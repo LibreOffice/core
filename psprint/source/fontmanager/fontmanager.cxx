@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 15:05:03 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 08:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,8 +1381,6 @@ void PrintFontManager::initialize( void* pInitDisplay )
         // there may be ":unscaled" directories (see XFree86)
         // it should be safe to ignore them since they should not
         // contain any of our recognbizeable fonts
-        OUString aUniPath;
-        FileBase::normalizePath( OStringToOUString( aPath, aEncoding ), aUniPath );
 
         // read fonts.dir if possible
         ::std::hash_map< OString, ByteString, OStringHash > aFontsDir;
@@ -2217,10 +2215,23 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
                 INetURLObject aToAfm( aTo );
                 aToAfm.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
                 OUString aFromPath, aToPath;
+#ifdef TF_FILEURL
+                FileBase::RC nError = FileBase::getSystemPathFromFileURL(
+                    aFromAfm.PathToFileName(), aFromPath );
+                if( osl_File_E_None == nError )
+                {
+                    nError = FileBase::getSystemPathFromFileURL(
+                        aToAfm.PathToFileName(), aToPath );
+                }
+                if( osl_File_E_None == nError )
+                {
+                    nError = File::copy( aFromPath, aToPath );
+                }
+#else
                 FileBase::normalizePath( aFromAfm.PathToFileName(), aFromPath );
                 FileBase::normalizePath( aToAfm.PathToFileName(), aToPath );
-
                 FileBase::RC nError = File::copy( aFromPath, aToPath );
+#endif
                 if( nError )
                 {
                     if( pCallback )
@@ -2231,9 +2242,18 @@ int PrintFontManager::importFonts( const ::std::list< OUString >& rFiles, Import
             }
             // copy font file
             OUString aFontFrom, aFontTo;
+#ifdef TF_FILEURL
+            if( ( osl_File_E_None == FileBase::getFileURLFromSystemPath(
+                   aFrom.PathToFileName(), aFontFrom ) ) &&
+                ( osl_File_E_None == FileBase::getFileURLFromSystemPath(
+                    aTo.PathToFileName(), aFontTo ) ) &&
+                ( osl_File_E_None == File::copy( aFontFrom, aFontTo ) ) )
+#else
+            // copy font file
             FileBase::normalizePath( aFrom.PathToFileName(), aFontFrom );
             FileBase::normalizePath( aTo.PathToFileName(), aFontTo );
             if( File::copy( aFontFrom, aFontTo ) )
+#endif
             {
                 if( aAfmCopied.getLength() )
                     File::remove( aAfmCopied );
@@ -2380,9 +2400,15 @@ bool PrintFontManager::checkChangeFontPropertiesPossible( fontID nFontID ) const
         if( aFontsDirPath.getLength() )
         {
             OUString aUniPath, aFDPath;
+#ifdef TF_FILEURL
+            FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, osl_getThreadTextEncoding() ), aUniPath );
+            aUniPath += OUString::createFromAscii( "/fonts.dir" );
+            FileBase::getSystemPathFromFileURL( aUniPath, aFDPath );
+#else
             FileBase::normalizePath( OStringToOUString( aFontsDirPath, osl_getThreadTextEncoding() ), aUniPath );
             aUniPath += OUString::createFromAscii( "/fonts.dir" );
             FileBase::getSystemPathFromNormalizedPath( aUniPath, aFDPath );
+#endif
             SvFileStream aFontsDir( aFDPath, STREAM_READ | STREAM_WRITE );
             if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
                 bSuccess = true;
@@ -2416,9 +2442,15 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
             break;
     }
     OUString aUniPath, aFDPath;
+#ifdef TF_FILEURL
+    FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, aEncoding ), aUniPath );
+    aUniPath += OUString::createFromAscii( "/fonts.dir" );
+    FileBase::getSystemPathFromFileURL( aUniPath, aFDPath );
+#else
     FileBase::normalizePath( OStringToOUString( aFontsDirPath, aEncoding ), aUniPath );
     aUniPath += OUString::createFromAscii( "/fonts.dir" );
     FileBase::getSystemPathFromNormalizedPath( aUniPath, aFDPath );
+#endif
 
     SvFileStream aFontsDir( aFDPath, STREAM_READ | STREAM_WRITE );
     aFontsDir.SetLineDelimiter( LINEEND_LF );
