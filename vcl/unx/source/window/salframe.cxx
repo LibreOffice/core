@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:49:01 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,7 +1471,6 @@ SalFrame::SetWindowState( const SalFrameState *pState )
         const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
         int nGravity = pWM->getPositionWinGravity();
 
-        bool bAdjusted = false;
         if( pState->mnMask & ( SAL_FRAMESTATE_MASK_HEIGHT | SAL_FRAMESTATE_MASK_WIDTH )
             && aPosSize.GetWidth() <= rScreenSize.Width()
             && aPosSize.GetHeight() <= rScreenSize.Height() )
@@ -1495,42 +1494,20 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             }
 
             // adjust position so that frame fits onto screen
-            if( aPosSize.Right()+(long)aGeom.nRightDecoration >= rScreenSize.Width() )
-            {
+            if( aPosSize.Right()+(long)aGeom.nRightDecoration > rScreenSize.Width()-1 )
                 aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
-                nGravity = EastGravity;
-                bAdjusted = true;
-            }
-            if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration >= rScreenSize.Height() )
-            {
+            if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration > rScreenSize.Height()-1 )
                 aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
-                nGravity = nGravity == EastGravity ? SouthEastGravity : SouthGravity;
-                bAdjusted = true;
-            }
             if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
-            {
                 aPosSize.Move( (long)aGeom.nLeftDecoration - (long)aPosSize.Left(), 0 );
-                nGravity = ( nGravity == SouthGravity || nGravity == SouthEastGravity ) ? SouthWestGravity : WestGravity;
-                bAdjusted = true;
-            }
             if( aPosSize.Top() < (long)aGeom.nTopDecoration )
-            {
                 aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
-                nGravity =
-                    ( nGravity == SouthEastGravity || nGravity == EastGravity ) ? NorthEastGravity :
-                    ( ( nGravity == SouthWestGravity || nGravity == WestGravity ) ? NorthWestGravity : NorthGravity );
-                bAdjusted = true;
-            }
         }
-
-         // demand correct positioning from the WM
-        if( bAdjusted )
-            maFrameData.SetWindowGravity ( nGravity );
 
          // resize with new args
          if (pWM->supportsICCCMPos())
          {
-             if( maFrameData.mpParent && ! bAdjusted )
+             if( maFrameData.mpParent )
                  aPosSize.Move( -maFrameData.mpParent->maGeometry.nX,
                                 -maFrameData.mpParent->maGeometry.nY );
              maFrameData.SetPosSize( aPosSize );
@@ -2451,6 +2428,36 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
                 // is not grabbed
                 XUngrabPointer( GetXDisplay(), CurrentTime );
                 bClosePopups = true;
+
+                /*  #i15246# only close popups if pointer is outside all our frames
+                 *  cannot use our own geometry data here because stacking
+                 *  is unknown (the above case implicitly assumes
+                 *  that floats are on top which should be true)
+                 */
+                XLIB_Window aRoot, aChild;
+                int root_x, root_y, win_x, win_y;
+                unsigned int mask_return;
+                if( XQueryPointer( GetXDisplay(), GetDisplay()->GetRootWindow(),
+                                   &aRoot, &aChild,
+                                   &root_x, &root_y,
+                                   &win_x, &win_y,
+                                   &mask_return )
+                    && aChild // pointer may not be in any child
+                    )
+                {
+                    for( SalFrame* pFrame = GetSalData()->pFirstFrame_; pFrame; pFrame = pFrame->maFrameData.pNextFrame_ )
+                    {
+                        if( ! pFrame->maFrameData.IsFloatGrabWindow()
+                            && ( pFrame->maFrameData.GetWindow() == aChild ||
+                                 pFrame->maFrameData.GetShellWindow() == aChild ||
+                                 pFrame->maFrameData.GetStackingWindow() == aChild )
+                            )
+                        {
+                            bClosePopups = false;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
