@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:25:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
@@ -86,7 +90,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContactOfPageObj : public ViewContactOfSdrObj
+        class SVX_DLLPUBLIC ViewContactOfPageObj : public ViewContactOfSdrObj
         {
             // The painter for the page. As long as the page does not change,
             // the incarnation can be reused.
