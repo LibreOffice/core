@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.22 $
+*  $Revision: 1.23 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-21 12:13:48 $
+*  last change: $Author: rt $ $Date: 2005-01-28 17:25:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -715,6 +715,11 @@ Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb
     HostName = "ucb";
 End
 
+Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Typedetection
+    ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    HostName = "TypeDetection";
+End
+
 Directory gid_Dir_Share_Registry_Res
     ParentID = gid_Dir_Share_Registry;
     HostName = "res";
@@ -768,6 +773,11 @@ End
 Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection
     ParentID = gid_Dir_Share_Registry_Modules_Oo;
     HostName = "TypeDetection";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_TypeDetection;
+    HostName = "UISort";
 End
 
 Directory gid_Dir_Share_Registry_Modules_Oo_Setup
