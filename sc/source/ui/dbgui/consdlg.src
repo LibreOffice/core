@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:20:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ĞĞÊı¾İ±êÖ¾(~R)";
         Text[ russian ] = "ïîäïèñè ñòğîê";
-        Text[ polish ] = "~nag³ówków wierszy";
+        Text[ polish ] = "Etykiety wierszy";
         Text[ japanese ] = "¶’[—ñ(~R)";
         Text[ chinese_traditional ] = "¦C¼ĞÃD(~R)";
         Text[ arabic ] = "ÚäÇæíä ÇáÕİæİ";
@@ -669,9 +669,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÁĞ±êÌâ(~H)";
         Text[ russian ] = "íàçâàíèş ñòîëáöîâ";
-        Text[ polish ] = "na~g³ówków kolumn";
+        Text[ polish ] = "Nag³ówki kolumn";
         Text[ japanese ] = "ã’[s(~H)";
-        Text[ chinese_traditional ] = "Äæ¼ĞÃD(~H)";
+        Text[ chinese_traditional ] = "Äæ¼ĞÃD(~O)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò óôçëşí";
         Text[ korean ] = "¿­ ¸Ó¸®±Û(~O)";
