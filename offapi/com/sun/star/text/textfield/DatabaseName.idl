@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseName.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of text field that displayes the name of a database.
     @see com::sun::star::text::TextField
 */
-service DatabaseName
+published service DatabaseName
 {
     service  com::sun::star::text::DependentTextField;
 
