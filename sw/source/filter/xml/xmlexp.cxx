@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:17:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,11 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 }
 #endif
 
-SwXMLExport::SwXMLExport(sal_uInt16 nExportFlags) :
-    SvXMLExport( MAP_INCH, XML_TEXT, nExportFlags ),
+// #110680#
+SwXMLExport::SwXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    sal_uInt16 nExportFlags)
+:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -265,13 +268,17 @@ SwXMLExport::SwXMLExport(sal_uInt16 nExportFlags) :
 }
 
 #ifdef XML_CORE_API
-SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
-             const OUString& rFileName,
-             const Reference< XDocumentHandler > & rHandler,
-             const Reference< XGraphicObjectResolver > & rEmbeddedGrfObjs,
-             sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-             sal_Bool bShowProg ) :
-    SvXMLExport( rFileName, rHandler, rModel, rEmbeddedGrfObjs,
+// #110680#
+SwXMLExport::SwXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const Reference< XModel >& rModel,
+    SwPaM& rPaM,
+    const OUString& rFileName,
+    const Reference< XDocumentHandler > & rHandler,
+    const Reference< XGraphicObjectResolver > & rEmbeddedGrfObjs,
+    sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
+    sal_Bool bShowProg )
+:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
                  SW_MOD()->GetMetric( rPaM.GetDoc()->IsHTMLMode() ) ),
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -734,7 +741,9 @@ Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport(EXPORT_ALL);
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLExport(EXPORT_ALL);
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_ALL );
 }
 
 OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw()
@@ -755,9 +764,13 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLExport(
+    //  EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
+    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
-        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-        EXPORT_FONTDECLS );
+        rSMgr,
+        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS );
 }
 
 OUString SAL_CALL SwXMLExportContent_getImplementationName() throw()
@@ -778,7 +791,12 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLExport(
+    //  EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
+    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
+        rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
         EXPORT_FONTDECLS );
 }
@@ -801,7 +819,9 @@ Reference< XInterface > SAL_CALL SwXMLExportMeta_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport(EXPORT_META);
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLExport(EXPORT_META);
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_META );
 }
 
 OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw()
@@ -822,7 +842,9 @@ Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport(EXPORT_SETTINGS);
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLExport(EXPORT_SETTINGS);
+    return (cppu::OWeakObject*)new SwXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
