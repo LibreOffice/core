@@ -3905,7 +3905,11 @@ echo $ECHO_N "checking the GNU gcc compiler version... $ECHO_C" >&6
    _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-   if test "$_gcc_major" = "3"; then
+   if test "$_gcc_major" -lt "3"; then
+      { { echo "$as_me:$LINENO: error: found version \"$_gcc_version\", use version 3+ of the gcc compiler" >&5
+echo "$as_me: error: found version \"$_gcc_version\", use version 3+ of the gcc compiler" >&2;}
+   { (exit 1); exit 1; }; }
+   else
       if test "$GCCVER" -eq "030203"; then
 	    if test "$ENABLE_SYMBOLS" = "SMALL"; then
            { { echo "$as_me:$LINENO: error: version \"$_gcc_version\" gives internal error with small." >&5
@@ -3913,10 +3917,6 @@ echo "$as_me: error: version \"$_gcc_version\" gives internal error with small."
    { (exit 1); exit 1; }; }
 	    fi
       fi
-   else
-      { { echo "$as_me:$LINENO: error: found version \"$_gcc_version\", use version 3+ of the gcc compiler" >&5
-echo "$as_me: error: found version \"$_gcc_version\", use version 3+ of the gcc compiler" >&2;}
-   { (exit 1); exit 1; }; }
    fi
    echo "$as_me:$LINENO: result: checked (gcc $_gcc_version)" >&5
 echo "${ECHO_T}checked (gcc $_gcc_version)" >&6
