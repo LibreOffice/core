@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:33:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void SwTxtFld::Expand()
             // BP: das muesste man noch optimieren!
             //JP 12.06.97: stimmt, man sollte auf jedenfall eine Status-
             //              aenderung an die Frames posten
-            if( pMyTxtNd->CalcVisibleFlag() )
+            if( pMyTxtNd->CalcHiddenParaField() )
                 pMyTxtNd->Modify( 0, 0 );
             return;
         }
