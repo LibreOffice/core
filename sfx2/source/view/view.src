@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:37:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE = "Fehler beim Versenden der Nachricht." ;
     MESSAGE [ English ] = "Error while sending mail." ;
     MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
-    MESSAGE [ italian ] = "Errore durante l'invio di un messaggio." ;
+    MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
     MESSAGE [ finnish ] = "Virhe sдhkцpostia lдhetettдessд." ;
@@ -1004,7 +1004,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message [ dutch ] = "Voor de door u verlangde activiteit is een postvak UIT nodig.\nMaak een postvak UIT voordat u deze opdracht opnieuw selecteert." ;
     Message [ portuguese ] = "… necessбria uma caixa de envio para executar esta acзгo.\nCrie primeiro uma caixa de envio e tente novamente." ;
     Message[ chinese_simplified ] = "÷і––’вЄц≤ў„чµƒ«∞ћб «ƒъ“—Њ≠љ®ЅҐЅЋ“їЄцЈҐЉюѕд°£\n«лƒъ‘Џљ®ЅҐ“їЄцЈҐЉюѕд÷ЃЇу‘ў÷Ў–¬÷і––’вЄц√ьЅо°£";
-    Message[ russian ] = "ƒл€ выбранного вами действи€ необходима папка \"ќтправленные\".\nѕрежде чем вы повторите эту операцию, создайте, пожалуйста, папку \"ќтправленные\".";
+    Message[ russian ] = "ƒл€ выбранного ¬ами действи€ необходима папка \"ќтправленные\".\nѕрежде чем ¬ы повторите эту операцию, создайте, пожалуйста, папку \"ќтправленные\".";
     Message[ polish ] = "Dla wybranej przez ciebie akcji potrzebna jest skrzynka nadawcza.\nProszк utwуrz skrzynkк nadawczє, zanim wykonasz ponownie tк akcjк.";
     Message[ japanese ] = "СIСрВ≥ВкВљ±ЄЉЃЁВрОјНsВЈВйВћВ…СЧРMƒЏ≤В™ХKЧvВ≈ВЈБB\nВ±Вћ±ЄЉЃЁВрНƒОјНsВЈВйСOВ…БAСЧРMƒЏ≤ВрКiФ[ВµВƒЙЇВ≥ВҐБB";
     Message[ chinese_traditional ] = "∞х¶ж≥o≠”ЊёІ@≠n®D±z∞tЄm§@≠”±H•уІX°C\nљ–±zЂЎ•я§@≠”±H•уІX°AµM¶Z¶b≠ЂЈs∞х¶ж≥o≠”©R•O°C";
@@ -1058,12 +1058,12 @@ String STR_FRAMESIZE
     Text [ portuguese ] = "Tamanho da moldura" ;
     Text[ chinese_simplified ] = "њтіу–°";
     Text[ russian ] = "–азмер кадра";
-    Text[ polish ] = "WielkoЬж ramki";
+    Text[ polish ] = "Frame - Rozmiar";
     Text[ japanese ] = "ћЏ∞— ї≤љё";
     Text[ chinese_traditional ] = "∞TЃЎ§j§p";
     Text[ greek ] = "ћЁгеипт Frame";
     Text[ korean ] = "«ЅЈєј” ≈©±в";
-    Text[ arabic ] = "Ќћг «б№ Frame";
+    Text[ arabic ] = "Ќћг «б≈Ў«—";
     Text[ turkish ] = "Frame boyutu";
     Text[ language_user1 ] = " ";
 };
