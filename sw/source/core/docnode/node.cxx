@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:06:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,29 +724,6 @@ SwFrmFmt* SwNode::GetFlyFmt() const
                 }
             }
         }
-    }
-    return pRet;
-}
-
-const SwFrmFmt* SwNode::GetFrmFmt() const
-{
-    const SwFrmFmt* pRet = 0;
-    const SwNode* pNd = FindStartNode();
-    ASSERT( pNd, "SwNode::GetFrmFmt(): Missing StartNode" );
-    if( pNd->IsSectionNode() )
-        pRet = ((SwSectionNode*)pNd)->GetSection().GetFmt();
-    else if( pNd->IsTableNode() )
-        pRet = ((SwTableNode*)pNd)->GetTable().GetFrmFmt();
-    else switch( ((SwStartNode*)pNd)->GetStartNodeType() )
-    {
-        case SwNormalStartNode: break;
-        case SwTableBoxStartNode: pRet = pNd->FindTableNode()->GetTable().GetTblBox(
-                                         pNd->GetIndex() )->GetFrmFmt(); break;
-        case SwFlyStartNode: pRet = GetFlyFmt(); break;
-        case SwFootnoteStartNode: pRet = GetDoc()->GetDfltFrmFmt(); break;
-        case SwHeaderStartNode: break;
-        case SwFooterStartNode: break;
-        default: ASSERT( FALSE, "GetFrmFmt(): New StartNodeType?" );
     }
     return pRet;
 }
