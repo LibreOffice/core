@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:27:33 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+#ifndef _SPLARGS_HXX
+#include <splargs.hxx>
+#endif
 
 
 #ifndef _MSGBOX_HXX //autogen
@@ -131,8 +134,14 @@
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 #ifndef _OLMENU_HRC
@@ -144,6 +153,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::i18n;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -196,15 +206,9 @@ SwHHCWrapper::SwHHCWrapper(
                                 bIsInteractive ),
     rWrtShell( pSwView->GetWrtShell() )
 {
+    pConvArgs       = 0;
     nLastPos        = 0;
     nUnitOffset     = 0;
-
-#ifdef TL_OLD
-    // currently this implementation only works for Korean (Hangu/Hanja conversion)
-    // since it is derived by 'HangulHanjaConversion' and there is not
-    // a more general base class for text conversion yet...
-    DBG_ASSERT( nSourceLang == LANGUAGE_KOREAN, "unexpected language" );
-#endif
 
     pView           = pSwView;
     pWin            = &pSwView->GetEditWin();
@@ -223,6 +227,8 @@ SwHHCWrapper::SwHHCWrapper(
 
 SwHHCWrapper::~SwHHCWrapper()
 {
+    delete pConvArgs;
+
     rWrtShell.SetCareWin( NULL );
 
     // check for existence of a draw view which means that there are
@@ -234,10 +240,10 @@ SwHHCWrapper::~SwHHCWrapper()
         {
             SwKeepConversionDirectionStateContext aContext;
 
-            SdrHHCWrapper aSdrSpell( pView, GetSourceLanguage(),
+            SdrHHCWrapper aSdrConvWrap( pView, GetSourceLanguage(),
                     GetTargetLanguage(), GetTargetFont(),
                     GetConversionOptions(), IsInteractive() );
-            aSdrSpell.StartTextConversion();
+            aSdrConvWrap.StartTextConversion();
         }
         pView->GetWindow()->SetCursor( pSave );
     }
@@ -251,10 +257,14 @@ SwHHCWrapper::~SwHHCWrapper()
 }
 
 
-void SwHHCWrapper::GetNextPortion( OUString& /* [out] */ rNextPortion )
+void SwHHCWrapper::GetNextPortion(
+        ::rtl::OUString&    rNextPortion,
+        LanguageType&       rLangOfPortion )
 {
     FindConvText_impl();
-    rNextPortion = aConvText;
+    rNextPortion    = pConvArgs->aConvText;
+    rLangOfPortion  = pConvArgs->nConvTextLang;
+
     nUnitOffset  = 0;
 
     // build last pos from currently selected text
@@ -302,7 +312,8 @@ void SwHHCWrapper::HandleNewUnit(
 void SwHHCWrapper::ReplaceUnit(
          const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
          const OUString& rReplaceWith,
-         ReplacementAction eAction )
+         ReplacementAction eAction,
+         LanguageType *pNewUnitLanguage )
 {
     static OUString aBracketedStart( C2U( "(" ) );
     static OUString aBracketedEnd( C2U( ")" ) );
@@ -405,7 +416,7 @@ void SwHHCWrapper::ReplaceUnit(
         rWrtShell.Insert( aNewTxt );
 
         // change language and font if necessary
-        if (GetSourceLanguage() != GetTargetLanguage())
+        if (IsChinese( GetSourceLanguage() ))
         {
             rWrtShell.SetMark();
             rWrtShell.GetCrsr()->GetMark()->nContent -= (xub_StrLen) aNewTxt.getLength();
@@ -419,11 +430,16 @@ void SwHHCWrapper::ReplaceUnit(
                     0, 0, 0  };
 
             SfxItemSet aSet( rWrtShell.GetAttrPool(), aRanges );
-            aSet.Put( SvxLanguageItem( GetTargetLanguage(), RES_CHRATR_CJK_LANGUAGE ) );
+            if (pNewUnitLanguage)
+            {
+                //DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
+                //      "similar language should not be changed!");
+                aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
+            }
 
             const Font *pTargetFont = GetTargetFont();
             DBG_ASSERT( pTargetFont, "target font missing?" );
-            if (pTargetFont)
+            if (pTargetFont && pNewUnitLanguage)
             {
                 SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( RES_CHRATR_CJK_FONT );
                 aFontItem.GetFamilyName()   = pTargetFont->GetName();
@@ -454,17 +470,64 @@ sal_Bool SwHHCWrapper::HasRubySupport() const
 
 void SwHHCWrapper::Convert()
 {
+    DBG_ASSERT( pConvArgs == 0, "NULL pointer expected" );
+    {
+        SwPaM *pCrsr = pView->GetWrtShell().GetCrsr();
+        SwPosition* pSttPos = pCrsr->Start();
+        SwPosition* pEndPos = pCrsr->End();
+        pConvArgs = new SwConversionArgs( GetSourceLanguage(),
+                            pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
+                            pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
+
+        // if it is not just a selection and we are about to begin
+        // with the current conversion for the very first time
+        // we need to find the start of the current (initial)
+        // convertible unit in order for the text conversion to give
+        // the correct result for that. Since it is easier to obtain
+        // the start of the word we use that though.
+        if (!pCrsr->HasMark())   // is not a selection?
+        {
+            // since #118246 / #117803 still occurs if the cursor is placed
+            // between the two chinese characters to be converted (because both
+            // of them are words on their own!) using the word boundary here does
+            // not work. Thus since chinese conversion is not interactive we start
+            // at the begin of the paragraph to solve the problem, i.e. have the
+            // TextConversion service get those charcters together in the same call.
+            xub_StrLen nStartIdx = STRING_MAXLEN;
+            if (svx::HangulHanjaConversion::IsChinese( GetSourceLanguage() ) )
+                nStartIdx = 0;
+            else
+            {
+                OUString aText( pConvArgs->pStartNode->GetTxt() );
+                long     nPos = pConvArgs->pStartIdx->GetIndex();
+                Boundary aBoundary( pBreakIt->GetBreakIter()->
+                        getWordBoundary( aText, nPos, pBreakIt->GetLocale( pConvArgs->nConvSrcLang ),
+                                WordType::DICTIONARY_WORD, sal_True ) );
+
+                // valid result found?
+                if (aBoundary.startPos < aText.getLength() &&
+                    aBoundary.startPos != aBoundary.endPos)
+                {
+                    nStartIdx = static_cast< xub_StrLen >(aBoundary.startPos );
+                }
+            }
+
+            if (STRING_MAXLEN != nStartIdx)
+                *pConvArgs->pStartIdx = nStartIdx;
+        }
+    }
+
     if ( bIsOtherCntnt )
-        ConvStart_impl( SVX_SPELL_OTHER );
+        ConvStart_impl( pConvArgs, SVX_SPELL_OTHER );
     else
     {
         bStartChk = sal_False;
-        ConvStart_impl( SVX_SPELL_BODY_END );
+        ConvStart_impl( pConvArgs,  SVX_SPELL_BODY_END );
     }
 
     ConvertDocument();
 
-    ConvEnd_impl();
+    ConvEnd_impl( pConvArgs );
 }
 
 
@@ -491,7 +554,7 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     if ( bIsOtherCntnt )
     {
         bStartChk = sal_False;
-        ConvStart_impl( SVX_SPELL_BODY );
+        ConvStart_impl( pConvArgs, SVX_SPELL_BODY );
         bGoOn = sal_True;
     }
     else if ( bStartDone && bEndDone )
@@ -499,7 +562,7 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
         // Bodybereich erledigt, Frage nach Sonderbereich
         if( bIsConvSpecial && HasOtherCnt_impl() )
         {
-            ConvStart_impl( SVX_SPELL_OTHER );
+            ConvStart_impl( pConvArgs, SVX_SPELL_OTHER );
             bIsOtherCntnt = bGoOn = sal_True;
         }
         else
@@ -524,7 +587,7 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
         {
 */
             bStartChk = !bStartDone;
-            ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+            ConvStart_impl( pConvArgs, bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
             bGoOn = sal_True;
 /*
         }
@@ -544,19 +607,19 @@ sal_Bool SwHHCWrapper::FindConvText_impl()
     sal_Bool bFound = sal_False;
 
     pWin->EnterWait();
-    sal_Bool bSpell = sal_True;
+    sal_Bool bConv = sal_True;
 
-    while ( bSpell )
+    while ( bConv )
     {
-        bFound = ConvContinue_impl();
+        bFound = ConvContinue_impl( pConvArgs );
         if (bFound)
         {
-            bSpell = sal_False;
+            bConv = sal_False;
         }
         else
         {
-            ConvEnd_impl();
-            bSpell = ConvNext_impl();
+            ConvEnd_impl( pConvArgs );
+            bConv = ConvNext_impl();
         }
     }
     pWin->LeaveWait();
@@ -570,30 +633,31 @@ sal_Bool SwHHCWrapper::HasOtherCnt_impl()
 }
 
 
-void SwHHCWrapper::ConvStart_impl( SvxSpellArea eSpell )
+void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConvArgs, SvxSpellArea eArea )
 {
-    SetDrawObj( SVX_SPELL_OTHER == eSpell );
-    pView->SpellStart( eSpell, bStartDone, bEndDone, this );
+    SetDrawObj( SVX_SPELL_OTHER == eArea );
+    pView->SpellStart( eArea, bStartDone, bEndDone, /* [out] */pConvArgs );
 }
 
 
-void SwHHCWrapper::ConvEnd_impl()
+void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConvArgs )
 {
-    pView->SpellEnd( this );
+    pView->SpellEnd( pConvArgs );
     //ShowLanguageErrors();
 }
 
 
-sal_Bool SwHHCWrapper::ConvContinue_impl()
+sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConvArgs )
 {
     sal_Bool bProgress = !bIsDrawObj && !bIsSelection;
 //    bLastRet = aConvText.getLength() == 0;
-    aConvText = OUString();
+    pConvArgs->aConvText = OUString();
+    pConvArgs->nConvTextLang = LANGUAGE_NONE;
     uno::Any  aRet = bProgress ?
-        pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, this ) :
-        pView->GetWrtShell().SpellContinue( &nPageCount, NULL, this );
-    aRet >>= aConvText;
-    return aConvText.getLength() != 0;
+        pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConvArgs ) :
+        pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConvArgs );
+    //aRet >>= aConvText;
+    return pConvArgs->aConvText.getLength() != 0;
 }
 
 //////////////////////////////////////////////////////////////////////
