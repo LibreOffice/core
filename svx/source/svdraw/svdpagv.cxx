@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-22 10:01:17 $
+ *  last change: $Author: fs $ $Date: 2001-12-18 11:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,8 +585,8 @@ void SdrUnoControlList::Disposing(SdrUnoControlRec* pRec)
 
             pRec->release();
             delete pAccess;
+            break;
         }
-        break;
     }
 }
 
