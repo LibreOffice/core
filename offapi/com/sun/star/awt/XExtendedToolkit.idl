@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedToolkit.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:00:51 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@ module com {  module sun {  module star {  module awt {
 
     <p>The last event broadcaster sends events on focus changes of all
     elements that can have the input focus.</p>
+
+    @deprecated
+        This interface was only implemented in an intermediate developer
+        release anyway.
 
     @since #107627#
 */
