@@ -2,9 +2,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:27 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
