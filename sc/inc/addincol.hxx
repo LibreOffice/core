@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:39:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _COM_SUN_STAR_SHEET_LOCALIZEDNAME_HPP_
 #include <com/sun/star/sheet/LocalizedName.hpp>
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 #ifndef _LANG_HXX
