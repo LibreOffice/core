@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-02 09:36:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, ScRefEdit*, pEd )
     else
         pLb->SelectEntryPos( aStrEd.Len() ? nUserDefPos : 0 );
 
-    return NULL;
+    return 0;
 }
 
 
