@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-17 15:44:59 $
+ *  last change: $Author: kr $ $Date: 2000-10-19 15:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2000-10-17 15:44:59 $
+ * @version     $Revision: 1.6 $ $ $Date: 2000-10-19 15:42:11 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -275,7 +275,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                     System.err.println(getClass() + " - reading message - exception occurred: \"" + exception + "\"");
                     System.err.println(getClass() + " - giving up");
                 }
-                  if(DEBUG);
+                  if(DEBUG)
                     exception.printStackTrace();
             }
 
@@ -292,6 +292,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
     protected XInstanceProvider _xInstanceProvider;
 
+    protected String            _name = "remote";
     protected IProtocol         _iProtocol;
     protected IEnvironment      _java_environment;
     protected MessageDispatcher _messageDispatcher;
@@ -398,6 +399,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         _xInstanceProvider  = (XInstanceProvider)args[2];
         _inputStream        = new XConnectionInputStream_Adapter(_xConnection);
         _outputStream       = new XConnectionOutputStream_Adapter(_xConnection);
+
+        if(args.length > 3)
+            _name = (String)args[3];
 
         _java_environment   = java_environment;
 
@@ -719,7 +723,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      * @see     com.sun.star.bridge.XBridge#getName
      */
     public String getName() throws com.sun.star.uno.RuntimeException {
-        return "remote";
+        return _name;
     }
 
     /**
@@ -774,7 +778,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             }
         }
           catch(Exception exception) {
-            if(DEBUG) ;{
+            if(DEBUG) {
                 System.err.println("##### " + getClass().getName() + ".sendRequest - exception occurred:" + exception);
                 exception.printStackTrace();
             }
