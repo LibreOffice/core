@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:11:40 $
+#   last change: $Author: vg $ $Date: 2005-03-23 11:45:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,11 @@ IDLFILES=\
     XFormsSupplier.idl\
     XModel.idl \
     XDataTypeRepository.idl \
+    XFormsEvent.idl \
     XFormsUIHelper1.idl \
     XSubmission.idl \
     Binding.idl \
+    InvalidDataOnSubmitException.idl \
 
 
 # ------------------------------------------------------------------
