@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdiclist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:34:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 #include <cppuhelper/factory.hxx>   // helper for factories
 
@@ -465,9 +468,50 @@ void ConvDicNameContainer::AddConvDics(
 
 ///////////////////////////////////////////////////////////////////////////
 
+namespace
+{
+template<typename T, typename InitData,
+         typename Unique = InitData, typename Data = T>
+class StaticWithInit_ {
+public:
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get() {
+        return *rtl_Instance<
+            T, StaticInstanceWithInit,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data, InitData >::create( StaticInstanceWithInit(),
+                                      ::osl::GetGlobalMutex(),
+                                      InitData() );
+    }
+private:
+    struct StaticInstanceWithInit {
+        T * operator () ( Data d ) {
+            static T instance(d);
+            return &instance;
+        }
+    };
+};
+
+//after src680m62 you can replace StaticWithInit_ with rtl::StaticWithInit and remove the above definition of StaticWithInit_
+
+struct StaticConvDicList : public StaticWithInit_<
+    Reference<XInterface>, StaticConvDicList> {
+    Reference<XInterface> operator () () {
+        return (cppu::OWeakObject *) new ConvDicList;
+    }
+};
+}
+
+
 void ConvDicList::MyAppExitListener::AtExit()
 {
     rMyDicList.FlushDics();
+    StaticConvDicList::get().clear();
 }
 
 ConvDicList::ConvDicList() :
@@ -746,8 +790,7 @@ Reference< XInterface > SAL_CALL ConvDicList_CreateInstance(
         const Reference< XMultiServiceFactory > & rSMgr )
     throw(Exception)
 {
-    Reference< XInterface > xService = (cppu::OWeakObject *) new ConvDicList;
-    return xService;
+    return StaticConvDicList::get();
 }
 
 
@@ -782,18 +825,12 @@ void * SAL_CALL ConvDicList_getFactory(
     void * pRet = 0;
     if ( !ConvDicList::getImplementationName_Static().compareToAscii( pImplName ) )
     {
-/*        Reference< XSingleServiceFactory > xFactory =
+        Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(
                 pServiceManager,
                 ConvDicList::getImplementationName_Static(),
                 ConvDicList_CreateInstance,
                 ConvDicList::getSupportedServiceNames_Static());
-*/
-        Reference< XSingleServiceFactory > xFactory =
-            cppu::createSingleFactory( pServiceManager,
-                ConvDicList::getImplementationName_Static(),
-                ConvDicList_CreateInstance,
-                ConvDicList::getSupportedServiceNames_Static() );
         // acquire, because we return an interface pointer instead of a reference
         xFactory->acquire();
         pRet = xFactory.get();
