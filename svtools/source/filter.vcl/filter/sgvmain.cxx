@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:53:26 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <math.h>
 #endif
 #include <vcl/graph.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include "filter.hxx"
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
