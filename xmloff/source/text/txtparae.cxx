@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-06 12:54:45 $
+ *  last change: $Author: dvo $ $Date: 2002-10-08 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,12 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTSHAPESSUPPLIER_HPP_
+#include <com/sun/star/text/XTextShapesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
@@ -248,6 +254,10 @@
 #ifndef _XMLOFF_MULTIPROPERTYSETHELPER_HXX
 #include "MultiPropertySetHelper.hxx"
 #endif
+#ifndef _XMLOFF_FORMLAYEREXPORT_HXX_
+#include "formlayerexport.hxx"
+#endif
+
 
 using namespace ::rtl;
 using namespace ::std;
@@ -1618,14 +1628,17 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                                         aPrevNumInfo, aNextNumInfo,
                                         bAutoStyles );
 
-            // export start + end redlines (for wholly redlined tables)
-            if ((! bAutoStyles) && (NULL != pRedlineExport))
-                pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_True);
+            if (! pSectionExport->IsMuteSection(xCurrentTextSection))
+            {
+                // export start + end redlines (for wholly redlined tables)
+                if ((! bAutoStyles) && (NULL != pRedlineExport))
+                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_True);
 
-            exportTable( xTxtCntnt, bAutoStyles, bProgress  );
+                exportTable( xTxtCntnt, bAutoStyles, bProgress  );
 
-            if ((! bAutoStyles) && (NULL != pRedlineExport))
-                pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_False);
+                if ((! bAutoStyles) && (NULL != pRedlineExport))
+                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_False);
+            }
 
             bHasContent = sal_True;
         }
@@ -3208,5 +3221,58 @@ void XMLTextParagraphExport::exportRuby(
             GetExport().EndElement(XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
             bOpenRuby = sal_False;
         }
+    }
+}
+
+
+
+
+void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
+    const Reference<XIndexAccess> & rShapes,
+    UniReference<xmloff::OFormLayerXMLExport> xFormExport   )
+{
+    // check parameters ad pre-conditions
+    if( ( ! rShapes.is() ) || ( ! xFormExport.is() ) )
+    {
+        // if we don't have shapes or a form export, there's nothing to do
+        return;
+    }
+    DBG_ASSERT( pSectionExport != NULL, "We need the section export." );
+
+    sal_Int32 nShapes = xShapes->getCount();
+    for( sal_Int32 i = 0; i < nShapes; i++ )
+    {
+        // now we need to check
+        // 1) if this is a control shape, and
+        // 2) if it's in a mute section
+        // if both answers are 'yes', notify the form layer export
+
+        // we join accessing the shape and testing for control
+        Reference<XControlShape> xControlShape;
+        xShapes->getByIndex( i ) >>= xControlShape;
+        if( xControlShape.is() )
+        {
+            //            Reference<XPropertySet> xPropSet( xControlShape, UNO_QUERY );
+            //            Reference<XTextContent> xTextContent;
+            //            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TextRange" ) ) ) >>= xTextContent;
+
+            Reference<XTextContent> xTextContent( xControlShape, UNO_QUERY );
+            if( xTextContent.is() )
+            {
+                if( pSectionExport->IsMuteSection( xTextContent, sal_False ) )
+                {
+                    // Ah, we've found a shape that
+                    // 1) is a control shape
+                    // 2) is anchored in a mute section
+                    // so: don't export it!
+                    xFormExport->excludeFromExport(
+                        xControlShape->getControl() );
+                }
+                // else: not in mute section -> should be exported -> nothing
+                // to do
+            }
+            // else: no anchor -> ignore
+        }
+        // else: no control shape -> nothing to do
     }
 }

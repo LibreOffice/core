@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 13:16:22 $
+ *  last change: $Author: dvo $ $Date: 2002-10-08 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ public:
      */
     sal_Bool IsMuteSection(
         const ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextSection > & rSection);
+            ::com::sun::star::text::XTextSection > & rSection) const;
 
     /**
      * XTextContent-version of IsMuteSection(Reference<XTextSection>&)
@@ -226,7 +226,7 @@ public:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rSection,
         /// return value if this content doesn't support the section property
-        sal_Bool bDefault);
+        sal_Bool bDefault) const;
 
     /**
      * Determine whether rContent is contained in rEnclosingSection. If the
@@ -321,7 +321,7 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextSection > & rSection,
         ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XDocumentIndex > & rIndex);
+            ::com::sun::star::text::XDocumentIndex > & rIndex) const;
 
     /// map service name to section type
     enum SectionTypeEnum MapSectionType(const ::rtl::OUString& rSectionName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 13:16:22 $
+ *  last change: $Author: dvo $ $Date: 2002-10-08 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ void XMLSectionExport::ExportSectionStart(
 
 sal_Bool XMLSectionExport::GetIndex(
     const Reference<XTextSection> & rSection,
-    Reference<XDocumentIndex> & rIndex)
+    Reference<XDocumentIndex> & rIndex) const
 {
     // first, reset result
     sal_Bool bRet = sal_False;
@@ -1772,7 +1772,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 
 
 sal_Bool XMLSectionExport::IsMuteSection(
-    const Reference<XTextSection> & rSection)
+    const Reference<XTextSection> & rSection) const
 {
     sal_Bool bRet = sal_False;
 
@@ -1817,12 +1817,12 @@ sal_Bool XMLSectionExport::IsMuteSection(
 
 sal_Bool XMLSectionExport::IsMuteSection(
     const Reference<XTextContent> & rSection,
-    sal_Bool bDefault)
+    sal_Bool bDefault) const
 {
     // default: like default argument
     sal_Bool bRet = bDefault;
 
-    Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
+    Reference<XPropertySet> xPropSet(rSection->getAnchor(), UNO_QUERY);
     if (xPropSet.is())
     {
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
