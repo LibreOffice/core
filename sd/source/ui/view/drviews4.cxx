@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-15 11:53:23 $
+ *  last change: $Author: ka $ $Date: 2001-08-23 10:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _URLBMK_HXX //autogen
+#include <svtools/urlbmk.hxx>
+#endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
@@ -115,7 +118,6 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-
 #include "docshell.hxx"
 #include "drawdoc.hxx"
 #include "sdwindow.hxx"
@@ -451,7 +453,45 @@ void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
             bIsRulerDrag = FALSE;
         }
         else
-            SdViewShell::MouseButtonUp(rMEvt, pWin);
+        {
+            const BOOL bNativeShow = pFuSlideShow &&
+                                     ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) &&
+                                     !pFuSlideShow->IsLivePresentation();
+
+            // paste of selection?
+            if( rMEvt.IsMiddle() && !bNativeShow &&
+                ( Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() & MOUSE_MIDDLE_PASTESELECTION ) )
+            {
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( pWindow ) );
+
+                if( aDataHelper.GetTransferable().is() )
+                {
+                    Point       aPos;
+                    sal_Int8    nDnDAction = DND_ACTION_COPY;
+
+                    if( pWindow )
+                        aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+
+                    if( !pDrView->InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
+                    {
+                        String          aEmptyStr;
+                        INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+
+                        if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                        {
+                            InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                        }
+                    }
+                }
+            }
+            else
+                SdViewShell::MouseButtonUp(rMEvt, pWin);
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 15:28:23 $
+ *  last change: $Author: ka $ $Date: 2001-08-23 10:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,8 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
     String                          aDisplayName;
 
+    SD_MOD()->pTransferSelection = pTransferable;
+
     if( pDocSh )
     {
         aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
@@ -289,14 +291,11 @@ void SdView::UpdateSelectionClipboard( BOOL bForceDeselect )
     if( pViewSh && pViewSh->GetActiveWindow() )
     {
         if( !bForceDeselect && GetMarkList().GetMarkCount() )
-        {
             CreateSelectionDataObject( this, *pViewSh->GetActiveWindow() );
-            SD_MOD()->pSelectionView = this;
-        }
-        else if( SD_MOD()->pSelectionView == this )
+        else if( SD_MOD()->pTransferSelection && ( SD_MOD()->pTransferSelection->GetView() == this ) )
         {
             TransferableHelper::ClearSelection( pViewSh->GetActiveWindow() );
-            SD_MOD()->pSelectionView = NULL;
+            SD_MOD()->pTransferSelection = NULL;
         }
     }
 }

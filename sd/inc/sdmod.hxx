@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 15:17:02 $
+ *  last change: $Author: ka $ $Date: 2001-08-23 10:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ public:
 
     SdTransferable*         pTransferClip;
     SdTransferable*         pTransferDrag;
-    SdView*                 pSelectionView;
+    SdTransferable*         pTransferSelection;
 
     void                    Execute(SfxRequest& rReq);
     void                    GetState(SfxItemSet&);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 15:19:49 $
+ *  last change: $Author: ka $ $Date: 2001-08-23 10:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,8 +602,8 @@ void SdTransferable::ObjectReleased()
     if( this == SD_MOD()->pTransferDrag )
         SD_MOD()->pTransferDrag = NULL;
 
-    if( pSdViewIntern == SD_MOD()->pSelectionView )
-        SD_MOD()->pSelectionView = NULL;
+    if( this == SD_MOD()->pTransferSelection )
+        SD_MOD()->pTransferSelection = NULL;
 }
 
 // -----------------------------------------------------------------------------

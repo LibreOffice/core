@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-22 10:13:24 $
+ *  last change: $Author: ka $ $Date: 2001-08-23 10:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,17 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     if( nPage != SDRPAGE_NOTFOUND )
         pPage = (SdPage*) pDoc->GetPage( nPage );
 
-    // !!!Clipboard
-    SdTransferable* pOwnData = ( SD_MOD()->pTransferClip == (SdTransferable*) aDataHelper.GetTransferable().get() ) ? SD_MOD()->pTransferClip :
-                               ( ( SD_MOD()->pTransferDrag == (SdTransferable*) aDataHelper.GetTransferable().get() ) ? SD_MOD()->pTransferDrag : NULL );
+    SdTransferable* pOwnData;
+    void*           pImplementation = aDataHelper.GetTransferable().get();
+
+    if( SD_MOD()->pTransferClip == (SdTransferable*) pImplementation )
+        pOwnData = SD_MOD()->pTransferClip;
+    else if( SD_MOD()->pTransferDrag == (SdTransferable*) pImplementation )
+        pOwnData = SD_MOD()->pTransferDrag;
+    else if( SD_MOD()->pTransferSelection == (SdTransferable*) pImplementation )
+        pOwnData = SD_MOD()->pTransferSelection;
+    else
+        pOwnData = NULL;
 
     if( !pOwnData )
     {
