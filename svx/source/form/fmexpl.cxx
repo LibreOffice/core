@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:16:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@
 #include "fmservs.hxx"
 #endif
 
-#ifndef _SVX_TABORDER_HXX
-#include "taborder.hxx"
-#endif
+//CHINA001 #ifndef _SVX_TABORDER_HXX
+//CHINA001 #include "taborder.hxx"
+//CHINA001 #endif
 
 #ifndef _SVX_FMMODEL_HXX
 #include "fmmodel.hxx"
