@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:16:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "DrawViewShell.hxx"
+#include "ViewShellImplementation.hxx"
 
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -456,7 +457,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERTPAGE:
         case SID_INSERTPAGE_QUICK:
         case SID_DUPLICATE_PAGE:
-            CreateOrDuplicatePage (rReq);
+            CreateOrDuplicatePage (rReq, ePageKind, GetActualPage());
+            Cancel();
+            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            rReq.Done ();
         break;
 
         case SID_MODIFYPAGE:
@@ -468,7 +473,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     pDrView->EndTextEdit();
                 }
+                USHORT nPage = aTabControl.GetCurPageId() - 1;
+                pActualPage = GetDoc()->GetSdPage(nPage, ePageKind);
+                mpImpl->ProcessModifyPageSlot (
+                    rReq,
+                    pActualPage,
+                    ePageKind);
 
+                /*
                 USHORT nPage = aTabControl.GetCurPageId() - 1;
                 pActualPage = GetDoc()->GetSdPage(nPage, ePageKind);
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -533,7 +545,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     //CHINA001 SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE);
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
                     DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                    AbstractSdNewFoilDlg* pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), pWindow, aAttrSet, ePageKind, GetDocSh(), TRUE );
+                    AbstractSdNewFoilDlg* pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), TRUE );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     if (pDlg->Execute() == RET_OK)
                     {
@@ -588,6 +600,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         Cancel ();
                         break;
                     }
+                    if (ePageKind == PK_HANDOUT)
+                    {
+                        bHandoutMode = TRUE;
+                        pHandoutMPage = GetDoc()->GetMasterSdPage(0, PK_HANDOUT);
+                    }
                 }
                 else
                 {
@@ -628,7 +645,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if(bShowDialog)
                     {
                         // ask user if he wants to loose UNDO stack
-                        ImpUndoDeleteWarning aUndoDeleteDlg(pWindow);
+                        ImpUndoDeleteWarning aUndoDeleteDlg(GetActiveWindow());
 
                         if(BUTTONID_OK == aUndoDeleteDlg.Execute())
                         {
@@ -713,6 +730,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     GetDoc()->SetChanged(bSetModified);
                 }
+                */
             }
 
             Cancel();
@@ -738,10 +756,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
                 String aPageName = pCurrentPage->GetName();
 
-                //CHINA001 SvxNameDialog aNameDlg( pWindow, aPageName, aDescr );
+                //CHINA001 SvxNameDialog aNameDlg( GetActiveWindow(), aPageName, aDescr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pWindow, aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
+                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr, ResId(RID_SVXDLG_NAME) );
                 DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
                 //CHINA001 aNameDlg.SetText( aTitle );
                 //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ), true );
@@ -899,7 +917,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 // hier den Zoom-Dialog oeffnen
-                pFuActual = new FuScale( this, pWindow, pDrView, GetDoc(), rReq );
+                pFuActual = new FuScale( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
             }
             Cancel();
         }
@@ -915,6 +933,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -927,7 +946,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 else
                 {
                     if( pDrView->IsVectorizeAllowed() )
-                        pFuActual = new FuVectorize( this, pWindow, pDrView, GetDoc(), rReq );
+                        pFuActual = new FuVectorize( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
                     else
                     {
                         WaitObject aWait( (Window*)GetActiveWindow() );
@@ -957,6 +976,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -984,6 +1004,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected(true,true,true) )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -1151,14 +1172,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_DELETE_SNAPITEM:
         {
             SdrPageView* pPV;
-            Point   aMPos = pWindow->PixelToLogic( aMousePos );
-            USHORT  nHitLog = (USHORT) pWindow->PixelToLogic( Size(
+            Point   aMPos = GetActiveWindow()->PixelToLogic( aMousePos );
+            USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic( Size(
                 FuPoor::HITPIX, 0 ) ).Width();
             USHORT  nHelpLine;
 
             bMousePosFreezed = FALSE;
 
-            if( pDrView->PickHelpLine( aMPos, nHitLog, *pWindow, nHelpLine, pPV) )
+            if( pDrView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 pPV->DeleteHelpLine( nHelpLine );
             }
@@ -1188,7 +1209,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_DRAW_FONTWORK:
         case SID_DRAW_FONTWORK_VERTICAL:
         {
-            svx::FontworkBar::execute( pView, nSId );
+            svx::FontworkBar::execute(mpView, nSId );
             Cancel();
             rReq.Done();
         }
@@ -1218,201 +1239,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     2. Use the model to create a new page or duplicate an existing one.
     3. Update the tab control and switch to the new page.
 */
-void DrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
+void DrawViewShell::CreateOrDuplicatePage (
+    SfxRequest& rRequest,
+    PageKind ePageKind,
+    SdPage* pPage)
 {
-    USHORT nSId = rReq.GetSlot();
     if (ePageKind == PK_STANDARD && eEditMode != EM_MASTERPAGE)
     {
         if ( pDrView->IsTextEdit() )
         {
             pDrView->EndTextEdit();
         }
-
-        USHORT nPageCount = GetDoc()->GetSdPageCount(ePageKind);
-        SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-        BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-        BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
-
-        String aStandardPageName;
-        String aNotesPageName;
-        AutoLayout eStandardLayout;
-        AutoLayout eNotesLayout;
-        BOOL bIsPageBack;
-        BOOL bIsPageObj;
-
-        // 1. Process the arguments.
-        const SfxItemSet* pArgs = rReq.GetArgs();
-        if (! pArgs)
-        {
-            SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
-            String aStr;
-            aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aStr ) );
-            aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
-                              aVisibleLayers.IsSet(aBckgrnd) ) );
-            aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
-                              aVisibleLayers.IsSet(aBckgrndObj) ) );
-
-            AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
-
-            if (eAutoLayout == AUTOLAYOUT_TITLE && pActualPage->GetPageNum() == 1)
-            {
-                // 1.Seite ist TitelDia
-                eAutoLayout = AUTOLAYOUT_ENUM;
-            }
-
-            aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
-                                                  eAutoLayout ) );
-
-            AbstractSdNewFoilDlg* pDlg = NULL; //CHINA001 SdNewFoilDlg* pDlg = NULL;
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-
-            if (nSId == SID_INSERTPAGE && !this->ISA(GraphicViewShell))
-            { //add by CHINA001
-                //CHINA001 pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, GetDocSh(), FALSE);
-                pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), pWindow, aAttrSet, ePageKind, GetDocSh(), FALSE );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            }
-            if (pDlg && pDlg->Execute () != RET_OK)
-            {
-                Cancel();
-
-                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-                delete pDlg;
-                rReq.Ignore ();
-                return;
-            }
-            else
-            {
-                // AutoLayouts muessen fertig sein
-                GetDoc()->StopWorkStartupDelay();
-
-                if (pDlg)
-                {
-                    pDlg->GetAttr( aAttrSet );
-                }
-
-                if (ePageKind == PK_NOTES)
-                {
-                    aNotesPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                    eNotesLayout   = (AutoLayout) ((const SfxAllEnumItem &)
-                        aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-                }
-                else
-                {
-                    aStandardPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                    eStandardLayout   = (AutoLayout) ((const SfxAllEnumItem &)
-                        aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-                }
-
-                bIsPageBack = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
-                bIsPageObj  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue();
-
-                GetDoc()->SetChanged(TRUE);
-            }
-
-            delete pDlg;
-        }
-        else if (pArgs->Count () != 4)
-        {
-            Cancel();
-
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-            StarBASIC::FatalError (SbERR_WRONG_ARGS);
-            rReq.Ignore ();
-            return;
-        }
-        else
-        {
-            // AutoLayouts muessen fertig sein
-            GetDoc()->StopWorkStartupDelay();
-
-            SFX_REQUEST_ARG (rReq, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
-            SFX_REQUEST_ARG (rReq, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-            SFX_REQUEST_ARG (rReq, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
-            SFX_REQUEST_ARG (rReq, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
-
-            if (CHECK_RANGE (AUTOLAYOUT_TITLE, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_HANDOUT6))
-            {
-                if (ePageKind == PK_NOTES)
-                {
-                    aNotesPageName = pPageName->GetValue ();
-                    eNotesLayout   = (AutoLayout) pLayout->GetValue ();
-                }
-                else
-                {
-                    aStandardPageName = pPageName->GetValue ();
-                    eStandardLayout   = (AutoLayout) pLayout->GetValue ();
-                }
-
-                bIsPageBack = pIsPageBack->GetValue ();
-                bIsPageObj  = pIsPageObj->GetValue ();
-            }
-            else
-            {
-                Cancel();
-
-                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-                StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-                rReq.Ignore ();
-                return;
-            }
-        }
-
-        // 2. Create a new page or duplicate an existing one.
-        pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
-
-        USHORT nNewPageIndex;
-        if ((nSId == SID_INSERTPAGE) || (nSId == SID_INSERTPAGE_QUICK))
-            nNewPageIndex = GetDoc()->CreatePage (pActualPage, ePageKind,
-                aStandardPageName, aNotesPageName,
-                eStandardLayout, eNotesLayout,
-                bIsPageBack, bIsPageObj);
-        else
-            nNewPageIndex = GetDoc()->DuplicatePage (pActualPage, ePageKind,
-                aStandardPageName, aNotesPageName,
-                eStandardLayout, eNotesLayout,
-                bIsPageBack, bIsPageObj);
-
-        pDrView->AddUndo (new SdrUndoNewPage (*GetDoc()->GetSdPage (nNewPageIndex, PK_STANDARD)));
-        pDrView->AddUndo (new SdrUndoNewPage (*GetDoc()->GetSdPage (nNewPageIndex, PK_NOTES)));
-
-        pDrView->EndUndo();
-
-        // 3. Update the tab control.
-        aTabControl.Clear();
-
-        SdPage* pPage;
-        String aPageName;
-        USHORT nPageCnt = GetDoc()->GetSdPageCount(ePageKind);
-
-        for (USHORT i = 0; i < nPageCnt; i++)
-        {
-            pPage = GetDoc()->GetSdPage(i, ePageKind);
-
-            aPageName = pPage->GetName();
-            aTabControl.InsertPage(i + 1, aPageName);
-        }
-
-        aTabControl.SetCurPageId (nNewPageIndex + 1);
-
-        GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-            (rReq.IsSynchronCall() ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON)
-            | SFX_CALLMODE_RECORD);
+        ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage);
     }
-
-    Cancel();
-
-    if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-        GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-    rReq.Done ();
 }
 
 } // end of namespace sd
