@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:57:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String STR_TOP
     TEXT [ portuguese_brazilian ] = "Em ~Cima" ;
     TEXT [ portuguese ] = "Em cima" ;
     TEXT [ finnish ] = "~Yl�reuna" ;
-    TEXT [ danish ] = "Foroven" ;
+    TEXT [ danish ] = "~Top" ;
     TEXT [ french ] = "En haut" ;
     TEXT [ swedish ] = "~�verst" ;
     TEXT [ dutch ] = "~Boven" ;
@@ -94,6 +94,8 @@ String STR_TOP
     TEXT[ hebrew ] = "~Oben";
     TEXT[ hindi ] = "~ऊपर";
     TEXT[ slovak ] = "~Hore";
+    TEXT[ hungarian ] = "~Fent";
+    TEXT[ slovenian ] = "~Zgoraj";
 };
 String STR_BOTTOM
 {
@@ -104,7 +106,7 @@ String STR_BOTTOM
     TEXT [ portuguese_brazilian ] = "Em ~Baixo" ;
     TEXT [ portuguese ] = "~Base" ;
     TEXT [ finnish ] = "~Alareuna" ;
-    TEXT [ danish ] = "Forneden" ;
+    TEXT [ danish ] = "~Bund" ;
     TEXT [ french ] = "En bas" ;
     TEXT [ swedish ] = "Nederst" ;
     TEXT [ dutch ] = "~Beneden" ;
@@ -126,6 +128,8 @@ String STR_BOTTOM
     TEXT[ hebrew ] = "~Unten";
     TEXT[ hindi ] = "~नीचे";
     TEXT[ slovak ] = "~Dole";
+    TEXT[ hungarian ] = "~Lent";
+    TEXT[ slovenian ] = "~Spodaj";
 };
 String STR_CENTER_HORI
 {
@@ -136,7 +140,7 @@ String STR_CENTER_HORI
     TEXT [ portuguese_brazilian ] = "~Centralizado" ;
     TEXT [ portuguese ] = "Centrado" ;
     TEXT [ finnish ] = "~Keskitetty" ;
-    TEXT [ danish ] = "Centreret" ;
+    TEXT [ danish ] = "~Centreret" ;
     TEXT [ french ] = "Centre" ;
     TEXT [ swedish ] = "~Centrerat" ;
     TEXT [ dutch ] = "~Gecentreerd" ;
@@ -158,6 +162,8 @@ String STR_CENTER_HORI
     TEXT[ hebrew ] = "~Zentriert";
     TEXT[ hindi ] = "~केन्द्रित";
     TEXT[ slovak ] = "Na ~stred";
+    TEXT[ hungarian ] = "~Középre";
+    TEXT[ slovenian ] = "Na ~sredini";
 };
 String STR_FROMTOP
 {
@@ -168,7 +174,7 @@ String STR_FROMTOP
     TEXT [ portuguese_brazilian ] = "De cima" ;
     TEXT [ portuguese ] = "De cima" ;
     TEXT [ finnish ] = "Ylh��lt�" ;
-    TEXT [ danish ] = "Ovenfra" ;
+    TEXT [ danish ] = "Fra toppen" ;
     TEXT [ french ] = "Du haut" ;
     TEXT [ swedish ] = "Uppifr�n" ;
     TEXT [ dutch ] = "Van boven" ;
@@ -190,6 +196,8 @@ String STR_FROMTOP
     TEXT[ hebrew ] = "‮מלמעלה‬";
     TEXT[ hindi ] = "ऊपर से";
     TEXT[ slovak ] = "Zhora";
+    TEXT[ hungarian ] = "Felülről";
+    TEXT[ slovenian ] = "Od zgoraj";
 };
 String STR_FROMBOTTOM
 {
@@ -199,7 +207,7 @@ String STR_FROMBOTTOM
     Text [ english_us ] = "From bottom" ;
     Text [ portuguese_brazilian ] = "De baixo" ;
     Text [ swedish ] = "Nedifr�n" ;
-    Text [ danish ] = "Nedefra" ;
+    Text [ danish ] = "Fra bunden" ;
     Text [ italian ] = "Dal basso" ;
     Text [ spanish ] = "Desde abajo" ;
     Text [ french ] = "Du bas" ;
@@ -221,6 +229,8 @@ String STR_FROMBOTTOM
     Text[ hebrew ] = "Von Unten";
     Text[ hindi ] = "नीचे से";
     Text[ slovak ] = "Zdola";
+    Text[ hungarian ] = "Alulról";
+    Text[ slovenian ] = "Z dna";
 };
 String STR_BELOW
 {
@@ -230,7 +240,7 @@ String STR_BELOW
     Text [ english_us ] = "Below" ;
     Text [ portuguese_brazilian ] = "Abaixo" ;
     Text [ swedish ] = "Nedanf�r" ;
-    Text [ danish ] = "Nedenfor" ;
+    Text [ danish ] = "Under" ;
     Text [ italian ] = "Al di sotto" ;
     Text [ spanish ] = "Debajo" ;
     Text [ french ] = "En dessous" ;
@@ -252,6 +262,8 @@ String STR_BELOW
     Text[ hebrew ] = "Unterhalb";
     Text[ hindi ] = "नीचे";
     Text[ slovak ] = "Pod";
+    Text[ hungarian ] = "Alatt";
+    Text[ slovenian ] = "Spodaj";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Align
@@ -287,6 +299,8 @@ String STR_LEFT
     TEXT[ hebrew ] = "Links";
     TEXT[ hindi ] = "बायाँ";
     TEXT[ slovak ] = "Vľavo";
+    TEXT[ hungarian ] = "Balra";
+    TEXT[ slovenian ] = "Levo";
 };
 String STR_MIR_LEFT
 {
@@ -296,7 +310,7 @@ String STR_MIR_LEFT
     Text [ english_us ] = "Inside" ;
     Text [ portuguese_brazilian ] = "Interior" ;
     Text [ swedish ] = "Inv�ndigt" ;
-    Text [ danish ] = "Indersiden" ;
+    Text [ danish ] = "Indenfor" ;
     Text [ italian ] = "Interno" ;
     Text [ spanish ] = "Interior" ;
     Text [ french ] = "Int�rieur" ;
@@ -318,6 +332,8 @@ String STR_MIR_LEFT
     Text[ hebrew ] = "Innen";
     Text[ hindi ] = "भीतर";
     Text[ slovak ] = "Vnútri";
+    Text[ hungarian ] = "Belül";
+    Text[ slovenian ] = "Znotraj";
 };
 String STR_RIGHT
 {
@@ -350,6 +366,8 @@ String STR_RIGHT
     TEXT[ hebrew ] = "Rechts";
     TEXT[ hindi ] = "दाहिना";
     TEXT[ slovak ] = "Vpravo";
+    TEXT[ hungarian ] = "Jobbra";
+    TEXT[ slovenian ] = "Desno";
 };
 String STR_MIR_RIGHT
 {
@@ -360,7 +378,7 @@ String STR_MIR_RIGHT
     TEXT [ portuguese_brazilian ] = "Exterior" ;
     TEXT [ portuguese ] = "Exterior" ;
     TEXT [ finnish ] = "Ulkopuolella" ;
-    TEXT [ danish ] = "Ydersiden" ;
+    TEXT [ danish ] = "Udenfor" ;
     TEXT [ french ] = "Ext�rieur" ;
     TEXT [ swedish ] = "Utsida" ;
     TEXT [ dutch ] = "Buiten" ;
@@ -382,6 +400,8 @@ String STR_MIR_RIGHT
     TEXT[ hebrew ] = "Außen";
     TEXT[ hindi ] = "बाहर";
     TEXT[ slovak ] = "Zvonka";
+    TEXT[ hungarian ] = "Kívül";
+    TEXT[ slovenian ] = "Zunaj";
 };
 String STR_CENTER_VERT
 {
@@ -391,7 +411,7 @@ String STR_CENTER_VERT
     Text [ english_us ] = "C~enter" ;
     Text [ portuguese_brazilian ] = "~Centro" ;
     Text [ swedish ] = "C~entrerat" ;
-    Text [ danish ] = "Centreret" ;
+    Text [ danish ] = "~Midte" ;
     Text [ italian ] = "Centro" ;
     Text [ spanish ] = "~Centro" ;
     Text [ french ] = "Centre" ;
@@ -413,6 +433,8 @@ String STR_CENTER_VERT
     Text[ hebrew ] = "~Mitte";
     Text[ hindi ] = "~मध्य";
     Text[ slovak ] = "Str~ed";
+    Text[ hungarian ] = "Kö~zépen";
+    Text[ slovenian ] = "S~redina";
 };
 String STR_FROMLEFT
 {
@@ -445,6 +467,8 @@ String STR_FROMLEFT
     TEXT[ hebrew ] = "‮משמאל‬";
     TEXT[ hindi ] = "बायाँ ओर से";
     TEXT[ slovak ] = "Zľava";
+    TEXT[ hungarian ] = "Balról";
+    TEXT[ slovenian ] = "Z leve";
 };
 String STR_MIR_FROMLEFT
 {
@@ -476,6 +500,8 @@ String STR_MIR_FROMLEFT
     Text[ hebrew ] = "Von Innen";
     Text[ hindi ] = "भीतर से";
     Text[ slovak ] = "Zvnútra";
+    Text[ hungarian ] = "Belülről";
+    Text[ slovenian ] = "Od znotraj";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel
@@ -510,6 +536,8 @@ String STR_REL_BORDER
     Text[ hebrew ] = "Rand";
     Text[ hindi ] = "पृष्ठ-प्रान्त";
     Text[ slovak ] = "Okraj";
+    Text[ hungarian ] = "Margó";
+    Text[ slovenian ] = "Rob";
 };
 String STR_REL_PRTAREA
 {
@@ -519,7 +547,7 @@ String STR_REL_PRTAREA
     Text [ english_us ] = "Paragraph text area" ;
     Text [ portuguese_brazilian ] = "�rea de texto" ;
     Text [ swedish ] = "Textomr�de i stycke" ;
-    Text [ danish ] = "Tekstomr�de" ;
+    Text [ danish ] = "Afsnitstekstomr�de" ;
     Text [ italian ] = "Area del testo del paragrafo" ;
     Text [ spanish ] = "�rea de texto del p�rrafo" ;
     Text [ french ] = "Zone de texte de paragraphe" ;
@@ -541,6 +569,8 @@ String STR_REL_PRTAREA
     Text[ hebrew ] = "Textbereich";
     Text[ hindi ] = "टेक्स्ट् विस्तीर्ण";
     Text[ slovak ] = "Oblasť textu";
+    Text[ hungarian ] = "Szövegterület";
+    Text[ slovenian ] = "Področje besedila odstavka";
 };
 String STR_TOPPRT
 {
@@ -573,6 +603,8 @@ String STR_TOPPRT
     TEXT[ hebrew ] = "Oberer Rand";
     TEXT[ hindi ] = "ऊपरी पृष्ठ-प्रान्त";
     TEXT[ slovak ] = "Horný okraj";
+    TEXT[ hungarian ] = "Felső margó";
+    TEXT[ slovenian ] = "Zgornji rob";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Rel
@@ -607,6 +639,8 @@ String STR_FLY_REL_PG_LEFT
     Text[ hebrew ] = "Rahmenrand links";
     Text[ hindi ] = "बायाँ फ्रेम का किनारा";
     Text[ slovak ] = "Ohraničenie ľavého okraja";
+    Text[ hungarian ] = "Bal keretszegély";
+    Text[ slovenian ] = "Levi rob okvira";
 };
 String STR_FLY_MIR_REL_PG_LEFT
 {
@@ -638,6 +672,8 @@ String STR_FLY_MIR_REL_PG_LEFT
     Text[ hebrew ] = "Rahmenrand innen";
     Text[ hindi ] = "भीतरी फ्रेम का किनारा";
     Text[ slovak ] = "Vnútorné ohraničenie";
+    Text[ hungarian ] = "Belső keretszegély";
+    Text[ slovenian ] = "Notranji rob okvira";
 };
 String STR_FLY_REL_PG_RIGHT
 {
@@ -669,6 +705,8 @@ String STR_FLY_REL_PG_RIGHT
     Text[ hebrew ] = "Rahmenrand rechts";
     Text[ hindi ] = "दाहिना फ्रेम का किनारा";
     Text[ slovak ] = "Ohraničenie pravého okraja";
+    Text[ hungarian ] = "Jobb keretszegély";
+    Text[ slovenian ] = "Desni rob okvira";
 };
 String STR_FLY_MIR_REL_PG_RIGHT
 {
@@ -700,6 +738,8 @@ String STR_FLY_MIR_REL_PG_RIGHT
     Text[ hebrew ] = "Rahmenrand außen";
     Text[ hindi ] = "बाहरी फ्रेम का किनारा";
     Text[ slovak ] = "Vonkajší okraj rámca";
+    Text[ hungarian ] = "Külső keretszegély";
+    Text[ slovenian ] = "Zunanji rob okvira";
 };
 String STR_FLY_REL_PG_FRAME
 {
@@ -731,6 +771,8 @@ String STR_FLY_REL_PG_FRAME
     Text[ hebrew ] = "Gesamter Rahmen";
     Text[ hindi ] = "सम्पूर्ण फ्रेम ";
     Text[ slovak ] = "Celý rámec";
+    Text[ hungarian ] = "Teljes keret";
+    Text[ slovenian ] = "Celoten okvir";
 };
 String STR_FLY_REL_PG_PRTAREA
 {
@@ -762,6 +804,8 @@ String STR_FLY_REL_PG_PRTAREA
     Text[ hebrew ] = "Rahmentextbereich";
     Text[ hindi ] = "फ्रेम टेक्स्ट् विस्तीर्ण";
     Text[ slovak ] = "Ohraničenie textovej oblasti";
+    Text[ hungarian ] = "Keret szövegterület";
+    Text[ slovenian ] = "Področje besedila okvira";
 };
 String STR_FRAME
 {
@@ -793,6 +837,8 @@ String STR_FRAME
     Text[ hebrew ] = "Absatzbereich";
     Text[ hindi ] = "परिच्छेद विस्तीर्ण";
     Text[ slovak ] = "Oblasť odstavca";
+    Text[ hungarian ] = "Bekezdés területe";
+    Text[ slovenian ] = "Področje odstavka";
 };
 String STR_PRTAREA
 {
@@ -824,6 +870,8 @@ String STR_PRTAREA
     Text[ hebrew ] = "Absatztextbereich";
     Text[ hindi ] = "परिच्छेद टेक्स्ट् विस्तीर्ण";
     Text[ slovak ] = "Oblasť textu v odstavci";
+    Text[ hungarian ] = "Bekezdés szövegterület";
+    Text[ slovenian ] = "Področje besedila odstavka";
 };
 String STR_REL_PG_LEFT
 {
@@ -833,7 +881,7 @@ String STR_REL_PG_LEFT
     Text [ english_us ] = "Left page border" ;
     Text [ portuguese_brazilian ] = "Borda esquerda da p�gina" ;
     Text [ swedish ] = "V�nster sidmarginal" ;
-    Text [ danish ] = "Venstre siderand" ;
+    Text [ danish ] = "Venstre sidekant" ;
     Text [ italian ] = "Margine paragrafo sinistro" ;
     Text [ spanish ] = "Margen izquierdo de la p�gina" ;
     Text [ french ] = "Marge � gauche" ;
@@ -855,6 +903,8 @@ String STR_REL_PG_LEFT
     Text[ hebrew ] = "Seitenrand links";
     Text[ hindi ] = "बायाँ पृष्ठ किनारा";
     Text[ slovak ] = "Okraj ľavej stránky";
+    Text[ hungarian ] = "Bal oldalszegély";
+    Text[ slovenian ] = "Levi rob strani";
 };
 String STR_MIR_REL_PG_LEFT
 {
@@ -864,7 +914,7 @@ String STR_MIR_REL_PG_LEFT
     Text [ english_us ] = "Inner page border" ;
     Text [ portuguese_brazilian ] = "Borda interna da p�gina" ;
     Text [ swedish ] = "Inv�ndig sidmarginal" ;
-    Text [ danish ] = "Indre siderand" ;
+    Text [ danish ] = "Indre sidekant" ;
     Text [ italian ] = "Margine pagina interno" ;
     Text [ spanish ] = "Margen interior de la p�gina" ;
     Text [ french ] = "Marge int�rieure" ;
@@ -886,6 +936,8 @@ String STR_MIR_REL_PG_LEFT
     Text[ hebrew ] = "Seitenrand innen";
     Text[ hindi ] = "भीतरी पृष्ठ किनारा";
     Text[ slovak ] = "Vnútorný okraj stránky";
+    Text[ hungarian ] = "Belső oldalszegély";
+    Text[ slovenian ] = "Notranji rob strani";
 };
 String STR_REL_PG_RIGHT
 {
@@ -895,7 +947,7 @@ String STR_REL_PG_RIGHT
     Text [ english_us ] = "Right page border" ;
     Text [ portuguese_brazilian ] = "Borda direita da p�gina" ;
     Text [ swedish ] = "H�ger sidmarginal" ;
-    Text [ danish ] = "H�jre siderand" ;
+    Text [ danish ] = "H�jre sidekant" ;
     Text [ italian ] = "Margine pagina destro" ;
     Text [ spanish ] = "Borde derecho de la p�gina" ;
     Text [ french ] = "Marge � droite" ;
@@ -917,6 +969,8 @@ String STR_REL_PG_RIGHT
     Text[ hebrew ] = "Seitenrand rechts";
     Text[ hindi ] = "दाहिना पृष्ठ किनारा";
     Text[ slovak ] = "Pravý okraj strany";
+    Text[ hungarian ] = "Jobb oldalszegély";
+    Text[ slovenian ] = "Desni rob strani";
 };
 String STR_MIR_REL_PG_RIGHT
 {
@@ -926,7 +980,7 @@ String STR_MIR_REL_PG_RIGHT
     Text [ english_us ] = "Outer page border" ;
     Text [ portuguese_brazilian ] = "Borda exterior da p�gina" ;
     Text [ swedish ] = "Utv�ndig sidmarginal" ;
-    Text [ danish ] = "Ydre siderand" ;
+    Text [ danish ] = "Ydre sidekant" ;
     Text [ italian ] = "Margine pagina esterno" ;
     Text [ spanish ] = "Margen exterior de la p�gina" ;
     Text [ french ] = "Marge ext�rieure" ;
@@ -948,6 +1002,8 @@ String STR_MIR_REL_PG_RIGHT
     Text[ hebrew ] = "Seitenrand außen";
     Text[ hindi ] = "बाहरी पृष्ठ किनारा";
     Text[ slovak ] = "Vonkajší okraj stránky";
+    Text[ hungarian ] = "Külső oldalszegély";
+    Text[ slovenian ] = "Zunanji rob strani";
 };
 String STR_REL_FRM_LEFT
 {
@@ -957,7 +1013,7 @@ String STR_REL_FRM_LEFT
     Text [ english_us ] = "Left paragraph border" ;
     Text [ portuguese_brazilian ] = "Borda esquerda do par�grafo" ;
     Text [ swedish ] = "V�nster styckemarginal" ;
-    Text [ danish ] = "Venstre afsnitsrand" ;
+    Text [ danish ] = "Venstre afsnitskant" ;
     Text [ italian ] = "Margine paragrafo sinistro" ;
     Text [ spanish ] = "Margen izquierdo del p�rrafo" ;
     Text [ french ] = "Marge de paragraphe gauche" ;
@@ -979,6 +1035,8 @@ String STR_REL_FRM_LEFT
     Text[ hebrew ] = "Absatzrand links";
     Text[ hindi ] = "बायाँ परिच्छेद किनारा ";
     Text[ slovak ] = "Ľavé ohraničenie odstavca";
+    Text[ hungarian ] = "Bal bekezdésszegély";
+    Text[ slovenian ] = "Levi rob odstavka";
 };
 String STR_MIR_REL_FRM_LEFT
 {
@@ -988,7 +1046,7 @@ String STR_MIR_REL_FRM_LEFT
     Text [ english_us ] = "Inner paragraph border" ;
     Text [ portuguese_brazilian ] = "Borda interna do par�grafo" ;
     Text [ swedish ] = "Inre styckemarginal" ;
-    Text [ danish ] = "Indre afsnitsrand" ;
+    Text [ danish ] = "Indre afsnitskant" ;
     Text [ italian ] = "Margine paragrafo interno" ;
     Text [ spanish ] = "Margen interior del p�rrafo" ;
     Text [ french ] = "Marge de paragraphe int�rieure" ;
@@ -1010,6 +1068,8 @@ String STR_MIR_REL_FRM_LEFT
     Text[ hebrew ] = "Absatzrand innen";
     Text[ hindi ] = "भीतरी परिच्छेद किनारा";
     Text[ slovak ] = "Vnútorný okraj odstavca";
+    Text[ hungarian ] = "Belső bekezdésszegély";
+    Text[ slovenian ] = "Notranji rob odstavka";
 };
 String STR_REL_FRM_RIGHT
 {
@@ -1019,7 +1079,7 @@ String STR_REL_FRM_RIGHT
     Text [ english_us ] = "Right paragraph border" ;
     Text [ portuguese_brazilian ] = "Borda direita do par�grafo" ;
     Text [ swedish ] = "H�ger styckemarginal" ;
-    Text [ danish ] = "H�jre afsnitsrand" ;
+    Text [ danish ] = "H�jre afsnitskant" ;
     Text [ italian ] = "Margine paragrafo destro" ;
     Text [ spanish ] = "Borde derecho del p�rrafo" ;
     Text [ french ] = "Marge de paragraphe droite" ;
@@ -1041,6 +1101,8 @@ String STR_REL_FRM_RIGHT
     Text[ hebrew ] = "Absatzrand rechts";
     Text[ hindi ] = "दाहिना परिच्छेद किनारा";
     Text[ slovak ] = "Pravý okraj odstavca";
+    Text[ hungarian ] = "Jobb bekezdésszegély";
+    Text[ slovenian ] = "Desni rob odstavka";
 };
 String STR_MIR_REL_FRM_RIGHT
 {
@@ -1050,7 +1112,7 @@ String STR_MIR_REL_FRM_RIGHT
     Text [ english_us ] = "Outer paragraph border" ;
     Text [ portuguese_brazilian ] = "Borda exterior do par�grafo" ;
     Text [ swedish ] = "Yttre styckemarginal" ;
-    Text [ danish ] = "Ydre afsnitsrand" ;
+    Text [ danish ] = "Ydre afsnitskant" ;
     Text [ italian ] = "Margine paragrafo esterno" ;
     Text [ spanish ] = "Margen exterior del p�rrafo" ;
     Text [ french ] = "Marge de paragraphe ext�rieure " ;
@@ -1072,6 +1134,8 @@ String STR_MIR_REL_FRM_RIGHT
     Text[ hebrew ] = "Absatzrand außen";
     Text[ hindi ] = "बाहरी परिच्छेद किनारा";
     Text[ slovak ] = "Vonkajší okraj odstavca";
+    Text[ hungarian ] = "Külső bekezdésszegély";
+    Text[ slovenian ] = "Zunanji rob odstavka";
 };
 String STR_REL_PG_FRAME
 {
@@ -1103,6 +1167,8 @@ String STR_REL_PG_FRAME
     Text[ hebrew ] = "‮דף שלם‬";
     Text[ hindi ] = "सम्पूर्ण पृष्ठ";
     Text[ slovak ] = "Celá stránka";
+    Text[ hungarian ] = "Egész oldal";
+    Text[ slovenian ] = "Cela stran";
 };
 String STR_REL_PG_PRTAREA
 {
@@ -1134,6 +1200,8 @@ String STR_REL_PG_PRTAREA
     Text[ hebrew ] = "Seitentextbereich";
     Text[ hindi ] = "पृष्ठ टेक्स्ट् विस्तीर्ण";
     Text[ slovak ] = "Textová oblasť stránky";
+    Text[ hungarian ] = "Oldal szövegterülete";
+    Text[ slovenian ] = "Področje besedila strani";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel Zeichenausrichtungen
@@ -1146,7 +1214,7 @@ String STR_REL_BASE
     Text [ english_us ] = "Base line" ;
     Text [ portuguese_brazilian ] = "Linha de base" ;
     Text [ swedish ] = "Baslinje" ;
-    Text [ danish ] = "Basislinje" ;
+    Text [ danish ] = "Grundlinje" ;
     Text [ italian ] = "Linea di base" ;
     Text [ spanish ] = "L�nea de base" ;
     Text [ french ] = "Ligne de base" ;
@@ -1168,6 +1236,8 @@ String STR_REL_BASE
     Text[ hebrew ] = "Grundlinie";
     Text[ hindi ] = "आधार रेखा";
     Text[ slovak ] = "Základná čiara";
+    Text[ hungarian ] = "Alapvonal";
+    Text[ slovenian ] = "Osnovna vrstica";
 };
 String STR_REL_CHAR
 {
@@ -1199,6 +1269,8 @@ String STR_REL_CHAR
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Znak";
+    Text[ hungarian ] = "Karakter";
+    Text[ slovenian ] = "Znak";
 };
 String STR_REL_ROW
 {
@@ -1230,6 +1302,8 @@ String STR_REL_ROW
     Text[ hebrew ] = "Zeile";
     Text[ hindi ] = "पंक्ति";
     Text[ slovak ] = "Riadok";
+    Text[ hungarian ] = "Sor";
+    Text[ slovenian ] = "Vrstica";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
@@ -1242,7 +1316,7 @@ String STR_TOP_BASE
     Text [ english_us ] = "Base line at ~top" ;
     Text [ portuguese_brazilian ] = "Linha de base no ~topo" ;
     Text [ swedish ] = "Baslinje ~�verst" ;
-    Text [ danish ] = "Basislinje �verst" ;
+    Text [ danish ] = "Grundlinje ~�verst" ;
     Text [ italian ] = "Linea di base in ~alto" ;
     Text [ spanish ] = "L�nea de base ~arriba" ;
     Text [ french ] = "Ligne de base en ~haut" ;
@@ -1264,6 +1338,8 @@ String STR_TOP_BASE
     Text[ hebrew ] = "Grundlinie ~oben";
     Text[ hindi ] = "ऊपर में आधार रेखा at ~top";
     Text[ slovak ] = "Základná ~hore";
+    Text[ hungarian ] = "Alapvonalhoz ~fent";
+    Text[ slovenian ] = "Osnovna vrstica na ~vrhu";
 };
 String STR_BOTTOM_BASE
 {
@@ -1273,7 +1349,7 @@ String STR_BOTTOM_BASE
     Text [ english_us ] = "~Base line at bottom" ;
     Text [ portuguese_brazilian ] = "Linha de ~base em baixo" ;
     Text [ swedish ] = "Baslinje ~nederst" ;
-    Text [ danish ] = "Basislinje nederst" ;
+    Text [ danish ] = "Grundlinje ~nederst" ;
     Text [ italian ] = "Base in ~basso" ;
     Text [ spanish ] = "L�nea de base a~bajo" ;
     Text [ french ] = "Ligne de base en ~bas" ;
@@ -1295,6 +1371,8 @@ String STR_BOTTOM_BASE
     Text[ hebrew ] = "Grundlinie ~unten";
     Text[ hindi ] = "नीचे में ~आधार रेखा";
     Text[ slovak ] = "Základná ~dole";
+    Text[ hungarian ] = "Alapvonalhoz ~lent";
+    Text[ slovenian ] = "Osnovna vrstica na ~dnu";
 };
 String STR_CENTER_BASE
 {
@@ -1304,7 +1382,7 @@ String STR_CENTER_BASE
     Text [ english_us ] = "Base line ~centered" ;
     Text [ portuguese_brazilian ] = "Linha de base c~entralizada" ;
     Text [ swedish ] = "Baslinje ~centrerad" ;
-    Text [ danish ] = "Basislinje centreret" ;
+    Text [ danish ] = "Grundlinje centreret" ;
     Text [ italian ] = "Linea di base ~centrata" ;
     Text [ spanish ] = "L�nea de base ~centrada" ;
     Text [ french ] = "Ligne de base ~centr�e" ;
@@ -1326,6 +1404,8 @@ String STR_CENTER_BASE
     Text[ hebrew ] = "Grundlinie ~zentriert";
     Text[ hindi ] = "आधार रेखा ~मध्यभाग में";
     Text[ slovak ] = "Základná upro~stred";
+    Text[ hungarian ] = "Alapvonalhoz ~középen";
+    Text[ slovenian ] = "Osnovna vrstica na ~sredini";
 };
 String STR_LINE_TOP
 {
@@ -1337,7 +1417,7 @@ String STR_LINE_TOP
     Text [ spanish ] = "L�nea arriba" ;
     Text [ french ] = "Ligne en haut" ;
     Text [ swedish ] = "�versta raden" ;
-    Text [ danish ] = "R�kke �verst" ;
+    Text [ danish ] = "Toppen af linjen" ;
     Text [ portuguese ] = "Linha superior" ;
     Text [ portuguese_brazilian ] = "Topo da linha" ;
     Text[ chinese_simplified ] = "行上方";
@@ -1357,6 +1437,8 @@ String STR_LINE_TOP
     Text[ hebrew ] = "Zeile oben";
     Text[ hindi ] = "रेखा के ऊपर";
     Text[ slovak ] = "Vrchol riadku";
+    Text[ hungarian ] = "Sor teteje";
+    Text[ slovenian ] = "Nad vrstico";
 };
 String STR_LINE_BOTTOM
 {
@@ -1368,7 +1450,7 @@ String STR_LINE_BOTTOM
     Text [ spanish ] = "L�nea abajo" ;
     Text [ french ] = "Ligne en bas" ;
     Text [ swedish ] = "Nedersta raden" ;
-    Text [ danish ] = "R�kke nederst" ;
+    Text [ danish ] = "Bunden af linjen" ;
     Text [ portuguese ] = "Linha inferior" ;
     Text [ portuguese_brazilian ] = "Base da linha" ;
     Text[ chinese_simplified ] = "行下方";
@@ -1388,6 +1470,8 @@ String STR_LINE_BOTTOM
     Text[ hebrew ] = "Zeile unten";
     Text[ hindi ] = "रेखा के नीचे";
     Text[ slovak ] = "Päta riadku";
+    Text[ hungarian ] = "Sor alja";
+    Text[ slovenian ] = "Na dnu vrstice";
 };
 String STR_LINE_CENTER
 {
@@ -1399,7 +1483,7 @@ String STR_LINE_CENTER
     Text [ french ] = "Ligne centr�e" ;
     Text [ dutch ] = "Regel gecentreerd" ;
     Text [ swedish ] = "Rad centrerad" ;
-    Text [ danish ] = "R�kke centreret" ;
+    Text [ danish ] = "Midten af linjen" ;
     Text [ portuguese ] = "Linha centrada" ;
     Text [ portuguese_brazilian ] = "Centro da linha" ;
     Text[ chinese_simplified ] = "行居中";
@@ -1419,6 +1503,8 @@ String STR_LINE_CENTER
     Text[ hebrew ] = "Zeile zentriert";
     Text[ hindi ] = "रेखा के मध्य";
     Text[ slovak ] = "Stred riadku";
+    Text[ hungarian ] = "Sor közepe";
+    Text[ slovenian ] = "Na sredini vrstice";
 };
 String STR_CHAR_TOP
 {
@@ -1430,7 +1516,7 @@ String STR_CHAR_TOP
     Text [ spanish ] = "Car�cter arriba" ;
     Text [ french ] = "D�calage haut" ;
     Text [ swedish ] = "Tecken �verst" ;
-    Text [ danish ] = "Tegn �verst" ;
+    Text [ danish ] = "Toppen af tegnet" ;
     Text [ portuguese ] = "Car�cter em cima" ;
     Text [ portuguese_brazilian ] = "Topo do caracter" ;
     Text[ chinese_simplified ] = "字符上方";
@@ -1450,6 +1536,8 @@ String STR_CHAR_TOP
     Text[ hebrew ] = "Zeichen oben";
     Text[ hindi ] = "अक्षर के ऊपर";
     Text[ slovak ] = "Vrchol znaku";
+    Text[ hungarian ] = "Karakter teteje";
+    Text[ slovenian ] = "Nad znakom";
 };
 String STR_CHAR_BOTTOM
 {
@@ -1461,7 +1549,7 @@ String STR_CHAR_BOTTOM
     Text [ spanish ] = "Car�cter abajo" ;
     Text [ french ] = "D�calage bas" ;
     Text [ swedish ] = "Tecken nederst" ;
-    Text [ danish ] = "Tegn nederst" ;
+    Text [ danish ] = "Bunden af tegnet" ;
     Text [ portuguese ] = "Car�cter em baixo" ;
     Text [ portuguese_brazilian ] = "Base do caracter" ;
     Text[ chinese_simplified ] = "字符下方";
@@ -1481,6 +1569,8 @@ String STR_CHAR_BOTTOM
     Text[ hebrew ] = "Zeichen unten";
     Text[ hindi ] = "अक्षर के नीचे";
     Text[ slovak ] = "Päta znaku";
+    Text[ hungarian ] = "Karakter alja";
+    Text[ slovenian ] = "Pod znakom";
 };
 String STR_CHAR_CENTER
 {
@@ -1492,7 +1582,7 @@ String STR_CHAR_CENTER
     Text [ french ] = "Caract�re centr�" ;
     Text [ dutch ] = "Teken gecentreerd" ;
     Text [ swedish ] = "Tecken centrerat" ;
-    Text [ danish ] = "Tegn centreret" ;
+    Text [ danish ] = "Midten af tegnet" ;
     Text [ portuguese ] = "Car�cter centrado" ;
     Text [ portuguese_brazilian ] = "Centro do caracter" ;
     Text[ chinese_simplified ] = "字符居中";
@@ -1512,6 +1602,8 @@ String STR_CHAR_CENTER
     Text[ hebrew ] = "Zeichen zentriert";
     Text[ hindi ] = "अक्षर के मध्य";
     Text[ slovak ] = "Stred znaku";
+    Text[ hungarian ] = "Karakter közepe";
+    Text[ slovenian ] = "Na sredini znaka";
 };
 String STR_OLE_INSERT
 {
@@ -1545,6 +1637,8 @@ String STR_OLE_INSERT
     TEXT[ hebrew ] = "‮הוספת אוביקת‬";
     TEXT[ hindi ] = "वस्तु जोड़ो";
     TEXT[ slovak ] = "Vložiť objekt";
+    TEXT[ hungarian ] = "Objektum beszúrása";
+    TEXT[ slovenian ] = "Vstavi predmet";
 };
 String STR_OLE_EDIT
 {
@@ -1577,6 +1671,8 @@ String STR_OLE_EDIT
     TEXT[ hebrew ] = "Objekt bearbeiten";
     TEXT[ hindi ] = "वस्तु संपादन";
     TEXT[ slovak ] = "Upraviť objekt";
+    TEXT[ hungarian ] = "Objektum szerkesztése";
+    TEXT[ slovenian ] = "Uredi predmet";
 };
 String STR_COLL_HEADER
 {
@@ -1609,6 +1705,8 @@ String STR_COLL_HEADER
     TEXT[ hebrew ] = " (Vorlage:";
     TEXT[ hindi ] = " (नमूना: ";
     TEXT[ slovak ] = " (Šablóna: ";
+    TEXT[ hungarian ] = "(Sablon:";
+    TEXT[ slovenian ] = " (Predloga:";
 };
 String STR_FRMUI_BORDER
 {
@@ -1619,7 +1717,7 @@ String STR_FRMUI_BORDER
     Text [ portuguese_brazilian ] = "Bordas" ;
     Text [ portuguese ] = "Contornos" ;
     Text [ finnish ] = "Reunat" ;
-    Text [ danish ] = "Ramme" ;
+    Text [ danish ] = "Kanter" ;
     Text [ french ] = "Bordure" ;
     Text [ swedish ] = "Inramning" ;
     Text [ dutch ] = "Omranding" ;
@@ -1641,6 +1739,8 @@ String STR_FRMUI_BORDER
     Text[ hebrew ] = "‮מסגרות‬";
     Text[ hindi ] = "किनारें";
     Text[ slovak ] = "Okraje";
+    Text[ hungarian ] = "Szegélyek";
+    Text[ slovenian ] = "Obrobe";
 };
 String STR_FRMUI_PATTERN
 {
@@ -1673,6 +1773,8 @@ String STR_FRMUI_PATTERN
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
     Text[ slovak ] = "Pozadie";
+    Text[ hungarian ] = "Háttér";
+    Text[ slovenian ] = "Ozadje";
 };
 String STR_FRMUI_WRAP
 {
@@ -1705,6 +1807,8 @@ String STR_FRMUI_WRAP
     Text[ hebrew ] = "‮שבירת שורות‬";
     Text[ hindi ] = "लपेटना";
     Text[ slovak ] = "Obtekanie textu";
+    Text[ hungarian ] = "Körbefuttatás";
+    Text[ slovenian ] = "Oblivanje";
 };
 InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
 {
@@ -1740,6 +1844,8 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ hebrew ] = "Der Spaltenabstand ist zu groß für die Spaltenbreite.";
     MESSAGE[ hindi ] = "स्तंभ के बीच का अंतर स्तंभ चौड़ाई से अधिक है ।";
     MESSAGE[ slovak ] = "Rozostup stĺpcov je väčší ako šírka stĺpca.";
+    MESSAGE[ hungarian ] = "A hasábok közötti távolság nagyobb, mint a hasábszélesség.";
+    MESSAGE[ slovenian ] = "Razmik stolpcev presega širino stolpcev.";
 };
 String STR_REL_PG_TOP
 {
@@ -1753,7 +1859,7 @@ String STR_REL_PG_TOP
     Text[ spanish ] = "Borde superior de la p�gina";
     Text[ finnish ] = "Top page border";
     Text[ italian ] = "Margine superiore";
-    Text[ danish ] = "Top page border";
+    Text[ danish ] = "Sidekant top";
     Text[ swedish ] = "Sidmarginal �verst";
     Text[ polish ] = "Top page border";
     Text[ portuguese_brazilian ] = "Borda superior da p�gina";
@@ -1769,6 +1875,8 @@ String STR_REL_PG_TOP
     Text[ hebrew ] = "Seitenrand oben";
     Text[ hindi ] = "Top page border";
     Text[ slovak ] = "Horný okraj strany";
+    Text[ hungarian ] = "Felső oldalszegély";
+    Text[ slovenian ] = "Zgornji rob strani";
 };
 String STR_REL_PG_BOTTOM
 {
@@ -1782,7 +1890,7 @@ String STR_REL_PG_BOTTOM
     Text[ spanish ] = "Borde inferior de la p�gina";
     Text[ finnish ] = "Bottom page border";
     Text[ italian ] = "Margine inferiore";
-    Text[ danish ] = "Bottom page border";
+    Text[ danish ] = "Sidekant bund";
     Text[ swedish ] = "Sidmarginal nederst";
     Text[ polish ] = "Bottom page border";
     Text[ portuguese_brazilian ] = "Borda inferior da p�gina";
@@ -1798,6 +1906,8 @@ String STR_REL_PG_BOTTOM
     Text[ hebrew ] = "Seitenrand unten";
     Text[ hindi ] = "Bottom page border";
     Text[ slovak ] = "Dolný okraj strany";
+    Text[ hungarian ] = "Alsó oldalszegély";
+    Text[ slovenian ] = "Spodnji rob strani";
 };
 String STR_REL_FRM_TOP
 {
@@ -1811,7 +1921,7 @@ String STR_REL_FRM_TOP
     Text[ spanish ] = "Borde superior del p�rrafo";
     Text[ finnish ] = "Top paragraph border";
     Text[ italian ] = "Margine superiore paragrafo";
-    Text[ danish ] = "Top paragraph border";
+    Text[ danish ] = "Top afsnitskant";
     Text[ swedish ] = "Styckemarginal �verst";
     Text[ polish ] = "Top paragraph border";
     Text[ portuguese_brazilian ] = "Borda superior do par�grafo";
@@ -1827,6 +1937,8 @@ String STR_REL_FRM_TOP
     Text[ hebrew ] = "Absatzrand oben";
     Text[ hindi ] = "Top paragraph border";
     Text[ slovak ] = "Horný okraj odstavca";
+    Text[ hungarian ] = "Felső bekezdésszegély";
+    Text[ slovenian ] = "Zgornji rob odstavka";
 };
 String STR_REL_FRM_BOTTOM
 {
@@ -1840,7 +1952,7 @@ String STR_REL_FRM_BOTTOM
     Text[ spanish ] = "Borde inferior del p�rrafo";
     Text[ finnish ] = "Bottom paragraph border";
     Text[ italian ] = "Margine inferiore paragrafo";
-    Text[ danish ] = "Bottom paragraph border";
+    Text[ danish ] = "Bund afsnitskant";
     Text[ swedish ] = "Styckemarginal nederst";
     Text[ polish ] = "Bottom paragraph border";
     Text[ portuguese_brazilian ] = "Borda inferior do par�grafo";
@@ -1856,6 +1968,8 @@ String STR_REL_FRM_BOTTOM
     Text[ hebrew ] = "Absatzrand unten";
     Text[ hindi ] = "Bottom paragraph border";
     Text[ slovak ] = "Dolný okraj odstavca";
+    Text[ hungarian ] = "Alsó bekezdésszegély";
+    Text[ slovenian ] = "Spodnji rob odstavka";
 };
 String STR_FROMRIGHT
 {
@@ -1869,7 +1983,7 @@ String STR_FROMRIGHT
     TEXT[ spanish ] = "De la derecha";
     TEXT[ finnish ] = "From right";
     TEXT[ italian ] = "Da destra";
-    TEXT[ danish ] = "From right";
+    TEXT[ danish ] = "Fra h�jre";
     TEXT[ swedish ] = "Fr�n h�ger";
     TEXT[ polish ] = "From right";
     TEXT[ portuguese_brazilian ] = "Da direita";
@@ -1885,7 +1999,10 @@ String STR_FROMRIGHT
     TEXT[ hebrew ] = "‮מימין‬";
     TEXT[ hindi ] = "From right";
     TEXT[ slovak ] = "Sprava";
+    TEXT[ hungarian ] = "Jobbról";
+    TEXT[ slovenian ] = "Z desne";
 };
+
 
 
 
