@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.30 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-18 21:15:25 $
+ *  $Revision: 1.31 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-19 00:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 
 // =======================================================================
 
+static inline unsigned long AbsoluteValue ( const long  nValue ){ unsigned long   nAbsValue = 0;        if ( nValue < 0 )  {      nAbsValue = -nValue;   } // if    else   {      nAbsValue = nValue;    } // else             return nAbsValue;} // AbsoluteValue
+
+// =======================================================================
+
+// =======================================================================
+
 static void SetWhiteBackColor()
 {
     RGBColor aWhiteBackColor;
@@ -109,6 +115,8 @@ static void SetBlackForeColor()
 
     RGBForeColor( &aBlackForeColor );
 } // SetBlackForeColor
+
+// =======================================================================
 
 // =======================================================================
 
@@ -144,6 +152,52 @@ static void CheckRectBounds ( Rect        *rSrcRect,
     } // if
 } // CheckRectBounds
 
+// -----------------------------------------------------------------------
+
+static inline void GetSalDstRect ( const SalTwoRect  *pPosAry,
+                                   Rect              *rDstRect
+                                 )
+{
+    SetRect( rDstRect,
+             pPosAry->mnDestX,
+             pPosAry->mnDestY,
+             pPosAry->mnDestX + pPosAry->mnDestWidth,
+             pPosAry->mnDestY + pPosAry->mnDestHeight
+           );
+} // GetSalSourceRect
+
+// -----------------------------------------------------------------------
+
+static inline void GetSalSrcRect ( const SalTwoRect  *pPosAry,
+                                   Rect              *rSrcRect
+                                 )
+{
+    SetRect( rSrcRect,
+             pPosAry->mnSrcX,
+             pPosAry->mnSrcY,
+             pPosAry->mnSrcX + pPosAry->mnSrcWidth,
+             pPosAry->mnSrcY + pPosAry->mnSrcHeight
+           );
+} // GetSalSrcRect
+
+// -----------------------------------------------------------------------
+
+static inline short SelectCopyMode ( const SalGraphicsDataPtr pSalGraphicsData )
+{
+    short nCopyMode = 0;
+
+    if ( pSalGraphicsData->mnPenMode == patCopy )
+    {
+        nCopyMode = srcCopy;
+    } // if
+    else
+    {
+        nCopyMode = srcXor;
+    } // else
+
+    return nCopyMode;
+} // SelectCopyMode
+
 // =======================================================================
 
 // =======================================================================
@@ -157,10 +211,6 @@ static void CompressRGBColor ( const PixMapPtr   pPixMap,
                                const RGBColor   *pRGBColor,                               SalColor         *rSalColor
                              ){
     if ( pPixMap->pixelSize == k32BitScreenDepth ) {      *rSalColor = Compress32BitRGBColor( pRGBColor );   } // if    else   {      *rSalColor = Compress16BitRGBColor( pRGBColor );   } // else} // CompressRGBColor    // -----------------------------------------------------------------------
-
-static unsigned long AbsoluteValue ( const long  nValue ){    unsigned long   nAbsValue = 0;        if ( nValue < 0 )  {      nAbsValue = -nValue;   } // if    else   {      nAbsValue = nValue;    } // else             return nAbsValue;} // AbsoluteValue
-
-// -----------------------------------------------------------------------
 
 static unsigned long  RGBDistance ( const RGBColor  *pRGBColor1,                                    const RGBColor  *pRGBColor2
                                   ){  unsigned long   nRGBDist    = 0;   long            nDeltaRed   = 0;   long            nDeltaGreen = 0;   long            nDeltaBlue  = 0;          nDeltaRed   = (long)pRGBColor2->red   - (long)pRGBColor1->red; nDeltaGreen = (long)pRGBColor2->green - (long)pRGBColor1->green;   nDeltaBlue  = (long)pRGBColor2->blue  - (long)pRGBColor1->blue;           nRGBDist =   AbsoluteValue(nDeltaRed)         + AbsoluteValue(nDeltaGreen)           + AbsoluteValue(nDeltaBlue);           return nRGBDist;} // RGBDistance
@@ -257,16 +307,13 @@ static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 
 // =======================================================================
 
-static void GetGDeviceResolution ( SalGraphicsDataPtr rSalGraphicsData )
+static OSErr GetGDeviceBitDepth ( unsigned short  *rGDeviceBitDepth )
 {
-    GDPtr  pGDevice = NULL;                   pGDevice = *GetGDevice ( );
-    if ( pGDevice != NULL )
+    GDPtr  pGDevice = NULL;    OSErr  nQDErr   = noErr;                                  pGDevice = *GetGDevice ( );
+    nQDErr = QDErr();
+    if ( ( pGDevice != NULL ) && ( nQDErr == noErr ) )
     {
-        long       nGDeviceTop    = pGDevice->gdRect.top;
-        long       nGDeviceLeft   = pGDevice->gdRect.left;
-        long       nGDeviceBottom = pGDevice->gdRect.bottom;
-        long       nGDeviceRight  = pGDevice->gdRect.right;
-        PixMapPtr  pPixMap        = NULL;
+        PixMapPtr  pPixMap = NULL;
 
         pPixMap = *pGDevice->gdPMap;
 
@@ -275,17 +322,40 @@ static void GetGDeviceResolution ( SalGraphicsDataPtr rSalGraphicsData )
             // From the PixMap data get the current bits-per-pixel
             // as associated with the current GDevice
 
-            rSalGraphicsData->mnBitDepth = pPixMap->pixelSize;
+            *rGDeviceBitDepth = (unsigned short)pPixMap->pixelSize;
         } // if
+    } // if
+
+    return nQDErr;
+} // GetGDeviceBitDepth
+
+// -----------------------------------------------------------------------
+
+static OSErr GetGDeviceResolution ( long  *rGDeviceHRes,
+                                    long  *rGDeviceVRes
+                                  )
+{
+    GDPtr  pGDevice = NULL;
+    OSErr  nQDErr   = noErr;                  pGDevice = *GetGDevice ( );
+
+    nQDErr = QDErr();
+    if ( ( pGDevice != NULL ) && ( nQDErr == noErr ) )
+    {
+        long  nGDeviceTop    = pGDevice->gdRect.top;
+        long  nGDeviceLeft   = pGDevice->gdRect.left;
+        long  nGDeviceBottom = pGDevice->gdRect.bottom;
+        long  nGDeviceRight  = pGDevice->gdRect.right;
 
         // From the current GDevice get its horizontal resolution
 
-        rSalGraphicsData->mnHorizontalRes = AbsoluteValue( nGDeviceRight - nGDeviceLeft );
+        *rGDeviceHRes = AbsoluteValue( nGDeviceRight - nGDeviceLeft );
 
         // From the current GDevice get its vertical resolution
 
-        rSalGraphicsData->mnVerticalRes = AbsoluteValue( nGDeviceBottom - nGDeviceTop );
+        *rGDeviceVRes = AbsoluteValue( nGDeviceBottom - nGDeviceTop );
     } // if
+
+    return nQDErr;
 } // GetGDeviceResolution
 
 // =======================================================================
@@ -303,6 +373,10 @@ static OSErr BeginClip ( SalGraphicsDataPtr rSalGraphicsData )
         // Get the port bounds from our current region handle
 
         GetRegionBounds( rSalGraphicsData->mhClipRgn, &aClipRect );
+
+        // Erase the clip rectangle beftore the actual clipping
+
+        EraseRect( &aClipRect );
 
         // Clip to a rectangle that we got from our current region
 
@@ -399,26 +473,6 @@ static OSErr CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
 // =======================================================================
 
-static short SelectCopyMode ( const SalGraphicsDataPtr pSalGraphicsData )
-{
-    short nCopyMode = 0;
-
-    if ( pSalGraphicsData->mnPenMode == patCopy )
-    {
-        nCopyMode = srcCopy;
-    } // if
-    else
-    {
-        nCopyMode = srcXor;
-    } // else
-
-    return nCopyMode;
-} // SelectCopyMode
-
-// =======================================================================
-
-// =======================================================================
-
 static void InitBrush ( SalGraphicsDataPtr rSalGraphicsData )
 {
     RGBColor aBlackColor;
@@ -446,13 +500,6 @@ static void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
     rSalGraphicsData->mnFontSize  = 10;
     rSalGraphicsData->mnFontStyle = normal;
 } // InitFont
-
-// -----------------------------------------------------------------------
-
-static void InitGDeviceAttr ( SalGraphicsDataPtr rSalGraphicsData )
-{
-    GetGDeviceResolution ( rSalGraphicsData );
-} // InitQD
 
 // -----------------------------------------------------------------------
 
@@ -502,10 +549,6 @@ SalGraphics::SalGraphics()
     // QuickDraw graph port, offscreen graphic world, and graphic device handle
 
     InitQD( &maGraphicsData );
-
-    // Current GDevice resolution, and bit-depth
-
-    InitGDeviceAttr( &maGraphicsData );
 
     // Regions within a current port
 
@@ -559,33 +602,44 @@ SalGraphics::~SalGraphics()
 
 void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    rDPIX = maGraphicsData.mnHorizontalRes;
-    rDPIY = maGraphicsData.mnVerticalRes;
+    long nHRes = 0;
+    long nVRes = 0;
+
+    maGraphicsData.mnMacOSErr = GetGDeviceResolution( &nHRes, &nVRes );
+
+    if ( maGraphicsData.mnMacOSErr == noErr )
+    {
+        rDPIX = nHRes;
+        rDPIY = nVRes;
+    } // if
 } // SalGraphics::GetResolution
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 {
-    if ( maGraphicsData.mhWnd )
+    long nHRes = 0;
+    long nVRes = 0;
+
+    maGraphicsData.mnMacOSErr = GetGDeviceResolution( &nHRes, &nVRes );
+
+    if ( maGraphicsData.mnMacOSErr == noErr )
     {
-        VCLGraphics_GetScreenResolution( maGraphicsData.mhWnd,
-            &rDPIX, &rDPIY );
-    }
-    else
-    {
-        // Stub code: we only support screen resolution right now
-        rDPIX = 0;
-        rDPIY = 0;
-    }
-}
+        rDPIX = nHRes;
+        rDPIY = nVRes;
+    } // if
+} // SalGraphics::GetScreenFontResolution
 
 // -----------------------------------------------------------------------
 
 USHORT SalGraphics::GetBitCount()
 {
-    return 0;
-}
+    unsigned short nBitDepth = 0;
+
+    maGraphicsData.mnMacOSErr = GetGDeviceBitDepth ( &nBitDepth );
+
+    return nBitDepth;
+} // SalGraphics::GetBitCount
 
 // -----------------------------------------------------------------------
 
@@ -1127,19 +1181,9 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
                         RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
                         short      nCopyMode = 0;
 
-                        SetRect( &aSrcRect,
-                                  pPosAry->mnSrcX,
-                                  pPosAry->mnSrcY,
-                                  pPosAry->mnSrcX + pPosAry->mnSrcWidth,
-                                  pPosAry->mnSrcY + pPosAry->mnSrcHeight
-                               );
+                        GetSalSrcRect( pPosAry, &aSrcRect );
 
-                        SetRect( &aDstRect,
-                                  pPosAry->mnDestX,
-                                  pPosAry->mnDestY,
-                                  pPosAry->mnDestX + pPosAry->mnDestWidth,
-                                  pPosAry->mnDestY + pPosAry->mnDestHeight
-                               );
+                        GetSalDstRect( pPosAry, &aDstRect );
 
                         GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
 
@@ -1302,8 +1346,12 @@ long SalGraphics::GetCharWidth( sal_Unicode nChar1, sal_Unicode nChar2, long* pW
 
 void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 {
-    // Stub code: we have not yet written any interfaces to native fonts.
-    // However, we need to get some font info in order to continue porting.
+    // Stub Code
+
+    FMetricRec aFMetric;
+
+    FontMetrics( &aFMetric );
+
     pMetric->mnAscent = 10;
     pMetric->mnDescent = 10;
 }

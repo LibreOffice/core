@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-18 21:15:25 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-19 00:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,6 @@ struct SalGraphicsData
     CGrafPtr        mpCGrafPort;        // QD color graphics port
     GWorldPtr               mpOffscreenGWorld;      // QD offscreen GWorld
     GDHandle                mhGDevice;              // QD GDevice
-
-    // Current GDevice resolution, and bit-depth
-
-    unsigned long            mnBitDepth;             // Current GDevice bit-depth
-    unsigned long            mnHorizontalRes;        // Current GDevice horizontal resolution
-    unsigned long            mnVerticalRes;          // Current GDevice vertical resolution
 
     // Regions within a current port
 
