@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:48:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1589,5 +1589,6 @@ ItemList [ language_user1 ] =
     };
     };
  // ********************************************************************** EOF
+
 
 
