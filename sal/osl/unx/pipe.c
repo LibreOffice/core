@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:43:11 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,11 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
     addr.sun_family = AF_UNIX;
     strncpy(addr.sun_path, name, sizeof(addr.sun_path));
+#if defined(FREEBSD)
+    len = SUN_LEN(&addr);
+#else
     len = sizeof(addr);
+#endif
 
     if ( Options & osl_Pipe_CREATE )
     {
