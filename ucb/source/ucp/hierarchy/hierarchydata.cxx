@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-28 09:34:59 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 11:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _HIERARCHYPROVIDER_HXX
 #include "hierarchyprovider.hxx"
 #endif
+#ifndef _HIERARCHYURI_HXX
+#include "hierarchyuri.hxx"
+#endif
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -136,12 +139,11 @@ struct HierarchyEntry::iterator_Impl
 //=========================================================================
 //=========================================================================
 
-#define HIERARCHY_ROOT_DB_KEY   "/org.openoffice.ucb.Hierarchy/Root"
+#define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
+#define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
 
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH    "nodepath"
-// true->async. update; false->sync. update
-#define CFGPROPERTY_LAZYWRITE   "lazywrite"
 
 //=========================================================================
 HierarchyEntry::HierarchyEntry(
@@ -151,10 +153,15 @@ HierarchyEntry::HierarchyEntry(
 : m_xSMgr( rSMgr ),
   m_bTriedToGetRootReadAccess( sal_False )
 {
+    HierarchyUri aUri( rURL );
+    m_aServiceSpecifier = aUri.getService();
+
     if ( pProvider )
     {
-        m_xConfigProvider = pProvider->getConfigProvider();
-          m_xRootReadAccess = pProvider->getRootConfigReadNameAccess();
+        m_xConfigProvider
+            = pProvider->getConfigProvider( m_aServiceSpecifier );
+        m_xRootReadAccess
+            = pProvider->getRootConfigReadNameAccess( m_aServiceSpecifier );
     }
 
     // Note: do not init m_aPath in init list. createPathFromHierarchyURL
@@ -258,18 +265,15 @@ sal_Bool HierarchyEntry::setData(
 
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                m_xSMgr->createInstance( m_aServiceSpecifier ),
                 UNO_QUERY );
 
         if ( m_xConfigProvider.is() )
         {
             // Create parent's key. It must exist!
 
-            OUString aParentPath(
-                RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
-            OUString aKey  = m_aPath;
+            OUString aParentPath;
+            OUString aKey;
             sal_Bool bRoot = sal_True;
 
             sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
@@ -283,12 +287,13 @@ sal_Bool HierarchyEntry::setData(
                 OSL_ENSURE( nPos != -1,
                             "HierarchyEntry::setData - Wrong path!" );
 
-                aParentPath += OUString::createFromAscii( "/" );
                 aParentPath += m_aPath.copy( 0, nPos );
                 bRoot = sal_False;
             }
+            else
+                aKey = m_aPath;
 
-            Sequence< Any > aArguments( 2 );
+            Sequence< Any > aArguments( 1 );
             PropertyValue   aProperty;
 
             aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -296,15 +301,10 @@ sal_Bool HierarchyEntry::setData(
             aProperty.Value <<= aParentPath;
             aArguments[ 0 ] <<= aProperty;
 
-            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_LAZYWRITE ) );
-            aProperty.Value <<= sal_True;
-            aArguments[ 1 ] <<= aProperty;
-
             Reference< XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            READWRITE_SERVICE_NAME ) ),
                         aArguments ),
                     UNO_QUERY );
 
@@ -508,16 +508,13 @@ sal_Bool HierarchyEntry::move(
     {
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                m_xSMgr->createInstance( m_aServiceSpecifier ),
                 UNO_QUERY );
 
         if ( !m_xConfigProvider.is() )
             return sal_False;
 
-        OUString aOldParentPath(
-            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
+        OUString aOldParentPath;
         sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
@@ -528,13 +525,13 @@ sal_Bool HierarchyEntry::move(
 
             OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
 
-            aOldParentPath += OUString::createFromAscii( "/" );
             aOldParentPath += m_aPath.copy( 0, nPos );
             bOldRoot = sal_False;
         }
+        else
+            aOldKey = m_aPath;
 
-        OUString aNewParentPath(
-                    RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
+        OUString aNewParentPath;
         nPos = aNewPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
@@ -545,28 +542,24 @@ sal_Bool HierarchyEntry::move(
 
             OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
 
-            aNewParentPath += OUString::createFromAscii( "/" );
             aNewParentPath += aNewPath.copy( 0, nPos );
             bNewRoot = sal_False;
         }
+        else
+            aNewKey = aNewPath;
 
-        Sequence< Any > aArguments( 2 );
+        Sequence< Any > aArguments( 1 );
         PropertyValue   aProperty;
 
-        aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+        aProperty.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                     CFGPROPERTY_NODEPATH ) );
         aProperty.Value <<= aOldParentPath;
         aArguments[ 0 ] <<= aProperty;
 
-        aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_LAZYWRITE ) );
-        aProperty.Value <<= sal_True;
-        aArguments[ 1 ] <<= aProperty;
-
         xOldParentBatch = Reference< XChangesBatch >(
             m_xConfigProvider->createInstanceWithArguments(
-                OUString::createFromAscii(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    READWRITE_SERVICE_NAME ) ),
                 aArguments ),
             UNO_QUERY );
 
@@ -591,8 +584,8 @@ sal_Bool HierarchyEntry::move(
 
             xNewParentBatch = Reference< XChangesBatch >(
                 m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        READWRITE_SERVICE_NAME ) ),
                     aArguments ),
                 UNO_QUERY );
 
@@ -808,17 +801,14 @@ sal_Bool HierarchyEntry::remove()
 
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                m_xSMgr->createInstance( m_aServiceSpecifier ),
                 UNO_QUERY );
 
         if ( m_xConfigProvider.is() )
         {
             // Create parent's key. It must exist!
 
-            OUString aParentPath(
-                RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_ROOT_DB_KEY ) );
+            OUString aParentPath;
             OUString aKey  = m_aPath;
             sal_Bool bRoot = sal_True;
 
@@ -833,12 +823,13 @@ sal_Bool HierarchyEntry::remove()
                 OSL_ENSURE( nPos != -1,
                             "HierarchyEntry::remove - Wrong path!" );
 
-                aParentPath += OUString::createFromAscii( "/" );
                 aParentPath += m_aPath.copy( 0, nPos );
                 bRoot = sal_False;
             }
+            else
+                aKey = m_aPath;
 
-            Sequence< Any > aArguments( 2 );
+            Sequence< Any > aArguments( 1 );
             PropertyValue   aProperty;
 
             aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -846,15 +837,10 @@ sal_Bool HierarchyEntry::remove()
             aProperty.Value <<= aParentPath;
             aArguments[ 0 ] <<= aProperty;
 
-            aProperty.Name    = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    CFGPROPERTY_LAZYWRITE ) );
-            aProperty.Value <<= sal_True;
-            aArguments[ 1 ] <<= aProperty;
-
             Reference< XChangesBatch > xBatch(
                 m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        READWRITE_SERVICE_NAME ) ),
                     aArguments ),
                 UNO_QUERY );
 
@@ -974,8 +960,8 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 Reference< XStringEscape > xEscaper(
                                             xRootHierNameAccess, UNO_QUERY );
 
-                OSL_ENSURE( xEscaper.is(),
-                            "HierarchyEntry::first - No string escaper!" );
+//                OSL_ENSURE( xEscaper.is(),
+//                            "HierarchyEntry::first - No string escaper!" );
 
                 it.m_pImpl->dir = xHierNameAccess;
                 it.m_pImpl->esc = xEscaper;
@@ -1024,15 +1010,15 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
 {
     Reference< XStringEscape > xEscaper( getRootReadAccess(), UNO_QUERY );
 
-    OSL_ENSURE( xEscaper.is(),
-                "HierarchyEntry::createPathFromHierarchyURL - No escaper!" );
+//    OSL_ENSURE( xEscaper.is(),
+//                "HierarchyEntry::createPathFromHierarchyURL - No escaper!" );
 
     // Transform path....
     // folder/subfolder/subsubfolder
     //      --> folder/Children/subfolder/Children/subsubfolder
 
-    // Erase URL scheme and ":/" from rURL to get the path.
-    OUString aPath = rURL.copy( HIERARCHY_URL_SCHEME_LENGTH + 2 );
+    HierarchyUri aUri( rURL );
+    OUString aPath = aUri.getPath().copy( 1 ); // skip leading slash.
     sal_Int32 nLen = aPath.getLength();
 
     OUString aNewPath;
@@ -1098,10 +1084,7 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
             {
                 if ( !m_xConfigProvider.is() )
                     m_xConfigProvider = Reference< XMultiServiceFactory >(
-                        m_xSMgr->createInstance(
-                            OUString::createFromAscii(
-                                "com.sun.star.configuration."
-                                "ConfigurationProvider" ) ),
+                        m_xSMgr->createInstance( m_aServiceSpecifier ),
                         UNO_QUERY );
 
                 if ( m_xConfigProvider.is() )
@@ -1112,17 +1095,16 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
                     PropertyValue   aProperty;
                     aProperty.Name = OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                     CFGPROPERTY_NODEPATH ) );
-                    aProperty.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    HIERARCHY_ROOT_DB_KEY ) );
+                    aProperty.Value <<= OUString(); // root path
                     aArguments[ 0 ] <<= aProperty;
 
                     m_bTriedToGetRootReadAccess = sal_True;
 
                     m_xRootReadAccess = Reference< XHierarchicalNameAccess >(
                         m_xConfigProvider->createInstanceWithArguments(
-                            OUString::createFromAscii(
-                                "com.sun.star.configuration."
-                                "ConfigurationAccess" ),
+                            OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    READ_SERVICE_NAME ) ),
                             aArguments ),
                         UNO_QUERY );
                 }
