@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:17:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,14 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
+#include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/sotref.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/persist.hxx>
-#include <so3/embobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
@@ -85,13 +87,16 @@
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
 
+using namespace com::sun::star;
+
 //------------------------------------------------------------------------
 
-ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel ) :
-    SfxInPlaceClient( pViewShell, pDraw ),
+ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj ) :
+    SfxInPlaceClient( pViewShell, pDraw, pObj->GetAspect() ),
     pModel( pSdrModel ),
     pGrafEdit( 0 )
 {
+    SetObject( pObj->GetObjRef() );
 }
 
 __EXPORT ScClient::~ScClient()
@@ -100,17 +105,9 @@ __EXPORT ScClient::~ScClient()
 
 SdrOle2Obj* ScClient::GetDrawObj()
 {
-    SvEmbeddedObject* pMyObj = GetEmbedObj();
-    SvInfoObject* pInfoObj = GetViewShell()->GetViewFrame()->GetObjectShell()->Find( pMyObj );
+    uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
     SdrOle2Obj* pOle2Obj = NULL;
-//  String aName = pMyObj->GetName()->GetName();
-
-    String aName;
-
-    if ( pInfoObj )
-        aName = pInfoObj->GetObjName();
-    else
-        DBG_ERROR( "IP-Object not found :-/" );
+    String aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
     USHORT nPages = pModel->GetPageCount();
     for (USHORT nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
@@ -132,26 +129,18 @@ SdrOle2Obj* ScClient::GetDrawObj()
     return pOle2Obj;
 }
 
-void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
+void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("RequestObjAreaPixel: das ist nicht meine ViewShell");
-        SfxInPlaceClient::RequestObjAreaPixel( rObjRect );
+        DBG_ERROR("Wrong ViewShell");
         return;
     }
 
-    //  Position anpassen
-
-    Rectangle aRect = rObjRect;
-    Window* pWin = pViewSh->GetActiveWin();
-    Rectangle aLogicRect( pWin->PixelToLogic( aRect.TopLeft() ),
-                            pWin->PixelToLogic( aRect.GetSize() ) );
-
     BOOL bChange = FALSE;
-    SCTAB nTab = pViewSh->GetViewData()->GetTabNo();
+    USHORT nTab = pViewSh->GetViewData()->GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if (pPage)
     {
@@ -194,105 +183,59 @@ void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
             bChange = TRUE;
         }
     }
-    else
-        DBG_ERROR("RequestObjAreaPixel: Page ist weg");
+}
 
-        //  wieder in Pixel umrechnen
-
-    if (bChange)
-        aRect = Rectangle( pWin->LogicToPixel( aLogicRect.TopLeft() ),
-                            pWin->LogicToPixel( aLogicRect.GetSize() ) );
-
-    //  Basisklasse
-
-    SfxInPlaceClient::RequestObjAreaPixel( aRect );
+void __EXPORT ScClient::ObjectAreaChanged()
+{
+    SfxViewShell* pSfxViewSh = GetViewShell();
+    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+    if (!pViewSh)
+    {
+        DBG_ERROR("Wrong ViewShell");
+        return;
+    }
 
     //  Position und Groesse ins Dokument uebernehmen
-
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
-        //  das ist schon das skalierte Rechteck (wie im Draw-Model)
+        pDrawObj->SetLogicRect( GetScaledObjArea() );
 
-        Rectangle aOld = pDrawObj->GetLogicRect();
-        if ( aLogicRect != aOld )
-        {
-            //  #56590# Rundungsfehler vermeiden - nur, wenn mindestens 1 Pixel Unterschied
-            //  (getrennt fuer Position und Groesse)
-
-            Size aOnePixel = pWin->PixelToLogic( Size(1,1) );
-            Size aLogicSize = aLogicRect.GetSize();
-            Rectangle aNew = aOld;
-            Size aNewSize = aNew.GetSize();
-
-            if ( Abs( aLogicRect.Left() - aOld.Left() ) >= aOnePixel.Width() )
-                aNew.SetPos( Point( aLogicRect.Left(), aNew.Top() ) );
-            if ( Abs( aLogicRect.Top() - aOld.Top() ) >= aOnePixel.Height() )
-                aNew.SetPos( Point( aNew.Left(), aLogicRect.Top() ) );
-
-            if ( Abs( aLogicSize.Width() - aNewSize.Width() ) >= aOnePixel.Width() )
-                aNewSize.Width() = aLogicSize.Width();
-            if ( Abs( aLogicSize.Height() - aNewSize.Height() ) >= aOnePixel.Height() )
-                aNewSize.Height() = aLogicSize.Height();
-            aNew.SetSize( aNewSize );
-
-            if ( aNew != aOld )                     // veraendert nur, wenn mindestens 1 Pixel
-            {
-                pDrawObj->SetLogicRect( aNew );
-
-                //  set document modified (SdrModel::SetChanged is not used)
-                SfxViewShell* pSfxViewSh = GetViewShell();
-                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
-                if (pViewSh)
-                    pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
-            }
-        }
+        //  set document modified (SdrModel::SetChanged is not used)
+        // TODO/LATER: is there a reason that this code is not executed in Draw?
+        SfxViewShell* pSfxViewSh = GetViewShell();
+        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+        if (pViewSh)
+            pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
     }
-
-    //
-    //  evtl. scrollen, um Objekt sichtbar zu halten
-    //
 
     if (pDrawObj)
         pViewSh->ScrollToObject( pDrawObj );
 }
 
-void __EXPORT ScClient::ViewChanged( USHORT nAspect )
+void __EXPORT ScClient::ViewChanged()
 {
-    SfxInPlaceClient::ViewChanged( nAspect );
-
-    SvEmbeddedObject* pObj = GetEmbedObj();
-    Rectangle aObjVisArea = OutputDevice::LogicToLogic( pObj->GetVisArea(),
-                                                pObj->GetMapUnit(), MAP_100TH_MM );
-    Size aVisSize = aObjVisArea.GetSize();
+    uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
+    awt::Size aSz = xObj->getVisualAreaSize( GetAspect() );
+    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
+    Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
 
     //  Groesse ins Dokument uebernehmen
-
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
         Rectangle aLogicRect = pDrawObj->GetLogicRect();
+        Fraction aFractX = GetScaleWidth();
+        Fraction aFractY = GetScaleHeight();
+        aFractX *= aVisSize.Width();
+        aFractY *= aVisSize.Height();
+        aVisSize = Size( (long) aFractX, (long) aFractY );      // skaliert fuer Draw-Model
 
-//      SvClientData* pClientData = GetEnv();
-        SvClientData* pClientData = GetClientData();
-        if (pClientData)
-        {
-            Fraction aFractX = pClientData->GetScaleWidth();
-            Fraction aFractY = pClientData->GetScaleHeight();
-            aFractX *= aVisSize.Width();
-            aFractY *= aVisSize.Height();
-            aVisSize = Size( (long) aFractX, (long) aFractY );      // skaliert fuer Draw-Model
-
-                //  pClientData->SetObjArea vor pDrawObj->SetLogicRect, damit keine
-                //  falschen Skalierungen ausgerechnet werden:
-
-            Rectangle aObjArea = aLogicRect;
-            aObjArea.SetSize( aObjVisArea.GetSize() );          // Dokument-Groesse vom Server
-            pClientData->SetObjArea( aObjArea );
-        }
-
-        //  Set size in draw model (scale is recalculated) - only if there was a visible
-        //  change (in pixels)
+        //  pClientData->SetObjArea vor pDrawObj->SetLogicRect, damit keine
+        //  falschen Skalierungen ausgerechnet werden:
+        //Rectangle aObjArea = aLogicRect;
+        //aObjArea.SetSize( aVisSize );          // Dokument-Groesse vom Server
+        //SetObjArea( aObjArea );
 
         SfxViewShell* pSfxViewSh = GetViewShell();
         ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
@@ -311,32 +254,6 @@ void __EXPORT ScClient::ViewChanged( USHORT nAspect )
     }
 }
 
-void __EXPORT ScClient::MakeViewData()
-{
-    SfxInPlaceClient::MakeViewData();
-
-    SvClientData* pClientData = GetClientData();
-    SdrOle2Obj* pDrawObj = GetDrawObj();
-    if (pClientData && pDrawObj)
-    {
-        //  Groesse und Scale wie in tabvwshb
-
-        Rectangle aRect = pDrawObj->GetLogicRect();
-        Size aDrawSize = aRect.GetSize();
-        Size aOleSize = GetEmbedObj()->GetVisArea().GetSize();
-
-            // sichtbarer Ausschnitt wird nur inplace veraendert!
-        aRect.SetSize( aOleSize );
-        pClientData->SetObjArea( aRect );
-
-        Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-        Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-        aScaleHeight.ReduceInaccurate(10);
-        pClientData->SetSizeScale(aScaleWidth,aScaleHeight);
-    }
-}
-
 void __EXPORT ScClient::MakeVisible()
 {
     SdrOle2Obj* pDrawObj = GetDrawObj();
@@ -348,89 +265,4 @@ void __EXPORT ScClient::MakeVisible()
             pViewSh->ScrollToObject( pDrawObj );
     }
 }
-
-#if 0
-
-//  Mit Optimierung gibt es Abstuerze beim Deaktivieren von Grafik-Image-Objekten
-
-#ifdef WNT
-#pragma optimize ( "", off )
-#endif
-
-void lcl_ReplaceObject( SdrOle2Obj* pGrafOle, SdrGrafObj* pGrafObj,
-                        SfxViewShell* pSfxViewSh )
-{
-    //  das Ole-Objekt wieder durch das Grafikobjekt ersetzen
-
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
-    if (pViewSh)
-    {
-        SdrView* pSdrView = pViewSh->GetSdrView();
-        SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
-
-        if ( pGrafOle )
-        {
-            SvInPlaceObjectRef aIPObj = pGrafOle->GetObjRef();
-            Rectangle          aRect  = pGrafOle->GetLogicRect();
-
-            // #41302# ReplaceObject ohne zu markieren, weil's aus dem
-            // MarkListHasChanged heraus gerufen wird
-            pSdrView->ReplaceObject( pGrafOle, *pPV, pGrafObj, FALSE );
-            pSdrView->EndUndo();
-            pGrafObj->SetLogicRect(aRect);
-            pGrafObj->SetGraphic(SimDLL::GetGraphic(aIPObj));
-        }
-        else                            // zwischendurch geloescht ?
-        {
-            DBG_ERROR("Grafik-Ole-Objekt ist weg");
-
-            pSdrView->EndUndo();        //  damit das Undo nicht offen bleibt
-                                        //! anderen Text fuer Undo setzen ???
-        }
-    }
-}
-
-#ifdef WNT
-#pragma optimize ( "", on )
-#endif
-
-#endif
-
-void __EXPORT ScClient::UIActivate( BOOL bActivate )
-{
-    SvInPlaceClientRef aIPClient( this );   // nicht aus versehen zwischendrin loeschen
-
-    SfxInPlaceClient::UIActivate(bActivate);
-
-#if 0
-    //! remove this along with the pGrafEdit member!
-
-    if ( !bActivate && pGrafEdit )          // wurde eine Grafik bearbeitet?
-    {
-        SdrOle2Obj* pGrafOle = GetDrawObj();
-        SdrGrafObj* pGrafObj = pGrafEdit;
-        pGrafEdit = NULL;                   // vor lcl_ReplaceObject
-
-        lcl_ReplaceObject( pGrafOle, pGrafObj, GetViewShell() );
-    }
-#endif
-
-    if ( !bActivate )       //  Chart-Daten-Hervorhebung aufheben
-    {
-        SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
-        if (pViewSh)
-        {
-            pViewSh->ClearHighlightRanges();
-
-            //  Move an der ViewShell soll eigentlich vom Sfx gerufen werden, wenn sich
-            //  das Frame-Window wegen unterschiedlicher Toolboxen o.ae. verschiebt
-            //  (um nicht aus Versehen z.B. Zeichenobjekte zu verschieben, #56515#).
-            //  Dieser Mechanismus funktioniert aber momentan nicht, darum hier der Aufruf
-            //  per Hand (im Move wird verglichen, ob die Position wirklich geaendert ist).
-            pViewSh->ForceMove();
-        }
-    }
-}
-
 
