@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:35:44 $
+ *  last change: $Author: oj $ $Date: 2001-01-16 15:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,6 +750,7 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     if(last())
         next();
     m_bEOF = sal_True;
@@ -773,6 +774,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_FIRST,0);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet;
@@ -788,6 +790,7 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_LAST,0);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     // here I know definitely that I stand on the last record
@@ -800,6 +803,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_ABSOLUTE,row);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
@@ -814,6 +818,7 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,row);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
@@ -828,6 +833,7 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_PRIOR,0);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     sal_Bool bRet = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
@@ -889,6 +895,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     //  m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_NEXT,0);
     m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     OTools::ThrowException(m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -996,6 +1003,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     // first unbound all columns
     N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
     //  SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE ,(SQLPOINTER)1,SQL_IS_INTEGER);
@@ -1005,6 +1013,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
 void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
+    m_nLastColumnPos = 0;
 }
 // -------------------------------------------------------------------------
 
@@ -1315,6 +1324,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     Sequence<sal_Int8> aBookmark;
     bookmark >>= aBookmark;
     SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER);
@@ -1330,6 +1340,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_nLastColumnPos = 0;
     Sequence<sal_Int8> aBookmark;
     bookmark >>= aBookmark;
     SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER);
