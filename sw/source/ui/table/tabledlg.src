@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:15:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabDialog DLG_FORMAT_TABLE
     Text [ italian ] = "Formato tabella" ;
     Text [ portuguese_brazilian ] = "Formato de tabela" ;
     Text [ portuguese ] = "Formato da tabela" ;
-    Text [ finnish ] = "Taulukon muoto" ;
+    Text [ finnish ] = "Taulukon muotoilu" ;
     Text [ danish ] = "Tabelformat" ;
     Text [ french ] = "Format de tableau" ;
     Text [ swedish ] = "Tabellformat" ;
@@ -188,7 +188,7 @@ TabDialog DLG_FORMAT_TABLE
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -288,6 +288,7 @@ TabPage TP_FORMAT_TABLE
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -370,6 +371,7 @@ TabPage TP_FORMAT_TABLE
         Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Relati~vo";
+        Text[ finnish ] = "~Suhteellinen";
     };
     GroupBox GB_OPTIONS
     {
@@ -381,7 +383,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "Opzioni" ;
         Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Propriedades" ;
-        Text [ finnish ] = "Määritykset" ;
+        Text [ finnish ] = "Ominaisuudet" ;
         Text [ danish ] = "Egenskaber" ;
         Text [ french ] = "Options" ;
         Text [ swedish ] = "Egenskaper" ;
@@ -439,7 +441,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "~Sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Venstre" ;
         Text [ french ] = "~À gauche" ;
         Text [ swedish ] = "Vän~ster" ;
@@ -485,6 +487,7 @@ TabPage TP_FORMAT_TABLE
         Text[ arabic ] = "ãä ÇáíÓÇÑ";
         Text[ turkish ] = "S~oldan";
         Text[ catalan ] = "De iz~quierda";
+        Text[ finnish ] = "~Vasemmalta";
     };
     RadioButton RB_RIGHT
     {
@@ -496,7 +499,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "~Destra" ;
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
-        Text [ finnish ] = "~Oikealle" ;
+        Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "Højre" ;
         Text [ french ] = "~À droite" ;
         Text [ swedish ] = "Höge~r" ;
@@ -526,7 +529,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "~Centrato" ;
         Text [ portuguese_brazilian ] = "~Centralizado" ;
         Text [ portuguese ] = "~Centrado" ;
-        Text [ finnish ] = "~Keski" ;
+        Text [ finnish ] = "~Keskitä" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "~Centré" ;
         Text [ swedish ] = "~Centrerat" ;
@@ -573,6 +576,7 @@ TabPage TP_FORMAT_TABLE
         Text[ turkish ] = "~Manüel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Manual";
+        Text[ finnish ] = "~Manuaalinen";
     };
     GroupBox GB_POS
     {
@@ -584,7 +588,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "Allineamento" ;
         Text [ portuguese_brazilian ] = "Posição" ;
         Text [ portuguese ] = "Alinhamento" ;
-        Text [ finnish ] = "Sijainti" ;
+        Text [ finnish ] = "Tasaus" ;
         Text [ danish ] = "Justering" ;
         Text [ french ] = "Alignement" ;
         Text [ swedish ] = "Justering" ;
@@ -613,7 +617,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "Distanze" ;
         Text [ portuguese_brazilian ] = "Distância" ;
         Text [ portuguese ] = "Espaçamento" ;
-        Text [ finnish ] = "Etäisyys" ;
+        Text [ finnish ] = "Välit" ;
         Text [ danish ] = "Afstand" ;
         Text [ french ] = "Écarts" ;
         Text [ swedish ] = "Avstånd" ;
@@ -642,7 +646,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "a sinis~tra" ;
         Text [ portuguese_brazilian ] = "Para a esqueda" ;
         Text [ portuguese ] = "À esqueda" ;
-        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Til venstre" ;
         Text [ french ] = "À ga~uche" ;
         Text [ swedish ] = "Till väns~ter" ;
@@ -688,7 +692,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "a de~stra" ;
         Text [ portuguese_brazilian ] = "Para a direita" ;
         Text [ portuguese ] = "À direita" ;
-        Text [ finnish ] = "~Oikealle" ;
+        Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "Til højre" ;
         Text [ french ] = "À dr~oite" ;
         Text [ swedish ] = "Till hö~ger" ;
@@ -735,7 +739,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "Verso l'~alto" ;
         Text [ portuguese_brazilian ] = "Para o t~opo" ;
         Text [ portuguese ] = "Para ~cima" ;
-        Text [ finnish ] = "~Ylös" ;
+        Text [ finnish ] = "~Ylhäällä" ;
         Text [ danish ] = "Foroven" ;
         Text [ french ] = "Vers le ~haut" ;
         Text [ swedish ] = "~Uppe" ;
@@ -781,7 +785,7 @@ TabPage TP_FORMAT_TABLE
         Text [ italian ] = "In basso" ;
         Text [ portuguese_brazilian ] = "Para a ~base" ;
         Text [ portuguese ] = "Para ~baixo" ;
-        Text [ finnish ] = "~Alhaalta" ;
+        Text [ finnish ] = "~Alhaalla" ;
         Text [ danish ] = "Forneden" ;
         Text [ french ] = "Vers le ~bas" ;
         Text [ swedish ] = "N~ere" ;
@@ -855,6 +859,7 @@ TabPage TP_TABLE_COLUMN
         Text[ turkish ] = "Tablo geniþliðine göre ayarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ajustar ancho de la tabla";
+        Text[ finnish ] = "Fit to table width";
     };
     CheckBox CB_PROP
     {
@@ -883,6 +888,7 @@ TabPage TP_TABLE_COLUMN
         Text[ turkish ] = "Sütunlarý orantýlý deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar columnas proporcionalmente";
+        Text[ finnish ] = "Adjust columns proportionally";
     };
     FixedText FT_SPACE
     {
@@ -910,6 +916,7 @@ TabPage TP_TABLE_COLUMN
         Text[ turkish ] = "Kalan boþluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espacio disponible";
+        Text[ finnish ] = "Tilaa jäljellä";
     };
     MetricField ED_SPACE
     {
@@ -1116,7 +1123,7 @@ TabPage TP_TABLE_COLUMN
         Text [ italian ] = "Larghezza colonna" ;
         Text [ portuguese_brazilian ] = "Largura da coluna" ;
         Text [ portuguese ] = "Largura da coluna" ;
-        Text [ finnish ] = "Sarakeleveys" ;
+        Text [ finnish ] = "Sarakkeen leveys" ;
         Text [ danish ] = "Kolonnebredde" ;
         Text [ french ] = "Largeur de colonne" ;
         Text [ swedish ] = "Kolumnbredd" ;
@@ -1164,7 +1171,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "I~nterruzione" ;
         Text [ portuguese_brazilian ] = "~Interrupção" ;
         Text [ portuguese ] = "~Quebra" ;
-        Text [ finnish ] = "~Vaihto" ;
+        Text [ finnish ] = "~Keskeytys" ;
         Text [ danish ] = "Skift" ;
         Text [ french ] = "~Saut" ;
         Text [ swedish ] = "~Brytning" ;
@@ -1228,7 +1235,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "~Colonna" ;
         Text [ portuguese_brazilian ] = "~Coluna" ;
         Text [ portuguese ] = "~Coluna" ;
-        Text [ finnish ] = "~Palsta" ;
+        Text [ finnish ] = "~Sarake" ;
         Text [ danish ] = "Kolonne" ;
         Text [ french ] = "~Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
@@ -1258,7 +1265,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "~Prima" ;
         Text [ portuguese_brazilian ] = "an~tes" ;
         Text [ portuguese ] = "an~tes" ;
-        Text [ finnish ] = "~ennen" ;
+        Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "A~vant" ;
         Text [ swedish ] = "F~öre" ;
@@ -1290,7 +1297,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "D~opo" ;
         Text [ portuguese_brazilian ] = "dep~ois" ;
         Text [ portuguese ] = "Dep~ois" ;
-        Text [ finnish ] = "~jälkeen" ;
+        Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "A~près" ;
         Text [ swedish ] = "Eft~er" ;
@@ -1320,7 +1327,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "Con mo~dello di pagina" ;
         Text [ portuguese_brazilian ] = "Com mode~lo" ;
         Text [ portuguese ] = "Com es~tilo de página" ;
-        Text [ finnish ] = "Käytä ~mallia" ;
+        Text [ finnish ] = "~Sivutyylin kanssa" ;
         Text [ danish ] = "Med sidetypografi" ;
         Text [ french ] = "Avec le style de page" ;
         Text [ swedish ] = "Med sidformatma~ll" ;
@@ -1374,6 +1381,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Sayfa ~numaralarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nú~mero de página";
+        Text[ finnish ] = "~Sivunumero";
     };
     NumericField NF_PAGENUM
     {
@@ -1417,6 +1425,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Tabloyu ayýrma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
+        Text[ finnish ] = "~Älä jaa taulukkoa";
     };
     CheckBox CB_KEEP
     {
@@ -1445,6 +1454,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Alttaki paragraf ile birlikte tut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mantener ~junto al párrafo siguiente";
+        Text[ finnish ] = "~sido seuraavaan kappaleeseen";
     };
     CheckBox CB_HEADLINE
     {
@@ -1502,6 +1512,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Dikey hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alineación vertical";
+        Text[ finnish ] = "Pystysuora tasaus";
     };
     RadioButton RB_VERT_TOP
     {
@@ -1529,6 +1540,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Arriba";
+        Text[ finnish ] = "Top";
     };
     RadioButton RB_VERT_CENTER
     {
@@ -1556,6 +1568,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Aþaðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Centro";
+        Text[ finnish ] = "~Centered";
     };
     RadioButton RB_VERT_BOTTOM
     {
@@ -1583,6 +1596,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ turkish ] = "Yukarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~bajo";
+        Text[ finnish ] = "Bottom";
     };
 };
 InfoBox MSG_WRONG_TABLENAME
@@ -1609,4 +1623,5 @@ InfoBox MSG_WRONG_TABLENAME
     Message[ turkish ] = "Tablo adýnda boþluk bulunmamalýdýr.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El nombre de la tabla no debe contener espacios.";
+    Message[ finnish ] = "Taulukon nimessä ei saa olla välejä.";
 };
