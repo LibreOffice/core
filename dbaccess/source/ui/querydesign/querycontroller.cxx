@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 08:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,17 @@ OQueryController::~OQueryController()
 void OQueryController::dispose()
 {
     if(isModified())
-        Execute(ID_BROWSER_SAVEDOC);
+    {
+        QueryBox aQry(getView(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
+        switch (aQry.Execute())
+        {
+            case RET_YES:
+                Execute(ID_BROWSER_SAVEDOC);
+                break;
+            default:
+                break;
+        }
+    }
 
     OGenericUnoController::dispose();
     m_pAddTabDlg = NULL;
@@ -313,10 +323,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = m_xConnection.is() && m_vTableFieldDesc.size() && m_vTableData.size();
+            aReturn.bEnabled = m_xConnection.is() && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size());
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_xConnection.is() && m_bModified && m_vTableFieldDesc.size() && m_vTableData.size();
+            aReturn.bEnabled = m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size());
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -528,13 +538,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 try
                 {
                     ::rtl::OUString aErrorMsg,sStmt;
-                    sStmt = getQueryView()->getStatement();
-                    if(sStmt != m_sStatement)
-                    {
-                        if(!m_bDesign) //
-                            static_cast<OQueryViewSwitch*>(m_pView)->clear();
-                        m_sStatement = sStmt;
-                    }
+                    m_sStatement = getQueryView()->getStatement();
                     if(!m_sStatement.getLength())
                     {
                         // change the view of the data

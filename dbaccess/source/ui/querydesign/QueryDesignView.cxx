@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 08:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,7 @@ void OQueryDesignView::GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUSt
 
         if(aTableListStr.getLength())
         {
-            aTableListStr = aTableListStr.replaceAt(aTableListStr.getLength()-1,1, ::rtl::OUString() );
+            //  aTableListStr = aTableListStr.replaceAt(aTableListStr.getLength()-1,1, ::rtl::OUString() );
             ::rtl::OUString aStr = ::rtl::OUString::createFromAscii("{ OJ ");
             aStr += aTableListStr;
             aStr += ::rtl::OUString::createFromAscii(" },");
@@ -2271,8 +2271,10 @@ sal_Bool OQueryDesignView::InsertJoin(const ::connectivity::OSQLParseNode *pNode
         if (!InsertJoin(pNode->getChild(0)->getChild(1)))
             return sal_False;
     }
-    else if (!SQL_ISRULE(pNode->getChild(0), table_ref) ||
-        !SQL_ISRULE(pNode->getChild(0)->getChild(0), table_name))
+    else if (!(SQL_ISRULE(pNode->getChild(0), table_ref) && (
+             SQL_ISRULE(pNode->getChild(0)->getChild(0), catalog_name)   ||
+             SQL_ISRULE(pNode->getChild(0)->getChild(0), schema_name)    ||
+             SQL_ISRULE(pNode->getChild(0)->getChild(0), table_name))))
         return sal_False;
 
     // geschachtelter join?
@@ -2287,8 +2289,10 @@ sal_Bool OQueryDesignView::InsertJoin(const ::connectivity::OSQLParseNode *pNode
             return sal_False;
     }
     // sonst sollte es eine Tabelle sein
-    else if (!SQL_ISRULE(pNode->getChild(3), table_ref) ||
-        !SQL_ISRULE(pNode->getChild(3)->getChild(0), table_name))
+    else if (!(SQL_ISRULE(pNode->getChild(3), table_ref) && (
+             SQL_ISRULE(pNode->getChild(3)->getChild(0), catalog_name)   ||
+             SQL_ISRULE(pNode->getChild(3)->getChild(0), schema_name)    ||
+             SQL_ISRULE(pNode->getChild(3)->getChild(0), table_name))))
         return sal_False;
 
     // named column join wird später vieleicht noch implementiert
