@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: as $ $Date: 2001-08-20 13:00:40 $
+#   last change: $Author: hjs $ $Date: 2001-09-03 16:12:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@ PRJ=..
 
 PRJNAME=			framework
 TARGET=				framework
+TARGETTYPE=GUI
 
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
