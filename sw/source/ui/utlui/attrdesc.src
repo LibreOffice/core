@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:54:50 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,7 +1654,7 @@ String STR_CHANNELR
     Text[ polish ] = "Zawaro滄 czerwonego: ";
     Text[ portuguese_brazilian ] = "Red portion: ";
     Text[ japanese ] = "愒怓偺妱崌: ";
-    Text[ korean ] = "利祸 何盒: ";
+    Text[ korean ] = "利祸: ";
     Text[ chinese_simplified ] = "红色比例： ";
     Text[ chinese_traditional ] = "︹ゑㄒ ";
     Text[ turkish ] = "Red portion: ";
@@ -1678,7 +1678,7 @@ String STR_CHANNELG
     Text[ polish ] = "Zawarto滄 zielonego: ";
     Text[ portuguese_brazilian ] = "Green portion: ";
     Text[ japanese ] = "椢怓偺妱崌: ";
-    Text[ korean ] = "踌祸 何盒: ";
+    Text[ korean ] = "踌祸: ";
     Text[ chinese_simplified ] = "绿色比例： ";
     Text[ chinese_traditional ] = "厚︹ゑㄒ ";
     Text[ turkish ] = "Green portion: ";
@@ -1702,7 +1702,7 @@ String STR_CHANNELB
     Text[ polish ] = "Zawarto滄 niebieskiego: ";
     Text[ portuguese_brazilian ] = "Blue portion: ";
     Text[ japanese ] = "惵怓偺妱崌: ";
-    Text[ korean ] = "没祸 何盒: ";
+    Text[ korean ] = "没祸: ";
     Text[ chinese_simplified ] = "蓝色比例： ";
     Text[ chinese_traditional ] = "屡︹ゑㄒ ";
     Text[ turkish ] = "Blue portion: ";
