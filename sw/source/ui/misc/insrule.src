@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:37:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ ModalDialog DLG_INSERT_RULER
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     Control VS_EXAMPLE
     {
@@ -148,6 +149,7 @@ ModalDialog DLG_INSERT_RULER
         Text[ korean ] = "´ÜÀÏ";
         Text[ turkish ] = "Tek";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sencilla";
     };
     Text [ english_us ] = "Insert Horizontal Ruler" ;
     Text [ portuguese_brazilian ] = "Horizontale Linie einfügen" ;
@@ -168,4 +170,5 @@ ModalDialog DLG_INSERT_RULER
     Text[ korean ] = "¼öÆò ¼±  »ðÀÔ";
     Text[ turkish ] = "Yatay çizgi ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar línea horizontal";
 };
