@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:25:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/config.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -78,6 +77,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
+
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 
 #include "solar.hrc"
 #include "filedlg.hxx"
