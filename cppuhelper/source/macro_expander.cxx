@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:52:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,12 +111,6 @@ static Sequence< OUString > const & s_get_service_names()
 
 typedef ::cppu::WeakComponentImplHelper3<
     util::XMacroExpander, lang::XServiceInfo, lang::XInitialization > t_uno_impl;
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-// Initialize static template data here to break circular reference to libstatic
-
-cppu::ClassData3 cppu::WeakComponentImplHelper3< com::sun::star::util::XMacroExpander, com::sun::star::lang::XServiceInfo, com::sun::star::lang::XInitialization >::s_aCD(1);
-#endif
 
 struct mutex_holder
 {
