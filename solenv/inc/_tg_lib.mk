@@ -33,13 +33,8 @@ $(LIB1TARGET) :	$(LIB1FILES) \
     @echo using: $(LIB1TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB1OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB1FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -63,7 +58,7 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .IF "$(LIB1FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB1FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB1FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB1OBJFILES)
@@ -109,13 +104,8 @@ $(LIB2TARGET) :	$(LIB2FILES) \
     @echo using: $(LIB2TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB2OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB2FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -139,7 +129,7 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .IF "$(LIB2FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB2FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB2FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB2OBJFILES)
@@ -185,13 +175,8 @@ $(LIB3TARGET) :	$(LIB3FILES) \
     @echo using: $(LIB3TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB3OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB3FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -215,7 +200,7 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .IF "$(LIB3FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB3FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB3FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB3OBJFILES)
@@ -261,13 +246,8 @@ $(LIB4TARGET) :	$(LIB4FILES) \
     @echo using: $(LIB4TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB4OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB4FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -291,7 +271,7 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .IF "$(LIB4FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB4FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB4FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB4OBJFILES)
@@ -337,13 +317,8 @@ $(LIB5TARGET) :	$(LIB5FILES) \
     @echo using: $(LIB5TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB5OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB5FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -367,7 +342,7 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .IF "$(LIB5FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB5FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB5FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB5OBJFILES)
@@ -413,13 +388,8 @@ $(LIB6TARGET) :	$(LIB6FILES) \
     @echo using: $(LIB6TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB6OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB6FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -443,7 +413,7 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .IF "$(LIB6FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB6FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB6FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB6OBJFILES)
@@ -489,13 +459,8 @@ $(LIB7TARGET) :	$(LIB7FILES) \
     @echo using: $(LIB7TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB7OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB7FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -519,7 +484,7 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .IF "$(LIB7FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB7FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB7FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB7OBJFILES)
@@ -565,13 +530,8 @@ $(LIB8TARGET) :	$(LIB8FILES) \
     @echo using: $(LIB8TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB8OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB8FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -595,7 +555,7 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .IF "$(LIB8FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB8FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB8FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB8OBJFILES)
@@ -641,13 +601,8 @@ $(LIB9TARGET) :	$(LIB9FILES) \
     @echo using: $(LIB9TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB9OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB9FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -671,7 +626,7 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .IF "$(LIB9FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB9FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB9FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB9OBJFILES)
@@ -717,13 +672,8 @@ $(LIB10TARGET) :	$(LIB10FILES) \
     @echo using: $(LIB10TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB10OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB10FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -747,7 +697,7 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .IF "$(LIB10FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB10FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB10FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB10OBJFILES)
