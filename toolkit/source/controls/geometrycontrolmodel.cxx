@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 14:27:23 $
+ *  last change: $Author: tbe $ $Date: 2001-03-08 16:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <comphelper/property.hxx>
 #endif
 #include "toolkit/controls/eventcontainer.hxx"
+#include <toolkit/helper/property.hxx>
+#include <tools/debug.hxx>
 
 
 #define GCM_PROPERTY_ID_POS_X       1
@@ -188,6 +190,65 @@
     }
 
     //--------------------------------------------------------------------
+    ::com::sun::star::uno::Any OGeometryControlModel_Base::ImplGetDefaultValueByHandle(sal_Int32 nHandle) const
+    {
+        ::com::sun::star::uno::Any aDefault;
+
+        switch ( nHandle )
+        {
+            case GCM_PROPERTY_ID_POS_X:         aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_POS_Y:         aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_WIDTH:         aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_HEIGHT:        aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_NAME:          aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_TABINDEX:      aDefault <<= (sal_Int16) 0; break;
+            case GCM_PROPERTY_ID_STEP:          aDefault <<= (sal_Int32) 0; break;
+            case GCM_PROPERTY_ID_TAG:           aDefault <<= ::rtl::OUString(); break;
+            default:                            DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
+        }
+
+        return aDefault;
+    }
+
+    //--------------------------------------------------------------------
+    ::com::sun::star::uno::Any OGeometryControlModel_Base::ImplGetPropertyValueByHandle(sal_Int32 nHandle) const
+    {
+        ::com::sun::star::uno::Any aValue;
+
+        switch ( nHandle )
+        {
+            case GCM_PROPERTY_ID_POS_X:         aValue <<= m_nPosX; break;
+            case GCM_PROPERTY_ID_POS_Y:         aValue <<= m_nPosY; break;
+            case GCM_PROPERTY_ID_WIDTH:         aValue <<= m_nWidth; break;
+            case GCM_PROPERTY_ID_HEIGHT:        aValue <<= m_nHeight; break;
+            case GCM_PROPERTY_ID_NAME:          aValue <<= m_aName; break;
+            case GCM_PROPERTY_ID_TABINDEX:      aValue <<= m_nTabIndex; break;
+            case GCM_PROPERTY_ID_STEP:          aValue <<= m_nStep; break;
+            case GCM_PROPERTY_ID_TAG:           aValue <<= m_aTag; break;
+            default:                            DBG_ERROR( "ImplGetPropertyValueByHandle - unknown Property" );
+        }
+
+        return aValue;
+    }
+
+    //--------------------------------------------------------------------
+    void OGeometryControlModel_Base::ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue)
+    {
+        switch ( nHandle )
+        {
+            case GCM_PROPERTY_ID_POS_X:         aValue >>= m_nPosX; break;
+            case GCM_PROPERTY_ID_POS_Y:         aValue >>= m_nPosY; break;
+            case GCM_PROPERTY_ID_WIDTH:         aValue >>= m_nWidth; break;
+            case GCM_PROPERTY_ID_HEIGHT:        aValue >>= m_nHeight; break;
+            case GCM_PROPERTY_ID_NAME:          aValue >>= m_aName; break;
+            case GCM_PROPERTY_ID_TABINDEX:      aValue >>= m_nTabIndex; break;
+            case GCM_PROPERTY_ID_STEP:          aValue >>= m_nStep; break;
+            case GCM_PROPERTY_ID_TAG:           aValue >>= m_aTag; break;
+            default:                            DBG_ERROR( "ImplSetPropertyValueByHandle - unknown Property" );
+        }
+    }
+
+    //--------------------------------------------------------------------
     Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType ) throw(RuntimeException)
     {
         Any aReturn;
@@ -272,6 +333,27 @@
     }
 
     //--------------------------------------------------------------------
+    ::com::sun::star::beans::PropertyState OGeometryControlModel_Base::getPropertyStateByHandle(sal_Int32 nHandle)
+    {
+        ::com::sun::star::uno::Any aValue = ImplGetPropertyValueByHandle( nHandle );
+        ::com::sun::star::uno::Any aDefault = ImplGetDefaultValueByHandle( nHandle );
+
+        return CompareProperties( aValue, aDefault ) ? ::com::sun::star::beans::PropertyState_DEFAULT_VALUE : ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+    }
+
+    //--------------------------------------------------------------------
+    void OGeometryControlModel_Base::setPropertyToDefaultByHandle(sal_Int32 nHandle)
+    {
+        ImplSetPropertyValueByHandle( nHandle , ImplGetDefaultValueByHandle( nHandle ) );
+    }
+
+    //--------------------------------------------------------------------
+    ::com::sun::star::uno::Any OGeometryControlModel_Base::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
+    {
+        return ImplGetDefaultValueByHandle( nHandle );
+    }
+
+    //--------------------------------------------------------------------
     Reference< XPropertySetInfo> SAL_CALL OGeometryControlModel_Base::getPropertySetInfo() throw(RuntimeException)
     {
         return OPropertySetAggregationHelper::createPropertySetInfo(getInfoHelper());
@@ -329,6 +411,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/07 14:27:23  tbe
+ *  added step and tag property
+ *
  *  Revision 1.5  2001/03/02 12:33:21  tbe
  *  clone geometry control model
  *

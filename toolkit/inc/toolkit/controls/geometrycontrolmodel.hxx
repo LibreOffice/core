@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 14:27:58 $
+ *  last change: $Author: tbe $ $Date: 2001-03-08 16:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,11 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         sal_Bool        m_bCloneable;
 
     protected:
+        virtual ::com::sun::star::uno::Any          ImplGetDefaultValueByHandle(sal_Int32 nHandle) const;
+        virtual ::com::sun::star::uno::Any          ImplGetPropertyValueByHandle(sal_Int32 nHandle) const;
+        virtual void                                ImplSetPropertyValueByHandle(sal_Int32 nHandle, const :: com::sun::star::uno::Any& aValue);
+
+    protected:
         /**
             @param _pAggregateInstance
                 the object to be aggregated. The refcount of the instance given MUST be 0!
@@ -166,6 +171,11 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 
         virtual void SAL_CALL getFastPropertyValue(
             ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle) const;
+
+        // OPropertyStateHelper overridables
+        virtual ::com::sun::star::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);
+        virtual void                                    setPropertyToDefaultByHandle(sal_Int32 nHandle);
+        virtual ::com::sun::star::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -239,6 +249,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/07 14:27:58  tbe
+ *  added step and tag property
+ *
  *  Revision 1.5  2001/03/02 12:33:51  tbe
  *  clone geometry control model
  *
