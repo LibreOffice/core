@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiPropertySet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:15:19 $
+ *  last change:$Date: 2004-05-07 16:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,11 @@ public class _XMultiPropertySet extends MultiMethodTest {
             boolean isBound = ((property.Attributes &
                 PropertyAttribute.BOUND) != 0);
             boolean isExcluded = exclProps.contains(name);
+
+            //exclude UserDefined, because we can't change XNameContainer
+            if (name.indexOf("UserDefined")>0 || name.indexOf("Device")>0) {
+                isWritable=false;
+            }
 
             if ( isWritable && isNotNull && isBound && !isExcluded) {
                 bound+=name+";";
