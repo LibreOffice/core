@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:58:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
-#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
 #include <vcl/svapp.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/stritem.hxx>
@@ -87,8 +77,6 @@
 #include "validate.hxx"
 #include "compiler.hxx"
 #include "opcode.hxx" //CHINA001
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 
 // ============================================================================
 
@@ -696,38 +684,15 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
     Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
-    // choose macro dialog
-    ::rtl::OUString aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
+    // Use static SfxApplication method to bring up selector dialog for
+    // choosing a script
+    ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
 
     Application::SetDefDialogParent( pOld );
 
-    // a scriptURL has the following format:
-    // vnd.sun.star.script:[name]?language=[language]&location=[location]
-    // [name] = [libname].[modulename].[macroname]
-    // [language] = Basic
-    // [location] = application | document
-    // e.g. "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    //
-    // but for the UI we need this format:
-    // 'macroname'
-
-    if ( aScriptURL.getLength() != 0 )
+    if ( aScriptURL != NULL && aScriptURL.getLength() != 0 )
     {
-        // parse scriptURL
-        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
-        if ( xFactory.is() )
-        {
-            Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
-            if ( xUrl.is() )
-            {
-                ::rtl::OUString aName = xUrl->getName();
-                sal_Int32 nIndex = 0;
-                String aMacroName = aName.getToken( 2, sal_Unicode( '.' ), nIndex );
-                aEdtTitle.SetText( aMacroName );
-            }
-        }
+        aEdtTitle.SetText( aScriptURL );
     }
 
     return( 0L );
