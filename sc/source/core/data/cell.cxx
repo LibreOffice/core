@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:19:15 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <mac_end.h>
 #endif
 
-#ifdef SOLARIS
+#if defined (SOLARIS) || defined (FREEBSD)
 #include <ieeefp.h>
 #elif ( defined ( LINUX ) && ( GLIBC < 2 ) )
 #include <i386/ieeefp.h>
