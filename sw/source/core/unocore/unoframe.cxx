@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:42:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,23 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
+#include <com/sun/star/embed/XComponentSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -275,7 +290,7 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #endif
 
-#include <so3/outplace.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 // from fefly1.cxx
 extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -1671,26 +1686,25 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
                                             ->GetIndex() + 1 ]->GetOLENode();
-            SvInPlaceObjectRef xIP( pOleNode->GetOLEObj().GetOleRef() );
+            uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
+            uno::Reference < embed::XClassifiedObject > xClass( xIP, uno::UNO_QUERY );
+            uno::Reference < embed::XComponentSupplier > xSup( xIP, uno::UNO_QUERY );
             OUString aHexCLSID;
-            if(xIP.Is())
+            if(xClass.is() && xSup.is())
             {
-                SvOutPlaceObjectRef xOut(xIP);
-                SvGlobalName aClassName = xOut.Is() ? xOut->GetObjectCLSID() : xIP->GetClassName();
+                SvGlobalName aClassName( xClass->getClassID() );
                 aHexCLSID = aClassName.GetHexName();
                 if(FN_UNO_CLSID != pCur->nWID)
                 {
-                    SfxInPlaceObjectRef xIPO( xIP );
-                    SfxObjectShell* pShell = xIPO.Is() ? xIPO->GetObjectShell() : 0;
-                    //in both cases the XModel is returned for internal components
-                    //external components provide their XComponent for
-                    //the "Component" property, only
-                    if( pShell )
-                        aAny <<= pShell->GetModel();
-                    else if(xOut.Is() && FN_UNO_COMPONENT == pCur->nWID)
-                         aAny <<= xOut->GetUnoComponent();
+                    uno::Reference < lang::XComponent > xComp( xSup->getComponent(), uno::UNO_QUERY );
+                    uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
+                    if ( xModel.is() )
+                        aAny <<= xModel;
+                    else if ( FN_UNO_COMPONENT == pCur->nWID )
+                        aAny <<= xComp;
                 }
             }
+
             if(FN_UNO_CLSID == pCur->nWID)
                 aAny <<= aHexCLSID;
         }
@@ -2202,7 +2216,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 throw RuntimeException();
             OUString aCLSID;
             SvGlobalName aClassName;
-            SvInPlaceObjectRef xIPObj;
+            uno::Reference < embed::XEmbeddedObject > xIPObj;
             if( (*pCLSID) >>= aCLSID )
             {
                 sal_Bool bInternal = sal_True;
@@ -2212,25 +2226,28 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     aExcept.Message = OUString::createFromAscii("CLSID invalid");
                     throw aExcept;
                 }
-                xIPObj = SvInPlaceObject::CreateObject( aClassName );
+
+                comphelper::EmbeddedObjectContainer aCnt;
+                ::rtl::OUString aName;
+                xIPObj = aCnt.CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
             }
-            if ( xIPObj.Is() )
+            if ( xIPObj.is() )
             {
-                if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->GetPrt() )
-                    xIPObj->OnDocumentPrinterChanged( pDoc->GetPrt() );
+                //TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
+                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->GetPrt() )
+                //    xIPObj->OnDocumentPrinterChanged( pDoc->GetPrt() );
 
                 UnoActionContext aAction(pDoc);
                 pDoc->StartUndo(UNDO_INSERT);
-                ULONG lDummy;
-                String aDummy;
-                // determine source CLSID
-                xIPObj->SvPseudoObject::FillClass( &aClassName, &lDummy, &aDummy, &aDummy, &aDummy);
-
                 if(!bSizeFound)
                 {
+                    //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
+                    sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
                     //The Size should be suggested by the OLE server if not manually set
-                    MapMode aRefMap( xIPObj->GetMapUnit() );
-                    Size aSz( xIPObj->GetVisArea().GetSize() );
+                    MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
+                    awt::Size aSize = xIPObj->getVisualAreaSize( nAspect );
+                    Size aSz( aSize.Width, aSize.Height );
                     if ( !aSz.Width() || !aSz.Height() )
                     {
                         aSz.Width() = aSz.Height() = 5000;
@@ -2245,7 +2262,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 }
                 SwFlyFrmFmt* pFmt = 0;
 
-                pFmt = pDoc->Insert(aPam, &xIPObj, &aFrmSet );
+                pFmt = pDoc->Insert(aPam, xIPObj, &aFrmSet );
                 ASSERT( pFmt, "Doc->Insert(notxt) failed." );
 
                 pDoc->EndUndo(UNDO_INSERT);
@@ -3025,38 +3042,24 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
 
         SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
                                         ->GetIndex() + 1 ]->GetOLENode();
-        SvInPlaceObjectRef xIP( pOleNode->GetOLEObj().GetOleRef() );
-        if (xIP.Is())
+        uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
+        uno::Reference < embed::XComponentSupplier > xSup( xIP, uno::UNO_QUERY );
+        if (xSup.is())
         {
-            SfxInPlaceObjectRef xSfxObj( xIP );
-            if(xSfxObj.Is())
+            xRet = uno::Reference < lang::XComponent >( xSup->getComponent(), uno::UNO_QUERY );
+            uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
+            uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
+            if( xBrdcst.is() && xModel.is() )
             {
-                SfxObjectShell* pObjSh = xSfxObj->GetObjectShell();
-                if( pObjSh )
+                SwClientIter aIter( *pFmt );
+                SwXOLEListener* pListener = (SwXOLEListener*)aIter.
+                                        First( TYPE( SwXOLEListener ));
+                //create a new one if the OLE object doesn't have one already
+                if( !pListener )
                 {
-                    uno::Reference< frame::XModel > xModel = pObjSh->GetBaseModel();
-                    xRet = uno::Reference< XComponent >(xModel, uno::UNO_QUERY);
-
-                    uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
-                    if( xBrdcst.is() )
-                    {
-                        SwClientIter aIter( *pFmt );
-                        SwXOLEListener* pListener = (SwXOLEListener*)aIter.
-                                                First( TYPE( SwXOLEListener ));
-                        //create a new one if the OLE object doesn't have one already
-                        if( !pListener )
-                        {
-                            uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
-                            xBrdcst->addModifyListener( xOLEListener );
-                        }
-                    }
+                    uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
+                    xBrdcst->addModifyListener( xOLEListener );
                 }
-            }
-            else
-            {
-                SvOutPlaceObjectRef xOut( pOleNode->GetOLEObj().GetOleRef() );
-                if ( xOut.Is() )
-                    xRet = xOut->GetUnoComponent();
             }
         }
     }
@@ -3151,14 +3154,20 @@ void SwXOLEListener::modified( const EventObject& rEvent )
     }
     if(!pNd)
         throw RuntimeException();
-    if( !pNd->GetOLEObj().IsOleRef() ||
-            !pNd->GetOLEObj().GetOleRef()->GetProtocol().IsInPlaceActive() )
+
+    uno::Reference < embed::XEmbeddedObject > xIP = pNd->GetOLEObj().GetOleRef();
+    if ( xIP.is() )
     {
-        // if the OLE-Node is UI-Active do nothing
-        pNd->SetOLESizeInvalid( sal_True );
-        pNd->GetDoc()->SetOLEObjModified();
+        sal_Int32 nState = xIP->getCurrentState();
+        if ( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE )
+            return;
     }
+
+    // if the OLE-Node is UI-Active do nothing
+    pNd->SetOLESizeInvalid( sal_True );
+    pNd->GetDoc()->SetOLEObjModified();
 }
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
