@@ -3,3 +3,14 @@ Pairs of duplicates:
 objects3dtoolbox, cube
 spelling, spelldialog
 drawchart, insertobjectchart
+connector, connectortoolbox
+basicshapes, basicshapes.rectangle
+helpbookmark, addbookmark
+searchdialog, helpsearch
+zoomin, helpzoomin
+zoomout, helpzoomout
+inserttable, <formtablecontrol,?> 
+inserttimefield, <formtimefield?>
+numberformatcurrency, <formcurrencyfield?>
+numberformatdate, <formdatefield?>
+
