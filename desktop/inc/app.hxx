@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-09 12:10:47 $
+ *  last change: $Author: lo $ $Date: 2002-10-22 15:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ class Desktop : public Application //public SfxApplicationClass
         }
 
     private:
+#ifndef BUILD_SOSL
+        sal_Bool            TabRegDialog(String);
+#endif BUILD_SOSL
         void                HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                StartSetup( const ::rtl::OUString& aParameters );
 

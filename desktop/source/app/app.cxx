@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-21 09:02:16 $
+ *  last change: $Author: lo $ $Date: 2002-10-22 15:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1401,6 +1401,13 @@ void Desktop::Main()
                                                  OUString() ));
             HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
         }
+        /*
+        catch( ... )
+        {
+            OUString aMsg( CreateErrorMsgString(, OUString))
+            HandleBootstrapErrors(, aMsg);
+        }
+        */
     }
 
     if (bCanceled)
@@ -1414,110 +1421,7 @@ void Desktop::Main()
     delete pLabelResMgr;
 
 #ifndef BUILD_SOSL
-    // get the tabreg service for an evaluation version
-    // without this service office shouldn't run at all
-    String aEval;
-    sal_Bool bExpired = sal_True;
-    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-    Reference < XMaterialHolder > xHolder( xSMgr->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
-    if ( xHolder.is() )
-    {
-        // get a sequence of strings for the defined locales
-        // a registered version doesn't provide data
-        bExpired = sal_False;
-        Any aData = xHolder->getMaterial();
-        Sequence < NamedValue > aSeq;
-        if ( aData >>= aSeq )
-        {
-            // this is an evaluation version, because it provides "material"
-            bExpired = sal_True;
-
-            // determine current locale
-            ::rtl::OUString aLocale;
-            ::rtl::OUString aTmp;
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-            aRet >>= aLocale;
-
-            sal_Int32 nCount = aSeq.getLength();
-            if ( nCount )
-            {
-                // first entry is for expiry
-                const NamedValue& rValue = aSeq[0];
-                if ( rValue.Name.equalsAscii("expired") )
-                    rValue.Value >>= bExpired;
-            }
-
-            // find string for matching locale
-            sal_Int32 n;
-            for ( n=0; n<nCount; n++ )
-            {
-                const NamedValue& rValue = aSeq[n];
-                if ( rValue.Name == aLocale )
-                {
-                    rValue.Value >>= aTmp;
-                    aEval = aTmp;
-                    break;
-                }
-            }
-
-            if ( n == nCount )
-            {
-                // try matching only first part of locale, if tab service provides it
-                ::rtl::OUString aShortLocale;
-                sal_Int32 nPos = aLocale.indexOf('_');
-                if ( nPos > 0 )
-                {
-                    aShortLocale = aLocale.copy( 0, nPos );
-                    for ( n=0; n<nCount; n++ )
-                    {
-                        const NamedValue& rValue = aSeq[n];
-                        if ( rValue.Name == aShortLocale )
-                        {
-                            rValue.Value >>= aTmp;
-                            aEval = aTmp;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if ( n == nCount )
-            {
-                // current locale is unknown for service, use default english
-                sal_Int32 nCount = aSeq.getLength();
-                for ( n=0; n<nCount; n++ )
-                {
-                    const NamedValue& rValue = aSeq[n];
-                    if ( rValue.Name.equalsAscii("en") )
-                    {
-                        rValue.Value >>= aTmp;
-                        aEval = aTmp;
-                        break;
-                    }
-                }
-
-                if ( n == nCount )
-                    // strange version, no english string
-                    bExpired = sal_True;
-            }
-        }
-    }
-
-    if ( aEval.Len() )
-    {
-        if ( aTitle.GetChar(aTitle.Len()-1) != ' ' )
-            aTitle += ' ';
-        aTitle += aEval;
-    }
-
-    if ( bExpired )
-    {
-        InfoBox aBox( NULL, aTitle );
-        aBox.Execute();
-        return;
-    }
-
+    if( !TabRegDialog(aTitle) ) return;
 #endif
 
 #ifndef PRODUCT
@@ -1727,6 +1631,116 @@ void Desktop::Main()
     // instead of removing of the configManager just let it commit all the changes
     utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 }
+
+#ifndef BUILD_SOSL
+sal_Bool Desktop::TabRegDialog(String aTitle)
+{
+    // get the tabreg service for an evaluation version
+    // without this service office shouldn't run at all
+    String aEval;
+    sal_Bool bExpired = sal_True;
+    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+    Reference < XMaterialHolder > xHolder( xSMgr->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
+    if ( xHolder.is() )
+    {
+        // get a sequence of strings for the defined locales
+        // a registered version doesn't provide data
+        bExpired = sal_False;
+        Any aData = xHolder->getMaterial();
+        Sequence < NamedValue > aSeq;
+        if ( aData >>= aSeq )
+        {
+            // this is an evaluation version, because it provides "material"
+            bExpired = sal_True;
+
+            // determine current locale
+            ::rtl::OUString aLocale;
+            ::rtl::OUString aTmp;
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+            aRet >>= aLocale;
+
+            sal_Int32 nCount = aSeq.getLength();
+            if ( nCount )
+            {
+                // first entry is for expiry
+                const NamedValue& rValue = aSeq[0];
+                if ( rValue.Name.equalsAscii("expired") )
+                    rValue.Value >>= bExpired;
+            }
+
+            // find string for matching locale
+            sal_Int32 n;
+            for ( n=0; n<nCount; n++ )
+            {
+                const NamedValue& rValue = aSeq[n];
+                if ( rValue.Name == aLocale )
+                {
+                    rValue.Value >>= aTmp;
+                    aEval = aTmp;
+                    break;
+                }
+            }
+
+            if ( n == nCount )
+            {
+                // try matching only first part of locale, if tab service provides it
+                ::rtl::OUString aShortLocale;
+                sal_Int32 nPos = aLocale.indexOf('_');
+                if ( nPos > 0 )
+                {
+                    aShortLocale = aLocale.copy( 0, nPos );
+                    for ( n=0; n<nCount; n++ )
+                    {
+                        const NamedValue& rValue = aSeq[n];
+                        if ( rValue.Name == aShortLocale )
+                        {
+                            rValue.Value >>= aTmp;
+                            aEval = aTmp;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if ( n == nCount )
+            {
+                // current locale is unknown for service, use default english
+                sal_Int32 nCount = aSeq.getLength();
+                for ( n=0; n<nCount; n++ )
+                {
+                    const NamedValue& rValue = aSeq[n];
+                    if ( rValue.Name.equalsAscii("en") )
+                    {
+                        rValue.Value >>= aTmp;
+                        aEval = aTmp;
+                        break;
+                    }
+                }
+
+                if ( n == nCount )
+                    // strange version, no english string
+                    bExpired = sal_True;
+            }
+        }
+    }
+
+    if ( aEval.Len() )
+    {
+        if ( aTitle.GetChar(aTitle.Len()-1) != ' ' )
+            aTitle += ' ';
+        aTitle += aEval;
+    }
+
+    if ( bExpired )
+    {
+        InfoBox aBox( NULL, aTitle );
+        aBox.Execute();
+    }
+    return bExpired;
+
+}
+#endif
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
