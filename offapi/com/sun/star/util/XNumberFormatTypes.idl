@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatTypes.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** represents functions to get specific, predefined number formats.
  */
-interface XNumberFormatTypes: com::sun::star::uno::XInterface
+published interface XNumberFormatTypes: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
