@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:34:43 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:14:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,15 +120,9 @@ ALLDPC: \
 .ENDIF
 .ENDIF
 .IF "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)$(PARFILES)"!=""
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-#	@+if ( -e  $(MISC)$/$(TARGET).dpr ) $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
-    @+if ( -e  $(MISC)$/$(TARGET).dpj ) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
-    @+if ( -e  $(MISC)$/genjava.mk ) $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
-.ELSE
-#	@+-if exist $(MISC)$/$(TARGET).dpr $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
-    @+-if exist $(MISC)$/$(TARGET).dpj $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
-    @+-if exist $(MISC)$/genjava.mk $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
-.ENDIF
+#	@+$(IFEXIST) $(MISC)$/$(TARGET).dpr $(THEN) $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
+    @+$(IFEXIST) $(MISC)$/$(TARGET).dpj $(THEN) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
+    @+$(IFEXIST) $(MISC)$/genjava.mk $(THEN) $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
     +$(TOUCH) $(MISC)$/$(TARGET).dpc
 .IF "$(SVXLIGHT)"!=""
 #.IF "$(SVXLIGHTSLOFILES)"!=""
@@ -154,11 +148,7 @@ ALLDPC: \
 ALLDPC:
     @echo ------------------------------
     @echo No Dependencies
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @echo "#" > $(MISC)$/$(TARGET).dpc
-.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @echo # > $(MISC)$/$(TARGET).dpc
-.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    @echo $(EMQ)# > $(MISC)$/$(TARGET).dpc
 
 ALLDEP:
     @echo ------------------------------
