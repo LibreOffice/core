@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:13:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ namespace svxform
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
             const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-                SAL_MODULENAME( "dbtools2" )
+                SVLIBRARY( "dbtools" )
             );
 
             // load the dbtools library
