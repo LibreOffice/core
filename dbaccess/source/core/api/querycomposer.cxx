@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:42:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
 
+
 namespace
 {
     struct OrderCreator : public ::std::unary_function< ::rtl::OUString, void>
@@ -206,6 +207,15 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
 {
+    DBG_DTOR(OQueryComposer,NULL);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OQueryComposer::disposing()
+{
+    m_xComposer = NULL;
+    m_xComposerHelper = NULL;
+    ::comphelper::disposeComponent(m_xAnalyzerHelper);
+    ::comphelper::disposeComponent(m_xAnalyzer);
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::lang::XTypeProvider
@@ -282,6 +292,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
+    m_aFilters.clear();
     m_xAnalyzer->setQuery(command);
     m_sOrgFilter = m_xAnalyzer->getFilter();
     m_sOrgOrder = m_xAnalyzer->getOrder();
@@ -321,7 +332,6 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
     OrderCreator aOrderCreator;
     aOrderCreator = ::std::for_each(m_aOrders.begin(),m_aOrders.end(),aOrderCreator);
     return aOrderCreator.m_sOrder;
-    //  return m_xAnalyzer->getOrder();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column ) throw(SQLException, RuntimeException)
@@ -369,9 +379,6 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
     if ( filter.getLength() )
         m_aFilters.push_back(filter);
 
-
-    //  aFilterCreator = ::std::for_each(m_aFilters.begin(),m_aFilters.end(),aFilterCreator);
-
     m_xComposer->setFilter(aFilterCreator.m_sFilter);
 }
 // -------------------------------------------------------------------------
@@ -389,8 +396,6 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
     if ( order.getLength() )
         m_aOrders.push_back(order);
 
-
-    //  aOrderCreator = ::std::for_each(m_aOrders.begin(),m_aOrders.end(),aOrderCreator);
     m_xComposer->setOrder(aOrderCreator.m_sOrder);
 }
 // -------------------------------------------------------------------------
