@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuBarFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:14:15 $
+ *  last change: $Date: 2005-03-01 20:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import ifc.ui._XUIConfiguration;
 import java.io.PrintWriter;
 import com.sun.star.lang.EventObject;
-import drafts.com.sun.star.ui.ConfigurationEvent;
+import com.sun.star.ui.ConfigurationEvent;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModuleUIConfigurationManagerSupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:14:47 $
+ *  last change: $Date: 2005-03-01 20:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ public class ModuleUIConfigurationManagerSupplier extends TestCase{
         TestEnvironment tEnv = null;
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
-            oObj = (XInterface)xMSF.createInstance("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+            oObj = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             tEnv = new TestEnvironment(oObj);
             tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigurationManager",
                                             "com.sun.star.frame.StartModule");
