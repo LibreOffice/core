@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-07 14:12:52 $
+ *  last change: $Author: ama $ $Date: 2002-05-08 10:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,12 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     pOut->Push();
     BOOL bClip = TRUE;
     PolyPolygon aPoly;
+
+    SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
+    SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
+    if( pGrfNd )
+        pGrfNd->SetFrameInPaint( TRUE );
+
     if ( (!pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER) &&
          FindFlyFrm()->GetContour( aPoly ) )
     {
@@ -545,6 +551,8 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
         // wenn nicht sichtbar, loesche einfach den angegebenen Bereich
         lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect(),
                         bIsOleNode );
+    if( pGrfNd )
+        pGrfNd->SetFrameInPaint( FALSE );
 
     pOut->Pop();
     SfxProgress::LeaveLock();
@@ -974,7 +982,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
     if( pGrfNd )
     {
         FASTBOOL bForceSwap = FALSE, bContinue = TRUE;
-        pGrfNd->SetFrameInPaint( TRUE );
         GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
@@ -1069,7 +1076,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
             if( bSwapped && bPrn )
                 bForceSwap = TRUE;
         }
-        pGrfNd->SetFrameInPaint( FALSE );
         if( bForceSwap )
             pGrfNd->SwapOut();
     }
