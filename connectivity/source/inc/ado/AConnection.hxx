@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 10:06:14 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,18 @@ namespace connectivity
 {
     namespace ado
     {
+        struct OExtendedTypeInfo
+        {
+            ::connectivity::OTypeInfo       aSimpleType;    // the general type info
+            sal_Int32                       eType;          // the ADO type
+
+            inline ::rtl::OUString getDBName() const { return aSimpleType.aTypeName; }
+        };
+
         class WpADOConnection;
         class ODriver;
-        typedef ::std::multimap<sal_Int32, ::connectivity::OTypeInfo*>  OTypeInfoMap;
+        class OCatalog;
+        typedef ::std::multimap<sal_Int32, OExtendedTypeInfo*>          OTypeInfoMap;
         typedef connectivity::OMetaConnection                           OConnection_BASE;
 
 
@@ -117,6 +126,7 @@ namespace connectivity
             ODriver*                    m_pDriver;
         private:
             WpADOConnection*            m_pAdoConnection;
+            OCatalog*                   m_pCatalog;
             sal_Int32                   m_nEngineType;
             sal_Bool                    m_bClosed;
             sal_Bool                    m_bAutocommit;
@@ -170,16 +180,25 @@ namespace connectivity
             //
             WpADOConnection* getConnection() { return m_pAdoConnection; }
             void setCatalog(const ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
+            void setCatalog(OCatalog* _pCatalog) { m_pCatalog = _pCatalog; }
+
             const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
+            OCatalog* getAdoCatalog() const
+            {
+                if ( m_xCatalog.get().is() )
+                    return m_pCatalog;
+                return NULL;
+            }
 
             sal_Int32 getEngineType()   const { return m_nEngineType; }
             ODriver*  getDriver()       const { return m_pDriver; }
 
-            static const ::connectivity::OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+            static const OExtendedTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
                                const ::rtl::OUString& _sTypeName,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
+                               sal_Int32 _nAdoType,
                                sal_Bool& _brForceToType);
         };
     }

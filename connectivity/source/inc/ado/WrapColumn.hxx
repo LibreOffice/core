@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WrapColumn.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:13:03 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace connectivity
             void put_NumericScale(sal_Int8 _nScale);
             SortOrderEnum get_SortOrder() const;
             void put_SortOrder(SortOrderEnum _nScale);
+            sal_Int32 get_DefinedSize() const;
             ColumnAttributesEnum get_Attributes() const;
             sal_Bool put_Attributes(const ColumnAttributesEnum& _eNum);
             WpADOProperties get_Properties() const;
