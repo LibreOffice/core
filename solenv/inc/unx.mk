@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-19 13:46:45 $
+#   last change: $Author: svesik $ $Date: 2001-06-22 11:52:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,6 +164,10 @@ OLE2DEF=-DOLE2
 
 .IF "$(COM)$(OS)$(CPU)" == "C730IRIXM"
 .INCLUDE : unxirxm3.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCIRIXM"
+.INCLUDE : unxirgm.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "C710IRIXM"
