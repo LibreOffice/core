@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 08:46:16 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 11:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,27 +582,29 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         pEntry = (*pController->getTableFieldDesc())[GetCurColumnId() - 1];
 
     sal_Bool bWasEmpty = pEntry ? pEntry->IsEmpty() : sal_False;
-    sal_Bool bError = sal_False;
+    sal_Bool bError         = sal_False;
+    sal_Bool bListAction    = sal_False;
 
     if (pEntry && Controller().Is() && Controller()->IsModified())
     {
         // fuer die Undo-Action
-        String strOldCellContents;
+        String strOldCellContents,sNewValue;
         long nRow = GetRealRow(GetCurRow());
         switch (nRow)
         {
             case BROW_VIS_ROW:
-                if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
-                   (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
                 {
                     sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue();
                     strOldCellContents = bOldValue ? g_strOne : g_strZero;
+                    sNewValue          = !bOldValue ? g_strOne : g_strZero;
+                }
+                if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
+                   (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
+                {
                     pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
                 }
                 else
                 {
-                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue();
-                    strOldCellContents = bOldValue ? g_strOne : g_strZero;
                     pEntry->SetVisible(sal_True);
                     m_pVisibleCell->GetBox().Check();
                 }
@@ -646,6 +648,11 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                                         xColumn);
                     if (pParseNode)
                     {
+
+                        bListAction = sal_True;
+                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                        appendUndoAction(pEntry->IsVisible() ? g_strOne : g_strZero,g_strZero,BROW_VIS_ROW);
+
                         pEntry->SetVisible(sal_False);
                         bWasEmpty = sal_False; // XXXXX
                         delete pParseNode;
@@ -665,6 +672,13 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                         aFieldName = aFieldName.GetToken(1,'.');
 
                         // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
+                        if(!bListAction)
+                        {
+                            bListAction = sal_True;
+                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                        }
+                        appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
+
                         pEntry->SetAlias(sTableAlias);
                         if(m_bVisibleRow[BROW_TABLE_ROW])
                             RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
@@ -678,22 +692,32 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
                                 if (pEntryTab)
                                 {
+                                    //  appendUndoAction(pEntry->GetDatabase(),sTableAlias,GetBrowseRow(BROW_TABLE_ROW));
                                     pEntry->SetDatabase(pEntryTab->GetComposedName());
                                     pEntry->SetTable(pEntryTab->GetTableName());
+                                    pEntry->SetTabWindow(pEntryTab);
                                 }
                             }
                         }
                     }
                     strOldCellContents = pEntry->GetField();
                     pEntry->SetField(aFieldName);
+                    sNewValue = aFieldName;
 
                     // Falls nur COUNT(*) erlaubt wird
                     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
                     if(!xConnection.is())
                         break;
+
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     if(aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
                     {
+                        if(!bListAction)
+                        {
+                            bListAction = sal_True;
+                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                        }
+                        appendUndoAction(pEntry->GetFunction(),String(),BROW_FUNCTION_ROW);
                         pEntry->SetFunction(::rtl::OUString());
                         m_pFunctionCell->SelectEntryPos(0);
                         if(!m_bVisibleRow[BROW_FUNCTION_ROW])
@@ -726,6 +750,12 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             aParameter = aParameter.GetToken(1,'.');
 
                             // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
+                            if(!bListAction)
+                            {
+                                bListAction = sal_True;
+                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                            }
+                            appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
                             pEntry->SetAlias(sTableAlias);
                             if(m_bVisibleRow[BROW_TABLE_ROW])
                                 RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
@@ -739,6 +769,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                     OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
                                     pEntry->SetDatabase(pEntryTab->GetComposedName());
                                     pEntry->SetTable(pEntryTab->GetTableName());
+                                    pEntry->SetTabWindow(pEntryTab);
                                 }
                             }
                         }
@@ -753,18 +784,32 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 if (pEntryTab)
                                 {
                                     pEntry->SetDatabase(pEntryTab->GetComposedName());
+                                    if(!bListAction)
+                                    {
+                                        bListAction = sal_True;
+                                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                                    }
+                                    appendUndoAction(pEntry->GetTable(),pEntryTab->GetTableName(),BROW_TABLE_ROW);
+
                                     pEntry->SetTable(pEntryTab->GetTableName());
                                     pEntry->SetAlias(pEntry->GetTable());
+                                    pEntry->SetTabWindow(pEntryTab);
                                 }
                             }
                         }
 
+                        if(!bListAction)
+                        {
+                            bListAction = sal_True;
+                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                        }
+                        appendUndoAction(pEntry->GetFunction(),aFkt,BROW_FUNCTION_ROW);
                         m_pFieldCell->SetText(aParameter);
                         m_pFunctionCell->SelectEntry(aFkt);
                         if(!m_bVisibleRow[BROW_FUNCTION_ROW])
-                        {
                             SetRowVisible(BROW_FUNCTION_ROW, sal_True);
-                        }
+
+
                         RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
                         RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
                     }
@@ -772,6 +817,12 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     {
                         pEntry->SetField(aFieldName);
                         pEntry->SetAlias(String());
+                        if(!bListAction)
+                        {
+                            bListAction = sal_True;
+                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                        }
+                        appendUndoAction(pEntry->GetTable(),String(),BROW_TABLE_ROW);
                         pEntry->SetTable(String());
                         pEntry->SetTabWindow(NULL);
                         m_pFieldCell->SetText(aFieldName);
@@ -788,6 +839,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     for (int i = 0; i < m_nVisibleCount; i++)   // Spalte neu zeichnen
                         RowModified(i,nCol);
                 }
+                sNewValue = pEntry->GetField();
                 pController->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
             }
             break;
@@ -800,6 +852,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     pEntry->SetAlias(aAliasName);
                 else
                     pEntry->SetAlias(String());
+                sNewValue = pEntry->GetAlias();
 
                 // jetzt noch ::com::sun::star::data::Database und Tabelle uebernehmen
                 OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
@@ -832,11 +885,13 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     m_pVisibleCell->GetBox().Check();
                     RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                 }
+                sNewValue = String::CreateFromInt32((sal_uInt16)pEntry->GetOrderDir());
             }   break;
 
             case BROW_COLUMNALIAS_ROW:
                 strOldCellContents = pEntry->GetFieldAlias();
                 pEntry->SetFieldAlias(m_pTextCell->GetText());
+                sNewValue = pEntry->GetFieldAlias();
                 break;
             case BROW_FUNCTION_ROW:
                 {
@@ -876,6 +931,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             pEntry->SetGroupBy(sal_False);
                         pEntry->SetFunction(String());
                     }
+                    sNewValue = pEntry->GetFunction();
                 }
                 break;
             default:
@@ -970,6 +1026,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 }
                 strOldCellContents = pEntry->GetCriteria(nIdx);
                 pEntry->SetCriteria(nIdx, aCrit);
+                sNewValue = pEntry->GetCriteria(nIdx);
                 if(aCrit.getLength() && nRow >= (GetRowCount()-1))
                 {
                     RowInserted( GetRowCount()-1, 1, TRUE );
@@ -986,11 +1043,9 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         if(!bError)
         {
             // und noch die Undo-Action fuer das Ganze
-            OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
-            pUndoAct->SetCellIndex(GetCurRow());
-            pUndoAct->SetColId(GetCurColumnId());
-            pUndoAct->SetCellContents(strOldCellContents);
-            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
+            appendUndoAction(strOldCellContents,sNewValue,nRow);
+            if(bListAction)
+                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
         }
     }
 
@@ -1970,15 +2025,13 @@ sal_Bool OSelectionBrowseBox::GetFunktionName(String& rFkt)
 String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
+    //  DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
     SaveModified();
 
     OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId - 1];
     DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::GetCellContents : invalid column id, prepare for GPF ... ");
 
-
-    long nRow = GetRealRow(nCellIndex);
-    switch (nRow)
+    switch (nCellIndex)
     {
         case BROW_VIS_ROW :
             return pEntry->IsVisible() ? g_strOne : g_strZero;
@@ -1990,7 +2043,7 @@ String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
             return String(nIdx);
         }
         default:
-            return GetCellText(nRow, (sal_uInt16)nColId);
+            return GetCellText(nCellIndex, (sal_uInt16)nColId);
     }
 }
 
@@ -1998,15 +2051,15 @@ String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
 void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const String& strNewText)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    sal_Bool bWasEditing = IsEditing() && (GetCurColumnId() == nColId) && (GetCurRow() == nRow);
+    sal_Bool bWasEditing = IsEditing() && (GetCurColumnId() == nColId) && IsRowVisible(nRow) && (GetCurRow() == GetBrowseRow(nRow));
     if (bWasEditing)
         DeactivateCell();
 
     OTableFieldDesc* pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[nColId - 1];
     DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::SetCellContents : invalid column id, prepare for GPF ... ");
 
-    long nCellIndex = GetRealRow(nRow);
-    switch (nCellIndex)
+
+    switch (nRow)
     {
         case BROW_VIS_ROW:
             pEntry->SetVisible(strNewText == g_strOne);
@@ -2035,10 +2088,12 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
                 pEntry->SetFunctionType(FKT_AGGREGATE);
             break;
         default:
-            pEntry->SetCriteria(nCellIndex - BROW_CRIT1_ROW, strNewText);
+            pEntry->SetCriteria(nRow - BROW_CRIT1_ROW, strNewText);
     }
 
-    RowModified(nCellIndex, (sal_uInt16)nColId);
+    long nCellIndex = GetRealRow(nRow);
+    if(IsRowVisible(nRow))
+        RowModified(nCellIndex, (sal_uInt16)nColId);
 
     // die entsprechende Feld-Beschreibung ist jetzt leer -> Visible auf sal_False (damit das konsistent mit normalen leeren Spalten ist)
     if (pEntry->IsEmpty())
@@ -2113,3 +2168,88 @@ sal_uInt16 OSelectionBrowseBox::GetDefaultColumnWidth(const String& rName) const
     return DEFAULT_SIZE;
 }
 //------------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::isCutAllowed()
+{
+    sal_Bool bCutAllowed = sal_False;
+    long nRow = GetRealRow(GetCurRow());
+    switch (nRow)
+    {
+        case BROW_VIS_ROW:
+        case BROW_ORDER_ROW:
+        case BROW_TABLE_ROW:
+        case BROW_FUNCTION_ROW:
+            break;
+        case BROW_FIELD_ROW:
+            bCutAllowed = m_pFieldCell->GetSelected().Len() != 0;
+            break;
+        default:
+            bCutAllowed = m_pTextCell->GetSelected().Len() != 0;
+            break;
+    }
+    return bCutAllowed;
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::cut()
+{
+    String sOldValue = GetCellContents(GetRealRow(GetCurRow()),GetCurColumnId());
+    long nRow = GetRealRow(GetCurRow());
+    switch (nRow)
+    {
+        case BROW_FIELD_ROW:
+            m_pFieldCell->Cut();
+            break;
+        default:
+            m_pTextCell->Cut();
+    }
+    RowModified(GetBrowseRow(nRow), GetCurColumnId());
+
+    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+    pController->InvalidateFeature( ID_BROWSER_UNDO );
+    pController->InvalidateFeature( ID_BROWSER_REDO );
+    pController->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::paste()
+{
+    long nRow = GetRealRow(GetCurRow());
+    switch (nRow)
+    {
+        case BROW_FIELD_ROW:
+            m_pFieldCell->Paste();
+            break;
+        default:
+            m_pTextCell->Paste();
+    }
+    RowModified(GetBrowseRow(nRow), GetCurColumnId());
+    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+    pController->InvalidateFeature( ID_BROWSER_UNDO );
+    pController->InvalidateFeature( ID_BROWSER_REDO );
+    pController->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::copy()
+{
+    long nRow = GetRealRow(GetCurRow());
+    switch (nRow)
+    {
+        case BROW_FIELD_ROW:
+            m_pFieldCell->Copy();
+            break;
+        default:
+            m_pTextCell->Copy();
+    }
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow)
+{
+    if(_rNewValue != _rOldValue)
+    {
+        OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
+        pUndoAct->SetCellIndex(_nRow);
+        pUndoAct->SetColId(GetCurColumnId());
+        pUndoAct->SetCellContents(_rOldValue);
+        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
+    }
+}
+// -----------------------------------------------------------------------------
+

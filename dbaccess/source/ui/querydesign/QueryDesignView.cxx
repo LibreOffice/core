@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 11:11:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 11:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,8 @@ void OQueryDesignView::setStatement(const ::rtl::OUString& _rsStatement)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::copy()
 {
+    if(m_pSelectionBox->HasChildPathFocus())
+        m_pSelectionBox->copy();
 }
 // -----------------------------------------------------------------------------
 BOOL OQueryDesignView::IsAddAllowed()
@@ -294,16 +296,27 @@ BOOL OQueryDesignView::IsAddAllowed()
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isCutAllowed()
 {
-    return sal_False;
+    sal_Bool bCutAllowed = sal_False;
+    if(m_pSelectionBox->HasChildPathFocus())
+        bCutAllowed = m_pSelectionBox->isCutAllowed();
+    else
+    {
+    }
+    return bCutAllowed;
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::cut()
 {
+    if(m_pSelectionBox->HasChildPathFocus())
+        m_pSelectionBox->cut();
+
     static_cast<OQueryController*>(getController())->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::paste()
 {
+    if(m_pSelectionBox->HasChildPathFocus())
+        m_pSelectionBox->paste();
     static_cast<OQueryController*>(getController())->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------

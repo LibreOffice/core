@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 11:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,12 @@ namespace dbaui
 
         void                        SetReadOnly(sal_Bool bRO);
 
+        // can the current content be cut
+        sal_Bool                    isCutAllowed();
+        void                        cut();
+        void                        paste();
+        void                        copy();
+
     protected:
         virtual sal_Bool            SeekRow( long nRow );
 
@@ -213,6 +219,7 @@ namespace dbaui
         long                        GetRealRow(long nRow) const;
         long                        GetBrowseRow(long nRowId) const;
         sal_Bool                    GetFunktionName(String& rFkt);
+        void                        appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
