@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:03:03 $
+ *  last change: $Author: ka $ $Date: 2002-07-12 12:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
                 pObj = rMarkList.GetMark( 0 )->GetObj();
 
-                if( pObj->ISA( SdrObjGroup ) || pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) )
+//              if( pObj->ISA( SdrObjGroup ) || pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) )
                     aName = pObj->GetName();
 
                 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aName, aDesc );
