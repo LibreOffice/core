@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2001-11-29 13:57:04 $
+#   last change: $Author: hr $ $Date: 2004-02-03 18:02:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,8 @@ SLOFILES= \
         $(SLO)$/ZipPackageFolder.obj	\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
         $(SLO)$/ZipPackageSink.obj		\
-        $(SLO)$/ZipPackageStream.obj
+        $(SLO)$/ZipPackageStream.obj	\
+        $(SLO)$/wrapstreamforshare.obj
 #		$(SLO)$/InteractionRequest.obj  \
 #		$(SLO)$/InteractionContinuation.obj
 
