@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetView.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,14 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_XActivationBroadcaster_idl__
+#include <com/sun/star/sheet/XActivationBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XEnhancedMouseClickBroadcaster_idl__
+#include <com/sun/star/sheet/XEnhancedMouseClickBroadcaster.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module sheet {
@@ -161,6 +169,9 @@ service SpreadsheetView
      */
     interface com::sun::star::sheet::XRangeSelection;
 
+    [optional] interface com::sun::star::sheet::XEnhancedMouseClickBroadcaster;
+
+    [optional] interface com::sun::star::sheet::XActivationBroadcaster;
 };
 
 //=============================================================================
