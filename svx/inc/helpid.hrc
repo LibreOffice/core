@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:49:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,29 +702,35 @@
 #define HID_COLORPAGE_BASICKEYWORD_CB               (HID_SVX_EXT0_START + 107)
 #define HID_COLORPAGE_BASICERROR_CB                 (HID_SVX_EXT0_START + 108)
 
-#define HID_POPUP_EXTRUSION_DIRECTION           (HID_SVX_EXT0_START + 109)
-#define HID_POPUP_EXTRUSION_DEPTH               (HID_SVX_EXT0_START + 110)
-#define HID_POPUP_EXTRUSION_LIGHTING            (HID_SVX_EXT0_START + 111)
-#define HID_POPUP_EXTRUSION_SURFACE             (HID_SVX_EXT0_START + 112)
-#define HID_MENU_EXTRUSION_DIRECTION            (HID_SVX_EXT0_START + 113)
-#define HID_VALUESET_EXTRUSION_DIRECTION        (HID_SVX_EXT0_START + 114)
-#define HID_MENU_EXTRUSION_DEPTH                (HID_SVX_EXT0_START + 115)
-#define HID_MENU_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 116)
-#define HID_VALUESET_EXTRUSION_LIGHTING         (HID_SVX_EXT0_START + 117)
-#define HID_MENU_EXTRUSION_SURFACE              (HID_SVX_EXT0_START + 118)
-#define HID_SCRIPTSBOX                          (HID_SVX_EXT0_START + 119)
-#define HID_SELECTOR_CATEGORIES                 (HID_SVX_EXT0_START + 120)
-#define HID_SELECTOR_COMMANDS                   (HID_SVX_EXT0_START + 121)
+#define HID_POPUP_EXTRUSION_DIRECTION               (HID_SVX_EXT0_START + 109)
+#define HID_POPUP_EXTRUSION_DEPTH                   (HID_SVX_EXT0_START + 110)
+#define HID_POPUP_EXTRUSION_LIGHTING                (HID_SVX_EXT0_START + 111)
+#define HID_POPUP_EXTRUSION_SURFACE                 (HID_SVX_EXT0_START + 112)
+#define HID_MENU_EXTRUSION_DIRECTION                (HID_SVX_EXT0_START + 113)
+#define HID_VALUESET_EXTRUSION_DIRECTION            (HID_SVX_EXT0_START + 114)
+#define HID_MENU_EXTRUSION_DEPTH                    (HID_SVX_EXT0_START + 115)
+#define HID_MENU_EXTRUSION_LIGHTING                 (HID_SVX_EXT0_START + 116)
+#define HID_VALUESET_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 117)
+#define HID_MENU_EXTRUSION_SURFACE                  (HID_SVX_EXT0_START + 118)
+#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 119)
+#define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 120)
+#define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 121)
 
 // Hangul Hanja extensions
-#define HID_HANGULHANJA_OPT_DLG                     (HID_SVX_EXT0_START + 119)
-#define HID_HANGULHANJA_NEWDICT_DLG                 (HID_SVX_EXT0_START + 120)
-#define HID_HANGULHANJA_EDIT_DLG                    (HID_SVX_EXT0_START + 121)
-#define HID_HANGULDLG_BUTTON_OPTIONS                (HID_SVX_EXT0_START + 122)
-#define HID_HANGULHANJA_OPT_DICTS_LB                (HID_SVX_EXT0_START + 123)
+#define HID_HANGULHANJA_OPT_DLG                     (HID_SVX_EXT0_START + 122)
+#define HID_HANGULHANJA_NEWDICT_DLG                 (HID_SVX_EXT0_START + 123)
+#define HID_HANGULHANJA_EDIT_DLG                    (HID_SVX_EXT0_START + 124)
+#define HID_HANGULDLG_BUTTON_OPTIONS                (HID_SVX_EXT0_START + 125)
+#define HID_HANGULHANJA_OPT_DICTS_LB                (HID_SVX_EXT0_START + 126)
 
-#define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 124)
-    // please adjust ACT_SVX_HID_END2 below if you add entries here!
+#define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 127)
+
+#define HID_OPTIONS_JAVA                            (HID_SVX_EXT0_START + 128)
+#define HID_OPTIONS_JAVA_LIST                       (HID_SVX_EXT0_START + 129)
+#define HID_OPTIONS_JAVA_PARAMETER                  (HID_SVX_EXT0_START + 130)
+#define HID_OPTIONS_JAVA_CLASSPATH                  (HID_SVX_EXT0_START + 131)
+
+// please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
@@ -737,8 +743,7 @@
 #endif
 
 // overrun check 2
-
-#define ACT_SVX_HID_END2        HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES
+#define ACT_SVX_HID_END2        HID_OPTIONS_JAVA_CLASSPATH
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
