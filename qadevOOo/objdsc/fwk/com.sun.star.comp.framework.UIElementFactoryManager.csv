@@ -1,0 +1,5 @@
+"UIElementFactoryManager";"drafts::com::sun::star::ui::XUIElementFactory";"createUIElement()"
+"UIElementFactoryManager";"drafts::com::sun::star::ui::XUIElementFactoryRegistration";"getRegisteredFactories()"
+"UIElementFactoryManager";"drafts::com::sun::star::ui::XUIElementFactoryRegistration";"getFactory()"
+"UIElementFactoryManager";"drafts::com::sun::star::ui::XUIElementFactoryRegistration";"registerFactory()"
+"UIElementFactoryManager";"drafts::com::sun::star::ui::XUIElementFactoryRegistration";"deregisterFactory()"
