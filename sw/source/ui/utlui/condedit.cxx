@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:01:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 if (bBrackets)
                     sDBName += '[';
                 OUString sTmp;
-                aColDesc[daDataSource] >>= sTmp;
+                sTmp = aColDesc.getDataSource();
                 sDBName += String(sTmp);
                 sDBName += '.';
 
