@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 06:46:10 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
@@ -123,27 +126,10 @@ namespace dbaui
                 ,public IControlActionListener
     {
     protected:
-        ::osl::Mutex            m_aEntryMutex;
-        DBTreeView*             m_pTreeView;
-        Splitter*               m_pSplitter;
-        DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
-        SvLBoxEntry*            m_pCurrentlyDisplayed;
-        sal_Int32               m_nAsyncDrop;
-
+        // ---------------------------
         DECLARE_STL_STDKEY_MAP( sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >, SpecialSlotDispatchers);
         DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
-        SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
-        SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
 
-        ::svx::ODataAccessDescriptor    m_aDocumentDataSource;
-            // if we're part of a document, this is the state of the DocumentDataSource slot
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
-                                m_xCollator;
-
-        ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
-
-        // ---------------------------
         struct DropDescriptor
         {
             TransferableDataHelper  aDroppedData;
@@ -152,7 +138,33 @@ namespace dbaui
 
             DropDescriptor() : pDroppedAt(NULL), bTable(sal_True) { }
         };
-        DropDescriptor              m_aAsyncDrop;
+
+        // ---------------------------
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
+
+        ::osl::Mutex            m_aEntryMutex;
+
+        SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
+        SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
+
+        ::svx::ODataAccessDescriptor    m_aDocumentDataSource;
+            // if we're part of a document, this is the state of the DocumentDataSource slot
+
+        ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
+
+        DropDescriptor          m_aAsyncDrop;
+        Timer                   m_aRefreshMenu;     // the timer for the menu "refresh"
+
+        ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
+
+        DBTreeView*             m_pTreeView;
+        Splitter*               m_pSplitter;
+        DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
+        SvLBoxEntry*            m_pCurrentlyDisplayed;
+
+        sal_Int32               m_nAsyncDrop;
+
+        sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
 
     // attribute access
     public:
@@ -244,6 +256,9 @@ namespace dbaui
         virtual void            AddSupportedFeatures();
         virtual FeatureState    GetState(sal_uInt16 nId);
         virtual void            Execute(sal_uInt16 nId);
+
+        virtual void onToolBoxSelected( sal_uInt16 _nSelectedItem );
+        virtual void onToolBoxClicked( sal_uInt16 _nClickedItem );
 
         // IControlActionListener overridables
         virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent );
@@ -348,6 +363,8 @@ namespace dbaui
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
         DECL_LINK( OnAsyncDrop, void* );
 
+        DECL_LINK( OnShowRefreshDropDown, void* );
+
         void implRemoveStatusListeners();
 
         void openHelpAgent(sal_Int32 _nHelpId);
@@ -420,6 +437,11 @@ namespace dbaui
         // set _rsName as title at the frame
         void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
         void setDefaultTitle() const;
+
+        /** get the signature (command/escape processing) of the query the form is based on
+            <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
+        */
+        sal_Bool implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing );
 
         sal_Bool isEntryCutAllowed(SvLBoxEntry* _pEntry);
         sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry);
