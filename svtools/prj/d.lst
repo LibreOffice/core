@@ -265,4 +265,4 @@ hedabu: ..\inc\urihelper.hxx %_DEST%\inc%_EXT%\svtools\urihelper.hxx
 hedabu: ..\inc\reginfo.hxx %_DEST%\inc%_EXT%\svtools\reginfo.hxx
 hedabu: ..\inc\pathoptions.hxx %_DEST%\inc%_EXT%\svtools\pathoptions.hxx
 hedabu: ..\inc\useroptions.hxx %_DEST%\inc%_EXT%\svtools\useroptions.hxx
-hedabu: ..\inc\useroptions.hxx %_DEST%\inc%_EXT%\svtools\saveopt.hxx
+hedabu: ..\inc\saveopt.hxx %_DEST%\inc%_EXT%\svtools\saveopt.hxx
