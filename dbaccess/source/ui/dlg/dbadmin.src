@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 20:20:46 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 08:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,29 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text = "Adabas D" ;
         Text[ENGLISH] = "Adabas D" ;
         Text[ english_us ] = "Adabas D";
+        Text[ portuguese ] = "Adabas D";
+        Text[ russian ] = "Adabas D";
+        Text[ greek ] = "Adabas D";
+        Text[ dutch ] = "Adabas D";
+        Text[ french ] = "Adabas D";
+        Text[ spanish ] = "Adabas D";
+        Text[ italian ] = "Adabas D";
+        Text[ danish ] = "Adabas D";
+        Text[ swedish ] = "Adabas D";
+        Text[ polish ] = "Adabas D";
+        Text[ portuguese_brazilian ] = "Adabas D";
+        Text[ japanese ] = "Adabas D";
+        Text[ korean ] = "Adabas D";
+        Text[ chinese_simplified ] = "Adabas D";
+        Text[ chinese_traditional ] = "Adabas D";
+        Text[ arabic ] = "Adabas D";
+        Text[ turkish ] = "Adabas D";
+    };
+    String STR_PAGETITLE_ADABAS_STATISTIC
+    {
+        Text = "Adabas D Statistic" ;
+        Text[ENGLISH] = "Adabas D statistic" ;
+        Text[ english_us ] = "Adabas D statistic";
         Text[ portuguese ] = "Adabas D";
         Text[ russian ] = "Adabas D";
         Text[ greek ] = "Adabas D";
@@ -612,10 +635,20 @@ TabPage PAGE_GENERAL
     };
     FixedText FT_SPECIAL_MESSAGE
     {
-        Pos = MAP_APPFONT ( 6, 162 );
+        Pos = MAP_APPFONT ( 6, 125 );
         Size = MAP_APPFONT ( 248, 20 );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
+    };
+    PushButton PB_CREATEDATABASE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 154 , 165 ) ;
+        Size = MAP_APPFONT ( 100 , 14 ) ;
+        HelpId = HID_DSADMIN_CREATEDATABASE;
+        Text = "~Neue Datenbank..." ;
+        Text [ english ] = "~new database" ;
+        Text [ english_us ] = "~new database" ;
     };
     String STR_NAMEINVALID
     {
@@ -2124,7 +2157,8 @@ WarningBox WARN_SAVEFORQUERIES
         "Sollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
     Message [ english ] = "To administrate the queries of a data source, it must be saved.\n"
         "Should all changes made in this dialog now be saved?";
-    Message [ english_us ] = "To administrate the queries of a data source, that data source must be saved.\nShould all changes made in this dialog be saved now?";
+    Message [ english_us ] = "To administrate the queries of a data source, it must be saved.\n"
+        "Should all changes made in this dialog now be saved?";
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_YES;
     Message[ portuguese ] = "É necessário guardar a fonte de dados para poder administrar as respectivas consultas.\nGuardar as modificações efectuadas nesta caixa de diálogo?";
@@ -2176,6 +2210,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/03/21 20:20:46  rt
+ *  Merge SRC626: 21.03.01 - 21:20:00 (NoBranch)
+ *
  *  Revision 1.31  2001/03/19 09:38:53  nf
  *  Merge SRC625: 19.03.01 - 10:38:11 (NoBranch)
  *

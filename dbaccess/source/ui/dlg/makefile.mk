@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.13 $
+ #  $Revision: 1.14 $
  #
- #  last change: $Author: fs $ $Date: 2001-03-16 16:23:07 $
+ #  last change: $Author: oj $ $Date: 2001-03-27 08:05:56 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,8 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        AdabasStat.src	\
+        AdabasPage.src	\
         indexdialog.src	\
         RelationDlg.src	\
         adtabdlg.src	\
@@ -95,6 +97,8 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/AdabasStat.obj	\
+        $(SLO)$/AdabasPage.obj	\
         $(SLO)$/indexfieldscontrol.obj	\
         $(SLO)$/indexdialog.obj	\
         $(SLO)$/RelationDlg.obj	\
@@ -123,6 +127,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.13  2001/03/16 16:23:07  fs
+ #	added index design related files
+ #	
  #	Revision 1.12  2001/02/28 10:03:45  oj
  #	new relation dialog
  #	

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:00 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 08:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,13 +134,32 @@
 #ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #include "propertysetitem.hxx"
 #endif
-
+#ifndef DBAUI_ADABASPAGE_HXX
+#include "AdabasPage.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
+#include <com/sun/star/sdbc/XDriver.hpp>
+#endif
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-
+using namespace dbtools;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
@@ -657,6 +676,13 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ADDITIONALOPTIONS, ::rtl::OUString::createFromAscii("SystemDriverSettings")));
 
+    // special settings for adabas
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString::createFromAscii("DataCacheSizeIncrement")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString::createFromAscii("DataCacheSize")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString::createFromAscii("ControlUser")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString::createFromAscii("ControlPassword")));
+
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
 
@@ -719,7 +745,64 @@ ODbAdminDialog::~ODbAdminDialog()
     SetInputSet(NULL);
     DELETEZ(pExampleSet);
 }
+// -----------------------------------------------------------------------------
+Reference<XConnection> ODbAdminDialog::createConnection()
+{
+    Reference<XConnection> xConnection;
+//  //  if (bValid)
+    {   // get the current table list from the connection for the current settings
+        // the PropertyValues for the current dialog settings
+        Sequence< PropertyValue > aConnectionParams;
+        if (getCurrentSettings(aConnectionParams))
+        {
+            // the current DSN
+            String sConnectionURL;
+            SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+            sConnectionURL = pUrlItem->GetValue();
 
+            // fill the table list with this connection information
+            SQLExceptionInfo aErrorInfo;
+            try
+            {
+                WaitObject aWaitCursor(this);
+                // get the global DriverManager
+                Reference< XDriverAccess > xDriverManager;
+                String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
+                    // in case an error occures
+                sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_DRIVERMANAGER);
+                try
+                {
+                    xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                    DBG_ASSERT(xDriverManager.is(), "OTableTreeListBox::UpdateTableList : could not instantiate the driver manager, or it does not provide the necessary interface!");
+                }
+                catch (Exception& e)
+                {
+                    // wrap the exception into an SQLException
+                    SQLException aSQLWrapper(e.Message, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
+                    throw aSQLWrapper;
+                }
+                if (!xDriverManager.is())
+                    throw Exception();
+
+
+                sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
+                Reference< XDriver > xDriver = xDriverManager->getDriverByURL(sConnectionURL);
+                if (!xDriver.is())
+                    // will be caught and translated into an SQLContext exception
+                    throw Exception();
+
+                xConnection = xDriver->connect(sConnectionURL, aConnectionParams);
+            }
+            catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+            catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+
+            showError(aErrorInfo,this,getORB());
+        }
+    }
+
+    return xConnection;
+}
 //-------------------------------------------------------------------------
 short ODbAdminDialog::Execute()
 {
@@ -842,6 +925,7 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         case PAGE_GENERAL:
             static_cast<OGeneralPage&>(_rPage).SetTypeSelectHandler(LINK(this, ODbAdminDialog, OnTypeSelected));
             static_cast<OGeneralPage&>(_rPage).SetNameModifyHandler(LINK(this, ODbAdminDialog, OnNameModified));
+            static_cast<OGeneralPage&>(_rPage).SetAdminDialog(this);
             break;
         case PAGE_TABLESUBSCRIPTION:
             static_cast<OTableSubscriptionPage&>(_rPage).setServiceFactory(m_xORB);
@@ -850,6 +934,9 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         case PAGE_QUERYADMINISTRATION:
             static_cast<OQueryAdministrationPage&>(_rPage).setServiceFactory(m_xORB);
             static_cast<OQueryAdministrationPage&>(_rPage).SetAdminDialog(this);
+            break;
+        case TAB_PAG_ADABAS_SETTINGS:
+            static_cast<OAdabasAdminSettings&>(_rPage).SetAdminDialog(this);
             break;
     }
 
@@ -892,10 +979,21 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_DELETEDDATASOURCE, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_SUPPRESSVERSIONCL, sal_True);
     *pCounter++ = new OPropertySetItem(DSID_DATASOURCE_UNO);
+    *pCounter++ = new SfxBoolItem(DSID_CONN_SHUTSERVICE, sal_False);
+    *pCounter++ = new SfxInt32Item(DSID_CONN_DATAINC, 20);
+    *pCounter++ = new SfxInt32Item(DSID_CONN_CACHESIZE, 20);
+    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLUSER, String());
+    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLPWD, String());
+
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
+        {0,0},
+        {0,0},
+        {0,0},
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -1108,7 +1206,9 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             m_aCurrentDetailPages.push(PAGE_ODBC);
             break;
         case DST_ADABAS:
+            AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), OAdabasAdminSettings::Create, 0, sal_False, 1);
             AddTabPage(PAGE_ADABAS, String(ResId(STR_PAGETITLE_ADABAS)), OAdabasDetailsPage::Create, 0, sal_False, 1);
+            m_aCurrentDetailPages.push(TAB_PAG_ADABAS_SETTINGS);
             m_aCurrentDetailPages.push(PAGE_ADABAS);
             break;
     }
@@ -1244,6 +1344,8 @@ Any ODbAdminDialog::implTranslateProperty(const SfxPoolItem* _pItem)
         aValue <<= ::rtl::OUString(PTR_CAST(SfxStringItem, _pItem)->GetValue().GetBuffer());
     else if (_pItem->ISA(SfxBoolItem))
         aValue = ::cppu::bool2any(PTR_CAST(SfxBoolItem, _pItem)->GetValue());
+    else if (_pItem->ISA(SfxInt32Item))
+        aValue <<= PTR_CAST(SfxInt32Item, _pItem)->GetValue();
     else if (_pItem->ISA(OStringListItem))
         aValue <<= PTR_CAST(OStringListItem, _pItem)->getList();
     else
@@ -1288,6 +1390,13 @@ void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, c
         break;
         case TypeClass_BOOLEAN:
             _rSet.Put(SfxBoolItem(_nId, ::cppu::any2bool(_rValue)));
+            break;
+        case TypeClass_LONG:
+            {
+                sal_Int32 nValue = 0;
+                _rValue >>= nValue;
+                _rSet.Put(SfxInt32Item(_nId, nValue));
+            }
             break;
         case TypeClass_SEQUENCE:
         {
@@ -1487,12 +1596,39 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
     const sal_Int32* pRelevantItems = NULL;
     switch (eType)
     {
-        case DST_ADABAS: pRelevantItems = OAdabasDetailsPage::getDetailIds(); break;
-        case DST_JDBC: pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
-        case DST_ADO: pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
-        case DST_ODBC: pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
+        case DST_ADABAS:
+            {
+                static sal_Int32* pAdabasItems = NULL;
+                if(!pAdabasItems)
+                {
+                    const sal_Int32* pFirstRelevantItems = OAdabasDetailsPage::getDetailIds();
+                    const sal_Int32* pSecondRelevantItems = OAdabasAdminSettings::getDetailIds();
+                    sal_Int32 nFLen = 0;
+                    sal_Int32 nSLen = 0;
+
+                    for(pRelevantItems = pFirstRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
+                        ++nFLen;
+
+                    for(pRelevantItems = pSecondRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
+                        ++nSLen;
+
+                    pAdabasItems = new sal_Int32[nFLen + nSLen];
+                    nFLen = 0;
+                    for(pRelevantItems = pFirstRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
+                        pAdabasItems[nFLen++] = *pRelevantItems;
+
+                    for(pRelevantItems = pSecondRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
+                        pAdabasItems[nFLen++] = *pRelevantItems;
+
+                }
+                pRelevantItems = pAdabasItems;
+            }
+            break;
+        case DST_JDBC:  pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
+        case DST_ADO:   pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
+        case DST_ODBC:  pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
         case DST_DBASE: pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
-        case DST_TEXT: pRelevantItems = OTextDetailsPage::getDetailIds(); break;
+        case DST_TEXT:  pRelevantItems = OTextDetailsPage::getDetailIds(); break;
         case DST_CALC:
             {
                 // spreadsheet currently has no options page
@@ -2297,6 +2433,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39  2001/03/15 08:23:00  fs
+ *  cppuhelper/extract -> comphelper/extract
+ *
  *  Revision 1.38  2001/03/13 10:21:34  fs
  *  #84827# #84908# allow changes to be applied without re-initializing the page (which could lead to opening a connection)
  *

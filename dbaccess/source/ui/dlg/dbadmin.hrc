@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:34:41 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 08:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #define PB_NEWQUERY             5
 #define PB_EDITQUERY            6
 #define PB_DELETEQUERY          7
+#define PB_CREATEDATABASE       8
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
@@ -149,6 +150,7 @@
 #define STR_NO_ADABASE_DATASOURCES          16
 #define STR_PAGETITLE_ADO                   17
 #define STR_PAGETITLE_QUERIES               18
+#define STR_PAGETITLE_ADABAS_STATISTIC      19
 
 //========================================================================
 // menu item ids
@@ -161,6 +163,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/01/30 08:34:41  fs
+ *  redesigned the table subscription page
+ *
  *  Revision 1.10  2001/01/26 06:59:12  fs
  *  some basics for the query administration page - not enabled yet
  *
