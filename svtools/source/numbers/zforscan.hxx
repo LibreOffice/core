@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
+ *  last change: $Author: er $ $Date: 2001-08-28 17:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,9 @@ private:                            // ---- privater Teil
             return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
                 (GetKeywords()[NF_KEY_EC] == GetKeywords()[NF_KEY_E]);
         }
+
+    // if 0 at strArray[i] is of S,00 or SS,00 or SS"any"00 in ScanType() or FinalScan()
+    BOOL Is100SecZero( USHORT i, BOOL bHadDecSep );
 
     short Next_Symbol(const String& rStr,
                         xub_StrLen& nPos,

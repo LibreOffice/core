@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
+ *  last change: $Author: er $ $Date: 2001-08-28 17:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,17 @@ void ImpSvNumberformatScan::Reset()
     bBlank = FALSE;
 }
 
+
+BOOL ImpSvNumberformatScan::Is100SecZero( USHORT i, BOOL bHadDecSep )
+{
+    USHORT nIndexPre = PreviousKeyword( i );
+    return (nIndexPre == NF_KEY_S || nIndexPre == NF_KEY_SS)
+            && (bHadDecSep                 // S, SS ','
+            || (i>0 && nTypeArray[i-1] == SYMBOLTYPE_STRING));
+                // SS"any"00  take "any" as a valid decimal separator
+}
+
+
 xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
@@ -1054,8 +1065,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
     SkipStrings(i, nPos);                   // Ausgabestrings ueberlesen
     while (i < nAnzStrings)
     {
-        if (nTypeArray[i] > 0)              // Schluesselwort
-        {
+        if (nTypeArray[i] > 0)
+        {                                       // keyword
             switch (nTypeArray[i])
             {
                 case NF_KEY_E:                          // E
@@ -1125,8 +1136,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 break;
             }
         }
-        else                                // Steuerzeichen
-        {
+        else
+        {                                       // control character
             switch ( sStrArray[i].GetChar(0) )
             {
                 case '#':
@@ -1137,12 +1148,13 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 {
                     if (eScannedType == NUMBERFORMAT_TIME)
                     {
-                        USHORT nIndexPre = PreviousKeyword(i);
-                        if ((nIndexPre == NF_KEY_S || nIndexPre == NF_KEY_SS)
-                             && bDecSep)                    // S, SS ','
+                        if ( Is100SecZero( i, bDecSep ) )
+                        {
+                            bDecSep = TRUE;                 // subsequent 0's
                             eNewType = NUMBERFORMAT_TIME;
+                        }
                         else
-                            return nPos;                    // Fehler
+                            return nPos;                    // Error
                     }
                     else
                         eNewType = NUMBERFORMAT_NUMBER;
@@ -1151,7 +1163,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 case ',':
                 case '.':
                 {
-                    bDecSep = TRUE;                         // fuer SS,0
+                    bDecSep = TRUE;                         // for SS,0
                     eNewType = NUMBERFORMAT_UNDEFINED;
                 }
                 break;
@@ -1186,7 +1198,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                             nIndexNex == NF_KEY_SS   )  // SS
                             eNewType = NUMBERFORMAT_TIME;
                         else
-                            return nPos;                // Fehler
+                            return nPos;                // Error
                     }
                 }
                 break;
@@ -2136,8 +2148,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         {
                             case '0':
                             {
-                                if (bDecSep)
+                                if ( Is100SecZero( i, bDecSep ) )
                                 {
+                                    bDecSep = TRUE;
                                     nTypeArray[i] = SYMBOLTYPE_DIGIT;
                                     String& rStr = sStrArray[i];
                                     i++;
