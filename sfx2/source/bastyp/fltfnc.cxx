@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:40:30 $
+ *  last change: $Author: mhu $ $Date: 2000-09-28 12:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,11 @@
 #include <unotools/processfactory.hxx>
 #endif
 
+/* (mhu)
 #ifndef _COM_SUN_STAR_CHAOS_DOCUMENTHEADERFIELD_HPP_
 #include <com/sun/star/chaos/DocumentHeaderField.hpp>
 #endif
+*/
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
@@ -228,7 +230,9 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+/* (mhu)
 using namespace ::com::sun::star::chaos;
+*/
 using namespace ::rtl;
 using namespace ::vos;
 
