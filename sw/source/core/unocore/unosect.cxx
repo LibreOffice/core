@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-11-28 12:50:47 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,12 +534,14 @@ void SwXTextSection::setPropertyValues(
 
         sal_Bool bLinkModeChanged = sal_False;
         sal_Bool bLinkMode;
-        for(sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
+        for(sal_Int16 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
         {
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), pPropertyNames[nProperty]);
             if(pMap)
             {
+                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                    throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ), nProperty );
                 switch(pMap->nWID)
                 {
                     case WID_SECT_CONDITION:
@@ -729,7 +731,8 @@ void SwXTextSection::setPropertyValues(
                 }
             }
             else
-                throw beans::UnknownPropertyException();
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
+
         }
         if(pFmt)
         {
@@ -991,11 +994,7 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                 }
             }
             else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pPropertyNames[nProperty];
-                throw aExcept;
-            }
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else
@@ -1101,11 +1100,7 @@ Sequence< PropertyState > SwXTextSection::getPropertyStates(
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                 aPropSet.getPropertyMap(), pNames[i]);
             if(!pMap)
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pNames[i];
-                throw aExcept;
-            }
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
             switch(pMap->nWID)
             {
                 case WID_SECT_CONDITION:
@@ -1168,7 +1163,7 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                 aPropSet.getPropertyMap(), rPropertyName);
         if(!pMap)
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pMap->nFlags & PropertyAttribute::READONLY)
             throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         SfxItemSet* pNewAttrSet = 0;
@@ -1261,6 +1256,8 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
     SwSectionFmt*   pFmt = GetFmt();
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                             aPropSet.getPropertyMap(), rPropertyName);
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 

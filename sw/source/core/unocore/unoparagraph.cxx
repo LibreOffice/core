@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:52:20 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,22 +304,15 @@ void SwXParagraph::setPropertyValues(
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
             if(pMap)
             {
-                if(pMap->nFlags & PropertyAttribute::READONLY)
-                {
-                    IllegalArgumentException aArg;
-                    aArg.Message = pPropertyNames[nProp];
-                    throw aArg;
-                }
+                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                    throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ), nProp );
+
                 SwXTextCursor::SetPropertyValue(*pUnoCrsr, aPropSet,
                                         sTmp, pValues[nProp], pMap);
                 pMap++;
             }
             else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pPropertyNames[nProp];
-                throw aExcept;
-            }
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else
@@ -360,11 +353,7 @@ Sequence< Any > SwXParagraph::getPropertyValues(
                 ++pMap;
             }
             else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pPropertyNames[nProp];
-                throw aExcept;
-            }
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else
@@ -532,11 +521,7 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
         const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), rPropertyName );
         if(!pMap)
-        {
-            UnknownPropertyException aExcept;
-            aExcept.Message = rPropertyName;
-            throw aExcept;
-        }
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         sal_Bool bDummy = sal_False;
         eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pMap,
                                                      bDummy );
@@ -568,12 +553,7 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
         {
             pMap = SfxItemPropertyMap::GetByName( pMap, *pNames );
             if(!pMap)
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = *pNames;
-                throw aExcept;
-            }
-
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + *pNames, static_cast < cppu::OWeakObject * > ( this ) );
             if (bAttrSetFetched && !pSet &&
                 pMap->nWID >= RES_CHRATR_BEGIN &&
                 pMap->nWID <= RES_UNKNOWNATR_END )
@@ -645,7 +625,7 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
                 SwUnoCursorHelper::resetCrsrPropertyValue(pMap, *pUnoCrsr);
         }
         else
-            throw beans::UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -678,7 +658,7 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
             }
         }
         else
-            throw beans::UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();

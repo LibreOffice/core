@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-25 16:06:50 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1906,7 +1906,8 @@ Any SwXTextCursor::GetPropertyValue(
         }
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
+
     return aAny;
 }
 /* -----------------------------03.05.00 12:57--------------------------------
@@ -1925,6 +1926,8 @@ void SwXTextCursor::SetPropertyValue(
                             rPropSet.getPropertyMap(), rPropertyName);
     if(pMap)
     {
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
         SwTextCursorItemSet_Impl aSet(pDoc, pMap->nWID );
         if(!lcl_setCrsrPropertyValue( pMap, rPaM, aSet, aValue ))
             rPropSet.setPropertyValue(*pMap, aValue, aSet.GetItemSet( &rPaM ) );
@@ -1932,7 +1935,7 @@ void SwXTextCursor::SetPropertyValue(
             SwXTextCursor::SetCrsrAttr(rPaM, aSet.GetItemSet() );
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
 }
 /* -----------------------------03.05.00 13:16--------------------------------
 
@@ -1963,11 +1966,7 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
                 continue;
             }
             else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pNames[i];
-                throw aExcept;
-            }
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
         }
         if (eCaller == SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION &&
             pMap->nWID < FN_UNO_RANGE_BEGIN &&
@@ -2088,7 +2087,7 @@ void SwXTextCursor::SetPropertyToDefault(
             SwUnoCursorHelper::resetCrsrPropertyValue(pMap, rPaM);
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
 }
 /* -----------------------------03.05.00 13:19--------------------------------
 
@@ -2113,7 +2112,7 @@ Any SwXTextCursor::GetPropertyDefault(
         }
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
     return aRet;
 }
 /*-- 09.12.98 14:18:54---------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 14:59:29 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -474,13 +477,8 @@ void SwXTextPortion::GetPropertyValues( const OUString *pPropertyNames,
                 pMap++;
             }
             else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pPropertyNames[nProp];
-                throw aExcept;
-            }
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
-
         delete pSet;
     }
     else
@@ -516,17 +514,12 @@ void SwXTextPortion::setPropertyValues(
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if(pMap)
-            {
-                SwXTextCursor::SetPropertyValue(
-                    *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
-            }
-            else
-            {
-                UnknownPropertyException aExcept;
-                aExcept.Message = pPropertyNames[nProp];
-                throw aExcept;
-            }
+            if (!pMap)
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ), nProp );
+
+            SwXTextCursor::SetPropertyValue( *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
         }
     }
     else

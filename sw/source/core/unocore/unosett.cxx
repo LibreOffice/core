@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-10-26 11:32:37 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,8 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                                                         _pMap, rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
             SwFtnInfo aFtnInfo(pDoc->GetFtnInfo());
             switch(pMap->nWID)
             {
@@ -582,7 +584,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
             pDoc->SetFtnInfo(aFtnInfo);
         }
         else
-            throw lang::IllegalArgumentException();
+            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -705,8 +707,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw lang::IllegalArgumentException();
-
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -814,6 +815,8 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                                                         _pMap, rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
             SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
             switch(pMap->nWID)
             {
@@ -875,6 +878,8 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             }
             pDoc->SetEndNoteInfo(aEndInfo);
         }
+        else
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
 }
 /*-- 14.12.98 14:27:41---------------------------------------------------
@@ -963,6 +968,8 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 break;
             }
         }
+        else
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     return aRet;
 }
@@ -1066,6 +1073,8 @@ void SwXLineNumberingProperties::setPropertyValue(
                                                         _pMap, rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
             SwLineNumberInfo  aInfo(pDoc->GetLineNumberInfo());
             switch(pMap->nWID)
             {
@@ -1162,7 +1171,7 @@ void SwXLineNumberingProperties::setPropertyValue(
             pDoc->SetLineNumberInfo(aInfo);
         }
         else
-            throw beans::UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -1268,7 +1277,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw beans::UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -2560,10 +2569,11 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
 {
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     _pMap, rPropertyName);
-    if(!pMap)
-        throw UnknownPropertyException();
-    if( pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    if ( pMap->nFlags & PropertyAttribute::READONLY)
+        throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+
     switch(pMap->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
@@ -2630,8 +2640,9 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
 {
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     _pMap, rPropertyName);
-    if(!pMap)
-        throw UnknownPropertyException();
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     Any aRet;
     switch(pMap->nWID)
     {
