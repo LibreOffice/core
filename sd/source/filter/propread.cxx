@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-18 12:58:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #ifndef _BIGINT_HXX
 #include <tools/bigint.hxx>
 #endif
+#include "rtl/tencinfo.h"
+#include "rtl/textenc.h"
 
 // ------------------------------------------------------------------------
 
@@ -539,27 +541,13 @@ void Section::Read( SvStorageStream *pStrm )
                     aPropItem >> nPropType;
                     if ( nPropType == VT_I2 )
                         aPropItem >> nCodePage;
-                    switch ( nCodePage )
+                    if ( nCodePage == 1200 )
+                        mnTextEnc = RTL_TEXTENCODING_UCS2;
+                    else
                     {
-                        default :
-                        case 1252: mnTextEnc = RTL_TEXTENCODING_MS_1252; break;
-                        case 1200: mnTextEnc = RTL_TEXTENCODING_UCS2; break;
-                        case 1250: mnTextEnc = RTL_TEXTENCODING_MS_1250; break;
-                        case 1251: mnTextEnc = RTL_TEXTENCODING_MS_1251; break;
-                        case 1253: mnTextEnc = RTL_TEXTENCODING_MS_1253; break;
-                        case 1254: mnTextEnc = RTL_TEXTENCODING_MS_1254; break;
-                        case 1255: mnTextEnc = RTL_TEXTENCODING_MS_1255; break;
-                        case 1256: mnTextEnc = RTL_TEXTENCODING_MS_1256; break;
-                        case 1257: mnTextEnc = RTL_TEXTENCODING_MS_1257; break;
-                        case 1258: mnTextEnc = RTL_TEXTENCODING_MS_1258; break;
-                        case 874: mnTextEnc = RTL_TEXTENCODING_MS_874; break;
-                        case 932: mnTextEnc = RTL_TEXTENCODING_MS_932; break;
-                        case 936: mnTextEnc = RTL_TEXTENCODING_MS_936; break;
-                        case 949: mnTextEnc = RTL_TEXTENCODING_MS_949; break;
-                        case 950: mnTextEnc = RTL_TEXTENCODING_MS_950; break;
-                        case 1361: mnTextEnc = RTL_TEXTENCODING_MS_1361; break;
-                        case 65000 : mnTextEnc = RTL_TEXTENCODING_UTF7; break;
-                        case 65001 : mnTextEnc = RTL_TEXTENCODING_UTF8; break;
+                        mnTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
+                        if ( mnTextEnc == RTL_TEXTENCODING_DONTKNOW )
+                            mnTextEnc = RTL_TEXTENCODING_MS_1252;
                     }
                 }
             }
