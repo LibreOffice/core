@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 15:35:21 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 15:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             const SfxPoolItem* pRet = SfxViewFrame::Current()->GetDispatcher()->
                 Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
                         &aName, &aNewView,
-                        &aViewStat,&aRectItem/*aHidden*/,
+                        &aViewStat,
                         &aSilent, &aReferer, 0L );
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
