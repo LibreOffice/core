@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentResultSetCapability.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module ucb {
 /** These values are used to specify the capabilities of an
     <type>XDynamicResultSet</type>.
 */
-constants ContentResultSetCapability
+published constants ContentResultSetCapability
 {
     //-------------------------------------------------------------------------
     /** indicates that a <type>ContentResultSet</type> is properly sorted,
