@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-08 12:13:32 $
+ *  last change: $Author: jp $ $Date: 2002-03-13 11:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,8 +821,7 @@ ULONG SwASCIIParser::ReadChars()
                         ++pStt;
 
                         // JP 03.04.96: das letze am Ende nehmen wir nicht
-                        if( !rInput.IsEof() || !(pEnd == pStt ||
-                            ( !*pEnd && pEnd == pStt+1 ) ) )
+                        if( !rInput.IsEof() || pEnd != pStt )
                             bSplitNode = TRUE;
                     }
                     break;
@@ -848,9 +847,8 @@ ULONG SwASCIIParser::ReadChars()
                             bChkSplit = TRUE;
 
                             // JP 03.04.96: das letze am Ende nehmen wir nicht
-                        if( bChkSplit && ( !rInput.IsEof() ||
-                            !(pEnd == pStt || ( !*pEnd && pEnd == pStt+1 ))))
-                                bSplitNode = TRUE;
+                        if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
+                            bSplitNode = TRUE;
                     }
                     break;
 
