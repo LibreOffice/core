@@ -3,9 +3,9 @@
  *
  *  $RCSfile: JavaVMCreationFailureException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:29:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com { module sun { module star { module java {
 
     @since #107627#
  */
-exception JavaVMCreationFailureException: JavaInitializationException
+published exception JavaVMCreationFailureException: JavaInitializationException
 {
     /** contains an error code that reflects the returned error code of
         JNI_CreateJavaVM or other errors. A negative value represents
