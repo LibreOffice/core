@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 12:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,7 +1576,7 @@ sal_Bool OTableController::isAddAllowed() const
     if(xColsSup.is())
         bAddAllowed = Reference<XAppend>(xColsSup->getColumns(),UNO_QUERY).is();
 
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
     bAddAllowed = bAddAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn());
 
     return bAddAllowed;
@@ -1589,7 +1589,7 @@ sal_Bool OTableController::isDropAllowed() const
     if(xColsSup.is())
         bDropAllowed = Reference<XDrop>(xColsSup->getColumns(),UNO_QUERY).is();
 
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
     bDropAllowed = bDropAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithDropColumn());
 
     return bDropAllowed;
