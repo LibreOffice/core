@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _WW8STRUC_HXX
 #define _WW8STRUC_HXX
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -94,7 +97,7 @@ inline void Set_UInt32( BYTE *& p, UINT32 n )
     { LongToSVBT32( n, *(SVBT32*)p );  p+= 4; }
 
 
-#if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
+#if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #define __WW8_NEEDS_COPY
 #else
 #if defined WNT || defined WIN || defined OS2
