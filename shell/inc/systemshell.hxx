@@ -2,9 +2,9 @@
  *
  *  $RCSfile: systemshell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:53:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,6 @@ namespace SystemShell
           will be used.
     */
     void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& aMimeType);
-};
+}
 
 #endif
