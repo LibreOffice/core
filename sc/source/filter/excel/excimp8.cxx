@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:45:44 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@
 #include "docoptio.hxx"
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
+#endif
+
+#ifndef SC_FPROGRESSBAR_HXX
+#include "fprogressbar.hxx"
 #endif
 
 #ifndef SC_XLOCX_HXX
@@ -347,7 +351,7 @@ void ImportExcel8::Cellmerging( void )
         {
             nRow2 = Min( nRow2, static_cast<sal_uInt16>( MAXROW ) );
             nCol2 = Min( nCol2, static_cast<sal_uInt16>( MAXCOL ) );
-            GetXFIndexBuffer().SetMerge( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1), static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2) );
+            GetXFRangeBuffer().SetMerge( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1), static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2) );
         }
         else
             GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > static_cast<sal_uInt16>(MAXROW) ? nRow1 : nRow2, MAXROW);
@@ -380,15 +384,18 @@ void ImportExcel8::Labelsst( void )
 
     aIn >> nRow >> nCol >> nXF >> nSst;
 
-    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF );
         if( pCell )
-            GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow) );
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
     {
@@ -405,9 +412,12 @@ void ImportExcel8::Rstring( void )
     UINT16 nRow, nCol, nXF;
     aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         // unformatted Unicode string with separate formatting information
         XclImpString aString( maStrm );
@@ -416,9 +426,9 @@ void ImportExcel8::Rstring( void )
 
         ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
         if( pCell )
-            GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow) );
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
     {
@@ -435,16 +445,19 @@ void ImportExcel8::Label( void )
     UINT16  nRow, nCol, nXF;
     aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= static_cast<sal_uInt16>(MAXROW) && nCol <= static_cast<sal_uInt16>(MAXCOL) )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         XclImpString aString( maStrm );
         ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
         if( pCell )
-            GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow) );
+        pColRowBuff->Used( nScCol, nScRow );
 
     }
     else
@@ -591,43 +604,59 @@ void ImportExcel8::PostDocLoad( void )
 void ImportExcel8::ApplyEscherObjects()
 {
     XclImpObjectManager& rObjManager = GetObjectManager();
+
+    ScfProgressBar aProgress( GetDocShell(), STR_PROGRESS_CALCULATING );
+    sal_Int32 nSegApply = aProgress.AddSegment( 2000 );
+
     if( rObjManager.HasEscherStream() )
     {
         XclImpDffManager& rDffManager = rObjManager.GetDffManager();
         if( const SvxMSDffShapeInfos* pShapeInfos = rDffManager.GetShapeInfos() )
         {
-            for( sal_uInt16 nInfo = 0, nInfoCount = pShapeInfos->Count(); nInfo < nInfoCount; ++nInfo )
+            if( USHORT nInfoCount = pShapeInfos->Count() )
             {
-                if( const SvxMSDffShapeInfo* pShapeInfo = pShapeInfos->GetObject( nInfo ) )
-                {
-                    sal_uInt32 nShapeId = pShapeInfo->nShapeId;
-                    XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( pShapeInfo->nFilePos );
-                    if( pEscherObj && !pEscherObj->GetIsSkip() && !pEscherObj->GetSdrObj() )
-                    {
-                        SvxMSDffImportData aDffImportData;
-                        rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
+                sal_Int32 nSegSetObj = aProgress.AddSegment( 1000 );
 
-                        // *** find some comboboxes to skip ***
-                        if( const XclImpEscherTbxCtrl* pCtrlObj = PTR_CAST( XclImpEscherTbxCtrl, pEscherObj ) )
+                ScfProgressBar& rSubProgress = aProgress.GetSegmentProgressBar( nSegSetObj );
+                sal_Int32 nSubSeg = rSubProgress.AddSegment( nInfoCount );
+                rSubProgress.ActivateSegment( nSubSeg );
+
+                for( USHORT nInfo = 0; nInfo < nInfoCount; ++nInfo )
+                {
+                    if( const SvxMSDffShapeInfo* pShapeInfo = pShapeInfos->GetObject( nInfo ) )
+                    {
+                        sal_uInt32 nShapeId = pShapeInfo->nShapeId;
+                        XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( pShapeInfo->nFilePos );
+                        if( pEscherObj && !pEscherObj->GetIsSkip() && !pEscherObj->GetSdrObj() )
                         {
-                            if( pCtrlObj->GetType() == EXC_OBJ_CMO_COMBOBOX )
+                            SvxMSDffImportData aDffImportData;
+                            rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
+
+                            // *** find some comboboxes to skip ***
+                            if( const XclImpEscherTbxCtrl* pCtrlObj = PTR_CAST( XclImpEscherTbxCtrl, pEscherObj ) )
                             {
-                                if( const XclEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
+                                if( pCtrlObj->GetType() == EXC_OBJ_CMO_COMBOBOX )
                                 {
-                                    bool bSkipObj = false;
-                                    if( pExcRoot->pAutoFilterBuffer )
-                                        bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
-                                    if( bSkipObj )
-                                        pEscherObj->SetSkip();
+                                    if( const XclEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
+                                    {
+                                        bool bSkipObj = false;
+                                        if( pExcRoot->pAutoFilterBuffer )
+                                            bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
+                                        if( bSkipObj )
+                                            pEscherObj->SetSkip();
+                                    }
                                 }
                             }
                         }
                     }
+                    rSubProgress.Progress();
                 }
             }
         }
     }
-    rObjManager.Apply();
+
+    ScfProgressBar& rApplyProgress = aProgress.GetSegmentProgressBar( nSegApply );
+    rObjManager.Apply( rApplyProgress );
 }
 
 
