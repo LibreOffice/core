@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-07 08:53:13 $
+ *  last change: $Author: aw $ $Date: 2001-06-14 11:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,10 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_COMBINE:  // BASIC
         {
+            // #88224# End text edit to avoid conflicts
+            if(pDrView->IsTextEdit())
+                pDrView->EndTextEdit();
+
             if ( pDrView->IsPresObjSelected() )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -295,6 +299,10 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_MERGE:
         {
+            // #88224# End text edit to avoid conflicts
+            if(pDrView->IsTextEdit())
+                pDrView->EndTextEdit();
+
             if ( pDrView->IsPresObjSelected() )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -311,6 +319,10 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_SUBSTRACT:
         {
+            // #88224# End text edit to avoid conflicts
+            if(pDrView->IsTextEdit())
+                pDrView->EndTextEdit();
+
             if ( pDrView->IsPresObjSelected() )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -327,6 +339,10 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_INTERSECT:
         {
+            // #88224# End text edit to avoid conflicts
+            if(pDrView->IsTextEdit())
+                pDrView->EndTextEdit();
+
             if ( pDrView->IsPresObjSelected() )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
