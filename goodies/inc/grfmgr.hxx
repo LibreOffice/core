@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-02 08:37:14 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 14:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ private:
     BOOL                    mbDummyFlag7    : 1;
     BOOL                    mbDummyFlag8    : 1;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
 
     void                    ImplConstruct();
     void                    ImplAssignGraphicData();
@@ -262,7 +262,7 @@ private:
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
-#endif // __PRIVATE
+#endif // _SOLAR__PRIVATE
 
 protected:
 
@@ -382,7 +382,7 @@ private:
                     GraphicManager( const GraphicManager& rGraphicManager ) {}
     GraphicManager& operator=( const GraphicManager& rGraphicManager ) { return *this; }
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
 
     BOOL            ImplDraw( OutputDevice* pOut, const Point& rPt,
                               const Size& rSz, GraphicObject& rObj,
@@ -425,7 +425,7 @@ private:
 
     ByteString      ImplGetUniqueID( const GraphicObject& rObj ) const;
 
-#endif // __PRIVATE
+#endif // _SOLAR__PRIVATE
 
 public:
 
