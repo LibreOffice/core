@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
+ *  last change: $Author: mba $ $Date: 2000-11-06 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,15 +751,16 @@ FASTBOOL SfxApplication::Initialize_Impl()
     RegisterEvent(SFX_EVENT_ONERROR,    String(SfxResId(STR_EVENT_ONERROR)));
     RegisterEvent(SFX_EVENT_NEWMESSAGE, String(SfxResId(STR_EVENT_NEWMESSAGE)));
 
+    SfxFilterMatcher& rMatcher = GetFilterMatcher();
+/*
     // Filtercontainer fuer ::com::sun::star::sdbcx::User Overrides registrieren
     SfxFilterContainer* pDefaults = new SfxFilterContainer( DEFINE_CONST_UNICODE(SFX_FCONTNR_REDIRECTS) );
-    SfxFilterMatcher& rMatcher = GetFilterMatcher();
     rMatcher.AddContainer( pDefaults );
     pDefaults->LoadFilters(
         DEFINE_CONST_UNICODE(SFX_FCONTNR_REDIRECTS), sal_False,
         SFX_FILTER_REDIRECT | SFX_FILTER_IMPORT | SFX_FILTER_ALIEN |
         SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINCHOOSER );
-
+  */
     if( _nFeatures & SFX_FEATURE_SCALC &&
         _nFeatures & SFX_FEATURE_SIMPRESS &&
         _nFeatures & SFX_FEATURE_SDRAW &&
