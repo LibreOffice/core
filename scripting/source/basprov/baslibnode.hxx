@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:46:26 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace basprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
+     ::rtl::OUString  m_sScriptingContext;
         BasicManager* m_pBasicManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLibrary;
@@ -108,7 +108,7 @@ namespace basprov
 
     public:
         BasicLibraryNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxScriptingContext,
+        const ::rtl::OUString& sScriptingContext,
             BasicManager* pBasicManager,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer,
             const ::rtl::OUString& sLibName, bool isAppScript=true );
