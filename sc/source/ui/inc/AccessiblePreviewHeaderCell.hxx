@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:15:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,19 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
 
 class ScPreviewShell;
 class ScPreviewTableInfo;
-class accessibility::AccessibleTextHelper;
+namespace accessibility {
+    class AccessibleTextHelper;
+}
 
 typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessiblePreviewHeaderCellImpl;
