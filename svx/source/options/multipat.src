@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:42:01 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_DEL_MULTIPATH
     {
@@ -171,6 +172,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     FixedLine GB_MULTIPATH
     {
@@ -205,6 +207,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ czech ] = "Cesty";
         Text[ hebrew ] = "‮מסלולים‬";
         Text[ hindi ] = "मार्ग";
+        Text[ slovak ] = "Cesty";
     };
     OKButton BTN_MULTIPATH_OK
     {
@@ -226,6 +229,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text[ czech ] = "Vybrat cesty";
     Text[ hebrew ] = "‮מסלולים נבחרים‬";
     Text[ hindi ] = "मार्गों को चुनो";
+    Text[ slovak ] = "Vybrať cesty";
 };
 String RID_MULTIPATH_DBL_ERR
 {
@@ -258,6 +262,7 @@ String RID_MULTIPATH_DBL_ERR
     Text[ czech ] = "Cesta %1 již existuje.";
     Text[ hebrew ] = "‮המסלול %1 כבר קיים.‬";
     Text[ hindi ] = "मार्ग %1 पहिले से ही अस्तित्व में है ।";
+    Text[ slovak ] = "Cesta %1 už existuje.";
 };
 String RID_SVXSTR_FILE_TITLE
 {
@@ -290,6 +295,7 @@ String RID_SVXSTR_FILE_TITLE
     Text[ czech ] = "Vybrat soubory";
     Text[ hebrew ] = "‮בחירת קבצים‬";
     Text[ hindi ] = "फाइलों को चुनो";
+    Text[ slovak ] = "Vybrať súbory";
 };
 String RID_SVXSTR_FILE_HEADLINE
 {
@@ -322,6 +328,7 @@ String RID_SVXSTR_FILE_HEADLINE
     Text[ czech ] = "Soubory";
     Text[ hebrew ] = "‮קבצים‬";
     Text[ hindi ] = "Files";
+    Text[ slovak ] = "Súbory";
 };
 String RID_SVXSTR_ARCHIVE_TITLE
 {
@@ -351,6 +358,7 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text[ czech ] = "Vybrat archívy";
     Text[ hebrew ] = "‮בחירת ארכיונים‬";
     Text[ hindi ] = "Select Archives";
+    Text[ slovak ] = "Vybrať archívy";
 };
 String RID_SVXSTR_ARCHIVE_HEADLINE
 {
@@ -380,6 +388,7 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ czech ] = "Archívy";
     Text[ hebrew ] = "‮ארכיונים‬";
     Text[ hindi ] = "Archives";
+    Text[ slovak ] = "Archívy";
 };
 String RID_SVXSTR_MULTIFILE_DBL_ERR
 {
@@ -412,7 +421,10 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ czech ] = "Soubor %1 již existuje.";
     Text[ hebrew ] = "‮הקובץ %1 כבר קיים.‬";
     Text[ hindi ] = "%1 फाइल पहिले से ही अस्तित्व में है ।";
+    Text[ slovak ] = "Súbor %1 už existuje.";
 };
+
+
 
 
 
