@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:32:18 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ BOOL SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
                                         GetLanguage().GetLanguage() );
             sal_Int32 nCharType = rCC.getCharacterType( rTxt, n );
             return CharClass::isLetterType( nCharType ) &&
-                   0 != ( ::com::sun::star::lang::KCharacterType::UPPER &
+                   0 != ( ::com::sun::star::i18n::KCharacterType::UPPER &
                                                     nCharType );
         }
     return FALSE;
@@ -937,7 +937,7 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
         else if( rCC.isAlpha( rTxt, nPos ) )
         {
             BOOL bIsUpper =
-                0 != ( ::com::sun::star::lang::KCharacterType::UPPER &
+                0 != ( ::com::sun::star::i18n::KCharacterType::UPPER &
                                         rCC.getCharacterType( rTxt, nPos ));
             sal_Unicode cLow = rCC.toLower( rTxt, nPos, 1 ).GetChar(0), cNumTyp;
             int eTmpScan;
