@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 21:11:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,8 +663,28 @@ Resource RID_ERRHDLSC
         Text = "Die folgenden Zeichen konnten nicht in den gewählten Zeichensatz konvertiert werden\nund wurden in &#1234; Ersatzdarstellung geschrieben:\n\n$(ARG1)";
         Text[ENGLISH] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
         Text[ENGLISH_US] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ portuguese ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ russian ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ greek ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ dutch ] = "De volgende tekens konden niet worden geconverteerd naar het geselecteerde tekenset\nen werden geschreven als ? vervangende weergave:\n\n$(ARG1)";
+        Text[ french ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ spanish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ finnish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ italian ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ danish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ swedish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ polish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ portuguese_brazilian ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ japanese ] = "ˆÈ‰º‚Ì•¶š‚Í‘I‘ğ‚µ‚½•¶š¾¯Ä‚Å‚Í•ÏŠ·‚Å‚«‚¸A\n‘ã‘Ö•\\¦ ? ‚Å‘‚«‚Ü‚ê‚Ü‚µ‚½:\n\n$(ARG1)";
+        Text[ korean ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ chinese_simplified ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ chinese_traditional ] = "¥H¤Uªº¦r¤¸µLªkÂà´«¦¨¿ï¨úªº¦r¤¸¶°ªº¦r¤¸¡C\n±Ä¥Î´À¥Nªí¥Ü¤è¦¡ ? :\n\n$(ARG1)";
+        Text[ turkish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ arabic ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ catalan ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
     };
 };
+
 
 
 
