@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:06:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
          nIgnoreProps < 2 && i != xPropStates.end();
          i++ )
     {
-        if( i->mnIndex )
+        if( i->mnIndex == -1 )
             continue;
 
         switch( xPM->GetEntryContextId(i->mnIndex) )
