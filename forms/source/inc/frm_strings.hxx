@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:40:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_FIELDTYPE,                "Type" );
     FORMS_CONSTASCII_STRING( PROPERTY_DECIMALS,                 "Decimals" );
     FORMS_CONSTASCII_STRING( PROPERTY_REFVALUE,                 "RefValue" );
+    FORMS_CONSTASCII_STRING( PROPERTY_UNCHECKED_REFVALUE,       "SecondaryRefValue" );
     FORMS_CONSTASCII_STRING( PROPERTY_VALUEMIN,                 "ValueMin" );
     FORMS_CONSTASCII_STRING( PROPERTY_VALUEMAX,                 "ValueMax" );
     FORMS_CONSTASCII_STRING( PROPERTY_STRICTFORMAT,             "StrictFormat" );
@@ -317,9 +318,24 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,       "ShowRecordActions" );
     FORMS_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,          "ShowFilterSort" );
 
-    FORMS_CONSTASCII_STRING( PROPERTY_DYNAMIC_CONTROL_BORDER,   "DynamicControlBorder" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_FOCUS, "ControlBorderColorOnFocus" );
-    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_MOUSE, "ControlBorderColorOnHover" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_WHITESPACE,           "WhiteSpace" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_PATTERN,              "Pattern" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_LENGTH,               "Length" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_LENGTH,           "MinLength" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_LENGTH,           "MaxLength" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_TOTAL_DIGITS,         "TotalDigits" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_FRACTION_DIGITS,      "FractionDigits" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE,        "MaxInclusive" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE,        "MaxExclusive" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE,        "MinInclusive" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE,        "MinExclusive" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_IS_BASIC,             "IsBasic" );
+    FORMS_CONSTASCII_STRING( PROPERTY_XSD_TYPE_CLASS,           "TypeClass" );
+
+    FORMS_CONSTASCII_STRING( PROPERTY_DYNAMIC_CONTROL_BORDER,      "DynamicControlBorder"        );
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus"   );
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover"   );
+    FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
 
     //--------------------------------------------------------------------------
     //- URLs
