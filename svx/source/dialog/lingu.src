@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:58:44 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ QueryBox RID_SVXQB_THESAURUS
     MESSAGE [ dutch ] = "Dit woord is niet zo geschikt. Thesaurus starten?" ;
     MESSAGE [ spanish ] = "¡Evite por favor esta palabra! ¿Desea iniciar la búsqueda de sinónimos?" ;
     MESSAGE [ english_us ] = "This word appears in the list of words you want to avoid. Start thesaurus?" ;
-    MESSAGE[ chinese_simplified ] = "ÄúÓ¦¸Ã±ÜÃâÊ¹ÓÃÕâ¸ö×Ö£¡ÄúÒªÆô¶¯´ÊµäÂğ£¿";
+    MESSAGE[ chinese_simplified ] = "Ó¦¸Ã±ÜÃâÊ¹ÓÃÕâ¸ö×Ö£¡ÄúÒªÆô¶¯´Êµä£¿";
     MESSAGE[ russian ] = "İòî ñëîâî íåîáõîäèìî èçáåãàòü! Çàïóñòèòü òåçàóğóñ?";
     MESSAGE[ polish ] = "Proszê unikaæ tego s³owa! W³¹czyæ Tezaurus?";
     MESSAGE[ japanese ] = "‚±‚Ì’PŒê‚Í”ğ‚¯‚Ä‰º‚³‚¢!@—ŞŒê«“T‚ğ‹N“®‚µ‚Ü‚·‚©?";
@@ -114,7 +114,7 @@ QueryBox RID_SVXQB_CONTINUE
     MESSAGE[ chinese_simplified ] = "´ÓÎÄµµ¿ª¶Ë¼ÌĞøËÑÑ°£¿";
     MESSAGE[ russian ] = "Ïğîäîëæèòü ïğîâåğêó â íà÷àëå äîêóìåíòà?";
     MESSAGE[ polish ] = "Kontuynuowaæ sprawdzanie na pocz¹tku dokumentu?";
-    MESSAGE[ japanese ] = "•¶“ª‚ÅÁª¯¸‚ğ‘±s‚µ‚Ü‚·‚©H";
+    MESSAGE[ japanese ] = "ÄŞ·­ÒİÄ‚Ìn‚ß‚É–ß‚Á‚ÄÁª¯¸‚ğ‘±s‚µ‚Ü‚·‚©H";
     MESSAGE[ chinese_traditional ] = "±q¤å¥ó°_©l¦ì¸mÄ~Äò´M§ä¡H";
     MESSAGE[ arabic ] = "åá ÊÑíÏ ãÊÇÈÚÉ ÇáÊÏŞíŞ ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
     MESSAGE[ greek ] = "Íá óõíå÷éóôåß ï İëåã÷ïò áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
@@ -142,7 +142,7 @@ QueryBox RID_SVXQB_BW_CONTINUE
     Message[ chinese_simplified ] = "´ÓÎÄµµÎ²¶Ë¼ÌĞøËÑÑ°£¿";
     Message[ russian ] = "Ïğîäîëæèòü ïğîâåğêó â êîíöå äîêóìåíòà?";
     Message[ polish ] = "Kontynuowaæ sprawdzanie na koñcu dokumentu?";
-    Message[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÅŒã‚ÅÁª¯¸‚µ‚Ü‚·‚©H";
+    Message[ japanese ] = "ÄŞ·­ÒİÄ––‚É–ß‚Á‚ÄÁª¯¸‚ğ‘±s‚µ‚Ü‚·‚©H";
     Message[ chinese_traditional ] = "±q¤å¥ó§ÀºİÄ~Äò´M§ä¡H";
     Message[ arabic ] = "åá ÊÑíÏ ãÊÇÈÚÉ ÇáÊÏŞíŞ ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
     Message[ greek ] = "Íá óõíå÷éóôåß ï İëåã÷ïò áğü ôï ôİëïò ôïõ åããñÜöïõ;";
@@ -173,7 +173,7 @@ QueryBox RID_SVXQB_BODYTEXT
     MESSAGE[ chinese_simplified ] = "ÄúÏëÒª¼ì²éÕıÎÄÂğ£¿";
     MESSAGE[ russian ] = "Âû õîòèòå ïğîâåğèòü îñíîâíîé òåêñò?";
     MESSAGE[ polish ] = "Czy chcesz sprawdziæ tekst g³ówny?";
-    MESSAGE[ japanese ] = "Ò²İ Ã·½Ä‚ğÁª¯¸‚µ‚Ü‚·‚©?";
+    MESSAGE[ japanese ] = "Ò²İÃ·½Ä‚ğÁª¯¸‚µ‚Ü‚·‚©H";
     MESSAGE[ chinese_traditional ] = "±z·Q­nÀË¬d¤º¤å¡H";
     MESSAGE[ arabic ] = "åá ÊÑíÏ ÇáÊÏŞíŞ İí ÇáäÕ ÇáÑÆíÓí¿";
     MESSAGE[ greek ] = "Èİëåôå íá ãßíåé İëåã÷ïò ôïõ êıñéïõ êåéìİíïõ;";
@@ -230,7 +230,7 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     MESSAGE [ dutch ] = "De functie 'Speciale bereiken controleren' is uitgeschakeld. Controle toch uitvoeren?" ;
     MESSAGE [ spanish ] = "La verificación de las áreas especiales está desactivada, ¿Desea verificar de todas maneras?" ;
     MESSAGE [ english_us ] = "Check special regions is deactivated. Check anyway?" ;
-    MESSAGE[ chinese_simplified ] = "ÒÑ¾­Ê§»îÌØÊâÇøÓòµÄ¼ì²é£¬Äú»¹ÊÇÒªÖ´ĞĞ¼ì²é£¿";
+    MESSAGE[ chinese_simplified ] = "ÒÑ¾­¹Ø±ÕÌØÊâÇøÓòµÄ¼ì²é¹¦ÄÜ£¬Äú»¹ÊÇÒªÖ´ĞĞ¼ì²é£¿";
     MESSAGE[ russian ] = "Ïğîâåğêà ñïåöèàëüíûõ îáëàñòåé îòêëş÷åíà. Âñå ğàâíî ïğîâåğèòü?";
     MESSAGE[ polish ] = "Sprawdzanie obszarów specjalnych jest wy³¹czone. Mimo to sprawdzaæ?";
     MESSAGE[ japanese ] = "“Á•Ê”ÍˆÍ‚ÌÁª¯¸‚ªµÌ‚É‚È‚Á‚Ä‚¢‚Ü‚·B‚»‚ê‚Å‚àÁª¯¸‚µ‚Ü‚·‚©B";
@@ -501,7 +501,7 @@ String RID_SVXSTR_DIC_ERR_UNKNOWN
     Text[ portuguese_brazilian ] = "Failed to add word to dictionary\n for an unknown reason.";
     Text[ japanese ] = "’PŒê‚ÍŒ´ˆö‚ª•s–¾‚È‚Ü‚Ü\n«‘‚É’Ç‰Á‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "ÀÌ ´Ü¾î´Â ¾Ë·Á ÁöÁö ¾ÊÀº ÀÌÀ¯·Î ÀÎÇØ\n»çÀü¿¡ Ãß°¡ÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÓÉÓÚ²»Ã÷µÄÔ­ÒòÎŞ·¨½«\nÕâ¸ö´ÊÌí¼Óµ½´ÊµäÖĞÈ¥¡£";
+    Text[ chinese_simplified ] = "Õâ¸ö×ÖÎŞ·¨Ìí¼Óµ½´ÊµäÖĞÈ¥,Ô­Òò²»Ã÷¡£";
     Text[ chinese_traditional ] = "¦r¨åµLªk¦¬¿ı³o­Ó¦r¡A­ì¦]¤£©ú¡C";
     Text[ arabic ] = "ÊÚĞÑ ÅÖÇİÉ ÇáßáãÉ Åáì ÇáŞÇãæÓ\náÓÈÈ ÛíÑ ãÚÑæİ.";
     Text[ turkish ] = "Sözcük bilinmeyen bir nedenden dolayı\nsözlüğe eklenemedi.";
@@ -524,7 +524,7 @@ String RID_SVXSTR_DIC_ERR_FULL
     Text[ portuguese_brazilian ] = "The dictionary is already full.";
     Text[ japanese ] = "«‘‚Í‚·‚Å‚É‚¢‚Á‚Ï‚¢‚Å‚·B";
     Text[ korean ] = "»çÀüÀº ÀÌ¹Ì ²Ë Â÷ ÀÖ½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "´ÊµäÒÑ¾­×°Âú¡£";
+    Text[ chinese_simplified ] = "´ÊµäÒÑÂú¡£";
     Text[ chinese_traditional ] = "¦r¨å¤wº¡¡C";
     Text[ arabic ] = "ÇáŞÇãæÓ ããÊáÆ ÈÇáİÚá.";
     Text[ turkish ] = "Sözlük doldu.";
