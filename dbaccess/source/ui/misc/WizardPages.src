@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-06 06:10:18 $
+ *  last change: $Author: kz $ $Date: 2002-08-08 20:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ chinese_traditional ] = "ÂèñÊ∂à(~C)";
         Text[ arabic ] = "≈·€«¡ «·√„—";
         Text[ turkish ] = "›ptal";
-        Text[ catalan ] = "~Cancel.la";
+        Text[ catalan ] = "~Cancel∑la";
         Text[ finnish ] = "~Peruuta";
         Text[ thai ] = "~‡∏¢‡∏Å‡πÄ‡∏•‡∏¥‡∏Å";
     };
@@ -677,7 +677,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ chinese_traditional ] = "(ÊúÄÂ§öÁöÑ)Âàó(~X)";
         Text[ turkish ] = "Sat˝rlar (azami):";
         Text[ arabic ] = "(«·Õœ «·√ﬁ’Ï) ··’›Ê›:";
-        Text[ catalan ] = "LÌnies (m‡~x):";
+        Text[ catalan ] = "LÌnies (m?~x):";
         Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î (‡∏°‡∏≤‡∏Å~‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î):";
     };
 
