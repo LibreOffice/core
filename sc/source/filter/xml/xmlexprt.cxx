@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:34:17 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 13:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2593,15 +2593,20 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
             OUString sString;
             for( ScMyDetectiveObjVec::const_iterator aObjItr = rObjVec.begin(); aObjItr != rObjVec.end(); aObjItr++ )
             {
-                if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB))
+                if (aObjItr->eObjType != SC_DETOBJ_CIRCLE)
                 {
-                    ScXMLConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
-                    AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sString );
+                    if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB))
+                    {
+                        ScXMLConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
+                        AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sString );
+                    }
+                    ScXMLConverter::GetStringFromDetObjType( sString, aObjItr->eObjType );
+                    AddAttribute( XML_NAMESPACE_TABLE, XML_DIRECTION, sString );
+                    if( aObjItr->bHasError )
+                        AddAttribute( XML_NAMESPACE_TABLE, XML_CONTAINS_ERROR, XML_TRUE );
                 }
-                ScXMLConverter::GetStringFromDetObjType( sString, aObjItr->eObjType );
-                AddAttribute( XML_NAMESPACE_TABLE, XML_DIRECTION, sString );
-                if( aObjItr->bHasError )
-                    AddAttribute( XML_NAMESPACE_TABLE, XML_CONTAINS_ERROR, XML_TRUE );
+                else
+                    AddAttribute( XML_NAMESPACE_TABLE, XML_MARKED_INVALID, XML_TRUE );
                 SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, XML_HIGHLIGHTED_RANGE, sal_True, sal_True );
             }
             OUStringBuffer aBuffer;
