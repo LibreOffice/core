@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:04:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,28 @@ struct EscherShape
 {
     ULONG mnEscherShapeOrder;
     ULONG mnNoInlines;
-    EscherShape(ULONG nEscherShapeOrder)
-        : mnEscherShapeOrder(nEscherShapeOrder), mnNoInlines(0) {}
+    // --> OD 2004-12-13 #117915# - new member <mbInHeaderFooter>
+    bool mbInHeaderFooter;
+    EscherShape( ULONG nEscherShapeOrder,
+                 bool _bInHeaderFooter )
+        : mnEscherShapeOrder(nEscherShapeOrder),
+          mnNoInlines(0),
+          mbInHeaderFooter( _bInHeaderFooter )
+    {}
+    // <--
 };
 
 class wwZOrderer
 {
 private:
+    // --> OD 2004-12-13 #117915# - consider that objects in page header/footer
+    // are always behind objects in page body. Thus, assure, that in vector
+    // <maEscherLayer> objects in page header|footer are inserted before
+    // objects in page body - see method <GetEscherObjectPos(..)>.
     //No of objects in doc before starting (always 0 unless using file->insert
     //and probably 0 then as well
     std::vector<EscherShape> maEscherLayer;
+    // <--
     typedef std::vector<EscherShape>::iterator myeiter;
 
     std::vector<short> maDrawHeight;
@@ -104,7 +116,11 @@ private:
 
     USHORT GetEscherObjectIdx(ULONG nSpId);
     myeiter MapEscherIdxToIter(ULONG nIdx);
-    ULONG GetEscherObjectPos(ULONG nSpId);
+    // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
+    // that object is in header or footer
+    ULONG GetEscherObjectPos( ULONG nSpId,
+                              const bool _bInHeaderFooter );
+    // <--
     ULONG GetDrawingObjectPos(short nWwHeight);
     bool InsertObject(SdrObject *pObject, ULONG nPos);
 public:
@@ -116,7 +132,12 @@ public:
      instantiate the appropiate one at run time.
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
-    void InsertEscherObject(SdrObject* pObject, ULONG nSpId);
+    // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
+    // that object is in header or footer
+    void InsertEscherObject( SdrObject* pObject,
+                             ULONG nSpId,
+                             const bool _bInHeaderFooter );
+    // <--
     void InsideEscher(ULONG nIndex);
     void OutsideEscher();
 };
