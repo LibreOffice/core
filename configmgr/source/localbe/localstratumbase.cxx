@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localstratumbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:47:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ uno::Reference<backend::XLayer> SAL_CALL
                         "LocalStratum:getLayer - no LayerId specified")),
                 *this, 0) ;
     }
-    rtl::OUString const componentSubPath = componentToPath(aLayerId) + getDataSuffix();
+    rtl::OUString const componentSubPath = layeridToPath(aLayerId) + getDataSuffix();
     if (!isMoreRecent(componentSubPath, aTimestamp)) { return NULL ; }
 
     return createReadonlyFileLayer(componentSubPath);
