@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:53:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
 //......................................................................
 namespace dbaui
@@ -219,12 +222,12 @@ namespace dbaui
         ,m_xConnection(_xConnection)
     {
         OSL_ENSURE(m_xORB.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
-        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::implDrop(const ::rtl::OUString& _rLinkName)
     {
+        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         try
         {
             Reference< XNameContainer > xRemoveAccess(m_xDocumentContainer, UNO_QUERY);
@@ -240,20 +243,34 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::implOpen(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, sal_Bool _bReadOnly)
+    Reference< XComponent> OLinkedDocumentsAccess::implOpen(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, EOpenMode _eOpenMode)
     {
         Reference< XComponent> xRet;
+        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         Reference< XComponentLoader > xComponentLoader(m_xDocumentContainer,UNO_QUERY);
         if ( !xComponentLoader.is() )
             return xRet;
 
+        WaitObject aWaitCursor( m_pDialogParent );
         Sequence< PropertyValue > aArguments(2);
 
         aArguments[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
-        aArguments[0].Value <<= (_bReadOnly ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openDesign")) );
+        switch(_eOpenMode)
+        {
+            case OPEN_NORMAL:
+                aArguments[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
+                break;
+            case OPEN_DESIGN:
+                aArguments[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openDesign"));
+                break;
+            case OPEN_FORMAIL:
+                aArguments[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openForMail"));
+                break;
+        }
 
         aArguments[1].Name = PROPERTY_ACTIVECONNECTION;
         aArguments[1].Value <<= m_xConnection;
+        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         try
         {
             Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
@@ -284,7 +301,11 @@ namespace dbaui
             if ( _rxConnection.is() )
                 aDesc[::svx::daConnection] <<= _rxConnection;
 
-            Reference< XJobExecutor > xFormWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.form.CallFormWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            Reference< XJobExecutor > xFormWizard;
+            {
+                WaitObject aWaitCursor( m_pDialogParent );
+                xFormWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.form.CallFormWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            }
             if ( xFormWizard.is() )
                 xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
 
@@ -294,47 +315,6 @@ namespace dbaui
             OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newReport: caught an exception while loading the object!");
         }
         return sal_True;
-
-
-
-
-        SfxApplication* pApp = SFX_APP();
-        SbxArray* pParameter            = new SbxArray();
-        SbxVariable* pDataSourceName    = new SbxVariable();
-        SbxVariable* pContentType       = new SbxVariable();
-        SbxVariable* pContent           = new SbxVariable();
-        SbxValue* pReturn               = new SbxValue();
-        pReturn->AddRef();
-
-        if (0 != _rDataSourceName.Len())
-        {
-            // add the data source name to the parameter list
-            SbxVariable* pArgument = new SbxVariable;
-            pArgument->PutString(_rDataSourceName);
-            pParameter->Put(pArgument, 1);
-
-            if (_rxConnection.is())
-            {
-                pParameter->Put(GetSbUnoObject(String::CreateFromAscii("Connection"), makeAny(_rxConnection)), 2);
-
-                if ((-1 != _nCommandType) && _rObjectName.Len())
-                {
-                    pArgument = new SbxVariable;
-                    pArgument->PutLong(_nCommandType);
-                    pParameter->Put(pArgument, 3);
-
-                    pArgument = new SbxVariable;
-                    pArgument->PutString(_rObjectName);
-                    pParameter->Put(pArgument, 4);
-                }
-            }
-        }
-
-        pApp->EnterBasicCall();
-        ErrCode aResult = pApp->GetMacroConfig()->Call(NULL, String::CreateFromAscii("FormWizard.FormWizard.MainWithDefault"), pApp->GetBasicManager(), pParameter, pReturn);
-        pApp->LeaveBasicCall();
-
-        return ERRCODE_NONE != aResult;
     }
 
     //------------------------------------------------------------------
@@ -352,7 +332,11 @@ namespace dbaui
             if ( _rxConnection.is() )
                 aDesc[::svx::daConnection] <<= _rxConnection;
 
-            Reference< XJobExecutor > xReportWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            Reference< XJobExecutor > xReportWizard;
+            {
+                WaitObject aWaitCursor( m_pDialogParent );
+                xReportWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            }
             if ( xReportWizard.is() )
                 xReportWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
 
@@ -366,21 +350,20 @@ namespace dbaui
 
 
     //------------------------------------------------------------------
-    sal_Bool OLinkedDocumentsAccess::newTableWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
-        const String& _rObjectName, const Reference< XConnection >& _rxConnection)
+    sal_Bool OLinkedDocumentsAccess::newTableWithPilot(const String& _rDataSourceName,const Reference< XConnection >& _rxConnection)
     {
         try
         {
             ::svx::ODataAccessDescriptor aDesc;
             aDesc.setDataSource(::rtl::OUString(_rDataSourceName));
-            if ( _nCommandType != -1 )
-                aDesc[::svx::daCommandType] <<= _nCommandType;
-            if ( _rObjectName.Len() )
-                aDesc[::svx::daCommand] <<= ::rtl::OUString(_rObjectName);
             if ( _rxConnection.is() )
                 aDesc[::svx::daConnection] <<= _rxConnection;
 
-            Reference< XJobExecutor > xTableWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.table.CallTableWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            Reference< XJobExecutor > xTableWizard;
+            {
+                WaitObject aWaitCursor( m_pDialogParent );
+                xTableWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.table.CallTableWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            }
 
             if ( xTableWizard.is() )
                 xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
@@ -392,12 +375,6 @@ namespace dbaui
         }
         return sal_True;
     }
-
-
-
-
-
-
     //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newQueryWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
         const String& _rObjectName, const Reference< XConnection >& _rxConnection)
@@ -414,7 +391,11 @@ namespace dbaui
             if ( _rxConnection.is() )
                 aDesc[::svx::daConnection] <<= _rxConnection;
 
-            Reference< XJobExecutor > xQueryWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.query.CallQueryWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            Reference< XJobExecutor > xQueryWizard;
+            {
+                WaitObject aWaitCursor( m_pDialogParent );
+                xQueryWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.query.CallQueryWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            }
             if ( xQueryWizard.is() )
                 xQueryWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
 
@@ -428,6 +409,7 @@ namespace dbaui
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition)
     {
+        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         // determine the URL to use for the new document
         Sequence<sal_Int8> aClassId;
         switch (_nNewFormId)
@@ -479,6 +461,7 @@ namespace dbaui
                     OpenCommandArgument2 aOpenCommand;
                     aOpenCommand.Mode = OpenMode::DOCUMENT;
                     aCommand.Argument <<= aOpenCommand;
+                    WaitObject aWaitCursor( m_pDialogParent );
                     xNewDocument.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
                 }
             }
@@ -492,9 +475,9 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::open(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, sal_Bool _bReadOnly)
+    Reference< XComponent > OLinkedDocumentsAccess::open(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, EOpenMode _eOpenMode)
     {
-        Reference< XComponent > xRet = implOpen(_rLinkName,_xDefinition, _bReadOnly);
+        Reference< XComponent > xRet = implOpen(_rLinkName,_xDefinition, _eOpenMode);
         if ( !xRet.is() )
         {
             String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
