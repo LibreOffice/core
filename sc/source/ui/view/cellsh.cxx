@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:57:35 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,12 +814,22 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
             case SID_OUTLINE_SHOW:
-                if (!pTabViewShell->OutlinePossible(FALSE))
+                if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                {
+                    //! test for data pilot operation
+                }
+                else if (!pTabViewShell->OutlinePossible(FALSE))
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_OUTLINE_HIDE:
-                if (!pTabViewShell->OutlinePossible(TRUE))
+                if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                {
+                    //! test for data pilot operation
+                }
+                else if (!pTabViewShell->OutlinePossible(TRUE))
                     rSet.DisableItem( nWhich );
                 break;
 
