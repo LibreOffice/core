@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SysShExec.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 15:17:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #include "SysShExec.hxx"
 #endif
 
-#include <osl/file.h>
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_SYS_SHELL_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -219,6 +221,76 @@ namespace // private
 
     #define E_UNKNOWN_EXEC_ERROR -1
 
+    //-----------------------------------------
+    //-----------------------------------------
+
+    bool is_system_path(const OUString& path_or_uri)
+    {
+        OUString url;
+        osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(path_or_uri, url);
+        return (rc == osl::FileBase::E_None);
+    }
+
+    //-----------------------------------------
+    // trying to identify a jump mark
+    //-----------------------------------------
+
+    const OUString    JUMP_MARK_HTM  = OUString::createFromAscii(".htm#");
+    const OUString    JUMP_MARK_HTML = OUString::createFromAscii(".html#");
+    const sal_Unicode HASH_MARK      = (sal_Unicode)'#';
+
+    bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = NULL)
+    {
+        sal_Int32 jmp_mark = std::max<int>(
+            system_path.lastIndexOf(JUMP_MARK_HTM),
+            system_path.lastIndexOf(JUMP_MARK_HTML));
+
+        if (jmp_mark_start)
+            *jmp_mark_start = jmp_mark;
+
+        return (jmp_mark > -1);
+    }
+
+    //-----------------------------------------
+    //-----------------------------------------
+
+    bool is_existing_file(const OUString& file_name)
+    {
+        OSL_ASSERT(is_system_path(file_name));
+
+        bool exist = false;
+
+        OUString file_url;
+        osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(file_name, file_url);
+
+        if (osl::FileBase::E_None == rc)
+        {
+            osl::DirectoryItem dir_item;
+            rc = osl::DirectoryItem::get(file_url, dir_item);
+            exist = (osl::FileBase::E_None == rc);
+        }
+        return exist;
+    }
+
+    //-------------------------------------------------
+    // Jump marks in file urls are illegal.
+    //-------------------------------------------------
+
+    void remove_jump_mark(OUString* p_command)
+    {
+        OSL_PRECOND(p_command, "invalid parameter");
+
+        sal_Int32 pos;
+        if (has_jump_mark(*p_command, &pos))
+        {
+            const sal_Unicode* p_jmp_mark = p_command->getStr() + pos;
+            while (*p_jmp_mark && (*p_jmp_mark != HASH_MARK))
+                p_jmp_mark++;
+
+            *p_command = OUString(p_command->getStr(), p_jmp_mark - p_command->getStr());
+        }
+    }
+
 } // end namespace
 
 //-----------------------------------------------------------------------------------------
@@ -238,47 +310,59 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
     // parameter checking
-    if ( !aCommand.getLength( ) )
+    if (0 == aCommand.getLength())
         throw IllegalArgumentException(
             OUString::createFromAscii( "Empty command" ),
             static_cast< XSystemShellExecute* >( this ),
             1 );
 
-    if ( !( nFlags >= DEFAULTS && nFlags <= NO_SYSTEM_ERROR_MESSAGE ) )
+    if (!(nFlags >= DEFAULTS && nFlags <= NO_SYSTEM_ERROR_MESSAGE))
         throw IllegalArgumentException(
             OUString::createFromAscii( "Invalid Flags specified" ),
             static_cast< XSystemShellExecute* >( this ),
             3 );
 
-    SHELLEXECUTEINFOW sei;
-    ZeroMemory( &sei, sizeof( sei ) );
+    /*  #i4789#; jump mark detection on system paths
+        if the given command is a system path (not http or
+        other uri schemes) and seems to have a jump mark
+        and names no existing file (remeber the jump mark
+        sign '#' is a valid file name character we remove
+        the jump mark, else ShellExecuteEx fails */
+    OUString preprocessed_command(aCommand);
+    if (is_system_path(preprocessed_command) &&
+        has_jump_mark(preprocessed_command) &&
+        !is_existing_file(preprocessed_command))
+        remove_jump_mark(&preprocessed_command);
 
-    sei.cbSize       = sizeof( sei );
-    sei.lpFile       = aCommand.getStr();
+    SHELLEXECUTEINFOW sei;
+    ZeroMemory(&sei, sizeof( sei));
+
+    sei.cbSize       = sizeof(sei);
+    sei.lpFile       = preprocessed_command.getStr();
     sei.lpParameters = aParameter.getStr();
     sei.nShow        = SW_SHOWNORMAL;
 
-    if ( NO_SYSTEM_ERROR_MESSAGE & nFlags )
+    if (NO_SYSTEM_ERROR_MESSAGE & nFlags)
         sei.fMask = SEE_MASK_FLAG_NO_UI;
 
     SetLastError( 0 );
 
-    sal_Bool bRet = ShellExecuteExW( &sei );
+    sal_Bool bRet = ShellExecuteExW(&sei);
 
-    if ( !bRet && (nFlags & NO_SYSTEM_ERROR_MESSAGE) )
+    if (!bRet && (nFlags & NO_SYSTEM_ERROR_MESSAGE))
     {
         // ShellExecuteEx fails to set an error code
         // we return osl_File_E_INVAL
-        sal_Int32 psxErr = GetLastError( );
-        if ( ERROR_SUCCESS == psxErr )
+        sal_Int32 psxErr = GetLastError();
+        if (ERROR_SUCCESS == psxErr)
             psxErr = E_UNKNOWN_EXEC_ERROR;
         else
-            psxErr = MapError( psxErr );
+            psxErr = MapError(psxErr);
 
         throw SystemShellExecuteException(
-            OUString::createFromAscii( "Error executing command" ),
-            static_cast< XSystemShellExecute* >( this ),
-            psxErr );
+            OUString::createFromAscii("Error executing command"),
+            static_cast< XSystemShellExecute* >(this),
+            psxErr);
     }
 }
 

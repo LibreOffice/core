@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-19 14:11:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,8 @@ void CSmplMailClient::initRecipientList(
     ULONG ulRecipClass,
     size_t& nPos )
 {
+    OSL_PRECOND( nPos < m_RecipientList.size( ), "Wrong index" );
+
     for( sal_Int32 i = 0; i < aRecipList.getLength( ); i++ )
     {
         m_RecipsSmtpAddressList.push_back(

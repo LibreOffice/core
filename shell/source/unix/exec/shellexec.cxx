@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 15:20:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 
 #include <errno.h>
 #include <unistd.h>
-#include <string.h>
 
 //------------------------------------------------------------------------
 // namespace directives

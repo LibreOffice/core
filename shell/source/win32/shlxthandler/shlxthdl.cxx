@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlxthdl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-08-26 10:53:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "utilities.hxx"
 #endif
 
+#include <tchar.h>
 #include <string>
 #include <shlobj.h>
 
@@ -167,8 +168,6 @@ namespace /* private */
         return DeleteRegistryKey(HKEY_CLASSES_ROOT, tmp.c_str()) ? S_OK : E_FAIL;
     }
 
-#ifdef _WINXPSDK
-
     //---------------------------
     //
     //---------------------------
@@ -202,8 +201,6 @@ namespace /* private */
 
         return UnregisterComComponent(CLSID_COLUMN_HANDLER);
     }
-
-#endif
 
     //---------------------------
     //
@@ -376,42 +373,53 @@ namespace /* private */
 
 extern "C" STDAPI DllRegisterServer()
 {
-    char ModuleFileName[MAX_PATH];
+    TCHAR ModuleFileName[MAX_PATH];
 
-    GetModuleFileNameA(
-        GetModuleHandleA(MODULE_NAME_A),
+    GetModuleFileName(
+        GetModuleHandle(MODULE_NAME),
         ModuleFileName,
         sizeof(ModuleFileName));
 
     HRESULT hr = S_OK;
 
-#if defined(_WINXPSDK) && (BUILD_SOSL)
+/*
 
-    // register column handler
+// register column handler
+#ifdef UNICODE
+    if (FAILED(RegisterColumnHandler(WStringToString(ModuleFileName))))
+        hr = E_FAIL;
+#else
     if (FAILED(RegisterColumnHandler(ModuleFileName)))
         hr = E_FAIL;
+#endif
 
     ApproveShellExtension(
         CLSID_COLUMN_HANDLER,
         COLUMN_HANDLER_DESCRIPTIVE_NAME);
 
-#endif
-
-#if defined(BUILD_SOSL)
-
-    // register info tip control
+// register info tip control
+#ifdef UNICODE
+    if (FAILED(RegisterInfotipHandler(WStringToString(ModuleFileName))))
+        hr = E_FAIL;
+#else
     if (FAILED(RegisterInfotipHandler(ModuleFileName)))
         hr = E_FAIL;
+#endif
 
     ApproveShellExtension(
         CLSID_INFOTIP_HANDLER,
         INFOTIP_HANDLER_DESCRIPTIVE_NAME);
 
-#endif
+*/
 
-    // register property sheet handler
+// register property sheet handler
+#ifdef UNICODE
+    if (FAILED(RegisterPropSheetHandler(WStringToString(ModuleFileName).c_str())))
+        hr = E_FAIL;
+#else
     if (FAILED(RegisterPropSheetHandler(ModuleFileName)))
         hr = E_FAIL;
+#endif
 
     ApproveShellExtension(
         CLSID_PROPERTYSHEET_HANDLER,
@@ -432,23 +440,18 @@ extern "C" STDAPI DllUnregisterServer()
 {
     HRESULT hr = S_OK;
 
-#if defined(_WINXPSDK) && (BUILD_SOSL)
-
+/*
     if (FAILED(UnregisterColumnHandler()))
         hr = E_FAIL;
 
     UnapproveShellExtension(CLSID_COLUMN_HANDLER);
-
-#endif
-
-#if defined (BUILD_SOSL)
 
     if (FAILED(UnregisterInfotipHandler()))
         hr = E_FAIL;
 
     UnapproveShellExtension(CLSID_INFOTIP_HANDLER);
 
-#endif
+*/
 
     if (FAILED(UnregisterPropSheetHandler()))
         hr = E_FAIL;
@@ -470,15 +473,7 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
     *ppv = 0;
 
-    if ((rclsid != CLSID_INFOTIP_HANDLER) &&
-
-#ifdef _WINXPSDK
-
-        (rclsid != CLSID_COLUMN_HANDLER) &&
-
-#endif
-
-        (rclsid != CLSID_PROPERTYSHEET_HANDLER))
+    if ((rclsid != CLSID_INFOTIP_HANDLER) && (rclsid != CLSID_COLUMN_HANDLER) && (rclsid != CLSID_PROPERTYSHEET_HANDLER))
         return CLASS_E_CLASSNOTAVAILABLE;
 
     if ((riid != IID_IUnknown) && (riid != IID_IClassFactory))

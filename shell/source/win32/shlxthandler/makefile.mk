@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tra $ $Date: 2002-12-06 15:38:15 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:16:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,11 +82,11 @@ TARGETTYPE=CUI
 # set ISOLATION_AWARE_ENABLE for activating
 # the Windows XP visual styles
 
-#/D_WINXPSDK set this for a Win2000/WinXP Platform SDK
-#/DBUILD_SOSL for extended functionality (Infotip and
+#-D_WINXPSDK set this for a Win2000/WinXP Platform SDK
+#-DBUILD_SOSL for extended functionality (Infotip and
 # Column Handler)
 
-CFLAGS+=/DISOLATION_AWARE_ENABLED /DWIN32_LEAN_AND_MEAN /DXML_UNICODE /D_NTSDK /DUNICODE 
+CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
 
 # --- Files --------------------------------------------------------
 
@@ -108,7 +108,10 @@ SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/ziparchv.obj\
     $(SLO)$/zipexcptn.obj\
     $(SLO)$/metaaccessor.obj\
-    $(SLO)$/utilities.obj
+    $(SLO)$/utilities.obj\
+    $(SLO)$/listviewbuilder.obj\
+    $(SLO)$/document_statistic.obj\
+    $(SLO)$/iso8601_converter.obj
     
 SHL1TARGET=$(TARGET)
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2002-08-26 10:50:02 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:16:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-CFLAGS+=/Ob0 /D_NTSDK
+CFLAGS+=-Ob0 -D_NTSDK
 
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/$(TARGET).obj\
