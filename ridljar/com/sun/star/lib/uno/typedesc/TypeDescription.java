@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:24:37 $
+ *  last change: $Author: kr $ $Date: 2001-06-08 14:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2001-05-17 12:24:37 $
+ * @version     $Revision: 1.10 $ $ $Date: 2001-06-08 14:57:03 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -447,6 +447,8 @@ public class TypeDescription implements ITypeDescription {
     }
 
     static public TypeDescription getTypeDescription(TypeInfo typeInfo, Class zClass) {
+        if(DEBUG) System.err.println("TypeDescription.getTypeDescription:" + typeInfo + " " + zClass);
+
           TypeDescription typeDescription = null;
 
         if(typeInfo == null || !typeInfo.isInterface())
@@ -577,6 +579,20 @@ public class TypeDescription implements ITypeDescription {
     protected ITypeDescription _componentType;
 
 
+    private int calcMethodOffset(Class zClass) {
+        int offset = 3;
+
+        if(zClass != com.sun.star.uno.XInterface.class) {
+            Method methods[] = zClass.getMethods();
+
+            for(int i = 0; i < methods.length; ++ i)
+                if((methods[i].getModifiers() & Modifier.STATIC) == 0)
+                    ++ offset;
+        }
+
+        return offset;
+    }
+
     private void _initByClass(Class zClass) {
         __cyclicTypes.put(zClass.getName(), this);
 
@@ -599,6 +615,8 @@ public class TypeDescription implements ITypeDescription {
             _typeName  = zClass.getName();
 
             _arrayTypeName = "[L" + _class.getName() + ";";
+
+            _offset = calcMethodOffset(zClass);
 
             Class interfaces[] = _class.getInterfaces();
             if(interfaces.length > 0)
@@ -699,11 +717,7 @@ public class TypeDescription implements ITypeDescription {
             _offset = 3;
         }
         else {
-            if(_superType != null) {
-                _superType._initMethodTypeInfos();
-
-                superOffset = _superType._offset;
-            }
+            superOffset = _superType._offset;
 
             TypeInfo typeInfos[] = __getTypeInfos(_class);
             Method methods[] = _class.getMethods();
