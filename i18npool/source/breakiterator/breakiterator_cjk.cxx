@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-11 18:52:28 $
+ *  last change: $Author: khong $ $Date: 2002-12-05 19:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
         while (nStartPos > 0 &&
             (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
-            bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos]) != -1))
+            bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos-1]) != -1))
         nStartPos--;
     }
 
