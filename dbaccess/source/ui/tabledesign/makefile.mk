@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:03:49 $
+#   last change: $Author: kz $ $Date: 2004-05-19 04:37:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-# IMGLST_SRS=$(SRS)$/$(TARGET).srs
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
@@ -97,5 +97,3 @@ SRC1FILES =  table.src
 .INCLUDE :  target.mk
 
 $(SRS)$/$(TARGET).srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
-
-
