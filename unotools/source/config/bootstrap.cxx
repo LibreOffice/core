@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-25 10:27:16 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
     return true;
 }
 // ---------------------------------------------------------------------------------------
-#ifdef DEBUG
+#ifdef _DEBUG
 static
 PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 {
