@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-05 09:48:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvXMLUnitConverter;
 #ifdef _USE_NAMESPACE
 namespace rtl
@@ -87,7 +91,7 @@ Dieses Item beschreibt, ob Inhalt, Groesse oder Position geschuetzt werden
 sollen.
 */
 
-class SvxProtectItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 {
     BOOL bCntnt :1;     //Inhalt geschuetzt
     BOOL bSize  :1;     //Groesse geschuetzt
