@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-14 14:47:03 $
+ *  last change: $Author: sj $ $Date: 2001-04-02 11:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,7 @@ void SdOptionsMisc::SetDefaults()
     SetDoubleClickTextEdit( TRUE );
     SetClickChangeRotation( FALSE );
     SetStartWithActualPage( FALSE );
+    SetSummationOfParagraphs( FALSE );
     SetPreviewQuality( DRAWMODE_DEFAULT );
     SetSolidDragging( FALSE );
     SetSolidMarkHdl( TRUE );
@@ -573,6 +574,7 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
+            IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             GetPreviewQuality() == rOpt.GetPreviewQuality() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() );
@@ -599,10 +601,11 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
         // just for impress
         "NewDoc/AutoPilot",
-        "Start/CurrentPage"
+        "Start/CurrentPage",
+        "Compatibility/AddBetween"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 14 : 12 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
     ppNames = aPropNames;
 }
 
@@ -626,8 +629,12 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        if( pValues[12].hasValue() ) SetStartWithTemplate( *(sal_Bool*) pValues[ 12 ].getValue() );
-        if( pValues[13].hasValue() ) SetStartWithActualPage( *(sal_Bool*) pValues[ 13 ].getValue() );
+        if( pValues[12].hasValue() )
+            SetStartWithTemplate( *(sal_Bool*) pValues[ 12 ].getValue() );
+        if( pValues[13].hasValue() )
+            SetStartWithActualPage( *(sal_Bool*) pValues[ 13 ].getValue() );
+        if( pValues[14].hasValue() )
+            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 14 ].getValue() );
     }
 
     return TRUE;
@@ -655,6 +662,7 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     {
         pValues[ 12 ] <<= IsStartWithTemplate();
         pValues[ 13 ] <<= IsStartWithActualPage();
+        pValues[ 14 ] <<= IsSummationOfParagraphs();
     }
 
     return TRUE;
@@ -680,6 +688,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
 {
     SetStartWithTemplate( pOpts->IsStartWithTemplate() );
     SetStartWithActualPage( pOpts->IsStartWithActualPage() );
+    SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
 
     if( pView )
     {
@@ -747,6 +756,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetDoubleClickTextEdit( IsDoubleClickTextEdit() );
     pOpts->SetClickChangeRotation( IsClickChangeRotation() );
     pOpts->SetStartWithActualPage( IsStartWithActualPage() );
+    pOpts->SetSummationOfParagraphs( IsSummationOfParagraphs() );
     pOpts->SetPreviewQuality( GetPreviewQuality() );
     pOpts->SetSolidDragging( IsSolidDragging() );
     pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );

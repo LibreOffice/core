@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:14:49 $
+ *  last change: $Author: sj $ $Date: 2001-04-02 11:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,17 +307,18 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     aCbxCopy                    ( this, SdResId( CBX_COPY ) ),
     aCbxMarkedHitMovesAlways    ( this, SdResId( CBX_MARKED_HIT_MOVES_ALWAYS ) ),
     aCbxCrookNoContortion       ( this, SdResId( CBX_CROOK_NO_CONTORTION ) ),
-    aGrpOther                   ( this, SdResId( GRP_OTHER ) ),
-
-    /// NEU
-    aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
-    aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
-
     aGrpSettings                ( this, SdResId( GRP_SETTINGS ) ),
+
     aTxtMetric                  ( this, SdResId( FT_METRIC ) ),
     aLbMetric                   ( this, SdResId( LB_METRIC ) ),
     aTxtTabstop                 ( this, SdResId( FT_TABSTOP ) ),
-    aMtrFldTabstop              ( this, SdResId( MTR_FLD_TABSTOP ) )
+    aMtrFldTabstop              ( this, SdResId( MTR_FLD_TABSTOP ) ),
+
+    aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
+    aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
+
+    aTxtCompatibility           ( this, SdResId( FT_COMPATIBILITY ) ),
+    aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) )
 {
     FreeResource();
     SetExchangeSupport();
@@ -384,8 +385,8 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aCbxPickThrough.GetSavedValue()         != aCbxPickThrough.IsChecked() ||
         aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
         aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
-        /// NEU
-        aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() )
+        aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() ||
+        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.GetSavedValue() )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 
@@ -397,6 +398,7 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
         aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
         aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
+        aOptsItem.SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
 
         rAttrs.Put( aOptsItem );
 
@@ -441,6 +443,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxMasterPageCache.Check( aOptsItem.IsMasterPagePaintCaching() );
     aCbxCopy.Check( aOptsItem.IsDragWithCopy() );
     aCbxStartWithActualPage.Check( aOptsItem.IsStartWithActualPage() );
+    aCbxCompatibility.Check( aOptsItem.IsSummationOfParagraphs() );
     aCbxStartWithTemplate.SaveValue();
     aCbxMarkedHitMovesAlways.SaveValue();
     aCbxCrookNoContortion.SaveValue();
@@ -449,6 +452,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxMasterPageCache.SaveValue();
     aCbxCopy.SaveValue();
     aCbxStartWithActualPage.SaveValue();
+    aCbxCompatibility.SaveValue();
 
     // Metrik
     USHORT nWhich = GetWhich( SID_ATTR_METRIC );
@@ -521,20 +525,17 @@ void    SdTpOptionsMisc::SetDrawMode()
     aCbxStartWithTemplate.Hide();
     aGrpProgramStart.Hide();
     aCbxStartWithActualPage.Hide();
+    aCbxCompatibility.Hide();
+    aTxtCompatibility.Hide();
     aGrpStartWithActualPage.Hide();
     aCbxCrookNoContortion.Show();
 
-    long nDiff = aGrpOther.GetPosPixel().Y() - aGrpProgramStart.GetPosPixel().Y();
-    lcl_MoveWin( aGrpOther, nDiff );
+    long nDiff = aGrpSettings.GetPosPixel().Y() - aGrpProgramStart.GetPosPixel().Y();
+    lcl_MoveWin( aGrpSettings, nDiff );
     lcl_MoveWin( aCbxMasterPageCache, nDiff );
     lcl_MoveWin( aCbxCopy, nDiff );
     lcl_MoveWin( aCbxMarkedHitMovesAlways, nDiff );
     lcl_MoveWin( aCbxCrookNoContortion, nDiff );
-
-    nDiff += aGrpSettings.GetPosPixel().Y() - aGrpStartWithActualPage.GetPosPixel().Y();
-    nDiff -= aCbxCrookNoContortion.GetPosPixel().Y() - aCbxMarkedHitMovesAlways.GetPosPixel().Y();
-
-    lcl_MoveWin( aGrpSettings, nDiff );
     lcl_MoveWin( aTxtMetric, nDiff );
     lcl_MoveWin( aLbMetric, nDiff );
     lcl_MoveWin( aTxtTabstop, nDiff );
