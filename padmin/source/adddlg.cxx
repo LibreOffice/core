@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:33 $
+ *  last change: $Author: pl $ $Date: 2001-05-22 13:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,9 +809,9 @@ void AddPrinterDialog::advance()
     {
         if( m_pChooseDevicePage->isPrinter() )
         {
-            if( ! m_pCommandPage )
-                m_pCommandPage = new APCommandPage( this, DeviceKind::Printer );
-            m_pCurrentPage = m_pCommandPage;
+            if( ! m_pChooseDriverPage )
+                m_pChooseDriverPage = new APChooseDriverPage( this );
+            m_pCurrentPage = m_pChooseDriverPage;
             m_aPrevPB.Enable( TRUE );
         }
         else if( m_pChooseDevicePage->isOld() )
@@ -840,17 +840,17 @@ void AddPrinterDialog::advance()
     }
     else if( m_pCurrentPage == m_pChooseDriverPage )
     {
+        if( ! m_pCommandPage )
+            m_pCommandPage = new APCommandPage( this, DeviceKind::Printer );
+        m_pCurrentPage = m_pCommandPage;
+    }
+    else if( m_pCurrentPage == m_pCommandPage )
+    {
         if( ! m_pNamePage )
             m_pNamePage = new APNamePage( this, m_aPrinter.m_aPrinterName, DeviceKind::Printer );
         m_pCurrentPage = m_pNamePage;
         m_aFinishPB.Enable( TRUE );
         m_aNextPB.Enable( FALSE );
-    }
-    else if( m_pCurrentPage == m_pCommandPage )
-    {
-        if( ! m_pChooseDriverPage )
-            m_pChooseDriverPage = new APChooseDriverPage( this );
-        m_pCurrentPage = m_pChooseDriverPage;
     }
     else if( m_pCurrentPage == m_pFaxDriverPage )
     {
@@ -919,17 +919,17 @@ void AddPrinterDialog::back()
     m_pCurrentPage->Show( FALSE );
     if( m_pCurrentPage == m_pChooseDriverPage )
     {
-        m_pCurrentPage = m_pCommandPage;
+        m_pCurrentPage = m_pChooseDevicePage;
+        m_aPrevPB.Enable( FALSE );
     }
     else if( m_pCurrentPage == m_pNamePage )
     {
-        m_pCurrentPage = m_pChooseDriverPage;
+        m_pCurrentPage = m_pCommandPage;
         m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pCommandPage )
     {
-        m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( FALSE );
+        m_pCurrentPage = m_pChooseDriverPage;
     }
     else if( m_pCurrentPage == m_pOldPrinterPage )
     {
