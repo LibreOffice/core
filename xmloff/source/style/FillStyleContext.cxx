@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 14:15:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ XMLBitmapStyleContext::~XMLBitmapStyleContext()
 
 SvXMLImportContext* XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext;
+    SvXMLImportContext *pContext = 0;
     if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
     {
         OUString sURL;
