@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollPanel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:34:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,8 @@ void ScrollPanel::ListHasChanged (void)
 
 void ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
-    const String& rTitle)
+    const String& rTitle,
+    ULONG nHelpId)
 {
     pControl->GetWindow()->AddEventListener (
         LINK(this,ScrollPanel,WindowEventListener));
@@ -158,6 +159,7 @@ void ScrollPanel::AddControl (
         rTitle,
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetWindow()->SetParent(&maScrollWindow);
+    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
     // Add a down link only for the first control so that when
