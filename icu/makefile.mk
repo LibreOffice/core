@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: er $ $Date: 2002-06-03 16:54:12 $
+#   last change: $Author: er $ $Date: 2002-07-19 16:29:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ TARFILE_NAME=icu-2.0
 TARFILE_ROOTDIR=icu
 
 PATCH_FILE_NAME=icu-2.0.patch
+BINARY_PATCH_FILE_NAME=icu-2.0-binary_patch.tar.gz
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -137,17 +138,29 @@ OUT2BIN= \
 
 # --- Targets ------------------------------------------------------
 
+all: \
+    $(MISC)$/remove_build.flag \
+    ALLTAR
+    
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
+TG_DELIVER : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
         $(DELIVER)
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)icu-2.0-binary_patch.tar.gz | tar $(TAR_EXCLUDE_SWITCH) -xvf - 
+    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILE_NAME) | tar $(TAR_EXCLUDE_SWITCH) -xvf - 
+    +$(TOUCH) $(PACKAGE_DIR)$/so_add_binary
     
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
+
+# Since you never know what will be in a patch (for example, it may already
+# patch at configure level) or in the case of a binary patch, we remove the
+# entire package directory if a patch is newer.
+$(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME)
+    $(REMOVE_PACKAGE_COMMAND)
+    +$(TOUCH) $(MISC)$/remove_build.flag
 
 .IF "$(BUILD_SOSL)"!=""
 ALLTAR : TG_DELIVER
