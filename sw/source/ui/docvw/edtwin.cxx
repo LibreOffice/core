@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:23:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
@@ -140,6 +143,9 @@
 #ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
 #endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
@@ -163,6 +169,9 @@
 #endif
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _SVX_FLDITEM_HXX
 #   ifndef ITEMID_FIELD
@@ -822,7 +831,7 @@ void SwEditWin::StopInsFrm()
  --------------------------------------------------------------------*/
 
 
-void SwEditWin::FlushInBuffer( SwWrtShell *pSh )
+void SwEditWin::FlushInBuffer()
 {
     if ( aInBuffer.Len() )
     {
@@ -840,8 +849,35 @@ void SwEditWin::FlushInBuffer( SwWrtShell *pSh )
                 aReq.Done();
             }
         }
-
-        pSh->Insert( aInBuffer );
+        //#21019# apply CTL and CJK language to the text input
+        sal_Bool bLang = true;
+        SwWrtShell& rSh = rView.GetWrtShell();
+        if(eBufferLanguage != LANGUAGE_DONTKNOW)
+        {
+            USHORT nWhich = 0;
+            switch( GetI18NScriptTypeOfLanguage( eBufferLanguage ))
+            {
+                case  ::com::sun::star::i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+                case  ::com::sun::star::i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+                default: bLang = sal_False;
+            }
+            if(bLang)
+            {
+                SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
+                rSh.GetAttr(aLangSet);
+                if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, TRUE))
+                {
+                    bLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage() != eBufferLanguage;
+                }
+                if(bLang)
+                {
+                    SvxLanguageItem aLangItem( eBufferLanguage, nWhich );
+                    rSh.SetAttr( aLangItem );
+                }
+            }
+        }
+        rSh.Insert( aInBuffer );
+        eBufferLanguage = LANGUAGE_DONTKNOW;
         aInBuffer.Erase();
         bFlushCharBuffer = FALSE;
     }
@@ -1154,6 +1190,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     SwWrtShell &rSh = rView.GetWrtShell();
     BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCrsrReadonly();
+
+    //if the language changes the buffer must be flushed
+    LanguageType eNewLanguage = GetInputLanguage();
+    if(!bIsDocReadOnly && eBufferLanguage != eNewLanguage && aInBuffer.Len())
+    {
+        FlushInBuffer();
+    }
+    eBufferLanguage = eNewLanguage;
 
     QuickHelpData aTmpQHD;
     if( pQuickHlpData->bClear )
@@ -1914,12 +1958,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     case KEY_RIGHT | KEY_MOD2:
                         rSh.Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                         eKeyState = KS_Ende;
-                        FlushInBuffer( &rSh );
+                        FlushInBuffer();
                         break;
                     case KEY_LEFT | KEY_MOD2:
                         rSh.Left( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                         eKeyState = KS_Ende;
-                        FlushInBuffer( &rSh );
+                        FlushInBuffer();
                         break;
                 }
             }
@@ -1931,7 +1975,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 bNormalChar = !rKeyCode.IsControlMod() &&
                                 SW_ISPRINTABLE( aCh );
                 if( aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
-                    FlushInBuffer( &rSh );
+                    FlushInBuffer();
 
                 if( rView.KeyInput( aKeyEvent ) )
                     bFlushBuffer = TRUE, bNormalChar = FALSE;
@@ -2025,7 +2069,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                  ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
                  ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
             {
-                FlushInBuffer( &rSh );
+                FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, aCh );
                 if( '\"' != aCh && '\'' != aCh )        // nur bei "*_" rufen!
                     rSh.UpdateAttr();
@@ -2040,7 +2084,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 !bIsNormalChar
                 )
             {
-                FlushInBuffer( &rSh );
+                FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, aCh );
             }
             else
@@ -2070,7 +2114,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
             {
-                FlushInBuffer( &rSh );
+                FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, 0 );
             }
             eKeyState = eNextKeyState;
@@ -2080,7 +2124,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         default:
         {
             USHORT nSlotId = 0;
-            FlushInBuffer( &rSh );
+            FlushInBuffer();
 //???           if( bFlushCharBuffer )
 //???               FlushInBuffer( &rSh );
             switch( eKeyState )
@@ -2279,7 +2323,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         //OS 16.02.96 11.04: bFlushCharBuffer wurde hier nicht zurueckgesetzt
         // warum nicht?
         BOOL bSave = bFlushCharBuffer;
-        FlushInBuffer(&rSh);
+        FlushInBuffer();
         bFlushCharBuffer = bSave;
 
         // evt. Tip-Hilfe anzeigen
@@ -3992,6 +4036,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     nDropFormat( 0 ),
     nDropDestination( 0 ),
     nInsFrmColCount( 1 ),
+    eBufferLanguage(LANGUAGE_DONTKNOW),
     bLockInput(FALSE),
     nKS_NUMDOWN_Count(0), // #i23725#
     nKS_NUMINDENTINC_Count(0) // #i23725#
@@ -4332,7 +4377,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     rSh.DelRight();
 
                 bCallBase = FALSE;
-                rSh.CreateExtTextInput();
+                LanguageType eInputLanguage = GetInputLanguage();
+                rSh.CreateExtTextInput(eInputLanguage);
             }
         }
         break;
@@ -4750,7 +4796,7 @@ void SwEditWin::ClearTip()
 
 IMPL_LINK( SwEditWin, KeyInputFlushHandler, Timer *, EMPTYARG )
 {
-    FlushInBuffer( &rView.GetWrtShell() );
+    FlushInBuffer();
     return 0;
 }
 
@@ -4877,9 +4923,9 @@ void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
     }
     bClear = TRUE;
 
+    Window& rWin = rSh.GetView().GetEditWin();
     if( bIsTip )
     {
-        Window& rWin = rSh.GetView().GetEditWin();
         Point aPt( rWin.OutputToScreenPixel( rWin.LogicToPixel(
                     rSh.GetCharRect().Pos() )));
         aPt.Y() -= 3;
@@ -4898,7 +4944,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
         pCETID = new CommandExtTextInputData( sStr, pAttrs, nL,
                                                 0, 0, 0, FALSE );
-        rSh.CreateExtTextInput();
+        rSh.CreateExtTextInput(rWin.GetInputLanguage());
         rSh.SetExtTextInputData( *pCETID );
     }
 }
