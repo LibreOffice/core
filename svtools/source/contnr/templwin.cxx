@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:11:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
 
 {
     // detect application language
-    eLangType = SvtPathOptions().GetLanguageType();
+    aLocale= SvtPathOptions().GetLocale();
 
     // create windows and frame
     pEditWin = new SvtExtendedMultiLineEdit_Impl( this );
@@ -920,7 +920,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
                             {
                                 INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL( rURL );
                                 if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM )
-                                    aValueStr = INetContentTypes::GetPresentation( eTypeID, eLangType );
+                                    aValueStr = INetContentTypes::GetPresentation( eTypeID, aLocale );
                                 else
                                     aValueStr = SvFileInformationManager::GetDescription( rURL );
                                 if ( aValueStr.Len() == 0 )
