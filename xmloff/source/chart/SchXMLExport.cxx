@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:12:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,9 +1112,11 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     sal_Bool bWrite = sal_False;
     sal_Int32 nAttachedAxis;
 
+
     // #32368# determine the number of lines in a combi-chart
     // note: bIsBar
     sal_Int32 nNumberOfLinesInBarChart = 0;
+    sal_Bool bStockHasVolume = sal_False;
     if( bExportContent )
     {
         if( 0 == xDiagram->getDiagramType().reverseCompareToAsciiL(
@@ -1131,6 +1133,22 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 String aStr( aEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
                 DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+            }
+        }
+        else if( 0 == xDiagram->getDiagramType().reverseCompareToAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
+                xDiaProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Volume" )))
+                    >>= bStockHasVolume;
+            }
+            catch( uno::Exception & aEx )
+            {
+                String aStr( aEx.Message );
+                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR1( "Exception caught for property Volume: %s", aBStr.GetBuffer());
             }
         }
     }
@@ -1255,6 +1273,14 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
                                        mrExport.GetNamespaceMap().GetQNameByKey(
                                            XML_NAMESPACE_CHART, GetXMLToken( XML_LINE )));
+            }
+
+            // #i32366# first series gets type "bar" for stock with volume charts
+            if( bStockHasVolume && (nSeries - mnDomainAxes) == 0 )
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
+                                       mrExport.GetNamespaceMap().GetQNameByKey(
+                                           XML_NAMESPACE_CHART, GetXMLToken( XML_BAR )));
             }
 
             // open series element until end of for loop
