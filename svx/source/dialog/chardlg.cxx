@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2953,7 +2953,6 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
     m_aEndBracketFT     ( this, ResId( FT_ENDBRACKET ) ),
     m_aEndBracketLB     ( this, ResId( ED_ENDBRACKET ) ),
 
-    m_aPreviewLine      ( this, ResId( FL_TWOLINES_PREVIEW ) ),
     m_aPreviewWin       ( this, ResId( WIN_TWOLINES_PREVIEW ) ),
     m_aFontTypeFT       ( this, ResId( FT_TWOLINES_FONTTYPE ) )
 
@@ -2967,10 +2966,10 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
 void SvxCharTwoLinesPage::Initialize()
 {
     Size aSize = m_aStartBracketLB.GetSizePixel();
-    aSize.Height() = m_aStartBracketLB.CalcSize( 1, 2 ).Height();
+    aSize.Height() = m_aStartBracketLB.CalcSize( 1, 6 ).Height();
     m_aStartBracketLB.SetSizePixel( aSize );
     aSize = m_aEndBracketLB.GetSizePixel();
-    aSize.Height() = m_aEndBracketLB.CalcSize( 1, 2 ).Height();
+    aSize.Height() = m_aEndBracketLB.CalcSize( 1, 6 ).Height();
     m_aEndBracketLB.SetSizePixel( aSize );
 
     m_aTwoLinesBtn.Check( FALSE );

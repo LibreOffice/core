@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,7 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
         {
             case SDRTEXTANI_NONE:
             {
+                aFtDirection.Disable();
                 aBtnUp.Disable();
                 aBtnLeft.Disable();
                 aBtnRight.Disable();
@@ -636,6 +637,7 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
 
                 if( eAniKind == SDRTEXTANI_BLINK )
                 {
+                    aFtDirection.Disable();
                     aBtnUp.Disable();
                     aBtnLeft.Disable();
                     aBtnRight.Disable();
@@ -647,6 +649,7 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
                 }
                 else
                 {
+                    aFtDirection.Enable();
                     aBtnUp.Enable();
                     aBtnLeft.Enable();
                     aBtnRight.Enable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ IMPL_LINK(SvxTransparenceTabPage, ClickTransOffHdl_Impl, void *, EMPTYARG)
     rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
     rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
     XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
 
     InvalidatePreview( FALSE );
 

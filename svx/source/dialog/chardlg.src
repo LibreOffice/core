@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_WEST_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 14  );
-        Size = MAP_APPFONT ( 80 , 10 );
+        Pos = MAP_APPFONT ( 12 , 14 );
+        Size = MAP_APPFONT ( 80 , 8 );
         Text = "~Schriftart";
-        Text [ english_us ] = "Font";
+        Text [ ENGLISH ] = "~Font";
+        Text [ english_us ] = "~Font";
         Text[ portuguese ] = "~Tipo de letra";
         Text[ russian ] = "Òèï øðèôòà";
         Text[ greek ] = "Ãñáììáôï~óåéñÜ";
@@ -154,9 +155,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_WEST_NAME_NOCJK
     {
-        Pos = MAP_APPFONT ( 12 , 3  );
-        Size = MAP_APPFONT ( 80 , 8 );
+        Pos = MAP_APPFONT ( 12 , 6 );
+        Size = MAP_APPFONT ( 112 , 8 );
         Text = "~Schriftart";
+        Text [ ENGLISH ] = "~Font";
         Text [ english_us ] = "~Font";
         Text[ portuguese ] = "~Tipo de letra";
         Text[ russian ] = "Òèï øðèôòà";
@@ -181,24 +183,25 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_WEST_NAME
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 12 , 25  );
-        Size = MAP_APPFONT ( 80 , 48 );
+        Pos = MAP_APPFONT ( 12 , 25 );
+        Size = MAP_APPFONT ( 80 , 120 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     ComboBox LB_WEST_NAME_NOCJK
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 12 , 14 );
-        Size = MAP_APPFONT ( 100 , 72 );
+        Pos = MAP_APPFONT ( 12 , 17 );
+        Size = MAP_APPFONT ( 112 , 71 );
         TabStop = TRUE;
         DropDown = FALSE;
     };
     FixedText FT_WEST_STYLE
     {
-        Pos = MAP_APPFONT ( 98 , 14  );
-        Size = MAP_APPFONT ( 40 , 10 );
+        Pos = MAP_APPFONT ( 96 , 14 );
+        Size = MAP_APPFONT ( 40 , 8 );
         Text = "S~chriftschnitt";
+        Text [ ENGLISH ] = "~Typeface";
         Text [ english_us ] = "~Typeface";
         Text[ portuguese ] = "Estilo";
         Text[ russian ] = "Íà÷åðòàíèå";
@@ -222,9 +225,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_WEST_STYLE_NOCJK
     {
-        Pos = MAP_APPFONT ( 118 , 3  );
-        Size = MAP_APPFONT ( 40 , 8 );
+        Pos = MAP_APPFONT ( 130 , 6 );
+        Size = MAP_APPFONT ( 72 , 8 );
         Text = "S~chriftschnitt";
+        Text [ ENGLISH ] = "~Typeface";
         Text [ english_us ] = "~Typeface";
         Text[ portuguese ] = "Estilo";
         Text[ russian ] = "Íà÷åðòàíèå";
@@ -249,7 +253,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_WEST_STYLE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 98 , 25  );
+        Pos = MAP_APPFONT ( 96 , 25 );
         Size = MAP_APPFONT ( 40 , 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -411,8 +415,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_WEST_STYLE_NOCJK
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 118 , 14 );
-        Size = MAP_APPFONT ( 70 , 72 );
+        Pos = MAP_APPFONT ( 130 , 17 );
+        Size = MAP_APPFONT ( 72 , 71 );
         TabStop = TRUE;
         DropDown = FALSE;
         StringList =
@@ -572,10 +576,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_WEST_SIZE
     {
-        Pos = MAP_APPFONT ( 144 , 14  );
-        Size = MAP_APPFONT ( 38 , 10 );
-        Text = "Sch~riftgrad";
-        Text [ english_us ] = "Size";
+        Pos = MAP_APPFONT ( 140 , 14 );
+        Size = MAP_APPFONT ( 38 , 8 );
+        Text = "Sc~hriftgrad";
+        Text [ ENGLISH ] = "~Size";
+        Text [ english_us ] = "~Size";
         Text[ portuguese ] = "~Tamanho";
         Text[ russian ] = "Ðàçìåð øðèôòà";
         Text[ greek ] = "ÌÝãåèïò";
@@ -598,10 +603,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_WEST_SIZE_NOCJK
     {
-        Pos = MAP_APPFONT ( 194 , 3  );
-        Size = MAP_APPFONT ( 38 , 8 );
-        Text = "Sch~riftgrad";
-        Text [ english_us ] = "Size";
+        Pos = MAP_APPFONT ( 208 , 6 );
+        Size = MAP_APPFONT ( 40 , 8 );
+        Text = "Sc~hriftgrad";
+        Text [ ENGLISH ] = "~Size";
+        Text [ english_us ] = "~Size";
         Text[ portuguese ] = "~Tamanho";
         Text[ russian ] = "Ðàçìåð øðèôòà";
         Text[ greek ] = "ÌÝãåèïò";
@@ -625,7 +631,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     MetricBox LB_WEST_SIZE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 144 , 25  );
+        Pos = MAP_APPFONT ( 140 , 25 );
         Size = MAP_APPFONT ( 38 , 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -633,17 +639,18 @@ TabPage RID_SVXPAGE_CHAR_NAME
     MetricBox LB_WEST_SIZE_NOCJK
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 194 , 14  );
-        Size = MAP_APPFONT ( 38 , 72 );
+        Pos = MAP_APPFONT ( 208 , 17 );
+        Size = MAP_APPFONT ( 40 , 71 );
         TabStop = TRUE;
         DropDown = FALSE;
     };
     FixedText FT_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 188 , 14  );
-        Size = MAP_APPFONT ( 66 , 10 );
+        Pos = MAP_APPFONT ( 182 , 14 );
+        Size = MAP_APPFONT ( 66 , 8 );
         Text = "S~prache";
-        Text [ english_us ] = "Language";
+        Text [ ENGLISH ] = "~Language";
+        Text [ english_us ] = "~Language";
         Text[ portuguese ] = "~Língua";
         Text[ russian ] = "ßçûê";
         Text[ greek ] = "Ãëþóóá";
@@ -666,9 +673,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_WEST_LANG_NOCJK
     {
-        Pos = MAP_APPFONT ( 118 , 94  );
-        Size = MAP_APPFONT ( 70 , 8 );
+        Pos = MAP_APPFONT ( 130 , 94 );
+        Size = MAP_APPFONT ( 72 , 8 );
         Text = "S~prache";
+        Text [ ENGLISH ] = "~Language";
         Text [ english_us ] = "~Language";
         Text[ portuguese ] = "~Língua";
         Text[ russian ] = "ßçûê";
@@ -693,8 +701,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_WEST_LANG
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 188 , 25  );
-        Size = MAP_APPFONT ( 66 , 72 );
+        Pos = MAP_APPFONT ( 182 , 25 );
+        Size = MAP_APPFONT ( 66 , 100 );
         TabStop = TRUE;
         Sort = TRUE ;
         DropDown = TRUE;
@@ -702,15 +710,15 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_WEST_LANG_NOCJK
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 118 , 105 );
-        Size = MAP_APPFONT ( 70 , 72 );
+        Pos = MAP_APPFONT ( 130 , 105 );
+        Size = MAP_APPFONT ( 72 , 100 );
         TabStop = TRUE;
         Sort = TRUE ;
         DropDown = TRUE;
     };
     FixedLine FL_EAST
     {
-        Pos = MAP_APPFONT ( 6 , 43  );
+        Pos = MAP_APPFONT ( 6 , 43 );
         Size = MAP_APPFONT ( 248 , 8 );
         Text = "Schriftart für asiatischen Text";
         Text [ english_us ] = "Asian text font";
@@ -736,10 +744,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_EAST_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 54  );
-        Size = MAP_APPFONT ( 80 , 10 );
-        Text = "Schr~iftart";
-        Text [ english_us ] = "Font";
+        Pos = MAP_APPFONT ( 12 , 54 );
+        Size = MAP_APPFONT ( 80 , 8 );
+        Text = "Sch~riftart";
+        Text [ ENGLISH ] = "F~ont";
+        Text [ english_us ] = "F~ont";
         Text[ portuguese ] = "Ti~po de letra";
         Text[ russian ] = "Òèï øðèôòà";
         Text[ greek ] = "Ãñáììáôïóå~éñÜ";
@@ -763,16 +772,17 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_EAST_NAME
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 12 , 65  );
-        Size = MAP_APPFONT ( 80 , 48 );
+        Pos = MAP_APPFONT ( 12 , 65 );
+        Size = MAP_APPFONT ( 80 , 120 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_EAST_STYLE
     {
-        Pos = MAP_APPFONT ( 98 , 54  );
-        Size = MAP_APPFONT ( 40 , 10 );
-        Text = "Schri~ftschnitt";
+        Pos = MAP_APPFONT ( 96 , 54 );
+        Size = MAP_APPFONT ( 40 , 8 );
+        Text = "Schr~iftschnitt";
+        Text [ ENGLISH ] = "T~ypeface";
         Text [ english_us ] = "T~ypeface";
         Text[ portuguese ] = "~Estilo";
         Text[ russian ] = "Íà÷åðòàíèå";
@@ -797,7 +807,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ComboBox LB_EAST_STYLE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 98 , 65  );
+        Pos = MAP_APPFONT ( 96 , 65 );
         Size = MAP_APPFONT ( 40 , 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -958,10 +968,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_EAST_SIZE
     {
-        Pos = MAP_APPFONT ( 144 , 54  );
-        Size = MAP_APPFONT ( 38 , 10 );
-        Text = "Schrif~tgrad";
-        Text [ english_us ] = "Size";
+        Pos = MAP_APPFONT ( 140 , 54  );
+        Size = MAP_APPFONT ( 38 , 8 );
+        Text = "Schri~ftgrad";
+        Text [ ENGLISH ] = "S~ize";
+        Text [ english_us ] = "S~ize";
         Text[ portuguese ] = "~Tamanho";
         Text[ russian ] = "Ðàçìåð øðèôòà";
         Text[ greek ] = "ÌÝãåèïò";
@@ -985,17 +996,18 @@ TabPage RID_SVXPAGE_CHAR_NAME
     MetricBox LB_EAST_SIZE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 144 , 65  );
+        Pos = MAP_APPFONT ( 140 , 65 );
         Size = MAP_APPFONT ( 38 , 48 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_EAST_LANG
     {
-        Pos = MAP_APPFONT ( 188 , 54  );
-        Size = MAP_APPFONT ( 66 , 10 );
-        Text = "Sprach~e";
-        Text [ english_us ] = "Language";
+        Pos = MAP_APPFONT ( 182 , 54 );
+        Size = MAP_APPFONT ( 66 , 8 );
+        Text = "Spr~ache";
+        Text [ ENGLISH ] = "L~anguage";
+        Text [ english_us ] = "L~anguage";
         Text[ portuguese ] = "~Língua";
         Text[ russian ] = "ßçûê";
         Text[ greek ] = "Ãëþóóá";
@@ -1019,8 +1031,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_EAST_LANG
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 188 , 65  );
-        Size = MAP_APPFONT ( 66 , 72 );
+        Pos = MAP_APPFONT ( 182 , 65 );
+        Size = MAP_APPFONT ( 66 , 100 );
         TabStop = TRUE;
         Sort = TRUE ;
         DropDown = TRUE;
@@ -1028,7 +1040,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     Window WIN_CHAR_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 129  ) ;
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
         Size = MAP_APPFONT ( 248 , 39 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
@@ -1088,10 +1100,11 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     FixedText FT_COLOR2
     {
-        Pos = MAP_APPFONT ( 12 , 94  );
+        Pos = MAP_APPFONT ( 12 , 94 );
         Size = MAP_APPFONT ( 58 , 8 );
         Text = "Schriftfar~be";
-        Text [ english_us ] = "Font ~Color" ;
+        Text [ ENGLISH ] = "Font ~color" ;
+        Text [ english_us ] = "Font ~color" ;
         Text[ portuguese ] = "~Cor da letra";
         Text[ russian ] = "Öâåò øðèôòà";
         Text[ greek ] = "×ñþìá ãñáììáôïóåéñÜò";
@@ -1115,8 +1128,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
     ListBox LB_COLOR2
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 12 , 105  );
-        Size = MAP_APPFONT ( 58 , 72 );
+        Pos = MAP_APPFONT ( 12 , 105 );
+        Size = MAP_APPFONT ( 58 , 100 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
@@ -1181,10 +1194,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     Hide = TRUE ;
     FixedText FT_UNDERLINE
     {
-        Pos = MAP_APPFONT( 6, 3 );
-        Size = MAP_APPFONT( 68, 10 );
+        Pos = MAP_APPFONT( 12 , 6 );
+        Size = MAP_APPFONT( 68 , 8 );
         Text = "~Unterstreichung";
-        Text [ english_us ] = "Underlining" ;
+        Text [ ENGLISH ] = "~Underlining" ;
+        Text [ english_us ] = "~Underlining" ;
         Text[ portuguese ] = "~Sublinhado";
         Text[ russian ] = "Ïîä÷åðêèâàíèå";
         Text[ greek ] = "~ÕðïãñÜììéóç";
@@ -1208,7 +1222,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_UNDERLINE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 14  );
+        Pos = MAP_APPFONT ( 12 , 17 );
         Size = MAP_APPFONT ( 68 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -1252,413 +1266,414 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Wave (Bold)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
             < "Double Wave"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "(sem)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Simples" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Duplo" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Negrito"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Pontilhado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Pontilhado (negrito)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Traço"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Traço (negrito)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Traço longo"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Traço longo (negrito)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Ponto e traço"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Ponto e traço (negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Ponto ponto traço"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Ponto ponto traço (negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Ondulado"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Ondulado (negrito)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Ondulado duplo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Simples" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Duplo" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Negrito"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pontilhado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Pontilhado (negrito)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Traço"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Traço (negrito)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Traço longo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Traço longo (negrito)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Ponto e traço"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Ponto e traço (negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Ponto ponto traço"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Ponto ponto traço (negrito)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Ondulado"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Ondulado (negrito)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ondulado duplo"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ russian ] =
+        {
             < "(Áåç)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Îáû÷íîå" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Äâîéíîå" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Æèðíîå"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Ïóíêòèð" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Ïóíêòèð (æèðíûé)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Øòðèõè"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Øòðèõ (æèðíûé)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Øòðèõ (äëèííûé)"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Øòðèõ (äëèííûé, æèðíûé)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Òî÷êà øòðèõ"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Òî÷êà øòðèõ (æèðíûé)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Òî÷êà òî÷êà øòðèõ"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Òî÷êà òî÷êà øòðèõ (æèðíûé)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Âîëíà"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Âîëíà (æèðíàÿ)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Äâîéíàÿ âîëíà"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Îáû÷íîå" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Äâîéíîå" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Æèðíîå"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Ïóíêòèð" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Ïóíêòèð (æèðíûé)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Øòðèõè"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Øòðèõ (æèðíûé)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Øòðèõ (äëèííûé)"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Øòðèõ (äëèííûé, æèðíûé)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Òî÷êà øòðèõ"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Òî÷êà øòðèõ (æèðíûé)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Òî÷êà òî÷êà øòðèõ"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Òî÷êà òî÷êà øòðèõ (æèðíûé)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Âîëíà"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Âîëíà (æèðíàÿ)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Äâîéíàÿ âîëíà"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ greek ] =
+        {
             < "(×ùñßò)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "ÁðëÜ" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "ÄéðëÜ" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "¸íôïíá"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "ÄéÜóôéêôï" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "ÄéÜóôéêôï (¸íôïíá)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Ðáýëá"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "ÌåãÜëç ðáýëá"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "ÌåãÜëç ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Ôåëåßá - Ðáýëá"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Ôåëåßá - Ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Ôåëåßá - Ôåëåßá - Ðáýëá"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Ôåëåßá - Ôåëåßá - Ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "ÊõìáôéóôÞ ðáýëá"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "ÊõìáôéóôÞ ðáýëá (Ýíôïíá)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "ÊõìáôéóôÞ ðáýëá (äéðëÞ)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "ÁðëÜ" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "ÄéðëÜ" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "¸íôïíá"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "ÄéÜóôéêôï" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "ÄéÜóôéêôï (¸íôïíá)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Ðáýëá"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "ÌåãÜëç ðáýëá"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "ÌåãÜëç ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Ôåëåßá - Ðáýëá"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Ôåëåßá - Ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Ôåëåßá - Ôåëåßá - Ðáýëá"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Ôåëåßá - Ôåëåßá - Ðáýëá (¸íôïíá)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "ÊõìáôéóôÞ ðáýëá"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "ÊõìáôéóôÞ ðáýëá (Ýíôïíá)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "ÊõìáôéóôÞ ðáýëá (äéðëÞ)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "(Zonder)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Enkel" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Dubbel" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Vet"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Stippellijn" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Stippellijn vet" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Streepje"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Streepje vet"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Streepje lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Streepje lang vet"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punt streepje"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punt streepje vet"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punt punt streepje"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punt punt streepje vet"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Golf"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Golf vet"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Golf dubbel"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Enkel" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Dubbel" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Vet"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Stippellijn" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Stippellijn vet" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Streepje"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Streepje vet"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Streepje lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Streepje lang vet"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Punt streepje"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punt streepje vet"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Punt punt streepje"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punt punt streepje vet"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Golf"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Golf vet"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Golf dubbel"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ french ] =
+        {
             < "(Sans)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Simple" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Double" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Gras"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Pointillé" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Pointillé gras" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Tiret"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Tiret gras"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Tiret long"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Tiret gras long"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Point tiret"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Point tiret gras"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Point point tiret"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Point point tiret gras"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Ondulation"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Ondulation grasse"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Ondulation double"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Simple" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Double" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Gras"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pointillé" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Pointillé gras" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Tiret"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Tiret gras"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Tiret long"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Tiret gras long"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Point tiret"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Point tiret gras"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Point point tiret"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Point point tiret gras"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Ondulation"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Ondulation grasse"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ondulation double"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "(Sin)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Sencillo" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doble" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Negrita"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punteado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punteado negrita" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Trazo"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Trazo negrita"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Trazo largo"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Trazo negrita largo"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punto trazo"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punto punto trazo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Ondulada"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Ondulada negrita"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Sencillo" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Doble" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Negrita"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Punteado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Punteado negrita" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Trazo"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Trazo negrita"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Trazo largo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Trazo negrita largo"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Punto trazo"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Punto punto trazo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Ondulada"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Ondulada negrita"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ italian ] =
+        {
             < "(senza)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Semplice" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doppia" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Grassetto"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punto" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punto grassetto" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Tratto"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Tratto grassetto"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Tratto lungo"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Tratto lungo grassetto"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punto tratto"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punto tratto grassetto"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punto punto tratto"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punto punto tratto grassetto"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Ondulato"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Ondulato grassetto"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Ondulato doppio"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Semplice" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Doppia" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Grassetto"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Punto" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Punto grassetto" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Tratto"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Tratto grassetto"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Tratto lungo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Tratto lungo grassetto"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Punto tratto"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punto tratto grassetto"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Punto punto tratto"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punto punto tratto grassetto"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Ondulato"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Ondulato grassetto"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ondulato doppio"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ danish ] =
+        {
             < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Enkelt" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Dobbelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fed"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punkteret" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punkteret (fed)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Stiplet"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Stiplet (fed)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Stiplet lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Stiplet lang (fed)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Prik streg"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Prik streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Prik prik streg"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Prik prik streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Bølge"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Bølge (fed)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Dobbelt bølge"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Enkelt" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Dobbelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Fed"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Punkteret" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Punkteret (fed)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Stiplet"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Stiplet (fed)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Stiplet lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Stiplet lang (fed)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Prik streg"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Prik streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Prik prik streg"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Prik prik streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Bølge"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Bølge (fed)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Dobbelt bølge"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "(Utan)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Enkel" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Dubbel" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fet"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Prickar" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Prickar fet" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Streck"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Streck fet"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Långt streck"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Långt streck fet"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Prick streck"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Prickat streck fet"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Prick prick streck"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Prick prick streck fet"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Våg"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Våg fet"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Dubbel våg"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Enkel" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Dubbel" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Fet"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Prickar" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Prickar fet" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Streck"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Streck fet"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Långt streck"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Långt streck fet"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Prick streck"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Prickat streck fet"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Prick prick streck"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Prick prick streck fet"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Våg"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Våg fet"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Dubbel våg"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ polish ] =
+        {
             < "(Brak)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Pojedyncze" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Podwójne" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Pogrubienie"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Kropki" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Kropki pogrubione" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Kreski"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Kreski pogrubione"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "D³ugie kreski"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "D³ugie pogrubione kreski"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Kropka-kreska"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Pogrubiona kropka-kreska"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Kropka-kropka-kreska"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Pogrubiona kropka-kropka-kreska"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Faliste"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Pogrubiona linia falista"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Podwójna linia falista"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Pojedyncze" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Podwójne" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Pogrubienie"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Kropki" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Kropki pogrubione" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Kreski"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Kreski pogrubione"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "D³ugie kreski"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "D³ugie pogrubione kreski"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Kropka-kreska"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Pogrubiona kropka-kreska"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Kropka-kropka-kreska"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Pogrubiona kropka-kropka-kreska"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Faliste"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Pogrubiona linia falista"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Podwójna linia falista"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Einfach" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Doppelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Fett"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Punktiert" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Punktiert fett" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Strich"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Strich fett"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Strich lang"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Strich fett lang"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Punkt Strich"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Punkt Punkt Strich"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punkt Punkt Strich fett"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Welle"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Welle fett"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Welle doppelt"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "(‚È‚µ)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "’Pü" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "“ñdü" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "‘¾ü"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "“_ü" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "‘¾‚¢“_ü" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "”jü"; CHRDLG_UNDERLINE_DASH; > ;
-        < "‘¾‚¢”jü"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "’·‚¢”jü"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "‘¾’·‚¢”jü"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "ˆê“_½ü"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "‘¾‚¢ˆê“_½ü"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "“ñ“_½ü"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "‘¾‚¢“ñ“_½ü"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "”gü"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "‘¾‚¢”gü"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "“ñd”gü"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "’Pü" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "“ñdü" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "‘¾ü"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "“_ü" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "‘¾‚¢“_ü" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "”jü"; CHRDLG_UNDERLINE_DASH; > ;
+            < "‘¾‚¢”jü"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "’·‚¢”jü"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "‘¾’·‚¢”jü"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "ˆê“_½ü"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "‘¾‚¢ˆê“_½ü"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "“ñ“_½ü"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "‘¾‚¢“ñ“_½ü"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "”gü"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "‘¾‚¢”gü"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "“ñd”gü"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ korean ] =
+        {
             < "(¾øÀÌ)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "º¸Åë" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "´õºí" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "±½Àº"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Á¡" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Á¡ (±½Àº)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "¼±"; CHRDLG_UNDERLINE_DASH; > ;
-        < "¼± (±½Àº)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "±ä ¼±"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "±ä ¼±(±½Àº)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "ÀÏÁ¡ ¼â¼±"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "ÀÏÁ¡ ¼â¼± (±½Àº)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "ÀÌÁ¡ ¼â¼±"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "ÀÌÁ¡ ¼â¼± (±½Àº)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "¹Ýº¹ ±âÈ£"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "¹Ýº¹ ±âÈ£ (±½Àº)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "¹Ýº¹ ±âÈ£ (ÀÌÁß)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "º¸Åë" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "´õºí" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "±½Àº"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Á¡" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Á¡ (±½Àº)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "¼±"; CHRDLG_UNDERLINE_DASH; > ;
+            < "¼± (±½Àº)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "±ä ¼±"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "±ä ¼±(±½Àº)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "ÀÏÁ¡ ¼â¼±"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "ÀÏÁ¡ ¼â¼± (±½Àº)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "ÀÌÁ¡ ¼â¼±"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "ÀÌÁ¡ ¼â¼± (±½Àº)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "¹Ýº¹ ±âÈ£"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "¹Ýº¹ ±âÈ£ (±½Àº)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "¹Ýº¹ ±âÈ£ (ÀÌÁß)"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "(ÎÞ)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "µ¥Ïß" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Ë«Ïß" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "´ÖÌå"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "µãÏß" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "µãÏß´ÖÌå" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "»®Ïß"; CHRDLG_UNDERLINE_DASH; > ;
-        < "ÏÂ»®Ïß´ÖÌå"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "³¤»®Ïß"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "ÏÂ»®Ïß´Ö³¤Ìå"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "µã»®Ïß"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "µã»®Ïß´ÖÌå"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Ë«µã»®Ïß"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Ë«µã»®Ïß´ÖÌå"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "²¨ÀËÏß"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "ÇúÏß´ÖÌå"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Ë«²¨ÀËÏß"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "µ¥Ïß" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Ë«Ïß" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "´ÖÌå"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "µãÏß" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "µãÏß´ÖÌå" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "»®Ïß"; CHRDLG_UNDERLINE_DASH; > ;
+            < "ÏÂ»®Ïß´ÖÌå"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "³¤»®Ïß"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "ÏÂ»®Ïß´Ö³¤Ìå"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "µã»®Ïß"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "µã»®Ïß´ÖÌå"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Ë«µã»®Ïß"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Ë«µã»®Ïß´ÖÌå"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "²¨ÀËÏß"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "ÇúÏß´ÖÌå"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ë«²¨ÀËÏß"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "(µL)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "³æ½u" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Âù½u" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "²ÊÅé"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "ÂI½u" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "ÂI½u²ÊÅé" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "¦E½u"; CHRDLG_UNDERLINE_DASH; > ;
-        < "¦E½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "ªø¦E½u"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "¦E½u²ÊªøÅé"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "ÂI¹º½u"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "ÂI¹º½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "ÂùÂI¹º½u"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "ÂùÂI¹º½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "¦±½u"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "¦±½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Âù¦±½u"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "³æ½u" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Âù½u" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "²ÊÅé"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "ÂI½u" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "ÂI½u²ÊÅé" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "¦E½u"; CHRDLG_UNDERLINE_DASH; > ;
+            < "¦E½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "ªø¦E½u"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "¦E½u²ÊªøÅé"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "ÂI¹º½u"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "ÂI¹º½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "ÂùÂI¹º½u"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "ÂùÂI¹º½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "¦±½u"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "¦±½u²ÊÅé"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Âù¦±½u"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "(Ohne)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Tek" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Çift" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Kalýn"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Noktalý" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Kalýn noktalý" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Çizgi"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Kalýn çizgi"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Uzun çizgi"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Kalýn uçun çizgi"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Nokta çizgi"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Kalýn nokta çizgi"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Nokta nokta çizgi"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Kalýn nokta nokta çizgi"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Dalga"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Kalýn dalga"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Çift dalga"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Tek" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Çift" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Kalýn"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Noktalý" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Kalýn noktalý" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Çizgi"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Kalýn çizgi"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Uzun çizgi"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Kalýn uçun çizgi"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Nokta çizgi"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Kalýn nokta çizgi"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Nokta nokta çizgi"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Kalýn nokta nokta çizgi"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Dalga"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Kalýn dalga"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Çift dalga"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "(ÈÏæä)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "ãÝÑÏ" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "ãÒÏæÌ" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "ÚÑíÖ"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "ãäÞØ" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "ãäÞØ ÚÑíÖ" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "ÔÑØÉ"; CHRDLG_UNDERLINE_DASH; > ;
-        < "ÔÑØÉ ÚÑíÖÉ"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "ÔÑØÉ ØæíáÉ"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "ÔÑØÉ ÚÑíÖÉ ØæíáÉ"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "äÞØÉ æÔÑØÉ"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "äÞØÉ æÔÑØÉ (ÚÑíÖÉ)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "äÞØÉ æäÞØÉ æÔÑØÉ"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "äÞØÉ æäÞØÉ æÔÑØÉ (ÚÑíÖÉ)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "ãæÌÉ"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "ãæÌÉ ÚÑíÖÉ"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "ãæÌÉ ãÒÏæÌÉ"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "ãÝÑÏ" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "ãÒÏæÌ" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "ÚÑíÖ"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "ãäÞØ" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "ãäÞØ ÚÑíÖ" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "ÔÑØÉ"; CHRDLG_UNDERLINE_DASH; > ;
+            < "ÔÑØÉ ÚÑíÖÉ"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "ÔÑØÉ ØæíáÉ"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "ÔÑØÉ ÚÑíÖÉ ØæíáÉ"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "äÞØÉ æÔÑØÉ"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "äÞØÉ æÔÑØÉ (ÚÑíÖÉ)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "äÞØÉ æäÞØÉ æÔÑØÉ"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "äÞØÉ æäÞØÉ æÔÑØÉ (ÚÑíÖÉ)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "ãæÌÉ"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "ãæÌÉ ÚÑíÖÉ"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "ãæÌÉ ãÒÏæÌÉ"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "(Sin)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Sencillo" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Doble" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Negrita"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Punteado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Punteado negrita" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Trazo"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Trazo negrita"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Trazo largo"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Trazo negrita largo"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Punto trazo"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Punto punto trazo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Ondulada"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Ondulada negrita"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Sencillo" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Doble" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Negrita"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Punteado" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Punteado negrita" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Trazo"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Trazo negrita"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Trazo largo"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Trazo negrita largo"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Punto trazo"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Punto punto trazo"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Punto punto trazo negrita"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Ondulada"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Ondulada negrita"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Ondulada doble"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "(Ilman)" ; CHRDLG_UNDERLINE_NONE ; > ;
-        < "Yksittäinen" ; CHRDLG_UNDERLINE_SINGLE ; > ;
-        < "Kaksinkertainen" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
-        < "Lihavointi"; CHRDLG_UNDERLINE_BOLD; > ;
-        < "Pisteet" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-        < "Pisteet (lihavointi)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-        < "Väliviiva"; CHRDLG_UNDERLINE_DASH; > ;
-        < "Väliviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
-        < "Pitkä ajatusviiva"; CHRDLG_UNDERLINE_LONGDASH; > ;
-        < "Pitkä ajatusviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
-        < "Piste-viiva"; CHRDLG_UNDERLINE_DASHDOT; > ;
-        < "Piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
-        < "Piste-piste-viiva"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-        < "Piste-piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
-        < "Aaltoviiva"; CHRDLG_UNDERLINE_WAVE; > ;
-        < "Aaltoviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
-        < "Kaksinkertainen aaltoviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
-    };
+            < "Yksittäinen" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Kaksinkertainen" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Lihavointi"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pisteet" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Pisteet (lihavointi)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Väliviiva"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Väliviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Pitkä ajatusviiva"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Pitkä ajatusviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Piste-viiva"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Piste-piste-viiva"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Piste-piste-viiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Aaltoviiva"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Aaltoviiva (lihavointi)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Kaksinkertainen aaltoviiva"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
     };
     FixedText FT_UNDERLINE_COLOR
     {
-        Pos = MAP_APPFONT ( 80 , 3  );
-        Size = MAP_APPFONT ( 68 , 10 );
+        Pos = MAP_APPFONT ( 86 , 6 );
+        Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Farbe";
-        Text [ english_us ] = "Color";
+        Text [ ENGLISH ] = "~Color";
+        Text [ english_us ] = "~Color";
         Text[ portuguese ] = "Co~r";
         Text[ russian ] = "Öâåò";
         Text[ greek ] = "×ñþìá";
@@ -1682,17 +1697,18 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_UNDERLINE_COLOR
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 80 , 14  );
-        Size = MAP_APPFONT ( 68 , 72 );
+        Pos = MAP_APPFONT ( 86 , 17 );
+        Size = MAP_APPFONT ( 68 , 100 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_STRIKEOUT
     {
-        Pos = MAP_APPFONT ( 6 , 32  );
-        Size = MAP_APPFONT ( 68 , 10 );
+        Pos = MAP_APPFONT ( 12 , 35 );
+        Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Durchstreichung";
-        Text [ english_us ] = "Strikethrough" ;
+        Text [ ENGLISH ] = "~Strikethrough" ;
+        Text [ english_us ] = "~Strikethrough" ;
         Text[ portuguese ] = "~Rasurado";
         Text[ russian ] = "Çà÷åðêèâàíèå";
         Text[ greek ] = "~ÄéáêñéôÞ äéáãñáöÞ";
@@ -1716,7 +1732,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_STRIKEOUT
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 43  );
+        Pos = MAP_APPFONT ( 12 , 46 );
         Size = MAP_APPFONT ( 68 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -1738,194 +1754,195 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "With /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
             < "With X" ; CHRDLG_STRIKEOUT_X ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "(sem)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Simples" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Duplo" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Negrito" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Com /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Com X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Simples" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Duplo" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Negrito" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Com /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Com X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "(Áåç)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Îáû÷íîå" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Äâîéíîå" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Æèðíîå" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Ñ /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Ñ X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Îáû÷íîå" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Äâîéíîå" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Æèðíîå" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Ñ /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Ñ X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "(×ùñßò)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "ÁðëÜ" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "ÄéðëÜ" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "¸íôïíá" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Ìå /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Ìå X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "ÁðëÜ" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "ÄéðëÜ" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "¸íôïíá" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Ìå /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Ìå X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "(Zonder)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Enkel" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Dubbel" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Vet" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Met /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Met X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Enkel" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Dubbel" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Vet" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Met /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Met X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ french ] =
+        {
             < "(Sans)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Simple" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Double" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Gras" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Avec /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Avec X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Simple" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Double" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Gras" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Avec /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Avec X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "(Sin)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Sencillo" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doble" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Negrita" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Sencillo" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Doble" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Negrita" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "(senza)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Semplice" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doppia" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Grassetto" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Semplice" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Doppia" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Grassetto" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Enkelt" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Dobbelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fed" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Med /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Enkelt" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Dobbelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Fed" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Med /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "(Utan)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Enkel" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Dubbel" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fet" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Med /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Med X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Enkel" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Dubbel" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Fet" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Med /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Med X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "(Brak)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Pojedyncze" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Podwójne" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Pogrubienie" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Z /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Z X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Pojedyncze" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Podwójne" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Pogrubienie" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Z /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Z X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Einfach" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Doppelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Fett" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Mit /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Mit X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "(‚È‚µ)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "’Pü" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "“ñdü" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "‘¾ü" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "/ ‚Å" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "X ‚Å" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "’Pü" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "“ñdü" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "‘¾ü" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "/ ‚Å" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "X ‚Å" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "(¾øÀÌ)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "º¸Åë" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "´õºí" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "±½Àº" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "ÇÔ²² /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "ÇÔ²² X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "º¸Åë" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "´õºí" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "±½Àº" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "ÇÔ²² /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "ÇÔ²² X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "(ÎÞ)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "µ¥Ïß" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Ë«Ïß" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "´ÖÌå" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "´ø /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "´ø X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "µ¥Ïß" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Ë«Ïß" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "´ÖÌå" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "´ø /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "´ø X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "(µL)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "³æ½u" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Âù½u" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "²ÊÅé" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "±a /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "±a X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "³æ½u" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Âù½u" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "²ÊÅé" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "±a /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "±a X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "(Ohne)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Basit" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Çift" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Kalýn" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "/ ile" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "X ile" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Basit" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Çift" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Kalýn" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "/ ile" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "X ile" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "(ÈÏæä)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "ãÝÑÏ" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "ãÒÏæÌ" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "ÚÑíÖ" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "ÈÜ /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "ÈÜ X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "ãÝÑÏ" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "ãÒÏæÌ" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "ÚÑíÖ" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "ÈÜ /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "ÈÜ X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "(Sin)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Sencillo" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Doble" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Negrita" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Sencillo" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Doble" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Negrita" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Con /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "Con X" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "(Ilman)" ; CHRDLG_STRIKEOUT_NONE ; > ;
-        < "Yksittäinen" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
-        < "Kaksinkertainen" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
-        < "Lihavointi" ; CHRDLG_STRIKEOUT_BOLD ; > ;
-        < "Kenoviivoilla" ; CHRDLG_STRIKEOUT_SLASH ; > ;
-        < "X-kirjaimilla" ; CHRDLG_STRIKEOUT_X ; > ;
-    };
+            < "Yksittäinen" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+            < "Kaksinkertainen" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
+            < "Lihavointi" ; CHRDLG_STRIKEOUT_BOLD ; > ;
+            < "Kenoviivoilla" ; CHRDLG_STRIKEOUT_SLASH ; > ;
+            < "X-kirjaimilla" ; CHRDLG_STRIKEOUT_X ; > ;
+        };
     };
     CheckBox CB_INDIVIDUALWORDS
     {
-        Pos = MAP_APPFONT ( 80 , 45  );
+        Pos = MAP_APPFONT ( 86 , 48 );
         Size = MAP_APPFONT ( 68 , 10 );
-        Text = "~Wortweise";
-        Text [ english_us ] = "Individual ~words" ;
         TabStop = TRUE;
+        Text = "~Wortweise";
+        Text [ ENGLISH ] = "Individual ~words" ;
+        Text [ english_us ] = "Individual ~words" ;
         Text[ portuguese ] = "Só p~alavras";
         Text[ russian ] = "Òîëüêî ñëîâà";
         Text[ greek ] = "ËÝîç ðñïò ëÝîç";
@@ -1948,9 +1965,10 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     FixedText FT_EMPHASIS
     {
-        Pos = MAP_APPFONT ( 6 , 61  );
-        Size = MAP_APPFONT ( 68 , 10 );
+        Pos = MAP_APPFONT ( 12 , 64 );
+        Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Betonungszeichen";
+        Text [ ENGLISH ] = "Emp~hasis mark" ;
         Text [ english_us ] = "Emp~hasis mark" ;
         Text[ portuguese ] = "Caracteres de a~centuação";
         Text[ russian ] = "Çíàê óäàðåíèÿ";
@@ -1975,13 +1993,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_EMPHASIS
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 72  );
+        Pos = MAP_APPFONT ( 12 , 75 );
         Size = MAP_APPFONT ( 68 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList =
         {
-            < "(keins)" ; default ; > ;
+            < "(Ohne)" ; default ; > ;
             < "Punkt" ; default ; > ;
             < "Kreis" ; default ; > ;
             < "Scheibe" ; default ; > ;
@@ -1995,181 +2013,182 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Disc" ; default ; > ;
             < "Accent" ; default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
-            < "(keins)" ; default ; > ;
-        < "Punkt" ; default ; > ;
-        < "Kreis" ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
-    };
-    StringList [ english_us ] =
-    {
+        StringList [ language_user1 ] =
+        {
+            < "(ohne)" ; default ; > ;
+            < "Punkt" ; default ; > ;
+            < "Kreis" ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "(None)" ; default ; > ;
-        < "Dot" ; default ; > ;
-        < "Circle" ; default ; > ;
-        < "Disc" ; default ; > ;
-        < "Accent" ; default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Dot" ; default ; > ;
+            < "Circle" ; default ; > ;
+            < "Disc" ; default ; > ;
+            < "Accent" ; default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "(sem)" ; default ; > ;
-        < "Ponto" ; default ; > ;
-        < "Círculo" ; default ; > ;
-        < "Disco" ; default ; > ;
-        < "Acento" ; default ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Ponto" ; default ; > ;
+            < "Círculo" ; default ; > ;
+            < "Disco" ; default ; > ;
+            < "Acento" ; default ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "(Áåç)" ; default ; > ;
-        < "Òî÷êà" ; default ; > ;
-        < "Êðóæîê" ; default ; > ;
-        < "Äèñê" ; default ; > ;
-        < "Àêöåíò" ; default ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Òî÷êà" ; default ; > ;
+            < "Êðóæîê" ; default ; > ;
+            < "Äèñê" ; default ; > ;
+            < "Àêöåíò" ; default ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "(êáíÝíá)" ; default ; > ;
-        < "Êïõêêßäá" ; default ; > ;
-        < "Êýêëïò" ; default ; > ;
-        < "Äßóêïò" ; default ; > ;
-        < "Ôïíéóìüò" ; default ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "Êïõêêßäá" ; default ; > ;
+            < "Êýêëïò" ; default ; > ;
+            < "Äßóêïò" ; default ; > ;
+            < "Ôïíéóìüò" ; default ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "(geen)" ; default ; > ;
-        < "Punt" ; default ; > ;
-        < "Cirkel" ; default ; > ;
-        < "Schijf" ; default ; > ;
-        < "Accent  " ; default ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Punt" ; default ; > ;
+            < "Cirkel" ; default ; > ;
+            < "Schijf" ; default ; > ;
+            < "Accent  " ; default ; > ;
+        };
+        StringList [ french ] =
+        {
             < "(aucun)" ; default ; > ;
-        < "Point" ; default ; > ;
-        < "Cercle" ; default ; > ;
-        < "Disque" ; default ; > ;
-        < "Accent" ; default ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Point" ; default ; > ;
+            < "Cercle" ; default ; > ;
+            < "Disque" ; default ; > ;
+            < "Accent" ; default ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "(Sin)" ; default ; > ;
-        < "Punto" ; default ; > ;
-        < "Círculo" ; default ; > ;
-        < "Disco" ; default ; > ;
-        < "Acento" ; default ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Punto" ; default ; > ;
+            < "Círculo" ; default ; > ;
+            < "Disco" ; default ; > ;
+            < "Acento" ; default ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "(senza)" ; default ; > ;
-        < "Punto" ; default ; > ;
-        < "cerchio" ; default ; > ;
-        < "Disco" ; default ; > ;
-        < "Accento" ; default ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Punto" ; default ; > ;
+            < "cerchio" ; default ; > ;
+            < "Disco" ; default ; > ;
+            < "Accento" ; default ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "(Ohne)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "°" ; default ; > ;
+            < "." ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "(Inget)" ; default ; > ;
-        < "Punkt" ; default ; > ;
-        < "Cirkel" ; default ; > ;
-        < "Skiva" ; default ; > ;
-        < "Accent" ; default ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Punkt" ; default ; > ;
+            < "Cirkel" ; default ; > ;
+            < "Skiva" ; default ; > ;
+            < "Accent" ; default ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "(brak)" ; default ; > ;
-        < "Kropka" ; default ; > ;
-        < "Kó³ko" ; default ; > ;
-        < "Dysk" ; default ; > ;
-        < "Akcent" ; default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Kropka" ; default ; > ;
+            < "Kó³ko" ; default ; > ;
+            < "Dysk" ; default ; > ;
+            < "Akcent" ; default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "(Ohne)" ; default ; > ;
-        < "?" ; default ; > ;
-        < "." ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "?" ; default ; > ;
+            < "." ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "(‚È‚µ)" ; default ; > ;
-        < "•ŠÛ" ; default ; > ;
-        < "ŠÛ" ; default ; > ;
-        < "’†•" ; default ; > ;
-        < "±¸¾ÝÄ" ; default ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "•ŠÛ" ; default ; > ;
+            < "ŠÛ" ; default ; > ;
+            < "’†•" ; default ; > ;
+            < "±¸¾ÝÄ" ; default ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "(¾øÀÌ)" ; default ; > ;
-        < "Á¡" ; default ; > ;
-        < "¿ø" ; default ; > ;
-        < "½½¶óÀÌ½º" ; default ; > ;
-        < "¾×¼¾Æ®" ; default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "Á¡" ; default ; > ;
+            < "¿ø" ; default ; > ;
+            < "½½¶óÀÌ½º" ; default ; > ;
+            < "¾×¼¾Æ®" ; default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "(ÎÞ)" ; default ; > ;
-        < "µã" ; default ; > ;
-        < "Ô²ÐÎ" ; default ; > ;
-        < "´óÔ²µã" ; default ; > ;
-        < "ÖØÒô·ûºÅ" ; default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "µã" ; default ; > ;
+            < "Ô²ÐÎ" ; default ; > ;
+            < "´óÔ²µã" ; default ; > ;
+            < "ÖØÒô·ûºÅ" ; default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "(µL)" ; default ; > ;
-        < "ÂI" ; default ; > ;
-        < "¶ê§Î" ; default ; > ;
-        < "¤j¶êÂI" ; default ; > ;
-        < "­«­µ²Å¸¹" ; default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "ÂI" ; default ; > ;
+            < "¶ê§Î" ; default ; > ;
+            < "¤j¶êÂI" ; default ; > ;
+            < "­«­µ²Å¸¹" ; default ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "(Ohne)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "°" ; default ; > ;
+            < "." ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "(ÈÏæä)" ; default ; > ;
-        < "äÞØÉ" ; default ; > ;
-        < "ÏÇÆÑÉ" ; default ; > ;
-        < "ÞÑÕ" ; default ; > ;
-        < "ÚáÇãÉ äØÞíÉ " ; default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "äÞØÉ" ; default ; > ;
+            < "ÏÇÆÑÉ" ; default ; > ;
+            < "ÞÑÕ" ; default ; > ;
+            < "ÚáÇãÉ äØÞíÉ " ; default ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "(Sin)" ; default ; > ;
-        < "Dot" ; default ; > ;
-        < "Círculo" ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Dot" ; default ; > ;
+            < "Círculo" ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "(Ei mitään)" ; default ; > ;
-        < "Pilkku" ; default ; > ;
-        < "Ympyrä" ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
-    };
+            < "Pilkku" ; default ; > ;
+            < "Ympyrä" ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 80 , 61  );
-        Size = MAP_APPFONT ( 68 , 10 );
+        Pos = MAP_APPFONT ( 86 , 64 );
+        Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Position";
-        Text [ english_us ] = "Position" ;
+        Text [ ENGLISH ] = "~Position" ;
+        Text [ english_us ] = "~Position" ;
         Text[ portuguese ] = "~Posição";
         Text[ russian ] = "Ïîçèöèÿ";
         Text[ greek ] = "ÈÝóç";
@@ -2193,7 +2212,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     ListBox LB_POSITION
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 80 , 72  );
+        Pos = MAP_APPFONT ( 86 , 75 );
         Size = MAP_APPFONT ( 68 , 48 );
         TabStop = TRUE;
         DropDown = TRUE;
@@ -2207,113 +2226,114 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Above text" ; CHRDLG_POSITION_OVER ; > ;
             < "Below text" ; CHRDLG_POSITION_UNDER ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Über Text" ; CHRDLG_POSITION_OVER ; > ;
-        < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Superior ao texto" ; CHRDLG_POSITION_OVER ; > ;
-        < "Inferior ao texto" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Inferior ao texto" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "Íàä òåêñòîì" ; CHRDLG_POSITION_OVER ; > ;
-        < "Ïîä òåêñòîì" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Ïîä òåêñòîì" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "ÐÜíù áðü êåßìåíï" ; CHRDLG_POSITION_OVER ; > ;
-        < "ÊÜôù áðü ôï êåßìåíï" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "ÊÜôù áðü ôï êåßìåíï" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Boven tekst" ; CHRDLG_POSITION_OVER ; > ;
-        < "Onder tekst" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Onder tekst" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ french ] =
+        {
             < "Au-dessus du texte" ; CHRDLG_POSITION_OVER ; > ;
-        < "Sous le texte" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Sous le texte" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Sobre texto" ; CHRDLG_POSITION_OVER ; > ;
-        < "Debajo de texto" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Debajo de texto" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Sopra il testo" ; CHRDLG_POSITION_OVER ; > ;
-        < "Sotto il testo" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Sotto il testo" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Über Text" ; CHRDLG_POSITION_OVER ; > ;
-        < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Över text" ; CHRDLG_POSITION_OVER ; > ;
-        < "Under text" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Under text" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Nad tekstem" ; CHRDLG_POSITION_OVER ; > ;
-        < "Pod tekstem" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Pod tekstem" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "?ber Text" ; CHRDLG_POSITION_OVER ; > ;
-        < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "Ã·½Ä‚Ìã‚É" ; CHRDLG_POSITION_OVER ; > ;
-        < "Ã·½Ä‚Ì‰º‚É" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "Ã·½Ä‚Ì‰º‚É" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "ÅØ½ºÆ® À§¿¡" ; CHRDLG_POSITION_OVER ; > ;
-        < "ÅØ½ºÆ® ¹Ø¿¡" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "ÅØ½ºÆ® ¹Ø¿¡" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "ÎÄ×ÖÖ®ÉÏ" ; CHRDLG_POSITION_OVER ; > ;
-        < "ÎÄ×ÖÖ®ÏÂ" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "ÎÄ×ÖÖ®ÏÂ" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "¤å¦r¤§¤W" ; CHRDLG_POSITION_OVER ; > ;
-        < "¤å¦r¤§¤U" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "¤å¦r¤§¤U" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Über Text" ; CHRDLG_POSITION_OVER ; > ;
-        < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "ÝæÞ ÇáäÕ" ; CHRDLG_POSITION_OVER ; > ;
-        < "ÊÍÊ ÇáäÕ" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "ÊÍÊ ÇáäÕ" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Sobre texto" ; CHRDLG_POSITION_OVER ; > ;
-        < "Debajo de texto" ; CHRDLG_POSITION_UNDER ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Debajo de texto" ; CHRDLG_POSITION_UNDER ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Tekstin yläpuolella" ; CHRDLG_POSITION_OVER ; > ;
-        < "Tekstin alapuolella" ; CHRDLG_POSITION_UNDER ; > ;
-    };
+            < "Tekstin alapuolella" ; CHRDLG_POSITION_UNDER ; > ;
+        };
     };
     FixedText FT_EFFECTS
     {
-        Pos = MAP_APPFONT( 166, 3 );
-        Size = MAP_APPFONT( 88, 10 );
+        Pos = MAP_APPFONT( 166 , 6 );
+        Size = MAP_APPFONT( 82 , 8 );
         Text = "~Auszeichnungen";
-        Text [ english_us ] = "Effects" ;
+        Text [ ENGLISH ] = "~Effects" ;
+        Text [ english_us ] = "~Effects" ;
         Text[ portuguese ] = "~Efeitos";
         Text[ russian ] = "Ýôôåêòû âûäåëåíèÿ";
         Text[ greek ] = "ÅöÝ";
@@ -2336,20 +2356,28 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_EFFECTS2
     {
-        Pos = MAP_APPFONT ( 166 , 14  ) ;
-        Size = MAP_APPFONT ( 88 , 56 ) ;
+        Pos = MAP_APPFONT ( 166 , 17 ) ;
+        Size = MAP_APPFONT ( 82 , 56 ) ;
         DropDown = TRUE;
         StringList =
         {
-            < "Keine" ; Default ; > ;
+            < "(Ohne)" ; Default ; > ;
             < "Versalien" ; Default ; > ;
             < "Gemeine" ; Default ; > ;
             < "Titelschrift" ; Default ; > ;
             < "Kapitälchen" ; Default ; > ;
         };
+        StringList [ ENGLISH ] =
+        {
+            < "(None)" ; Default ; > ;
+            < "Capitals" ; Default ; > ;
+            < "Lowercase" ; Default ; > ;
+            < "Title" ; Default ; > ;
+            < "Small capitals" ; Default ; > ;
+        };
         StringList [ english_us ] =
         {
-            < "None" ; Default ; > ;
+            < "(None)" ; Default ; > ;
             < "Capitals" ; Default ; > ;
             < "Lowercase" ; Default ; > ;
             < "Title" ; Default ; > ;
@@ -2357,7 +2385,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ language_user1 ] =
         {
-                < "Keine" ; Default ; > ;
+            < "Keine" ; Default ; > ;
             < "Versalien" ; Default ; > ;
             < "Gemeine" ; Default ; > ;
             < "Titelschrift" ; Default ; > ;
@@ -2365,7 +2393,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ portuguese ] =
         {
-                < "Nenhum(a)" ; Default ; > ;
+            < "Nenhum(a)" ; Default ; > ;
             < "Maiúsculas" ; Default ; > ;
             < "Minúsculas" ; Default ; > ;
             < "Caracteres do título" ; Default ; > ;
@@ -2373,7 +2401,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ russian ] =
         {
-                < "Áåç" ; Default ; > ;
+            < "Áåç" ; Default ; > ;
             < "Ïðîïèñíûå" ; Default ; > ;
             < "Ñòðî÷íûå" ; Default ; > ;
             < "Òèòóëüíûé øðèôò" ; Default ; > ;
@@ -2381,7 +2409,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ greek ] =
         {
-                < "ÊáíÝíá" ; Default ; > ;
+            < "ÊáíÝíá" ; Default ; > ;
             < "Êåöáëáßá" ; Default ; > ;
             < "Ðåæïß ÷áñáêôÞñåò" ; Default ; > ;
             < "Ôßôëïò" ; Default ; > ;
@@ -2389,7 +2417,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ dutch ] =
         {
-                < "Geen" ; Default ; > ;
+            < "Geen" ; Default ; > ;
             < "Hoofdletters" ; Default ; > ;
             < "Kleine letters" ; Default ; > ;
             < "Titel" ; Default ; > ;
@@ -2397,7 +2425,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ french ] =
         {
-                < "Aucun(e)" ; Default ; > ;
+            < "Aucun(e)" ; Default ; > ;
             < "Majuscules" ; Default ; > ;
             < "Minuscules" ; Default ; > ;
             < "Caractères du titre" ; Default ; > ;
@@ -2405,7 +2433,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ spanish ] =
         {
-                < "Ninguno" ; Default ; > ;
+            < "Ninguno" ; Default ; > ;
             < "Mayúsculas" ; Default ; > ;
             < "Minúsculas" ; Default ; > ;
             < "Título" ; Default ; > ;
@@ -2413,7 +2441,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ italian ] =
         {
-                < "Nessuno" ; Default ; > ;
+            < "Nessuno" ; Default ; > ;
             < "Maiuscolo" ; Default ; > ;
             < "Minuscolo" ; Default ; > ;
             < "Titolo" ; Default ; > ;
@@ -2421,7 +2449,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-                < "Ingen" ; Default ; > ;
+            < "Ingen" ; Default ; > ;
             < "Store bogstaver" ; Default ; > ;
             < "Små bogstaver" ; Default ; > ;
             < "Titelskrift" ; Default ; > ;
@@ -2429,7 +2457,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ swedish ] =
         {
-                < "Inga" ; Default ; > ;
+            < "Inga" ; Default ; > ;
             < "Versaler" ; Default ; > ;
             < "Gemener" ; Default ; > ;
             < "Titel" ; Default ; > ;
@@ -2437,7 +2465,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ polish ] =
         {
-                < "Brak" ; Default ; > ;
+            < "Brak" ; Default ; > ;
             < "Wersaliki" ; Default ; > ;
             < "Ma³e litery" ; Default ; > ;
             < "Czcionka tytu³owa" ; Default ; > ;
@@ -2445,7 +2473,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ portuguese_brazilian ] =
         {
-                < "Keine" ; Default ; > ;
+            < "Keine" ; Default ; > ;
             < "Versalien" ; Default ; > ;
             < "Gemeine" ; Default ; > ;
             < "Titelschrift" ; Default ; > ;
@@ -2453,7 +2481,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ japanese ] =
         {
-                < "‚È‚µ" ; Default ; > ;
+            < "‚È‚µ" ; Default ; > ;
             < "‘å•¶Žš" ; Default ; > ;
             < "¬•¶Žš" ; Default ; > ;
             < "À²ÄÙ•¶Žš" ; Default ; > ;
@@ -2461,7 +2489,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ korean ] =
         {
-                < "¾øÀÌ" ; Default ; > ;
+            < "¾øÀÌ" ; Default ; > ;
             < "´ë¹®ÀÚ" ; Default ; > ;
             < "¼Ò¹®ÀÚ" ; Default ; > ;
             < "Á¦¸ñ" ; Default ; > ;
@@ -2469,7 +2497,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ chinese_simplified ] =
         {
-                < "ÎÞ" ; Default ; > ;
+            < "ÎÞ" ; Default ; > ;
             < "´óÐ´×ÖÄ¸" ; Default ; > ;
             < "Ð¡Ð´×ÖÄ¸" ; Default ; > ;
             < "±êÌâ×ÖÌå" ; Default ; > ;
@@ -2477,7 +2505,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ chinese_traditional ] =
         {
-                < "µL" ; Default ; > ;
+            < "µL" ; Default ; > ;
             < "¤j¼g¦r¥À" ; Default ; > ;
             < "¤p¼g¦r¥À" ; Default ; > ;
             < "¼ÐÃD¤å¦r" ; Default ; > ;
@@ -2485,7 +2513,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ turkish ] =
         {
-                < "Yok" ; Default ; > ;
+            < "Yok" ; Default ; > ;
             < "Büyük harflerle" ; Default ; > ;
             < "Küçük harflerle" ; Default ; > ;
             < "Baþlýk yazýtipi" ; Default ; > ;
@@ -2493,35 +2521,35 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ arabic ] =
         {
-                < "ÈÏæä" ; Default ; > ;
+            < "ÈÏæä" ; Default ; > ;
             < "ÃÍÑÝ ßÈíÑÉ" ; Default ; > ;
             < "ÃÍÑÝ ÕÛíÑÉ" ; Default ; > ;
             < "ÎØ ÚäæÇä" ; Default ; > ;
             < "ÍÑÝ ÈÏÇíÉ ÃßÈÑ" ; Default ; > ;
         };
-    StringList [ catalan ] =
-    {
+        StringList [ catalan ] =
+        {
             < "Ninguno" ; Default ; > ;
-        < "Mayúsculas" ; Default ; > ;
-        < "Minúsculas" ; Default ; > ;
-        < "Título" ; Default ; > ;
-        < "Versalitas" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Mayúsculas" ; Default ; > ;
+            < "Minúsculas" ; Default ; > ;
+            < "Título" ; Default ; > ;
+            < "Versalitas" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Ei mitään" ; Default ; > ;
-        < "Isot kirjaimet" ; Default ; > ;
-        < "Pienet kirjaimet" ; Default ; > ;
-        < "Otsikko" ; Default ; > ;
-        < "Pienet alkukirjaimet" ; Default ; > ;
-    };
+            < "Isot kirjaimet" ; Default ; > ;
+            < "Pienet kirjaimet" ; Default ; > ;
+            < "Otsikko" ; Default ; > ;
+            < "Pienet alkukirjaimet" ; Default ; > ;
+        };
     };
     FixedText FT_RELIEF
     {
-        Pos = MAP_APPFONT ( 166 , 32  );
-        Size = MAP_APPFONT ( 88 , 8 );
+        Pos = MAP_APPFONT ( 166 , 35 );
+        Size = MAP_APPFONT ( 82 , 8 );
         Text = "~Relief" ;
-        Text [ ENGLISH ] = "Relief" ;
+        Text [ ENGLISH ] = "~Relief" ;
         Text[ english_us ] = "~Relief";
         Text[ portuguese ] = "~Relevo";
         Text[ russian ] = "Ðåëüåô";
@@ -2545,154 +2573,155 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_RELIEF
     {
-        Pos = MAP_APPFONT ( 166 , 43  ) ;
-        Size = MAP_APPFONT ( 88 , 56 ) ;
+        Pos = MAP_APPFONT ( 166 , 46 ) ;
+        Size = MAP_APPFONT ( 82 , 56 ) ;
         DropDown = TRUE;
         StringList =
         {
-            < "Keine" ; Default ; > ;
+            < "(Ohne)" ; Default ; > ;
             < "Erhaben" ; Default ; > ;
             < "Vertieft" ; Default ; > ;
         };
         StringList [ ENGLISH ] =
         {
-            < "None" ; Default ; > ;
+            < "(None)" ; Default ; > ;
             < "Embossed" ; Default ; > ;
             < "Engraved" ; Default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Keine" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
-    StringList [ english_us ] =
-    {
-            < "None" ; Default ; > ;
-        < "Embossed" ; Default ; > ;
-        < "Engraved" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "(None)" ; Default ; > ;
+            < "Embossed" ; Default ; > ;
+            < "Engraved" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Nenhum" ; Default ; > ;
-        < "Em relevo" ; Default ; > ;
-        < "Gravado" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Em relevo" ; Default ; > ;
+            < "Gravado" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "Áåç" ; Default ; > ;
-        < "Âûïóêëûé" ; Default ; > ;
-        < "Âäàâëåííûé" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Âûïóêëûé" ; Default ; > ;
+            < "Âäàâëåííûé" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "ÊáíÝíá" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Geen" ; Default ; > ;
-        < "Reliëf" ; Default ; > ;
-        < "Diepte" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Reliëf" ; Default ; > ;
+            < "Diepte" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
             < "Aucun" ; Default ; > ;
-        < "Relief" ; Default ; > ;
-        < "Empreinte" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Relief" ; Default ; > ;
+            < "Empreinte" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Ninguno" ; Default ; > ;
-        < "Saliente" ; Default ; > ;
-        < "Ahondado" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Saliente" ; Default ; > ;
+            < "Ahondado" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Nessuno" ; Default ; > ;
-        < "In rilievo" ; Default ; > ;
-        < "Incavato" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "In rilievo" ; Default ; > ;
+            < "Incavato" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Ingen" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Ingen" ; Default ; > ;
-        < "Upphöjt" ; Default ; > ;
-        < "Graverat" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Upphöjt" ; Default ; > ;
+            < "Graverat" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Brak" ; Default ; > ;
-        < "Wypuk³e" ; Default ; > ;
-        < "Wklês³e" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Wypuk³e" ; Default ; > ;
+            < "Wklês³e" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Keine" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "‚È‚µ" ; Default ; > ;
-        < "•‚‚«o‚µ" ; Default ; > ;
-        < "•‚‚«’¤‚è" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "•‚‚«o‚µ" ; Default ; > ;
+            < "•‚‚«’¤‚è" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "¾øÀ½" ; Default ; > ;
-        < "µ¹Ãâ" ; Default ; > ;
-        < "È¨" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "µ¹Ãâ" ; Default ; > ;
+            < "È¨" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "ÎÞ" ; Default ; > ;
-        < "ÑôÎÄ" ; Default ; > ;
-        < "ÒõÎÄ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "ÑôÎÄ" ; Default ; > ;
+            < "ÒõÎÄ" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "µL" ; Default ; > ;
-        < "¯B¥Y" ; Default ; > ;
-        < "ÀJ¨è" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "¯B¥Y" ; Default ; > ;
+            < "ÀJ¨è" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Yok" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "ÈÏæä" ; Default ; > ;
-        < "ãÒÎÑÝ" ; Default ; > ;
-        < "ãÍÝæÑ" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "ãÒÎÑÝ" ; Default ; > ;
+            < "ãÍÝæÑ" ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Keine" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Ei mitään" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
-    };
+            < "Erhaben" ; Default ; > ;
+            < "Vertieft" ; Default ; > ;
+        };
     };
     TriStateBox CB_OUTLINE
     {
-        Pos = MAP_APPFONT ( 166 , 61  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( 166 , 64 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "~Kontur" ;
-        Text [ english_us ] = "Outline" ;
+        Text [ ENGLISH ] = "~Outline" ;
+        Text [ english_us ] = "~Outline" ;
         Text[ portuguese ] = "~Contorno";
         Text[ russian ] = "Êîíòóð";
         Text[ greek ] = "ÄéÜñèñùóç";
@@ -2715,10 +2744,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     TriStateBox CB_SHADOW
     {
-        Pos = MAP_APPFONT ( 166 , 75  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( 166 , 78 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "~Schatten" ;
-        Text [ english_us ] = "Shadow" ;
+        Text [ ENGLISH ] = "Sh~adow" ;
+        Text [ english_us ] = "Sh~adow" ;
         Text[ portuguese ] = "~Sombras";
         Text[ russian ] = "Òåíü";
         Text[ greek ] = "~ÓêéÜ";
@@ -2741,10 +2771,11 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     CheckBox CB_BLINKING
     {
-        Pos = MAP_APPFONT ( 166 , 89  ) ;
-        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Pos = MAP_APPFONT ( 166 , 92 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
         Hide = TRUE;
         Text = "B~linkend" ;
+        Text [ ENGLISH ] = "~Blinking" ;
         Text [ english_us ] = "~Blinking" ;
         Text[ portuguese ] = "~Intermitente";
         Text[ russian ] = "Ìèãàíèå";
@@ -2769,7 +2800,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     Window WIN_EFFECTS_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 129  ) ;
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
         Size = MAP_APPFONT ( 248 , 39 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
@@ -2796,7 +2827,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     FixedText FT_EFFECTS_FONTTYPE
     {
         Pos = MAP_APPFONT ( 6 , 171  ) ;
-        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
     };
     String STR_EFFECTS_CAPITALS
     {
@@ -2977,8 +3008,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     Hide = TRUE ;
     FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 4 , 3  );
-        Size = MAP_APPFONT ( 252 , 8 );
+        Pos = MAP_APPFONT ( 6 , 3 );
+        Size = MAP_APPFONT ( 248 , 8 );
         Text = "Position";
         Text [ english_us ] = "Position" ;
         Text[ portuguese ] = "Posição";
@@ -3003,10 +3034,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_HIGHPOS
     {
-        Pos = MAP_APPFONT ( 6 , 14  );
-        Size = MAP_APPFONT ( 57 , 10 );
-        Text = "H~och";
-        Text [ english_us ] = "Super" ;
+        Pos = MAP_APPFONT ( 12 , 16 );
+        Size = MAP_APPFONT ( 58 , 10 );
+        Text = "~Hoch";
+        Text [ ENGLISH ] = "~Super" ;
+        Text [ english_us ] = "~Super" ;
         TabStop = TRUE;
         Text[ portuguese ] = "A~cima";
         Text[ russian ] = "Ñâåðõó";
@@ -3030,10 +3062,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_NORMALPOS
     {
-        Pos = MAP_APPFONT ( 6 , 28  );
-        Size = MAP_APPFONT ( 57 , 10 );
+        Pos = MAP_APPFONT ( 12 , 30 );
+        Size = MAP_APPFONT ( 58 , 10 );
         Text = "~Normal";
-        Text [ english_us ] = "Normal" ;
+        Text [ ENGLISH ] = "~Normal" ;
+        Text [ english_us ] = "~Normal" ;
         TabStop = TRUE;
         Text[ portuguese ] = "~Normal";
         Text[ russian ] = "Ñòàíäàðò";
@@ -3057,10 +3090,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_LOWPOS
     {
-        Pos = MAP_APPFONT ( 6 , 42  );
-        Size = MAP_APPFONT ( 57 , 10 );
+        Pos = MAP_APPFONT ( 12 , 44 );
+        Size = MAP_APPFONT ( 58 , 10 );
         Text = "~Tief";
-        Text [ english_us ] = "Sub" ;
+        Text [ ENGLISH ] = "S~ub" ;
+        Text [ english_us ] = "S~ub" ;
         TabStop = TRUE;
         Text[ portuguese ] = "A~baixo";
         Text[ russian ] = "Ñíèçó";
@@ -3084,10 +3118,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedText FT_HIGHLOW
     {
-        Pos = MAP_APPFONT ( 68 , 14  );
-        Size = MAP_APPFONT ( 57 , 10 );
-        Text = "Ho~ch/Tief um";
-        Text [ english_us ] = "Raise/lower by" ;
+        Pos = MAP_APPFONT ( 74 , 16 );
+        Size = MAP_APPFONT ( 58 , 8 );
+        Text = "H~och/Tief um";
+        Text [ ENGLISH ] = "~Raise/lower by" ;
+        Text [ english_us ] = "~Raise/lower by" ;
         Text[ portuguese ] = "~Superior/Inferior em";
         Text[ russian ] = "âûøå/íèæå íà";
         Text[ greek ] = "ÐÜíù/ÊÜôù êáôÜ";
@@ -3111,8 +3146,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     MetricField ED_HIGHLOW
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 129 , 13  );
-        Size = MAP_APPFONT ( 27 , 12 );
+        Pos = MAP_APPFONT ( 136 , 14 );
+        Size = MAP_APPFONT ( 30 , 12 );
         TabStop = TRUE;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3126,10 +3161,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     CheckBox CB_HIGHLOW
     {
-        Pos = MAP_APPFONT ( 162 , 14  );
-        Size = MAP_APPFONT ( 92 , 10 );
-        Text = "A~utomatisch";
-        Text [ english_us ] = "A~utomatic" ;
+        Pos = MAP_APPFONT ( 172 , 16 );
+        Size = MAP_APPFONT ( 76 , 10 );
+        Text = "~Automatisch";
+        Text [ ENGLISH ] = "~Automatic" ;
+        Text [ english_us ] = "~Automatic" ;
         TabStop = TRUE;
         Text[ portuguese ] = "A~utomático";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
@@ -3153,10 +3189,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedText FT_FONTSIZE
     {
-        Pos = MAP_APPFONT ( 68 , 42  );
-        Size = MAP_APPFONT ( 57 , 8 );
+        Pos = MAP_APPFONT ( 74 , 32 );
+        Size = MAP_APPFONT ( 58 , 8 );
         Text = "~Schriftgröße rel.";
-        Text [ english_us ] = "Relative font size" ;
+        Text [ ENGLISH ] = "R~elative font size" ;
+        Text [ english_us ] = "R~elative font size" ;
         Text[ portuguese ] = "Ta~manho relativo";
         Text[ russian ] = "Ðàçìåð îòíîñ.";
         Text[ greek ] = "ÌÝãåèïò ãñáììáôï~óåéñÜò ó÷åôéêÜ";
@@ -3180,8 +3217,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     MetricField ED_FONTSIZE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 129 , 40  );
-        Size = MAP_APPFONT ( 27 , 12 );
+        Pos = MAP_APPFONT ( 136 , 30 );
+        Size = MAP_APPFONT ( 30 , 12 );
         TabStop = TRUE;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3195,8 +3232,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedLine FL_ROTATION_SCALING
     {
-        Pos = MAP_APPFONT ( 4 , 57  );
-        Size = MAP_APPFONT ( 252 , 8 );
+        Pos = MAP_APPFONT ( 6 , 59 );
+        Size = MAP_APPFONT ( 248 , 8 );
         Text = "Rotation / Skalierung";
         Text [ english_us ] = "Rotation / scaling" ;
         Text[ portuguese ] = "Rotação / Escala";
@@ -3221,8 +3258,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedLine FL_SCALING
     {
-        Pos = MAP_APPFONT ( 4 , 57  );
-        Size = MAP_APPFONT ( 252 , 8 );
+        Pos = MAP_APPFONT ( 6 , 59 );
+        Size = MAP_APPFONT ( 248 , 8 );
         Text = "Skalierung";
         Text [ english_us ] = "Scaling" ;
         Text[ portuguese ] = "Escala";
@@ -3247,92 +3284,96 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_0_DEG
     {
-        Pos = MAP_APPFONT ( 6 , 68  );
-        Size = MAP_APPFONT ( 45 , 10 );
+        Pos = MAP_APPFONT ( 12 , 70 );
+        Size = MAP_APPFONT ( 46 , 10 );
         TabStop = TRUE;
-        Text = "0 Grad";
-        Text [ english_us ] = "0 degrees" ;
-        Text[ portuguese ] = "0 graus";
-        Text[ russian ] = "0 ãðàäóñîâ";
-        Text[ greek ] = "0 âáèìïß";
-        Text[ dutch ] = "0 graden";
-        Text[ french ] = "0 degré";
-        Text[ spanish ] = "0 grados";
-        Text[ italian ] = "0 gradi";
-        Text[ danish ] = "0 degree";
-        Text[ swedish ] = "0 grad";
-        Text[ polish ] = "0 stopni";
-        Text[ portuguese_brazilian ] = "0 degree";
-        Text[ japanese ] = "0 “x";
-        Text[ korean ] = "0 µµ";
-        Text[ chinese_simplified ] = "0 ¶È";
-        Text[ chinese_traditional ] = "0 «×";
-        Text[ turkish ] = "0 degree";
-        Text[ arabic ] = "0 ÏÑÌÉ";
-        Text[ catalan ] = "0 grados";
-        Text[ finnish ] = "0 Grad";
+        Text = "~0 Grad";
+        Text [ ENGLISH ] = "~0 degrees" ;
+        Text [ english_us ] = "~0 degrees" ;
+        Text[ portuguese ] = "~0 graus";
+        Text[ russian ] = "~0 ãðàäóñîâ";
+        Text[ greek ] = "~0 âáèìïß";
+        Text[ dutch ] = "~0 graden";
+        Text[ french ] = "~0 degré";
+        Text[ spanish ] = "~0 grados";
+        Text[ italian ] = "~0 gradi";
+        Text[ danish ] = "~0 degree";
+        Text[ swedish ] = "~0 grad";
+        Text[ polish ] = "~0 stopni";
+        Text[ portuguese_brazilian ] = "~0 degree";
+        Text[ japanese ] = "~0 “x";
+        Text[ korean ] = "~0 µµ";
+        Text[ chinese_simplified ] = "~0 ¶È";
+        Text[ chinese_traditional ] = "~0 «×";
+        Text[ turkish ] = "~0 degree";
+        Text[ arabic ] = "~0 ÏÑÌÉ";
+        Text[ catalan ] = "~0 grados";
+        Text[ finnish ] = "~0 Grad";
     };
     RadioButton RB_90_DEG
     {
-        Pos = MAP_APPFONT ( 56 , 68  );
-        Size = MAP_APPFONT ( 45 , 10 );
+        Pos = MAP_APPFONT ( 62 , 70 );
+        Size = MAP_APPFONT ( 46 , 10 );
         TabStop = TRUE;
-        Text = "90 Grad";
-        Text [ english_us ] = "90 degrees" ;
-        Text[ portuguese ] = "90 graus";
-        Text[ russian ] = "90 ãðàäóñîâ";
-        Text[ greek ] = "90 âáèìïß";
-        Text[ dutch ] = "90 graden";
-        Text[ french ] = "90 degrés";
-        Text[ spanish ] = "90 grados";
-        Text[ italian ] = "90 gradi";
-        Text[ danish ] = "90 degree";
-        Text[ swedish ] = "90 grader";
-        Text[ polish ] = "90 stopni";
-        Text[ portuguese_brazilian ] = "90 degree";
-        Text[ japanese ] = "90 “x";
-        Text[ korean ] = "90 µµ";
-        Text[ chinese_simplified ] = "90 ¶È";
-        Text[ chinese_traditional ] = "90 «×";
-        Text[ turkish ] = "90 degree";
-        Text[ arabic ] = "90 ÏÑÌÉ";
-        Text[ catalan ] = "90 grados";
-        Text[ finnish ] = "90 astetta";
+        Text = "~90 Grad";
+        Text [ ENGLISH ] = "~90 degrees" ;
+        Text [ english_us ] = "~90 degrees" ;
+        Text[ portuguese ] = "~90 graus";
+        Text[ russian ] = "~90 ãðàäóñîâ";
+        Text[ greek ] = "~90 âáèìïß";
+        Text[ dutch ] = "~90 graden";
+        Text[ french ] = "~90 degrés";
+        Text[ spanish ] = "~90 grados";
+        Text[ italian ] = "~90 gradi";
+        Text[ danish ] = "~90 degree";
+        Text[ swedish ] = "~90 grader";
+        Text[ polish ] = "~90 stopni";
+        Text[ portuguese_brazilian ] = "~90 degree";
+        Text[ japanese ] = "~90 “x";
+        Text[ korean ] = "~90 µµ";
+        Text[ chinese_simplified ] = "~90 ¶È";
+        Text[ chinese_traditional ] = "~90 «×";
+        Text[ turkish ] = "~90 degree";
+        Text[ arabic ] = "~90 ÏÑÌÉ";
+        Text[ catalan ] = "~90 grados";
+        Text[ finnish ] = "~90 astetta";
     };
     RadioButton RB_270_DEG
     {
-        Pos = MAP_APPFONT ( 106 , 68  );
-        Size = MAP_APPFONT ( 45 , 10 );
+        Pos = MAP_APPFONT ( 112 , 70 );
+        Size = MAP_APPFONT ( 46 , 10 );
         TabStop = TRUE;
-        Text = "270 Grad";
-        Text [ english_us ] = "270 degrees" ;
-        Text[ portuguese ] = "270 graus";
-        Text[ russian ] = "270 ãðàäóñîâ";
-        Text[ greek ] = "270 âáèìïß";
-        Text[ dutch ] = "270 graden";
-        Text[ french ] = "270 degrés";
-        Text[ spanish ] = "270 grados";
-        Text[ italian ] = "270 gradi";
-        Text[ danish ] = "270 degree";
-        Text[ swedish ] = "270 grader";
-        Text[ polish ] = "270 stopni";
-        Text[ portuguese_brazilian ] = "270 degree";
-        Text[ japanese ] = "270 “x";
-        Text[ korean ] = "270 µµ";
-        Text[ chinese_simplified ] = "270 ¶È";
-        Text[ chinese_traditional ] = "270 «×";
-        Text[ turkish ] = "270 degree";
-        Text[ arabic ] = "270 ÏÑÌÉ";
-        Text[ catalan ] = "270 grados";
-        Text[ finnish ] = "270 Grad";
+        Text = "~270 Grad";
+        Text [ ENGLISH ] = "~270 degrees" ;
+        Text [ english_us ] = "~270 degrees" ;
+        Text[ portuguese ] = "~270 graus";
+        Text[ russian ] = "~270 ãðàäóñîâ";
+        Text[ greek ] = "~270 âáèìïß";
+        Text[ dutch ] = "~270 graden";
+        Text[ french ] = "~270 degrés";
+        Text[ spanish ] = "~270 grados";
+        Text[ italian ] = "~270 gradi";
+        Text[ danish ] = "~270 degree";
+        Text[ swedish ] = "~270 grader";
+        Text[ polish ] = "~270 stopni";
+        Text[ portuguese_brazilian ] = "~270 degree";
+        Text[ japanese ] = "~270 “x";
+        Text[ korean ] = "~270 µµ";
+        Text[ chinese_simplified ] = "~270 ¶È";
+        Text[ chinese_traditional ] = "~270 «×";
+        Text[ turkish ] = "~270 degree";
+        Text[ arabic ] = "~270 ÏÑÌÉ";
+        Text[ catalan ] = "~270 grados";
+        Text[ finnish ] = "~270 Grad";
     };
     CheckBox CB_FIT_TO_LINE
     {
-        Pos = MAP_APPFONT ( 160 , 68  );
-        Size = MAP_APPFONT ( 60 , 10 );
+        Pos = MAP_APPFONT ( 162 , 70 );
+        Size = MAP_APPFONT ( 86 , 10 );
         TabStop = TRUE;
-        Text = "An Zeile anpassen";
-        Text [ english_us ] = "Fit to line" ;
+        Text = "An ~Zeile anpassen";
+        Text [ ENGLISH ] = "Fit to ~line" ;
+        Text [ english_us ] = "Fit to ~line" ;
         Text[ portuguese ] = "Ajustar à linha";
         Text[ russian ] = "Ñîãëàñîâàòü ñî ñòðîêîé";
         Text[ greek ] = "ÐñïóáñìïãÞ ùò ðñïò ôç óåéñÜ";
@@ -3355,10 +3396,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedText FT_SCALE_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 84  );
-        Size = MAP_APPFONT ( 50 , 8 );
-        Text = "Breite skalieren";
-        Text [ english_us ] = "Scale width" ;
+        Pos = MAP_APPFONT ( 12 , 86 );
+        Size = MAP_APPFONT ( 80 , 8 );
+        Text = "~Breite skalieren";
+        Text [ ENGLISH ] = "Scale ~width" ;
+        Text [ english_us ] = "Scale ~width" ;
         Text[ portuguese ] = "Escalar largura";
         Text[ russian ] = "Ìàñøòàá øèðèíû";
         Text[ greek ] = "ÊëéìÜêùóç ðëÜôïõò";
@@ -3382,8 +3424,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     MetricField MF_SCALE_WIDTH
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 70 , 82  );
-        Size = MAP_APPFONT ( 27 , 12 );
+        Pos = MAP_APPFONT ( 94 , 84 );
+        Size = MAP_APPFONT ( 30 , 12 );
         TabStop = TRUE;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3397,8 +3439,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedLine FL_KERNING2
     {
-        Pos = MAP_APPFONT ( 4 , 98  );
-        Size = MAP_APPFONT ( 252 , 8 );
+        Pos = MAP_APPFONT ( 6 , 100 );
+        Size = MAP_APPFONT ( 248 , 8 );
         Text = "Laufweite";
         Text [ english_us ] = "Spacing" ;
         Text[ portuguese ] = "Espaçamento";
@@ -3424,7 +3466,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     ListBox LB_KERNING2
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 108  );
+        Pos = MAP_APPFONT ( 12 , 111 );
         Size = MAP_APPFONT ( 72 , 48 ) ;
         DropDown = TRUE ;
         StringList =
@@ -3441,131 +3483,133 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         };
         StringList [ language_user1 ] =
         {
-                < "Standard" ; Default ; > ;
+            < "Standard" ; Default ; > ;
             < "Gesperrt" ; Default ; > ;
             < "Schmal" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
-                < "Padrão" ; Default ; > ;
+            < "Padrão" ; Default ; > ;
             < "Expandido" ; Default ; > ;
             < "Condensado" ; Default ; > ;
         };
         StringList [ russian ] =
         {
-                < "Ñòàíäàðò" ; Default ; > ;
+            < "Ñòàíäàðò" ; Default ; > ;
             < "Ðàçðåæåííûé" ; Default ; > ;
             < "Óïëîòíåííûé" ; Default ; > ;
         };
         StringList [ greek ] =
         {
-                < "ÐñïåðéëïãÞ" ; Default ; > ;
+            < "ÐñïåðéëïãÞ" ; Default ; > ;
             < "ÅêôåôáìÝíá" ; Default ; > ;
             < "ÓõìðõêíùìÝíá" ; Default ; > ;
         };
         StringList [ dutch ] =
         {
-                < "Standaard" ; Default ; > ;
+            < "Standaard" ; Default ; > ;
             < "Verbreed" ; Default ; > ;
             < "Versmald" ; Default ; > ;
         };
         StringList [ french ] =
         {
-                < "Standard" ; Default ; > ;
+            < "Standard" ; Default ; > ;
             < "Étendu" ; Default ; > ;
             < "Condensé" ; Default ; > ;
         };
         StringList [ spanish ] =
         {
-                < "Estándar" ; Default ; > ;
+            < "Estándar" ; Default ; > ;
             < "Expandido" ; Default ; > ;
             < "Condensado" ; Default ; > ;
         };
         StringList [ italian ] =
         {
-                < "Standard" ; Default ; > ;
+            < "Standard" ; Default ; > ;
             < "Espansa" ; Default ; > ;
             < "Ridotta" ; Default ; > ;
         };
         StringList [ danish ] =
         {
-                < "Normal" ; Default ; > ;
+            < "Normal" ; Default ; > ;
             < "Bred" ; Default ; > ;
             < "Smal" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
-                < "Standard" ; Default ; > ;
+            < "Standard" ; Default ; > ;
             < "Spärrat" ; Default ; > ;
             < "Smalt" ; Default ; > ;
         };
         StringList [ polish ] =
         {
-                < "Domyœlnie" ; Default ; > ;
+            < "Domyœlnie" ; Default ; > ;
             < "Szerokie" ; Default ; > ;
             < "W¹skie" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-                < "Padr?o" ; Default ; > ;
+            < "Padr?o" ; Default ; > ;
             < "Gesperrt" ; Default ; > ;
             < "Schmal" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
-                < "•W€" ; Default ; > ;
+            < "•W€" ; Default ; > ;
             < "L‚­‚·‚é" ; Default ; > ;
             < "‹·‚­‚·‚é" ; Default ; > ;
         };
         StringList [ korean ] =
         {
-                < "±âº»" ; Default ; > ;
+            < "±âº»" ; Default ; > ;
             < "ÀåÆò" ; Default ; > ;
             < "Á¼°Ô" ; Default ; > ;
         };
         StringList [ chinese_simplified ] =
         {
-                < "±ê×¼" ; Default ; > ;
+            < "±ê×¼" ; Default ; > ;
             < "Ëø¶¨µÄ" ; Default ; > ;
             < "ÏÁÕ­" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-                < "¼Ð·Ç" ; Default ; > ;
+            < "¼Ð·Ç" ; Default ; > ;
             < "Âê©w" ; Default ; > ;
             < "¯U¯¶" ; Default ; > ;
         };
         StringList [ turkish ] =
         {
-                < "Standart" ; Default ; > ;
+            < "Standart" ; Default ; > ;
             < "Aralýðý büyüt" ; Default ; > ;
             < "Aralýðý küçült" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
-                < "ÞíÇÓí" ; Default ; > ;
+            < "ÞíÇÓí" ; Default ; > ;
             < "ãæÓÚ" ; Default ; > ;
             < "ãßËÝ" ; Default ; > ;
         };
-    StringList [ catalan ] =
-    {
+        StringList [ catalan ] =
+        {
             < "Estándar" ; Default ; > ;
-        < "Expandido" ; Default ; > ;
-        < "Condensado" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Expandido" ; Default ; > ;
+            < "Condensado" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Oletusarvo" ; Default ; > ;
-        < "Laajennettu" ; Default ; > ;
-        < "Tiivistetty" ; Default ; > ;
-    };
+            < "Laajennettu" ; Default ; > ;
+            < "Tiivistetty" ; Default ; > ;
+        };
     };
     FixedText FT_KERNING2
     {
-        Pos = MAP_APPFONT ( 81 , 109  );
-        Size = MAP_APPFONT ( 30 , 10 );
-        Text = "u~m";
-        Text [ english_us ] = "by" ;
+        Pos = MAP_APPFONT ( 86 , 113 );
+        Size = MAP_APPFONT ( 24 , 8 );
+        Center = TRUE ;
+        Text = "~um";
+        Text [ ENGLISH ] = "~by" ;
+        Text [ english_us ] = "~by" ;
         Text[ portuguese ] = "a";
         Text[ russian ] = "íà";
         Text[ greek ] = "êáôÜ";
@@ -3589,8 +3633,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     MetricField ED_KERNING2
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 114 , 108  );
-        Size = MAP_APPFONT ( 42 , 12 );
+        Pos = MAP_APPFONT ( 112 , 111 );
+        Size = MAP_APPFONT ( 40 , 12 );
         TabStop = TRUE;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -3601,9 +3645,10 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     CheckBox CB_PAIRKERNING
     {
-        Pos = MAP_APPFONT ( 162 , 109  );
+        Pos = MAP_APPFONT ( 156 , 113 );
         Size = MAP_APPFONT ( 92 , 10 );
         Text = "~Paarweises Kerning";
+        Text [ ENGLISH ] = "~Pair kerning" ;
         Text [ english_us ] = "~Pair kerning" ;
         TabStop = TRUE;
         Text[ portuguese ] = "~Kerning de pares";
@@ -3631,7 +3676,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "Beispiel" ;
         Text [ english_us ] = "Example" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 129  ) ;
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
         Size = MAP_APPFONT ( 248 , 39 ) ;
         Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "Ïðèìåð";
@@ -3667,8 +3712,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     Hide = TRUE ;
     FixedLine FL_SWITCHON
     {
-        Pos = MAP_APPFONT ( 4 , 3  );
-        Size = MAP_APPFONT ( 251 , 8 );
+        Pos = MAP_APPFONT ( 6 , 3 );
+        Size = MAP_APPFONT ( 248 , 8 );
         Text = "Doppelzeilig";
         Text [ english_us ] = "Double lined" ;
         Text[ portuguese ] = "Linhas duplas";
@@ -3693,10 +3738,11 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     CheckBox CB_TWOLINES
     {
-        Pos = MAP_APPFONT ( 7 , 14  );
-        Size = MAP_APPFONT ( 245 , 10 );
+        Pos = MAP_APPFONT ( 12 , 14 );
+        Size = MAP_APPFONT ( 236 , 10 );
         Text = "~Doppelzeilig schreiben";
-        Text [ english_us ] = "~Write in double lines" ;
+        Text [ ENGLISH ] = "Write in ~double lines" ;
+        Text [ english_us ] = "Write in ~double lines" ;
         TabStop = TRUE;
         Text[ portuguese ] = "~Linhas duplas";
         Text[ russian ] = "Äâå ñòðîêè â îäíîé";
@@ -3720,8 +3766,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     FixedLine FL_ENCLOSE
     {
-        Pos = MAP_APPFONT ( 3 , 30  );
-        Size = MAP_APPFONT ( 252 , 8 );
+        Pos = MAP_APPFONT ( 6 , 30 );
+        Size = MAP_APPFONT ( 248 , 8 );
         Text = "Einschließende Zeichen";
         Text [ english_us ] = "Enclosing character" ;
         Text[ portuguese ] = "Caracteres de inclusão";
@@ -3746,8 +3792,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     FixedText FT_STARTBRACKET
     {
-        Pos = MAP_APPFONT ( 6 , 41  );
-        Size = MAP_APPFONT ( 90 , 10 );
+        Pos = MAP_APPFONT ( 12 , 41 );
+        Size = MAP_APPFONT ( 90 , 8 );
         Text = "A~nfangszeichen";
         Text [ english_us ] = "I~nitial character" ;
         Text[ portuguese ] = "Carácter i~nicial";
@@ -3772,8 +3818,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     ListBox ED_STARTBRACKET
     {
-        Pos = MAP_APPFONT ( 6 , 54  );
-        Size = MAP_APPFONT ( 90 , 37 );
+        Pos = MAP_APPFONT ( 12 , 52 );
+        Size = MAP_APPFONT ( 90 , 72 );
         TabStop = TRUE;
         Border = TRUE;
         StringList =
@@ -3794,191 +3840,191 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
             < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
             < "Other Characters..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "(nenhum)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "(Áåç)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Äðóãèå çíàêè..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Äðóãèå çíàêè..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "(ÊáíÝíá)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Ðåñéóóüôåñïé ÷áñáêôÞñåò..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Ðåñéóóüôåñïé ÷áñáêôÞñåò..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "(Geen)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Andere tekens..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Andere tekens..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ french ] =
+        {
             < "(Aucun)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Autres caractères..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Autres caractères..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "(Ninguno)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "(nessuno)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Altri caratteri..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Altri caratteri..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "(Inget)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Fler tecken..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Fler tecken..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "(Brak)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Dodatkowe znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Dodatkowe znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "(‚È‚µ)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "‚»‚Ì‘¼‚Ì‹L†..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "‚»‚Ì‘¼‚Ì‹L†..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "(¾øÀ½)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "±âÅ¸¡¡¹®ÀÚ..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "±âÅ¸¡¡¹®ÀÚ..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "(ÎÞ)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "ÆäËû×Ö·û..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "ÆäËû×Ö·û..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "(µL)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "¨ä¥L¦r¤¸..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "¨ä¥L¦r¤¸..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "(ÈÏæä)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "ÃÍÑÝ ÃÎÑì..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "ÃÍÑÝ ÃÎÑì..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "(Ninguno)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "(Ei mitään)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
+            < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
     };
     FixedText FT_ENDBRACKET
     {
-        Pos = MAP_APPFONT ( 102 , 41  );
-        Size = MAP_APPFONT ( 90 , 10 );
+        Pos = MAP_APPFONT ( 108 , 41 );
+        Size = MAP_APPFONT ( 90 , 8 );
         Text = "~Endzeichen";
         Text [ english_us ] = "Final charact~er" ;
         Text[ portuguese ] = "Carácter ~final";
@@ -4003,8 +4049,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     ListBox ED_ENDBRACKET
     {
-        Pos = MAP_APPFONT ( 102 , 54  );
-        Size = MAP_APPFONT ( 89 , 37 );
+        Pos = MAP_APPFONT ( 108 , 52 );
+        Size = MAP_APPFONT ( 90 , 72 );
         TabStop = TRUE;
         Border = TRUE;
         StringList =
@@ -4025,218 +4071,192 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
             < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
             < "Other Characters..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "(Nenhum)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Outros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Outros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "(Áåç)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Äðóãèå çíàêè..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Äðóãèå çíàêè..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "(ÊáíÝíá)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Ðåñéóóüôåñïé ÷áñáêôÞñåò..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Ðåñéóóüôåñïé ÷áñáêôÞñåò..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "(Geen)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Andere tekens..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ french ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Andere tekens..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ french ] =
+        {
             < "(Aucun)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Autres caractères..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Autres caractères..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "(Ninguno)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "(nessuno)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Altri caratteri..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Altri caratteri..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "(Ingen)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Fler tecken..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Fler tecken..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "(Brak)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Dodatkowe znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Dodatkowe znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "(‚È‚µ)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "‚»‚Ì‘¼‚Ì‹L†..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "‚»‚Ì‘¼‚Ì‹L†..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "(¾øÀ½)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "±âÅ¸¡¡¹®ÀÚ..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "±âÅ¸¡¡¹®ÀÚ..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "(ÎÞ)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "ÆäËû×Ö·û..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "ÆäËû×Ö·û..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "(µL)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "¨ä¥L¦r¤¸..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "¨ä¥L¦r¤¸..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "(Keines)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Weitere Zeichen..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "(ÈÏæä)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "ÃÍÑÝ ÃÎÑì..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "ÃÍÑÝ ÃÎÑì..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "(Ninguno)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Otros caracteres..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "(Ei mitään)" ; CHRDLG_ENCLOSE_NONE ; > ;
-        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
-        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
-        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
-        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
-        < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
-    };
-    };
-    FixedLine FL_TWOLINES_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 4 , 97  );
-        Size = MAP_APPFONT ( 252 , 8 );
-        Text = "Vorschau";
-        Text [ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Preview";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
+            < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+            < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+            < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+            < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+            < "Muut merkit" ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+        };
     };
     Window WIN_TWOLINES_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 108  ) ;
-        Size = MAP_APPFONT ( 248 , 59 ) ;
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
+        Size = MAP_APPFONT ( 248 , 39 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example" ;
         Text[ portuguese ] = "Exemplo";
@@ -4261,8 +4281,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     FixedText FT_TWOLINES_FONTTYPE
     {
-        Pos = MAP_APPFONT ( 7 , 169  ) ;
-        Size = MAP_APPFONT ( 246 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 171 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Hide = TRUE;
     };
 };

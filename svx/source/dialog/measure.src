@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage RID_SVXPAGE_MEASURE
 
     FixedLine FL_LINE
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "Linie" ;
         Text [ ENGLISH ] = "Line" ;
@@ -112,7 +112,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_LINE_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 15  ) ;
+        Pos = MAP_APPFONT ( 12 , 16  ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "L~iniendistanz" ;
         Text [ ENGLISH ] = "L~ine distance" ;
@@ -141,8 +141,8 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_LINE_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80, 13  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( 78 , 14  ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -156,7 +156,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE_OVERHANG
     {
-        Pos = MAP_APPFONT ( 12 , 31  ) ;
+        Pos = MAP_APPFONT ( 12 , 32  ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Hilfslinien~überhang" ;
         Text [ ENGLISH ] = "Helpline ~overhang" ;
@@ -185,8 +185,8 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE_OVERHANG
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 29  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( 78 , 30  ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -200,7 +200,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 47  ) ;
+        Pos = MAP_APPFONT ( 12 , 48  ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Hilfslinien~distanz" ;
         Text [ ENGLISH ] = "Helpline ~distance" ;
@@ -229,8 +229,8 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 45  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( 78 , 46  ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -244,7 +244,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE1_LEN
     {
-        Pos = MAP_APPFONT ( 12 , 63  ) ;
+        Pos = MAP_APPFONT ( 12 , 64  ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Linke Hilfslinie" ;
         Text [ ENGLISH ] = "~Left helpline" ;
@@ -273,8 +273,8 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE1_LEN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 61 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( 78 , 62 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -288,7 +288,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_HELPLINE2_LEN
     {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Rechte Hilfslinie" ;
         Text [ ENGLISH ] = "~Right helpline" ;
@@ -317,8 +317,8 @@ TabPage RID_SVXPAGE_MEASURE
     MetricField MTR_FLD_HELPLINE2_LEN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 77 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( 78 , 78 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -332,8 +332,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_BELOW_REF_EDGE
     {
-        Pos = MAP_APPFONT ( 12 , 95  ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 96  ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
         TabStop = TRUE ;
         Text = "Maßlinie u~nterhalb des Objekts" ;
         Text [ ENGLISH ] = "Measure ~below reference edge" ;
@@ -360,13 +360,14 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedLine FL_VERT
     {
-        Pos = MAP_APPFONT ( 129 , 12  ) ;
-        Size = MAP_APPFONT ( 4, 116 ) ;
+        Pos = MAP_APPFONT ( 127 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 108 ) ;
+        Vert = TRUE ;
     };
     FixedLine FL_LABEL
     {
-        Pos = MAP_APPFONT ( 135 , 3  ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
         Text = "Beschriftung" ;
         Text [ ENGLISH ] = "Legend" ;
         Text[ english_us ] = "Legend";
@@ -392,8 +393,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 141 , 15  ) ;
-        Size = MAP_APPFONT ( 116 , 8 ) ;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "~Textposition" ;
         Text [ ENGLISH ] = "Text position" ;
         Text [ dutch ] = "Tekstpositie" ;
@@ -422,14 +423,14 @@ TabPage RID_SVXPAGE_MEASURE
     {
         HelpId = HID_MEASURE_CTL_POSITION ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 141 , 26  ) ;
+        Pos = MAP_APPFONT ( 138 , 25  ) ;
         Size = MAP_APPFONT ( 88 , 40 ) ;
         TabStop = TRUE ;
     };
     TriStateBox TSB_AUTOPOSV
     {
-        Pos = MAP_APPFONT ( 149 , 72  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 147 , 69  ) ;
+        Size = MAP_APPFONT ( 101 , 10 ) ;
         TabStop = TRUE ;
         Text = "Automatisch ~Vertikal" ;
         Text [ ENGLISH ] = "~Automatic vertical" ;
@@ -457,8 +458,8 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_AUTOPOSH
     {
-        Pos = MAP_APPFONT ( 149 , 86  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 147 , 83  ) ;
+        Size = MAP_APPFONT ( 101 , 10 ) ;
         TabStop = TRUE ;
         Text = "Automatisch ~Horizontal" ;
         Text [ ENGLISH ] = "~Automatic horizontal" ;
@@ -486,7 +487,7 @@ TabPage RID_SVXPAGE_MEASURE
     };
     TriStateBox TSB_SHOW_UNIT
     {
-        Pos = MAP_APPFONT ( 141 , 101  ) ;
+        Pos = MAP_APPFONT ( 138 , 98  ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Einheit anzeigen" ;
@@ -516,19 +517,19 @@ TabPage RID_SVXPAGE_MEASURE
     ListBox LB_UNIT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 211 , 100 ) ;
-        Size = MAP_APPFONT ( 42 , 80 ) ;
+        Pos = MAP_APPFONT ( 202 , 96 ) ;
+        Size = MAP_APPFONT ( 46 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     TriStateBox TSB_PARALLEL
     {
-        Pos = MAP_APPFONT ( 141, 115 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 112 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Beschriftung ~parallel zur Hilfslinie" ;
-        Text [ ENGLISH ] = "legend ~parallel to help line" ;
+        Text = "~Parallel zur Hilfslinie" ;
+        Text [ ENGLISH ] = "~Parallel to help line" ;
         Text[ english_us ] = "Legend ~parallel to line";
         Text[ portuguese ] = "Paralelamente";
         Text[ russian ] = "Ïîäïèñü ïàðàëëåëüíî äîï. ëèíèè";
@@ -555,7 +556,7 @@ TabPage RID_SVXPAGE_MEASURE
         HelpId = HID_MEASURE_CTL_PREVIEW ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 132 ) ;
-        Size = MAP_APPFONT ( 247, 48 ) ;
+        Size = MAP_APPFONT ( 248 , 47 ) ;
     };
     String STR_MEASURE_AUTOMATIC
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2162,7 +2162,8 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aAdjustNumbersCB.Hide();
     aTextAlignFT.Hide();
     aTextAlignLB.Hide();
-    aScriptSpaceCB.SetPosPixel( aAllowWordBreakCB.GetPosPixel() );
+    aScriptSpaceCB.SetPosPixel( aHangingPunctCB.GetPosPixel() );
+    aHangingPunctCB.SetPosPixel( aAllowWordBreakCB.GetPosPixel() );
 //JP 28.3.2001 - these options currently not available!
 }
 /*-- 29.11.00 11:36:24---------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:08:13 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2199,9 +2199,9 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Z~eilenwechsel" ;
+        Text = "Zeilenwechsel" ;
         Text [ ENGLISH ] = "Line break" ;
-        Text[ english_us ] = "L~ine change";
+        Text[ english_us ] = "Line change";
         Text[ portuguese ] = "~Mudar de linha";
         Text[ russian ] = "—мена строки";
         Text[ greek ] = "Ѕллбгё у~ейс№т";

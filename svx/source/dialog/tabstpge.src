@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:28:41 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage RID_SVXPAGE_TABULATOR
     MetricBox ED_TABPOS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 45 , 95 ) ;
+        Size = MAP_APPFONT ( 39 , 95 ) ;
         Minimum = -5600 ;
         Maximum = 5600 ;
         DecimalDigits = 2 ;
@@ -95,9 +95,9 @@ TabPage RID_SVXPAGE_TABULATOR
     FixedLine FL_TABPOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text = "Position" ;
-        Text [ ENGLISH ] = "Position" ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text = "~Position" ;
+        Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "Posisjon" ;
         Text [ italian ] = "Posizione" ;
         Text [ portuguese_brazilian ] = "Posição" ;
@@ -108,7 +108,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posición" ;
-        Text [ english_us ] = "Position" ;
+        Text [ english_us ] = "~Position" ;
         Text[ chinese_simplified ] = "Î»ÖÃ";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
@@ -123,14 +123,14 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     FixedLine FL_TABPOS_VERT
     {
-        Pos = MAP_APPFONT ( 64 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 101 ) ;
+        Pos = MAP_APPFONT ( 55 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 95 ) ;
         Vert = TRUE;
     };
     RadioButton BTN_TABTYPE_LEFT
     {
-        Pos = MAP_APPFONT ( 75 , 14 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 14 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ norwegian ] = "~Left" ;
@@ -159,15 +159,15 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     Window WIN_TABLEFT
     {
-        Pos = MAP_APPFONT ( 116 , 14 ) ;
+        Pos = MAP_APPFONT ( 115 , 14 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     RadioButton BTN_TABTYPE_RIGHT
     {
-        Pos = MAP_APPFONT ( 75 , 28 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 28 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "~Rechts" ;
-        Text [ ENGLISH ] = "Ri~ght" ;
+        Text [ ENGLISH ] = "~Right" ;
         Text [ norwegian ] = "Hø~yre" ;
         Text [ italian ] = "A dest~ra" ;
         Text [ portuguese_brazilian ] = "Di~reita" ;
@@ -178,7 +178,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "Höge~r" ;
         Text [ dutch ] = "~Rechts" ;
         Text [ spanish ] = "~Derecha" ;
-        Text [ english_us ] = "Righ~t" ;
+        Text [ english_us ] = "~Right" ;
         Text[ chinese_simplified ] = "ÏòÓÒ(~T)";
         Text[ russian ] = "Ñïðàâà";
         Text[ polish ] = "Prawy";
@@ -193,15 +193,15 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     Window WIN_TABRIGHT
     {
-        Pos = MAP_APPFONT ( 116 , 28 ) ;
+        Pos = MAP_APPFONT ( 115 , 28 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     RadioButton BTN_TABTYPE_CENTER
     {
-        Pos = MAP_APPFONT ( 75 , 42 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text = "Z~entriert" ;
-        Text [ ENGLISH ] = "C~enter" ;
+        Pos = MAP_APPFONT ( 66 , 42 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Zentriert" ;
+        Text [ ENGLISH ] = "~Center" ;
         Text [ norwegian ] = "M~idtstill" ;
         Text [ italian ] = "~Centrata" ;
         Text [ portuguese_brazilian ] = "C~entro" ;
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "C~entrerat" ;
         Text [ dutch ] = "~Centreren" ;
         Text [ spanish ] = "Cen~trado" ;
-        Text [ english_us ] = "C~entered" ;
+        Text [ english_us ] = "~Centered" ;
         Text[ chinese_simplified ] = "¾ÓÖÐ(~E)";
         Text[ russian ] = "Ïî öåíòðó";
         Text[ polish ] = "Wyœrodk.";
@@ -227,15 +227,15 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     Window WIN_TABCENTER
     {
-        Pos = MAP_APPFONT ( 116 , 42 ) ;
+        Pos = MAP_APPFONT ( 115 , 42 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     RadioButton BTN_TABTYPE_DECIMAL
     {
-        Pos = MAP_APPFONT ( 75 , 56 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 56 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "~Dezimal" ;
-        Text [ ENGLISH ] = "Deci~mal" ;
+        Text [ ENGLISH ] = "~Decimal" ;
         Text [ norwegian ] = "Desi~mal" ;
         Text [ italian ] = "~Decimale" ;
         Text [ portuguese_brazilian ] = "Deci~mal" ;
@@ -246,7 +246,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "~Decimal" ;
         Text [ dutch ] = "~Decimaal" ;
         Text [ spanish ] = "Deci~mal" ;
-        Text [ english_us ] = "Deci~mal" ;
+        Text [ english_us ] = "~Decimal" ;
         Text[ chinese_simplified ] = "Ê®½øÖÆ(~M)";
         Text[ russian ] = "Äåñÿòè÷íûé";
         Text[ polish ] = "Dziesiê~tny";
@@ -261,14 +261,14 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     Window WIN_TABDECIMAL
     {
-        Pos = MAP_APPFONT ( 116 , 56 ) ;
+        Pos = MAP_APPFONT ( 115 , 56 ) ;
         Size = MAP_APPFONT ( 7 , 10 ) ;
     };
     FixedText FT_TABTYPE_DECCHAR
     {
-        Pos = MAP_APPFONT ( 85 , 70 ) ;
-        Size = MAP_APPFONT ( 32 , 9 ) ;
-        Text = "Zei~chen" ;
+        Pos = MAP_APPFONT ( 75 , 70 ) ;
+        Size = MAP_APPFONT ( 39 , 8 ) ;
+        Text = "Z~eichen" ;
         Text [ ENGLISH ] = "~Char" ;
         Text [ norwegian ] = "~Tegn" ;
         Text [ italian ] = "Cara~ttere" ;
@@ -296,14 +296,14 @@ TabPage RID_SVXPAGE_TABULATOR
     Edit ED_TABTYPE_DECCHAR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 68 ) ;
+        Pos = MAP_APPFONT ( 114 , 68 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Left = TRUE ;
     };
     FixedLine FL_TABTYPE
     {
-        Pos = MAP_APPFONT ( 69 , 3 ) ;
-        Size = MAP_APPFONT ( 61 , 8 ) ;
+        Pos = MAP_APPFONT ( 60 , 3 ) ;
+        Size = MAP_APPFONT ( 66 , 8 ) ;
         Text = "Typ" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -331,16 +331,16 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     FixedLine FL_TABTYPE_VERT
     {
-        Pos = MAP_APPFONT ( 131 , 14 ) ;
-        Size = MAP_APPFONT ( 4  , 101) ;
+        Pos = MAP_APPFONT ( 127 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 95 ) ;
         Vert = TRUE;
     };
     RadioButton BTN_FILLCHAR_NO
     {
-        Pos = MAP_APPFONT ( 142 , 14 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 14 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "~Keine" ;
-        Text [ ENGLISH ] = "N~one" ;
+        Text [ ENGLISH ] = "~None" ;
         Text [ norwegian ] = "I~ngen" ;
         Text [ italian ] = "~Nessuno" ;
         Text [ portuguese_brazilian ] = "N~enhum" ;
@@ -351,7 +351,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
         Text [ spanish ] = "Nin~guno" ;
-        Text [ english_us ] = "N~one" ;
+        Text [ english_us ] = "~None" ;
         Check = TRUE ;
         Text[ chinese_simplified ] = "ÎÞ(~O)";
         Text[ russian ] = "Áåç";
@@ -367,28 +367,28 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
-        Pos = MAP_APPFONT ( 142 , 28 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 28 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "~........" ;
     };
     RadioButton BTN_FILLCHAR_DASHLINE
     {
-        Pos = MAP_APPFONT ( 142 , 42 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 42 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "~--------" ;
     };
     RadioButton BTN_FILLCHAR_UNDERSCORE
     {
-        Pos = MAP_APPFONT ( 142 , 56 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 56 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "~_____" ;
     };
     RadioButton BTN_FILLCHAR_OTHER
     {
-        Pos = MAP_APPFONT ( 142 , 70 ) ;
-        Size = MAP_APPFONT ( 46 , 10 ) ;
+        Pos = MAP_APPFONT ( 138 , 70 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
         Text = "Ze~ichen" ;
-        Text [ ENGLISH ] = "Ch~ar" ;
+        Text [ ENGLISH ] = "Ch~aracter" ;
         Text [ norwegian ] = "Te~gn" ;
         Text [ italian ] = "C~arattere" ;
         Text [ portuguese_brazilian ] = "Ca~racter" ;
@@ -399,7 +399,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "Tec~ken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~arácter" ;
-        Text [ english_us ] = "Character" ;
+        Text [ english_us ] = "Ch~aracter" ;
         Text[ chinese_simplified ] = "×Ö·û(~H)";
         Text[ russian ] = "Çíàê";
         Text[ polish ] = "Znak";
@@ -415,14 +415,14 @@ TabPage RID_SVXPAGE_TABULATOR
     Edit ED_FILLCHAR_OTHER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 189 , 69 ) ;
+        Pos = MAP_APPFONT ( 186 , 68 ) ;
         Size = MAP_APPFONT ( 9 , 12 ) ;
         Left = TRUE ;
     };
     FixedLine FL_FILLCHAR
     {
-        Pos = MAP_APPFONT ( 136 , 3 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+        Size = MAP_APPFONT ( 66 , 8 ) ;
         Text = "Füllzeichen" ;
         Text [ ENGLISH ] = "Fill character" ;
         Text [ norwegian ] = "Fylltegn" ;
@@ -450,7 +450,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     PushButton BTN_NEW
     {
-        Pos = MAP_APPFONT ( 205 , 6 ) ;
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Neu" ;
         Text [ ENGLISH ] = "~New" ;
@@ -479,7 +479,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     PushButton BTN_DELALL
     {
-        Pos = MAP_APPFONT ( 205 , 23 ) ;
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Alle löschen" ;
         Text [ ENGLISH ] = "Dele~te all" ;
@@ -508,7 +508,7 @@ TabPage RID_SVXPAGE_TABULATOR
     };
     PushButton BTN_DEL
     {
-        Pos = MAP_APPFONT ( 205 , 40 ) ;
+        Pos = MAP_APPFONT ( 204 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Lö~schen" ;
         Text [ ENGLISH ] = "~Delete" ;
