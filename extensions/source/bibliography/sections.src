@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-24 20:38:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,7 +962,7 @@ String ST_IDENTIFIER
     Text[ japanese ] = "’˜‘ID(~N)";
     Text[ korean ] = "¾à¾î(~N)";
     Text[ chinese_simplified ] = "¼ò³Æ(~N)";
-    Text[ chinese_traditional ] = "ÃÑ§O¤å(~N)";
+    Text[ chinese_traditional ] = "Â²µu´y­z¤å";
     Text[ arabic ] = "ÇáÇÓã ÇáãÎÊÕÑ";
     Text[ turkish ] = "~Kısa ad";
     Text[ language_user1 ] = " ";
@@ -1041,7 +1041,7 @@ String ST_AUTHOR
     Text[ japanese ] = "’˜Ò";
     Text[ korean ] = "Author(s)";
     Text[ chinese_simplified ] = "Author(s)";
-    Text[ chinese_traditional ] = "Author(s)";
+    Text[ chinese_traditional ] = "§@ªÌ";
     Text[ turkish ] = "Author(s)";
     Text[ arabic ] = "Author(s)";
     Text[ catalan ] = "Author(s)";
@@ -1065,7 +1065,7 @@ String ST_TITLE
     Text[ japanese ] = "À²ÄÙ(~L)";
     Text[ korean ] = "Á¦¸ñ(~L)";
     Text[ chinese_simplified ] = "±êÌâ(~L)";
-    Text[ chinese_traditional ] = "¼ĞÃD(~L)";
+    Text[ chinese_traditional ] = "¼ĞÃD";
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ turkish ] = "Başlık";
     Text[ language_user1 ] = " ";
@@ -1091,7 +1091,7 @@ String ST_PUBLISHER
     Text[ japanese ] = "o”ÅĞ(~P)";
     Text[ korean ] = "ÃâÆÇ»ç(~P)";
     Text[ chinese_simplified ] = "³ö°æÉç(~P)";
-    Text[ chinese_traditional ] = "¥Xª©ªÀ(~P)";
+    Text[ chinese_traditional ] = "¥Xª©ªÀ";
     Text[ arabic ] = "ÏÇÑ ÇáäÔÑ";
     Text[ turkish ] = "Yayınevi";
     Text[ language_user1 ] = " ";
@@ -1117,7 +1117,7 @@ String ST_ADDRESS
     Text[ japanese ] = "ZŠ(~D)";
     Text[ korean ] = "ÁÖ¼Ò(~D)";
     Text[ chinese_simplified ] = "µØÖ·(~D)";
-    Text[ chinese_traditional ] = "¦a§}(~D)";
+    Text[ chinese_traditional ] = "¦a§}";
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ turkish ] = "Adres";
     Text[ language_user1 ] = " ";
@@ -1169,7 +1169,7 @@ String ST_CHAPTER
     Text[ japanese ] = "Í(~C)";
     Text[ korean ] = "Àå(~C)";
     Text[ chinese_simplified ] = "ÕÂ(~C)";
-    Text[ chinese_traditional ] = "³¹(~C)";
+    Text[ chinese_traditional ] = "³¹";
     Text[ arabic ] = "ÇáİÕá";
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
@@ -1195,7 +1195,7 @@ String ST_PAGE
     Text[ japanese ] = "Íß°¼Ş”(~G)";
     Text[ korean ] = "ÂÊ(~G)";
     Text[ chinese_simplified ] = "Ò³(~G)";
-    Text[ chinese_traditional ] = "­¶(~G)";
+    Text[ chinese_traditional ] = "­¶";
     Text[ arabic ] = "ÕİÍÉ (ÕİÍÇÊ)";
     Text[ turkish ] = "Sayfa(lar)";
     Text[ language_user1 ] = " ";
@@ -1247,7 +1247,7 @@ String ST_EDITION
     Text[ japanese ] = "”Å(~I)";
     Text[ korean ] = "ÆÇ(~I)";
     Text[ chinese_simplified ] = "°æ±¾(~I)";
-    Text[ chinese_traditional ] = "ª©¥»(~I)";
+    Text[ chinese_traditional ] = "ª©¥»";
     Text[ arabic ] = "ÇáØÈÚÉ";
     Text[ turkish ] = "Yayım";
     Text[ language_user1 ] = " ";
@@ -1273,7 +1273,7 @@ String ST_BOOKTITLE
     Text[ japanese ] = "‘–¼(~B)";
     Text[ korean ] = "Ã¥ Á¦¸ñ(~B)";
     Text[ chinese_simplified ] = "ÊéÃû(~B)";
-    Text[ chinese_traditional ] = "®Ñ¦W(~B)";
+    Text[ chinese_traditional ] = "®Ñ¦W";
     Text[ arabic ] = "ÚäæÇä ÇáßÊÇÈ";
     Text[ turkish ] = "Kitap adı";
     Text[ language_user1 ] = " ";
@@ -1300,7 +1300,7 @@ String ST_VOLUME
     Text[ japanese ] = "Šª";
     Text[ korean ] = "Volume";
     Text[ chinese_simplified ] = "Volume";
-    Text[ chinese_traditional ] = "Volume";
+    Text[ chinese_traditional ] = "¥U";
     Text[ turkish ] = "Volume";
     Text[ arabic ] = "Volume";
     Text[ catalan ] = "Volume";
@@ -1324,7 +1324,7 @@ String ST_HOWPUBLISHED
     Text[ japanese ] = "¶ÊŞ°À²Ìß(~Y)";
     Text[ korean ] = "ÃâÆÇÇüÅÂ(~Y)";
     Text[ chinese_simplified ] = "·¢ĞĞ·½Ê½(~Y)";
-    Text[ chinese_traditional ] = "ª©¥»Ãş«¬(~Y)";
+    Text[ chinese_traditional ] = "¥Xª©Ãş«¬";
     Text[ arabic ] = "ØÑíŞÉ ÇáØÈÇÚÉ";
     Text[ turkish ] = "Yayım türü";
     Text[ language_user1 ] = " ";
@@ -1349,8 +1349,8 @@ String ST_ORGANIZATION
     Text[ portuguese_brazilian ] = "Organization";
     Text[ japanese ] = "‘gD’c‘Ì–¼(~Z)";
     Text[ korean ] = "Á¶Á÷(~Z)";
-    Text[ chinese_simplified ] = "×éÖ¯(~Z)";
-    Text[ chinese_traditional ] = "¾÷ºc(~Z)";
+    Text[ chinese_simplified ] = "ÉçÍÅ×éÖ¯(~Z)";
+    Text[ chinese_traditional ] = "ªÀ¹Î²ÕÂ´";
     Text[ arabic ] = "ÇáãäÙãÉ";
     Text[ turkish ] = "Organizasyon";
     Text[ language_user1 ] = " ";
@@ -1375,8 +1375,8 @@ String ST_INSTITUTION
     Text[ portuguese_brazilian ] = "Institution";
     Text[ japanese ] = "‹@ŠÖ–¼(~U)";
     Text[ korean ] = "°ø°ø±â°ü(~U)";
-    Text[ chinese_simplified ] = "»ú¹¹(~U)";
-    Text[ chinese_traditional ] = "¾÷ºc(~U)";
+    Text[ chinese_simplified ] = "¹«¹²»ú¹¹(~U)";
+    Text[ chinese_traditional ] = "¤½¦@¾÷ºc";
     Text[ arabic ] = "ÇáåíÆÉ";
     Text[ turkish ] = "Kurum";
     Text[ language_user1 ] = " ";
@@ -1403,7 +1403,7 @@ String ST_SCHOOL
     Text[ japanese ] = "‹³ˆç‹@ŠÖ–¼";
     Text[ korean ] = "University";
     Text[ chinese_simplified ] = "University";
-    Text[ chinese_traditional ] = "University";
+    Text[ chinese_traditional ] = "°ªµ¥°|®Õ";
     Text[ turkish ] = "University";
     Text[ arabic ] = "University";
     Text[ catalan ] = "University";
@@ -1428,7 +1428,7 @@ String ST_REPORT
     Text[ japanese ] = "ÚÎß°Ä‚Ìí—Ş(~P)";
     Text[ korean ] = "Type of proceedings";
     Text[ chinese_simplified ] = "Type of proceedings";
-    Text[ chinese_traditional ] = "Type of proceedings";
+    Text[ chinese_traditional ] = "³øªíªºÃş«¬";
     Text[ turkish ] = "Type of proceedings";
     Text[ arabic ] = "Type of proceedings";
     Text[ catalan ] = "Type of proceedings";
@@ -1452,7 +1452,7 @@ String ST_MONTH
     Text[ japanese ] = "Œ(~M)";
     Text[ korean ] = "¿ù(~M)";
     Text[ chinese_simplified ] = "ÔÂ(~M)";
-    Text[ chinese_traditional ] = "¤ë(~M)";
+    Text[ chinese_traditional ] = "¤ë";
     Text[ arabic ] = "ÇáÔåÑ";
     Text[ turkish ] = "Ay";
     Text[ language_user1 ] = " ";
@@ -1478,7 +1478,7 @@ String ST_JOURNAL
     Text[ japanese ] = "G–¼(~J)";
     Text[ korean ] = "ÀâÁö(~J)";
     Text[ chinese_simplified ] = "ÔÓÖ¾(~J)";
-    Text[ chinese_traditional ] = "Âø»x(~J)";
+    Text[ chinese_traditional ] = "Âø»x";
     Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "Dergi";
     Text[ language_user1 ] = " ";
@@ -1505,7 +1505,7 @@ String ST_NUMBER
     Text[ japanese ] = "”Ô†(~E)";
     Text[ korean ] = "¹øÈ£(~E)";
     Text[ chinese_simplified ] = "±àºÅ(~E)";
-    Text[ chinese_traditional ] = "¸¹½X(~E)";
+    Text[ chinese_traditional ] = "¸¹½X";
     Text[ arabic ] = "ÑŞã";
     Text[ language_user1 ] = "\"Sayı\" burada istisna (dergi için)";
     Text[ turkish ] = "Sayı";
@@ -1531,7 +1531,7 @@ String ST_SERIES
     Text[ japanese ] = "‘p‘(~R)";
     Text[ korean ] = "½Ã¸®Áî(~R)";
     Text[ chinese_simplified ] = "ÏµÁĞ(~R)";
-    Text[ chinese_traditional ] = "¨t¦C(~R)";
+    Text[ chinese_traditional ] = "¨t¦C";
     Text[ arabic ] = "ÓáÓáÉ";
     Text[ turkish ] = "Dizi";
     Text[ language_user1 ] = " ";
@@ -1557,7 +1557,7 @@ String ST_ANNOTE
     Text[ japanese ] = "’ß(~O)";
     Text[ korean ] = "ÁÖ¼®(~O)";
     Text[ chinese_simplified ] = "ËµÃ÷(~O)";
-    Text[ chinese_traditional ] = "³Æµù(~O)";
+    Text[ chinese_traditional ] = "³Æµù";
     Text[ arabic ] = "ÊÚáíŞ ÊæÖíÍí";
     Text[ turkish ] = "Açıklama";
     Text[ language_user1 ] = " ";
@@ -1583,7 +1583,7 @@ String ST_NOTE
     Text[ japanese ] = "ÒÓ(~N)";
     Text[ korean ] = "¸Ş¸ğ(~N)";
     Text[ chinese_simplified ] = "±¸×¢(~N)";
-    Text[ chinese_traditional ] = "³Æµù(~N)";
+    Text[ chinese_traditional ] = "³Æµù";
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "Not";
     Text[ language_user1 ] = " ";
@@ -1746,6 +1746,7 @@ String ST_CUSTOM5
     Text[ catalan ] = "Campo de usuario ~5";
     Text[ finnish ] = "Käyttäjän määrittämä kenttä ~5";
 };
+
 
 
 
