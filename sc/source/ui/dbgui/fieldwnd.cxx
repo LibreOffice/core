@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:07:08 $
+ *  last change: $Author: dr $ $Date: 2002-10-08 08:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ BOOL ScDPFieldWindow::GetFieldIndex( const Point& rPos, long& rnIndex ) const
         }
         break;
     }
-    return (rnIndex < nFieldSize);
+    return IsValidIndex( rnIndex );
 }
 
 //-------------------------------------------------------------------
