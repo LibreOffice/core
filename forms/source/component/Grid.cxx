@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,9 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_HELPTEXT:
+            rValue <<= m_sHelpText;
+            break;
         case PROPERTY_ID_HELPURL:
             rValue <<= m_sHelpURL;
             break;
@@ -545,6 +548,9 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
     sal_Bool bModified(sal_False);
     switch (nHandle)
     {
+        case PROPERTY_ID_HELPTEXT:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sHelpText);
+            break;
         case PROPERTY_ID_HELPURL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sHelpURL);
             break;
@@ -639,6 +645,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_HELPTEXT:
+            rValue >>= m_sHelpText;
+            break;
         case PROPERTY_ID_HELPURL:
             rValue >>= m_sHelpURL;
             break;
