@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 13:25:52 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 15:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,6 +1129,24 @@ void SbaTableQueryBrowser::removeModelListeners(const Reference< ::com::sun::sta
     }
 }
 // -------------------------------------------------------------------------
+void SbaTableQueryBrowser::RowChanged()
+{
+    SbaGridControl* pControl = getBrowserView()->getVclControl();
+    if (!pControl->IsEditing())
+        InvalidateFeature(ID_BROWSER_COPY);
+    SbaXDataBrowserController::RowChanged();
+}
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::ColumnChanged()
+{
+    SbaGridControl* pControl = getBrowserView()->getVclControl();
+    if (!pControl->IsEditing())
+        InvalidateFeature(ID_BROWSER_COPY);
+    SbaXDataBrowserController::ColumnChanged();
+}
+
+// -------------------------------------------------------------------------
 String SbaTableQueryBrowser::getURL() const
 {
     return String();
@@ -1291,13 +1309,22 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
                     EntryType eType = getEntryType(pEntry);
                     aReturn.bEnabled = (eType == etTable || eType == etQuery || eType == etView);
                     break;
-                }// else run through
+                }
+                else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
+                {
+                    SbaGridControl* pControl = getBrowserView()->getVclControl();
+                    aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
+                }
+                else
+                    return SbaXDataBrowserController::GetState(nId);
+                break;
+
             case ID_BROWSER_CUT:
                 if(m_pTreeView->HasChildPathFocus())
-                {
                     aReturn.bEnabled = sal_False;
-                    break;
-                }// else run through
+                else
+                    return SbaXDataBrowserController::GetState(nId);
+                break;
 
             case ID_BROWSER_PASTE:
                 // first look which side is active
@@ -1327,7 +1354,11 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
                             aReturn.bEnabled = sal_False;
                     }
                     break;
-                }// else run through
+                }
+                else
+                    return SbaXDataBrowserController::GetState(nId);
+                break;
+
             default:
                 return SbaXDataBrowserController::GetState(nId);
         }
@@ -1478,8 +1509,16 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 #else
                     pTransfer->CopyToClipboard(getView());
 #endif
-                break;
-            }// else run through
+            }
+            else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
+            {
+                SbaGridControl* pControl = getBrowserView()->getVclControl();
+                pControl->copyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
+            }
+            else
+                SbaXDataBrowserController::Execute(nId);
+            break;
+
         case ID_BROWSER_CUT:// cut isn't allowed for the treeview
         default:
             SbaXDataBrowserController::Execute(nId);
@@ -2056,6 +2095,9 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         // insert the new entry into the tree
         DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
         OSL_ENSURE(pContainerData, "elementInserted: There must be user data for this type!");
+
+        sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pContainerData->eType);
+        Image aImage = Image(ModuleRes(nImageResId));
 
         sal_Bool bIsTable = etTableContainer == pContainerData->eType;
         if (bIsTable)
