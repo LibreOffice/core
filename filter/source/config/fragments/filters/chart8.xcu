@@ -10,5 +10,5 @@
             <value xml:lang="en-US">Open Office Chart</value>
             <value xml:lang="de">Open Office Diagramm</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT OWN DEFAULT NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT OWN DEFAULT NOTINFILEDIALOG NOTINCHOOSER</value></prop>
     </node>
