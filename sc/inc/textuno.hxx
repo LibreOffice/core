@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2000-12-18 19:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class EditEngine;
 class EditTextObject;
 class ScDocShell;
 class ScAddress;
+class ScCellObj;
 
 struct ScHeaderFieldData;
 
@@ -173,6 +174,8 @@ public:
                                                     USHORT nP );
     virtual                 ~ScHeaderFooterTextObj();
 
+    const SvxUnoText&       GetUnoText() const;
+
     static void             FillDummyFieldData( ScHeaderFieldData& rData );
 
                             // XText
@@ -247,17 +250,26 @@ public:
 };
 
 
-//  abgeleitete Cursor-Objekte nur, um per getImplementation unterscheiden zu koennen
+//  derived cursor objects for getImplementation and getText/getStart/getEnd
 
 //! uno3: SvxUnoTextCursor is not derived from XUnoTunnel, but should be (?)
 
 class ScCellTextCursor : public SvxUnoTextCursor
 {
+    ScCellObj&              rTextObj;
+
 public:
-                            ScCellTextCursor();
                             ScCellTextCursor(const ScCellTextCursor& rOther);
-                            ScCellTextCursor(const SvxUnoText& rText);
+                            ScCellTextCursor(ScCellObj& rText);
     virtual                 ~ScCellTextCursor();
+
+                            // SvxUnoTextCursor methods reimplemented here:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
+                            getText() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getStart() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getEnd() throw(::com::sun::star::uno::RuntimeException);
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
@@ -271,11 +283,21 @@ public:
 
 class ScHeaderFooterTextCursor : public SvxUnoTextCursor
 {
+private:
+    ScHeaderFooterTextObj&  rTextObj;
+
 public:
-                            ScHeaderFooterTextCursor();
                             ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther);
-                            ScHeaderFooterTextCursor(const SvxUnoText& rText);
+                            ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText);
     virtual                 ~ScHeaderFooterTextCursor();
+
+                            // SvxUnoTextCursor methods reimplemented here:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
+                            getText() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getStart() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getEnd() throw(::com::sun::star::uno::RuntimeException);
 
                             // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<

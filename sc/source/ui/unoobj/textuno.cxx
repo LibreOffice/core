@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-24 12:06:46 $
+ *  last change: $Author: nn $ $Date: 2000-12-18 19:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "editutil.hxx"
 #include "unoguard.hxx"
 #include "miscuno.hxx"
+#include "cellsuno.hxx"
 
 using namespace com::sun::star;
 
@@ -270,13 +271,19 @@ ScHeaderFooterTextObj::~ScHeaderFooterTextObj()
         pUnoText->release();
 }
 
+const SvxUnoText& ScHeaderFooterTextObj::GetUnoText() const
+{
+    DBG_ASSERT(pUnoText, "GetUnoText: NULL");
+    return *pUnoText;
+}
+
 // XText
 
 uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCursor()
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScHeaderFooterTextCursor( *pUnoText );
+    return new ScHeaderFooterTextCursor( *this );
 }
 
 uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCursorByRange(
@@ -380,6 +387,14 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             SvxEditSource* pEditSource = pTextRange->GetEditSource();
             ESelection aSelection = pTextRange->GetSelection();
 
+            if (!bAbsorb)
+            {
+                //  don't replace -> append at end
+                aSelection.Adjust();
+                aSelection.nStartPara = aSelection.nEndPara;
+                aSelection.nStartPos  = aSelection.nEndPos;
+            }
+
             SvxFieldItem aItem = pHeaderField->CreateFieldItem();
 
             SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
@@ -391,6 +406,8 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pHeaderField->InitDoc( &rContentObj, nPart, aSelection );
+
+            pTextRange->SetSelection( aSelection );
 
             return;
         }
@@ -487,23 +504,65 @@ sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeExcepti
 
 //------------------------------------------------------------------------
 
-ScCellTextCursor::ScCellTextCursor() :
-    SvxUnoTextCursor( SvxUnoText() )
-{
-}
-
 ScCellTextCursor::ScCellTextCursor(const ScCellTextCursor& rOther) :
-    SvxUnoTextCursor( rOther )
+    SvxUnoTextCursor( rOther ),
+    rTextObj( rOther.rTextObj )
 {
+    rTextObj.acquire();
 }
 
-ScCellTextCursor::ScCellTextCursor(const SvxUnoText& rText) :
-    SvxUnoTextCursor( rText )
+ScCellTextCursor::ScCellTextCursor(ScCellObj& rText) :
+    SvxUnoTextCursor( rText.GetUnoText() ),
+    rTextObj( rText )
 {
+    rTextObj.acquire();
 }
 
 ScCellTextCursor::~ScCellTextCursor()
 {
+    rTextObj.release();
+}
+
+// SvxUnoTextCursor methods reimplemented here to return the right objects:
+
+uno::Reference<text::XText> SAL_CALL ScCellTextCursor::getText() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return &rTextObj;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! use other object for range than cursor?
+
+    ScCellTextCursor* pNew = new ScCellTextCursor( *this );
+    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+
+    ESelection aNewSel = GetSelection();
+    aNewSel.nEndPara = aNewSel.nStartPara;
+    aNewSel.nEndPos  = aNewSel.nStartPos;
+    pNew->SetSelection( aNewSel );
+
+    return xRange;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! use other object for range than cursor?
+
+    ScCellTextCursor* pNew = new ScCellTextCursor( *this );
+    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+
+    ESelection aNewSel = GetSelection();
+    aNewSel.nStartPara = aNewSel.nEndPara;
+    aNewSel.nStartPos  = aNewSel.nEndPos;
+    pNew->SetSelection( aNewSel );
+
+    return xRange;
 }
 
 // XUnoTunnel
@@ -549,23 +608,65 @@ ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno:
 
 //------------------------------------------------------------------------
 
-ScHeaderFooterTextCursor::ScHeaderFooterTextCursor() :
-    SvxUnoTextCursor( SvxUnoText() )
-{
-}
-
 ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther) :
-    SvxUnoTextCursor( rOther )
+    SvxUnoTextCursor( rOther ),
+    rTextObj( rOther.rTextObj )
 {
+    rTextObj.acquire();
 }
 
-ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(const SvxUnoText& rText) :
-    SvxUnoTextCursor( rText )
+ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText) :
+    SvxUnoTextCursor( rText.GetUnoText() ),
+    rTextObj( rText )
 {
+    rTextObj.acquire();
 }
 
 ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor()
 {
+    rTextObj.release();
+}
+
+// SvxUnoTextCursor methods reimplemented here to return the right objects:
+
+uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextCursor::getText() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return &rTextObj;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! use other object for range than cursor?
+
+    ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
+    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+
+    ESelection aNewSel = GetSelection();
+    aNewSel.nEndPara = aNewSel.nStartPara;
+    aNewSel.nEndPos  = aNewSel.nStartPos;
+    pNew->SetSelection( aNewSel );
+
+    return xRange;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! use other object for range than cursor?
+
+    ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
+    uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
+
+    ESelection aNewSel = GetSelection();
+    aNewSel.nStartPara = aNewSel.nEndPara;
+    aNewSel.nStartPos  = aNewSel.nEndPos;
+    pNew->SetSelection( aNewSel );
+
+    return xRange;
 }
 
 // XUnoTunnel
