@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:02:28 $
+ *  last change: $Author: os $ $Date: 2001-06-18 11:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,87 +850,64 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 BOOL bNumbering = FALSE;
                 USHORT nRet = USHRT_MAX;
                 SvtPathOptions aPathOpt;
-//                SwLoadTemplateDlg* pDlg = new SwLoadTemplateDlg(0);
-                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                Reference < XFilePicker > xFP;
-                if( xMgr.is() )
+                SfxNewFileDialog* pNewFileDlg =
+                    new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE);
+                nRet = pNewFileDlg->Execute();
+                if(RET_TEMPLATE_LOAD == nRet)
                 {
-                    Sequence <Any> aProps(1);
-                    DBG_ERROR("appropriate service not yet available!")
-//  should be something like
-//                    aProps.getArray()[0] <<= C2U("FileOpen_TemplateBoxes");
-                    aProps.getArray()[0] <<= C2U("FileOpen");
-                    xFP = Reference< XFilePicker >(
-                            xMgr->createInstanceWithArguments(
-                                C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                            UNO_QUERY );
-                }
-                if(!xFP.is())
-                {
-                    DBG_ERROR("service com.sun.star.ui.dialogs.FilePicker not found");
-                    break;
-                }
-
-                xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
-
-                SfxObjectFactory &rFact = GetFactory();
-                Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
-                {
-                    const SfxFilter* pFlt = rFact.GetFilter( i );
-                    if( pFlt && pFlt->IsAllowedAsTemplate() )
+                    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                    Reference < XFilePicker > xFP;
+                    if( xMgr.is() )
                     {
-                        const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
-                        xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                        Sequence <Any> aProps(1);
+                        aProps.getArray()[0] <<= C2U("FileOpen");
+                        xFP = Reference< XFilePicker >(
+                                xMgr->createInstanceWithArguments(
+                                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
+                                UNO_QUERY );
                     }
+                    if(!xFP.is())
+                    {
+                        DBG_ERROR("service com.sun.star.ui.dialogs.FilePicker not found");
+                        break;
+                    }
+                    xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
-                    if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
-                        xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+                    SfxObjectFactory &rFact = GetFactory();
+                    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                    for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
+                    {
+                        const SfxFilter* pFlt = rFact.GetFilter( i );
+                        if( pFlt && pFlt->IsAllowedAsTemplate() )
+                        {
+                            const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                            xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                        }
 
+                        if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
+                            xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+
+                    }
+                    if( xFP->execute() == RET_OK )
+                    {
+                        aFileName = xFP->getFiles().getConstArray()[0];
+                    }
                 }
-
-                nRet = xFP->execute();
-                if( nRet == RET_OK )
+                else
                 {
-                    aFileName = xFP->getFiles().getConstArray()[0];
+                    aFileName = pNewFileDlg->GetTemplateFileName();
                 }
-//                else if( nRet == RET_TEMPLATE )
-//                {
-//                    SfxNewFileDialog* pNewDlg = pDlg->GetNewFileDlg();
-
-//                    nRet = pNewDlg->Execute();
-//                    if( nRet == RET_OK )
-//                        aFileName = pNewDlg->GetTemplateFileName();
-//                }
-
                 SwgReaderOption aOpt;
-                try
-                {
-                    Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-/*                    Any aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_TEXT, 0);
-                    aOpt.SetTxtFmts( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True);
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_FRAME, 0);
-                    aOpt.SetFrmFmts( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_PAGES, 0);
-                    aOpt.SetPageDescs( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_NUMBERING, 0);
-                    aOpt.SetNumRules( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_OVERWRITE, 0);
-                    aOpt.SetMerge( !(aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True) );
-*/
-                    aOpt.SetTxtFmts( sal_True );
-                    aOpt.SetFrmFmts( sal_True );
-                    aOpt.SetPageDescs( sal_True );
-                    aOpt.SetNumRules(sal_True );
-                    aOpt.SetMerge( sal_True );
-                }
-                catch(Exception& rEx)
-                {
-                    DBG_ERROR("control acces failed")
-                }
+                USHORT nFlags = pNewFileDlg->GetTemplateFlags();
+                aOpt.SetTxtFmts(    0 != (nFlags&SFX_LOAD_TEXT_STYLES ));
+                aOpt.SetFrmFmts(    0 != (nFlags&SFX_LOAD_FRAME_STYLES));
+                aOpt.SetPageDescs(  0 != (nFlags&SFX_LOAD_PAGE_STYLES ));
+                aOpt.SetNumRules(   0 != (nFlags&SFX_LOAD_NUM_STYLES  ));
+                aOpt.SetMerge(      0 != (nFlags&SFX_MERGE_STYLES     ));
 
                 if( aFileName.Len() )
                     SetError( LoadStylesFromFile( aFileName, aOpt, FALSE ));
+                delete pNewFileDlg;
             }
             break;
             case SID_SOURCEVIEW:
@@ -1716,10 +1693,10 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     SfxMedium aMed( rURL, STREAM_STD_READ, FALSE );
     if( aMed.IsStorage() )
     {
-        ULONG nVersion = pFlt->GetVersion();
-        if( pFlt &&  nVersion )
+        ULONG nVersion = pFlt ? pFlt->GetVersion() : 0;
+        if( nVersion )
             aMed.GetStorage()->SetVersion( (long)nVersion );
-        pRead = pFlt->GetVersion() >= SOFFICE_FILEFORMAT_60 ? ReadXML : ReadSw3;
+        pRead = nVersion >= SOFFICE_FILEFORMAT_60 ? ReadXML : ReadSw3;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )
