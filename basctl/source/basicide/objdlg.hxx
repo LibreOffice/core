@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2002-04-25 09:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ protected:
 
 public:
     ObjectCatalog( Window * pParent );
+    virtual ~ObjectCatalog();
 
     void                ScanBasic( BasicManager* pBasMgr, const String& rName );
     void                UpdateEntries();

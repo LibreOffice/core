@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-11 13:41:28 $
+ *  last change: $Author: tbe $ $Date: 2002-04-25 09:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SV_CMDEVT_HXX
 #include <vcl/cmdevt.hxx>
+#endif
+#ifndef _SV_TASKPANELIST_HXX
+#include <vcl/taskpanelist.hxx>
 #endif
 #include <vcl/sound.hxx>
 #include <objdlg.hrc>
@@ -196,8 +199,15 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
         SetOutputSizePixel( aSize );
 
     Resize();   // damit der Resize-Handler die Controls anordnet
+
+    // make object catalog keyboard accessible
+    pParent->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
+ObjectCatalog::~ObjectCatalog()
+{
+    GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+}
 
 void __EXPORT ObjectCatalog::Move()
 {
