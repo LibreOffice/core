@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:34:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,13 +587,13 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
         SwDoc* pGDoc = pGlosGroup->GetDoc();
 
         // Bis es eine Option dafuer gibt, base util::URL loeschen
-        const String aOldURL( INetURLObject::GetBaseURL() );
         if(pCfg->IsSaveRelFile())
         {
-            INetURLObject::SetBaseURL( URIHelper::SmartRelToAbs(pGlosGroup->GetFileName()));
+            INetURLObject aTemp(pGlosGroup->GetFileName());
+            pGlosGroup->SetBaseURL( aTemp.GetMainURL(INetURLObject::NO_DECODE));
         }
         else
-            INetURLObject::SetBaseURL( aEmptyStr );
+            pGlosGroup->SetBaseURL( aEmptyStr );
 
         sal_uInt16 nRet;
         if( pOnlyTxt )
@@ -611,8 +611,6 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
             else
                 nRet = (sal_uInt16) -1;
         }
-
-        INetURLObject::SetBaseURL( aOldURL );
 
         if(nRet == (sal_uInt16) -1 )
         {
