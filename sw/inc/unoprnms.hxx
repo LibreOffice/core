@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:12:03 $
+ *  last change: $Author: os $ $Date: 2001-04-17 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_LEFT_MARGIN                 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_RIGHT_MARGIN            ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_LEFT_MARGIN_RELATIVE    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_FIRST_LINE_INDENT       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_HYPHENATION                    ;

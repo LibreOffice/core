@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:26:59 $
+ *  last change: $Author: os $ $Date: 2001-04-17 14:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_LEFT_MARGIN                       
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_RIGHT_MARGIN                      (MAP_CHAR_LEN("ParaRightMargin"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_LEFT_MARGIN_RELATIVE              (MAP_CHAR_LEN("ParaLeftMarginRelative"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE             (MAP_CHAR_LEN("ParaRightMarginRelative"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT         (MAP_CHAR_LEN("ParaIsAutoFirstLineIndent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_FIRST_LINE_INDENT                 (MAP_CHAR_LEN("ParaFirstLineIndent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE        (MAP_CHAR_LEN("ParaFirstLineIndentRelative"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_IS_HYPHENATION                    (MAP_CHAR_LEN("ParaIsHyphenation"));

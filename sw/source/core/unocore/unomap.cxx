@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: os $ $Date: 2001-04-16 15:23:56 $
+ *  last change: $Author: os $ $Date: 2001-04-17 14:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_LOCATION),         RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_POSITION},                                \
         { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},                                   \
         { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},                                  \
-        { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},                         \
+        { SW_PROP_NAME(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT),   RES_LR_SPACE,           &::getBooleanCppuType(),      PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO},                                      \
+        { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},                         \
         _STANDARD_FONT_PROPERTIES \
         _CJK_FONT_PROPERTIES \
         _CTL_FONT_PROPERTIES \
@@ -841,6 +842,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN_RELATIVE),  RES_LR_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     MID_L_REL_MARGIN},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE), RES_LR_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     MID_R_REL_MARGIN},
+                    { SW_PROP_NAME(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT), RES_LR_SPACE,          &::getBooleanCppuType(),      PROPERTY_NONE, MID_FIRST_AUTO},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE),   RES_LR_SPACE,       &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  CONVERT_TWIPS},
@@ -1189,6 +1191,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PROPERTY_NONE, MID_UL_HASCOLOR},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT),        RES_LR_SPACE,   &::getBooleanCppuType(),      PROPERTY_NONE, MID_FIRST_AUTO},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),  RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
@@ -1691,6 +1694,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PROPERTY_NONE, MID_UL_HASCOLOR},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getBooleanCppuType(),      PROPERTY_NONE, MID_FIRST_AUTO},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),  RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
