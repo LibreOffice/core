@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrlohdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-08-01 15:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& 
 
     rValue >>= aLocale;
 
-    if( IsXMLToken(rStrImpValue, XML_NONE) )
+    if( !IsXMLToken(rStrImpValue, XML_NONE) )
         aLocale.Language = rStrImpValue;
 
     rValue <<= aLocale;
@@ -172,7 +172,7 @@ sal_Bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& r
 
     rValue >>= aLocale;
 
-    if( IsXMLToken( rStrImpValue, XML_NONE ) )
+    if( !IsXMLToken( rStrImpValue, XML_NONE ) )
         aLocale.Country = rStrImpValue;
 
     rValue <<= aLocale;
