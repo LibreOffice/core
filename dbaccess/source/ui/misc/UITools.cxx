@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,13 +737,15 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                 case DataType::OTHER:
                     aName = _rsTypeNames.GetToken(TYPE_OTHER);
                     break;
-                default:
-                    OSL_ENSURE(0,"Unknown type");
             }
-            pInfo->aUIName = aName.GetBuffer();
-            pInfo->aUIName += aB1;
+            if ( aName.Len() )
+            {
+                pInfo->aUIName = aName.GetBuffer();
+                pInfo->aUIName += aB1;
+            }
             pInfo->aUIName += pInfo->aTypeName;
-            pInfo->aUIName += aB2;
+            if ( aName.Len() )
+                pInfo->aUIName += aB2;
             // Now that we have the type info, save it in the multimap
             _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
         }
