@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 13:18:24 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,8 +748,11 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, R
 
     ::osl::MutexGuard aGuard( m_rMutex );
     checkUpdateIterator();
+
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
+
     m_pCache->updateNull(columnIndex);
-    firePropertyChange(columnIndex-1 ,Any());
+    firePropertyChange(columnIndex-1, aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
