@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 13:16:14 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,7 @@ IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
 
 IMPL_LINK( SfxApplication, StartWelcomeScreenHdl_Impl, void*, EMPTYARG )
 {
+/*
     // User-Event kommt zu schnell, also 0,5s warten, wenn er nicht sowieso schon da ist.
     static Timer* pTimer = NULL;
     if ( !pTimer && !SFX_APP()->GetHelpPI() )
@@ -518,7 +519,6 @@ IMPL_LINK( SfxApplication, StartWelcomeScreenHdl_Impl, void*, EMPTYARG )
 
     if ( SvtHelpOptions().IsWelcomeScreen() )
     {
-/*
         ULONG nId = 0;
         Config aConfig( SfxHelp_Impl::GetHelpAgentConfig() );
         ImplSetLanguageGroup( aConfig, String::CreateFromAscii("WelcomeScreen"), TRUE );
@@ -546,8 +546,8 @@ IMPL_LINK( SfxApplication, StartWelcomeScreenHdl_Impl, void*, EMPTYARG )
                 aConfig.WriteKey( nId, (USHORT)0 ); // gleich als gelesen flaggen
             }
         }
- */
     }
+ */
     return 1;
 }
 

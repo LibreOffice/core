@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-21 14:43:09 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,7 @@ SfxHelpTextWindow::SfxHelpTextWindow( Window* pParent ) :
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( &aTextWin ) );
+    xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
 
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
 
@@ -631,7 +632,8 @@ IMPL_LINK( SfxHelpWindow, SelectHdl, ToolBox* , pToolBox )
 
 // -----------------------------------------------------------------------
 
-SfxHelpWindow::SfxHelpWindow( Window* pParent, WinBits nBits ) :
+SfxHelpWindow::SfxHelpWindow( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+        Window* pParent, WinBits nBits ) :
 
     SplitWindow( pParent, nBits | WB_3DLOOK ),
 
@@ -648,6 +650,9 @@ SfxHelpWindow::SfxHelpWindow( Window* pParent, WinBits nBits ) :
     pIndexWin = new SfxHelpIndexWindow( this );
     pIndexWin->Show();
     pTextWin = new SfxHelpTextWindow( this );
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier > xSup( rFrame, UNO_QUERY );
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrames > xFrames = xSup->getFrames();
+    xFrames->append( pTextWin->getFrame() );
     pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow, SelectHdl ) );
     pTextWin->Show();
 

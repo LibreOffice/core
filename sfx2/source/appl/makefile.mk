@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pb $ $Date: 2000-11-20 12:56:08 $
+#   last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,7 +115,6 @@ SLOFILES =  \
         $(SLO)$/appdde.obj \
         $(SLO)$/workwin.obj \
         $(SLO)$/sfxhelp.obj \
-        $(SLO)$/sfxhelp2.obj \
         $(SLO)$/childwin.obj \
         $(SLO)$/sfxdemo.obj \
         $(SLO)$/sfxdll.obj \

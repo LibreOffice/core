@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,45 +430,6 @@ SfxTabDialog::SfxTabDialog
 SfxTabDialog::~SfxTabDialog()
 {
     // Konfiguration in Ini-Manager abspeichern
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-    String aDlgData( pIniMgr->GetString( GetPosPixel(), Size() ) );
-    aDlgData += pIniMgr->GetToken();
-    aDlgData += String::CreateFromInt32( aTabCtrl.GetCurPageId() );
-    pIniMgr->Set( aDlgData, SFX_KEY_DIALOG, nResId );
-    const USHORT nCount = pImpl->pData->Count();
-
-    for ( USHORT i = 0; i < nCount; ++i )
-    {
-        Data_Impl* pDataObject = pImpl->pData->GetObject(i);
-
-        if ( pDataObject->pTabPage )
-        {
-            pDataObject->pTabPage->FillUserData();
-            String aPageData(pDataObject->pTabPage->GetUserData());
-            if ( aPageData.Len() )
-            {
-                pIniMgr->Set( aPageData, SFX_KEY_PAGE, pDataObject->nId);
-            }
-
-            if ( pDataObject->bOnDemand )
-                delete (SfxItemSet*)&pDataObject->pTabPage->GetItemSet();
-            delete pDataObject->pTabPage;
-        }
-        delete pDataObject;
-    }
-    delete pImpl->pApplyButton;
-    delete pImpl->pData;
-    delete pImpl;
-    delete pUserBtn;
-    delete pOutSet;
-    delete pExampleSet;
-    delete pRanges;
-
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->ResetTopic();
-#else
     String aDlgData(',');
     aDlgData += String::CreateFromInt32( aTabCtrl.GetCurPageId() );
     const USHORT nCount = pImpl->pData->Count();
@@ -495,11 +456,11 @@ SfxTabDialog::~SfxTabDialog()
     delete pOutSet;
     delete pExampleSet;
     delete pRanges;
-
+/*
     SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
     if ( pHelpPI )
         pHelpPI->ResetTopic();
-#endif
+ */
 }
 
 // -----------------------------------------------------------------------
@@ -1308,11 +1269,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
     if ( pExampleSet )
         pTabPage->ActivatePage( *pExampleSet );
-
+/*
     SfxHelpPI *pHelpPI = pSfxApp->GetHelpPI();
     if ( pHelpPI )
         pHelpPI->LoadTopic( pTabPage->GetHelpId() );
-
+*/
     BOOL bReadOnly = pTabPage->IsReadOnly();
     ( bReadOnly || pImpl->bHideResetBtn ) ? aResetBtn.Hide() : aResetBtn.Show();
     return 0;

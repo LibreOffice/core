@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2000-11-24 16:09:38 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,7 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
 long SfxAppFocusChanged_Impl( void* pObj, void* pArg )
 {
+/*
     SfxApplication *pApp = SFX_APP();
     if ( pApp && !pApp->IsDowning() )
     {
@@ -674,7 +675,7 @@ long SfxAppFocusChanged_Impl( void* pObj, void* pArg )
                 nId, sal_False, SvtHelpOptions().IsHelpAgentAutoStartMode() );
         }
     }
-
+ */
     return 0;
 }
 

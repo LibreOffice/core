@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-21 14:43:09 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ private:
     DECL_LINK(          SelectHdl, ToolBox* );
 
 public:
-    SfxHelpWindow( Window* pParent, WinBits nBits );
+    SfxHelpWindow( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+            Window* pParent, WinBits nBits );
     ~SfxHelpWindow();
 
     void                setContainerWindow(

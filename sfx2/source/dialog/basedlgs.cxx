@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,25 +72,20 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
 #endif
-
 #pragma hdrstop
 
 #include "basedlgs.hxx"
 #include "viewfrm.hxx"
 #include "tabdlg.hxx"
 #include "app.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "bindings.hxx"
 #include "dispatch.hxx"
-#include "sfxhelp.hxx"
 #include "accmgr.hxx"
+#include "childwin.hxx"
+#include "viewsh.hxx"
 
 static String aEmptyString;
 
@@ -270,10 +265,11 @@ SfxModalDialog::~SfxModalDialog()
 */
 
 {
+/*
     SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
     if ( pHelpPI )
         pHelpPI->ResetTopic();
-
+*/
     SetDialogData_Impl(0, this, nUniqId, aExtraData);
     aTimer.Stop();
 }
@@ -282,9 +278,11 @@ SfxModalDialog::~SfxModalDialog()
 
 IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
 {
+/*
     SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
     if ( pHelpPI )
         pHelpPI->LoadTopic( GetHelpId() );
+ */
     return 0L;
 }
 

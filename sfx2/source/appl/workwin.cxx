@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-25 13:18:08 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include "ipenv.hxx"
 #include "splitwin.hxx"
 #include "msgpool.hxx"
-#include "sfxhelp.hxx"
 #include "stbmgr.hxx"
 
 DBG_NAME(SfxWorkWindow);
@@ -2149,13 +2148,6 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId)
                     SfxFrame::BeamerSet_Impl();
                 else if ( pDock->IsAutoHide_Impl() )
                     pDock->AutoShow_Impl();
-            }
-
-            if ( nId != SID_HELP_PI )
-            {
-                SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-                if ( pHelpPI )
-                    pHelpPI->LoadTopic(pCW->pWin->GetWindow()->GetHelpId() );
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appchild.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 17:30:29 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include "childwin.hxx"
 #include "arrdecl.hxx"
 #include "templdlg.hxx"
-#include "sfxhelp.hxx"
 #include "ipfrm.hxx"
 #include "ipenv.hxx"
 #include "request.hxx"
@@ -297,19 +296,6 @@ SfxTemplateDialog* SfxApplication::GetTemplateDialog()
 
 //--------------------------------------------------------------------
 
-SfxHelpPI* SfxApplication::GetHelpPI()
-{
-    if ( pViewFrame )
-    {
-        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SfxHelpPIWrapper::GetChildWindowId());
-        return pChild ? (SfxHelpPI*) pChild->GetWindow() : 0;
-    }
-
-    return NULL;
-}
-
-//--------------------------------------------------------------------
-
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const
 {
     if ( pFrame )
@@ -321,118 +307,8 @@ SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) co
 }
 
 //--------------------------------------------------------------------
-#if SUPD<604
-void SfxApplication::ChildWindowExecute( SfxRequest &rReq )
 
-/*  [Beschreibung]
-
-    Diese Methode kann in der Execute-Methode f"ur das ein- und ausschalten
-    von Child-Windows eingesetzt werden, um dieses inkl. API-Anbindung zu
-    implementieren.
-
-    Einfach in der IDL als 'ExecuteMethod' eintragen.
-*/
-
+SfxHelpPI* SfxApplication::GetHelpPI()
 {
-    // Parameter auswerten
-    USHORT nSID = rReq.GetSlot();
-
-    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, FALSE);
-    BOOL bShow = FALSE;
-    BOOL bHasChild = HasChildWindow(nSID);
-    bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
-
-    if ( bShow && ( nSID == SID_HELP_PI ) )
-    {
-        // Nur starten wenn Hilfe installiert...
-        SfxHelp_Impl* pHelp = (SfxHelp_Impl*)Application::GetHelp();
-        if ( !pHelp || !pHelp->CheckHelpFile( TRUE ) )
-            return;
-    }
-
-    // ausf"uhren
-    if ( !pShowItem || bShow != bHasChild )
-    {
-        // Vor dem Toggle ausf"uhren, denn hartes Anschalten hat Vorrang
-        // vor weichem Anschalten
-        if ( nSID == SID_BROWSER )
-            SfxFrame::BeamerSwitched_Impl( bShow );
-
-        ToggleChildWindow( nSID );
-
-        if ( bShow && nSID == SID_BROWSER )
-        {
-            // Beamer soll sichtbar sein, da explizit eingeschaltet
-            SfxChildWindow* pChild = SFX_APP()->GetChildWindow( SID_BROWSER );
-            if ( pChild )
-            {
-//                SfxExplorerHorizDockWnd_Impl* pBeamer = (SfxExplorerHorizDockWnd_Impl*) pChild->GetWindow();
-//                pBeamer->AutoShow_Impl( TRUE );
-            }
-        }
-    }
-
-    GetBindings().Invalidate( nSID );
-    GetDispatcher().Update_Impl( TRUE );
-
-    if ( bShow && ( nSID == SID_HELP_PI ) )
-        GetpApp()->FocusChanged();  // Hilfe passend zum FocusWindow...
-
-    // ggf. recorden
-    if ( !rReq.IsAPI() )
-        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
-
-    rReq.Done();
+    return NULL;
 }
-
-//--------------------------------------------------------------------
-
-void SfxApplication::ChildWindowState( SfxItemSet& rState )
-
-/*  [Beschreibung]
-
-    Diese Methode kann in der Status-Methode f"ur das Ein- und Ausschalt-
-    Zustand von Child-Windows eingesetzt werden, um dieses zu implementieren.
-
-    Einfach in der IDL als 'StateMethod' eintragen.
-*/
-
-{
-    SfxWhichIter aIter( rState );
-    for ( USHORT nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
-    {
-        if ( nSID == SID_CUSTOMIZETOOLBOX )
-        {
-            if ( pViewFrame &&
-                 pViewFrame->GetFrame()->HasComponent() &&
-                 pViewFrame->GetViewShell()->GetMenuBar_Impl() )
-                rState.DisableItem(nSID);
-        }
-        else if ( nSID == SID_HYPERLINK_DIALOG )
-        {
-            const SfxPoolItem* pDummy = NULL;
-            SfxItemState eState = GetDispatcher().QueryState( SID_HYPERLINK_SETLINK, pDummy );
-            if ( SFX_ITEM_DISABLED == eState )
-                rState.DisableItem(nSID);
-            else
-            {
-                if ( KnowsChildWindow(nSID) )
-                    rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID)) );
-                else
-                    rState.DisableItem(nSID);
-            }
-        }
-        else if ( nSID == SID_MAIL_CHILDWIN )
-//! (pb) temporary till the implementation is finished
-            rState.DisableItem(nSID);
-        else if ( nSID == SID_HELP_PI )
-//! (pb) what about help?
-            rState.DisableItem(nSID);
-        else if ( KnowsChildWindow(nSID) )
-            rState.Put( SfxBoolItem( nSID, HasChildWindow(nSID) ) );
-        else
-            rState.DisableItem(nSID);
-    }
-}
-
-#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-24 08:51:51 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,8 +786,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         BOOL bReset = ((const SfxBoolItem *)pItem)->GetValue();
         Help* pHelp = Application::GetHelp();
-        if ( bReset && pHelp )
-            ((SfxHelp_Impl*)pHelp)->ResetPIStarterList();
+//        if ( bReset && pHelp )
+//            ((SfxHelp_Impl*)pHelp)->ResetPIStarterList();
     }
 
     // WelcomeScreen

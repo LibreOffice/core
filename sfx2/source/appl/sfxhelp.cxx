@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 12:57:47 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,93 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen
-#include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
-#endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#endif
-#ifndef _WRKWIN_HXX //autogen
-#include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
-#include <svtools/whiter.hxx>
-#endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
-#include <basic/sbstar.hxx>
-#endif
-#ifndef _SB_SBMETH_HXX //autogen
-#include <basic/sbmeth.hxx>
-#endif
-#ifndef _SB_SBMOD_HXX //autogen
-#include <basic/sbmod.hxx>
-#endif
+#include "sfxhelp.hxx"
 
-#ifndef _SV_SOUND_HXX //autogen
-#include <vcl/sound.hxx>
-#endif
-
-#include <automation/automation.hxx>
-#include <svtools/pathoptions.hxx>
 #pragma hdrstop
-
-#ifndef _SFXENUMITEM_HXX //autogen
-#include <svtools/eitem.hxx>
-#endif
-
-#ifdef WNT
-#pragma optimize ( "", off )
-#endif
-
-#include <tools/urlobj.hxx>
-#include <svtools/helpopt.hxx>
-
-#include <helpid.hrc>
-#include <app.hxx>
-#include <sfx.hrc>
-#include <sfxhelp.hxx>
-#include <sfxhelp2.hxx>
-#include <docfac.hxx>
-#include <openflag.hxx>
-#include <bindings.hxx>
-#include <dispatch.hxx>
-#include <genlink.hxx>
-#include <viewsh.hxx>
-#include <sfxresid.hxx>
-#include <printer.hxx>
-#include <request.hxx>
-#include <docfile.hxx>
-#include <app.hrc>
-#include <msgpool.hxx>
-#include <appdata.hxx>
-#include "objshimp.hxx"
-#include "macrconf.hxx"
-#include "viewfrm.hxx"
-#include "objface.hxx"
-#include "newhelp.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -162,481 +78,49 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
+#include <com/sun/star/frame/XTasksSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+
+#include "sfxsids.hrc"
+#include "app.hxx"
+#include "viewfrm.hxx"
+#include "msgpool.hxx"
+#include "newhelp.hxx"
+#include "objsh.hxx"
+#include "docfac.hxx"
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-#ifdef MAC
-#define HELP_APP_NAME "StarHelp 4.0"
-#elif defined UNX
-#define HELP_APP_NAME "shelp"
-#else
-#define HELP_APP_NAME "SHELP.EXE"
-#endif
-
-static const char __FAR_DATA zsHelpAgentConfig[] = "hlpagent.ini";
-static const char __FAR_DATA zsHelpAgentConfig_Tips[] = "Tips";
-
-static const USHORT nBorder = 10;       // So war's im Writer - aber warum ???
-
-SV_IMPL_VARARR_SORT( SortedULONGs, ULONG );
-//SV_IMPL_PTRARR( HelpTextCaches, HelpTextCache* );
-
-USHORT ImplSetLanguageGroup( Config& rConfig, const String& rGroupName, BOOL bSearchLanguage )
-{
-    USHORT nFound = 0;
-
-    // Nach Prioritaeten die richtige Language-Section suchen...
-    LanguageType eLanguage = Application::GetSettings().GetInternational().GetLanguage();
-    for ( USHORT nPrio = 0; nPrio <= 4; nPrio++ )
-    {
-        const char* pLang = ResMgr::GetLang( eLanguage, nPrio );
-        if ( pLang )
-        {
-            String aGroup( rGroupName );
-            aGroup += '-';
-            aGroup += String::CreateFromAscii(pLang);
-            if ( !bSearchLanguage || rConfig.HasGroup( U2S(aGroup) ) )
-            {
-                rConfig.SetGroup( U2S(aGroup) );
-                nFound = nPrio+1;
-                break;
-            }
-            // Falls keine gefunden wird, dann die genaueste einstellen
-            if ( nPrio == 0 )
-                rConfig.SetGroup( U2S(aGroup) );
-        }
-    }
-    return nFound;
-}
-
-//=========================================================================
-SFX_IMPL_DOCKINGWINDOW(SfxHelpPIWrapper, SID_HELP_PI);
-SFX_IMPL_DOCKINGWINDOW(SfxHelpTipsWrapper, SID_TIPWINDOW);
-
-static Point CalcFloaterPos( Window *pPI, Rectangle& rFloaterRect, const Rectangle& rDialogRect )
-{
-    Point aPos = rFloaterRect.TopLeft();
-    if ( rFloaterRect.IsOver( rDialogRect ) )
-    {
-        Size aScreenSize = pPI->GetDesktopRectPixel().GetSize();
-        Size aFloaterSz = rFloaterRect.GetSize();
-        long nMinWidth = aScreenSize.Width() / 5;
-//      long nMinHeight = aScreenSize.Height() / 5;
-
-        // Minimalgroessen nur, wenn nicht vorher schon kleiner, weil der
-        // Anwender es wollte:
-        if ( aFloaterSz.Width() < nMinWidth )
-            nMinWidth =  aFloaterSz.Width();
-//      if ( aFloaterSz.Height() < nMinHeight )
-//          nMinHeight=  aFloaterSz.Height();
-
-
-        long nTopDiff = -(rFloaterRect.Top() - rDialogRect.Top());
-        long nBottomDiff = rFloaterRect.Bottom() - rDialogRect.Bottom();
-        long nLeftDiff = -(rFloaterRect.Left() - rDialogRect.Left());
-        long nRightDiff = rFloaterRect.Right() - rDialogRect.Right();
-
-        BOOL bRight = ( rDialogRect.Right() + rFloaterRect.GetWidth() ) < aScreenSize.Width();
-        BOOL bLeft = ( rDialogRect.Left() - rFloaterRect.GetWidth() ) > 0;
-        BOOL bTop = ( rDialogRect.Top() - rFloaterRect.GetHeight() ) > 0;
-        BOOL bBottom = ( rDialogRect.Bottom() + rFloaterRect.GetHeight() ) < aScreenSize.Height();
-
-        if ( bLeft || bRight )
-            aPos.X() = ( bRight && ( !bLeft || ( nLeftDiff < nRightDiff ) ) )
-                ? rDialogRect.Right()
-                : rDialogRect.Left() - rFloaterRect.GetWidth();
-        else if ( bTop || bBottom )
-            aPos.Y() = ( bTop && ( !bBottom || ( nBottomDiff < nTopDiff ) ) )
-                ? rDialogRect.Top() - rFloaterRect.GetHeight()
-                : rDialogRect.Bottom();
-        else
-                {
-            // Rechts oder links daneben, wo mehr Platz ist...
-            long nLeftSpace = rDialogRect.Left();
-            long nRightSpace = aScreenSize.Width() - rDialogRect.Right();
-            if ( nLeftSpace > nRightSpace )
-            {
-                aPos.X() = 0;
-                long nWidth = nLeftSpace;
-                if ( nWidth < nMinWidth )
-                    nWidth = nMinWidth;
-                rFloaterRect.Right() = rFloaterRect.Left() + nWidth;
-
-            }
-            else
-            {
-                long nWidth = nRightSpace;
-                if ( nWidth < nMinWidth )
-                    nWidth = nMinWidth;
-                aPos.X() = aScreenSize.Width() - nWidth;
-                rFloaterRect.Right() = rFloaterRect.Left() + nWidth;
-            }
-        }
-    }
-    rFloaterRect.SetPos( aPos );
-    return aPos;
-}
-
-
-//=========================================================================
-
-SfxHelpPIWrapper::SfxHelpPIWrapper(Window *pParent,
-    USHORT nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo) :
-    SfxChildWindow(pParent, nId)
-{
-    // Skalierung des HelpPI initialisieren
-    USHORT nScale = 100;
-    if ( pInfo->aExtraString.Len() )
-    {
-        USHORT nPos = pInfo->aExtraString.Search(0x0023); // '#' = 23h
-        if ( nPos != STRING_NOTFOUND )
-        {
-            String aScale = pInfo->aExtraString.Copy(nPos+1);
-            pInfo->aExtraString.Erase(nPos+1);
-            pInfo->aExtraString.Erase(nPos,1);
-            nScale = (USHORT) aScale.ToInt32();
-        }
-        else
-        {
-            // Es ist noch ein alter Eintrag (FloatingWindow); das Alignment
-            // wird dann in Initialize nicht ver"andert.
-            pInfo->aExtraString.Erase();
-        }
-    }
-
-    // Versuche, das Helferlein zu laden
-    SfxHelpPI *pSfxHelpPI = new SfxHelpPI(pBindings, this, pParent, nScale);
-
-    pWindow = pSfxHelpPI;
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-
-    if ( !pInfo->aSize.Width() )
-    {
-        // initial zentriert hochkommen
-        Size aSz( 400, 250 );
-        pSfxHelpPI->SetSizePixel( aSz );
-
-        if ( SFX_APP()->GetDemoKind() == SFX_DEMOKIND_TRYBUY )
-        {
-            Rectangle aRect = Rectangle( Point(), pParent->GetOutputSizePixel() );
-            Point aPoint = aRect.BottomRight();
-            aPoint.X() -= ( aSz.Width() + 10 );
-            aPoint.Y() -= ( aSz.Height() + 10 );
-            pSfxHelpPI->SetFloatingPos( aPoint );
-        }
-    }
-
-    pSfxHelpPI->Initialize(pInfo);
-    pSfxHelpPI->ResetTopic();
-}
-
-BOOL SfxHelpPIWrapper::QueryClose()
-{
-    BOOL bCanClose = TRUE;
-    SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-    {
-//        HelpPI* pH = pHelpPI->GetHelpPI();
-//        if ( pH && pH->HasDialog() )
-//            bCanClose = FALSE;
-    }
-    return bCanClose;
-}
-
-void SfxHelpPI::ResetTopic()
-{
-    // initial antriggern
-    ULONG nHelpId = 0L;
-    SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
-    SfxShell *pShell;
-    for ( USHORT nShellLevel = 0;
-          !nHelpId && 0 != ( pShell = pDispatcher->GetShell(nShellLevel) );
-          ++nShellLevel )
-        nHelpId = pShell->GetHelpId();
-    LoadTopic( nHelpId );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxHelpPI::FillInfo(SfxChildWinInfo& rInfo ) const
-{
-    SfxDockingWindow::FillInfo( rInfo );
-    rInfo.aExtraString += '#';
-//    rInfo.aExtraString += String( pHelpPI->GetCurScale() );
-}
-
-//-------------------------------------------------------------------------
-
-SfxHelpPI::SfxHelpPI(SfxBindings* pBindinx, SfxChildWindow* pCW, Window* pParent, USHORT nScale )
-    : SfxDockingWindow( pBindinx, pCW, pParent,
-        WB_CLOSEABLE | WB_DOCKABLE | WB_CLIPCHILDREN | WB_MOVEABLE | WB_SIZEABLE | WB_DIALOGCONTROL | WB_3DLOOK ),
-    pInnerWindow( NULL ),
-    aTipBox( this, WB_3DLOOK )
-{
-    AlwaysEnableInput( TRUE, TRUE );
-    Enable( TRUE, TRUE );
-    bInShowMe = FALSE;
-    nTip = 0;
-
-    aTopicJustRequestedTimer.SetTimeout( 200 );
-
-    pInnerWindow = new Window( this, WB_DIALOGCONTROL );
-
-//    pHelpPI = new HelpPI( pInnerWindow, TRUE );
-//    pHelpPI->SetSpecialLinkHdl( LINK( this, SfxHelpPI, SpecialLinkHdl ) );
-//    pHelpPI->SetToolboxHdl( LINK( this, SfxHelpPI, PIToolboxHdl ) );
-
-    SetText( DEFINE_CONST_UNICODE("Help Agent") );
-
-    SetSizePixel( LogicToPixel( Size( 150, 70 ), MapMode( MAP_SYSFONT ) ) );
-    pInnerWindow->SetSizePixel( LogicToPixel ( Size( 147, 67 ), MapMode( MAP_SYSFONT ) ) );
-    pInnerWindow->SetPosPixel( LogicToPixel ( Point( 3, 3 ), MapMode( MAP_SYSFONT ) ) );
-
-    pInnerWindow->Show();
-
-    SetUniqueId( SID_HELP_PI );
-    SetMinOutputSizePixel( Size( 200, 100 ) );
-//    if ( nScale )
-//        pHelpPI->ChangeScale( nScale );
-//    else
-    {
-        const long nDPI = LogicToPixel(Point(1, 1), MapMode(MAP_INCH)).X();
-//        if(nDPI < 90 && GetDesktopRectPixel().GetWidth() > 1000)
-//            pHelpPI->ChangeScale( 150 );
-    }
-
-//    pHelpPI->GetTopicChangedHdl() = LINK( this, SfxHelpPI, TopicChangedHdl_Impl );
-    LoadTopic( HELP_INDEX );
-}
-
-BOOL SfxHelpPI::Close()
-{
-//    return pHelpPI->HasDialog() ? FALSE : SfxDockingWindow::Close();
-    return TRUE;
-}
-
-void SfxHelpPI::SetTip( ULONG nTp )
-{
-    nTip = nTp;
-    if ( nTip )
-    {
-        Resize();       // Falls keine Aenderung von aussen kommt...
-        aTipBox.SetHelpId( HID_HELPAGENT_TIP_BOX );
-        aTipBox.SetClickHdl( LINK( this, SfxHelpPI, TipBoxHdl ) );
-        aTipBox.Show();
-    }
-    else
-    {
-        aTipBox.Hide();
-        Resize();
-    }
-}
-
-void SfxHelpPI::SetTipText( const String& rTip )
-{
-    String aText( SfxResId( RID_STR_NOAUTOSTARTHELPAGENT ) );
-    aText.SearchAndReplace( DEFINE_CONST_UNICODE("XX"), rTip );
-    aTipBox.SetText( aText );
-}
-
-IMPL_LINK( SfxHelpPI, PIToolboxHdl, ToolBox* , pToolBox )
-{
-    // Wird z.Zt nur fuer 'Volle Hilfe' gerufen
-    if ( pToolBox )
-    {
-        // Link kommt von ToolBox, im Hdl darf diese aber nicht durch das
-        // Abschalten des HelpPI zerstoert werden
-        // => Diesen Link nochmal als UserEvent rufen...
-        Application::PostUserEvent( LINK( this, SfxHelpPI, PIToolboxHdl ) );
-    }
-    else
-    {
-        Help* pHelp = Application::GetHelp();
-    }
-
-    return 1;
-}
-#if 0
-IMPL_LINK( SfxHelpPI, SpecialLinkHdl, SpecialLinkInfo* , pInfo )
-{
-    bInShowMe = TRUE;
-    if ( pInfo->aURL.Len() )
-    {
-        SfxStringItem aDoc( SID_FILE_NAME, pInfo->aURL );
-        SfxStringItem aRef( SID_REFERER, DEFINE_CONST_UNICODE("private:help") );
-        SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aDoc, &aRef, 0L );
-    }
-    bInShowMe = FALSE;
-    delete pInfo;   // Dieser Link wird asynchron gerufen, deshalb wurden die Daten mit new angelegt...
-    return 0L;
-}
-#endif
-
-IMPL_LINK( SfxHelpPI, TopicChangedHdl_Impl, void* , pVoid )
-{
-    if ( nTip && !aTipBox.GetText().Len() )
-    {
-//        String aTitle( pHelpPI->GetTitle( nTip ) );
-        // Tip-Text erst hier, da der HelpAgent asynchron starten soll...
-//        SetTipText( aTitle );
-    }
-
-    return 0L;
-}
-
-IMPL_LINK( SfxHelpPI, TipBoxHdl, CheckBox* , pBox )
-{
-    Help* pHelp = Application::GetHelp();
-    if ( pHelp )
-        ((SfxHelp_Impl*)pHelp)->EnableTip( nTip, !pBox->IsChecked() );
-
-    return 0L;
-}
-
-//-------------------------------------------------------------------------
-
-SfxHelpPI::~SfxHelpPI()
-{
-//    delete pHelpPI;
-    delete pInnerWindow;
-
-    SfxHelp_Impl* pHelp = (SfxHelp_Impl*) Application::GetHelp();
-    if ( pHelp )
-        pHelp->HelpAgentClosed();
-}
-
-//-------------------------------------------------------------------------
-
-void SfxHelpPI::Paint( const Rectangle& rRect)
-{
-}
-
-//-------------------------------------------------------------------------
-
-void SfxHelpPI::Resize()
-{
-    Size aSize( GetOutputSizePixel() );
-    Point aPos( pInnerWindow->GetPosPixel() );
-    aSize.Width() -= 2 * aPos.X();
-    aSize.Height() -= 2 * aPos.Y();
-
-    if ( nTip )
-    {
-        Size aTextSize( aTipBox.GetTextWidth( String() ), aTipBox.GetTextHeight());
-        if ( aSize.Height() > ( aTextSize.Height() + aPos.X() ) )
-        {
-            aSize.Height() -= aTextSize.Height() + aPos.X();
-            aTipBox.SetPosSizePixel( Point( aPos.X(), aPos.Y()+aPos.X()+aSize.Height() ),
-                                     Size( aSize.Width(), aTextSize.Height() ) );
-            aTipBox.Show();
-        }
-        else
-            aTipBox.Hide();
-    }
-
-    pInnerWindow->SetSizePixel( aSize );
-//    pHelpPI->Resize();
-    SfxDockingWindow::Resize();
-    Invalidate();
-}
-
-//-------------------------------------------------------------------------
-
-String SfxHelpPI::GetExtraInfo() const
-{
-    return String();
-//    return pHelpPI->GetCurScale();
-}
-
-void SfxHelpPI::LoadTopic( const String& rFileName, ULONG nId)
-{
-//    pHelpPI->LoadTopic( rFileName, nId );
-}
-
-void SfxHelpPI::LoadTopic( ULONG nId )
-{
-    // at the moment no implementation
-}
-
-void SfxHelpPI::LoadTopic( const String& rKeyword )
-{
-    SfxObjectShell* pShell = SfxObjectShell::Current();
-    if ( pShell )
-    {
-        INetURLObject aAbsName( SfxHelp_Impl::GetHelpPath() );
-        aAbsName.insertName( pShell->GetFactory().GetHelpFile() );
-        aAbsName.setExtension( DEFINE_CONST_UNICODE("svh") );
-        String aFileName = aAbsName.GetMainURL();
-//        pHelpPI->LoadTopic( aFileName, rKeyword );
-    }
-}
-
 SfxHelp_Impl::SfxHelp_Impl()
 {
-    nLastDialog = 0;
-    pHelpInfo = 0;
-//    pHelpCache = 0;
-    pPIStarterList = 0;
-    pHelpFileInfos = 0;
-
-    aDialogDetector.SetTimeout( 10 );
-    aDialogDetector.SetTimeoutHdl( LINK( this, SfxHelp_Impl, DialogDetectHdl ) );
 }
 
 SfxHelp_Impl::~SfxHelp_Impl()
 {
-    aDialogDetector.Stop();
-
-//    delete pHelpInfo;
-    delete pPIStarterList;
-
-    if ( pHelpFileInfos )
-    {
-        for ( USHORT n = pHelpFileInfos->Count(); n; )
-        {
-            HelpFileInfo* pInf = (HelpFileInfo*)pHelpFileInfos->GetObject( --n );
-            delete pInf;
-        }
-        delete pHelpFileInfos;
-    }
-
-    // HelpCache wird durch PTRARR_DEL geloescht.
 }
 
-USHORT SfxHelp_Impl::GetHelpFileInfoCount()
+String SfxHelp_Impl::GetHelpModuleName( ULONG nHelpId )
 {
-    // at the moment no implementation
-    if ( !pHelpFileInfos )
-        pHelpFileInfos = new List;
-    return pHelpFileInfos->Count();
-}
-
-HelpFileInfo* SfxHelp_Impl::GetHelpFileInfo( USHORT n )
-{
-    // GetHelpFileInfoCount() rufen, weil die Liste ggf. erst erzeugt wird
-    if ( n < GetHelpFileInfoCount() )
-        return (HelpFileInfo*) pHelpFileInfos->GetObject( n );
-    return NULL;
-
-}
-
-void SfxHelp_Impl::HelpAgentClosed()
-{
-    nLastDialog = 0;
-}
-
-String SfxHelp_Impl::GetHelpFileName( ULONG nHelpId )
-{
-    SfxHelp_Impl* pHelp = (SfxHelp_Impl*) Application::GetHelp();
-    if ( pHelp && pHelp->aCustomHelpFile.Len() )
-        return pHelp->aCustomHelpFile;
-
-    String aHelpFileName;
-    SfxApplication *pSfxApp = SFX_APP();
-    SfxViewFrame *pViewFrame = pSfxApp->GetViewFrame();
+    String aModuleName;
+    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
     {
         // Wenn es ein Slot ist, kann es sein, da\s internes InPlace vorliegt
@@ -646,135 +130,89 @@ String SfxHelp_Impl::GetHelpFileName( ULONG nHelpId )
             if ( pViewFrame->GetParentViewFrame_Impl() )
             {
                 // Ist es ein ContainerSlot ?
-                const SfxSlot* pSlot =
-                    pSfxApp->GetSlotPool(pViewFrame).GetSlot( (USHORT) nHelpId );
+                const SfxSlot* pSlot = SFX_APP()->GetSlotPool(pViewFrame).GetSlot( (USHORT) nHelpId );
                 if ( !pSlot || pSlot->IsMode( SFX_SLOT_CONTAINER ) )
                     pViewFrame = pViewFrame->GetParentViewFrame_Impl();
             }
         }
 
         if( pViewFrame->GetObjectShell() )
-            aHelpFileName = pViewFrame->GetHelpFile_Impl();
+            aModuleName = String::CreateFromAscii( pViewFrame->GetObjectShell()->GetFactory().GetShortName() );
     }
 
-    if ( !aHelpFileName.Len() )
-        aHelpFileName = DEFINE_CONST_UNICODE(SFX_DESKTOP_HELPFILE_NAME);
-
-    return aHelpFileName;
-}
-
-void SfxHelp_Impl::SetCurrentHelpFile( ULONG nHelpId )
-{
-    String aString = GetHelpFileName( nHelpId );
-    if ( GetCurrentHelpFile() != aString )
-        SetHelpFile( aString );
-}
-
-Window* SfxHelp_Impl::SearchFocusWindowParent()
-{
-    RESOURCE_TYPE nType;
-    Window* pFocusParent = Application::GetFocusWindow();
-    while ( pFocusParent &&
-            ( ( nType = pFocusParent->GetType() ) != WINDOW_MODELESSDIALOG ) &&
-            ( nType != WINDOW_MODALDIALOG ) &&
-            ( nType != WINDOW_TABDIALOG ) &&
-            ( nType != WINDOW_PATHDIALOG ) &&
-            ( nType != WINDOW_FILEDIALOG ) &&
-            ( nType != WINDOW_PRINTERSETUPDIALOG ) &&
-//          ( nType != WINDOW_FLOATINGWINDOW ) &&
-//          ( nType != WINDOW_DOCKINGWINDOW ) &&
-            ( nType != WINDOW_PRINTDIALOG ) )
-    {
-        pFocusParent = pFocusParent->GetParent();
-    }
-    return pFocusParent;
-}
-
-void SfxHelp_Impl::CheckPIPosition()
-{
-    Window* pDialog = SearchFocusWindowParent();
-    if( ( nLastDialog != (ULONG)pDialog ) &&
-        ( !pDialog || ( ! pDialog->GetText().EqualsAscii("HelpWindow") ) ) )
-    {
-        BOOL bAccepted = TRUE;
-        SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-
-        if ( pDialog && pHelpPI )
-        {
-//            if ( pHelpPI->IsWindowOrChild( pDialog, TRUE ) && !pHelpPI->GetHelpPI()->HasDialogFocus() )
-//                return;
-
-            if ( !pDialog->IsVisible() )
-            {
-                aDialogDetector.Start();
-                bAccepted = FALSE;
-            }
-            else if ( pDialog == pHelpPI->GetFloatingWindow() )
-            {
-                bAccepted = FALSE;
-            }
-            else if ( pHelpPI && pHelpPI->IsFloatingMode() )
-            {
-                // Dialog schon fertig?
-                Size aDlgSize = pDialog->GetSizePixel();
-                Point aDlgPos = pDialog->GetPosPixel();
-                // Sind Position und Groesse schon eingestellt?
-                if ( aDlgSize.Width() && ( aDlgPos.X() || aDlgPos.Y() ) )
-                {
-                    Rectangle aDlgRect( aDlgPos, aDlgSize );
-                    Rectangle aPIRect( pHelpPI->GetPosPixel(), pHelpPI->GetSizePixel() );
-                    /* Point aPos = */ CalcFloaterPos( pHelpPI, aPIRect, aDlgRect );
-                    pHelpPI->SetPosSizePixel( aPIRect.TopLeft(), aPIRect.GetSize() );
-                    pHelpPI->GetFloatingWindow()->ToTop();
-                }
-                else
-                {
-                    aDialogDetector.Start();
-                    bAccepted = FALSE;
-                }
-            }
-        }
-
-        if ( bAccepted )
-            nLastDialog = (ULONG)pDialog;
-    }
-}
-
-IMPL_LINK( SfxHelp_Impl, DialogDetectHdl, Timer* , EMPTYARG )
-{
-    SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI && pHelpPI->IsFloatingMode() )
-        CheckPIPosition();
-    return 1;
+    return aModuleName;
 }
 
 BOOL SfxHelp_Impl::Start( ULONG nHelpId )
 {
-//  return ImplStart( nHelpId, TRUE, TRUE, TRUE );
+    Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
-    Reference < XFrame > xDesktop;
-    xDesktop = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xTask = xDesktop->findFrame( ::rtl::OUString::createFromAscii( "_blank" ), 0 );
-    Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-    pWin->SetText( DEFINE_CONST_UNICODE("StarOffice Help 0.8") );
-    SfxHelpWindow* pHlpWin = new SfxHelpWindow( pWin, WB_DOCKBORDER );
-    pHlpWin->Show();
-    Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( pHlpWin );
-    xWindow->setPosSize( 50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE );
-    if ( !xTask->setComponent( xWindow, Reference < XController >() ) )
+    Reference < XTask > xActiveTask = xDesktop->getActiveTask();
+    if ( !xActiveTask.is() )
         return FALSE;
+
+    // build up the help URL
+    String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
+    aHelpURL += GetHelpModuleName( nHelpId );
+    aHelpURL += '/';
+    aHelpURL += String::CreateFromInt32( nHelpId );
+
+    // try to find the help frame
+    Reference < XDispatchProvider > xFrame( xActiveTask->findFrame( ::rtl::OUString::createFromAscii( "OFFICE_HELP" ),
+                                                    FrameSearchFlag::GLOBAL ), UNO_QUERY );
+    ::com::sun::star::util::URL aURL;
+    aURL.Complete = aHelpURL;
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    xTrans->parseStrict( aURL );
+
+    Sequence < PropertyValue > aProps;
+    sal_Int32 nFlag = FrameSearchFlag::GLOBAL;
+    if ( aTicket.Len() )
+    {
+        // if there is a ticket, we are inside a plugin, so a request including the URL must be posted
+        if ( !xFrame.is() )
+            // must be created on dispatch
+            nFlag |= FrameSearchFlag::CREATE;
+    }
     else
     {
-        pHlpWin->setContainerWindow( xTask->getContainerWindow() );
-        xTask->getContainerWindow()->setVisible( sal_True );
+        // otherwise the URL can be dispatched to the help frame
+        if ( !xFrame.is() )
+        {
+            Reference < XFrame > xTask = xActiveTask->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
+            xFrame = Reference < XDispatchProvider >( xTask, UNO_QUERY );
+            Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+            pWin->SetText( DEFINE_CONST_UNICODE("StarOffice Help 0.8") );
+            SfxHelpWindow* pHlpWin = new SfxHelpWindow( xTask, pWin, WB_DOCKBORDER );
+            pHlpWin->Show();
+            Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( pHlpWin );
+            xWindow->setPosSize( 50, 50, 300, 200, ::com::sun::star::awt::PosSize::SIZE );
+            if ( !xTask->setComponent( xWindow, Reference < XController >() ) )
+                return FALSE;
+            else
+            {
+                pHlpWin->setContainerWindow( xTask->getContainerWindow() );
+                xTask->getContainerWindow()->setVisible( sal_True );
+            }
+        }
     }
+
+    Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
+                            DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
+    if ( xDispatch.is() )
+    {
+        xDispatch->dispatch( aURL, aProps );
+    }
+
     return TRUE;
 }
 
+/*-----------------22.11.2000 10:59-----------------
+ * old code
 BOOL SfxHelp_Impl::ImplStart( ULONG nHelpId, BOOL bCheckHelpFile, BOOL bChangeHelpFile, BOOL bHelpAgent )
 {
-/*! (pb) what about help?
     static BOOL bInHelpRequest = FALSE;
     if ( bInHelpRequest || !nHelpId || ( nHelpId == SID_EXTENDEDHELP ) )
     {
@@ -844,427 +282,100 @@ BOOL SfxHelp_Impl::ImplStart( ULONG nHelpId, BOOL bCheckHelpFile, BOOL bChangeHe
     }
     bInHelpRequest = FALSE;
     return bDone;
-*/
     return FALSE;
 }
-
-
-BOOL SfxHelp_Impl::Start( const XubString& rKeyword )
-{
-    BOOL bDone = FALSE;
-    SetCurrentHelpFile( HELP_INDEX );
-    if ( CheckHelpFile( TRUE ) )
-    {
-    }
-    return bDone;
-}
-
-void SfxHelp_Impl::SlotExecutedOrFocusChanged( ULONG nId, BOOL bSlot, BOOL bAutoStart )
-{
-    BOOL bAutoStarted = FALSE;
-    SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-    {
-//      if ( !bSlot && pHelpPI->IsWindowOrChild( Application::GetFocusWindow(), TRUE ) && !pHelpPI->GetHelpPI()->HasDialogFocus() )
-        if ( !bSlot && pHelpPI->IsWindowOrChild( Application::GetFocusWindow(), TRUE ) )
-            return; // Wenn Navigation im HelpPI, dann nicht triggern...
-        // Nicht auf Focus reagieren, wenn gerade mit F1 angetriggert
-        if ( pHelpPI->IsTopicJustRequested() )
-            return;
-
-        if ( !bSlot || !pHelpPI->IsInShowMe() )
-            pHelpPI->LoadTopic( nId );
-    }
-    else if ( bAutoStart && GetPIStarterList()->Seek_Entry( nId, 0 ) )
-    {
-         SetCurrentHelpFile( nId );
-        StartHelpPI( nId, bSlot, TRUE );
-        bAutoStarted = TRUE;
-    }
-
-    if ( !bSlot && ( pHelpPI || bAutoStarted ) )
-        CheckPIPosition();
-}
-
-
-XubString SfxHelp_Impl::GetHelpText( ULONG nHelpId )
-{
-#if defined DBG_UTIL && ( defined WNT || defined OS2 || defined UNX )
-    static int bTraceHelpIds = 2;
-    if ( bTraceHelpIds == 2 )
-    {
-        char *pHELP = getenv( "HELP" );
-        if( pHELP && !strcmp( pHELP, "MP" ) )
-            bTraceHelpIds = 1;
-        else
-            bTraceHelpIds = 0;
-    }
-    if ( bTraceHelpIds )
-    {
-        ByteString aTraceStr( "HELPID: " );
-        aTraceStr += ByteString::CreateFromInt32( nHelpId );
-        DBG_TRACE( aTraceStr.GetBuffer() );
-    }
-#endif
-
-    // at the moment no implementation
-    return XubString();
-}
-
-void SfxHelp_Impl::GetHelpURLs( const String& rRootURL, SvStringsDtor& rLst )
-{
-    AssertValidHelpDocInfo();
-  //  pHelpInfo->GetHelpURLs( rRootURL, rLst );
-}
-
-void SfxHelp_Impl::GetBookmarks( SvStringsDtor& rLst )
-{
-    AssertValidHelpDocInfo();
-//    pHelpInfo->GetBookmarks( rLst );
-}
-
-void SfxHelp_Impl::AddBookmark( const String& rName, const String& rURL )
-{
-    AssertValidHelpDocInfo();
-//    pHelpInfo->AddBookmark( rName, rURL );
-}
-
-void SfxHelp_Impl::RemoveBookmark( const String& rName )
-{
-    AssertValidHelpDocInfo();
-//    pHelpInfo->RemoveBookmark( rName );
-}
-
-void SfxHelp_Impl::RenameBookmark( const String& rOldTitle, const String& rNewTitle )
-{
-    AssertValidHelpDocInfo();
-//    pHelpInfo->RenameBookmark( rOldTitle, rNewTitle );
-}
-
-
-BOOL SfxHelp_Impl::CheckHelpFile( BOOL bPrompt ) const
-{
-    return SfxHelp_Impl::CheckHelpFile( GetHelpFile(), bPrompt );
-}
-
-BOOL SfxHelp_Impl::CheckHelpFile( const String& rFileName, BOOL bPrompt )
-{
-    // at the moment no implementation
-    BOOL bOK = FALSE;
-    if ( !bOK && bPrompt )
-    {
-        Window* pParent = Application::GetFocusWindow();
-        String aErrorStr( SfxResId( RID_STR_HLPFILENOTEXIST ) );
-        InfoBox( pParent, aErrorStr ).Execute();
-    }
-
-    return bOK;
-}
-
-void SfxHelp_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-    SfxSimpleHint *pHint = PTR_CAST( SfxSimpleHint, &rHint );
-    if ( pHint && ( pHint->GetId() & SFX_HINT_DYING ) )
-    {
-        // z.Zt. lausche ich nur am HelpDoc...
-    }
-}
-
-//-------------------------------------------------------------------------
-
-void SfxHelp_Impl::SetHelpFile( const String &rFileName, BOOL bAdjustExt )
-{
-    INetURLObject aAbsName( GetHelpPath() );
-    aAbsName.insertName( rFileName );
-
-    if ( bAdjustExt )
-        aAbsName.setExtension( DEFINE_CONST_UNICODE("svh") );
-
-    String aFileName = aAbsName.PathToFileName();
-//      InfoBox( 0, aFileName ).Execute();
-    Help::SetHelpFile( aFileName );
-    aCurHelpFile = rFileName;
-}
-
-void SfxHelp_Impl::AssertValidHelpDocInfo()
-{
-//    if ( !pHelpInfo || ( pHelpInfo->GetRequestedFileName() != GetHelpFile() ) )
-    {
-//        delete pHelpInfo;
-//        pHelpInfo = new SHelpInfo( GetHelpFile(), FALSE );      // vielleicht doch cachable?
-    }
-}
-
-String SfxHelp_Impl::GetHelpPath()
-{
-    String aHelpDir = SvtPathOptions().GetHelpPath();
-    if ( aHelpDir.Len() )
-    {
-        String aPath;
-        INetURLObject aHelpRoot( aHelpDir );
-        DBG_ASSERT( aHelpRoot.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-        // Nach Prioritaeten das richtige Language-Dir suchen...
-        LanguageType eLanguage = Application::GetSettings().GetInternational().GetLanguage();
-        for ( USHORT nPrio = 0; nPrio <= 4; nPrio++ )
-        {
-            const char* pLang = ResMgr::GetLang( eLanguage, nPrio );
-            if ( pLang )
-            {
-                INetURLObject aTemp = aHelpRoot;
-                aTemp.insertName( String::CreateFromAscii( pLang ) );
-                if ( 0 /*! Exists??? */ )
-                {
-                    return aTemp.GetMainURL();
-                }
-            }
-        }
-        return aPath;
-    }
-    else
-    {
-        String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
-        INetURLObject aObj( aProgURL );
-        return aObj.GetMainURL();
-    }
-}
-
-void SfxHelp_Impl::CreatePIStarterList()
-{
-    pPIStarterList = new SortedULONGs;
-}
-
-void SfxHelp_Impl::StartHelpPI( ULONG nHelpId, BOOL bSlot, BOOL bTip )
-{
-/*! (pb) what about help?
-    if( ImplGetHelpMode() & HELPTEXTMODE_NOHELPAGENT )
-        return;
-
-    BOOL bValidHelpFile = CheckHelpFile( FALSE );
-    SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-    if ( !pHelpPI && bValidHelpFile )
-    {
-        SFX_APP()->SetChildWindow( SID_HELP_PI, TRUE );
-        pHelpPI = SFX_APP()->GetHelpPI();
-        CheckPIPosition();
-    }
-    else if ( pHelpPI && !bValidHelpFile )
-    {
-        SFX_APP()->SetChildWindow( SID_HELP_PI, FALSE );
-        pHelpPI = NULL;
-    }
-
-    if ( pHelpPI )
-    {
-        if ( bTip )
-        {
-            pHelpPI->SetTip( nHelpId );
-            if ( !bSlot )
-            {
-                // Start ueber Focus => Text des Controls...
-                Window* pWin = Application::GetFocusWindow();
-                if ( pWin && pWin->GetText().Len() )
-                {
-                    String aText( pWin->GetText() );
-                    aText.EraseAllChars( '~' );
-                    pHelpPI->SetTipText( aText );
-                }
-            }
-        }
-        pHelpPI->LoadTopic( nHelpId );
-        pHelpPI->SetTopicJustRequested( TRUE );
-    }
 */
-}
 
-void SfxHelp_Impl::EnableTip( ULONG nTip, BOOL bEnable )
+struct HelpFileInfo;
+class SfxHelp
 {
-}
-
-void SfxHelp_Impl::ResetPIStarterList()
-{
-}
-
-String SfxHelp_Impl::GetConfigDir( BOOL bGetSharedConfig )
-{
-#if SUPD<613//MUSTINI
-    ULONG nKey = bGetSharedConfig ? SFX_KEY_CONFIG_DIR : SFX_KEY_USERCONFIG_PATH;
-    SfxIniManager* pIni = SFX_INIMANAGER()->Find( nKey );
-    if ( !pIni )
-        pIni = SFX_INIMANAGER();
-    return pIni->Get( nKey );
-#else
-    String sConfigDir;
-    SvtPathOptions aPathCFG;
-    if( bGetSharedConfig == sal_True )
-    {
-        sConfigDir = aPathCFG.GetConfigPath();
-    }
-    else
-    {
-        sConfigDir = aPathCFG.GetUserConfigPath();
-    }
-    return sConfigDir;
-#endif
-}
-
-void SfxHelp::SetCustomHelpFile( const String& rName )
-{
-    SfxHelp_Impl* pHelp = (SfxHelp_Impl*) Application::GetHelp();
-    pHelp->aCustomHelpFile = rName;
-}
-
-void SfxHelp::ShowHint( ULONG nId )
-{
-    SfxHelp_Impl* pHelp = (SfxHelp_Impl*) Application::GetHelp();
-    if ( pHelp )
-    {
-        pHelp->SlotExecutedOrFocusChanged( nId, TRUE, TRUE );
-        // Falls sofort eine Slot-Id folgt, diese unterdruecken
-         SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-        if ( pHelpPI )
-            pHelpPI->SetTopicJustRequested( TRUE );
-    }
-}
+public:
+    static  BOOL            ShowHelp( ULONG nId, BOOL bShowInHelpAgent, const char* pFileName = 0, BOOL bQuiet = FALSE );
+    static  BOOL            ShowHelp( const String& rKeyword, BOOL bShowInHelpAgent, const char* pFileName = 0 );
+    static  void            ShowHint( ULONG nId );
+    static  void            SetCustomHelpFile( const String& rName );
+    static  USHORT          GetHelpFileInfoCount();
+    static  HelpFileInfo*   GetHelpFileInfo( USHORT n );
+};
 
 BOOL SfxHelp::ShowHelp( ULONG nId, BOOL bShowInHelpAgent, const char* pFileName, BOOL bQuiet )
 {
-    // at the moment no implementation
     return FALSE;
 }
 
 BOOL SfxHelp::ShowHelp( const String& rKeyword, BOOL bShowInHelpAgent, const char* pFileName )
 {
-    // at the moment no implementation
-    BOOL bDone = FALSE;
-    return bDone;
+    return FALSE;
+}
+
+void SfxHelp::ShowHint( ULONG nId )
+{
+}
+
+void SfxHelp::SetCustomHelpFile( const String& rName )
+{
 }
 
 USHORT SfxHelp::GetHelpFileInfoCount()
 {
-    SfxHelp_Impl* pHelp = (SfxHelp_Impl*) Application::GetHelp();
-    return pHelp ? pHelp->GetHelpFileInfoCount() : 0;
+    return 0;
 }
 
 HelpFileInfo* SfxHelp::GetHelpFileInfo( USHORT n )
 {
-    SfxHelp_Impl* pHelp = (SfxHelp_Impl*) Application::GetHelp();
-    return pHelp ? pHelp->GetHelpFileInfo( n ) : NULL;
+    return NULL;
 }
 
-// class SfxHelpTipsWrapper ----------------------------------------------
-
-SfxHelpTipsWrapper::SfxHelpTipsWrapper(Window *pParent,
-    USHORT nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo) :
-    SfxChildWindow(pParent, nId)
+class SfxHelpPI
 {
-    // Skalierung des HelpPI initialisieren
-    USHORT nScale = 100;
-    if ( pInfo->aExtraString.Len() )
-    {
-        USHORT nPos = pInfo->aExtraString.Search(0x0023); // '#' = 23h
-        if ( nPos != STRING_NOTFOUND )
-        {
-            String aScale = pInfo->aExtraString.Erase(nPos+1);
-            pInfo->aExtraString.Erase(nPos,1);
-            nScale = (USHORT) aScale.ToInt32();
-        }
-        else
-        {
-            // Es ist noch ein alter Eintrag (FloatingWindow); das Alignment
-            // wird dann in Initialize nicht ver"andert.
-            pInfo->aExtraString.Erase();
-        }
-    }
+public:
+    void            LoadTopic( const String& rFileName, ULONG nId );
+    void            LoadTopic( ULONG nId );
+    void            LoadTopic( const String& rKeyword );
+    void            ResetTopic();
+    BOOL            Close();
+//    BOOL            IsConstructed() const { return ( pHelpPI != 0 ); }
+    String          GetExtraInfo() const;
+//    HelpPI*         GetHelpPI() const { return pHelpPI; }
+//    virtual void    FillInfo( SfxChildWinInfo& ) const;
+    void            SetTip( ULONG nId );
+    void            SetTipText( const String& rText );
+//    BOOL            IsInShowMe() const { return bInShowMe; }
+//    BOOL            IsTopicJustRequested() const { return aTopicJustRequestedTimer.IsActive(); }
+//    void            SetTopicJustRequested( BOOL bOn ) { if( bOn )
+//                                                            aTopicJustRequestedTimer.Start();
+//                                                        else
+//                                                            aTopicJustRequestedTimer.Stop(); }
+};
 
-    // Versuche, das TipWindow zu laden
-    SfxHelpTipsWindow* pDockWindow = new SfxHelpTipsWindow( pBindings, this, pParent );
-    pWindow = pDockWindow;
+void SfxHelpPI::LoadTopic( const String& rFileName, ULONG nId ) {}
+void SfxHelpPI::LoadTopic( ULONG nId ) {}
+void SfxHelpPI::LoadTopic( const String& rKeyword ) {}
+void SfxHelpPI::ResetTopic() {}
+//    BOOL            IsConstructed() const { return ( pHelpPI != 0 ); }
+//    HelpPI*         GetHelpPI() const { return pHelpPI; }
+//    virtual void    FillInfo( SfxChildWinInfo& ) const;
+void SfxHelpPI::SetTip( ULONG nId ) {}
+void SfxHelpPI::SetTipText( const String& rText ) {}
 
-    eChildAlignment = SFX_ALIGN_BOTTOM;
-    if ( !pInfo->aSize.Width() )
-    {
-        Size aSz( 400, 150 );
-        pWindow->SetSizePixel( aSz );
-    }
-
-    pDockWindow->Initialize( pInfo );
-}
-
-SfxHelpTipsWindow::SfxHelpTipsWindow( SfxBindings* pBindings, SfxChildWindow* pChildWin, Window* pParent )
-    : SfxDockingWindow( pBindings, pChildWin, pParent,
-        WB_CLOSEABLE | WB_DOCKABLE | WB_CLIPCHILDREN | WB_MOVEABLE | WB_SIZEABLE | WB_DIALOGCONTROL | WB_3DLOOK ),
-
-      maCloseButton( this, 0 ),
-      maCheckBox( this, 0 ),
-      maTipWindow( this, WB_BORDER )
+class SfxHelpPIWrapper
 {
-    mpHelpPI = NULL;
+public:
+    static USHORT GetChildWindowId();
+};
 
-    maCloseButton.SetSymbol( SYMBOL_CLOSE );
-    maCloseButton.SetClickHdl( LINK( this, SfxHelpTipsWindow, CloseButtonHdl ) );
-
-    maCheckBox.SetClickHdl( LINK( this, SfxHelpTipsWindow, CheckBoxHdl ) );
-    maCheckBox.SetHelpId( HID_HELPAGENT_TIP_BOX );
-    maCheckBox.SetText( String( SfxResId( RID_STR_NOWELCOMESCREEN ) ) );
-
-    PostUserEvent( LINK( this, SfxHelpTipsWindow, ShowTip ) );
-
-#ifdef DEBUG
-    maTipWindow.SetBackground( Wallpaper( COL_GREEN ) );
-#endif
-
-    maCloseButton.Show();
-    maTipWindow.Show();
-    maCheckBox.Show();
-}
-
-SfxHelpTipsWindow::~SfxHelpTipsWindow()
-{
-//    delete mpHelpPI;
-}
-
-void SfxHelpTipsWindow::FillInfo( SfxChildWinInfo& rInfo ) const
-{
-    SfxDockingWindow::FillInfo( rInfo );
-    rInfo.bVisible = FALSE; // Visibility wird ueber Config gesteuert
-}
-
-void SfxHelpTipsWindow::Resize()
-{
-    Size aOutSz( GetOutputSizePixel() );
-    const long nButtonSize = 16;
-    const long nSpace = 2;
-    Size aCheckBoxSz = maCheckBox.CalcMinimumSize();
-    aCheckBoxSz.Width() += 4; // FocusRect
-    long nWindowPos = IsFloatingMode() ? 0 : (nButtonSize+2*nSpace);
-    maCloseButton.Show( !IsFloatingMode() );
-
-    maCloseButton.SetPosSizePixel( nSpace, nSpace, nButtonSize, nButtonSize );
-    maCheckBox.SetPosSizePixel(     nWindowPos, aOutSz.Height() - aCheckBoxSz.Height() - nSpace,
-                                    aCheckBoxSz.Width(), aCheckBoxSz.Height() );
-    maTipWindow.SetPosSizePixel(    nWindowPos, 0,
-                                    aOutSz.Width() - nWindowPos, aOutSz.Height() - aCheckBoxSz.Height() - 2*nSpace );
-
-//    if ( mpHelpPI )
-//        mpHelpPI->Resize();
-}
-
-IMPL_LINK( SfxHelpTipsWindow, ShowTip, void*, EMPTYARG )
+USHORT SfxHelpPIWrapper::GetChildWindowId()
 {
     return 0;
 }
 
-IMPL_LINK( SfxHelpTipsWindow, CloseButtonHdl, Button*, EMPTYARG )
+class SfxHelpTipsWrapper
 {
-    Close();
+public:
+    static USHORT GetChildWindowId();
+};
+
+USHORT SfxHelpTipsWrapper::GetChildWindowId()
+{
     return 0;
 }
-
-IMPL_LINK( SfxHelpTipsWindow, CheckBoxHdl, CheckBox*, EMPTYARG )
-{
-    SvtHelpOptions().SetWelcomeScreen( !maCheckBox.IsChecked() );
-    return 0;
-}
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-07 16:55:25 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,9 +359,9 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             if ( !bDone )
             {
                 // Bei neuen/komplizierten Funktionen den HelpAgent feuern...
-                Help* pHelp = Application::GetHelp();
-                if ( pHelp )
-                    ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged( rReq.GetSlot(), sal_True, SvtHelpOptions().IsHelpAgentAutoStartMode() );
+  //              Help* pHelp = Application::GetHelp();
+  //              if ( pHelp )
+  //                  ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged( rReq.GetSlot(), sal_True, SvtHelpOptions().IsHelpAgentAutoStartMode() );
 
                 SfxExecFunc pFunc = rSlot.GetExecFnc();
                 rShell.CallExec( pFunc, rReq );
@@ -1739,9 +1739,9 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         if ( bUIActive )
         {
             // ggf. Hilfe-PI antriggern
-            SfxHelpPI* pHelpPI = pSfxApp->GetHelpPI();
-            if (pHelpPI && nHelpId)
-                pHelpPI->LoadTopic( nHelpId );
+//            SfxHelpPI* pHelpPI = pSfxApp->GetHelpPI();
+//            if (pHelpPI && nHelpId)
+//                pHelpPI->LoadTopic( nHelpId );
         }
     }
 

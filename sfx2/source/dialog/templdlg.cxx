@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 09:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include "arrdecl.hxx"
 #include "fltfnc.hxx"
 #include "docfilt.hxx"
+#include "docfac.hxx"
 
 #include "docvor.hxx"
 #include "doctempl.hxx"
