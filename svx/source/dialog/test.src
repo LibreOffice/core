@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:40:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1216,7 +1216,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ czech ] = "Zamknout";
         Text[ hebrew ] = "Sch~Ǭtzen";
         Text[ hindi ] = "~���?����?����?��-���?����?��?���?����?����?����?����?����?��-���?����?����?��";
-        Text[ slovak ] = "~Ochrǭni��";
+        Text[ slovak ] = "~Zamknǧ��";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -1772,7 +1772,7 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ czech ] = " stup�?��";
         CustomUnitText[ hebrew ] = " �թ�?���?�-���ժ";
         CustomUnitText[ hindi ] = " ���?���ϋ���?���ϋ���?����?��-���?����?��?���?����?����?����?����?����?����?����?����?��?";
-        CustomUnitText[ slovak ] = " stupﾋﾨﾫﾋﾨﾫﾋﾨﾫ?ov";
+        CustomUnitText[ slovak ] = " stupﾏ?ov";
     };
     /*
     Control CTL_ANGLE
@@ -1874,7 +1874,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ catalan ] = "Inclinaci??Radi d'angle";
     Text[ finnish ] = "Kallistus-/kulmas??de";
     Text[ thai ] = "���?�,�?��? / ?���??�,�?���?";
-    Text[ czech ] = "Skosen��/ polom�>r rohu";
+    Text[ czech ] = "Skosen�� / polom�>r rohu";
     Text[ hebrew ] = "Schr��gstellen / Eckenradius";
     Text[ hindi ] = "���?������?�������Ϩ���?������?������?���>���?������?������?���/ ���?������?���-���?������������?������?������?������?������?��� ���?������?���-���?������?������?������?������?���������?���?������?������?������?������?������?������?������?���";
     Text[ slovak ] = "SkosenǸ rohy";
@@ -2043,7 +2043,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ catalan ] = "Inclinaci??Radi d'angle";
                 Text[ finnish ] = "Kallistus-/kulmas??de";
                 Text[ thai ] = "���?�,�?��? / ?���??�,�?���?";
-                Text[ czech ] = "Skosen��/ polom�>r rohu";
+                Text[ czech ] = "Skosen�� / polom�>r rohu";
                 Text[ hebrew ] = "Schr��gstellen / Eckenradius";
                 Text[ hindi ] = "���?������?�������Ϩ���?������?������?���>���?������?������?���/ ���?������?���-���?������������?������?������?������?������?��� ���?������?���-���?������?������?������?������?���������?���?������?������?������?������?������?������?������?���";
                 Text[ slovak ] = "SkosenǸ rohy";
@@ -2068,6 +2068,38 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ slovak ] = "Umiestnenie a ve��kos��";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
