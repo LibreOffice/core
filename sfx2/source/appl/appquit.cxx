@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:38:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ void SfxApplication::Deinitialize()
     DELETEZ(pImp->pOfaResMgr);
 
     // ab hier d"urfen keine SvObjects mehr existieren
-    DELETEX(pAppData_Impl->pMatcher);
+    DELETEZ(pAppData_Impl->pMatcher);
 
     delete pAppData_Impl->pLabelResMgr;
 
