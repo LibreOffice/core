@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlelement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:49:08 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace xmloff
             IMAGE_FRAME,
             HIDDEN,
             GRID,
+            VALUERANGE,
             GENERIC_CONTROL,
 
             UNKNOWN // must be the last element
@@ -129,6 +130,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3.62.1  2003/10/22 13:17:42  fs
+ *  #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
+ *
+ *  Revision 1.3  2003/06/12 09:49:08  vg
+ *  INTEGRATION: CWS mh11rc (1.2.152); FILE MERGED
+ *  2003/06/06 11:08:47 mh 1.2.152.1: join: from cws_srx644_ooo11beta2
+ *
  *  Revision 1.2.152.1  2003/06/06 11:08:47  mh
  *  join: from cws_srx644_ooo11beta2
  *
