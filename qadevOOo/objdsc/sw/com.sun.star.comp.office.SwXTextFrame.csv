@@ -14,6 +14,7 @@
 "SwXTextFrame";"com::sun::star::text::TextFrame";"FrameIsAutomaticHeight"
 "SwXTextFrame";"com::sun::star::text::TextFrame";"SizeType"
 "SwXTextFrame";"com::sun::star::text::TextFrame";"WritingMode#optional"
+"SwXTextFrame";"com::sun::star::text::TextFrame";"IsFollowingTextFlow#optional"
 "SwXTextFrame";"com::sun::star::text::BaseFrameProperties";"AnchorPageNo"
 "SwXTextFrame";"com::sun::star::text::BaseFrameProperties";"AnchorFrame"
 "SwXTextFrame";"com::sun::star::text::BaseFrameProperties";"BackColor"
