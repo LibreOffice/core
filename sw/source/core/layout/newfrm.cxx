@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-14 14:09:27 $
+ *  last change: $Author: ama $ $Date: 2001-09-18 09:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ static SwRectFnCollection aHorizontal = {
     &SwRect::_Right,
     &SwRect::_Width,
     &SwRect::_Height,
+    &SwRect::_Pos,
+    &SwRect::_Size,
     /* fnRectSet      */
     &SwRect::_Top,
     &SwRect::_Bottom,
@@ -188,6 +190,8 @@ static SwRectFnCollection aVertical = {
     &SwRect::_Bottom,
     &SwRect::_Height,
     &SwRect::_Width,
+    &SwRect::SwappedPos,
+    &SwRect::SwappedSize,
     /* fnRectSet      */
     &SwRect::_Right,
     &SwRect::_Left,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-14 14:08:42 $
+ *  last change: $Author: ama $ $Date: 2001-09-18 09:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,8 @@ struct SwRectFnCollection
     SwRectGet     fnGetRight;
     SwRectGet     fnGetWidth;
     SwRectGet     fnGetHeight;
+    SwRectPoint   fnGetPos;
+    SwRectSize    fnGetSize;
 
     SwRectSet     fnSetTop;
     SwRectSet     fnSetBottom;

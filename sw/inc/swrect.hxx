@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 07:58:18 $
+ *  last change: $Author: ama $ $Date: 2001-09-18 09:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@ public:
     void AddHeight( const long nAdd );
     void SetPosX(   const long nNew );
     void SetPosY(   const long nNew );
+    const Point _Pos()  const;
+    const Size  _Size() const;
+    const Point SwappedPos()  const;
+    const Size  SwappedSize() const;
 #endif
 };
 
@@ -185,6 +189,8 @@ extern SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 #ifdef VERTICAL_LAYOUT
 typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
+typedef const Point (SwRect:: *SwRectPoint)() const;
+typedef const Size (SwRect:: *SwRectSize)() const;
 #endif
 
 //---------------------------------- Set-Methoden

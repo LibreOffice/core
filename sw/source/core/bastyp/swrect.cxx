@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 07:59:07 $
+ *  last change: $Author: ama $ $Date: 2001-09-18 09:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,10 @@ void SwRect::SubTop( const long nSub ){ nHeight += nSub; nY -= nSub; }
 void SwRect::AddBottom( const long nAdd ){ nHeight += nAdd; }
 void SwRect::SetPosX( const long nNew ){ nX = nNew; }
 void SwRect::SetPosY( const long nNew ){ nY = nNew; }
+const Point SwRect::_Pos()  const { return Pos(); }
+const Size  SwRect::_Size() const { return SSize(); }
+const Point SwRect::SwappedPos()  const { return Point( nY, nX ); }
+const Size  SwRect::SwappedSize() const { return Size( nHeight, nWidth ); }
 #endif
 
 #ifndef PRODUCT
