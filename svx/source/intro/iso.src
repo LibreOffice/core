@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iso.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:59:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 10:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,20 +130,16 @@ ModalDialog RID_DEFAULTABOUT
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
         WordBreak = TRUE ;
-        Text[ de ] = "Copyright © 2003 Sun Microsystems, Inc. All rights reserved. Use is subject to license terms. Third-party software, including font technology, is copyrighted and licensed from Sun suppliers. Sun, Sun Microsystems, the Sun logo, Java, Solaris and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries. Federal Acquisitions: Commercial Software - Government Users Subject to Standard License Terms and Conditions. Copyright © 2003 Sun Microsystems, Inc. Tous droits r�serv�s. Distribu� par des licences qui en restreignent l'utilisation. Le logiciel d�tenu par des tiers, et qui comprend la technologie relative aux polices de caract�res, est prot�g� par un copyright et licenci� par des fournisseurs de Sun. Sun, Sun Microsystems, le logo Sun, Java, Solaris et StarOffice sont des marques de fabrique ou des marques d�pos�es de Sun Microsystems, Inc. aux Etats-Unis et dans d'autres pays.";
-        Text[ en-US ] = "Copyright © 2003 Sun Microsystems, Inc. All rights reserved. Use is subject to license terms. Third-party software, including font technology, is copyrighted and licensed from Sun suppliers. Sun, Sun Microsystems, the Sun logo, Java, Solaris and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries. Federal Acquisitions: Commercial Software - Government Users Subject to Standard License Terms and Conditions. Copyright © 2003 Sun Microsystems, Inc. Tous droits réservés. Distribué par des licences qui en restreignent l'utilisation. Le logiciel détenu par des tiers, et qui comprend la technologie relative aux polices de caractères, est protégé par un copyright et licencié par des fournisseurs de Sun. Sun, Sun Microsystems, le logo Sun, Java, Solaris et StarOffice sont des marques de fabrique ou des marques déposées de Sun Microsystems, Inc. aux Etats-Unis et dans d'autres pays.";
-    };
-    String ABOUT_STR_DEVELOPER
-    {
-        Text = "" ;
+        Text[ de ] = "Copyright � 2004 Sun Microsystems, Inc. All rights reserved. U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements. Use is subject to license terms. This distribution may include materials developed by third parties.Sun, Sun Microsystems, the Sun logo, Java, Solaris and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries. UNIX is a registered trademark in the U.S. and other countries, exclusively licensed through X/Open Company, Ltd.";
+        Text[ en-US ] = "Copyright © 2004 Sun Microsystems, Inc. All rights reserved. U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements. Use is subject to license terms. This distribution may include materials developed by third parties.Sun, Sun Microsystems, the Sun logo, Java, Solaris and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries. UNIX is a registered trademark in the U.S. and other countries, exclusively licensed through X/Open Company, Ltd.";
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
     {
         DEVELOPER_LIST
     };
-    String ABOUT_STR_COPYRIGHT_ADABAS
+    String ABOUT_STR_FRENCH_COPYRIGHT
     {
-        TEXT_COPYRIGHTS_ADABAS
+        Text = "Copyright © 2004 Sun Microsystems, Inc. Tous droits réservés. L'utilisation est soumise aux termes du contrat de licence. Cette distribution peut comprendre des composants développés par des tierces parties. Sun, Sun Microsystems, le logo Sun, Java, Solaris et StarOffice sont des marques de fabrique ou des marques déposées de Sun Microsystems, Inc. aux Etats-Unis et dans d'autres pays. UNIX est une marque déposée aux Etats-Unis et dans d'autres pays et licenciée exlusivement par X/Open Company, Ltd.";
     };
     String ABOUT_STR_ACCEL
     {
