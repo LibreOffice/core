@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-10-25 14:17:40 $
+ *  last change: $Author: af $ $Date: 2002-11-04 14:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,15 @@ void  SdTabControl::MouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
+    // A single left click with pressed control key on a tab page first
+    // switches to that page before the usual handling (copying with drag
+    // and drop) takes place.
+    else if (rMEvt.IsLeft() && rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift())
+    {
+        pDrViewSh->SwitchPage (GetPageId (rMEvt.GetPosPixel()) - 1);
+    }
+
+
     TabBar::MouseButtonDown(rMEvt);
 }
 
@@ -210,7 +219,7 @@ void SdTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     bInternalMove = TRUE;
 
     // object is delete by reference mechanismn
-    ( new SdTabControl::SdTabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_MOVE );
+    ( new SdTabControl::SdTabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 
 /*************************************************************************
@@ -287,10 +296,52 @@ sal_Int8 SdTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         USHORT nPageId = ShowDropPos( aPos ) - 1;
 
-        if( pDrViewSh->IsSwitchPageAllowed() && pDoc->MovePages( nPageId ) )
+        switch (rEvt.mnAction)
         {
-            SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-            pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            case DND_ACTION_MOVE:
+                if( pDrViewSh->IsSwitchPageAllowed() && pDoc->MovePages( nPageId ) )
+                {
+                    SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
+                    pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                }
+                break;
+
+            case DND_ACTION_COPY:
+            {
+                // Copying the selected page to the place that rEvt points
+                // takes place in three steps:
+                // 1. Create a copy of the selected page.  This copy will
+                // lie directly behind the selected page.
+                // 2. Move the copy to the desired place.
+                // 3. Select the copy.
+                if (pDrViewSh->IsSwitchPageAllowed())
+                {
+                    // 1. Create a copy.
+                    USHORT nPageNumOfCopy = pDoc->DuplicatePage (GetCurPageId() - 1);
+                    // 2. Move page.  For this first switch to the copy:
+                    // MovePages operates on the currently selected page(s).
+                    pDrViewSh->SwitchPage (nPageNumOfCopy);
+                    // Adapt target page id when necessary, i.e. page copy
+                    // has been inserted in front of the target page.
+                    USHORT nPageNum = nPageId;
+                    if ((nPageNumOfCopy <= nPageNum) && (nPageNum != (USHORT)-1))
+                        nPageNum += 1;
+                    if (pDoc->MovePages(nPageNum))
+                    {
+                        // 3. Switch to the copy that has been moved to its
+                        // final destination.  Use an asynchron slot call to
+                        // be executed after the still pending ones.
+                        if (nPageNumOfCopy >= nPageNum || (nPageNum == (USHORT)-1))
+                            nPageNum += 1;
+                        SetCurPageId (GetPageId(nPageNum));
+                        SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
+                        pDispatcher->Execute(SID_SWITCHPAGE,
+                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                    }
+                }
+
+                break;
+            }
         }
 
         nRet = rEvt.mnAction;
