@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 12:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,25 +77,10 @@
 //#define _ATL_DEBUG_INTERFACES
 #endif
 
-//#include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
-
 #include <tools/prewin.h>
-//#include <stdlib.h>
-//#include <malloc.h>
-//#include <ole2.h>
-//#include <oleauto.h>
-//#include <oaidl.h>
-//#include <ocidl.h>
 #include <tchar.h>
-//#include <objbase.h>
-//#include <atlbase.h>
-//extern CComModule _Module;
-//#include <atlcom.h>
 #if _MSC_VER >= 1200
 #include <dispex.h>
-//#include <winbase.h>
 #endif
 #include <tools/postwin.h>
 
@@ -110,62 +95,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
-#include <com/sun/star/script/XTypeConverter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_FINISHENGINEEVENT_HPP_
-#include <com/sun/star/script/FinishEngineEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_INTERRUPTREASON_HPP_
-#include <com/sun/star/script/InterruptReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINELISTENER_HPP_
-#include <com/sun/star/script/XEngineListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XDEBUGGING_HPP__
-#include <com/sun/star/script/XDebugging.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XINVOCATION_HPP_
 #include <com/sun/star/script/XInvocation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_CONTEXTINFORMATION_HPP_
-#include <com/sun/star/script/ContextInformation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_FINISHREASON_HPP_
-#include <com/sun/star/script/FinishReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINE_HPP_
-#include <com/sun/star/script/XEngine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_INTERRUPTENGINEEVENT_HPP_
-#include <com/sun/star/script/InterruptEngineEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYACCESS_HXX_
-#include <com/sun/star/script/XLibraryAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_INVALIDVALUEEXCEPTION_HPP_
-#include <com/sun/star/registry/InvalidValueException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_REGISTRYKEYTYPE_HPP_
-#include <com/sun/star/registry/RegistryKeyType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_REGISTRYVALUETYPE_HPP_
-#include <com/sun/star/registry/RegistryValueType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_INVALIDREGISTRYEXCEPTION_HPP_
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
-#include <com/sun/star/loader/XImplementationLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGESUPPLIER_HPP_
-#include <com/sun/star/bridge/XBridgeSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BRIDGE_XBRIDGESUPPLIER2_HPP_
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
@@ -181,9 +115,6 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -204,14 +135,6 @@
 
 #ifndef _TYPELIB_TYPECLASS_H_
 #include <typelib/typeclass.h>
-#endif
-
-#ifndef _UNO_DISPATCHER_H_
-#include <uno/dispatcher.h>
-#endif
-
-#ifndef _UNO_MAPPING_H_
-#include <uno/mapping.hxx>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -319,78 +242,9 @@ sal_Bool convertSelfToIDispatch( T& unoInterface, IDispatch** ppDisp)
     }
     return *ppDisp ? sal_True : sal_False;
 }
-// ----------------------------------------------------------------------
-// see the overloaded getCppuType function in this file
-//class IUnknownWrapper: public XInterface
-//{
-//public:
-//
-//    virtual Any invokeWithDispId(DISPID dispID, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw ( IllegalArgumentException, CannotConvertException, InvocationTargetException, Exception ) = 0;
-//    virtual void setValueWithDispId(DISPID dispID, const Any& Value) throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, Exception)  = 0;
-//    virtual Any getValueWithDispId(DISPID dispID) throw( UnknownPropertyException, Exception) = 0;
-//};
-//-----------------------------------------------------------------------
 
 
 
-/* ref class to hold IUnknown pointer
-*/
-template <class UnknownClass> class OleRef
-{
-public:
-
-    typedef OleRef<UnknownClass> self;
-
-    OleRef()
-        : m_pUnknown(NULL)
-    {}
-
-    OleRef(const self& copy)
-        : m_pUnknown(copy.m_pUnknown)
-    {
-        if (m_pUnknown) m_pUnknown->AddRef();
-    }
-
-    OleRef(UnknownClass* pUnknown)
-        : m_pUnknown(pUnknown)
-    {
-        if (m_pUnknown) m_pUnknown->AddRef();
-    }
-
-    ~OleRef()
-    {
-        if (m_pUnknown) m_pUnknown->Release();
-    }
-
-    self& operator = (const self& copy)
-    {
-        if (m_pUnknown) m_pUnknown->Release();
-        m_pUnknown = copy.m_pUnknown;
-        if (m_pUnknown) m_pUnknown->AddRef();
-
-        return *this;
-    }
-
-    self& operator = (UnknownClass* pUnknown)
-    {
-        if (m_pUnknown) m_pUnknown->Release();
-        m_pUnknown = pUnknown;
-        if (m_pUnknown) m_pUnknown->AddRef();
-        return *this;
-    }
-
-    UnknownClass* get() { return m_pUnknown; }
-
-    UnknownClass* operator->() { return m_pUnknown; }
-
-    const UnknownClass* operator->() const { return m_pUnknown; }
-
-    Boolean is() { return (m_pUnknown != NULL); }
-
-protected:
-
-    UnknownClass* m_pUnknown;
-};
 
 inline sal_Bool operator == (const Uik & uik1, const Uik & uik2)
 {
