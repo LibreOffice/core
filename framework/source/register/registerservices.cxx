@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:29:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,14 @@
 #include <uielement/toolbarsmenucontroller.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
+#include <services/autorecovery.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
+#include <helper/statusindicatorfactory.hxx>
+#endif
+
 #ifndef __FRAMEWORK_UIELEMENT_RECENTFILESMENUCONTROLLER_HXX_
 #include <uielement/recentfilesmenucontroller.hxx>
 #endif
@@ -303,6 +311,8 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::WindowStateConfiguration                )
                         COMPONENTINFO( ::framework::ToolbarControllerFactory                )
                         COMPONENTINFO( ::framework::ToolbarsMenuController                  )
+                        COMPONENTINFO( ::framework::AutoRecovery                            )
+                        COMPONENTINFO( ::framework::StatusIndicatorFactory                  )
                         COMPONENTINFO( ::framework::RecentFilesMenuController               )
                         COMPONENTINFO( ::framework::StatusBarFactory                        )
                         COMPONENTINFO( ::framework::UICategoryDescription                   )
@@ -347,6 +357,8 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
+                        IFFACTORY( ::framework::AutoRecovery                            )   else
+                        IFFACTORY( ::framework::StatusIndicatorFactory                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
