@@ -1,72 +1,65 @@
 <?xml version='1.0' encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//W3C//DTD HTML 3.2//EN" "componentdependencies.dtd">
-<COMPONENTDESCRIPTION>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//W3C//DTD HTML 3.2//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   odbc    </module-name>
+    <component-description>
+        <Author>Ocke Janssen</Author>
+        <Name>  com.sun.star.sdbc.ODBCDriver    </Name>
+        <Description>
+            This is the implementation of the sdbc-odbc bridge.
+        </Description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service> com.sun.star.sdbc.Driver    </supported-service>
+        <service-dependency>    ... </service-dependency>
+        <project-build-dependency>  cppuhelper  </project-build-dependency>
+        <project-build-dependency>  cppu        </project-build-dependency>
+        <project-build-dependency>  sal         </project-build-dependency>
+        <project-build-dependency>  vos         </project-build-dependency>
 
-<Author>Ocke Janssen</Author>
-<Name>  com.sun.star.sdbc.ODBCDriver    </Name>
-
-<Description>
-    This is the implementation of the sdbc-odbc bridge.
-</Description>
-
-<ModuleName>    odbc    </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-<Language>  c++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>  com.sun.star.sdbc.Driver    </SupportedService>
-
-<ServiceDependency> ... </ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-<ProjectBuildDependency>    vos         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu1       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   vos         </RuntimeModuleDependency>
+        <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+        <runtime-module-dependency> cppu1       </runtime-module-dependency>
+        <runtime-module-dependency> sal1        </runtime-module-dependency>
+        <runtime-module-dependency> vos         </runtime-module-dependency>
 
 
 
-<Type>  com.sun.star.util.XCancellable              </Type>
-<Type>  com.sun.star.util.XNumberFormatter          </Type>
-<Type>  com.sun.star.uno.TypeClass                  </Type>
-<Type>  com.sun.star.uno.XWeak                      </Type>
-<Type>  com.sun.star.uno.XAggregation               </Type>
-<Type>  com.sun.star.beans.XPropertyState           </Type>
-<Type>  com.sun.star.beans.XPropertySet             </Type>
-<Type>  com.sun.star.beans.PropertyValue            </Type>
-<Type>  com.sun.star.beans.XMultiPropertySet        </Type>
-<Type>  com.sun.star.beans.XFastPropertySet         </Type>
-<Type>  com.sun.star.lang.XTypeProvider             </Type>
-<Type>  com.sun.star.lang.EventObject               </Type>
-<Type>  com.sun.star.lang.XComponent                </Type>
-<Type>  com.sun.star.lang.IllegalArgumentException  </Type>
-<Type>  com.sun.star.lang.XMultiServiceFactory      </Type>
-<Type>  com.sun.star.java.XJavaThreadRegister_11    </Type>
-<Type>  com.sun.star.java.XJavaVM                   </Type>
-<Type>  com.sun.star.sdbc.XConnection               </Type>
-<Type>  com.sun.star.sdbc.XStatement                </Type>
-<Type>  com.sun.star.sdbc.XResultSet                </Type>
-<Type>  com.sun.star.sdbc.XResultSetMetaDataSupplier</Type>
-<Type>  com.sun.star.sdbc.XColumnLocate             </Type>
-<Type>  com.sun.star.sdbc.XResultSetUpdate          </Type>
-<Type>  com.sun.star.sdbc.XWarningsSupplier         </Type>
-<Type>  com.sun.star.sdbc.XRowUpdate                </Type>
-<Type>  com.sun.star.sdbc.XMultipleResults          </Type>
-<Type>  com.sun.star.sdbc.XBatchExecution           </Type>
-<Type>  com.sun.star.sdbc.XPreparedBatchExecution   </Type>
-<Type>  com.sun.star.sdbc.XParameters               </Type>
-<Type>  com.sun.star.sdbc.XOutParameters            </Type>
-<Type>  com.sun.star.sdbc.DriverPropertyInfo        </Type>
-<Type>  com.sun.star.sdbc.XRow                      </Type>
-<Type>  com.sun.star.sdb.XColumnUpdate              </Type>
-<Type>  com.sun.star.sdb.XColumn                    </Type>
-
-</COMPONENTDESCRIPTION>
+        <type>  com.sun.star.util.XCancellable              </type>
+        <type>  com.sun.star.util.XNumberFormatter          </type>
+        <type>  com.sun.star.uno.TypeClass                  </type>
+        <type>  com.sun.star.uno.XWeak                      </type>
+        <type>  com.sun.star.uno.XAggregation               </type>
+        <type>  com.sun.star.beans.XPropertyState           </type>
+        <type>  com.sun.star.beans.XPropertySet             </type>
+        <type>  com.sun.star.beans.PropertyValue            </type>
+        <type>  com.sun.star.beans.XMultiPropertySet        </type>
+        <type>  com.sun.star.beans.XFastPropertySet         </type>
+        <type>  com.sun.star.lang.XTypeProvider             </type>
+        <type>  com.sun.star.lang.EventObject               </type>
+        <type>  com.sun.star.lang.XComponent                </type>
+        <type>  com.sun.star.lang.IllegalArgumentException  </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory      </type>
+        <type>  com.sun.star.java.XJavaThreadRegister_11    </type>
+        <type>  com.sun.star.java.XJavaVM                   </type>
+        <type>  com.sun.star.sdbc.XConnection               </type>
+        <type>  com.sun.star.sdbc.XStatement                </type>
+        <type>  com.sun.star.sdbc.XResultSet                </type>
+        <type>  com.sun.star.sdbc.XResultSetMetaDataSupplier</type>
+        <type>  com.sun.star.sdbc.XColumnLocate             </type>
+        <type>  com.sun.star.sdbc.XResultSetUpdate          </type>
+        <type>  com.sun.star.sdbc.XWarningsSupplier         </type>
+        <type>  com.sun.star.sdbc.XRowUpdate                </type>
+        <type>  com.sun.star.sdbc.XMultipleResults          </type>
+        <type>  com.sun.star.sdbc.XBatchExecution           </type>
+        <type>  com.sun.star.sdbc.XPreparedBatchExecution   </type>
+        <type>  com.sun.star.sdbc.XParameters               </type>
+        <type>  com.sun.star.sdbc.XOutParameters            </type>
+        <type>  com.sun.star.sdbc.DriverPropertyInfo        </type>
+        <type>  com.sun.star.sdbc.XRow                      </type>
+        <type>  com.sun.star.sdb.XColumnUpdate              </type>
+        <type>  com.sun.star.sdb.XColumn                    </type>
+    </component-description>
+</module-description>
 
 
