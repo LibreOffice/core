@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:25:51 $
+ *  last change: $Author: sb $ $Date: 2001-06-06 07:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XContentProviderManager;
@@ -90,7 +96,8 @@ namespace ucb {
 rtl::OUString getLocalFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
-        rManager);
+        rManager)
+    SAL_THROW((com::sun::star::uno::RuntimeException));
 
 //============================================================================
 /** Using a specific content provider manager, convert a file path in system
@@ -122,7 +129,8 @@ getFileURLFromSystemPath(
             com::sun::star::ucb::XContentProviderManager > const &
         rManager,
     rtl::OUString const & rBaseURL,
-    rtl::OUString const & rSystemPath);
+    rtl::OUString const & rSystemPath)
+    SAL_THROW((com::sun::star::uno::RuntimeException));
 
 //============================================================================
 /** Using a specific content provider manager, convert a (file) URL to a
@@ -150,7 +158,8 @@ getSystemPathFromFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
         rManager,
-    rtl::OUString const & rURL);
+    rtl::OUString const & rURL)
+    SAL_THROW((com::sun::star::uno::RuntimeException));
 
 }
 
