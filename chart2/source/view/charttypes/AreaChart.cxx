@@ -15,14 +15,8 @@
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
 #endif
 
-#ifndef _SV_GEN_HXX
-#include <tools/gen.hxx>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
-#include <tools/color.hxx>
 #endif
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
