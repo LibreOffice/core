@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-15 07:14:58 $
+ *  last change: $Author: lla $ $Date: 2000-11-15 10:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define CONFIGMGR_CHANGE_HXX
 
 #include <map>
+#include <memory>
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -72,13 +73,16 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
 #include "valuenode.hxx"
 
 namespace configmgr
 {
 
     namespace uno = com::sun::star::uno;
-    namespace lang = com::sun::star::lang;
 
     class Change;
     class SubtreeChange;

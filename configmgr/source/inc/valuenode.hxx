@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-15 07:14:58 $
+ *  last change: $Author: lla $ $Date: 2000-11-15 10:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #define _CONFIGMGR_TREE_VALUENODE_HXX
 
+#include <memory>
 #include "rttimacros.hxx"
 #include <rtl/ustring.hxx>
 
