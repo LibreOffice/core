@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:44:36 $
+#   last change: $Author: rt $ $Date: 2003-09-16 14:44:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,16 +70,11 @@ GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  connectivity/version.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 IENV!:=$(IENV);..$/res
 
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
-.ENDIF
 .IF "$(OS)"=="IRIX"
 LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
 .ENDIF
@@ -154,7 +149,7 @@ SHL1OBJS=   $(SLO)$/scdll.obj
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
 .ENDIF
 
@@ -185,15 +180,6 @@ LIB3FILES=	\
 LIB3FILES+= \
             $(SLB)$/unoobj.lib
 
-.IF "$(linkinc)" != ""
-#SHL1STDLIBS+= \
-#			$(SLB)$/stardiv_sc.lib
-.ELSE
-#SHL1STDLIBS+= \
-#			$(L)$/offsmart.lib \
-#			$(L)$/svtsmart.lib \
-#			$(L)$/svxsmrt1.lib
-.ENDIF
 
 LIB4TARGET=$(SLB)$/scalc3c.lib
 LIB4FILES=	\
@@ -222,8 +208,7 @@ LIB5OBJFILES=$(OBJ)$/sclib.obj
 .IF "$(depend)" == ""
 ALL:	\
     $(MISC)$/linkinc.ls \
-    ALLTAR	\
-    ea
+    ALLTAR
 .ENDIF
 
 # --- Targets -------------------------------------------------------------
@@ -249,23 +234,6 @@ APP1STACK=81920
 
 .IF "$(depend)" == ""
 
-# -------------------------------------------------------------------------
-# MAC
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo CreateScDocShellDll                              >  $@
-    @echo CreateObjScDocShellDll                           >> $@
-    @echo InitScDll                                        >> $@
-    @echo DeInitScDll                                      >> $@
-    @echo component_getImplementationEnvironment           >> $@
-    @echo component_writeInfo                              >> $@
-    @echo component_getFactory                             >> $@
-.ENDIF
 
 .IF "$(GUI)" == "WNT"
 
@@ -288,54 +256,6 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     echo  RC $(RCFLAGS) $(RES)$/scappi.res                    >>$@
 .ENDIF
 
-# -------------------------------------------------------------------------
-# Presentation Manager 2.0
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-    @echo ================================================================
-    @echo building $@
-    @echo ----------------------------------------------------------------
-.IF "$(COM)"!="WTC"
-    echo  LIBRARY		INITINSTANCE TERMINSTANCE			>$@
-    echo  DESCRIPTION   'ScDLL'                            >>$@
-    echo  PROTMODE										   >>$@
-    @echo CODE        LOADONCALL 			              >>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					  >>$@
-    @echo EXPORTS                                                   >>$@
-.IF "$(COM)"!="ICC"
-    @echo _CreateScDocShellDll @2                              >>$@
-    @echo _CreateObjScDocShellDll @3                           >>$@
-    @echo _InitScDll @4                                            >>$@
-    @echo _DeInitScDll @5                                          >>$@
-    @echo _component_getImplementationEnvironment @6               >>$@
-    @echo _component_writeInfo @7                                  >>$@
-    @echo _component_getFactory @8                                 >>$@
-.ELSE
-    @echo CreateScDocShellDll @2                              >>$@
-    @echo CreateObjScDocShellDll @3                           >>$@
-    @echo InitScDll @4                                            >>$@
-    @echo DeInitScDll @5                                          >>$@
-    @echo component_getImplementationEnvironment @6               >>$@
-    @echo component_writeInfo @7                                  >>$@
-    @echo component_getFactory @8                                 >>$@
-.ENDIF
-.ELSE
-        @echo option DESCRIPTION 'ScDLL'                            >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll                         >>$@
-    @echo CreateScDocShellDll_ @2      >>temp.def
-    @echo CreateObjScDocShellDll_ @3   >>temp.def
-    @echo InitScDll_ @4                    >>temp.def
-    @echo DeInitScDll_ @5                  >>temp.def
-    @echo component_getImplementationEnvironment_ @6  >>temp.def
-    @echo component_writeInfo_ @7          >>temp.def
-    @echo component_getFactory_ @8         >>temp.def
-    @gawk -f s:\util\exp.awk temp.def				>>$@
-    del temp.def
-.ENDIF
-.ENDIF
 .ENDIF
 
 
@@ -347,11 +267,3 @@ $(MISCX)$/$(SHL1TARGET).flt:
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
 
-
-ea:
-.IF "$(GUI)" == "OS2"
-    @+echo extended attributes? siehe sw\util.
-#	+call swos2.cmd
-.ELSE
-    @echo nix
-.ENDIF
