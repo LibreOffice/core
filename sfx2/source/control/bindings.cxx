@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.24 $
- *  last change: $Author: hr $ $Date: 2003-04-04 19:22:09 $
+ *  $Revision: 1.25 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,8 +1520,14 @@ sal_Bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_
     return ( pRet != 0 );
 }
 
+void SfxBindings::ExecuteGlobal_Impl( USHORT nId )
+{
+    if( nId && pDispatcher )
+        Execute_Impl( nId, NULL, 0, SFX_CALLMODE_ASYNCHRON, NULL, TRUE );
+}
+
 const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
-                        const SfxPoolItem **ppInternalArgs )
+                        const SfxPoolItem **ppInternalArgs, BOOL bGlobalOnly )
 {
     SfxStateCache *pCache = GetStateCache( nId );
     if ( !pCache )
@@ -1530,7 +1536,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         while ( pBind )
         {
             if ( pBind->GetStateCache( nId ) )
-                return pBind->Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs );
+                return pBind->Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs, bGlobalOnly );
             pBind = pBind->pImp->pSubBindings;
         };
     }
@@ -1580,6 +1586,10 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         pShell = rDispatcher.GetShell( pServer->GetShellLevel() );
         pSlot = pServer->GetSlot();
     }
+
+    if ( bGlobalOnly )
+        if ( !pShell->ISA(SfxModule) && !pShell->ISA(SfxApplication) && !pShell->ISA(SfxViewFrame) )
+            return NULL;
 
     SfxItemPool &rPool = pShell->GetPool();
     SfxRequest aReq( nId, nCallMode, rPool );
