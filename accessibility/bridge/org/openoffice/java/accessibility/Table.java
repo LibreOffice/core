@@ -81,10 +81,20 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         try {
             if (AnyConverter.isObject(any)) {
                 XAccessible unoAccessible = (XAccessible) AnyConverter.toObject(
-                    Container.XAccessibleType, any);
+                    AccessibleObjectFactory.XAccessibleType, any);
                 if (unoAccessible != null) {
                     // FIXME: have to handle non transient objects here ..
                     descendant = new TableCell(unoAccessible);
+                    if (Build.DEBUG) {
+                        try {
+                            if (Build.DEBUG) {
+                                System.err.println("[Table] retrieved active descendant event: new descendant is " +
+                                    unoAccessible.getAccessibleContext().getAccessibleName());
+                            }
+                        } catch (java.lang.NullPointerException e) {
+                            System.err.println("*** ERROR *** new active descendant not accessible");
+                        }
+                    }
                 }
             }
             setActiveDescendant(descendant);
@@ -114,14 +124,14 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
