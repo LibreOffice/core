@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:47:38 $
+#   last change: $Author: hr $ $Date: 2003-04-04 16:56:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ CXXFILES =								\
     AccessibleStaticTextBase.cxx		\
     AccessibleParaManager.cxx			\
     AccessibleEditableTextPara.cxx		\
+    AccessibleStringWrap.cxx			\
     AccessibleImageBullet.cxx			\
     ShapeTypeHandler.cxx				\
     SvxShapeTypes.cxx					\
@@ -123,6 +124,7 @@ SLOFILES =	\
     $(SLO)$/AccessibleStaticTextBase.obj		\
     $(SLO)$/AccessibleParaManager.obj			\
     $(SLO)$/AccessibleEditableTextPara.obj		\
+    $(SLO)$/AccessibleStringWrap.obj			\
     $(SLO)$/AccessibleImageBullet.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
