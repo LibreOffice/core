@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: vg $ $Date: 2002-02-26 15:47:36 $
+#   last change: $Author: vg $ $Date: 2002-04-04 12:40:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,12 +68,16 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 
 use Cwd;
+use Config;
+#use POSIX 'wait';
+#use POSIX 'waitpid';
+#use POSIX 'pause';
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.48 $ ';
+$id_str = ' $Revision: 1.49 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -93,6 +97,7 @@ $cmd_file = '';
 $BuildAllParents = 0;
 $show = 0;
 $deliver = 0;
+$child_dir = '';
 %LocalDepsHash = ();
 %DepsArchive = ();
 %BuildQueue = ();
@@ -105,13 +110,24 @@ $deliver = 0;
 @dmake_args = ();
 %DeadParents = ();
 $CurrentPrj = '';
+$no_projects = 0;
+$only_dependent = 0;
 $StandDir = &get_stand_dir();
 $build_from = '';
 $build_from_opt = '';
 $build_since = '';
 $dlv_switch = '';
+$child = 0;
+$children = 0;
+%processes_hash = ();
+$SIG{CHLD} = '';
+# $may_be_built = 0;
 
 &get_options;
+if ($QuantityToBuild) {
+    $SIG{CHLD} = \&handle_dead_child;
+#  $may_be_built = $QuantityToBuild;
+}
 
 $deliver_commando = $ENV{DELIVER};
 $deliver_commando .= ' '. $dlv_switch;
@@ -253,9 +269,11 @@ sub BuildAll {
 #
 # Start build given project
 #
-sub MakeDir {
-    my ($DirToBuild, $BuildDir, $error);
+sub dmake_dir {
+    my ($DirToBuild, $BuildDir);
     $DirToBuild = shift;
+    #print "\n\n\nStarting $DirToBuild\n\n\n";
+    #print "$may_be_built\n";
     $BuildDir = &CorrectPath($StandDir . $PathHash{$DirToBuild});
     if ($cmd_file) {
         print "cd $BuildDir\n";
@@ -266,14 +284,21 @@ sub MakeDir {
     } else {
         print "$BuildDir\n";
     };
-    &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+    &RemoveFromDependencies($DirToBuild, \%LocalDepsHash) if (!$child);
     if (!$cmd_file && !$show) {
         &print_error("\n$BuildDir not found!!\n") if (!(chdir ($BuildDir)));
         cwd();
-        $error = system ("$dmake");
-        if ($error) {
-            &print_error("Error $error occurred while making $BuildDir");
+        system ("$dmake");
+        if ($? && ($? != -1)) {
+            &print_error("Error $? occurred while making $BuildDir");
         };
+    };
+    if ($child) {
+        my $oldfh = select STDERR;
+        $| = 1;
+#select $oldfh;
+        POSIX::_exit($? >> 8) if ($? && ($? != -1));
+        POSIX::_exit(0);
     };
 };
 
@@ -346,7 +371,7 @@ sub BuildPrj {
             } else {
                 next;
             };
-        };
+};
         s/\r\n//;
         if ($_ =~ /nmake/) {
             my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
@@ -368,7 +393,7 @@ sub BuildPrj {
             };
             $PlatformHash{$DirAlias}++;
             $Dependencies = $';
-            @Array = GetDependenciesArray($Dependencies);
+            @Array = &GetDependenciesArray($Dependencies);
             $LocalDepsHash{$DirAlias} = [@Array];
             $BuildQueue{$DirAlias}++;
             $PathHash{$DirAlias} = $Dir;
@@ -481,13 +506,96 @@ sub get_stand_dir {
 };
 
 #
+# cancel build when one of children has error exit code
+#
+sub cancel_build {
+    my $exit_code = shift;
+    delete $processes_hash{$pid};
+    kill 9 => -$$;
+    exit($exit_code);
+};
+
+#
+# child handler (clears the terminated child)
+#
+sub handle_dead_child {
+    $SIG{CHLD} = \&handle_dead_child if (!$Config{d_sigaction});
+    use POSIX ":sys_wait_h";
+    my $pid = 0;
+    WAITLOOP: {
+        if (($pid = POSIX::waitpid(-1, WNOHANG)) != -1) {
+            redo WAITLOOP if (!(defined $processes_hash{$pid}));
+            &cancel_build($?) if ($?);
+            &clear_from_child($pid);
+            redo WAITLOOP;
+        };
+    };
+    #print "\n\nChild has been handled\n\n";
+#   print "Sending alarm\n";
+#   alarm(1);
+#   print "Sent alarm\n";
+};
+
+sub clear_from_child {
+    my $pid = shift;
+      &RemoveFromDependencies($processes_hash{$pid},
+                            \%LocalDepsHash);
+    delete $processes_hash{$pid};
+    &start_child;
+    $children = scalar (keys %processes_hash);
+    $only_dependent = 0;
+    print 'Running processes: ', $children, "\n";
+};
+
+sub start_child {
+    do {
+        $child_dir = &PickPrjToBuild(\%LocalDepsHash) if (!$child_dir);
+        if ($only_dependent || ($children >= $QuantityToBuild)) {
+            return;
+        };
+        if ($child_dir) {
+            if ($pid = fork) { # parent
+                $processes_hash{$pid} = $child_dir;
+                $children = scalar (keys %processes_hash);
+                $child_dir = '';
+            } elsif (defined $pid) { # child
+                $child = 1;
+                &dmake_dir($child_dir);
+            };
+        };
+    } while (!$no_projects);
+};
+
+#
 # Build the entire project according to queue of dependencies
 #
 sub BuildDependent {
-    my ($Dir);
-    while ($Dir = &PickPrjToBuild(\%LocalDepsHash)) {
-        &MakeDir($Dir);
-        $Dir = '';
+    my $pid = 0;
+    while ($child_dir = &PickPrjToBuild(\%LocalDepsHash)) {
+        if ($QuantityToBuild) { # multyprocessing
+            while (!$no_projects) {
+                if ($only_dependent || ($children >= $QuantityToBuild)) {
+                    #print "******* Children: $children *******\n";
+                    #print "*******************************\n";
+                    #print "***** Parent is sleeping! *****\n";
+                    #print "*******************************\n";
+#                   alarm(1);
+                    sleep;
+                    #print "*****************************\n";
+                    #print "***** Parent is awaken! *****\n";
+                    #print "*****************************\n";
+                    next;
+                };
+                &start_child;
+            };
+            print STDERR "Multiprocessing build is finished\n";
+            do {
+                POSIX::sleep(1);
+            } while ($children);
+        } else {
+            &dmake_dir($child_dir);
+        };
+        $child_dir = '';
     };
 };
 
@@ -512,7 +620,8 @@ sub PickPrjToBuild {
     my ($Prj, $DepsHash);
     $DepsHash = shift;
     $Prj = &FindIndepPrj($DepsHash);
-    delete $$DepsHash{$Prj};
+    delete $$DepsHash{$Prj} if (defined $$DepsHash{$Prj});
+    #print "$Prj removed from dependencies hash\n";
     return $Prj;
 };
 
@@ -552,6 +661,7 @@ sub RemoveFromDependencies {
     foreach $Prj (keys %$Dependencies) {
         foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
             if (${$$Dependencies{$Prj}}[$i] eq $ExclPrj) {
+                #print $ExclPrj, " excluded\n";
                 splice (@{$$Dependencies{$Prj}}, $i, 1);
                 $i = 0;
                 last;
@@ -583,9 +693,13 @@ sub FindIndepPrj {
         };
         # If there are only dependent projects in hash - generate error
         return '' if ($build_from);
+        if ($children <= $QuantityToBuild) {
+            $only_dependent = 1;
+            return '';
+        };
         print STDERR "\nError: projects";
         foreach $Prj (keys %$Dependencies) {
-            if (IsHashNative($Prj)) {
+            if (&IsHashNative($Prj)) {
                 next;
             };
             $i = 0;
@@ -595,6 +709,10 @@ sub FindIndepPrj {
             };
         };
         &print_error ("\nhave dead or circular dependencies\n");
+    } else {
+        $no_projects = 1;
+        #print "\$no_projects ist gesetzt\n";
+        return '';
     };
 };
 
@@ -669,12 +787,12 @@ sub print_error {
     $ENV{mk_tmp} = '';
     close CMD_FILE if ($cmd_file);
     unlink ($cmd_file);
-    exit(1);
+    exit(1) if (!$child);
 };
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-file file_name|-dlv[_switch] dlvswitch] \n";
+    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-file file_name|-PP processes|-dlv[_switch] dlvswitch] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
@@ -686,6 +804,7 @@ sub usage {
     print STDERR "      -show       - show what is going to be built\n";
     print STDERR "      -file       - generate command file file_name\n";
     print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
+    print STDERR "      -PP         - start multiprocessing build, with number of processes passed (UNIXes only)\n";
     print STDERR "      -dlv[_switch]   - use deliver with the switch specified\n";
     print STDERR "      --help      - print help info\n";
     print STDERR "Default:          - build current project\n";
@@ -697,10 +816,8 @@ sub usage {
 #
 sub get_options {
     my $arg;
-    #&usage() && exit(0) if ($#ARGV == -1);
-    #$QuantityToBuild
     while ($arg = shift @ARGV) {
-        $arg =~ /^PP$/          and $QuantityToBuild = shift @ARGV  and next;
+        $arg =~ /^-PP$/         and $QuantityToBuild = shift @ARGV  and next;
         $arg =~ /^-all$/        and $BuildAllParents = 1            and next;
         $arg =~ /^-show$/       and $show = 1                       and next;
         $arg =~ /^-deliver$/    and $deliver = 1                    and next;
@@ -725,7 +842,14 @@ sub get_options {
         &print_error('Switches -from an -since collision');
     };
     @ARGV = @dmake_args;
-    $cmd_file = '' if ($show);
+    if ($show) {
+        $cmd_file = '';
+        $QuantityToBuild = 0;
+    };
+    if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
+        $QuantityToBuild = 0;
+        &print_error('-PP switch is unusable under windows!\n');
+    };
 };
 
 #
