@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:32:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,30 @@ class ViewTabListBox_Impl;
 class SvtFileView_Impl;
 class SvLBoxEntry;
 class HeaderBar;
-
 class IUrlFilter;
+
+/// the result of an action in the FileView
+enum FileViewResult
+{
+    eSuccess,
+    eFailure,
+    eTimeout,
+    eStillRunning
+};
+
+/// describes parameters for doing an action on the FileView asynchronously
+struct FileViewAsyncAction
+{
+    sal_uInt32  nMinTimeout;    /// minimum time to wait for a result, in milliseconds
+    sal_uInt32  nMaxTimeout;    /// maximum time to wait for a result, in milliseconds, until eTimeout is returned
+    Link        aFinishHandler; /// the handler to be called when the action is finished. Called in every case, no matter of the result
+
+    FileViewAsyncAction()
+    {
+        nMinTimeout = nMaxTimeout = 0;
+    }
+};
+
 class SvtFileView : public Control
 {
 private:
@@ -112,21 +134,80 @@ public:
     String                  GetURL( SvLBoxEntry* pEntry ) const;
     String                  GetCurrentURL() const;
 
+    sal_Bool                GetParentURL( String& _rParentURL ) const;
     sal_Bool                CreateNewFolder( const String& rNewFolder );
-    sal_Bool                HasPreviousLevel( String& rParentURL ) const;
-    sal_Bool                PreviousLevel( String& rNewURL );
 
     void                    SetHelpId( sal_uInt32 nHelpId );
     sal_uInt32              GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
     void                    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
-    sal_Bool                Initialize( const String& rURL, const String& rFilter );
-    sal_Bool                Initialize( const String& rURL,
-                                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
+    /** initialize the view with the content of a folder given by URL, and aply an immediate filter
+
+        @param rFolderURL
+            the URL of the folder whose content is to be read
+        @param rFilter
+            the initial filter to be applied
+        @param pAsyncDescriptor
+            If not <NULL/>, this struct describes the parameters for doing the
+            action asynchronously.
+    */
+    FileViewResult          Initialize(
+                                const String& rFolderURL,
+                                const String& rFilter,
+                                const FileViewAsyncAction* pAsyncDescriptor
+                            );
+
+    /** initialze the view with a sequence of contents, which have already been obtained elsewhere
+
+        This method will never return <member>eStillRunning</member>, since it will fill the
+        view synchronously
+    */
+    sal_Bool                Initialize( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
+
+    /** initializes the view with the content of a folder given by an UCB content
+    */
     sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const String& rFilter );
 
-    sal_Bool                ExecuteFilter( const String& rFilter );
+    /** reads the current content of the current folder again, and applies the given filter to it
+
+        Note 1: The folder is really read a second time. This implies that any new elements (which were
+        not present when you called Initialize the last time) are now displayed.
+
+        Note 2: This method must not be called when you previously initialized the view from a sequence
+        of strings, or a UNO content object.
+
+        @param rFilter
+            the filter to be applied
+        @param pAsyncDescriptor
+            If not <NULL/>, this struct describes the parameters for doing the
+            action asynchronously.
+    */
+    FileViewResult          ExecuteFilter(
+                                const String& rFilter,
+                                const FileViewAsyncAction* pAsyncDescriptor
+                            );
+
+    /** cancels a running async action (if any)
+
+        @seealso Initialize
+        @seealso ExecuteFilter
+        @seealso FileViewAsyncAction
+    */
+    void                    CancelRunningAsyncAction();
+
+    /** initializes the view with the parent folder of the current folder
+
+        @param rNewURL
+            the URL of the folder which we just navigated to
+        @param pAsyncDescriptor
+            If not <NULL/>, this struct describes the parameters for doing the
+            action asynchronously.
+    */
+    FileViewResult          PreviousLevel(
+                                const FileViewAsyncAction* pAsyncDescriptor
+                            );
+
     void                    SetNoSelection();
     void                    ResetCursor();
 
@@ -152,6 +233,9 @@ public:
 
     void                    SetUrlFilter( const IUrlFilter* _pFilter );
     const IUrlFilter*       GetUrlFilter( ) const;
+
+protected:
+    virtual void            StateChanged( StateChangedType nStateChange );
 };
 
 // struct SvtContentEntry ------------------------------------------------
