@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2000-11-23 15:40:19 $
+#   last change: $Author: kr $ $Date: 2001-03-14 16:47:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ TARGET  := test_com_sun_star_lib_uno_environments_java
 
 
 JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/Proxy_Test.class				\
     $(CLASSDIR)$/$(PACKAGE)$/java_environment_Test.class
 
 
