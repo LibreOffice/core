@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,16 +124,17 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
 // -------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection,SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding) : ODatabaseMetaDataResultSet_BASE(m_aMutex)
-                        ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
-                        ,m_aStatement(NULL)
-                        ,m_xMetaData(NULL)
-                        ,m_aStatementHandle(_pStatementHandle)
-                        ,m_bEOF(sal_False)
-                        ,m_nTextEncoding(_nTextEncoding)
-                        ,m_bFreeHandle(sal_False)
-                        ,m_pConnection(_pConnection)
-                        ,m_nDriverColumnCount(0)
+ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection)
+    :ODatabaseMetaDataResultSet_BASE(m_aMutex)
+    ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
+    ,m_aStatement(NULL)
+    ,m_xMetaData(NULL)
+    ,m_aStatementHandle(_pConnection->createStatementHandle())
+    ,m_bEOF(sal_False)
+    ,m_nTextEncoding(_pConnection->getTextEncoding())
+    ,m_bFreeHandle(sal_False)
+    ,m_pConnection(_pConnection)
+    ,m_nDriverColumnCount(0)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
     osl_incrementInterlockedCount( &m_refCount );
@@ -154,11 +155,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
 
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_bFreeHandle)
-    {
-        N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE);
-        N3SQLFreeHandle(SQL_HANDLE_STMT,m_aStatementHandle);
-        m_aStatementHandle = NULL;
-    }
+        m_pConnection->freeStatementHandle(m_aStatementHandle);
 
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
@@ -198,7 +195,7 @@ sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32  column)
 {
     sal_Int32   map = column;
 
-    if (m_aColMapping.size())
+    if (!m_aColMapping.empty())
     {
         // Validate column number
         map = m_aColMapping[column];
@@ -288,7 +285,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     sal_Int8  nVal = 0;
     if(columnIndex <= m_nDriverColumnCount)
     {
-        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nVal,sizeof nVal);
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TINYINT,m_bWasNull,**this,&nVal,sizeof nVal);
 
         if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
             return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);

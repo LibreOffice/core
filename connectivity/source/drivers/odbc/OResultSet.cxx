@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,11 +192,7 @@ void OResultSet::disposing(void)
     if(m_aBindVector.size())
         releaseBuffer();
     if(m_bFreeHandle)
-    {
-        N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE);
-        N3SQLFreeHandle(SQL_HANDLE_STMT,m_aStatementHandle);
-        m_aStatementHandle = NULL;
-    }
+        m_pStatement->getOwnConnection()->freeStatementHandle(m_aStatementHandle);
 
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
@@ -206,7 +202,7 @@ sal_Int32 OResultSet::mapColumn (sal_Int32  column)
 {
     sal_Int32   map = column;
 
-    if (m_aColMapping.size())
+    if (!m_aColMapping.empty())
     {
         // Validate column number
         OSL_ENSURE(column>0,"OResultSet::mapColumn column <= 0");
@@ -434,7 +430,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     sal_Int8 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_CHAR,&nRet,sizeof nRet);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TINYINT,&nRet,sizeof nRet);
     return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int8)aValue;
 }
 // -------------------------------------------------------------------------

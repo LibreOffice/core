@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,17 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
-OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex),
-                                                        OPropertySetHelper(OStatement_BASE::rBHelper),
-    rBHelper(OStatement_BASE::rBHelper),
-    m_pConnection(_pConnection),
-    m_pRowStatusArray(0)
+OStatement_Base::OStatement_Base(OConnection* _pConnection )
+    :OStatement_BASE(m_aMutex)
+    ,OPropertySetHelper(OStatement_BASE::rBHelper)
+    ,rBHelper(OStatement_BASE::rBHelper)
+    ,m_pConnection(_pConnection)
+    ,m_pConnectionTemp(NULL)
+    ,m_pRowStatusArray(0)
+    ,m_aStatementHandle(SQL_NULL_HANDLE)
 {
     m_pConnection->acquire();
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&m_aStatementHandle);
+    m_aStatementHandle = m_pConnection->createStatementHandle();
 }
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
@@ -173,11 +176,7 @@ void OStatement_BASE2::disposing()
     OSL_ENSURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
     N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS);
     N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
-    N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE);
-        //  OTools::ThrowException(m_pConnection,N3SQLFreeStmt(m_aStatementHandle,SQL_DROP),m_aStatementHandle,SQL_HANDLE_STMT,*this);
-
-    N3SQLFreeHandle(SQL_HANDLE_STMT,m_aStatementHandle);
-    m_aStatementHandle = NULL;
+    m_pConnection->freeStatementHandle(m_aStatementHandle);
     if (m_pConnection)
         m_pConnection->release();
 

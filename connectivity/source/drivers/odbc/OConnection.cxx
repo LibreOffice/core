@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 14:16:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,8 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          m_bClosed(sal_False),
                          m_xMetaData(NULL),
                          m_bUseCatalog(sal_False),
-                         m_bUseOldDateFormat(sal_False)
+                         m_bUseOldDateFormat(sal_False),
+                         m_nStatementCount(0)
 {
     m_pDriver->acquire();
     ModuleContext::AddRef();
@@ -218,6 +219,8 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_aConnectionHandle  = SQL_NULL_HANDLE;
+    m_aURL  = url;
+    m_aInfo = info;
 
     // Connection allozieren
     N3SQLAllocHandle(SQL_HANDLE_DBC,m_pDriverHandleCopy,&m_aConnectionHandle);
@@ -576,12 +579,61 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
+    for (::std::map< SQLHANDLE,OConnection*>::iterator aConIter = m_aConnections.begin();aConIter != m_aConnections.end();++aConIter )
+        aConIter->second->dispose();
+
+    ::std::map< SQLHANDLE,OConnection*>().swap(m_aConnections);
+
     OTools::ThrowException(this,N3SQLDisconnect(m_aConnectionHandle),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
+}
+// -----------------------------------------------------------------------------
+OConnection* OConnection::cloneConnection()
+{
+    return new OConnection(m_pDriverHandleCopy,m_pDriver);
+}
+// -----------------------------------------------------------------------------
+SQLHANDLE OConnection::createStatementHandle()
+{
+    OConnection* pConnectionTemp = this;
+    sal_Bool bNew = sal_False;
+    sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
+    if(nMaxStatements && nMaxStatements <= m_nStatementCount)
+    {
+        OConnection* pConnection = cloneConnection();
+        pConnection->acquire();
+        pConnection->Construct(m_aURL,m_aInfo);
+        pConnectionTemp = pConnection;
+        bNew = sal_True;
+    }
+
+    SQLHANDLE aStatementHandle = SQL_NULL_HANDLE;
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
+    OTools::ThrowException(pConnectionTemp,nRetcode,pConnectionTemp->getConnection(),SQL_HANDLE_DBC,*this);
+    ++m_nStatementCount;
+    if(bNew)
+        m_aConnections.insert(::std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));
+
+    return aStatementHandle;
+
+}
+// -----------------------------------------------------------------------------
+void OConnection::freeStatementHandle(SQLHANDLE& _pHandle)
+{
+    ::std::map< SQLHANDLE,OConnection*>::iterator aFind = m_aConnections.find(_pHandle);
+    N3SQLFreeStmt(_pHandle,SQL_CLOSE);
+    N3SQLFreeHandle(SQL_HANDLE_STMT,_pHandle);
+    _pHandle = SQL_NULL_HANDLE;
+    if(aFind != m_aConnections.end())
+    {
+        aFind->second->dispose();
+        m_aConnections.erase(aFind);
+    }
+    --m_nStatementCount;
 }
 // -----------------------------------------------------------------------------
 
