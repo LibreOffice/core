@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:42:31 $
+ *  last change: $Author: ama $ $Date: 2001-02-21 14:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         else
         {
             xub_StrLen nOldLineStart = rInf.GetLineStart();
-            rInf.SetLineStart( 0 );
+            if( IsFollow() )
+                rInf.SetLineStart( 0 );
             rInf.SetNotEOL( nFullLen == nOldFullLen && nTxtRest > nFollow );
             bFull = SwTxtPortion::Format( rInf );
             rInf.SetNotEOL( sal_False );
