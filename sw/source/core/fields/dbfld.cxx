@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ BOOL SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) cons
         rAny <<= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -261,7 +261,7 @@ BOOL SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
         rAny >>= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -523,7 +523,7 @@ BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
         rAny <<= OUString(aContent);
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 
@@ -552,7 +552,7 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
         ::GetString( rAny, aContent );
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -615,7 +615,7 @@ BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) c
         rAny <<= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -636,7 +636,7 @@ BOOL SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId
         rAny >>= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= rtl::OUString(GetExpStr());
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -578,7 +578,7 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         ChgExpStr(::GetString( rAny, sTmp ));
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -747,7 +747,7 @@ BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -783,7 +783,7 @@ BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -1145,7 +1145,7 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= OUString( aPText );
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -1163,7 +1163,7 @@ BOOL SwInputField::PutValue( const uno::Any& rAny, BYTE nMId )
         ::GetString( rAny, aPText );
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -1267,7 +1267,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= rtl::OUString(GetExpStr());
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -1348,7 +1348,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         ChgExpStr( ::GetString( rAny, sTmp ));
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }

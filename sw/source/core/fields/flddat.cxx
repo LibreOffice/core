@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -386,7 +386,7 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 13:24:59 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int32)GetFormat();
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -235,7 +235,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -415,7 +415,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -455,7 +455,7 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }

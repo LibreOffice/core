@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -609,7 +609,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }

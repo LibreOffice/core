@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -453,7 +453,7 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return bRet;
 }
@@ -532,7 +532,7 @@ BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -559,7 +559,7 @@ BOOL SwAuthorField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -692,7 +692,7 @@ BOOL SwFileNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= OUString(GetContent());
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -742,7 +742,7 @@ BOOL SwFileNameField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -849,7 +849,7 @@ BOOL SwTemplNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -889,7 +889,7 @@ BOOL SwTemplNameField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -991,7 +991,7 @@ BOOL SwDocStatField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int16)GetFormat();
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1018,7 +1018,7 @@ BOOL SwDocStatField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return bRet;
 }
@@ -1293,7 +1293,7 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1343,7 +1343,7 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, BYTE nMId )
             nSubType |= DI_SUB_TIME;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1620,7 +1620,7 @@ BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     if( pOut )
         rAny <<= OUString( *pOut );
@@ -1649,7 +1649,7 @@ BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, BYTE nMId )
         bIsHidden = *(sal_Bool*)rAny.getValue();
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1747,7 +1747,7 @@ BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1766,7 +1766,7 @@ BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
 
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1879,7 +1879,7 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -1904,7 +1904,7 @@ BOOL SwPostItField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2025,7 +2025,7 @@ BOOL SwExtUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2054,7 +2054,7 @@ BOOL SwExtUserField::PutValue( const uno::Any& rAny, BYTE nMId )
             SetFormat(GetFormat() & ~AF_FIXED);
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2135,7 +2135,7 @@ BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int16)nOffset;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2153,7 +2153,7 @@ BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, BYTE nMId )
         rAny >>=nOffset;
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2398,7 +2398,7 @@ BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int16)GetFormat();
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2421,7 +2421,7 @@ BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2542,7 +2542,7 @@ BOOL SwJumpEditField::QueryValue( uno::Any& rAny, BYTE nMId ) const
          rAny <<= OUString(sTxt);
          break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2577,7 +2577,7 @@ BOOL SwJumpEditField::PutValue( const uno::Any& rAny, BYTE nMId )
          ::GetString( rAny, sTxt);
          break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2636,7 +2636,7 @@ BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
         rAny <<= rtl::OUString( sCharacters );
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2650,7 +2650,7 @@ BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
         ::GetString( rAny, sCharacters ).Erase( MAX_COMBINED_CHARACTERS );
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return sal_True;
 }

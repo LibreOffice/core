@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrptfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ BOOL SwScriptField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
@@ -175,7 +175,7 @@ BOOL SwScriptField::PutValue( const uno::Any& rAny, BYTE nMId )
         bCodeURL = *(sal_Bool*)rAny.getValue();
         break;
     default:
-        DBG_ERROR("illegal property")
+        DBG_ERROR("illegal property");
     }
     return TRUE;
 }
