@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:46:06 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,6 +1977,24 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Size = MAP_APPFONT ( 254 , 52 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
+        Text[ english_us ] = "Options";
+        Text[ portuguese ] = "Options";
+        Text[ russian ] = "Ïàğàìåòğû";
+        Text[ greek ] = "Options";
+        Text[ dutch ] = "Options";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Options";
+        Text[ italian ] = "Options";
+        Text[ danish ] = "Options";
+        Text[ swedish ] = "Options";
+        Text[ polish ] = "Opcje";
+        Text[ portuguese_brazilian ] = "Options";
+        Text[ japanese ] = "µÌß¼®İ";
+        Text[ korean ] = "Options";
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ turkish ] = "Options";
+        Text[ arabic ] = "ÎíÇÑÇÊ";
     };
     CheckBox CB_AS_HANG_PUNC
     {
@@ -1984,6 +2002,24 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Size = MAP_APPFONT ( 245 , 12 ) ;
         Text = "Hängende Interpunktion zulassen" ;
         Text [ ENGLISH ] = "Hanging punctuation" ;
+        Text[ english_us ] = "Hanging punctuation";
+        Text[ portuguese ] = "Hanging punctuation";
+        Text[ russian ] = "Âèñÿ÷àÿ ïóíêòóàöèÿ";
+        Text[ greek ] = "Hanging punctuation";
+        Text[ dutch ] = "Hanging punctuation";
+        Text[ french ] = "Permettre la ponctuation négative";
+        Text[ spanish ] = "Hanging punctuation";
+        Text[ italian ] = "Hanging punctuation";
+        Text[ danish ] = "Hanging punctuation";
+        Text[ swedish ] = "Hanging punctuation";
+        Text[ polish ] = "Hanging punctuation";
+        Text[ portuguese_brazilian ] = "Hanging punctuation";
+        Text[ japanese ] = "‹å“Ç“_‚ğ‚Â‚¯‚é";
+        Text[ korean ] = "Hanging punctuation";
+        Text[ chinese_simplified ] = "ÈİĞíĞĞÄ©¸½¼Ó±êµã·ûºÅ";
+        Text[ chinese_traditional ] = "¦æ¥½ªş¥[¼ĞÂI²Å¸¹";
+        Text[ turkish ] = "Hanging punctuation";
+        Text[ arabic ] = "ÇáÓãÇÍ ÈÚáÇãÇÊ ÇáÊäŞíØ ÇáãÚáŞÉ";
     };
     CheckBox CB_AS_SCRIPT_SPACE
     {
@@ -1991,6 +2027,24 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Size = MAP_APPFONT ( 245 , 12 ) ;
         Text = "Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
         Text [ ENGLISH ] = "Apply distance between asian, latin and complex text" ;
+        Text[ english_us ] = "Apply distance between asian, latin and complex text";
+        Text[ portuguese ] = "Apply distance between asian, latin and complex text";
+        Text[ russian ] = "Ïğèìåíèòü èíòåğâàë ìåæäó àçèàòñêèì, ëàòèíñêèì è ñëîæíûì òåêñòîì";
+        Text[ greek ] = "Apply distance between asian, latin and complex text";
+        Text[ dutch ] = "Apply distance between asian, latin and complex text";
+        Text[ french ] = "Apply distance between asian, latin and complex text";
+        Text[ spanish ] = "Apply distance between asian, latin and complex text";
+        Text[ italian ] = "Apply distance between asian, latin and complex text";
+        Text[ danish ] = "Apply distance between asian, latin and complex text";
+        Text[ swedish ] = "Apply distance between asian, latin and complex text";
+        Text[ polish ] = "Odstêp miêdzy tekstami o czcionce azjatyckiej, ³aciñskiej i kompleksowej.";
+        Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
+        Text[ japanese ] = "˜a•¶A‰p”šA‚¨‚æ‚Ñ¬‡•¶Í‚Å‚Ì•¶šŠÔŠu‚ğg—p";
+        Text[ korean ] = "Apply distance between asian, latin and complex text";
+        Text[ chinese_simplified ] = "ÔÚÖĞÈÕº«ÎÄ×ÖºÍÎ÷ÎÄÖ®¼ä¼ÓÈë¿Õ¸ñ";
+        Text[ chinese_traditional ] = "¦b¤¤¤éÁú¤å¦r©M¦è¤å¤§¶¡¥[¤JªÅ®æ";
+        Text[ turkish ] = "Apply distance between asian, latin and complex text";
+        Text[ arabic ] = "ÇÓÊÎÏÇã ãÓÇİÉ Èíä ÇáäÕæÕ ÇáÂÓíæíÉ æÇááÇÊíäíÉ æÇáãÚŞÏÉ.";
     };
     CheckBox CB_AS_FORBIDDEN
     {
@@ -1998,7 +2052,43 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Size = MAP_APPFONT ( 245 , 12 ) ;
         Text = "Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
         Text [ ENGLISH ] = "Apply list of forbidden characters at line end and line start" ;
+        Text[ english_us ] = "Apply list of forbidden characters at line end and line start";
+        Text[ portuguese ] = "Apply list of forbidden characters at line end and line start";
+        Text[ russian ] = "Ó÷èòûâàòü ñïèñîê çàïğåùåííûõ çíàêîâ â íà÷àëå è êîíöå ñòğîêè";
+        Text[ greek ] = "Apply list of forbidden characters at line end and line start";
+        Text[ dutch ] = "Apply list of forbidden characters at line end and line start";
+        Text[ french ] = "Apply list of forbidden characters at line end and line start";
+        Text[ spanish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ italian ] = "Apply list of forbidden characters at line end and line start";
+        Text[ danish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ swedish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ polish ] = "Uwzglêdnij listê niedozwolonych znaków na pocz¹tku i na koñcu wiersza";
+        Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
+        Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ég—p‚µ‚Ä‚Í‚¢‚¯‚È‚¢‹L†‚ÌØ½Ä‚ğ“K—p";
+        Text[ korean ] = "Apply list of forbidden characters at line end and line start";
+        Text[ chinese_simplified ] = "¹Ë¼°ĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃ×Ö·ûµÄÇåµ¥";
+        Text[ chinese_traditional ] = "ÅU¤Î¦æ­º¦æ¥½¸T¤î¨Ï¥Î¦r¤¸ªº²M³æ";
+        Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ arabic ] = "Apply list of forbidden characters at line end and line start";
     };
+    Text[ english_us ] = "Asian typography";
+    Text[ portuguese ] = "Asian typography";
+    Text[ russian ] = "Asian typography";
+    Text[ greek ] = "Asian typography";
+    Text[ dutch ] = "Asian typography";
+    Text[ french ] = "Asian typography";
+    Text[ spanish ] = "Asian typography";
+    Text[ italian ] = "Asian typography";
+    Text[ danish ] = "Asian typography";
+    Text[ swedish ] = "Asian typography";
+    Text[ polish ] = "Typografia azjatycka";
+    Text[ portuguese_brazilian ] = "Asian typography";
+    Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+    Text[ korean ] = "Asian typography";
+    Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
+    Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+    Text[ turkish ] = "Asian typography";
+    Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
 };
 
  // ********************************************************************** EOF
