@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-12 07:50:08 $
+ *  last change: $Author: pb $ $Date: 2001-07-13 09:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <stdio.h>
 
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
 #ifndef _SV_PRNSETUP_HXX //autogen
 #include <svtools/prnsetup.hxx>
 #endif
@@ -93,6 +96,9 @@
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
+#ifndef _SVTOOLS_IMAGEMGR_HXX
+#include <svtools/imagemgr.hxx>
+#endif
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #pragma hdrstop
@@ -112,6 +118,8 @@
 #include "docvor.hrc"
 #include "docfilt.hxx"
 #include "filedlghelper.hxx"
+#include "docfilt.hxx"
+#include "fcontnr.hxx"
 
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
@@ -119,6 +127,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
 
 static const char cDelim = ':';
 BOOL SfxOrganizeListBox_Impl::bDropMoveOk = TRUE;
@@ -175,6 +185,8 @@ friend class SfxOrganizeListBox_Impl;
     SfxOrganizeListBox_Impl*pFocusBox;
     Printer*                pPrt;
 
+    SvStringsDtor*          GetAllFactoryURLs_Impl() const;
+    sal_Bool                GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( USHORT nId );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
 
@@ -1614,6 +1626,59 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
         return FALSE;
 }
 
+SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl() const
+{
+    SvStringsDtor* pList = new SvStringsDtor;
+    String aFactoryURL( DEFINE_CONST_UNICODE("private:factory/") );
+    USHORT nCount = SfxObjectFactory::GetObjectFactoryCount_Impl();
+    for( USHORT i = 0; i < nCount; ++i )
+    {
+        const SfxObjectFactory& rObjFac = SfxObjectFactory::GetObjectFactory_Impl(i);
+        const String& rDefTemplateURL = rObjFac.GetStandardTemplate();
+        String aShortName = String::CreateFromAscii( rObjFac.GetShortName() );
+        if ( rDefTemplateURL.Len() > 0 && aShortName.Len() > 0 )
+        {
+            String* pURL = new String( aFactoryURL );
+            *pURL += aShortName;
+            pList->Insert( pURL, pList->Count() );
+        }
+    }
+
+    return pList;
+}
+
+sal_Bool SfxOrganizeDlg_Impl::GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const
+{
+    sal_Bool bRet = sal_False;
+    const SfxDocumentTemplates* pTemplates = aMgr.GetTemplates();
+    SvLBoxEntry* pEntry = pFocusBox ? pFocusBox->FirstSelected() : NULL;
+    USHORT nRegion = 0, nIndex = 0;
+    GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
+    rFileURL = pTemplates->GetPath( nRegion, nIndex );
+    if ( rFileURL.Len() > 0 )
+    {
+        SvStorage aStorage( rFileURL );
+        if ( !aStorage.GetError() )
+        {
+            const SfxFilter* pFilter =
+                SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage.GetFormat() );
+            if ( pFilter )
+            {
+                const SfxFactoryFilterContainer* pFilterCont =
+                    (SfxFactoryFilterContainer*)pFilter->GetFilterContainer();
+                if ( pFilterCont )
+                {
+                    const SfxObjectFactory& rObjFac = pFilterCont->GetFactory();
+                    rFactoryURL = String::CreateFromAscii( rObjFac.GetShortName() );
+                    bRet = ( rFactoryURL.Len() > 0 );
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+
 long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
 
 /*  [Beschreibung]
@@ -1632,6 +1697,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
 {
     SuspendAccel aTmp(&aEditAcc);
     SvLBoxEntry *pEntry = pFocusBox? pFocusBox->FirstSelected(): 0;
+    sal_Bool bHandled = sal_True;
     switch(nId)
     {
         case ID_NEW:
@@ -1820,10 +1886,25 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
             break;
         }
 
-        default: return 0;
-    }
-    return 1;
+        case ID_DEFAULT_TEMPLATE:
+        {
+            String aFactoryURL, aFileURL;
+            if ( GetFactoryURL_Impl( aFactoryURL, aFileURL ) )
+                SfxObjectFactory::SetStandardTemplate( aFactoryURL, aFileURL );
+            break;
+        }
 
+        default:
+            bHandled = sal_False;
+    }
+
+    if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE || nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
+    {
+        String aObjFacURL = aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE )->GetItemCommand( nId );
+        SfxObjectFactory::SetStandardTemplate( aObjFacURL, String() );
+    }
+
+    return bHandled ? 1 : 0;
 }
 
 //-------------------------------------------------------------------------
@@ -1933,11 +2014,40 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
         Path aPath( pFocusBox, pFocusBox->FirstSelected() );
         USHORT nIndex = aPath[ nDocLevel + 1 ];
         bPrint = ( nIndex == CONTENT_STYLE );
-    }
+                }
     pMenu->EnableItem( ID_PRINT, bPrint );
+
+    if ( bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES && nDepth == nDocLevel )
+    {
+        String aFactoryURL, aFileURL;
+        bEnable = GetFactoryURL_Impl( aFactoryURL, aFileURL );
+    }
+    else if ( bEnable )
+        bEnable = FALSE;
+    pMenu->EnableItem( ID_DEFAULT_TEMPLATE, bEnable );
+
+    bEnable = sal_True;
+    SvStringsDtor* pList = GetAllFactoryURLs_Impl();
+    USHORT nCount = pList->Count();
+    if ( nCount > 0 )
+    {
+        PopupMenu* pSubMenu = new PopupMenu;
+        USHORT nItemId = ID_RESET_DEFAULT_TEMPLATE + 1;
+        for ( USHORT i = 0; i < nCount; ++i )
+        {
+            String aObjFacURL( *pList->GetObject(i) );
+            String aTitle = SvFileInformationManager::GetDescription( aObjFacURL );
+            pSubMenu->InsertItem( nItemId, aTitle, SvFileInformationManager::GetImage( aObjFacURL ) );
+            pSubMenu->SetItemCommand( nItemId++, aObjFacURL );
+            DBG_ASSERT( nItemId <= ID_RESET_DEFAULT_TEMPLATE_END, "menu item id overflow" );
+        }
+        pMenu->SetPopupMenu( ID_RESET_DEFAULT_TEMPLATE, pSubMenu );
+    }
+    else
+        bEnable = sal_False;
+    delete pList;
     pMenu->EnableItem( ID_RESET_DEFAULT_TEMPLATE, bEnable );
-    pMenu->EnableItem( ID_DEFAULT_TEMPLATE,
-                       bEnable && eVT == SfxOrganizeListBox_Impl::VIEW_TEMPLATES && nDepth == nDocLevel );
+
     return 1;
 }
 
