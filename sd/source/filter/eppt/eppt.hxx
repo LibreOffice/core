@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-14 09:52:54 $
+ *  last change: $Author: sj $ $Date: 2002-05-24 13:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,7 +734,8 @@ class PortionObj : public PropStateValue
 
         void            ImplClear();
         void            ImplConstruct( PortionObj& rPortionObj );
-        sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef, String& rURL );
+        sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, String& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = FALSE );
 

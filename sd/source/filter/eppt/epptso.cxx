@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-14 09:52:16 $
+ *  last change: $Author: sj $ $Date: 2002-05-24 13:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2090,7 +2090,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
 
         sal_Bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
         if ( bPropSetsValid )
-            nFieldType = ImplGetTextField( rXTextRange, aURL );
+            nFieldType = ImplGetTextField( rXTextRange, mXPropSet, aURL );
         if ( nFieldType )
         {
             mpFieldEntry = new FieldEntry( nFieldType, 0, mnTextSize );
@@ -2376,124 +2376,134 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
 //  bit24->27   PPT Textfield type
 //     23->     PPT Textfield needs a placeholder
 
-sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >
-                                            & rXCursorText, String& rURL )
+sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXCursorText,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, String& rURL )
 {
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >
-        aXTextField( rXCursorText, ::com::sun::star::uno::UNO_QUERY );
-
-    if ( aXTextField.is() )
+    ::com::sun::star::uno::Any aAny;
+    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextPortionType" ) ), sal_True ) )
     {
-        mXPropSet = ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >
-                ( aXTextField, ::com::sun::star::uno::UNO_QUERY );
-
-        if ( mXPropSet.is() )
+        String  aTextFieldType( *(::rtl::OUString*)aAny.getValue() );
+        if ( aTextFieldType == String( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) ) )
         {
-            String aFieldKind( aXTextField->getPresentation( TRUE ) );
-            if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
+            if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, sal_True ) )
             {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ) )
+                ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > aXTextField;
+                if ( aAny >>= aXTextField )
                 {
-                    sal_Bool bBool;
-                    mAny >>= bBool;
-                    if ( !bBool )  // Fixed DateFields gibt es in PPT nicht
+                    if ( aXTextField.is() )
                     {
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ) )
+                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                            xFieldPropSet( aXTextField, ::com::sun::star::uno::UNO_QUERY );
+                        if ( xFieldPropSet.is() )
                         {
-                            nFormat = *(sal_Int32*)mAny.getValue();
-                            switch ( nFormat )
+                            String aFieldKind( aXTextField->getPresentation( TRUE ) );
+                            if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
                             {
-                                default:
-                                case 5 :
-                                case 4 :
-                                case 2 : nFormat = 0; break;
-                                case 8 :
-                                case 9 :
-                                case 3 : nFormat = 1; break;
-                                case 7 :
-                                case 6 : nFormat = 2; break;
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                {
+                                    sal_Bool bBool;
+                                    aAny >>= bBool;
+                                    if ( !bBool )  // Fixed DateFields gibt es in PPT nicht
+                                    {
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), sal_True )
+                                        {
+                                            nFormat = *(sal_Int32*)aAny.getValue();
+                                            switch ( nFormat )
+                                            {
+                                                default:
+                                                case 5 :
+                                                case 4 :
+                                                case 2 : nFormat = 0; break;
+                                                case 8 :
+                                                case 9 :
+                                                case 3 : nFormat = 1; break;
+                                                case 7 :
+                                                case 6 : nFormat = 2; break;
+                                            }
+                                            nRetValue |= ( ( ( 1 << 4 ) | nFormat ) << 24 ) | 0x800000;
+                                        }
+                                    }
+                                }
                             }
-                            nRetValue |= ( ( ( 1 << 4 ) | nFormat ) << 24 ) | 0x800000;
-                        }
-                    }
-                }
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Url" ) ) )
-            {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) ) )
-                    rURL = String( *(::rtl::OUString*)mAny.getValue() );
-                nRetValue = 4 << 28;
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Page" ) ) )
-            {
-                nRetValue = 3 << 28 | 0x800000;
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) )
-            {
-
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Time" ) ) )
-            {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ) )
-                {
-                    sal_Bool bBool;
-                    mAny >>= bBool;
-                    if ( !bBool )
-                    {
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ) )
-                        {
-                            nFormat = *(sal_Int32*)mAny.getValue();
-                            nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
-                        }
-                    }
-                }
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) )
-            {
-
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Table" ) ) )
-            {
-
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtTime" ) ) )
-            {
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ) )
-                {
-                    sal_Bool bBool;
-                    mAny >>= bBool;
-                    if ( !bBool )
-                    {
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ) )
-                        {
-                            nFormat = *(sal_Int32*)mAny.getValue();
-                            switch ( nFormat )
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) )
                             {
-                                default:
-                                case 6 :
-                                case 7 :
-                                case 8 :
-                                case 2 : nFormat = 12; break;
-                                case 3 : nFormat = 9; break;
-                                case 5 :
-                                case 4 : nFormat = 10; break;
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) ), sal_True )
+                                    rURL = String( *(::rtl::OUString*)aAny.getValue() );
+                                nRetValue = 4 << 28;
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Page" ) ) )
+                            {
+                                nRetValue = 3 << 28 | 0x800000;
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) )
+                            {
 
                             }
-                            nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Time" ) ) )
+                            {
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                {
+                                    sal_Bool bBool;
+                                    aAny >>= bBool;
+                                    if ( !bBool )
+                                    {
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                        {
+                                            nFormat = *(sal_Int32*)aAny.getValue();
+                                            nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
+                                        }
+                                    }
+                                }
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "File" ) ) )
+                            {
+
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Table" ) ) )
+                            {
+
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtTime" ) ) )
+                            {
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                {
+                                    sal_Bool bBool;
+                                    aAny >>= bBool;
+                                    if ( !bBool )
+                                    {
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), sal_True )
+                                        {
+                                            nFormat = *(sal_Int32*)aAny.getValue();
+                                            switch ( nFormat )
+                                            {
+                                                default:
+                                                case 6 :
+                                                case 7 :
+                                                case 8 :
+                                                case 2 : nFormat = 12; break;
+                                                case 3 : nFormat = 9; break;
+                                                case 5 :
+                                                case 4 : nFormat = 10; break;
+
+                                            }
+                                            nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
+                                        }
+                                    }
+                                }
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtFile" ) ) )
+                            {
+
+                            }
+                            else if ( aFieldKind ==  String( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
+                            {
+
+                            }
                         }
                     }
                 }
-            }
-            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtFile" ) ) )
-            {
-
-            }
-            else if ( aFieldKind ==  String( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
-            {
-
             }
         }
     }
