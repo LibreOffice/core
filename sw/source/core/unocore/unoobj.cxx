@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-05 14:07:06 $
+ *  last change: $Author: os $ $Date: 2002-03-19 08:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1231,13 +1231,11 @@ void SwXTextCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException )
                 eType == CURSOR_TBLTEXT ||
                 eType == CURSOR_HEADER ||
                 eType == CURSOR_FOOTER ||
-                eType == CURSOR_FOOTNOTE)
+                eType == CURSOR_FOOTNOTE||
+                eType == CURSOR_REDLINE)
         {
             pUnoCrsr->MoveSection( fnSectionCurr, fnSectionStart);
         }
-        else
-            DBG_WARNING("not implemented")
-            ;
     }
     else
     {
@@ -1260,13 +1258,11 @@ void SwXTextCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
                 eType == CURSOR_TBLTEXT ||
                 eType == CURSOR_HEADER ||
                 eType == CURSOR_FOOTER ||
-                eType == CURSOR_FOOTNOTE)
+                eType == CURSOR_FOOTNOTE||
+                eType == CURSOR_REDLINE)
         {
             pUnoCrsr->MoveSection( fnSectionCurr, fnSectionEnd);
         }
-        else
-            DBG_WARNING("not implemented");
-            ;
     }
     else
     {

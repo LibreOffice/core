@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-08 10:51:58 $
+ *  last change: $Author: os $ $Date: 2002-03-19 08:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #endif
 
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -102,11 +105,23 @@
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
 #endif
+#ifndef _UNOREDLINE_HXX
+#include <unoredline.hxx>
+#endif
+#ifndef _UNOMAP_HXX
+#include <unomap.hxx>
+#endif
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
 #endif
 #ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
@@ -161,12 +176,21 @@ uno::Reference< XTextCursor >   SwXText::createCursor() throw ( ::com::sun::star
     }
     return xRet;
 }
+/* -----------------------------15.03.2002 12:39------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXText::SwXText(SwDoc* pDc, CursorType eType) :
+    pDoc(pDc),
+    bObjectValid(0 != pDc),
+    eCrsrType(eType),
+    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT))
+{
+}
 /*-- 09.12.98 12:43:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXText::~SwXText()
 {
-
 }
 /*-- 09.12.98 12:43:02---------------------------------------------------
 
@@ -180,6 +204,7 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
     const uno::Type& rXTypeProviderType = ::getCppuType((uno::Reference< lang::XTypeProvider >*)0);
     const uno::Type& rXTextContentInsert = ::getCppuType((uno::Reference< XRelativeTextContentInsert >*)0);
     const uno::Type& rXTextContentRemove = ::getCppuType((uno::Reference< XRelativeTextContentRemove >*)0);
+    const uno::Type& rXPropertySet = ::getCppuType((uno::Reference<XPropertySet>*)0);
     const uno::Type& rXUnoTunnel = ::getCppuType((uno::Reference< XUnoTunnel >*)0);
 
     uno::Any aRet;
@@ -218,6 +243,11 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
         uno::Reference< XRelativeTextContentRemove > xRet = this;
         aRet.setValue(&xRet, rXTextContentRemove);
     }
+    else if(rType == rXPropertySet)
+    {
+        uno::Reference< XPropertySet > xRet = this;
+        aRet.setValue(&xRet, rXPropertySet);
+    }
     else if(rType == rXUnoTunnel )
     {
         uno::Reference< XUnoTunnel > xRet = this;
@@ -230,13 +260,14 @@ uno::Any SAL_CALL SwXText::queryInterface( const uno::Type& rType ) throw(uno::R
  ---------------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SwXText::getTypes() throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aRet(5);
+    uno::Sequence< uno::Type > aRet(6);
     uno::Type* pTypes = aRet.getArray();
     pTypes[0] = ::getCppuType((uno::Reference< XText >*)0);
     pTypes[1] = ::getCppuType((uno::Reference< XTextRangeCompare >*)0);
     pTypes[2] = ::getCppuType((uno::Reference< XRelativeTextContentInsert >*)0);
     pTypes[3] = ::getCppuType((uno::Reference< XRelativeTextContentRemove >*)0);
     pTypes[4] = ::getCppuType((uno::Reference< XUnoTunnel >*)0);
+    pTypes[5] = ::getCppuType((uno::Reference< XPropertySet >*)0);
 
     return aRet;
 }
@@ -1165,6 +1196,127 @@ sal_Int16 SwXText::compareRegionEnds(
 
     return ComparePositions(xEnd1, xEnd2);
 }
+
+/*-- 15.03.2002 12:30:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< beans::XPropertySetInfo > SwXText::getPropertySetInfo(  )
+    throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo =
+        new SfxItemPropertySetInfo(_pMap);
+    return xInfo;
+}
+/*-- 15.03.2002 12:30:42---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXText::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+    lang::IllegalArgumentException, lang::WrappedTargetException,
+    uno::RuntimeException)
+{
+    throw lang::IllegalArgumentException();
+}
+/*-- 15.03.2002 12:30:42---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwXText::getPropertyValue(
+    const ::rtl::OUString& rPropertyName )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+                uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw  uno::RuntimeException();
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                    _pMap, rPropertyName);
+    uno::Any aRet;
+    if(pMap)
+    {
+        switch(pMap->nWID)
+        {
+//          no code necessary - the redline is always located at the end node
+//            case FN_UNO_REDLINE_NODE_START:
+//            break;
+            case FN_UNO_REDLINE_NODE_END:
+            {
+                const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
+                USHORT nRedTblCount = rRedTbl.Count();
+                if ( nRedTblCount > 0 )
+                {
+                    const SwStartNode* pStartNode = GetStartNode();
+                    ULONG nOwnIndex = pStartNode->EndOfSectionIndex();
+                    for(USHORT nRed = 0; nRed < nRedTblCount; nRed++)
+                    {
+                        const SwRedline* pRedline = rRedTbl[nRed];
+                        const SwPosition* pRedStart = pRedline->Start();
+                        const SwNodeIndex nRedNode = pRedStart->nNode;
+                        if(nOwnIndex == nRedNode.GetIndex())
+                        {
+                            aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, TRUE);
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+    else
+    {
+        UnknownPropertyException aExcept;
+        aExcept.Message = C2U("Unknown property: ");
+        aExcept.Message += rPropertyName;
+        throw aExcept;
+    }
+    return aRet;
+
+}
+/*-- 15.03.2002 12:30:42---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXText::addPropertyChangeListener(
+    const ::rtl::OUString& aPropertyName,
+    const uno::Reference< beans::XPropertyChangeListener >& xListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    throw uno::RuntimeException();
+}
+/*-- 15.03.2002 12:30:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXText::removePropertyChangeListener(
+    const ::rtl::OUString& aPropertyName,
+    const uno::Reference< beans::XPropertyChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+            uno::RuntimeException)
+{
+    throw uno::RuntimeException();
+}
+/*-- 15.03.2002 12:30:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXText::addVetoableChangeListener(
+    const ::rtl::OUString& PropertyName,
+    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    throw uno::RuntimeException();
+}
+/*-- 15.03.2002 12:30:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXText::removeVetoableChangeListener(
+    const ::rtl::OUString& PropertyName,
+    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    throw uno::RuntimeException();
+}
+
 /* -----------------------------08.01.01 09:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1176,7 +1328,7 @@ const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
 /* -----------------------------08.01.01 09:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Int64 SAL_CALL SwXText::getSomething( const uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SwXText::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException)
 {
     if( rId.getLength() == 16
@@ -1230,7 +1382,7 @@ Sequence< OUString > SwXBodyText::getSupportedServiceNames(void) throw( RuntimeE
 /*-- 10.12.98 11:17:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SAL_CALL SwXBodyText::queryAggregation(
+uno::Any SwXBodyText::queryAggregation(
     const uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1266,7 +1418,7 @@ uno::Any SAL_CALL SwXBodyText::queryAggregation(
 /*-- 10.12.98 11:17:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Sequence< uno::Type > SAL_CALL SwXBodyText::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SwXBodyText::getTypes(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTypes = SwXBodyTextBaseClass::getTypes();
     uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
@@ -1281,7 +1433,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXBodyText::getTypes(  ) throw(uno::Runtime
 /* -----------------------------21.03.00 15:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< sal_Int8 > SAL_CALL SwXBodyText::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< sal_Int8 > SwXBodyText::getImplementationId(  ) throw(uno::RuntimeException)
 {
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
@@ -1498,7 +1650,7 @@ uno::Reference< XTextCursor >   SwXHeadFootText::createCursor() throw(uno::Runti
 /* -----------------------------21.03.00 15:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SwXHeadFootText::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< ::com::sun::star::uno::Type > SwXHeadFootText::getTypes(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aHFTypes = SwXHeadFootTextBaseClass::getTypes();
     uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
@@ -1519,7 +1671,7 @@ uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SwXHeadFootText::getTypes(
 /* -----------------------------21.03.00 15:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< sal_Int8 > SAL_CALL SwXHeadFootText::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< sal_Int8 > SwXHeadFootText::getImplementationId(  ) throw(uno::RuntimeException)
 {
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
@@ -1533,7 +1685,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXHeadFootText::getImplementationId(  ) thro
 /* -----------------------------21.03.00 15:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Any SAL_CALL SwXHeadFootText::queryInterface( const uno::Type& aType ) throw(uno::RuntimeException)
+uno::Any SwXHeadFootText::queryInterface( const uno::Type& aType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = SwXHeadFootTextBaseClass::queryInterface(aType);
     if(aRet.getValueType() == ::getCppuVoidType() )
@@ -1650,7 +1802,7 @@ uno::Reference< container::XEnumeration >  SwXHeadFootText::createEnumeration(vo
 /* -----------------19.03.99 15:50-------------------
  *
  * --------------------------------------------------*/
-uno::Type SAL_CALL SwXHeadFootText::getElementType(void) throw( uno::RuntimeException )
+uno::Type SwXHeadFootText::getElementType(void) throw( uno::RuntimeException )
 {
     return ::getCppuType((uno::Reference<XTextRange>*)0);
 }

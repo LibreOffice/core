@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:32:49 $
+ *  last change: $Author: os $ $Date: 2002-03-19 08:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,6 +679,11 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             else
                 DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
         }
+    }
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
+            rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
+    {
+        //this will always be empty - redlines at the start or end of a redlined text cannot occur
     }
     else
         aRet = SwXRedlinePortion::GetPropertyValue(rPropertyName, *pRedline);
