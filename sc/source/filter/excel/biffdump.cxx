@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:32:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
 #endif
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
+#ifndef SC_XICONTENT_HXX
+#include "xicontent.hxx"
 #endif
 
 #ifndef _FLTTOOLS_HXX
@@ -132,9 +132,6 @@ static UINT16           nXFCount = 0;
 
 static UINT16           nSXLISize[2] = {0, 0};      // array size for SXLI records [rows/cols]
 static UINT16           nSXLIIndex = 0;             // current index for SXLI records
-
-extern const sal_Char*  pUserNamesStreamName;
-extern const sal_Char*  pRevLogStreamName;
 
 Biff8RecDumper          __aDummyBiff8RecDumperInstance();
 
@@ -917,6 +914,32 @@ void __AddGUID( ByteString& rStr, XclImpStream& rIn )
 }
 
 
+void Biff8RecDumper::PreDumpDecrypted( ULONG nL )
+{
+    if( !nL ) return;
+
+    ByteString t;
+    const sal_Char* pPre = (pLevelPre > pLevelPreString) ? pLevelPre - 1 : pLevelPre;
+
+    LINESTART();
+    ADDTEXT( "*** encrypted ***" );
+    PRINT();
+    pIn->DisableDecryption();
+    pIn->Seek( EXC_REC_SEEK_TO_BEGIN );
+    ContDump( nL );
+
+    if( pIn->HasValidDecrypter() )
+    {
+        LINESTART();
+        ADDTEXT( "*** decrypted ***" );
+        PRINT();
+        pIn->EnableDecryption();
+        pIn->Seek( EXC_REC_SEEK_TO_BEGIN );
+        ContDump( nL );
+    }
+}
+
+
 void Biff8RecDumper::RecDump( BOOL bSubStream )
 {
     const sal_Char*     p;
@@ -926,6 +949,15 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
     const UINT16        nR = pIn->GetRecId();
     const ByteString*   pName = GetName( nR );
 
+    // detect BIFF version
+    switch( nR )
+    {
+        case 0x0009:    SetBiff( xlBiff2 );                     break;
+        case 0x0209:    SetBiff( xlBiff3 );                     break;
+        case 0x0409:    SetBiff( xlBiff4 );                     break;
+        case 0x0809:    SetBiff( bBIFF8 ? xlBiff8 : xlBiff5 );  break;
+    }
+
     // set CONTINUE handling mode
     switch( nR )
     {
@@ -934,10 +966,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         case 0x005D:        // OBJ
         case 0x00EC:        // MSODRAWING
         case 0x01B6:        // TXO
-            pIn->InitializeRecord( false );
+            pIn->ResetRecord( false );
         break;
         default:
-            pIn->InitializeRecord( bReadContRecs );
+            pIn->ResetRecord( bReadContRecs );
     }
     const ULONG         nL = pIn->GetRecSize();
 
@@ -1003,7 +1035,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         if( !bSkipOffset )
         {
             aT += " :";
-            __AddHex( aT, UINT32(pIn->Tell() - 2 * sizeof(UINT16)) );
+            __AddHex( aT, UINT32(pIn->GetSvStreamPos() - 2 * sizeof(UINT16)) );
             aT += ':';
         }
 
@@ -1013,10 +1045,24 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
     if( HasModeNameOnly( nR ) )
         ;
     else if( HasModeHex( nR ) || !bBIFF8 )
-        ContDump( nL );
+    {
+        if( bEncrypted )
+            PreDumpDecrypted( nL );
+        else
+            ContDump( nL );
+    }
     else if( nMaxBodyLines && nL )
     {
         XclImpStream& rIn = *pIn;
+
+        if( bEncrypted )
+        {
+            PreDumpDecrypted( nL );
+            LINESTART();
+            ADDTEXT( "*** contents ***" );
+            PRINT();
+            pIn->Seek( EXC_REC_SEEK_TO_BEGIN );
+        }
 
         LINESTART();
 
@@ -1353,9 +1399,20 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                         {
                             case 0x0001:
                             {
-                                ADDTEXT( "BIFF8 standard)   key=..." );
+                                ADDTEXT( "BIFF8 standard)" );
                                 PRINT();
-                                ContDump( rIn.GetRecLeft() );
+                                LINESTART();
+                                ADDTEXT( "document-id=..." );
+                                PRINT();
+                                ContDump( 16 );
+                                LINESTART();
+                                ADDTEXT( "salt-data=..." );
+                                PRINT();
+                                ContDump( 16 );
+                                LINESTART();
+                                ADDTEXT( "salt-hash=..." );
+                                PRINT();
+                                ContDump( 16 );
                             }
                             break;
                             case 0x0002:
@@ -1374,12 +1431,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                                 ADDTEXT( "   hash-key-len=" );  ADDDEC( 4 );
                                 PRINT();
                                 LINESTART();
-                                ADDTEXT( "unknown=" );          ADDHEX( 4 );
+                                ADDTEXT( "crypt-prov-type=" );  ADDHEX( 4 );
                                 ADDTEXT( "   unknown=" );       ADDHEX( 4 );
                                 ADDTEXT( "   unknown=" );       ADDHEX( 4 );
                                 PRINT();
                                 LINESTART();
-                                ADDTEXT( "crypto-provider='" );
+                                ADDTEXT( "crypt-provider-name='" );
                                 sal_uInt16 nChar;
                                 do
                                 {
@@ -1393,12 +1450,16 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                                 LINESTART();
                                 sal_uInt32 nLen;
                                 rIn >> nLen;
-                                ADDTEXT( "*** key1 ***   len=" );   __AddHex( t, nLen );
+                                ADDTEXT( "*** document-id ***   len=" );   __AddHex( t, nLen );
                                 PRINT();
-                                ContDump( 2 * nLen );
+                                ContDump( nLen );
+                                LINESTART();
+                                ADDTEXT( "*** salt-data ***   len=" );   __AddHex( t, nLen );
+                                PRINT();
+                                ContDump( nLen );
                                 LINESTART();
                                 rIn >> nLen;
-                                ADDTEXT( "*** key2 ***   len=" );   __AddHex( t, nLen );
+                                ADDTEXT( "*** salt-hash ***   len=" );   __AddHex( t, nLen );
                                 PRINT();
                                 ContDump( nLen );
                             }
@@ -1420,7 +1481,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                         ContDump( rIn.GetRecLeft() );
                     }
                 }
-                bBIFF8 = FALSE;     // continue in hex mode
             }
             break;
             case 0x0031:        // FONT
@@ -1479,6 +1539,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     String aData;
                     sal_uInt32 __nFlags;
                     LINESTART();
+                    rIn.SetNulSubstChar( '\0' );
                     aData = rIn.ReadRawUniString( 32, true );
                     ADDTEXT( "device-name='" );         ADDTEXT( GETSTR( aData ) );
                     ADDTEXT( "'" );
@@ -2696,6 +2757,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x0138:        // CHTRINFO - change tracking info
             {
+                rIn.DisableDecryption();
                 ADDTEXT( "14 bytes of unknown data..." );
                 PRINT();
                 ContDump( 14 );
@@ -3011,6 +3073,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x0194:
             {
+                rIn.DisableDecryption();
                 ADDTEXT( "unknown: " );         ADDHEX( 4 );
                 ADDTEXT( "   date/time: " );    ADDDEC( 2 );
                 ADDTEXT( "-" );                 ADDDEC( 1 );
@@ -3032,8 +3095,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( rIn.GetRecLeft() );
             }
             break;
+            case 0x0195:
+                rIn.DisableDecryption();
+                ContDump( nL );
+            break;
             case 0x0196:
             {
+                rIn.DisableDecryption();
                 ADDTEXT( "unknown: " );             ADDHEX( 2 );
                 ADDTEXT( " " );                     ADDHEX( 2 );
                 ADDTEXT( " " );                     ADDHEX( 2 );
@@ -4002,6 +4070,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x0809:        // BOF
             {
+                rIn.DisableDecryption();
                 LINESTART();
                 ADDTEXT( "version number:      " );
                 ADDHEX( 2 );
@@ -4938,16 +5007,28 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( nL );
                 break;
             case 0x1066:        // ChartGelframe
-                rIn.InitializeRecord( true, 0x1066 );
+                rIn.ResetRecord( true, 0x1066 );
                 EscherDump( nL );
                 break;
             case 0x1067:        // ChartBoppcustom
                 ContDump( nL );
                 break;
             default:
-                ContDump( nL );
+                if( !bEncrypted )
+                    ContDump( nL );
         }
 
+    }
+
+    if( nR == EXC_ID_FILEPASS )
+    {
+        bEncrypted = true;
+        pIn->Seek( EXC_REC_SEEK_TO_BEGIN );
+        bool bValid = (XclImpDecryptHelper::ReadFilepass( *pIn ) == ERRCODE_NONE);
+        LINESTART();
+        ADDTEXT( "decrypter=" );    lcl_AddOnOff( t, bValid );
+        PRINT();
+        bBIFF8 = bBIFF8 && bValid;  // dump BIFF8 hex only on invalid decrypter
     }
 
     if( bDec )
@@ -4955,7 +5036,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 }
 
 
-void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStreamName )
+void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const String& rStrmName )
 {
     ByteString sOutput;
 
@@ -4967,14 +5048,12 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
         return;
     }
 
-    String sName;
-    sName.AppendAscii( pStreamName );
-    if( !pStorage->IsContained( sName ) || !pStorage->IsStream( sName ) )
+    if( !pStorage->IsContained( rStrmName ) || !pStorage->IsStream( rStrmName ) )
         return;
 
-    SvStream* pStream = pStorage->OpenStream( sName, STREAM_STD_READ );
+    SvStorageStreamRef xSvStrm = OpenStream( pStorage, rStrmName );
 
-    if( !pStream )
+    if( !xSvStrm.Is() )
     {
         sOutput = "-- no stream available --";
         Print( sOutput );
@@ -4982,26 +5061,26 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
         return;
     }
 
-    pStream->Seek( STREAM_SEEK_TO_END );
-    if( pStream->Tell() == ~((ULONG)0) )
+    xSvStrm->Seek( STREAM_SEEK_TO_END );
+    if( xSvStrm->Tell() == STREAM_SEEK_TO_END )
     {
         sOutput = "-- no stream available --";
         Print( sOutput );
         DBG_ERROR( "Biff8RecDumper::DumpSubStream - no stream available" );
-        delete pStream;
         return;
     }
 
     sOutput = "-- substream dump --";
     Print( sOutput );
     sOutput = "Stream name: ";
-    sOutput += pStreamName;
+    sOutput += ByteString( rStrmName, RTL_TEXTENCODING_ASCII_US );
     Print( sOutput );
 
     XclImpStream* pOldStream = pIn;
-    pIn = new XclImpStream( *pStream, *pExcRoot->pIR );
+    pIn = new XclImpStream( *xSvStrm, GetRoot() );
     XclImpStream& rIn = *pIn;
-    rIn.SetWarningMode( bWarnings );
+    if( pOldStream )
+        rIn.CopyDecrypterFrom( *pOldStream );
 
     // -- dump from here --
     UINT16  nId;
@@ -5019,16 +5098,14 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
     sOutput = "-- end of stream --\n";
     Print( sOutput );
     delete pIn;
-    delete pStream;
     pIn = pOldStream;
 }
 
 
 void Biff8RecDumper::DumpPivotCache( const UINT16 nStrId )
 {
-    ByteString sByteStrName;
-    __AddPureHex( sByteStrName, nStrId );
-    DumpSubStream( pPivotCache, sByteStrName.GetBuffer() );
+    SvStorageRef xStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    DumpSubStream( xStrg, ScfTools::GetHexStr( nStrId ) );
 }
 
 
@@ -7907,7 +7984,7 @@ _common:
                 if( *pOutName == "*" )
                 {
                     ByteString          aDefault( "DefaultDumpName.txt" );
-                    SfxObjectShell*     pShell = pExcRoot->pDoc->GetDocumentShell();
+                    SfxObjectShell*     pShell = GetDocShell();
                     if( pShell )
                     {
                         SfxMedium*      pMedium = pShell->GetMedium();
@@ -8401,14 +8478,14 @@ void Biff8RecDumper::AddError( const UINT32 n, const ByteString& rT, const ByteS
 }
 
 
-Biff8RecDumper::Biff8RecDumper( RootData& rRootData, BOOL _bBIFF8 ) :
-    ExcRoot( &rRootData ),
-    bBIFF8( _bBIFF8 )
+Biff8RecDumper::Biff8RecDumper( const XclImpRoot& rRoot, BOOL _bBIFF8 ) :
+    XclImpRoot( rRoot ),
+    bBIFF8( _bBIFF8 ),
+    bEncrypted( false )
 {
     nXFCount = 0;
     nFontIndex = 0;
     nInstances++;
-    pPivotCache = NULL;
 
     if( !pCharType )
     {
@@ -8585,7 +8662,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
                 r.StoreGlobalPosition();
                 while( r.StartNextRecord() )
                 {
-                    r.InitializeRecord( false );
+                    r.ResetRecord( false );
                     sal_uInt16 nRecSize = (sal_uInt16) Min( r.GetRecSize(), nBufLen );
                     aBook << r.GetRecId() << nRecSize;
                     r.Read( pBuffer, nRecSize );
@@ -8595,23 +8672,20 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
             }
         }
 
-        pPivotCache = pExcRoot->pPivotCacheStorage;
-
         if( pTitle )
             *pDumpStream << pTitle->GetBuffer();
 
         pIn = &r;
         r.StoreGlobalPosition();
-        r.SetWarningMode( bWarnings );
 
         ::std::auto_ptr< ScfProgressBar > pProgress( new ScfProgressBar(
-            pExcRoot->pIR->GetDocShell(), String( RTL_CONSTASCII_USTRINGPARAM( "Dumper" ) ) ) );
-        sal_Int32 nStreamSeg = pProgress->AddSegment( r.GetStreamSize() );
+            GetDocShell(), String( RTL_CONSTASCII_USTRINGPARAM( "Dumper" ) ) ) );
+        sal_Int32 nStreamSeg = pProgress->AddSegment( r.GetSvStreamSize() );
         pProgress->ActivateSegment( nStreamSeg );
 
         while( r.StartNextRecord() )
         {
-            pProgress->Progress( r.Tell() );
+            pProgress->Progress( r.GetSvStreamPos() );
 
             if( HasModeDump( r.GetRecId() ) )
                 RecDump();
@@ -8623,17 +8697,22 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         pProgress.reset();
 
         r.SeekGlobalPosition();
-        r.SetWarningMode( TRUE );
-
-        pPivotCache = NULL;
 
         // dump substreams
-        if( pExcRoot->pRootStorage )
+        if( GetRootStorage() )
         {
-            DumpSubStream( pExcRoot->pRootStorage, pUserNamesStreamName );
-            DumpSubStream( pExcRoot->pRootStorage, pRevLogStreamName );
+            pIn = NULL;
+            bool bOldEncr = bEncrypted;
+            bEncrypted = false;
+            DumpSubStream( GetRootStorage(), EXC_STREAM_USERNAMES );
 
-            SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
+            pIn = &r;
+            bEncrypted = bOldEncr;
+            DumpSubStream( GetRootStorage(), EXC_STREAM_REVLOG );
+
+            pIn = NULL;
+
+            SvStorageStream*    pContrIn = GetRootStorage()->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
             if( pContrIn )
                 ControlsDump( *pContrIn );
         }
