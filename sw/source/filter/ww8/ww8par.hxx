@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-17 13:28:26 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 10:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ class WW8ReaderSave
     BOOL bTable         : 1;
     BOOL bTableInApo    : 1;
     BOOL bAnl           : 1;
-    BOOL bNeverCallProcessSpecial: 1;
+    BOOL bInHyperlink : 1;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );
@@ -695,7 +695,7 @@ friend class WW8FormulaControl;
     BOOL bStyNormal;        // Style mit Id 0 wird gelesen
     BOOL bWWBugNormal;      // WW-Version nit Bug Dya in Style Normal
     BOOL bNoAttrImport;     // Attribute ignorieren zum Ignorieren v. Styles
-    BOOL bNeverCallProcessSpecial; // Sonderfall zum einlesen eines 0x01
+    BOOL bInHyperlink;      // Sonderfall zum einlesen eines 0x01
                                    // siehe: SwWW8ImplReader::Read_F_Hyperlink()
 
     // praktische Hilfsvariablen:
@@ -1154,11 +1154,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.29 2001-07-17 13:28:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.30 2001-08-28 10:23:48 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.29  2001/07/17 13:28:26  cmc
+      #89808# ##1192## Retain blank pages before explicit section breaks
+
       Revision 1.28  2001/06/12 09:24:43  cmc
       #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
 

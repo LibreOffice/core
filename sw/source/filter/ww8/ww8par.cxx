@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-08 11:05:29 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 10:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bTable          = pRdr->bTable ;
     bTableInApo     = pRdr->bTableInApo;
     bAnl            = pRdr->bAnl;
-    bNeverCallProcessSpecial = pRdr->bNeverCallProcessSpecial;
+    bInHyperlink    = pRdr->bInHyperlink;
     nAktColl        = pRdr->nAktColl;
     nNoAttrScan     = pRdr->pSBase->GetNoAttrScan();
 
@@ -857,7 +857,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bTable        = bTable ;
     pRdr->bTableInApo   = bTableInApo;
     pRdr->bAnl          = bAnl;
-    pRdr->bNeverCallProcessSpecial = bNeverCallProcessSpecial;
+    pRdr->bInHyperlink  = bInHyperlink;
     pRdr->nAktColl      = nAktColl;
     pRdr->pSBase->SetNoAttrScan( nNoAttrScan );
 
@@ -1350,7 +1350,7 @@ void SwWW8ImplReader::UpdatePageDescs( USHORT nPageDescOffset )
 
 BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp )   // Apo / Table / Anl
 {
-    if( bNeverCallProcessSpecial )
+    if( bInHyperlink )
         return FALSE;
 
     *pbReSync = FALSE;
@@ -1752,7 +1752,7 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
         nTxtFirstLineOfst = pCollA[nAktColl].nTxtFirstLineOfst;
     }
     BOOL bTabRowEnd = FALSE;
-    if( pStartAttr && bCallProcessSpecial && !bNeverCallProcessSpecial )
+    if( pStartAttr && bCallProcessSpecial && !bInHyperlink )
     {
         BOOL bReSync;
         bTabRowEnd = ProcessSpecial( FALSE, &bReSync, rRes.nAktCp + pPlcxMan->GetCpOfs() );// Apo / Table / Anl
@@ -2055,7 +2055,8 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
         }
     }
     ReadAttrEnds( nNext, l );
-    JoinNode( pPaM );
+    if (!bInHyperlink)
+        JoinNode( pPaM );
     if( nType == MAN_MAINTEXT )
         UpdatePageDescs( nPageDescOffset ); // muss passieren, solange es den
                                             // PlcxMan noch gibt
@@ -2103,7 +2104,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara,
     bAktAND_fNumberAcross = FALSE;
     bNoLnNumYet = TRUE;
     bRestartLnNumPerSection = FALSE;
-    bNeverCallProcessSpecial= FALSE;
+    bInHyperlink = FALSE;
     nProgress = 0;
     nHdTextHeight = nFtTextHeight = 0;
     nPgWidth = lA4Width;
@@ -3074,11 +3075,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.28 2001-08-08 11:05:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.29 2001-08-28 10:23:48 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.28  2001/08/08 11:05:29  cmc
+      #90420# support for extended word 6 unicode documents
+
       Revision 1.27  2001/07/17 14:36:39  cmc
       #89811# Annotations initials import not upgraded from preunicode time correctly
 

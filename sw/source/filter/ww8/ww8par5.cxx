@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-23 12:43:31 $
+ *  last change: $Author: cmc $ $Date: 2001-08-28 10:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2831,7 +2831,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         which has 10 levels, while TOX has only two, this
                         level is set only in the constructor of SwForm, so
                         create a new one and copy over anything that could
-                        be set in the old one
+                        be set in the old one, and remove entries from the
+                        pattern which do not apply to illustration indices
                         */
                         SwForm aOldForm( pBase->GetTOXForm() );
                         SwForm aForm( eType );
@@ -2839,8 +2840,19 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
                         for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
                         {
-                            aForm.SetPattern( nLevel,
-                                aOldForm.GetPattern(nLevel));
+
+                            SwFormTokenEnumerator aTokenEnum(aOldForm.
+                                GetPattern(nLevel));
+                            while (aTokenEnum.HasNextToken())
+                            {
+                                if (aTokenEnum.GetNextTokenType() ==
+                                        TOKEN_ENTRY_NO)
+                                {
+                                    aTokenEnum.RemoveCurToken();
+                                }
+                            }
+                            aForm.SetPattern( nLevel, aTokenEnum.GetPattern() );
+
                             aForm.SetTemplate( nLevel,
                                 aOldForm.GetTemplate(nLevel));
                         }
@@ -2987,8 +2999,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 
         if (nBegin)
         {
-            WW8ReaderSave aSave( this );        // rettet Flags u.ae. u. setzt sie zurueck
-            bNeverCallProcessSpecial = TRUE;
+            // rettet Flags u.ae. u. setzt sie zurueck
+            WW8ReaderSave aSave( this );
+            bInHyperlink = TRUE;
             ReadText( nBegin, 1, pPlcxMan->GetManType() );
             aSave.Restore( this );
 
@@ -3204,12 +3217,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.25 2001-08-23 12:43:31 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.26 2001-08-28 10:23:48 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.25  2001/08/23 12:43:31  cmc
+      #91214# Illustration toc limited to 1 level
+
       Revision 1.24  2001/08/03 16:00:48  cmc
       #90250# ruby field can be seperated by ; as well as ,
 
