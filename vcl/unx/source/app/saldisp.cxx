@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-08 19:09:04 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,8 +567,7 @@ sal_GetServerVendor( Display *p_display )
         { vendor_none,        NULL,                               0 },
     };
 
-#ifndef USE_PSPRINT
-    // handle xprinter separately, since it doesn´t implement ServerVendor()
+#ifdef _USE_PRINT_EXTENSION_
     if ( ! XSalIsDisplay( p_display ) )
         return vendor_xprinter;
 #endif
@@ -739,7 +738,7 @@ SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
     if( !pSalData->GetCurDisp() )
         pSalData->SetCurDisp( this );
 
-#ifndef USE_PSPRINT
+#ifdef _USE_PRINT_EXTENSION_
     pXLib_    = XSalIsDisplay( pDisp_ ) ? pSalData->GetLib() : NULL;
 #else
     pXLib_    = pSalData->GetLib();
@@ -3553,7 +3552,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
             return pVisual_->GetTCColor( nPixel );
 
         if( !pPalette_
-#ifndef USE_PSPRINT
+#ifdef _USE_PRINT_EXTENSION_
             && ( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
 #else
             && hColormap_
@@ -3570,7 +3569,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
     if( pPalette_ && nPixel < nUsed_ )
         return pPalette_[nPixel];
 
-#ifndef USE_PSPRINT
+#ifdef _USE_PRINT_EXTENSION_
     if( !hColormap_ && !XSalIsPrinter( GetXDisplay() ) )
 #else
     if( !hColormap_ )
@@ -3625,7 +3624,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
     if( !pLookupTable_ )
     {
         if( !pPalette_
-#ifndef USE_PSPRINT
+#ifdef _USE_PRINT_EXTENSION_
             && ( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
 #else
             && hColormap_
@@ -3644,7 +3643,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                 if( pPalette_[i] == nSalColor )
                     return i;
 
-#ifndef USE_PSPRINT
+#ifdef _USE_PRINT_EXTENSION_
         if( hColormap_ || XSalIsPrinter( GetXDisplay() ) )
 #else
         if( hColormap_ )

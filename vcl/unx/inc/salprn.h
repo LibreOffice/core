@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 16:34:47 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _SV_SALPRN_H
 #define _SV_SALPRN_H
 
-#ifdef USE_PSPRINT
+#ifndef _USE_PRINT_EXTENSION_
 
 #ifndef _PSPRINT_JOBDATA_HXX_
 #include <psprint/jobdata.hxx>

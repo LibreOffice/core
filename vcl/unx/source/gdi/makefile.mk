@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hdu $ $Date: 2001-02-15 15:30:00 $
+#   last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,16 +98,11 @@ SLOFILES=	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj
 
-.IF "$(PSPRINT)" != ""
-SLOFILES+=$(SLO)$/salprnpsp.obj
-.ELIF "$(USE_XPRINT)" == "TRUE"
+.IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
 SLOFILES+=$(SLO)$/xprintext.obj
 .ELSE
-SLOFILES+=\
-        $(SLO)$/salprn.obj 		\
-        $(SLO)$/salpimpl.obj 	\
-        $(SLO)$/salconfig.obj
+SLOFILES+=$(SLO)$/salprnpsp.obj
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS"

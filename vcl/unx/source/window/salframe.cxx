@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-24 16:00:00 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 #ifndef _VCL_WMADAPTOR_HXX_
 #include <wmadaptor.hxx>
 #endif
-#ifdef USE_PSPRINT
+#ifndef _USE_PRINT_EXTENSION_
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
 #endif
@@ -2196,7 +2196,7 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
     {
         if( FocusIn == pEvent->type )
         {
-#ifdef USE_PSPRINT
+#ifndef _USE_PRINT_EXTENSION_
             if( GetSalData()->pFirstInstance_->maInstData.mbPrinterInit )
             {
                 ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 15:45:26 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,10 @@
 #include <dtint.hxx>
 #endif
 #if !defined(_USE_PRINT_EXTENSION_)
-    #ifndef _SV_SALPRN_H
-    #include <salprn.h>
-    #endif
+#ifndef _SV_SALPRN_H
+#include <salprn.h>
 #endif
-#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
-    #ifndef _VCL_SALCONFIG_HXX
-    #include <salconfig.hxx>
-    #endif
 #endif
-
 // -=-= C++ globals =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void SalAbort( const XubString& rErrorText )
@@ -201,10 +195,6 @@ SalInstance *CreateSalInstance()
     // init instance (only one instance in this version !!!)
     pSalData->pFirstInstance_ = pInst;
 
-#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
-    StartPrinterListening();
-#endif
-
     return pInst;
 }
 
@@ -214,15 +204,7 @@ void DestroySalInstance( SalInstance *pInst )
 
     // reset instance (only one instance in this version !!!)
     if( pSalData->pFirstInstance_ == pInst )
-    {
-#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
-        StopPrinterListening();
-#endif
         pSalData->pFirstInstance_ = NULL;
-#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
-        ::vcl_sal::XpDefaults::release();
-#endif
-    }
 
     delete pInst;
 }

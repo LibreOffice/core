@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-05 07:38:51 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,9 @@
 
 #include <glyphcache.hxx>
 
-#ifdef USE_XRENDER
-    #define Region XLIB_Region
-    #include <X11/extensions/Xrender.h>
-    #undef Region
-#endif
+#define Region XLIB_Region
+#include <X11/extensions/Xrender.h>
+#undef Region
 
 class X11GlyphPeer
 : public GlyphCachePeer
@@ -82,10 +80,8 @@ public:
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
     bool                ForcedAntialiasing( const ServerFont& ) const;
 
-#ifdef USE_XRENDER
     GlyphSet            GetGlyphSet( ServerFont& );
     Glyph               GetGlyphId( ServerFont&, int nGlyphIndex );
-#endif // USE_XRENDER
 
 protected:
     virtual void        RemovingFont( ServerFont& );
@@ -98,7 +94,6 @@ private:
     RawBitmap           maRawBitmap;
     bool                mbForcedAA;
 
-#ifdef USE_XRENDER
     bool                mbUsingXRender;
     XRenderPictFormat*  mpGlyphFormat;
 
@@ -114,7 +109,6 @@ public:
     Picture     (*pXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*);
     void        (*pXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
     void        (*pXRenderFreePicture)(Display*,Picture);
-#endif // USE_XRENDER
 };
 
 #endif // _SV_GCACH_XPEER_HXX

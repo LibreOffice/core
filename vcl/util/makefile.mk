@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: pl $ $Date: 2001-08-10 10:58:14 $
+#   last change: $Author: pl $ $Date: 2001-08-27 09:42:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,7 +191,7 @@ LIB1FILES+= \
 .ENDIF          # "$(remote)" != ""
 
 .IF "$(GUI)" == "UNX"
-.IF "$(PSPRINT)" != ""
+.IF "$(USE_XPRINT)" != "TRUE"
     SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
 .ENDIF
 .ENDIF
@@ -269,11 +269,7 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXm -lXt -lX11
 .ELSE
-.IF "$(PSPRINT)"!=""
 SHL1STDLIBS += -lXm -lXt -lX11
-.ELSE
-SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
-.ENDIF
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 
 # MacOSX
@@ -287,11 +283,7 @@ SHL1STDLIBS += -framework Cocoa
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXaw -lXt -lX11
 .ELSE
-.IF "$(PSPRINT)"!=""
 SHL1STDLIBS += -lXaw -lXt -lX11
-.ELSE
-SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXaw -lXt -lX11
-.ENDIF
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 .ENDIF          # "$(OS)"=="MACOSX"
 .ENDIF          # "$(OS)"=="SOLARIS"

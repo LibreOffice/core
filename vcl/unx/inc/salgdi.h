@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:15:35 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ class   SalPrinter;
 class   SalInfoPrinter;
 class   ServerFont;
 
-#ifdef USE_PSPRINT
+#ifndef _USE_PRINT_EXTENSION_
 namespace psp { struct JobData; class PrinterGfx; }
 #endif
 
@@ -112,7 +112,7 @@ class SalGraphicsData
 
                             STDAPI( SalGraphicsData )
 
-#ifdef USE_PSPRINT
+#ifndef _USE_PRINT_EXTENSION_
             ::psp::JobData*         m_pJobData;
             ::psp::PrinterGfx*      m_pPrinterGfx;
             String*                 m_pPhoneNr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-11 15:27:23 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,15 @@
 #include <gcach_xpeer.hxx>
 #include <stdlib.h>
 
-#ifdef USE_XRENDER
-    #include <dlfcn.h>
-#endif // USE_XRENDER
+#include <dlfcn.h>
 
 // ---------------------------------------------------------------------------
 
 X11GlyphPeer::X11GlyphPeer()
 :   mpDisplay(NULL)
 ,   mbForcedAA(false)
-#ifdef USE_XRENDER
 ,   mbUsingXRender(false)
 ,   mpGlyphFormat(NULL)
-#endif // USE_XRENDER
 {
     maRawBitmap.mnAllocated = 0;
     maRawBitmap.mpBits = NULL;
@@ -114,7 +110,6 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( (nEnvAntiAlias & 1) == 0 )
         mbForcedAA = false;
 
-#if defined(USE_XRENDER)
     // but we prefer the hardware accelerated solution
     int nDummy;
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
@@ -184,7 +179,6 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     if( (nEnvAntiAlias & 2) == 0 )
         mbUsingXRender = false;
-#endif // USE_XRENDER
 }
 
 // ---------------------------------------------------------------------------
@@ -197,11 +191,9 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
         case AAFORCED_KIND:
             break;
 
-#ifdef USE_XRENDER
         case XRENDER_KIND:
             (*pXRenderFreeGlyphSet)( mpDisplay,(GlyphSet)rServerFont.GetExtPointer() );
             break;
-#endif // USE_XRENDER
     }
 
     rServerFont.SetExtended( EMPTY_KIND, NULL );
@@ -240,7 +232,6 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             }
             break;
 
-#ifdef USE_XRENDER
         case XRENDER_KIND:
         {
             GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
@@ -251,7 +242,6 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
 
             break;
         }
-#endif // USE_XRENDER
     }
 
 
@@ -272,7 +262,6 @@ bool X11GlyphPeer::ForcedAntialiasing( const ServerFont& rServerFont ) const
 
 // ---------------------------------------------------------------------------
 
-#ifdef USE_XRENDER
 GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
 {
     if( !mbUsingXRender )
@@ -310,7 +299,6 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
 
     return aGlyphSet;
 }
-#endif // USE_XRENDER
 
 // ---------------------------------------------------------------------------
 
@@ -418,7 +406,6 @@ const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
 
 // ---------------------------------------------------------------------------
 
-#ifdef USE_XRENDER
 Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 {
     Glyph aGlyphId;
@@ -459,4 +446,3 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 
     return aGlyphId;
 }
-#endif // USE_XRENDER
