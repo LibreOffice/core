@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-19 13:04:33 $
+ *  last change: $Author: os $ $Date: 2002-06-25 11:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,23 +624,25 @@ void SwXTextSection::setPropertyValues(
                     break;
                     case WID_SECT_LINK     :
                     {
-                        if(pValues[nProperty].getValueType() == ::getCppuType((const text::SectionFileLink*)0))
+                        text::SectionFileLink aLink;
+                        if(pValues[nProperty] >>= aLink)
                         {
-                            text::SectionFileLink* pLink =  (text::SectionFileLink*)    pValues[nProperty].getValue();
                             if(m_bIsDescriptor)
                             {
                                 pProps->bDDE = sal_False;
-                                pProps->sLinkFileName = String(pLink->FileURL);
-                                pProps->sSectionFilter = String(pLink->FilterName);
+                                pProps->sLinkFileName = String(aLink.FileURL);
+                                pProps->sSectionFilter = String(aLink.FilterName);
                             }
                             else
                             {
                                 if(aSection.GetType() != FILE_LINK_SECTION &&
-                                    pLink->FileURL.getLength())
+                                    aLink.FileURL.getLength())
                                     aSection.SetType(FILE_LINK_SECTION);
-                                String sFileName(URIHelper::SmartRelToAbs( pLink->FileURL) );
+                                String sFileName;
+                                if(aLink.FileURL.getLength())
+                                    sFileName += URIHelper::SmartRelToAbs( aLink.FileURL);
                                 sFileName += so3::cTokenSeperator;
-                                sFileName += String(pLink->FilterName);
+                                sFileName += String(aLink.FilterName);
                                 sFileName += so3::cTokenSeperator;
                                 sFileName += aSection.GetLinkFileName().GetToken( 2, so3::cTokenSeperator );
                                 aSection.SetLinkFileName(sFileName);
