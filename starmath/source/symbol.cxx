@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-28 07:26:50 $
+ *  last change: $Author: tl $ $Date: 2001-06-29 08:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,15 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+
 #ifndef _SV_RESARY_HXX
+#if SUPD >= 637
+#include <tools/resary.hxx>
+#else
 #include <vcl/resary.hxx>
 #endif
+#endif
+
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
