@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 11:41:52 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 14:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,49 +608,44 @@ void SdXMLShapeContext::SetStyle()
             {
                 uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier( GetImport().GetModel(), uno::UNO_QUERY );
 
-                if( !xFamiliesSupplier.is() )
+                if( xFamiliesSupplier.is() )
                 {
-                    DBG_ERROR( "XModel does not support XStyleFamiliesSupplier!" );
-                    break;
-                }
-
-                uno::Reference< container::XNameAccess > xFamilies( xFamiliesSupplier->getStyleFamilies() );
-                if( !xFamilies.is() )
-                {
-                    DBG_ERROR( "XModel has no style families!" );
-                    break;
-                }
-
-                uno::Reference< container::XNameAccess > xFamily;
-
-                if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
-                {
-                    sal_Int32 nPos = -1;
-                    OUString aFamily;
-
-                    do
+                    uno::Reference< container::XNameAccess > xFamilies( xFamiliesSupplier->getStyleFamilies() );
+                    if( xFamilies.is() )
                     {
-                        nPos++;
-                        nPos = aStyleName.indexOf( sal_Unicode('-'), nPos );
-                        if( -1 != nPos )
-                            aFamily = aStyleName.copy( 0, nPos );
 
-                    } while( -1 != nPos && !xFamilies->hasByName( aFamily ) );
+                        uno::Reference< container::XNameAccess > xFamily;
 
-                    if( -1 == nPos )
-                        break;
+                        if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
+                        {
+                            sal_Int32 nPos = -1;
+                            OUString aFamily;
 
-                    xFamilies->getByName( aFamily ) >>= xFamily;
-                    aStyleName = aStyleName.copy( nPos + 1 );
+                            do
+                            {
+                                nPos++;
+                                nPos = aStyleName.indexOf( sal_Unicode('-'), nPos );
+                                if( -1 != nPos )
+                                    aFamily = aStyleName.copy( 0, nPos );
+
+                            } while( -1 != nPos && !xFamilies->hasByName( aFamily ) );
+
+                            if( -1 == nPos )
+                                break;
+
+                            xFamilies->getByName( aFamily ) >>= xFamily;
+                            aStyleName = aStyleName.copy( nPos + 1 );
+                        }
+                        else
+                        {
+                                // get graphics familie
+                                xFamilies->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) ) ) >>= xFamily;
+                        }
+
+                        if( xFamily.is() )
+                            xFamily->getByName( aStyleName ) >>= xStyle;
+                    }
                 }
-                else
-                {
-                        // get graphics familie
-                        xFamilies->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) ) ) >>= xFamily;
-                }
-
-                if( xFamily.is() )
-                    xFamily->getByName( aStyleName ) >>= xStyle;
             }
 
             if( xStyle.is() )
