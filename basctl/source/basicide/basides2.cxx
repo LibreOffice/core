@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:11:40 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,19 +184,16 @@ USHORT __EXPORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiff
 void BasicIDEShell::SetMDITitle()
 {
     String aTitle = BasicIDE::GetStdTitle();
-    if ( pCurWin )
+
+    if ( pCurWin && m_aCurLibName.Len() )
     {
-        StarBASIC* pLib = pCurWin->GetBasic();
-        DBG_ASSERT( pLib, "Lib?!" );
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
-        if ( pBasMgr )
-        {
-            aTitle += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
-            aTitle += BasicIDE::FindTitle( pBasMgr, SFX_TITLE_FILENAME );
-            aTitle += '.';
-            aTitle += pLib->GetName();
-        }
+        aTitle += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+        LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pCurShell, m_aCurLibName );
+        aTitle += BasicIDE::GetTitle( m_pCurShell, eLocation, SFX_TITLE_FILENAME );
+        aTitle += '.';
+        aTitle += m_aCurLibName;
     }
+
     // Wenn DocShell::SetTitle, erfolgt beim Schliessen Abfrage, ob Speichern!
     GetViewFrame()->GetObjectShell()->SetTitle( aTitle );
     GetViewFrame()->GetObjectShell()->SetModified( FALSE );
@@ -223,55 +220,57 @@ void BasicIDEShell::CreateModulWindowLayout()
     pModulLayout = new ModulWindowLayout( &GetViewFrame()->GetWindow() );
 }
 
-ModulWindow* BasicIDEShell::CreateBasWin( StarBASIC* pBasic, String aModName )
+ModulWindow* BasicIDEShell::CreateBasWin( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
 {
     bCreatingWindow = TRUE;
 
     ULONG nKey = 0;
     ModulWindow* pWin = 0;
 
+    String aLibName( rLibName );
+    String aModName( rModName );
+
+    if ( !aLibName.Len() )
+        aLibName = String::CreateFromAscii( "Standard" );
+
+    if ( !BasicIDE::HasModuleLibrary( pShell, aLibName ) )
+        BasicIDE::CreateModuleLibrary( pShell, aLibName );
+
+    if ( !aModName.Len() )
+        aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+
     // Vielleicht gibt es ein suspendiertes?
-    pWin = FindBasWin( pBasic, aModName, FALSE, TRUE );
+    pWin = FindBasWin( pShell, aLibName, aModName, FALSE, TRUE );
 
     if ( !pWin )
     {
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-        if ( pBasMgr )
+        try
         {
-            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            String aLibName = pBasic->GetName();
-
-            if ( aModName.Len() == 0 )
-                aModName = BasicIDE::CreateModuleName( pShell, aLibName );
-
-            try
+            ::rtl::OUString aModule;
+            if ( BasicIDE::HasModule( pShell, aLibName, aModName ) )
             {
-                ::rtl::OUString aModule;
-                if ( BasicIDE::HasModule( pShell, aLibName, aModName ) )
-                {
-                    // get module
-                    aModule = BasicIDE::GetModule( pShell, aLibName, aModName );
-                }
-                else
-                {
-                    // create module
-                    aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
-                }
+                // get module
+                aModule = BasicIDE::GetModule( pShell, aLibName, aModName );
+            }
+            else
+            {
+                // create module
+                aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+            }
 
-                // new module window
-                pWin = new ModulWindow( pModulLayout, pBasic, pShell, aLibName, aModName, aModule );
-                nKey = InsertWindowInTable( pWin );
-            }
-            catch ( container::ElementExistException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
-            catch ( container::NoSuchElementException& e )
-            {
-                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aBStr.GetBuffer() );
-            }
+            // new module window
+            pWin = new ModulWindow( pModulLayout, pShell, aLibName, aModName, aModule );
+            nKey = InsertWindowInTable( pWin );
+        }
+        catch ( container::ElementExistException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+        }
+        catch ( container::NoSuchElementException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
         }
     }
     else
@@ -296,7 +295,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( StarBASIC* pBasic, String aModName )
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin( StarBASIC* pBasic, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
+ModulWindow* BasicIDEShell::FindBasWin( SfxObjectShell* pShell, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
 {
     ModulWindow* pModWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -304,18 +303,15 @@ ModulWindow* BasicIDEShell::FindBasWin( StarBASIC* pBasic, const String& rModNam
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
-            String aMod( pWin->GetName() );
-            if ( !pBasic )  // nur irgendeins finden...
+            if ( !rLibName.Len() )  // nur irgendeins finden...
                 pModWin = (ModulWindow*)pWin;
-            else if ( ( pWin->GetBasic() == pBasic ) && ( aMod == rModName ) )
-            {
+            else if ( pWin->GetShell() == pShell && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
                 pModWin = (ModulWindow*)pWin;
-            }
         }
         pWin = aIDEWindowTable.Next();
     }
     if ( !pModWin && bCreateIfNotExist )
-        pModWin = CreateBasWin( pBasic, rModName );
+        pModWin = CreateBasWin( pShell, rLibName, rModName );
 
     return pModWin;
 }
