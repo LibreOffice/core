@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 11:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,7 +892,7 @@ Reference< ::com::sun::star::frame::XDispatch> FmXFormShell::interceptedQueryDis
             // from this id the forms collection and the form
             Reference< XIndexAccess> xPageForms(GetPageForms(sPageId), UNO_QUERY);
             Reference< XResultSet> xAffectedForm(getElementFromAccessPath(xPageForms, UniString(sAccessPath)), UNO_QUERY);
-            DBG_ASSERT(xAffectedForm.is(), "FmXFormShell::queryDispatch : could not retrieve a form form the request !");
+            DBG_ASSERT(xAffectedForm.is(), "FmXFormShell::queryDispatch : could not retrieve a form for the request !");
 
 
             Reference< XPropertySet> xFormProps(xAffectedForm, UNO_QUERY);
@@ -1047,12 +1047,12 @@ void FmXFormShell::disposing()
     m_xSelObject                = NULL;
     m_xCurControl               = NULL;
     m_xCurForm                  = NULL;
-    m_aLastGridFound            = NULL;
+    m_xLastGridFound            = NULL;
     m_xAttachedFrame            = NULL;
     m_xExternalViewController   = NULL;
     m_xExtViewTriggerController = NULL;
     m_xExternalDisplayedForm    = NULL;
-    m_aLastGridFound            = NULL;
+    m_xLastGridFound            = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -2275,12 +2275,19 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(pDispatcher, "FmXFormShell::OnExecuteNavSlot : invalid argument !");
 
-    Reference< XResultSet> xCursor(pDispatcher->getForm());
-    Reference< XResultSetUpdate> xUpdateCursor(xCursor, UNO_QUERY);
-    Reference< XPropertySet> xCursorSet;
-    sal_Bool bDoneSomething = sal_False;
+    Reference< XResultSet > xCursor( pDispatcher->getForm() );
+    Reference< XResultSetUpdate > xUpdateCursor( xCursor, UNO_QUERY );
 
-    switch (pDispatcher->getSlot())
+    // all slots except undo need a SaveModified
+    if ( pDispatcher->getSlot() != SID_FM_RECORD_UNDO )
+    {
+        Reference< XPropertySet> xCursorSet;
+        sal_Bool bDoneSomething = sal_False;
+        if ( !SaveModified( xUpdateCursor, xCursorSet, bDoneSomething ) )
+            return 1L;
+    }
+
+    switch ( pDispatcher->getSlot() )
     {
         case SID_FM_RECORD_UNDO:
         {
@@ -2295,48 +2302,47 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
                 DO_SAFE( xUpdateCursor->moveToInsertRow(); );
 
             if (xCursor == getActiveForm())
-            {
                 m_bActiveModified = sal_False;
-                m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
-            }
         }
         break;
+
         case SID_FM_RECORD_FIRST:
-            if (SaveModified(xUpdateCursor, xCursorSet, bDoneSomething))
-            {
-                DO_SAFE( xCursor->first(); );
-            }
+            DO_SAFE( xCursor->first(); );
             break;
+
         case SID_FM_RECORD_PREV:
             MoveLeft(xUpdateCursor);
             break;
+
         case SID_FM_RECORD_NEXT:
             MoveRight(xUpdateCursor);
             break;
+
         case SID_FM_RECORD_LAST:
-            if (SaveModified(xUpdateCursor, xCursorSet, bDoneSomething))
-            {
-                // run in an own thread if ...
-                Reference< XPropertySet> xCursorProps(xCursor, UNO_QUERY);
-                // ... the data source is thread safe ...
-                sal_Bool bAllowOwnThread = ::comphelper::hasProperty(FM_PROP_THREADSAFE, xCursorProps) && ::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_THREADSAFE));
-                // ... the record count is unknown
-                sal_Bool bNeedOwnThread = ::comphelper::hasProperty(FM_PROP_ROWCOUNTFINAL, xCursorProps) && !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
+        {
+            // run in an own thread if ...
+            Reference< XPropertySet> xCursorProps(xCursor, UNO_QUERY);
+            // ... the data source is thread safe ...
+            sal_Bool bAllowOwnThread = ::comphelper::hasProperty(FM_PROP_THREADSAFE, xCursorProps) && ::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_THREADSAFE));
+            // ... the record count is unknown
+            sal_Bool bNeedOwnThread = ::comphelper::hasProperty(FM_PROP_ROWCOUNTFINAL, xCursorProps) && !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
 
 
-                if (bNeedOwnThread && bAllowOwnThread)
-                    DoAsyncCursorAction(pDispatcher->getForm(), FmXFormShell::CA_MOVE_TO_LAST);
-                else
-                    DO_SAFE( xCursor->last(); );
-            }
-            break;
+            if (bNeedOwnThread && bAllowOwnThread)
+                DoAsyncCursorAction(pDispatcher->getForm(), FmXFormShell::CA_MOVE_TO_LAST);
+            else
+                DO_SAFE( xCursor->last(); );
+        }
+        break;
+
         case SID_FM_RECORD_NEW:
-            if (SaveModified(xUpdateCursor, xCursorSet, bDoneSomething))
-            {
-                DO_SAFE( xUpdateCursor->moveToInsertRow(); );
-            }
+            DO_SAFE( xUpdateCursor->moveToInsertRow(); );
             break;
     }
+
+    if (xCursor == getActiveForm())
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
+
     UpdateAllFormDispatchers(pDispatcher->getFormAccessPath());
     return 0L;
 }
@@ -2787,11 +2793,11 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     DBG_ASSERT(xControlModel.is(), "FmXFormShell::OnFoundData : ungueltiges Control !");
 
     // disable the permanent cursor for the last grid we found a record
-    if (m_aLastGridFound.is() && (m_aLastGridFound != xControlModel))
+    if (m_xLastGridFound.is() && (m_xLastGridFound != xControlModel))
     {
-        Reference< XPropertySet> xOldSet(m_aLastGridFound, UNO_QUERY);
+        Reference< XPropertySet> xOldSet(m_xLastGridFound, UNO_QUERY);
         sal_Bool bB(sal_False);
-        xOldSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,getBooleanCppuType()));
+        xOldSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, makeAny( (sal_Bool)sal_False ) );
         Reference< XPropertyState> xOldSetState(xOldSet, UNO_QUERY);
         if (xOldSetState.is())
             xOldSetState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
@@ -2814,7 +2820,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         sal_Bool bB(sal_True);
         xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,getBooleanCppuType()));
         xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, makeAny(sal_Int32(COL_LIGHTRED)));
-        m_aLastGridFound = xControlModel;
+        m_xLastGridFound = xControlModel;
 
         xGrid->setCurrentColumnPosition((sal_Int16)nGridColumn);
     }
