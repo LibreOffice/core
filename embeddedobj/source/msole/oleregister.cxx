@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleregister.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-28 17:54:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #endif
 
 #include "xolefactory.hxx"
+#include "xdialogcreator.hxx"
 
 using namespace ::com::sun::star;
 
@@ -90,12 +91,25 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    if ( pServiceManager && aImplName.equals( OleEmbeddedObjectFactory::impl_staticGetImplementationName() ) )
+    if ( pServiceManager )
     {
-        xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
-                                            OleEmbeddedObjectFactory::impl_staticGetImplementationName(),
-                                            OleEmbeddedObjectFactory::impl_staticCreateSelfInstance,
-                                            OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
+        if ( aImplName.equals( OleEmbeddedObjectFactory::impl_staticGetImplementationName() ) )
+        {
+            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+                                                OleEmbeddedObjectFactory::impl_staticGetImplementationName(),
+                                                OleEmbeddedObjectFactory::impl_staticCreateSelfInstance,
+                                                OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
+        }
+#ifdef WNT
+        // the following service makes sence only on windows
+        else if ( aImplName.equals( MSOLEDialogObjectCreator::impl_staticGetImplementationName() ) )
+        {
+            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+                                                MSOLEDialogObjectCreator::impl_staticGetImplementationName(),
+                                                MSOLEDialogObjectCreator::impl_staticCreateSelfInstance,
+                                                MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames() );
+        }
+#endif
     }
 
     if ( xFactory.is() )
@@ -114,16 +128,24 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
         try
         {
             uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
-
             uno::Reference< registry::XRegistryKey >  xNewKey;
 
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         OleEmbeddedObjectFactory::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-
             uno::Sequence< ::rtl::OUString > rServices = OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
+
+#ifdef WNT
+        // the following service makes sence only on windows
+            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                                        MSOLEDialogObjectCreator::impl_staticGetImplementationName() +
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+            rServices = MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames();
+            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+                xNewKey->createKey( rServices.getConstArray()[ind] );
+#endif
 
             return sal_True;
         }
