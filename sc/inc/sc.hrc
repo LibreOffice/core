@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:42:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@
 #define HID_SCSHELL_CHARTSH     (HID_SC_SHELL_START +12)
 #define HID_SCSHELL_GRAPHIC     (HID_SC_SHELL_START +13)
 #define HID_SCSHELL_PAGEBREAK   (HID_SC_SHELL_START +14)
+#define HID_SCSHELL_MEDIA       (HID_SC_SHELL_START +15)
 
 // Hilfe IDs fuer Dokumentfenster --------------------------------------------
 #define HID_SC_WIN_GRIDWIN      ( HID_SC_WIN_START )
@@ -1177,6 +1178,8 @@
 #define RID_IMAGELIST_H_NAVCONT (SC_RESOURCE_START+57)
 #define RID_OUTLINEBITMAPS_H    (SC_RESOURCE_START+58)
 #define RID_OBJECTMENU_EDIT     (SC_RESOURCE_START+59)
+#define RID_MEDIA_OBJECTBAR     (SC_RESOURCE_START+60)
+#define RID_POPUP_MEDIA         (SC_RESOURCE_START+61)
 
 #define STR_START               (SC_RESOURCE_START+100)
 #define STR_ROWHEIGHT           (STR_START)
@@ -1411,7 +1414,10 @@
 #define SCSTR_FILTER_STRINGS    (STR_START + 399)
 #define SCSTR_COMPILER_INTL_STR (STR_START + 400)
 
-#define STR_END                 (STR_START + 401)
+// Media shell
+#define SCSTR_MEDIASHELL        (STR_START + 401)
+
+#define STR_END                 (STR_START + 402)
 
 #define BMP_START               (STR_END)
 
