@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:37:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #endif
 #ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
-#endif
-#ifndef _MULTIPRO_HXX
-#include "multipro.hxx"
 #endif
 #ifndef _SVX_FMITEMS_HXX
 #include "fmitems.hxx"
@@ -540,10 +537,15 @@ namespace svxform
                     // der TabDialog, wenn es genau ein Formular ist ...
                     aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
 
-                    // Properties, wenn es nur Controls oder genau ein Formular ist
-                    // (und der ProBrowser nicht sowieso schon offen ist)
+                    // in XML forms, we don't allow for the properties of a form
+                    // #i36484# / 2004-11-04 /- fs@openoffice.org
+                    if ( pFormShell->GetImpl()->getDocumentType() == eEnhancedForm && !m_nControlsSelected )
+                        aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
+
+                    // if the property browser is already open, we don't allow for the properties, too
                     if( pFormShell->GetImpl()->IsPropBrwOpen() )
-                        aContextMenu.RemoveItem( aContextMenu.GetItemPos(SID_FM_SHOW_PROPERTY_BROWSER) );
+                        aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
+                    // and finally, if there's a mixed selection of forms and controls, disable the entry, too
                     else
                         aContextMenu.EnableItem( SID_FM_SHOW_PROPERTY_BROWSER,
                             (m_nControlsSelected && !m_nFormsSelected) || (!m_nControlsSelected && m_nFormsSelected) );
@@ -562,9 +564,11 @@ namespace svxform
                     {
                         aContextMenu.SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
                         FmControlData* pCurrent = (FmControlData*)(m_arrCurrentSelection[0]->GetUserData());
-                        Reference< XPropertySet >  xCurrentProps(pCurrent->GetFormComponent(), UNO_QUERY);
-                        pFormShell->GetImpl()->CheckControlConversionSlots(xCurrentProps, *aContextMenu.GetPopupMenu(SID_FM_CHANGECONTROLTYPE));
-                            // die Shell filtert nach weiteren Bedingungen, zum Beispiel kein 'hidden control'
+
+                        OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
+                            "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
+
+                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection( *aContextMenu.GetPopupMenu( SID_FM_CHANGECONTROLTYPE ) );
                     }
                     else
                         aContextMenu.EnableItem( SID_FM_CHANGECONTROLTYPE, sal_False );
@@ -664,10 +668,10 @@ namespace svxform
                         }
                         break;
                         default:
-                            if (pFormShell->GetImpl()->IsControlConversionSlot(nSlotId))
+                            if (pFormShell->GetImpl()->isControlConversionSlot(nSlotId))
                             {
                                 FmControlData* pCurrent = (FmControlData*)(m_arrCurrentSelection[0]->GetUserData());
-                                if (pFormShell->GetImpl()->ExecuteControlConversionSlot(pCurrent->GetFormComponent(), nSlotId))
+                                if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )
                                     ShowSelectionProperties();
                             }
                     }
@@ -1520,8 +1524,9 @@ namespace svxform
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if( pFormShell )
         {
-            pFormShell->GetImpl()->setCurForm( xNewForm );
-            pFormShell->GetCurPage()->GetImpl()->setCurForm( xNewForm );
+            InterfaceBag aSelection;
+            aSelection.insert( Reference< XInterface >( xNewForm, UNO_QUERY ) );
+            pFormShell->GetImpl()->setCurrentSelection( aSelection );
 
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES,sal_True,sal_True);
         }
@@ -1748,113 +1753,71 @@ namespace svxform
             "NavigatorTree::ShowSelectionProperties : selection meta data invalid !");
 
 
-        Reference< XInterface >  xInterfaceSelected;
-        Reference< XForm >  xFormSelected;
-        sal_Bool bPropertiesAvailable = sal_True;
-        sal_Bool bNeedSetCurControl = sal_True;
+        InterfaceBag aSelection;
+        sal_Bool bSetSelectionAsMarkList = sal_False;
 
         if (m_bRootSelected)
-            bPropertiesAvailable = sal_False;   // fuer die Root habe ich keine - weder einzeln noch in einer Gruppe - Properties
-        else if (m_nFormsSelected + m_nControlsSelected == 0)   // keines der beiden sollte kleiner 0 sein !
-            bPropertiesAvailable = sal_False;   // keine Selektion -> keine Properties
-        else if (m_nFormsSelected * m_nControlsSelected != 0)
-            bPropertiesAvailable = sal_False;   // gemischte Selektion -> keine Properties
+            ;                                   // no properties for the root, neither for single nor for multi selection
+        else if ( m_nFormsSelected + m_nControlsSelected == 0 )   // none of the two should be less 0
+            ;                                   // no selection -> no properties
+        else if ( m_nFormsSelected * m_nControlsSelected != 0 )
+            ;                                   // mixed selection -> no properties
         else
-        {   // so, hier bin ich, wenn entweder nur Forms oder nur Controls selektiert sind
-           if (m_arrCurrentSelection.Count() == 1)
+        {   // either only forms, or only controls are selected
+            if (m_arrCurrentSelection.Count() == 1)
             {
                 if (m_nFormsSelected > 0)
                 {   // es ist genau eine Form selektiert
                     FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject(0)->GetUserData();
-                    xFormSelected = pFormData->GetFormIface();
-                    xInterfaceSelected = xFormSelected;
-                } else
+                    aSelection.insert( Reference< XInterface >( pFormData->GetFormIface(), UNO_QUERY ) );
+                }
+                else
                 {   // es ist genau ein Control selektiert (egal ob hidden oder normal)
                     FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject(0)->GetUserData();
-                    xInterfaceSelected = pEntryData->GetElement();
-                    pFormShell->GetImpl()->setCurControl(xInterfaceSelected);
-                    bNeedSetCurControl = sal_False;
 
-                    if (pEntryData->GetParent())
-                        xFormSelected = ((FmFormData*)pEntryData->GetParent())->GetFormIface();
+                    aSelection.insert( Reference< XInterface >( pEntryData->GetElement(), UNO_QUERY ) );
                 }
-            } else
+            }
+            else
             {   // wir haben eine MultiSelection, also muessen wir ein MultiSet dafuer aufbauen
                 if (m_nFormsSelected > 0)
                 {   // ... nur Forms
                     // erstmal die PropertySet-Interfaces der Forms einsammeln
-                    Sequence< Reference< XPropertySet > > seqForms(m_nFormsSelected);
-                    Reference< XPropertySet > * pPropSets = seqForms.getArray();
-                    for (int i=0; i<m_nFormsSelected; i++)
+                    for ( sal_Int32 i = 0; i < m_nFormsSelected; ++i )
                     {
-                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject(i)->GetUserData();
-                        pPropSets[i] = pFormData->GetPropertySet();
+                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject((USHORT)i)->GetUserData();
+                        aSelection.insert( Reference< XInterface >( pFormData->GetPropertySet(), UNO_QUERY ) );
                     }
-                    // dann diese in ein MultiSet packen
-                    FmXMultiSet* pSelectionSet = new FmXMultiSet( seqForms );
-                    xInterfaceSelected = Reference< XInterface > ( (XPropertySet*)pSelectionSet );
                 }
                 else
                 {   // ... nur Controls
                     if (m_nHiddenControls == m_nControlsSelected)
                     {   // ein MultiSet fuer die Properties der hidden controls
-                        Sequence< Reference< XPropertySet > > seqHiddenControls(m_nHiddenControls);
-                        Reference< XPropertySet > * pPropSets = seqHiddenControls.getArray();
-                        FmEntryData* pParentData = ((FmEntryData*)m_arrCurrentSelection.GetObject(0)->GetUserData())->GetParent();
-                        for (int i=0; i<m_nHiddenControls; i++)
+                        for ( sal_Int32 i = 0; i < m_nHiddenControls; ++i )
                         {
-                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject(i)->GetUserData();
-                            pPropSets[i] = pEntryData->GetPropertySet();
-
-                            if (pParentData && pParentData != pEntryData->GetParent())
-                                pParentData = NULL;
+                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject((USHORT)i)->GetUserData();
+                            aSelection.insert( Reference< XInterface >( pEntryData->GetPropertySet(), UNO_QUERY ) );
                         }
-
-                        // dann diese in ein MultiSet packen
-                        FmXMultiSet* pSelectionSet = new FmXMultiSet( seqHiddenControls );
-                        xInterfaceSelected = Reference< XInterface > ( (XPropertySet*)pSelectionSet );
-                        // und der Shell als aktuelles Objekt anzeigen
-                        pFormShell->GetImpl()->setCurControl( xInterfaceSelected );
-                        bNeedSetCurControl = sal_False;
-
-                        if (pParentData)
-                            // alle hidden controls gehoeren zu einer Form
-                            xFormSelected = ((FmFormData*)pParentData)->GetFormIface();
                     }
                     else if (m_nHiddenControls == 0)
                     {   // nur normale Controls
-                        // ein MultiSet aus der MarkList der View aufbauen ...
-                        const SdrMarkList& mlMarked = pFormShell->GetFormView()->GetMarkedObjectList();
-                        FmXMultiSet* pSelectionSet = FmXMultiSet::Create( mlMarked );
-                        xInterfaceSelected = Reference< XInterface > ( (XPropertySet*)pSelectionSet );
-                        pFormShell->GetImpl()->setCurControl( xInterfaceSelected );
-                        bNeedSetCurControl = sal_False;
-
-                        // jetzt das Formular setzen
-                        sal_Bool bMixedWithFormControls;
-                        xFormSelected = pFormShell->GetImpl()->DetermineCurForm(mlMarked,bMixedWithFormControls);
-                    } else
-                        // gemischte Selektion aus hidden und normalen Controls -> keine Properties
-                        bPropertiesAvailable = sal_False;
+                        bSetSelectionAsMarkList = sal_True;
+                    }
                 }
             }
 
         }
 
-        // um das Setzen des current Controls kann sich die Shell kuemmern (da gibt es einige Feinheiten, die ich hier nicht
-        // neu implementieren moechte)
-        if (bNeedSetCurControl)
-            pFormShell->GetImpl()->DetermineSelection(pFormShell->GetFormView()->GetMarkedObjectList());
         // und dann meine Form und mein SelObject
-        pFormShell->GetImpl()->setSelObject(xInterfaceSelected);
-        pFormShell->GetImpl()->setCurForm(xFormSelected);
+        if ( bSetSelectionAsMarkList )
+            pFormShell->GetImpl()->setCurrentSelectionFromMark( pFormShell->GetFormView()->GetMarkedObjectList() );
+        else
+            pFormShell->GetImpl()->setCurrentSelection( aSelection );
 
-        if (pFormShell->GetImpl()->IsPropBrwOpen() || bForce)
+        if ( pFormShell->GetImpl()->IsPropBrwOpen() || bForce )
         {
             // und jetzt kann ich das Ganze dem PropertyBrowser uebergeben
-            FmInterfaceItem aInterfaceItem( SID_FM_SHOW_PROPERTY_BROWSER, xInterfaceSelected );
-            pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
-                &aInterfaceItem, 0L );
+            pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON );
         }
     }
 
@@ -1986,8 +1949,8 @@ namespace svxform
             if (pCurrent->ISA(FmFormData))
             {
                 Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
-                if (pFormShell->GetImpl()->getCurForm() == xCurrentForm)    // die Shell kennt die zu loeschende Form ?
-                    pFormShell->GetImpl()->setCurForm( NULL );              // -> wegnehmen ...
+                if ( pFormShell->GetImpl()->getCurrentForm() == xCurrentForm )  // die Shell kennt die zu loeschende Form ?
+                    pFormShell->GetImpl()->forgetCurrentForm();                 // -> wegnehmen ...
             }
             GetNavModel()->Remove(pCurrent, sal_True);
         }
@@ -2204,7 +2167,11 @@ namespace svxform
             FmFormData* pSingleSelectionData = PTR_CAST( FmFormData, static_cast< FmEntryData* >( FirstSelected()->GetUserData() ) );
             DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
             if ( pSingleSelectionData )
-                pFormShell->GetImpl()->setCurForm( pSingleSelectionData->GetFormIface() );
+            {
+                InterfaceBag aSelection;
+                aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface(), UNO_QUERY ) );
+                pFormShell->GetImpl()->setCurrentSelection( aSelection );
+            }
         }
     }
 
