@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:01:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ String STR_SVT_PRNDLG_READY
     Text[ hebrew ] = "‮מוכן‬";
     Text[ hindi ] = "तैयार";
     Text[ slovak ] = "Pripravené";
+    Text[ hungarian ] = "Kész";
+    Text[ slovenian ] = "Pripravljen";
 };
 String STR_SVT_PRNDLG_PAUSED
 {
@@ -122,6 +124,8 @@ String STR_SVT_PRNDLG_PAUSED
     Text[ hebrew ] = "‮מופסק‬";
     Text[ hindi ] = "रोका हुआ";
     Text[ slovak ] = "Prerušené";
+    Text[ hungarian ] = "Felfüggesztve";
+    Text[ slovenian ] = "Začasno prekinjeno";
 };
 String STR_SVT_PRNDLG_PENDING
 {
@@ -131,7 +135,7 @@ String STR_SVT_PRNDLG_PENDING
     Text [ english_us ] = "Pending deletion" ;
     Text [ portuguese_brazilian ] = "Exclus�o pendente" ;
     Text [ swedish ] = "Radering i v�ntel�ge" ;
-    Text [ danish ] = "Slet igangv�rende" ;
+    Text [ danish ] = "Sletning af igangv�rende" ;
     Text [ italian ] = "In attesa di eliminare" ;
     Text [ spanish ] = "A la espera de ser borrado" ;
     Text [ french ] = "Suppression imminente" ;
@@ -153,6 +157,8 @@ String STR_SVT_PRNDLG_PENDING
     Text[ hebrew ] = "‮לפני מחיקה‬";
     Text[ hindi ] = "विचाराधीन मिटाने का कार्य";
     Text[ slovak ] = "Počas odstraňovania";
+    Text[ hungarian ] = "Törlés folyamatban";
+    Text[ slovenian ] = "Prišlo bo do brisanja";
 };
 String STR_SVT_PRNDLG_BUSY
 {
@@ -184,6 +190,8 @@ String STR_SVT_PRNDLG_BUSY
     Text[ hebrew ] = "‮תפוס‬";
     Text[ hindi ] = "कार्य में निरत";
     Text[ slovak ] = "Zaneprázdnený";
+    Text[ hungarian ] = "Foglalt";
+    Text[ slovenian ] = "Zaseden";
 };
 String STR_SVT_PRNDLG_INITIALIZING
 {
@@ -215,6 +223,8 @@ String STR_SVT_PRNDLG_INITIALIZING
     Text[ hebrew ] = "‮מאתחל‬";
     Text[ hindi ] = "इनिश्यलैज़िंग";
     Text[ slovak ] = "Inicializácia";
+    Text[ hungarian ] = "Felkészülés";
+    Text[ slovenian ] = "Inicializacija";
 };
 String STR_SVT_PRNDLG_WAITING
 {
@@ -246,6 +256,8 @@ String STR_SVT_PRNDLG_WAITING
     Text[ hebrew ] = "‮ממתין‬";
     Text[ hindi ] = "ठहराव";
     Text[ slovak ] = "Čakám";
+    Text[ hungarian ] = "Várakozás";
+    Text[ slovenian ] = "Čakanje";
 };
 String STR_SVT_PRNDLG_WARMING_UP
 {
@@ -277,6 +289,8 @@ String STR_SVT_PRNDLG_WARMING_UP
     Text[ hebrew ] = "‮מתחמם‬";
     Text[ hindi ] = "Warming up";
     Text[ slovak ] = "Zahrievanie";
+    Text[ hungarian ] = "Bemelegítés";
+    Text[ slovenian ] = "Ogrevanje";
 };
 String STR_SVT_PRNDLG_PROCESSING
 {
@@ -308,6 +322,8 @@ String STR_SVT_PRNDLG_PROCESSING
     Text[ hebrew ] = "‮עיבוד‬";
     Text[ hindi ] = "कार्यवाही करना";
     Text[ slovak ] = "Spracovávam";
+    Text[ hungarian ] = "Feldolgozás";
+    Text[ slovenian ] = "Obdelava";
 };
 String STR_SVT_PRNDLG_PRINTING
 {
@@ -317,7 +333,7 @@ String STR_SVT_PRNDLG_PRINTING
     Text [ english_us ] = "Printing" ;
     Text [ portuguese_brazilian ] = "Imprimindo" ;
     Text [ swedish ] = "Skriv ut" ;
-    Text [ danish ] = "Udskriv" ;
+    Text [ danish ] = "Udskriver" ;
     Text [ italian ] = "Stampa" ;
     Text [ spanish ] = "Imprimir" ;
     Text [ french ] = "Imprimer" ;
@@ -339,6 +355,8 @@ String STR_SVT_PRNDLG_PRINTING
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई करना ";
     Text[ slovak ] = "Prebieha tlač";
+    Text[ hungarian ] = "Nyomtatás";
+    Text[ slovenian ] = "Tiskanje";
 };
 String STR_SVT_PRNDLG_OFFLINE
 {
@@ -370,6 +388,8 @@ String STR_SVT_PRNDLG_OFFLINE
     Text[ hebrew ] = "‮לא מקוון‬";
     Text[ hindi ] = "ऑफ़लैन";
     Text[ slovak ] = "Offline";
+    Text[ hungarian ] = "Offline";
+    Text[ slovenian ] = "Brez povezave";
 };
 String STR_SVT_PRNDLG_ERROR
 {
@@ -401,6 +421,8 @@ String STR_SVT_PRNDLG_ERROR
     Text[ hebrew ] = "‮שגיאה‬";
     Text[ hindi ] = "गलती";
     Text[ slovak ] = "Chyba";
+    Text[ hungarian ] = "Hiba";
+    Text[ slovenian ] = "Napaka";
 };
 String STR_SVT_PRNDLG_SERVER_UNKNOWN
 {
@@ -432,6 +454,8 @@ String STR_SVT_PRNDLG_SERVER_UNKNOWN
     Text[ hebrew ] = "‮שרת לא מוכר‬";
     Text[ hindi ] = "अज्ञात सर्वर";
     Text[ slovak ] = "Neznámy server";
+    Text[ hungarian ] = "Ismeretlen kiszolgáló";
+    Text[ slovenian ] = "Neznani strežnik";
 };
 String STR_SVT_PRNDLG_PAPER_JAM
 {
@@ -463,6 +487,8 @@ String STR_SVT_PRNDLG_PAPER_JAM
     Text[ hebrew ] = "‮תקלת נייר‬";
     Text[ hindi ] = "कागज़ ज़ाम";
     Text[ slovak ] = "Zaseknutie papiera";
+    Text[ hungarian ] = "Papírelakadás";
+    Text[ slovenian ] = "Zastoj papirja";
 };
 String STR_SVT_PRNDLG_PAPER_OUT
 {
@@ -494,6 +520,8 @@ String STR_SVT_PRNDLG_PAPER_OUT
     Text[ hebrew ] = "‮אין מספיק נייר‬";
     Text[ hindi ] = "अपर्याप्त कागज़";
     Text[ slovak ] = "Nedostatok papieru";
+    Text[ hungarian ] = "Nincs elég papír";
+    Text[ slovenian ] = "Ni dovolj papirja";
 };
 String STR_SVT_PRNDLG_MANUAL_FEED
 {
@@ -525,6 +553,8 @@ String STR_SVT_PRNDLG_MANUAL_FEED
     Text[ hebrew ] = "‮הזנת נייר ידנית‬";
     Text[ hindi ] = "हस्त-संबन्धी फ़ीड़";
     Text[ slovak ] = "Ručné vkladanie";
+    Text[ hungarian ] = "Kézi adagolás";
+    Text[ slovenian ] = "Ročno podajanje";
 };
 String STR_SVT_PRNDLG_PAPER_PROBLEM
 {
@@ -556,6 +586,8 @@ String STR_SVT_PRNDLG_PAPER_PROBLEM
     Text[ hebrew ] = "‮בעית נייר‬";
     Text[ hindi ] = "कागज़ का समस्या";
     Text[ slovak ] = "Problémy s papierom";
+    Text[ hungarian ] = "Papírhiba";
+    Text[ slovenian ] = "Težave s papirjem";
 };
 String STR_SVT_PRNDLG_IO_ACTIVE
 {
@@ -587,6 +619,8 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text[ hebrew ] = "‮קלט-פלט פעיל‬";
     Text[ hindi ] = "I/O active";
     Text[ slovak ] = "I/O aktívny";
+    Text[ hungarian ] = "I/O-aktivitás";
+    Text[ slovenian ] = "V/I aktiven";
 };
 String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
 {
@@ -618,6 +652,8 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text[ hebrew ] = "‮תור הפלט מלא‬";
     Text[ hindi ] = "औटपुट् बिन भरा हुआ है";
     Text[ slovak ] = "Výstupná schránka je plná";
+    Text[ hungarian ] = "A kimeneti tálca megtelt";
+    Text[ slovenian ] = "Izhodni predal je poln";
 };
 String STR_SVT_PRNDLG_TONER_LOW
 {
@@ -649,6 +685,8 @@ String STR_SVT_PRNDLG_TONER_LOW
     Text[ hebrew ] = "‮טונר עומד להיגמר‬";
     Text[ hindi ] = "टोनर् धीमा";
     Text[ slovak ] = "Málo toneru";
+    Text[ hungarian ] = "Kevés a festék";
+    Text[ slovenian ] = "Zmanjkuje tonerja";
 };
 String STR_SVT_PRNDLG_NO_TONER
 {
@@ -680,6 +718,8 @@ String STR_SVT_PRNDLG_NO_TONER
     Text[ hebrew ] = "‮אזל הטונר‬";
     Text[ hindi ] = "No toner";
     Text[ slovak ] = "Došiel toner";
+    Text[ hungarian ] = "Nincs festék";
+    Text[ slovenian ] = "Ni tonerja";
 };
 String STR_SVT_PRNDLG_PAGE_PUNT
 {
@@ -689,7 +729,7 @@ String STR_SVT_PRNDLG_PAGE_PUNT
     Text [ english_us ] = "Delete Page" ;
     Text [ portuguese_brazilian ] = "Excluir P�gina" ;
     Text [ swedish ] = "Kassera sida" ;
-    Text [ danish ] = "Kasser side" ;
+    Text [ danish ] = "Slet side" ;
     Text [ italian ] = "Esci" ;
     Text [ spanish ] = "Borrar p�gina" ;
     Text [ french ] = "Suppression de page" ;
@@ -711,6 +751,8 @@ String STR_SVT_PRNDLG_PAGE_PUNT
     Text[ hebrew ] = "‮למחוק דף זה‬";
     Text[ hindi ] = "पृष्ट मिटाओ";
     Text[ slovak ] = "Odstrániť stránku";
+    Text[ hungarian ] = "Oldal törlése";
+    Text[ slovenian ] = "Izbriši stran";
 };
 String STR_SVT_PRNDLG_USER_INTERVENTION
 {
@@ -742,6 +784,8 @@ String STR_SVT_PRNDLG_USER_INTERVENTION
     Text[ hebrew ] = "‮התערבות המשתמש נדרשת‬";
     Text[ hindi ] = "User intervention necessary";
     Text[ slovak ] = "Je potrebný zásah užívateľa";
+    Text[ hungarian ] = "Felhasználói beavatkozás szükséges";
+    Text[ slovenian ] = "Potreben je poseg uporabnika";
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
@@ -751,7 +795,7 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text [ english_us ] = "Insufficient memory" ;
     Text [ portuguese_brazilian ] = "Mem�ria insuficiente" ;
     Text [ swedish ] = "Ej tillr�ckligt med minne" ;
-    Text [ danish ] = "Ikke nok hukommelse" ;
+    Text [ danish ] = "Ikke tilstr�kkelig hukommelse" ;
     Text [ italian ] = "Non c'� abbastanza memoria" ;
     Text [ spanish ] = "Memoria insuficiente" ;
     Text [ french ] = "M�moire insuffisante !" ;
@@ -773,6 +817,8 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text[ hebrew ] = "‮אין מספיק זכרון‬";
     Text[ hindi ] = "अपर्याप्त मेमरी";
     Text[ slovak ] = "Nedostatok pamäti";
+    Text[ hungarian ] = "Kevés a memória";
+    Text[ slovenian ] = "Na voljo ni dovolj pomnilnika";
 };
 String STR_SVT_PRNDLG_DOOR_OPEN
 {
@@ -804,6 +850,8 @@ String STR_SVT_PRNDLG_DOOR_OPEN
     Text[ hebrew ] = "‮מכסה פתוח‬";
     Text[ hindi ] = "Cover open";
     Text[ slovak ] = "Otvorený kryt";
+    Text[ hungarian ] = "A fedél nyitva van";
+    Text[ slovenian ] = "Pokrov naprave je odprt";
 };
 String STR_SVT_PRNDLG_POWER_SAVE
 {
@@ -813,7 +861,7 @@ String STR_SVT_PRNDLG_POWER_SAVE
     Text [ english_us ] = "Power save mode" ;
     Text [ portuguese_brazilian ] = "Modo de economia de energia" ;
     Text [ swedish ] = "Energiesparl�ge" ;
-    Text [ danish ] = "Energisparende modus" ;
+    Text [ danish ] = "Energibesparende tilstand" ;
     Text [ italian ] = "Modo risparmio energetico" ;
     Text [ spanish ] = "Modo de ahorro energ�tico" ;
     Text [ french ] = "Mode �conomie d'�nergie" ;
@@ -835,6 +883,8 @@ String STR_SVT_PRNDLG_POWER_SAVE
     Text[ hebrew ] = "‮מצב חיסכון בחשמל‬";
     Text[ hindi ] = "पवर संचित करने का प्रकार";
     Text[ slovak ] = "Úsporný režim";
+    Text[ hungarian ] = "Energiatakarékos üzemmód";
+    Text[ slovenian ] = "Varčevalni način";
 };
 String STR_SVT_PRNDLG_DEFPRINTER
 {
@@ -866,6 +916,8 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text[ hebrew ] = "‮מדפסת ברירת המחדל‬";
     Text[ hindi ] = "अनुपस्थिति मुद्रक";
     Text[ slovak ] = "Východzia tlačiareň";
+    Text[ hungarian ] = "Alapértelmezett nyomtató";
+    Text[ slovenian ] = "Privzeti tiskalnik";
 };
 String STR_SVT_PRNDLG_JOBCOUNT
 {
@@ -897,6 +949,8 @@ String STR_SVT_PRNDLG_JOBCOUNT
     Text[ hebrew ] = "‮%d מסמכים‬";
     Text[ hindi ] = "%d documents";
     Text[ slovak ] = "%d dokumentov";
+    Text[ hungarian ] = "%d dokumentum";
+    Text[ slovenian ] = "%d dokumenti";
 };
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
@@ -910,7 +964,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text [ english_us ] = "Printer Setup" ;
     Text [ portuguese_brazilian ] = "Configurar a impressora" ;
     Text [ swedish ] = "St�ll in skrivare" ;
-    Text [ danish ] = "Indstil printer" ;
+    Text [ danish ] = "Printerops�tning" ;
     Text [ italian ] = "Imposta stampante" ;
     Text [ spanish ] = "Configurar impresora" ;
     Text [ french ] = "Param�trage de l'imprimante" ;
@@ -925,7 +979,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ english_us ] = "Printer" ;
         Text [ portuguese_brazilian ] = "Impressora" ;
         Text [ swedish ] = "Skrivare" ;
-        Text [ danish ] = "Printer " ;
+        Text [ danish ] = "Printer" ;
         Text [ italian ] = "Stampante" ;
         Text [ spanish ] = "Impresora" ;
         Text [ french ] = "Imprimante" ;
@@ -948,6 +1002,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "Printer";
         Text[ slovak ] = "Tlačiareň";
+        Text[ hungarian ] = "Nyomtató";
+        Text[ slovenian ] = "Tiskalnik";
     };
     FixedText FT_NAME
     {
@@ -958,7 +1014,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ english_us ] = "~Name" ;
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ italian ] = "~Nome" ;
         Text [ spanish ] = "~Nombre" ;
         Text [ french ] = "Nom" ;
@@ -981,6 +1037,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮שם מדפסת‬";
         Text[ hindi ] = "~नाम्";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     ListBox LB_NAMES
     {
@@ -1000,7 +1058,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ english_us ] = "Propert~ies..." ;
         Text [ portuguese_brazilian ] = "~Propriedades..." ;
         Text [ swedish ] = "~Egenskaper..." ;
-        Text [ danish ] = "Egenskaber..." ;
+        Text [ danish ] = "~Egenskaber..." ;
         Text [ italian ] = "~Propriet�..." ;
         Text [ spanish ] = "~Propiedades..." ;
         Text [ french ] = "~Propri�t�s..." ;
@@ -1022,6 +1080,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "Propert~ies...";
         Text[ slovak ] = "Vlastnost~i...";
+        Text[ hungarian ] = "~Tulajdonságok...";
+        Text[ slovenian ] = "La~stnosti...";
     };
     FixedText FT_STATUS
     {
@@ -1055,6 +1115,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮מצב‬";
         Text[ hindi ] = "वस्तुस्थिति";
         Text[ slovak ] = "Stav";
+        Text[ hungarian ] = "Állapot";
+        Text[ slovenian ] = "Stanje";
     };
     FixedText FI_STATUS
     {
@@ -1093,6 +1155,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     FixedText FI_TYPE
     {
@@ -1131,6 +1195,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान्";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Hely";
+        Text[ slovenian ] = "Mesto";
     };
     FixedText FI_LOCATION
     {
@@ -1169,6 +1235,8 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
         Text[ slovak ] = "Komentár";
+        Text[ hungarian ] = "Megjegyzés";
+        Text[ slovenian ] = "Komentar";
     };
     FixedText FI_COMMENT
     {
@@ -1213,7 +1281,10 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ hebrew ] = "‮תצורת מדפסת‬";
     Text[ hindi ] = "मुद्रक सेटप";
     Text[ slovak ] = "Nastavenie tlačiarne";
+    Text[ hungarian ] = "Nyomtató beállítása";
+    Text[ slovenian ] = "Nastavitve tiskalnika";
 };
+
 
 
 
