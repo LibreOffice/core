@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 12:26:53 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,27 @@ namespace xmloff
     };
 
     //=====================================================================
+    //= OButtonImport
+    //=====================================================================
+    /** A specialized version of the <type>OControlImport</type> class, which handles
+        some specialities of buttons and imagebuttons (namely the target frame)
+    */
+    class OButtonImport : public OControlImport
+    {
+    public:
+        OButtonImport(
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
+
+    protected:
+        // SvXMLImportContext overridables
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+    };
+
+    //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
@@ -582,6 +603,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/03/28 12:26:53  fs
+ *  #85391# corrected OComboItemImport
+ *
  *  Revision 1.8  2001/02/13 09:09:32  fs
  *  #83529# introducing ORadioImport - need special handling for DefaultState / State
  *

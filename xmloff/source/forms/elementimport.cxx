@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 12:27:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,26 @@ namespace xmloff
     }
 
     //=====================================================================
+    //= OButtonImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OButtonImport::OButtonImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OButtonImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OControlImport::StartElement(_rxAttrList);
+
+        // handle the target-frame attribute
+        simluateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+    }
+
+    //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     //---------------------------------------------------------------------
@@ -901,6 +921,10 @@ namespace xmloff
     {
         switch (_eType)
         {
+            case OControlElement::BUTTON:
+            case OControlElement::IMAGE:
+                return new OButtonImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+
             case OControlElement::COMBOBOX:
             case OControlElement::LISTBOX:
                 return new OListAndComboImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
@@ -1004,6 +1028,9 @@ namespace xmloff
     {
         m_rFormImport.enterEventContext();
         OFormImport_Base::StartElement(_rxAttrList);
+
+        // handle the target-frame attribute
+        simluateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
     }
 
     //---------------------------------------------------------------------
@@ -1110,6 +1137,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/03/28 12:27:19  fs
+ *  #85391# correctly read the list source / list items of combo boxes
+ *
  *  Revision 1.15  2001/03/20 08:07:11  fs
  *  #85115# for compatibility reason recognize the old 'detail-fiels' for a while ...
  *
