@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:53:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ namespace connectivity
 
         virtual ~OConnectionWrapper();
         void setDelegation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount);
+        // must be called from derived classes
+        void disposing();
     public:
         OConnectionWrapper( );
 
