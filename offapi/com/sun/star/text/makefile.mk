@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: tl $ $Date: 2002-08-15 14:08:56 $
+#   last change: $Author: tl $ $Date: 2002-10-10 11:15:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -175,6 +175,7 @@ IDLFILES=\
     TextRanges.idl\
     TextSection.idl\
     TextSections.idl\
+        TextSortable.idl\
     TextSortDescriptor.idl\
     TextTable.idl\
         TextTableCursor.idl\
