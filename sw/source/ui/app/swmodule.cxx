@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:11:47 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,8 +528,8 @@ void SwDLL::RegisterControls()
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
-    SvxUndoControl::RegisterControl(SID_UNDO, pMod );
-    SvxRedoControl::RegisterControl(SID_REDO, pMod );
+    SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
+    SvxUndoRedoControl::RegisterControl(SID_REDO, pMod );
 
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );
     SvxLineStyleToolBoxControl::RegisterControl(SID_ATTR_LINE_STYLE, pMod );
