@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:48:01 $
+#   last change: $Author: cmc $ $Date: 2002-04-15 13:27:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,9 +156,6 @@ LIB1OBJFILES= \
         $(OUT)$/obj$/swcomlib.obj \
         $(OUT)$/obj$/w4wflt.obj
 
-.IF "$(OS)$(CPU)"=="SOLARISS"
-LIB1OBJFILES += $(SOLARLIBDIR)$/autorec.o
-.ENDIF
 
 
 
@@ -237,9 +234,6 @@ SHL2OBJS= \
     $(OUT)$/slo$/swdll.obj
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
-.IF "$(OS)$(CPU)"=="SOLARISS"
-SHL2OBJS +=  $(SOLARLIBDIR)$/autorec.o
-.ENDIF
 
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 SHL2BASE=	0x1e000000
