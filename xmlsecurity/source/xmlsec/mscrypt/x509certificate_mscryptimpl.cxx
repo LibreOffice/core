@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:25 $
+ *  last change: $Author: mmi $ $Date: 2004-07-14 10:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #ifndef _CERTIFICATEEXTENSION_XMLSECIMPL_HXX_
 #include "certificateextension_xmlsecimpl.hxx"
 #endif
+
+//MM : added by MM
+#include "oid.hxx"
+//MM : end
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -391,13 +395,28 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
 }
 
 // MM : added by MM
+::rtl::OUString findOIDDescription(char *oid)
+{
+    OUString ouOID = OUString::createFromAscii( oid );
+    for (int i=0; i<nOID; i++)
+    {
+        OUString item = OUString::createFromAscii( OIDs[i].oid );
+        if (ouOID == item)
+        {
+            return OUString::createFromAscii( OIDs[i].desc );
+        }
+    }
+
+    return OUString() ;
+}
+
 ::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
         CRYPT_ALGORITHM_IDENTIFIER algorithm = m_pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm;
-        return OUString::createFromAscii( algorithm.pszObjId ) ;
+        return findOIDDescription( algorithm.pszObjId ) ;
     }
     else
     {
@@ -432,7 +451,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
         CRYPT_ALGORITHM_IDENTIFIER algorithm = m_pCertContext->pCertInfo->SignatureAlgorithm;
-        return OUString::createFromAscii( algorithm.pszObjId ) ;
+        return findOIDDescription( algorithm.pszObjId ) ;
     }
     else
     {
