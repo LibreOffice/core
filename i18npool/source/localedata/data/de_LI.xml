@@ -14,8 +14,8 @@
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>.</DateSeparator>
-<ThousandSeparator>.</ThousandSeparator>
-<DecimalSeparator>,</DecimalSeparator>
+<ThousandSeparator>'</ThousandSeparator>
+<DecimalSeparator>.</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>.</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
@@ -37,7 +37,7 @@
 <LC_FORMAT>
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
 <FormatCode>TT.MM.JJ</FormatCode>
-<DefaultName> </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
 <FormatCode>NN TT.MMM JJ</FormatCode>
@@ -164,43 +164,43 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="2">
-<FormatCode>0,00</FormatCode>
+<FormatCode>0.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER"  formatindex="3">
-<FormatCode>#.##0</FormatCode>
+<FormatCode>#'##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
-<FormatCode>#.##0,00</FormatCode>
+<FormatCode>#'##0.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
-<FormatCode>#.###,00</FormatCode>
+<FormatCode>#'###.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$CHF-1407] #.##0;[$CHF-1407]-#.##0</FormatCode>
+<FormatCode>[$CHF-1407] #'##0;[$CHF-1407]-#'##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$CHF-1407] #.##0,00;[$CHF-1407]-#.##0,00</FormatCode>
+<FormatCode>[$CHF-1407] #'##0.00;[$CHF-1407]-#'##0.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$CHF-1407] #.##0;[ROT][$CHF-1407]-#.##0</FormatCode>
+<FormatCode>[$CHF-1407] #'##0;[ROT][$CHF-1407]-#'##0</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$CHF-1407] #.##0,00;[ROT][$CHF-1407]-#.##0,00</FormatCode>
+<FormatCode>[$CHF-1407] #'##0.00;[ROT][$CHF-1407]-#'##0.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
-<FormatCode>#.##0,00 CCC</FormatCode>
+<FormatCode>#'##0.00 CCC</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$CHF-1407] #.##0,--;[ROT][$CHF-1407]-#.##0,--</FormatCode>
+<FormatCode>[$CHF-1407] #'##0,--;[ROT][$CHF-1407]-#'##0,--</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -208,15 +208,15 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER"  formatindex="9">
-<FormatCode>0,00%</FormatCode>
+<FormatCode>0.00%</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="6">
-<FormatCode>0,00E+000</FormatCode>
+<FormatCode>0.00E+000</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="7">
-<FormatCode>0,00E+00</FormatCode>
+<FormatCode>0.00E+00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 </LC_FORMAT>
