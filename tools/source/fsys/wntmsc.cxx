@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wntmsc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-09-17 10:51:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ DECLARE_LIST( FileStatList, FileStat* );
 
 int Sys2SolarError_Impl( int nSysErr );
 
-static ByteString sLastCaseSensitiveDir = "";
 static BOOL   bLastCaseSensitive    = FALSE;
 
 //--------------------------------------------------------------------
