@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 09:47:02 $
+ *  last change: $Author: os $ $Date: 2002-10-15 11:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ class SwAuthMarkDlg : public Window
     DECL_LINK(CompEntryHdl, ListBox*);
     DECL_LINK(ChangeSourceHdl, RadioButton*);
     DECL_LINK(IsEntryAllowedHdl, Edit*);
+    DECL_LINK(EditModifyHdl, Edit*);
 
     void InitControls();
     virtual void    Activate();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:04:57 $
+ *  last change: $Author: os $ $Date: 2002-10-15 11:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,6 +1391,7 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
     aEditEntryPB.SetClickHdl(LINK(this,SwAuthMarkDlg, CreateEntryHdl));
     aFromComponentRB.SetClickHdl(LINK(this,SwAuthMarkDlg, ChangeSourceHdl));
     aFromDocContentRB.SetClickHdl(LINK(this,SwAuthMarkDlg, ChangeSourceHdl));
+    aEntryED.SetModifyHdl(LINK(this,SwAuthMarkDlg, EditModifyHdl));
 
     GetParent()->SetText(String(SW_RES(
                     bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT)));
@@ -1604,6 +1605,7 @@ IMPL_LINK(SwAuthMarkDlg, CreateEntryHdl, PushButton*, pButton)
         aEntryED.SetText(m_sFields[AUTH_FIELD_IDENTIFIER]);
         aAuthorFI.SetText(m_sFields[AUTH_FIELD_AUTHOR]);
         aTitleFI.SetText(m_sFields[AUTH_FIELD_TITLE]);
+        aOKBT.Enable();
     }
     return 0;
 }
@@ -1673,6 +1675,22 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
     CompEntryHdl(&aEntryLB);
     return 0;
 }
+/* -----------------15.10.2002 13:16-----------------
+ *
+ * --------------------------------------------------*/
+IMPL_LINK(SwAuthMarkDlg, EditModifyHdl, Edit*, pEdit)
+{
+    Link aAllowed = LINK(this, SwAuthMarkDlg, IsEntryAllowedHdl);
+    long nResult = aAllowed.Call(pEdit);
+    aOKBT.Enable(nResult > 0);
+    if(nResult)
+    {
+        String sEntry(pEdit->GetText());
+        m_sFields[AUTH_FIELD_IDENTIFIER] = sEntry;
+        m_sCreatedEntry[AUTH_FIELD_IDENTIFIER] = sEntry;
+    }
+    return 0;
+};
 /* -----------------------------20.12.99 15:11--------------------------------
 
  ---------------------------------------------------------------------------*/
