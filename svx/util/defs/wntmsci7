@@ -19475,3 +19475,4 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?createTextField@SvxUnoDrawMSFactory@@SA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
 ?ImpGetResStr@@YAABVString@@G@Z
 ??0?$Reference@VXInteractionHandler@task@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??1LoadStoreTempInfos@@QAE@XZ
