@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-18 10:49:08 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameter";
+        Text[ dutch ] = "Parameters";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
@@ -328,7 +328,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameter";
+        Text[ dutch ] = "Parameters";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
@@ -370,7 +370,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ english_us ] = "Threshold ~value" ;
         Text[ chinese_simplified ] = "³õÊ¼Öµ(~V)";
         Text[ russian ] = "Ïîğîãîâîå çíà÷åíèå";
-        Text[ polish ] = "Warto?æ progowa";
+        Text[ polish ] = "Wartoœæ progowa";
         Text[ japanese ] = "‚µ‚«‚¢’l(~V)";
         Text[ chinese_traditional ] = "ªì©l­È(~V)";
         Text[ arabic ] = "ŞíãÉ ÇáÈÏÁ";
@@ -496,7 +496,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameter";
+        Text[ dutch ] = "Parameters";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
@@ -635,7 +635,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameter";
+        Text[ dutch ] = "Parameters";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
@@ -776,7 +776,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ greek ] = "ĞáñÜìåôñïé";
-        Text[ dutch ] = "Parameter";
+        Text[ dutch ] = "Parameters";
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
@@ -818,7 +818,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ english_us ] = "Light source" ;
         Text[ chinese_simplified ] = "¹âÔ´";
         Text[ russian ] = "Èñòî÷íèê ñâåòà";
-        Text[ polish ] = "?ród³o ?wiat³a";
+        Text[ polish ] = "ród³o œwiat³a";
         Text[ japanese ] = "ŒõŒ¹";
         Text[ chinese_traditional ] = "¥ú·½";
         Text[ arabic ] = "ãÕÏÑ ÇáÖæÁ";
