@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
+ *  last change: $Author: jbu $ $Date: 2000-12-08 08:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ namespace io_acceptor
         {
             m_pSocket->stopAccepting();
         }
-        else
+        else if( _xAcceptor.is() )
         {
             _xAcceptor->stopAccepting();
         }
