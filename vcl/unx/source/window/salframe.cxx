@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:25:58 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
     SalVisual* pVis = GetDisplay()->GetVisual();
     XLIB_Window aFrameParent = pParentData ? pParentData->aWindow : GetDisplay()->GetRootWindow();
+    XLIB_Window aClientLeader = None;
 
     if( (nSalFrameStyle & SAL_FRAME_STYLE_FLOAT) &&
         ! (nSalFrameStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION)
@@ -487,11 +488,40 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                 Hints.flags |= IconMaskHint;
         }
 
-        Hints.flags         |= WindowGroupHint;
+        // find the top level frame of the transience hierarchy
         X11SalFrame* pFrame = this;
         while( pFrame->mpParent )
             pFrame = pFrame->mpParent;
-        Hints.window_group  = pFrame->GetShellWindow();
+        if( (pFrame->nStyle_ & SAL_FRAME_STYLE_CHILD ) )
+        {
+            // if the top level window is a plugin window,
+            // then we should place us in the same window group as
+            // the parent application (or none if there is no window group
+            // hint in the parent).
+            if( pFrame->GetShellWindow() )
+            {
+                XWMHints* pWMHints = XGetWMHints( pDisplay_->GetDisplay(),
+                    pFrame->GetShellWindow() );
+                if( pWMHints )
+                {
+                    if( (pWMHints->flags & WindowGroupHint) )
+                    {
+                        Hints.flags |= WindowGroupHint;
+                        Hints.window_group = pWMHints->window_group;
+                    }
+                    XFree( pWMHints );
+                }
+            }
+        }
+        else
+        {
+            Hints.flags         |= WindowGroupHint;
+            Hints.window_group  = pFrame->GetShellWindow();
+            // note: for a normal document window this will produce None
+            // as the window is not yet created and the shell window is
+            // initialized to None. This must be corrected after window creation.
+            aClientLeader = GetDisplay()->GetDrawable();
+        }
     }
 
     mhWindow = XCreateWindow( GetXDisplay(),
@@ -505,6 +535,13 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                               nAttrMask,
                               &Attributes );
     mhShellWindow = pParentData ? mhShellWindow : mhWindow;
+
+    // correct window group if necessary
+    if( (Hints.flags & WindowGroupHint) == WindowGroupHint )
+    {
+        if( Hints.window_group == None )
+            Hints.window_group = GetShellWindow();
+    }
 
     maGeometry.nX       = x;
     maGeometry.nY       = y;
@@ -547,16 +584,18 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         XFree (pHints);
 
         // set client leader
-        XLIB_Window aLeader = GetDisplay()->GetDrawable();
-        XChangeProperty( GetXDisplay(),
-                         mhWindow,
-                         pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_CLIENT_LEADER),
-                         XA_WINDOW,
-                         32,
-                         PropModeReplace,
-                         (unsigned char*)&aLeader,
-                         1
-                         );
+        if( aClientLeader )
+        {
+            XChangeProperty( GetXDisplay(),
+                             mhWindow,
+                             pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_CLIENT_LEADER),
+                             XA_WINDOW,
+                             32,
+                             PropModeReplace,
+                             (unsigned char*)&aClientLeader,
+                             1
+                             );
+        }
 #define DECOFLAGS (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
         int nDecoFlags = WMAdaptor::decoration_All;
         if( (nStyle_ & DECOFLAGS ) != DECOFLAGS || (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
@@ -670,8 +709,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     maAlwaysOnTopRaiseTimer.SetTimeoutHdl( LINK( this, X11SalFrame, HandleAlwaysOnTopRaise ) );
     maAlwaysOnTopRaiseTimer.SetTimeout( 100 );
 
-    mpDeleteData                = NULL;
-
     meWindowType                = WMAdaptor::windowType_Normal;
     mnDecorationFlags           = WMAdaptor::decoration_All;
     mbMaximizedVert             = false;
@@ -719,6 +756,8 @@ void X11SalFrame::passOnSaveYourSelf()
 
 X11SalFrame::~X11SalFrame()
 {
+    notifyDelete();
+
     if( mhStackingWindow )
         aPresentationReparentList.remove( mhStackingWindow );
 
@@ -751,8 +790,6 @@ X11SalFrame::~X11SalFrame()
         hPresentationWindow = None;
         doReparentPresentationDialogues( GetDisplay() );
     }
-
-    NotifyDeleteData ();
 
     if( pGraphics_ )
     {
@@ -2556,39 +2593,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
     return nRet;
 }
 
-//
-// The eventhandler member functions may indirectly call their own destructor.
-// So make sure to be notified of that case to not to touch any member in the
-// rest of the eventhandler.
-//
-void
-X11SalFrame::RegisterDeleteData (SalFrameDelData *pData)
-{
-    pData->SetNext (mpDeleteData);
-    mpDeleteData = pData;
-}
-void
-X11SalFrame::NotifyDeleteData ()
-{
-    for (SalFrameDelData* pData = mpDeleteData; pData != NULL; pData = pData->GetNext())
-        pData->Delete();
-}
-void
-X11SalFrame::UnregisterDeleteData (SalFrameDelData *pData)
-{
-    if (mpDeleteData == pData)
-    {
-        mpDeleteData = pData->GetNext ();
-    }
-    else
-    {
-        SalFrameDelData* pList = mpDeleteData;
-        while (pList->GetNext() != pData)
-            pList = pList->GetNext ();
-        pList->SetNext (pData->GetNext());
-    }
-}
-
 // F10 means either KEY_F10 or KEY_MENU, which has to be decided
 // in the independent part.
 struct KeyAlternate
@@ -2811,8 +2815,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         nSize = 1;
     }
 
-    SalFrameDelData aDeleteWatch;
-    RegisterDeleteData (&aDeleteWatch);
+    DeletionListener aDeleteWatch( this );
 
     if (   mpInputContext != NULL
         && mpInputContext->UseContext()
@@ -2868,12 +2871,10 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
       //
       // update the spot location for PreeditPosition IME style
       //
-    if (! aDeleteWatch.IsDeleted())
+    if (! aDeleteWatch.isDeleted())
     {
         if (mpInputContext != NULL && mpInputContext->UseContext())
             mpInputContext->UpdateSpotLocation();
-
-        UnregisterDeleteData (&aDeleteWatch);
     }
 
     free (pBuffer);
