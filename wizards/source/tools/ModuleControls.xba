@@ -182,4 +182,58 @@ Dim iYPos as Integer
 	oDialogModel.cmdGoOn.PositionY = iYPos
 	oDialogModel.cmdSwitchHeight.PositionY = iYPos
 	oDialogModel.Height = iDlgHeight
-End Sub</script:module>
+End Sub
+
+
+Sub GetFolderName(oRefModel as Object)
+Dim oFolderDialog
+Dim iAccept as Integer
+Dim sPath as String
+Dim InitPath as String
+Dim RefControlName as String
+Dim oUcb as object
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
+	InitPath = ConvertToUrl(oRefModel.Text)
+	If oUcb.Exists(InitPath) Then
+		oFolderDialog.SetDisplayDirectory(InitPath)
+	End If
+	iAccept = oFolderDialog.Execute()
+	If iAccept = 1 Then
+		sPath = oFolderDialog.GetDisplayDirectory()
+		If oUcb.Exists(sPath) Then
+			oRefModel.Text = ConvertFromUrl(sPath)
+		End If
+	End If
+End Sub
+
+
+Sub GetFileName(oRefModel as Object, Filternames())
+Dim oFileDialog as Object
+Dim iAccept as Integer
+Dim sPath as String
+Dim InitPath as String
+Dim RefControlName as String
+Dim oUcb as object
+Dim i as Integer
+Dim MaxIndex as Integer
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
+	MaxIndex = Ubound(FilterNames())
+	For i = 0 To MaxIndex
+		oFileDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
+	Next i
+	oFileDialog.SetCurrentFilter(FilterNames(0,0)
+	InitPath = ConvertToUrl(oRefModel.Text)
+	If oUcb.Exists(InitPath) Then
+		oFileDialog.SetDisplayDirectory(InitPath)
+	End If
+	iAccept = oFileDialog.Execute()
+	If iAccept = 1 Then
+		sPath = oFileDialog.Files(0)
+		If oUcb.Exists(sPath) Then
+			oRefModel.Text = ConvertFromUrl(sPath)
+		End If
+	End If
+End Sub
+</script:module>

@@ -274,20 +274,25 @@ End Function
 &apos; &apos;RemoveItem&apos; appears only only once in the Listbox
 Sub RemoveListboxItemByName(oListbox as Object, RemoveItem as String)
 Dim OldList() as String
+Dim NullList() as String
 Dim i as Integer
 Dim a as Integer
 Dim MaxIndex as Integer
-	a = 0
-	MaxIndex = Ubound(oListbox.StringItemList())
 	OldList = oListbox.StringItemList()
-	Dim NewList(MaxIndex -1)
-	For i = 0 To MaxIndex
-		If RemoveItem &lt;&gt; OldList(i) Then
-			NewList(a) = OldList(i)
-			a = a + 1
-		End If
-	Next i
-	oListbox.StringItemList() = NewList()
+	MaxIndex = Ubound(OldList())
+	If MaxIndex &gt; 0 Then
+		a = 0
+		Dim NewList(MaxIndex -1)
+		For i = 0 To MaxIndex
+			If RemoveItem &lt;&gt; OldList(i) Then
+				NewList(a) = OldList(i)
+				a = a + 1
+			End If
+		Next i
+		oListbox.StringItemList() = NewList()
+	Else
+		oListBox.StringItemList() = NullList()
+	End If
 End Sub
 
 
