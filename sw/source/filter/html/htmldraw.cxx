@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:54:32 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,10 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      SvxCSS1PropertyInfo& rCSS1PropInfo,
                                      sal_Bool bHidden )
 {
-    // immer ueber dem Text stehen
-    pNewDrawObj->SetLayer( pDoc->GetHeavenId() );
+    // always on top of text.
+    // OD 02.07.2003 #108784# but in invisible layer. <ConnectToLayout> will
+    // move the object to the visible layer.
+    pNewDrawObj->SetLayer( pDoc->GetInvisibleHeavenId() );
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
