@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: nf $ $Date: 2001-10-16 14:21:13 $
+#   last change: $Author: nf $ $Date: 2001-11-05 15:35:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ OBJFILES=                       \
     $(OBJ)$/shellprp.obj 	\
     $(OBJ)$/fattr.obj 		\
     $(OBJ)$/minormk.obj 	\
+    $(OBJ)$/prodmap.obj 	\
     $(OBJ)$/mkcreate.obj
 
 SLOFILES=                   \
@@ -107,6 +108,7 @@ SLOFILES=                   \
     $(SLO)$/shellprp.obj 	\
     $(SLO)$/fattr.obj 		\
     $(SLO)$/minormk.obj 	\
+    $(SLO)$/prodmap.obj 	\
     $(SLO)$/mkcreate.obj
 
 LIB1TARGET= $(LB)$/btstrp.lib
