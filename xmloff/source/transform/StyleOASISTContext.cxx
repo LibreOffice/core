@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:34:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,56 @@ void XMLPropertiesTContext_Impl::StartElement(
                     SvXMLUnitConverter::convertNumber( nIntervalMinorDivisor, rAttrValue );
                     bIntervalMinorFound = true;
                     break;
+                case XML_OPTACTION_SYMBOL_TYPE:
+                    {
+                        // if symbol_type is "named-symbol" the "symbol"
+                        // property is set in the action XML_OPTACTION_SYMBOL_NAME
+                        sal_Int32 nSymbolType = 0;
+                        if( IsXMLToken( rAttrValue, XML_NONE ))
+                            nSymbolType = -3;
+                        else if( IsXMLToken( rAttrValue, XML_AUTOMATIC ))
+                            nSymbolType = -2;
+                        else if( IsXMLToken( rAttrValue, XML_IMAGE ))
+                            nSymbolType = -1;
 
+                        if( nSymbolType < 0 )
+                            pAttrList->AddAttribute(
+                                GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                    XML_NAMESPACE_CHART,
+                                    GetXMLToken( XML_SYMBOL )),
+                                OUString::valueOf( nSymbolType ));
+                    }
+                    break;
+                case XML_OPTACTION_SYMBOL_NAME:
+                    {
+                        // assume "symbol-type" == "named-symbol"
+                        sal_Int32 nSymbolType = -3; // NONE
+                        // "square" just has an awkward token-name
+                        if( IsXMLToken( rAttrValue, XML_GRADIENTSTYLE_SQUARE ))
+                            nSymbolType = 0;
+                        else if( IsXMLToken( rAttrValue, XML_DIAMOND ))
+                            nSymbolType = 1;
+                        else if( IsXMLToken( rAttrValue, XML_ARROW_DOWN ))
+                            nSymbolType = 2;
+                        else if( IsXMLToken( rAttrValue, XML_ARROW_UP ))
+                            nSymbolType = 3;
+                        else if( IsXMLToken( rAttrValue, XML_ARROW_RIGHT ))
+                            nSymbolType = 4;
+                        else if( IsXMLToken( rAttrValue, XML_ARROW_LEFT ))
+                            nSymbolType = 5;
+                        else if( IsXMLToken( rAttrValue, XML_BOW_TIE ))
+                            nSymbolType = 6;
+                        else if( IsXMLToken( rAttrValue, XML_HOURGLASS ))
+                            nSymbolType = 7;
+
+                        if( nSymbolType >= 0 )
+                            pAttrList->AddAttribute(
+                                GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                    XML_NAMESPACE_CHART,
+                                    GetXMLToken( XML_SYMBOL )),
+                                OUString::valueOf( nSymbolType ));
+                    }
+                    break;
                 // #i25616#
                 case XML_OPTACTION_OPACITY:
                     aOpacityValueRemember = rAttrValue;
