@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-15 13:17:03 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 {
                     Read_PicLoc( aRes.nSprmId,
                         aRes.pMemPos + 1 + (8 > pWwFib->nVersion ? 0 : 1)
-                        + WW8SprmDataOfs( aRes.nSprmId ), 4 );
+                        + WW8SprmDataOfs( pWwFib->nVersion, aRes.nSprmId ), 4 );
                     // Ok, that's it.  Now let's get out of here!
                     break;
                 }

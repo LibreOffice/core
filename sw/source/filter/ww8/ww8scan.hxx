@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ void WW8ReadSTTBF( BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
 
 USHORT WW8GetSprmId( BYTE nVersion, const BYTE* pSp, BYTE* pDelta = 0 );
 USHORT WW8GetSprmSize( BYTE nVersion, const BYTE* pSprm, USHORT* pId );
-BYTE WW8SprmDataOfs( USHORT nId );
+BYTE WW8SprmDataOfs(BYTE nVersion, USHORT nId );
 
 struct WW8FieldDesc
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:38 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1662,7 +1662,6 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
                     continue;
 
-                USHORT nValue;
                 SwWriteTableCell* pCell = pBoxArr[ nBox ];
                 if( SFX_ITEM_ON == pCell->GetBox()->GetFrmFmt()->
                     GetAttrSet().GetItemState( RES_BACKGROUND, FALSE, &pI )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
         sal_uInt8 nDelta;
         sal_uInt16 nAktId = WW8GetSprmId(rFib.nVersion, pSprms, &nDelta );
         if( nAktId == nId ) // Sprm found
-            return pSprms + 1 + nDelta + WW8SprmDataOfs( nId );
+            return pSprms + 1 + nDelta + WW8SprmDataOfs(rFib.nVersion, nId );
                                                 // gib Zeiger auf Daten
         USHORT x = WW8GetSprmSize(rFib.nVersion, pSprms, &nAktId );
         i += x;
@@ -1764,7 +1764,8 @@ BOOL SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
             if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
             {
                 Read_PicLoc( aRes.nSprmId, aRes.pMemPos+ 1+
-                (8 > pWwFib->nVersion ? 0 : 1) + WW8SprmDataOfs(aRes.nSprmId),
+                (8 > pWwFib->nVersion ? 0 : 1) + WW8SprmDataOfs(
+                    pWwFib->nVersion, aRes.nSprmId),
                 4);
                 break;
             }

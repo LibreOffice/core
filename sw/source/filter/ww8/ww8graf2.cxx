@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,8 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
             if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
             {
                 Read_PicLoc( aRes.nSprmId, aRes.pMemPos+ 1+
-                (8 > pWwFib->nVersion ? 0 : 1) + WW8SprmDataOfs(aRes.nSprmId),
+                    (8 > pWwFib->nVersion ? 0 : 1) +
+                    WW8SprmDataOfs(pWwFib->nVersion,aRes.nSprmId),
                 4);
                 break;
             }

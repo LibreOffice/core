@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2910,7 +2910,7 @@ const BYTE* WW8RStyle::HasParaSprm( USHORT nId ) const
         USHORT nAktId = WW8GetSprmId( rFib.nVersion, pSprms, &nDelta );
         // Sprm found ?
         if( nAktId == nId )
-            return pSprms + 1 + nDelta + WW8SprmDataOfs( nId );
+            return pSprms + 1 + nDelta + WW8SprmDataOfs(rFib.nVersion, nId );
 
         x = WW8GetSprmSize( rFib.nVersion, pSprms, &nAktId );
         i += x;

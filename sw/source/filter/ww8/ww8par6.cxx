@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 11:55:17 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5539,7 +5539,7 @@ short SwWW8ImplReader::ImportSprm(const BYTE* pPos,USHORT nId)
 
     SprmReadInfo& rSprm = WW8GetSprmReadInfo( nId );
 
-    USHORT nFixedLen = 1 + nDelta + WW8SprmDataOfs( nId );
+    USHORT nFixedLen = 1 + nDelta + WW8SprmDataOfs(nV, nId );
     USHORT nL = WW8GetSprmSize( nV, pPos, &nId );
 
     if( rSprm.pReadFnc )

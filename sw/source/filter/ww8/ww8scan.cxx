@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 11:55:18 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void WW8SprmIter::UpdateMyMembers()
     if (pSprms && nRemLen > 0)
     {
         nAktId = WW8GetSprmId( nVersion, pSprms );
-        pAktParams = pSprms + 1 + nDelta + WW8SprmDataOfs( nAktId );
+        pAktParams = pSprms + 1 + nDelta + WW8SprmDataOfs(nVersion, nAktId );
         nAktSize = WW8GetSprmSize( nVersion, pSprms, &nAktId );
     }
     else
@@ -2624,13 +2624,13 @@ BOOL WW8PLCFx_SEPX::Find4Sprms(USHORT nId1,USHORT nId2,USHORT nId3,USHORT nId4,
         USHORT nAktId = WW8GetSprmId( GetVersion(), pSp );
         BOOL bOk = TRUE;
         if( nAktId  == nId1 )
-            p1 = pSp + 1 + nDelta + WW8SprmDataOfs( nId1 );
+            p1 = pSp + 1 + nDelta + WW8SprmDataOfs(GetVersion(), nId1 );
         else if( nAktId  == nId2 )
-            p2 = pSp + 1 + nDelta + WW8SprmDataOfs( nId2 );
+            p2 = pSp + 1 + nDelta + WW8SprmDataOfs(GetVersion(), nId2 );
         else if( nAktId  == nId3 )
-            p3 = pSp + 1 + nDelta + WW8SprmDataOfs( nId3 );
+            p3 = pSp + 1 + nDelta + WW8SprmDataOfs(GetVersion(), nId3 );
         else if( nAktId  == nId4 )
-            p4 = pSp + 1 + nDelta + WW8SprmDataOfs( nId4 );
+            p4 = pSp + 1 + nDelta + WW8SprmDataOfs(GetVersion(), nId4 );
         else
             bOk = FALSE;
         bFound |= bOk;
@@ -2656,7 +2656,7 @@ const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
         // Sprm gefunden?
         USHORT nAktId = WW8GetSprmId( GetVersion(), pSp );
         if ( (nAktId == nId) && (pSp[ 1 + nDelta ] == n2nd) )
-            return pSp + 1 + nDelta + WW8SprmDataOfs( nId );
+            return pSp + 1 + nDelta + WW8SprmDataOfs(GetVersion(), nId );
         // erhoehe Zeiger, so dass er auf naechsten Sprm zeigt
         USHORT x = WW8GetSprmSize( GetVersion(), pSp, &nAktId );
         i += x;
@@ -6237,7 +6237,7 @@ extern "C"
 }
 
 
-SprmInfo& WW8GetSprmInfo( USHORT nId )
+SprmInfo WW8GetSprmInfo(BYTE nVersion, USHORT nId)
 {
     // if necessary sort tab
     static BOOL bInit = FALSE;
@@ -6260,8 +6260,41 @@ SprmInfo& WW8GetSprmInfo( USHORT nId )
         ASSERT( pFound,
             "Unknown undocumented sprm, report to complete word import");
 #endif
-        // as a fallback use the null element
-        pFound = (void*)aWwSprmTab;
+        if (nVersion != 8)
+        {
+            // as a fallback use the null element
+            pFound = (void*)aWwSprmTab;
+        }
+        else
+        {
+            aSrch.nVari = L_FIX;
+            switch (nId >> 13)
+            {
+                case 0:
+                case 1:
+                    aSrch.nLen = 1;
+                    break;
+                case 2:
+                    aSrch.nLen = 2;
+                    break;
+                case 3:
+                    aSrch.nLen = 4;
+                    break;
+                case 4:
+                case 5:
+                    aSrch.nLen = 2;
+                    break;
+                case 6:
+                    aSrch.nLen = 0;
+                    aSrch.nVari =  L_VAR;
+                    break;
+                case 7:
+                default:
+                    aSrch.nLen = 3;
+                    break;
+            }
+            pFound = (void*)&aSrch;
+        }
     }
     return *(SprmInfo*) pFound;
 }
@@ -6269,9 +6302,10 @@ SprmInfo& WW8GetSprmInfo( USHORT nId )
 //-----------------------------------------
 //              Sprms
 //-----------------------------------------
-static USHORT WW8GetSprmSize0( USHORT nId, const BYTE* pSprm, BYTE nDelta)
+static USHORT WW8GetSprmSize0(BYTE nVersion, USHORT nId, const BYTE* pSprm,
+    BYTE nDelta)
 {
-    SprmInfo& rSprm = WW8GetSprmInfo( nId );
+    SprmInfo aSprm = WW8GetSprmInfo(nVersion, nId);
     USHORT nL = 0;                      // number of Bytes to read
 
     //sprmPChgTabs
@@ -6280,7 +6314,7 @@ static USHORT WW8GetSprmSize0( USHORT nId, const BYTE* pSprm, BYTE nDelta)
         case 23:
         case 0xC615:
             if( pSprm[1 + nDelta] != 255 )
-                nL = pSprm[1 + nDelta] + rSprm.nLen;
+                nL = pSprm[1 + nDelta] + aSprm.nLen;
             else
             {
                 BYTE nDel = pSprm[2 + nDelta];
@@ -6293,20 +6327,20 @@ static USHORT WW8GetSprmSize0( USHORT nId, const BYTE* pSprm, BYTE nDelta)
             nL = SVBT16ToShort( &pSprm[1 + nDelta] );
             break;
         default:
-            switch ( rSprm.nVari )
+            switch (aSprm.nVari)
             {
                 case L_FIX:
-                    nL = rSprm.nLen;        // Excl. Token
+                    nL = aSprm.nLen;        // Excl. Token
                     break;
                 case L_VAR:
                     // Variable 1-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = pSprm[1 + nDelta] + rSprm.nLen;
+                    nL = pSprm[1 + nDelta] + aSprm.nLen;
                     break;
                 case L_VAR2:
                     // Variable 2-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = SVBT16ToShort( &pSprm[1 + nDelta] ) + rSprm.nLen - 1;
+                    nL = SVBT16ToShort( &pSprm[1 + nDelta] ) + aSprm.nLen - 1;
                     break;
                 default:
                     ASSERT(0,"Unknown sprm varient");
@@ -6370,7 +6404,8 @@ BOOL WW8PLCFx_SEPX::CompareSprms(const BYTE*  pOtherSprms, long nOtherSprmSiz,
                     bRes = FALSE;
                 else
                 {
-                    const BYTE *pTst = pSp + 1 + nDelta + WW8SprmDataOfs(nSpId);
+                    const BYTE *pTst = pSp + 1 + nDelta + WW8SprmDataOfs(
+                        GetVersion(), nSpId);
                     //Allow a one twip fuzziness for the margins, word is
                     //doing something very small but intriguing with its
                     //rounding of these margins
@@ -6383,8 +6418,8 @@ BOOL WW8PLCFx_SEPX::CompareSprms(const BYTE*  pOtherSprms, long nOtherSprmSiz,
                         if (abs(nOne-nTwo) > 1) //(perhaps ww8par2#nToleranz)
                             bRes = FALSE;
                     }
-                    else if (memcmp(pTst,pOtherSp,WW8GetSprmSize0(nSpId,pSp,
-                        nDelta)))
+                    else if (memcmp(pTst,pOtherSp,WW8GetSprmSize0(GetVersion(),
+                        nSpId,pSp, nDelta)))
                     {
                         bRes = FALSE;
                     }
@@ -6437,11 +6472,11 @@ USHORT WW8GetSprmSize( BYTE nVersion, const BYTE* pSprm, USHORT* pId )
 {
     BYTE   nDelta = ( 8 > nVersion ) ? 0 : 1;
     USHORT nId = pId ? *pId : WW8GetSprmId( nVersion, pSprm );
-    return WW8GetSprmSize0( nId, pSprm, nDelta ) + 1 + nDelta +
-        WW8GetSprmInfo( nId ).nVari;
+    return WW8GetSprmSize0(nVersion, nId, pSprm, nDelta) + 1 + nDelta +
+        WW8SprmDataOfs(nVersion, nId);
 }
 
-BYTE WW8SprmDataOfs( USHORT nId )
+BYTE WW8SprmDataOfs(BYTE nVersion, USHORT nId)
 {
-    return WW8GetSprmInfo( nId ).nVari;
+    return WW8GetSprmInfo(nVersion, nId).nVari;
 }

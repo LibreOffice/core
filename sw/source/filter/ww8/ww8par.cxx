@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-15 10:00:24 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3210,8 +3210,8 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
 
                         if( 0x6A03 == nId && 0 < nLen )
                         {
-                            nPictureId = SVBT32ToLong( pSprm + 1 +
-                                    nDelta + WW8SprmDataOfs( nId ) );
+                            nPictureId = SVBT32ToLong( pSprm + 1 + nDelta +
+                                WW8SprmDataOfs(rReader.pWwFib->nVersion,nId) );
                             bRet = TRUE;
                         }
                         pSprm += nSL;
