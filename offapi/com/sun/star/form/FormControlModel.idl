@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormControlModel.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:24 $
+ *  last change: $Author: mi $ $Date: 2003-01-16 08:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ service FormControlModel
         determined automatically.</p>
 
         <p>Each component which supports a tabstop must provide a
-        <type>FormControlModel::TabIndex</type> property.</p>
+        <member>FormControlModel::TabIndex</member> property.</p>
 
         <p>Normally, a <type>FormController</type> instance is evaluating this property.</p>
      */
@@ -141,36 +141,4 @@ service FormControlModel
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4.20.1  2002/07/26 09:59:57  fs
-    IDL review form layer
-
-    Revision 1.4  2001/01/23 10:08:21  mi
-    optional interfaces now marked as [optional] instead of just a prosa description of this fact
-
-    Revision 1.3  2000/11/08 12:42:52  mi
-    moved from api
-
-    Revision 1.2  2000/10/10 08:40:23  dg
-    optional was missing for TabIndex
-
-    Revision 1.1.1.1  2000/09/18 23:35:16  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:24  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:00  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:31  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
