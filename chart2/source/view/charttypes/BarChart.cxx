@@ -108,17 +108,33 @@ uno::Reference< XTransformation > BarPositionHelper::getTransformationLogicToSce
         doLogicScaling( NULL, &MinY, &MinZ );
         doLogicScaling( NULL, &MaxY, &MaxZ);
 
-        aMatrix.TranslateX(-MinX);
-        aMatrix.TranslateY(-MinY);
-        aMatrix.TranslateZ(-MinZ+0.5*getSlotWidth());
+        if( AxisOrientation_MATHEMATICAL==m_aScales[0].Orientation )
+            aMatrix.TranslateX(-MinX);
+        else
+            aMatrix.TranslateX(-MaxX);
+        if( AxisOrientation_MATHEMATICAL==m_aScales[1].Orientation )
+            aMatrix.TranslateY(-MinY);
+        else
+            aMatrix.TranslateY(-MaxY);
+        if( AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation )
+            aMatrix.TranslateZ(-MaxZ);//z direction in draw is reverse mathematical direction
+            //aMatrix.TranslateZ(-MinZ+0.5*getSlotWidth());
+        else
+            aMatrix.TranslateZ(-MinZ);
+            //aMatrix.TranslateZ(-MinZ+0.5*getSlotWidth());
 
         double fWidthX = MaxX - MinX;
         double fWidthY = MaxY - MinY;
         double fWidthZ = MaxZ - MinZ;
 
-        aMatrix.ScaleX(FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX);
-        aMatrix.ScaleY(FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY);
-        aMatrix.ScaleZ(FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ/getSlotWidth());
+        double fScaleDirectionX = AxisOrientation_MATHEMATICAL==m_aScales[0].Orientation ? 1.0 : -1.0;
+        double fScaleDirectionY = AxisOrientation_MATHEMATICAL==m_aScales[1].Orientation ? 1.0 : -1.0;
+        double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? -1.0 : 1.0;
+
+        aMatrix.ScaleX(fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX);
+        aMatrix.ScaleY(fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY);
+        aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
+        //aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ/getSlotWidth());
 
         //if(nDim==2)
             aMatrix = aMatrix*m_aMatrixScreenToScene;
@@ -243,7 +259,10 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
 {
     uno::Reference< drawing::XShape > xShape(NULL);
     //test @todo remove
-    eGeometry = GEOMETRY_CYLINDER;
+    static sal_Int32 nTest = 0;
+    eGeometry = Geometry3D(nTest%4+1);
+    nTest++;
+
     switch( eGeometry )
     {
         case GEOMETRY_CYLINDER:
@@ -282,7 +301,7 @@ void BarChart::createShapes()
 
     //update/create information for current group
     m_pPosHelper->updateSeriesCount( m_aXSlots.size() );
-    double fLogicZ        = -0.5;//as defined
+    double fLogicZ        = 0.0;//as defined
     double fLogicBaseWidth = m_pPosHelper->getSlotWidth();
 
     //(@todo maybe different iteration for breaks in axis ?)
@@ -305,7 +324,7 @@ void BarChart::createShapes()
             if(fLogicPositiveYSum==0.0 && fLogicNegativeYSum==0.0)
                 continue;
 
-            double fScaledLogicPositiveYSum = 0.0, fScaledLogicNegativeYSum = 0.0;
+            double fScaledLogicPositiveYSum = fLogicPositiveYSum, fScaledLogicNegativeYSum = fLogicNegativeYSum;
             m_pPosHelper->doLogicScaling(NULL,&fScaledLogicPositiveYSum,NULL);
             m_pPosHelper->doLogicScaling(NULL,&fScaledLogicNegativeYSum,NULL);
 
@@ -388,7 +407,8 @@ void BarChart::createShapes()
                     //scaling of X and Z is not provided as the created objects should be symmetric in that dimensions
 
                     //calculate resulting width
-                    double fCompleteHeight = bPositive ? fScaledLogicPositiveYSum : fScaledLogicNegativeYSum;
+//                    double fCompleteHeight = bPositive ? fScaledLogicPositiveYSum : fScaledLogicNegativeYSum;
+                    double fCompleteHeight = bPositive ? fLogicPositiveYSum : fLogicNegativeYSum;
                     double fLogicBarWidth = fLogicBaseWidth;
                     if(m_nDimension==3)
                     {
@@ -396,7 +416,8 @@ void BarChart::createShapes()
                         if(fCompleteHeight!=0.0)
                             fLogicBarWidth = fLogicBaseWidth*(fCompleteHeight-fLowerYValue)/(fCompleteHeight);
                     }
-                    double fLogicBarDepth = fLogicBarWidth; //Logic Depth and Width are identical by define ... (symmetry is not necessary anymore)
+                    //double fLogicBarDepth = fLogicBarWidth; //Logic Depth and Width are identical by define ... (symmetry is not necessary anymore)
+                    double fLogicBarDepth = 1.0;
 
                     DataPointGeometry aLogicGeom( drawing::Position3D(fLogicX,fLowerYValue,fLogicZ)
                                 , drawing::Direction3D(fLogicBarWidth,fUpperYValue-fLowerYValue,fLogicBarDepth)
