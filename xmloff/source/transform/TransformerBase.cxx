@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:30:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
 #endif
 
 #ifndef _XMLOFF_TRANSFORMERBASE_HXX
@@ -501,20 +504,17 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
-        Reference<XInterface> xValue;
-        *pAny >>= xValue;
-
         // document handler
-        Reference<XDocumentHandler> xTmpDocHandler(
-            xValue, UNO_QUERY );
-        if( xTmpDocHandler.is() )
-            m_xHandler = xTmpDocHandler;
+        if( pAny->getValueType() == ::getCppuType( (const Reference< XDocumentHandler >*) 0 ) )
+            m_xHandler.set( *pAny, UNO_QUERY );
 
         // property set to transport data across
-        Reference<XPropertySet> xTmpPropertySet(
-            xValue, UNO_QUERY );
-        if( xTmpPropertySet.is() )
-            m_xPropSet = xTmpPropertySet;
+        if( pAny->getValueType() == ::getCppuType( (const Reference< XPropertySet >*) 0 ) )
+            m_xPropSet.set( *pAny, UNO_QUERY );
+
+        // xmodel
+        if( pAny->getValueType() == ::getCppuType( (const Reference< ::com::sun::star::frame::XModel >*) 0 ) )
+            mxModel.set( *pAny, UNO_QUERY );
     }
 
     if( m_xPropSet.is() )
@@ -564,6 +564,18 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
         }
     }
+}
+
+static MapUnit lcl_getUnit( const OUString& rValue )
+{
+    MapUnit nDestUnit;
+    if( rValue.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "cm" ) ) )
+        nDestUnit = MAP_CM;
+    else if ( rValue.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "mm" ) ) )
+        nDestUnit = MAP_MM;
+    else
+        nDestUnit = MAP_INCH;
+    return nDestUnit;
 }
 
 XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
@@ -641,6 +653,36 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         OUString aAttrValue( rAttrValue );
                         if( ReplaceInchWithIn( aAttrValue ) )
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_TWIPS2IN:
+                    {
+                        OUString aAttrValue( rAttrValue );
+
+                        XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
+                        if( isWriter() )
+                        {
+                            MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+
+                            // convert twips value to inch
+                            sal_Int32 nMeasure;
+                            if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                            {
+
+                                // --> OD 2004-10-29 #i13778#,#i36248#
+                                // apply correct twip-to-1/100mm
+                                nMeasure = (sal_Int32)( nMeasure >= 0
+                                                        ? ((nMeasure*127L+36L)/72L)
+                                                        : ((nMeasure*127L-36L)/72L) );
+                                // <--
+
+                                rtl::OUStringBuffer aBuffer;
+                                SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                                aAttrValue = aBuffer.makeStringAndClear();
+                            }
+                        }
+
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
                 case XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF:
@@ -757,6 +799,86 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             (*aIter).second.m_nParam1,
                             (*aIter).second.m_nParam2,
                             (*aIter).second.m_nParam3 );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_IN2TWIPS:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        XMLTransformerBase::ReplaceSingleInWithInch( aAttrValue );
+
+                        if( isWriter() )
+                        {
+                            MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+
+                            // convert inch value to twips and export as faked inch
+                            sal_Int32 nMeasure;
+                            if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                            {
+
+                                // --> OD 2004-10-29 #i13778#,#i36248#
+                                // apply correct 1/100mm-to-twip conversion
+                                nMeasure = (sal_Int32)( nMeasure >= 0
+                                                        ? ((nMeasure*72L+63L)/127L)
+                                                        : ((nMeasure*72L-63L)/127L) );
+                                // <--
+
+                                OUStringBuffer aBuffer;
+                                SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                                aAttrValue = aBuffer.makeStringAndClear();
+                            }
+                        }
+
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_SVG_WIDTH_HEIGHT_OOO:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        ReplaceSingleInchWithIn( aAttrValue );
+
+                        MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+
+                        sal_Int32 nMeasure;
+                        if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                        {
+
+                            if( nMeasure > 0 )
+                                nMeasure -= 1;
+                            else if( nMeasure < 0 )
+                                nMeasure += 1;
+
+
+                            OUStringBuffer aBuffer;
+                            SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                            aAttrValue = aBuffer.makeStringAndClear();
+                        }
+
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        ReplaceSingleInWithInch( aAttrValue );
+
+                        MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+
+                        sal_Int32 nMeasure;
+                        if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                        {
+
+                            if( nMeasure > 0 )
+                                nMeasure += 1;
+                            else if( nMeasure < 0 )
+                                nMeasure -= 1;
+
+
+                            OUStringBuffer aBuffer;
+                            SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                            aAttrValue = aBuffer.makeStringAndClear();
+                        }
+
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
@@ -1332,4 +1454,31 @@ const XMLTransformerContext *XMLTransformerBase::GetAncestorContext(
     OSL_ENSURE( nSize >nPos+2 , "invalid context" );
 
     return nSize > nPos+2 ? (*m_pContexts)[nSize-(nPos+2)].get() : 0;
+}
+
+bool XMLTransformerBase::isDraw() const
+{
+    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
+    return xSI.is() && xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
+}
+
+bool XMLTransformerBase::isImpress() const
+{
+    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
+    return xSI.is() && xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+}
+
+bool XMLTransformerBase::isCalc() const
+{
+    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
+    return xSI.is() && xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) );
+}
+
+bool XMLTransformerBase::isWriter() const
+{
+    Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
+    return  xSI.is() &&
+        (   xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) ||
+            xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) ||
+            xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ) );
 }
