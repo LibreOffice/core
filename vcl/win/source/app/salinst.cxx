@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,8 @@ SalInstance* CreateSalInstance()
         {
             aSalShlData.mbWNT = 1;
             // Windows XP ?
-            if ( aVerInfo.dwMajorVersion == 5 && aVerInfo.dwMinorVersion == 1 )
+            if ( aVerInfo.dwMajorVersion > 5 ||
+               ( aVerInfo.dwMajorVersion == 5 && aVerInfo.dwMinorVersion >= 1 ) )
                 aSalShlData.mbWXP = 1;
         }
     }
@@ -764,7 +765,11 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATEHWND:
-            nRet = (LRESULT)ImplSalReCreateHWND( (HWND)wParam, (HWND)lParam );
+            nRet = (LRESULT)ImplSalReCreateHWND( (HWND)wParam, (HWND)lParam, FALSE );
+            rDef = FALSE;
+            break;
+        case SAL_MSG_RECREATECHILDHWND:
+            nRet = (LRESULT)ImplSalReCreateHWND( (HWND)wParam, (HWND)lParam, TRUE );
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYFRAME:
