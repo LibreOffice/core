@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:42:05 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
 struct FrmMap;
-
+// OD 12.11.2003 #i22341#
+struct SwPosition;
 
 /*--------------------------------------------------------------------
      Beschreibung:  Rahmendialog
@@ -162,6 +163,10 @@ class SwFrmPage: public SfxTabPage
     SwTwips         nLowerBorder;
     double          fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
 
+    // OD 12.11.2003 #i22341# - keep content position of character for
+    // to character anchored objects.
+    const SwPosition* mpToCharCntntPos;
+
     // Die alten Ausrichtungen
     USHORT          nOldH;
     USHORT          nOldHRel;
@@ -192,9 +197,21 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK( ModifyHdl, Edit * );
 
     void            Init(const SfxItemSet& rSet, BOOL bReset = FALSE);
-    USHORT          FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB);
-    ULONG           FillRelLB(FrmMap *pMap, USHORT nLBSelPos, USHORT nAlign, USHORT nRel, ListBox &rLB, FixedText &rFT);
-    USHORT          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
+    // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
+    //                          in the alignment.
+    USHORT          FillPosLB( const FrmMap* _pMap,
+                               const USHORT _nAlign,
+                               const USHORT _nRel,
+                               ListBox& _rLB );
+    // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
+    //                          in their string entries.
+    ULONG           FillRelLB( const FrmMap* _pMap,
+                               const USHORT _nLBSelPos,
+                               const USHORT _nAlign,
+                               USHORT _nRel,
+                               ListBox& _rLB,
+                               FixedText& _rFT );
+    USHORT          GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
     USHORT          GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     USHORT          GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     USHORT          GetAnchor();
