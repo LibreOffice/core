@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bigint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 10:43:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,17 +106,17 @@ static void MakeBigInt( BigInt& rThis, const BigInt& rVal )
         long nTmp = rVal.nVal;
 
         rThis.nVal   = rVal.nVal;
-        rThis.bIsBig = TRUE;
+        rThis.bIsBig = sal_True;
         if ( nTmp < 0 )
         {
-            rThis.bIsNeg = TRUE;
+            rThis.bIsNeg = sal_True;
             nTmp = -nTmp;
         }
         else
-            rThis.bIsNeg = FALSE;
+            rThis.bIsNeg = sal_False;
 
-        rThis.nNum[0] = (USHORT)(nTmp & 0xffffL);
-        rThis.nNum[1] = (USHORT)(nTmp >> 16);
+        rThis.nNum[0] = (sal_uInt16)(nTmp & 0xffffL);
+        rThis.nNum[1] = (sal_uInt16)(nTmp >> 16);
 #ifndef _WIN16
         if ( nTmp & 0xffff0000L )
 #else
@@ -147,7 +147,7 @@ static void Normalize( BigInt& rThis )
             else
                 rThis.nVal = ((long)rThis.nNum[1] << 16) + rThis.nNum[0];
 
-            rThis.bIsBig = FALSE;
+            rThis.bIsBig = sal_False;
 
             if ( rThis.bIsNeg )
                 rThis.nVal = -rThis.nVal;
@@ -163,14 +163,14 @@ static void Normalize( BigInt& rThis )
 
 // -----------------------------------------------------------------------
 
-static void Mult( BigInt& rThis, const BigInt &rVal, USHORT nMul )
+static void Mult( BigInt& rThis, const BigInt &rVal, sal_uInt16 nMul )
 {
-    USHORT nK = 0;
+    sal_uInt16 nK = 0;
     for ( int i = 0; i < rVal.nLen; i++ )
     {
-        ULONG nTmp = (ULONG)rVal.nNum[i] * (ULONG)nMul + nK;
-        nK            = (USHORT)(nTmp >> 16);
-        rThis.nNum[i] = (USHORT)nTmp;
+        sal_uInt32 nTmp = (sal_uInt32)rVal.nNum[i] * (sal_uInt32)nMul + nK;
+        nK            = (sal_uInt16)(nTmp >> 16);
+        rThis.nNum[i] = (sal_uInt16)nTmp;
     }
 
     if ( nK )
@@ -181,22 +181,22 @@ static void Mult( BigInt& rThis, const BigInt &rVal, USHORT nMul )
     else
         rThis.nLen = rVal.nLen;
 
-    rThis.bIsBig = TRUE;
+    rThis.bIsBig = sal_True;
     rThis.bIsNeg = rVal.bIsNeg;
 }
 
 // -----------------------------------------------------------------------
 
-static void Div( BigInt& rThis, USHORT nDiv, USHORT& rRem )
+static void Div( BigInt& rThis, sal_uInt16 nDiv, sal_uInt16& rRem )
 {
-    ULONG nK = 0;
+    sal_uInt32 nK = 0;
     for ( int i = rThis.nLen - 1; i >= 0; i-- )
     {
-        ULONG nTmp = (ULONG)rThis.nNum[i] + (nK << 16);
-        rThis.nNum[i] = (USHORT)(nTmp / nDiv);
+        sal_uInt32 nTmp = (sal_uInt32)rThis.nNum[i] + (nK << 16);
+        rThis.nNum[i] = (sal_uInt16)(nTmp / nDiv);
         nK            = nTmp % nDiv;
     }
-    rRem = (USHORT)nK;
+    rRem = (sal_uInt16)nK;
 
     if ( rThis.nNum[rThis.nLen-1] == 0 )
         rThis.nLen -= 1;
@@ -204,12 +204,12 @@ static void Div( BigInt& rThis, USHORT nDiv, USHORT& rRem )
 
 // -----------------------------------------------------------------------
 
-static BOOL IsLess( const BigInt& rThis, const BigInt& rVal )
+static sal_Bool IsLess( const BigInt& rThis, const BigInt& rVal )
 {
     if ( rVal.nLen < rThis.nLen)
-        return TRUE;
+        return sal_True;
     if ( rVal.nLen > rThis.nLen )
-        return FALSE;
+        return sal_False;
 
     int i;
     for ( i = rThis.nLen - 1; i > 0 && rThis.nNum[i] == rVal.nNum[i]; i-- )
@@ -251,7 +251,7 @@ static void AddLong( BigInt& rA, BigInt& rB, BigInt& rErg )
                 k = 1;
             else
                 k = 0;
-            rErg.nNum[i] = (USHORT)(nZ & 0xffffL);
+            rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
         }
         // Trat nach der letzten Addition ein Ueberlauf auf, muss dieser
         // noch ins Ergebis uebernommen werden
@@ -263,21 +263,21 @@ static void AddLong( BigInt& rA, BigInt& rB, BigInt& rErg )
         // Die Laenge und das Vorzeichen setzen
         rErg.nLen   = nLen;
         rErg.bIsNeg = rA.bIsNeg && rB.bIsNeg;
-        rErg.bIsBig = TRUE;
+        rErg.bIsBig = sal_True;
     }
     // Wenn nur einer der beiden Operanten negativ ist, wird aus der
     // Addition eine Subtaktion
     else if (rA.bIsNeg)
     {
-        rA.bIsNeg = FALSE;
+        rA.bIsNeg = sal_False;
         SubLong(rB, rA, rErg);
-        rA.bIsNeg = TRUE;
+        rA.bIsNeg = sal_True;
     }
     else
     {
-        rB.bIsNeg = FALSE;
+        rB.bIsNeg = sal_False;
         SubLong(rA, rB, rErg);
-        rB.bIsNeg = TRUE;
+        rB.bIsNeg = sal_True;
     }
 }
 
@@ -315,7 +315,7 @@ static void SubLong( BigInt& rA, BigInt& rB, BigInt& rErg )
                     k = -1;
                 else
                     k = 0;
-                rErg.nNum[i] = (USHORT)(nZ & 0xffffL);
+                rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
             }
             rErg.bIsNeg = rA.bIsNeg;
         }
@@ -328,29 +328,29 @@ static void SubLong( BigInt& rA, BigInt& rB, BigInt& rErg )
                     k = -1;
                 else
                     k = 0;
-                rErg.nNum[i] = (USHORT)(nZ & 0xffffL);
+                rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
             }
             // wenn a < b, dann Vorzeichen vom Ergebnis umdrehen
             rErg.bIsNeg = !rA.bIsNeg;
         }
         rErg.nLen   = nLen;
-        rErg.bIsBig = TRUE;
+        rErg.bIsBig = sal_True;
     }
     // Wenn nur einer der beiden Operanten negativ ist, wird aus der
     // Subtaktion eine Addition
     else if (rA.bIsNeg)
     {
-        rA.bIsNeg = FALSE;
+        rA.bIsNeg = sal_False;
         AddLong(rA, rB, rErg);
-        rA.bIsNeg = TRUE;
-        rErg.bIsNeg = TRUE;
+        rA.bIsNeg = sal_True;
+        rErg.bIsNeg = sal_True;
     }
     else
     {
-        rB.bIsNeg = FALSE;
+        rB.bIsNeg = sal_False;
         AddLong(rA, rB, rErg);
-        rB.bIsNeg = TRUE;
-        rErg.bIsNeg = FALSE;
+        rB.bIsNeg = sal_True;
+        rErg.bIsNeg = sal_False;
     }
 }
 
@@ -359,10 +359,10 @@ static void SubLong( BigInt& rA, BigInt& rB, BigInt& rErg )
 static void MultLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
 {
     int    i, j;
-    ULONG  nZ, k;
+    sal_uInt32  nZ, k;
 
     rErg.bIsNeg = rA.bIsNeg != rB.bIsNeg;
-    rErg.bIsBig = TRUE;
+    rErg.bIsBig = sal_True;
     rErg.nLen   = rA.nLen + rB.nLen;
 
     for (i = 0; i < rErg.nLen; i++)
@@ -372,12 +372,12 @@ static void MultLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
     {
         for (i = 0, k = 0; i < rA.nLen; i++)
         {
-            nZ = (ULONG)rA.nNum[i] * (ULONG)rB.nNum[j] +
-                 (ULONG)rErg.nNum[i + j] + k;
-            rErg.nNum[i + j] = (USHORT)(nZ & 0xffffUL);
+            nZ = (sal_uInt32)rA.nNum[i] * (sal_uInt32)rB.nNum[j] +
+                 (sal_uInt32)rErg.nNum[i + j] + k;
+            rErg.nNum[i + j] = (sal_uInt16)(nZ & 0xffffUL);
             k = nZ >> 16;
         }
-        rErg.nNum[i + j] = (USHORT)k;
+        rErg.nNum[i + j] = (sal_uInt16)k;
     }
 }
 
@@ -387,12 +387,12 @@ static void DivLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
 {
     int    i, j;
     long   nTmp;
-    USHORT nK, nQ, nMult;
+    sal_uInt16 nK, nQ, nMult;
     short  nLenB  = rB.nLen;
     short  nLenB1 = rB.nLen - 1;
     BigInt aTmpA, aTmpB;
 
-    nMult = (USHORT)(0x10000L / ((long)rB.nNum[nLenB1] + 1));
+    nMult = (sal_uInt16)(0x10000L / ((long)rB.nNum[nLenB1] + 1));
 
     Mult( aTmpA, rA, nMult );
     if ( aTmpA.nLen == rA.nLen )
@@ -409,10 +409,10 @@ static void DivLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
-            nQ = (USHORT)(((ULONG)nTmp) / aTmpB.nNum[nLenB1]);
+            nQ = (sal_uInt16)(((sal_uInt32)nTmp) / aTmpB.nNum[nLenB1]);
 
-        if ( ((ULONG)aTmpB.nNum[nLenB1 - 1] * nQ) >
-            ((((ULONG)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
+        if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
+            ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
         // Und hier faengt das Teilen an
         nK = 0;
@@ -422,10 +422,10 @@ static void DivLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
             nTmp = (long)aTmpA.nNum[j - nLenB + i]
                    - ((long)aTmpB.nNum[i] * nQ)
                    - nK;
-            aTmpA.nNum[j - nLenB + i] = (USHORT)nTmp;
-            nK = (USHORT) (nTmp >> 16);
+            aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
+            nK = (sal_uInt16) (nTmp >> 16);
             if ( nK )
-                nK = (USHORT)(0x10000UL - nK);
+                nK = (sal_uInt16)(0x10000UL - nK);
         }
         aTmpA.nNum[j - nLenB + i] -= nK;
         if (aTmpA.nNum[j - nLenB + i] == 0)
@@ -437,7 +437,7 @@ static void DivLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
             for (i = 0; i < nLenB; i++)
             {
                 nTmp = aTmpA.nNum[j - nLenB + i] + aTmpB.nNum[i] + nK;
-                aTmpA.nNum[j - nLenB + i] = (USHORT)(nTmp & 0xFFFFL);
+                aTmpA.nNum[j - nLenB + i] = (sal_uInt16)(nTmp & 0xFFFFL);
                 if (nTmp & 0xFFFF0000L)
                     nK = 1;
                 else
@@ -447,7 +447,7 @@ static void DivLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
     }
 
     rErg.bIsNeg = rA.bIsNeg != rB.bIsNeg;
-    rErg.bIsBig = TRUE;
+    rErg.bIsBig = sal_True;
     rErg.nLen   = rA.nLen - rB.nLen + 1;
 }
 
@@ -457,12 +457,12 @@ static void ModLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
 {
     short  i, j;
     long   nTmp;
-    USHORT nK, nQ, nMult;
+    sal_uInt16 nK, nQ, nMult;
     short  nLenB  = rB.nLen;
     short  nLenB1 = rB.nLen - 1;
     BigInt aTmpA, aTmpB;
 
-    nMult = (USHORT)(0x10000L / ((long)rB.nNum[nLenB1] + 1));
+    nMult = (sal_uInt16)(0x10000L / ((long)rB.nNum[nLenB1] + 1));
 
     Mult( aTmpA, rA, nMult);
     if ( aTmpA.nLen == rA.nLen )
@@ -479,10 +479,10 @@ static void ModLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
         else
-            nQ = (USHORT)(((ULONG)nTmp) / aTmpB.nNum[nLenB1]);
+            nQ = (sal_uInt16)(((sal_uInt32)nTmp) / aTmpB.nNum[nLenB1]);
 
-        if ( ((ULONG)aTmpB.nNum[nLenB1 - 1] * nQ) >
-            ((((ULONG)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
+        if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
+            ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
         // Und hier faengt das Teilen an
         nK = 0;
@@ -492,10 +492,10 @@ static void ModLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
             nTmp = (long)aTmpA.nNum[j - nLenB + i]
                    - ((long)aTmpB.nNum[i] * nQ)
                    - nK;
-            aTmpA.nNum[j - nLenB + i] = (USHORT)nTmp;
-            nK = (USHORT) (nTmp >> 16);
+            aTmpA.nNum[j - nLenB + i] = (sal_uInt16)nTmp;
+            nK = (sal_uInt16) (nTmp >> 16);
             if ( nK )
-                nK = (USHORT)(0x10000UL - nK);
+                nK = (sal_uInt16)(0x10000UL - nK);
         }
         aTmpA.nNum[j - nLenB + i] -= nK;
         if (aTmpA.nNum[j - nLenB + i] == 0)
@@ -506,7 +506,7 @@ static void ModLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
             nK = 0;
             for (i = 0; i < nLenB; i++) {
                 nTmp = aTmpA.nNum[j - nLenB + i] + aTmpB.nNum[i] + nK;
-                aTmpA.nNum[j - nLenB + i] = (USHORT)(nTmp & 0xFFFFL);
+                aTmpA.nNum[j - nLenB + i] = (sal_uInt16)(nTmp & 0xFFFFL);
                 if (nTmp & 0xFFFF0000L)
                     nK = 1;
                 else
@@ -521,7 +521,7 @@ static void ModLong( const BigInt& rA, const BigInt& rB, BigInt& rErg )
 
 // -----------------------------------------------------------------------
 
-static BOOL ABS_IsLess( const BigInt& rA, const BigInt& rB )
+static sal_Bool ABS_IsLess( const BigInt& rA, const BigInt& rB )
 {
     if (rA.bIsBig || rB.bIsBig)
     {
@@ -560,7 +560,7 @@ BigInt::BigInt( const BigInt& rBigInt )
     else
     {
         bIsSet = rBigInt.bIsSet;
-        bIsBig = FALSE;
+        bIsBig = sal_False;
         nVal   = rBigInt.nVal;
     }
 }
@@ -569,16 +569,16 @@ BigInt::BigInt( const BigInt& rBigInt )
 
 BigInt::BigInt( const ByteString& rString )
 {
-    bIsSet = TRUE;
-    bIsNeg = FALSE;
-    bIsBig = FALSE;
+    bIsSet = sal_True;
+    bIsNeg = sal_False;
+    bIsBig = sal_False;
     nVal   = 0;
 
-    BOOL bNeg = FALSE;
+    sal_Bool bNeg = sal_False;
     const sal_Char* p = rString.GetBuffer();
     if ( *p == '-' )
     {
-        bNeg = TRUE;
+        bNeg = sal_True;
         p++;
     }
     while( *p >= '0' && *p <= '9' )
@@ -597,16 +597,16 @@ BigInt::BigInt( const ByteString& rString )
 
 BigInt::BigInt( const UniString& rString )
 {
-    bIsSet = TRUE;
-    bIsNeg = FALSE;
-    bIsBig = FALSE;
+    bIsSet = sal_True;
+    bIsNeg = sal_False;
+    bIsBig = sal_False;
     nVal   = 0;
 
-    BOOL bNeg = FALSE;
+    sal_Bool bNeg = sal_False;
     const sal_Unicode* p = rString.GetBuffer();
     if ( *p == '-' )
     {
-        bNeg = TRUE;
+        bNeg = sal_True;
         p++;
     }
     while( *p >= '0' && *p <= '9' )
@@ -625,38 +625,38 @@ BigInt::BigInt( const UniString& rString )
 
 BigInt::BigInt( double nValue )
 {
-    bIsSet = TRUE;
+    bIsSet = sal_True;
 
     if ( nValue < 0 )
     {
         nValue *= -1;
-        bIsNeg  = TRUE;
+        bIsNeg  = sal_True;
     }
     else
     {
-        bIsNeg  = FALSE;
+        bIsNeg  = sal_False;
     }
 
     if ( nValue < 1 )
     {
-        bIsBig = FALSE;
+        bIsBig = sal_False;
         nVal   = 0;
     }
     else
     {
-        bIsBig = TRUE;
+        bIsBig = sal_True;
 
         int i=0;
 
         while ( ( nValue > 65536.0 ) && ( i < MAX_DIGITS ) )
         {
-            nNum[i] = (USHORT) fmod( nValue, 65536.0 );
+            nNum[i] = (sal_uInt16) fmod( nValue, 65536.0 );
             nValue -= nNum[i];
             nValue /= 65536.0;
             i++;
         }
         if ( i < MAX_DIGITS )
-            nNum[i++] = (USHORT) nValue;
+            nNum[i++] = (sal_uInt16) nValue;
 
         nLen = i;
 
@@ -667,26 +667,22 @@ BigInt::BigInt( double nValue )
 
 // -----------------------------------------------------------------------
 
-BigInt::BigInt( ULONG nValue )
+BigInt::BigInt( sal_uInt32 nValue )
 {
-#if __SIZEOFLONG != 4
-    #error sizeof (long) != 4: API auf INTxx umstellen
-#else
-    bIsSet  = TRUE;
+    bIsSet  = sal_True;
     if ( nValue & 0x80000000UL )
     {
-        bIsBig  = TRUE;
-        bIsNeg  = FALSE;
-        nNum[0] = (USHORT)(nValue & 0xffffUL);
-        nNum[1] = (USHORT)(nValue >> 16);
+        bIsBig  = sal_True;
+        bIsNeg  = sal_False;
+        nNum[0] = (sal_uInt16)(nValue & 0xffffUL);
+        nNum[1] = (sal_uInt16)(nValue >> 16);
         nLen    = 2;
     }
     else
     {
-        bIsBig = FALSE;
+        bIsBig = sal_False;
         nVal   = nValue;
     }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -694,11 +690,11 @@ BigInt::BigInt( ULONG nValue )
 BigInt::operator ULONG() const
 {
     if ( !bIsBig )
-        return (ULONG)nVal;
+        return (sal_uInt32)nVal;
     else if ( nLen == 2 )
     {
-        ULONG nRet;
-        nRet  = ((ULONG)nNum[1]) << 16;
+        sal_uInt32 nRet;
+        nRet  = ((sal_uInt32)nNum[1]) << 16;
         nRet += nNum[0];
         return nRet;
     }
@@ -714,13 +710,13 @@ BigInt::operator double() const
     else
     {
         int     i = nLen-1;
-        double  nRet = (double) ((ULONG)nNum[i]);
+        double  nRet = (double) ((sal_uInt32)nNum[i]);
 
         while ( i )
         {
             nRet *= 65536.0;
             i--;
-            nRet += (double) ((ULONG)nNum[i]);
+            nRet += (double) ((sal_uInt32)nNum[i]);
         }
 
         if ( bIsNeg )
@@ -825,7 +821,7 @@ BigInt& BigInt::operator=( const BigInt& rBigInt )
     else
     {
         bIsSet = rBigInt.bIsSet;
-        bIsBig = FALSE;
+        bIsBig = sal_False;
         nVal   = rBigInt.nVal;
     }
     return *this;
@@ -939,15 +935,15 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
-            // ein BigInt durch ein USHORT teilen
-            USHORT nTmp;
+            // ein BigInt durch ein sal_uInt16 teilen
+            sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
-                nTmp = (USHORT) -rVal.nVal;
+                nTmp = (sal_uInt16) -rVal.nVal;
                 bIsNeg = !bIsNeg;
             }
             else
-                nTmp = (USHORT) rVal.nVal;
+                nTmp = (sal_uInt16) rVal.nVal;
 
             Div( *this, nTmp, nTmp );
             Normalize( *this );
@@ -1005,15 +1001,15 @@ void BigInt::DivMod( const BigInt& rVal, BigInt& rMod )
 
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
-            // ein BigInt durch ein USHORT teilen
-            USHORT nTmp;
+            // ein BigInt durch ein sal_uInt16 teilen
+            sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
-                nTmp = (USHORT) -rVal.nVal;
+                nTmp = (sal_uInt16) -rVal.nVal;
                 bIsNeg = !bIsNeg;
             }
             else
-                nTmp = (USHORT) rVal.nVal;
+                nTmp = (sal_uInt16) rVal.nVal;
 
             Div( *this, nTmp, nTmp );
             rMod = BigInt( (long)nTmp );
@@ -1061,14 +1057,14 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
             // ein BigInt durch ein short teilen
-            USHORT nTmp;
+            sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
-                nTmp = (USHORT) -rVal.nVal;
+                nTmp = (sal_uInt16) -rVal.nVal;
                 bIsNeg = !bIsNeg;
             }
             else
-                nTmp = (USHORT) rVal.nVal;
+                nTmp = (sal_uInt16) rVal.nVal;
 
             Div( *this, nTmp, nTmp );
             *this = BigInt( (long)nTmp );
@@ -1090,7 +1086,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
 
 // -----------------------------------------------------------------------
 
-BOOL operator==( const BigInt& rVal1, const BigInt& rVal2 )
+sal_Bool operator==( const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
     {
@@ -1108,16 +1104,16 @@ BOOL operator==( const BigInt& rVal1, const BigInt& rVal2 )
 
                 return nA.nNum[i] == nB.nNum[i];
             }
-            return FALSE;
+            return sal_False;
         }
-        return FALSE;
+        return sal_False;
     }
     return rVal1.nVal == rVal2.nVal;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL operator<( const BigInt& rVal1, const BigInt& rVal2 )
+sal_Bool operator<( const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
     {
@@ -1150,7 +1146,7 @@ BOOL operator<( const BigInt& rVal1, const BigInt& rVal2 )
 
 // -----------------------------------------------------------------------
 
-BOOL operator >(const BigInt& rVal1, const BigInt& rVal2 )
+sal_Bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
 {
     if ( rVal1.bIsBig || rVal2.bIsBig )
     {
