@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:40:33 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ polish ] = "~Obszar";
         Text[ portuguese_brazilian ] = "~Subset";
         Text[ japanese ] = "ם—Þ(~S)";
-        Text[ korean ] = "¹üְ§";
+        Text[ korean ] = "¹üְ§(~S)";
         Text[ chinese_simplified ] = "׳׃¼¯(~S)";
         Text[ chinese_traditional ] = "₪l¶°(~S)";
         Text[ turkish ] = "~Subset";
@@ -1818,7 +1818,7 @@ String RID_SUBSETSTR_HALFW_FULLW_FORMS
 {
     Text = "Halbbreite und breite Formen" ;
     Text [ ENGLISH ] = "Halfwidth And Fullwidth Forms" ;
-    Text[ english_us ] = "Halfwidth And Fullwidth Forms";
+    Text[ english_us ] = "Half-width and Full-width Forms";
         Text[ portuguese ] = "Formas de meia-largura e largura normal";
         Text[ russian ] = "װמנלû ןמכמגטםםמי ט ןמכםמי רטנטםû";
         Text[ greek ] = "׀כבפיÝע ךבי חלי-נכבפיÝע צüסלוע";
