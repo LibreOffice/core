@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nn $ $Date: 2002-08-28 17:57:01 $
+#   last change: $Author: vg $ $Date: 2003-12-17 20:10:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,10 +165,22 @@ SLOFILES =  \
 EXCEPTIONSFILES=\
         $(SLO)$/viewdata.obj
 
-NOOPTFILES=\
-    $(SLO)$/drawview.obj	\
-    $(SLO)$/dbfunc2.obj     \
-    $(SLO)$/tabvwsh2.obj
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
+    NOOPTFILES= \
+        $(SLO)$/drawview.obj	\
+        $(SLO)$/dbfunc2.obj     \
+        $(SLO)$/tabvwsh2.obj \
+        $(SLO)$/viewfun4.obj \
+        $(SLO)$/viewfun2.obj
+.ELSE
+
+    NOOPTFILES=\
+        $(SLO)$/drawview.obj	\
+        $(SLO)$/dbfunc2.obj     \
+        $(SLO)$/tabvwsh2.obj
+.ENDIF
+# goal seek -O2
+
 
 # --- Targets -------------------------------------------------------
 
