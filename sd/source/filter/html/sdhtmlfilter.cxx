@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-25 15:32:39 $
+ *  last change: $Author: cl $ $Date: 2002-07-12 12:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <svx/svdpagv.hxx>
 #include <svx/xoutbmp.hxx>
 
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
@@ -102,14 +106,16 @@ sal_Bool SdHTMLFilter::Export()
     SfxItemSet      aArgs( mrDocument.GetPool(), ATTR_PUBLISH_START, ATTR_PUBLISH_END );
     SdPublishingDlg aDlg( mrDocShell.GetWindow(), mrDocument.GetDocumentType() );
 
+    mrMedium.Close();
+    mrMedium.Commit();
+    osl::File::remove( mrMedium.GetName() );
+
     if( aDlg.Execute() )
     {
 //      String aTmp;
 //      ::utl::LocalFileHelper::ConvertSystemPathToURL( mrMedium.GetName(), aTmp );
 //      const INetURLObject aURL( aTmp );
 
-        mrMedium.Close();
-        mrMedium.Commit();
         aDlg.FillItemSet( aArgs );
         aArgs.Put( SfxStringItem( ATTR_PUBLISH_LOCATION, mrMedium.GetName() ) );
         delete( new HtmlExport( &mrDocument, &mrDocShell, &aArgs ) );
