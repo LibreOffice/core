@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-08-30 09:39:42 $
+ *  last change: $Author: er $ $Date: 2002-05-02 12:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1356,10 +1356,12 @@ BOOL ImpSvNumberInputScan::ScanMidString(
         {
             nMonth = nTmpMonth;
             nMonthPos = 2;                          // month in the middle
-            // Short month may be abbreviated Jan. or
-            // #79632# recognize 17-Jan-2001 to be a date
-            if ( !(nMonth < 0 && (SkipChar( '.', rString, nPos ) ||
-                    SkipChar( '-', rString, nPos ))) )
+            if ( nMonth < 0 && SkipChar( '.', rString, nPos ) )
+                ;   // short month may be abbreviated Jan.
+            else if ( SkipChar( '-', rString, nPos ) )
+                ;   // #79632# recognize 17-Jan-2001 to be a date
+                    // #99065# short and long month name
+            else
                 SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
             SkipBlanks(rString, nPos);
         }
