@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 13:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,7 @@
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL   RID_STRING_START + 184
 #define STR_TABLEDESIGN_DATASOURCE_DELETED  RID_STRING_START + 185
 #define STR_DATASOURCE_DELETED              RID_STRING_START + 186
+#define STR_CALCDOC_DOESNOTEXIST            RID_STRING_START + 187
 
 //========================================================================
 // untyped resources
@@ -460,6 +461,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.57  2001/07/18 08:51:09  oj
+ *  #89772# set new configurationnode when datasource was renamed
+ *
  *  Revision 1.56  2001/07/16 13:42:36  oj
  *  #89650# check if table was created for html/rtf format
  *

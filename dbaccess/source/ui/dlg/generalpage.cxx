@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:35:00 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,9 @@
 #ifndef _DBAUI_DETAILPAGES_HXX_
 #include "detailpages.hxx"
 #endif
-
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #endif
@@ -715,6 +717,19 @@ namespace dbaui
         catch(const Exception&) { }
         return bExists;
     }
+    //-------------------------------------------------------------------------
+    sal_Bool OGeneralPage::fileExists(const ::rtl::OUString& _rURL) const
+    {
+        ::ucb::Content aCheckExistence;
+        sal_Bool bExists = sal_False;
+        try
+        {
+            aCheckExistence = ::ucb::Content(_rURL, Reference< XCommandEnvironment >());
+            bExists = aCheckExistence.isDocument();
+        }
+        catch(const Exception&) { }
+        return bExists;
+    }
 
     //-------------------------------------------------------------------------
     sal_Int32 OGeneralPage::checkPathExistence(const String& _rURL)
@@ -771,7 +786,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     sal_Bool OGeneralPage::commitURL()
     {
-        if ((DST_DBASE == m_eCurrentSelection) || (DST_TEXT == m_eCurrentSelection))
+        if ((DST_DBASE == m_eCurrentSelection) || (DST_TEXT == m_eCurrentSelection) || (DST_CALC == m_eCurrentSelection))
         {
             String sOldPath = m_aConnection.GetSavedValueNoPrefix();
             String sURL = m_aConnection.GetTextNoPrefix();
@@ -782,23 +797,42 @@ namespace dbaui
                 OFileNotation aTransformer(sURL, OFileNotation::N_DETECT);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 
-                switch (checkPathExistence(sURL))
+                if(DST_CALC == m_eCurrentSelection)
                 {
-                    case RET_RETRY:
-                        m_bUserGrabFocus = sal_False;
-                        m_aConnection.GrabFocus();
-                        m_bUserGrabFocus = sal_True;
+                    if(!fileExists(sURL))
+                    {
+                        String sFile = String(ModuleRes(STR_CALCDOC_DOESNOTEXIST));
+                        sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
+                        OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),sFile).Execute();
+                        m_aConnection.SetTextNoPrefix(sOldPath);
                         return sal_False;
-
-                    case RET_CANCEL:
-                        m_aConnection.SetText(sOldPath);
-                        return sal_False;
-
-                    default:
-                        // accept the input
+                    }
+                    else
+                    {
                         m_aConnection.SetTextNoPrefix(sURL);
                         m_aConnection.SaveValueNoPrefix();
-                        break;
+                    }
+                }
+                else
+                {
+                    switch (checkPathExistence(sURL))
+                    {
+                        case RET_RETRY:
+                            m_bUserGrabFocus = sal_False;
+                            m_aConnection.GrabFocus();
+                            m_bUserGrabFocus = sal_True;
+                            return sal_False;
+
+                        case RET_CANCEL:
+                            m_aConnection.SetTextNoPrefix(sOldPath);
+                            return sal_False;
+
+                        default:
+                            // accept the input
+                            m_aConnection.SetTextNoPrefix(sURL);
+                            m_aConnection.SaveValueNoPrefix();
+                            break;
+                    }
                 }
             }
         }
@@ -809,7 +843,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     long OGeneralPage::PreNotify( NotifyEvent& _rNEvt )
     {
-        if ((DST_DBASE == m_eCurrentSelection) || (DST_TEXT == m_eCurrentSelection))
+        if ((DST_DBASE == m_eCurrentSelection) || (DST_TEXT == m_eCurrentSelection) || (DST_CALC == m_eCurrentSelection))
             switch (_rNEvt.GetType())
             {
                 case EVENT_GETFOCUS:
@@ -1177,6 +1211,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/07/17 07:35:00  oj
+ *  #89533# GetMainURL changed
+ *
  *  Revision 1.14  2001/07/16 07:48:40  oj
  *  #89578# removed : after address url
  *

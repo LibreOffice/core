@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:22:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3256,10 +3256,18 @@ String STR_ADDRESSBOOK_LDAP
     Text[ arabic ] = "LDAP addressbook";
     Text[ catalan ] = "LDAP addressbook";
 };
+String STR_CALCDOC_DOESNOTEXIST
+{
+    Text = "Die Datei \"$file$\" existiert nicht.";
+    Text [ english ] = "The file \"$file$\" does not exist.";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.64  2001/07/19 09:22:58  oj
+ *  #89594# insert mnemonics
+ *
  *  Revision 1.63  2001/07/17 20:28:54  kz
  *  Merge SRC638: 17.07.01 - 22:31:16
  *
