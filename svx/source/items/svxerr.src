@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:31:23 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,8 +624,8 @@ Resource RID_SVXERRCODE
         Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
         Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚Ş‚Æ‚«‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚Í“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "±Û¸Ó¸®±âÈ£¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®±âÈ£¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÈëÈ«²¿Í¼±ê·ûºÅ¡£";
-        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø½s¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
+        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÏîÄ¿·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÈëÈ«²¿µÄÏîÄ¿·ûºÅ¡£";
+        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø²Å¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚĞÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
         Text[ turkish ] = "Madde işaretleri okunurken hata oluştu. Bu nedenle tüm madde işaretleri yüklenemedi.";
         Text[ catalan ] = "Ha ocurrido un error al leer una viñeta. No se pudieron cargar todas las viñetas.";
@@ -687,6 +687,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
