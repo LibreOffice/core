@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-01 13:14:51 $
+ *  last change: $Author: dbo $ $Date: 2001-03-07 14:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,9 +820,9 @@ void ControlImportContext::importDefaults(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
         makeAny( _aId ) );
 
-    importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("tab-index") ),
-                        xAttributes );
+    importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("tab-index") ),
+                         xAttributes );
 
     sal_Bool bDisable;
     if (getBoolAttr( &bDisable, OUString( RTL_CONSTASCII_USTRINGPARAM("disabled") ), xAttributes ) &&
@@ -855,6 +855,19 @@ void ControlImportContext::importDefaults(
     importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
                            OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
                            xAttributes );
+
+    sal_Int32 nLong;
+    if (! getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("page") ), xAttributes ))
+    {
+        nLong = 0;
+    }
+    _xControlModel->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
+        makeAny( nLong ) );
+
+    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
+                          xAttributes );
 }
 //__________________________________________________________________________________________________
 void ControlImportContext::importEvents(

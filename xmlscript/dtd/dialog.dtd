@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.6 2001-03-01 13:14:50 dbo Exp $
+	$Id: dialog.dtd,v 1.7 2001-03-07 14:57:38 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -66,6 +66,8 @@
 			       dialog:tab-index %numeric; #IMPLIED
 			       dialog:disabled %boolean; #IMPLIED
 			       dialog:printable %boolean; #IMPLIED
+			       dialog:page %numeric; #IMPLIED
+			       dialog:tag CDATA #IMPLIED
 			       ">
 
 <!ENTITY % control "(dialog:bulletinboard|
@@ -95,7 +97,10 @@
 			dialog:top %numeric; #IMPLIED
 			dialog:width %numeric; #IMPLIED
 			dialog:height %numeric; #IMPLIED
-			dialog:title CDATA #IMPLIED>
+			dialog:title CDATA #IMPLIED
+			dialog:page %numeric; #IMPLIED
+			dialog:tag CDATA #IMPLIED
+			>
 
 <!ELEMENT dialog:styles (dialog:style+)>
 

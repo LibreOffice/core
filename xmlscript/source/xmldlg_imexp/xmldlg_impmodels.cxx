@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-02 15:56:48 $
+ *  last change: $Author: dbo $ $Date: 2001-03-07 14:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,37 +1528,50 @@ void WindowElement::endElement()
             OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
             makeAny( aValue ) );
     }
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) );
-    if (aValue.getLength())
+
+    sal_Int32 nLong;
+
+    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ), _xAttributes ))
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-            makeAny( aValue.toInt32() ) );
+            makeAny( nLong ) );
     }
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("top") ) );
-    if (aValue.getLength())
+    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("top") ), _xAttributes ))
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-            makeAny( aValue.toInt32() ) );
+            makeAny( nLong ) );
     }
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("width") ) );
-    if (aValue.getLength())
+    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("width") ), _xAttributes ))
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-            makeAny( aValue.toInt32() ) );
+            makeAny( nLong ) );
     }
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("height") ) );
-    if (aValue.getLength())
+    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("height") ), _xAttributes ))
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-            makeAny( aValue.toInt32() ) );
+            makeAny( nLong ) );
+    }
+
+    if (! getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("page") ), _xAttributes ))
+    {
+        nLong = 0;
+    }
+
+    xProps->setPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
+        makeAny( nLong ) );
+
+    aValue = _xAttributes->getValueByUidName(
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) );
+    if (aValue.getLength())
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
+            makeAny( aValue ) );
     }
 }
 
