@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:10:55 $
+ *  last change: $Author: bm $ $Date: 2001-03-30 13:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "TextBreak", TEXT, line_break, XML_TYPE_BOOL ),
     MAP_ENTRY( "ArrangeOrder", CHART, label_arrangement, XML_SCH_TYPE_AXIS_ARRANGEMENT ),
     MAP_SPECIAL( "NumberFormat", STYLE, data_style_name, XML_TYPE_NUMBER, NUMBER_FORMAT ),
+    MAP_ENTRY( "Visible", CHART, visible, XML_TYPE_BOOL ),
 
     // statistical properties
     MAP_ENTRY( "MeanValue", CHART,  mean_value, XML_TYPE_BOOL ),
