@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:37:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,8 @@ void Desktop::Init()
     }
 
     ::comphelper::setProcessServiceFactory( rSMgr );
+    // prepare language
+    LanguageSelection::prepareLanguage();
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 #ifdef UNX
@@ -580,25 +582,25 @@ void Desktop::Init()
         _exit(0);
     }
 #endif
-    // start ipc thread only for non-remote offices
-    RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
-    OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
-    if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
-    {
-        SetBootstrapError( BE_PATHINFO_MISSING );
-    }
-    else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
-    {
-        // 2nd office startup should terminate after sending cmdlineargs through pipe
-        _exit( 0 );
-    }
-    else if ( pCmdLineArgs->IsHelp() )
-    {
-        // disable IPC thread in an instance that is just showing a help message
-        OfficeIPCThread::DisableOfficeIPCThread();
-    }
+        // start ipc thread only for non-remote offices
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
+        OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
+        if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
+        {
+            SetBootstrapError( BE_PATHINFO_MISSING );
+        }
+        else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
+        {
+            // 2nd office startup should terminate after sending cmdlineargs through pipe
+            _exit( 0 );
+        }
+        else if ( pCmdLineArgs->IsHelp() )
+        {
+            // disable IPC thread in an instance that is just showing a help message
+            OfficeIPCThread::DisableOfficeIPCThread();
+        }
+        pSignalHandler = new SalMainPipeExchangeSignalHandler;
 
-    pSignalHandler = new SalMainPipeExchangeSignalHandler;
 }
 
 void Desktop::DeInit()
@@ -1241,6 +1243,7 @@ void Desktop::Main()
         {
             // problems with user installation...
             HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+            return;
         }
         // refresh path information
         utl::Bootstrap::reloadData();
@@ -1373,8 +1376,7 @@ void Desktop::Main()
 
         AllSettings aSettings( Application::GetSettings() );
 
-        LanguageSelection langselect;
-        LanguageType eUILanguage = langselect.Execute();
+        LanguageType eUILanguage = LanguageSelection::getLanguageType();
         aSettings.SetUILanguage( eUILanguage );
 
         LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
@@ -1715,7 +1717,7 @@ void Desktop::EnableOleAutomation()
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.comp.ole.EmbedServer"));
-#endif"SaveDocuments"
+#endif
 }
 
 sal_Bool Desktop::CheckOEM()
