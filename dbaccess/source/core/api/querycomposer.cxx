@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-16 13:14:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,8 +495,8 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         Reference<XResultSetMetaData> xMeta = xResMetaDataSup->getMetaData();
 
         sal_Int32 nCount = xMeta.is() ? xMeta->getColumnCount() : sal_Int32(0);
-        ::comphelper::UStringMixEqual bCase(m_xMetaData->storesMixedCaseQuotedIdentifiers());
-        ::comphelper::TStringMixEqualFunctor bCase2(m_xMetaData->storesMixedCaseQuotedIdentifiers());
+        ::comphelper::UStringMixEqual bCase(m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers());
+        ::comphelper::TStringMixEqualFunctor bCase2(m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers());
         ::std::map<OSQLColumns::const_iterator,int> aColumnMap;
         for(sal_Int32 i=1;i<=nCount;++i)
         {
@@ -535,7 +535,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
                         Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
                         if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
                         {
-                            ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xMetaData->storesMixedCaseQuotedIdentifiers());
+                            ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers());
                             if(sName.getLength())
                                 pColumn->setName(sName);
                             else
@@ -556,7 +556,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
     }
-    m_pColumns = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+    m_pColumns = new OPrivateColumns(aCols,m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
 
     getTables();
     getParameters();
@@ -685,7 +685,9 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
     ::rtl::OUString aSql;
-    ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
+    ::rtl::OUString aQuote;
+    if ( m_xMetaData.is() )
+        aQuote = m_xMetaData->getIdentifierQuoteString();
 
     if ( m_pColumns->hasByName(aName) )
     {
@@ -852,14 +854,17 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     ::rtl::OUString aName,aAppendOrder;
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
-    if(!m_xMetaData->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
+    if(m_xMetaData.is() && !m_xMetaData->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
         throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),
             *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     // filter anhaengen
     // select ohne where und order by aufbauen
     ::rtl::OUString aSql(m_aWorkSql);
-    ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
+    ::rtl::OUString aQuote;
+    if ( m_xMetaData.is() )
+        aQuote = m_xMetaData->getIdentifierQuoteString();
+
     if(m_pColumns->hasByName(aName))
     {
         Reference<XPropertySet> xColumn;
@@ -942,7 +947,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeExc
         for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aTables.end();++aIter)
             aNames.push_back(aIter->first);
 
-        m_pTables = new OPrivateTables(aTables,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pTables = new OPrivateTables(aTables,m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
 
     return m_pTables;
@@ -1372,7 +1377,7 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(Runti
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_pParameters = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
+        m_pParameters = new OPrivateColumns(aCols,m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
 
     return m_pParameters;
