@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:12:27 $
+#   last change: $Author: rt $ $Date: 2003-08-21 13:21:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ dummy:
 # Only build crash reporter if either a product build with debug info 
 # or a non-pro build is done.
 
-.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" != "FULL"
+.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 
 CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
@@ -113,7 +113,7 @@ APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11
 
 # Build statically linked version for special builds and non-pros
 
-.IF "$(ENABLE_CRASHDUMP)" == "STATIC" || "$(PRODUCT)" != "FULL"
+.IF "$(ENABLE_CRASHDUMP)" == "STATIC" || "$(PRODUCT)" == ""
 APP2NOSAL=TRUE
 APP2TARGET=$(TARGET2)
 APP2OBJS=$(OBJFILES)
@@ -131,7 +131,7 @@ APP2STDLIBS=$(STATIC) `pkg-config --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(
 
 ALL: ALLTAR $(BIN)$/crash_dump.res.01
 
-.ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" != "FULL"
+.ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 
 .ENDIF #  "$(OS)"=="MACOSX"
 
