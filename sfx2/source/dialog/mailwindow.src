@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:15:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,9 @@ Window RID_MAIL_WINDOW
         };
         StringList [ language_user1 ] =
         {
-            < "An" ; 1 ; > ;
-            < "Kopie" ; 2 ; > ;
-            < "Blindkopie" ; 3 ; > ;
+            < "; An" ; 1 ; > ;
+            < "; Kopie" ; 2 ; > ;
+            < "; Blindkopie" ; 3 ; > ;
         };
         StringList [ english_us ] =
         {
@@ -464,11 +464,11 @@ Window RID_MAIL_WINDOW
         };
         StringList [ language_user1 ] =
         {
-            < "Sehr hoch" ; 1 ; > ;
-            < "Hoch" ; 2 ; > ;
-            < "Normal" ; 3 ; > ;
-            < "Niedrig" ; 4 ; > ;
-            < "Sehr niedrig" ; 5 ; > ;
+            < "; Sehr hoch" ; 1 ; > ;
+            < "; Hoch" ; 2 ; > ;
+            < "; Normal" ; 3 ; > ;
+            < "; Niedrig" ; 4 ; > ;
+            < "; Sehr niedrig" ; 5 ; > ;
         };
         StringList [ english_us ] =
         {
@@ -564,7 +564,7 @@ Window RID_MAIL_WINDOW
             < "Importante" ; 2 ; > ;
             < "Normal" ; 3 ; > ;
             < "Baixo" ; 4 ; > ;
-            < "A mais baixa" ; 5 ; > ;
+            < "Baixνssima" ; 5 ; > ;
         };
         StringList [ japanese ] =
         {
@@ -707,7 +707,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ polish ] = "WystΉpi³ b³Ήd podczas przesy³ania wiadomoci: brak konta uΏytkownika lub nieprawid³owa instalacja.\nSprawd ustawienia programu %PRODUCTNAME lub programu do poczty elektronicznej.";
     MESSAGE[ japanese ] = "γƒ΅γƒƒγ‚»γƒΌγ‚Έι€δΏ΅ζ™‚γ®γ‚¨γƒ©γƒΌγ€‚γ‚¨γƒ©γƒΌγ®εε› γ¨γ—γ¦γ―γ€γƒ¦γƒΌγ‚¶γƒΌγ‚Άγ‚«γ‚¦γƒ³γƒγγªγ„γ‹γ€γ‚γ‚‹γ„γ―γ‚»γƒƒγƒγ‚Άγƒƒγƒ—γζ­£γ—γγªγ„γ‹γθ€ƒγγ‚‰γ‚γΎγ™γ€‚\n%PRODUCTNAMEγ€γΎγγ―γδ½Ώγ„γ® E-mail γƒ—γƒ­γ‚°γƒ©γƒ γ®θ¨­ε®γ‚’ηΆΊθªγ—γ¦γγ γ•γ„γ€‚";
     MESSAGE[ chinese_traditional ] = "ε¨ε‚³ι€ι€™ε€‹ζ–‡δ»¶ζ™‚η™Όη”δΈ€ε€‹ι―θª¤γ€‚ε―θƒ½ηΌΊε°‘δΈ€ε€‹δ½Ώη”¨θ€…θ³¬θ™ζ–η¨‹εΌε®‰θ£ζ‰ε•ι΅γ€‚\nθ«‹ζªΆζ¥ %PRODUCTNAME η„θ¨­ε®ε’ι›»ε­ιƒµδ»¶η¨‹εΌη„θ¨­ε®γ€‚";
-    MESSAGE[ greek ] = "Σφάλμα κατά την αποστολή μηνύματος.";
+    MESSAGE[ greek ] = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος. Αυτό μπορεί να συμβαίνει επειδή δεν υπάρχει λογαριασμός χρήστη ή επειδή η εγκατάσταση είναι ελαττωματική.\nΕλέγξτε τις ρυθμίσεις του %PRODUCTNAME ή του προγράμματος ηλεκτρονικού ταχυδρομείου.";
     MESSAGE[ korean ] = "λ©”μ‹μ§€λ¥Ό λ³΄λ‚΄λ” μ¤‘ μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤. μ•„λ§λ„ μ‚¬μ©μ κ³„μ •μ΄ μ—†κ±°λ‚ μλª» μ„¤μΉλμ–΄ μ¤λ¥κ°€ λ°μƒν–μ„ κ²ƒμ…λ‹λ‹¤.\n%PRODUCTNAME μ„¤μ •μ΄λ‚ μ „μ λ©”μΌ ν”„λ΅κ·Έλ¨ μ„¤μ •μ„ ν™•μΈν•μ‹­μ‹μ¤.";
     MESSAGE[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΕΡΣΗα ΗαΡΣΗαΙ ";
     MESSAGE[ turkish ] = "Posta gφnderirken hata oluώtu. Muhtemel hatalar, hatalύ kullanύcύ hesabύndan veya hatalύ kurlumdan , geηekleώmiώ olabilir.\nLόtfen, %PRODUCTNAME iηerisinde yer alan e-posta ayarlarύnύzύ kontrol edin.";
@@ -721,6 +721,7 @@ InfoBox MSG_ERROR_SEND_MAIL
 };
 
 // ------------------------------------------------------------------- EOF
+
 
 
 
