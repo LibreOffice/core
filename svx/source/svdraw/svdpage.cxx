@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:49:17 $
+ *  last change: $Author: dl $ $Date: 2001-04-12 10:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1346,7 +1346,8 @@ void SdrPage::SetSize(const Size& aSiz)
 {
     nWdt=aSiz.Width();
     nHgt=aSiz.Height();
-    pModel->SetChanged();
+    if( pModel )
+        pModel->SetChanged();
 }
 
 Size SdrPage::GetSize() const
@@ -1390,27 +1391,36 @@ void  SdrPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
     nBordUpp=nUpp;
     nBordRgt=nRgt;
     nBordLwr=nLwr;
-    pModel->SetChanged();
+    if( pModel )
+        pModel->SetChanged();
 }
 
 void  SdrPage::SetLftBorder(INT32 nBorder)
 {
-    nBordLft=nBorder; pModel->SetChanged();
+    nBordLft=nBorder;
+    if( pModel )
+        pModel->SetChanged();
 }
 
 void  SdrPage::SetUppBorder(INT32 nBorder)
 {
-    nBordUpp=nBorder; pModel->SetChanged();
+    nBordUpp=nBorder;
+    if( pModel )
+        pModel->SetChanged();
 }
 
 void  SdrPage::SetRgtBorder(INT32 nBorder)
 {
-    nBordRgt=nBorder; pModel->SetChanged();
+    nBordRgt=nBorder;
+    if( pModel )
+        pModel->SetChanged();
 }
 
 void  SdrPage::SetLwrBorder(INT32 nBorder)
 {
-    nBordLwr=nBorder; pModel->SetChanged();
+    nBordLwr=nBorder;
+    if( pModel )
+        pModel->SetChanged();
 }
 
 INT32 SdrPage::GetLftBorder() const
@@ -1462,16 +1472,19 @@ USHORT SdrPage::GetPageNum() const
 {
     if (!bInserted) return 0;
     if (bMaster) {
-        if (pModel->IsMPgNumsDirty()) ((SdrModel*)pModel)->RecalcPageNums(TRUE);
+        if (pModel && pModel->IsMPgNumsDirty())
+            ((SdrModel*)pModel)->RecalcPageNums(TRUE);
     } else {
-        if (pModel->IsPagNumsDirty()) ((SdrModel*)pModel)->RecalcPageNums(FALSE);
+        if (pModel && pModel->IsPagNumsDirty())
+            ((SdrModel*)pModel)->RecalcPageNums(FALSE);
     }
     return nPageNum;
 }
 
 void SdrPage::SetChanged()
 {
-    pModel->SetChanged();
+    if( pModel )
+        pModel->SetChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1525,7 +1538,9 @@ void SdrPage::MoveMasterPage(USHORT nPos, USHORT nNewPos)
 SdrPage* SdrPage::GetMasterPage(USHORT nPos) const
 {
     USHORT nPgNum=GetMasterPageNum(nPos);
-    SdrPage* pPg=pModel->GetMasterPage(nPgNum);
+    SdrPage* pPg=NULL;
+    if( pModel )
+        pPg = pModel->GetMasterPage(nPgNum);
     return pPg;
 }
 
@@ -1799,6 +1814,28 @@ void SdrPage::SetBackgroundObj( SdrObject* pObj )
     }
     delete pBackgroundObj, pBackgroundObj = pObj;
 }
+
+void SdrPage::SetInserted( FASTBOOL bIns )
+{
+    if( bInserted != bIns )
+    {
+        bInserted = bIns;
+
+        SdrObjListIter aIter( *this, IM_FLAT );
+        while ( aIter.IsMore() )
+        {
+            SdrObject* pObj = aIter.Next();
+            if ( pObj->ISA(SdrOle2Obj) )
+            {
+                if( bInserted )
+                    ( (SdrOle2Obj*) pObj)->Connect();
+                else
+                    ( (SdrOle2Obj*) pObj)->Disconnect();
+            }
+        }
+    }
+}
+
 
 uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 {
