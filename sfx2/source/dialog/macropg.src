@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-22 07:44:46 $
+ *  last change: $Author: gt $ $Date: 2002-08-22 13:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     FixedText FT_MACRO
     {
-        Pos = MAP_APPFONT ( COL0 , ROW7  ) ;
+        Pos = MAP_APPFONT ( COL0 , ROW7A  ) ;
         Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Group = TRUE ;
     };
@@ -142,7 +142,11 @@ TabPage RID_SFX_TP_MACROASSIGN
     FixedText FT_LABEL4LB_MACROS
     {
         Pos = MAP_APPFONT ( COL2 , ROW7  ) ;
-        Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT + HEIGHT_EXTRA7 ) ;
+        WordBreak = TRUE;
+        Text = "~Vorhandene Makros in:\n" ;
+        Text [ english ] = "~Existing macros in:\n" ;
+        Text [ english_us ] = "~Existing macros in:\n" ;
     };
     Control LB_MACROS
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-22 07:44:45 $
+ *  last change: $Author: gt $ $Date: 2002-08-22 13:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,18 +86,51 @@
 #include "macrconf.hxx"
 #include "sfxdefs.hxx"
 
+#ifndef _HEADERTABLISTBOX_HXX
 #include "headertablistbox.hxx"
-
-
-#if SUPD>399
-SvStringsDtor* _ImpGetRangeHdl( _SfxMacroTabPage*, const String& rLanguage );
-SvStringsDtor* _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage*, const String& rLanguage,
-                                        const String& rRange );
-#else
-SvStringsDtor* _ImpGetRangeHdl( _SfxMacroTabPage*, ScriptType eType );
-SvStringsDtor* _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage*, ScriptType eType,
-                                        const String& rRange );
 #endif
+#ifndef _MACROPG_IMPL_HXX
+#include "macropg_impl.hxx"
+#endif
+
+
+_SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
+    pAssignPB( NULL ),
+    pDeletePB( NULL ),
+    pStrEvent( NULL ),
+    pAssignedMacro( NULL ),
+    pScriptTypeLB( NULL ),
+    pEventLB( NULL ),
+    pGroupLB( NULL ),
+    pFT_MacroLBLabel( NULL ),
+    pMacroLB( NULL ),
+    pMacroFT( NULL ),
+    pMacroStr( NULL ),
+    fnGetRange( NULL ),
+    fnGetMacroOfRange( NULL ),
+    bReadOnly( FALSE )
+{
+}
+
+_SfxMacroTabPage_Impl::~_SfxMacroTabPage_Impl()
+{
+    delete pAssignPB;
+    delete pDeletePB;
+    delete pStrEvent;
+    delete pAssignedMacro;
+    delete pScriptTypeLB;
+    delete pEventLB;
+    delete pGroupLB;
+    delete pMacroLB;
+    delete pFT_MacroLBLabel;
+    delete pMacroFT;
+    delete pMacroStr;
+}
+
+
+SvStringsDtor* _ImpGetRangeHdl( _SfxMacroTabPage*, const String& rLanguage );
+SvStringsDtor* _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage*, const String& rLanguage, const String& rRange );
+
 static USHORT __FAR_DATA aPageRg[] = {
     SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
     0
@@ -235,12 +268,12 @@ String ConvertToUIName_Impl( SvxMacro *pMacro, const String& rLanguage )
 void _SfxMacroTabPage::EnableButtons( const String& rLangName )
 {
     // Solange die Eventbox leer ist, nichts tun
-    const SvLBoxEntry* pE = pEventLB->GetListBox().FirstSelected();
+    const SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
         // Gebundenes Macro holen
         const SvxMacro* pM = aTbl.Get( (USHORT)(ULONG) pE->GetUserData() );
-        pDeletePB->Enable( 0 != pM && !bReadOnly );
+        mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
         // Bei gleichem ScriptType Zuweisung nur, wenn Macro sich
         // ge"andert hat; bei verschiedenem ScriptType, wenn Script nicht leer
@@ -248,69 +281,34 @@ void _SfxMacroTabPage::EnableButtons( const String& rLangName )
         sEventMacro = ((SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
         if ( rLangName.EqualsAscii("JavaScript") )
         {
-#if SUPD<582
-            String sScript = pJavaED->GetText();
-            if( pM && rLangName != pM->GetLanguage() )
-                pAssignPB->Enable( TRUE && !bReadOnly );
-            else
-                pAssignPB->Enable( !bReadOnly && sScript.Len() && ( !sEventMacro.Len() || sScript != sEventMacro ) );
-#endif
+            DBG_ERROR( "_SfxMacroTabPage::EnableButtons(): this is not an up to date usage!" );
         }
         else
         {
-            SfxMacroInfo *pInfo = pMacroLB->GetMacroInfo();
+            SfxMacroInfo* pInfo = mpImpl->pMacroLB->GetMacroInfo();
             String sSelMacro;
             if ( pInfo )
                 sSelMacro = pInfo->GetMacroName();
             if( pM && rLangName != pM->GetLanguage() )
-                pAssignPB->Enable( pInfo != 0 && !bReadOnly );
+                mpImpl->pAssignPB->Enable( pInfo != 0 && !mpImpl->bReadOnly );
             else
-                pAssignPB->Enable( pInfo && !bReadOnly && !sSelMacro.EqualsIgnoreCaseAscii( sEventMacro ) );
+                mpImpl->pAssignPB->Enable( pInfo && !mpImpl->bReadOnly && !sSelMacro.EqualsIgnoreCaseAscii( sEventMacro ) );
         }
     }
 }
 
-_SfxMacroTabPage::_SfxMacroTabPage( Window* pParent, const ResId& rResId,
-                                    const SfxItemSet& rAttrSet )
-    : SfxTabPage( pParent, rResId, rAttrSet ),
-    pAssignPB( NULL ),
-    pDeletePB( NULL ),
-    pStrEvent( NULL ),
-    pAssignedMacro( NULL ),
-    pScriptTypeLB( NULL ),
-    pEventLB( NULL ),
-    pGroupLB( NULL ),
-    pFT_MacroLBLabel( NULL ),
-    pMacroLB( NULL ),
-    pMacroFT( NULL ),
-#if SUPD<582
-    pJavaStr( NULL ),
-    pJavaED( NULL ),
-#endif
-    pMacroStr( NULL ),
-    fnGetRange( &_ImpGetRangeHdl ),
-    fnGetMacroOfRange( &_ImpGetMacrosOfRangeHdl ),
-    bReadOnly( FALSE )
+_SfxMacroTabPage::_SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )
+    : SfxTabPage( pParent, rResId, rAttrSet )
+
 {
+    mpImpl = new _SfxMacroTabPage_Impl;
+    mpImpl->fnGetRange = &_ImpGetRangeHdl;
+    mpImpl->fnGetMacroOfRange = &_ImpGetMacrosOfRangeHdl;
 }
 
 _SfxMacroTabPage::~_SfxMacroTabPage()
 {
-    delete pAssignPB;
-    delete pDeletePB;
-    delete pStrEvent;
-    delete pAssignedMacro;
-    delete pScriptTypeLB;
-    delete pEventLB;
-    delete pGroupLB;
-    delete pMacroLB;
-    delete pFT_MacroLBLabel;
-    delete pMacroFT;
-#if SUPD<582
-    delete pJavaStr;
-    delete pJavaED;
-#endif
-    delete pMacroStr;
+    DELETEZ( mpImpl );
 }
 
 void _SfxMacroTabPage::AddEvent( const String & rEventName, USHORT nEventId )
@@ -322,11 +320,11 @@ void _SfxMacroTabPage::AddEvent( const String & rEventName, USHORT nEventId )
     SvxMacro* pM = aTbl.Get( nEventId );
     if( pM )
     {
-        String sNew( ConvertToUIName_Impl( pM, pScriptTypeLB->GetSelectEntry() ) );
+        String sNew( ConvertToUIName_Impl( pM, mpImpl->pScriptTypeLB->GetSelectEntry() ) );
         sTmp += sNew;
     }
 
-    SvLBoxEntry* pE = pEventLB->GetListBox().InsertEntry( sTmp );
+    SvLBoxEntry* pE = mpImpl->pEventLB->GetListBox().InsertEntry( sTmp );
     pE->SetUserData( (void*)nEventId );
 }
 
@@ -355,13 +353,33 @@ void _SfxMacroTabPage::ScriptChanged( const String& aLangName )
 #if SUPD<582
         pJavaED->Hide();
 #endif
-        pGroupLB->SetScriptType( aLangName );
-        pGroupLB->Show();
-        pMacroLB->Show();
-        pMacroFT->SetText( *pMacroStr );
+        mpImpl->pGroupLB->SetScriptType( aLangName );
+        mpImpl->pGroupLB->Show();
+        mpImpl->pMacroLB->Show();
+        mpImpl->pMacroFT->SetText( *mpImpl->pMacroStr );
     }
 
     EnableButtons( aLangName );
+}
+
+void _SfxMacroTabPage::SetGetRangeLink( FNGetRangeHdl pFn )
+{
+    mpImpl->fnGetRange = pFn;
+}
+
+FNGetRangeHdl _SfxMacroTabPage::GetGetRangeLink() const
+{
+    return mpImpl->fnGetRange;
+}
+
+void _SfxMacroTabPage::SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn )
+{
+    mpImpl->fnGetMacroOfRange = pFn;
+}
+
+FNGetMacrosOfRangeHdl _SfxMacroTabPage::GetGetMacrosOfRangeLink() const
+{
+    return mpImpl->fnGetMacroOfRange;
 }
 
 BOOL _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
@@ -387,17 +405,28 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
 
     FillEvents();
 
-    SvHeaderTabListBox& rListBox = pEventLB->GetListBox();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.GetEntry( 0 );
     if( pE )
         rListBox.SetCurEntry( pE );
 }
 
+void _SfxMacroTabPage::SetReadOnly( BOOL bSet )
+{
+    mpImpl->bReadOnly = bSet;
+}
+
+BOOL _SfxMacroTabPage::IsReadOnly() const
+{
+    return mpImpl->bReadOnly;
+}
+
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
-    SvHeaderTabListBox& rListBox = pThis->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.FirstSelected();
-    ULONG nPos;
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
+    SvLBoxEntry*            pE = rListBox.FirstSelected();
+    ULONG                   nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -406,27 +435,19 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
     }
 
     USHORT nEventId = (USHORT)(ULONG)pE->GetUserData();
-    String aLanguage = pThis->pScriptTypeLB->GetSelectEntry();
+    String aLanguage = pImpl->pScriptTypeLB->GetSelectEntry();
 
     const SvxMacro* pM = pThis->aTbl.Get( nEventId );
     if( pM )
     {
         if( aLanguage != pM->GetLanguage() )
         {
-            pThis->pScriptTypeLB->SelectEntry( pM->GetLanguage() );
+            pImpl->pScriptTypeLB->SelectEntry( pM->GetLanguage() );
             pThis->ScriptChanged( pM->GetLanguage() );
         }
-        else if ( aLanguage.EqualsAscii("JavaScript") )
+        else
         {
-#if SUPD<582
-
-            const SvxMacro* pM = 0;
-            const SvLBoxEntry* pE = rListBox.FirstSelected();
-            if( pE &&
-                ( pM = pThis->aTbl.Get( (USHORT)(ULONG)pE->GetUserData() ) ) != 0 &&
-                pM->GetMacName().Len() )
-                    pThis->pJavaED->SetText( pM->GetMacName() );
-#endif
+            DBG_ASSERT( !aLanguage.EqualsAscii("JavaScript"), "_SfxMacroTabPage, SelectEvent_Impl(): outdated use!" );
         }
     }
 
@@ -436,31 +457,36 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 {
-    String  sSel( pThis->pGroupLB->GetGroup() );
-    String  aLanguage = pThis->pScriptTypeLB->GetSelectEntry();
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    String                  sSel( pImpl->pGroupLB->GetGroup() );
+    String                  aLanguage = pImpl->pScriptTypeLB->GetSelectEntry();
     if( !aLanguage.EqualsAscii( "JavaScript" ) )
     {
-        pThis->pGroupLB->GroupSelected();
-        SfxMacroInfo*   pMacro = pThis->pMacroLB->GetMacroInfo();
+        pImpl->pGroupLB->GroupSelected();
+        SfxMacroInfo*   pMacro = pImpl->pMacroLB->GetMacroInfo();
         String          aLabelText;
         if( pMacro )
-            aLabelText = pMacro->GetModuleName();
+        {
+            aLabelText = pImpl->maStaticMacroLBLabel;
+            aLabelText += pMacro->GetModuleName();
+        }
         else
         {
             // Wenn dort ein Macro drin ist, wurde es selektiert und der
             // AssignButton schon in SelectMacro richtig enabled
-            pThis->pAssignPB->Enable( FALSE );
+            pImpl->pAssignPB->Enable( FALSE );
         }
 
-        pThis->pFT_MacroLBLabel->SetText( aLabelText );
+        pImpl->pFT_MacroLBLabel->SetText( aLabelText );
     }
     return 0;
 }
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
 {
-    pThis->pMacroLB->FunctionSelected();
-    pThis->EnableButtons( pThis->pScriptTypeLB->GetSelectEntry() );
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    pImpl->pMacroLB->FunctionSelected();
+    pThis->EnableButtons( pImpl->pScriptTypeLB->GetSelectEntry() );
     return 0;
 }
 
@@ -472,7 +498,8 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, GetFocus_Impl, Edit*, EMPTYARG )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
-    SvHeaderTabListBox& rListBox = pThis->pEventLB->GetListBox();
+    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
+    SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.FirstSelected();
     ULONG nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
@@ -482,34 +509,26 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         return 0;
     }
 
-    const BOOL bAssEnabled = pBtn != pThis->pDeletePB &&
-                            pThis->pAssignPB->IsEnabled();
+    const BOOL bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     // aus der Tabelle entfernen
     USHORT nEvent = (USHORT)(ULONG)pE->GetUserData();
     SvxMacro *pMacro = pThis->aTbl.Remove( nEvent );
     delete pMacro;
 
-    String aLanguage = pThis->pScriptTypeLB->GetSelectEntry();
+    String aLanguage = pImpl->pScriptTypeLB->GetSelectEntry();
     String sNew;
     if( bAssEnabled )
     {
         String sGroup;
         String sMacro;
         String aEntryText( sNew );
-        if ( aLanguage.EqualsAscii("JavaScript") )
-        {
-#if SUPD<582
-            sNew = sMacro = pThis->pJavaED->GetText();
-#endif
-        }
-        else
-        {
-            SfxMacroInfo *pMacro = pThis->pMacroLB->GetMacroInfo();
-            sMacro = pMacro->GetQualifiedName();
-            sGroup = pThis->pGroupLB->GetGroup();
-            sNew = pMacro->GetMacroName();
-        }
+        DBG_ASSERT( !aLanguage.EqualsAscii("JavaScript"), "_SfxMacroTabPage, AssignDeleteHdl_Impl(): outdated use!" );
+
+        SfxMacroInfo* pMacro = pImpl->pMacroLB->GetMacroInfo();
+        sMacro = pMacro->GetQualifiedName();
+        sGroup = pImpl->pGroupLB->GetGroup();
+        sNew = pMacro->GetMacroName();
 
         String sBasicName(SfxResId(STR_BASICNAME));
         if ( aLanguage == sBasicName )
@@ -518,7 +537,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
             pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, aLanguage ) );
     }
 
-    pThis->pEventLB->SetUpdateMode( FALSE );
+    pImpl->pEventLB->SetUpdateMode( FALSE );
     pE->ReplaceItem( new SvLBoxString( pE, 0, sNew ), LB_MACROS_ITEMPOS );
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
@@ -531,66 +550,61 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, ChangeScriptHdl_Impl, RadioButton*, EMPTYARG )
 {
-    pThis->ScriptChanged( pThis->pScriptTypeLB->GetSelectEntry() );
+    pThis->ScriptChanged( pThis->mpImpl->pScriptTypeLB->GetSelectEntry() );
     return 0;
 }
 
 void _SfxMacroTabPage::InitAndSetHandler()
 {
     // Handler installieren
-    SvHeaderTabListBox& rListBox = pEventLB->GetListBox();
-    HeaderBar&          rHeaderBar = pEventLB->GetHeaderBar();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
+    HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
     Link                aLnk(STATIC_LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
-    pMacroLB->SetDoubleClickHdl( aLnk );
-    pDeletePB->SetClickHdl( aLnk );
-    pAssignPB->SetClickHdl( aLnk );
+    mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
+    mpImpl->pDeletePB->SetClickHdl( aLnk );
+    mpImpl->pAssignPB->SetClickHdl( aLnk );
     rListBox.SetDoubleClickHdl( aLnk );
 
     rListBox.SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectEvent_Impl ));
-    pGroupLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectGroup_Impl ));
-    pMacroLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectMacro_Impl ));
+    mpImpl->pGroupLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectGroup_Impl ));
+    mpImpl->pMacroLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, SelectMacro_Impl ));
 
-    pScriptTypeLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, ChangeScriptHdl_Impl ));
-
-#if SUPD<582
-    pJavaED->SetGetFocusHdl( STATIC_LINK( this, _SfxMacroTabPage, GetFocus_Impl ));
-    pJavaED->SetModifyHdl( STATIC_LINK( this, _SfxMacroTabPage, GetFocus_Impl ));
-#endif
+    mpImpl->pScriptTypeLB->SetSelectHdl( STATIC_LINK( this, _SfxMacroTabPage, ChangeScriptHdl_Impl ));
 
     rListBox.SetSelectionMode( SINGLE_SELECTION );
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
     Size aSize( nTabs[ 2 ], 0 );
-    rHeaderBar.InsertItem( ITEMID_EVENT, *pStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
+    rHeaderBar.InsertItem( ITEMID_EVENT, *mpImpl->pStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     aSize.Width() = 1764;       // don't know what, so 42^2 is best to use...
-    rHeaderBar.InsertItem( ITMEID_ASSMACRO, *pAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
+    rHeaderBar.InsertItem( ITMEID_ASSMACRO, *mpImpl->pAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
-    pEventLB->Show();
-    pEventLB->ConnectElements();
+    mpImpl->pEventLB->Show();
+    mpImpl->pEventLB->ConnectElements();
 
-    pEventLB->Enable( TRUE );
-    pGroupLB->Enable( TRUE );
-    pMacroLB->Enable( TRUE );
+    mpImpl->pEventLB->Enable( TRUE );
+    mpImpl->pGroupLB->Enable( TRUE );
+    mpImpl->pMacroLB->Enable( TRUE );
 
-    pScriptTypeLB->SetDropDownLineCount( 3 );
+    mpImpl->pScriptTypeLB->SetDropDownLineCount( 3 );
     String sBasicName(SfxResId(STR_BASICNAME));
-    pScriptTypeLB->InsertEntry( sBasicName );
-    pScriptTypeLB->SelectEntry( sBasicName );
+    mpImpl->pScriptTypeLB->InsertEntry( sBasicName );
+    mpImpl->pScriptTypeLB->SelectEntry( sBasicName );
 
-    pGroupLB->SetFunctionListBox( pMacroLB );
+    mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
     FillMacroList();
 }
 
 void _SfxMacroTabPage::FillMacroList()
 {
-    String aLanguage = pScriptTypeLB->GetSelectEntry();
+    String aLanguage = mpImpl->pScriptTypeLB->GetSelectEntry();
     if( ! aLanguage.EqualsAscii("JavaScript") )
     {
         // 2 Listboxen
-        SvStringsDtor* pArr = (*fnGetRange)( this, String(SfxResId(STR_BASICNAME)) );
+        SvStringsDtor* pArr = (*mpImpl->fnGetRange)( this, String(SfxResId(STR_BASICNAME)) );
         if( pArr )
         {
-            pGroupLB->Init( pArr );
+            mpImpl->pGroupLB->Init( pArr );
             delete pArr;
         }
     }
@@ -598,9 +612,9 @@ void _SfxMacroTabPage::FillMacroList()
 
 void _SfxMacroTabPage::FillEvents()
 {
-    SvHeaderTabListBox& rListBox = pEventLB->GetListBox();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
 
-    String              aLanguage = pScriptTypeLB->GetSelectEntry();
+    String              aLanguage = mpImpl->pScriptTypeLB->GetSelectEntry();
     ULONG               nEntryCnt = rListBox.GetEntryCount();
 
     // Events aus der Tabelle holen und die EventListBox entsprechen fuellen
@@ -629,19 +643,7 @@ void _SfxMacroTabPage::FillEvents()
 
 void _SfxMacroTabPage::SelectEvent( const String & rEventName, USHORT nEventId )
 {
-/*
-    String sTmp( rEventName );
-    sTmp += '\t';
-
-    // falls die Tabelle schon gueltig ist
-    SvxMacro* pM = aTbl.Get( nEventId );
-    if( pM )
-    {
-        String sNew( ConvertToUIName_Impl( pM, pScriptTypeLB->GetSelectEntry() ) );
-        sTmp += sNew;
-    }
-*/
-    SvHeaderTabListBox& rListBox = pEventLB->GetListBox();
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     ULONG               nEntryCnt = rListBox.GetEntryCount();
 
     for( ULONG n = 0 ; n < nEntryCnt ; ++n )
@@ -730,22 +732,19 @@ SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage* pTbPg,
 SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
-    pStrEvent           = new String(                   SfxResId( STR_EVENT ) );
-    pAssignedMacro      = new String(                   SfxResId( STR_ASSMACRO ) );
-    pEventLB            = new _HeaderTabListBox( this,  SfxResId( LB_EVENT ) );
-    pAssignPB           = new PushButton( this,         SfxResId( PB_ASSIGN ) );
-    pDeletePB           = new PushButton( this,         SfxResId( PB_DELETE ) );
-    pScriptTypeLB       = new ListBox(this,             SfxResId( LB_SCRIPTTYPE ) );
-    pScriptTypeLB->Hide();
-    pMacroFT            = new FixedText( this,          SfxResId( FT_MACRO ) );
-    pGroupLB            = new SfxConfigGroupListBox_Impl( this,     SfxResId( LB_GROUP ) );
-    pFT_MacroLBLabel    = new FixedText( this,          SfxResId( FT_LABEL4LB_MACROS ) );
-    pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  SfxResId( LB_MACROS ) );
-    pMacroStr           = new String(                   SfxResId( STR_MACROS ) );
-#if SUPD<582
-    pJavaStr            = new String(                   SfxResId( STR_JAVASCRIPT ) );
-    pJavaED             = new MultiLineEdit( this,      SfxResId( ED_JAVASCRIPT ) );
-#endif
+    mpImpl->pStrEvent           = new String(                   SfxResId( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new String(                   SfxResId( STR_ASSMACRO ) );
+    mpImpl->pEventLB            = new _HeaderTabListBox( this,  SfxResId( LB_EVENT ) );
+    mpImpl->pAssignPB           = new PushButton( this,         SfxResId( PB_ASSIGN ) );
+    mpImpl->pDeletePB           = new PushButton( this,         SfxResId( PB_DELETE ) );
+    mpImpl->pScriptTypeLB       = new ListBox(this,             SfxResId( LB_SCRIPTTYPE ) );
+    mpImpl->pScriptTypeLB->Hide();
+    mpImpl->pMacroFT            = new FixedText( this,          SfxResId( FT_MACRO ) );
+    mpImpl->pGroupLB            = new SfxConfigGroupListBox_Impl( this,     SfxResId( LB_GROUP ) );
+    mpImpl->pFT_MacroLBLabel    = new FixedText( this,          SfxResId( FT_LABEL4LB_MACROS ) );
+    mpImpl->maStaticMacroLBLabel= mpImpl->pFT_MacroLBLabel->GetText();
+    mpImpl->pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  SfxResId( LB_MACROS ) );
+    mpImpl->pMacroStr           = new String(                   SfxResId( STR_MACROS ) );
 
     FreeResource();
 
