@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 12:27:55 $
+ *  last change: $Author: bm $ $Date: 2001-06-05 16:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,6 +1020,7 @@ XML_CONSTASCII_ACTION( sXML_linenumbering_configuration, "linenumbering-configur
 XML_CONSTASCII_ACTION( sXML_linenumbering_separator, "linenumbering-separator" );
 XML_CONSTASCII_ACTION( sXML_lines, "lines" );
 XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
+XML_CONSTASCII_ACTION( sXML_link_data_style_to_source, "link-data-style-to-source" );
 XML_CONSTASCII_ACTION( sXML_link_to_source_data, "link-to-source-data" );
 XML_CONSTASCII_ACTION( sXML_list, "list");
 XML_CONSTASCII_ACTION( sXML_list_block, "list-block" );
