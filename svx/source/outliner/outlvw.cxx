@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-01 10:34:48 $
+ *  last change: $Author: thb $ $Date: 2001-08-02 10:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1768,11 +1768,13 @@ ULONG OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, BOOL bSelect, 
     return nRet;
 }
 
+#ifndef SVX_LIGHT
 ULONG OutlinerView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->Write( rOutput, eFormat );
 }
+#endif
 
 void OutlinerView::SetBackgroundColor( const Color& rColor )
 {
