@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 
 #include <algorithm>
+
+#include "svxdlg.hxx" //CHINA001
+//CHINA001 #include "dialogs.hrc" //CHINA001
 
 // --------------
 // - Namespaces -
@@ -344,11 +347,18 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
         case( MN_ACTUALIZE ):
         {
             GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            ActualizeProgress   aActualizeProgress( this, pTheme );
+            //CHINA001 ActualizeProgress    aActualizeProgress( this, pTheme );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if(pFact)
+            {
+                VclAbstractRefreshableDialog* aActualizeProgress = pFact->CreateActualizeProgressDialog( this, pTheme, ResId(RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS) );
+                DBG_ASSERT(aActualizeProgress, "Dialogdiet fail!");//CHINA001
 
-            aActualizeProgress.Update();
-            aActualizeProgress.Execute();
-            mpGallery->ReleaseTheme( pTheme, *this );
+                aActualizeProgress->Update();  //CHINA001 aActualizeProgress.Update();
+                aActualizeProgress->Execute(); //CHINA001 aActualizeProgress.Execute();
+                mpGallery->ReleaseTheme( pTheme, *this );
+                delete aActualizeProgress;      //add CHINA001
+            }
         }
         break;
 
@@ -363,11 +373,15 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
         {
             GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
             const String    aOldName( pTheme->GetName() );
-            TitleDialog     aDlg( this, aOldName );
+            //CHINA001 TitleDialog      aDlg( this, aOldName );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldName, ResId(RID_SVXDLG_GALLERY_TITLE) );
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
 
-            if( aDlg.Execute() == RET_OK )
+            if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
             {
-                const String aNewName( aDlg.GetTitle() );
+                const String aNewName( aDlg->GetTitle() ); //CHINA001 aDlg.GetTitle() );
 
                 if( aNewName.Len() && ( aNewName != aOldName ) )
                 {
@@ -384,8 +398,8 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
                     mpGallery->RenameTheme( aOldName, aName );
                 }
             }
-
             mpGallery->ReleaseTheme( pTheme, *this );
+            delete aDlg; //add CHINA001
         }
         break;
 
@@ -395,10 +409,17 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
 
             if( pTheme && !pTheme->IsReadOnly() && !pTheme->IsImported() )
             {
-                GalleryIdDialog aDlg( this, pTheme );
+                //CHINA001 GalleryIdDialog aDlg( this, pTheme );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if(pFact)
+                {
+                    AbstractGalleryIdDialog* aDlg = pFact->CreateGalleryIdDialog( this, pTheme, ResId(RID_SVXDLG_GALLERY_THEMEID) );
+                    DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
 
-                if( aDlg.Execute() == RET_OK )
-                    pTheme->SetId( aDlg.GetId(), TRUE );
+                    if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
+                        pTheme->SetId( aDlg->GetId(), TRUE ); //CHINA001 pTheme->SetId( aDlg.GetId(), TRUE );
+                    delete aDlg; //add CHINA001
+                }
             }
 
             mpGallery->ReleaseTheme( pTheme, *this );
@@ -410,9 +431,13 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
             SfxItemSet              aSet( SFX_APP()->GetPool() );
             GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
             ExchangeData            aData; ImplFillExchangeData( pTheme, aData );
-            GalleryThemeProperties  aThemeProps( NULL, &aData, &aSet );
+            //CHINA001 GalleryThemeProperties   aThemeProps( NULL, &aData, &aSet );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            VclAbstractDialog* aThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, &aData, &aSet, ResId(RID_SVXTABDLG_GALLERYTHEME) );
+            DBG_ASSERT(aThemeProps, "Dialogdiet fail!");//CHINA001
 
-            if( RET_OK == aThemeProps.Execute() )
+            if( RET_OK == aThemeProps->Execute() ) //CHINA001 if( RET_OK == aThemeProps.Execute() )
             {
                 String aName( pTheme->GetName() );
 
@@ -434,6 +459,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
             }
 
             mpGallery->ReleaseTheme( pTheme, *this );
+            delete aThemeProps; //add CHINA001
         }
         break;
     }
@@ -655,9 +681,13 @@ IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, p )
         GalleryTheme*           pTheme = mpGallery->AcquireTheme( aName, *this );
         SfxItemSet              aSet( SFX_APP()->GetPool() );
         ExchangeData            aData; ImplFillExchangeData( pTheme, aData );
-        GalleryThemeProperties  aThemeProps( NULL, &aData, &aSet );
+        //CHINA001 GalleryThemeProperties   aThemeProps( NULL, &aData, &aSet );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        VclAbstractDialog* aThemeProps = pFact->CreateGalleryThemePropertiesDialog( NULL, &aData, &aSet, ResId(RID_SVXTABDLG_GALLERYTHEME) );
+        DBG_ASSERT(aThemeProps, "Dialogdiet fail!");//CHINA001
 
-        if( RET_OK == aThemeProps.Execute() )
+        if( RET_OK == aThemeProps->Execute() ) //CHINA001 if( RET_OK == aThemeProps.Execute() )
         {
             String aName( pTheme->GetName() );
 
@@ -680,6 +710,7 @@ IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, p )
             mpThemes->SelectEntry( pTheme->GetName() );
             SelectThemeHdl( NULL );
             mpGallery->ReleaseTheme( pTheme, *this );
+            delete aThemeProps; //add CHINA001
         }
         else
         {
