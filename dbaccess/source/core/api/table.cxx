@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 using namespace dbaccess;
@@ -467,5 +470,13 @@ void ODBTable::refreshIndexes()
     m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
     */
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODBTable::getName() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::rtl::OUString aVal;
+    dbtools::composeTableName(Reference<XConnection>(m_aConnection)->getMetaData(),m_CatalogName,m_SchemaName,m_Name,aVal,sal_False);
+    return aVal;
+}
+// -----------------------------------------------------------------------------
 
 
