@@ -534,7 +534,6 @@ Function GetDocumentType(oDocument)
 End Function
 
 
-
 Function GetNumberFormatType(oDocFormats, oFormatObject as Object) as Integer
 Dim ThisFormatKey as Long
 Dim oObjectFormat as Object
@@ -728,7 +727,6 @@ Dim PropValue(1) as new com.sun.star.beans.PropertyValue
 	PropValue(1).Value = &quot;macro:///&quot; &amp; SubPath
 	oDocument.Events.ReplaceByName(EventName, PropValue())
 End Sub
-
 
 
 Function ModifyPropertyValue(oContent() as Object, TargetProperties() as New com.sun.star.beans.PropertyValue )

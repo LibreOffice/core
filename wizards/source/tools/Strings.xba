@@ -75,7 +75,6 @@ Dim BigLen%
 End Function
 
 
-
 &apos; Deletes the Char &apos;CompChar&apos; out of the String &apos;BigString&apos;
 &apos; in case CompChar&apos;s Position in BigString is right at the beginning
 Function LTRimChar(ByVal BigString as String,CompChar as String) as String
@@ -90,7 +89,6 @@ Dim BigLen as integer
 	End If
 	LTrimChar = BigString
 End Function
-
 
 
 &apos; Retrieves an Array out of a String.
@@ -202,6 +200,25 @@ Dim a as Integer
 End Sub
 
 
+&apos; Searches for a String in a two-dimensional Array by querying all Searchindexex of the second dimension 
+&apos; and delivers the specific String of the ReturnIndex in the second dimension of the Searchlist()
+Function StringInMultiArray(SearchList(), SearchString as String, SearchIndex as Integer, ReturnIndex as Integer, Optional MaxIndex as Integer) as String
+Dim i as integer
+Dim CurFieldString as String
+	If IsMissing(MaxIndex) Then
+		MaxIndex = Ubound(SearchList(),1)
+	End If
+	For i = Lbound(SearchList()) to MaxIndex
+		CurFieldString = SearchList(i,SearchIndex)
+		If  Ucase(CurFieldString) = Ucase(SearchString) Then
+			StringInMultiArray() = SearchList(i,ReturnIndex)
+			Exit Function
+		End if
+	Next
+	StringInMultiArray() = &quot;&quot;
+End Function
+
+
 &apos; Replaces the string &quot;OldReplace&quot; through the String &quot;NewReplace&quot; in the String
 &apos; &apos;BigString&apos;
 Function ReplaceString(ByVal Bigstring, NewReplace, OldReplace as String)  as String
@@ -257,7 +274,6 @@ Dim Separator as String
 		ConvertFromUrl = BigString
 	End If
 End Function
-
 
 
 &apos; Retrieves the second value for a next to &apos;SearchString&apos; in
