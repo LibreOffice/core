@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 13:25:59 $
+ *  last change: $Author: sab $ $Date: 2002-05-29 11:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,33 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Settings_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new ScXMLExport(EXPORT_SETTINGS);
+}
+
+//----------------------------------------------------------------------------
+
+class ScXMLShapeExport : public XMLShapeExport
+{
+public:
+    ScXMLShapeExport(SvXMLExport& rExp) : XMLShapeExport(rExp) {}
+    ~ScXMLShapeExport();
+
+    /** is called before a shape element for the given XShape is exported */
+    virtual void onExport( const uno::Reference < drawing::XShape >& xShape );
+};
+
+ScXMLShapeExport::~ScXMLShapeExport()
+{
+}
+
+void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShape )
+{
+    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+    if( xShapeProp.is() )
+    {
+        sal_Int16 nLayerID;
+        if( (xShapeProp->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ))) >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
+            GetExport().AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -2463,12 +2490,6 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
                 }
-                uno::Reference< beans::XPropertySet > xShapeProp( aItr->xShape, uno::UNO_QUERY );
-                if( xShapeProp.is() )
-                {
-                    if(aItr->nLayerID == SC_LAYER_BACK)
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
-                }
                 ExportShape(aItr->xShape, pPoint);
             }
             aItr++;
@@ -3261,9 +3282,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
 
 XMLShapeExport* ScXMLExport::CreateShapeExport()
 {
-/*  UniReference < XMLPropertySetMapper > xShapeStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScShapeStylesProperties, xScPropHdlFactory);
-    SvXMLExportPropertyMapper *pShapeStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xShapeStylesPropertySetMapper);*/
-    return new XMLShapeExport(*this/*, pShapeStylesExportPropertySetMapper*/);
+    return new ScXMLShapeExport(*this);
 }
 
 void ScXMLExport::CreateSharedData(const sal_Int32 nTableCount)
