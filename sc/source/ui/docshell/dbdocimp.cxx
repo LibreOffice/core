@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-13 19:24:17 $
+ *  last change: $Author: nn $ $Date: 2000-12-01 14:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <offmgr/sbaitems.hxx>  // SbaSelectionList
 
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -96,6 +97,7 @@
 using namespace com::sun::star;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
@@ -334,7 +336,17 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
             xRowProp->setPropertyValue(
                         rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
 
-            xRowSet->execute();
+            uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
+            if ( xExecute.is() )
+            {
+                uno::Reference<task::XInteractionHandler> xHandler(
+                        comphelper::getProcessServiceFactory()->createInstance(
+                            rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                        uno::UNO_QUERY);
+                xExecute->executeWithCompletion( xHandler );
+            }
+            else
+                xRowSet->execute();
 
             //
             //  get column descriptions
