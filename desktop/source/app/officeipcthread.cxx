@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-17 10:26:08 $
+ *  last change: $Author: mav $ $Date: 2002-07-25 12:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ String CreateMD5FromString( const OUString& aMsg )
         sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
 
         rtl_digest_init( handle, pData, nSize );
+        rtl_digest_update( handle, pData, nSize );
         rtl_digest_get( handle, pMD5KeyBuffer, nMD5KeyLen );
         rtl_digest_destroy( handle );
 
