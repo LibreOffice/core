@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:16:47 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:38:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions 
 
 CFLAGSCXX= -pipe -frtti
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 
 #Note: the build is not consistent in that it links static librtaries
