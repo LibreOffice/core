@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-19 13:14:43 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 12:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,8 @@ void SAL_CALL SvXMLImport::unknown( const OUString& sString )
 
 void SvXMLImport::SetStatisticAttributes(const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
+    GetProgressBarHelper()->SetRepeat(sal_False);
+    GetProgressBarHelper()->SetReference(0);
 }
 
 ///////////////////////////////////////////////////////////////////////
