@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+#   last change: $Author: hjs $ $Date: 2000-11-15 16:30:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,8 +151,6 @@ UNOTYPES=\
     com.sun.star.beans.PropertyAttribute \
     com.sun.star.beans.PropertyValue \
     com.sun.star.beans.PropertyValues \
-    com.sun.star.data.XDatabaseDialogs	\
-    com.sun.star.data.XDatabaseFavorites \
     com.sun.star.form.XBoundComponent \
     com.sun.star.form.XLoadable \
     com.sun.star.form.XGridColumnFactory \
