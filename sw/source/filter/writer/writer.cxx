@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:50:20 $
+ *  last change: $Author: jp $ $Date: 2002-01-23 16:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,9 @@ ULONG Writer::Write( SwPaM& rPam, SvStorage&, const String* )
 
 BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 {
+    if( !pOrigFileName )                // can be happen, by example if we
+        return FALSE;                   // write into the clipboard
+
     BOOL bRet = FALSE;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
 
