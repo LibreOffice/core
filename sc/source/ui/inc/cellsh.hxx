@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:21:58 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 11:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,13 @@
 #include "formatsh.hxx"
 #endif
 
+class SvxClipboardFmtItem;
+
 class ScCellShell: public ScFormatShell
 {
+private:
+    static void GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
+
 public:
 
     TYPEINFO();
