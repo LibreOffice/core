@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:45:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,7 +1021,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
     if( !pStt || !pEnd )
         return ;                        // no valid selection
 
-    GetTblSel( pStt, pEnd, rBoxes );
+    GetTblSel( pStt, pEnd, rBoxes, 0 );
 
     const SwTable* pTbl = pStt->FindTabFrm()->GetTable();
 
