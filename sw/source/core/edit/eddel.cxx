@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:59:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             continue;
 
         SwPaM aInsertPaM(*pPos, aSttNdIdx);
-        GetDoc()->MakeUniqueNumRules(aInsertPaM);
+        pDestShell->GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
         bRet = TRUE;
     FOREACHPAM_END()
