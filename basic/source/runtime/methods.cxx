@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-05 14:55:59 $
+ *  last change: $Author: ab $ $Date: 2001-07-10 12:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
 #endif
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
@@ -240,16 +243,12 @@ static long GetDayDiff( const Date& rDate )
 
 static CharClass& GetCharClass( void )
 {
-    static sal_Bool bInit = sal_False;
+    static sal_Bool bNeedsInit = sal_True;
     static ::com::sun::star::lang::Locale aLocale;
-    if( !bInit )
+    if( bNeedsInit )
     {
-        const International& rInt = GetpApp()->GetAppInternational();
-        LanguageType eLang = rInt.GetLanguage();
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( (eLang == LANGUAGE_SYSTEM ? International::GetRealLanguage( eLang ) : eLang),
-            aLanguage, aCountry );
-        aLocale = ::com::sun::star::lang::Locale( aLanguage, aCountry, OUString() );
+        bNeedsInit = sal_False;
+        aLocale = Application::GetSettings().GetLocale();
     }
     static CharClass aCharClass( aLocale );
     return aCharClass;
@@ -1425,8 +1424,6 @@ RTLFUNC(UCase)
 
 RTLFUNC(Val)
 {
-    static International aEnglischIntn( LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_US );
-
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -1459,7 +1456,7 @@ RTLFUNC(Val)
         {
             // #57844 Lokalisierte Funktion benutzen
             int nErrno;
-            nResult = SolarMath::StringToDouble( aStr.GetBuffer(), aEnglischIntn, nErrno );
+            nResult = SolarMath::StringToDouble( aStr.GetBuffer(), ',', '.', nErrno );
             // ATL: nResult = strtod( aStr.GetStr(), &pEndPtr );
         }
 
