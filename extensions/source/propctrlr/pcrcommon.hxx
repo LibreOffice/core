@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrcommon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #define _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 
-#define EDITOR_LIST_APPEND  (sal_uInt16)-1
+#define EDITOR_LIST_APPEND              (sal_uInt16)-1
+#define EDITOR_LIST_REPLACE_EXISTING    (sal_uInt16)-1
+#define EDITOR_PAGE_CURRENT             (sal_uInt16)-1
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -72,6 +74,13 @@
 namespace pcr
 {
 //............................................................................
+
+    #define OWN_PROPERTY_ID_INTROSPECTEDOBJECT      0x0010
+    #define OWN_PROPERTY_ID_INTROSPECTEDCOLLECTION  0x0011
+    #define OWN_PROPERTY_ID_CURRENTPAGE             0x0012
+    #define OWN_PROPERTY_ID_CONTROLCONTEXT          0x0013
+    #define OWN_PROPERTY_ID_TABBINGMODEL            0x0014
+    #define OWN_PROPERTY_ID_CONTEXTDOCUMENT         0x0015
 
     String getStandardString();
 
