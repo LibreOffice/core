@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 12:18:04 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,75 +239,16 @@ hidspecial HID_BROWSER_VIEW_CREATE_DESIGN               { HelpId = HID_BROWSER_V
 hidspecial HID_DSADMIN_DOCUMENTS                        { HelpId = HID_DSADMIN_DOCUMENTS ; };
 hidspecial HID_DSADMIN_DOCUMENTLINKS                    { HelpId = HID_DSADMIN_DOCUMENTLINKS ; };
 
+hidspecial HID_DSADMIN_FILTER_EXPLANATION               { HelpId = HID_DSADMIN_FILTER_EXPLANATION ; };
+hidspecial HID_CONFIRM_DROP_BUTTON_ALL                  { HelpId = HID_CONFIRM_DROP_BUTTON_ALL ; };
+hidspecial HID_DSBROWSER_BOOKMARK_SELECTED              { HelpId = HID_DSBROWSER_BOOKMARK_SELECTED ; };
+hidspecial HID_DSADMIN_TABLE_TOOLBOX                    { HelpId = HID_DSADMIN_TABLE_TOOLBOX ; };
+hidspecial HID_DSADMIN_QUERY_TOOLBOX                    { HelpId = HID_DSADMIN_QUERY_TOOLBOX ; };
+hidspecial HID_DSADMIN_BOOKMARK_TOOLBOX             { HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX ; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.22  2001/04/24 14:34:31  oj
- *  new helpids
- *
- *  Revision 1.21  2001/04/24 08:35:10  oj
- *  wrong hid name
- *
- *  Revision 1.20  2001/03/22 08:06:31  oj
- *  some new helpids
- *
- *  Revision 1.19  2001/03/14 10:36:46  oj
- *  new helpid
- *
- *  Revision 1.18  2001/02/28 10:22:55  oj
- *  new helpids for relation design
- *
- *  Revision 1.17  2001/02/23 14:57:25  oj
- *  a lot more helpids
- *
- *  Revision 1.16  2001/02/16 16:06:11  oj
- *  new helpid
- *
- *  Revision 1.15  2001/02/14 14:42:34  oj
- *  new helpids
- *
- *  Revision 1.14  2001/02/05 09:57:58  fs
- *  #83327# 2 new help ids for the sql error message dialog
- *
- *  Revision 1.13  2001/02/05 09:53:41  oj
- *  new ids
- *
- *  Revision 1.12  2001/01/26 06:56:39  fs
- *  some new help ids for the query administration
- *
- *  Revision 1.11  2001/01/23 08:16:13  oj
- *  #83023##83022##83027#
- *
- *  Revision 1.10  2001/01/04 11:24:38  fs
- *  #81485# help ids for the ADO page
- *
- *  Revision 1.9  2000/12/14 08:52:33  fs
- *  #81845# +HID_DSADMIN_SPECIAL_MESSAGE
- *
- *  Revision 1.8  2000/12/12 16:32:06  fs
- *  #81862# type for the adabas user help id (why the heck does the compiler not complain about this?????)
- *
- *  Revision 1.7  2000/12/08 21:11:06  fs
- *  some new help ids for the data source browser
- *
- *  Revision 1.6  2000/12/05 15:59:22  fs
- *  #79820# HID_DSADMIN_DIALOG
- *
- *  Revision 1.5  2000/12/05 12:47:59  fs
- *  #80539# removed two obsolete ids
- *
- *  Revision 1.4  2000/12/05 11:40:56  fs
- *  #80539# HID_GENERIC_SQL_ERROR
- *
- *  Revision 1.3  2000/12/03 10:36:03  fs
- *  #79820# some new help ids
- *
- *  Revision 1.2  2000/10/30 14:08:43  fs
- *  typo
- *
- *  Revision 1.1  2000/10/30 13:49:40  fs
- *  initial checkin hid list for the dbaccess project
- *
  *
  *  Revision 1.0 30.10.00 14:02:39  fs
  ************************************************************************/
