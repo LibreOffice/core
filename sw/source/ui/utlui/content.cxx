@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:40:08 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 && TOX_HEADER_SECTION != eTmpType )
                 {
                     const String& rSectionName = pFmt->GetSection()->GetName();
-                    sal_uInt16 nLevel = 0;
+                    BYTE nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
                     while(pParentFmt)
                     {
@@ -777,7 +777,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 {
                     String sSectionName = pFmt->GetSection()->GetName();
 
-                    sal_uInt16 nLevel = 0;
+                    BYTE nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
                     while(pParentFmt)
                     {
@@ -995,6 +995,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
     aUpdTimer.SetTimeoutHdl(LINK(this, SwContentTree, TimerUpdate));
     aUpdTimer.SetTimeout(1000);
     Clear();
+    EnableContextMenuHandling();
 }
 
 /***************************************************************************
@@ -1072,184 +1073,155 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 /***************************************************************************
     Beschreibung:   Handler fuer Dragging und ContextMenu
 ***************************************************************************/
-
-void  SwContentTree::Command( const CommandEvent& rCEvt )
+PopupMenu* SwContentTree::CreateContextMenu( void )
 {
-    sal_Bool bParent = sal_False;
-    switch( rCEvt.GetCommand() )
+    PopupMenu* pPop = new PopupMenu;
+    PopupMenu* pSubPop1 = new PopupMenu;
+    PopupMenu* pSubPop2 = new PopupMenu;
+    PopupMenu* pSubPop3 = new PopupMenu;
+    PopupMenu* pSubPop4 = new PopupMenu; // Edit
+
+    sal_uInt16 i;
+    for(i = 1; i <= MAXLEVEL; i++ )
     {
-        case COMMAND_CONTEXTMENU:
-        {
-            PopupMenu aPop;
-            PopupMenu aSubPop1;
-            PopupMenu aSubPop2;
-            PopupMenu aSubPop3;
-            PopupMenu aSubPop4; // Bearbeiten
-            sal_uInt16 i;
-
-            for( i = 1; i <= MAXLEVEL; i++ )
-            {
-                aSubPop1.InsertItem( i + 100, String::CreateFromInt32(i));
-            }
-            aSubPop1.CheckItem(100 + nOutlineLevel);
-            for(i=0; i < 3; i++ )
-            {
-                aSubPop2.InsertItem( i + 201, aContextStrings[
-                        ST_HYPERLINK - ST_CONTEXT_FIRST + i]);
-            }
-            aSubPop2.CheckItem( 201 +
-                            GetParentWindow()->GetRegionDropMode());
-            //Liste der offenen Dateien einfuegen
-            sal_uInt16 nId = 301;
-            const SwView* pActiveView = ::GetActiveView();
-            SwView *pView = SwModule::GetFirstView();
-            while (pView)
-            {
-                String sInsert = pView->GetDocShell()->GetTitle();
-                if(pView == pActiveView)
-                {
-                    sInsert += '(';
-                    sInsert += aContextStrings[ ST_ACTIVE - ST_CONTEXT_FIRST];
-                    sInsert += ')';
-                }
-                aSubPop3.InsertItem(nId, sInsert);
-                if(bIsConstant && pActiveShell == &pView->GetWrtShell())
-                    aSubPop3.CheckItem(nId);
-                pView = SwModule::GetNextView(pView);
-                nId++;
-            }
-            aSubPop3.InsertItem(nId++, aContextStrings[ST_ACTIVE_VIEW - ST_CONTEXT_FIRST]);
-            if(pHiddenShell)
-            {
-                String sHiddenEntry = pHiddenShell->GetView().GetDocShell()->GetTitle();
-                sHiddenEntry += C2S(" ( ");
-                sHiddenEntry += aContextStrings[ ST_HIDDEN - ST_CONTEXT_FIRST];
-                sHiddenEntry += C2S(" )");
-                aSubPop3.InsertItem(nId, sHiddenEntry);
-            }
-
-            if(bIsActive)
-                aSubPop3.CheckItem( --nId );
-            else if(bIsHidden)
-                aSubPop3.CheckItem( nId );
-
-            aPop.InsertItem( 1, aContextStrings[
-                                        ST_OUTLINE_LEVEL - ST_CONTEXT_FIRST]);
-            aPop.InsertItem(2, aContextStrings[ST_DRAGMODE - ST_CONTEXT_FIRST]);
-            aPop.InsertItem(3, aContextStrings[ST_DISPLAY - ST_CONTEXT_FIRST]);
-            Link aSelLk = LINK(this, SwContentTree, PopupHdl );
-            //jetzt noch bearbeiten
-            SvLBoxEntry* pEntry;
-            //Bearbeiten nur, wenn die angezeigten Inhalte aus der aktiven View kommen
-            if((bIsActive || pActiveShell == pActiveView->GetWrtShellPtr())
-                    && 0 != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
-            {
-                const SwContentType* pContType = ((SwContent*)pEntry->GetUserData())->GetParent();
-                const sal_uInt16 nContentType = pContType->GetType();
-                sal_Bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
-                sal_Bool bVisible = !((SwContent*)pEntry->GetUserData())->IsInvisible();
-                sal_Bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
-                sal_Bool bEditable = pContType->IsEditable() &&
-                    ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
-                sal_Bool bDeletable = pContType->IsDeletable() &&
-                    ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
-                sal_Bool bRenamable = bEditable && !bReadonly &&
-                    (CONTENT_TYPE_TABLE == nContentType ||
-                        CONTENT_TYPE_FRAME == nContentType ||
-                        CONTENT_TYPE_GRAPHIC == nContentType ||
-                        CONTENT_TYPE_OLE == nContentType ||
-                        CONTENT_TYPE_BOOKMARK == nContentType ||
-                        CONTENT_TYPE_REGION == nContentType||
-                        CONTENT_TYPE_INDEX == nContentType);
-
-                if(!bReadonly && (bEditable || bDeletable))
-                {
-                    sal_Bool bSubPop4 = sal_False;
-                    if(CONTENT_TYPE_INDEX == nContentType)
-                    {
-                        bSubPop4 = sal_True;
-                        aSubPop4.InsertItem(401, sRemoveIdx);
-                        aSubPop4.InsertItem(402, sUpdateIdx);
-
-                        const SwTOXBase* pBase = ((SwTOXBaseContent*)pEntry->GetUserData())->GetTOXBase();
-                        if(!pBase->IsTOXBaseInReadonly())
-                            aSubPop4.InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
-                        aSubPop4.InsertItem(405, sReadonlyIdx);
-
-                        aSubPop4.CheckItem( 405, pActiveShell->IsTOXBaseReadonly(*pBase));
-                        aSubPop4.InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
-                    }
-                    else if(CONTENT_TYPE_TABLE == nContentType && !bReadonly)
-                    {
-                        bSubPop4 = sal_True;
-                        aSubPop4.InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
-                        aSubPop4.InsertItem(404, sUnprotTbl);
-                        sal_Bool bFull = sal_False;
-                        String sTblName = ((SwContent*)pEntry->GetUserData())->GetName();
-                        sal_Bool bProt =pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
-                        aSubPop4.EnableItem(403, !bFull );
-                        aSubPop4.EnableItem(404, bProt );
-                        aSubPop4.InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
-                    }
-                    else if(bEditable || bDeletable)
-                    {
-                        if(bEditable && bDeletable)
-                        {
-                            aSubPop4.InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
-                            aSubPop4.InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
-                            bSubPop4 = sal_True;
-                        }
-                        else if(bEditable)
-                            aPop.InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
-                        else if(bDeletable)
-                            aPop.InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
-                    }
-                    //Rename object
-                    if(bRenamable)
-                    {
-                        if(bSubPop4)
-                            aSubPop4.InsertItem(502, sRename);
-                        else
-                            aPop.InsertItem(502, sRename);
-                    }
-
-                    if(bSubPop4)
-                    {
-                        aPop.InsertItem(4, pContType->GetSingleName());
-                        aPop.SetPopupMenu(4, &aSubPop4);
-                        aSubPop4.SetSelectHdl(aSelLk);
-                    }
-                }
-            }
-
-
-            aPop.SetPopupMenu( 1, &aSubPop1 );
-            aPop.SetPopupMenu( 2, &aSubPop2 );
-            aPop.SetPopupMenu( 3, &aSubPop3 );
-            aPop.SetSelectHdl(aSelLk);
-            aSubPop1.SetSelectHdl(aSelLk);
-            aSubPop2.SetSelectHdl(aSelLk);
-            aSubPop3.SetSelectHdl(aSelLk);
-
-            //determine the position to execute the PopupMenu
-            Point   aPopupPos;
-            if( rCEvt.IsMouseEvent() )
-                aPopupPos = rCEvt.GetMousePosPixel();
-            else if(FirstSelected())
-            {
-                SvLBoxEntry*  pSelected = FirstSelected();
-                MakeVisible( pSelected );
-                aPopupPos = GetFocusRect( pSelected, GetEntryPos( pSelected ).Y() ).Center();
-            }
-            aPop.Execute( this, aPopupPos );
-        }
-        break;
-        default: bParent = sal_True;
+        pSubPop1->InsertItem( i + 100, String::CreateFromInt32(i));
     }
-    if(bParent)
-        SvTreeListBox::Command(rCEvt);
-}
+    pSubPop1->CheckItem(100 + nOutlineLevel);
+    for(i=0; i < 3; i++ )
+    {
+        pSubPop2->InsertItem( i + 201, aContextStrings[
+                ST_HYPERLINK - ST_CONTEXT_FIRST + i]);
+    }
+    pSubPop2->CheckItem( 201 +
+                    GetParentWindow()->GetRegionDropMode());
+    //Liste der offenen Dateien einfuegen
+    sal_uInt16 nId = 301;
+    const SwView* pActiveView = ::GetActiveView();
+    SwView *pView = SwModule::GetFirstView();
+    while (pView)
+    {
+        String sInsert = pView->GetDocShell()->GetTitle();
+        if(pView == pActiveView)
+        {
+            sInsert += '(';
+            sInsert += aContextStrings[ ST_ACTIVE - ST_CONTEXT_FIRST];
+            sInsert += ')';
+        }
+        pSubPop3->InsertItem(nId, sInsert);
+        if(bIsConstant && pActiveShell == &pView->GetWrtShell())
+            pSubPop3->CheckItem(nId);
+        pView = SwModule::GetNextView(pView);
+        nId++;
+    }
+    pSubPop3->InsertItem(nId++, aContextStrings[ST_ACTIVE_VIEW - ST_CONTEXT_FIRST]);
+    if(pHiddenShell)
+    {
+        String sHiddenEntry = pHiddenShell->GetView().GetDocShell()->GetTitle();
+        sHiddenEntry += C2S(" ( ");
+        sHiddenEntry += aContextStrings[ ST_HIDDEN - ST_CONTEXT_FIRST];
+        sHiddenEntry += C2S(" )");
+        pSubPop3->InsertItem(nId, sHiddenEntry);
+    }
 
+    if(bIsActive)
+        pSubPop3->CheckItem( --nId );
+    else if(bIsHidden)
+        pSubPop3->CheckItem( nId );
+
+    pPop->InsertItem( 1, aContextStrings[
+                                ST_OUTLINE_LEVEL - ST_CONTEXT_FIRST]);
+    pPop->InsertItem(2, aContextStrings[ST_DRAGMODE - ST_CONTEXT_FIRST]);
+    pPop->InsertItem(3, aContextStrings[ST_DISPLAY - ST_CONTEXT_FIRST]);
+    //jetzt noch bearbeiten
+    SvLBoxEntry* pEntry;
+    //Bearbeiten nur, wenn die angezeigten Inhalte aus der aktiven View kommen
+    if((bIsActive || pActiveShell == pActiveView->GetWrtShellPtr())
+            && 0 != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
+    {
+        const SwContentType* pContType = ((SwContent*)pEntry->GetUserData())->GetParent();
+        const sal_uInt16 nContentType = pContType->GetType();
+        sal_Bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
+        sal_Bool bVisible = !((SwContent*)pEntry->GetUserData())->IsInvisible();
+        sal_Bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
+        sal_Bool bEditable = pContType->IsEditable() &&
+            ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
+        sal_Bool bDeletable = pContType->IsDeletable() &&
+            ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
+        sal_Bool bRenamable = bEditable && !bReadonly &&
+            (CONTENT_TYPE_TABLE == nContentType ||
+                CONTENT_TYPE_FRAME == nContentType ||
+                CONTENT_TYPE_GRAPHIC == nContentType ||
+                CONTENT_TYPE_OLE == nContentType ||
+                CONTENT_TYPE_BOOKMARK == nContentType ||
+                CONTENT_TYPE_REGION == nContentType||
+                CONTENT_TYPE_INDEX == nContentType);
+
+        if(!bReadonly && (bEditable || bDeletable))
+        {
+            sal_Bool bSubPop4 = sal_False;
+            if(CONTENT_TYPE_INDEX == nContentType)
+            {
+                bSubPop4 = sal_True;
+                pSubPop4->InsertItem(401, sRemoveIdx);
+                pSubPop4->InsertItem(402, sUpdateIdx);
+
+                const SwTOXBase* pBase = ((SwTOXBaseContent*)pEntry->GetUserData())->GetTOXBase();
+                if(!pBase->IsTOXBaseInReadonly())
+                    pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
+                pSubPop4->InsertItem(405, sReadonlyIdx);
+
+                pSubPop4->CheckItem( 405, pActiveShell->IsTOXBaseReadonly(*pBase));
+                pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
+            }
+            else if(CONTENT_TYPE_TABLE == nContentType && !bReadonly)
+            {
+                bSubPop4 = sal_True;
+                pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
+                pSubPop4->InsertItem(404, sUnprotTbl);
+                sal_Bool bFull = sal_False;
+                String sTblName = ((SwContent*)pEntry->GetUserData())->GetName();
+                sal_Bool bProt =pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
+                pSubPop4->EnableItem(403, !bFull );
+                pSubPop4->EnableItem(404, bProt );
+                pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
+            }
+            else if(bEditable || bDeletable)
+            {
+                if(bEditable && bDeletable)
+                {
+                    pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
+                    pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
+                    bSubPop4 = sal_True;
+                }
+                else if(bEditable)
+                    pPop->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
+                else if(bDeletable)
+                    pPop->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
+            }
+            //Rename object
+            if(bRenamable)
+            {
+                if(bSubPop4)
+                    pSubPop4->InsertItem(502, sRename);
+                else
+                    pPop->InsertItem(502, sRename);
+            }
+
+            if(bSubPop4)
+            {
+                pPop->InsertItem(4, pContType->GetSingleName());
+                pPop->SetPopupMenu(4, pSubPop4);
+            }
+        }
+    }
+
+
+    pPop->SetPopupMenu( 1, pSubPop1 );
+    pPop->SetPopupMenu( 2, pSubPop2 );
+    pPop->SetPopupMenu( 3, pSubPop3 );
+    return pPop;
+
+}
 /***************************************************************************
     Beschreibung:   Einrueckung fuer outlines (und sections)
 ***************************************************************************/
@@ -1411,8 +1383,8 @@ void SwContentTree::Display( sal_Bool bActive )
     SvLBoxEntry* pOldSelEntry = FirstSelected();
     String sEntryName;  // Name des Eintrags
     sal_uInt16 nEntryRelPos = 0; // rel. Pos zu seinem Parent
-    sal_uInt16 nOldEntryCount = GetEntryCount();
-    sal_uInt16 nOldScrollPos = 0;
+    sal_uInt32 nOldEntryCount = GetEntryCount();
+    sal_Int32 nOldScrollPos = 0;
     if(pOldSelEntry)
     {
         ScrollBar* pVScroll = GetVScroll();
@@ -1466,7 +1438,7 @@ void SwContentTree::Display( sal_Bool bActive )
                                 0, bChOnDemand, LIST_APPEND, (*ppContentT));
                 if(nCntType == nLastSelType)
                     pSelEntry = pEntry;
-                sal_uInt16 nExpandOptions = bIsActive || bIsConstant ?
+                sal_Int32 nExpandOptions = bIsActive || bIsConstant ?
                                             nActiveBlock :
                                                 nHiddenBlock;
                 if(nExpandOptions & (1 << nCntType))
@@ -1579,8 +1551,8 @@ void SwContentTree::Display( sal_Bool bActive )
         nOldScrollPos && pVScroll && pVScroll->IsVisible()
         && pVScroll->GetThumbPos() != nOldScrollPos)
     {
-        short nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
-        ScrollOutputArea( nDelta );
+        sal_Int32 nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
+        ScrollOutputArea( (short)nDelta );
     }
 
 }
@@ -2654,11 +2626,10 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 ***************************************************************************/
 
 
-IMPL_LINK(SwContentTree, PopupHdl, Menu*, pMenu)
+void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
 {
-    sal_uInt16 nId = pMenu->GetCurItemId();
     SvLBoxEntry* pFirst = FirstSelected();
-    switch( nId )
+    switch( nSelectedPopupEntry )
     {
         //Outlinelevel
         case 101:
@@ -2671,18 +2642,18 @@ IMPL_LINK(SwContentTree, PopupHdl, Menu*, pMenu)
         case 108:
         case 109:
         case 110:
-            nId -= 100;
-            if(nOutlineLevel != nId )
-                SetOutlineLevel((sal_Int8)nId);
+            nSelectedPopupEntry -= 100;
+            if(nOutlineLevel != nSelectedPopupEntry )
+                SetOutlineLevel((sal_Int8)nSelectedPopupEntry);
         break;
         case 201:
         case 202:
         case 203:
-            GetParentWindow()->SetRegionDropMode(nId - 201);
+            GetParentWindow()->SetRegionDropMode(nSelectedPopupEntry - 201);
         break;
         case 401:
         case 402:
-            EditEntry(pFirst, nId == 401 ? EDIT_MODE_RMV_IDX : EDIT_MODE_UPD_IDX);
+            EditEntry(pFirst, nSelectedPopupEntry == 401 ? EDIT_MODE_RMV_IDX : EDIT_MODE_UPD_IDX);
         break;
         // Eintrag bearbeiten
         case 403:
@@ -2695,7 +2666,7 @@ IMPL_LINK(SwContentTree, PopupHdl, Menu*, pMenu)
         {
             const SwTOXBase* pBase = ((SwTOXBaseContent*)pFirst->GetUserData())
                                                                 ->GetTOXBase();
-            pActiveShell->SetTOXBaseReadonly(*pBase, !pMenu->IsItemChecked(nId));
+            pActiveShell->SetTOXBaseReadonly(*pBase, !pActiveShell->IsTOXBaseReadonly(*pBase));
         }
         break;
         case 4:
@@ -2707,31 +2678,30 @@ IMPL_LINK(SwContentTree, PopupHdl, Menu*, pMenu)
             EditEntry(pFirst, EDIT_MODE_RENAME);
         break;
         //Anzeige
-        default: // nId > 300
-        if(nId > 300 && nId < 400)
+        default: // nSelectedPopupEntry > 300
+        if(nSelectedPopupEntry > 300 && nSelectedPopupEntry < 400)
         {
-            nId -= 300;
+            nSelectedPopupEntry -= 300;
             SwView *pView = SwModule::GetFirstView();
             while (pView)
             {
-                nId --;
-                if(nId == 0)
+                nSelectedPopupEntry --;
+                if(nSelectedPopupEntry == 0)
                 {
                     SetConstantShell(&pView->GetWrtShell());
                     break;
                 }
                 pView = SwModule::GetNextView(pView);
             }
-            if(nId)
+            if(nSelectedPopupEntry)
             {
-                bViewHasChanged = bIsActive = nId==1;
+                bViewHasChanged = bIsActive = nSelectedPopupEntry == 1;
                 bIsConstant = sal_False;
-                Display(nId == 1);
+                Display(nSelectedPopupEntry == 1);
             }
         }
     }
     GetParentWindow()->UpdateListBox();
-    return sal_True;
 }
 
 /***************************************************************************
@@ -3214,7 +3184,7 @@ sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
         xub_StrLen nPos = 0;
         aUrl    = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
         aDescr  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        nDefDrag= sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
+        nDefDrag= (USHORT)sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
         nDocSh  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
     }
     return bRet;
