@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wallitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: mav $ $Date: 2002-11-06 13:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,89 +96,13 @@ public:
     static void Set( SfxBrushItemLink* pLink );
 };
 #endif  // _SFX_BRUSHITEMLINK_DECLARED
-// -----------------------------------------------------------------------------------------
-
-#ifndef _SFX_BRUSHITEMLINK
-
-#ifndef _RTTI_HXX
-#include <tools/rtti.hxx>
-#endif
-#ifndef _SV_WALL_HXX
-#include <vcl/wall.hxx>
-#endif
-
-#include "poolitem.hxx"
-
-class SvStream;
-class Graphic;
-
-DBG_NAMEEX(SfxWallpaperItem);
-
-class SfxWallpaperItem : public SfxPoolItem
-{
-private:
-    Wallpaper               _aWallpaper;
-    XubString               _aURL;
-    XubString               _aFilter;
-    USHORT                  _nFlags;
-    BOOL                    IsDownloaded() const;
-    void                    Download();
-public:
-                            TYPEINFO();
-
-                            SfxWallpaperItem( USHORT nWhich );
-                            SfxWallpaperItem( USHORT nWhich, SvStream& rStream, USHORT nVersion );
-                            SfxWallpaperItem( const SfxWallpaperItem& rCpy );
-                            SfxWallpaperItem( USHORT nWhich, const Wallpaper& );
-                            ~SfxWallpaperItem();
-
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nItemVersion ) const;
-    virtual SvStream&       Store( SvStream&, USHORT nItemVersion ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-
-    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal,
-                                         BYTE nMemberId = 0 ) const;
-    virtual BOOL            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
-
-    void                    SetBitmapURL( const XubString& rURL, const XubString& rFilter );
-    void                    SetGraphic( const Graphic& rGraphic, BOOL bKeepLink=FALSE );
-    void                    SetColor( const Color& rColor ) { _aWallpaper.SetColor(rColor); }
-    void                    SetStyle( WallpaperStyle eStyle ) { _aWallpaper.SetStyle(eStyle); }
-
-    const Wallpaper&        GetWallpaper( BOOL bNeedsBitmap = TRUE ) const;
-    const XubString&        GetBitmapURL() const { return _aURL; }
-    const XubString&        GetBitmapFilter() const { return _aFilter; }
-};
-
-class WallpaperLoader_Impl;
-class CntWallpaperItem;
-
-class WallpaperLoader : public SvRefBase
-{
-    WallpaperLoader_Impl    *pImp;
-
-public:
-
-                        WallpaperLoader( const CntWallpaperItem& rItem);
-                        ~WallpaperLoader();
-
-    void                RequestData( const Link& rLink );
-    const Wallpaper&    GetWallpaper() const;
-    void                Done();
-    void                SetBitmap( SvStream* pStream );
-};
-
-SV_DECL_REF( WallpaperLoader );
-SV_IMPL_REF( WallpaperLoader );
-
-#endif // _SFX_BRUSHITEM_LINK
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /*
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:58:54  hr
+    initial import
+
     Revision 1.15  2000/09/18 14:13:18  willem.vandorp
     OpenOffice header added.
 
