@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:37:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,12 @@
  ************************************************************************/
 
 #include <stdio.h>
-#ifdef SOLARIS
-#include <alloca.h>
-#elif defined MACOSX
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
 #include <hash_map>
 #include <vector>
 
+#ifndef INCLUDE_SAL_ALLOCA_H
+#include <sal/alloca.h>
+#endif
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
