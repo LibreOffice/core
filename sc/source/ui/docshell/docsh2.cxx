@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:42:09 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,13 @@ void ScDocShell::InitItems()
 
             aDocument.SetForbiddenCharacters( xForbiddenTable );
         }
+    }
+
+    if ( !aDocument.IsValidAsianCompression() )
+    {
+        // set compression mode from configuration if not already set (e.g. XML import)
+        SvxAsianConfig aAsian( sal_False );     //! share with forbidden characters
+        aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
     }
 }
 

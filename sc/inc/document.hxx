@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-14 07:09:12 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,8 @@ typedef Table SvULONGTable;
 #define SC_MACROCALL_ALLOWED        0
 #define SC_MACROCALL_NOTALLOWED     1
 #define SC_MACROCALL_ASK            2
+
+#define SC_ASIANCOMPRESSION_INVALID     0xff
 
 
 enum ScDocumentMode
@@ -447,6 +449,8 @@ private:
     BOOL                bHasMacroFunc;      // valid only after loading
 
     BYTE                nVisSpellState;
+
+    BYTE                nAsianCompression;
 
     inline BOOL         RowHidden( USHORT nRow, USHORT nTab );      // FillInfo
 
@@ -1347,6 +1351,10 @@ public:
 
     vos::ORef<SvxForbiddenCharactersTable> GetForbiddenCharacters();
     void            SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersTable> xNew );
+
+    BYTE            GetAsianCompression() const;        // CharacterCompressionType values
+    BOOL            IsValidAsianCompression() const;
+    void            SetAsianCompression(BYTE nNew);
 
     ScLkUpdMode     GetLinkMode() const             { return eLinkMode ;}
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}

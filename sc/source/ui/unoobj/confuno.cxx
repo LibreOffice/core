@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:43:42 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_PRINTERSETUP), 0,  &getCppuType((uno::Sequence<sal_Int8>*)0),  0},
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNO_CHARCOMP),     0,  &getCppuType((sal_Int16*)0),        0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -251,6 +252,21 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 //  read-only - should not be set
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
+            {
+                // Int16 contains CharacterCompressionType values
+                sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
+                pDoc->SetAsianCompression( (BYTE) nUno );
+                if ( !pDoc->IsImportingXML() )
+                {
+                    //  update automatic row heights and repaint
+                    USHORT nTabCount = pDoc->GetTableCount();
+                    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                        if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
+                            pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+                    pDocShell->SetDocumentModified();
+                }
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -348,6 +364,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 uno::Reference<i18n::XForbiddenCharacters> xForbidden = new ScForbiddenCharsObj( pDocShell );
                 aRet <<= xForbidden;
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
+                aRet <<= static_cast<sal_Int16> ( pDoc->GetAsianCompression() );
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();

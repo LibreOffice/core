@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-14 07:10:10 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         eLinkMode(LM_UNKNOWN),
         pDPCollection( NULL ),
         pScriptTypeData( NULL ),
+        nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nStandardIndexEnglishUS(-1)
 {
     eSrcSet = gsl_getSystemTextEncoding();

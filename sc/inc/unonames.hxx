@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-31 18:07:16 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,7 @@
 #define SC_UNO_PRINTERNAME          "PrinterName"
 #define SC_UNO_PRINTERSETUP         "PrinterSetup"
 #define SC_UNO_APPLYDOCINF          "ApplyUserData"
+#define SC_UNO_CHARCOMP             "CharacterCompressionType"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
