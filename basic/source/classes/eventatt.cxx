@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-13 10:38:27 $
+ *  last change: $Author: thb $ $Date: 2001-06-20 07:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,7 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
+#ifndef SVX_LIGHT
     Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     if( !xMSF.is() )
         return;
@@ -580,6 +581,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     aRetVal <<= xDlg;
     SbxVariableRef refVar = rPar.Get(0);
     unoToSbxValue( (SbxVariable*)refVar, aRetVal );
+#endif
 }
 
 

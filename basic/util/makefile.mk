@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ab $ $Date: 2001-03-03 15:48:21 $
+#   last change: $Author: thb $ $Date: 2001-06-20 07:43:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,26 +69,9 @@ GEN_HID=TRUE
 
 # --- Settings ---------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.IF "$(GUI)"=="WIN"
-.IF "$(product)" != ""
-LINKFLAGS=$(LINKFLAGS) /NOPACKC
-.ENDIF
-.ENDIF
-
-.IF "$(depend)" == ""
 
 # --- Allgemein ---------------------------------------------------
-
-USE_LDUMP2=TRUE
-
-.IF "$(header)" == ""
-
-#SRSFILES=	$(SRS)$/app.srs $(SRS)$/testtool.srs
-
 
 LIB1TARGET=$(SLB)$/sb.lib
 LIB1FILES=		\
@@ -113,19 +96,13 @@ SHL1STDLIBS= \
             $(SVMEMLIB)	\
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB) \
+            $(SOTLIB) \
+            $(VOSLIB) \
             $(XMLSCRIPTLIB)
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+=$(LIBCIMT)
+#SHL1STDLIBS+=$(LIBCIMT)
 .ENDIF
-
-.IF "$(SO3)" != ""
-SHL1STDLIBS+=\
-            $(SOTLIB) \
-            $(VOSLIB)
-.ENDIF
-
-
 
 .IF "$(GUI)" != "UNX"
 SHL1OBJS=	\
@@ -142,10 +119,58 @@ DEF1DEPN	=	\
 DEFLIB1NAME	=sb
 DEF1DES		=StarBasic
 
+
+# Light basic
+
+LIB2TARGET=$(SLB)$/sbl.lib
+LIB2FILES=		\
+    $(SLB)$/basicmgr.lib   \
+    $(SLB)$/classesl.lib	 \
+    $(SLB)$/comp.lib 	 \
+    $(SLB)$/runtime.lib
+
+SHL2TARGET= sbl$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= basicl
+
+SHL2STDLIBS= \
+            $(CPPULIB) \
+            $(CPPUHELPERLIB) \
+            $(TOOLSLIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB)	\
+            $(SVLIB) \
+            $(SJLIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(SVMEMLIB)	\
+            $(SOTLIB) \
+            $(VOSLIB) \
+            $(COMPHELPERLIB) \
+            $(UNOTOOLSLIB)
+
+.IF "$(GUI)"=="WNT"
+#SHL2STDLIBS+=$(LIBCIMT)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+SHL2OBJS=	\
+    $(SLO)$/sb.obj
+.ENDIF
+
+SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+SHL2LIBS=	$(SLB)$/sbl.lib
+
+DEF2NAME	=$(SHL2TARGET)
+DEF2DEPN	=	\
+    $(MISC)$/$(SHL2TARGET).flt $(SLB)$/sbl.lib
+
+DEFLIB2NAME	=sbl
+DEF2DES		=StarBasic Light
+
+
 # --- SBASIC IDE --------------------------------------------------------
 
 APP1TARGET=$(PRJNAME)
-.IF "$(GUI)" != "MAC"
 APP1STDLIBS= \
             $(SALLIB) \
             $(TOOLSLIB) \
@@ -158,20 +183,12 @@ APP1STDLIBS= \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(SJLIB) \
+            $(SOTLIB) \
             $(VOSLIB) \
             $(SVMEMLIB)
+
 .IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
 APP1STDLIBS+=$(CPPULIB)
-.ENDIF
-.ELSE
-APP1STDLIBS= \
-            $(SOLARLIBDIR)$/SALMAIN.OBJ \
-            $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB \
-            $(TOOLSLIB) \
-            $(SVTOOLLIB) \
-            $(SVLIB) \
-            $(SJLIB) \
-            $(SO2LIB)
 .ENDIF
 .IF "$(GUI)"=="UNX"
 APP1STDLIBS+= \
@@ -189,32 +206,15 @@ APP1STDLIBS+=	\
 .ENDIF
 
 
-.IF "$(SO3)" != ""
-APP1STDLIBS+=\
-            $(SOTLIB)
-.ENDIF
-
-.IF "$(GUI)" != "MAC"
 APP1DEPN=	$(L)$/itools.lib $(SVLIBDEPEND) $(LB)$/basic.lib $(LB)$/app.lib $(LB)$/sample.lib
-.ELSE
-APP1DEPN = $(APP1STDLIBS) $(APP1LIBS)
-MACRES = $(SV_RES)SV.R $(SV_RES)SV_DEMO.R $(SV_RES)SV_POWER.R
-.ENDIF
 
 APP1OBJS = $(OBJ)$/ttbasic.obj 
 
 .IF "$(GUI)" != "UNX"
 APP1OBJS+=	\
-            $(OBJ)$/app.obj
-
-.IF "$(COM)"!="ICC"
-APP1OBJS+=	\
+            $(OBJ)$/app.obj \
             $(SLO)$/sbintern.obj
 .ENDIF
-.ENDIF
-
-#APP1DEF=	$(MISC)$/$(PRJNAME).def
-#APP1RES=	$(RES)$/sb.res
 
 RES1TARGET=$(PRJNAME)
 SRS1FILES= \
@@ -228,103 +228,9 @@ RESLIB1SRSFILES= \
         $(SRS)$/app.srs \
         $(SRS)$/classes.srs
 
-# --- jstest ------------------------------------------------------
-
-#.IF "$(GUI)" != "MAC"
-
-#APP4TARGET=jstest
-#APP4STDLIBS= \
-#			$(TOOLSLIB) \
-#			$(SVTOOLLIB) \
-#			$(SVLIB) \
-#			$(SVMEMLIB) \
-#			$(SO2LIB)	\
-#			$(SALLIB) \
-#			$(ONELIB)	\
-#			$(LB)$/basic.lib
-
-#.IF "$(GUI)"=="UNX"
-#APP4STDLIBS+= \
-#			$(VOSLIB) $(SALLIB)
-#.ENDIF
-
-
-#APP4DEPN=\
-#		$(L)$/svtool.lib \
-#		$(L)$/itools.lib \
-#		$(SVLIBDEPEND) \
-#		$(OBJ)$/jstest.obj
-
-#APP4OBJS=		$(OBJ)$/jstest.obj
-
-#.ENDIF
-
 # --- Targets -----------------------------------------------------------
 
-ALL: $(LIB1TARGET)		   \
-     $(LB)$/basic.lib       \
-     ALLTAR
-
-
-#-------------------------------------------------------------------------
-#								Windows 3.x
-#-------------------------------------------------------------------------
-
-
-.IF "$(GUI)" == "WIN"
-
-LINKFLAGS+=/NOCV /IG
-LINK=$(DEVROOT)$/bin\optlinks\optlinks
-
-$(MISC)$/$(PRJNAME).def: makefile.mk
-    echo NAME		 BASIC											 >$@
-    echo DESCRIPTION 'StarBASIC DevSystem (C)1994 STAR DIVISION GmbH'>>$@
-    echo EXETYPE	 WINDOWS										 >>$@
-    echo PROTMODE													 >>$@
-    echo STUB		 'winSTUB.EXE'                                   >>$@
-    echo CODE		 LOADONCALL MOVEABLE							 >>$@
-    echo DATA		 PRELOAD MULTIPLE MOVEABLE						 >>$@
-    echo HEAPSIZE	 4096											 >>$@
-    echo STACKSIZE	 30000											 >>$@
-.ENDIF # GUI == WIN
-
-#-------------------------------------------------------------------------
-#								MAC
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(PRJNAME).def: makefile.mk
-    echo Kein def-File fuer Applikationen auf Mac
-.ENDIF # GUI == MAC
-
-#-------------------------------------------------------------------------
-#										OS/2
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(PRJNAME).def: makefile.mk
-.IF "$(COM)"!="WTC"
-    echo NAME		 BASIC WINDOWAPI								  >$@
-    echo DESCRIPTION 'StarBASIC DevSystem (C)1993 STAR DIVISION GmbH' >>$@
-    echo EXETYPE	 OS2											  >>$@
-    echo PROTMODE													  >>$@
-    echo STUB		 'OS2STUB.EXE'                                    >>$@
-    echo CODE		 LOADONCALL 									  >>$@
-    echo DATA		 PRELOAD MULTIPLE								  >>$@
-    echo HEAPSIZE	 4096											  >>$@
-    echo STACKSIZE	 30000											  >>$@
-.ELSE
-    @echo option DESCRIPTION 'StarBasic DLL'                           >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll                             >>$@
-#    @ldump -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(SLB)$/sb.lib    >>temp.def
-    @ldump -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET)    >>temp.def
-    @awk -f s:\util\exp.awk temp.def
-    del temp.def
-.ENDIF
-
-.ENDIF # GUI == OS2
+.INCLUDE :  target.mk
 
 #-------------------------------------------------------------------------
 #								Windows NT
@@ -347,17 +253,19 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo exception >> $@
     @echo bad_alloc >> $@
     @echo __CT >> $@
-.IF "$(GUI)"=="OS2"
-    @echo __alloc	>> $@
-    @echo __malloc	>> $@
-.ENDIF
 
-.ENDIF
-
-# ------------------------------------------------------------------------
-.ENDIF
-
-.INCLUDE :  target.mk
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo WEP > $@
+    @echo LIBMAIN >> $@
+    @echo LibMain >> $@
+    @echo Sbi >> $@
+    @echo SvRTL >> $@
+    @echo SbRtl_ >> $@
+    @echo exception >> $@
+    @echo bad_alloc >> $@
+    @echo __CT >> $@
 
 $(SRS)$/basic.srs:
     +$(TYPE) $(SRS)$/classes.srs + $(SRS)$/runtime.srs > $@

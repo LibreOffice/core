@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:12:48 $
+#   last change: $Author: thb $ $Date: 2001-06-20 07:43:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=BASIC
 TARGET=classes
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------------
 
@@ -73,20 +74,33 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Allgemein -----------------------------------------------------------
 
-SLOFILES=	\
+COMMON_SLOFILES=	\
     $(SLO)$/sb.obj       \
     $(SLO)$/sbxmod.obj	\
     $(SLO)$/image.obj	\
     $(SLO)$/sbintern.obj	\
     $(SLO)$/sbunoobj.obj	\
-    $(SLO)$/eventatt.obj	\
     $(SLO)$/propacc.obj	\
     $(SLO)$/disas.obj
+
+SLOFILES=	$(COMMON_SLOFILES)	\
+    $(SLO)$/eventatt.obj
 
 OBJFILES=	\
     $(OBJ)$/sbintern.obj
 
 SRCFILES=	sb.src
+
+SECOND_BUILD=SVXLIGHT
+SVXLIGHT_SLOFILES=	$(SLO)$/eventatt.obj
+SVXLIGHTCDEFS+=-DSVX_LIGHT
+
+
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1OBJFILES = $(SLOFILES)
+
+LIB2TARGET= $(SLB)$/$(TARGET)l.lib
+LIB2OBJFILES = $(REAL_SVXLIGHT_SLOFILES) $(COMMON_SLOFILES)
 
 # --- Targets -------------------------------------------------------------
 
