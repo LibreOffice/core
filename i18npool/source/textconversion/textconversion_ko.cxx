@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:15:02 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,16 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                     break;
 
             for (sal_Int32 len = end - start; len > 0; len--) {
-                if (xCDL.is())
-                    result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
-                        aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
+                try {
+                    if (xCDL.is())
+                        result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
+                            aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
+                }
+                catch (...) {
+                    // catch all exceptions (especially the NoSupportException
+                    // when there is no user defined dictionary!)
+                    // to allow querying the system dictionary in the next line
+                }
                 if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
                                          // Char2char converison below is enough.
                     candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions); // system dictionary
