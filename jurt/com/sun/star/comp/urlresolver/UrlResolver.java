@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UrlResolver.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:38:13 $
+ *  last change: $Author: jl $ $Date: 2002-02-18 13:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This component gives a factory for an <code>UnoUrlResolver</code> service.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-04 11:38:13 $
+ * @version     $Revision: 1.4 $ $ $Date: 2002-02-18 13:18:16 $
  * @author      Kay Ramme
  * @see         com.sun.star.brige.XBrideFactory
  * @see         com.sun.star.connection.Connector
@@ -136,33 +136,34 @@ public class UrlResolver {
             }
 
             Object rootObject = null;
-
+            XBridgeFactory xBridgeFactory= null;
             try {
-                XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
-                                                                                          _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
+                xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
+                                                                          _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
+            } catch (com.sun.star.uno.Exception e) {
+                throw new com.sun.star.uno.RuntimeException(e.getMessage());
+            }
+            XBridge xBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
 
-                XBridge xBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
+            if(xBridge == null) {
+                Object connector= null;
+                try {
+                    connector = _xMultiServiceFactory.createInstance("com.sun.star.connection.Connector");
+                } catch (com.sun.star.uno.Exception e) {
+                        throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                }
 
-                if(xBridge == null) {
-                    Object connector = _xMultiServiceFactory.createInstance("com.sun.star.connection.Connector");
+                XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
 
-                    XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
-
-                    // connect to the server
-                    XConnection xConnection = connector_xConnector.connect(conDcp);
-
+                // connect to the server
+                XConnection xConnection = connector_xConnector.connect(conDcp);
+                try {
                     xBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, null);
+                } catch (com.sun.star.bridge.BridgeExistsException e) {
+                    throw new com.sun.star.uno.RuntimeException(e.getMessage());
                 }
-                rootObject = xBridge.getInstance(rootOid);
             }
-            catch(Exception exception) {
-                if(DEBUG) {
-                    System.err.println("##### " + getClass().getName() + ".resolve - exception occurred:" + exception);
-                    exception.printStackTrace();
-                }
-                throw new com.sun.star.uno.RuntimeException(exception.getMessage());
-            }
-
+            rootObject = xBridge.getInstance(rootOid);
             return rootObject;
         }
     }
