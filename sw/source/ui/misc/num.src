@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:59:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ TabPage TP_NUM_POSITION
     StringList [ greek ] =
     {
             < "¡ÒÈÛÙÂÒ‹" ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
+        < "”ÙÔ Í›ÌÙÒÔ" ; > ;
         < "ƒÂÓÈ‹" ; > ;
     };
     StringList [ korean ] =
@@ -662,7 +662,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ greek ] = "”ÙıÎ ·ÒﬂËÏÁÛÁÚ";
                 Text[ korean ] = "Î≤àÌò∏ Îß§Í∏∞Í∏∞ Ïú†Ìòï";
                 Text[ turkish ] = "Numaralama tipi";
-                Text[ language_user1 ] = "Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
+                Text[ language_user1 ] = "; Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
                 Text[ catalan ] = "Tipus de numeraciÛ";
                 Text[ finnish ] = "Numerointityyppi";
                 Text[ thai ] = "‡∏ä‡∏ô‡∏¥‡∏î‡∏•‡∏≥‡∏î‡∏±‡∏ö‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç";
@@ -791,7 +791,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ greek ] = "≈ÈÎÔ„›Ú";
                 Text[ korean ] = "ÏòµÏÖò";
                 Text[ turkish ] = "SeÁenekler";
-                Text[ language_user1 ] = "KW had called this \"Customize\" which leads to unnecessary confusion in translation. EM";
+                Text[ language_user1 ] = "; KW had called this \"Customize\" which leads to unnecessary confusion in translation. EM";
                 Text[ catalan ] = "Opcions";
                 Text[ finnish ] = "Asetukset";
                 Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
@@ -874,6 +874,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ hindi ] = "‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ ‡§¶‡•á‡§®‡§æ/‡§¨‡•Å‡§≤‡•ç‡§≤‡•á‡§ü‡•ç‡§∏";
     Text[ slovak ] = "ƒå√≠slovanie/odr√°≈æky";
 };
+
 
 
 
