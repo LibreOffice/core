@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:09:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1926,9 +1926,9 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                     const SwLayoutFrm *pEnd, const SwTblSearchType eSearchType )
 {
-    while ( !pStart->IsCellFrm() )
+    while ( pStart && !pStart->IsCellFrm() )
         pStart = pStart->GetUpper();
-    while ( !pEnd->IsCellFrm() )
+    while ( pEnd && !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();
 
     // #112697# Robust:
