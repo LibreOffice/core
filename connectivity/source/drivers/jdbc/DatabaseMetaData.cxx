@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include "TPrivilegesResultSet.hxx"
 
 using namespace ::comphelper;
 
@@ -893,6 +894,10 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
+    if ( m_pConnection->isIgnoreDriverPrivilegesEnabled() )
+    {
+        return new OResultSetPrivileges(this,catalog,schemaPattern,tableNamePattern);
+    }
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
