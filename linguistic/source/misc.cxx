@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-14 09:15:49 $
+ *  last change: $Author: tl $ $Date: 2001-08-17 11:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,16 +443,14 @@ INT32 GetPosInWordToCheck( const OUString &rTxt, INT32 nPos )
     INT32 nLen = rTxt.getLength();
     if (0 <= nPos  &&  nPos < nLen)
     {
-        INT32 nSkipped = 0;
-        BOOL bSkip;
-        for (INT32 i = 0;  i <= nPos;  ++i)
+        nRes = 0;
+        for (INT32 i = 0;  i < nPos;  ++i)
         {
             sal_Unicode cChar = rTxt[i];
-            bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
-            if (bSkip)
-                ++nSkipped;
+            BOOL bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
+            if (!bSkip)
+                ++nRes;
         }
-        nRes = nPos - nSkipped;
     }
     return nRes;
 }
@@ -469,24 +467,32 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
                  nChgLen = 0;
         OUString aRplc;
         BOOL bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
+#ifdef DEBUG
+        OUString aWord( rxHyphWord->getWord() );
+#endif
 
         OUString aOrigHyphenatedWord;
         INT16 nOrigHyphenPos        = -1;
         INT16 nOrigHyphenationPos   = -1;
         if (!bAltSpelling)
         {
-#ifdef DEBUG
-            OUString aWord( rxHyphWord->getWord() );
-#endif
             aOrigHyphenatedWord = rOrigWord;
             nOrigHyphenPos      = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenPos() );
             nOrigHyphenationPos = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenationPos() );
         }
         else
         {
+            //! should at least work with the German words
+            //! Bä-c-k-er and Sc-hif-fah-rt
+
             OUString aLeft, aRight;
             INT16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
-            nPos += (-1 + nChgLen);
+
+            // get words like Sc-hif-fah-rt to work correct
+            INT16 nHyphenationPos = rxHyphWord->getHyphenationPos();
+            if (nChgPos > nHyphenationPos)
+                --nPos;
+
             aLeft = rOrigWord.copy( 0, nPos );
             aRight = rOrigWord.copy( nPos + nChgLen );
 
@@ -495,9 +501,8 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             aOrigHyphenatedWord += aRight;
 
             nOrigHyphenPos      = aLeft.getLength() +
-                                    rxHyphWord->getHyphenPos() - nChgPos;
-            nOrigHyphenationPos = aLeft.getLength() +
-                                    rxHyphWord->getHyphenationPos() - nChgPos;
+                                  rxHyphWord->getHyphenPos() - nChgPos;
+            nOrigHyphenationPos = GetOrigWordPos( rOrigWord, nHyphenationPos );
         }
 
         if (nOrigHyphenPos == -1  ||  nOrigHyphenationPos == -1)
