@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-16 15:36:01 $
+ *  last change: $Author: sab $ $Date: 2002-04-05 06:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ using namespace ::xmloff::token;
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
+    MAP( "AsianVerticalMode", XML_NAMESPACE_STYLE, XML_GLYPH_ORIENTATION_VERTICAL, XML_SC_TYPE_VERTICAL, 0),
     MAP( "BottomBorder", XML_NAMESPACE_FO, XML_BORDER_BOTTOM, XML_TYPE_BORDER, CTF_SC_BOTTOMBORDER ),
     MAP( "BottomBorder", XML_NAMESPACE_STYLE, XML_BORDER_LINE_WIDTH_BOTTOM, XML_TYPE_BORDER_WIDTH, CTF_SC_BOTTOMBORDERWIDTH ),
     MAP( "CellBackColor", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
@@ -781,6 +782,11 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SC_TYPE_EQUAL :
             {
                 pHdl = new XmlScPropHdl_IsEqual;
+            }
+            break;
+            case XML_SC_TYPE_VERTICAL :
+            {
+                pHdl = new XmlScPropHdl_Vertical;
             }
             break;
         }
@@ -1535,11 +1541,7 @@ sal_Bool XmlScPropHdl_IsTextWrapped::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool aBreak1, aBreak2;
-
-    if((r1 >>= aBreak1) && (r2 >>= aBreak2))
-        return (aBreak1 == aBreak2);
-    return sal_False;
+    return (::cppu::any2bool(r1) == ::cppu::any2bool(r2));
 }
 
 sal_Bool XmlScPropHdl_IsTextWrapped::importXML(
@@ -1549,17 +1551,14 @@ sal_Bool XmlScPropHdl_IsTextWrapped::importXML(
 {
     sal_Bool bRetval(sal_False);
 
-    sal_Bool bValue;
     if (IsXMLToken(rStrImpValue, XML_WRAP))
     {
-        bValue = sal_True;
-        rValue <<= bValue;
+        rValue = ::cppu::bool2any(sal_True);
         bRetval = sal_True;
     }
     else if (IsXMLToken(rStrImpValue, XML_NO_WRAP))
     {
-        bValue = sal_False;
-        rValue <<= bValue;
+        rValue = ::cppu::bool2any(sal_False);
         bRetval = sal_True;
     }
 
@@ -1571,21 +1570,17 @@ sal_Bool XmlScPropHdl_IsTextWrapped::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bVal;
     sal_Bool bRetval(sal_False);
 
-    if(rValue >>= bVal)
+    if (::cppu::any2bool(rValue))
     {
-        if (bVal)
-        {
-            rStrExpValue = GetXMLToken(XML_WRAP);
-            bRetval = sal_True;
-        }
-        else
-        {
-            rStrExpValue = GetXMLToken(XML_NO_WRAP);
-            bRetval = sal_True;
-        }
+        rStrExpValue = GetXMLToken(XML_WRAP);
+        bRetval = sal_True;
+    }
+    else
+    {
+        rStrExpValue = GetXMLToken(XML_NO_WRAP);
+        bRetval = sal_True;
     }
 
     return bRetval;
@@ -1607,3 +1602,55 @@ sal_Bool XmlScPropHdl_IsEqual::exportXML( ::rtl::OUString& rStrExpValue,
     return sal_False;
 }
 
+XmlScPropHdl_Vertical::~XmlScPropHdl_Vertical()
+{
+}
+
+sal_Bool XmlScPropHdl_Vertical::equals(
+    const ::com::sun::star::uno::Any& r1,
+    const ::com::sun::star::uno::Any& r2 ) const
+{
+    return (::cppu::any2bool(r1) == ::cppu::any2bool(r2));
+}
+
+sal_Bool XmlScPropHdl_Vertical::importXML(
+    const ::rtl::OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRetval(sal_False);
+
+    if (IsXMLToken(rStrImpValue, XML_AUTO))
+    {
+        rValue = ::cppu::bool2any(sal_True);
+        bRetval = sal_True;
+    }
+    else if (IsXMLToken(rStrImpValue, XML_0))
+    {
+        rValue = ::cppu::bool2any(sal_False);
+        bRetval = sal_True;
+    }
+
+    return bRetval;
+}
+
+sal_Bool XmlScPropHdl_Vertical::exportXML(
+    ::rtl::OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRetval(sal_False);
+
+    if (::cppu::any2bool(rValue))
+    {
+        rStrExpValue = GetXMLToken(XML_AUTO);
+        bRetval = sal_True;
+    }
+    else
+    {
+        rStrExpValue = GetXMLToken(XML_0);
+        bRetval = sal_True;
+    }
+
+    return bRetval;
+}

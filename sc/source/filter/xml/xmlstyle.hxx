@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 21:06:54 $
+ *  last change: $Author: sab $ $Date: 2002-04-05 06:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define XML_SC_TYPE_VERTJUSTIFY                     (XML_SC_TYPES_START + 13)
 #define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 14)
 #define XML_SC_TYPE_EQUAL                           (XML_SC_TYPES_START + 15)
+#define XML_SC_TYPE_VERTICAL                        (XML_SC_TYPES_START + 16)
 
 #define CTF_SC_HORIJUSTIFY                          (XML_SC_CTF_START +  1)
 #define CTF_SC_HORIJUSTIFY_SOURCE                   (XML_SC_CTF_START +  2)
@@ -374,6 +375,15 @@ class XmlScPropHdl_IsEqual : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_IsEqual() {}
     virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const { return sal_True; }
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XmlScPropHdl_Vertical : public XMLPropertyHandler
+{
+public:
+    virtual ~XmlScPropHdl_Vertical();
+    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
