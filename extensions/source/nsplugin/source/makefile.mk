@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-02 15:02:05 $
+#   last change: $Author: kz $ $Date: 2004-11-26 16:00:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,6 +159,29 @@ DEF1EXPORTFILE=exports.dxp
 .ENDIF
 .IF "$(GUI)"=="WNT"
 DEF1EXPORTFILE=exports_wnt.dxp
+.ENDIF
+
+SHL2OBJS=$(SHL1OBJS)
+SHL2STDLIBS=$(SHL1STDLIBS)
+SHL2TARGET=$(TARGET)_oo
+.IF "$(GUI)"=="WNT"
+SHL2STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
+.ENDIF
+
+SHL2DEPN=
+SHL2IMPLIB=	i$(SHL2TARGET)
+SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+
+# ----- get some additional keys in versioninfo ------------
+SHL2ADD_VERINFO=nsplugin_oo.rc
+SHL2DEPN+=$(SHL2ADD_VERINFO)
+
+DEF2NAME=$(SHL2TARGET)
+.IF "$(GUI)"=="UNX"
+DEF2EXPORTFILE=exports.dxp
+.ENDIF
+.IF "$(GUI)"=="WNT"
+DEF2EXPORTFILE=exports_wnt.dxp
 .ENDIF
 
 # --- Targets ----------------------------------
