@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-15 11:16:53 $
+ *  last change: $Author: sb $ $Date: 2002-08-15 16:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,11 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
         nCurrPos += pNewClusterWidths[ i ];
         pG->maLinearPos.X() += nDelta;
     }
+
+    // adjust new glyph widths to results calculated above
+    pG = mpGlyphItems;
+    for( i = 1; i < mnGlyphCount; ++i, ++pG )
+        pG[0].mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
 }
 
 // -----------------------------------------------------------------------
