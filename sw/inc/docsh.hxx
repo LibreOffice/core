@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:24:41 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,8 @@ public:
                                    long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
 
     virtual void LoadStyles( SfxObjectShell& rSource );
+
+    void _LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocument );
 
     // Seitenvorlagedialog anzeigen, ggf. auf Spaltenpage
     void FormatPage( const String& rPage,
