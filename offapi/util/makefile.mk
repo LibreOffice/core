@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: jsc $ $Date: 2002-12-02 11:34:04 $
+#   last change: $Author: dfoster $ $Date: 2003-01-27 14:34:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,6 +145,7 @@ UNOIDLDBFILES= \
     $(UCR)$/dcsstext.db \
     $(UCR)$/dcssscriptframework.db \
     $(UCR)$/dcsssfprovider.db \
+    $(UCR)$/dcsssfsecurity.db \
     $(UCR)$/dcsssfstorage.db 
 
 
