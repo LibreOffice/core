@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: af $ $Date: 2002-10-25 14:14:17 $
+ *  last change: $Author: ka $ $Date: 2002-11-28 17:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,12 +214,17 @@ void SdDrawViewShell::ArrangeGUIElements ()
     int nScrollBarSize = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
     aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
-#ifdef UNX
-    if( ( aTabSize.Width() == 0 ) || ( aTabSize.Height() ) )
-#else
-    if ( aTabSize.Width() == 0 )
-#endif
-        aTabSize.Width() = TABCONTROL_INITIAL_SIZE;
+    if( 0 == aTabSize.Width() )
+    {
+        if( 0.0 == pFrameView->GetTabCtrlPercent() )
+            aTabSize.Width() = TABCONTROL_INITIAL_SIZE;
+        else
+        {
+            const Size aFrameSize( GetViewFrame()->GetWindow().GetOutputSizePixel() );
+            aTabSize.Width() = FRound( aFrameSize.Width() * pFrameView->GetTabCtrlPercent() );
+        }
+    }
+
     aTabSize.Height() = aScrBarWH.Height();
     Point aHPos = aViewPos;
     aHPos.Y() += aViewSize.Height() - aTabSize.Height();
@@ -543,7 +548,16 @@ void SdDrawViewShell::WriteFrameViewData()
     if(pFrameView->GetDrawMode() != pWindow->GetDrawMode())
       pFrameView->SetDrawMode(pWindow->GetDrawMode());
 
+    // remember tabcontrol extent as percentage of whole frame width
+    const Size aFrameSize( GetViewFrame()->GetWindow().GetOutputSizePixel() );
+
+    if( aFrameSize.Width() )
+        pFrameView->SetTabCtrlPercent( (double) aTabControl.GetSizePixel().Width() / aFrameSize.Width() );
+    else
+        pFrameView->SetTabCtrlPercent( 0.0 );
 }
+
+
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-30 14:16:29 $
+ *  last change: $Author: ka $ $Date: 2002-11-28 17:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bShowPreviewInPageMode = pFrameView->IsShowPreviewInPageMode() != 0;
         bShowPreviewInMasterPageMode = pFrameView->IsShowPreviewInMasterPageMode() != 0;
         bShowPreviewInOutlineMode = pFrameView->IsShowPreviewInOutlineMode() != 0;
+        nTabCtrlPercent = pFrameView->GetTabCtrlPercent();
     }
     else
     {
@@ -272,6 +273,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bShowPreviewInPageMode = FALSE;
         bShowPreviewInMasterPageMode = TRUE;
         bShowPreviewInOutlineMode = TRUE;
+        nTabCtrlPercent = 0.0;
 
         Update( SD_MOD()->GetSdOptions(pDrawDoc->GetDocumentType()) );
     }
