@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:41:59 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,13 +166,13 @@ Menu RID_DRAW_GLUEPOINT_POPUP
 };
 
 
-Menu RID_SLIDETABLE_POPUP
+Menu RID_SLIDE_SORTER_IMPRESS_SEL_POPUP
 {
     ItemList =
     {
-        MN_INSERT_PAGE
-        MN_DELETE_PAGE
-        MN_RENAME_PAGE
+        MN_INSERT_SLIDE
+        MN_DELETE_SLIDE
+        MN_RENAME_SLIDE
         SEPARATOR
         MN_PRESENTATION_LAYOUT
         MN_MODIFY_PAGE
@@ -183,11 +183,51 @@ Menu RID_SLIDETABLE_POPUP
 };
 
 
-Menu RID_SLIDE_NOSEL_POPUP
+Menu RID_SLIDE_SORTER_IMPRESS_NOSEL_POPUP
+{
+    ItemList =
+    {
+        MN_INSERT_SLIDE
+    };
+};
+
+Menu RID_SLIDE_SORTER_DRAW_SEL_POPUP
 {
     ItemList =
     {
         MN_INSERT_PAGE
+        MN_DELETE_PAGE
+        MN_RENAME_PAGE
+    };
+};
+
+
+Menu RID_SLIDE_SORTER_DRAW_NOSEL_POPUP
+{
+    ItemList =
+    {
+        MN_INSERT_PAGE
+    };
+};
+
+Menu RID_SLIDE_SORTER_MASTER_SEL_POPUP
+{
+    ItemList =
+    {
+        MN_INSERT_MASTER
+        MN_DELETE_MASTER
+        MN_RENAME_MASTER
+        SEPARATOR
+        MN_PRESENTATION_LAYOUT
+    };
+};
+
+
+Menu RID_SLIDE_SORTER_MASTER_NOSEL_POPUP
+{
+    ItemList =
+    {
+        MN_INSERT_MASTER
     };
 };
 
