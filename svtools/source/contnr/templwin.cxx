@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-23 13:11:11 $
+ *  last change: $Author: pb $ $Date: 2001-06-01 13:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,7 +1018,7 @@ void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
 {
     String aURL = pFileWin->GetSelectedFile();
     if ( aURL.Len() > 0 && !::utl::UCBContentHelper::IsFolder( aURL ) )
-        pFrameWin->OpenFile( aURL, sal_False, !bNotAsTemplate );
+        pFrameWin->OpenFile( aURL, sal_False, ( !bNotAsTemplate && pFileWin->IsTemplateFolder() ) );
 }
 
 String SvtTemplateWindow::GetFolderTitle() const
@@ -1107,6 +1107,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, 
     aNewTitle += pImpl->pWin->GetFolderTitle();
     SetText( aNewTitle );
 
+    SelectHdl_Impl( NULL );
     return 0;
 }
 
