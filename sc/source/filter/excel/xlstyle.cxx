@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:59:56 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,16 @@
 
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_FONTFAMILY_HPP_
+#include <com/sun/star/awt/FontFamily.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
+#include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
+#include <com/sun/star/awt/FontUnderline.hpp>
 #endif
 
 #ifndef _SV_FONT_HXX
@@ -379,14 +389,36 @@ void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
 
 // *** conversion of API constants *** ----------------------------------------
 
+namespace ApiAwt = ::com::sun::star::awt;
+
 float XclFontData::GetApiHeight() const
 {
     return static_cast< float >( mnHeight / TWIPS_PER_POINT );
 }
 
-::com::sun::star::awt::FontSlant XclFontData::GetApiPosture() const
+sal_Int16 XclFontData::GetApiFamily() const
 {
-    return mbItalic ? ::com::sun::star::awt::FontSlant_ITALIC : ::com::sun::star::awt::FontSlant_NONE;
+    sal_Int16 nApiFamily = ApiAwt::FontFamily::DONTKNOW;
+    switch( mnFamily )
+    {
+        case FAMILY_DECORATIVE: nApiFamily = ApiAwt::FontFamily::DECORATIVE;    break;
+        case FAMILY_MODERN:     nApiFamily = ApiAwt::FontFamily::MODERN;        break;
+        case FAMILY_ROMAN:      nApiFamily = ApiAwt::FontFamily::ROMAN;         break;
+        case FAMILY_SCRIPT:     nApiFamily = ApiAwt::FontFamily::SCRIPT;        break;
+        case FAMILY_SWISS:      nApiFamily = ApiAwt::FontFamily::SWISS;         break;
+        case FAMILY_SYSTEM:     nApiFamily = ApiAwt::FontFamily::SYSTEM;        break;
+    }
+    return nApiFamily;
+}
+
+sal_Int16 XclFontData::GetApiCharSet() const
+{
+    return static_cast< sal_Int16 >( GetScCharSet() );
+}
+
+ApiAwt::FontSlant XclFontData::GetApiPosture() const
+{
+    return mbItalic ? ApiAwt::FontSlant_ITALIC : ApiAwt::FontSlant_NONE;
 }
 
 float XclFontData::GetApiWeight() const
@@ -396,20 +428,77 @@ float XclFontData::GetApiWeight() const
 
 sal_Int16 XclFontData::GetApiUnderline() const
 {
-    sal_Int16 nApiUnderl = ::com::sun::star::awt::FontUnderline::NONE;
+    sal_Int16 nApiUnderl = ApiAwt::FontUnderline::NONE;
     switch( meUnderline )
     {
         case xlUnderlSingle:
-        case xlUnderlSingleAcc:     nApiUnderl = ::com::sun::star::awt::FontUnderline::SINGLE; break;
+        case xlUnderlSingleAcc:     nApiUnderl = ApiAwt::FontUnderline::SINGLE; break;
         case xlUnderlDouble:
-        case xlUnderlDoubleAcc:     nApiUnderl = ::com::sun::star::awt::FontUnderline::DOUBLE; break;
+        case xlUnderlDoubleAcc:     nApiUnderl = ApiAwt::FontUnderline::DOUBLE; break;
     }
     return nApiUnderl;
 }
 
 sal_Int16 XclFontData::GetApiStrikeout() const
 {
-    return mbStrikeout ? ::com::sun::star::awt::FontStrikeout::SINGLE : ::com::sun::star::awt::FontStrikeout::NONE;
+    return mbStrikeout ? ApiAwt::FontStrikeout::SINGLE : ApiAwt::FontStrikeout::NONE;
+}
+
+void XclFontData::SetApiHeight( float fPoint )
+{
+    mnHeight = static_cast< sal_uInt16 >( ::std::min( fPoint * TWIPS_PER_POINT + 0.5, 32767.0 ) );
+}
+
+void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
+{
+    switch( nApiFamily )
+    {
+        case ApiAwt::FontFamily::DECORATIVE:    mnFamily = FAMILY_DECORATIVE;   break;
+        case ApiAwt::FontFamily::MODERN:        mnFamily = FAMILY_MODERN;       break;
+        case ApiAwt::FontFamily::ROMAN:         mnFamily = FAMILY_ROMAN;        break;
+        case ApiAwt::FontFamily::SCRIPT:        mnFamily = FAMILY_SCRIPT;       break;
+        case ApiAwt::FontFamily::SWISS:         mnFamily = FAMILY_SWISS;        break;
+        case ApiAwt::FontFamily::SYSTEM:        mnFamily = FAMILY_SYSTEM;       break;
+        default:                                mnFamily = FAMILY_DONTKNOW;
+    }
+}
+
+void XclFontData::SetApiCharSet( sal_Int16 nApiCharSet )
+{
+    SetScCharSet( static_cast< CharSet >( nApiCharSet ) );
+}
+
+void XclFontData::SetApiPosture( ApiAwt::FontSlant eApiPosture )
+{
+    mbItalic =
+        (eApiPosture == ApiAwt::FontSlant_OBLIQUE) ||
+        (eApiPosture == ApiAwt::FontSlant_ITALIC) ||
+        (eApiPosture == ApiAwt::FontSlant_REVERSE_OBLIQUE) ||
+        (eApiPosture == ApiAwt::FontSlant_REVERSE_ITALIC);
+}
+
+void XclFontData::SetApiWeight( float fApiWeight )
+{
+    SetScWeight( VCLUnoHelper::ConvertFontWeight( fApiWeight ) );
+}
+
+void XclFontData::SetApiUnderline( sal_Int16 nApiUnderl )
+{
+    switch( nApiUnderl )
+    {
+        case ApiAwt::FontUnderline::NONE:
+        case ApiAwt::FontUnderline::DONTKNOW:   meUnderline = xlUnderlNone;     break;
+        case ApiAwt::FontUnderline::DOUBLE:
+        case ApiAwt::FontUnderline::DOUBLEWAVE: meUnderline = xlUnderlDouble;   break;
+        default:                                meUnderline = xlUnderlSingle;
+    }
+}
+
+void XclFontData::SetApiStrikeout( sal_Int16 nApiStrikeout )
+{
+    mbStrikeout =
+        (nApiStrikeout != ApiAwt::FontStrikeout::NONE) &&
+        (nApiStrikeout != ApiAwt::FontStrikeout::DONTKNOW);
 }
 
 
