@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:34:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
+#endif
+#ifndef _DBCONFIG_HXX
+#include <dbconfig.hxx>
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -327,10 +330,14 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     sal_Bool bEnableOK = sal_True;
     if(m_xDBContext.is())
     {
+        SwDBConfig aDb;
+        ::rtl::OUString sBibliography = aDb.GetBibliographySource().sDataSource;
         uno::Sequence< ::rtl::OUString> aNames = m_xDBContext->getElementNames();
         const ::rtl::OUString* pNames = aNames.getConstArray();
         for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
         {
+            if ( pNames[nName] == sBibliography )
+                continue;
             SvLBoxEntry* pEntry = m_aListLB.InsertEntry(pNames[nName]);
             AddressUserData_Impl* pUserData = new AddressUserData_Impl();
             pEntry->SetUserData(pUserData);
@@ -389,6 +396,10 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if(pSelect && xMgr.is())
     {
+        String sCommand = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        if ( !sCommand.Len() )
+            return 0;
+
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         if(pUserData->xConnection.is() )
         {
@@ -406,7 +417,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
                 xRowProperties->setPropertyValue(C2U("DataSourceName"),
                         makeAny(OUString(m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1))));
                 xRowProperties->setPropertyValue(C2U("Command"), makeAny(
-                        OUString(m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1))));
+                        OUString()));
                 xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(pUserData->nCommandType));
                 xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(pUserData->xConnection));
                 xRowSet->execute();
@@ -715,8 +726,9 @@ void SwAddressListDialog::DetectTablesAndQueries(
                                     m_aDBData.nCommandType == CommandType::TABLE ?
                                             SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
         }
-        m_aOK.Enable(pSelect && m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1).Len());
-        m_aFilterPB.Enable( pUserData->xConnection.is() );
+        String sCommand = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        m_aOK.Enable(pSelect && sCommand.Len());
+        m_aFilterPB.Enable( pUserData->xConnection.is() && sCommand.Len() );
         m_aTablePB.Enable( pUserData->nTableAndQueryCount > 1 );
     }
     catch(Exception& rEx)
