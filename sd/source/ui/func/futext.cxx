@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:49:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,7 +1394,14 @@ BOOL FuText::DeleteDefaultText()
             {
                 ::Outliner* pOutliner = pView->GetTextEditOutliner();
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( 0 );
+                BOOL bIsUndoEnabled = pOutliner->IsUndoEnabled();
+                if( bIsUndoEnabled )
+                    pOutliner->EnableUndo(FALSE);
+
                 pOutliner->SetText( String(), pOutliner->GetParagraph( 0 ) );
+
+                if( bIsUndoEnabled )
+                    pOutliner->EnableUndo(TRUE);
 
                 if (pSheet &&
                     (ePresObjKind == PRESOBJ_NOTES || ePresObjKind == PRESOBJ_TEXT))
