@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-26 10:41:16 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,11 @@
 #include "optsitem.hxx"
 #endif //!SVX_LIGHT
 #include "frmview.hxx"
+#endif
+
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 
 using namespace ::rtl;
@@ -710,7 +715,8 @@ SdrPage* __EXPORT SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
 SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
 {
 #ifndef SVX_LIGHT
-    CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
+    // #90477# CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
+    CharSet eSysSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
 
     /**************************************************************************
     * Aktuelle FileFormat-Versionsnummer
@@ -878,7 +884,8 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
 
 SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
 {
-    CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
+    // #90477# CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
+    CharSet eSysSet = GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion());
 
     rIn >> (FmFormModel&) rDoc;
     rDoc.GetItemPool().LoadCompleted();

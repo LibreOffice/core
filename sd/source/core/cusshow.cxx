@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 /*************************************************************************
@@ -127,7 +132,9 @@ SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow)
     SdIOCompat aIO(rOut, STREAM_WRITE, 0);
 
     // Name
-    rOut.WriteByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
+    // #90477# rOut.WriteByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
+    rOut.WriteByteString(rCustomShow.aName,
+        GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion()));
 
     // Anzahl Seiten
     UINT32 nCount = rCustomShow.Count();
@@ -159,7 +166,9 @@ SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow)
     SdIOCompat aIO(rIn, STREAM_READ);
 
     // Name
-    rIn.ReadByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
+    // #90477# rIn.ReadByteString( rCustomShow.aName, ::GetStoreCharSet( gsl_getSystemTextEncoding() ) );
+    rIn.ReadByteString(rCustomShow.aName,
+        GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion()));
 
     // Anzahl Seiten
     UINT32 nCount = 0;

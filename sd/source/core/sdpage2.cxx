@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:27:14 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@
 #endif
 #endif
 #endif // !SVX_LIGHT
+
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -349,7 +354,8 @@ void SdPage::EndListenOutlineText()
 void __EXPORT SdPage::WriteData(SvStream& rOut) const
 {
     FmFormPage::WriteData( rOut );
-    rOut.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
+    // #90477# rOut.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
+    rOut.SetStreamCharSet(GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion()));
 
     if ( pModel->IsStreamingSdrModel() )
     {
@@ -429,8 +435,11 @@ void __EXPORT SdPage::WriteData(SvStream& rOut) const
         }
     }
 
-    INT16 nI16Temp = ::GetStoreCharSet( gsl_getSystemTextEncoding() );  // .EXEs vor 303 werten den aus
+    // #90477# INT16 nI16Temp = ::GetStoreCharSet( gsl_getSystemTextEncoding() );  // .EXEs vor 303 werten den aus
+    INT16 nI16Temp = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
+
     rOut << nI16Temp;
+
     rOut.WriteByteString( INetURLObject::AbsToRel(aSoundFile,
                                                   INetURLObject::WAS_ENCODED,
                                                   INetURLObject::DECODE_UNAMBIGUOUS));
@@ -459,7 +468,9 @@ void __EXPORT SdPage::WriteData(SvStream& rOut) const
 void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 {
     FmFormPage::ReadData( rHead, rIn );
-    rIn.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
+
+    // #90477# rIn.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
+    rIn.SetStreamCharSet(GetSOLoadTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rIn.GetVersion()));
 
     if ( pModel->IsStreamingSdrModel() )
     {
@@ -535,7 +546,9 @@ void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
     {
         INT16 nCharSet;
         rIn >> nCharSet;    // nur Einlesen, Konvertierung ab 303 durch Stream
-        eCharSet = (CharSet) nCharSet;
+
+        // #90477# eCharSet = (CharSet) nCharSet;
+        eCharSet = (CharSet)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
 
         String aSoundFileRel;
         rIn.ReadByteString( aSoundFileRel );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:27:14 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 #include "glob.hxx"
 #include "sdiocmpt.hxx"
 #include "drawdoc.hxx"
+
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -227,8 +232,11 @@ void SdAnimationInfo::WriteData(SvStream& rOut)
     rOut << aBlueScreen;
     rOut << aDimColor;
 
-    rtl_TextEncoding eSysEnc = ::GetStoreCharSet( gsl_getSystemTextEncoding() );
+    // #90477# rtl_TextEncoding eSysEnc = ::GetStoreCharSet( gsl_getSystemTextEncoding() );
+    rtl_TextEncoding eSysEnc = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
+
     rOut << (INT16) eSysEnc;
+
     rOut.WriteByteString( INetURLObject::AbsToRel( aSoundFile,
                                                    INetURLObject::WAS_ENCODED,
                                                    INetURLObject::DECODE_UNAMBIGUOUS), eSysEnc );
@@ -316,7 +324,9 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
     {
         INT16 nCharSet;
         rIn >> nCharSet;
-        eTextEnc = (rtl_TextEncoding)nCharSet;
+
+        // #unicode# eTextEnc = (rtl_TextEncoding)nCharSet;
+        eTextEnc = (rtl_TextEncoding)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
 
         String aSoundFileRel;
         rIn.ReadByteString( aSoundFileRel, eTextEnc );
