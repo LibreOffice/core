@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 10:10:20 $
+ *  last change: $Author: os $ $Date: 2001-02-14 15:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COMBINE_IS_ON;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COMBINE_PREFIX;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COMBINE_SUFFIX;
 
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_EMPHASIZE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_EMPHASIS;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_LINE_SPACING                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_TOP_MARGIN              ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 10:10:55 $
+ *  last change: $Author: os $ $Date: 2001-02-14 15:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, MID_TWOLINES}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_START_BRACKET}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_END_BRACKET}, \
-        { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_EMPHASIS},\
+        { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),                 RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_EMPHASIS},\
         { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PROPERTY_NONE ,0     },    \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },    \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
@@ -780,7 +780,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     _PROP_DIFF_FONTHEIGHT
                     {0,0,0,0}
                 };
@@ -878,7 +878,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
@@ -1214,7 +1214,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRangePropertyMap_Impl;
@@ -1711,7 +1711,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTableCursorPropertyMap_Impl;

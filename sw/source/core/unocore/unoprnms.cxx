@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 10:10:55 $
+ *  last change: $Author: os $ $Date: 2001-02-14 15:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_TRANSPARENT          (MAP_CHA
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COMBINE_IS_ON         (MAP_CHAR_LEN("CharCombineIsOn"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COMBINE_PREFIX            (MAP_CHAR_LEN("CharCombinePrefix"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COMBINE_SUFFIX            (MAP_CHAR_LEN("CharCombineSuffix"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_EMPHASIZE         (MAP_CHAR_LEN("CharEmphasize"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_EMPHASIS                  (MAP_CHAR_LEN("CharEmphasis"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_LINE_SPACING                      (MAP_CHAR_LEN("ParaLineSpacing"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_TOP_MARGIN                        (MAP_CHAR_LEN("ParaTopMargin"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_BOTTOM_MARGIN                     (MAP_CHAR_LEN("ParaBottomMargin"));
