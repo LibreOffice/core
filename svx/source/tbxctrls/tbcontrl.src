@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-02 20:19:03 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ String RID_SVXSTR_TRANSPARENT
     Text[ korean ] = "채우기 없음";
     Text[ turkish ] = "Dolgu yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin relleno";
+    Text[ catalan ] = "Sense emplenament";
     Text[ finnish ] = "Ei t�ytt��";
     Text[ thai ] = "ไม่เติม";
 };
@@ -145,7 +145,7 @@ String RID_SVXSTR_FILLPATTERN
     Text[ korean ] = "패턴";
     Text[ turkish ] = "Desen";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modelo";
+    Text[ catalan ] = "Model";
     Text[ thai ] = "ลวดลาย";
 };
 String RID_SVXSTR_FRAME
@@ -173,7 +173,7 @@ String RID_SVXSTR_FRAME
     Text[ korean ] = "테두리";
     Text[ turkish ] = "Kenarl�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Borde";
+    Text[ catalan ] = "Vores";
     Text[ thai ] = "เส้นขอบ";
 };
 String RID_SVXSTR_FRAME_STYLE
@@ -201,7 +201,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ korean ] = "테두리 유형";
     Text[ turkish ] = "Kenarl�k bi�imi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilo de borde";
+    Text[ catalan ] = "Estil de la vora";
     Text[ thai ] = "ลักษณะเส้นขอบ";
 };
 String RID_SVXSTR_FRAME_COLOR
@@ -229,7 +229,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text[ korean ] = "테두리 색";
     Text[ turkish ] = "Kenarl�k rengi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color del borde";
+    Text[ catalan ] = "Color de la vora";
     Text[ thai ] = "สีเส้นขอบ";
 };
 ListBox RID_SVXTBX_STYLE
@@ -266,7 +266,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text[ korean ] = "강조";
     Text[ turkish ] = "Vurgu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fondo de car�cter";
+    Text[ catalan ] = "Ressaltament";
     Text[ finnish ] = "Korostetaan";
     Text[ thai ] = "ไฮไลต์";
 };
@@ -292,7 +292,7 @@ String RID_SVXSTR_BACKGROUND
     Text[ chinese_traditional ] = "背景";
     Text[ arabic ] = "�������";
     Text[ turkish ] = "Artalan";
-    Text[ catalan ] = "Fondo";
+    Text[ catalan ] = "Fons";
     Text[ finnish ] = "Tausta";
     Text[ thai ] = "พื้นหลัง";
 };
@@ -318,7 +318,7 @@ String RID_SVXSTR_AUTOMATIC
     Text[ chinese_traditional ] = "自動";
     Text[ turkish ] = "Automatic";
     Text[ arabic ] = "������";
-    Text[ catalan ] = "Automatic";
+    Text[ catalan ] = "Autom�tic";
     Text[ finnish ] = "Automaattinen";
     Text[ thai ] = "อัตโนมัติ";
 };
