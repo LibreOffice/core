@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-19 09:38:08 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,51 +170,23 @@ rtl::OUString retrieveClassPath( ::rtl::OUString const & macro )
     return buf.makeStringAndClear();
 }
 
-//ToDo we should use a SAL function to determine which platform and OS we are working on.
 rtl::OUString getPlatform()
 {
-    char * szArchitecture =
-#if defined SPARC
-    "sparc";
-#elif defined INTEL
-    "x86";
-#elif defined POWERPC
-    "ppc";
-#elif defined MIPS
-    "mips";
-#elif defined S390
-    "s390";
-#else
-#error unknown plattform
-#endif
-
-    char * szOS =
-
-#if defined WNT
-        "wnt";
-#elif defined  SOLARIS
-    "solaris";
-#elif defined LINUX
-    "linux";
-#elif defined MACOSX
-    "macosx";
-#elif defined FREEBSD
-    "freebsd";
-#elif defined NETBSD
-    "netbsd";
-#elif defined AIX
-    "aix";
-#else
-#error unknown operating system
-#endif
     rtl::OUStringBuffer buf(256);
     buf.appendAscii("_");
-    rtl::OUString sOS = rtl::OStringToOUString(
-        rtl::OString(szOS), RTL_TEXTENCODING_UTF8);
+
+    rtl::OUString sOS;
+    rtl::Bootstrap::get(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_OS")),
+        sOS);
+    OSL_ASSERT(sOS.getLength() > 0);
     buf.append(sOS);
     buf.appendAscii("_");
-    rtl::OUString sArch = rtl::OStringToOUString(
-        rtl::OString(szArchitecture), RTL_TEXTENCODING_UTF8);
+    rtl::OUString sArch;
+    rtl::Bootstrap::get(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_ARCH")),
+        sArch);
+    OSL_ASSERT(sArch.getLength() > 0);
     buf.append(sArch);
     return buf.makeStringAndClear();
 }
@@ -312,7 +284,8 @@ javaFrameworkError getVendorPluginURLs(
             jfw::CXmlCharPtr sTextLibrary(
                 xmlNodeListGetString(doc, cur->xmlChildrenNode, 1));
             PluginLibrary plugin;
-            plugin.sVendor = rtl::OString((sal_Char*)(xmlChar*) sAttrVendor);
+            rtl::OString osVendor((sal_Char*)(xmlChar*) sAttrVendor);
+            plugin.sVendor = rtl::OStringToOUString(osVendor, RTL_TEXTENCODING_UTF8);
 
             if (mode == JFW_MODE_OFFICE)
             {
@@ -340,6 +313,40 @@ javaFrameworkError getVendorPluginURLs(
     }
     return JFW_E_NONE;
 }
+
+javaFrameworkError getSupportedVendors(
+    const xmlDocPtr doc,
+    const xmlXPathContextPtr  context,
+    std::vector<rtl::OUString> * vecVendors)
+{
+    OSL_ASSERT(vecVendors && doc && context);
+
+    //get the nodeset for the library elements
+    jfw::CXPathObjectPtr result;
+    result = xmlXPathEvalExpression(
+        (xmlChar*)"/jf:javaSelection/jf:plugins/jf:library", context);
+    if (xmlXPathNodeSetIsEmpty(result->nodesetval))
+    {
+        return JFW_E_ERROR;
+    }
+    vecVendors->clear();
+
+    //get the values of the library elements + vendor attribute
+    xmlNode* cur = result->nodesetval->nodeTab[0];
+    JFW_MODE mode = getMode();
+    while (cur != NULL)
+    {
+        //between library elements are also text elements
+        if (cur->type == XML_ELEMENT_NODE)
+        {
+            jfw::CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "vendor"));
+            vecVendors->push_back(sAttrVendor);
+        }
+        cur = cur->next;
+    }
+    return JFW_E_NONE;
+}
+
 
 /** Get the file URL to the javasettings.xml
  */
@@ -443,56 +450,78 @@ rtl::OUString getVendorSettingsURL()
 {
     //get the system path to the javavendors.xml file
     //First try in an office installation
-    rtl::OUString sBaseDir = getBaseInstallation();
-    if (sBaseDir.getLength() != 0)
+    JFW_MODE mode = getMode();
+    if (mode == JFW_MODE_OFFICE)
     {
-        //We are run within office installation
-        rtl::OUStringBuffer sSettings(256);
-        sSettings.append(sBaseDir);
-        sSettings.appendAscii("/share/config/");
-        sSettings.appendAscii(VENDORSETTINGS);
-        return sSettings.makeStringAndClear();
+        rtl::OUString sBaseDir = getBaseInstallation();
+        if (sBaseDir.getLength() != 0)
+        {
+            //We are run within office installation
+            rtl::OUStringBuffer sSettings(256);
+            sSettings.append(sBaseDir);
+            sSettings.appendAscii("/share/config/");
+            sSettings.appendAscii(VENDORSETTINGS);
+            return sSettings.makeStringAndClear();
+        }
+    }
+    else if(mode == JFW_MODE_ENV_SIMPLE)
+    {
+
+        //try next to the executable
+        rtl_uString* sExe = NULL;
+        if (osl_getExecutableFile( & sExe) == osl_Process_E_None)
+        {
+            rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
+            rtl::OUString sVendor = getDirFromFile(ouExe);
+            rtl::OUStringBuffer sBufVendor(256);
+            sBufVendor.append(sVendor);
+            sBufVendor.appendAscii("/");
+            sBufVendor.appendAscii(VENDORSETTINGS);
+            sVendor = sBufVendor.makeStringAndClear();
+
+            //check if the file exists
+            osl::DirectoryItem vendorItem;
+            osl::File::RC fileError = osl::DirectoryItem::get(sVendor, vendorItem);
+            if (fileError == osl::FileBase::E_None)
+                return sVendor;
+            //Hack. try the so sub dir of the executable dir. Necessery for build process
+            //where javavendors.xml is delivered to ../bin/so for StarOffice
+            sVendor = getDirFromFile(ouExe);
+            sBufVendor.append(sVendor);
+            sBufVendor.appendAscii("/so/");
+            sBufVendor.appendAscii(VENDORSETTINGS);
+            sVendor = sBufVendor.makeStringAndClear();
+            //check if the file exists
+            fileError = osl::DirectoryItem::get(sVendor, vendorItem);
+            if (fileError == osl::FileBase::E_None)
+                return sVendor;
+        }
+        else
+            OSL_ASSERT(0);
+
+        //try next to the jvmfwk.dll
+        rtl::OUString sLib = searchFileNextToThisLib(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(VENDORSETTINGS)));
+        if (sLib.getLength() > 0)
+            return sLib;
+
+        //try the paths from the PATH environment variable
+        rtl::OUString sVendorsFile(
+            RTL_CONSTASCII_USTRINGPARAM(VENDORSETTINGS));
+        rtl::OUString sVendorsUrl;
+
+        rtl::OUString sPathName(RTL_CONSTASCII_USTRINGPARAM("PATH"));
+        rtl::OUString sPathValue;
+        if (osl_getEnvironment(sPathName.pData, & sPathValue.pData)
+            == osl_Process_E_None)
+        {
+            if (osl_searchFileURL(sVendorsFile.pData, sPathValue.pData ,
+                                  & sVendorsUrl.pData)
+                == osl_File_E_None)
+                return sVendorsUrl;
+        }
     }
 
-    //try next to the executable
-    rtl_uString* sExe = NULL;
-    if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
-    {
-        OSL_ASSERT(0);
-        return rtl::OUString();
-    }
-
-    rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
-    rtl::OUString sVendor = getDirFromFile(ouExe);
-    rtl::OUStringBuffer sBufVendor(256);
-    sBufVendor.append(sVendor);
-    sBufVendor.appendAscii("/");
-    sBufVendor.appendAscii(VENDORSETTINGS);
-    sVendor = sBufVendor.makeStringAndClear();
-
-    //check if the file exists
-    osl::DirectoryItem vendorItem;
-    osl::File::RC fileError = osl::DirectoryItem::get(sVendor, vendorItem);
-    if (fileError == osl::FileBase::E_None)
-        return sVendor;
-
-    //Hack. try the so sub dir of the executable dir. Necessery for build process
-    //where javavendors.xml is delivered to ../bin/so for StarOffice
-    sVendor = getDirFromFile(ouExe);
-    sBufVendor.append(sVendor);
-    sBufVendor.appendAscii("/so/");
-    sBufVendor.appendAscii(VENDORSETTINGS);
-    sVendor = sBufVendor.makeStringAndClear();
-    //check if the file exists
-    fileError = osl::DirectoryItem::get(sVendor, vendorItem);
-    if (fileError == osl::FileBase::E_None)
-        return sVendor;
-
-    //try next to the jvmfwk.dll
-    rtl::OUString sLib = searchFileNextToThisLib(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(VENDORSETTINGS)));
-
-    OSL_ASSERT(sLib.getLength()> 0 );
     return rtl::OUString();
 }
 
@@ -574,15 +603,16 @@ bool isAccessibilitySupportDesired()
 javaFrameworkError getVersionInformation(
     const xmlDocPtr doc,
     const xmlXPathContextPtr context,
-    const rtl::OString & sVendor,
+    const rtl::OUString & sVendor,
     VersionInfo *pVersionInfo)
 {
     OSL_ASSERT(doc && context && sVendor.getLength() && pVersionInfo);
 
+    rtl::OString osVendor = rtl::OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
     //Get minVersion
     rtl::OString sExpresion= rtl::OString(
         "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
-        sVendor + rtl::OString("\"]/jf:minVersion");
+        osVendor + rtl::OString("\"]/jf:minVersion");
 
     jfw::CXPathObjectPtr xPathObjectMin;
     xPathObjectMin =
@@ -603,7 +633,7 @@ javaFrameworkError getVersionInformation(
 
     //Get maxVersion
     sExpresion = rtl::OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
-        sVendor + rtl::OString("\"]/jf:maxVersion");
+        osVendor + rtl::OString("\"]/jf:maxVersion");
     jfw::CXPathObjectPtr xPathObjectMax;
     xPathObjectMax = xmlXPathEvalExpression(
         (xmlChar*) sExpresion.getStr(), context);
@@ -623,11 +653,11 @@ javaFrameworkError getVersionInformation(
 
     //Get excludeVersions
     sExpresion = rtl::OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
-        sVendor + rtl::OString("\"]/jf:excludeVersions/jf:version");
+        osVendor + rtl::OString("\"]/jf:excludeVersions/jf:version");
     jfw::CXPathObjectPtr xPathObjectVersions;
     xPathObjectVersions =
         xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(), context);
-    if (xPathObjectVersions->nodesetval)
+    if (!xmlXPathNodeSetIsEmpty(xPathObjectVersions->nodesetval))
     {
         xmlNode* cur = xPathObjectVersions->nodesetval->nodeTab[0];
         while (cur != NULL)
