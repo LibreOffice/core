@@ -2,9 +2,9 @@
 *
 *  $RCSfile: PrimaryKeyHandler.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 14:01:29 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:42:53 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -128,11 +128,11 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
         chkcreatePrimaryKey = CurUnoDialog.insertCheckBox("chkcreatePrimaryKey", SPRIMEKEYMODE, this,
             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-            new Object[] {UIConsts.INTEGERS[8], "HID:41229", screatePrimaryKey, new Integer(97), new Integer(70), new Short((short)1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(160)});
+            new Object[] {UIConsts.INTEGERS[8], "HID:41227", screatePrimaryKey, new Integer(97), new Integer(70), new Short((short)1), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(160)});
 
         optAddAutomatically = CurUnoDialog.insertRadioButton("optAddAutomatically", SPRIMEKEYMODE, this,
               new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41231", sAddAutomatically, new Integer(106), new Integer(82), new Short((short)1),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
+              new Object[] { UIConsts.INTEGERS[8], "HID:41228", sAddAutomatically, new Integer(106), new Integer(82), new Short((short)1),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
         );
 
         optUseExisting = CurUnoDialog.insertRadioButton("optUseExisting", SPRIMEKEYMODE, this,
@@ -142,12 +142,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
         optUseSeveral = CurUnoDialog.insertRadioButton("optUseSeveral", SPRIMEKEYMODE, this,
               new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-              new Object[] { UIConsts.INTEGERS[8], "HID:41234", sUseSeveral, new Integer(106), new Integer(132),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
+              new Object[] { UIConsts.INTEGERS[8], "HID:41233", sUseSeveral, new Integer(106), new Integer(132),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(200)}
         );
 
         chkApplyAutoValueAutomatic = CurUnoDialog.insertCheckBox("chkApplyAutoValueAutomatic", SPRIMEKEYMODE, this,
                 new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"}, //107
-                new Object[] {UIConsts.INTEGERS[8], "HID:41233", sApplyAutoValue, new Integer(116), new Integer(92), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(68)});
+                new Object[] {UIConsts.INTEGERS[8], "HID:41229", sApplyAutoValue, new Integer(116), new Integer(92), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(68)});
 
         lblPrimeFieldName = CurUnoDialog.insertLabel("lblPrimeFieldName",
             new String[] {"Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -156,12 +156,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
         lstSinglePrimeKey = CurUnoDialog.insertListBox("lstSinglePrimeKey", "onPrimeKeySelected", null, this,
             new String[] {"Dropdown", "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] {Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:41232", new Integer(162), new Integer(115), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(70)});
+            new Object[] {Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:41231", new Integer(162), new Integer(115), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(70)});
 
         chkApplyAutoValueExisting = CurUnoDialog.insertCheckBox("chkApplyAutoValueExisting", SPRIMEKEYMODE, this,
                 new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"}, //107
-                new Object[] {UIConsts.INTEGERS[8], "HID:41233", sApplyAutoValue, new Integer(238), new Integer(117), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(66)});
-        curPrimaryKeySelection = new FieldSelection(CurUnoDialog, IPRIMEKEYSTEP.intValue(), 116, 142, 188, 39, slblAvailableFields, slblSelPrimaryFields, 41235, false);
+                new Object[] {UIConsts.INTEGERS[8], "HID:41232", sApplyAutoValue, new Integer(238), new Integer(117), IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(66)});
+        curPrimaryKeySelection = new FieldSelection(CurUnoDialog, IPRIMEKEYSTEP.intValue(), 116, 142, 188, 39, slblAvailableFields, slblSelPrimaryFields, 41234, false);
         curPrimaryKeySelection.addFieldSelectionListener(this);
 
     }
