@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:36:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,6 @@ public:
 
     inline long         GetMaxTextLength() const { return nMaxTextLength; }
     inline void         SetClickHdl( const Link& rLink ) { aIconCtrl.SetClickHdl( rLink ); }
-    inline String       GetTemplateRootURL() const { return aTemplateRootURL; }
 
     String              GetSelectedIconURL() const;
     String              GetSelectedIconText() const;
@@ -155,7 +154,10 @@ public:
     void                UpdateIcons( sal_Bool _bHiContrast );
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
-    inline const String&    GetSamplesFolderURL() const;
+
+    inline const String&    GetTemplateRootURL() const      { return aTemplateRootURL; }
+    inline const String&    GetMyDocumentsRootURL() const   { return aMyDocumentsRootURL; }
+    inline const String&    GetSamplesFolderURL() const     { return aSamplesFolderRootURL; }
 
     void                SelectFolder(sal_Int32 nFolderPos);
 };
@@ -163,11 +165,6 @@ public:
 inline sal_Bool SvtIconWindow_Impl::ProcessKeyEvent( const KeyEvent& rKEvt )
 {
     return ( rKEvt.GetKeyCode().IsMod2() ? aIconCtrl.DoKeyInput( rKEvt ) : sal_False );
-}
-
-inline const String& SvtIconWindow_Impl::GetSamplesFolderURL() const
-{
-    return aSamplesFolderRootURL;
 }
 
 // class SvtFileViewWindow_Impl ------------------------------------------
@@ -182,6 +179,7 @@ private:
     Link                aNewFolderLink;
     String              aCurrentRootURL;
     String              aFolderURL;
+    String              aMyDocumentsURL;
     String              aSamplesFolderURL;
 
     sal_Bool            bIsTemplateFolder;
@@ -190,7 +188,7 @@ private:
                         GetNewDocContents() const;
 
 public:
-    SvtFileViewWindow_Impl( SvtTemplateWindow* pParent, const String& rSamplesFolderURL );
+    SvtFileViewWindow_Impl( SvtTemplateWindow* pParent );
     ~SvtFileViewWindow_Impl();
 
     virtual void        Resize();
@@ -204,6 +202,8 @@ public:
     inline String       GetRootURL() const { return aCurrentRootURL; }
     inline void         OpenRoot( const String& rRootURL )
                             { aCurrentRootURL = rRootURL; OpenFolder( rRootURL ); }
+    inline void         SetMyDocumentsURL( const String& _rNewURL ) { aMyDocumentsURL = _rNewURL; }
+    inline void         SetSamplesFolderURL( const String& _rNewURL ) { aSamplesFolderURL = _rNewURL; }
 
     String              GetSelectedFile() const;
     void                OpenFolder( const String& rURL );
