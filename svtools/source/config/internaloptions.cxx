@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:35:48 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes
@@ -314,14 +315,14 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_INTERNAL, CONFIG_MODE_IMMEDIATE_UPDATE )
     // Init member then.
-    ,   m_bSlotCFG          ( DEFAULT_SLOTCFG           )
-    ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL     )
-    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI         )
-    ,   m_aCurrentTempURL   ( DEFAULT_CURRENTTEMPURL    )
     , m_bRemoveMenuEntryClose ( sal_False )
     , m_bRemoveMenuEntryBackToWebtop ( sal_False )
     , m_bRemoveMenuEntryNewWebtop ( sal_False )
     , m_bRemoveMenuEntryLogout ( sal_False )
+    ,   m_bSlotCFG          ( DEFAULT_SLOTCFG           )
+    ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL     )
+    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI         )
+    ,   m_aCurrentTempURL   ( DEFAULT_CURRENTTEMPURL    )
 {
     // Use our list of configuration keys to get his values.
     // structure of internal section: (first 2 entries are fixed - all other are member of a set!)
