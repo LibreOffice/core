@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SearchAndReplace" script:language="StarBasic">&apos; ***
+&apos; SearchAndReplace basic script
+&apos; Uses a user interface to search and replace the specified strings
+&apos;
+&apos; author        Neil Montgomery
+&apos; created       August 12, 2002
+&apos; ***
+
+
+&apos; Main subprocedure to start script
+Sub Main
+ dialogShow()
+End Sub
+
+
+&apos; Global reference to the dialog object
+Dim oDialog as Object
+
+
+&apos; Uses the loadDialog subprocedure to load and execute the dialog box
+Sub dialogShow
+ oDialog = loadDialog(&quot;Standard&quot;,&quot;SearchAndReplaceDialog&quot;)
+ oDialog.execute()
+End Sub
+
+
+
+&apos; ***
+&apos; Loads the dialog from the dialog library
+&apos;
+&apos; param Libname         the library name where dialog is stored
+&apos; param  DialogName     the name of the dialog
+&apos; param         oLibContainer   library container to hold the loaded dialog library (optional)
+&apos; return        runtime dialog object
+&apos; ***
+Function loadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+ Dim oLib as Object
+ Dim oLibDialog as Object
+ Dim oRuntimeDialog as Object
+ 
+ If isMissing(oLibContainer ) then
+  oLibContainer = DialogLibraries
+ End If
+ oLibContainer.loadLibrary(LibName)
+ oLib = oLibContainer.getByName(Libname)
+ oLibDialog = oLib.getByName(DialogName)
+ oRuntimeDialog = createUnoDialog(oLibDialog)
+ loadDialog() = oRuntimeDialog
+End Function
+
+
+
+&apos; ***
+&apos; Creates a connection to the current document.
+&apos; Gets the search and replace keys from the dialog and replaces all
+&apos; instances of the search key with the replace key. 
+&apos;
+&apos; ***
+Sub getInfoFromDialog
+ Dim oDocument As Object
+ Dim oSearch As Object
+ Dim oFound As Object
+ Dim oFoundCursor As Object
+ Dim oSearchText as Object
+ Dim oReplaceText as Object
+ 
+ &apos; Create a document object for the current document then create text and
+ &apos; cursor objects
+ oDocument = StarDesktop.ActiveFrame.Controller.Model
+ oSearch = oDocument.createSearchDescriptor
+
+ &apos; Replace all instances of the search string with the replavce string
+ oSearch.SearchString = getSearchKey()
+ oSearch.ReplaceString = getReplaceKey()
+ oDocument.replaceAll(oSearch)
+End Sub
+
+
+&apos; ***
+&apos; Gets the search key string from the dialog
+&apos;
+&apos; returns	string 		representing the search key
+&apos; ***
+Function getSearchKey() as String
+ Dim sSearch As String
+
+ &apos; Get the search key from the dialog
+ oSearchText = oDialog.GetControl(&quot;SearchKeyTextBox&quot;)
+ sSearch = oSearchText.Text
+ getSearchKey = sSearch
+End Function
+
+
+
+&apos; ***
+&apos; Gets the replace key string from the dialog 
+&apos;
+&apos; returns 	string		representing the replace key
+&apos; ***
+Function getReplaceKey() as String
+ Dim sReplace As String
+
+ &apos; Get the replace key from the dialog
+ oReplaceText = oDialog.GetControl(&quot;ReplaceKeyTextBox&quot;)
+ sReplace = oReplaceText.Text
+ getReplaceKey = sReplace
+End Function</script:module>

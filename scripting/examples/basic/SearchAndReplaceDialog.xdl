@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="SearchAndReplaceDialog" dlg:left="113" dlg:top="112" dlg:width="178" dlg:height="138" dlg:closeable="true" dlg:moveable="true">
+ <dlg:bulletinboard>
+  <dlg:textfield dlg:id="SearchKeyTextBox" dlg:tab-index="0" dlg:left="28" dlg:top="31" dlg:width="53" dlg:height="13"/>
+  <dlg:textfield dlg:id="ReplaceKeyTextBox" dlg:tab-index="1" dlg:left="102" dlg:top="31" dlg:width="51" dlg:height="13"/>
+  <dlg:button dlg:id="CommandButton1" dlg:tab-index="2" dlg:left="59" dlg:top="79" dlg:width="62" dlg:height="13" dlg:value="Search And Replace">
+   <script:event script:event-name="on-mousedown" script:location="application" script:macro-name="Standard.SearchAndReplace.getInfoFromDialog" script:language="StarBasic"/>
+  </dlg:button>
+  <dlg:text dlg:id="Label1" dlg:tab-index="3" dlg:left="37" dlg:top="20" dlg:width="33" dlg:height="8" dlg:value="Search Key"/>
+  <dlg:text dlg:id="Label2" dlg:tab-index="4" dlg:left="109" dlg:top="20" dlg:width="35" dlg:height="8" dlg:value="Replace Key"/>
+ </dlg:bulletinboard>
+</dlg:window>
