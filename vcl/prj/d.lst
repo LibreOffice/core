@@ -76,6 +76,7 @@ hedabu: ..\inc\imagebtn.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
 hedabu: ..\inc\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
 hedabu: ..\inc\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
 hedabu: ..\inc\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
+hedabu: ..\inc\javachild.hxx %_DEST%\inc%_EXT%\vcl\javachild.hxx
 hedabu: ..\inc\jobset.hxx %_DEST%\inc%_EXT%\vcl\jobset.hxx
 hedabu: ..\inc\keycod.hxx %_DEST%\inc%_EXT%\vcl\keycod.hxx
 hedabu: ..\inc\keycodes.hxx %_DEST%\inc%_EXT%\vcl\keycodes.hxx
