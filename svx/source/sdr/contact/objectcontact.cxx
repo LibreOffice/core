@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:44:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ namespace sdr
         ObjectContact::~ObjectContact()
         {
 #ifdef DBG_UTIL
+            DBG_ASSERT(0L == maVOCList.Count(),
+                "ObjectContact destructor: ViewObjectContactList is not empty, call PrepareDelete() before deleting (!)");
             DBG_ASSERT(0L == mpObjectAnimator,
                 "ObjectContact destructor: still an ObjectAnimator existing, call PrepareDelete() before deleting (!)");
             DBG_ASSERT(0L == mpEventHandler,
@@ -121,17 +123,19 @@ namespace sdr
         // it is required to first call PrepareDelete().
         void ObjectContact::PrepareDelete()
         {
-            // get rid of all contacts
-            while(maDrawHierarchy.Count())
+            // #114735# clear DrawHierarchy, empty maDrawHierarchy
+            ClearDrawHierarchy();
+
+            // get rid of all registered contacts
+            while(maVOCList.Count())
             {
-                ViewObjectContact* pCandidate = maDrawHierarchy.GetLastObjectAndRemove();
+                ViewObjectContact* pCandidate = maVOCList.GetLastObjectAndRemove();
                 DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
 
                 // ViewObjectContacts only make sense with View and Object contacts.
                 // When the contact to the SdrObject is deleted like in this case,
                 // all ViewObjectContacts can be deleted, too.
                 pCandidate->PrepareDelete();
-                pCandidate->SetParent(0L);
                 delete pCandidate;
             }
 
@@ -141,6 +145,36 @@ namespace sdr
 
             // delete the EventHandler. This will destroy all still contained events.
             DeleteEventHandler();
+        }
+
+        // A new ViewObjectContact was created and shall be remembered.
+        void ObjectContact::AddViewObjectContact(ViewObjectContact& rVOContact)
+        {
+            maVOCList.Append(&rVOContact);
+        }
+
+        // A ViewObjectContact was deleted and shall be forgotten.
+        void ObjectContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
+        {
+            if(maVOCList.Count())
+            {
+                maVOCList.Remove(&rVOContact);
+            }
+
+            // #114735# also remove from base level DrawHierarchy
+            if(maDrawHierarchy.Count())
+            {
+                if(maDrawHierarchy.Remove(&rVOContact))
+                {
+                    MarkDrawHierarchyInvalid();
+                }
+            }
+        }
+
+        // Test if ViewObjectContact is registered here
+        sal_Bool ObjectContact::ContainsViewObjectContact(ViewObjectContact& rVOContact)
+        {
+            return maVOCList.Contains(&rVOContact);
         }
 
         // Clear Draw Hierarchy data.
