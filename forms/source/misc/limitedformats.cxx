@@ -2,9 +2,9 @@
  *
  *  $RCSfile: limitedformats.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 10:13:05 $
+ *  last change: $Author: fs $ $Date: 2001-05-25 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,10 @@ namespace frm
             case FormComponentType::DATEFIELD:
             {
                 static FormatEntry s_aFormats[] = {
-                    { "M/D/YY", -1, ltSystem },
-                    { "MM/DD/YY", -1, ltSystem },
-                    { "MM/DD/YYYY", -1, ltSystem },
-                    { "NNNNMMMM DD, YYYY", -1, ltSystem },
+                    { "T-M-JJ", -1, ltGerman },
+                    { "TT-MM-JJ", -1, ltGerman },
+                    { "TT-MM-JJJJ", -1, ltGerman },
+                    { "NNNNT. MMMM JJJJ", -1, ltGerman },
 
                     { "DD/MM/YY", -1, ltEnglishUS },
                     { "MM/DD/YY", -1, ltEnglishUS },
@@ -366,13 +366,16 @@ namespace frm
                 bModified = nTablePosition != nOldEnumValue;
             }
 
-            if (!bFoundIt && !_rOldValue.hasValue())
+            if (!_rOldValue.hasValue())
             {   // did not reach the end of the table (means we found nNewFormat)
                 // -> go to the end to ensure that _rOldValue is set
                 while (pFormats->pDescription)
                 {
                     if (nTablePosition == nOldEnumValue)
+                    {
                         _rOldValue <<= pFormats->nKey;
+                        break;
+                    }
 
                     ++pFormats;
                     ++nTablePosition;
@@ -445,6 +448,9 @@ namespace frm
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/05/23 10:13:05  fs
+ *  #86172# clear the format keys in the tables when releasing the number formats supplier
+ *
  *  Revision 1.2  2001/05/23 08:32:20  rt
  *  #65293# GCC does not like 'Locale ident(String(), String(), String())'
  *
