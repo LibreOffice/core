@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-18 13:25:26 $
+ *  last change: $Author: mba $ $Date: 2001-05-18 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,20 @@ using namespace ::com::sun::star::beans ;
 #define FIXPROPERTYNAME_SLOTCFG             OUString(RTL_CONSTASCII_USTRINGPARAM("Slot"                     ))
 #define FIXPROPERTYNAME_SENDCRASHMAIL       OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
 #define FIXPROPERTYNAME_USEMAILUI           OUString(RTL_CONSTASCII_USTRINGPARAM("UseMailUI"                ))
+#define FIXPROPERTYNAME_REMOVEMENUENTRYCLOSE           OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryClose"))
+#define FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP    OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryBackToWebtop"))
+#define FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP       OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryNewWebtop"))
+#define FIXPROPERTYNAME_REMOVEMENUENTRYLOGOUT          OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveMenuEntryLogout"))
 
 #define FIXPROPERTYHANDLE_SLOTCFG           0
 #define FIXPROPERTYHANDLE_SENDCRASHMAIL     1
-#define FIXPROPERTYHANDLE_USEMAILUI         1
+#define FIXPROPERTYHANDLE_USEMAILUI         2
+#define FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE   3
+#define FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP         4
+#define FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP         5
+#define FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT         6
 
-#define FIXPROPERTYCOUNT                    3
+#define FIXPROPERTYCOUNT                    7
 
 #define PROPERTYNAME_RECOVERYLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"             ))
 #define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("URL"                      ))
@@ -168,6 +176,20 @@ typedef stack< tIMPL_RecoveryEntry > tIMPL_RecoveryStack;
 
 class SvtInternalOptions_Impl : public ConfigItem
 {
+    //-------------------------------------------------------------------------------------------------------------
+    //  private member
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
+
+        sal_Bool                m_bRemoveMenuEntryClose;
+        sal_Bool                m_bRemoveMenuEntryBackToWebtop;
+        sal_Bool                m_bRemoveMenuEntryNewWebtop;
+        sal_Bool                m_bRemoveMenuEntryLogout;
+        sal_Bool                m_bSlotCFG          ;   /// cache "Slot" of Internal section
+        sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
+        sal_Bool                m_bUseMailUI;
+        tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -236,9 +258,14 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    SlotCFGEnabled      () const;
-        sal_Bool    CrashMailEnabled    () const;
-        sal_Bool    MailUIEnabled       () const;
+        sal_Bool    IsRemoveMenuEntryClose() const { return m_bRemoveMenuEntryClose; }
+        sal_Bool    IsRemoveMenuEntryBackToWebtop() const { return m_bRemoveMenuEntryBackToWebtop; }
+        sal_Bool    IsRemoveMenuEntryNewWebtop() const { return m_bRemoveMenuEntryNewWebtop; }
+        sal_Bool    IsRemoveMenuEntryLogout() const { return m_bRemoveMenuEntryLogout; }
+        sal_Bool    SlotCFGEnabled      () const { return m_bSlotCFG; }
+        sal_Bool    CrashMailEnabled    () const { return m_bSendCrashMail; }
+        sal_Bool    MailUIEnabled       () const { return m_bUseMailUI; }
+
         void        PushRecoveryItem    (   const   OUString&   sURL        ,
                                             const   OUString&   sFilter     ,
                                              const  OUString&   sTempName   );
@@ -268,17 +295,6 @@ class SvtInternalOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         Sequence< OUString > impl_GetPropertyNames();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        sal_Bool                m_bSlotCFG          ;   /// cache "Slot" of Internal section
-        sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
-        sal_Bool                m_bUseMailUI;
-        tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
 };
 
 //_________________________________________________________________________________________________________________
@@ -295,6 +311,10 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     ,   m_bSlotCFG          ( DEFAULT_SLOTCFG       )
     ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL )
     ,   m_bUseMailUI        ( DEFAULT_USEMAILUI )
+    , m_bRemoveMenuEntryClose ( sal_False )
+    , m_bRemoveMenuEntryBackToWebtop ( sal_False )
+    , m_bRemoveMenuEntryNewWebtop ( sal_False )
+    , m_bRemoveMenuEntryLogout ( sal_False )
 {
     // Use our list of configuration keys to get his values.
     // structure of internal section: (first 2 entries are fixed - all other are member of a set!)
@@ -321,6 +341,10 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     seqValues[FIXPROPERTYHANDLE_SLOTCFG         ] >>= m_bSlotCFG        ;
     seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
     seqValues[FIXPROPERTYHANDLE_USEMAILUI       ] >>= m_bUseMailUI  ;
+    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE ] >>= m_bRemoveMenuEntryClose  ;
+    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ] >>= m_bRemoveMenuEntryBackToWebtop  ;
+    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP ] >>= m_bRemoveMenuEntryNewWebtop  ;
+    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT ] >>= m_bRemoveMenuEntryLogout  ;
 
     // Read dynamical set "RecoveryList" then.
     // 3 subkeys for every item!
@@ -391,30 +415,6 @@ void SvtInternalOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::SlotCFGEnabled() const
-{
-    return m_bSlotCFG;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::CrashMailEnabled() const
-{
-    return m_bSendCrashMail;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::MailUIEnabled() const
-{
-    return m_bUseMailUI;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
                                                 const   OUString&   sFilter     ,
                                                 const   OUString&   sTempName   )
@@ -463,6 +463,10 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
     seqProperties[FIXPROPERTYHANDLE_SLOTCFG         ]   =   FIXPROPERTYNAME_SLOTCFG         ;
     seqProperties[FIXPROPERTYHANDLE_SENDCRASHMAIL   ]   =   FIXPROPERTYNAME_SENDCRASHMAIL   ;
     seqProperties[FIXPROPERTYHANDLE_USEMAILUI       ]   =   FIXPROPERTYNAME_USEMAILUI       ;
+    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE        ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYCLOSE;
+    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP;
+    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP    ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP;
+    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT       ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYLOGOUT;
 
     sal_uInt32 nPosition = FIXPROPERTYCOUNT;
     // Add names for recovery list to list.
@@ -549,6 +553,33 @@ sal_Bool SvtInternalOptions::MailUIEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->MailUIEnabled();
+}
+
+//*****************************************************************************************************************
+//  public methods
+//*****************************************************************************************************************
+sal_Bool SvtInternalOptions::IsRemoveMenuEntryClose() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsRemoveMenuEntryClose();
+}
+
+sal_Bool SvtInternalOptions::IsRemoveMenuEntryBackToWebtop() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsRemoveMenuEntryBackToWebtop();
+}
+
+sal_Bool SvtInternalOptions::IsRemoveMenuEntryNewWebtop() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsRemoveMenuEntryNewWebtop();
+}
+
+sal_Bool SvtInternalOptions::IsRemoveMenuEntryLogout() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsRemoveMenuEntryLogout();
 }
 
 //*****************************************************************************************************************
