@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:38:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo() :
     sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
     sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
     sIsNumbering(RTL_CONSTASCII_USTRINGPARAM("IsNumbering")),
-    sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"))
+    sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber")),
+    sNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"))
 {
     Reset();
 }
@@ -123,7 +124,18 @@ void XMLTextNumRuleInfo::Set(
         aAny >>= xNumRules;
     }
 
-    if( xNumRules.is() )
+    BOOL bIsOutline = FALSE;
+
+    Reference<XPropertySet> xNumRulesProps(xNumRules, UNO_QUERY);
+    if (xNumRulesProps.is() &&
+        xNumRulesProps->getPropertySetInfo()->
+        hasPropertyByName( sNumberingIsOutline ) )
+    {
+        aAny = xNumRulesProps->getPropertyValue( sNumberingIsOutline );
+        bIsOutline = *(sal_Bool*)aAny.getValue();
+    }
+
+    if( xNumRules.is() && !bIsOutline )
     {
         Reference < XNamed > xNamed( xNumRules, UNO_QUERY );
         if( xNamed.is() )
