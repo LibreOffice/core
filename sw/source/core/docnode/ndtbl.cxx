@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:08:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,14 @@
 
 #include <node.hxx>
 #include <ndtxt.hxx>
+
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+
 
 const sal_Unicode T2T_PARA = 0x0a;
 
@@ -2272,6 +2280,158 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     pTab->GetTable()->GetTabCols( rFill, pBox );
 }
 
+//
+// Here are some little helpers used in SwDoc::GetTabRows
+//
+
+#define ROWFUZZY 25
+
+struct FuzzyCompare
+{
+    bool operator() ( long s1, long s2 ) const;
+};
+
+bool FuzzyCompare::operator() ( long s1, long s2 ) const
+{
+    return ( s1 < s2 && abs( s1 - s2 ) > ROWFUZZY );
+}
+
+bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
+{
+    for( USHORT i = 0; i < rBoxes.Count(); ++i )
+    {
+        if ( rFrm.GetTabBox() == rBoxes[ i ] )
+            return true;
+    }
+
+    return false;
+}
+
+//
+// SwDoc::GetTabRows()
+//
+
+void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
+                        const SwCellFrm* pBoxFrm ) const
+{
+    ASSERT( pBoxFrm, "GetTabRows called without pBoxFrm" )
+
+    SwTabFrm* pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+    const SwTableBox* pBox = pBoxFrm->GetTabBox();
+    SwFrm* pFrm = pTab->GetNextLayoutLeaf();
+
+    //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
+    SWRECTFN( pTab )
+    const SwPageFrm* pPage = pTab->FindPageFrm();
+
+    rFill.SetRight( (pTab->Prt().*fnRect->fnGetHeight)() );
+    long nLeftMin;
+    if ( bVert )
+    {
+        nLeftMin = pTab->GetPrtLeft() - pPage->Frm().Left() + DOCUMENTBORDER;
+        rFill.SetLeft    ( LONG_MAX );
+        rFill.SetRightMax( rFill.GetRight() );
+
+    }
+    else
+    {
+        nLeftMin = pTab->GetPrtTop() - pPage->Frm().Top() + DOCUMENTBORDER;
+        rFill.SetLeft    ( 0 );
+        rFill.SetRightMax( LONG_MAX );
+    }
+    rFill.SetLeftMin ( nLeftMin );
+
+    // get boxes for current column:
+    const SwFrm* pCntnt = pBoxFrm->ContainsCntnt();
+    SwSelBoxes aBoxes;
+    if ( pCntnt && pCntnt->IsTxtFrm() )
+    {
+        const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
+        const SwCursor aTmpCrsr( aPos );
+        ::GetTblSel( aTmpCrsr, aBoxes, TBLSEARCH_COL );
+    }
+
+    typedef std::map< long, std::pair< long, long >, FuzzyCompare > BoundaryMap;
+    BoundaryMap aBoundaries;
+    BoundaryMap::iterator aIter;
+    std::pair< long, long > aPair;
+
+    typedef std::map< long, bool > HiddenMap;
+    HiddenMap aHidden;
+    HiddenMap::iterator aHiddenIter;
+
+    while ( pFrm && pTab->IsAnLower( pFrm ) )
+    {
+        if ( pFrm->IsCellFrm() )
+        {
+            // upper and lower borders of current cell frame:
+            long nUpperBorder = (pFrm->Frm().*fnRect->fnGetTop)();
+            long nLowerBorder = (pFrm->Frm().*fnRect->fnGetBottom)();
+
+            // get boundaries for nUpperBorder:
+            aIter = aBoundaries.find( nUpperBorder );
+            if ( aIter == aBoundaries.end() )
+            {
+                aPair.first = nUpperBorder; aPair.second = LONG_MAX;
+                aBoundaries[ nUpperBorder ] = aPair;
+            }
+
+            // get boundaries for nLowerBorder:
+            aIter = aBoundaries.find( nLowerBorder );
+            if ( aIter == aBoundaries.end() )
+            {
+                aPair.first = nUpperBorder; aPair.second = LONG_MAX;
+            }
+            else
+            {
+                nLowerBorder = (*aIter).first;
+                long nNewLowerBorderUpperBoundary = Max( (*aIter).second.first, nUpperBorder );
+                aPair.first = nNewLowerBorderUpperBoundary; aPair.second = LONG_MAX;
+            }
+            aBoundaries[ nLowerBorder ] = aPair;
+
+            // calculate hidden flags for entry nUpperBorder/nLowerBorder:
+            long nTmpVal = nUpperBorder;
+            for ( BYTE i = 0; i < 2; ++i )
+            {
+                aHiddenIter = aHidden.find( nTmpVal );
+                if ( aHiddenIter == aHidden.end() )
+                    aHidden[ nTmpVal ] = !lcl_IsFrmInColumn( *((SwCellFrm*)pFrm), aBoxes );
+                else
+                {
+                    if ( aHidden[ nTmpVal ] &&
+                         lcl_IsFrmInColumn( *((SwCellFrm*)pFrm), aBoxes ) )
+                        aHidden[ nTmpVal ] = false;
+                }
+                nTmpVal = nLowerBorder;
+            }
+        }
+
+        pFrm = pFrm->GetNextLayoutLeaf();
+    }
+
+    // transfer calculated values from BoundaryMap and HiddenMap into rFill:
+    USHORT nIdx = 0;
+    for ( aIter = aBoundaries.begin(); aIter != aBoundaries.end(); ++aIter )
+    {
+        const long nTabTop = (pTab->*fnRect->fnGetPrtTop)();
+        const long nKey = (*fnRect->fnYDiff)( (*aIter).first, nTabTop );
+        const std::pair< long, long > aTmpPair = (*aIter).second;
+        const long nFirst = (*fnRect->fnYDiff)( aTmpPair.first, nTabTop );
+        const long nSecond = aTmpPair.second;
+
+        aHiddenIter = aHidden.find( (*aIter).first );
+        const bool bHidden = aHiddenIter != aHidden.end() && (*aHiddenIter).second;
+        rFill.Insert( nKey, nFirst, nSecond, bHidden, nIdx++ );
+    }
+
+    // delete first and last entry
+    ASSERT( rFill.Count(), "Deleting from empty vector. Fasten your seatbelts!" )
+    rFill.Remove( 0, 1 );
+    rFill.Remove( rFill.Count() - 1 , 1 );
+    rFill.SetLastRowAllowedToChange( !pTab->HasFollowFlowLine() );
+}
+
 void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
                         const SwCursor* pCrsr, const SwCellFrm* pBoxFrm )
 {
@@ -2346,18 +2506,108 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     aOld.SetRight   ( (pTab->Prt().*fnRect->fnGetRight)());
     aOld.SetRightMax( nRightMax - nLeftMin );
 
-/*  if( DoesUndo() )
+    SetTabCols(rTab, rNew, aOld, pBox, bCurRowOnly );
+    ::ClearFEShellTabCols();
+}
+
+void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
+                        const SwCellFrm* pBoxFrm )
+{
+    const SwTableBox* pBox;
+    SwTabFrm *pTab;
+
+    ASSERT( pBoxFrm, "SetTabRows called without pBoxFrm" )
+
+    pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+    pBox = pBoxFrm->GetTabBox();
+
+    // sollte die Tabelle noch auf relativen Werten (USHRT_MAX) stehen
+    // dann muss es jetzt auf absolute umgerechnet werden.
+    SwTable& rTab = *pTab->GetTable();
+    SWRECTFN( pTab )
+    SwTabCols aOld( rNew.Count() );
+
+    //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
+    const SwPageFrm* pPage = pTab->FindPageFrm();
+
+    aOld.SetRight( (pTab->Prt().*fnRect->fnGetHeight)() );
+    long nLeftMin;
+    if ( bVert )
     {
-        ClearRedo();
-        AppendUndo( new SwUndoAttrTbl(
-                *rTab.GetTableNode(),
-                TRUE ));
+        nLeftMin = pTab->GetPrtLeft() - pPage->Frm().Left() + DOCUMENTBORDER;
+        aOld.SetLeft    ( LONG_MAX );
+        aOld.SetRightMax( aOld.GetRight() );
+
+    }
+    else
+    {
+        nLeftMin = pTab->GetPrtTop() - pPage->Frm().Top() + DOCUMENTBORDER;
+        aOld.SetLeft    ( 0 );
+        aOld.SetRightMax( LONG_MAX );
+    }
+    aOld.SetLeftMin ( nLeftMin );
+
+    GetTabRows( aOld, 0, pBoxFrm );
+
+       StartUndo( UNDO_TABLE_ATTR );
+
+    // check for differences between aOld and rNew:
+    const USHORT nCount = rNew.Count();
+    long nShift = 0;
+    for ( USHORT i = 0; i <= nCount; ++i )
+    {
+        const USHORT nIdxStt = bVert ? nCount - i : i - 1;
+        const USHORT nIdxEnd = bVert ? nCount - i - 1 : i;
+
+        const long nOldRowStart = i == 0  ? 0 : aOld[ nIdxStt ];
+        const long nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];
+        const long nOldRowHeight = nOldRowEnd - nOldRowStart;
+
+        const long nNewRowStart = i == 0  ? 0 : rNew[ nIdxStt ];
+        const long nNewRowEnd =   i == nCount ? rNew.GetRight() : rNew[ nIdxEnd ];
+        const long nNewRowHeight = nNewRowEnd - nNewRowStart;
+
+        const long nDiff = nNewRowHeight - nOldRowHeight;
+        if ( abs( nDiff ) >= ROWFUZZY )
+        {
+            // Iterate over all SwCellFrms with Bottom = nOldPos
+            const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
+            while ( pFrm && pTab->IsAnLower( pFrm ) )
+            {
+                if ( pFrm->IsCellFrm() )
+                {
+                    const long nLowerBorder = (pFrm->Frm().*fnRect->fnGetBottom)();
+                    const ULONG nTabTop = (pTab->*fnRect->fnGetPrtTop)();
+                    if ( abs( (*fnRect->fnYInc)( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
+                    {
+                        if ( !bCurColOnly || pFrm == pBoxFrm )
+                        {
+                            const SwFrm* pCntnt = ((SwCellFrm*)pFrm)->ContainsCntnt();
+                            if ( pCntnt && pCntnt->IsTxtFrm() )
+                            {
+                                const SwTableLine* pLine = ((SwCellFrm*)pFrm)->GetTabBox()->GetUpper();
+                                SwFmtFrmSize aNew( pLine->GetFrmFmt()->GetFrmSize() );
+                                const ULONG nNewSize = (pFrm->Frm().*fnRect->fnGetHeight)() + nDiff;
+                                if ( nNewSize != aNew.GetHeight() )
+                                {
+                                    aNew.SetHeight( nNewSize );
+                                    if ( ATT_VAR_SIZE == aNew.GetSizeType() )
+                                        aNew.SetSizeType( ATT_MIN_SIZE );
+                                    const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
+                                    const SwCursor aTmpCrsr( aPos );
+                                    SetRowHeight( aTmpCrsr, aNew );
+                                }
+                            }
+                        }
+                    }
+                }
+                pFrm = pFrm->GetNextLayoutLeaf();
+            }
+        }
     }
 
-    rTab.SetTabCols( rNew, aOld, pBox, bCurRowOnly );
+    EndUndo( UNDO_TABLE_ATTR );
 
-    SetModified();*/
-    SetTabCols(rTab, rNew, aOld, pBox, bCurRowOnly );
     ::ClearFEShellTabCols();
 }
 
