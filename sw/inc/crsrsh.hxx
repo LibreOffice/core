@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:41:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,26 @@ private:
     USHORT nCrsrMove;
     USHORT nBasicActionCnt;     // Actions, die vom Basic geklammert wurden
     CrsrMoveState eMvState;     // Status fuers Crsr-Travelling - GetCrsrOfst
+    // -> #i27615#
+    /**
+       marked numbering rule
+
+       If a numbering level/rule are marked, changes to character
+       attributes are propagated to the according numbering style.
+
+    */
+    String sMarkedNumRule;
+
+    /**
+       marked numbering level
+
+       If a numbering level/rule are marked, changes to character
+       attributes are propagated to the according numbering style.
+
+    */
+    BYTE nMarkedNumLevel;
+    // <- #i27615#
+
 
     BOOL bHasFocus : 1;         // Shell ist in einem Window "aktiv"
     BOOL bSVCrsrVis : 1;        // SV-Cursor Un-/Sichtbar
@@ -303,6 +323,7 @@ private:
     BOOL bBasicHideCrsr : 1;    // TRUE -> HideCrsr vom Basic
     BOOL bSetCrsrInReadOnly : 1;// TRUE -> Cursor darf in ReadOnly-Bereiche
     BOOL bOverwriteCrsr : 1;    // TRUE -> show Overwrite Crsr
+
     // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
     bool mbMacroExecAllowed : 1;
 
@@ -311,6 +332,25 @@ private:
                      BOOL bIdleEnd = FALSE );
 
     void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
+
+    // -> #i27615#
+
+    /**
+       Updates the marked numbering level stored in this shell
+       according to the cursor.
+     */
+    void UpdateMarkedNumLevel();
+
+    /**
+       Set the marked numbering level stored in this shell.
+
+       @param sNumRule   the name of the marked numbering rule
+       @param nLevel     the marked numbering level
+
+       The empty string denotes that no numbering rule is marked.
+     */
+    void SetMarkedNumLevel(const String & sNumRule, BYTE nLevel);
+    // <- #i27615#
 
     FASTBOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
     FASTBOOL UpDown( BOOL, USHORT );
