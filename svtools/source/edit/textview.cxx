@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-01 12:52:40 $
+ *  last change: $Author: mt $ $Date: 2001-10-10 12:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,8 +1110,8 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
 
 void TextView::Copy()
 {
-    uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
-    Copy( aSelection );
+    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    Copy( aClipboard );
 }
 
 void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
@@ -1143,8 +1143,8 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 
 void TextView::Paste()
 {
-    uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
-    Paste( aSelection );
+    uno::Reference<datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    Paste( aClipboard );
 }
 
 String TextView::GetSelected()
