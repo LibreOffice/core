@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-06 13:43:29 $
+ *  last change: $Author: aw $ $Date: 2002-05-17 14:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,38 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
+void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, SdView* pView)
+{
+    // #98198# evtl. feed characters to activated textedit
+    const SfxItemSet* pSet = rReq.GetArgs();
+
+    if(pSet)
+    {
+        String aInputString;
+
+        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR))
+            aInputString = ((SfxStringItem&)pSet->Get(SID_ATTR_CHAR)).GetValue();
+
+        if(aInputString.Len())
+        {
+            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+            if(pOLV)
+            {
+                for(sal_uInt16 a(0); a < aInputString.Len(); a++)
+                {
+                    sal_Char aChar = aInputString.GetChar(a);
+                    KeyCode aKeyCode;
+                    KeyEvent aKeyEvent(aChar, aKeyCode);
+
+                    // add actual character
+                    pOLV->PostKeyEvent(aKeyEvent);
+                }
+            }
+        }
+    }
+}
+
 void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
@@ -220,6 +252,13 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         MapSlot( nSId );
 
         Invalidate();
+
+        Invalidate();
+
+        // #98198# evtl. feed characters to activated textedit
+        if(SID_ATTR_CHAR == nSId && pView && pView->IsTextEdit())
+            ImpAddPrintableCharactersToTextEdit(rReq, pView);
+
         rReq.Done();
         return;
     }
@@ -284,39 +323,8 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
             rBindings.Invalidate( SID_TEXT_FITTOSIZE_VERTICAL );
 
             // #98198# evtl. feed characters to activated textedit
-            if(SID_ATTR_CHAR == nSId)
-            {
-                const SfxItemSet* pSet = rReq.GetArgs();
-
-                if(pSet)
-                {
-                    String aInputString;
-
-                    if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR))
-                        aInputString = ((SfxStringItem&)pSet->Get(SID_ATTR_CHAR)).GetValue();
-
-                    if(aInputString.Len())
-                    {
-                        if(pView->IsTextEdit())
-                        {
-                            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
-
-                            if(pOLV)
-                            {
-                                for(sal_uInt16 a(0); a < aInputString.Len(); a++)
-                                {
-                                    sal_Char aChar = aInputString.GetChar(a);
-                                    KeyCode aKeyCode;
-                                    KeyEvent aKeyEvent(aChar, aKeyCode);
-
-                                    // add actual character
-                                    pOLV->PostKeyEvent(aKeyEvent);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            if(SID_ATTR_CHAR == nSId && pView && pView->IsTextEdit())
+                ImpAddPrintableCharactersToTextEdit(rReq, pView);
 
             rReq.Done();
         }
