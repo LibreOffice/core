@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 07:51:23 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,16 @@ namespace dbaui
                 The root entry of pEntry.
         */
         void handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntry,EntryType eType,SvLBoxEntry* pDSEntry);
+
+        /** checks if the currently displayed entry changed
+            @param  _sName
+                    Name of the changed entry
+            @param  _pContainer
+                    The container of the displayed entry
+            @return
+                    <TRUE/> if it is the currently displayed otherwise <FALSE/>
+        */
+        sal_Bool isCurrentlyDisplayedChanged(const String& _sName,SvLBoxEntry* _pContainer);
     };
 
 // .........................................................................
