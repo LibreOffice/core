@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-17 12:39:06 $
+ *  last change: $Author: fme $ $Date: 2001-12-18 13:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,13 +917,37 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             GetCharRect( aRect, aPos, &aTmpState );
             // information about end of repaint area
             Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
+
+#ifdef VERTICAL_LAYOUT
+            SwTxtFrm* pStartFrm = this;
+
+            while( pStartFrm->HasFollow() &&
+                   nChgStart >= pStartFrm->GetFollow()->GetOfst() )
+                pStartFrm = pStartFrm->GetFollow();
+
+            SwTxtFrm *pEndFrm = pStartFrm;
+
+            while( pEndFrm->HasFollow() &&
+                   nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
+                pEndFrm = pEndFrm->GetFollow();
+
+#endif
+
             if ( pEnd2Pos )
             {
                 // we are inside a special portion, take left border
+#ifdef VERTICAL_LAYOUT
+                SWRECTFN( pEndFrm )
+                (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
+                (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
+                (aRect.*fnRect->fnSetWidth)( 1 );
+                (aRect.*fnRect->fnSetHeight)( (pEnd2Pos->aLine.*fnRect->fnGetHeight)() );
+#else
                 aRect.Top( pEnd2Pos->aLine.Top() );
                 aRect.Left( pEnd2Pos->aPortion.Right() );
                 aRect.Width( 1 );
                 aRect.Height( pEnd2Pos->aLine.Height() );
+#endif
                 delete pEnd2Pos;
             }
 
@@ -936,17 +960,29 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             if ( pSt2Pos )
             {
                 // we are inside a special portion, take right border
+#ifdef VERTICAL_LAYOUT
+                SWRECTFN( pStartFrm )
+                (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
+                (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
+                (aTmp.*fnRect->fnSetWidth)( 1 );
+                (aTmp.*fnRect->fnSetHeight)( (pSt2Pos->aLine.*fnRect->fnGetHeight)() );
+#else
                 aTmp.Top( pSt2Pos->aLine.Top() );
                 aTmp.Left( pSt2Pos->aPortion.Left() );
                 aTmp.Width( 1 );
                 aTmp.Height( pSt2Pos->aLine.Height() );
+#endif
                 delete pSt2Pos;
             }
 
             BOOL bSameFrame = TRUE;
+#ifndef VERTICAL_LAYOUT
             SwTxtFrm* pStartFrm = this;
+#endif
+
             if( HasFollow() )
             {
+#ifndef VERTICAL_LAYOUT
                 while( pStartFrm->HasFollow() &&
                        nChgStart >= pStartFrm->GetFollow()->GetOfst() )
                     pStartFrm = pStartFrm->GetFollow();
@@ -954,10 +990,26 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                 while( pEndFrm->HasFollow() &&
                        nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
                     pEndFrm = pEndFrm->GetFollow();
+#endif
                 if( pEndFrm != pStartFrm )
                 {
                     bSameFrame = FALSE;
                     SwRect aStFrm( pStartFrm->PaintArea() );
+#ifdef VERTICAL_LAYOUT
+                    {
+                        SWRECTFN( pStartFrm )
+                        (aTmp.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
+                        (aTmp.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+                        (aTmp.*fnRect->fnSetBottom)( (aStFrm.*fnRect->fnGetBottom)() );
+                    }
+                    aStFrm = pEndFrm->PaintArea();
+                    {
+                        SWRECTFN( pEndFrm )
+                        (aRect.*fnRect->fnSetTop)( (aStFrm.*fnRect->fnGetTop)() );
+                        (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
+                        (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+                    }
+#else
                     aTmp.Left( aStFrm.Left() );
                     aTmp.Right( aStFrm.Right() );
                     aTmp.Bottom( aStFrm.Bottom() );
@@ -965,6 +1017,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     aRect.Top( aStFrm.Top() );
                     aRect.Left( aStFrm.Left() );
                     aRect.Right( aStFrm.Right() );
+#endif
                     aRect.Union( aTmp );
                     while( TRUE )
                     {
