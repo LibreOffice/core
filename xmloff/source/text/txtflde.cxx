@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,8 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
 static sal_Char __READONLY_DATA FIELD_SERVICE_URL[] = "URL";
 static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
+static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
+static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
 
 
 SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
@@ -334,6 +336,9 @@ SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     { FIELD_SERVICE_DDE,                    FIELD_ID_DDE },
 
     { FIELD_SERVICE_BIBLIOGRAPHY,           FIELD_ID_BIBLIOGRAPHY },
+
+    { FIELD_SERVICE_SCRIPT,                 FIELD_ID_SCRIPT },
+    { FIELD_SERVICE_ANNOTATION,             FIELD_ID_ANNOTATION },
 
     // non-writer fields
     { FIELD_SERVICE_SHEET_NAME,             FIELD_ID_SHEET_NAME },
@@ -615,6 +620,8 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             }
             break;
 
+        case FIELD_ID_SCRIPT:
+        case FIELD_ID_ANNOTATION:
         case FIELD_ID_BIBLIOGRAPHY:
         case FIELD_ID_DDE:
         case FIELD_ID_MACRO:
@@ -763,7 +770,9 @@ sal_Bool XMLTextFieldExport::IsStringField(
         // always string:
         return sal_True;
 
-    case FIELD_ID_DATABASE_NEXT:
+    case FIELD_ID_SCRIPT:
+    case FIELD_ID_ANNOTATION:
+       case FIELD_ID_DATABASE_NEXT:
     case FIELD_ID_DATABASE_SELECT:
     case FIELD_ID_VARIABLE_DECL:
     case FIELD_ID_USER_DECL:
@@ -847,6 +856,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         }
         break;
 
+    case FIELD_ID_SCRIPT:
+    case FIELD_ID_ANNOTATION:
     case FIELD_ID_BIBLIOGRAPHY:
     case FIELD_ID_DDE:
     case FIELD_ID_REF_REFERENCE:
@@ -1441,7 +1452,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
                           sPropertyReferenceFieldPart, xPropSet)),
                       sXML_template);
         ProcessString(sXML_ref_name,
-                      MakeFootnoteRefName(GetIntProperty(
+                      MakeFootnoteRefName(GetInt16Property(
                           sPropertySequenceNumber, xPropSet)));
         ExportElement(
             MapReferenceSource(GetInt16Property(
@@ -1491,6 +1502,12 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         ExportElement(sXML_bibliography_mark, sPresentation);
         break;
     }
+
+    case FIELD_ID_SCRIPT:
+    case FIELD_ID_ANNOTATION:
+        // TODO: implement these fields!!!
+        GetExport().GetDocHandler()->characters(sPresentation);
+        break;
 
     case FIELD_ID_UNKNOWN:
     default:
@@ -1741,33 +1758,43 @@ void XMLTextFieldExport::ExportFieldDeclarations()
             Any aAny = xFieldMasterNameAccess->getByName(sName);
             aAny >>= xPropSet;
 
-            ProcessString(sXML_name,
-                          GetStringProperty(sPropertyName, xPropSet));
-
-            // export elements; can't use ProcessString because
-            // elements are in office namespace
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                     sXML_dde_application,
-                                     GetStringProperty(sPropertyDDECommandType,
-                                                       xPropSet));
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                     sXML_dde_topic,
-                                     GetStringProperty(sPropertyDDECommandFile,
-                                                       xPropSet));
-            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                     sXML_dde_item,
-                                  GetStringProperty(sPropertyDDECommandElement,
-                                                    xPropSet));
-            sal_Bool bIsAutomaticUpdate = GetBoolProperty(
-                sPropertyIsAutomaticUpdate, xPropSet);
-            if (bIsAutomaticUpdate)
+            // check if this connection is being used by a field
+            Reference<XPropertySet> xDummy;
+            if (GetDependentFieldPropertySet(xPropSet, xDummy))
             {
-                GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
-                                              sXML_automatic_update,
-                                              sXML_true);
-            }
 
-            ExportElement(sXML_dde_connection_decl, sal_True);
+                ProcessString(sXML_name,
+                              GetStringProperty(sPropertyName, xPropSet));
+
+                // export elements; can't use ProcessString because
+                // elements are in office namespace
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                         sXML_dde_application,
+                                         GetStringProperty(
+                                             sPropertyDDECommandType,
+                                             xPropSet));
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                         sXML_dde_topic,
+                                         GetStringProperty(
+                                             sPropertyDDECommandFile,
+                                             xPropSet));
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                         sXML_dde_item,
+                                         GetStringProperty(
+                                             sPropertyDDECommandElement,
+                                             xPropSet));
+                sal_Bool bIsAutomaticUpdate = GetBoolProperty(
+                    sPropertyIsAutomaticUpdate, xPropSet);
+                if (bIsAutomaticUpdate)
+                {
+                    GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
+                                                  sXML_automatic_update,
+                                                  sXML_true);
+                }
+
+                ExportElement(sXML_dde_connection_decl, sal_True);
+            }
+            // else: no dependent field -> no export of field declaration
         }
     }
     // else: no declarations element

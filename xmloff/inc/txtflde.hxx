@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:16 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@ enum FieldIdEnum {
 
     FIELD_ID_SHEET_NAME,            // name of current (spread-)sheet
     FIELD_ID_URL,                   // URL field (only Calc, Draw, Impress)
+
+    FIELD_ID_SCRIPT,                // script fields (for HTML pages, mostly)
+    FIELD_ID_ANNOTATION,            // annotation (notice) field
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
