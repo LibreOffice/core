@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLExecution.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-12-11 11:32:46 $
+ *  last change:$Date: 2004-07-23 10:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,15 @@ public class SQLExecution {
      */
     public boolean executeSQLCommand(String command, Hashtable sqlInput, Hashtable sqlOutput, boolean mergeOutputIntoInput)
                                         throws IllegalArgumentException {
+        if (sqlOutput == null) {
+            sqlOutput = new Hashtable();
+            // this has to be true, so the user of this method gets a return
+            mergeOutputIntoInput = true;
+            if (sqlInput == null) {
+                System.out.println("sqlInput and sqlOutput are null: cannot return the results of the sql command.");
+                return false;
+            }
+        }
         Vector sqlCommand = new Vector();
         sqlCommand.add("");
         boolean update = false;
@@ -260,7 +269,7 @@ public class SQLExecution {
             }
         }
         for (int i=0;i<sqlCommand.size(); i++) {
-            sqlOutput = execute((String)sqlCommand.get(i), update);
+            execute((String)sqlCommand.get(i), sqlOutput, update);
             // merge output with input
             if (!update && mergeOutputIntoInput) {
                 Enumeration keys = sqlOutput.keys();
@@ -288,8 +297,7 @@ public class SQLExecution {
      *          command
      * @return A Hashtable with the result.
      */
-    private Hashtable execute(String command, boolean update) {
-        Hashtable output = null;
+    private void execute(String command, Hashtable output, boolean update) {
         if (m_bDebug)
             System.out.println("Debug - SQLExecution - execute Command: " + command);
         try {
@@ -299,7 +307,6 @@ public class SQLExecution {
             }
             else {
                 // make a select: collect the result
-                output = new Hashtable();
                 ResultSet sqlResult = mStatement.executeQuery(command);
                 ResultSetMetaData sqlRSMeta = sqlResult.getMetaData();
                 int columnCount = sqlRSMeta.getColumnCount();
@@ -342,9 +349,7 @@ public class SQLExecution {
         }
         catch (java.sql.SQLException e) {
             e.printStackTrace();
-            return null;
         }
-        return output;
     }
 
     /**
