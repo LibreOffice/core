@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:14:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ private:
         existing one.  See ViewShell::CreateOrDuplicatePage() for more
         information.
     */
-    virtual void CreateOrDuplicatePage (
+    virtual SdPage* CreateOrDuplicatePage (
         SfxRequest& rRequest,
         PageKind ePageKind,
         SdPage* pPage);
