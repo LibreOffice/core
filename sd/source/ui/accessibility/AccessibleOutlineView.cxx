@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 18:51:34 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,7 @@ AccessibleOutlineView::AccessibleOutlineView (
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
-      maTextHelper( this,
-                    ::std::auto_ptr< SvxEditSource >( NULL ) )
+      maTextHelper( ::std::auto_ptr< SvxEditSource >( NULL ) )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -181,6 +180,8 @@ AccessibleOutlineView::~AccessibleOutlineView (void)
 void AccessibleOutlineView::Init (void)
 {
     AccessibleDocumentViewBase::Init ();
+
+    maTextHelper.SetEventSource(this);
 }
 
 
@@ -245,7 +246,7 @@ void SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     // dispose children
-    maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
+    maTextHelper.Dispose();
 
     AccessibleDocumentViewBase::disposing (rEventObject);
 }
@@ -277,7 +278,7 @@ void AccessibleOutlineView::Deactivated (void)
 void SAL_CALL AccessibleOutlineView::disposing (void)
 {
     // dispose children
-    maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
+    maTextHelper.Dispose();
 
     AccessibleDocumentViewBase::disposing ();
 }
