@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:38:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ QueryBox RID_SVXQB_THESAURUS
     MESSAGE[ korean ] = "ÀÌ ´Ü¾î´Â È¸ÇÇ´Ü¾î ¸ñ·Ï¿¡ ÀÖ½À´Ï´Ù. µ¿ÀÇ¾î »çÀüÀ» ½ÃÀÛÇÒ±î¿ä?";
     MESSAGE[ turkish ] = "Bu sözcüðü kullanmaktan kaçýnmalýsýnýz! Eþ anlamlýlar sözlüðü baþlatýlsýn mý?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¡Evite por favor esta palabra! ¿Desea iniciar la búsqueda de sinónimos?";
 };
 QueryBox RID_SVXQB_CONTINUE
 {
@@ -121,6 +122,7 @@ QueryBox RID_SVXQB_CONTINUE
     MESSAGE[ korean ] = "¹®¼­ Ã³À½¿¡¼­ °Ë»ç¸¦ °è¼ÓÇÒ±î¿ä?";
     MESSAGE[ turkish ] = "Denetlemeye, belge baþýnda devam edilsin mi?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea continuar la revisión desde el inicio del documento?";
 };
 QueryBox RID_SVXQB_BW_CONTINUE
 {
@@ -149,6 +151,7 @@ QueryBox RID_SVXQB_BW_CONTINUE
     Message[ korean ] = "¹®¼­ ³¡¿¡¼­ °Ë»ç¸¦ °è¼ÓÇÒ±î¿ä?";
     Message[ turkish ] = "Denetlemeye, belge sonunda devam edilsin mi?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "¿Desea continuar la revisión al final del documento?";
 };
 QueryBox RID_SVXQB_BODYTEXT
 {
@@ -180,6 +183,7 @@ QueryBox RID_SVXQB_BODYTEXT
     MESSAGE[ korean ] = "ÁÖ ÅØ½ºÆ®¸¦ °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Ana metni denetlemek istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea verificar el texto principal?";
 };
 QueryBox RID_SVXQB_SPECIAL
 {
@@ -210,6 +214,7 @@ QueryBox RID_SVXQB_SPECIAL
     MESSAGE[ korean ] = "Æ¯¼ö ¿µ¿ªÀ» °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Özel bölümler denetlensin mi?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea verificar las áreas especiales?";
 };
 QueryBox RID_SVXQB_SPECIAL_FORCED
 {
@@ -240,6 +245,7 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     MESSAGE[ korean ] = "Æ¯¼ö¿µ¿ª °Ë»ç°¡ ºñÈ°¼º»óÅÂÀÔ´Ï´Ù. ±×·¡µµ °Ë»çÇÒ±î¿ä?";
     MESSAGE[ turkish ] = "Özel bölüm denetleme etkin deðil, yine de denetlensin mi?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "La verificación de las áreas especiales está desactivada, ¿Desea verificar de todas maneras?";
 };
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_HMSTATUS_OK
@@ -267,6 +273,7 @@ String RID_SVXSTR_HMSTATUS_OK
     Text[ korean ] = "´Ü¾îÀÇ ¸ÂÃã¹ýÀÌ Á¤È®ÇÕ´Ï´Ù";
     Text[ turkish ] = "Sözcüðün imlasý doðru";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La palabra está escrita correctamente";
 };
 String RID_SVXSTR_HMSTATUS_DONTUSE
 {
@@ -293,6 +300,7 @@ String RID_SVXSTR_HMSTATUS_DONTUSE
     Text[ korean ] = "ÀÌ ´Ü¾î »ç¿ëÀ» ÇÇÇÏ½Ê½Ã¿À";
     Text[ turkish ] = "Bu sözcüðü kullanmaktan kaçýnmalýsýnýz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Debería evitar esta palabra";
 };
 String RID_SVXSTR_HMSTATUS_WRONG
 {
@@ -319,6 +327,7 @@ String RID_SVXSTR_HMSTATUS_WRONG
     Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ´Ü¾îÀÔ´Ï´Ù.";
     Text[ turkish ] = "Sözcük bilinmiyor.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Palabra desconocida.";
 };
 String RID_SVXSTR_HMSTATUS_CAPERROR
 {
@@ -347,6 +356,7 @@ String RID_SVXSTR_HMSTATUS_CAPERROR
     Text[ korean ] = "´ë/¼Ò¹®ÀÚ ¿À·ù";
     Text[ turkish ] = "Büyük /küçük harf hatasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error de mayúsculas/minúsculas";
 };
 String RID_SVXSTR_HMSTATUS_INVALID_LANG
 {
@@ -370,6 +380,7 @@ String RID_SVXSTR_HMSTATUS_INVALID_LANG
     Text[ chinese_traditional ] = "»y¨¥¤£¨ü¤ä´©";
     Text[ arabic ] = "áÇ íÊã ÏÚã åÐå ÇááÛÉ";
     Text[ turkish ] = "Dil desteklenmiyor.";
+    Text[ catalan ] = "No se apoya este idioma";
 };
 String RID_SVXSTR_HMERR_CHECKINSTALL
 {
@@ -398,6 +409,7 @@ String RID_SVXSTR_HMERR_CHECKINSTALL
     TEXT[ korean ] = " ¸ÂÃã¹ý °Ë»ç¸¦ ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n »ç¿ëÀÚÀÇ ¼³Ä¡ »óÅÂ¸¦ Á¡°ËÇÑ ´ÙÀ½, \nÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ð¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
     TEXT[ turkish ] = "denetlenemiyor. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yükleyin.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "no está disponible para la revisión ortográfica.\nRevise su instalación e instale,\nsi es necesario, el idioma deseado";
 };
 String RID_SVXSTR_HMERR_ADDWORD
 {
@@ -426,6 +438,7 @@ String RID_SVXSTR_HMERR_ADDWORD
     Text[ korean ] = "´Ü¾î¸¦ »çÀü¿¡ Ãß°¡ÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Sözcük, sözlüðe eklenemedi.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo añadir la palabra al diccionario.";
 };
 String RID_SVXSTR_HMERR_HYPH
 {
@@ -454,6 +467,7 @@ String RID_SVXSTR_HMERR_HYPH
     TEXT[ korean ] = "ÇÏÀÌÇÂ »ç¿ë ºÒ°¡´É";
     TEXT[ turkish ] = "Heceleme kullanýlamýyor";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No está disponible la separación silábica";
 };
 String RID_SVXSTR_HMERR_THESAURUS
 {
@@ -482,6 +496,7 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT[ korean ] = "¼³Á¤µÈ ¾ð¾î¿¡ ´ëÇÑ µ¿ÀÇ¾î»çÀüÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ »óÅÂ¸¦ Á¡°ËÇÑ ´ÙÀ½ \nÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ð¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
     TEXT[ turkish ] = "Ayarlanan dil için eþ anlamlýlar sözlüðü mevcut deðil. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yükleyin.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No existe un diccionario de sinónimos para el idioma seleccionado. \nCompruebe por favor su instalación\n e instale, si es necesario, el idioma deseado";
 };
 String RID_SVXSTR_DIC_ERR_UNKNOWN
 {
@@ -505,6 +520,7 @@ String RID_SVXSTR_DIC_ERR_UNKNOWN
     Text[ chinese_traditional ] = "¦r¨åµLªk¦¬¿ý³o­Ó¦r¡A­ì¦]¤£©ú¡C";
     Text[ arabic ] = "ÊÚÐÑ ÅÖÇÝÉ ÇáßáãÉ Åáì ÇáÞÇãæÓ\náÓÈÈ ÛíÑ ãÚÑæÝ.";
     Text[ turkish ] = "Sözcük bilinmeyen bir nedenden dolayý\nsözlüðe eklenemedi.";
+    Text[ catalan ] = "No se puede recoger en el diccionario la\npalabra debido a una razón desconocida.";
 };
 String RID_SVXSTR_DIC_ERR_FULL
 {
@@ -528,6 +544,7 @@ String RID_SVXSTR_DIC_ERR_FULL
     Text[ chinese_traditional ] = "¦r¨å¤wº¡¡C";
     Text[ arabic ] = "ÇáÞÇãæÓ ããÊáÆ ÈÇáÝÚá.";
     Text[ turkish ] = "Sözlük doldu.";
+    Text[ catalan ] = "El diccionario está lleno.";
 };
 String RID_SVXSTR_DIC_ERR_READONLY
 {
@@ -551,6 +568,7 @@ String RID_SVXSTR_DIC_ERR_READONLY
     Text[ chinese_traditional ] = "¦r¨å¬O°ßÅªªº¡C";
     Text[ arabic ] = "ÇáÞÇãæÓ ãÍãí ÖÏ ÇáßÊÇÈÉ.";
     Text[ turkish ] = "Sözlük yazmaya karþý korumalýdýr.";
+    Text[ catalan ] = "El diccionario es solo de lectura.";
 };
 
  // ********************************************************************** EOF
