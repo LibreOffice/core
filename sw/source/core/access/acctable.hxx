@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:51:58 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _ACCTABLE_HXX
 #define _ACCTABLE_HXX
-
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
@@ -283,8 +282,9 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
+    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
-        sal_Int32 nSelectedChildIndex )
+        sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
