@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:45:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
   -----------------------------------------------------------------------*/
 SwXNumberingRules::~SwXNumberingRules()
 {
-    if(sCreatedNumRuleName.Len())
+    if(pDoc && sCreatedNumRuleName.Len())
         pDoc->DelNumRule( sCreatedNumRuleName );
     if( pNumRule && bOwnNumRuleCreated )
         delete pNumRule;
