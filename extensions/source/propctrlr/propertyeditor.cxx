@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:21:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,18 +322,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::AppendEntry( const OLineDescriptor& rData)
-    {
-        // let the current page handle this
-        sal_uInt16 nEntry = LISTBOX_ENTRY_NOTFOUND;
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if (pPage)
-            nEntry = pPage->getListBox()->AppendEntry(rData);
-
-        return nEntry;
-    }
-
-    //------------------------------------------------------------------
     void OPropertyEditor::SetPropertyValue( const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue )
     {
         // let the current page handle this
@@ -362,6 +350,18 @@ namespace pcr
         if(pPage)
             nVal=pPage->getListBox()->GetPropertyPos( rEntryName );
         return nVal;
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton )
+    {
+        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
+        {
+            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
+            if ( pPage )
+                pPage->getListBox()->EnablePropertyInput( _rEntryName, _bEnableInput, _bEnableBrowseButton );
+        }
+
     }
 
     //------------------------------------------------------------------
