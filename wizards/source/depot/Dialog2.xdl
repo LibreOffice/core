@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog2" dlg:left="91" dlg:top="24" dlg:width="220" dlg:height="128" dlg:page="1" dlg:help-url="HID:34520" dlg:closeable="true" dlg:moveable="true">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog2" dlg:tab-index="0" dlg:left="91" dlg:top="24" dlg:width="220" dlg:height="128" dlg:page="1" dlg:help-url="HID:34520" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblStockNames" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="102" dlg:height="8" dlg:value="lblStockNames"/>
   <dlg:menulist dlg:id="lstSellStocks" dlg:tab-index="1" dlg:left="6" dlg:top="17" dlg:width="102" dlg:height="12" dlg:page="1" dlg:help-url="HID:34530" dlg:spin="true">
