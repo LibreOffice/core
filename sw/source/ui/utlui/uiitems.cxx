@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:57:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,11 +292,6 @@ int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 ---------------------------------------------------------------*/
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const USHORT nId )
     : SfxPoolItem( nId ), pRule( new SwNumRule( rRul ) )
-{
-}
-
-SwUINumRuleItem::SwUINumRuleItem( const String& rName, const USHORT nId )
-    : SfxPoolItem( nId ), pRule( new SwNumRule( rName ) )
 {
 }
 
