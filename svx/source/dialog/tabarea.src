@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-05 17:01:05 $
+ *  last change: $Author: bm $ $Date: 2001-02-05 17:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,150 +862,160 @@ TabPage RID_SVXPAGE_AREA
             < "Hatching" ; AREADLG_HATCH ; > ;
             < "Bitmap" ; AREADLG_BITMAP ; > ;
         };
+        StringList [ norwegian ]  =
+        {
+            <  "usynlig" ; AREADLG_INVISIBLE ; > ;
+            < "Color" ; AREADLG_COLOR ; > ;
+            < "+++Gradient" ; AREADLG_GRADIENT ; > ;
+            < "Skravering" ; AREADLG_HATCH ; > ;
+            < "Punktmatrise" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ italian ]  =
+        {
+            < "Invisibile" ; AREADLG_INVISIBLE ; > ;
+            < "Colore" ; AREADLG_COLOR ; > ;
+            < "Sfumatura" ; AREADLG_GRADIENT ; > ;
+            < "Tratteggio" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ portuguese_brazilian ]  =
+        {
+            < "invisÌvel" ; AREADLG_INVISIBLE ; > ;
+            < "Cor" ; AREADLG_COLOR ; > ;
+            < "DÈgradÈ" ; AREADLG_GRADIENT ; > ;
+            < "TraÁo sombreado" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ portuguese ]  =
+        {
+            < "InvisÌvel" ; AREADLG_INVISIBLE ; > ;
+            < "Cor" ; AREADLG_COLOR ; > ;
+            < "GradaÁ„o" ; AREADLG_GRADIENT ; > ;
+            < "Tracejado" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ finnish ]  =
+        {
+            < "n‰kym‰tˆn" ; AREADLG_INVISIBLE ; > ;
+            < "V‰ri" ; AREADLG_COLOR ; > ;
+            < "Liukuv‰ri" ; AREADLG_GRADIENT ; > ;
+            < "Viivoitus" ; AREADLG_HATCH ; > ;
+            < "Bittikartta" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ danish ]  =
+        {
+            < "Usynlig" ; AREADLG_INVISIBLE ; > ;
+            < "Farve" ; AREADLG_COLOR ; > ;
+            < "Farvegraduering" ; AREADLG_GRADIENT ; > ;
+            < "Skravering" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ french ]  =
+        {
+            < "Invisible" ; AREADLG_INVISIBLE ; > ;
+            < "Couleur" ; AREADLG_COLOR ; > ;
+            < "DÈgradÈ" ; AREADLG_GRADIENT ; > ;
+            < "Hachure" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ swedish ]  =
+        {
+            < "Osynlig" ; AREADLG_INVISIBLE ; > ;
+            < "F‰rg" ; AREADLG_COLOR ; > ;
+            < "F‰rggradient" ; AREADLG_GRADIENT ; > ;
+            < "Skraffering" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ dutch ]  =
+        {
+            < "Onzichtbaar" ; AREADLG_INVISIBLE ; > ;
+            < "Kleur" ; AREADLG_COLOR ; > ;
+            < "Kleurverloop" ; AREADLG_GRADIENT ; > ;
+            < "Arcering" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ spanish ]  =
+        {
+            < "Invisible" ; AREADLG_INVISIBLE ; > ;
+            < "Color" ; AREADLG_COLOR ; > ;
+            < "Gradiente" ; AREADLG_GRADIENT ; > ;
+            < "Trama" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ chinese_simplified ]  =
+        {
+            < "“˛»Îµƒ" ; AREADLG_INVISIBLE ; > ;
+            < "—’…´" ; AREADLG_COLOR ; > ;
+            < "≤ …´Õº∞∏" ; AREADLG_GRADIENT ; > ;
+            < "“ı”∞œﬂ" ; AREADLG_HATCH ; > ;
+            < "ŒªÕº" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ russian ]  =
+        {
+            < "ÕÂ‚Ë‰ËÏ˚È" ; AREADLG_INVISIBLE ; > ;
+            < "÷‚ÂÚ" ; AREADLG_COLOR ; > ;
+            < "√‡‰ËÂÌÚÌ‡ˇ" ; AREADLG_GRADIENT ; > ;
+            < "ÿÚËıÓ‚Í‡" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ polish ]  =
+        {
+            < "Niewidoczny" ; AREADLG_INVISIBLE ; > ;
+            < "Kolor" ; AREADLG_COLOR ; > ;
+            < "Gradient" ; AREADLG_GRADIENT ; > ;
+            < "Kreskowanie" ; AREADLG_HATCH ; > ;
+            < "Mapa bitowa" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ japanese ]  =
+        {
+            < "ìhÇËÇ¬Ç‘ÇµÇ»Çµ" ; AREADLG_INVISIBLE ; > ;
+            < "êF" ; AREADLG_COLOR ; > ;
+            < "∏ﬁ◊√ﬁ∞ºÆ›" ; AREADLG_GRADIENT ; > ;
+            < " Ø¡›∏ﬁ" ; AREADLG_HATCH ; > ;
+            < "ÀﬁØƒœØÃﬂ" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ chinese_traditional ]  =
+        {
+            < "¡Ù§J™∫" ; AREADLG_INVISIBLE ; > ;
+            < "√C¶‚" ; AREADLG_COLOR ; > ;
+            < "±m¶‚πœÆ◊" ; AREADLG_GRADIENT ; > ;
+            < "≥±ºvΩu" ; AREADLG_HATCH ; > ;
+            < "¬I∞}πœ" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ arabic ]  =
+        {
+            < "€Ì— „—∆Ì" ; AREADLG_INVISIBLE ; > ;
+            < "·Ê‰" ; AREADLG_COLOR ; > ;
+            < " œ—Ã «··Ê‰" ; AREADLG_GRADIENT ; > ;
+            < "‰ﬁ‘" ; AREADLG_HATCH ; > ;
+            < "’Ê—… ‰ﬁÿÌ…" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ greek ]  =
+        {
+            < "ÃÁ ÔÒ·Ù‹" ; AREADLG_INVISIBLE ; > ;
+            < "◊Ò˛Ï·" ; AREADLG_COLOR ; > ;
+            < "ƒÈ·‚‹ËÏ. ˜Ò˛Ï·" ; AREADLG_GRADIENT ; > ;
+            < "√Ò·ÏÏÔÛÍÈ‹" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ korean ]  =
+        {
+            < "∫∏¿Ã¡ˆ æ ∞‘" ; AREADLG_INVISIBLE ; > ;
+            < "ªˆ" ; AREADLG_COLOR ; > ;
+            < "±◊∂Ûµ•¿Ãº«" ; AREADLG_GRADIENT ; > ;
+            < "«ÿƒ™" ; AREADLG_HATCH ; > ;
+            < "∫Ò∆Æ∏ " ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ turkish ]  =
+        {
+            < "Gizle" ; AREADLG_INVISIBLE ; > ;
+            < "Renk" ; AREADLG_COLOR ; > ;
+            < "Gradyan" ; AREADLG_GRADIENT ; > ;
+            < "Desen" ; AREADLG_HATCH ; > ;
+            < "Bit e˛lem" ; AREADLG_BITMAP ; > ;
+        };
     };
-/*
-    RadioButton RBT_INVISIBLE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text = "~Unsichtbar" ;
-        Text [ ENGLISH ] = "~Invisible" ;
-        Text [ norwegian ] = "~usynlig" ;
-        Text [ italian ] = "~Invisibile" ;
-        Text [ portuguese_brazilian ] = "~invisÌvel" ;
-        Text [ portuguese ] = "~InvisÌvel" ;
-        Text [ finnish ] = "n‰ky~m‰tˆn" ;
-        Text [ danish ] = "Usynlig" ;
-        Text [ french ] = "~Invisible" ;
-        Text [ swedish ] = "Osy~nlig" ;
-        Text [ dutch ] = "~Onzichtbaar" ;
-        Text [ spanish ] = "In~visible" ;
-        Text [ english_us ] = "I~nvisible" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "“˛»Îµƒ(~N)";
-        Text[ russian ] = "ÕÂ‚Ë‰ËÏ˚È";
-        Text[ polish ] = "Niewidoczny";
-        Text[ japanese ] = "ìhÇËÇ¬Ç‘ÇµÇ»Çµ(~N)";
-        Text[ chinese_traditional ] = "¡Ù§J™∫(~N)";
-        Text[ arabic ] = "€Ì— „—∆Ì";
-        Text[ greek ] = "ÃÁ ÔÒ·Ù‹";
-        Text[ korean ] = "∫∏¿Ã¡ˆ æ ∞‘(~N)";
-        Text[ turkish ] = "~Gizle";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_COLOR
-    {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "Far~be" ;
-        Text [ ENGLISH ] = "C~olor" ;
-        Text [ norwegian ] = "C~olor" ;
-        Text [ italian ] = "C~olore" ;
-        Text [ portuguese_brazilian ] = "C~or" ;
-        Text [ portuguese ] = "C~or" ;
-        Text [ finnish ] = "V‰~ri" ;
-        Text [ danish ] = "Farve" ;
-        Text [ french ] = "C~ouleur" ;
-        Text [ swedish ] = "~F‰rg" ;
-        Text [ dutch ] = "~Kleur" ;
-        Text [ spanish ] = "~Color" ;
-        Text [ english_us ] = "~Color" ;
-        Text[ chinese_simplified ] = "—’…´(~C)";
-        Text[ russian ] = "÷‚ÂÚ";
-        Text[ polish ] = "~Kolor";
-        Text[ japanese ] = "êF(~C)";
-        Text[ chinese_traditional ] = "√C¶‚(~C)";
-        Text[ arabic ] = "·Ê‰";
-        Text[ greek ] = "◊Ò˛Ï·";
-        Text[ korean ] = "ªˆ(~C)";
-        Text[ turkish ] = "Ren~k";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_GRADIENT
-    {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "Farb~verlauf" ;
-        Text [ ENGLISH ] = "~Gradient" ;
-        Text [ norwegian ] = "~+++Gradient" ;
-        Text [ italian ] = "~Sfumatura" ;
-        Text [ portuguese_brazilian ] = "~DÈgradÈ" ;
-        Text [ portuguese ] = "~GradaÁ„o" ;
-        Text [ finnish ] = "~Liukuv‰ri" ;
-        Text [ danish ] = "Farvegraduering" ;
-        Text [ french ] = "DÈ~gradÈ" ;
-        Text [ swedish ] = "F‰rggradien~t" ;
-        Text [ dutch ] = "K~leurverloop" ;
-        Text [ spanish ] = "~Gradiente" ;
-        Text [ english_us ] = "~Gradient" ;
-        Text[ chinese_simplified ] = "≤ …´Õº∞∏(~G)";
-        Text[ russian ] = "√‡‰ËÂÌÚÌ‡ˇ";
-        Text[ polish ] = "Gradient";
-        Text[ japanese ] = "∏ﬁ◊√ﬁ∞ºÆ›(~G)";
-        Text[ chinese_traditional ] = "±m¶‚πœÆ◊(~G)";
-        Text[ arabic ] = " œ—Ã «··Ê‰";
-        Text[ greek ] = "ƒÈ·~‚‹ËÏ. ˜Ò˛Ï·";
-        Text[ korean ] = "±◊∂Ûµ•¿Ãº«(~G)";
-        Text[ turkish ] = "Grad~yan";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_HATCHING
-    {
-        Pos = MAP_APPFONT ( 70 , 28 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text = "~Schraffur" ;
-        Text [ ENGLISH ] = "H~atching" ;
-        Text [ norwegian ] = "S~kravering" ;
-        Text [ italian ] = "Tratteggio" ;
-        Text [ portuguese_brazilian ] = "T~raÁo sombreado" ;
-        Text [ portuguese ] = "~Tracejado" ;
-        Text [ finnish ] = "~Viivoitus" ;
-        Text [ danish ] = "Skravering" ;
-        Text [ french ] = "Hachure" ;
-        Text [ swedish ] = "Skraff~ering" ;
-        Text [ dutch ] = "~Arcering" ;
-        Text [ spanish ] = "~Trama" ;
-        Text [ english_us ] = "H~atching" ;
-        Text[ chinese_simplified ] = "“ı”∞œﬂ(~A)";
-        Text[ russian ] = "ÿÚËıÓ‚Í‡";
-        Text[ polish ] = "~Kreskowanie";
-        Text[ japanese ] = " Ø¡›∏ﬁ(~H)";
-        Text[ chinese_traditional ] = "≥±ºvΩu(~H)";
-        Text[ arabic ] = "‰ﬁ‘";
-        Text[ greek ] = "√Ò·ÏÏÔ~ÛÍÈ‹";
-        Text[ korean ] = "«ÿƒ™(~A)";
-        Text[ turkish ] = "~Desen";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_BITMAP
-    {
-        Pos = MAP_APPFONT ( 70 , 42 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text = "B~itmap" ;
-        Text [ ENGLISH ] = "~Bitmap" ;
-        Text [ norwegian ] = "~Punktmatrise" ;
-        Text [ italian ] = "~Bitmap" ;
-        Text [ portuguese_brazilian ] = "~Bitmap" ;
-        Text [ portuguese ] = "~Bitmap" ;
-        Text [ finnish ] = "~Bittikartta" ;
-        Text [ danish ] = "Bitmap" ;
-        Text [ french ] = "~Bitmap" ;
-        Text [ swedish ] = "B~itmap" ;
-        Text [ dutch ] = "~Bitmap" ;
-        Text [ spanish ] = "Bit~map" ;
-        Text [ english_us ] = "~Bitmap" ;
-        Text[ chinese_simplified ] = "ŒªÕº(~B)";
-        Text[ russian ] = "Bitmap";
-        Text[ polish ] = "Mapa bitowa";
-        Text[ japanese ] = "ÀﬁØƒœØÃﬂ(~B)";
-        Text[ chinese_traditional ] = "¬I∞}πœ(~B)";
-        Text[ arabic ] = "’Ê—… ‰ﬁÿÌ…";
-        Text[ greek ] = "~Bitmap";
-        Text[ korean ] = "∫Ò∆Æ∏ (~B)";
-        Text[ turkish ] = "B~it e˛lem";
-        Text[ language_user1 ] = " ";
-    };
-*/
+
     ListBox LB_COLOR
     {
         Border = TRUE ;
