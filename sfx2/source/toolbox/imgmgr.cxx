@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-20 21:25:34 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 17:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,21 @@ static int nGlobalRef=0;
 
 ImageList* GetImageList( BOOL bBig, BOOL bHiContrast = FALSE )
 {
-    // Has to be changed if we know how the IDs are named!!!
+    // #i21242# MT: For B&W we need the HC Image and must transform.
+    // bHiContrast is TRUE for all dark backgrounds, but we need HC Images for HC White also,
+    // so we can't rely on bHighContrast.
+
+    BOOL bBlackAndWhite = Application::GetSettings().GetStyleSettings().IsHighContrastBlackAndWhite();
+    if ( bBlackAndWhite )
+        bHiContrast = TRUE;
+
+        // Has to be changed if we know how the IDs are named!!!
     ImageList*& rpList = bBig ? ( bHiContrast ? pImageListHiBig : pImageListBig ) :
                                 ( bHiContrast ? pImageListHiSmall : pImageListSmall );
     if ( !rpList )
     {
         ResMgr *pResMgr = Resource::GetResManager();
+
         ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
                              ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ));
 
@@ -180,6 +189,17 @@ ImageList* GetImageList( BOOL bBig, BOOL bHiContrast = FALSE )
             rpList = new ImageList( aResId );
         else
             rpList = new ImageList();
+
+        if ( bBlackAndWhite )
+        {
+            // First invert the Image, because it's designed for black background, structures are bright
+            rpList->Invert();
+            // Now make monochrome...
+            ImageColorTransform eTrans = IMAGECOLORTRANSFORM_MONOCHROME_WHITE;
+            if ( Application::GetSettings().GetStyleSettings().GetFaceColor().GetColor() == COL_WHITE )
+                eTrans = IMAGECOLORTRANSFORM_MONOCHROME_BLACK;
+            *rpList = rpList->GetColorTransformedImageList( eTrans );
+        }
     }
 
     return rpList;
