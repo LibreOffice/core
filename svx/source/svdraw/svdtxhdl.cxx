@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:48:48 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
                 aXPP.Move(aPos.X(), aPos.Y());
                 SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
 
-                pObj->SetItemSet(aAttrSet);
+                pObj->SetMergedItemSet(aAttrSet);
                 pGroup->GetSubList()->InsertObject(pObj);
             }
         }
@@ -628,7 +628,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
         SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
-        pObj->SetItemSet(aAttrSet);
+        pObj->SetMergedItemSet(aAttrSet);
         pGroup->GetSubList()->InsertObject(pObj);
     }
     if (eStrk!=STRIKEOUT_NONE) {
@@ -663,7 +663,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
         SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
-        pObj->SetItemSet(aAttrSet);
+        pObj->SetMergedItemSet(aAttrSet);
         pGroup->GetSubList()->InsertObject(pObj);
     }
     return 0;
