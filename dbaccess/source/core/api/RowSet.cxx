@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:50:03 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 12:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,11 +997,14 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
         {
             ::osl::MutexGuard aCacheGuard( *m_pMutex);
-            m_pCache->insertRow();
+            sal_Bool bInserted = m_pCache->insertRow();
 
             // notification order
             // - column values
             setCurrentRow(sal_False,aOldValues,aGuard); // we don't move here
+
+            // make sure that our row is set to the new inserted row before clearing the inser flags in the cache
+            m_pCache->resetInsertRow(bInserted);
 
             // - rowChanged
             notifyAllListenersRowChanged(aGuard,aEvt);
@@ -1235,7 +1238,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
             positionCache();
 
         ORowSetRow aOldValues;
-        if ( !m_bBeforeFirst && !m_bAfterLast && m_pCache->m_aMatrixIter != m_pCache->getEnd() )
+        if ( !m_bBeforeFirst && !m_bAfterLast && m_pCache->m_aMatrixIter != m_pCache->getEnd() && m_pCache->m_aMatrixIter->isValid() )
             aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
 
         const sal_Bool bNewState = m_bNew;
@@ -1304,10 +1307,11 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    if ( m_pCache && ( m_pCache->m_bInserted || m_bModified ) )
+    if ( m_pCache && ( m_pCache->m_bInserted || m_bModified) )
         return  (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex];
-    else
-        return getValue(columnIndex);
+
+    OSL_ENSURE(m_pCache->m_aInsertRow != m_aCurrentRow,"Current row stand on the insert row but all flags are wrong!");
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORowSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -1864,7 +1868,6 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     // notify the rowset listeners
     if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
     {
-
         // first notify the clones so that they can save their position
         const Any* pBegin = rows.getConstArray();
         const Any* pEnd   = pBegin + rows.getLength();
@@ -1893,9 +1896,10 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
                 notifyClonesRowDeleted(*pBegin);
                 if(compareBookmarks( m_aBookmark,*pBegin) == 0)
                 {
+                    m_aOldRow       = NULL;
+                    m_aCurrentRow   = m_pCache->getEnd();
                     m_aBookmark     = Any();
-                    m_aCurrentRow   = NULL;
-                    m_aCurrentRow.setBookmark(Any());
+                    m_aCurrentRow.setBookmark(m_aBookmark);
                 }
             }
         }

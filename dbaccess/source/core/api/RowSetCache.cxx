@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:10 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 12:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,8 +664,11 @@ sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
         {
             moveWindow();
             checkPositionFlags();
-            if(!m_bAfterLast)
+            if ( !m_bAfterLast )
+            {
                 m_aMatrixIter = calcPosition();
+                OSL_ENSURE(m_aMatrixIter->isValid(),"Iterator after moveto bookmark not valid");
+            }
             else
                 m_aMatrixIter = m_pMatrix->end();
         }
@@ -1387,21 +1390,21 @@ Reference< XInterface > ORowSetCache::getStatement(  )
 // -------------------------------------------------------------------------
 
 // XResultSetUpdate
-void ORowSetCache::insertRow(  )
+sal_Bool ORowSetCache::insertRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-    if(!m_bInserted || !m_aInsertRow->isValid())
+    if ( !m_bInserted || !m_aInsertRow->isValid() )
         throw SQLException();
 
+    sal_Bool bRet;
     m_pCacheSet->insertRow(*m_aInsertRow,m_aUpdateTable);
 
-    if(rowInserted())
+    if ( bRet = rowInserted() )
     {
         ++m_nRowCount;
         Any aBookmark = (*(*m_aInsertRow))[0].makeAny();
         m_bAfterLast = m_bBeforeFirst = sal_False;
-        clearInsertRow();
         if(aBookmark.hasValue())
             moveToBookmark(aBookmark);
         else
@@ -1409,18 +1412,21 @@ void ORowSetCache::insertRow(  )
             OSL_ENSURE(0,"There must be a bookmark after the row was inserted!");
         }
     }
-
+    return bRet;
+}
+// -------------------------------------------------------------------------
+void ORowSetCache::resetInsertRow(sal_Bool _bClearInsertRow)
+{
+    if ( _bClearInsertRow )
+        clearInsertRow();
     m_bNew      = sal_False;
     m_bModified = sal_False;
     m_bInserted = sal_False;
-
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::cancelRowModification()
 {
-    m_bNew          = sal_False;
-    m_bModified     = sal_False;
-    m_bInserted     = sal_False;
+    resetInsertRow(sal_False);
 
     // clear the insertrow references   -> implies that the current row of the rowset changes as well
     ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();

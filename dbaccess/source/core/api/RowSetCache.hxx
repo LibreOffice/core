@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:10 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 12:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,10 +307,12 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getStatement(  );
 
     // ::com::sun::star::sdbc::XResultSetUpdate
-        void insertRow(  );
-        void updateRow(  );
+        sal_Bool insertRow();
+        void resetInsertRow(sal_Bool _bClearInsertRow);
+
+        void updateRow();
         void updateRow( ORowSetMatrix::iterator& _rUpdateRow );
-        void deleteRow(  );
+        void deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );
         void moveToCurrentRow(  );
@@ -332,6 +334,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.18  2002/12/05 14:10:10  oj
+    #106008# copy row content instead of remember ref
+
     Revision 1.17  2002/12/05 09:54:54  fs
     #105390# #i8481# cancelInsert renamed to cancelRowModification
 
