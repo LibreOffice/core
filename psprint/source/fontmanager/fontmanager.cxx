@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:21:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,16 @@ inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
     sal_uInt16 nRet = (sal_uInt16)pBuffer[1] |
         (((sal_uInt16)pBuffer[0]) << 8);
     pBuffer+=2;
+    return nRet;
+}
+
+inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
+{
+    sal_uInt32 nRet = (((sal_uInt32)pBuffer[0]) << 24) |
+                      (((sal_uInt32)pBuffer[1]) << 16) |
+                      (((sal_uInt32)pBuffer[2]) << 8)  |
+                      (((sal_uInt32)pBuffer[3]) );
+    pBuffer += 4;
     return nRet;
 }
 
@@ -376,6 +386,9 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             // so currently we get kernpairs by accessing the raw data
             struct _TrueTypeFont* pImplTTFont = (struct _TrueTypeFont*)pTTFont;
 
+            //-----------------------------------------------------------------
+            // Kerning:  KT_MICROSOFT
+            //-----------------------------------------------------------------
             if( pImplTTFont->nkern && pImplTTFont->kerntype == KT_MICROSOFT )
             {
                 // create a glyph -> character mapping
@@ -433,8 +446,8 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                             }
                         }
                         break;
-                        case 2:
 
+                        case 2:
                         {
                             const sal_uInt8* pSubTable = pTable;
                             sal_uInt16 nRowWidth    = getUInt16BE( pTable );
@@ -472,6 +485,131 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                     }
                 }
             }
+
+            //-----------------------------------------------------------------
+            // Kerning:  KT_APPLE_NEW
+            //-----------------------------------------------------------------
+            if( pImplTTFont->nkern && pImplTTFont->kerntype == KT_APPLE_NEW )
+            {
+                // create a glyph -> character mapping
+                ::std::hash_map< sal_uInt16, sal_Unicode > aGlyphMap;
+                ::std::hash_map< sal_uInt16, sal_Unicode >::iterator left, right;
+                for( i = 21; i < 0xfffd; i++ )
+                {
+                    sal_uInt16 nGlyph = MapChar( pTTFont, (sal_Unicode)i, 0 ); // kerning for horz only
+                    if( nGlyph != 0 )
+                        aGlyphMap[ nGlyph ] = (sal_Unicode)i;
+                }
+
+                // Loop through each of the 'kern' subtables
+                KernPair aPair;
+                for( i = 0; i < pImplTTFont->nkern; i++ )
+                {
+                    const sal_uInt8* pTable = pImplTTFont->kerntables[i];
+
+                    sal_uInt32 nLength      = getUInt32BE( pTable );
+                    sal_uInt16 nCoverage    = getUInt16BE( pTable );
+                    sal_uInt16 nTupleIndex  = getUInt16BE( pTable );
+
+                    // Get kerning type
+                    sal_Bool bKernVertical     = nCoverage & 0x8000;
+                    sal_Bool bKernCrossStream  = nCoverage & 0x4000;
+                    sal_Bool bKernVariation    = nCoverage & 0x2000;
+
+                    // Kerning sub-table format, 0 through 3
+                    sal_uInt8 nSubTableFormat  = nCoverage & 0x00FF;
+
+                    aPair.kern_x    = 0;
+                    aPair.kern_y    = 0;
+                    switch( nSubTableFormat )
+                    {
+                        case 0:
+                        {
+                            // Grab the # of kern pairs but skip over the:
+                            //   searchRange
+                            //   entrySelector
+                            //   rangeShift
+                            sal_uInt16 nPairs = getUInt16BE( pTable );
+                            pTable += 6;
+
+                            for( int n = 0; n < nPairs; n++ )
+                            {
+                                sal_uInt16 nLeftGlyph   = getUInt16BE( pTable );
+                                sal_uInt16 nRightGlyph  = getUInt16BE( pTable );
+                                sal_Int16  nKern         = (sal_Int16)getUInt16BE( pTable );
+
+                                left = aGlyphMap.find( nLeftGlyph );
+                                right = aGlyphMap.find( nRightGlyph );
+                                if( left != aGlyphMap.end() && right != aGlyphMap.end() )
+                                {
+                                    aPair.first     = left->second;
+                                    aPair.second    = right->second;
+
+                                    // Only support horizontal kerning for now
+                                    aPair.kern_x = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
+                                    aPair.kern_y = 0;
+                                    m_pMetrics->m_aXKernPairs.push_back( aPair );
+
+/*                                  switch( nCoverage & 1 )
+                                    {
+                                        case 1:
+                                            aPair.kern_x = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
+                                            m_pMetrics->m_aXKernPairs.push_back( aPair );
+                                            break;
+                                        case 0:
+                                            aPair.kern_y = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
+                                            m_pMetrics->m_aYKernPairs.push_back( aPair );
+                                            break;
+                                    }
+*/
+                                }
+                            }
+                        }
+                        break;
+
+                        case 2:
+                        {
+                            const sal_uInt8* pSubTable = pTable;
+                            sal_uInt16 nRowWidth    = getUInt16BE( pTable );
+                            sal_uInt16 nOfLeft      = getUInt16BE( pTable );
+                            sal_uInt16 nOfRight     = getUInt16BE( pTable );
+                            sal_uInt16 nOfArray     = getUInt16BE( pTable );
+                            const sal_uInt8* pTmp = pSubTable + nOfLeft;
+                            sal_uInt16 nFirstLeft   = getUInt16BE( pTmp );
+                            sal_uInt16 nLastLeft    = getUInt16BE( pTmp ) + nFirstLeft - 1;
+                            pTmp = pSubTable + nOfRight;
+                            sal_uInt16 nFirstRight  = getUInt16BE( pTmp );
+                            sal_uInt16 nLastRight   = getUInt16BE( pTmp ) + nFirstRight -1;
+
+                            int nPairs = (int)(nLastLeft-nFirstLeft+1)*(int)(nLastRight-nFirstRight+1);
+                            for( aPair.first = nFirstLeft; aPair.first < nLastLeft; aPair.first++ )
+                            {
+                                for( aPair.second = 0; aPair.second < nLastRight; aPair.second++ )
+                                {
+                                    sal_Int16 nKern = (sal_Int16)getUInt16BE( pTmp );
+                                    switch( nCoverage & 1 )
+                                    {
+                                        case 1:
+                                            aPair.kern_x = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
+                                            m_pMetrics->m_aXKernPairs.push_back( aPair );
+                                            break;
+                                        case 0:
+                                            aPair.kern_y = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
+                                            m_pMetrics->m_aYKernPairs.push_back( aPair );
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                        default:
+                            fprintf( stderr, "Found unsupported Apple-style kern subtable type %d.\n", nSubTableFormat );
+                            break;
+                    }
+                }
+            }
+
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "found %d/%d kern pairs for %s\n",
                      m_pMetrics->m_aXKernPairs.size(),
@@ -969,49 +1107,54 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
     {
         // check for corresponding afm metric
         // first look for an adjacent file
+        static const char* pSuffix[] = { ".afm", ".AFM" };
 
-        ByteString aName( rFontFile );
-        aName.Erase( aName.Len()-4 );
-        aName.Append( ".afm" );
-
-        ByteString aFilePath( aDir );
-        aFilePath.Append( '/' );
-        aFilePath.Append( aName );
-
-        ByteString aAfmFile;
-        if( access( aFilePath.GetBuffer(), R_OK ) )
+        for( int i = 0; i < sizeof(pSuffix)/sizeof(pSuffix[0]); i++ )
         {
-            // try in subdirectory afm instead
-            aFilePath = aDir;
-            aFilePath.Append( "/afm/" );
+            ByteString aName( rFontFile );
+            aName.Erase( aName.Len()-4 );
+            aName.Append( pSuffix[i] );
+
+            ByteString aFilePath( aDir );
+            aFilePath.Append( '/' );
             aFilePath.Append( aName );
 
-            if( ! access( aFilePath.GetBuffer(), R_OK ) )
+            ByteString aAfmFile;
+            if( access( aFilePath.GetBuffer(), R_OK ) )
             {
-                aAfmFile = "afm/";
-                aAfmFile += aName;
+                // try in subdirectory afm instead
+                aFilePath = aDir;
+                aFilePath.Append( "/afm/" );
+                aFilePath.Append( aName );
+
+                if( ! access( aFilePath.GetBuffer(), R_OK ) )
+                {
+                    aAfmFile = "afm/";
+                    aAfmFile += aName;
+                }
             }
-        }
-        else
-            aAfmFile = aName;
+            else
+                aAfmFile = aName;
 
-        if( aAfmFile.Len() )
-        {
-            Type1FontFile* pFont = new Type1FontFile();
-            pFont->m_nDirectory     = nDirID;
-
-            pFont->m_aFontFile      = rFontFile;
-            pFont->m_aMetricFile    = aAfmFile;
-
-            if( rXLFDs.size() )
-                getFontAttributesFromXLFD( pFont, rXLFDs.front() );
-            else if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms ) )
+            if( aAfmFile.Len() )
             {
-                delete pFont;
-                pFont = NULL;
+                Type1FontFile* pFont = new Type1FontFile();
+                pFont->m_nDirectory     = nDirID;
+
+                pFont->m_aFontFile      = rFontFile;
+                pFont->m_aMetricFile    = aAfmFile;
+
+                if( rXLFDs.size() )
+                    getFontAttributesFromXLFD( pFont, rXLFDs.front() );
+                else if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms ) )
+                {
+                    delete pFont;
+                    pFont = NULL;
+                }
+                if( pFont )
+                    rNewFonts.push_back( pFont );
+                break;
             }
-            if( pFont )
-                rNewFonts.push_back( pFont );
         }
     }
     else if( aExt.EqualsIgnoreCaseAscii( "afm" ) )
@@ -1438,9 +1581,17 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
                 aNames.pop_front();
             }
             else
-                // poor font does not have a family name
-                // name it to file name minus ".tt{f|c}"
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, pTTFontFile->m_aFontFile.getLength()-4 ), aEncoding ), sal_True );
+            {
+                 sal_Int32   dotIndex;
+
+                 // poor font does not have a family name
+                 // name it to file name minus the extension
+                 dotIndex = pTTFontFile->m_aFontFile.lastIndexOf( '.' );
+                 if ( dotIndex == -1 )
+                     dotIndex = pTTFontFile->m_aFontFile.getLength();
+
+                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, dotIndex ), aEncoding ), sal_True );
+            }
         }
         pFont->m_aAliases.clear();
         for( ::std::list< OUString >::iterator it = aNames.begin(); it != aNames.end(); ++it )
