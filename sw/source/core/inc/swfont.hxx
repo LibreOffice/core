@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:23:27 $
+ *  last change: $Author: fme $ $Date: 2001-04-19 09:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ class SwSubFont : public SvxFont
     USHORT CalcEscAscent( const USHORT nOldAscent ) const;
     USHORT CalcEscHeight( const USHORT nOldHeight,
                           const USHORT nOldAscent ) const;
+    void CalcEsc( SwDrawTextInfo& rInf, Point& rPos );
+
     inline void CopyMagic( const SwSubFont& rFnt )
         { pMagic = rFnt.pMagic; nFntIndex = rFnt.nFntIndex; }
 
