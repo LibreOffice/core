@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:49:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 
 #include <math.h>
 #include <vcl/metaact.hxx>   // fuer TakeContour
@@ -1287,6 +1291,10 @@ SdrObject::SdrObject():
 
 SdrObject::~SdrObject()
 {
+    uno::Reference< lang::XComponent > xShape( mxUnoShape, uno::UNO_QUERY );
+    if( xShape.is() )
+        xShape->dispose();
+
     DBG_DTOR(SdrObject,NULL);
     SendUserCall(SDRUSERCALL_DELETE,GetBoundRect());
     if (pPlusData!=NULL) delete pPlusData;
