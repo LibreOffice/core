@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-07-25 13:32:10 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 16:52:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ LIB1FILES=\
 
 # --- dynamic library ---------------------------
 
-SHL1TARGET=	$(DBTOOLS_TARGET)$(DBTOOLS_MAJOR)
+SHL1TARGET=	$(DBTOOLS_TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
@@ -101,10 +101,6 @@ SHL1STDLIBS=\
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SHL1STDLIBS+=$(UCBHELPERLIB)
-.ENDIF
-
-.IF "$(COMPHELPERLIB)" == ""
-SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
 SHL1DEPN=
