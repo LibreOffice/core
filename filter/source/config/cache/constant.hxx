@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:11:03 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _FILTER_CONFIG_CONSTANT_HXX_
 #define _FILTER_CONFIG_CONSTANT_HXX_
 
@@ -67,7 +66,7 @@
 /*  disable impl_loadOnDemand function of BaseContainer for certain
     functions, where it the feature "impl_loadItemOnDemand() of class FilterCache
     can be used instead of loadAll()!*/
-#define LOAD_IMPLICIT
+// #define LOAD_IMPLICIT
 
 //_______________________________________________
 
