@@ -42,14 +42,14 @@ int main(int argc, char* argv[])
 
 sal_Bool test1()
 {
-    printf("\n Test1:  com.sun.star.bridge.OleBridgeSupplier2\n");
+    printf("\n Test1:  com.sun.star.bridge.oleautomation.BridgeSupplier\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-    OUString sService1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.OleBridgeSupplier2"));
+    OUString sService1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.BridgeSupplier"));
     Reference<XInterface> xint1= fac->createInstanceWithContext( sService1, context);
 
     OUString sModule(
@@ -79,7 +79,7 @@ sal_Bool test2()
 {
     printf("Test2:  com.sun.star.bridge.OleBridgeSupplierVar1\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
@@ -110,15 +110,15 @@ sal_Bool test2()
 
 sal_Bool test3()
 {
-    printf("Test3:  com.sun.star.bridge.OleObjectFactory\n");
+    printf("Test3:  com.sun.star.bridge.oleautomation.Factory\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
                 sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
 
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-      OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.OleObjectFactory"));
+      OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.Factory"));
     Reference<XInterface> xint= fac->createInstanceWithContext( sService, context);
 
 
@@ -166,14 +166,14 @@ sal_Bool test4()
         RTL_CONSTASCII_USTRINGPARAM("oleautobridge.uno" SAL_DLLEXTENSION));
     OUString sFactoryFunc( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     {
-    printf("Test4:  com.sun.star.bridge.OleApplicationRegistration\n");
+    printf("Test4:  com.sun.star.bridge.oleautomation.ApplicationRegistration\n");
        Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-    OUString sService4( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.OleApplicationRegistration"));
+    OUString sService4( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.ApplicationRegistration"));
     Reference<XInterface> xint= fac->createInstanceWithContext( sService4, context);
 
     hMod= osl_loadModule( sModule.pData, 0);
@@ -183,7 +183,7 @@ sal_Bool test4()
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
     bTest1= pSymbol ? sal_True : sal_False;
-    // OleApplicationRegistration is a one-instance-service, therefore kill service manager first
+    // ApplicationRegistration is a one-instance-service, therefore kill service manager first
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
 
