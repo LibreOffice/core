@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:47:18 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ namespace com { namespace sun { namespace star {
 namespace sdb {
     class XSQLQueryComposer;
     class SQLContext;
+}
+namespace sdbcx {
+    class XTablesSupplier;
 }
 namespace sdbc {
     class XConnection;
@@ -279,6 +282,7 @@ namespace dbtools
         @param      _rxCursorSet    the property set
     */
     sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+
     //----------------------------------------------------------------------------------
     /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
     */
@@ -290,6 +294,19 @@ namespace dbtools
                             sal_Bool _bQuote,
                             EComposeRule _eComposeRule);
 
+    //----------------------------------------------------------------------------------
+    /** compose the table name out of the property set which must support the properties from the service <member scope= "com::sun::star::sdbcx">table</member>
+        @param  _xMetaData
+            The metadata from the connection.
+        @param  _xTable
+            The table.
+    */
+    ::rtl::OUString composeTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
+                                     sal_Bool _bQuote,
+                                     EComposeRule _eComposeRule);
+
+    //----------------------------------------------------------------------------------
     sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                                     sal_Int32 _nDataType);
     // return the datasource for the given datasource name
@@ -370,6 +387,74 @@ namespace dbtools
                             const sal_Int32 _nColumnIndex,
                             const ::com::sun::star::uno::Any& _rValue) SAL_THROW ( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
 
+    /** creates the standard sql create table statement without the key part.
+        @param  descriptor
+            The descriptor of the new table.
+        @param  _xConnection
+            The connection.
+    */
+    ::rtl::OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** creates the standard sql statement for the key part of a create table statement.
+        @param  descriptor
+            The descriptor of the new table.
+        @param  _xConnection
+            The connection.
+    */
+    ::rtl::OUString createStandardKeyStatement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** creates the standard sql statement for the column part of a create table statement.
+        @param  descriptor
+            The descriptor of the column.
+        @param  _xConnection
+            The connection.
+    */
+    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** creates a SDBC column with the help of getColumns.
+        @param  _xTable
+            The table.
+        @param  _rName
+            The name of the column.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
+            createSDBCXColumn(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                const ::rtl::OUString& _rName,
+                                sal_Bool _bCase);
+
+    /** tries to locate the corresponding DataDefinitionSupplier for the given url and connection
+        @param  _rsUrl
+            The URL used to connect to the database.
+        @param  _xConnection
+            The connection used to find the correct driver.
+        @param  _rxFactory
+            Used to create the drivermanager.
+        @return
+            The datadefintion object.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
+            const ::rtl::OUString& _rsUrl,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+
+    /** returns the table privileges to the given parameters
+        @param  _xMetaData
+            The meta data.
+        @param  _sCatalog
+            contains the catalog name
+        @param  _sSchema
+            contains the schema name
+        @param  _sTable
+            contains the table name
+    */
+    sal_Int32 getTablePrivileges(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+                                 const ::rtl::OUString& _sCatalog,
+                                 const ::rtl::OUString& _sSchema,
+                                 const ::rtl::OUString& _sTable);
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
