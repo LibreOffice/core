@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextFrameView.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:53:39 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module text {
 
 /** The accessible view of text frames.
 
-     @since #107627#
+     @since OOo 1.1.2
  */
 published service AccessibleTextFrameView
 {
