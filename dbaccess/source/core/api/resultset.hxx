@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:18:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ namespace dbaccess
                                               ::com::sun::star::sdbc::XRowUpdate,
                                               ::com::sun::star::lang::XServiceInfo > OResultSetBase;
 
-    typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface> OWeakStatement;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ONoWeakStatement;
 
     //************************************************************
     //  OResultSet
@@ -144,7 +144,7 @@ namespace dbaccess
                         public ::comphelper::OPropertyArrayUsageHelper < OResultSet >
     {
     protected:
-        OWeakStatement              m_aStatement;
+        ONoWeakStatement                m_aStatement;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  m_xAggregateAsResultSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >        m_xAggregateAsRow;
