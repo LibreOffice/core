@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:23:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,18 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
+#endif
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /* -----------------12.02.99 12:28-------------------
  *
  * --------------------------------------------------*/
+
 SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 {
     BOOL bTextDialog = (nId == SID_SW_EDITOPTIONS) ? TRUE : FALSE;
@@ -277,7 +283,9 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pPrt = new SfxPrinter(pSet);
         pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));*/
 
-        SvtLinguConfig  aLinguCfg;
+        // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+        SwLinguConfig aLinguCfg;
+
         Any aLang = aLinguCfg.GetProperty(C2U("DefaultLocale"));
         Locale aLocale;
         aLang >>= aLocale;
