@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_MULTMRK
     Text [ English ] = "Index marks" ;
     Text [ norwegian ] = "Stikkordregistermerker" ;
     Text [ italian ] = "Contrassegni indice" ;
-    Text [ portuguese_brazilian ] = "Marcas do ?ndice" ;
+    Text [ portuguese_brazilian ] = "Marca��es do �ndice" ;
     Text [ portuguese ] = "Marcas do �ndice" ;
     Text [ finnish ] = "Hakemiston merkinn�t" ;
     Text [ danish ] = "Indeksmarkeringer" ;
@@ -91,7 +91,7 @@ ModalDialog DLG_MULTMRK
         Text [ English ] = "Choice" ;
         Text [ norwegian ] = "Choice" ;
         Text [ italian ] = "Selezione" ;
-        Text [ portuguese_brazilian ] = "Escolha" ;
+        Text [ portuguese_brazilian ] = "Sele��o" ;
         Text [ portuguese ] = "Selec��o" ;
         Text [ finnish ] = "Valinta" ;
         Text [ danish ] = "V�lg" ;
@@ -114,6 +114,9 @@ ModalDialog DLG_MULTMRK
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opci�";
         Text[ thai ] = "เลือก";
+        Text[ czech ] = "Výběr";
+        Text[ hebrew ] = "‮מבחר‬";
+        Text[ hindi ] = "चुनाव";
     };
     FixedText FT_ENTRY
     {
@@ -123,7 +126,7 @@ ModalDialog DLG_MULTMRK
         Text [ English ] = "Index" ;
         Text [ norwegian ] = "Stikkordregister" ;
         Text [ italian ] = "Indice" ;
-        Text [ portuguese_brazilian ] = "?ndice" ;
+        Text [ portuguese_brazilian ] = "�ndice" ;
         Text [ portuguese ] = "�ndice" ;
         Text [ finnish ] = "Hakemisto" ;
         Text [ danish ] = "Indeks" ;
@@ -147,6 +150,9 @@ ModalDialog DLG_MULTMRK
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�ndex";
         Text[ thai ] = "ดัชนี";
+        Text[ czech ] = "Rejstřík";
+        Text[ hebrew ] = "Verzeichnis";
+        Text[ hindi ] = "अनुक्रमणिका";
     };
     FixedText FT_TEXT
     {
@@ -186,6 +192,9 @@ ModalDialog DLG_MULTMRK
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entrada";
         Text[ thai ] = "รายการ";
+        Text[ czech ] = "Položka";
+        Text[ hebrew ] = "‮שורה‬";
+        Text[ hindi ] = "प्रविष्टि";
     };
     ListBox LB_TOX
     {
@@ -218,11 +227,23 @@ ModalDialog DLG_MULTMRK
     Text[ chinese_simplified ] = "目录标记";
     Text[ greek ] = "��������� ����������";
     Text[ korean ] = "색인 표시";
-    Text[ turkish ] = "Dizin i�in i�aretlenen giri�ler";
+    Text[ turkish ] = "Dizin i�aretleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marques de l'�ndex";
     Text[ thai ] = "ทำเครื่องหมายดัชนี";
+    Text[ czech ] = "Značky rejstříku";
+    Text[ hebrew ] = "Verzeichnismarkierungen";
+    Text[ hindi ] = "अनुक्रमणिका चिह्न";
 };
+
+
+
+
+
+
+
+
+
 
 
 
