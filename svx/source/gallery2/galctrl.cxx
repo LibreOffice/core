@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-13 12:59:00 $
+ *  last change: $Author: ka $ $Date: 2001-11-12 14:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,9 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, US
                             aSize.Height()= (long) ( aOutputRect.GetWidth() / fBmpWH );
                         }
                     }
+
+                    aSize.Width() = Max( aSize.Width(), 4L );
+                    aSize.Height() = Max( aSize.Height(), 4L );
 
                     const Point aPos( ( ( aOutputRect.GetWidth() - aSize.Width() ) >> 1 ) + aOutputRect.Left(),
                                       ( ( aOutputRect.GetHeight() - aSize.Height() ) >> 1 ) + aOutputRect.Top() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-08 19:03:02 $
+ *  last change: $Author: ka $ $Date: 2001-11-12 14:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,7 +1446,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 aPath = aRelURL1.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( aFileName.GetChar( 0 ) != '/' )
-                    aPath += '/';
+                        aPath += '/';
 
                 aPath += aFileName;
 
@@ -1461,10 +1461,8 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
                     aPath += aFileName;
 
+                    // assign this URL, even in the case it is not valid (#94482)
                     pObj->aURL = INetURLObject( aPath );
-
-                    if( !FileExists( pObj->aURL ) )
-                        pObj->aURL = INetURLObject();
                 }
             }
             else
