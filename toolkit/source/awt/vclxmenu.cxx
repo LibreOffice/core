@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:57:46 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XMenu*, (::com::sun::star::awt::XMenuBar*) this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XMenuBar*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XPopupMenu*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XMenuExtended*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
@@ -213,7 +214,8 @@ IMPL_XUNOTUNNEL( VCLXMenu )
 IMPL_XTYPEPROVIDER_START( VCLXMenu )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenu>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu>* ) NULL )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuExtended>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 
@@ -344,7 +346,6 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     }
     return aRef;
 }
-
 
 // ::com::sun::star::awt::XPopupMenu
 void VCLXMenu::insertSeparator( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
