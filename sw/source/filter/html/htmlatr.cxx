@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:53:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,7 +1502,8 @@ public:
 
 USHORT HTMLEndPosLst::_FindStartPos( const HTMLSttEndPos *pPos ) const
 {
-    for( USHORT i=0; i<aStartLst.Count() && aStartLst[i]!=pPos;  i++ )
+    USHORT i;
+    for( i = 0; i < aStartLst.Count() && aStartLst[i] != pPos;  i++ )
         ;
 
     ASSERT( i != aStartLst.Count(), "Item nicht in Start-Liste gefunden!" );
@@ -1512,7 +1513,9 @@ USHORT HTMLEndPosLst::_FindStartPos( const HTMLSttEndPos *pPos ) const
 
 USHORT HTMLEndPosLst::_FindEndPos( const HTMLSttEndPos *pPos ) const
 {
-    for( USHORT i=0; i<aEndLst.Count() && aEndLst[i]!=pPos;  i++ )
+    USHORT i;
+
+    for( i = 0; i < aEndLst.Count() && aEndLst[i] != pPos;  i++ )
         ;
 
     ASSERT( i != aEndLst.Count(), "Item nicht in Ende-Liste gefunden" );
@@ -1526,7 +1529,9 @@ void HTMLEndPosLst::_InsertItem( HTMLSttEndPos *pPos, USHORT nEndPos )
     // In der Start-Liste das Attribut hinter allen vorher und an
     // der gleichen Position gestarteten Attributen einfuegen
     xub_StrLen nStart = pPos->GetStart();
-    for( USHORT i=0; i < aStartLst.Count() &&
+    USHORT i;
+
+    for( i = 0; i < aStartLst.Count() &&
                      aStartLst[i]->GetStart() <= nStart; i++ )
         ;
     aStartLst.Insert( pPos, i );
@@ -1811,7 +1816,8 @@ void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, xub_StrLen nNewEnd,
 void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, xub_StrLen nStart,
                                                           xub_StrLen nEnd )
 {
-    for( USHORT i=0; i<aEndLst.Count(); i++ )
+    USHORT i;
+    for( i = 0; i < aEndLst.Count(); i++ )
     {
         HTMLSttEndPos *pTest = aEndLst[i];
         xub_StrLen nTestEnd = pTest->GetEnd();
