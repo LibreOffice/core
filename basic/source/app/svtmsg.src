@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:15:25 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ String S_GPF_ABORT
     Text[ chinese_traditional ] = "Program aborted with GPF";
     Text[ arabic ] = "Program aborted with GPF";
     Text[ turkish ] = "Program aborted with GPF";
+    Text[ catalan ] = "Programa interrumpido con GPF";
 };
 String S_APP_SHUTDOWN
 {
@@ -116,6 +117,7 @@ String S_APP_SHUTDOWN
     Text[ chinese_traditional ] = "Application has been shut down";
     Text[ arabic ] = "Application has been shut down";
     Text[ turkish ] = "Application has been shut down";
+    Text[ catalan ] = "Se cerró la aplicación";
 };
 String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 {
@@ -138,6 +140,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
     Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ catalan ] = "No se pudo ejecutar Slot ID. ActiveDispatcher inexistente";
 };
 String S_SID_EXECUTE_FAILED
 {
@@ -160,6 +163,7 @@ String S_SID_EXECUTE_FAILED
     Text[ chinese_traditional ] = "Slot ID could not be run";
     Text[ arabic ] = "Slot ID could not be run";
     Text[ turkish ] = "Slot ID could not be run";
+    Text[ catalan ] = "No se pudo ejecutar Slot ID";
 };
 String S_UNO_PROPERTY_NITIALIZE_FAILED
 {
@@ -182,6 +186,7 @@ String S_UNO_PROPERTY_NITIALIZE_FAILED
     Text[ chinese_traditional ] = "UnoSlot: Properties could not be initialized";
     Text[ arabic ] = "UnoSlot: Properties could not be initialized";
     Text[ turkish ] = "UnoSlot: Properties could not be initialized";
+    Text[ catalan ] = "UnoSlot: No se pudo instalar Properties";
 };
 String S_RESETAPPLICATION_FAILED_COMPLEX
 {
@@ -204,6 +209,7 @@ String S_RESETAPPLICATION_FAILED_COMPLEX
     Text[ chinese_traditional ] = "ResetApplication failed: too complex";
     Text[ arabic ] = "ResetApplication failed: too complex";
     Text[ turkish ] = "ResetApplication failed: too complex";
+    Text[ catalan ] = "No se realizó ResetApplication: Demasiado compleja";
 };
 String S_RESETAPPLICATION_FAILED_UNKNOWN
 {
@@ -226,6 +232,7 @@ String S_RESETAPPLICATION_FAILED_UNKNOWN
     Text[ chinese_traditional ] = "ResetApplication failed: unknown window type";
     Text[ arabic ] = "ResetApplication failed: unknown window type";
     Text[ turkish ] = "ResetApplication failed: unknown window type";
+    Text[ catalan ] = "No se realizó ResetApplication: Tipo desconocido de error";
 };
 String S_NO_ACTIVE_WINDOW
 {
@@ -248,6 +255,7 @@ String S_NO_ACTIVE_WINDOW
     Text[ chinese_traditional ] = "ResetApplication failed: unknown window type";
     Text[ arabic ] = "Active window not found (GetNextCloseWindow)";
     Text[ turkish ] = "Active window not found (GetNextCloseWindow)";
+    Text[ catalan ] = "No se encontró ninguna ventana activa (GetNextCloseWindow)";
 };
 String S_NO_DIALOG_IN_GETACTIVE
 {
@@ -270,6 +278,7 @@ String S_NO_DIALOG_IN_GETACTIVE
     Text[ chinese_traditional ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ arabic ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ turkish ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ catalan ] = "¡GetActive no devuelve ningún diálogo! Informe por favor al servicio de programación";
 };
 String S_NO_POPUP
 {
@@ -292,6 +301,7 @@ String S_NO_POPUP
     Text[ chinese_traditional ] = "PopUp menu not open";
     Text[ arabic ] = "PopUp menu not open";
     Text[ turkish ] = "PopUp menu not open";
+    Text[ catalan ] = "No existe ningún PopupMenu abierto";
 };
 String S_NO_SUBMENU
 {
@@ -314,6 +324,7 @@ String S_NO_SUBMENU
     Text[ chinese_traditional ] = "Submenu does not exist";
     Text[ arabic ] = "Submenu does not exist";
     Text[ turkish ] = "Submenu does not exist";
+    Text[ catalan ] = "Submenú inexistente";
 };
 String S_CONTROLTYPE_NOT_SUPPORTED
 {
@@ -336,6 +347,7 @@ String S_CONTROLTYPE_NOT_SUPPORTED
     Text[ chinese_traditional ] = "ControlType ($Arg1) is not supported";
     Text[ arabic ] = "ControlType ($Arg1) is not supported";
     Text[ turkish ] = "ControlType ($Arg1) is not supported";
+    Text[ catalan ] = "No se apoya ControlType ($Arg1)";
 };
 String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
 {
@@ -358,6 +370,7 @@ String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
     Text[ chinese_traditional ] = "Selection by attributes only possible for directories";
     Text[ arabic ] = "Selection by attributes only possible for directories";
     Text[ turkish ] = "Selection by attributes only possible for directories";
+    Text[ catalan ] = "La selección por atributos es solo posible para directorios.";
 };
 String S_NO_MORE_FILES
 {
@@ -380,6 +393,7 @@ String S_NO_MORE_FILES
     Text[ chinese_traditional ] = "No further files";
     Text[ arabic ] = "No further files";
     Text[ turkish ] = "No further files";
+    Text[ catalan ] = "Ningún otro archivo";
 };
 String S_UNKNOWN_METHOD
 {
@@ -402,6 +416,7 @@ String S_UNKNOWN_METHOD
     Text[ chinese_traditional ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ turkish ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ catalan ] = "Método desconocido '($Arg1)' a ($Arg2)";
 };
 String S_INVALID_PARAMETERS
 {
@@ -424,6 +439,7 @@ String S_INVALID_PARAMETERS
     Text[ chinese_traditional ] = "Invalid Parameters";
     Text[ arabic ] = "Invalid Parameters";
     Text[ turkish ] = "Invalid Parameters";
+    Text[ catalan ] = "Parámetros incorrectos";
 };
 String S_POINTER_OUTSIDE_APPWIN
 {
@@ -446,6 +462,7 @@ String S_POINTER_OUTSIDE_APPWIN
     Text[ chinese_traditional ] = "Pointer not located in application window at '($Arg1)'";
     Text[ arabic ] = "Pointer not located in application window at '($Arg1)'";
     Text[ turkish ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ catalan ] = "Pointer fuera de la ventana de aplicación en '($Arg1)'";
 };
 String S_UNKNOWN_COMMAND
 {
@@ -468,6 +485,7 @@ String S_UNKNOWN_COMMAND
     Text[ chinese_traditional ] = "Unknown command '($Arg1)'";
     Text[ arabic ] = "Unknown command '($Arg1)'";
     Text[ turkish ] = "Unknown command '($Arg1)'";
+    Text[ catalan ] = "Error desconocido '($Arg1)'";
 };
 String S_WIN_NOT_FOUND
 {
@@ -490,6 +508,7 @@ String S_WIN_NOT_FOUND
     Text[ chinese_traditional ] = "($Arg1) could not be found";
     Text[ arabic ] = "($Arg1) could not be found";
     Text[ turkish ] = "($Arg1) could not be found";
+    Text[ catalan ] = "No se pudo encontrar ($Arg1)";
 };
 String S_WIN_INVISIBLE
 {
@@ -512,6 +531,7 @@ String S_WIN_INVISIBLE
     Text[ chinese_traditional ] = "($Arg1) is not visible";
     Text[ arabic ] = "($Arg1) is not visible";
     Text[ turkish ] = "($Arg1) is not visible";
+    Text[ catalan ] = "No se puede ver ($Arg1).";
 };
 String S_WIN_DISABLED
 {
@@ -534,6 +554,7 @@ String S_WIN_DISABLED
     Text[ chinese_traditional ] = "($Arg1) could not be accessed.";
     Text[ arabic ] = "ÊÚÐÑ ÇáæÕæá Åáì ($Arg1).";
     Text[ turkish ] = "($Arg1) could not be accessed";
+    Text[ catalan ] = "No se pudo acceder a ($Arg1)";
 };
 String S_NUMBER_TOO_BIG
 {
@@ -556,6 +577,7 @@ String S_NUMBER_TOO_BIG
     Text[ chinese_traditional ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ arabic ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ turkish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ catalan ] = "Núm. de entradas ($Arg2) es demasiado grande en ($Arg1). El máximo es ($Arg3)";
 };
 String S_NUMBER_TOO_SMALL
 {
@@ -578,6 +600,7 @@ String S_NUMBER_TOO_SMALL
     Text[ chinese_traditional ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ arabic ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ turkish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ catalan ] = "Núm. de entradas ($Arg2) es demasiado pequeño en ($Arg1). El mínimo es ($Arg3)";
 };
 String S_WINDOW_DISAPPEARED
 {
@@ -600,6 +623,7 @@ String S_WINDOW_DISAPPEARED
     Text[ chinese_traditional ] = "Window momentarily not visible at ($Arg1)";
     Text[ arabic ] = "Window momentarily not visible at ($Arg1)";
     Text[ turkish ] = "Window momentarily not visible at ($Arg1)";
+    Text[ catalan ] = "Desaparación momentánea de Windows en ($Arg1)";
 };
 String S_ERROR_SAVING_IMAGE
 {
@@ -622,6 +646,7 @@ String S_ERROR_SAVING_IMAGE
     Text[ chinese_traditional ] = "Error #($Arg1) when saving the image";
     Text[ arabic ] = "Error #($Arg1) when saving the image";
     Text[ turkish ] = "Error #($Arg1) when saving the image";
+    Text[ catalan ] = "Error #($Arg1) al guardar la imagen";
 };
 String S_INVALID_POSITION
 {
@@ -644,6 +669,7 @@ String S_INVALID_POSITION
     Text[ chinese_traditional ] = "Invalid positon at ($Arg1)";
     Text[ arabic ] = "Invalid positon at ($Arg1)";
     Text[ turkish ] = "Invalid positon at ($Arg1)";
+    Text[ catalan ] = "Posición indicada incorrecta en ($Arg1)";
 };
 String S_SPLITWIN_NOT_FOUND
 {
@@ -666,6 +692,7 @@ String S_SPLITWIN_NOT_FOUND
     Text[ chinese_traditional ] = "Split window not found at ($Arg1)";
     Text[ arabic ] = "Split window not found at ($Arg1)";
     Text[ turkish ] = "Split window not found at ($Arg1)";
+    Text[ catalan ] = "No se pudo encontrar SplitWindow en ($Arg1)";
 };
 String S_INTERNAL_ERROR
 {
@@ -688,6 +715,7 @@ String S_INTERNAL_ERROR
     Text[ chinese_traditional ] = "Internal error at ($Arg1)";
     Text[ arabic ] = "Internal error at ($Arg1)";
     Text[ turkish ] = "Internal error at ($Arg1)";
+    Text[ catalan ] = "Error interno en ($Arg1)";
 };
 String S_NO_STATUSBAR
 {
@@ -710,6 +738,7 @@ String S_NO_STATUSBAR
     Text[ chinese_traditional ] = "No status bar at ($Arg1)";
     Text[ arabic ] = "No status bar at ($Arg1)";
     Text[ turkish ] = "No status bar at ($Arg1)";
+    Text[ catalan ] = "No existe StatusBar en ($Arg1)";
 };
 String S_ITEMS_INVISIBLE
 {
@@ -732,6 +761,7 @@ String S_ITEMS_INVISIBLE
     Text[ chinese_traditional ] = "The items are hidden at ($Arg1)";
     Text[ arabic ] = "The items are hidden at ($Arg1)";
     Text[ turkish ] = "The items are hidden at ($Arg1)";
+    Text[ catalan ] = "Los ítems en ($Arg1) están ocultos";
 };
 String S_TABPAGE_NOT_FOUND
 {
@@ -754,6 +784,7 @@ String S_TABPAGE_NOT_FOUND
     Text[ chinese_traditional ] = "Tab page not found at ($Arg1)";
     Text[ arabic ] = "Tab page not found at ($Arg1)";
     Text[ turkish ] = "Tab page not found at ($Arg1)";
+    Text[ catalan ] = "No se encontró tabpage en ($Arg1)";
 };
 String S_TRISTATE_NOT_ALLOWED
 {
@@ -777,6 +808,7 @@ String S_TRISTATE_NOT_ALLOWED
     Text[ arabic ] = "Three state cannot be set at ($Arg1)";
     Text[ turkish ] = "Three state cannot be set at ($Arg1)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pude aplicar tristate en ($Arg1)";
 };
 String S_ERROR_IN_SET_TEXT
 {
@@ -799,6 +831,7 @@ String S_ERROR_IN_SET_TEXT
     Text[ chinese_traditional ] = "Set text did not function";
     Text[ arabic ] = "Set text did not function";
     Text[ turkish ] = "Set text did not function";
+    Text[ catalan ] = "No ha funcionado SetText";
 };
 String S_ATTEMPT_TO_WRITE_READONLY
 {
@@ -821,6 +854,7 @@ String S_ATTEMPT_TO_WRITE_READONLY
     Text[ chinese_traditional ] = "Attempt to write on read-only ($Arg1)";
     Text[ arabic ] = "Attempt to write on read-only ($Arg1)";
     Text[ turkish ] = "Attempt to write on read-only ($Arg1)";
+    Text[ catalan ] = "Intento de escritura en ReadOnly ($Arg1)";
 };
 String S_NO_SELECT_FALSE
 {
@@ -843,6 +877,7 @@ String S_NO_SELECT_FALSE
     Text[ chinese_traditional ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ arabic ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ turkish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ catalan ] = "No se permite Select FALSE. Use MultiSelect en ($Arg1)";
 };
 String S_ENTRY_NOT_FOUND
 {
@@ -865,6 +900,7 @@ String S_ENTRY_NOT_FOUND
     Text[ chinese_traditional ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ arabic ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ turkish ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ catalan ] = "No se encontrá entrada \"($Arg2)\" en ($Arg1)";
 };
 String S_METHOD_FAILED
 {
@@ -887,6 +923,7 @@ String S_METHOD_FAILED
     Text[ chinese_traditional ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ arabic ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ turkish ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ catalan ] = "No resultó ($Arg1) de la entrada \"($Arg2)\"";
 };
 String S_HELPID_ON_TOOLBOX_NOT_FOUND
 {
@@ -909,6 +946,7 @@ String S_HELPID_ON_TOOLBOX_NOT_FOUND
     Text[ chinese_traditional ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ arabic ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ turkish ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ catalan ] = "No se encontró en ($Arg1) HelpID en ToolBox";
 };
 String S_BUTTON_DISABLED_ON_TOOLBOX
 {
@@ -931,6 +969,7 @@ String S_BUTTON_DISABLED_ON_TOOLBOX
     Text[ chinese_traditional ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ arabic ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ turkish ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ catalan ] = "El botón está desactivado en ToolBox en ($Arg1)";
 };
 String S_BUTTON_HIDDEN_ON_TOOLBOX
 {
@@ -953,6 +992,7 @@ String S_BUTTON_HIDDEN_ON_TOOLBOX
     Text[ chinese_traditional ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ arabic ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ turkish ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ catalan ] = "El botón es hidden en ToolBox en ($Arg1)";
 };
 String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
 {
@@ -975,6 +1015,7 @@ String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
     Text[ chinese_traditional ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ arabic ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ turkish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ catalan ] = "No se pudo mostrar el boton en ToolBox para ($Arg1)";
 };
 String S_TEAROFF_FAILED
 {
@@ -997,6 +1038,7 @@ String S_TEAROFF_FAILED
     Text[ chinese_traditional ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ arabic ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ turkish ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ catalan ] = "Ha fallado TearOff en ToolBox para ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
@@ -1019,6 +1061,7 @@ String S_NO_SELECTED_ENTRY
     Text[ chinese_traditional ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ arabic ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ turkish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ catalan ] = "No hay ninguna entrada seleccionada en TreeListBox para ($Arg1)";
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
@@ -1041,6 +1084,7 @@ String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
     Text[ chinese_traditional ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ arabic ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ turkish ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ catalan ] = "Seleccionar/Deshacer selección con String no implementado para ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_FLOATING_MODE
 {
@@ -1063,6 +1107,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
     Text[ chinese_traditional ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ turkish ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ catalan ] = "Método permitido solo en modo Froating para ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_DOCKING_MODE
 {
@@ -1085,6 +1130,7 @@ String S_ALLOWED_ONLY_IN_DOCKING_MODE
     Text[ chinese_traditional ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ turkish ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ catalan ] = "Método permitido solo en modo Docking para ($Arg1)";
 };
 String S_SIZE_NOT_CHANGEABLE
 {
@@ -1107,6 +1153,7 @@ String S_SIZE_NOT_CHANGEABLE
     Text[ chinese_traditional ] = "Size cannot be altered at ($Arg1)";
     Text[ arabic ] = "Size cannot be altered at ($Arg1)";
     Text[ turkish ] = "Size cannot be altered at ($Arg1)";
+    Text[ catalan ] = "Tamaño no modificable para ($Arg1)";
 };
 String S_NO_OK_BUTTON
 {
@@ -1129,6 +1176,7 @@ String S_NO_OK_BUTTON
     Text[ chinese_traditional ] = "There is no OK button at ($Arg1)";
     Text[ arabic ] = "There is no OK button at ($Arg1)";
     Text[ turkish ] = "There is no OK button at ($Arg1)";
+    Text[ catalan ] = "No existe botón Aceptar para ($Arg1)";
 };
 String S_NO_CANCEL_BUTTON
 {
@@ -1151,6 +1199,7 @@ String S_NO_CANCEL_BUTTON
     Text[ chinese_traditional ] = "There is no Cancel button at ($Arg1)";
     Text[ arabic ] = "There is no Cancel button at ($Arg1)";
     Text[ turkish ] = "There is no Cancel button at ($Arg1)";
+    Text[ catalan ] = "No existe botón Cancelar para ($Arg1)";
 };
 String S_NO_YES_BUTTON
 {
@@ -1173,6 +1222,7 @@ String S_NO_YES_BUTTON
     Text[ chinese_traditional ] = "There is no Yes button at ($Arg1)";
     Text[ arabic ] = "There is no Yes button at ($Arg1)";
     Text[ turkish ] = "There is no Yes button at ($Arg1)";
+    Text[ catalan ] = "No existe botón Sí para ($Arg1)";
 };
 String S_NO_NO_BUTTON
 {
@@ -1195,6 +1245,7 @@ String S_NO_NO_BUTTON
     Text[ chinese_traditional ] = "There is no No button at ($Arg1)";
     Text[ arabic ] = "There is no No button at ($Arg1)";
     Text[ turkish ] = "There is no No button at ($Arg1)";
+    Text[ catalan ] = "No existe boton No para ($Arg1)";
 };
 String S_NO_RETRY_BUTTON
 {
@@ -1217,6 +1268,7 @@ String S_NO_RETRY_BUTTON
     Text[ chinese_traditional ] = "There is no Repeat button at ($Arg1)";
     Text[ arabic ] = "There is no Repeat button at ($Arg1)";
     Text[ turkish ] = "There is no Repeat button at ($Arg1)";
+    Text[ catalan ] = "No existe botón Repetir para ($Arg1)";
 };
 String S_NO_HELP_BUTTON
 {
@@ -1239,6 +1291,7 @@ String S_NO_HELP_BUTTON
     Text[ chinese_traditional ] = "There is no Help button at ($Arg1)";
     Text[ arabic ] = "There is no Help button at ($Arg1)";
     Text[ turkish ] = "There is no Help button at ($Arg1)";
+    Text[ catalan ] = "No existe botón Ayuda para ($Arg1)";
 };
 String S_NO_DEFAULT_BUTTON
 {
@@ -1261,6 +1314,7 @@ String S_NO_DEFAULT_BUTTON
     Text[ chinese_traditional ] = "There is no Default button defined at ($Arg1)";
     Text[ arabic ] = "There is no Default button defined at ($Arg1)";
     Text[ turkish ] = "There is no Default button defined at ($Arg1)";
+    Text[ catalan ] = "No hay definido un botón Default para ($Arg1)";
 };
 String S_BUTTON_ID_NOT_THERE
 {
@@ -1283,6 +1337,7 @@ String S_BUTTON_ID_NOT_THERE
     Text[ chinese_traditional ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ arabic ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ turkish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ catalan ] = "No existe un botón con la ID ($Arg1) para ($Arg2)";
 };
 String S_BUTTONID_REQUIRED
 {
@@ -1305,6 +1360,7 @@ String S_BUTTONID_REQUIRED
     Text[ chinese_traditional ] = "A button ID needs to be entered at ($Arg1)";
     Text[ arabic ] = "A button ID needs to be entered at ($Arg1)";
     Text[ turkish ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ catalan ] = "Debe indicarse un ButtonId para ($Arg1)";
 };
 String S_UNKNOWN_TYPE
 {
@@ -1316,7 +1372,7 @@ String S_UNKNOWN_TYPE
     Text[ dutch ] = "Onbekend objecttype ($Arg1) uit UId of methode '($Arg2)' niet ondersteund";
     Text[ french ] = "Type d'objet inconnu ($Arg1) issu de UId ou méthode '($Arg2)' non supportée";
     Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId o método '($Arg2)' no apoyado";
-    Text[ italian ] = "Unknown object type ($Arg1) from UId";
+    Text[ italian ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ danish ] = "Unknown object type ($Arg1) from UId";
     Text[ swedish ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ polish ] = "Nieznany typ obiektu ($Arg1) z UId lub nie obs³ugiwana metoda '($Arg2)'";
@@ -1327,6 +1383,7 @@ String S_UNKNOWN_TYPE
     Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ arabic ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ turkish ] = "Unknown object type ($Arg1) from UId";
+    Text[ catalan ] = "Tipo de objeto ($Arg1) desconocido por su UId";
 };
 String S_UNPACKING_STORAGE_FAILED
 {
@@ -1349,6 +1406,7 @@ String S_UNPACKING_STORAGE_FAILED
     Text[ chinese_traditional ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed.";
     Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ arabic ] = "ÝÔáÊ ÚãáíÉ Ýß ÖÛØ ÊÎÒíä\"($Arg1)\"  Åáì \"($Arg2)\"";
+    Text[ catalan ] = "No se pudo descomprimir storage \"($Arg1)\" a \"($Arg2)\"";
 };
 String S_NO_LIST_BOX_BUTTON
 {
@@ -1360,7 +1418,7 @@ String S_NO_LIST_BOX_BUTTON
     Text[ dutch ] = "ListBoxButton niet voorhanden bij ($Arg1)";
     Text[ french ] = "Bouton de zone de liste inexistant pour ($Arg1)";
     Text[ spanish ] = "ListBoxButton no existe en ($Arg1)";
-    Text[ italian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ italian ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ danish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ swedish ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ polish ] = "ListBoxButton does not exist in ($Arg1)";
@@ -1371,4 +1429,5 @@ String S_NO_LIST_BOX_BUTTON
     Text[ chinese_traditional ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ turkish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ arabic ] = "ListBoxButton does not exist in ($Arg1)";
+    Text[ catalan ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
 };
