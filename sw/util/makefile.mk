@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:41:43 $
+#   last change: $Author: hr $ $Date: 2004-05-14 11:15:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -331,8 +331,9 @@ LIB3OBJFILES = \
         $(SLO)$/swuiccoll.obj \
         $(SLO)$/numpara.obj \
         $(SLO)$/swdialmgr.obj \
-        $(SLO)$/swuiidxmrk.obj 
-        
+        $(SLO)$/swuiidxmrk.obj \
+                $(SLO)$/wordcountdialog.obj
+
 #SHL3OBJS= \
 #        $(SLO)$/swuiexp.obj     \
 #        $(SLO)$/swabstdlg.obj	\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-14 09:53:04 $
+#   last change: $Author: hr $ $Date: 2004-05-14 11:15:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,8 @@ SLOFILES =  \
         $(SLO)$/swuiexp.obj		\
         $(SLO)$/swwrtshitem.obj \
         $(SLO)$/swdialmgr.obj  \
+        $(SLO)$/wordcountdialog.obj \
+        $(SLO)$/swdlgfact.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
@@ -105,9 +107,7 @@ LIB1OBJFILES =  \
         $(SLO)$/macassgn.obj \
         $(SLO)$/regionsw.obj \
         $(SLO)$/swabstdlg.obj \
-        $(SLO)$/swwrtshitem.obj\
-        $(SLO)$/swdlgfact.obj \
-        $(SLO)$/wordcountdialog.obj
+        $(SLO)$/swwrtshitem.obj
 
 # --- Tagets -------------------------------------------------------
 
@@ -125,3 +125,10 @@ $(INCCOM)$/swuilib.hxx: makefile.mk
 .ENDIF
 
 $(SLO)$/swabstdlg.obj : $(INCCOM)$/swuilib.hxx
+
+
+
+
+
+
+
