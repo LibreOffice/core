@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:04:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,8 @@ ModalDialog DLG_CAPTION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250 , 127 ) ;
-    Text = "Beschriftung" ;
-    Text [ English ] = "Caption" ;
-    Text [ norwegian ] = "Bildetekst" ;
-    Text [ italian ] = "Dicitura" ;
-    Text [ portuguese_brazilian ] = "Legenda" ;
-    Text [ portuguese ] = "Legenda" ;
-    Text [ finnish ] = "Kuvaotsikko" ;
-    Text [ danish ] = "Billedtekst" ;
-    Text [ french ] = "Légende" ;
-    Text [ swedish ] = "Bildtext" ;
-    Text [ dutch ] = "Bijschrift" ;
-    Text [ spanish ] = "Etiqueta" ;
-    Text [ english_us ] = "Caption" ;
+    Text [ de ] = "Beschriftung" ;
+    Text [ en-US ] = "Caption" ;
     Moveable = TRUE ;
     OKButton BTN_OK
     {
@@ -110,37 +99,9 @@ ModalDialog DLG_CAPTION
         Pos = MAP_APPFONT ( 194 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Optionen" ;
-        Text [ English ] = "~Options" ;
-        Text [ norwegian ] = "~Options" ;
-        Text [ italian ] = "~Opzioni" ;
-        Text [ portuguese_brazilian ] = "~Opções" ;
-        Text [ portuguese ] = "~Opções" ;
-        Text [ finnish ] = "A~setukset" ;
-        Text [ danish ] = "~Indstillinger" ;
-        Text [ french ] = "~Options" ;
-        Text [ swedish ] = "~Alternativ" ;
-        Text [ dutch ] = "~Opties" ;
-        Text [ spanish ] = "Opciones" ;
-        Text [ english_us ] = "~Options" ;
-        Text[ chinese_simplified ] = "é€‰é¡¹(~O)";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ polish ] = "~Opcje";
-        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(~O)";
-        Text[ chinese_traditional ] = "é¸é …(~O)";
-        Text[ arabic ] = "ÎíÇÑÇÊ";
-        Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "ì˜µì…˜(~O)";
-        Text[ turkish ] = "~Seçenekler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opcions";
-        Text[ thai ] = "~à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "Volby";
-        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-        Text[ hindi ] = "~à¤µà¤¿à¤•à¤²à¥à¤ª";
-        Text[ slovak ] = "M~oÅ¾nosti";
-        Text[ hungarian ] = "~BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "~MoÅ¾nosti";
+        Text [ de ] = "~Optionen" ;
+        Text [ en-US ] = "~Options" ;
+        Text [ x-comment ] = " ";
     };
     FixedText TXT_SAMPLE
     {
@@ -152,38 +113,10 @@ ModalDialog DLG_CAPTION
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Kategorie" ;
-        Text [ English ] = "~Category" ;
-        Text [ norwegian ] = "~Category" ;
-        Text [ italian ] = "~Categoria" ;
-        Text [ portuguese_brazilian ] = "~Categoria" ;
-        Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "L~uokka" ;
-        Text [ danish ] = "~Kategori" ;
-        Text [ french ] = "~Catégorie" ;
-        Text [ swedish ] = "~Kategori" ;
-        Text [ dutch ] = "~Categorie" ;
-        Text [ spanish ] = "~Categoría" ;
-        Text [ english_us ] = "Ca~tegory" ;
+        Text [ de ] = "~Kategorie" ;
+        Text [ en-US ] = "Ca~tegory" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "åˆ†ç±»(~T)";
-        Text[ russian ] = "Êàòåãîğèÿ";
-        Text[ polish ] = "Ka~tegoria";
-        Text[ japanese ] = "ã‚«ãƒ†ã‚´ãƒªãƒ¼(~T)";
-        Text[ chinese_traditional ] = "åˆ†é¡(~T)";
-        Text[ arabic ] = "ÇáİÆÉ";
-        Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "ë²”ì£¼(~T)";
-        Text[ turkish ] = "~Kategori";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ca~tegoria";
-        Text[ thai ] = "à¸›à¸£à¸°à¹€~à¸ à¸—";
-        Text[ czech ] = "Kategorie";
-        Text[ hebrew ] = "~Kategorie";
-        Text[ hindi ] = "à¤µ~à¤°à¥à¤—";
-        Text[ slovak ] = "Ka~tegÃ³rie";
-        Text[ hungarian ] = "Ka~tegÃ³ria";
-        Text[ slovenian ] = "Ka~tegorija";
+        Text [ x-comment ] = " ";
     };
     ComboBox BOX_CATEGORY
     {
@@ -197,38 +130,10 @@ ModalDialog DLG_CAPTION
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Nummerierung" ;
-        Text [ English ] = "~Numbering" ;
-        Text [ norwegian ] = "~Numbering" ;
-        Text [ italian ] = "Numerazione" ;
-        Text [ portuguese_brazilian ] = "~Numeração" ;
-        Text [ portuguese ] = "~Numeração" ;
-        Text [ finnish ] = "~Numerointi" ;
-        Text [ danish ] = "~Nummerering" ;
-        Text [ french ] = "Numérotation" ;
-        Text [ swedish ] = "~Numrering" ;
-        Text [ dutch ] = "~Nummering" ;
-        Text [ spanish ] = "Nu~meración" ;
-        Text [ english_us ] = "~Numbering" ;
+        Text [ de ] = "~Nummerierung" ;
+        Text [ en-US ] = "~Numbering" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ç¼–å·(~N)";
-        Text[ russian ] = "Íóìåğàöèÿ";
-        Text[ polish ] = "~Numeracja";
-        Text[ japanese ] = "ç•ªå·ä»˜ã‘(~N)";
-        Text[ chinese_traditional ] = "ç·¨è™Ÿ(~N)";
-        Text[ arabic ] = "ÇáÊÑŞíã";
-        Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°(~N)";
-        Text[ turkish ] = "~Numaralama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nu~meració";
-        Text[ thai ] = "~à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
-        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­";
-        Text[ hebrew ] = "â€®××™×¡×¤×•×¨â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "ÄŒÃ­slova~nie";
-        Text[ hungarian ] = "~SzÃ¡mozÃ¡s";
-        Text[ slovenian ] = "OÅ¡~tevilÄevanje";
+        Text [ x-comment ] = " ";
     };
     ListBox BOX_FORMAT
     {
@@ -242,38 +147,10 @@ ModalDialog DLG_CAPTION
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Beschriftungstext" ;
-        Text [ English ] = "~Caption text" ;
-        Text [ norwegian ] = "~Caption" ;
-        Text [ italian ] = "~Dicitura" ;
-        Text [ portuguese_brazilian ] = "~Legenda" ;
-        Text [ portuguese ] = "~Texto para etiqueta" ;
-        Text [ finnish ] = "Kuvaotsikko" ;
-        Text [ danish ] = "~Billedtekst" ;
-        Text [ french ] = "~Texte de légende" ;
-        Text [ swedish ] = "~Bildtext" ;
-        Text [ dutch ] = "~Opschrift" ;
-        Text [ spanish ] = "~Texto de la etiqueta" ;
-        Text [ english_us ] = "~Caption" ;
+        Text [ de ] = "~Beschriftungstext" ;
+        Text [ en-US ] = "~Caption" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ ‡ç­¾æ–‡(~C)";
-        Text[ russian ] = "Íàçâàíèå";
-        Text[ polish ] = "Po~dpis";
-        Text[ japanese ] = "å›³è¡¨ç•ªå·ãƒ†ã‚­ã‚¹ãƒˆ(~C)";
-        Text[ chinese_traditional ] = "æ¨™ç±¤æ–‡(~C)";
-        Text[ arabic ] = "äÕ ÇáÊÓãíÉ ÇáÊæÖíÍíÉ";
-        Text[ greek ] = "Êåßìåíï ëåæÜíôáò";
-        Text[ korean ] = "ìº¡ì…˜(~C)";
-        Text[ turkish ] = "R~esim yazısı metni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Llegenda";
-        Text[ thai ] = "~à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
-        Text[ czech ] = "Popisek";
-        Text[ hebrew ] = "~Beschriftungstext";
-        Text[ hindi ] = "~à¤•à¥‰à¤ªà¥à¤¶à¤¨à¥";
-        Text[ slovak ] = "~Popisok";
-        Text[ hungarian ] = "~Felirat";
-        Text[ slovenian ] = "~Napis";
+        Text [ x-comment ] = " ";
     };
     Edit EDT_TEXT
     {
@@ -288,37 +165,9 @@ ModalDialog DLG_CAPTION
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Left = TRUE ;
-        Text = "~Position" ;
-        Text [ English ] = "~Position" ;
-        Text [ norwegian ] = "~Posisjon" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "~Posição" ;
-        Text [ portuguese ] = "~Posição" ;
-        Text [ finnish ] = "Sijainti" ;
-        Text [ danish ] = "~Placering" ;
-        Text [ french ] = "Position" ;
-        Text [ swedish ] = "~Position" ;
-        Text [ dutch ] = "~Positie" ;
-        Text [ spanish ] = "~Posición" ;
-        Text [ english_us ] = "~Position" ;
-        Text[ chinese_simplified ] = "ä½ç½®(~P)";
-        Text[ russian ] = "Ïîçèöèÿ";
-        Text[ polish ] = "~Pozycja";
-        Text[ japanese ] = "ä½ç½®(~P)";
-        Text[ chinese_traditional ] = "ä½ç½®(~P)";
-        Text[ arabic ] = "ÇáãæÖÚ";
-        Text[ greek ] = "Èİóç";
-        Text[ korean ] = "ìœ„ì¹˜(~P)";
-        Text[ turkish ] = "K~onum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Posició";
-        Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "~Umiestnenie";
-        Text[ hungarian ] = "~PozÃ­ciÃ³";
-        Text[ slovenian ] = "~PoloÅ¾aj";
+        Text [ de ] = "~Position" ;
+        Text [ en-US ] = "~Position" ;
+        Text [ x-comment ] = " ";
     };
     ListBox BOX_POS
     {
@@ -334,71 +183,17 @@ ModalDialog DLG_CAPTION
         Size = MAP_APPFONT ( 145 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE;
-        Text = "~Umrandung und Schatten übernehmen" ;
-        Text [ English ] = "~Copy border and shadow" ;
-        Text[ english_us ] = "~Apply border and shadow";
-        Text[ portuguese ] = "~Aplicar contornos e sombreado";
-        Text[ russian ] = "Ïğèìåíèòü îáğàìëåíèå è òåíü";
-        Text[ greek ] = "ÅöáñìïãŞ ğåñéãñÜììáôïò êáé óêéÜò";
-        Text[ dutch ] = "~Omranding en schaduw overnemen";
-        Text[ french ] = "~Appliquer bordure et ombre";
-        Text[ spanish ] = "~Aplicar borde y sombra";
-        Text[ italian ] = "~Applica bordo e ombra";
-        Text[ danish ] = "~Anvend kant og skygge";
-        Text[ swedish ] = "Ö~verta inramning och skugga";
-        Text[ polish ] = "~Zastosuj obramowanie i cieniowanie";
-        Text[ portuguese_brazilian ] = "~Aplicar borda e sombreado";
-        Text[ japanese ] = "å¤–æ ã¨å½±ã®é©ç”¨(~A)";
-        Text[ korean ] = "í…Œë‘ë¦¬ ë° ê·¸ë¦¼ì ì ìš©(~A)";
-        Text[ chinese_simplified ] = "é‡‡ç”¨è¾¹æ¡†å’Œé˜´å½±(~A)";
-        Text[ chinese_traditional ] = "æ¡ç”¨é‚Šæ¡†å’Œé™°å½±(~A)";
-        Text[ arabic ] = "ÊØÈíŞ ÇáÍÏæÏ æÇáÙá";
-        Text[ turkish ] = "~Kenar ve gölgelendirme uygulaması";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Aplica la vora i l'ombra";
-        Text[ finnish ] = "~Lisää reuna ja varjostus";
-        Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸šà¹à¸¥à¸°à¹€à¸‡à¸²";
-        Text[ czech ] = "PouÅ¾Ã­t ohraniÄenÃ­ a stÃ­n";
-        Text[ hebrew ] = "~Umrandung und Schatten Ã¼bernehmen";
-        Text[ hindi ] = "~à¤•à¤¿à¤¨à¤¾à¤°à¤¾ à¤”à¤° à¤›à¤¾à¤¯à¤¾ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-        Text[ slovak ] = "PouÅ¾iÅ¥ ohr~aniÄenie a tieÅˆovanie";
-        Text[ hungarian ] = "~SzegÃ©ly Ã©s Ã¡rnyÃ©k alkalmazÃ¡sa";
-        Text[ slovenian ] = "~Uporabi obrobe in senÄenje";
+        Text [ de ] = "~Umrandung und Schatten übernehmen" ;
+        Text [ en-US ] = "~Apply border and shadow";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_OBJECT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text = "~Objektname" ;
-        Text [ English ] = "~Object name" ;
-        Text[ english_us ] = "O~bject name";
-        Text[ portuguese ] = "~Nome do objecto";
-        Text[ russian ] = "~Èìÿ îáúåêòà";
-        Text[ greek ] = "¼íïìá áíôéêåéìİíïõ";
-        Text[ dutch ] = "~Objectnaam";
-        Text[ french ] = "Nom de l'objet";
-        Text[ spanish ] = "~Nombre del objeto";
-        Text[ italian ] = "Nome oggetto";
-        Text[ danish ] = "Objektnavn";
-        Text[ swedish ] = "~Objektnamn";
-        Text[ polish ] = "Nazwa o~biektu";
-        Text[ portuguese_brazilian ] = "~Nome do objeto";
-        Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå(~B)";
-        Text[ korean ] = "ê°œì²´ì´ë¦„(~B)";
-        Text[ chinese_simplified ] = "å¯¹è±¡åç§°(~B)";
-        Text[ chinese_traditional ] = "ç‰©ä»¶åç¨±(~B)";
-        Text[ arabic ] = "ÇÓã ÇáßÇÆä";
-        Text[ turkish ] = "N~esne adı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom de l'o~bjecte";
-        Text[ finnish ] = "O~bjektin nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸§à¸±~à¸•à¸–à¸¸";
-        Text[ czech ] = "NÃ¡zev objektu";
-        Text[ hebrew ] = "~Objektname";
-        Text[ hindi ] = "~à¤µà¤¸à¥à¤¤à¥ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov o~bjektu";
-        Text[ hungarian ] = "~ObjektumnÃ©v";
-        Text[ slovenian ] = "Ime pre~dmeta";
+        Text [ de ] = "~Objektname" ;
+        Text [ en-US ] = "O~bject name";
+        Text [ x-comment ] = " ";
     };
     Edit ED_OBJECT_NAME
     {
@@ -412,190 +207,34 @@ ModalDialog DLG_CAPTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182 , 8 ) ;
-        Text = "Eigenschaften" ;
-        Text [ English ] = "Settings" ;
-        Text[ english_us ] = "Properties";
-        Text[ portuguese ] = "Propriedades";
-        Text[ russian ] = "Ñâîéñòâà";
-        Text[ greek ] = "Éäéüôçôåò";
-        Text[ dutch ] = "Eigenschappen";
-        Text[ french ] = "Propriétés";
-        Text[ spanish ] = "Propiedades";
-        Text[ finnish ] = "Ominaisuudet";
-        Text[ italian ] = "Proprietà";
-        Text[ danish ] = "Egenskaber";
-        Text[ swedish ] = "Egenskaper";
-        Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Propriedades";
-        Text[ japanese ] = "å±æ€§";
-        Text[ korean ] = "ë“±ë¡ ì •ë³´";
-        Text[ chinese_simplified ] = "å±æ€§";
-        Text[ chinese_traditional ] = "å±¬æ€§";
-        Text[ turkish ] = "Özellikler";
-        Text[ arabic ] = "Settings";
-        Text[ catalan ] = "Propietats";
-        Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
-        Text[ czech ] = "Vlastnosti";
-        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
-        Text[ slovak ] = "Vlastnosti";
-        Text[ hungarian ] = "TulajdonsÃ¡gok";
-        Text[ slovenian ] = "Lastnosti";
+        Text [ de ] = "Eigenschaften" ;
+        Text [ en-US ] = "Properties";
     };
     String STR_BEGINNING
     {
-        Text = "Am Anfang" ;
-        Text [ English ] = "At the beginning" ;
-        Text [ norwegian ] = "At the beginning" ;
-        Text [ italian ] = "All'inizio" ;
-        Text [ portuguese_brazilian ] = "Acima" ;
-        Text [ portuguese ] = "No início" ;
-        Text [ finnish ] = "Yläpuolella" ;
-        Text [ danish ] = "Over" ;
-        Text [ french ] = "Au début" ;
-        Text [ swedish ] = "I början" ;
-        Text [ dutch ] = "Aan begin" ;
-        Text [ spanish ] = "Al principio" ;
-        Text [ english_us ] = "Above" ;
-        Text[ chinese_simplified ] = "åœ¨èµ·å§‹ä½ç½®";
-        Text[ russian ] = "Ñâåğõó";
-        Text[ polish ] = "Na pocz¹tku";
-        Text[ japanese ] = "æœ€åˆã«";
-        Text[ chinese_traditional ] = "åœ¨èµ·å§‹ä½ç½®";
-        Text[ arabic ] = "İí ÇáÈÏÇíÉ";
-        Text[ greek ] = "Óôçí áñ÷Ş";
-        Text[ korean ] = "ì‹œì‘ì—ì„œ";
-        Text[ turkish ] = "Üstte";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A sobre";
-        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸šà¸™";
-        Text[ czech ] = "VÃ½Å¡e";
-        Text[ hebrew ] = "Am Anfang";
-        Text[ hindi ] = "à¤Šà¤ªà¤°";
-        Text[ slovak ] = "Nad";
-        Text[ hungarian ] = "Felett";
-        Text[ slovenian ] = "Nad";
+        Text [ de ] = "Am Anfang" ;
+        Text [ en-US ] = "Above" ;
+        Text [ x-comment ] = " ";
     };
     String STR_END
     {
-        Text = "Am Ende" ;
-        Text [ English ] = "At the end" ;
-        Text [ norwegian ] = "At the end" ;
-        Text [ italian ] = "Alla fine" ;
-        Text [ portuguese_brazilian ] = "Abaixo" ;
-        Text [ portuguese ] = "No fim" ;
-        Text [ finnish ] = "Alapuolella" ;
-        Text [ danish ] = "Under" ;
-        Text [ french ] = "À la fin" ;
-        Text [ swedish ] = "I slutet" ;
-        Text [ dutch ] = "Aan einde" ;
-        Text [ spanish ] = "Al final" ;
-        Text [ english_us ] = "Below" ;
-        Text[ chinese_simplified ] = "åœ¨ç»“æŸä½ç½®";
-        Text[ russian ] = "Ñíèçó";
-        Text[ polish ] = "Na koñcu";
-        Text[ japanese ] = "æœ€å¾Œã«";
-        Text[ chinese_traditional ] = "åœ¨çµæŸä½ç½®";
-        Text[ arabic ] = "İí ÇáäåÇíÉ";
-        Text[ greek ] = "ÊÜôù áğü";
-        Text[ korean ] = "ë";
-        Text[ turkish ] = "Altta";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sota";
-        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡";
-        Text[ czech ] = "NÃ­Å¾e";
-        Text[ hebrew ] = "Am Ende";
-        Text[ hindi ] = "à¤¨à¥€à¤šà¥‡";
-        Text[ slovak ] = "Pod";
-        Text[ hungarian ] = "Alatt";
-        Text[ slovenian ] = "Spodaj";
+        Text [ de ] = "Am Ende" ;
+        Text [ en-US ] = "Below" ;
+        Text [ x-comment ] = " ";
     };
     String STR_ABOVE
     {
-        Text = "Oberhalb" ;
-        Text [ English ] = "Above" ;
-        Text [ norwegian ] = "Above" ;
-        Text [ italian ] = "Al di sopra" ;
-        Text [ portuguese_brazilian ] = "Acima" ;
-        Text [ portuguese ] = "Acima" ;
-        Text [ finnish ] = "Yläpuolella" ;
-        Text [ danish ] = "Over" ;
-        Text [ french ] = "Supra" ;
-        Text [ swedish ] = "Ovanför" ;
-        Text [ dutch ] = "Boven" ;
-        Text [ spanish ] = "Encima" ;
-        Text [ english_us ] = "Above" ;
-        Text[ chinese_simplified ] = "ä¹‹ä¸Š";
-        Text[ russian ] = "Ñâåğõó";
-        Text[ polish ] = "Powy¿ej";
-        Text[ japanese ] = "ä¸Šã«";
-        Text[ chinese_traditional ] = "ä¹‹ä¸Š";
-        Text[ arabic ] = "ÃÚáì";
-        Text[ greek ] = "ĞÜíù áğü";
-        Text[ korean ] = "ìœ„";
-        Text[ turkish ] = "Üstte";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A sobre";
-        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸šà¸™";
-        Text[ czech ] = "VÃ½Å¡e";
-        Text[ hebrew ] = "Oberhalb";
-        Text[ hindi ] = "à¤Šà¤ªà¤°";
-        Text[ slovak ] = "Nad";
-        Text[ hungarian ] = "Felett";
-        Text[ slovenian ] = "Nad";
+        Text [ de ] = "Oberhalb" ;
+        Text [ en-US ] = "Above" ;
+        Text [ x-comment ] = " ";
     };
     String STR_CP_BELOW
     {
-        Text = "Unterhalb" ;
-        Text [ English ] = "Below" ;
-        Text [ norwegian ] = "Below" ;
-        Text [ italian ] = "Al di sotto" ;
-        Text [ portuguese_brazilian ] = "Abaixo" ;
-        Text [ portuguese ] = "Abaixo" ;
-        Text [ finnish ] = "Alapuolella" ;
-        Text [ danish ] = "Under" ;
-        Text [ french ] = "Infra" ;
-        Text [ swedish ] = "Nedanför" ;
-        Text [ dutch ] = "Beneden" ;
-        Text [ spanish ] = "Debajo" ;
-        Text [ english_us ] = "Below" ;
-        Text[ chinese_simplified ] = "ä¹‹ä¸‹";
-        Text[ russian ] = "Ñíèçó";
-        Text[ polish ] = "Poni¿ej";
-        Text[ japanese ] = "ä¸‹ã«";
-        Text[ chinese_traditional ] = "ä¹‹ä¸‹";
-        Text[ arabic ] = "ÃÓİá";
-        Text[ greek ] = "ÊÜôù áğü";
-        Text[ korean ] = "ì•„ë˜";
-        Text[ turkish ] = "Altta";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sota";
-        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡";
-        Text[ czech ] = "NÃ­Å¾e";
-        Text[ hebrew ] = "Unterhalb";
-        Text[ hindi ] = "à¤¨à¥€à¤šà¥‡";
-        Text[ slovak ] = "Pod";
-        Text[ hungarian ] = "Alatt";
-        Text[ slovenian ] = "Spodaj";
+        Text [ de ] = "Unterhalb" ;
+        Text [ en-US ] = "Below" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "æ ‡ç­¾";
-    Text[ russian ] = "Íàçâàíèå";
-    Text[ polish ] = "Podpis";
-    Text[ japanese ] = "å›³è¡¨ç•ªå·";
-    Text[ chinese_traditional ] = "æ¨™ç±¤";
-    Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
-    Text[ greek ] = "ËåæÜíôá";
-    Text[ korean ] = "ìº¡ì…˜";
-    Text[ turkish ] = "Resim yazısı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Llegenda";
-    Text[ thai ] = "à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
-    Text[ czech ] = "Popisek";
-    Text[ hebrew ] = "Beschriftung";
-    Text[ hindi ] = "à¤•à¥‰à¤ªà¥à¤¶à¤¨à¥";
-    Text[ slovak ] = "Popisok";
-    Text[ hungarian ] = "Felirat";
-    Text[ slovenian ] = "Napis";
+    Text [ x-comment ] = " ";
 };
 ModalDialog DLG_SEQUENCE_OPTION
 {
@@ -603,8 +242,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 170 , 64 ) ;
-    Text = "Nummernkreis Optionen" ;
-    TEXT [ English ] = "Sequence options" ;
+    Text [ de ] = "Nummernkreis Optionen" ;
     Moveable = TRUE ;
     OKButton BTN_OK
     {
@@ -629,71 +267,17 @@ ModalDialog DLG_SEQUENCE_OPTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        TEXT = "Kapitelweise Nummerierung" ;
-        TEXT [ English ] = "Chapter numbering" ;
-        Text [ english_us ] = "Numbering by chapter" ;
-        Text [ portuguese_brazilian ] = "Numeração por capítulos" ;
-        Text [ swedish ] = "Numrering kapitelvis" ;
-        Text [ danish ] = "Kapitelvis nummerering" ;
-        Text [ italian ] = "Numerazione a capitoli" ;
-        Text [ spanish ] = "Numeración por capítulos" ;
-        Text [ french ] = "Numérotation par chapitre" ;
-        Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
-        Text [ portuguese ] = "Numeração por capítulos" ;
-        Text[ chinese_simplified ] = "æŒ‰ç« èŠ‚ç¼–å·";
-        Text[ russian ] = "Íóìåğàöèÿ ïî ãëàâàì";
-        Text[ polish ] = "Numeracja wed³ug rozdzia³ów";
-        Text[ japanese ] = "ç« ã”ã¨ã®ç•ªå·ä»˜ã‘";
-        Text[ chinese_traditional ] = "æŒ‰ç« ç¯€ç·¨è™Ÿ";
-        Text[ arabic ] = "ÊÑŞíã ÇáİÕæá";
-        Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
-        Text[ korean ] = "ì¥ë³„ë¡œ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Bölüm numaralandırması";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeració de capítols";
-        Text[ finnish ] = "Numerointi luvuittain";
-        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¹‚à¸”à¸¢à¸šà¸—";
-        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ podle kapitol";
-        Text[ hebrew ] = "Kapitelweise Nummerierung";
-        Text[ hindi ] = "à¤…à¤§à¥à¤¯à¤¾à¤¯ à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤° à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "ÄŒÃ­slovanie podÄ¾a kapitol";
-        Text[ hungarian ] = "SzÃ¡mozÃ¡s fejezetenkÃ©nt";
-        Text[ slovenian ] = "OÅ¡tevilÄevanje po poglavjih";
+        Text [ de ] = "Kapitelweise Nummerierung" ;
+        Text [ en-US ] = "Numbering by chapter" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_LEVEL
     {
         Pos = MAP_APPFONT ( 12 , 21 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        TEXT = "E~bene" ;
-        TEXT [ English ] = "~Level" ;
-        Text [ portuguese ] = "~Nível" ;
-        Text [ english_us ] = "~Level" ;
-        Text [ portuguese_brazilian ] = "~Nível" ;
-        Text [ swedish ] = "~Nivå" ;
-        Text [ danish ] = "~Niveau" ;
-        Text [ italian ] = "Li~vello" ;
-        Text [ spanish ] = "~Nivel" ;
-        Text [ french ] = "Ni~veau" ;
-        Text [ dutch ] = "N~iveau" ;
-        Text[ chinese_simplified ] = "çº§(~L)";
-        Text[ russian ] = "Óğîâåíü";
-        Text[ polish ] = "P~oziom";
-        Text[ japanese ] = "ãƒ¬ãƒ™ãƒ«(~L)";
-        Text[ chinese_traditional ] = "ç´š(~L)";
-        Text[ arabic ] = "ÇáãÓÊæì";
-        Text[ greek ] = "Åğßğåäï";
-        Text[ korean ] = "ìˆ˜ì¤€(~L)";
-        Text[ turkish ] = "D~üzey";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nivell";
-        Text[ finnish ] = "~Taso";
-        Text[ thai ] = "~à¸£à¸°à¸”à¸±à¸š";
-        Text[ czech ] = "ÃšroveÅˆ";
-        Text[ hebrew ] = "E~bene";
-        Text[ hindi ] = "~à¤¸à¥à¤¤à¤°";
-        Text[ slovak ] = "Ãš~roveÅˆ";
-        Text[ hungarian ] = "~Szint";
-        Text[ slovenian ] = "~Raven";
+        Text [ de ] = "E~bene" ;
+        Text [ en-US ] = "~Level" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_LEVEL
     {
@@ -702,161 +286,26 @@ ModalDialog DLG_SEQUENCE_OPTION
         Size = MAP_APPFONT ( 46 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Keine" ; > ;
         };
-        stringlist [ english ] =
-        {
-            < "Keine" ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Nenhum" ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "None" ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Nenhum" ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Ingen" ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Ingen" ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Senza" ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Ninguno" ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Aucun(e)" ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Geen" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-             < "æ— " ; > ;
-    };
-    StringList [ russian ] =
-    {
-             < "Íåò" ; > ;
-    };
-    StringList [ polish ] =
-    {
-             < "Brak" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-             < "ãªã—" ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
              < " " ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-             < "ç„¡" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-             < "ÈÏæä" ; > ;
-    };
-    StringList [ greek ] =
-    {
-             < "Êáíİíá" ; > ;
-    };
-    StringList [ korean ] =
-    {
-             < "ì—†ìŒ" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-             < "Yok" ; > ;
-    };
-    StringList [ catalan ] =
-    {
-             < "Cap" ; > ;
-    };
-    StringList [ finnish ] =
-    {
-             < "Ei mitään" ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹„à¸¡à¹ˆà¸¡à¸µ" ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Å½Ã¡dnÃ©" ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®×œ×œ×â€¬" ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚" ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Å½iadne" ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Semmi" ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Brez" ; > ;
     };
     };
     FixedText FT_SEPARATOR
     {
         Pos = MAP_APPFONT ( 12 , 37 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        TEXT = "~Trenner" ;
-        TEXT [ English ] = "~Separator" ;
-        Text [ english_us ] = "~Separator" ;
-        Text [ portuguese_brazilian ] = "~Separador" ;
-        Text [ swedish ] = "Skilje~tecken" ;
-        Text [ danish ] = "~Separator" ;
-        Text [ italian ] = "~Separatore" ;
-        Text [ spanish ] = "~Separador" ;
-        Text [ french ] = "~Séparateur" ;
-        Text [ dutch ] = "~Scheidingsteken" ;
-        Text [ portuguese ] = "~Separador" ;
-        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦(~S)";
-        Text[ russian ] = "Ğàçäåëèòåëü";
-        Text[ polish ] = "S~eparator";
-        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·(~S)";
-        Text[ chinese_traditional ] = "é€£æ¥ç¬¦(~S)";
-        Text[ arabic ] = "ÇáİÇÕá";
-        Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸(~S)";
-        Text[ turkish ] = "A~yraç";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Separador";
-        Text[ finnish ] = "~Erotin";
-        Text[ thai ] = "~à¸•à¸±à¸§à¹à¸¢à¸";
-        Text[ czech ] = "OddÄ›lovaÄ";
-        Text[ hebrew ] = "~Trenner";
-        Text[ hindi ] = "~à¤…à¤²à¤—à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-        Text[ slovak ] = "O~ddeÄ¾ovaÄ";
-        Text[ hungarian ] = "~ElvÃ¡lasztÃ³";
-        Text[ slovenian ] = "~LoÄilo";
+        Text [ de ] = "~Trenner" ;
+        Text [ en-US ] = "~Separator" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_SEPARATOR
     {
@@ -866,34 +315,8 @@ ModalDialog DLG_SEQUENCE_OPTION
         MaxTextLength = 1 ;
         TEXT = "." ;
     };
-    Text [ english_us ] = "Number Range Options" ;
-    Text [ portuguese_brazilian ] = "Opções do Intervalo Numérico" ;
-    Text [ swedish ] = "Sekvensalternativ" ;
-    Text [ danish ] = "Sekvensnummerering-indstillinger" ;
-    Text [ italian ] = "Opzioni sequenza" ;
-    Text [ spanish ] = "Opciones de secuencias" ;
-    Text [ french ] = "Options de séquence" ;
-    Text [ dutch ] = "Nummerreeksopties" ;
-    Text [ portuguese ] = "Opções de sequências" ;
-    Text[ chinese_simplified ] = "å·ç åºåˆ—é€‰é¡¹";
-    Text[ russian ] = "Ïàğàìåòğû äèàïàçîíà íîìåğîâ";
-    Text[ polish ] = "Opcje sekwencji";
-    Text[ japanese ] = "é€£ç•ªã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "ç·¨è™Ÿåºåˆ—é¸é …";
-    Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÑŞíã ÇáãÊÓáÓá";
-    Text[ greek ] = "Åğéëïãİò êıêëïõ áñéèìşí";
-    Text[ korean ] = "ë²ˆí˜¸ ë²”ìœ„ ì˜µì…˜";
-    Text[ turkish ] = "Numara aralığı seçenekleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions de seqüències";
-    Text[ finnish ] = "Numeroalueen asetukset";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸Šà¹ˆà¸§à¸‡à¸•à¸±à¸§à¹€à¸¥à¸‚";
-    Text[ czech ] = "Volby intervalu ÄÃ­slovÃ¡nÃ­";
-    Text[ hebrew ] = "Nummernkreis Optionen";
-    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤«à¥ˆà¤²à¤¾à¤µ à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = "VoÄ¾by intervalu ÄÃ­slovania";
-    Text[ hungarian ] = "SzÃ¡mtartomÃ¡ny beÃ¡llÃ­tÃ¡sai";
-    Text[ slovenian ] = "MoÅ¾nosti obsega Å¡tevil";
+    Text [ en-US ] = "Number Range Options" ;
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
