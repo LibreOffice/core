@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:44:42 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:06:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,6 @@ JARCOMPRESS_FLAG=0
 .ENDIF
 
 .IF "$(NEW_JAR_PACK)"!=""
-.IF "$(use_starjar)"!=""
-XSTARJARPATH=$(strip $(STARJARPATH))
-.ENDIF			# "$(use_starjar)"!=""
 $(JARTARGETN) : $(JARMANIFEST)
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
 
@@ -146,12 +143,6 @@ $(JARTARGETN) :
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @+-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
-.IF "$(use_starjar)"!=""
-    +-$(RM) $@
-    @+-$(COPY) $(DMAKE_WORK_DIR)$/$(JARFLT) $(TARGET)_$(JARFLT) >& $(NULLDEV)
-    cd $(CLASSDIR) && $(STARJAR) $@ $(JARMANIFEST) $(TARGET)_$(JARFLT) + $(XSTARJARPATH:s/ /+/)
-.ELSE			# "$(use_starjar)"!=""
     +cd $(CLASSDIR) && zip -u -r $(@:f) $(subst,$(CLASSDIR)$/, $(JARMANIFEST)) $(subst,\,/ $(JARCLASSDIRS))
-.ENDIF			# "$(use_starjar)"!=""
 .ENDIF
 
