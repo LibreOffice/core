@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2003-04-02 15:44:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@
 
 #include <string.h>
 
+#define EXT_STREAM_LENGTH 16
+
 using namespace ::com::sun::star;
 
 extern ::rtl::OUString  getStorageTypeFromGUID_Impl( GUID* guid );
@@ -119,6 +121,7 @@ extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 ::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid );
 
 const ::rtl::OUString aOfficeEmbedStreamName( RTL_CONSTASCII_USTRINGPARAM ( "package_stream" ) );
+const ::rtl::OUString aExtentStreamName( RTL_CONSTASCII_USTRINGPARAM ( "properties_stream" ) );
 
 uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
                                         uno::Reference< lang::XMultiServiceFactory > xFactory,
@@ -317,8 +320,10 @@ HRESULT EmbedDocument_Impl::SaveTo_Impl( IStorage* pStg )
     // for saveto operation the master storage
     // should not enter NoScribble mode
     CComPtr< IStream > pOrigOwn = m_pOwnStream;
+    CComPtr< IStream > pOrigExt = m_pExtStream;
     HRESULT hr = Save( pStg, sal_False );
     m_pOwnStream = pOrigOwn;
+    m_pExtStream = pOrigExt;
 
     return hr;
 }
@@ -362,6 +367,12 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
     {
         AddRef();
         *ppv = (IPersistFile*) this;
+        return S_OK;
+    }
+    else if (IsEqualIID(riid, IID_IDispatch))
+    {
+        AddRef();
+        *ppv = (IDispatch*) this;
         return S_OK;
     }
 
@@ -458,8 +469,20 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                         if ( hr == S_OK && m_pOwnStream )
                         {
-                            m_pMasterStorage = pStg;
-                            m_bIsDirty = sal_True;
+                            hr = pStg->CreateStream( aExtentStreamName,
+                                                     STGM_CREATE | ( nStreamMode & 0x73 ),
+                                                     0,
+                                                     0,
+                                                     &m_pExtStream );
+
+                            if ( hr == S_OK && m_pExtStream )
+                            {
+
+                                m_pMasterStorage = pStg;
+                                m_bIsDirty = sal_True;
+                            }
+                            else
+                                hr = E_FAIL;
                         }
                         else
                             hr = E_FAIL;
@@ -497,58 +520,97 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                             nStreamMode & 0x73,
                             0,
                             &m_pOwnStream );
-    if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
+    if ( !m_pOwnStream ) hr = E_FAIL;
 
-    hr = E_FAIL;
-
-    uno::Reference < io::XInputStream > xTempIn = createTempXInStreamFromIStream( m_xFactory, m_pOwnStream );
-    if ( xTempIn.is() )
+    if ( SUCCEEDED( hr ) )
     {
-        uno::Reference< frame::XModel > aDocument(
-                                            m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
-                                            uno::UNO_QUERY );
-        if ( aDocument.is() )
+        hr = pStg->OpenStream( aExtentStreamName,
+                                0,
+                                nStreamMode & 0x73,
+                                0,
+                                &m_pExtStream );
+        if ( !m_pExtStream ) hr = E_FAIL;
+    }
+
+    RECTL aRectToSet;
+    if ( SUCCEEDED( hr ) )
+    {
+        ULARGE_INTEGER nNewPos;
+        LARGE_INTEGER aZero = { 0L, 0L };
+        hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
+        if ( SUCCEEDED( hr ) )
         {
-            m_pDocHolder->SetDocument( aDocument );
+            sal_uInt32 nRead;
+            sal_Int8 aInf[EXT_STREAM_LENGTH];
+            hr = m_pExtStream->Read( (void*)aInf, EXT_STREAM_LENGTH, &nRead );
+            if ( nRead != EXT_STREAM_LENGTH ) hr = E_FAIL;
 
-            uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-            if( xLoadable.is() )
+            if ( SUCCEEDED( hr ) )
             {
-                try
-                {
-                    xLoadable->load( fillArgsForLoading_Impl( xTempIn, nStreamMode ) );
-                    m_pMasterStorage = pStg;
-                    hr = S_OK;
-                }
-                catch( uno::Exception& )
-                {
-                }
+                aRectToSet.left = *((sal_Int32*)aInf);
+                aRectToSet.top = *((sal_Int32*)&aInf[4]);
+                aRectToSet.right = *((sal_Int32*)&aInf[8]);
+                aRectToSet.bottom = *((sal_Int32*)&aInf[12]);
             }
+        }
+    }
 
-            if ( FAILED( hr ) )
-                m_pDocHolder->CloseDocument();
+    if ( SUCCEEDED( hr ) )
+    {
+        hr = E_FAIL;
+
+        uno::Reference < io::XInputStream > xTempIn = createTempXInStreamFromIStream( m_xFactory, m_pOwnStream );
+        if ( xTempIn.is() )
+        {
+            uno::Reference< frame::XModel > aDocument(
+                                                m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                                                uno::UNO_QUERY );
+            if ( aDocument.is() )
+            {
+                m_pDocHolder->SetDocument( aDocument );
+
+                uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+                if( xLoadable.is() )
+                {
+                    try
+                    {
+                        xLoadable->load( fillArgsForLoading_Impl( xTempIn, nStreamMode ) );
+                        m_pMasterStorage = pStg;
+                        hr = m_pDocHolder->SetVisArea( &aRectToSet );
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
+
+                if ( FAILED( hr ) )
+                    m_pDocHolder->CloseDocument();
+            }
         }
     }
 
     if ( FAILED( hr ) )
     {
         m_pOwnStream = CComPtr< IStream >();
+        m_pExtStream = CComPtr< IStream >();
         hr = pStg->DestroyElement( aOfficeEmbedStreamName );
+        hr = pStg->DestroyElement( aExtentStreamName );
 
         OSL_ENSURE( SUCCEEDED( hr ), "Can not destroy created stream!\n" );
         if ( FAILED( hr ) )
             hr = E_FAIL;
     }
 
-    return hr;
+       return hr;
 }
 
 STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 {
-    if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() || !pStgSave || !m_pOwnStream )
+    if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() || !pStgSave || !m_pOwnStream || !m_pExtStream )
         return E_FAIL;
 
     CComPtr< IStream > pTargetStream;
+    CComPtr< IStream > pNewExtStream;
 
     if ( !fSameAsLoad && pStgSave != m_pMasterStorage )
     {
@@ -566,10 +628,20 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                                 0,
                                  0,
                                  &pTargetStream );
-        if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
+        if ( FAILED( hr ) || !pTargetStream ) return E_FAIL;
+
+        hr = pStgSave->CreateStream( aExtentStreamName,
+                                 STGM_CREATE | ( nStreamMode & 0x73 ),
+                                0,
+                                 0,
+                                 &pNewExtStream );
+        if ( FAILED( hr ) || !pNewExtStream ) return E_FAIL;
     }
     else
+    {
         pTargetStream = m_pOwnStream;
+        pNewExtStream = m_pExtStream;
+    }
 
     HRESULT hr = E_FAIL;
 
@@ -590,10 +662,35 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                 hr = copyXTempOutToIStream( xTempOut, pTargetStream );
                 if ( SUCCEEDED( hr ) )
                 {
-                    m_pOwnStream = CComPtr< IStream >();
-                    if ( fSameAsLoad || pStgSave == m_pMasterStorage )
-                        m_bIsDirty = sal_False;
+                    ULARGE_INTEGER nNewPos;
+                    LARGE_INTEGER aZero = { 0L, 0L };
+                    hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
+                    if ( SUCCEEDED( hr ) )
+                    {
+                        RECTL aRect;
+                        hr = m_pDocHolder->GetVisArea( &aRect );
 
+                        if ( SUCCEEDED( hr ) )
+                        {
+                            sal_uInt32 nWritten;
+                            sal_Int8 aInf[EXT_STREAM_LENGTH];
+                            *((sal_Int32*)aInf) = aRect.left;
+                            *((sal_Int32*)&aInf[4]) = aRect.top;
+                            *((sal_Int32*)&aInf[8]) = aRect.right;
+                            *((sal_Int32*)&aInf[12]) = aRect.bottom;
+
+                            hr = pNewExtStream->Write( (void*)aInf, EXT_STREAM_LENGTH, &nWritten );
+                            if ( nWritten != EXT_STREAM_LENGTH ) hr = E_FAIL;
+
+                            if ( SUCCEEDED( hr ) )
+                            {
+                                m_pOwnStream = CComPtr< IStream >();
+                                m_pExtStream = CComPtr< IStream >();
+                                if ( fSameAsLoad || pStgSave == m_pMasterStorage )
+                                    m_bIsDirty = sal_False;
+                            }
+                        }
+                    }
                 }
             }
             catch( uno::Exception& )
@@ -610,7 +707,7 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
     // m_pOwnStream == NULL && m_pMasterStorage != NULL means the object is in NoScribble mode
     // m_pOwnStream == NULL && m_pMasterStorage == NULL means the object is in HandsOff mode
 
-    if ( m_pOwnStream )
+    if ( m_pOwnStream || m_pExtStream )
         return E_UNEXPECTED;
 
     if ( !m_pMasterStorage && !pStgNew )
@@ -631,6 +728,14 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
                                         &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_OUTOFMEMORY;
 
+    hr = m_pMasterStorage->OpenStream( aExtentStreamName,
+                                        0,
+                                        nStreamMode & 0x73,
+                                        0,
+                                        &m_pExtStream );
+    if ( FAILED( hr ) || !m_pExtStream ) return E_OUTOFMEMORY;
+
+
     for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
     {
         if ( iAdvise->second )
@@ -644,6 +749,7 @@ STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
 {
     m_pMasterStorage = CComPtr< IStorage >();
     m_pOwnStream = CComPtr< IStream >();
+    m_pExtStream = CComPtr< IStream >();
 
     return S_OK;
 }
@@ -684,6 +790,14 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
                             &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
 
+    hr = m_pMasterStorage->CreateStream( aExtentStreamName,
+                            STGM_CREATE | ( nStreamMode & 0x73 ),
+                            0,
+                            0,
+                            &m_pExtStream );
+    if ( FAILED( hr ) || !m_pExtStream ) return E_FAIL;
+
+
     uno::Reference< frame::XModel > aDocument(
                     m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                     uno::UNO_QUERY );
@@ -717,18 +831,42 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
                                     cf,                         // ???
                                     ( sal_Unicode* )aCurType.getStr() );
 
-            if ( hr == S_OK )
+            if ( SUCCEEDED( hr ) )
             {
-                m_bIsDirty = sal_True;
+                ULARGE_INTEGER nNewPos;
+                LARGE_INTEGER aZero = { 0L, 0L };
+                hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
+                if ( SUCCEEDED( hr ) )
+                {
+                    RECTL aRect;
+                    hr = m_pDocHolder->GetVisArea( &aRect );
+
+                    if ( SUCCEEDED( hr ) )
+                    {
+                        sal_uInt32 nWritten;
+                        sal_Int8 aInf[EXT_STREAM_LENGTH];
+                        *((sal_Int32*)aInf) = aRect.left;
+                        *((sal_Int32*)&aInf[4]) = aRect.top;
+                        *((sal_Int32*)&aInf[8]) = aRect.right;
+                        *((sal_Int32*)&aInf[12]) = aRect.bottom;
+
+                        hr = m_pExtStream->Write( (void*)aInf, EXT_STREAM_LENGTH, &nWritten );
+                        if ( nWritten != EXT_STREAM_LENGTH ) hr = E_FAIL;
+                    }
+                }
             }
+
+            if ( SUCCEEDED( hr ) )
+                m_bIsDirty = sal_True;
             else
                 hr = E_FAIL;
         }
 
-        if ( hr != S_OK )
+        if ( FAILED( hr ) )
         {
             m_pDocHolder->CloseDocument();
             m_pOwnStream = NULL;
+            m_pExtStream = NULL;
             m_pMasterStorage = NULL;
         }
     }
