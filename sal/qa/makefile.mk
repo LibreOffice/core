@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mxiao $ $Date: 2002-09-19 08:52:58 $
+#   last change: $Author: lla $ $Date: 2002-10-14 13:30:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,14 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
 
+#-------------------------------------------------------------------------------
+
+.IF "$(COM)"=="GCC"
+NOOPTFILES= \
+    $(SLO)$/rtl_String_Utils.obj \
+   $(SLO)$/rtl_OUString.obj
+.ENDIF
+
 SHL2OBJS = \
             $(SLO)$/rtl_String_Utils.obj \
             $(SLO)$/rtl_OUString.obj
@@ -111,35 +119,42 @@ SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME    =$(SHL2TARGET)
 
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
 $(MISC)$/$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce
-    +$(RM)  $(MISC)$/$(SHL1TARGET).tst
-    +$(RM)  $(MISC)$/$(SHL1TARGET).map
-    +$(TYPE) $< | sed $(REGEXP) > $@
-    +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL1TARGET).tst
-    +$(TYPE) mapHeader > $(MISC)$/$(SHL1TARGET).map
-    +$(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL1TARGET).map1"
-    +$(TYPE) $(MISC)$/$(SHL1TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL1TARGET).map
-    +$(RM) $(MISC)$/$(SHL2TARGET).map1
-    +$(TYPE) mapFooter >> $(MISC)$/$(SHL1TARGET).map
+        +$(RM)  $(MISC)$/$(SHL1TARGET).tst
+        +$(RM)  $(MISC)$/$(SHL1TARGET).map
+        +$(TYPE) $< | sed $(REGEXP) > $@
+        +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL1TARGET).tst
+        +$(TYPE) mapHeader > $(MISC)$/$(SHL1TARGET).map
+        +$(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL1TARGET).map1"
+        +$(TYPE) $(MISC)$/$(SHL1TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL1TARGET).map
+        +$(RM) $(MISC)$/$(SHL1TARGET).map1
+        +$(TYPE) mapFooter >> $(MISC)$/$(SHL1TARGET).map
 
 $(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce
-    +$(RM)  $(MISC)$/$(SHL2TARGET).tst
-    +$(RM)  $(MISC)$/$(SHL2TARGET).map
-    +$(TYPE) $< | sed $(REGEXP) > $@
-    +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst
-    +$(TYPE) mapHeader > $(MISC)$/$(SHL2TARGET).map
-    +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL2TARGET).map1"
-    +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL2TARGET).map
-    +$(RM) $(MISC)$/$(SHL2TARGET).map1
-    +$(TYPE) mapFooter >> $(MISC)$/$(SHL2TARGET).map
+        +$(RM)  $(MISC)$/$(SHL2TARGET).tst
+        +$(RM)  $(MISC)$/$(SHL2TARGET).map
+        +$(TYPE) $< | sed $(REGEXP) > $@
+        +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst
+        +$(TYPE) mapHeader > $(MISC)$/$(SHL2TARGET).map
+        +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL2TARGET).map1"
+        +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL2TARGET).map
+        +$(RM) $(MISC)$/$(SHL2TARGET).map1
+        +$(TYPE) mapFooter >> $(MISC)$/$(SHL2TARGET).map
 
 cleanup:
-    +$(RM) $(SHL1TARGET).map
-    +$(RM) $(SHL2TARGET).map
-    +$(RM) sce$/$(SHL1TARGET).tst
-    +$(RM) sce$/$(SHL1TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL1TARGET).map
+    +$(RM) $(MISCX)$/$(SHL2TARGET).map
+    +$(RM) $(MISCX)$/$(SHL1TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL2TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL1TARGET).def
+    +$(RM) $(MISCX)$/$(SHL2TARGET).def
+    +$(RM) sce$/$(SHL1TARGET).out
+    +$(RM) sce$/$(SHL2TARGET).out
+    +$(RM) sce$/$(SHL1TARGET).qadev
+    +$(RM) sce$/$(SHL2TARGET).qadev
 
