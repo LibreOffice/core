@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <svx/svdetc.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
@@ -578,6 +581,9 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
         if (aIPObj.Is())
         {
+            if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & aIPObj->GetMiscStatus() )
+                aIPObj->OnDocumentPrinterChanged( pDocSh->GetPrinter(FALSE) );
+
             BOOL bInsertNewObject = FALSE;
             Size aSize;
             String aName;
