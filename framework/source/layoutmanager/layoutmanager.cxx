@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:12:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,8 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
                 xServiceManager->createInstance( SERVICENAME_WINDOWSTATECONFIGURATION ), UNO_QUERY ))
         ,   m_pAddonOptions( 0 )
         ,   m_aCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "custom_" ))
+        ,   m_aFullCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/custom_" ))
+        ,   m_aFullAddonTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/addon_" ))
         ,   m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
         ,   m_aProgressBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
         ,   m_eDockOperation( DOCKOP_ON_COLROW )
@@ -873,7 +875,7 @@ void LayoutManager::implts_createAddonsToolBars()
     Reference< XUIElement >               xUIElement;
 
     sal_uInt32 nCount = m_pAddonOptions->GetAddonsToolBarCount();
-    OUString aAddonsToolBarStaticName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/addon_" ));
+    OUString aAddonsToolBarStaticName( m_aFullAddonTbxPrefix );
     OUString aElementType( RTL_CONSTASCII_USTRINGPARAM( "toolbar" ));
 
     Sequence< PropertyValue > aPropSeq( 2 );
@@ -6217,7 +6219,10 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( xIfac == e.Source )
             {
                 aName = pIter->m_aName;
-//                pIter->m_bVisible = sal_True; // user close => make invisible!
+
+                // user closes a toolbar => make it invisible and store it permanently!
+                pIter->m_bVisible = sal_False;
+
                 aUIElement = *pIter;
                 break;
             }
