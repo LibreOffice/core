@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:11:30 $
+ *  last change: $Author: ama $ $Date: 2001-03-29 11:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 
 #ifndef REDUCEDSVXFONT
     const sal_Unicode CH_BLANK = sal_Unicode(' ');      // ' ' Leerzeichen
-    const XubString aDoubleSpace = (sal_Unicode*)"  ";
+    static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 #endif
 
 /*************************************************************************
@@ -308,7 +308,6 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     while( nPos < nTxtLen )
     {
         // Erst kommen die Upper-Chars dran
-        aCharString = rTxt.GetChar( nPos + nIdx );
 
         // 4251: Es gibt Zeichen, die Upper _und_ Lower sind (z.B. das Blank).
         // Solche Zweideutigkeiten fuehren ins Chaos, deswegen werden diese
@@ -316,12 +315,13 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
         while( nPos < nTxtLen )
         {
+            aCharString = rTxt.GetChar( nPos + nIdx );
             sal_Int32 nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
             if ( nCharacterType & ::com::sun::star::i18n::KCharacterType::LOWER )
                 break;
             if ( ! ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
                 break;
-            aCharString = rTxt.GetChar( ++nPos + nIdx );
+            ++nPos;
         }
         if( nOldPos != nPos )
         {
@@ -332,11 +332,12 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         while( nPos < nTxtLen )
         {
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
-            if ( ! ( nCharacterType & ::com::sun::star::i18n::KCharacterType::LOWER ) )
+            if ( ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
                 break;
             if ( CH_BLANK == aCharString )
                 break;
-            aCharString = rTxt.GetChar( ++nPos + nIdx );
+            if( ++nPos < nTxtLen )
+                aCharString = rTxt.GetChar( nPos + nIdx );
         }
         if( nOldPos != nPos )
         {
@@ -344,8 +345,8 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
             nOldPos = nPos;
         }
         // Nun werden die Blanks verarbeitet
-        while( nPos < nTxtLen && CH_BLANK == aCharString )
-            aCharString = rTxt.GetChar( ++nPos + nIdx );
+        while( nPos < nTxtLen && CH_BLANK == aCharString && ++nPos < nTxtLen )
+            aCharString = rTxt.GetChar( nPos + nIdx );
 
         if( nOldPos != nPos )
         {
@@ -739,7 +740,8 @@ void SvxDoDrawCapital::DoSpace( const BOOL bDraw )
             pFont->SetWordLineMode( FALSE );
             pFont->SetTransparent( TRUE );
             pFont->SetPhysFont( pOut );
-            pOut->DrawStretchText( aSpacePos, nDiff, aDoubleSpace, 0, 2 );
+            pOut->DrawStretchText( aSpacePos, nDiff, XubString( sDoubleSpace,
+                            RTL_TEXTENCODING_MS_1252 ), 0, 2 );
             pFont->SetWordLineMode( bWordWise );
             pFont->SetTransparent( bTrans );
             pFont->SetPhysFont( pOut );
