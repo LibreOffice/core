@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-05 16:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,11 @@
 #include "viewdata.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
 #endif
 
 class ScTabViewShell;
@@ -110,6 +113,16 @@ public:
     virtual void SAL_CALL grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+    /// Return the object's current bounding box relative to the desktop.
+    virtual Rectangle GetBoundingBoxOnScreen(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current bounding box relative to the parent object.
+    virtual Rectangle GetBoundingBox(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+public:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
@@ -125,19 +138,15 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-protected:
-    /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
-        throw (::com::sun::star::uno::RuntimeException);
-public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+           getAccessibleRelationSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XServiceInfo  ====================================================
@@ -185,6 +194,15 @@ private:
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 
     void CreateTextHelper();
+
+    void FillDependends(utl::AccessibleRelationSetHelper* pRelationSet);
+    void FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet);
+    void AddRelation(const ScAddress& rCell,
+        const sal_uInt16 aRelationType,
+        ::utl::AccessibleRelationSetHelper* pRelationSet);
+    void AddRelation(const ScRange& rRange,
+        const sal_uInt16 aRelationType,
+        ::utl::AccessibleRelationSetHelper* pRelationSet);
 };
 
 

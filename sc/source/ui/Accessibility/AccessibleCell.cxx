@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-05 16:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #ifndef SC_EDITSRC_HXX
 #include "editsrc.hxx"
 #endif
+#ifndef SC_DOCITER_HXX
+#include "dociter.hxx"
+#endif
+#ifndef SC_CELL_HXX
+#include "cell.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -94,6 +100,12 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -217,7 +229,6 @@ uno::Reference< XAccessible > SAL_CALL
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);
-//  return uno::Reference< XAccessible >();
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
@@ -253,6 +264,17 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     if (isVisible())
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
+}
+
+uno::Reference<XAccessibleRelationSet> SAL_CALL
+       ScAccessibleCell::getAccessibleRelationSet(void)
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper();
+    FillDependends(pRelationSet);
+    FillPrecedents(pRelationSet);
+    return pRelationSet;
 }
 
     //=====  XServiceInfo  ====================================================
@@ -357,5 +379,90 @@ void ScAccessibleCell::CreateTextHelper()
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
 
         mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
+    }
+}
+
+void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelationSet)
+{
+    if (mpDoc)
+    {
+        ScCellIterator aCellIter( mpDoc, 0,0, maCellAddress.Tab(), MAXCOL,MAXROW, maCellAddress.Tab() );
+        ScBaseCell* pCell = aCellIter.GetFirst();
+        while (pCell)
+        {
+            if (pCell->GetCellType() == CELLTYPE_FORMULA)
+            {
+                sal_Bool bFound(sal_False);
+                ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
+                ScTripel aRefStart;
+                ScTripel aRefEnd;
+                while ( !bFound && aIter.GetNextRef( aRefStart, aRefEnd ) )
+                {
+                    ScRange aRefRange( aRefStart, aRefEnd );
+                    if (aRefRange.In(maCellAddress))
+                        bFound = sal_True;
+                }
+                if (bFound)
+                    AddRelation(ScAddress(aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab()), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
+            }
+            pCell = aCellIter.GetNext();
+        }
+    }
+}
+
+void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet)
+{
+    if (mpDoc)
+    {
+        ScBaseCell* pBaseCell = mpDoc->GetCell(maCellAddress);
+        if (pBaseCell && (pBaseCell->GetCellType() == CELLTYPE_FORMULA))
+        {
+            ScFormulaCell* pFCell = (ScFormulaCell*) pBaseCell;
+
+            ScDetectiveRefIter aIter( pFCell );
+            ScTripel aRefStart;
+            ScTripel aRefEnd;
+            while ( aIter.GetNextRef( aRefStart, aRefEnd ) )
+            {
+                AddRelation(ScRange( aRefStart, aRefEnd ), AccessibleRelationType::CONTROLLED_BY, pRelationSet);
+            }
+        }
+    }
+}
+
+void ScAccessibleCell::AddRelation(const ScAddress& rCell,
+    const sal_uInt16 aRelationType,
+    utl::AccessibleRelationSetHelper* pRelationSet)
+{
+    AddRelation(ScRange(rCell, rCell), aRelationType, pRelationSet);
+}
+
+void ScAccessibleCell::AddRelation(const ScRange& rRange,
+    const sal_uInt16 aRelationType,
+    utl::AccessibleRelationSetHelper* pRelationSet)
+{
+    uno::Reference < XAccessibleTable > xTable ( getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY );
+    if (xTable.is())
+    {
+        sal_uInt32 nCount((rRange.aEnd.Col() - rRange.aStart.Col() + 1) * (rRange.aEnd.Row() - rRange.aStart.Row() + 1));
+        uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
+        uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
+        if (pTargetSet)
+        {
+            sal_uInt32 nPos(0);
+            for (sal_uInt32 i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); i++)
+            {
+                for (sal_uInt32 j = rRange.aStart.Row(); j <= rRange.aEnd.Row(); j++)
+                {
+                    pTargetSet[nPos] = xTable->getAccessibleCellAt(j, i);
+                    nPos++;
+                }
+            }
+            DBG_ASSERT(nCount == nPos, "something wents wrong");
+        }
+        AccessibleRelation aRelation;
+        aRelation.RelationType = aRelationType;
+        aRelation.TargetSet = aTargetSet;
+        pRelationSet->AddRelation(aRelation);
     }
 }
