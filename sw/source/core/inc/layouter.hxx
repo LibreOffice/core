@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:42:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@ class SwRowFrm;
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
 // <--
+// --> OD 2005-01-12 #i40155#
+#include <vector>
+class SwFrm;
+// <--
 
 #define LOOP_PAGE 1
 
@@ -95,6 +99,10 @@ class SwLayouter
     // <--
     // --> OD 2004-10-22 #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
+    // <--
+    // --> OD 2005-01-12 #i40155# - data structure to collect frames, which are
+    // marked not to wrap around objects.
+    std::vector< const SwFrm* > maFrmsNotToWrap;
     // <--
 public:
     SwLayouter();
@@ -119,6 +127,10 @@ public:
                                      const SwTxtFrm& _rTxtFrm,
                                      sal_uInt32& _ornToPageNum );
     // <--
+    // --> OD 2005-01-12 #i40155# - ummark given frame as to be moved forward.
+    static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
+                                   const SwTxtFrm& _rTxtFrm );
+    // <--
     // --> OD 2004-10-05 #i26945#
     static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                            const SwRowFrm& _rRowFrm );
@@ -129,6 +141,13 @@ public:
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
+    // <--
+    // --> OD 2005-01-12 #i40155#
+    static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
+    static void InsertFrmNotToWrap( const SwDoc& _rDoc,
+                                    const SwFrm& _rFrm );
+    static bool FrmNotToWrap( const SwDoc& _rDoc,
+                              const SwFrm& _rFrm );
     // <--
 };
 
