@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_html.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,9 @@
 #include "../support/syshelp.hxx"
 
 
-class ModuleDescription;
-class ComponentDescription;
-class TextElement;
-class ReferenceDocuElement;
+class XmlElement;
+class SglTextElement;
+class MultipleTextElement;
 
 
 class HtmlCreator
@@ -80,49 +79,51 @@ class HtmlCreator
   public:
                         HtmlCreator(
                             const char *        i_pOutputFileName,
-                            const ModuleDescription &
-                                                i_rDescr,
+                            const XmlElement &  i_rDocument,
                             const Simstr &      i_sIDL_BaseDirectory );
                         ~HtmlCreator();
 
     void                Run();
 
+    void                StartTable();
+    void                FinishTable();
+    void                StartBigCell(
+                            const char *        i_sTitle );
+    void                FinishBigCell();
+
+    void                Write_SglTextElement(
+                            const SglTextElement &
+                                                i_rElement,
+                            bool                i_bStrong = false );
+    void                Write_MultiTextElement(
+                            const MultipleTextElement &
+                                                i_rElement );
+    void                Write_SglText(
+                            const Simstr &      i_sName,
+                            const Simstr &      i_sValue );
+    void                Write_ReferenceDocu(
+                            const Simstr &      i_sName,
+                            const Simstr &      i_sRef,
+                            const Simstr &      i_sRole,
+                            const Simstr &      i_sTitle );
   private:
     void                PrintH1(
                             char *              i_pText );
-    void                StartTable();
-    void                FinishTable();
     void                StartRow();
     void                FinishRow();
     void                StartCell(
                             char *              i_pWidth );
     void                FinishCell();
 
-
-    void                Write_Description(
-                            const ComponentDescription &
-                                                i_rDescr );
-    void                Write_TextElement(
-                            TextElement &       i_rElement,
-                            E_LinkType          i_eLinkType );
-    void                Write_ReferenceDocu(
-                            const ReferenceDocuElement &
-                                                i_rRefDocu );
-    void                Write_Status(
-                            const char *        i_sStatus );
     void                WriteElementName(
-                            TextElement &       i_rElement );
-    void                WriteElementData(
-                            TextElement &       i_rElement,
-                            E_LinkType          i_eLinkType );
-
+                            const Simstr &      i_sName,
+                            bool                i_bStrong );
     void                WriteStr(
                             const char *        i_sStr )
                                                 { aFile.write( i_sStr, strlen(i_sStr) ); }
     // DATA
     ofstream            aFile;
-    const ModuleDescription &
-                        rDescr;
+    const XmlElement &  rDocument;
     Simstr              sIdl_BaseDirectory;
 };
 

@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmltree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: np $Date:  $
  *
@@ -66,130 +66,112 @@
 
 // USED SERVICES
     // BASE CLASSES
+#include "xmlelem.hxx"
     // COMPONENTS
 #include "../support/sistr.hxx"
 #include "../support/list.hxx"
     // PARAMETERS
 
 
-class ComponentDescription;
-class ReferenceDocuElement;
+class CompDescrList;
 
-class TextElement
+class ModuleDescription : public SequenceElement
 {
   public:
-    virtual void        SetText(
-                            const char *        i_sText ) = 0;
-    virtual const char *
-                        Name() const = 0;
-    virtual const char *
-                        Data(
-                            unsigned            i_nNr = 0 ) const = 0;
-    virtual unsigned    Size() const = 0;
-};
+                        ModuleDescription();
 
-class ParentElement
-{
-  public:
-    typedef DynamicList<TextElement>            ChildList;
-    void                AddChild(
-                            TextElement &       let_drElement );
-
-    const ChildList &   Children() const        { return aChildren; }
-    ChildList &         Children()              { return aChildren; }
-
+    const Simstr &      ModuleName() const;
+    void                Get_SupportedServices(    /// @return also the children of component-description.
+                            List< const MultipleTextElement * > &
+                                                o_rServices ) const;
+    void                Get_Types(
+                            List< const MultipleTextElement * > &
+                                                o_rTypes ) const;
+    void                Get_ServiceDependencies(
+                            List< const MultipleTextElement * > &
+                                                o_rServices ) const;
   private:
-    ChildList           aChildren;
+    SglTextElement *    pModuleName;
+    CompDescrList *     pCdList;
+    MultipleTextElement *
+                        pTypes;
+    MultipleTextElement *
+                        pServiceDependencies;
 };
 
 
-
-class ModuleDescription : public ParentElement
+class ComponentDescription : public SequenceElement
 {
   public:
-    typedef DynamicList<ComponentDescription> CD_List;
+                        ComponentDescription();
 
-    void                AddComponentDescription(
-                            ComponentDescription &
-                                            let_drCD );
-
-    const char *        Name() const            { return Children()[0]->Data(); }
-    const CD_List &     Components() const      { return aCDs; }
-
+    const Simstr &      ComponentName() const   { return pComponentName->Data(); }
+    const MultipleTextElement &
+                        SupportedServices() const
+                                                { return *pSupportedServices; }
+    const MultipleTextElement &
+                        Types() const           { return *pTypes; }
+    const MultipleTextElement &
+                        ServiceDependencies() const
+                                                { return *pServiceDependencies; }
   private:
-    CD_List             aCDs;
+    SglTextElement *    pComponentName;
+    MultipleTextElement *
+                        pSupportedServices;
+    MultipleTextElement *
+                        pTypes;
+    MultipleTextElement *
+                        pServiceDependencies;
 };
 
-
-class ComponentDescription : public ParentElement
+class CompDescrList : public ListElement
 {
   public:
-    typedef DynamicList<ReferenceDocuElement> Docu_List;
+                        CompDescrList();
+    virtual void        Write2Html(
+                            HtmlCreator &       io_rHC ) const;
+    virtual XmlElement *
+                        Create_and_Add_NewElement();
 
-    void                SetStatus(
-                            const char *        i_sText );
-
-    const char *        Name() const            { return Children()[0]->Data(); }
-    const Docu_List &   DocuRefs() const        { return aDocuRefs; }
-    Docu_List &         DocuRefs()              { return aDocuRefs; }
-    const char *        Status() const          { return sStatus; }
-
+    void                Get_SupportedServices(
+                            List< const MultipleTextElement * > &
+                                                o_rResult ) const;
+    void                Get_Types(
+                            List< const MultipleTextElement * > &
+                                                o_rResult ) const;
+    void                Get_ServiceDependencies(
+                            List< const MultipleTextElement * > &
+                                                o_rResult ) const;
   private:
-    Simstr              sStatus;
-    Docu_List           aDocuRefs;
+    List< ComponentDescription * >
+                        aCDs;
 };
 
-
-class SglTextElement : public TextElement
+class MdName : public SglTextElement
 {
   public:
-                        SglTextElement(
-                            const char *        i_sName );
-    virtual void        SetText(
-                            const char *        i_sText );
-
-    virtual const char *
-                        Name() const;
-    virtual const char *
-                        Data(
-                            unsigned            i_nNr = 0 ) const;
-    virtual unsigned    Size() const;
-
-  private:
-    Simstr              sName;
-    Simstr              sContent;
+                        MdName();
+    virtual void        Write2Html(
+                            HtmlCreator &       io_rHC ) const;
 };
 
-
-class MultipleTextElement : public TextElement
+class CdName : public SglTextElement
 {
   public:
-                        MultipleTextElement(
-                            const char *        i_sName );
-    virtual void        SetText(
-                            const char *        i_sText );
-
-    virtual const char *
-                        Name() const;
-    virtual const char *
-                        Data(
-                            unsigned            i_nNr = 0 ) const;
-    virtual unsigned    Size() const;
-
-  private:
-    Simstr              sName;
-    List<Simstr>        aContent;
+                        CdName();
+    virtual void        Write2Html(
+                            HtmlCreator &       io_rHC ) const;
 };
 
-
-class ReferenceDocuElement
+class SupportedService : public MultipleTextElement
 {
   public:
+                        SupportedService();
 
-    Simstr              sAttr_href;
-    Simstr              sAttr_role;
-    Simstr              sAttr_title;
+    virtual void        Insert2Index(
+                            Index &             o_rIndex ) const;
 };
+
 
 // IMPLEMENTATION
 

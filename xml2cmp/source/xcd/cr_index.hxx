@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 #include "../support/sistr.hxx"
 #include "../support/heap.hxx"
 #include "../support/list.hxx"
+#include "../support/syshelp.hxx"
 
 
-const unsigned C_nNrOfTagNames = 8;
 class ModuleDescription;
 
 
@@ -87,40 +87,35 @@ class Index
     void                WriteOutput(
                             const char *        i_sOuputFile );
 
+    void                InsertSupportedService(
+                            const Simstr &      i_sService );
   private:
-    struct IndexedTags
-    {
-      public:
-                        IndexedTags(
-                            const List<Simstr> &
-                                                i_rTagList );
-                        ~IndexedTags();
-
-        Heap *          HeapFor(
-                            const char *        i_sTagName );
-
-        DynamicList< Heap >
-                        aTagHeaps;
-        List< Simstr >  aTagNames;
-        unsigned        nSize;
-
-      private:
-        Heap *          aHeapsPerIndex[C_nNrOfTagNames];
-    };
-
     void                ReadFile(
                             const char *        i_sFilename );
     void                CreateHtmlFileName(
                             char *              o_sOutputHtml,
                             const ModuleDescription &
                                                 i_rModule );
+    void                WriteTableFromHeap(
+                            std::ofstream &     o_rOut,
+                            Heap &              i_rHeap,
+                            const char *        i_sIndexKey,
+                            const char *        i_sIndexReference,
+                            E_LinkType          i_eLinkType );
+    void                WriteHeap(
+                            std::ofstream &     o_rOut,
+                            Heap &              i_rHeap,
+                            E_LinkType          i_eLinkType );
 
+    // DATA
     Heap                aService2Module;
     Heap                aModule2Service;
-    IndexedTags         aTagIndices;
 
     Simstr              sOutputDirectory;
     Simstr              sIdlRootPath;
+
+    // Temporary Data
+    Simstr              sCurModule;
 };
 
 

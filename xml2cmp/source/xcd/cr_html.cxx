@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,14 +87,14 @@ char C_sHtmlFileFoot[] = "</BODY>\n</HTML>\n";
 
 
 HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
-                          const ModuleDescription & i_rDescr,
+                          const XmlElement &        i_rDocument,
                           const Simstr &            i_sIDL_BaseDirectory )
     :   aFile(i_pOutputFileName, ios::out
 #ifdef WNT
                                                | ios::binary
 #endif
                                                              ),
-        rDescr(i_rDescr),
+        rDocument(i_rDocument),
         sIdl_BaseDirectory(i_sIDL_BaseDirectory)
 {
     if ( !aFile )
@@ -116,147 +116,16 @@ HtmlCreator::Run()
     WriteStr( "ModuleDescription" );
     WriteStr( C_sHtmlFileHeader2 );
 
-    StartTable();
-
-    const ParentElement::ChildList & rModuleElements = rDescr.Children();
-    unsigned i_max = rModuleElements.size();
-
-    for (unsigned i = 0; i < i_max; i++)
-    {
-        Write_TextElement( *rModuleElements[i], lt_nolink );        // Name,
-                                                                    // ProjectBuildDependency,
-                                                                    // RuntimeModuleDependency
-    }  // end for
-
-    WriteStr( "<TR><TD COLSPAN=2>\n"
-              "<H4><BR>Components</H4>\n" );
-
-    const ModuleDescription::CD_List & rCDs = rDescr.Components();
-    unsigned d_max = rCDs.size();
-    for (unsigned d = 0; d < d_max; d++)
-    {
-        WriteStr( "<P><BR><BR></P>\n" );
-
-        Write_Description( *rCDs[d] );
-    }  // end for
-
-    WriteStr( "</TD><TR>\n" );
-    FinishTable();
+    rDocument.Write2Html(*this);
 
     WriteStr( "<P><BR><BR></P>\n" );
     WriteStr( C_sHtmlFileFoot );
 }
 
-
-void
-HtmlCreator::Write_Description( const ComponentDescription & i_rDescr )
-{
-    StartTable();
-
-    const ParentElement::ChildList & rDescrElements = i_rDescr.Children();
-
-    unsigned i_max = rDescrElements.size();
-    Write_TextElement( *rDescrElements[0], lt_nolink );           // Name
-    Write_TextElement( *rDescrElements[1], lt_nolink );           // Author
-    Write_TextElement( *rDescrElements[2], lt_nolink );           // Description
-    Write_TextElement( *rDescrElements[3], lt_idl );              // Loader Name
-    Write_TextElement( *rDescrElements[4], lt_nolink );           // Language
-
-    Write_Status(i_rDescr.Status());                              // Status
-
-    for (unsigned i = 5; i < i_max; i++)
-    {
-        Write_TextElement( *rDescrElements[i], lt_idl );          // Supported Service,
-                                                                  // Service Dependency,
-                                                                  // Type
-
-    }  // end for
-
-    const ComponentDescription::Docu_List & rDocuRefs = i_rDescr.DocuRefs();
-    unsigned r_max = rDocuRefs.size();
-    for (unsigned r = 0; r < r_max; r++)
-    {
-        Write_ReferenceDocu(*rDocuRefs[r]);
-    }  // end for
-
-    FinishTable();
-}
-
-void
-HtmlCreator::Write_TextElement( TextElement & i_rElement,
-                                E_LinkType    i_eLinkType )
-{
-    StartRow();
-
-    WriteElementName( i_rElement );
-    WriteElementData( i_rElement, i_eLinkType );
-
-    FinishRow();
-}
-
-void
-HtmlCreator::Write_ReferenceDocu( const ReferenceDocuElement & i_rRefDocu )
-{
-    StartRow();
-
-    StartCell( "23%" );
-    WriteStr("ReferenceDocu");
-    FinishCell();
-
-    StartCell( "77%" );
-    if ( i_rRefDocu.sAttr_href.l() > 0)
-    {
-        WriteStr("<A href=\"http://");
-        WriteStr(i_rRefDocu.sAttr_href.str());
-        WriteStr("\">");
-        WriteStr(i_rRefDocu.sAttr_href.str());
-        WriteStr("</A><BR>\n");
-    }
-    if ( i_rRefDocu.sAttr_title.l() > 0)
-    {
-        WriteStr("Title: ");
-        WriteStr(i_rRefDocu.sAttr_title.str());
-        WriteStr("<BR>\n");
-    }
-    if ( i_rRefDocu.sAttr_role.l() > 0)
-    {
-        WriteStr("Role: ");
-        WriteStr(i_rRefDocu.sAttr_role.str());
-    }
-    FinishCell();
-
-    FinishRow();
-}
-
-void
-HtmlCreator::Write_Status(const char * i_sStatus)
-{
-    StartRow();
-
-    StartCell( "23%" );
-    WriteStr("status");
-    FinishCell();
-
-    StartCell( "77%");
-    WriteName( aFile, sIdl_BaseDirectory, i_sStatus, lt_nolink );
-    FinishCell();
-
-    FinishRow();
-}
-
-void
-HtmlCreator::PrintH1( char * i_pText)
-{
-    static char sH1a[] = "<H1 ALIGN=CENTER>";
-    static char sH1e[] = "</H1>";
-    WriteStr(sH1a);
-    WriteStr(i_pText);
-    WriteStr(sH1e);
-}
-
 void
 HtmlCreator::StartTable()
 {
+    WriteStr( "<P><BR></P>\n" );
     WriteStr(
             "<TABLE WIDTH=95% BORDER=1 CELLSPACING=0 CELLPADDING=4>\n"
             "   <TBODY>\n"  );
@@ -267,6 +136,140 @@ HtmlCreator::FinishTable()
 {
     WriteStr( " </TBODY>\n"
               "</TABLE>\n\n" );
+}
+
+void
+HtmlCreator::StartBigCell( const char * i_sTitle )
+{
+    WriteStr( "<TR><TD COLSPAN=2>\n"
+              "<H4><BR>" );
+    WriteStr( i_sTitle );
+    WriteStr( "</H4>\n" );
+
+}
+
+void
+HtmlCreator::FinishBigCell()
+{
+    WriteStr( "</TD><TR>\n" );
+}
+
+void
+HtmlCreator::Write_SglTextElement( const SglTextElement &  i_rElement,
+                                   bool                    i_bStrong )
+{
+    StartRow();
+
+    WriteElementName( i_rElement.Name(), i_bStrong );
+
+    StartCell( "77%");
+    if (i_bStrong)
+    {
+        WriteStr( "<H4><A NAME=\"" );
+        unsigned nLen = strlen(i_rElement.Data());
+        if ( i_rElement.IsReversedName())
+        {
+            const char * pEnd = strchr(i_rElement.Data(), ' ');
+            nLen = pEnd - i_rElement.Data();
+        }
+        aFile.write( i_rElement.Data(), nLen );
+        WriteStr( "\">" );
+    }
+
+    WriteName( aFile, sIdl_BaseDirectory, i_rElement.Data(),
+               i_bStrong ? lt_nolink : i_rElement.LinkType() );
+
+    if (i_bStrong)
+        WriteStr( "</A></H4>" );
+    FinishCell();
+
+    FinishRow();
+}
+
+void
+HtmlCreator::Write_MultiTextElement( const MultipleTextElement &    i_rElement )
+{
+    StartRow();
+
+    WriteElementName( i_rElement.Name(), false );
+
+    StartCell( "77%");
+    unsigned i_max = i_rElement.Size();
+    for ( unsigned i = 0; i < i_max; ++i )
+    {
+        if (i > 0)
+            WriteStr( "<BR>\n" );
+        WriteName( aFile, sIdl_BaseDirectory, i_rElement.Data(i), i_rElement.LinkType() );
+    }   // end for
+    FinishCell();
+
+    FinishRow();
+}
+
+void
+HtmlCreator::Write_SglText( const Simstr &      i_sName,
+                            const Simstr &      i_sValue )
+{
+    StartRow();
+
+    WriteElementName( i_sName, false );
+
+    StartCell( "77%");
+    WriteStr( i_sValue );
+    FinishCell();
+
+    FinishRow();
+}
+
+void
+HtmlCreator::Write_ReferenceDocu( const Simstr &      i_sName,
+                                  const Simstr &      i_sRef,
+                                  const Simstr &      i_sRole,
+                                  const Simstr &      i_sTitle )
+{
+    StartRow();
+
+    StartCell( "23%" );
+    WriteStr(i_sName);
+    FinishCell();
+
+    StartCell( "77%" );
+    if ( !i_sRef.is_empty() )
+    {
+        WriteStr("<A href=\"");
+        WriteStr(i_sRef);
+        WriteStr("\">");
+        if ( !i_sTitle.is_empty() )
+            WriteStr( i_sTitle );
+        else
+            WriteStr(i_sRef);
+        WriteStr("</A><BR>\n");
+    }
+    else if ( !i_sTitle.is_empty() )
+    {
+        WriteStr("Title: ");
+        WriteStr( i_sTitle );
+        WriteStr("<BR>\n");
+    }
+    if ( !i_sRole.is_empty() )
+    {
+        WriteStr("Role: ");
+        WriteStr( i_sRole );
+    }
+    FinishCell();
+
+    FinishRow();
+}
+
+
+void
+HtmlCreator::PrintH1( char * i_pText)
+{
+    static char sH1a[] = "<H1 ALIGN=CENTER>";
+    static char sH1e[] = "</H1>";
+    WriteStr(sH1a);
+    WriteStr(i_pText);
+    WriteStr(sH1e);
 }
 
 void
@@ -296,60 +299,15 @@ HtmlCreator::FinishCell()
 }
 
 void
-HtmlCreator::WriteElementName( TextElement & i_rElement )
+HtmlCreator::WriteElementName( const Simstr & i_sName,
+                               bool           i_bStrong )
 {
     StartCell( "23%" );
-    const char * pName = i_rElement.Name();
-    bool bStrong = strcmp(pName,"name") == 0 || strcmp(pName,"module-name") == 0;
-
-    if (bStrong)
+    if (i_bStrong)
         WriteStr( "<H4>" );
-    WriteStr(pName);
-    if (bStrong)
+    WriteStr(i_sName);
+    if (i_bStrong)
         WriteStr( "</H4>" );
-    FinishCell();
-}
-
-void
-HtmlCreator::WriteElementData( TextElement & i_rElement,
-                               E_LinkType    i_eLinkType )
-{
-    StartCell( "77%");
-
-    bool bStrong = strcmp(i_rElement.Name(),"name") == 0 || strcmp(i_rElement.Name(),"module-name") == 0;
-
-    if (bStrong)
-    {
-        WriteStr( "<H4><A NAME=\"" );
-        int nLen = strlen(i_rElement.Data());
-        if ( *i_rElement.Name() == 'n')
-        {
-            const char * pEnd = strchr(i_rElement.Data(), ' ');
-            if (pEnd)
-            {
-                nLen = pEnd - i_rElement.Data();
-            }
-        }
-        aFile.write( i_rElement.Data(), nLen );
-        WriteStr( "\">" );
-    }
-
-    WriteName( aFile, sIdl_BaseDirectory, i_rElement.Data(), i_eLinkType );
-
-    if (bStrong)
-        WriteStr( "</A></H4>" );
-
-
-    unsigned i_max = i_rElement.Size();
-    if ( i_max > 1 )
-    {
-        for ( unsigned i = 1; i < i_max; ++i )
-        {
-            WriteStr( "<BR>\n" );
-            WriteName( aFile, sIdl_BaseDirectory, i_rElement.Data(i), i_eLinkType );
-        }   // end for
-    }   // end if
-
     FinishCell();
 }
 

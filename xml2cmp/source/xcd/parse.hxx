@@ -2,7 +2,7 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: np $Date:  $
  *
@@ -69,46 +69,64 @@
     // COMPONENTS
 #include "filebuff.hxx"
 #include "../support/sistr.hxx"
+#include "../support/list.hxx"
     // PARAMETERS
 
 
-class ModuleDescription;
-class ParentElement;
-class ComponentDescription;
-class ReferenceDocuElement;
+class XmlElement;
+class ListElement;
 
 class X2CParser
 {
   public:
+    typedef XmlElement * (*F_CREATE)(const Simstr &);
+
                         X2CParser(
-                            ModuleDescription & o_rData );
+                            XmlElement &        o_rDocumentData );
                         ~X2CParser();
 
-      bool              Parse(
+    bool                LoadFile(
                             const char *        i_sFilename );
+    void                Parse();
+    bool                Parse(
+                            const char *        i_sFilename );
+
+
     const char *        PureText() const        { return aFile.operator const char*(); }
+
+    void                Parse_Sequence(
+                           DynamicList<XmlElement> &
+                                                o_rElements,
+                           const Simstr &       i_sElementName );
+    void                Parse_FreeChoice(
+                            DynamicList<XmlElement> &
+                                                o_rElements );
+    void                Parse_List(
+                            ListElement &       o_rListElem );
+    void                Parse_Text(
+                            Simstr &            o_sText,
+                            const Simstr &      i_sElementName,
+                            bool                i_bReverseName );
+    void                Parse_MultipleText(
+                            List<Simstr> &      o_rTexts,
+                            const Simstr &      i_sElementName,
+                            bool                i_bReverseName );
+    void                Parse_SglAttr(
+                            Simstr &            o_sAttrValue,
+                            const Simstr &      i_sElementName,
+                            const Simstr &      i_sAttrName );
+    void                Parse_MultipleAttr(
+                            List<Simstr> &      o_rAttrValues,
+                            const Simstr &      i_sElementName,
+                            const List<Simstr> &
+                                                i_rAttrNames );
 
   private:
     void                Parse_XmlDeclaration();
     void                Parse_Doctype();
-    void                Parse_ModuleDescription();
-    void                Parse_ComponentDescription(
-                            ModuleDescription & o_rParent );
-    void                Parse_ReferenceDocu(
-                            ReferenceDocuElement &
-                                                o_rElement );
-    void                Parse_TextElement(
-                            const char *        i_sElementName,
-                            ParentElement &     o_rParent,
-                            bool                i_bSingle,
-                            bool                i_bReverseName );
-    void                Parse_Status(
-                            ComponentDescription &
-                                                o_rParent );
-    void                Get_ReferenceDocuAttribute(
-                            ReferenceDocuElement &
-                                                o_rElement );
-    Simstr              Get_Attribute(
+
+    void                Get_Attribute(
+                            Simstr &            o_rAttrValue,
                             Simstr &            o_rAttrName );
     bool                IsText(
                             const char *        i_sComparedText );
@@ -127,10 +145,22 @@ class X2CParser
                             Simstr &            o_rText,
                             char                i_cEnd,
                             bool                i_bReverseName = false );
+    void                CheckAndPassBeginTag(
+                            const char *        i_sElementName );
+    void                CheckAndPassEndTag(
+                            const char *        i_sElementName );
+
+
+    void                SyntaxError(
+                            const char *        i_sText );
+    void                TestCurChar();
 
     // DATA
+    Simstr              sFileName;
+    unsigned            nFileLine;
+
     Buffer              aFile;
-    ModuleDescription * pData;
+    XmlElement *        pDocumentData;
 
     char                sWord[8192];
     const char *        text;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <fstream>
 
 class Simstr;
-
+template <class XY> class List;
 
 
 #ifdef WNT
@@ -105,6 +105,14 @@ void                WriteStr(
 void                WriteStr(
                         std::ofstream &     o_rFile,
                         const Simstr &      i_sStr );
+
+void                GatherFileNames(
+                        List<Simstr> &      o_sFiles,
+                        const char *        i_sSrcDirectory );
+void                GatherSubDirectories(
+                        List<Simstr> &      o_sSubDirectories,
+                        const char *        i_sParentdDirectory );
+
 
 
 #endif

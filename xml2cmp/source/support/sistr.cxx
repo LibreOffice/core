@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sistr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:51 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ Simstr::is_no_text() const
       return true;
 
    int i;
-   for (i = 0; ( sz[i] == ' ' || sz[i] == '\t' ) && i < len; i++);
+   for (i = 0; sz[i] <= 32 && i < len; i++);
    if (i < len)
         return false;
     return true;

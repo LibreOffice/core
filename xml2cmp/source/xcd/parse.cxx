@@ -2,7 +2,7 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: np $Date:  $
  *
@@ -64,45 +64,31 @@
 
 #include <string.h>
 #include <iostream>
-#include <xmltree.hxx>
+#include <xmlelem.hxx>
 
 #ifdef UNX
 #define strnicmp strncasecmp
 #endif
 
 
-using std::cerr;
+using namespace std;
 
 
 // NOT FULLY DEFINED SERVICES
-
-char  C_sMODULEDESCRIPTION[] = "module-description";
-char  C_sCOMPONENTDESCRIPTION[] = "component-description";
-char  C_sAuthor[] = "author";
-char  C_sName[] = "name";
-char  C_sDescription[] = "description";
-char  C_sReferenceDocu[] = "reference-docu";
-char  C_sModuleName[] = "module-name";
-char  C_sLoaderName[] = "loader-name";
-char  C_sSupportedService[] = "supported-service";
-char  C_sServiceDependency[] = "service-dependency";
-char  C_sProjectBuildDependency[] = "project-build-dependency";
-char  C_sRuntimeModuleDependency[] = "runtime-module-dependency";
-char  C_sLanguage[] = "language";
-char  C_sStatus[] = "status";
-char  C_sType[] = "type";
 
 
 
 #define AssertionOf(x)  \
     {if (!(x)) {cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
-#define SyntaxAssertion(x,file) \
-    {if (!(x)) {cerr << "Syntax error in file: " << #file << std::endl; exit(3); }}
 
 
 
-X2CParser::X2CParser( ModuleDescription & o_rData )
-    :   pData(&o_rData)
+X2CParser::X2CParser( XmlElement & o_rDocumentData )
+    :   // sFileName,
+        nFileLine(0),
+        pDocumentData(&o_rDocumentData),
+        // sWord,
+        text(0)
 {
 }
 
@@ -110,9 +96,13 @@ X2CParser::~X2CParser()
 {
 }
 
+
 bool
-X2CParser::Parse( const char * i_sFilename )
+X2CParser::LoadFile( const char * i_sFilename )
 {
+    sFileName = i_sFilename;
+    nFileLine = 1;
+
     // Load file:
     if ( ! LoadXmlFile( aFile, i_sFilename ) )
         return false;
@@ -121,20 +111,33 @@ X2CParser::Parse( const char * i_sFilename )
     const char * pLastTag = strrchr(aFile.operator const char *(),'<');
     if (pLastTag == 0)
         return false;
-    if ( strnicmp(pLastTag+2, C_sMODULEDESCRIPTION, strlen(C_sMODULEDESCRIPTION)) != 0
+    if ( strnicmp(pLastTag+2, pDocumentData->Name().str(), pDocumentData->Name().l()) != 0
          || strnicmp(pLastTag, "</", 2) != 0 )
         return false;
     if (strchr(pLastTag,'>') == 0)
         return false;
+    return true;
+}
 
+void
+X2CParser::Parse()
+{
     // Parse:
     text = aFile.operator const char *();
 
     Parse_XmlDeclaration();
     Parse_Doctype();
-    Parse_ModuleDescription();
 
-    return true;
+    pDocumentData->Parse(*this);
+}
+
+bool
+X2CParser::Parse( const char * i_sFilename )
+{
+    bool ret = LoadFile(i_sFilename);
+    if (ret)
+        Parse();
+    return ret;
 }
 
 void
@@ -156,176 +159,149 @@ X2CParser::Parse_Doctype()
 }
 
 void
-X2CParser::Parse_ModuleDescription()
+X2CParser::Parse_Sequence( DynamicList<XmlElement> & o_rElements,
+                           const Simstr &            i_sElementName  )
 {
-    Goto('<');
-    AssertionOf( IsBeginTag(C_sMODULEDESCRIPTION) );
-    Goto_And_Pass('>');
+    CheckAndPassBeginTag(i_sElementName.str());
 
-    Parse_TextElement(C_sModuleName,*pData, true, false);
-
-    for ( Goto('<');
-          IsBeginTag(C_sCOMPONENTDESCRIPTION);
-          Goto('<') )
+    unsigned int i_max = o_rElements.size();
+    for (unsigned i = 0; i < i_max; ++i)
     {
-        Parse_ComponentDescription(*pData);
-    }
+        o_rElements[i]->Parse(*this);
+    }  // end for
 
-    for ( ; ! IsEndTag(C_sMODULEDESCRIPTION); Goto('<') )
-    {
-        if ( IsBeginTag(C_sProjectBuildDependency) )
-            Parse_TextElement(C_sProjectBuildDependency,*pData,false,false);
-        else if ( IsBeginTag(C_sRuntimeModuleDependency) )
-            Parse_TextElement(C_sRuntimeModuleDependency,*pData,false,false);
-    }
-    Goto_And_Pass('>');
+    CheckAndPassEndTag(i_sElementName.str());
 }
 
 void
-X2CParser::Parse_ComponentDescription(ModuleDescription & o_rParent)
+X2CParser::Parse_FreeChoice( DynamicList<XmlElement> & o_rElements )
 {
-    Goto('<');
-    AssertionOf( IsBeginTag(C_sCOMPONENTDESCRIPTION) );
-    Goto_And_Pass('>');
+    unsigned        nSize = o_rElements.size();
 
-    ComponentDescription * dpCD = new ComponentDescription;
-    o_rParent.AddComponentDescription(*dpCD);
-
-    Parse_TextElement(C_sAuthor,*dpCD,true,false);
-    Parse_TextElement(C_sName,*dpCD,true,true);
-    Parse_TextElement(C_sDescription,*dpCD,true,false);
-    Parse_TextElement(C_sLoaderName,*dpCD,true,true);
-    Parse_TextElement(C_sLanguage,*dpCD,true,false);
-    Parse_Status(*dpCD);
-    for ( Goto('<');
-          IsBeginTag(C_sSupportedService);
-          Goto('<') )
+    for ( bool bBreak = false;  !bBreak; )
     {
-        Parse_TextElement(C_sSupportedService,*dpCD,false,true);
-    }
-
-    for ( Goto('<');
-          ! IsEndTag(C_sCOMPONENTDESCRIPTION);
-          Goto('<') )
-    {
-        if ( IsBeginTag(C_sReferenceDocu) )
+        bBreak = true;
+        for ( unsigned i = 0; i < nSize; ++i )
         {
-            ReferenceDocuElement * pNewElem = new ReferenceDocuElement;
-            Parse_ReferenceDocu(*pNewElem);
-            dpCD->DocuRefs().push_back(pNewElem);
-        }
-        else if ( IsBeginTag(C_sServiceDependency) )
-            Parse_TextElement(C_sServiceDependency,*dpCD,false,true);
-        else if ( IsBeginTag(C_sType) )
-            Parse_TextElement(C_sType,*dpCD,false,true);
-    }
-    Goto_And_Pass('>');
-
-    // Take Name to front:
-    ParentElement::ChildList & rDescrElements = dpCD->Children();
-    TextElement * pTE = rDescrElements[0];
-    rDescrElements[0] = rDescrElements[1];
-    rDescrElements[1] = pTE;
+            Goto('<');
+            if ( IsBeginTag(o_rElements[i]->Name().str()) )
+            {
+                o_rElements[i]->Parse(*this);
+                bBreak = false;
+                break;
+            }
+        }   // end for i
+    }   // end for !bBreak
 }
 
 void
-X2CParser::Parse_ReferenceDocu(ReferenceDocuElement & o_rElement)
+X2CParser::Parse_List( ListElement &  o_rListElem )
 {
-    Move( strlen(C_sReferenceDocu) + 1 );
+
+    for ( Goto('<'); IsBeginTag(o_rListElem.Name().str()); Goto('<') )
+    {
+        XmlElement * pNew = o_rListElem.Create_and_Add_NewElement();
+        pNew->Parse(*this);
+    }
+}
+
+void
+X2CParser::Parse_Text( Simstr &         o_sText,
+                       const Simstr &   i_sElementName,
+                       bool             i_bReverseName )
+{
+    CheckAndPassBeginTag(i_sElementName.str());
+
+    // Add new Element
+    GetTextTill( o_sText, '<', i_bReverseName );
+    o_sText.remove_trailing_blanks();
+
+    CheckAndPassEndTag(i_sElementName.str());
+}
+
+void
+X2CParser::Parse_MultipleText( List<Simstr> &   o_rTexts,
+                               const Simstr &   i_sElementName,
+                               bool             i_bReverseName )
+{
+    for ( Goto('<'); IsBeginTag(i_sElementName.str()); Goto('<') )
+    {
+        o_rTexts.push_back(Simstr());
+        Parse_Text(o_rTexts.back(), i_sElementName, i_bReverseName);
+    }
+}
+
+void
+X2CParser::Parse_SglAttr( Simstr &          o_sAttrValue,
+                          const Simstr &    i_sElementName,
+                          const Simstr &    i_sAttrName )
+{
+    Goto('<');
+    if ( !IsBeginTag(i_sElementName.str()) )
+        SyntaxError("unexpected element");
+    Move( i_sElementName.l() + 1 );
+
+    Pass_White();
+    if (*text == '>')
+        SyntaxError("no attribute found, where one was expected");
+    Simstr sAttrName;
+    Get_Attribute(o_sAttrValue, sAttrName);
+    if (sAttrName != i_sAttrName)
+        SyntaxError("unknown attribute found");
+    Pass_White();
+    if (strncmp(text,"/>",2) != 0)
+        SyntaxError("missing \"/>\" at end of empty element");
+    Move(2);
+}
+
+void
+X2CParser::Parse_MultipleAttr( List<Simstr> &       o_rAttrValues,
+                               const Simstr &       i_sElementName,
+                               const List<Simstr> & i_rAttrNames )
+{
+    Goto('<');
+    if ( !IsBeginTag(i_sElementName.str()) )
+        SyntaxError("unexpected element");
+    Move( i_sElementName.l() + 1 );
+    Simstr sAttrName;
+    Simstr sAttrValue;
+    unsigned nSize = i_rAttrNames.size();
 
     for ( Pass_White(); *text != '/'; Pass_White() )
     {
-        Get_ReferenceDocuAttribute(o_rElement);
-    }
-    Move(1);
-}
 
-void
-X2CParser::Parse_TextElement( const char *    i_sElementName,
-                              ParentElement & o_rParent,
-                              bool            i_bSingle,
-                              bool            i_bReverseName )
-{
-    Goto('<');
-    text++;
-    AssertionOf( IsText(i_sElementName) );
-    Goto_And_Pass('>');
-    Pass_White();
+        Get_Attribute(sAttrValue, sAttrName);
 
-    TextElement * pNew = 0;
-
-    if ( !i_bSingle && o_rParent.Children().size() > 0 )
-    {
-        if ( strcmp( o_rParent.Children().back()->Name(),
-                     i_sElementName ) == 0 )
+        for ( unsigned i = 0; i < nSize; ++i )
         {
-            pNew = o_rParent.Children().back();
+            if ( i_rAttrNames[i] == sAttrName )
+            {
+                o_rAttrValues[i] = sAttrValue;
+                break;
+            }
         }
+        if (i == nSize)
+            SyntaxError("unknown attribute found");
     }
-    if (pNew == 0)
-    {
-        pNew = i_bSingle
-                    ?   (TextElement*) new SglTextElement(i_sElementName)
-                    :   (TextElement*) new MultipleTextElement(i_sElementName);
-        o_rParent.AddChild(*pNew);
-    }
-
-    // Add new Element
-    Simstr sText;
-    GetTextTill( sText, '<', i_bReverseName );
-    sText.remove_trailing_blanks();
-    pNew->SetText(sText);
-
-    AssertionOf( IsText("</") );
-    Move(2);
-    AssertionOf( IsText(i_sElementName) );
-    Goto_And_Pass('>');
-}
-
-void
-X2CParser::Parse_Status( ComponentDescription & o_rParent )
-{
-    Goto('<');
-    AssertionOf( IsBeginTag(C_sStatus) );
-    Move( strlen(C_sStatus) + 1 );
-
-    Pass_White();
-    AssertionOf(*text != '>');
-    Simstr sAttrName;
-    Simstr sAttrValue = Get_Attribute(sAttrName);
-    o_rParent.SetStatus(sAttrValue);
-
     Move(2);
 }
 
-void
-X2CParser::Get_ReferenceDocuAttribute( ReferenceDocuElement & o_rElement )
-{
-    Simstr sAttrName;
-    Simstr sAttrValue = Get_Attribute(sAttrName);
-    if ( strcmp( sAttrName.str(), "xlink:href") == 0 )
-        o_rElement.sAttr_href = sAttrValue;
-    else if ( strcmp( sAttrName.str(), "xlink:role") == 0 )
-        o_rElement.sAttr_role = sAttrValue;
-    else if ( strcmp( sAttrName.str(), "xlink:title") == 0 )
-        o_rElement.sAttr_title = sAttrValue;
-}
 
-Simstr
-X2CParser::Get_Attribute( Simstr & o_rAttrName )
+void
+X2CParser::Get_Attribute( Simstr & o_rAttrValue,
+                          Simstr & o_rAttrName )
 {
     GetTextTill( o_rAttrName, '=');
 
     while (*(++text) != '"')
     {
-        AssertionOf(*text != '\0');
+        if (*text == '\0')
+            SyntaxError("unexpected end of file");
     }
 
     ++text;
-    Simstr ret;
-    GetTextTill( ret, '"');
+    GetTextTill( o_rAttrValue, '"');
     ++text;
-    return ret;
 }
 
 bool
@@ -353,8 +329,8 @@ X2CParser::Goto( char i_cNext )
 {
     while (*text != i_cNext)
     {
+        TestCurChar();
         ++text;
-        AssertionOf(*text != '\0');
     }
 }
 
@@ -376,8 +352,8 @@ X2CParser::Pass_White()
 {
     while (*text <= 32)
     {
+        TestCurChar();
         ++text;
-        AssertionOf(*text != '\0');
     }
 }
 
@@ -392,7 +368,7 @@ X2CParser::GetTextTill( Simstr & o_rText,
           *text != i_cEnd;
           ++text )
     {
-        AssertionOf(*text !='\0');
+        TestCurChar();
         *pSet++ = *text;
     }
 
@@ -424,6 +400,52 @@ X2CParser::GetTextTill( Simstr & o_rText,
     }
 
     o_rText = &sWord[0];
+}
+
+void
+X2CParser::CheckAndPassBeginTag( const char * i_sElementName )
+{
+    Goto('<');
+    if ( ! IsBeginTag(i_sElementName) )
+        SyntaxError( "unexpected element");
+    Goto_And_Pass('>');
+    Pass_White();
+
+}
+
+void
+X2CParser::CheckAndPassEndTag( const char * i_sElementName )
+{
+    Pass_White();
+    if ( !IsEndTag(i_sElementName) )
+        SyntaxError("missing or not matching end tag");
+    Goto_And_Pass('>');
+}
+
+void
+X2CParser::SyntaxError( const char * i_sText )
+{
+    cerr << "Syntax error "
+         << i_sText
+         << " in file: "
+         << sFileName.str()
+         << " in line "
+         << nFileLine
+         << "."
+         << endl;
+
+     exit(3);
+}
+
+void
+X2CParser::TestCurChar()
+{
+//  if (*text == '\0')
+//      SyntaxError("unexpected end of file");
+//  else
+
+    if (*text == '\n')
+        nFileLine++;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_metho.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

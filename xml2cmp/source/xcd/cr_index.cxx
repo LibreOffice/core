@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 using std::cerr;
 using std::ofstream;
 
+extern unsigned C_nSupportedServicesIndex;
 
 char C_sLineEnd[] = "\n";
 
@@ -84,21 +85,8 @@ char C_sModule[]        = "ModuleName";
 char C_sComponentname[] = "ComponentName";
 
 
-int NrOfTagName(const char * i_sName);
-
 
 Simstr sIdlRootPath;
-
-void                WriteTableFromHeap(
-                        ofstream &          o_rOut,
-                        Heap &              i_rHeap,
-                        const char *        i_sIndexKey,
-                        const char *        i_sIndexReference,
-                        E_LinkType          i_eLinkType );
-void                WriteHeap(
-                        ofstream &          o_rOut,
-                        Heap &              i_rHeap,
-                        E_LinkType          i_eLinkType );
 
 
 Index::Index( const char *          i_sOutputDirectory,
@@ -106,59 +94,15 @@ Index::Index( const char *          i_sOutputDirectory,
               const List<Simstr> &  i_rTagList )
     :   aService2Module(20),
         aModule2Service(20),
-        aTagIndices(i_rTagList),
         sOutputDirectory(i_sOutputDirectory),
         sIdlRootPath(i_sIdlRootPath)
+        // sCurModule
 {
     ::sIdlRootPath = i_sIdlRootPath;
 }
 
-Index::IndexedTags::IndexedTags( const List<Simstr> & i_rTagList )
-    :   nSize(i_rTagList.size())
-{
-    aTagHeaps.reserve(nSize);
-    aTagNames.reserve(nSize);
-
-    for (int h = 0; h < C_nNrOfTagNames; ++h )
-    {
-        aHeapsPerIndex[h] = 0;
-    }
-
-    for ( unsigned i = 0; i < nSize; ++i )
-    {
-        int nNr = NrOfTagName(i_rTagList[i]);
-        if ( nNr > -1 )
-        {
-            Heap * pNew = new Heap(20);
-            aTagHeaps.push_back( pNew );
-            aTagNames.push_back( i_rTagList[i] );
-            aHeapsPerIndex[nNr] = pNew;
-        }
-        else
-        {
-            cerr << "Warning: It is not possible to create an index for the tag "
-                 << i_rTagList[i]
-                 << "."
-                 << std::endl;
-        }
-    }   // end for
-}
-
 Index::~Index()
 {
-}
-
-Index::IndexedTags::~IndexedTags()
-{
-}
-
-Heap *
-Index::IndexedTags::HeapFor( const char * i_sTagName )
-{
-    int nNr = NrOfTagName(i_sTagName);
-    if (nNr > -1 )
-        return aHeapsPerIndex[nNr];
-    return 0;
 }
 
 void
@@ -192,14 +136,15 @@ Index::WriteOutput( const char * i_sOuputFile )
     WriteTableFromHeap( aOut, aService2Module, C_sService, C_sModule, lt_html );
     WriteTableFromHeap( aOut, aModule2Service, C_sModule, C_sService, lt_idl );
 
-    for ( unsigned i = 0; i < aTagIndices.nSize; ++i )
-    {
-        WriteTableFromHeap( aOut, *aTagIndices.aTagHeaps[i],
-                            aTagIndices.aTagNames[i], C_sComponentname, lt_html );
-    }
-
     WriteStr( aOut, C_sFileEnd );
     aOut.close();
+}
+
+void
+Index::InsertSupportedService( const Simstr &       i_sService )
+{
+    aService2Module.InsertValue( i_sService, sCurModule );
+    aModule2Service.InsertValue( sCurModule, i_sService );
 }
 
 void
@@ -210,7 +155,9 @@ Index::ReadFile(  const char * i_sFilename )
     ModuleDescription   aModule;
     X2CParser           aParser(aModule);
 
-    if ( ! aParser.Parse(i_sFilename) )
+    // Parse
+    bool bResult = aParser.Parse(i_sFilename);
+    if (! bResult)
     {
         cerr << "Error: File \""
              << i_sFilename
@@ -225,67 +172,15 @@ Index::ReadFile(  const char * i_sFilename )
     aHtmlCreator.Run();
 
     // GetResults:
-    Simstr sModuleName = aModule.Name();
+    sCurModule = aModule.ModuleName();
 
-        // Module Tags
-    const ModuleDescription::ChildList &
-            rModuleElements = aModule.Children();
-    for ( unsigned mi = 1; mi < rModuleElements.size(); ++mi )
+    List< const MultipleTextElement* > aSupportedServices;
+    aModule.Get_SupportedServices(aSupportedServices);
+
+    for ( unsigned s = 0; s < aSupportedServices.size(); ++s )
     {
-        Heap * pHeap = aTagIndices.HeapFor(rModuleElements[mi]->Name());
-        if (pHeap != 0)
-        {
-            unsigned nDatSize = rModuleElements[mi]->Size();
-            for ( unsigned d = 0; d < nDatSize; ++d )
-            {
-                pHeap->InsertValue( rModuleElements[mi]->Data(d), sModuleName.str() );
-            }
-        }
-    }   // end for
-
-        // Component Tags
-    const ModuleDescription::CD_List &
-                    rCDs = aModule.Components();
-    static char     sCD_inModule[1020];
-    strcpy( sCD_inModule, sModuleName.str() );
-    strcat( sCD_inModule, "," );
-    char * pCut = strchr(sCD_inModule,',') + 1;
-
-    for ( unsigned cd = 0; cd < rCDs.size(); ++cd )
-    {
-        const ComponentDescription::ChildList &
-                rCD_Elements = rCDs[cd]->Children();
-        strcpy( pCut, rCDs[cd]->Name() );
-        for ( unsigned ci = 1; ci < rCD_Elements.size(); ++ci )
-        {
-            if ( ci == 5 )
-            {
-                TextElement * pElem = rCD_Elements[ci];
-                unsigned nDatSize = pElem->Size();
-                for ( unsigned d = 0; d < nDatSize; ++d )
-                {
-                    aService2Module.InsertValue(
-                            pElem->Data(d),
-                            sModuleName );
-                    aModule2Service.InsertValue(
-                            sModuleName,
-                            pElem->Data(d) );
-                }
-            }
-            else
-            {
-                Heap * pHeap = aTagIndices.HeapFor(rCD_Elements[ci]->Name());
-                if (pHeap != 0)
-                {
-                    unsigned nDatSize = rCD_Elements[ci]->Size();
-                    for ( unsigned d = 0; d < nDatSize; ++d )
-                    {
-                        pHeap->InsertValue( rCD_Elements[ci]->Data(d), sCD_inModule );
-                    }
-                }
-            }   // end if (ci == 6) else
-        }   // end for
-    }   // for
+        aSupportedServices[s]->Insert2Index(*this);
+    }
 }
 
 void
@@ -300,17 +195,17 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
 #else
 #error  WNT or UNX have to be defined.
 #endif
-    strcat( o_sOutputHtml, i_rModule.Name() );
+    strcat( o_sOutputHtml, i_rModule.ModuleName() );
     strcat( o_sOutputHtml, ".html" );
 }
 
 
 void
-WriteTableFromHeap( ofstream &      o_rOut,
-                    Heap &          i_rHeap,
-                    const char *    i_sIndexValue,
-                    const char *    i_sIndexReference,
-                    E_LinkType      i_eLinkType )
+Index::WriteTableFromHeap( ofstream &   o_rOut,
+                           Heap &           i_rHeap,
+                           const char * i_sIndexValue,
+                           const char * i_sIndexReference,
+                           E_LinkType       i_eLinkType )
 {
     WriteStr(o_rOut, "<H3><BR>");
     WriteStr(o_rOut, i_sIndexValue );
@@ -325,9 +220,9 @@ WriteTableFromHeap( ofstream &      o_rOut,
 
 
 void
-WriteHeap( ofstream &   o_rOut,
-           Heap &       i_rHeap,
-           E_LinkType   i_eLinkType )
+Index::WriteHeap( ofstream &    o_rOut,
+                  Heap &        i_rHeap,
+                  E_LinkType    i_eLinkType )
 {
     static Simstr S_sKey;
     static char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
@@ -373,58 +268,6 @@ WriteHeap( ofstream &   o_rOut,
     WriteStr( o_rOut, "</TD></TR>\n" );
 }
 
-int
-NrOfTagName( const char * i_sName )
-{
-    static const char * aTagNames[C_nNrOfTagNames] =
-                            {
-//                              "module-name",                  // 1
-                                    "author",                   // 1        0
-//                                  "name",                     // 1
-//                                  "description",              // 1
-                                    "loader-name",              // 1        1
-                                    "language",                 // 1        2
-//                                  "status",
-                                    "supported-service",        // +        3
-//                                  "reference-docu",
-                                    "service-dependency",       // *        4
-                                    "type",                     // *        5
-                                "project-build-dependency",     // *        6
-                                "runtime-module-dependency",    // *        7
-                            };
-    if (! i_sName)
-        return -1;
-
-    switch (*i_sName)
-    {
-        case 'a':   if ( strcmp( aTagNames[0], i_sName ) == 0 )
-                        return 0;
-                    break;
-        case 'l':   if ( strcmp( aTagNames[1], i_sName ) == 0 )
-                        return 1;
-                    else if ( strcmp( aTagNames[2], i_sName ) == 0 )
-                        return 1;
-                    break;
-        case 's':   if ( strcmp( aTagNames[3], i_sName ) == 0 )
-                        return 3;
-                    else if ( strcmp( aTagNames[4], i_sName ) == 0 )
-                        return 4;
-                    break;
-        case 't':   if ( strcmp( aTagNames[5], i_sName ) == 0 )
-                        return 5;
-                    break;
-        case 'p':   if ( strcmp( aTagNames[6], i_sName ) == 0 )
-                        return 6;
-                    break;
-        case 'r':   if ( strcmp( aTagNames[7], i_sName ) == 0 )
-                        return 7;
-                    break;
-    }
-    return -1;
-}
-
-
-
 
 
 /** Übersicht der Struktur
@@ -447,6 +290,9 @@ MODULEDESCRIPTION
     }
     ProjectBuildDependency*
     RuntimeModuleDependency*
+    ReferenceDocu*
+    ServiceDependency*
+    Type*
 }
 
 

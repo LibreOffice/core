@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+ *  last change: $Author: np $ $Date: 2001-03-23 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,37 +68,22 @@
 #include "cr_metho.hxx"
 #include "cr_html.hxx"
 #include "cr_index.hxx"
+#include "xmlelem.hxx"
 #include "xmltree.hxx"
 #include "parse.hxx"
 #include "../support/syshelp.hxx"
 #include "../support/heap.hxx"
 
 
-#ifdef WNT
-#include <io.h>
-#elif defined(UNX)
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#define stricmp strcasecmp
-#else
-#error Must run under unix or windows, please define UNX or WNT.
-#endif
 
 
-using std::cerr;
+using namespace std;
 
 
 int                     Do_IndexCommandLine(
                             const CommandLine &     i_rCommandLine );
 int                     Do_SingleFileCommandLine(
                             const CommandLine &     i_rCommandLine );
-void                    GatherFileNames(
-                            List<Simstr> &          o_sFiles,
-                            const char *            i_sSrcDirectory );
-void                    GatherSubDirectories(
-                            List<Simstr> &          o_sSubDirectories,
-                            const char *            i_sParentdDirectory );
 void                    Create_TypeInfoFile(
                             const char *            o_sOutputFile,
                             ModuleDescription &     i_rData );
@@ -117,7 +102,7 @@ main( int       argc,
 
     if (! aCommandLine.IsOk())
     {
-        cerr <<  aCommandLine.ErrorText() << std::endl;
+        cerr <<  aCommandLine.ErrorText() << endl;
         return 1;
     }
 
@@ -136,20 +121,30 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
     ModuleDescription   aDescr;
     X2CParser           aParser(aDescr);
 
-    // Parse
-    bool bParseResult = aParser.Parse(i_rCommandLine.XmlSrcFile());
-    if (! bParseResult)
+    // Load file and create Function-file
+    bool bLoadResult = aParser.LoadFile(i_rCommandLine.XmlSrcFile());
+    if (! bLoadResult)
     {
-        cerr << "Error: File %s could not be parsed." << i_rCommandLine.XmlSrcFile() << std::endl;
+        cerr << "Error: File %s could not be loaded." << i_rCommandLine.XmlSrcFile() << endl;
         return 1;
     }
 
-    // Produce output
     if ( strlen(i_rCommandLine.FuncFile()) > 0 )
     {
         Create_AccessMethod( i_rCommandLine.FuncFile(),
                              aParser.PureText() );
     }
+
+    cout << "File "
+         << i_rCommandLine.FuncFile()
+         << " with component_getDescriptionFunc() is created now."
+         << endl;
+
+
+    // Parse
+    aParser.Parse();
+
+    // Produce output
     if ( strlen(i_rCommandLine.HtmlFile()) > 0 )
     {
         HtmlCreator aHtmlCreator( i_rCommandLine.HtmlFile(),
@@ -176,160 +171,17 @@ Do_IndexCommandLine(const CommandLine & i_rCommandLine)
                             i_rCommandLine.IdlRootPath(),
                             i_rCommandLine.IndexedTags() );
 
-    std::cout << "Gather xml-files ..." << std::endl;
+    std::cout << "Gather xml-files ..." << endl;
     GatherFileNames( aFiles, i_rCommandLine.XmlSrcDirectory() );
 
-    std::cout << "Create output ..." << std::endl;
+    std::cout << "Create output ..." << endl;
     aIndex.GatherData(aFiles);
     aIndex.WriteOutput( i_rCommandLine.IndexOutputFile() );
 
-    std::cout << "... done." << std::endl;
+    std::cout << "... done." << endl;
 
     return 0;
 };
-
-
-const char C_sXML_END[] = "\\*.xml";
-
-void
-GatherFileNames( List<Simstr> &     o_sFiles,
-                 const char *       i_sSrcDirectory )
-{
-    static int   nAliveCounter = 0;
-
-    char *       sNextDir = 0;
-    Simstr       sNew = 0;
-
-#ifdef WNT
-    struct _finddata_t aEntry;
-    long hFile = 0;
-    int bFindMore = 0;
-    char * sFilter = new char[ strlen(i_sSrcDirectory) + sizeof C_sXML_END ];
-
-    // Stayingalive sign
-    if (++nAliveCounter % 100 == 1)
-        fprintf(stdout,".");
-
-    strcpy(sFilter, i_sSrcDirectory);
-    strcat(sFilter,C_sXML_END);
-
-    hFile = _findfirst( sFilter, &aEntry );
-    for ( bFindMore = hFile == -1;
-          bFindMore == 0;
-          bFindMore = _findnext( hFile, &aEntry ) )
-    {
-        sNew = i_sSrcDirectory;
-        sNew += "\\";
-        sNew += aEntry.name;
-        o_sFiles.push_back(sNew);
-    }   // end for
-
-    _findclose(hFile);
-    delete [] sFilter;
-#elif defined(UNX)
-    DIR * pDir = opendir( i_sSrcDirectory );
-    dirent * pEntry = 0;
-    char * sEnding;
-
-    while ( (pEntry = readdir(pDir)) != 0 )
-    {
-        sEnding = strrchr(pEntry->d_name,'.');
-        if (sEnding != 0 ? stricmp(sEnding,".xml") == 0 : 0 )
-        {
-            sNew = i_sSrcDirectory;
-            sNew += "/";
-            sNew += pEntry->d_name;
-            o_sFiles.push_back(sNew);
-        }
-    }   // end while
-
-    closedir( pDir );
-#else
-#error Must run on unix or windows, please define UNX or WNT.
-#endif
-
-    //  gathering from subdirectories:
-    List<Simstr> aSubDirectories;
-    GatherSubDirectories( aSubDirectories, i_sSrcDirectory );
-
-    unsigned d_max = aSubDirectories.size();
-    for ( unsigned d = 0; d < d_max; ++d )
-    {
-        sNextDir = new char[ strlen(i_sSrcDirectory) + 2 + aSubDirectories[d].l() ];
-
-        strcpy(sNextDir, i_sSrcDirectory);
-        strcat(sNextDir, C_sSLASH);
-        strcat(sNextDir, aSubDirectories[d].str());
-        GatherFileNames(o_sFiles, sNextDir);
-
-        delete [] sNextDir;
-    }
-}
-
-
-const char * C_sANYDIR = "\\*.*";
-
-void
-GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
-                      const char *      i_sParentdDirectory )
-{
-    Simstr sNew;
-
-#ifdef WNT
-    struct _finddata_t aEntry;
-    long hFile = 0;
-    int bFindMore = 0;
-    char * sFilter = new char[strlen(i_sParentdDirectory) + sizeof C_sANYDIR];
-
-    strcpy(sFilter, i_sParentdDirectory);
-    strcat(sFilter,C_sANYDIR);
-
-    hFile = _findfirst( sFilter, &aEntry );
-    for ( bFindMore = hFile == -1;
-          bFindMore == 0;
-          bFindMore = _findnext( hFile, &aEntry ) )
-    {
-        if (aEntry.attrib == _A_SUBDIR)
-        {
-            // Do not gather . .. and outputtree directories
-            if ( strchr(aEntry.name,'.') == 0
-                 && strncmp(aEntry.name, "wnt", 3) != 0
-                 && strncmp(aEntry.name, "unx", 3) != 0 )
-            {
-                sNew = aEntry.name;
-                o_sSubDirectories.push_back(sNew);
-            }
-        }   // endif (aEntry.attrib == _A_SUBDIR)
-    }   // end for
-    _findclose(hFile);
-    delete [] sFilter;
-
-#elif defined(UNX)
-    DIR * pDir = opendir( i_sParentdDirectory );
-    dirent * pEntry = 0;
-    struct stat     aEntryStatus;
-    char * sEnding;
-
-    while ( ( pEntry = readdir(pDir) ) != 0 )
-    {
-        stat(pEntry->d_name, &aEntryStatus);
-        if ( ( aEntryStatus.st_mode & S_IFDIR ) == S_IFDIR )
-        {
-            // Do not gather . .. and outputtree directories
-            if ( strchr(pEntry->d_name,'.') == 0
-                 && strncmp(pEntry->d_name, "wnt", 3) != 0
-                 && strncmp(pEntry->d_name, "unx", 3) != 0 )
-            {
-                sNew = pEntry->d_name;
-                o_sSubDirectories.push_back(sNew);
-            }
-        }   // endif (aEntry.attrib == _A_SUBDIR)
-    }   // end while
-    closedir( pDir );
-#else
-#error Must run on unix or windows, please define UNX or WNT.
-#endif
-}
 
 
 
@@ -344,39 +196,25 @@ Create_TypeInfoFile( const char *           o_sOutputFile,
     );
     if ( !aOut )
     {
-        cerr << "Error: " << o_sOutputFile << " could not be created." << std::endl;
+        cerr << "Error: " << o_sOutputFile << " could not be created." << endl;
         return;
     }
 
     Heap    aTypesHeap(12);
-    Simstr  sLibPrefix = i_rData.Children()[0]->Data();
+    Simstr  sLibPrefix = i_rData.ModuleName();
 
     // Gather types:
-    const ModuleDescription::CD_List & rListDescriptions = i_rData.Components();
+    List< const MultipleTextElement * > aTypes;
+    i_rData.Get_Types(aTypes);
 
-    // Descriptions:
-    for ( unsigned nDescrIter = 0; nDescrIter < rListDescriptions.size(); ++nDescrIter )
+    for ( unsigned t = 0; t < aTypes.size(); ++t )
     {
-        // Find Type-Tag:
-        TextElement * pTypes = 0;
-        ComponentDescription::ChildList & rTags = rListDescriptions[nDescrIter]->Children();
-        for ( unsigned nTagIter = 0; nTagIter < rTags.size(); ++nTagIter )
+        unsigned i_max = aTypes[t]->Size();
+        for ( unsigned  i = 0; i < i_max; ++i )
         {
-            if ( strcmp( rTags[nTagIter]->Name(),"type") == 0 )
-            {
-                pTypes = rTags[nTagIter];
-                break;
-            }
-        }   // end for (aTagIter)
-
-        if ( pTypes != 0)
-        {
-            for ( unsigned nTypeIter = 0; nTypeIter < pTypes->Size(); ++nTypeIter )
-            {   // Loop Services
-                aTypesHeap.InsertValue( pTypes->Data(nTypeIter), "" );
-            }   // end for aDataIter
-        }
-    }   // end for (aDescrIter)
+            aTypesHeap.InsertValue( aTypes[t]->Data(i), "" );
+        }  // end for
+    }
 
     // Write types:
     WriteStr( aOut, sLibPrefix );
