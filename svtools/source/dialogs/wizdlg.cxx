@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:02:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ struct ImplWizButtonData
 
 // =======================================================================
 
-void WizardDialog::ImplInitData()
+void WizardDialog::ImplInitData(sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount)
 {
     mpFirstPage     = NULL;
     mpFirstBtn      = NULL;
@@ -115,6 +115,8 @@ void WizardDialog::ImplInitData()
     mpViewWindow    = NULL;
     mnCurLevel      = 0;
     meViewAlign     = WINDOWALIGN_LEFT;
+    mbRoadmapMode   =  _bRoadmapMode;
+    mnLeftAlignCount = _nLeftAlignCount;
 }
 
 // -----------------------------------------------------------------------
@@ -162,31 +164,50 @@ void WizardDialog::ImplPosCtrls()
     long    nOffY = aDlgSize.Height();
 
     ImplWizButtonData* pBtnData = mpFirstBtn;
+    int i = 0;
     while ( pBtnData )
     {
-        Size aBtnSize = pBtnData->mpButton->GetSizePixel();
-        long nBtnHeight = aBtnSize.Height();
-        if ( nBtnHeight > nMaxHeight )
-            nMaxHeight = nBtnHeight;
-        nBtnWidth += aBtnSize.Width();
-        nBtnWidth += pBtnData->mnOffset;
+        if (i >= mnLeftAlignCount)
+        {
+            Size aBtnSize = pBtnData->mpButton->GetSizePixel();
+            long nBtnHeight = aBtnSize.Height();
+            if ( nBtnHeight > nMaxHeight )
+                nMaxHeight = nBtnHeight;
+            nBtnWidth += aBtnSize.Width();
+            nBtnWidth += pBtnData->mnOffset;
+        }
         pBtnData = pBtnData->mpNext;
+        i++;
     }
 
     if ( nMaxHeight )
     {
         long nOffX = aDlgSize.Width()-nBtnWidth-WIZARDDIALOG_BUTTON_DLGOFFSET_X;
+        long nOffLeftAlignX = LogicalCoordinateToPixel(6);
         nOffY -= WIZARDDIALOG_BUTTON_OFFSET_Y+nMaxHeight;
 
         pBtnData = mpFirstBtn;
+        int i = 0;
         while ( pBtnData )
         {
             Size aBtnSize = pBtnData->mpButton->GetSizePixel();
-            Point aPos( nOffX, nOffY+((nMaxHeight-aBtnSize.Height())/2) );
-            pBtnData->mpButton->SetPosPixel( aPos );
-            nOffX += aBtnSize.Width();
-            nOffX += pBtnData->mnOffset;
+            if (i >= mnLeftAlignCount)
+            {
+                Point aPos( nOffX, nOffY+((nMaxHeight-aBtnSize.Height())/2) );
+                pBtnData->mpButton->SetPosPixel( aPos );
+                nOffX += aBtnSize.Width();
+                nOffX += pBtnData->mnOffset;
+            }
+            else
+            {
+                Point aPos( nOffLeftAlignX, nOffY+((nMaxHeight-aBtnSize.Height())/2) );
+                pBtnData->mpButton->SetPosPixel( aPos );
+                nOffLeftAlignX += aBtnSize.Width();
+                nOffLeftAlignX += pBtnData->mnOffset;
+            }
+
             pBtnData = pBtnData->mpNext;
+            i++;
         }
 
         nOffY -= WIZARDDIALOG_BUTTON_OFFSET_Y;
@@ -216,9 +237,18 @@ void WizardDialog::ImplPosCtrls()
         }
         else if ( meViewAlign == WINDOWALIGN_LEFT )
         {
-            nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
-            nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
-            nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
+            if (mbRoadmapMode)
+            {
+                nViewOffX       = 0;
+                nViewOffY       = 0;
+                nViewHeight     = nDlgHeight;
+            }
+            else
+            {
+                nViewOffX       = WIZARDDIALOG_VIEW_DLGOFFSET_X;
+                nViewOffY       = WIZARDDIALOG_VIEW_DLGOFFSET_Y;
+                nViewHeight     = nDlgHeight-(WIZARDDIALOG_VIEW_DLGOFFSET_Y*2);
+            }
             nViewPosFlags  |= WINDOW_POSSIZE_HEIGHT;
         }
         else if ( meViewAlign == WINDOWALIGN_BOTTOM )
@@ -240,6 +270,14 @@ void WizardDialog::ImplPosCtrls()
                                        nViewPosFlags );
     }
 }
+
+
+long WizardDialog::LogicalCoordinateToPixel(int iCoordinate){
+    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MAP_APPFONT );
+    int iPixelCoordinate =  aLocSize.Width();
+    return iPixelCoordinate;
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -343,18 +381,18 @@ TabPage* WizardDialog::ImplGetPage( USHORT nLevel ) const
 
 // =======================================================================
 
-WizardDialog::WizardDialog( Window* pParent, WinBits nStyle ) :
+WizardDialog::WizardDialog( Window* pParent, WinBits nStyle, sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount ) :
     ModalDialog( pParent, nStyle )
 {
-    ImplInitData();
+    ImplInitData(_bRoadmapMode, _nLeftAlignCount);
 }
 
 // -----------------------------------------------------------------------
 
-WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
+WizardDialog::WizardDialog( Window* pParent, const ResId& rResId, sal_Bool _bRoadmapMode, sal_Int16 _nLeftAlignCount ) :
     ModalDialog( pParent, rResId )
 {
-    ImplInitData();
+    ImplInitData(_bRoadmapMode, _nLeftAlignCount);
 }
 
 // -----------------------------------------------------------------------
