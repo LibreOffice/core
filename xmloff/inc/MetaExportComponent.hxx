@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,11 @@
 class XMLMetaExportComponent : public SvXMLExport
 {
 public:
-    XMLMetaExportComponent();
+    // #110680#
+    // XMLMetaExportComponent();
+    XMLMetaExportComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+        );
 
     ~XMLMetaExportComponent();
 
