@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:04:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,7 +2109,7 @@ KSHORT SwTxtFrm::CalcFitToContent()
     SwTxtFrmLocker aLock( this );
     // <--
 
-    SwTxtFormatInfo aInf( this );
+    SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
     aInf.SetIgnoreFly( sal_True );
     SwTxtFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
