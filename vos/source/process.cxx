@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-08 13:56:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include <cstdarg>
 #include <vector>
 #include <rtl/ustring.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #include "vos/process.hxx"
 #include "vos/diagnose.hxx"
@@ -518,7 +521,11 @@ void OExtCommandLineImpl::init()
 // OExtCommandLine
 //
 
-OMutex OExtCommandLine::aMutex;
+namespace
+{
+    struct lclMutex : public rtl::Static< NAMESPACE_VOS(OMutex), lclMutex > {};
+}
+
 OExtCommandLineImpl* OExtCommandLine::pExtImpl=0;
 
 
@@ -529,7 +536,7 @@ VOS_IMPLEMENT_CLASSINFO(
 
 OExtCommandLine::OExtCommandLine()
 {
-    OGuard Guard(aMutex);
+    OGuard Guard(lclMutex::get());
 
     if ( pExtImpl == NULL )
     {
