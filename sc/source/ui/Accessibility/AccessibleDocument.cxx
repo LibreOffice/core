@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #ifndef _SC_ACCESSIBLESPREADSHEET_HXX
 #include "AccessibleSpreadsheet.hxx"
 #endif
-#ifndef SC_UNONAMES_HXX
-#include "unonames.hxx"
-#endif
 #ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
 #endif
@@ -82,9 +79,6 @@
 #include "drwlayer.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
@@ -97,9 +91,6 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
 #endif
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
@@ -120,7 +111,7 @@ ScAccessibleDocument::ScAccessibleDocument(
         const uno::Reference<XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos)
-    : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT),
+    : ScAccessibleDocumentBase(rxParent),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpAccessibleSpreadsheet(NULL)
@@ -147,7 +138,7 @@ void ScAccessibleDocument::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleContextBase::SetDefunc();
+    ScAccessibleDocumentBase::SetDefunc();
 }
 
     //=====  SfxListener  =====================================================
@@ -306,9 +297,9 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::EDITABLE);
     pStateSet->AddState(AccessibleStateType::ENABLED);
     pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (IsShowing(xParentStates))
+    if (isShowing())
         pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (IsVisible(xParentStates))
+    if (isVisible())
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
 }
@@ -440,16 +431,4 @@ sal_Bool ScAccessibleDocument::IsEditable(
 {
     // what is with document protection?
     return sal_True;
-}
-
-sal_Bool ScAccessibleDocument::IsShowing(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
-{
-    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::SHOWING));
-}
-
-sal_Bool ScAccessibleDocument::IsVisible(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
-{
-    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
 }

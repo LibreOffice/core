@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #ifndef _SC_ACCESSIBLETABLEBASE_HXX
 #define _SC_ACCESSIBLETABLEBASE_HXX
 
-#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
+#ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
 #include "AccessibleContextBase.hxx"
 #endif
 #ifndef SC_SCGLOB_HXX
@@ -91,7 +91,9 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScRange& rRange);
+protected:
     virtual ~ScAccessibleTableBase ();
+public:
 
     virtual void SetDefunc();
 

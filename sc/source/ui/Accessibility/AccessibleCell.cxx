@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,47 +111,14 @@ ScAccessibleCell::ScAccessibleCell (
         sal_Int32 nIndex,
         ScSplitPos eSplitPos)
     :
-    ScAccessibleContextBase (rxParent, AccessibleRole::TABLE_CELL),
+    ScAccessibleCellBase (rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
     mpViewShell(pViewShell),
-    mpDoc(GetDocument(pViewShell)),
-    maCellAddress(rCellAddress),
-    mnIndex(nIndex),
     meSplitPos(eSplitPos)
 {
 }
 
 ScAccessibleCell::~ScAccessibleCell ()
 {
-}
-
-    //=====  XInterface  ======================================================
-
-uno::Any SAL_CALL
-    ScAccessibleCell::queryInterface(
-    const uno::Type & rType )
-    throw(uno::RuntimeException)
-{
-    SC_QUERYINTERFACE( XAccessibleValue )
-
-    return ScAccessibleContextBase::queryInterface( rType );
-}
-
-/** Increase the reference count.
-*/
-void SAL_CALL
-    ScAccessibleCell::acquire (void)
-    throw ()
-{
-    OWeakObject::acquire ();
-}
-
-/** Decrease the reference count.
-*/
-void SAL_CALL
-    ScAccessibleCell::release (void)
-    throw ()
-{
-    OWeakObject::release ();
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -249,45 +216,6 @@ uno::Reference< XAccessible > SAL_CALL
     return uno::Reference< XAccessible >();
 }
 
-sal_Int32
-    ScAccessibleCell::getAccessibleIndexInParent (void)
-        throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-    return mnIndex;
-}
-
-::rtl::OUString SAL_CALL
-    ScAccessibleCell::createAccessibleDescription (void)
-    throw (uno::RuntimeException)
-{
-    rtl::OUString sDescription;
-
-    if (mpDoc)
-    {
-        ScPostIt aNote;
-        mpDoc->GetNote(maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), aNote);
-        sDescription = rtl::OUString (aNote.GetText());
-    }
-
-    if (!sDescription.getLength())
-        sDescription = getAccessibleName();
-
-    return sDescription;
-}
-
-::rtl::OUString SAL_CALL
-    ScAccessibleCell::createAccessibleName (void)
-    throw (uno::RuntimeException)
-{
-    rtl::OUString sName;
-    String sAddress;
-    // Document not needed, because only the cell address, but not the tablename is needed
-    maCellAddress.Format( sAddress, SCA_VALID, NULL );
-    sName = rtl::OUString(sAddress);
-    return sName;
-}
-
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
@@ -315,61 +243,12 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
     if (IsSelected(xParentStates))
         pStateSet->AddState(AccessibleStateType::SELECTED);
-    if (IsShowing(xParentStates))
+    if (isShowing())
         pStateSet->AddState(AccessibleStateType::SHOWING);
     pStateSet->AddState(AccessibleStateType::TRANSIENT);
-    if (IsVisible(xParentStates))
+    if (isVisible())
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
-}
-
-    //=====  XAccessibleValue  ================================================
-
-uno::Any SAL_CALL
-    ScAccessibleCell::getCurrentValue(  )
-    throw (uno::RuntimeException)
-{
-     ::osl::MutexGuard aGuard (maMutex);
-    uno::Any aAny;
-    if (mpDoc)
-        aAny <<= mpDoc->GetValue(maCellAddress);
-
-    return aAny;
-}
-
-sal_Bool SAL_CALL
-    ScAccessibleCell::setCurrentValue( const uno::Any& aNumber )
-    throw (uno::RuntimeException)
-{
-     ::osl::MutexGuard aGuard (maMutex);
-    double fValue;
-    sal_Bool bResult(sal_False);
-    if((aNumber >>= fValue) && mpDoc)
-    {
-        mpDoc->SetValue(maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), fValue);
-        bResult = sal_True;
-    }
-    return bResult;
-}
-
-uno::Any SAL_CALL
-    ScAccessibleCell::getMaximumValue(  )
-    throw (uno::RuntimeException)
-{
-    uno::Any aAny;
-    aAny <<= DBL_MAX;
-
-    return aAny;
-}
-
-uno::Any SAL_CALL
-    ScAccessibleCell::getMinimumValue(  )
-    throw (uno::RuntimeException)
-{
-    uno::Any aAny;
-    aAny <<= DBL_MIN;
-
-    return aAny;
 }
 
     //=====  XServiceInfo  ====================================================
@@ -392,24 +271,6 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleCell"));
 
     return aSequence;
-}
-
-    //=====  XTypeProvider  ===================================================
-
-uno::Sequence< uno::Type> SAL_CALL ScAccessibleCell::getTypes (void)
-        throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-    uno::Sequence< uno::Type>
-        aTypeSequence = ScAccessibleContextBase::getTypes();
-    sal_Int32 nOldSize(aTypeSequence.getLength());
-    aTypeSequence.realloc(nOldSize + 1);
-    uno::Type* pTypes = aTypeSequence.getArray();
-
-    pTypes[nOldSize] = ::getCppuType((const uno::Reference<
-            XAccessibleValue>*)0);
-
-    return aTypeSequence;
 }
 
     //====  internal  =========================================================
@@ -457,18 +318,6 @@ sal_Bool ScAccessibleCell::IsOpaque(
 sal_Bool ScAccessibleCell::IsSelected(const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return sal_False;
-}
-
-sal_Bool ScAccessibleCell::IsShowing(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
-{
-    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::SHOWING));
-}
-
-sal_Bool ScAccessibleCell::IsVisible(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
-{
-    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
 }
 
 ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)

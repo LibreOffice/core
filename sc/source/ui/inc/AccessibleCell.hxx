@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: AccessibleSpreadsheet.hxx,v $
+ *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
  *
@@ -60,72 +60,44 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBLESPREADSHEET_HXX
-#define _SC_ACCESSIBLESPREADSHEET_HXX
+#ifndef _SC_ACCESSIBLECELL_HXX
+#define _SC_ACCESSIBLECELL_HXX
 
-#include "AccessibleTableBase.hxx"
+#ifndef _SC_ACCESSIBLECELLBASE_HXX
+#include "AccessibleCellBase.hxx"
+#endif
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
 #ifndef SC_VIEWDATA_HXX
 #include "viewdata.hxx"
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
 #endif
 
 class ScTabViewShell;
 
 /** @descr
         This base class provides an implementation of the
-        <code>AccessibleTable</code> service.
+        <code>AccessibleCell</code> service.
 */
-class ScAccessibleSpreadsheet
-    :   public  ScAccessibleTableBase
+class ScAccessibleCell
+    :   public  ScAccessibleCellBase
 {
 public:
     //=====  internal  ========================================================
-    ScAccessibleSpreadsheet (
+    ScAccessibleCell (
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
-        sal_uInt16  nTab,
+        ScAddress& rCellAddress,
+        sal_Int32 nIndex,
         ScSplitPos eSplitPos);
 protected:
-    virtual ~ScAccessibleSpreadsheet ();
+    virtual ~ScAccessibleCell ();
 public:
-
-    void SetDefunc();
-
-    //=====  SfxListener  =====================================================
-
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-    //=====  XAccessibleTable  ================================================
-
-    /// Returns the selected rows in a table.
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
-                getSelectedAccessibleRows(  )
-                    throw (::com::sun::star::uno::RuntimeException);
-
-    /// Returns the selected columns in a table.
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
-                getSelectedAccessibleColumns(  )
-                    throw (::com::sun::star::uno::RuntimeException);
-
-    ///  Returns a boolean value indicating whether the specified row is selected.
-    virtual sal_Bool SAL_CALL
-                isAccessibleRowSelected( sal_Int32 nRow )
-                    throw (::com::sun::star::uno::RuntimeException);
-
-    /// Returns a boolean value indicating whether the specified column is selected.
-    virtual sal_Bool SAL_CALL
-                isAccessibleColumnSelected( sal_Int32 nColumn )
-                    throw (::com::sun::star::uno::RuntimeException);
-
-    /// Returns the Accessible at a specified row and column in the table.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-                getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (::com::sun::star::uno::RuntimeException);
-
-    /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
-    virtual sal_Bool SAL_CALL
-                isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ============================================
 
@@ -148,6 +120,21 @@ public:
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Determines if the object is visible.
+
+        <p>If an object and all of its parents are visible then the object
+        is also called showing.  If an object is showing then it has also
+        set the <const>AccessibleStateType::VISIBLE</const> state set in its
+        <type>AccessibleStateSet</type>.</p>
+
+        @return
+            Returns <TRUE/> if the object is visible and <FALSE/> otherwise.
+
+        @see isShowing
+    */
+    virtual sal_Bool SAL_CALL isVisible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     /** Grabs the focus to this object.
 
         <p>If this object can not accept the focus,
@@ -162,6 +149,28 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
+    /// Return the number of currently visible children.
+    // is overloaded to calculate this on demand
+    virtual sal_Int32 SAL_CALL
+        getAccessibleChildCount (void)
+                    throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the specified child or NULL if index is invalid.
+    // is overloaded to calculate this on demand
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+        getAccessibleChild (sal_Int32 nIndex)
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
+
+protected:
+    /// Return the object's current bounding box relative to the desktop.
+    virtual Rectangle GetBoundingBoxOnScreen(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current bounding box relative to the parent object.
+    virtual Rectangle GetBoundingBox(void)
+        throw (::com::sun::star::uno::RuntimeException);
+public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
@@ -182,18 +191,10 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-protected:
-    /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
-        throw (::com::sun::star::uno::RuntimeException);
 private:
     ScTabViewShell* mpViewShell;
-    ScSplitPos      meSplitPos;
-    ScAddress       maActiveCell;
+
+    ScSplitPos meSplitPos;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
@@ -201,7 +202,10 @@ private:
     sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsCompleteSheetSelected(
+    sal_Bool IsOpaque(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsSelected(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 

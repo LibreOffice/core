@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #define _SC_ACCESSIBLEDOCUMENT_HXX
 
-#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
-#include "AccessibleContextBase.hxx"
+#ifndef _SC_ACCESSIBLEDOCUMENTBASE_HXX
+#include "AccessibleDocumentBase.hxx"
 #endif
 #ifndef SC_VIEWDATA_HXX
 #include "viewdata.hxx"
@@ -80,7 +80,7 @@ class SdrPage;
 */
 
 class ScAccessibleDocument
-    :   public ScAccessibleContextBase
+    :   public ScAccessibleDocumentBase
 {
 public:
     //=====  internal  ========================================================
@@ -89,7 +89,9 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos);
+protected:
     virtual ~ScAccessibleDocument   (void);
+public:
 
      virtual void SetDefunc();
 
@@ -195,20 +197,12 @@ private:
 
     void FreeAccessibleSpreadsheet();
 
-    void ClearMemberAndDisableListening();
-
     SdrPage* GetDrawPage();
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     sal_Bool IsEditable(
-        const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsShowing(
-        const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsVisible(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };

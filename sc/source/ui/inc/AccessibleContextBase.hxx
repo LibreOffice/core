@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 
-#ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
-#define _SC_ACCESSIBLE_CONTEXT_BASE_HXX
+#ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
+#define _SC_ACCESSIBLECONTEXTBASE_HXX
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>

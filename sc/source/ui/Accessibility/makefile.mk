@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
+#   last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,14 +88,20 @@ CXXFILES =						\
         AccessibleSpreadsheet.cxx		\
         AccessibleCell.cxx			\
         AccessibleSpreadsheet.cxx		\
-        AccessibilityHints.cxx
+        AccessibilityHints.cxx			\
+        AccessibleDocumentBase.cxx		\
+        AccessibleCellBase.cxx			\
+        AccessibleDocumentPagePreview.cxx
 
 EXCEPTIONSFILES=\
         $(SLO)$/AccessibleContextBase.obj	\
         $(SLO)$/AccessibleTableBase.obj		\
         $(SLO)$/AccessibleDocument.obj		\
         $(SLO)$/AccessibleSpreadsheet.obj	\
-        $(SLO)$/AccessibleCell.obj
+        $(SLO)$/AccessibleCell.obj		\
+        $(SLO)$/AccessibleDocumentBase.obj	\
+        $(SLO)$/AccessibleCellBase.obj		\
+        $(SLO)$/AccessibleDocumentPagePreview.obj
 
 SLOFILES =  						\
         $(SLO)$/AccessibleContextBase.obj	\
@@ -103,7 +109,10 @@ SLOFILES =  						\
         $(SLO)$/AccessibleDocument.obj		\
         $(SLO)$/AccessibleSpreadsheet.obj	\
         $(SLO)$/AccessibleCell.obj		\
-        $(SLO)$/AccessibilityHints.obj
+        $(SLO)$/AccessibilityHints.obj		\
+        $(SLO)$/AccessibleDocumentBase.obj	\
+        $(SLO)$/AccessibleCellBase.obj		\
+        $(SLO)$/AccessibleDocumentPagePreview.obj
 
 # --- Tagets -------------------------------------------------------
 

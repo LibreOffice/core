@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
+ *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,84 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
     //=====  XAccessibleTable  ================================================
 
+uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
+                    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Sequence<sal_Int32> aSequence;
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        sal_Int32* pSequence = aSequence.getArray();
+        sal_Int32 nCount(0);
+        for (sal_uInt16 i = maRange.aStart.Row(); i <= maRange.aEnd.Row(); i++)
+        {
+            if (rMarkdata.IsRowMarked(i))
+            {
+                pSequence[nCount] = i;
+                nCount++;
+            }
+        }
+        aSequence.realloc(nCount);
+    }
+    else
+        aSequence.realloc(0);
+    return aSequence;
+}
+
+uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
+                    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Sequence<sal_Int32> aSequence;
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        sal_Int32* pSequence = aSequence.getArray();
+        sal_Int32 nCount(0);
+        for (sal_uInt16 i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); i++)
+        {
+            if (rMarkdata.IsColumnMarked(i))
+            {
+                pSequence[nCount] = i;
+                nCount++;
+            }
+        }
+        aSequence.realloc(nCount);
+    }
+    else
+        aSequence.realloc(0);
+    return aSequence;
+}
+
+sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
+                    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    sal_Bool bResult(sal_False);
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        bResult = rMarkdata.IsRowMarked((sal_uInt16)nRow);
+    }
+    return bResult;
+}
+
+sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
+                    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    sal_Bool bResult(sal_False);
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        bResult = rMarkdata.IsColumnMarked((sal_uInt16)nColumn);
+    }
+    return bResult;
+}
+
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
@@ -169,6 +247,19 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
         static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
     ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos);
     return pAccessibleCell;
+}
+
+sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+                    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    sal_Bool bResult(sal_False);
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        bResult = rMarkdata.IsCellMarked((sal_uInt16)nColumn, (sal_uInt16)nRow);
+    }
+    return bResult;
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -223,9 +314,9 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
     if (IsCompleteSheetSelected(xParentStates))
         pStateSet->AddState(AccessibleStateType::SELECTED);
-    if (IsShowing(xParentStates))
+    if (isShowing())
         pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (IsVisible(xParentStates))
+    if (isVisible())
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
 }
@@ -300,18 +391,6 @@ sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return sal_False;
-}
-
-sal_Bool ScAccessibleSpreadsheet::IsShowing(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
-{
-    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::SHOWING));
-}
-
-sal_Bool ScAccessibleSpreadsheet::IsVisible(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
-{
-    return (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::VISIBLE));
 }
 
 ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
