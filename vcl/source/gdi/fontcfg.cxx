@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:39:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,7 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
     #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Andale Sans UI"
+    #define FALLBACKFONT_UI_SANS_CHINESE "Andale Sans UI;Tahoma;Arial Unicode MS;Kai;Ming;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
 
     if( nLanguage == LANGUAGE_SYSTEM )
         nLanguage = Application::GetSettings().GetUILanguage();
@@ -431,6 +432,7 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
         aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
         aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
         static const OUString aFallBackKorean( aFallBackKoreanLocalized );
+        static const OUString aFallBackChinese( RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS_CHINESE) );
 
         // optimize font list for some locales, as long as Andale Sans UI does not support them
         switch( nLanguage )
@@ -461,6 +463,14 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
             case LANGUAGE_KOREAN:
             case LANGUAGE_KOREAN_JOHAB:
                 return aFallBackKorean;
+                break;
+            case LANGUAGE_CHINESE:
+            case LANGUAGE_CHINESE_TRADITIONAL:
+            case LANGUAGE_CHINESE_SIMPLIFIED:
+            case LANGUAGE_CHINESE_HONGKONG:
+            case LANGUAGE_CHINESE_SINGAPORE:
+            case LANGUAGE_CHINESE_MACAU:
+                return aFallBackChinese;
                 break;
             default:
                 break;
