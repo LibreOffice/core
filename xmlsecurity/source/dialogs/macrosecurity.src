@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:52:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ TabPage RID_XMLSECTP_SECLEVEL
         Size = MAP_APPFONT( SL_COL_2-SL_COL_1, SL_ROW_4-SL_ROW_3 );
         WordBreak = TRUE;
         Text [ de ] = "~Niedrig (nicht empfehlenswert).\nAlle Makros werden ohne Nachfrage ausgeführt. Diese Einstellung sollte nur benutzt werden, wenn sichergestellt werden kann, dass nur sichere Dokumente geladen werden.";
-        Text [ en-US ] = "~Low (not recommended).\nMacros are being executed without any confirmation. Use this setting only if it is guaranteed that all documents being opened are save.";
+        Text [ en-US ] = "~Low (not recommended).\nMacros are being executed without any confirmation. Use this setting only if it is guaranteed that all documents being opened are safe.";
     };
 };
 
@@ -205,7 +205,7 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
     {
         Pos = MAP_APPFONT( TS_COL_4, TS_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Zeigen...";
+        Text [ de ] = "Anzeigen...";
         Text [ en-US ] = "View...";
     };
     PushButton PB_REMOVE_TRUSTCERT
@@ -219,7 +219,7 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
     {
         Pos = MAP_APPFONT( TS_COL_0, TS_ROW_3 );
         Size = MAP_APPFONT( TS_COL_8-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Sichere Dateiquellen";
+        Text [ de ] = "Vertrauenswürdige Dateiquellen";
         Text [ en-US ] = "Trusted file locations";
     };
     FixedText FI_TRUSTFILELOC
@@ -228,7 +228,7 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
         Size = MAP_APPFONT( TS_COL_7-TS_COL_1, 3*RSC_CD_FIXEDLINE_HEIGHT );
         WordBreak = TRUE;
         Text [ de ] = "Vertrauenswürdige Dateiquellen werden nur benutzt, wenn die Sicherheitseinstellungen auf sehr hoch eingestellt sind. Dann werden nur Dokumentmakros aus den folgenden Quellen ausgeführt.";
-        Text [ en-US ] = "Trusted file locations are used only, if the security level is set to very high. Then document macros are being executed only, if loaded from one of the following sources.";
+        Text [ en-US ] = "Trusted file locations are used only if the security level is set to 'very high'. With this setting, document macros are only executed if they have been opened from one of the following locations.";
     };
     ListBox LB_TRUSTFILELOC
     {
