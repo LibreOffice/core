@@ -1,5 +1,5 @@
 dos: echo =====================================================================
-dos: echo License und Readme-Dateien werden auf S: gestellt ...
+dos: echo delivering license and readme-files...
 dos: echo =====================================================================
 mkdir: %_DEST%\bin%_EXT%\01
 mkdir: %_DEST%\bin%_EXT%\01\osl
