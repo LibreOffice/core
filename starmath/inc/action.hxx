@@ -2,9 +2,9 @@
  *
  *  $RCSfile: action.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,20 +71,6 @@
 
 class SmDocShell;
 
-class SmEditAction: public SfxUndoAction
-{
-    SmDocShell  *pDoc;
-    String      aOldText;
-    String      aNewText;
-
-public:
-    SmEditAction(SmDocShell *pDocSh, const String& rOldText, const String& rNewText);
-
-    virtual void Undo();
-    virtual void Redo();
-    virtual void Repeat(SmDocShell *pDocSh);
-    virtual String GetComment() const;
-};
 
 class SmFormatAction: public SfxUndoAction
 {

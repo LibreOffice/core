@@ -2,9 +2,9 @@
  *
  *  $RCSfile: action.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,35 +65,6 @@
 #include "smdll.hxx"
 #include "document.hxx"
 #include "starmath.hrc"
-
-SmEditAction::SmEditAction(SmDocShell *pDocSh,
-                           const String& rOldText,
-                           const String& rNewText) :
-    pDoc( pDocSh ),
-    aOldText( rOldText ),
-    aNewText( rNewText )
-{
-}
-
-void SmEditAction::Undo()
-{
-    pDoc->SetText(aOldText);
-}
-
-void SmEditAction::Redo()
-{
-    pDoc->SetText(aNewText);
-}
-
-void SmEditAction::Repeat(SmDocShell *pDocSh)
-{
-    pDocSh->SetText(aNewText);
-}
-
-String SmEditAction::GetComment() const
-{
-    return (SmResId(RID_UNDOEDITNAME));
-}
 
 
 SmFormatAction::SmFormatAction(SmDocShell *pDocSh,
