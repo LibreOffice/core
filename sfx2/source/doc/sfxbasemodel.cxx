@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:15:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,16 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPMODES_HPP_
-#include <com/sun/star/embed/EmbedMapModes.hpp>
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGECHANGELISTENER_HPP_
+#include <com/sun/star/document/XStorageChangeListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -157,6 +165,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 
 #ifndef _UNO_MAPPING_HXX_
@@ -211,6 +223,9 @@
 #include <svtools/printdlg.hxx>
 #include <sot/clsids.hxx>
 #include <sot/storinfo.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <svtools/transfer.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -268,10 +283,6 @@
 #include <evntconf.hxx>
 #endif
 
-#ifndef _SFX_INTERNO_HXX
-#include <interno.hxx>
-#endif
-
 #ifndef _SFX_HRC
 #include "sfx.hrc"
 #endif
@@ -288,11 +299,11 @@
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
 
+using namespace com::sun::star;
+
 //________________________________________________________________________________________________________
 //  defines
 //________________________________________________________________________________________________________
-
-#define SfxIOException_Impl( nErr )             ::com::sun::star::io::IOException()
 
 #define XFRAME                                  ::com::sun::star::frame::XFrame
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
@@ -304,7 +315,6 @@
 #define ANY                                     ::com::sun::star::uno::Any
 #define ILLEGALARGUMENTEXCEPTION                ::com::sun::star::lang::IllegalArgumentException
 #define ILLEGALARGUMENTIOEXCEPTION              ::com::sun::star::frame::IllegalArgumentIOException
-#define DOUBLEINITIALIZATIONEXCEPTION           ::com::sun::star::frame::DoubleInitializationException
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
 #define OINTERFACEITERATORHELPER                ::cppu::OInterfaceIteratorHelper
 #define SIZE                                    ::com::sun::star::awt::Size
@@ -369,6 +379,7 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XSCRIPTPROVIDER >                        m_xScriptProvider;
     REFERENCE< XUICONFIGURATIONMANAGER >                m_xUIConfigurationManager;
     OChildCommitListen_Impl*                            m_pChildCommitListen;
+    ::rtl::OUString                                 m_aPreusedFilterName;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
@@ -522,6 +533,13 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                                static_cast< XSCRIPTPROVIDERSUPPLIER* > ( this ) ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this ) ) ;
     }
+
+    if ( aReturn.hasValue() == sal_False )
+    {
+        aReturn = ::cppu::queryInterface(   rType                                           ,
+                                               static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   );
+    }
+
     // If searched interface supported by this class ...
     if ( aReturn.hasValue() == sal_True )
     {
@@ -602,6 +620,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XUNOTUNNEL             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ),
                                                          ::getCppuType(( const REFERENCE< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XSTORAGEBASEDDOCUMENT >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XSCRIPTPROVIDERSUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ) ,
@@ -976,36 +995,29 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_sURL = rURL;
-        m_pData->m_seqArguments.realloc( rArgs.getLength() );
+        m_pData->m_seqArguments = uno::Sequence< beans::PropertyValue >( rArgs.getLength() );
         sal_Int32 nNewLen = 0;
 
         for ( sal_Int32 nInd = 0; nInd < rArgs.getLength(); nInd++ )
         {
             if ( rArgs[nInd].Name.equalsAscii( "WinExtent" ) )
             {
-                // the document should be resized
-                SfxInPlaceObject* pInPlaceObj = m_pData->m_pObjectShell->GetInPlaceObject();
-                if ( pInPlaceObj )
+                Sequence< sal_Int32 > aSize;
+                if ( ( rArgs[nInd].Value >>= aSize ) && aSize.getLength() == 4 )
                 {
-                    Sequence< sal_Int32 > aSize;
-                    if ( ( rArgs[nInd].Value >>= aSize ) && aSize.getLength() == 4 )
-                    {
-                        Rectangle aTmpRect( aSize[0], aSize[1], aSize[2], aSize[3] );
-                        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, pInPlaceObj->GetMapUnit() );
-
-                        pInPlaceObj->SetVisArea( aTmpRect );
-                    }
+                    Rectangle aTmpRect( aSize[0], aSize[1], aSize[2], aSize[3] );
+                    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, m_pData->m_pObjectShell->GetMapUnit() );
+                    m_pData->m_pObjectShell->SetVisArea( aTmpRect );
                 }
             }
-            else if ( !rArgs[nInd].Name.equalsAscii( "Stream" ) )
+            else if ( !rArgs[nInd].Name.equalsAscii( "Stream" ) && !rArgs[nInd].Name.equalsAscii( "InputStream" ) )
             {
-                // TODO/MAV: remove the above condition when the stream parameter is supported
+                // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be ignored here
                 m_pData->m_seqArguments[nNewLen++] = rArgs[nInd];
             }
         }
 
         m_pData->m_seqArguments.realloc( nNewLen );
-
 
         if( m_pData->m_pObjectShell->GetMedium() )
         {
@@ -1066,21 +1078,24 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
         // "WinExtent" property should be updated always.
         // We can store it now to overwrite an old value
         // since it is not from ItemSet
-        SfxInPlaceObject* pInPlaceObj = m_pData->m_pObjectShell->GetInPlaceObject();
-        if ( pInPlaceObj )
+        Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
+        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, m_pData->m_pObjectShell->GetMapUnit(), MAP_100TH_MM );
+
+        Sequence< sal_Int32 > aSize(4);
+        aSize[0] = aTmpRect.Left();
+        aSize[1] = aTmpRect.Top();
+        aSize[2] = aTmpRect.Right();
+        aSize[3] = aTmpRect.Bottom();
+
+        seqArgsNew.realloc( ++nNewLength );
+        seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "WinExtent" );
+        seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
+
+        if ( m_pData->m_aPreusedFilterName.getLength() )
         {
-            Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
-            aTmpRect = OutputDevice::LogicToLogic( aTmpRect, pInPlaceObj->GetMapUnit(), MAP_100TH_MM );
-
-            Sequence< sal_Int32 > aSize(4);
-            aSize[0] = aTmpRect.Left();
-            aSize[1] = aTmpRect.Top();
-            aSize[2] = aTmpRect.Right();
-            aSize[3] = aTmpRect.Bottom();
-
             seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "WinExtent" );
-            seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
+            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "PreusedFilterName" );
+            seqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
         }
 
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
@@ -1099,6 +1114,10 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
             seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
         }
 
+        // only the values that are not supported by the ItemSet must be cached here
+        uno::Sequence< beans::PropertyValue > aFinalCache;
+        sal_Int32 nFinalLength = 0;
+
         for ( sal_Int32 nOrg = 0; nOrg < nOrgLength; nOrg++ )
         {
              sal_Int32 nOldInd = 0;
@@ -1115,15 +1134,19 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
                 // since it is not supported by transformer
 
                 seqArgsNew.realloc( ++nNewLength );
-                seqArgsNew[ nNewLength - 1 ].Name = m_pData->m_seqArguments[nOrg].Name;
-                seqArgsNew[ nNewLength - 1 ].Value = m_pData->m_seqArguments[nOrg].Value;
-            }
+                seqArgsNew[ nNewLength - 1 ] = m_pData->m_seqArguments[nOrg];
 
+                aFinalCache.realloc( ++nFinalLength );
+                aFinalCache[ nFinalLength - 1 ] = m_pData->m_seqArguments[nOrg];
+            }
         }
-        m_pData->m_seqArguments = seqArgsNew;
+
+        m_pData->m_seqArguments = aFinalCache;
+
+        return seqArgsNew;
     }
 
-    return m_pData->m_seqArguments ;
+    return m_pData->m_seqArguments;
 }
 
 //________________________________________________________________________________________________________
@@ -1946,13 +1969,48 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, m_pData->m_pObjectShell ) );
+
+        sal_Bool bRet = sal_False;
+
+        // TODO/LATER: let the embedded case of saving be handled more careful
         if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
-            if ( m_pData->m_pObjectShell->DoSave() )
-                m_pData->m_pObjectShell->DoSaveCompleted();
+            // If this is an embedded object that has no URL based location it should be stored to own storage.
+            // An embedded object can have a location based on URL in case it is a link, then it should be
+            // stored in normal way.
+            if ( !hasLocation() || getLocation().compareToAscii( "private:", 8 ) == 0 )
+            {
+                if ( bRet = m_pData->m_pObjectShell->DoSave() )
+                    bRet = m_pData->m_pObjectShell->DoSaveCompleted();
+            }
+            else
+            {
+                // TODO/LATER: not a nice solution, should be removed
+                //             but for now it is unavoidable since the persistence part of the link document handling
+                //             must be done as for nonembedded document
+                m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_STANDARD );
+                bRet = m_pData->m_pObjectShell->Save_Impl();
+                m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
+            }
         }
         else
-            m_pData->m_pObjectShell->Save_Impl();
+            bRet = m_pData->m_pObjectShell->Save_Impl();
+
+        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
+                                                                    : ERRCODE_IO_CANTWRITE;
+        m_pData->m_pObjectShell->ResetError();
+
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEFINISHED, m_pData->m_pObjectShell ) );
+
+        if ( bRet )
+        {
+            m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, m_pData->m_pObjectShell ) );
+        }
+        else
+            throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
     }
 }
 
@@ -1971,7 +2029,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        impl_store( m_pData->m_pObjectShell, rURL, rArgs, sal_False );
+        impl_store( rURL, rArgs, sal_False );
 
         SEQUENCE< PROPERTYVALUE > aSequence ;
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
@@ -1994,7 +2052,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        impl_store( m_pData->m_pObjectShell, rURL, rArgs, sal_True );
+        impl_store( rURL, rArgs, sal_True );
     }
 }
 
@@ -2027,7 +2085,7 @@ void SAL_CALL SfxBaseModel::initNew()
 
         if ( !bRes )
         {
-            throw SfxIOException_Impl( nErrCode );
+            throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
         }
     }
 }
@@ -2035,7 +2093,7 @@ void SAL_CALL SfxBaseModel::initNew()
 //________________________________________________________________________________________________________
 // XLoadable
 //________________________________________________________________________________________________________
-extern void SetTemplate_Impl( SvStorage*, const String&, const String&, SfxObjectShell* );
+extern void SetTemplate_Impl( const String&, const String&, SfxObjectShell* );
 
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -2149,6 +2207,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
 
             if( bTemplate )
             {
+                //TODO/LATER: make sure that templates always are XML docs!
                 // document is created from a template
                 String aName( pMedium->GetName() );
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplNamItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
@@ -2157,7 +2216,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                     aTemplateName = pTemplNamItem->GetValue();
                 else
                 {
-                    // !TODO: what's this?!
+                    // !TODO/LATER: what's this?!
                     // Interaktiv ( DClick, Contextmenu ) kommt kein Langname mit
                     aTemplateName = m_pData->m_pObjectShell->GetDocInfo().GetTitle();
                     if ( !aTemplateName.Len() )
@@ -2179,21 +2238,20 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 if( m_pData->m_pObjectShell->IsOwnStorageFormat_Impl( *pMedium ) )
                 {
                     // untitled document must be based on temporary storage
-                    SvStorageRef xTmpStor = new SvStorage( ( m_pData->m_pObjectShell->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60), String() );
-                    m_pData->m_pObjectShell->GetStorage()->CopyTo( &xTmpStor );
-                    m_pData->m_pObjectShell->DoHandsOff();
+                    uno::Reference < embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                    m_pData->m_pObjectShell->GetStorage()->copyToStorage( xTmpStor );
                     pMedium->SetStorage_Impl( xTmpStor );
                     m_pData->m_pObjectShell->ForgetMedium();
                     if( !m_pData->m_pObjectShell->DoSaveCompleted( pMedium ) )
-                        nError = xTmpStor->GetErrorCode();
+                        nError = ERRCODE_IO_GENERAL;
                     else if ( !bSalvage )
                         // some further initializations for templates
-                        SetTemplate_Impl( xTmpStor, aName, aTemplateName, m_pData->m_pObjectShell );
+                        SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
                 }
                 else
                 {
                     // some further initializations for templates
-                    SetTemplate_Impl( m_pData->m_pObjectShell->GetStorage(), aName, aTemplateName, m_pData->m_pObjectShell );
+                    SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
                 }
 
                 // templates are never readonly
@@ -2216,6 +2274,15 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 const SfxFilter* pFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
                 pMedium->SetFilter( pFilter );
                 m_pData->m_pObjectShell->SetModified(sal_True);
+            }
+
+            // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
+            if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+            {
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+                ::rtl::OUString aFilterName;
+                if ( pFilterItem )
+                    m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
             }
         }
         else
@@ -2268,7 +2335,9 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 delete pMedium;
             }
 
-            throw SfxIOException_Impl( nError ? nError : ERRCODE_IO_CANTREAD );
+            throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                uno::Reference< uno::XInterface >(),
+                                                nError ? nError : ERRCODE_IO_CANTREAD );
         }
     }
 }
@@ -2291,7 +2360,61 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ) )
+        if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) )
+        {
+            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            {
+                TransferableObjectDescriptor aDesc;
+
+                aDesc.maClassName = m_pData->m_pObjectShell->GetClassName();
+                aDesc.maTypeName = aFlavor.HumanPresentableName;
+
+                // TODO/LATER: ViewAspect needs to be sal_Int64
+                aDesc.mnViewAspect = embed::Aspects::MSOLE_CONTENT;
+
+                //TODO/LATER: status needs to become sal_Int64
+                aDesc.mnOle2Misc = m_pData->m_pObjectShell->GetMiscStatus();
+                Size aSize = m_pData->m_pObjectShell->GetVisArea().GetSize();
+
+                MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
+                aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
+                aDesc.maDragStartPos = Point();
+                aDesc.maDisplayName = String();
+                aDesc.mbCanLink = FALSE;
+
+                SvMemoryStream aMemStm( 1024, 1024 );
+                aMemStm << aDesc;
+                aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
+            }
+            else
+                throw UNSUPPORTEDFLAVOREXCEPTION();
+        }
+        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" ) )
+        {
+            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            {
+                try
+                {
+                    utl::TempFile aTmp;
+                    aTmp.EnableKillingFile( TRUE );
+                    storeToURL( aTmp.GetURL(), SEQUENCE < PROPERTYVALUE >() );
+                    SvStream* pStream = aTmp.GetStream( STREAM_READ );
+                    const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
+                    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+                    pStream->Seek( STREAM_SEEK_TO_BEGIN );
+                    pStream->Read( aSeq.getArray(),  nLen );
+                    delete pStream;
+                    if( aSeq.getLength() )
+                        aAny <<= aSeq;
+                }
+                catch ( uno::Exception& )
+                {
+                }
+            }
+            else
+                throw UNSUPPORTEDFLAVOREXCEPTION();
+        }
+        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2300,6 +2423,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream aMemStm( 65535, 65535 );
+                    aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     pMetaFile->Write( aMemStm );
                     delete pMetaFile;
@@ -2310,7 +2434,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ) )
+        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2319,6 +2443,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_EMF );
+                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
                     if ( pStream )
                     {
@@ -2342,7 +2467,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" ) )
+        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2351,6 +2476,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_WMF );
+                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
 
                     if ( pStream )
@@ -2379,6 +2505,29 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
+        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
+        {
+            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            {
+                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+
+                if ( pMetaFile )
+                {
+                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_BMP );
+                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                    delete pMetaFile;
+
+                    if ( pStream )
+                    {
+                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
+                                                        pStream->Seek( STREAM_SEEK_TO_END ) );
+                        delete pStream;
+                    }
+                }
+            }
+            else
+                throw UNSUPPORTEDFLAVOREXCEPTION();
+        }
         else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
@@ -2388,6 +2537,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_PNG );
+                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
 
                     if ( pStream )
@@ -2421,35 +2571,45 @@ SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 5 : 3;
+    sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 7 : 5;
     SEQUENCE< DATAFLAVOR > aFlavorSeq( nSuppFlavors );
 
     aFlavorSeq[0].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) );
     aFlavorSeq[0].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GDIMetaFile" ) );
     aFlavorSeq[0].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[1].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice;windows_formatname=\"Image EMF\"" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
     aFlavorSeq[1].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
     aFlavorSeq[1].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[2].MimeType =
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice;windows_formatname=\"Image WMF\"" ) );
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
     aFlavorSeq[2].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
     aFlavorSeq[2].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    if ( nSuppFlavors == 5 )
-    {
-        aFlavorSeq[3].MimeType =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice;windows_formatname=\"Image EMF\"" ) );
-        aFlavorSeq[3].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
-        aFlavorSeq[3].DataType = getCppuType( (const sal_uInt64*) 0 );
+    aFlavorSeq[3].MimeType =
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) );
+    aFlavorSeq[3].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Star Object Descriptor (XML)" ) );
+    aFlavorSeq[3].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-        aFlavorSeq[4].MimeType =
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice;windows_formatname=\"Image WMF\"" ) );
-        aFlavorSeq[4].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
-        aFlavorSeq[4].DataType = getCppuType( (const sal_uInt64*) 0 );
+    aFlavorSeq[4].MimeType =
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"" ) );
+    aFlavorSeq[4].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Star Embed Source (XML)" ) );
+    aFlavorSeq[4].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+
+    if ( nSuppFlavors == 7 )
+    {
+        aFlavorSeq[5].MimeType =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
+        aFlavorSeq[5].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
+        aFlavorSeq[5].DataType = getCppuType( (const sal_uInt64*) 0 );
+
+        aFlavorSeq[6].MimeType =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
+        aFlavorSeq[6].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows MetaFile" ) );
+        aFlavorSeq[6].DataType = getCppuType( (const sal_uInt64*) 0 );
     }
 
     return aFlavorSeq;
@@ -2468,12 +2628,12 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"GDIMetaFile\"" ) )
+    if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image EMF\"" ) )
+    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
@@ -2481,12 +2641,22 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
           && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice;windows_formatname=\"Image WMF\"" ) )
+    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
         else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
+            return sal_True;
+    }
+    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) )
+    {
+        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            return sal_True;
+    }
+    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" ) )
+    {
+        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
 
@@ -2568,6 +2738,36 @@ void addTitle_Impl( Sequence < ::com::sun::star::beans::PropertyValue >& rSeq, c
     }
 }
 
+void SfxBaseModel::NotifyStorageListeners_Impl()
+{
+    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+
+    if ( m_pData->m_pObjectShell )
+    {
+        ::cppu::OInterfaceContainerHelper* pContainer =
+            m_pData->m_aInterfaceContainer.getContainer(
+                ::getCppuType( ( const uno::Reference< document::XStorageChangeListener >*) NULL ) );
+        if ( pContainer != NULL )
+        {
+            uno::Reference< embed::XStorage > xNewStorage = m_pData->m_pObjectShell->GetStorage();
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while ( pIterator.hasMoreElements() )
+            {
+                try
+                {
+                    ((document::XStorageChangeListener*)pIterator.next())->notifyStorageChange(
+                                                                            xSelfHold,
+                                                                            xNewStorage );
+                }
+                catch( uno::RuntimeException& )
+                {
+                    pIterator.remove();
+                }
+            }
+        }
+    }
+}
+
 void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                              const  SfxHint&        rHint   )
 {
@@ -2583,6 +2783,10 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
         if ( pNamedHint )
         {
+            if ( SFX_EVENT_STORAGECHANGED == pNamedHint->GetEventId() )
+            {
+                NotifyStorageListeners_Impl();
+            }
             if ( SFX_EVENT_SAVEASDOC == pNamedHint->GetEventId() )
             {
                 // Temporary solution for storage problem
@@ -2822,8 +3026,20 @@ sal_Bool SfxBaseModel::impl_isDisposed() const
 //  private impl.
 //________________________________________________________________________________________________________
 
-void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell    ,
-                                const   OUSTRING&                   sURL            ,
+::rtl::OUString SfxBaseModel::GetMediumFilterName_Impl()
+{
+    const SfxFilter* pFilter = NULL;
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+        pFilter = pMedium->GetFilter();
+
+    if ( pFilter )
+        return pFilter->GetName();
+
+    return ::rtl::OUString();
+}
+
+void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL            ,
                                 const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
                                         sal_Bool                    bSaveTo         )
 {
@@ -2832,21 +3048,31 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
 
     //sal_Bool aSaveAsTemplate = sal_False;
 
-    SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
-    aParams->Put( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
-    if ( bSaveTo )
-        aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
-
-    TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
-    sal_Bool aRet = pObjectShell->APISaveAs_Impl( sURL, aParams );
-    DELETEZ( aParams );
-
-    sal_uInt32 nErrCode = pObjectShell->GetError() ? pObjectShell->GetError() : ERRCODE_IO_CANTWRITE;
-    pObjectShell->ResetError();
-
-    if ( !aRet )
+    if ( m_pData->m_pObjectShell )
     {
-        throw SfxIOException_Impl( nErrCode );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOC, m_pData->m_pObjectShell ) );
+
+        SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+        aParams->Put( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
+        if ( bSaveTo )
+            aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
+
+        TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
+        sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
+        DELETEZ( aParams );
+
+        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
+                                                                    : ERRCODE_IO_CANTWRITE;
+        m_pData->m_pObjectShell->ResetError();
+
+        if ( bRet )
+        {
+            m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, m_pData->m_pObjectShell ) );
+        }
+        else
+            throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
     }
 }
 
@@ -2998,8 +3224,7 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !impl_isDisposed() && GetObjectShell() )
     {
-        SvGlobalName aName;
-        aName.MakeFromMemory( (void*) aIdentifier.getConstArray() );
+        SvGlobalName aName( aIdentifier );
         if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
              return (sal_Int64)(sal_Int32)(SvObject*)GetObjectShell();
         else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
@@ -3008,6 +3233,11 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
 
     return 0;
 }
+
+//____________________________________________________________________________________________________
+//  XDocumentSubStorageSupplier
+//____________________________________________________________________________________________________
+
 
 void SfxBaseModel::ChildIsCommited()
 {
@@ -3028,21 +3258,26 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
     REFERENCE< XSTORAGE > xResult;
     if ( m_pData->m_pObjectShell.Is() )
     {
-        SotStorageRef rStorage = m_pData->m_pObjectShell->GetStorage();
-        if ( rStorage.Is() && !rStorage->GetError() )
+        uno::Reference< embed::XStorage > xStorage = m_pData->m_pObjectShell->GetStorage();
+        if ( xStorage.is() )
         {
-            xResult = rStorage->GetUNOAPIDuplicate( aStorageName, nMode );
-            rStorage->ResetError();
-            uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNOQUERY );
-            if ( xBroadcaster.is() )
+            try
             {
-                if ( m_pData->m_pChildCommitListen == NULL )
+                xResult = xStorage->openStorageElement( aStorageName, nMode );
+                uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNOQUERY );
+                if ( xBroadcaster.is() )
                 {
-                    m_pData->m_pChildCommitListen = new OChildCommitListen_Impl( *this );
-                    m_pData->m_pChildCommitListen->acquire();
+                    if ( m_pData->m_pChildCommitListen == NULL )
+                    {
+                        m_pData->m_pChildCommitListen = new OChildCommitListen_Impl( *this );
+                        m_pData->m_pChildCommitListen->acquire();
+                    }
+                    xBroadcaster->addTransactionListener( static_cast< embed::XTransactionListener* >(
+                                                                            m_pData->m_pChildCommitListen ) );
                 }
-                xBroadcaster->addTransactionListener( static_cast< embed::XTransactionListener* >(
-                                                                        m_pData->m_pChildCommitListen ) );
+            }
+            catch ( uno::Exception& )
+            {
             }
         }
     }
@@ -3063,17 +3298,17 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     sal_Bool bSuccess = sal_False;
     if ( m_pData->m_pObjectShell.Is() )
     {
-        SotStorageRef rStorage = m_pData->m_pObjectShell->GetStorage();
-        if ( rStorage.Is() && SOFFICE_FILEFORMAT_60 <= rStorage->GetVersion() )
+        uno::Reference < embed::XStorage > xStorage = m_pData->m_pObjectShell->GetStorage();
+        uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
+        if ( xAccess.is() )
         {
-            SvStorageInfoList aSubStorInfoList;
-            rStorage->FillInfoList( &aSubStorInfoList );
-            for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+            Sequence< ::rtl::OUString > aTemp = xAccess->getElementNames();
+            for ( sal_Int32 n = 0; n < aTemp.getLength(); n++ )
             {
-                if ( aSubStorInfoList[nInd].IsStorage() )
+                if ( xStorage->isStorageElement( aTemp[n] ) )
                 {
                     aResult.realloc( ++nResultSize );
-                    aResult[ nResultSize - 1 ] = aSubStorInfoList[nInd].GetName();
+                    aResult[ nResultSize - 1 ] = aTemp[n];
                 }
             }
 
@@ -3086,6 +3321,11 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
 
        return aResult;
 }
+
+//____________________________________________________________________________________________________
+//  XScriptProviderSupplier
+//____________________________________________________________________________________________________
+
 
 REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
     throw ( RUNTIMEEXCEPTION )
@@ -3115,6 +3355,10 @@ REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
     }
     return xSp;
 }
+
+//____________________________________________________________________________________________________
+//  XUIConfigurationManagerSupplier
+//____________________________________________________________________________________________________
 
 rtl::OUString SfxBaseModel::getRuntimeUID() const
 {
@@ -3186,17 +3430,27 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
 
-    SfxInPlaceObject* pInPlaceObj = m_pData->m_pObjectShell->GetInPlaceObject();
-    if ( !pInPlaceObj )
-        throw uno::Exception(); // TODO: error handling
+    Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
-    // TODO: for now always use MAP_100TH_MM, layter a native resolution can be used
-    Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
-    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, pInPlaceObj->GetMapUnit(), MAP_100TH_MM );
-    aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
-    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, MAP_100TH_MM, pInPlaceObj->GetMapUnit() );
+#if 0
+    Window* pWindow = NULL;
+    SfxViewFrame* pViewFrm = m_pData->m_pObjectShell.Is() ?
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
 
-    pInPlaceObj->SetVisArea( aTmpRect );
+    if ( pWindow )
+    {
+        MapMode aInternalMapMode( pViewFrm->GetWindow().GetMapMode() );
+        MapMode aExternalMapMode( m_pData->m_pObjectShell->GetMapUnit() );
+
+        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aInternalMapMode, aExternalMapMode );
+        aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
+        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aExternalMapMode, aInternalMapMode );
+    }
+    else
+#endif
+        aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
+
+    m_pData->m_pObjectShell->SetVisArea( aTmpRect );
 }
 
 awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 nAspect )
@@ -3212,19 +3466,27 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 nAspect )
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
 
-    SfxInPlaceObject* pInPlaceObj = m_pData->m_pObjectShell->GetInPlaceObject();
-    if ( !pInPlaceObj )
-        throw uno::Exception(); // TODO: error handling
+    Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
-    // TODO: for now always use MAP_100TH_MM, layter a native resolution can be used
-    Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
-    aTmpRect = OutputDevice::LogicToLogic( aTmpRect, pInPlaceObj->GetMapUnit(), MAP_100TH_MM );
+#if 0
+    Window* pWindow = NULL;
+    SfxViewFrame* pViewFrm = m_pData->m_pObjectShell.Is() ?
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
+
+    if ( pWindow )
+    {
+        MapMode aInternalMapMode( pViewFrm->GetWindow().GetMapMode() );
+        MapMode aExternalMapMode( m_pData->m_pObjectShell->GetMapUnit() );
+
+        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aInternalMapMode, aExternalMapMode );
+    }
+#endif
 
     return awt::Size( aTmpRect.GetWidth(), aTmpRect.GetHeight() );
 }
 
 
-sal_Int32 SAL_CALL SfxBaseModel::getMapMode( sal_Int64 nAspect )
+sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
@@ -3235,8 +3497,186 @@ sal_Int32 SAL_CALL SfxBaseModel::getMapMode( sal_Int64 nAspect )
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
 
-    // TODO: for now always use MAP_100TH_MM, layter a native resolution can be used
-    return embed::EmbedMapModes::ONE_100TH_MM;
+    return VCLUnoHelper::VCL2UnoEmbedMapUnit( m_pData->m_pObjectShell->GetMapUnit() );
+}
+
+embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentation( ::sal_Int64 nAspect )
+        throw ( lang::IllegalArgumentException,
+                embed::WrongStateException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    datatransfer::DataFlavor aDataFlavor(
+            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
+            ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
+            ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+
+    embed::VisualRepresentation aVisualRepresentation;
+    aVisualRepresentation.Data = getTransferData( aDataFlavor );
+    aVisualRepresentation.Flavor = aDataFlavor;
+
+    return aVisualRepresentation;
+}
+
+//____________________________________________________________________________________________________
+//  XStorageBasedDocument
+//____________________________________________________________________________________________________
+
+void SAL_CALL SfxBaseModel::loadFromStorage( const REFERENCE< XSTORAGE >& xStorage,
+                                             const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
+    throw ( ILLEGALARGUMENTEXCEPTION,
+            DOUBLEINITIALIZATIONEXCEPTION,
+            IOEXCEPTION,
+            EXCEPTION,
+            RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw IOEXCEPTION(); // TODO:
+
+    if ( m_pData->m_pObjectShell.Is() )
+    {
+        if( m_pData->m_pObjectShell->GetMedium() )
+            // if a Medium is present, the document is already initialized
+            throw DOUBLEINITIALIZATIONEXCEPTION();
+
+        SfxMedium* pMedium = new SfxMedium( xStorage );
+
+        SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
+        //SfxAllItemSet aSet( SFX_APP()->GetPool() );
+
+        TransformParameters( SID_OPENDOC, aMediaDescriptor, aSet );
+        pMedium->GetItemSet()->Put( aSet );
+
+        // allow to use an interactionhandler (if there is one)
+        pMedium->UseInteractionHandler( TRUE );
+
+        // TODO/LATER: in case of template storage, the temporary copy must be created
+        SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+        BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
+        m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
+        m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+
+        // load document
+        if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
+        {
+            sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+            throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                                uno::Reference< uno::XInterface >(),
+                                                nError ? nError : ERRCODE_IO_CANTREAD );
+        }
+    }
+}
+
+void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorage,
+                                const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
+    throw ( ILLEGALARGUMENTEXCEPTION,
+            IOEXCEPTION,
+            EXCEPTION,
+            RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    REFERENCE< XSTORAGE > xResult;
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw IOEXCEPTION(); // TODO:
+
+    SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
+    TransformParameters( SID_SAVEASDOC, aMediaDescriptor, aSet );
+
+    // TODO/LATER: may be a special URL "private:storage" should be used
+    SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+    sal_Int32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
+    if( pItem )
+    {
+        String aFilterName = pItem->GetValue();
+        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        if ( pFilter && pFilter->UsesStorage() )
+            nVersion = pFilter->GetVersion();
+    }
+
+    m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion );
+    if ( !m_pData->m_pObjectShell->DoSaveAs( xStorage, &aSet ) )
+    {
+        sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+        throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                            uno::Reference< uno::XInterface >(),
+                                            nError ? nError : ERRCODE_IO_GENERAL );
+    }
+}
+
+void SAL_CALL SfxBaseModel::switchToStorage( const REFERENCE< XSTORAGE >& xStorage )
+        throw ( ILLEGALARGUMENTEXCEPTION,
+                IOEXCEPTION,
+                EXCEPTION,
+                RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    REFERENCE< XSTORAGE > xResult;
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw IOEXCEPTION(); // TODO:
+
+    if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
+    {
+        sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+        throw task::ErrorCodeIOException( ::rtl::OUString(),
+                                            uno::Reference< uno::XInterface >(),
+                                            nError ? nError : ERRCODE_IO_GENERAL );
+    }
+
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+}
+
+REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()
+        throw ( IOEXCEPTION,
+                EXCEPTION,
+                RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    REFERENCE< XSTORAGE > xResult;
+    if ( !m_pData->m_pObjectShell.Is() )
+        throw IOEXCEPTION(); // TODO
+
+    return m_pData->m_pObjectShell->GetStorage();
+}
+
+void SAL_CALL SfxBaseModel::addStorageChangeListener(
+            const REFERENCE< document::XStorageChangeListener >& xListener )
+        throw ( RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.addInterface(
+                                    ::getCppuType((const REFERENCE< document::XStorageChangeListener >*)0), xListener );
+}
+
+void SAL_CALL SfxBaseModel::removeStorageChangeListener(
+            const REFERENCE< document::XStorageChangeListener >& xListener )
+        throw ( RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.removeInterface(
+                                    ::getCppuType((const REFERENCE< document::XStorageChangeListener >*)0), xListener );
 }
 
 
