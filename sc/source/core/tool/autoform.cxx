@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 10:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 /*------------------------------------------------------------------------
 
-    $Author: hr $ $Date: 2000-09-19 00:16:17 $ $Revision: 1.1.1.1 $
+    $Author: nn $ $Date: 2000-09-29 10:29:16 $ $Revision: 1.2 $
     $Logfile:   T:/sc/source/core/tool/autoform.cxv  $ $Workfile:   autoform.cxx  $
     (c) Copyright 1989 - 1994, Star Division GmbH, Hamburg
 
@@ -90,33 +90,17 @@
 #include <svx/shdditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
-#ifndef _SVX_ROTMODIT_HXX //autogen
 #include <svx/rotmodit.hxx>
-#endif
 #include <sfx2/app.hxx>
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#include <svtools/iniman.hxx>
-#ifndef _SHL_HXX
+#include <svtools/pathoptions.hxx>
 #include <tools/shl.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/system.hxx>
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
 
 #include "autoform.hxx"
 #include "zforauto.hxx"
@@ -1055,7 +1039,8 @@ BOOL ScAutoFormat::Load()
     BOOL bRet = TRUE;
 
     INetURLObject aURL;
-    aURL.SetSmartURL( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
+    SvtPathOptions aPathOpt;
+    aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
 
@@ -1160,7 +1145,8 @@ BOOL ScAutoFormat::Save()
     BOOL bRet = TRUE;
 
     INetURLObject aURL;
-    aURL.SetSmartURL( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
+    SvtPathOptions aPathOpt;
+    aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
 
@@ -1189,6 +1175,8 @@ BOOL ScAutoFormat::Save()
         for (USHORT i=1; bRet && (i < nCount); i++)
             bRet = ((ScAutoFormatData*)pItems[i])->Save(rStream);
         rStream.Flush();
+
+        aMedium.Commit();
     }
     bSaveLater = FALSE;
     return bRet;
