@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.37 2002-04-04 07:59:46 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.38 2002-04-08 16:36:07 fs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2002-04-04 07:59:46 $ $Revision: 1.37 $
+//	$Author: fs $ $Date: 2002-04-08 16:36:07 $ $Revision: 1.38 $
 //
 // Description:
 //
@@ -3198,27 +3198,32 @@ OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 }
 
 //------------------------------------------------------------------------------
+static Locale& impl_getLocaleInstance( )
+{
+	static Locale s_aLocale(
+		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) ),
+		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) ),
+		::rtl::OUString( )
+	);
+	return s_aLocale;
+}
+
+//------------------------------------------------------------------------------
+void OParseContext::setDefaultLocale( const ::com::sun::star::lang::Locale& _rLocale )
+{
+	impl_getLocaleInstance() = _rLocale;
+}
+
+//------------------------------------------------------------------------------
+Locale OParseContext::getPreferredLocale( ) const
+{
+	return getDefaultLocale();
+}
+
+//------------------------------------------------------------------------------
 const Locale& OParseContext::getDefaultLocale()
 {
-	static Locale aIntl(::rtl::OUString::createFromAscii("en_US"),::rtl::OUString::createFromAscii("en_US"),::rtl::OUString());
-	static sal_Bool bInitialized = sal_False;
-	if (!bInitialized)
-	{	
-		// ensure that the two members we're interested in are really set
-		// (if the system doesn't know the locale en_US aIntl would be initialized with the
-		// system language which may be anything - which we don't want ...)
-		// 74342 - 21.03.00 - FS
-
-		// TODO check the decimal sep and thousand sep
-//		if(!s_xLocaleData.is())
-//			s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY); 
-//
-//		s_xLocaleData->getLocaleItem(*m_pLocale).
-//		aIntl.SetNumThousandSep(',');
-//		aIntl.SetNumDecimalSep('.');
-		bInitialized = sal_True;
-	}
-	return aIntl;
+	return impl_getLocaleInstance();
 }
 
 //==========================================================================
