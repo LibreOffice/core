@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-14 08:52:08 $
+ *  last change: $Author: ssa $ $Date: 2002-03-14 13:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // compares window pos left-to-right
 struct LTRSort : public ::std::binary_function< const Window*, const Window*, bool >
 {
-    bool operator()( const Window* w1, const Window* w2 )
+    bool operator()( const Window* w1, const Window* w2 ) const
     {
         Point pos1, pos2;
         if( w1->GetType() == RSC_DOCKINGWINDOW )
@@ -95,7 +95,7 @@ struct LTRSort : public ::std::binary_function< const Window*, const Window*, bo
 };
 struct LTRSortBackward : public ::std::binary_function< const Window*, const Window*, bool >
 {
-    bool operator()( const Window* w1, const Window* w2 )
+    bool operator()( const Window* w1, const Window* w2 ) const
     {
         Point pos1, pos2;
         if( w1->GetType() == RSC_DOCKINGWINDOW )
@@ -130,12 +130,19 @@ void TaskPaneList::AddWindow( Window *pWindow )
 {
     bool bDockingWindow=false;
     bool bToolbox=false;
+    bool bDialog=false;
+    bool bUnknown=false;
+
     if( pWindow )
     {
         if( pWindow->GetType() == RSC_DOCKINGWINDOW )
             bDockingWindow = true;
         else if( pWindow->GetType() == RSC_TOOLBOX )
             bToolbox = true;
+        else if( pWindow->GetType() == RSC_DIALOG || pWindow->GetType() == RSC_MODELESSDIALOG || pWindow->GetType() == RSC_MODALDIALOG )
+            bDialog = true;
+        else
+            bUnknown = true;
 
         ::std::vector< Window* >::iterator p;
         p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
@@ -177,13 +184,13 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             if( (*p)->HasChildPathFocus( TRUE ) )
             {
                 // F6 works only in floaters
-                if( bFloatsOnly && (*p)->GetType() != RSC_DOCKINGWINDOW )
+                if( bFloatsOnly && (*p)->GetType() != RSC_DOCKINGWINDOW && (*p)->GetType() != RSC_MODELESSDIALOG )
                     return FALSE;
 
                 bFocusInList = TRUE;
                 // activate next task pane
                 Window *pNextWin = bFloatsOnly ? FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
-                if( pNextWin != *p )
+                if( pNextWin != pWin )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
                     pNextWin->GrabFocus();
@@ -213,16 +220,11 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         // the focus is not in the list: activate first float if F6 was pressed
         if( !bFocusInList && bFloatsOnly )
         {
-            p = mTaskPanes.begin();
-            while( p != mTaskPanes.end() )
+            Window *pWin = FindNextFloat( NULL, bForward );
+            if( pWin )
             {
-                Window *pWin = *p;
-                if( pWin->IsVisible() && pWin->GetType() == RSC_DOCKINGWINDOW )
-                {
-                    pWin->GrabFocus();
-                    return TRUE;
-                }
-                p++;
+                pWin->GrabFocus();
+                return TRUE;
             }
         }
     }
@@ -232,6 +234,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
 // --------------------------------------------------
 
+//  returns next valid pane
 Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
 {
     if( bForward )
@@ -263,6 +266,7 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
 
 // --------------------------------------------------
 
+// returns first valid float if pWindow==0, otherwise returns next valid float
 Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
 {
     if( bForward )
@@ -271,17 +275,28 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
 
     ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+
+    while( p != mTaskPanes.end() )
+    {
+        Window *pWin = *p;
+        ++p;
+    }
+
+    p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
     {
         if( !pWindow || *p == pWindow )
         {
-            unsigned n = mTaskPanes.size();
-            while( --n )
+            while( p != mTaskPanes.end() )
             {
-                if( ++p == mTaskPanes.end() )
+                if( pWindow )   // increment before test
+                    ++p;
+                if( p == mTaskPanes.end() )
                     return pWindow; // do not wrap, send focus back to document at end of list
-                if( (*p)->IsVisible() && (*p)->GetType() == RSC_DOCKINGWINDOW )
+                if( (*p)->IsVisible() && ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->GetType() == RSC_MODELESSDIALOG ) )
                     return *p;
+                if( !pWindow )  // increment after test, otherwise first element is skipped
+                    ++p;
             }
             break;
         }
