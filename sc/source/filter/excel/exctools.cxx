@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:08:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ RootData::~RootData()
 
 
 
-OutlineBuffer::OutlineBuffer( USHORT nNewSize )
+OutlineBuffer::OutlineBuffer( SCSIZE nNewSize )
 {
     DBG_ASSERT( nNewSize > 0, "-OutlineBuffer::Ctor: nNewSize == 0!" );
 
@@ -206,7 +206,7 @@ OutlineBuffer::~OutlineBuffer()
 }
 
 
-void OutlineBuffer::SetLevel( USHORT nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden )
+void OutlineBuffer::SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden )
 {
     if( nIndex < nSize )
     {
@@ -218,28 +218,6 @@ void OutlineBuffer::SetLevel( USHORT nIndex, BYTE nVal, BOOL bOuted, BOOL bHidde
             nLast = nIndex;
         if( nVal > nMaxLevel )
             nMaxLevel = nVal;
-    }
-}
-
-
-void OutlineBuffer::SetOuted( USHORT nIndex )
-{
-    if( nIndex < nSize )
-    {
-        pOuted[ nIndex ] = TRUE;
-        if( nIndex > nLast )
-            nLast = nIndex;
-    }
-}
-
-
-void OutlineBuffer::SetOuted( USHORT nIndex, BOOL bOuted )
-{
-    if( nIndex < nSize )
-    {
-        pOuted[ nIndex ] = bOuted;
-        if( nIndex > nLast )
-            nLast = nIndex;
     }
 }
 
@@ -345,7 +323,7 @@ void OutlineBuffer::MakeScOutline( void )
 }
 
 
-void OutlineBuffer::SetLevelRange( USHORT nF, USHORT nL, BYTE nVal,
+void OutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
                                     BOOL bOuted, BOOL bHidden )
 {
     DBG_ASSERT( nF <= nL, "+OutlineBuffer::SetLevelRange(): Last < First!" );
@@ -380,7 +358,7 @@ void OutlineBuffer::SetLevelRange( USHORT nF, USHORT nL, BYTE nVal,
 
 void OutlineBuffer::Reset( void )
 {
-    for( USHORT nC = 0 ; nC < nSize ; nC++  )
+    for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
     {
         pLevel[ nC ] = 0;
         pOuted[ nC ] = pHidden[ nC ] = FALSE;
@@ -392,7 +370,7 @@ void OutlineBuffer::Reset( void )
 
 void OutlineBuffer::Reset( ScOutlineArray *pOArray )
 {
-    for( USHORT nC = 0 ; nC < nSize ; nC++  )
+    for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
     {
         pLevel[ nC ] = 0;
         pOuted[ nC ] = pHidden[ nC ] = FALSE;
