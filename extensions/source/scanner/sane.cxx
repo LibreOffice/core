@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-28 16:45:33 $
+ *  last change: $Author: hr $ $Date: 2002-04-03 13:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #include <cstdarg>
-#include <cmath>
+#include <math.h>
 #include <tools/stream.hxx>
 #include <sane.hxx>
 #include <dlfcn.h>
