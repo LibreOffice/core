@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:08:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+
+#include <sfx2/objface.hxx>
+
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #include <svx/sizeitem.hxx>
 #endif
