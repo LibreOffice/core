@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_tab_stop, XML_TOK_TEXT_TAB_STOP },
     { XML_NAMESPACE_TEXT, sXML_line_break, XML_TOK_TEXT_LINE_BREAK },
     { XML_NAMESPACE_TEXT, sXML_s, XML_TOK_TEXT_S },
+    { XML_NAMESPACE_TEXT, sXML_a, XML_TOK_TEXT_HYPERLINK },
 
     { XML_NAMESPACE_TEXT, sXML_footnote, XML_TOK_TEXT_FOOTNOTE },
     { XML_NAMESPACE_TEXT, sXML_endnote, XML_TOK_TEXT_ENDNOTE },
@@ -353,6 +354,17 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_TEXT_FRAME_FILTER_NAME },
     XML_TOKEN_MAP_END
 };
+
+static __FAR_DATA SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
+{
+    { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXT_HYPERLINK_HREF },
+    { XML_NAMESPACE_OFFICE, sXML_name, XML_TOK_TEXT_HYPERLINK_NAME },
+    { XML_NAMESPACE_XLINK, sXML_show, XML_TOK_TEXT_HYPERLINK_SHOW },
+    { XML_NAMESPACE_OFFICE, sXML_target_frame_name, XML_TOK_TEXT_HYPERLINK_TARGET_FRAME },
+    { XML_NAMESPACE_TEXT, sXML_style_name, XML_TOK_TEXT_HYPERLINK_STYLE_NAME },
+    { XML_NAMESPACE_TEXT, sXML_visited_style_name, XML_TOK_TEXT_HYPERLINK_VIS_STYLE_NAME },
+    XML_TOKEN_MAP_END
+};
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM ) :
@@ -363,6 +375,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     pTextListBlockElemTokenMap( 0 ),
     pTextFieldAttrTokenMap( NULL ),
     pTextFrameAttrTokenMap( NULL ),
+    pTextHyperlinkAttrTokenMap( NULL ),
     pPrevFrmNames( 0 ),
     pNextFrmNames( 0 ),
     pRenameMap( NULL ),
@@ -378,7 +391,12 @@ XMLTextImportHelper::XMLTextImportHelper(
     sPropertySequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
     sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber")),
     sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
-    sChainPrevName(RTL_CONSTASCII_USTRINGPARAM("ChainPrevName"))
+    sChainPrevName(RTL_CONSTASCII_USTRINGPARAM("ChainPrevName")),
+    sHyperLinkURL(RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL")),
+    sHyperLinkName(RTL_CONSTASCII_USTRINGPARAM("HyperLinkName")),
+    sHyperLinkTarget(RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget")),
+    sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
+    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -453,6 +471,7 @@ XMLTextImportHelper::~XMLTextImportHelper()
     delete pTextListBlockElemTokenMap;
     delete pTextFieldAttrTokenMap;
     delete pTextFrameAttrTokenMap;
+    delete pTextHyperlinkAttrTokenMap;
 
     delete pRenameMap;
 
@@ -474,36 +493,29 @@ void XMLTextImportHelper::ResetCursor()
     xCursorAsRange = 0;
 }
 
-const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
+SvXMLTokenMap *XMLTextImportHelper::_GetTextElemTokenMap()
 {
-    if( !pTextElemTokenMap )
-        pTextElemTokenMap = new SvXMLTokenMap( aTextElemTokenMap );
-
-    return *pTextElemTokenMap;
+    return new SvXMLTokenMap( aTextElemTokenMap );
 }
 
-const SvXMLTokenMap& XMLTextImportHelper::GetTextPElemTokenMap()
+SvXMLTokenMap *XMLTextImportHelper::_GetTextPElemTokenMap()
 {
-    if( !pTextPElemTokenMap )
-        pTextPElemTokenMap = new SvXMLTokenMap( aTextPElemTokenMap );
-
-    return *pTextPElemTokenMap;
+    return new SvXMLTokenMap( aTextPElemTokenMap );
 }
 
-const SvXMLTokenMap& XMLTextImportHelper::GetTextPAttrTokenMap()
+SvXMLTokenMap *XMLTextImportHelper::_GetTextPAttrTokenMap()
 {
-    if( !pTextPAttrTokenMap )
-        pTextPAttrTokenMap = new SvXMLTokenMap( aTextPAttrTokenMap );
-
-    return *pTextPAttrTokenMap;
+    return new SvXMLTokenMap( aTextPAttrTokenMap );
 }
 
-const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
+SvXMLTokenMap *XMLTextImportHelper::_GetTextFrameAttrTokenMap()
 {
-    if( !pTextFrameAttrTokenMap )
-        pTextFrameAttrTokenMap = new SvXMLTokenMap( aTextFrameAttrTokenMap );
+    return new SvXMLTokenMap( aTextFrameAttrTokenMap );
+}
 
-    return *pTextFrameAttrTokenMap;
+SvXMLTokenMap *XMLTextImportHelper::_GetTextHyperlinkAttrTokenMap()
+{
+    return new SvXMLTokenMap( aTextHyperlinkAttrTokenMap );
 }
 
 sal_Bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
@@ -521,6 +533,39 @@ void XMLTextImportHelper::InsertString( const OUString& rChars )
         xText->insertString( xCursorAsRange, rChars, sal_False );
 }
 
+void XMLTextImportHelper::InsertString( const OUString& rChars,
+                                         sal_Bool& rIgnoreLeadingSpace )
+{
+    DBG_ASSERT( xText.is(), "no text" );
+    DBG_ASSERT( xCursorAsRange.is(), "no range" );
+    if( xText.is() )
+    {
+        sal_Int32 nLen = rChars.getLength();
+        OUStringBuffer sChars( nLen );
+
+        for( sal_Int32 i=0; i < nLen; i++ )
+        {
+            sal_Unicode c = rChars[i];
+            switch( c )
+            {
+                case 0x20:
+                case 0x09:
+                case 0x0a:
+                case 0x0d:
+                    if( !rIgnoreLeadingSpace )
+                        sChars.append( (sal_Unicode)0x20 );
+                    rIgnoreLeadingSpace = sal_True;
+                    break;
+                default:
+                    rIgnoreLeadingSpace = sal_False;
+                    sChars.append( c );
+                    break;
+            }
+        }
+        xText->insertString( xCursorAsRange, sChars.makeStringAndClear(),
+                             sal_False );
+    }
+}
 void XMLTextImportHelper::InsertControlCharacter( sal_Int16 nControl )
 {
     DBG_ASSERT( xText.is(), "no text" );
@@ -674,6 +719,56 @@ void XMLTextImportHelper::SetOutlineStyle(
     }
 }
 
+void XMLTextImportHelper::SetHyperlink(
+    const Reference < XTextCursor >& rCursor,
+    const OUString& rHRef,
+    const OUString& rName,
+    const OUString& rTargetFrameName,
+    const OUString& rStyleName,
+    const OUString& rVisitedStyleName )
+{
+    Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
+    Reference < XPropertySetInfo > xPropSetInfo =
+        xPropSet->getPropertySetInfo();
+    if( !xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName(sHyperLinkURL) )
+        return;
+
+    Any aAny;
+    aAny <<= rHRef;
+    xPropSet->setPropertyValue( sHyperLinkURL, aAny );
+
+    if( xPropSetInfo->hasPropertyByName( sHyperLinkName ) )
+    {
+        aAny <<= rName;
+        xPropSet->setPropertyValue( sHyperLinkName, aAny );
+    }
+
+    if( xPropSetInfo->hasPropertyByName( sHyperLinkTarget ) )
+    {
+        aAny <<= rTargetFrameName;
+        xPropSet->setPropertyValue( sHyperLinkTarget, aAny );
+    }
+
+    if( xTextStyles.is() )
+    {
+        if( rStyleName.getLength() &&
+            xPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
+            xTextStyles->hasByName( rStyleName ) )
+        {
+            aAny <<= rStyleName;
+            xPropSet->setPropertyValue( sUnvisitedCharStyleName, aAny );
+        }
+
+        if( rVisitedStyleName.getLength() &&
+            xPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
+            xTextStyles->hasByName( rVisitedStyleName ) )
+        {
+            aAny <<= rVisitedStyleName;
+            xPropSet->setPropertyValue( sVisitedCharStyleName, aAny );
+        }
+    }
+}
+
 void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 {
     xAutoStyles = pStyles;
@@ -695,7 +790,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_H:
         bHeading = sal_True;
     case XML_TOK_TEXT_P:
-        pContext = new XMLParaContext( rImport, *this,
+        pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
                                        xAttrList, bHeading );
         break;
@@ -1010,3 +1105,4 @@ void XMLTextImportHelper::ConnectFrameChains(
         }
     }
 }
+

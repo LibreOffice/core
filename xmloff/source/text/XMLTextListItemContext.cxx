@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListItemContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
     case XML_TOK_TEXT_H:
         bHeading = sal_True;
     case XML_TOK_TEXT_P:
-        pContext = new XMLParaContext( GetImport(), rTxtImport,
+        pContext = new XMLParaContext( GetImport(),
                                        nPrefix, rLocalName,
                                        xAttrList, bHeading );
         break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 09:50:51 $
+ *  last change: $Author: mib $ $Date: 2000-09-25 06:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,6 +1141,9 @@ XML_CONSTASCII_ACTION( sXML_pyramid, "pyramid" );
 XML_CONSTASCII_ACTION( sXML_connect_bars, "connect-bars" );
 XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
 XML_CONSTASCII_ACTION( sXML_pie_offset, "pie-offset" );
+XML_CONSTASCII_ACTION( sXML_new, "new" );
+XML_CONSTASCII_ACTION( sXML_replace, "replace" );
+XML_CONSTASCII_ACTION( sXML_visited_style_name, "visited-style-name" );
 
 #endif
 

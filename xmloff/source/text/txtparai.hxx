@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #endif
 
 class XMLHints_Impl;
-class XMLTextImportHelper;
 namespace com { namespace sun { namespace star {
 namespace text {  class XTextRange; }
 namespace xml { namespace sax { class XAttributeList; } }
@@ -79,7 +78,6 @@ namespace xml { namespace sax { class XAttributeList; } }
 
 class XMLParaContext : public SvXMLImportContext
 {
-    XMLTextImportHelper& rTxtImport;
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
     ::rtl::OUString             sStyleName;
@@ -93,7 +91,7 @@ public:
     TYPEINFO();
 
     XMLParaContext( SvXMLImport& rImport,
-            XMLTextImportHelper& rTxtImp, sal_uInt16 nPrfx,
+            sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
