@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-12 16:56:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,14 +906,24 @@ BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bR
             //! EndDrawUndo?
             return FALSE;
         }
-        else if (bRecord)
+        else
         {
-            SvUShorts aSrcList;
-            SvUShorts aDestList;
-            aSrcList.Insert(nSrcTab,0);
-            aDestList.Insert(nDestTab,0);
-            GetUndoManager()->AddUndoAction(
-                    new ScUndoCopyTab( this, aSrcList, aDestList ) );
+            USHORT nAdjSource = nSrcTab;
+            if ( nDestTab <= nSrcTab )
+                ++nAdjSource;               // new position of source table after CopyTab
+
+            if ( aDocument.IsTabProtected( nAdjSource ) )
+                aDocument.SetTabProtection( nDestTab, TRUE, aDocument.GetTabPassword( nAdjSource ) );
+
+            if (bRecord)
+            {
+                SvUShorts aSrcList;
+                SvUShorts aDestList;
+                aSrcList.Insert(nSrcTab,0);
+                aDestList.Insert(nDestTab,0);
+                GetUndoManager()->AddUndoAction(
+                        new ScUndoCopyTab( this, aSrcList, aDestList ) );
+            }
         }
 
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
