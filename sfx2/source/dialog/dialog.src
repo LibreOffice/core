@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:40:47 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ String STR_TABPAGE_MANAGESTYLES
     Text [ finnish ] = "Käsittele" ;
     Text [ danish ] = "Administrer" ;
     Text [ french ] = "Gérer" ;
-    Text [ swedish ] = "Organisera" ;
+    Text [ swedish ] = "Administrera" ;
     Text [ dutch ] = "Beheren" ;
     Text [ spanish ] = "Administrar" ;
     Text [ english_us ] = "Organizer" ;
@@ -813,11 +813,11 @@ InfoBox MSG_LAYOUT_NOT_LOADING
     MESSAGE [ dutch ] = "Document wordt zonder lay-out geladen." ;
     MESSAGE [ spanish ] = "Cargando el documento sin diseño." ;
     MESSAGE [ english_us ] = "Loading document without layout." ;
-    MESSAGE[ chinese_simplified ] = "²»´ø°æÊ½µØ×°ÔØÎÄ¼ş¡£";
+    MESSAGE[ chinese_simplified ] = "²»´ø°æÊ½µØ×°ÈëÎÄ¼ş¡£";
     MESSAGE[ russian ] = "Äîêóìåíò çàãğóæåòñÿ áåç ğàçìåòêè.";
     MESSAGE[ polish ] = "Dokument jest ³adowany bez uk³adu.";
     MESSAGE[ japanese ] = "ÄŞ·­ÒİÄ‚ÍÚ²±³Ä‚È‚µ‚Å“Ç‚İ‚Ü‚ê‚Ü‚·B";
-    MESSAGE[ chinese_traditional ] = "¸Ë¸ü¤å¥ó¡A¤£ªş±aª©¦¡¡C";
+    MESSAGE[ chinese_traditional ] = "¸ü¤J¤å¥ó¡A¤£ªş±aª©¦¡¡C";
     MESSAGE[ arabic ] = "ÓíÊã ÊÍãíá Çáãáİ ÈÏæä ÊÎØíØ.";
     MESSAGE[ greek ] = "Öüñôùóç åããñÜöïõ ÷ùñßò ôç äéÜôáîç.";
     MESSAGE[ korean ] = "¹®¼­¸¦ ·¹ÀÌ¾Æ¿ô ¾øÀÌ ·Îµå ÁßÀÔ´Ï´Ù.";
