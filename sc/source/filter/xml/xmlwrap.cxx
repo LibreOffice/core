@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:49:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
         xInfoSet->setPropertyValue( sPropName,
             uno::makeAny( rtl::OUString(INetURLObject::GetBaseURL()) ) );
-        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
+        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() &&
+             !pStorage->IsRoot() )
         {
             rtl::OUString aName( pStorage->GetName() );
             if( aName.getLength() )
@@ -777,6 +778,21 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         uno::Any aUsePrettyPrinting;
         aUsePrettyPrinting <<= bUsePrettyPrinting;
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), aUsePrettyPrinting);
+
+        // Set base URI
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        xInfoSet->setPropertyValue( sPropName,
+                uno::makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+        if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() &&
+             !pStorage->IsRoot() )
+        {
+            OUString aName( pStorage->GetName() );
+            if( aName.getLength() )
+            {
+                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
+            }
+        }
 
         sal_Bool bMetaRet(pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
         sal_Bool bStylesRet (sal_False);
