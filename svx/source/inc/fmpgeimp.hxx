@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-18 14:09:54 $
+ *  last change: $Author: fs $ $Date: 2001-12-21 11:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,10 +127,6 @@ protected:
     ~FmFormPageImpl();
 
     void Init();
-
-    sal_Bool    containsActiveCode(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxContainer,
-        const String& _rScriptType ) const;
 
 public:
     //  nur wichtig fuer den DesignMode

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-18 14:13:58 $
+ *  last change: $Author: fs $ $Date: 2001-12-21 11:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
-#include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
 
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
@@ -168,8 +165,6 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
-#include <algorithm>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -177,7 +172,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::script;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl);
@@ -806,76 +800,6 @@ void FmFormPageImpl::read(const Reference< ::com::sun::star::io::XObjectInputStr
         if (i < (sal_Int32)aList.Count())
             aList.GetObject(i)->SetUnoControlModel(xRef);
     }
-}
-
-//------------------------------------------------------------------------------
-namespace svxform
-{
-    struct CheckEventType : public ::std::unary_function< ScriptEventDescriptor, sal_Bool >
-    {
-        const ::rtl::OUString& m_rScriptType;
-        CheckEventType( const ::rtl::OUString& _rScriptType ) : m_rScriptType( _rScriptType ) { }
-
-        sal_Bool operator() ( const ScriptEventDescriptor& _rDescriptor )
-        {
-            return _rDescriptor.ScriptType.equals( m_rScriptType );
-        }
-    };
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmFormPageImpl::containsActiveCode( const Reference< XIndexAccess >& _rxContainer, const String& _rScriptType ) const
-{
-    DBG_ASSERT( _rxContainer.is(), "FmFormPageImpl::containsActiveCode: invalid container!" );
-    if ( !_rxContainer.is() )
-        return sal_False;
-
-    sal_Bool bContains = sal_False;
-    try
-    {
-        ::rtl::OUString sScriptType( _rScriptType );
-            // faster usage ....
-
-        sal_Int32 nChildCount = _rxContainer->getCount();
-
-        // first, try if the container itself handles script events for it's children
-        Reference< XEventAttacherManager > xEvents( _rxContainer, UNO_QUERY );
-        if ( xEvents.is() )
-        {   // yes, it does -> check them
-            for ( sal_Int32 i = 0; ( i < nChildCount ) && !bContains; ++i )
-            {
-                Sequence< ScriptEventDescriptor > aScripts = xEvents->getScriptEvents( i );
-                const ScriptEventDescriptor* pEvents = aScripts.getConstArray();
-                const ScriptEventDescriptor* pEventsEnd = pEvents + aScripts.getLength();
-                const ScriptEventDescriptor* pFirstFound = ::std::find_if(
-                    pEvents,
-                    pEventsEnd,
-                    CheckEventType( sScriptType )
-                );
-                if ( pFirstFound != pEventsEnd )
-                    bContains = sal_True;
-            }
-        }
-
-        if ( !bContains )
-        {   // step down only if not already found such a script ....
-            Reference< XIndexAccess > xChild;
-            for ( sal_Int32 i=0; ( i < nChildCount ) && !bContains; ++i )
-            {
-                if ( _rxContainer->getByIndex( i ) >>= xChild )
-                {   // the child is a container, again
-                    bContains = containsActiveCode( xChild, _rScriptType );
-                }
-            }
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_ERROR( "FmFormPageImpl::containsActiveCode: caught an exception!" );
-        // be on the safe side: If we can't check this, assume there is active (potential dangerous) code
-        bContains = sal_True;
-    }
-    return bContains;
 }
 
 //------------------------------------------------------------------------------
