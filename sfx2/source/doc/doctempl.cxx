@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: pb $ $Date: 2000-10-17 13:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,8 +454,7 @@ SfxObjectShellRef SfxTemplateDirEntry::CreateObjectShell()
         {
             bIsOwner=TRUE;
             SfxMedium *pMed=new SfxMedium(
-                GetFull().GetFull(),(STREAM_READ | STREAM_SHARE_DENYWRITE),
-                FALSE, TRUE, 0);
+                GetFull().GetFull(),(STREAM_READ | STREAM_SHARE_DENYWRITE), FALSE, 0 );
             const SfxFilter* pFilter = NULL;
             if( pSfxApp->GetFilterMatcher().GuessFilter(
                 *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||

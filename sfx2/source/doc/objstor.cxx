@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 17:15:55 $
+ *  last change: $Author: pb $ $Date: 2000-10-17 13:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,8 +1289,8 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
             pMedium->GetItemSet()?
                 new SfxAllItemSet(*pMedium->GetItemSet()): 0;
 
-        const SfxFilter *pFilter = GetMedium()->GetFilter();
-        SfxMedium *pMediumTmp = new SfxMedium( pMedium->GetName(), nFlags, bDirect, sal_False, pFilter, pSet );
+        const SfxFilter* pFilter = GetMedium()->GetFilter();
+        SfxMedium* pMediumTmp = new SfxMedium( pMedium->GetName(), nFlags, bDirect, pFilter, pSet );
         pMediumTmp->CreateTempFile();
         pMediumTmp->SetLongName( aLongName );
 
@@ -1365,10 +1365,9 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
                     ? GetFactory().GetFilterContainer()->GetFilter(pFilterItem->GetValue())
                     : 0;
         SfxMedium *pMed = new SfxMedium(
-                    pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE,
-                    sal_False, sal_False, pFilter );
+            pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, pFilter );
 
-        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
         if ( pPasswordItem )
             pMed->GetItemSet()->Put( *pPasswordItem );
 
@@ -1678,8 +1677,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 //  SfxItemSet  *pSet = pParams ? new SfxAllItemSet(*pParams) : 0;
 
     SfxMedium *pNewFile = new SfxMedium(
-        rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False,
-        sal_False, 0, pParams );
+        rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, 0, pParams );
 
     SFX_ITEMSET_ARG(
         pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
