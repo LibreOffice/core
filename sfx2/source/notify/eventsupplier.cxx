@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:30:04 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,8 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
         if ( aType.compareToAscii( STAR_BASIC ) == 0 && aScript.getLength() )
         {
             aGuard.clear();
-            SfxMacroLoader::loadMacro( aScript, mpObjShell );
+            com::sun::star::uno::Any aAny;
+            SfxMacroLoader::loadMacro( aScript, aAny, mpObjShell );
         }
         else if ( aType.compareToAscii( "Service" ) == 0  || ( aType.compareToAscii( "Script" ) == 0 ) )
         {
