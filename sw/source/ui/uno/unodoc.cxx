@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:29:55 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#include "swmodule.hxx"
+#include "swdll.hxx"
+#include "docsh.hxx"
+#include "globdoc.hxx"
+#include "wdocsh.hxx"
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -101,23 +104,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance( const 
     throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SW_MOD(), "No StarWriter module!" );
-
-    if ( SW_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/swriter" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
-
-    return uno::Reference< uno::XInterface >();
+    SwDLL::Init();
+    SfxObjectShell* pShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 //============================================================
@@ -143,23 +132,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance( const u
     throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SW_MOD(), "No StarWriter module!" );
-
-    if ( SW_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/swriter/web" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
-
-    return uno::Reference< uno::XInterface >();
+    SwDLL::Init();
+    SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 //============================================================
@@ -185,22 +160,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance( cons
     throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SW_MOD(), "No StarWriter module!" );
-
-    if ( SW_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/swriter/GlobalDocument" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
-
-    return uno::Reference< uno::XInterface >();
+    SwDLL::Init();
+    SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
