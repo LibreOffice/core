@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:41:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,6 +692,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
                                     SFX_CALLMODE_ASYNCHRON, &aShellItem, &aLibNameItem, 0L );
         }
         EndTabDialog( 1 );
+        return 0;
     }
     else if ( pButton == &aNewLibButton )
         NewLib();
@@ -702,6 +703,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     else if ( pButton == &aCloseButton )
     {
         EndTabDialog( 0 );
+        return 0;
     }
     else if ( pButton == &aPasswordButton )
     {
@@ -819,8 +821,21 @@ void LibPage::InsertLib()
     xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
 
     // filter
+    ::rtl::OUString aTitle( ::rtl::OUString( IDEResId( RID_STR_BASIC ) ) );
+    ::rtl::OUString aFilter;
+    aFilter =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.sdw;*.sxw;*.odt" ) );       // text
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.vor;*.stw;*.ott" ) );      // text template
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sgl;*.sxg;*.odm" ) );      // master document
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.oth" ) );                  // html document template
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sdc;*.sxc;*.ods" ) );      // spreadsheet
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.stc;*.ots" ) );            // spreadsheet template
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sda;*.sxd;*.odg" ) );      // drawing
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.std;*.otg" ) );            // drawing template
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sdd;*.sxi;*.odp" ) );      // presentation
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sti;*.otp" ) );            // presentation template
+    aFilter += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";*.sxm;*.odf" ) );            // formula
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_BASIC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.xlc;*.xlb;*.sbl;*.sxw;*.sxc;*.sxi;*.sdw;*.sdc;*.sdd" ) ) );
+    xFltMgr->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
     String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
