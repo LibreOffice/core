@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
+ *  last change: $Author: jl $ $Date: 2004-05-05 10:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,12 @@
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xpathInternals.h"
-
+#include "rtl/bootstrap.hxx"
 // #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
 // #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
+
+using namespace osl;
 namespace jfw
 {
 
@@ -118,9 +120,44 @@ javaFrameworkError getElementUpdated(rtl::OString & sValue)
 
     return errcode;
 }
+bool createUserDirectory()
+{
+    bool ret = false;
 
+    rtl::OUString sUserDir;
+    rtl::Bootstrap::get(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserInstallation")),
+        sUserDir,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}")));
+
+    FileBase::RC rc = Directory::create(sUserDir);
+    if (rc == FileBase::E_None)
+    {
+        // .StarOfficeXXX file created in home directory
+        sUserDir += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user"));
+        FileBase::RC rc = Directory::create(sUserDir);
+        if (rc == FileBase::E_None)
+        {
+            sUserDir += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/config"));
+            FileBase::RC rc = Directory::create(sUserDir);
+            if (rc == FileBase::E_None)
+                ret = true;
+        }
+    }
+    else if (rc == FileBase::E_EXIST)
+    {
+        ret = true;
+    }
+    // if the folder exists then all subdirectories should exist as well
+
+    return ret;
+}
 javaFrameworkError createUserSettingsDocument()
 {
+    //make sure there is a user directory
+    if( ! createUserDirectory())
+        return JFW_E_ERROR;
     javaFrameworkError ret = JFW_E_NONE;
     // check if javasettings.xml already exist
     rtl::OUString sURL = getUserSettingsURL();

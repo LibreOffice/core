@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
+ *  last change: $Author: jl $ $Date: 2004-05-05 10:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@ xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
  */
 javaFrameworkError getElementUpdated(rtl::OString & sValue);
 
+/** creates the user directory, if it does not exist already.
+
+    This is necessary, for tools, such as javaldx, run the java
+    configuration when the office is started for the first time.
+    Then the user directory may not be present yet.
+ */
+bool createUserDirectory();
 /** creates the javasettings.xml in the users home directory.
 
     If javasettings.xml does not exist then it creates the file
