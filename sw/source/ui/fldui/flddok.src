@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:55:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_FLD_DOK
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "~Tipo de campo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Felttype" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~F�lttyp" ;
         Text [ dutch ] = "~Veldtype" ;
@@ -104,6 +104,8 @@ TabPage TP_FLD_DOK
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_DOKTYPE
     {
@@ -148,6 +150,8 @@ TabPage TP_FLD_DOK
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चु~नो";
         Text[ slovak ] = "Vy~brať";
+        Text[ hungarian ] = "~Kijelölés";
+        Text[ slovenian ] = "Izb~eri";
     };
     ListBox LB_DOKSELECTION
     {
@@ -166,7 +170,7 @@ TabPage TP_FLD_DOK
         Text [ english_us ] = "F~ormat" ;
         Text [ portuguese_brazilian ] = "F~ormato" ;
         Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "~Format" ;
         Text [ italian ] = "F~ormato" ;
         Text [ spanish ] = "F~ormato" ;
         Text [ french ] = "F~ormat" ;
@@ -189,6 +193,8 @@ TabPage TP_FLD_DOK
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "~Formátum";
+        Text[ slovenian ] = "O~blika";
     };
     ListBox LB_DOKFORMAT
     {
@@ -220,7 +226,7 @@ TabPage TP_FLD_DOK
         TEXT [ portuguese_brazilian ] = "~Compensar" ;
         TEXT [ portuguese ] = "~Correc��o" ;
         TEXT [ finnish ] = "~Siirtym�" ;
-        TEXT [ danish ] = "Korrektion" ;
+        TEXT [ danish ] = "~Forskydning" ;
         TEXT [ french ] = "C~orrection" ;
         TEXT [ swedish ] = "Ko~rrigering" ;
         TEXT [ dutch ] = "~Correctie" ;
@@ -244,6 +250,8 @@ TabPage TP_FLD_DOK
         TEXT[ hebrew ] = "Ko~rrektur";
         TEXT[ hindi ] = "~ऑफसेट्ट";
         TEXT[ slovak ] = "O~dchýlka";
+        TEXT[ hungarian ] = "~Eltolás";
+        TEXT[ slovenian ] = "O~dmik";
     };
     Edit ED_DOKVALUE
     {
@@ -316,6 +324,8 @@ TabPage TP_FLD_DOK
         Text[ hebrew ] = "~Inhalt fixieren";
         Text[ hindi ] = "~स्थिर विषय";
         Text[ slovak ] = "Pe~vný obsah";
+        Text[ hungarian ] = "~Rögzített tartalom";
+        Text[ slovenian ] = "~Fiksna vsebina";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -332,7 +342,7 @@ TabPage TP_FLD_DOK
         Text [ english_us ] = "Offs~et in days" ;
         Text [ portuguese_brazilian ] = "Com~pensar em dias" ;
         Text [ swedish ] = "Ko~rrigering i dagar" ;
-        Text [ danish ] = "Korrektion i dage" ;
+        Text [ danish ] = "Forskydning i dage" ;
         Text [ italian ] = "Correzione in ~giorni" ;
         Text [ spanish ] = "~Correcci�n en d�as" ;
         Text [ french ] = "Co~rrection en jours" ;
@@ -355,6 +365,8 @@ TabPage TP_FLD_DOK
         Text[ hebrew ] = "Ko~rrektur in Tagen";
         Text[ hindi ] = "ऑ~फसेट्ट दिनों में";
         Text[ slovak ] = "Odchýlka v dň~och";
+        Text[ hungarian ] = "~Napokban megadott eltolás";
+        Text[ slovenian ] = "O~dmik v dnevih";
     };
     String STR_DOKTIMEOFF
     {
@@ -363,7 +375,7 @@ TabPage TP_FLD_DOK
         Text [ english_us ] = "Offs~et in minutes" ;
         Text [ portuguese_brazilian ] = "Compe~nsar em minutos" ;
         Text [ swedish ] = "Ko~rrigering i minuter" ;
-        Text [ danish ] = "Korrektion i minutter" ;
+        Text [ danish ] = "Forskydning i minutter" ;
         Text [ italian ] = "Co~rrezione in minuti" ;
         Text [ spanish ] = "~Correcci�n en minutos" ;
         Text [ french ] = "Co~rrection en minutes" ;
@@ -386,6 +398,8 @@ TabPage TP_FLD_DOK
         Text[ hebrew ] = "Ko~rrektur in Minuten";
         Text[ hindi ] = "ऑ~फसेट्ट मिनटों में";
         Text[ slovak ] = "Od~chýlka v minútach";
+        Text[ hungarian ] = "~Percekben megadott eltolás";
+        Text[ slovenian ] = "Od~mik v minutah";
     };
     Text [ english_us ] = "Document" ;
     Text [ portuguese_brazilian ] = "Documento" ;
@@ -413,7 +427,10 @@ TabPage TP_FLD_DOK
     Text[ hebrew ] = "Dokument";
     Text[ hindi ] = "लेखपत्र";
     Text[ slovak ] = "Dokument";
+    Text[ hungarian ] = "Dokumentum";
+    Text[ slovenian ] = "Dokument";
 };
+
 
 
 
