@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-12 07:34:07 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ String STR_POOLCHR_BUL_LEVEL
     Text [ spanish ] = "ViÒetas" ;
     Text [ french ] = "Puces" ;
     Text [ dutch ] = "Opsommingstekens" ;
-    Text [ swedish ] = "Uppr‰kningstecken" ;
+    Text [ swedish ] = "Punktuppst‰llningstecken" ;
     Text [ danish ] = "Punkttegn" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlungszeichen" ;
     Text [ portuguese ] = "Marcas e n˙meros" ;
@@ -759,7 +759,7 @@ String STR_POOLFRM_FRAME
     Text[ chinese_simplified ] = "øÚ";
     Text[ russian ] = "–‡ÏÍ‡";
     Text[ polish ] = "Ramka";
-    Text[ japanese ] = "√∑ΩƒŒﬁØ∏Ω";
+    Text[ japanese ] = "òg";
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "§Â¶r§Ë∂Ù";
     Text[ arabic ] = "ﬂ«œ—";
@@ -1980,7 +1980,7 @@ String STR_POOLCOLL_BUL_LEVEL1S
     Text [ italian ] = "Elenco 1 inizio" ;
     Text [ spanish ] = "EnumeraciÛn 1 inicio" ;
     Text [ french ] = "Puce 1 dÈbut" ;
-    Text [ swedish ] = "Uppr‰kning 1 start" ;
+    Text [ swedish ] = "Punktuppst‰llning 1 start" ;
     Text [ danish ] = "Punktopstilling 1 start" ;
     Text [ portuguese ] = "Marca 1 InÌcio" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 1 Anfang" ;
@@ -2005,7 +2005,7 @@ String STR_POOLCOLL_BUL_LEVEL1
     Text [ italian ] = "Elenco 1" ;
     Text [ spanish ] = "EnumeraciÛn 1" ;
     Text [ french ] = "Puce 1" ;
-    Text [ swedish ] = "Uppr‰kning 1" ;
+    Text [ swedish ] = "Punktuppst‰llning 1" ;
     Text [ danish ] = "Punktopstilling 1" ;
     Text [ portuguese ] = "Marca 1" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 1" ;
@@ -2030,7 +2030,7 @@ String STR_POOLCOLL_BUL_LEVEL1E
     Text [ spanish ] = "EnumeraciÛn 1 fin" ;
     Text [ french ] = "Puce 1 fin" ;
     Text [ dutch ] = "Opsomming 1 einde" ;
-    Text [ swedish ] = "Uppr‰kning 1 slut" ;
+    Text [ swedish ] = "Punktuppst‰llning 1 slut" ;
     Text [ danish ] = "Punktopstilling 1 slut" ;
     Text [ portuguese ] = "Marca 1 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 1 Ende" ;
@@ -2055,7 +2055,7 @@ String STR_POOLCOLL_BUL_NONUM1
     Text [ spanish ] = "EnumeraciÛn 1 continuaciÛn" ;
     Text [ french ] = "Puce 1 suivante" ;
     Text [ dutch ] = "Opsomming 1 voortzetting" ;
-    Text [ swedish ] = "Uppr‰kning 1 forts‰ttning" ;
+    Text [ swedish ] = "Punktuppst‰llning 1 forts‰ttning" ;
     Text [ danish ] = "Punktopstilling 1 fortsÊttelse" ;
     Text [ portuguese ] = "Marca 1 ContinuaÁ„o" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 1 Fortsetzung" ;
@@ -2080,7 +2080,7 @@ String STR_POOLCOLL_BUL_LEVEL2S
     Text [ italian ] = "Elenco 2 inizio" ;
     Text [ spanish ] = "EnumeraciÛn 2 inicio" ;
     Text [ french ] = "Puce 2 dÈbut" ;
-    Text [ swedish ] = "Uppr‰kning 2 start" ;
+    Text [ swedish ] = "Punktuppst‰llning 2 start" ;
     Text [ danish ] = "Punktopstilling 2 start" ;
     Text [ portuguese ] = "Marca 2 InÌcio" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 2 Anfang" ;
@@ -2105,7 +2105,7 @@ String STR_POOLCOLL_BUL_LEVEL2
     Text [ italian ] = "Elenco 2" ;
     Text [ spanish ] = "EnumeraciÛn 2" ;
     Text [ french ] = "Puce 2" ;
-    Text [ swedish ] = "Uppr‰kning 2" ;
+    Text [ swedish ] = "Punktuppst‰llning 2" ;
     Text [ danish ] = "Punktopstilling 2" ;
     Text [ portuguese ] = "Marca 2" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 2" ;
@@ -2130,7 +2130,7 @@ String STR_POOLCOLL_BUL_LEVEL2E
     Text [ spanish ] = "EnumeraciÛn 2 fin" ;
     Text [ french ] = "Puce 2 fin" ;
     Text [ dutch ] = "Opsomming 2 einde" ;
-    Text [ swedish ] = "Uppr‰kning 2 slut" ;
+    Text [ swedish ] = "Punktuppst‰llning 2 slut" ;
     Text [ danish ] = "Punktopstilling 2 slut" ;
     Text [ portuguese ] = "Marca 2 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 2 Ende" ;
@@ -2155,7 +2155,7 @@ String STR_POOLCOLL_BUL_NONUM2
     Text [ spanish ] = "EnumeraciÛn 2 continuaciÛn" ;
     Text [ french ] = "Puce 2 suivante" ;
     Text [ dutch ] = "Opsomming 2 voortzetting" ;
-    Text [ swedish ] = "Uppr‰kning 2 forts‰ttning" ;
+    Text [ swedish ] = "Punktuppst‰llning 2 forts‰ttning" ;
     Text [ danish ] = "Punktopstilling 2 fortsÊttelse" ;
     Text [ portuguese ] = "Marca 2 ContinuaÁ„o" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 2 Fortsetzung" ;
@@ -2180,7 +2180,7 @@ String STR_POOLCOLL_BUL_LEVEL3S
     Text [ italian ] = "Elenco 3 inizio" ;
     Text [ spanish ] = "EnumeraciÛn 3 inicio" ;
     Text [ french ] = "Puce 3 dÈbut" ;
-    Text [ swedish ] = "Uppr‰kning 3 start" ;
+    Text [ swedish ] = "Punktuppst‰llning 3 start" ;
     Text [ danish ] = "Punktopstilling 3 start" ;
     Text [ portuguese ] = "Marca 3 InÌcio" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 3 Anfang" ;
@@ -2205,7 +2205,7 @@ String STR_POOLCOLL_BUL_LEVEL3
     Text [ italian ] = "Elenco 3" ;
     Text [ spanish ] = "EnumeraciÛn 3" ;
     Text [ french ] = "Puce 3" ;
-    Text [ swedish ] = "Uppr‰kning 3" ;
+    Text [ swedish ] = "Punktuppst‰llning 3" ;
     Text [ danish ] = "Punktopstilling 3" ;
     Text [ portuguese ] = "Marca 3" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 3" ;
@@ -2230,7 +2230,7 @@ String STR_POOLCOLL_BUL_LEVEL3E
     Text [ spanish ] = "EnumeraciÛn 3 fin" ;
     Text [ french ] = "Puce 3 fin" ;
     Text [ dutch ] = "Opsomming 3 einde" ;
-    Text [ swedish ] = "Uppr‰kning 3 slut" ;
+    Text [ swedish ] = "Punktuppst‰llning 3 slut" ;
     Text [ danish ] = "Punktopstilling 3 slut" ;
     Text [ portuguese ] = "Marca 3 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 3 Ende" ;
@@ -2255,7 +2255,7 @@ String STR_POOLCOLL_BUL_NONUM3
     Text [ spanish ] = "EnumeraciÛn 3 continuaciÛn" ;
     Text [ french ] = "Puce 3 suivante" ;
     Text [ dutch ] = "Opsomming 3 voortzetting" ;
-    Text [ swedish ] = "Uppr‰kning 3 forts‰ttning" ;
+    Text [ swedish ] = "Punktuppst‰llning 3 forts‰ttning" ;
     Text [ danish ] = "Punktopstilling 3 fortsÊttelse" ;
     Text [ portuguese ] = "Marca 3 ContinuaÁ„o" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 3 Fortsetzung" ;
@@ -2280,7 +2280,7 @@ String STR_POOLCOLL_BUL_LEVEL4S
     Text [ italian ] = "Elenco 4 inizio" ;
     Text [ spanish ] = "EnumeraciÛn 4 inicio" ;
     Text [ french ] = "Puce 4 dÈbut" ;
-    Text [ swedish ] = "Uppr‰kning 4 start" ;
+    Text [ swedish ] = "Punktuppst‰llning 4 start" ;
     Text [ danish ] = "Punktopstilling 4 start" ;
     Text [ portuguese ] = "Marca 4 InÌcio" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 4 Anfang" ;
@@ -2305,7 +2305,7 @@ String STR_POOLCOLL_BUL_LEVEL4
     Text [ italian ] = "Elenco 4" ;
     Text [ spanish ] = "EnumeraciÛn 4" ;
     Text [ french ] = "Puce 4" ;
-    Text [ swedish ] = "Uppr‰kning 4" ;
+    Text [ swedish ] = "Punktuppst‰llning 4" ;
     Text [ danish ] = "Punktopstilling 4" ;
     Text [ portuguese ] = "Marca 4" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 4" ;
@@ -2330,7 +2330,7 @@ String STR_POOLCOLL_BUL_LEVEL4E
     Text [ spanish ] = "EnumeraciÛn 4 fin" ;
     Text [ french ] = "Puce 4 fin" ;
     Text [ dutch ] = "Opsomming 4 einde" ;
-    Text [ swedish ] = "Uppr‰kning 4 slut" ;
+    Text [ swedish ] = "Punktuppst‰llning 4 slut" ;
     Text [ danish ] = "Punktopstilling 4 slut" ;
     Text [ portuguese ] = "Marca 4 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 4 Ende" ;
@@ -2355,7 +2355,7 @@ String STR_POOLCOLL_BUL_NONUM4
     Text [ spanish ] = "EnumeraciÛn 4 continuaciÛn" ;
     Text [ french ] = "Puce 4 suivante" ;
     Text [ dutch ] = "Opsomming 4 voortzetting" ;
-    Text [ swedish ] = "Uppr‰kning 4 forts‰ttning" ;
+    Text [ swedish ] = "Punktuppst‰llning 4 forts‰ttning" ;
     Text [ danish ] = "Punktopstilling 4 fortsÊttelse" ;
     Text [ portuguese ] = "Marca 4 ContinuaÁ„o" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 4 Fortsetzung" ;
@@ -2380,7 +2380,7 @@ String STR_POOLCOLL_BUL_LEVEL5S
     Text [ italian ] = "Elenco 5 inizio" ;
     Text [ spanish ] = "EnumeraciÛn 5 inicio" ;
     Text [ french ] = "Puce 5 dÈbut" ;
-    Text [ swedish ] = "Uppr‰kning 5 start" ;
+    Text [ swedish ] = "Punktuppst‰llning 5 start" ;
     Text [ danish ] = "Punktopstilling 5 start" ;
     Text [ portuguese ] = "Marca 5 InÌcio" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 5 Anfang" ;
@@ -2405,7 +2405,7 @@ String STR_POOLCOLL_BUL_LEVEL5
     Text [ italian ] = "Elenco 5" ;
     Text [ spanish ] = "EnumeraciÛn 5" ;
     Text [ french ] = "Puce 5" ;
-    Text [ swedish ] = "Uppr‰kning 5" ;
+    Text [ swedish ] = "Punktuppst‰llning 5" ;
     Text [ danish ] = "Punktopstilling 5" ;
     Text [ portuguese ] = "Marca 5" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 5" ;
@@ -2430,7 +2430,7 @@ String STR_POOLCOLL_BUL_LEVEL5E
     Text [ spanish ] = "EnumeraciÛn 5 fin" ;
     Text [ french ] = "Puce 5 fin" ;
     Text [ dutch ] = "Opsomming 5 einde" ;
-    Text [ swedish ] = "Uppr‰kning 5 slut" ;
+    Text [ swedish ] = "Punktuppst‰llning 5 slut" ;
     Text [ danish ] = "Punktopstilling 5 slut" ;
     Text [ portuguese ] = "Marca 5 Fim" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 5 Ende" ;
@@ -2455,7 +2455,7 @@ String STR_POOLCOLL_BUL_NONUM5
     Text [ spanish ] = "EnumeraciÛn 5 continuaciÛn" ;
     Text [ french ] = "Puce 5 suivante" ;
     Text [ dutch ] = "Opsomming 5 voortzetting" ;
-    Text [ swedish ] = "Uppr‰kning 5 forts‰ttning" ;
+    Text [ swedish ] = "Punktuppst‰llning 5 forts‰ttning" ;
     Text [ danish ] = "Punktopstilling 5 fortsÊttelse" ;
     Text [ portuguese ] = "Marca 5 ContinuaÁ„o" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 5 Fortsetzung" ;
@@ -2682,7 +2682,7 @@ String STR_POOLCOLL_FRAME
     Text[ chinese_simplified ] = "øÚƒ⁄»›";
     Text[ russian ] = "—Ó‰ÂÊËÏÓÂ ‡ÏÍË";
     Text[ polish ] = "ZawartoúÊ ramki";
-    Text[ japanese ] = "√∑ΩƒŒﬁØ∏ΩÇÃì‡óe";
+    Text[ japanese ] = "ògÇÃì‡óe";
     Text[ chinese_traditional ] = "∞TÆÿ§∫Æe";
     Text[ arabic ] = "„Õ ÊÌ«  «·ﬂ«œ—";
     Text[ greek ] = "–ÂÒÈÂ˜¸ÏÂÌ· Î·ÈÛﬂÔı";
@@ -2876,7 +2876,7 @@ String STR_POOLCOLL_JAKETADRESS
     Text[ chinese_simplified ] = " ’º˛»À";
     Text[ russian ] = "œÓÎÛ˜‡ÚÂÎ¸";
     Text[ polish ] = "Odbiorca";
-    Text[ japanese ] = "éÛêMé“";
+    Text[ japanese ] = "à∂êÊ";
     Text[ chinese_traditional ] = "¶¨•Û™Ã";
     Text[ arabic ] = "«·„” ·„";
     Text[ greek ] = "–·Ò·ÎﬁÙÁÚ";
@@ -4797,7 +4797,7 @@ String STR_POOLNUMRULE_BUL1
     Text [ italian ] = "Elenco 1" ;
     Text [ spanish ] = "EnumeraciÛn 1" ;
     Text [ french ] = "Puce 1" ;
-    Text [ swedish ] = "Uppr‰kning 1" ;
+    Text [ swedish ] = "Punktuppst‰llning 1" ;
     Text [ danish ] = "Punktopstilling 1" ;
     Text [ portuguese ] = "Lista 1" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 1" ;
@@ -4822,7 +4822,7 @@ String STR_POOLNUMRULE_BUL2
     Text [ italian ] = "Elenco 2" ;
     Text [ spanish ] = "EnumeraciÛn 2" ;
     Text [ french ] = "Puce 2" ;
-    Text [ swedish ] = "Uppr‰kning 2" ;
+    Text [ swedish ] = "Punktuppst‰llning 2" ;
     Text [ danish ] = "Punktopstilling 2" ;
     Text [ portuguese ] = "Lista 2" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 2" ;
@@ -4847,7 +4847,7 @@ String STR_POOLNUMRULE_BUL3
     Text [ italian ] = "Elenco 3" ;
     Text [ spanish ] = "EnumeraciÛn 3" ;
     Text [ french ] = "Puce 3" ;
-    Text [ swedish ] = "Uppr‰kning 3" ;
+    Text [ swedish ] = "Punktuppst‰llning 3" ;
     Text [ danish ] = "Punktopstilling 3" ;
     Text [ portuguese ] = "Lista 3" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 3" ;
@@ -4872,7 +4872,7 @@ String STR_POOLNUMRULE_BUL4
     Text [ italian ] = "Elenco 4" ;
     Text [ spanish ] = "EnumeraciÛn 4" ;
     Text [ french ] = "Puce 4" ;
-    Text [ swedish ] = "Uppr‰kning 4" ;
+    Text [ swedish ] = "Punktuppst‰llning 4" ;
     Text [ danish ] = "Punktopstilling 4" ;
     Text [ portuguese ] = "Lista 4" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 4" ;
@@ -4897,7 +4897,7 @@ String STR_POOLNUMRULE_BUL5
     Text [ italian ] = "Elenco 5" ;
     Text [ spanish ] = "EnumeraciÛn 5" ;
     Text [ french ] = "Puce 5" ;
-    Text [ swedish ] = "Uppr‰kning 5" ;
+    Text [ swedish ] = "Punktuppst‰llning 5" ;
     Text [ danish ] = "Punktopstilling 5" ;
     Text [ portuguese ] = "Lista 5" ;
     Text [ portuguese_brazilian ] = "Aufz‰hlung 51" ;
