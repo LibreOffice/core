@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2003-10-30 14:23:52 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:02:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 #CFLAGS+=/Ob0 /Od
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CFLAGS+=-DSYSTEM_ZLIB
+.ENDIF
 SLOFILES= \
         $(SLO)$/Adler32.obj			\
         $(SLO)$/CRC32.obj			\
