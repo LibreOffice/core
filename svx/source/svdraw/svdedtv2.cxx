@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:54:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 11:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,11 @@
 
 #include "svxdlg.hxx" //CHINA001
 #include <dialogs.hrc> //CHINA001
+
+// #i37011#
+#ifndef _SVDOASHP_HXX
+#include "svdoashp.hxx"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1077,7 +1082,8 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                             aTmpPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aTmpPoly);
                         }
 
-                        ::basegfx::tools::correctOrientations(aTmpPoly);
+                        // #i37009#
+                        aTmpPoly = ::basegfx::tools::correctOrientations(aTmpPoly);
 
                         if(!bFirstObjectComplete)
                         {
@@ -1106,7 +1112,8 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                         aTmpPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aTmpPoly);
                     }
 
-                    ::basegfx::tools::correctOrientations(aTmpPoly);
+                    // #i37009#
+                    aTmpPoly = ::basegfx::tools::correctOrientations(aTmpPoly);
 
                     if(!bFirstObjectComplete)
                     {
@@ -1449,16 +1456,32 @@ BOOL SdrEditView::ImpCanDismantle(const SdrObject* pObj, BOOL bMakeLines) const
                 bOtherObjs=TRUE;
             }
         }
-    } else {
-        const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
-        if (pPath!=NULL) {
+    }
+    else
+    {
+        const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
+        const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
+
+        // #i37011#
+        if(pPath)
+        {
             if (ImpCanDismantle(pPath->GetPathPoly(),bMakeLines)) bMin1PolyPoly=TRUE;
             SdrObjTransformInfoRec aInfo;
             pObj->TakeObjInfo(aInfo);
             // #69711 : new condition IsLine() to be able to break simple Lines
             if (!(aInfo.bCanConvToPath || aInfo.bCanConvToPoly) && !pPath->IsLine() ) bOtherObjs=TRUE; // Passiert z.B. im Falle Fontwork (Joe, 28-11-95)
-        } else {
-            bOtherObjs=TRUE;
+        }
+        else if(pCustomShape)
+        {
+            if(bMakeLines)
+            {
+                // allow break command
+                bMin1PolyPoly = TRUE;
+            }
+        }
+        else
+        {
+            bOtherObjs = TRUE;
         }
     }
     return bMin1PolyPoly && !bOtherObjs;
@@ -1466,8 +1489,12 @@ BOOL SdrEditView::ImpCanDismantle(const SdrObject* pObj, BOOL bMakeLines) const
 
 void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, ULONG& rPos, SdrPageView* pPV, BOOL bMakeLines)
 {
-    const SdrPathObj* pSrcPath=PTR_CAST(SdrPathObj,pObj);
-    if (pSrcPath!=NULL) {
+    const SdrPathObj* pSrcPath = PTR_CAST(SdrPathObj, pObj);
+    const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
+
+    // #i37011#
+    if(pSrcPath)
+    {
         SdrObject* pLast=NULL; // // fuer die Zuweisung des OutlinerParaObject
         const XPolyPolygon& rXPP=pSrcPath->GetPathPoly();
         USHORT nPolyAnz=rXPP.Count();
@@ -1513,6 +1540,79 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
         }
         if (pLast!=NULL && pSrcPath->GetOutlinerParaObject()!=NULL)
             pLast->SetOutlinerParaObject(pSrcPath->GetOutlinerParaObject()->Clone());
+    }
+    else if(pCustomShape)
+    {
+        if(bMakeLines)
+        {
+            // break up custom shape
+            const SdrObject* pReplacement = pCustomShape->GetSdrObjectFromCustomShape();
+
+            if(pReplacement)
+            {
+                SdrObject* pCandidate = pReplacement->Clone();
+                DBG_ASSERT(pCandidate, "SdrEditView::ImpDismantleOneObject: Could not clone SdrObject (!)");
+                pCandidate->SetModel(pCustomShape->GetModel());
+
+                if(((SdrShadowItem&)pCustomShape->GetMergedItem(SDRATTR_SHADOW)).GetValue())
+                {
+                    if(pReplacement->ISA(SdrObjGroup))
+                    {
+                        pCandidate->SetMergedItem(SdrShadowItem(sal_True));
+                    }
+                }
+
+                SdrInsertReason aReason(SDRREASON_VIEWCALL, pCustomShape);
+                rOL.InsertObject(pCandidate, rPos, &aReason);
+                AddUndo(new SdrUndoNewObj(*pCandidate, TRUE));
+                MarkObj(pCandidate, pPV, FALSE, TRUE);
+
+                if(pCustomShape->HasText() && !pCustomShape->IsTextPath())
+                {
+                    // #i37011# also create a text object and add at rPos + 1
+                    SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(
+                        pCustomShape->GetObjInventor(), OBJ_TEXT, 0L, pCustomShape->GetModel());
+
+                    // Copy text content
+                    OutlinerParaObject* pParaObj = pCustomShape->GetOutlinerParaObject();
+                    if(pParaObj)
+                    {
+                        pTextObj->NbcSetOutlinerParaObject(pParaObj->Clone());
+                    }
+
+                    // copy all attributes
+                    SfxItemSet aTargetItemSet(pCustomShape->GetMergedItemSet());
+
+                    // clear fill and line style
+                    aTargetItemSet.Put(XLineStyleItem(XLINE_NONE));
+                    aTargetItemSet.Put(XFillStyleItem(XFILL_NONE));
+
+                    // get the text bounds and set at text object
+                    Rectangle aTextBounds = pCustomShape->GetSnapRect();
+                    if(pCustomShape->GetTextBounds(aTextBounds))
+                    {
+                        pTextObj->SetSnapRect(aTextBounds);
+                    }
+
+                    // if rotated, copy GeoStat, too.
+                    const GeoStat& rSourceGeo = pCustomShape->GetGeoStat();
+                    if(rSourceGeo.nDrehWink)
+                    {
+                        pTextObj->NbcRotate(
+                            pCustomShape->GetSnapRect().Center(), rSourceGeo.nDrehWink,
+                            rSourceGeo.nSin, rSourceGeo.nCos);
+                    }
+
+                    // set modified ItemSet at text object
+                    pTextObj->SetMergedItemSet(aTargetItemSet);
+
+                    // insert object
+                    rOL.InsertObject(pTextObj, rPos + 1, &aReason);
+                    AddUndo(new SdrUndoNewObj(*pTextObj, TRUE));
+                    MarkObj(pTextObj, pPV, FALSE, TRUE);
+                }
+            }
+        }
     }
 }
 
