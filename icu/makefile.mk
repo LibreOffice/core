@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 10:41:41 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:33:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,13 +129,16 @@ OUT2LIB= \
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
 .IF "$(USE_SHELL)"=="4nt"
+BUILD_ACTION_SEP=^
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
 .ELSE			# "$(USE_SHELL)"=="4nt"
+BUILD_ACTION_SEP=;
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "$(COMEX)"=="8"
-BUILD_ACTION=wdevenv allinone$/allinone Release
+CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) wdevenv allinone$/allinone Release
+BUILD_ACTION=devenv allinone$/allinone.sln /build Release /project all /useenv
 .ELSE
 BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all - Win32 Release"
 .ENDIF
