@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:39:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,21 @@ void GfxLink::SwapIn()
 
         mpSwap = NULL;
     }
+}
+
+// ------------------------------------------------------------------------
+
+BOOL GfxLink::ExportNative( SvStream& rOStream ) const
+{
+    if( GetDataSize() )
+    {
+        if( IsSwappedOut() )
+            mpSwap->WriteTo( rOStream );
+        else
+            rOStream.Write( GetData(), GetDataSize() );
+    }
+
+    return ( rOStream.GetError() == ERRCODE_NONE );
 }
 
 // ------------------------------------------------------------------------
