@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 15:58:57 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ italian ] = "Il nome della tabella $name$ esiste gi‡; non Ë visibile in quanto Ë stato filtrato.";
     Text[ danish ] = "the table $name$ already exists. She is only filtered!";
     Text[ swedish ] = "Tabellen $name$ finns redan. Den ‰r inte synlig eftersom den har filtrerats bort.";
-    Text[ polish ] = "Tabela $name$ juø istenieje. Zosta≥a ona przefiltrowana!";
+    Text[ polish ] = "Tabela $name$ juø istenieje. Nie jest widoczna, poniewaø zosta≥a przefiltrowana!";
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
     Text[ japanese ] = "ÔæÉÔΩ∞ÔæåÔæûÔæô $name$ „ÅØ„Åô„Åß„Å´„ÅÇ„Çä„Åæ„Åô„ÄÇÔæåÔΩ®ÔæôÔæÄ„Åï„Çå„Å¶„ÅÑ„Çã„Åü„ÇÅ„ÄÅË°®Á§∫„Åï„Çå„Åæ„Åõ„Çì„ÄÇ";
     Text[ korean ] = " $name$ ÏãúÌä∏Í∞Ä Ïù¥ÎØ∏ Ï°¥Ïû¨Ìï©ÎãàÎã§. Ïù¥ ÏãúÌä∏Îäî ÌïÑÌÑ∞Î°ú Ï†úÍ±∞ÎêòÏóàÍ∏∞ ÎïåÎ¨∏Ïóê Î≥¥Ïù¥ÏßÄ ÏïäÏäµÎãàÎã§.!";
@@ -169,7 +169,26 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
 {
     Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
     Text [ english ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
-    Text [ english_us ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text [ english_us ] = "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.";
+    Text[ portuguese ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ russian ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ greek ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ dutch ] = "Door een onbekende fout (waarschijnlijk is de driver niet in orde) kon de verbinding met de externe gegevensbron niet tot stand worden gebracht.";
+    Text[ french ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ spanish ] = "No se pudo realizar la conexiÛn a la fuente de datos externa. Ha ocurrido un error desconocido. Es posible que el controlador estÈ defectuoso.";
+    Text[ finnish ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati esterna a causa di un errore non classificato. Probabile difetto al driver.";
+    Text[ danish ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ swedish ] = "Det gick inte att skapa fˆrbindelsen till den externa datak‰llan. Ett ok‰nt fel uppstod. Det ‰r antagligen fel pÂ drivrutinen.";
+    Text[ polish ] = "Brak po≥πczenia z zewnÍtrznym ürÛd≥em danych. Wystπpni≥ nieznany b≥πd. Prawdopodobie nie dzia≥a sterownik.";
+    Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ japanese ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ korean ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ chinese_simplified ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ chinese_traditional ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ turkish ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ arabic ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ catalan ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
 };
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
@@ -177,6 +196,25 @@ String RID_STR_COULDNOTCONNECT_NODRIVER
     Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber f¸r die angegebene URL gefunden.";
     Text [ english ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
     Text [ english_us ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ portuguese ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ russian ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ greek ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ dutch ] = "De verbinding met de externe gegevensbron kon niet tot stand worden gebracht, daar er geen SDBC-driver voor aangegeven URL werd gevonden.";
+    Text[ french ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ spanish ] = "No se pudo realizar la conexiÛn a la fuente de datos externa porque no se encontrÛ ning˙n controlador SDBC para la URL indicada.";
+    Text[ finnish ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna in quanto non Ë stato trovato il driver SDBC per l'indirizzo URL stabilito.";
+    Text[ danish ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ swedish ] = "Det gick inte att skapa fˆrbindelsen till den externa datak‰llan. Det gick inte att hitta nÂgon SDBC-drivrutin fˆr den angivna URL:en.";
+    Text[ polish ] = "Brak po≥πczenia z zewnÍtrznym ürÛd≥em danych. Nie znaleziono sterownika SDCB do podanego adresu URL.";
+    Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ japanese ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ korean ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ chinese_simplified ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ chinese_traditional ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ turkish ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ arabic ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ catalan ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
 };
 
 String RID_STR_COULDNOTLOAD_MANAGER
@@ -184,4 +222,24 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
     Text [ english ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text [ english_us ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ portuguese ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ russian ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ greek ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ dutch ] = "De verbinding met de externe gegevensbron kon niet tot stand worden gebracht, daar de SDBC-driver-manager niet kon worden geladen. ";
+    Text[ french ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ spanish ] = "No se pudo realizar la conexiÛn a la fuente de datos externa porque no se pudo cargar el gestor de controladores SDBC.";
+    Text[ finnish ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna in quanto non Ë stato caricato il gestore del driver SDBC.";
+    Text[ danish ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ swedish ] = "Det gick inte att skapa fˆrbindelsen till den externa datak‰llan. Det gick inte att ladda managern fˆr SDBC-drivrutinen.";
+    Text[ polish ] = "Brak po≥πczenia z zewnÍtrznym ürÛd≥em danych. Za≥adowanie menedøera sterownika SDCB nie powiod≥o siÍ.";
+    Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ japanese ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ korean ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ chinese_simplified ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ chinese_traditional ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ turkish ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ arabic ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ catalan ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
+
