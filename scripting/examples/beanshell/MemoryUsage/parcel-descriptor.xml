@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+
+    <script language="BeanShell">
+        <locale lang="en">
+            <displayname value="BeanShell JVM Usage"/>
+            <description>
+                Updates a spreadsheet with the current memory usage statistics for the Java Virtual Machine
+            </description>
+        </locale>
+        <functionname value="memusage.bsh"/>
+        <logicalname value="MemoryUsage.BeanShell"/>
+    </script>
+
+</parcel>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+
+    <script language="BeanShell">
+        <locale lang="en">
+            <displayname value="Highlighter"/>
+            <description>
+                Text highlighting
+            </description>
+        </locale>
+        <functionname value="highlighter.bsh"/>
+        <logicalname value="Highlighter.BeanShell"/>
+    </script>
+
+</parcel>

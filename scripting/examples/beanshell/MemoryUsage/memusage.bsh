@@ -1,0 +1,37 @@
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.lang.XComponent;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheet;
+import drafts.com.sun.star.script.framework.XScriptContext;
+
+addEntry(date, total, free) {
+
+    // The context variable is of type XScriptContext and is available to
+    // all BeanShell scripts executed by the Script Framework
+    comp = context.getDocument();
+
+    doc = (XSpreadsheetDocument)
+        UnoRuntime.queryInterface(XSpreadsheetDocument.class, comp);
+
+    index = (XIndexAccess)
+        UnoRuntime.queryInterface(XIndexAccess.class, doc.getSheets());
+
+    sheet = (XSpreadsheet) AnyConverter.toObject(
+        new Type(com.sun.star.sheet.XSpreadsheet.class), index.getByIndex(0));
+
+    sheet.getCellByPosition(0, 1).setValue(total - free);
+    sheet.getCellByPosition(1, 1).setValue(free);
+    sheet.getCellByPosition(2, 1).setValue(total);
+    sheet.getCellByPosition(0, 2).setFormula(date);
+}
+
+runtime = Runtime.getRuntime();
+generator = new Random();
+date = new Date();
+
+len = (int)(generator.nextFloat() * runtime.freeMemory() / 5);
+bytes = new byte[len];
+addEntry(date.toString(), runtime.totalMemory(), runtime.freeMemory());
