@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 09:17:50 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ SAL_IMPLEMENT_MAIN()
                 kp = new StrongNameKeyPair(fs);
                 fs->Close();
             }
-            catch (System::IO::FileNotFoundException * e)
+            catch (System::IO::FileNotFoundException * )
             {
                 throw Exception(OUSTR("Could not find the keyfile. Verify the --keyfile argument!"), 0);
             }
