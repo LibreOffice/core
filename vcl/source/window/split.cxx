@@ -3,9 +3,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:54:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,33 @@
 #ifndef _SV_LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
+namespace
+{
+    struct BlackInstance
+    {
+        Wallpaper * operator ()()
+        {
+            static Wallpaper instance(COL_BLACK);
+            return &instance;
+        }
+    };
 
-static Wallpaper ImplBlackWall( COL_BLACK );
-static Wallpaper ImplWhiteWall( COL_LIGHTGRAY );
+    struct WhiteInstance
+    {
+        Wallpaper * operator ()()
+        {
+            static Wallpaper instance(COL_LIGHTGRAY);
+            return &instance;
+        }
+    };
+
+    struct ImplBlackWall : public rtl::Static< Wallpaper, ImplBlackWall, BlackInstance > {};
+    struct ImplWhiteWall : public rtl::Static< Wallpaper, ImplWhiteWall, WhiteInstance > {};
+}
 
 // =======================================================================
 
@@ -139,9 +162,9 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     SetPointer( Pointer( ePointerStyle ) );
 
     if( GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
-        SetBackground( ImplWhiteWall );
+        SetBackground( ImplWhiteWall::get() );
     else
-        SetBackground( ImplBlackWall );
+        SetBackground( ImplBlackWall::get() );
 
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
     pTList->AddWindow( this );
@@ -774,9 +797,9 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
         if( oldFaceColor.IsDark() != newFaceColor.IsDark() )
         {
             if( newFaceColor.IsDark() )
-                SetBackground( ImplWhiteWall );
+                SetBackground( ImplWhiteWall::get() );
             else
-                SetBackground( ImplBlackWall );
+                SetBackground( ImplBlackWall::get() );
         }
     }
 }
