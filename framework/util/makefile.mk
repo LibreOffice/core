@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: as $ $Date: 2002-04-22 13:52:25 $
+#   last change: $Author: as $ $Date: 2002-05-02 11:43:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,9 +112,12 @@ LIB1OBJFILES=	$(SLO)$/attributelist.obj					\
 LIB2TARGET=		$(SLB)$/fwiobj.lib
 
 LIB2OBJFILES=	$(SLO)$/wildcard.obj						\
+                $(SLO)$/converter.obj						\
                 $(SLO)$/lockhelper.obj						\
+                $(SLO)$/transactionmanager.obj				\
                 $(SLO)$/filtercache.obj						\
-                $(SLO)$/filtercachedata.obj
+                $(SLO)$/filtercachedata.obj					\
+                $(SLO)$/protocolhandlercache.obj
 
 # --- export classes library ---------------------------------------------------
 
@@ -172,13 +175,11 @@ SHL3IMPLIB=		ifwl
 
 SHL3OBJS=		$(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/contenthandlerfactory.obj	\
-                $(SLO)$/converter.obj				\
                 $(SLO)$/filterfactory.obj			\
                 $(SLO)$/frameloaderfactory.obj		\
                 $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/registertemp.obj			\
-                $(SLO)$/typedetection.obj			\
-                $(SLO)$/lockhelper.obj
+                $(SLO)$/typedetection.obj
 
 SHL3STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -207,7 +208,6 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/asyncquit.obj				\
                 $(SLO)$/basedispatcher.obj			\
                 $(SLO)$/blankdispatcher.obj			\
-                $(SLO)$/converter.obj				\
                 $(SLO)$/createdispatcher.obj		\
                 $(SLO)$/desktop.obj					\
                 $(SLO)$/dispatchprovider.obj		\
@@ -241,7 +241,8 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/jobexecutor.obj				\
                 $(SLO)$/dispatchrecordersupplier.obj\
-                $(SLO)$/dispatchrecorder.obj
+                $(SLO)$/dispatchrecorder.obj		\
+                $(SLO)$/servicehandler.obj
 
 SHL4STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
