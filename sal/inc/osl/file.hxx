@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:49:06 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,13 +476,14 @@ public:
 
 // -----------------------------------------------------------------------------
 
-#define VolumeInfoMask_Attributes     osl_VolumeInfo_Mask_Attributes
-#define VolumeInfoMask_TotalSpace     osl_VolumeInfo_Mask_TotalSpace
-#define VolumeInfoMask_UsedSpace      osl_VolumeInfo_Mask_UsedSpace
-#define VolumeInfoMask_FreeSpace      osl_VolumeInfo_Mask_FreeSpace
-#define VolumeInfoMask_MaxNameLength  osl_VolumeInfo_Mask_MaxNameLength
-#define VolumeInfoMask_MaxPathLength  osl_VolumeInfo_Mask_MaxPathLength
-#define VolumeInfoMask_FileSystemName osl_VolumeInfo_Mask_FileSystemName
+#define VolumeInfoMask_Attributes             osl_VolumeInfo_Mask_Attributes
+#define VolumeInfoMask_TotalSpace             osl_VolumeInfo_Mask_TotalSpace
+#define VolumeInfoMask_UsedSpace              osl_VolumeInfo_Mask_UsedSpace
+#define VolumeInfoMask_FreeSpace              osl_VolumeInfo_Mask_FreeSpace
+#define VolumeInfoMask_MaxNameLength          osl_VolumeInfo_Mask_MaxNameLength
+#define VolumeInfoMask_MaxPathLength          osl_VolumeInfo_Mask_MaxPathLength
+#define VolumeInfoMask_FileSystemName         osl_VolumeInfo_Mask_FileSystemName
+#define VolumeInfoMask_FileSystemCaseHandling osl_VolumeInfo_Mask_FileSystemCaseHandling
 
 class Directory;
 
