@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:26:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,17 +534,7 @@ void SwView::SelectShell()
         else if ( nSelectionType & SwWrtShell::SEL_DRW )
         {
             eShellMode = SEL_DRAW;
-
-            pShell = new svx::ExtrusionBar( this );
-            SetShell( pShell );
-            rDispatcher.Push( *pShell );
-
-            eShellMode = SEL_DRAW;
-            SetShell( new svx::FontworkBar( this ) );
-            rDispatcher.Push( *GetCurShell() );
-
             pShell = new SwDrawShell( *this );
-
             rDispatcher.Push( *pShell );
 
             if ( nSelectionType & SwWrtShell::SEL_BEZ )
@@ -557,6 +547,19 @@ void SwView::SelectShell()
             {
                 eShellMode = SEL_MEDIA;
                 pShell = new SwMediaShell( *this );
+                rDispatcher.Push( *pShell );
+            }
+
+            if (nSelectionType & SwWrtShell::SEL_EXTRUDED_CUSTOMSHAPE)
+            {
+                eShellMode = SEL_EXTRUDED_CUSTOMSHAPE;
+                pShell = new svx::ExtrusionBar(this);
+                rDispatcher.Push( *pShell );
+            }
+            if (nSelectionType & SwWrtShell::SEL_FONTWORK)
+            {
+                eShellMode = SEL_FONTWORK;
+                pShell = new svx::FontworkBar(this);
                 rDispatcher.Push( *pShell );
             }
         }
