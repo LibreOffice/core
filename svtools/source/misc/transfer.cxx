@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-07 12:27:47 $
+ *  last change: $Author: ka $ $Date: 2001-03-07 12:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #endif
 #ifndef _FILELIST_HXX
 #include <sot/filelist.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #endif
 
 #include "urlbmk.hxx"
@@ -680,16 +684,20 @@ void TransferableHelper::CopyToClipboard() const
 
 void TransferableHelper::FlushToClipboard() const
 {
-/*
     if( mxClipboard.is() )
     {
         Reference< XFlushableClipboard > xFlushableClipboard( mxClipboard, UNO_QUERY );
 
-        if( xFlushableClipboard.is() )
+        try
         {
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+            DBG_ERROR( "Could not flush clipboard" );
         }
     }
-*/
 }
 
 // -----------------------------------------------------------------------------
