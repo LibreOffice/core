@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message [ english_us ] = "Could not merge documents." ;
     Message [ portuguese_brazilian ] = "Es konnte nichts zusammengeführt werden." ;
     Message [ swedish ] = "Inget kunde sammanföras." ;
-    Message [ danish ] = "Fletning kunne ikke gennemføres." ;
+    Message [ danish ] = "Det var ikke muligt at udføre fletning." ;
     Message [ italian ] = "Non è stato possibile unire alcunché." ;
     Message [ spanish ] = "No se pudieron fusionar los documentos." ;
     Message [ french ] = "Impossible de fusionner les documents." ;
@@ -340,7 +340,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ portuguese_brazilian ] = "Não pude inserir Texto Automático." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
     MESSAGE [ finnish ] = "Automaattitekstiä ei voi lisätä." ;
-    MESSAGE [ danish ] = "AutoTekst kunne ikke indsættes." ;
+    MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTekst." ;
     MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
     MESSAGE [ dutch ] = "AutoTekst kon niet worden toegepast." ;
@@ -916,7 +916,7 @@ String MN_SRCVIEW_POPUPMENU
     Text [ portuguese ] = "Texto-fonte HTML" ;
     Text [ english_us ] = "HTML source" ;
     Text [ portuguese_brazilian ] = "HTML - Quelltext" ;
-    Text [ swedish ] = "HTML - Källtext" ;
+    Text [ swedish ] = "HTML-källtext" ;
     Text [ danish ] = "HTML-kildetekst" ;
     Text [ italian ] = "Testo sorgente HTML" ;
     Text [ spanish ] = "Texto fuente HTML" ;
