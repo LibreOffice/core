@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-10 16:55:09 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,19 @@
 #include "pptin.hxx"
 #include "drawdoc.hxx"
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _MS_FILTERTRACER_HXX
+#include <svx/msfiltertracer.hxx>
+#endif
+
 // --------------
 // - Namespaces -
 // --------------
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
@@ -127,11 +135,19 @@ sal_Bool SdPPTFilter::Import()
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetKey( pStorage->GetKey() );
 
-            SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
+            String aTraceConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Tracing/Import/PowerPoint" ) );
+            Sequence< PropertyValue > aConfigData( 1 );
+            PropertyValue aPropValue;
+            aPropValue.Value <<= rtl::OUString( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+            aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" ) );
+            aConfigData[ 0 ] = aPropValue;
 
+            MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
+            aTracer.StartTracing();
+            SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
             if ( !( bRet = pImport->Import() ) )
                 mrMedium.SetError( SVSTREAM_WRONGVERSION );
-
+            aTracer.EndTracing();
             delete pImport;
             delete pDocStream;
         }
