@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DialogThread.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-03-08 16:25:42 $
+ *  last change: $Date: 2004-11-17 13:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public class DialogThread extends Thread {
         try {
             XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
                                                   XDispatchProvider.class,
-                                                  xController);
+                                                  xController.getFrame());
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
                                               XURLTransformer.class,
                                               m_xMSF.createInstance(
@@ -113,7 +113,8 @@ public class DialogThread extends Thread {
             xParser.parseStrict(aParseURL);
 
             URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", com.sun.star.frame.FrameSearchFlag.SELF |
+                                    com.sun.star.frame.FrameSearchFlag.CHILDREN);
             PropertyValue[] dispatchArguments = new PropertyValue[0];
 
             if (xDispatcher != null) {

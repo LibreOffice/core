@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WriterHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-03-08 16:25:53 $
+ *  last change:$Date: 2004-11-17 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ public class WriterHelper {
      * interface
      * @return returns the gained XExtendedToolkit Interface
      */
-    protected XExtendedToolkit getToolkit() {
+    public XExtendedToolkit getToolkit() {
         Object toolkit = null;
 
         try {
