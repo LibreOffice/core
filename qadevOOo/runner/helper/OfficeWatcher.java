@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeWatcher.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:02:53 $
+ *  last change:$Date: 2004-07-23 10:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,16 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         if (ph !=null) {
             System.out.println("OfficeWatcher: the Office is idle for " + timeOut/1000
                         + " seconds, it probably hangs and is killed NOW.");
+            String AppKillCommand = (String) params.get ("AppKillCommand");
+            if (AppKillCommand != null) {
+                System.out.println("User defined an application to destroy the started process.");
+                System.out.println("Trying to execute: "+AppKillCommand);
+                try {
+                    Runtime.getRuntime ().exec (AppKillCommand);
+                } catch (java.io.IOException e) {
+                    e.printStackTrace ();
+                }
+            }
             ph.kill();
         }
         shortWait(timeOut==0?30000:timeOut);
