@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: ama $ $Date: 2001-04-12 08:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
         pBracket->cPost = 0;
     }
     BYTE nTmp = SW_SCRIPTS;
-    if( pBracket->cPre )
+    if( pBracket->cPre > 255 )
     {
         String aTxt( pBracket->cPre );
         USHORT nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
@@ -347,7 +347,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
     }
     pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
-    if( pBracket->cPost )
+    if( pBracket->cPost > 255 )
     {
         String aTxt( pBracket->cPost );
         USHORT nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
