@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE>OpenOffice.org examples</TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/5.2 (Win32)">
+	<META NAME="CLASSIFICATION" CONTENT="Acceptor / Connector services">
+	<META NAME="KEYWORDS" CONTENT="UNO,Acceptor,Connector services">
+</HEAD>
+<BODY LINK="#444488" VLINK="#444488" BGCOLOR="#eeeeff"><A NAME="__Top__"></A>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+  <COL WIDTH=75> 
+  <TR> 
+    <TD BGCOLOR="#666699"> 
+      <H1 ALIGN=CENTER STYLE="margin-top: 0cm; text-decoration: none"><A HREF="http://www.openoffice.org/"><IMG SRC="http://udk.openoffice.org/images/open_office_org_logo.gif" NAME="Grafik1" ALT="OpenOffice" ALIGN=RIGHT WIDTH=109 HEIGHT=54 BORDER=0></A><FONT COLOR="#ffffff"><FONT SIZE=6>OpenOffice.org 
+        examples</FONT></FONT></H1>
+    </TD>
+  </TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>
+  <COL WIDTH=85*> <COL WIDTH=85*> <COL WIDTH=85*> 
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><FONT COLOR="#ffffff"><FONT SIZE=4>Contents</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100%> <A HREF="#Overview">Overview </A><BR>
+      <A HREF="#Java">Java examples</A><br>
+      <A HREF="#CPlusPlus">C++ examples</A><br>
+      <a href="#Description"></a><A HREF="#Basic">OpenOffice.org Basic examples</A><BR>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3 ALIGN=LEFT STYLE="margin-top: 0cm; text-decoration: none"><A NAME="Overview "></A> 
+        <FONT COLOR="#ffffff"><FONT SIZE=4>Overview</FONT></FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100%> 
+      <p style="margin-bottom: 0.2cm"><font face="Times New Roman, serif">The 
+        OpenOffice.org software is a complete, feature-rich office productivity 
+        product, that provides in combination with the <a href="http://www.openoffice.org/dev_docs/source/download.html">OpenOffice.org 
+        Developer Kit (ODK)</a> all the essential tools for building and deploying 
+        custom solutions to build on, or integrate with, the OpenOffice.org suite 
+        of products.</font></p>
+      <p style="margin-bottom: 0.2cm">The ODK is a set of tools, libraries, jar 
+        files, header files and idl files which are necessary to develop components 
+        for the OpenOffice.org using the <a href="http://api.openoffice.org/">OpenOffice 
+        API</a> and the OpenOffice.org component technology <a href="http://udk.openoffice.org/">UNO 
+        (Universal Network Objects)</a>. Furthermore, the tarballs contain all 
+        below mentioned examples (C++, Java, and Basic) which demonstrate the 
+        UNO technology and the use of the OpenOffice.org API.</p>
+      <p>Further on, the ODK is the basic stuff for external developers to develop 
+        components <font face="Times New Roman, Times, serif">in any language 
+        for which a binding exists</font>. <font face="Times New Roman, Times, serif">Currently 
+        there are language bindings for OpenOffice.org Basic, Java and different 
+        C++ compilers on different platforms for OpenOffice.org without using 
+        OpenOffice.org build environment, thus covering the two most commonly 
+        used programming languages. There will be no limit for office automation 
+        in heterogeneous environments. </font>Currently supported platforms of 
+        the ODK are Linux, Solaris (sparc) and Windows.<br>
+      </p>
+      <p style="margin-bottom: 0.2cm"><font face="Times New Roman, Times, serif">The 
+        OpenOffice.org API defines the interface for accessing office functionality 
+        from different programming languages. The OpenOffice API reference manual 
+        is available from <a href="http://api.openoffice.org/">http://api.openoffice.org/</a>.</font></p>
+      <p style="margin-bottom: 0.2cm"><font face="Times New Roman, serif">The 
+        following examples demonstrate how to benefit from the included word processor, 
+        spreadsheet, presentation software, graphics program, and database software.</font></p>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100% BGCOLOR="#666699"> 
+      <H3><A NAME="Java"></A><FONT COLOR="#ffffff">Java examples</FONT></H3>
+    </TD>
+  </TR>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100%> 
+      <p>In order to connect the following client programs to the running office 
+        server, before running those programs, you should invoke the office with 
+        the following command:</p>
+      <p>soffice &quot;-accept=socket,host=localhost,port=8100;urp;StarOffice.ServiceManager&quot;</p>
+      <p>You could also customize the mentioned host and port to your needs.</p>
+      <table width="94%" border="1">
+        <tr> 
+          <td width="24%"><b>Example</b></td>
+          <td width="76%"><b>Description</b></td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/CalcAddins/">CalcAddins</a></td>
+          <td width="76%">This component adds new functions to the spreadsheet 
+            application. After registering the component, the inserted functions 
+            can be found with help of the functions autopilot. The new functions 
+            are assigned to the category <i>Add-in</i>.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/Car/">Car</a></td>
+          <td width="76%">The component <i>Car</i> is a very simple, but complete 
+            component, which simulates the driving, acceleration, and braking 
+            of a car. Moreover, the component demonstrates the use of properties 
+            and their listeners.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/ConverterServlet/">ConverterServlet</a></td>
+          <td width="76%">This servlet shows you, how to convert arbitrary documents 
+            on a remote running office server. The converted document will be 
+            pushed from the web server to the client browser.</td>
+        </tr>
+        <tr> 
+          <td width="24%"> <a href="http://api.openoffice.org/source/browse/api/odk/examples/java/DocumentConverter/">DocumentConverter</a></td>
+          <td width="76%">Here, the program offers a service, which converts arbitrary 
+            documents to a favored document type.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/DocumentLoader/">DocumentLoader</a></td>
+          <td width="76%">The <i>DocumentLoader</i> can open a new or an existing 
+            document.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/DocumentPrinter/">DocumentPrinter</a></td>
+          <td width="76%">The <i>DocumentPrinter</i> allows you to print your 
+            favored pages of a specified document on your favored printer.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/DocumentSaver/">DocumentSaver</a></td>
+          <td width="76%">The DocumentSaver shows you, how to save a document. 
+            Furthermore, you can change the type of your document.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/GraphicsInserter/">GraphicsInserter</a></td>
+          <td width="76%">The GraphicsInserter creates a graphics object on an 
+            empty text document by setting its position, width, height, and URL.</td>
+        </tr>
+        <tr> 
+          <td width="24%"> <a href="http://api.openoffice.org/source/browse/api/odk/examples/java/Inspector/">Inspector</a></td>
+          <td width="76%">The Instance Inspector is primarily an auxiliary tool 
+            for developer, which can present information about an object of the 
+            Star Office API at run-time. Dependent on the object to be inspected 
+            appropriate methods, interfaces, services, and attributes can be displayed 
+            to the developer. The methods, interfaces, services and attributes 
+            are represented in a predictable tree. If the attributes contained 
+            in an object are to be examined, the appropriate nodes in the tree 
+            can be expanded with the help of the mouse. For each non primitive 
+            object five categories are offered to the user, as far as those are 
+            available with the object concerned.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/NotesAccess/">NotesAccess</a></td>
+          <td width="76%">This class creates a spreadsheet document and fills 
+            it with existing values of documents from a Lotus Notes database.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/ToDo/">ToDo</a></td>
+          <td width="76%"> For every to-do listed in a spreadsheet document this 
+            component calculates the start date, day of week of the start date, 
+            the end date and the day of week of the end date. All calculations 
+            are dependent on the values of &quot;Needed Days&quot;, &quot;Due 
+            Date&quot; and &quot;Status&quot;. The columns &quot;Needed Days&quot; 
+            and &quot;Status&quot; are mandatory. The first to-do should be placed 
+            in row nine. The date to start the calculation should be placed in 
+            cell C6. The private holidays should be placed in cell K4/K5 and below.<br>
+            All rows will be calculated up to the first empty cell in the first 
+            column. If a cell in the column &quot;Due Date&quot; will be colored 
+            red, you should take a look at your entries.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/WriterSelector/">WriterSelector</a></td>
+          <td width="76%">This class gives you information on the selected objects 
+            (text range, text frame, or graphics) at an OpenOffice.org Server.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/calc/ChartTypeChange/">ChartTypeChange</a></td>
+          <td width="76%">This class loads an OpenOffice.org Calc document and 
+            changes the type of the embedded chart.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/calc/">EuroAdaption</a></td>
+          <td width="76%">The application connects to the office server and gets 
+            the <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>, opens an empty Calc document, enters an example 
+            text, sets the number format to DM, changes the number format to EUR 
+            (Euro), and uses the DM/EUR factor on each cell with a content.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/calc/">SCalc</a></td>
+          <td width="76%">The program connects to the office server and gets the 
+            <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. Then an empty calc document will be opened, cell 
+            styles will be created, some data will be inserted into the sheets, 
+            and the created cell styles will be applied. Finally, a 3D chart will 
+            be inserted.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/draw/">SDraw</a></td>
+          <td width="76%">This program connects to the office server and gets 
+            the <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. Afterwards, an empty text document will be created 
+            and some shapes will be inserted on the draw page</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">BookmarkInsertion</a></td>
+          <td width="76%">This application connects to the office server and gets 
+            the <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. An empty text document will be opened and an 
+            example text will be entered. After all some bookmarks will be inserted.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">HardFormatting</a></td>
+          <td width="76%">This program connects to the office server and gets 
+            the <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. Furthermore, an empty text document will be opened, 
+            an example text will be entered, some text attributes will be inspected, 
+            and the <a href="http://api.openoffice.org/common/ref/com/sun/star/beans/PropertyState.html">PropertyState</a> 
+            will be checked from the selection.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">SWriter</a></td>
+          <td width="76%">The program connects to the office server and gets the 
+            <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. An empty text document will be created, some 
+            text will be entered, and a text table, a colored text, and text frame 
+            will be inserted.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">StyleCreation</a></td>
+          <td width="76%">The example connects to the office server and gets the 
+            <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. An empty text document will be opened, a new 
+            paragraph style will be created, and applied.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">StyleInitialization</a></td>
+          <td width="76%">The program connects to the office server and gets the 
+            <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. Thereafter, an empty text document will be opened 
+            and an example text will be entered. The paragraph collection will 
+            be used, in order to apply a different paragraph style on the paragraphs.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">TextDocumentStructure</a></td>
+          <td width="76%">The application connects to the office server and gets 
+            the <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. An empty text document will be opened, an enumeration 
+            of all paragraphs and an enumeration of all text portions will be 
+            created. </td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/writer/">TextReplace</a></td>
+          <td width="76%">The example connects to the office server and gets the 
+            <a href="http://api.openoffice.org/common/ref/com/sun/star/lang/XMultiServiceFactory.html">multi 
+            service factory</a>. An empty text document will be created, an example 
+            text will be inserted, and some English spelled words will be replaced 
+            with US spelled words.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/java/com/sun/star/comp/demo/">DemoComponent</a></td>
+          <td width="76%">This Java program is a demo component, which exports 
+            two services.</td>
+        </tr>
+      </table>
+    </TD>
+  </TR>
+  <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3><a name="CPlusPlus"></a><font color="#ffffff">C++ examples</font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100%> 
+      <table width="94%" border="1">
+        <tr> 
+          <td width="24%"><b>Example</b></td>
+          <td width="76%"><b>Description</b></td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/cpp/officeclient/">Office 
+            client</a></td>
+          <td width="76%"> This component provides a UNO demo component which 
+            demonstrates the communication with a local office. The component 
+            will create different document types and close them. </td>
+        </tr>
+        <tr> 
+          <td width="24%">Counter</td>
+          <td width="76%">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td width="24%">Remote client</td>
+          <td width="76%">&nbsp;</td>
+        </tr>
+        <tr> 
+          <td width="24%">Car</td>
+          <td width="76%">The component <i>Car</i> is a very simple, but complete 
+            component, which simulates the driving, acceleration, and braking 
+            of a car. Moreover, the component demonstrates the use of properties 
+            and their listeners.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100% bgcolor="#666699"> 
+      <h3><a name="Basic"></a><font color="#ffffff">OpenOffice.org Basic examples</font></h3>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan=3 width=100%> 
+      <p>The example programs are embedded in StarOffice/OpenOffice.org documents 
+        in the samples directory.<br>
+        To view or edit the StarOffice/OpenOffice.org Basic source, select the 
+        appropriate document and then select Tools-&gt;Macro.</p>
+      <p> Most of the examples are stand-alone, but two of them (Creating an Index 
+        and Import/Export of ASCII Files) have an associated data file identified 
+        by a .txt file name suffix).</p>
+      <p>These examples are taken from the Programmer's Tutorial. Some of them 
+        were ported to Java and you find them above.</p>
+      <p>These examples are presented in the order in which they appear in Chapter 
+        5.</p>
+      <table width="94%" border="1">
+        <tr> 
+          <td width="24%"><b>Example</b></td>
+          <td width="76%"><b>Description</b></td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/text/modifying_text_automatically/" target="_blank"><font face="Times New Roman, serif">Changing 
+            Appearance</font></a></td>
+          <td width="76%">To change the style used for certain words, you can 
+            start with the following example. This code searches for the regular 
+            expression <font face="Courier New, Courier, mono">the[a-z]</font> 
+            which stands for the text portion the followed by exactly one lowercase 
+            letter. All occurrences of these four letters are then changed to 
+            be displayed in bold characters. The same happens in the next part 
+            of the program, this time changing the appearance of <font face="Courier New, Courier, mono">all[a-z]</font> 
+            to italic. In order for this example to work, you must execute it 
+            from an open text document.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/text/modifying_text_automatically/" target="_blank"><font face="Times New Roman, serif">Replacing 
+            Text</font></a></td>
+          <td width="76%"> 
+            <p>If you regularly receive documents from other people for editing, 
+              you might want to make sure that certain words are always written 
+              the same. The next example<br>
+              illustrates this by forcing certain words to be spelled in American 
+              English.<br>
+              In order for this example to work, you must execute it from an open 
+              text document. For a real world application, you&#146;d probably 
+              want to read the words from an external file.</p>
+          </td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/text/modifying_text_automatically/" target="_blank"><font face="Times New Roman, serif">Using 
+            Regular Expressions</font></a></td>
+          <td width="76%"> 
+            <p>Another application of automatic text modification is related to 
+              stylistic questions. Suppose your company&#146;s policy is to avoid 
+              the use of certain words. You want to replace these words, but you 
+              can&#146;t do that automatically, because you have to find the appropriate 
+              replacement which depends on the context. So instead of deleting 
+              or replacing the offending words automatically, you change their 
+              color to make them stand out during a subsequent manual review process.<br>
+              The following example handles two kinds of unwanted wordings: those 
+              which are absolutely forbidden and must be replaced by something 
+              else, and those which are considered bad style. A subroutine is 
+              responsible for the changes. It can be used to make all words in 
+              a list appear in a certain color in the text document. To keep the 
+              lists short, we are using regular expressions here which provide 
+              for the variants of the words (plural, adjective etc.).</p>
+          </td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/text/modifying_text_automatically/" target="_blank"><font face="Times New Roman, serif">Inserting 
+            Bookmarks</font></a></td>
+          <td width="76%"> 
+            <p>The next example does something very similar. This time, however, 
+              we do not<br>
+              change the color of the words but insert a bookmark at each of them. 
+              You can thus use the StarOffice navigator to jump directly from 
+              word to word. Bookmarks have first to be created using <font face="Courier New, Courier, mono">createInstance()</font>. 
+              They are then inserted with <font face="Courier New, Courier, mono">insertTextContent()</font> 
+              at the current text range.</p>
+            <p>The main difference to the preceding example is the For loop in 
+              <font face="Courier New, Courier, mono">markList()</font>. Instead 
+              of changing the color of the current word, it creates a new bookmark, 
+              oBookmark, whose name is the current word with an integer appended. 
+              It then<br>
+              inserts this bookmark at the word.</p>
+          </td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/text/creating_an_index/" target="_blank"><font face="Times New Roman, serif">Creating 
+            an Index</font></a></td>
+          <td width="76%">Indices for text documents can be created manually in 
+            StarWriter by clicking on the words that shall appear in the index. 
+            If the document is large or if you have to generate indices for several 
+            documents, this task should be automated.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/sheet/" target="_blank"><font face="Times New Roman, serif">Adapting 
+            to Euroland</font></a></td>
+          <td width="76%">Most of the member of the European Union will abandon 
+            their old currency in favor of the new Euro in 2001. This requires 
+            modifications to all programs using the old currencies. Since the 
+            exchange rates for the old currencies have been fixed at the end of 
+            1999, one can already convert old data. The following program does 
+            this for all values in a table that are formatted with the currency 
+            string DM.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/drawing/" target="_blank"><font face="Times New Roman, serif">Import/Export 
+            of ASCII Files</font></a> </td>
+          <td width="76%">You can use the drawing facilities of StarOffice API 
+            to generate a picture from ASCII input. One application would be a 
+            hierarchical representation of a directory listing, based on textual 
+            data.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/stock_quotes_updater/" target="_blank"><font face="Times New Roman, serif">Stock 
+            Quotes Updater</font></a></td>
+          <td width="76%">If you want to display stock charts for certain companies, 
+            you can fire up your browser every day, go to Yahoo, look up the quote 
+            and copy it by hand into a table. Or you can use a program that does 
+            all this automatically. The following example relies on the sheet 
+            module. It uses URLs to obtain the current stock quotes. The quotes 
+            are displayed in sheets, one for each company. We show a line diagram 
+            and the numerical values for this company on every sheet. The functionality 
+            is hidden in the three subroutines <font face="Courier New, Courier, mono">GetValue()</font>, 
+            <font face="Courier New, Courier, mono">UpdateValue()</font>, and 
+            <font face="Courier New, Courier, mono">UpdateChart()</font>.</td>
+        </tr>
+        <tr> 
+          <td width="24%"><a href="http://api.openoffice.org/source/browse/api/odk/examples/basic/forms_and_controls/" target="_blank"><font face="Times New Roman, serif">Forms 
+            and Controls</font></a></td>
+          <td width="76%">The example document Burger Factory offers you some 
+            forms and controls, which you can use to order your desired burger 
+            type, beverage, topping, and sauce. By hitting the button &quot;Order 
+            now !&quot;, your order will be placed.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100%> 
+      <HR SIZE=1 NOSHADE>
+    </TD>
+  </TR>
+  <TR> 
+    <TD WIDTH=50% BGCOLOR="#666699"> 
+      <P ALIGN=LEFT><FONT COLOR="#ffffff"> Author: <A HREF="mailto:Bertram.Nolte@sun.com"><FONT COLOR="#ffffff">Bertram 
+        Nolte</FONT></A> ( 
+        <!-- #BeginDate format:IS1a -->2001-10-15 7:24 PM<!-- #EndDate -->
+        )<BR>
+        <I>Copyright 2001 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, 
+        CA 94303 USA.</I></FONT> </P>
+    </TD>
+  <TR> 
+  <TR> 
+    <TD COLSPAN=3 WIDTH=100%> 
+      <HR SIZE=1 NOSHADE>
+    </TD>
+  </TR>
+</TABLE>
+<HR SIZE=3 NOSHADE>
+</BODY>
+</HTML>
