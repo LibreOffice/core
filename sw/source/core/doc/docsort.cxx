@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@
 #include <redline.hxx>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //nur zum debugen
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
