@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-01 09:10:15 $
+ *  last change: $Author: ka $ $Date: 2001-08-14 14:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDRAGCONTEXT_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #endif
 
 #include "transfer.hxx"
@@ -199,6 +202,25 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
     {
         ExecuteDropEvent aEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
         aEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+
+        if( aEvt.mbDefault )
+        {
+            // in case of a default action, call ::AcceptDrop first and use the returned
+            // accepted action as the execute action in the call to ::ExecuteDrop
+            AcceptDropEvent aAcceptEvent;
+
+            aAcceptEvent.mnAction = aEvt.mnAction;
+            aAcceptEvent.maPosPixel = aEvt.maPosPixel;
+            (DropTargetEvent&)( aAcceptEvent.maDragEvent ) = (DropTargetEvent&) rDTDE;
+            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).DropAction = rDTDE.DropAction;
+            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationX = rDTDE.LocationX;
+            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationY = rDTDE.LocationY;
+            ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).SourceActions = rDTDE.SourceActions;
+            aAcceptEvent.mbLeaving = sal_False;
+            aAcceptEvent.mbDefault = sal_True;
+
+            aEvt.mnAction = mrParent.AcceptDrop( aAcceptEvent );
+        }
 
         const sal_Int8 nRet = mrParent.ExecuteDrop( aEvt );
 
