@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:56:45 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,7 @@ String STR_INSERTDRAW
     Text [ portuguese_brazilian ] = "Zeichenobjekt einfügen" ;
     Text[ chinese_simplified ] = "²åÈë»æÍ¼¶ÔÏó";
     Text[ russian ] = "Âñòàâèòü ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Wstaw obiekty rysunkowe";
+    Text[ polish ] = "Wstaw obiekty graficzne";
     Text[ japanese ] = "•`‰æµÌŞ¼Şª¸Ä‚Ì‘}“ü";
     Text[ chinese_traditional ] = "´¡¤JÃ¸¹Ïª«¥ó";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä ÑÓæãí";
@@ -1692,7 +1692,7 @@ String STR_DRAWUNDO
     Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
     Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Obiekty rysunkowe";
+    Text[ polish ] = "Obiekty graficzne";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
@@ -1718,7 +1718,7 @@ String STR_DRAWGROUP
     Text [ portuguese_brazilian ] = "Zeichenobjekte gruppieren" ;
     Text[ chinese_simplified ] = "·Ö×é»æÍ¼¶ÔÏó";
     Text[ russian ] = "Ãğóïïèğîâàòü ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Grupuj obiekty rysunkowe";
+    Text[ polish ] = "Grupuj obiekty graficzne";
     Text[ japanese ] = "}Œ`•`‰æ‚ğ¸ŞÙ°Ìß‰»‚·‚é";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó¸s²Õ";
     Text[ arabic ] = "ÊÌãíÚ ßÇÆäÇÊ ÑÓæãíÉ";
@@ -1770,7 +1770,7 @@ String STR_DRAWDELETE
     Text [ portuguese_brazilian ] = "Zeichenobjekte löschen" ;
     Text[ chinese_simplified ] = "É¾³ı»æÍ¼¶ÔÏó";
     Text[ russian ] = "Óäàëèòü ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Usuñ obiekty rysunkowe";
+    Text[ polish ] = "Usuñ obiekty graficzne";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä‚ğ‰ğœ";
     Text[ chinese_traditional ] = "§R°£Ã¸¹Ïª«¥ó";
     Text[ arabic ] = "ÍĞİ ßÇÆäÇÊ ÑÓæãíÉ";
@@ -1797,7 +1797,7 @@ String STR_REREAD
     Text[ chinese_simplified ] = "¸üÌæÍ¼ĞÎ";
     Text[ russian ] = "Çàìåíèòü ãğàôèêó";
     Text[ polish ] = "Zamieñ grafikê";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì’uŠ·";
+    Text[ japanese ] = "}‚Ì’uŠ·";
     Text[ chinese_traditional ] = "¥N´À¹Ï§Î";
     Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Afbeelding vervangen";
@@ -1823,7 +1823,7 @@ String STR_DELGRF
     Text[ chinese_simplified ] = "É¾³ıÍ¼ĞÎ";
     Text[ russian ] = "Óäàëèòü";
     Text[ polish ] = "Usuñ grafikê";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ìíœ";
+    Text[ japanese ] = "}‚Ìíœ";
     Text[ chinese_traditional ] = "§R°£¹Ï§Î";
     Text[ arabic ] = "ÍĞİ ÕæÑÉ";
     Text[ dutch ] = "Afbeelding wissen";
@@ -2365,7 +2365,7 @@ String STR_UNDO_SETRUBYATTR
 {
     Text = "Phonetische Symbole setzen" ;
     Text [ ENGLISH ] = "Set phonetic Symbols" ;
-    Text[ english_us ] = "Set ruby symbols";
+    Text[ english_us ] = "Ruby Setting";
     Text[ portuguese ] = "Set phonetic Symbols";
     Text[ russian ] = "Ïîìåñòèòü äèàêğèòè÷åñêèå çíàêè";
     Text[ greek ] = "Ïñéóìüò öùíçôéêşí óõìâüëùí";
@@ -2379,8 +2379,8 @@ String STR_UNDO_SETRUBYATTR
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
     Text[ japanese ] = "ÙËŞİ’è";
     Text[ korean ] = "Set phonetic Symbols";
-    Text[ chinese_simplified ] = "Éè¶¨Æ´ÒôºÍ×¢Òô·ûºÅ";
-    Text[ chinese_traditional ] = "³]©wª`­µ²Å¸¹";
+    Text[ chinese_simplified ] = "¼ÓÉÏÆ´Òô»ò×¢Òô·ûºÅ";
+    Text[ chinese_traditional ] = "¥[¤Wª`­µ²Å¸¹";
     Text[ turkish ] = "Set phonetic Symbols";
     Text[ arabic ] = "ÊÚííä ÑãæÒ ÕæÊíÉ";
 };
