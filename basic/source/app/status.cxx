@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:40:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,26 +70,18 @@ StatusLine::StatusLine( BasicFrame* p )
 : TaskBar( p )
 , pFrame( p )
 {
-    Show();
-}
+    // initialize TaskToolBox
+    TaskToolBox*    pTempTaskToolBox = GetTaskToolBox();
+    pTempTaskToolBox->SetActivateTaskHdl( LINK( this, StatusLine, ActivateTask ) );
 
-TaskToolBox* StatusLine::CreateTaskToolBox()
-{
-    TaskToolBox *pTTB = new TaskToolBox( this );
-    pTTB->SetActivateTaskHdl( LINK( this, StatusLine, ActivateTask ) );
-//  pTTB->Show();
-    return pTTB;
-}
-
-TaskStatusBar* StatusLine::CreateTaskStatusBar()
-{
-    TaskStatusBar* pBar = new TaskStatusBar( this, WB_3DLOOK | WB_BORDER | WB_LEFT );
+    // initialize TaskStatusBar
+    TaskStatusBar*  pTempStatusBar = GetStatusBar();
     USHORT nCharWidth = GetTextWidth( '0' );    // Angenommen, alle Zahlen sind gleich breit
+    pTempStatusBar->InsertItem( ST_MESSAGE, GetTextWidth( 'X' ) * 20, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
+    pTempStatusBar->InsertItem( ST_LINE, 5*nCharWidth );
+    pTempStatusBar->InsertStatusField();
 
-    pBar->InsertItem( ST_MESSAGE, GetTextWidth( 'X' ) * 20, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
-    pBar->InsertItem( ST_LINE, 5*nCharWidth );
-    pBar->InsertStatusField();
-    return pBar;
+    Show();
 }
 
 void StatusLine::Message( String& s )
@@ -151,6 +143,7 @@ void StatusLine::LoadTaskToolBox()
 
     pTaskToolBox->EndUpdateTask();
     Resize();
+    Invalidate();
 }
 
 
