@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:12:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,5 +488,7 @@
 #define SID_CLOSE_MASTER_VIEW               (SID_SD_START+434)
 
 #define SID_ASSIGN_LAYOUT                   (SID_SD_START+435)
+#define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
+#define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
 
 #endif
