@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:54:44 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,38 @@ SfxItemPresentation SwNumRuleItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
+/*************************************************************************
+|*    class     SwParaConnectBorderItem
+*************************************************************************/
+
+SfxItemPresentation SwParaConnectBorderItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    XubString&          rText,
+    const IntlWrapper*        pIntl
+)   const
+{
+    // no UI support available
+    return SfxBoolItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntl );
+/*    switch ( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            return SFX_ITEM_PRESENTATION_NONE;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            USHORT nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
+            rText = SW_RESSTR( nId );
+            return ePres;
+        }
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+ */
+}
+
 
 
 /******************************************************************************
