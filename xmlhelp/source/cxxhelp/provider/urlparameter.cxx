@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
+ *  last change: $Author: abi $ $Date: 2001-05-23 14:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,17 @@
 #ifndef SablotHIncl
 #include <sablot.h>
 #endif
+#ifndef ShandlerHIncl
+#include <shandler.h>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
+#endif
+#ifndef _RTL_MEMORY_H_
+#include <rtl/memory.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -95,8 +104,14 @@
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
+#include <com/sun/star/ucb/OpenMode.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIER_HPP_
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
@@ -420,23 +435,26 @@ class InputStreamTransformer
 {
 public:
 
-    InputStreamTransformer( const Reference< XInputStream >& xUntransformed );
+    InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
+                            const rtl::OUString& aUri );
+
     ~InputStreamTransformer();
 
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
     virtual void SAL_CALL acquire( void ) throw( RuntimeException );
     virtual void SAL_CALL release( void ) throw( RuntimeException );
 
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
+        throw( NotConnectedException,
+               BufferSizeExceededException,
+               IOException,
+               RuntimeException);
 
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) throw( NotConnectedException,
-                                                                                                      BufferSizeExceededException,
-                                                                                                      IOException,
-                                                                                                      RuntimeException);
-
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead ) throw( NotConnectedException,
-                                                                                                             BufferSizeExceededException,
-                                                                                                             IOException,
-                                                                                                             RuntimeException);
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
+        throw( NotConnectedException,
+               BufferSizeExceededException,
+               IOException,
+               RuntimeException);
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
                                                                      BufferSizeExceededException,
@@ -459,11 +477,16 @@ public:
 
     virtual sal_Int64 SAL_CALL getLength( void ) throw( IOException,RuntimeException );
 
+    void addToBuffer( const char* buffer,int len );
+
 
 private:
 
-    Reference< XInputStream > m_xInputStream;
-    Reference< XSeekable >    m_xSeekable;
+    int len,pos;
+    char *buffer;
+
+      Reference< XInputStream > m_xInputStream;
+      Reference< XSeekable >    m_xSeekable;
 };
 
 
@@ -475,11 +498,6 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XActiveDataSink >& xDataSink )
 {
-    rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
-
-    Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
-    Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
-
     rtl::OUString url = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
     rtl::OUString jar =
         Databases::getInstallPathAsURL()         +
@@ -495,34 +513,22 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
     url += ( rtl::OUString::createFromAscii( "/" ) + get_path() );
 
-    Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
-    Reference< XContent > xContent = provider->queryContent( xIdentifier );
-
-    Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
-
     if( isRoot() )
     {
-        printf( "isRoot" );
 //      getPicture( HelpDatabases.getCssSheet(),m_xOutputStream);
     }
     else if( isPicture() )
     {
-        printf( "isPicture" );
 //      getPicture( m_xParameter.getInputFromJarFile(),m_xOutputStream );
     }
     else if( isActive() )
     {   // This is a Helptext
-        printf( "isActive" );
 //      m_xOutputStream.setBigBuffer( m_xParameter.getByteArrayText() );
     }
     else
     {
-        processor->execute( command,
-                            CommandId,
-                             Environment );
-
         // Now plug in a new XInputStream
-        xDataSink->setInputStream( new InputStreamTransformer( xDataSink->getInputStream() ) );
+        xDataSink->setInputStream( new InputStreamTransformer( rxSMgr,url ) );
     }
 }
 
@@ -687,30 +693,95 @@ bool URLParameter::query()
 //                           InutStreamTransformerImpl                        //
 ////////////////////////////////////////////////////////////////////////////////
 
+int schemehandlergetall( void *userData,
+                         SablotHandle processor_,
+                         const char *scheme,
+                         const char *rest,
+                         char **buffer,
+                         int *byteCount);
+int schemehandlerfreememory( void *userData,
+                             SablotHandle processor_,
+                             char *buffer );
+int schemehandleropen( void *userData,
+                       SablotHandle processor_,
+                       const char *scheme,
+                       const char *rest,
+                       int *handle );
+int schemehandlerget( void *userData,
+                      SablotHandle processor_,
+                      int handle,
+                      char *buffer,
+                      int *byteCount );
+int schemehandlerput( void *userData,
+                      SablotHandle processor_,
+                      int handle,
+                      const char *buffer,
+                      int *byteCount );
+int schemehandlerclose( void *userData,
+                        SablotHandle processor_,
+                        int handle );
 
 
-InputStreamTransformer::InputStreamTransformer( const Reference< XInputStream >& xInputStream )
-    : m_xInputStream( xInputStream ),
-      m_xSeekable( xInputStream,UNO_QUERY )
+struct UserData {
+
+    InputStreamTransformer*             m_pTransformer;
+    Reference< XMultiServiceFactory >   m_xSMgr;
+
+};
+
+
+InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
+                                                const rtl::OUString& aURL )
+    : len( 0 ),
+      pos( 0 ),
+      buffer( new char[0] )
 {
+    SchemeHandler schemeHandler;
+    schemeHandler.getAll = schemehandlergetall;
+    schemeHandler.freeMemory = schemehandlerfreememory;
+    schemeHandler.open = schemehandleropen;
+    schemeHandler.get = schemehandlerget;
+    schemeHandler.put = schemehandlerput;
+    schemeHandler.close = schemehandlerclose;
+
+    UserData userData;
+    userData.m_xSMgr = rxSMgr;
+    userData.m_pTransformer = this;
+
+    SablotHandle p;
+    SablotCreateProcessor(&p);
+    SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
+
+    rtl::OString aString = rtl::OString( aURL.getStr(),aURL.getLength(),RTL_TEXTENCODING_UTF8 );
+    char* inputStr = new char[ 1+aString.getLength() ];
+    inputStr[ aString.getLength() ] = 0;
+    rtl_copyMemory( (void*)(inputStr),(void*)(aString.getStr()),sal_uInt32( aString.getLength() ) );
+
+    SablotRunProcessor( p,
+                        "file://e:/src632b/help/main_transform.xsl",
+                        inputStr,
+                        "vnd.sun.star.resultat://resultbuff",
+                        0,
+                        0 );
+
+    char* my_buf;
+    SablotGetResultArg( p,"arg:/somename",&my_buf );
+    SablotDestroyProcessor( p );
+    delete[] inputStr;
 }
 
 
 InputStreamTransformer::~InputStreamTransformer()
 {
+    delete[] buffer;
 }
 
 
 Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType ) throw( RuntimeException )
 {
-    Any aRet;
-    if( m_xSeekable.is() )
-        aRet = ::cppu::queryInterface( rType,
+    Any aRet = ::cppu::queryInterface( rType,
                                        SAL_STATIC_CAST( XInputStream*,this ),
                                        SAL_STATIC_CAST( XSeekable*,this ) );
-    else
-        aRet = ::cppu::queryInterface( rType,
-                                       SAL_STATIC_CAST( XInputStream*,this ) );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -736,9 +807,20 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
                                                                                                                   IOException,
                                                                                                                   RuntimeException)
 {
-    return m_xInputStream->readBytes( aData,nBytesToRead );
-}
+    int curr,available = len-pos;
+    if( nBytesToRead <= available )
+        curr = nBytesToRead;
+    else
+        curr = available;
 
+    if( 0 <= curr && aData.getLength() < curr )
+        aData.realloc( curr );
+
+    for( int k = 0; k < curr; ++k )
+        aData[k] = buffer[pos++];
+
+    return curr > 0 ? curr : 0;
+}
 
 
 sal_Int32 SAL_CALL InputStreamTransformer::readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
@@ -747,7 +829,7 @@ sal_Int32 SAL_CALL InputStreamTransformer::readSomeBytes( Sequence< sal_Int8 >& 
            IOException,
            RuntimeException)
 {
-    return m_xInputStream->readSomeBytes( aData,nMaxBytesToRead );
+    return readBytes( aData,nMaxBytesToRead );
 }
 
 
@@ -757,7 +839,7 @@ void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip ) throw(
                                                                                  IOException,
                                                                                  RuntimeException )
 {
-    m_xInputStream->skipBytes( nBytesToSkip );
+    while( nBytesToSkip-- ) ++pos;
 }
 
 
@@ -766,7 +848,7 @@ sal_Int32 SAL_CALL InputStreamTransformer::available( void ) throw( NotConnected
                                                                     IOException,
                                                                     RuntimeException )
 {
-    return m_xInputStream->available();
+    return len-pos > 0 ? len - pos : 0 ;
 }
 
 
@@ -775,7 +857,6 @@ void SAL_CALL InputStreamTransformer::closeInput( void ) throw( NotConnectedExce
                                                                 IOException,
                                                                 RuntimeException )
 {
-    m_xInputStream->closeInput();
 }
 
 
@@ -784,8 +865,13 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
                                                                         IOException,
                                                                         RuntimeException )
 {
-    if( m_xSeekable.is() )
-        m_xSeekable->seek( location );
+    if( location < 0 )
+        throw IllegalArgumentException();
+    else
+        pos = location;
+
+    if( pos > len )
+        pos = len;
 }
 
 
@@ -793,14 +879,261 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
 sal_Int64 SAL_CALL InputStreamTransformer::getPosition( void ) throw( IOException,
                                                                       RuntimeException )
 {
-    if( m_xSeekable.is() )
-        return m_xSeekable->getPosition();
+    return sal_Int64( pos );
 }
 
 
 
 sal_Int64 SAL_CALL InputStreamTransformer::getLength( void ) throw( IOException,RuntimeException )
 {
-    if( m_xSeekable.is() )
-        return m_xSeekable->getLength();
+    return len;
+}
+
+
+void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
+{
+    char* tmp = buffer;
+    buffer = new char[ len+len_ ];
+    rtl_copyMemory( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );
+    rtl_copyMemory( (void*)(buffer+len),(void*)(buffer_),sal_uInt32( len_ ) );
+    len += len_;
+}
+
+
+
+class XActiveDataSinkImpl
+    : public OWeakObject,
+      public XActiveDataSink
+{
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException )
+    {
+        Any aRet = ::cppu::queryInterface( rType,
+                                           SAL_STATIC_CAST( XActiveDataSink*,this ) );
+
+        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+    }
+
+    virtual void SAL_CALL acquire( void ) throw( RuntimeException )
+    {
+        OWeakObject::acquire();
+    }
+
+    virtual void SAL_CALL release( void ) throw( RuntimeException )
+    {
+        OWeakObject::release();
+    }
+
+    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& xInputStream )
+    {
+        m_xInputStream = xInputStream;
+    }
+
+    virtual Reference< XInputStream > SAL_CALL getInputStream()
+    {
+        return m_xInputStream;
+    }
+
+private:
+
+    Reference< XInputStream > m_xInputStream;
+};
+
+
+#include <string.h>
+
+
+/*  getAll: open the URI and return the whole string
+        scheme = URI scheme (e.g. "http")
+        rest = the rest of the URI (without colon)
+        the document is returned in a handler-allocated buffer
+        byteCount holds the byte count on return
+        return *buffer = NULL if not processed
+*/
+
+
+int schemehandlergetall( void *userData,
+                         SablotHandle processor_,
+                         const char *scheme,
+                         const char *rest,
+                         char **buffer,
+                         int *byteCount )
+{
+    rtl::OUString url( rtl::OUString::createFromAscii( "vnd.sun.star.pkg:" ) );
+
+    if( strcmp( scheme,"vnd.sun.star.help" ) == 0 )
+    {
+        url += rtl::OUString::createFromAscii( "//" );
+
+        URLParameter urlpar( rtl::OUString::createFromAscii( scheme ) +
+                             rtl::OUString::createFromAscii( ":" )    +
+                             rtl::OUString::createFromAscii( rest ) );
+
+        rtl::OUString jar =
+            Databases::getInstallPathAsURL()         +
+            urlpar.get_language()                    +
+            rtl::OUString::createFromAscii( "/" )    +
+            urlpar.get_module()                      +
+            rtl::OUString::createFromAscii( ".jar" );
+
+        url+= rtl::Uri::encode( jar,
+                                rtl_UriCharClassUricNoSlash,
+                                rtl_UriEncodeIgnoreEscapes,
+                                RTL_TEXTENCODING_UTF8 );
+
+        url += ( rtl::OUString::createFromAscii( "/" ) + urlpar.get_path() );
+    }
+    else if( strcmp( scheme,"vnd.sun.star.pkg" ) == 0 )
+        url += rtl::OUString::createFromAscii( rest );
+    else
+    {
+        *buffer = 0;
+        *byteCount = 0;
+        return 0;
+    }
+
+    UserData *uData = reinterpret_cast< UserData* >( userData );
+
+    rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
+    Reference< XContentProvider > provider( uData->m_xSMgr->createInstance( service ),UNO_QUERY );
+    Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
+    Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
+    Reference< XContent > xContent = provider->queryContent( xIdentifier );
+    Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
+
+    OpenCommandArgument2 argument;
+    argument.Mode = OpenMode::ALL;
+    Reference< XActiveDataSink > xActiveDataSink( new XActiveDataSinkImpl() );
+    argument.Sink = xActiveDataSink;
+    argument.Priority = 0;
+
+    Command command;
+    command.Name = rtl::OUString::createFromAscii( "open" );
+    command.Handle = -1;
+    command.Argument <<= argument;
+
+    sal_Int32 commandId = processor->createCommandIdentifier();
+
+    try
+    {
+        processor->execute( command,
+                            commandId,
+                            Reference< XCommandEnvironment >( 0 ) );
+    }
+    catch( const CommandAbortedException& e )
+    {
+        printf( "catched exception" );
+    }
+
+    Reference< XInputStream > xInputStream = xActiveDataSink->getInputStream();
+    if( xInputStream.is() )
+    {
+        Reference< XSeekable > xSeekable( xInputStream,UNO_QUERY );
+
+        sal_Int32 size = 0;
+
+        if( xSeekable.is() )
+            size = sal_Int32( xSeekable->getLength() );
+
+        *buffer = new char[ 1+size ];
+        (*buffer)[ size ] = 0;
+
+        Sequence< sal_Int8 > aSeq;
+        xInputStream->readBytes( aSeq,size );
+
+        rtl_copyMemory( (void*)(*buffer),(void*)(aSeq.getConstArray()),sal_uInt32(size) );
+        *byteCount = size;
+    }
+    else
+    {
+        *buffer = 0;
+        *byteCount = 0;
+    }
+
+    return 0;
+}
+
+/*  freeMemory: free the buffer allocated by getAll
+ */
+
+const char *bla = "Hello";
+int internalPosition = 0;
+
+int schemehandlerfreememory( void *userData,
+                             SablotHandle processor_,
+                             char *buffer )
+{
+    delete[] buffer;
+    return 0;
+}
+
+
+/*  open: open the URI and return a handle
+    scheme = URI scheme (e.g. "http")
+    rest = the rest of the URI (without colon)
+    the resulting handle is returned in '*handle'
+*/
+
+int schemehandleropen( void *userData,
+                       SablotHandle processor_,
+                       const char *scheme,
+                       const char *rest,
+                       int *handle )
+{
+    *handle = 0;
+    return 0;
+}
+
+/*  get: retrieve data from the URI
+    handle = the handle assigned on open
+    buffer = pointer to the data
+    *byteCount = number of bytes to read
+    (the number actually read is returned here)
+*/
+
+int schemehandlerget( void *userData,
+                      SablotHandle processor_,
+                      int handle,
+                      char *buffer,
+                      int *byteCount )
+{
+    int pos( 0 );
+    if( handle == 0 )
+    {
+        while( pos < *byteCount && internalPosition < 5 )
+        {
+            buffer[pos] = bla[ internalPosition ];
+            ++pos;
+            ++internalPosition;
+        }
+    }
+    *byteCount = pos;
+    return 0;
+}
+
+/*  put: save data to the URI (if possible)
+    handle = the handle assigned on open
+    buffer = pointer to the data
+    *byteCount = number of bytes to write
+    (the number actually written is returned here)
+*/
+int schemehandlerput( void *userData,
+                      SablotHandle processor_,
+                      int handle,
+                      const char *buffer,
+                      int *byteCount )
+{
+    UserData *uData = reinterpret_cast< UserData* >( userData );
+    uData->m_pTransformer->addToBuffer( buffer,*byteCount );
+    return 0;
+}
+
+/*  close: close the URI with the given handle
+    handle = the handle assigned on open
+*/
+
+int schemehandlerclose( void *userData,
+                        SablotHandle processor_,
+                        int handle )
+{
+    return 0;
 }
