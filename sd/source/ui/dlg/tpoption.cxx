@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 08:34:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
 #endif
@@ -325,6 +328,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
     aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
     aTxtCompatibility           ( this, SdResId( FT_COMPATIBILITY ) ),
+    aCbxUsePrinterMetrics       ( this, SdResId( CB_USE_PRINTER_METRICS ) ),
     aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) ),
     aGrpScale                   ( this, SdResId( GRP_SCALE ) ),
     aFtScale                    ( this, SdResId( FT_SCALE ) ),
@@ -487,7 +491,8 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
         aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
         aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() ||
-        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.IsChecked() )
+        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.IsChecked() ||
+        aCbxUsePrinterMetrics.GetSavedValue()   != aCbxUsePrinterMetrics.IsChecked() )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 
@@ -500,6 +505,10 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
         aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
         aOptsItem.SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
+        aOptsItem.SetPrinterIndependentLayout (
+            aCbxUsePrinterMetrics.IsChecked()
+            ? ::com::sun::star::document::PrinterIndependentLayout::DISABLED
+            : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
         rAttrs.Put( aOptsItem );
 
         bModified = TRUE;
@@ -555,6 +564,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxStartWithActualPage.Check( aOptsItem.IsStartWithActualPage() );
 #if SUPD>627
     aCbxCompatibility.Check( aOptsItem.IsSummationOfParagraphs() );
+    aCbxUsePrinterMetrics.Check( aOptsItem.GetPrinterIndependentLayout()==1 );
 #endif
     aCbxStartWithTemplate.SaveValue();
     aCbxMarkedHitMovesAlways.SaveValue();
@@ -565,6 +575,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxCopy.SaveValue();
     aCbxStartWithActualPage.SaveValue();
     aCbxCompatibility.SaveValue();
+    aCbxUsePrinterMetrics.SaveValue();
 
     // Metrik
     USHORT nWhich = GetWhich( SID_ATTR_METRIC );
@@ -643,25 +654,63 @@ IMPL_LINK( SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------------------22.03.01 13:03--------------------------------
 
- ---------------------------------------------------------------------------*/
-void lcl_MoveWin( Window& rWin, long nDiff )
+
+namespace {
+void lcl_MoveWin( Window& rWin, long nYDiff)
 {
     Point aPos(rWin.GetPosPixel());
-    aPos.Y() -= nDiff;
+    aPos.Y() += nYDiff;
+    rWin.SetPosPixel (aPos);
+}
+
+void lcl_MoveWin( Window& rWin, long nXdiff, long nYdiff)
+{
+    Point aPos(rWin.GetPosPixel());
+    aPos.X() += nXdiff;
+    aPos.Y() += nYdiff;
     rWin.SetPosPixel(aPos);
 }
-/* -----------------------------22.03.01 13:10--------------------------------
+}
 
- ---------------------------------------------------------------------------*/
+void SdTpOptionsMisc::SetImpressMode (void)
+{
+    long nDialogWidth = GetSizePixel().Width();
+    long nLineHeight = aCbxPickThrough.GetPosPixel().Y()
+        - aCbxQuickEdit.GetPosPixel().Y();
+
+    // Put both "Text objects" check boxes side by side.
+    lcl_MoveWin (aCbxPickThrough,
+        nDialogWidth/2 - aCbxPickThrough.GetPosPixel().X(),
+        -nLineHeight);
+
+    // Move the other controls up one line.
+    lcl_MoveWin (aGrpProgramStart, -nLineHeight);
+    lcl_MoveWin (aCbxStartWithTemplate, -nLineHeight);
+    lcl_MoveWin (aGrpSettings, -nLineHeight);
+    lcl_MoveWin (aCbxMasterPageCache, -nLineHeight);
+    lcl_MoveWin (aCbxCopy, -nLineHeight);
+    lcl_MoveWin (aCbxMarkedHitMovesAlways, -nLineHeight);
+    lcl_MoveWin (aCbxCrookNoContortion, -nLineHeight);
+    lcl_MoveWin (aTxtMetric, -nLineHeight);
+    lcl_MoveWin (aLbMetric, -nLineHeight);
+    lcl_MoveWin (aTxtTabstop, -nLineHeight);
+    lcl_MoveWin (aMtrFldTabstop, -nLineHeight);
+    lcl_MoveWin (aGrpStartWithActualPage, -nLineHeight);
+    lcl_MoveWin (aCbxStartWithActualPage, -nLineHeight);
+    lcl_MoveWin (aTxtCompatibility, -nLineHeight);
+
+    // Move the printer-independent-metrics check box up two lines to change
+    // places with spacing-between-paragraphs check box.
+    lcl_MoveWin (aCbxUsePrinterMetrics, -2*nLineHeight);
+}
+
 void    SdTpOptionsMisc::SetDrawMode()
 {
     aCbxStartWithTemplate.Hide();
     aGrpProgramStart.Hide();
     aCbxStartWithActualPage.Hide();
     aCbxCompatibility.Hide();
-    aTxtCompatibility.Hide();
     aGrpStartWithActualPage.Hide();
     aCbxCrookNoContortion.Show();
 
@@ -681,16 +730,25 @@ void    SdTpOptionsMisc::SetDrawMode()
     aMtrFldOriginalHeight.Show();
 
     long nDiff = aGrpSettings.GetPosPixel().Y() - aGrpProgramStart.GetPosPixel().Y();
-    lcl_MoveWin( aGrpSettings, nDiff );
-    lcl_MoveWin( aCbxMasterPageCache, nDiff );
-    lcl_MoveWin( aCbxCopy, nDiff );
-    lcl_MoveWin( aCbxMarkedHitMovesAlways, nDiff );
-    lcl_MoveWin( aCbxCrookNoContortion, nDiff );
+    lcl_MoveWin( aGrpSettings, -nDiff );
+    lcl_MoveWin( aCbxMasterPageCache, -nDiff );
+    lcl_MoveWin( aCbxCopy, -nDiff );
+    lcl_MoveWin( aCbxMarkedHitMovesAlways, -nDiff );
+    lcl_MoveWin( aCbxCrookNoContortion, -nDiff );
     nDiff -= aCbxCrookNoContortion.GetPosPixel().Y() - aCbxMarkedHitMovesAlways.GetPosPixel().Y();
-    lcl_MoveWin( aTxtMetric, nDiff );
-    lcl_MoveWin( aLbMetric, nDiff );
-    lcl_MoveWin( aTxtTabstop, nDiff );
-    lcl_MoveWin( aMtrFldTabstop, nDiff );
+    lcl_MoveWin( aTxtMetric, -nDiff );
+    lcl_MoveWin( aLbMetric, -nDiff );
+    lcl_MoveWin( aTxtTabstop, -nDiff );
+    lcl_MoveWin( aMtrFldTabstop, -nDiff );
+
+    // Move the scale controls so that they are visually centered betwen the
+    // group controls above and below.
+    lcl_MoveWin (aFtScale, -17);
+    lcl_MoveWin (aCbScale, -17);
+
+    // Move the printer-independent-metrics check box in the place that the
+    // spacing-between-paragraphs check box normally is in.
+    aCbxUsePrinterMetrics.SetPosPixel (aCbxCompatibility.GetPosPixel());
 }
 // -----------------------------------------------------------------------
 
