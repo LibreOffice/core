@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seleng.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: gt $ $Date: 2002-04-04 09:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,14 @@
 #include <tools/debug.hxx>
 
 #pragma hdrstop
+
+
+inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
+{
+//  return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
+    return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
+}
+
 
 // TODO: FunctionSet::SelectAtPoint raus
 
@@ -158,11 +166,11 @@ void SelectionEngine::ActivateDragMode()
 |*
 |*    Beschreibung      SELENG.SDW
 |*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
+|*    Letzte Aenderung  GT 2002-04-04
 |*
 *************************************************************************/
 
-void SelectionEngine::CursorPosChanging( BOOL bShift, BOOL /* bMod1 */ )
+void SelectionEngine::CursorPosChanging( BOOL bShift, BOOL bMod1 )
 {
     if ( !pFunctionSet )
         return;
@@ -181,7 +189,8 @@ void SelectionEngine::CursorPosChanging( BOOL bShift, BOOL /* bMod1 */ )
         {
             if ( !(nFlags & SELENG_HAS_ANCH) )
             {
-                pFunctionSet->DeselectAll();
+                if( ShouldDeselect( bMod1 ) )
+                    pFunctionSet->DeselectAll();
                 pFunctionSet->CreateAnchor();
                 nFlags |= SELENG_HAS_ANCH;
             }
@@ -200,7 +209,10 @@ void SelectionEngine::CursorPosChanging( BOOL bShift, BOOL /* bMod1 */ )
         }
         else
         {
-            pFunctionSet->DeselectAll();
+            if( ShouldDeselect( bMod1 ) )
+                pFunctionSet->DeselectAll();
+            else
+                pFunctionSet->DestroyAnchor();
             nFlags &= (~SELENG_HAS_ANCH);
         }
     }
