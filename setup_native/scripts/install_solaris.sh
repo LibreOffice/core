@@ -84,10 +84,11 @@ fi
 # Check and get the list of packages to install
 #
 
-COREPKG=`find $PACKAGE_PATH/* -type d -prune -name "*-core01*" -print`
-PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-cde*" ! -name "*-core01*" ! -name "*-gnome*" -print`
+COREPKG01=`find $PACKAGE_PATH/* -type d -prune -name "*-core01*" -print`
+COREPKGLIST=`find $PACKAGE_PATH/* -type d -prune -name "*-core*" -print`
+PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-cde*" ! -name "*-core*" ! -name "*-gnome*" -print`
 
-if [ -z "$COREPKG" ]
+if [ -z "$COREPKG01" ]
 then
     error "No core package found in directory $PACKAGE_PATH"
 fi
@@ -100,7 +101,7 @@ then
 fi
 
 echo "Packages found:"
-for i in $COREPKG $PKGLIST $GNOMEPKG; do
+for i in $COREPKGLIST $PKGLIST $GNOMEPKG; do
   echo `basename $i`
 done
 
@@ -108,7 +109,7 @@ done
 # Check/Create installation directory
 #
 
-CORENAME=`basename $COREPKG`
+CORENAME=`basename $COREPKG01`
 INSTALLDIR=$MY_ROOT`pkgparam -d $PACKAGE_PATH $CORENAME BASEDIR`
 
 # We expect that $INSTALLDIR does not exist, however if it is empty we ignore it
@@ -159,7 +160,7 @@ echo "Path to the installation   : " $MY_ROOT
 
 export LD_PRELOAD=$GETUID_SO
 
-for i in $COREPKG $PKGLIST $GNOMEPKG; do
+for i in $COREPKGLIST $PKGLIST $GNOMEPKG; do
   echo /usr/sbin/pkgadd -a $ADMINFILE -d $PACKAGE_PATH -R $MY_ROOT `basename $i`
   /usr/sbin/pkgadd -a $ADMINFILE -d $PACKAGE_PATH -R $MY_ROOT `basename $i`
 done
