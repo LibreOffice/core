@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContentsIterator.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-03-04 17:42:27 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-12 11:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package org.openoffice.netbeans.modules.office.wizard;
 
 import java.awt.Component;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collections;
@@ -73,7 +74,6 @@ import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.openide.ErrorManager;
 import org.openide.TopManager;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
@@ -86,8 +86,8 @@ import org.openide.filesystems.*;
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.xml.ParcelDescriptor;
 import org.openoffice.netbeans.modules.office.loader.ParcelFolder;
+import org.openoffice.netbeans.modules.office.loader.ParcelContentsFolder;
 import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem;
-import org.openoffice.netbeans.modules.office.utils.PackageRemover;
 
 /** A template wizard iterator (sequence of panels).
  * Used to fill in the second and subsequent panels in the New wizard.
@@ -156,15 +156,7 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         DataFolder targetFolder = wiz.getTargetFolder();
         targetFolder = checkTarget(targetFolder);
 
-        String sourceFile = "Templates/OfficeScripting/EmptyScript/Empty";
         String language = (String)wiz.getProperty(PROP_LANGUAGE);
-
-        if (language.toLowerCase().equals("java"))
-            sourceFile += ".java";
-        else if (language.toLowerCase().equals("beanshell"))
-            sourceFile += ".bsh";
-        else
-            sourceFile = null;
 
         DataObject template = wiz.getTemplate();
         DataObject result;
@@ -180,45 +172,14 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         FileObject contents =
             recipe.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
 
-        FileObject descriptor =
-            contents.getFileObject(ParcelZipper.PARCEL_DESCRIPTOR_XML);
-
-        if (descriptor != null) {
-            ParcelDescriptor pd =
-                new ParcelDescriptor(FileUtil.toFile(descriptor));
+        if (contents != null) {
+            File f = FileUtil.toFile(contents);
+            ParcelDescriptor pd = ParcelDescriptor.createParcelDescriptor(f);
             pd.setLanguage(language);
             pd.write();
-        }
 
-        if (contents != null) {
             DataFolder parent = DataFolder.findFolder(contents);
-
-            FileSystem fs = Repository.getDefault().getDefaultFileSystem();
-            DataObject dObj = DataObject.find(fs.findResource(sourceFile));
-            dObj.createFromTemplate(parent);
-
-            DataObject[] objs = parent.getChildren();
-
-            for (int i = 0; i < objs.length; i++) {
-                FileObject fo = objs[i].getPrimaryFile();
-                if (fo.getExt().equals("java")) {
-                    try {
-                        PackageRemover.removeDeclaration(FileUtil.toFile(fo));
-
-                        // IssueZilla 11986 - rename the FileObject
-                        // so the JavaNode is resynchronized
-                        fo.rename(fo.lock(), fo.getName(), fo.getExt());
-                    }
-                    catch (IOException ioe) {
-                        NotifyDescriptor d = new NotifyDescriptor.Message(
-                         "Error removing package declaration from file: " +
-                         fo.getNameExt() +
-                         ". You should manually remove this declaration " +
-                         "before building the Parcel Recipe");
-                        TopManager.getDefault().notify(d);
-                    }
-                }
-            }
+            ParcelContentsFolder.createEmptyScript(parent, language);
         }
 
         return Collections.singleton(result);

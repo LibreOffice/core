@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContentsFolderDataLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:58:24 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-12 11:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public class ParcelContentsFolderDataLoader extends UniFileLoader {
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
             SystemAction.get(PasteAction.class),
-            SystemAction.get(NewTemplateAction.class),
+            SystemAction.get(NewAction.class),
             // null,
             // SystemAction.get(PropertiesAction.class),
         };

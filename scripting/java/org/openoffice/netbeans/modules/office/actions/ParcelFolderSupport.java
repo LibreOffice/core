@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-06-04 13:19:53 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-12 11:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,46 +104,55 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 {
     protected ParcelFolder parcelFolder;
     private ConfigurePanel configuror = null;
-    private ParcelDescriptor descriptor = null;
 
     public ParcelFolderSupport(ParcelFolder parcelFolder) {
         this.parcelFolder = parcelFolder;
     }
 
-    public String getClasspath() {
+    public String getLanguage() {
+        ParcelDescriptor descriptor = getParcelDescriptor();
+
         if (descriptor == null) {
-            try {
-                descriptor = getParcelDescriptor();
-            }
-            catch (IOException ioe) {
-                ErrorManager.getDefault().notify(ioe);
-                return null;
-            }
+            return "";
         }
-        return descriptor.getLanguageProperty("classpath");
+        else {
+            return descriptor.getLanguage();
+        }
+    }
+
+    public String getClasspath() {
+        ParcelDescriptor descriptor = getParcelDescriptor();
+
+        if (descriptor == null) {
+            return "";
+        }
+        else {
+            return descriptor.getLanguageProperty("classpath");
+        }
     }
 
     public void setClasspath(String value) {
-        try {
-            if (descriptor == null) {
-                descriptor = getParcelDescriptor();
-            }
+        ParcelDescriptor descriptor = getParcelDescriptor();
+
+        if (descriptor != null) {
             descriptor.setLanguageProperty("classpath", value);
-            descriptor.write();
-        }
-        catch (IOException ioe) {
-            ErrorManager.getDefault().notify(ioe);
+
+            try {
+                descriptor.write();
+            }
+            catch (IOException ioe) {
+                ErrorManager.getDefault().notify(ioe);
+            }
         }
     }
 
-    private ParcelDescriptor getParcelDescriptor() throws IOException {
+    private ParcelDescriptor getParcelDescriptor() {
         FileObject primary = parcelFolder.getPrimaryFile();
 
         File contents = FileUtil.toFile(
             primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
 
-        return new ParcelDescriptor(
-                new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML));
+        return ParcelDescriptor.getParcelDescriptor(contents);
     }
 
     public void generate() {
@@ -203,8 +212,9 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         classpath.addElement(contents.getAbsolutePath());
 
         try {
+            ParcelDescriptor descriptor = getParcelDescriptor();
             if (descriptor == null) {
-                descriptor = getParcelDescriptor();
+                descriptor = ParcelDescriptor.createParcelDescriptor(contents);
             }
 
             if (configuror == null) {
@@ -229,7 +239,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
         if (dd.getValue() == DialogDescriptor.OK_OPTION) {
             try {
-                descriptor = configuror.getConfiguration();
+                ParcelDescriptor descriptor = configuror.getConfiguration();
                 descriptor.write();
             }
             catch (Exception e) {
