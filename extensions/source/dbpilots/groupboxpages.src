@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:47:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ swedish ] = "Vilka ~beteckningar skall alternativfδlten fε?";
         Text[ polish ] = "Jakie ~nazwy powinny byζ uΏyte dla pσl opcji?";
         Text[ portuguese_brazilian ] = "Que ~nomes deseja dar para os botυes de opηγo?";
-        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γƒ•γ‚£γƒΌγƒ«γƒ‰γ«γ©γ®εε‰γ‚’γ¤γ‘γΎγ™γ‹γ€‚(~N)";
-        Text[ korean ] = "μ–΄λ–¤ μ΄λ¦„μ΄ μµμ… ν•„λ“μ— ν¬ν•¨λμ–΄μ•Ό ν•©λ‹κΉ?(~N)";
+        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γƒγ‚Ώγƒ³γ«γ¤γ‘γ‚‹εε‰γ‚’ε…¥ε›γ—γ¦γγ γ•γ„γ€‚(~N)";
+        Text[ korean ] = "μ–΄λ–¤ μ΄λ¦„μ΄ μµμ… ν•„λ“μ— ν¬ν•¨λμ–΄μ•Ό ν•©λ‹κΉ(~N)?";
         Text[ chinese_simplified ] = "θ¦δ½Ώη”¨η„ι€‰ι΅Ήε­—ζ®µη„εη§°(~N)οΌ";
         Text[ chinese_traditional ] = "θ¦δ½Ώη”¨η„ιΈι …ζ¬„δ½η„εη¨±(~N)οΌ";
         Text[ turkish ] = "Seηenekler Alanύna hangi ismi vermek istiyor sunuz?";
@@ -182,7 +182,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     Text[ swedish ] = "Data";
     Text[ polish ] = "Dane";
     Text[ portuguese_brazilian ] = "Dados";
-    Text[ japanese ] = "ι…ε—";
+    Text[ japanese ] = "γƒ‡γƒΌγ‚Ώ";
     Text[ korean ] = "λ°μ΄ν„°";
     Text[ chinese_simplified ] = "ζ•°ζ®";
     Text[ chinese_traditional ] = "θ³‡ζ–™";
@@ -385,7 +385,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ arabic ] = "ΪδΟ ΗΞΚνΗΡί αΓΝΟ ΗαΞνΗΡΗΚ΅ Σζέ νΚγ ΚΪννδ ήνγΙ γΪνδΙ αγΜγζΪΙ ΗαΞνΗΡΗΚ.";
         Text [ dutch ] = "Als u een optie kiest, wordt er een bepaalde waarde toegewezen aan de optiegroep.";
         Text [ chinese_simplified ] = "ε¦‚ζθ®Ύε®δ½Ώη”¨δΈ€δΈªι€‰ι΅ΉοΌθΏ™δΈªι€‰ι΅Ήε°η»„ε°±δΌθ·εΎ—ζδΈ€δΈªζ•°ε€Όγ€‚";
-        Text [ greek ] = "Αν επιλέξετε μία επιλογή θα δοθεί στην ομάδα επιλογής μια συγκεκριμένη τιμή";
+        Text [ greek ] = "Όταν κάνετε μια επιλογή, η ομάδα επιλογής παίρνει μια συγκεκριμένη τιμή.";
         Text [ korean ] = "μµμ…μ„ μ„ νƒν•λ©΄ μµμ… κ·Έλ£Ήμ— νΉμ •κ°’μ΄ ν• λ‹Ήλ©λ‹λ‹¤.";
         Text [ turkish ] = "Bir φzellik seηtiπinizde, φzellik grubuna φzel bir deπer verilir.";
         Text[ catalan ] = "Quan seleccioneu una opciσ es donarΰ un valor determinat al grup d'opcions.";
@@ -421,8 +421,8 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ arabic ] = "γΗ εν ΗαήνγΙ ΗαΚν ΚΡνΟ ΚΪννδεΗ αία ΞνΗΡΏ";
         Text [ dutch ] = "Welke waarden wilt u toewijzen aan de opties?";
         Text [ chinese_simplified ] = "θ¦ζ‡ε®ι€‰ι΅Ήδ½Ώη”¨η„ζ•°ε€Όζ―(~V)οΌ";
-        Text [ greek ] = "Ποιά τιμή θέλετε να αντιστοιχεί σε κάθε επιλογή;";
-        Text [ korean ] = "μ–΄λ–¤ κ°’μ„ κ° μµμ…μ— ν• λ‹Ήν•κ² μµλ‹κΉ?(~V)";
+        Text [ greek ] = "Ποιά τιμή θέλετε να ανατεθεί σε κάθε επιλογή;";
+        Text [ korean ] = "μ–΄λ–¤ κ°’μ„ κ° μµμ…μ— ν• λ‹Ήν•κ² μµλ‹κΉ(~V)?";
         Text [ turkish ] = "Hangi deπerin her seηeneπe gφre tanύmlanmasύnύ istiyorsunuz?";
         Text[ catalan ] = "Quin ~valor voleu assignar a cada opciσ";
         Text[ finnish ] = "Minkδ ~arvot haluat antaa valinnoille?";
@@ -558,15 +558,15 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text [ danish ] = "Hvilken etiket skal indstillingsgruppen have?";
         Text [ swedish ] = "Vilken ~beteckning skall din alternativgrupp ha?";
         Text [ polish ] = "Jakie ~podpisy powinny byζ uΏyte w grupie opcji?";
-        Text [ portuguese_brazilian ] = "Qual ~legenda vocκ deseja atribuir ao grupo de opηυes?";
-        Text [ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γ‚°γƒ«γƒΌγƒ—γ«γ©γ®εε‰γ‚’δ»γ‘γΎγ™γ‹γ€‚(~C)";
+        Text [ portuguese_brazilian ] = "Que ~legenda deseja atribuir ao grupo de opηυes?";
+        Text [ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γ‚°γƒ«γƒΌγƒ—γ«γ¤γ‘γ‚‹εε‰γ‚’ε…¥ε›γ—γ¦γγ γ•γ„γ€‚(~C)";
         Text [ chinese_simplified ] = "ι€‰ι΅Ήε°η»„εη§°(~C)οΌ";
         Text [ chinese_traditional ] = "ιΈι …ηΎ¤ηµ„η„ζ¨™ι΅(~C)οΌ";
         Text [ arabic ] = "ίνέ ΚΡνΟ ΚΣγνΙ γΜγζΪΙ ΗαΞνΗΡΗΚ ΗαΞΗΥΙ ΘίΏ";
         Text [ dutch ] = "Welk naam wilt u uw optiegroep geven?";
         Text [ chinese_simplified ] = "ι€‰ι΅Ήε°η»„εη§°(~C)οΌ";
-        Text [ greek ] = "Επιλέξτε την επιγραφή για την ομάδα σας επιλογών;";
-        Text [ korean ] = "μµμ… κ·Έλ£Ήμ— μ–΄λ–¤ μΊ΅μ…μ„ μ§€μ •ν•μ‹κ² μµλ‹κΉ?(~C)";
+        Text [ greek ] = "Επιλέξτε τη λεζάντα για την ομάδα σας επιλογών;";
+        Text [ korean ] = "μµμ… κ·Έλ£Ήμ— μ–΄λ–¤ μΊ΅μ…μ„ μ§€μ •ν•μ‹κ² μµλ‹κΉ(~C)?";
         Text [ turkish ] = "Seηenek grubunuza hangi baώlύk verildi?";
         Text[ catalan ] = "Quina ~llegenda s'ha de donar al grup d'opcions?";
         Text[ finnish ] = "Mikδ on valintaryhmδn ~otsikko?";
@@ -642,7 +642,7 @@ String RID_STR_GROUPWIZ_DBFIELD
     Text [ danish ] = "Vζrdien fra indstillingsgruppen kan enten gemmes i et databasefelt eller anvendes til en senere handling.";
     Text [ swedish ] = "Du kan antingen spara alternativgruppens vδrde i ett databasfδlt eller anvδnda det till en senare εtgδrd.";
     Text [ polish ] = "Wartoζ grupy opcji moΏna zapisaζ w polu bazy danych lub uΏyζ jej w pσniejszej akcji.";
-    Text [ portuguese_brazilian ] = "Vocκ pode guardar o valor do grupo de opηυes num campo da base de dados ou utilizα-lo para uma aηγo posterior.";
+    Text [ portuguese_brazilian ] = "Pode-se guardar o valor do grupo de opηυes num campo da base de dados ou utilizα-lo para uma aηγo posterior.";
     Text [ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γ‚°γƒ«γƒΌγƒ—γ®ε€¤γ―γ€γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγƒ•γ‚£γƒΌγƒ«γƒ‰γ«δΏε­γ™γ‚‹γ‹γ€γ‚γ‚‹γ„γ―ζ¬΅γ®γ‚Άγ‚―γ‚·γƒ§γƒ³γ§δ½Ώη”¨γ§γγΎγ™γ€‚";
     Text [ chinese_simplified ] = "ζ‚¨θƒ½ε¤ε°†ι€‰ι΅Ήε°η»„η„ζ•°ε€Όε­ε…¥δΈ€δΈªζ•°ζ®εΊ“ζ–δ»¥εθ°ƒη”¨ε®ƒγ€‚";
     Text [ chinese_traditional ] = "ζ‚¨θƒ½ε¤ ε¨δΈ€ε€‹θ³‡ζ–™εΊ«ζ¬„δ½ε…§ε„²ε­ιΈι …ηΎ¤ηµ„η„ζ•Έε€ΌοΌδ»¥ε‚™εΎη”¨γ€‚";
@@ -664,6 +664,13 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21.8.1  2003/07/03 14:40:43  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.21  2003/06/13 12:47:46  hr
+ *  INTEGRATION: CWS rcmerge (1.20.26); FILE MERGED
+ *  2003/06/12 11:09:55 gh 1.20.26.1: final Merge RC
+ *
  *  Revision 1.20.26.1  2003/06/12 11:09:55  gh
  *  final Merge RC
  *
@@ -783,6 +790,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
