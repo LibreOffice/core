@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 15:07:23 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,23 +801,6 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 }
 
 
-// change the URL in the attribut - if it is a valid URL!
-void lcl_CheckURLChanged( const SwFmtINetFmt& rURLAttr, const String& rText,
-                            xub_StrLen nStt, xub_StrLen nEnd )
-{
-    if( nStt < nEnd )
-    {
-        xub_StrLen nS = nStt, nE = nEnd;
-        String sNew( URIHelper::FindFirstURLInText( rText, nS, nE,
-                                                    GetAppCharClass() ));
-        if( sNew.Len() && nS == nStt && nE == nEnd )
-        {
-            // it is an valid URL, so set it to the URL Object
-            ((SwFmtINetFmt&)rURLAttr).SetValue( rText.Copy( nS, nE - nS ));
-        }
-    }
-}
-
 // Ueberladen der virtuellen Update-Methode von SwIndexReg. Dadurch
 // benoetigen die Text-Attribute nur xub_StrLen statt SwIndizies!
 void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
@@ -836,7 +819,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
             xub_StrLen nMax = nPos + nLen;
             for( USHORT n = 0; n < pSwpHints->Count(); ++n )
             {
-                BOOL bCheckURL = FALSE, bSttBefore = FALSE;
+                BOOL bSttBefore = FALSE;
                 pHt = pSwpHints->GetHt(n);
                 pIdx = pHt->GetStart();
                 if( *pIdx >= nPos )
@@ -845,8 +828,6 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                          *pIdx -= nLen;
                     else
                     {
-                        if( *pIdx < nMax )
-                             bCheckURL = TRUE;
                          *pIdx = nPos;
                     }
                 }
@@ -861,22 +842,11 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                     if( *pIdx > nMax )
                     {
                         *pIdx -= nLen;
-                        if( bSttBefore )
-                            bCheckURL = TRUE;
                     }
                     else if( *pIdx != nPos )
                     {
                         *pIdx = nPos;
-                        if( bSttBefore )
-                            bCheckURL = TRUE;
                     }
-                }
-
-                if( bCheckURL && RES_TXTATR_INETFMT == pHt->Which() )
-                {
-                    // reset the URL in the attribut - if it is a valid URL!
-                    lcl_CheckURLChanged( pHt->GetINetFmt(), aText,
-                                        *pHt->GetStart(), *pHt->GetEnd() );
                 }
 
 //JP 01.10.96: fuers SplitNode sollte das Flag nicht geloescht werden!
@@ -904,7 +874,6 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
 
             for( USHORT n = 0; n < pSwpHints->Count(); ++n )
             {
-                BOOL bCheckURL = FALSE;
                 pHt = pSwpHints->GetHt(n);
                 pIdx = pHt->GetStart();
                 if( *pIdx >= nPos )
@@ -917,7 +886,6 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                 {
                     if( *pEnd > nPos || IsIgnoreDontExpand() )
                     {
-                        bCheckURL = TRUE;
                         *pEnd += nLen;
                     }
                     else
@@ -974,16 +942,8 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                         else
                         {
                             *pEnd += nLen;
-                            bCheckURL = TRUE;
                         }
                     }
-                }
-
-                if( bCheckURL && RES_TXTATR_INETFMT == pHt->Which() )
-                {
-                    // reset the URL in the attribut - if it is a valid URL!
-                    lcl_CheckURLChanged( pHt->GetINetFmt(), aText,
-                                        *pHt->GetStart(), *pHt->GetEnd() );
                 }
             }
             if( bResort )
