@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:09:27 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:15:57 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -113,10 +113,10 @@ $(SAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR)
 	@echo -
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
-	@echo make $(APP3_NAME).run
-	@echo make $(APP4_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
+	@echo $(MAKE) $(APP3_NAME).run
+	@echo $(MAKE) $(APP4_NAME).run
 	@echo --------
 	@echo The examples need parameters. Please use one the following commands to 
 	@echo start the demo if you do not want the default parameters specified in the 
