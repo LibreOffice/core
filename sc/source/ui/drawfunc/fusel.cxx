@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:47:21 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/ipfrm.hxx>
-#include <so3/ipobj.hxx>
 #include <svtools/imapobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdouno.hxx>
@@ -86,6 +84,9 @@
 #include <svx/svdocapt.hxx>
 
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
 
 
 #include "fusel.hxx"
@@ -109,6 +110,7 @@
 #pragma optimize ( "", off )
 #endif
 
+using namespace com::sun::star;
 
 /*************************************************************************
 |*
@@ -248,7 +250,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 //  Is another object being edited in this view?
                 //  (Editing is ended in MarkListHasChanged - test before UnmarkAll)
                 SfxInPlaceClient* pClient = pViewShell->GetIPClient();
-                BOOL bWasOleActive = ( pClient && pClient->IsInPlaceActive() );
+                BOOL bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
                 //  Markieren
 
@@ -369,7 +371,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
 //  BOOL bOle    = pViewShell->GetViewData()->IsOle();
-    BOOL bOle    = pViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);
+    BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
 
     if (aDragTimer.IsActive() )
     {
@@ -422,9 +424,9 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (pIPClient)
     {
-        if ( pIPClient->IsInPlaceActive() )
+        if ( pIPClient->IsObjectInPlaceActive() )
         {
-            pIPClient->GetProtocol().Reset2Open();
+            pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
             SFX_APP()->SetViewFrame(pViewShell->GetViewFrame()); // 242.a: ???
         }
     }
@@ -457,8 +459,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         if (!bOle)
                         {
-                            SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*) pObj)->GetObjRef();
-                            if (aIPObj.Is())
+                            if (((SdrOle2Obj*) pObj)->GetObjRef().is())
                             {
                                 pView->HideMarkHdl(NULL);
                                 pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
