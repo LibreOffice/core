@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:18:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ public:
 
 //  void            CalcZoom( SvxZoomType eType, USHORT& rZoom, SCCOL& rCol, SCROW& rRow );
 
+    sal_Bool        HasPageFieldDataAtCursor() const;
     void            StartDataSelect();
 
                     //  MoveCursorAbs       - absolut
