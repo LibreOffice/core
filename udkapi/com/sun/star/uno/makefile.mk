@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-04 14:22:18 $
+#   last change: $Author: jl $ $Date: 2001-06-07 10:52:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ IDLFILES=\
     XReference.idl\
     XWeak.idl\
     XComponentContext.idl\
-    XCurrentContext.idl
+    XCurrentContext.idl\
+    XUnloadingPreference.idl
 
 # ------------------------------------------------------------------
 
