@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ama $ $Date: 2000-10-16 13:19:16 $
+#   last change: $Author: ama $ $Date: 2001-03-05 12:53:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,8 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        frmcrsr.cxx \
+                atrstck.cxx \
+                frmcrsr.cxx \
         frmform.cxx \
         frminf.cxx \
         frmpaint.cxx \
@@ -137,6 +138,7 @@ CXXFILES += \
 
 
 SLOFILES =  \
+                $(SLO)$/atrstck.obj \
         $(SLO)$/frmcrsr.obj \
         $(SLO)$/frmform.obj \
         $(SLO)$/frminf.obj \

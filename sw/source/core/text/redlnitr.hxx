@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@ class SwTxtNode;
 class SwDoc;
 class SfxItemSet;
 
+#ifndef OLD_ATTR_HANDLING
+class SwAttrHandler;
+#endif
+
 class SwExtend
 {
     SwFont *pFnt;
@@ -94,7 +98,9 @@ public:
         { if( pFnt ) return _Leave( rFnt, nNew ); return sal_False; }
     short Enter( SwFont& rFnt, xub_StrLen nNew );
     xub_StrLen Next( xub_StrLen nNext );
+#ifdef OLD_ATTR_HANDLING
     void ChangeTxtAttr( SwTxtAttr &rHt, sal_Bool bChg );
+#endif
 };
 
 class SwRedlineItr
@@ -102,6 +108,9 @@ class SwRedlineItr
     SwpHtStart_SAR aHints;
     const SwDoc& rDoc;
     const SwTxtNode& rNd;
+#ifndef OLD_ATTR_HANDLING
+    SwAttrHandler& rAttrHandler;
+#endif
     SfxItemSet *pSet;
     SwExtend *pExt;
     ULONG nNdIdx;
@@ -118,7 +127,9 @@ class SwRedlineItr
     void FillHints( MSHORT nAuthor, SwRedlineType eType );
     short _Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld );
     xub_StrLen _GetNextRedln( xub_StrLen nNext );
+#ifdef OLD_ATTR_HANDLING
     void _ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg );
+#endif
     inline sal_Bool LeaveExtend( SwFont& rFnt, xub_StrLen nNew )
         { return pExt->Leave(rFnt, nNew ); }
     inline short EnterExtend( SwFont& rFnt, xub_StrLen nNew )
@@ -127,13 +138,24 @@ class SwRedlineItr
         { if( pExt ) return pExt->Next( nNext ); return nNext; }
     inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
 public:
-    SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, xub_StrLen nRedlPos,
-        sal_Bool bShw, const SvUShorts *pArr = 0, xub_StrLen nStart = STRING_LEN );
+#ifndef OLD_ATTR_HANDLING
+    SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, SwAttrHandler& rAH,
+        xub_StrLen nRedlPos, sal_Bool bShw, const SvUShorts *pArr = 0,
+        xub_StrLen nStart = STRING_LEN );
+#else
+    SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
+        xub_StrLen nRedlPos, sal_Bool bShw, const SvUShorts *pArr = 0,
+        xub_StrLen nStart = STRING_LEN );
+#endif
     ~SwRedlineItr();
     inline sal_Bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
     inline void Clear( SwFont* pFnt ) { if( bOn ) _Clear( pFnt ); }
+#ifndef OLD_ATTR_HANDLING
+    void ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg );
+#else
     inline void ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
         { if( bShow || pExt ) _ChangeTxtAttr( pFnt, rHt, bChg ); }
+#endif
     inline short Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
         { if( bShow || pExt ) return _Seek( rFnt, nNew, nOld ); return 0; }
     inline void Reset() { if( nAct != nFirst ) nAct = STRING_LEN;

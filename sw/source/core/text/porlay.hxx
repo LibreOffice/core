@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 09:54:07 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,8 @@ public:
     inline const SwCharRange *GetReformat() const { return &aReformat; }
     inline long *GetDelta() { return &nDelta; }
     inline const long *GetDelta() const { return &nDelta; }
-    inline SwScriptInfo* GetScriptInfo() { return &aScriptInfo; }
+    inline SwScriptInfo& GetScriptInfo() { return aScriptInfo; }
+
     // fuer SwTxtFrm::Format: liefert die aktuelle Laenge des Absatzes
     xub_StrLen GetParLen() const;
 
@@ -455,6 +456,5 @@ inline SwLinePortion *SwLineLayout::GetFirstPortion() const
 
 CLASSIO( SwLineLayout )
 CLASSIO( SwParaPortion )
-
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 10:22:10 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,11 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
+#ifndef OLD_ATTR_HANDLING
+#ifndef _ATRSTCK_HXX
+#include <atrstck.hxx>
+#endif
+#endif
 
 //////////////////////////
 
@@ -143,21 +148,31 @@ using namespace ::com::sun::star;
  *                      SwAttrIter::CtorInit()
  *************************************************************************/
 
-void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
+void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
     SwRootFrm *pRootFrm = rTxtNode.GetDoc()->GetRootFrm();
     pShell = pRootFrm ? pRootFrm->GetShell() : 0;
 
-    pScriptInfo = pScrInf;
+    pScriptInfo = &rScrInf;
     pAttrSet = &rTxtNode.GetSwAttrSet();
     pHints = rTxtNode.GetpSwpHints();
+
+#ifndef OLD_ATTR_HANDLING
+    // init of attribute stack with current default attributes
+    aAttrHandler.Init( *pAttrSet );
+#endif
+
     delete pFnt;
     if ( rTxtNode.HasSwAttrSet() )
     {
         // Hier wird noch ein weiterer Cache eingebaut werden,
         // der ueber ein paar SfxItemSets sucht.
+#ifndef OLD_ATTR_HANDLING
+        pFnt = new SwFont( aAttrHandler );
+#else
         pFnt = new SwFont( pAttrSet );
+#endif
     }
     else
     {
@@ -186,6 +201,17 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
             if( nChg < rTxtNode.GetTxt().Len() )
                 nScript = pScriptInfo->GetScriptType( 0 );
         }
+
+        // set font to script type of first character
+        switch ( nScript ) {
+            case i18n::ScriptType::ASIAN :
+                pFnt->SetActual( SW_CJK ); break;
+            case i18n::ScriptType::COMPLEX :
+                pFnt->SetActual( SW_CTL ); break;
+            default:
+                pFnt->SetActual( SW_LATIN ); break;
+        }
+
         do
         {
             nChg = pScriptInfo->GetScriptChg( nCnt );
@@ -231,8 +257,14 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
                 nInputStt = pExtInp->Start()->nContent.GetIndex();
             }
 
-            pRedln = new SwRedlineItr( rTxtNode, *pFnt, nRedlPos, bShow,
-                                        pArr, nInputStt );
+#ifndef OLD_ATTR_HANDLING
+            pRedln = new SwRedlineItr( rTxtNode, *pFnt, aAttrHandler, nRedlPos,
+                                        bShow, pArr, nInputStt );
+#else
+            pRedln = new SwRedlineItr( rTxtNode, *pFnt, nRedlPos,
+                                        bShow, pArr, nInputStt );
+#endif
+
             if( pRedln->IsOn() )
                 ++nChgCnt;
         }
@@ -256,9 +288,11 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
  * kein Redline aktiv, nStart und nEnd sind invalid.
  *************************************************************************/
 
-SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, MSHORT nRed,
-    sal_Bool bShw, const SvUShorts *pArr, xub_StrLen nExtStart )
-    : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ),
+#ifndef OLD_ATTR_HANDLING
+SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
+    SwAttrHandler& rAH, MSHORT nRed, sal_Bool bShw, const SvUShorts *pArr,
+    xub_StrLen nExtStart )
+    : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ), rAttrHandler( rAH ),
       nNdIdx( rTxtNd.GetIndex() ), nFirst( nRed ),
       nAct( MSHRT_MAX ), bOn( sal_False ), pSet(0), bShow( bShw )
 {
@@ -268,6 +302,19 @@ SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, MSHORT nRed,
         pExt = NULL;
     Seek( rFnt, 0, STRING_LEN );
 }
+#else
+SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
+    MSHORT nRed, sal_Bool bShw, const SvUShorts *pArr, xub_StrLen nExtStart )
+    : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ), nNdIdx( rTxtNd.GetIndex() ),
+     nFirst( nRed ), nAct( MSHRT_MAX ), bOn( sal_False ), pSet(0), bShow( bShw )
+{
+    if( pArr )
+        pExt = new SwExtend( *pArr, nExtStart );
+    else
+        pExt = NULL;
+    Seek( rFnt, 0, STRING_LEN );
+}
+#endif
 
 SwRedlineItr::~SwRedlineItr()
 {
@@ -382,8 +429,13 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                             ( SFX_ITEM_SET == pSet->GetItemState( nWhich, sal_True, &pItem ) ) )
                         {
                             SwTxtAttr* pAttr = ((SwTxtNode&)rNd).MakeTmpTxtAttr(*pItem);
+                            pAttr->SetRedlineAttr( sal_True );
                             aHints.C40_INSERT( SwTxtAttr, pAttr, aHints.Count());
+#ifndef OLD_ATTR_HANDLING
+                            rAttrHandler.PushAndChg( *pAttr, rFnt );
+#else
                             pAttr->ChgFnt( &rFnt );
+#endif
                             if( RES_CHRATR_COLOR == nWhich )
                                 rFnt.SetNoCol( sal_True );
                         }
@@ -418,6 +470,22 @@ void SwRedlineItr::FillHints( MSHORT nAuthor, SwRedlineType eType )
     }
 }
 
+#ifndef OLD_ATTR_HANDLING
+void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
+{
+    ASSERT( IsOn(), "SwRedlineItr::ChangeTxtAttr: Off?" );
+
+    if( !bShow && !pExt )
+        return;
+
+    if( bChg )
+        rAttrHandler.PushAndChg( rHt, *pFnt );
+    else
+        rAttrHandler.PopAndChg( rHt, *pFnt );
+}
+#endif
+
+#ifdef OLD_ATTR_HANDLING
 void SwRedlineItr::_ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
 {
     ASSERT( IsOn(), "SwRedlineItr::ChangeTxtAttr: Off?" );
@@ -456,6 +524,7 @@ void SwRedlineItr::_ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
             rHt.RstFnt( pFnt );
     }
 }
+#endif
 
 void SwRedlineItr::_Clear( SwFont* pFnt )
 {
@@ -466,7 +535,13 @@ void SwRedlineItr::_Clear( SwFont* pFnt )
         SwTxtAttr *pPos = aHints[ 0 ];
         aHints.Remove(0);
         if( pFnt )
+#ifndef OLD_ATTR_HANDLING
+            rAttrHandler.PopAndChg( *pPos, *pFnt );
+        else
+            rAttrHandler.Pop( *pPos );
+#else
             pPos->RstFnt( pFnt );
+#endif
         delete pPos;
     }
     if( pFnt )
@@ -621,6 +696,7 @@ xub_StrLen SwExtend::Next( xub_StrLen nNext )
     return nNext;
 }
 
+#ifdef OLD_ATTR_HANDLING
 void SwExtend::ChangeTxtAttr( SwTxtAttr &rHt, sal_Bool bChg )
 {
     ASSERT( pFnt, "SwExtend: No font, no fun." );
@@ -629,5 +705,4 @@ void SwExtend::ChangeTxtAttr( SwTxtAttr &rHt, sal_Bool bChg )
     else
         rHt.RstFnt( pFnt );
 }
-
-
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 09:52:41 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ void SwTxtFrm::CalcLineSpace()
 
 #define SET_SCRIPT_INVAL( nPos )\
     if( GetPara() )\
-        GetPara()->GetScriptInfo()->SetInvalidity( nPos );
+        GetPara()->GetScriptInfo().SetInvalidity( nPos );
 
 void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 10:23:15 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

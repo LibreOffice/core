@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-23 09:58:03 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,11 +172,20 @@ using namespace ::com::sun::star;
 
 void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
+#ifndef OLD_ATTR_HANDLING
+    ASSERT( pHt && pFnt, "No attribute of font available for change");
+    if( pRedln && pRedln->IsOn() )
+        pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
+    else
+        aAttrHandler.PushAndChg( *pHt, *pFnt );
+    nChgCnt++;
+#else
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
     else
         pHt->ChgFnt( pFnt );
     nChgCnt++;
+#endif
 }
 
 /*************************************************************************
@@ -185,11 +194,21 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
+#ifndef OLD_ATTR_HANDLING
+    ASSERT( pHt && pFnt, "No attribute of font available for reset");
+    // get top from stack after removing pHt
+    if( pRedln && pRedln->IsOn() )
+        pRedln->ChangeTxtAttr( pFnt, *pHt, sal_False );
+    else
+        aAttrHandler.PopAndChg( *pHt, *pFnt );
+    nChgCnt--;
+#else
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_False );
     else
         pHt->RstFnt( pFnt );
     nChgCnt--;
+#endif
 }
 
 /*************************************************************************
@@ -498,7 +517,7 @@ sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
     if( pOut )
     {
         SwScriptInfo aScriptInfo;
-        SwAttrIter aIter( *(SwTxtNode*)this, &aScriptInfo );
+        SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
         aIter.SeekAndChg( nBegin, pOut );
         bRet = aIter.GetFnt()->IsSymbol( GetDoc()->GetRootFrm() ?
                 GetDoc()->GetRootFrm()->GetCurrShell() : 0 );
@@ -640,6 +659,8 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 
 #define FLYINCNT_MIN_WIDTH 284
 
+// changing this method very likely requires changing of
+// "GetScalingOfSelectedText"
 void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                                ULONG& rAbsMin, OutputDevice* pOut ) const
 {
@@ -697,7 +718,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
         aNodeArgs.nMaxWidth -= aNodeArgs.nRightRest;
 
     SwScriptInfo aScriptInfo;
-    SwAttrIter aIter( *(SwTxtNode*)this, &aScriptInfo );
+    SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     xub_StrLen nIdx = 0;
     aIter.SeekAndChg( nIdx, pOut );
     xub_StrLen nLen = aText.Len();
@@ -893,7 +914,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     pOut->SetMapMode( MapMode( MAP_TWIP ) );
 
     SwScriptInfo aScriptInfo;
-    SwAttrIter aIter( *(SwTxtNode*)this, &aScriptInfo );
+    SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
 
     xub_StrLen nIdx = nStt;
 
@@ -1012,14 +1033,15 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         SwTxtIter aLine( pFrm, &aInf );
         aLine.CharToLine( nStt );
         pOut->SetMapMode( aOldMap );
-        return nWidth ? ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0;
+        return (USHORT)( nWidth ?
+            ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0 );
     }
     // no frame or no paragraph, we take the height of the character
     // at nStt as line height
 
     aIter.SeekAndChg( nStt, pOut );
     pOut->SetMapMode( aOldMap );
-    return nWidth ? ( ( 100 * aIter.GetFnt()->_GetTxtSize( 0, pOut, GetTxt(),
-                        nStt, 1 ).Height() ) / nWidth ) : 0;
+    return (USHORT)( nWidth ? ( ( 100 * aIter.GetFnt()->_GetTxtSize( 0, pOut,
+            GetTxt(), nStt, 1 ).Height() ) / nWidth ) : 0 );
 }
 

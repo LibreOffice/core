@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 10:24:21 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 12:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+#ifndef _ATRSTCK_HXX
+#include <atrstck.hxx>
+#endif
+
 #include "txttypes.hxx"
 #include "swfont.hxx"
 #include "porlay.hxx"
@@ -90,6 +94,11 @@ class SwAttrIter
 {
     friend class SwFontSave;
 protected:
+
+#ifndef OLD_ATTR_HANDLING
+    SwAttrHandler aAttrHandler;
+#endif
+
     ViewShell *pShell;
     SwFont *pFnt;
     SwpHints  *pHints;
@@ -110,15 +119,15 @@ private:
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
-    void CtorInit( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf );
+    void CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf );
     inline SwAttrIter()
         : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0){}
 
 public:
     // Konstruktor, Destruktor
-    inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo* pScrInf )
+    inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
         : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0)
-        { CtorInit( rTxtNode, pScrInf ); }
+        { CtorInit( rTxtNode, rScrInf ); }
 
     virtual ~SwAttrIter();
 
