@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:02:13 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ void OBookmarkContainer::dispose()
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // remove our elements
+    m_aBookmarksIndexed.clear();
     m_aBookmarks.clear();
     m_aObjectKeys.clear();
     m_aConfigurationNode.clear();
@@ -389,7 +390,7 @@ sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
-    return m_aBookmarks.size() != 0;
+    return !m_aBookmarks.empty();
 }
 
 // XEnumerationAccess
@@ -539,9 +540,9 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
 {
     MutexGuard aGuard(m_rMutex);
 
-    m_aBookmarks[_rName] = _rDocumentLocation;
-    m_aBookmarksIndexed.push_back(m_aBookmarks.find(_rName));
-    m_aObjectKeys[_rName] = _rObjectNode;
+    OSL_ENSURE(m_aBookmarks.find(_rName) == m_aBookmarks.end(),"Bookmark already known!");
+    m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
+    m_aObjectKeys.insert(ConfigNodeMap::value_type(_rName,_rObjectNode));
 }
 
 //--------------------------------------------------------------------------
