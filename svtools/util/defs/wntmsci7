@@ -7616,3 +7616,9 @@ _TI2?AVUnsupportedFlavorException@datatransfer@star@sun@com@@
 ?s_aCD@?$WeakImplHelper1@VXTerminateListener@frame@star@sun@com@@@cppu@@0UClassData1@2@A
 ?s_pType_com_sun_star_frame_XDesktop@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDesktop@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_frame_XTerminateListener@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXTerminateListener@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??0OUString@rtl@@QAE@PBDJGK@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABE@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABJ@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABVOUString@rtl@@@Z
+??A?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QBAABVOUString@rtl@@J@Z
+?set@?$Reference@VXSingleServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@QAAEPAVXSingleServiceFactory@lang@345@@Z
