@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:04:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,13 @@ void SwFmtFld::SetFld(SwField * _pField)
 int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 {
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return pField->GetTyp() == ((SwFmtFld&)rAttr).GetFld()->GetTyp() &&
-           pField->GetFormat() == ((SwFmtFld&)rAttr).GetFld()->GetFormat();
+    // OD 2004-05-14 #i29146# - correction: check, if <pField> and
+    // <((SwFmtFld&)rAttr).GetFld()> are set.
+    // OD 2004-05-14 #i29146# - items are equal, if both fields aren't set.
+    return ( pField && ((SwFmtFld&)rAttr).GetFld() &&
+             pField->GetTyp() == ((SwFmtFld&)rAttr).GetFld()->GetTyp() &&
+             pField->GetFormat() == ((SwFmtFld&)rAttr).GetFld()->GetFormat() ) ||
+           ( !pField && !((SwFmtFld&)rAttr).GetFld() );
 }
 
 SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
