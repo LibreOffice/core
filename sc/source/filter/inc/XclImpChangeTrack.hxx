@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:03:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ private:
     String                      sOldUsername;
 
     ScChangeTrack*              pChangeTrack;
-    SvStorageStreamRef          xInStrm;        // input stream
+    SotStorageStreamRef          xInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;
     sal_Bool                    bGlobExit;      // global exit loop
