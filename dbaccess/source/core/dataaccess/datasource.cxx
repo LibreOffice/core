@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 09:15:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 15:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -88,6 +94,9 @@
 #include <comphelper/extract.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -532,6 +541,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             sPwd = m_aPassword;
     }
 
+    sal_uInt16 nExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
@@ -553,6 +563,37 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,m_aInfo));
         else
             xReturn = xManager->getConnectionWithInfo(m_sConnectURL,m_aInfo);
+
+        if ( !xReturn.is() )
+        {
+            // try to examine what went wrong
+            Reference< XDriver > xDriver;
+            try
+            {
+                Reference< XDriverAccess > xAccessDrivers( xManager, UNO_QUERY );
+                if ( xAccessDrivers.is() )
+                    xDriver = xAccessDrivers->getDriverByURL( m_sConnectURL );
+            }
+            catch( const Exception& )
+            {
+                DBG_ERROR( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
+            }
+
+            if ( !xDriver.is() )
+                nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
+        }
+    }
+    else
+        nExceptionMessageId = RID_STR_COULDNOTLOAD_MANAGER;
+
+    if ( !xReturn.is() )
+    {
+        ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
+
+        SQLContext aContext;
+        aContext.Details = m_sConnectURL;
+
+        throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }
 
     return xReturn;
@@ -853,20 +894,21 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
         throw DisposedException();
 
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
-    if (!xSdbcConn.is())
-        // something went heavily wrong, for instance the driver manager could not be instantiated
-        throwGenericSQLException(::rtl::OUString::createFromAscii("Could not connect to the data source. An unspecified error occured."), static_cast< XDataSource* >(this));
+    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::getConnection: invalid return value of buildLowLevelConnection!" );
+        // buildLowLevelConnection is expected to always succeed
 
     Reference< XConnection > xConn;
-
-    // build a connection server and return it (no stubs)
-    xConn = new OConnection(*this, m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_TABLES),m_aConfigurationNode,xSdbcConn, m_xServiceFactory);
-    Reference< XComponent> xComp(xConn,UNO_QUERY);
-    if(xComp.is())
+    if ( xSdbcConn.is() )
     {
-        xComp->addEventListener(this);
+        // build a connection server and return it (no stubs)
+        xConn = new OConnection(*this, m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_TABLES),m_aConfigurationNode,xSdbcConn, m_xServiceFactory);
+        Reference< XComponent> xComp(xConn,UNO_QUERY);
+        if(xComp.is())
+        {
+            xComp->addEventListener(this);
+        }
+        m_aConnections.push_back(OWeakConnection(xConn));
     }
-    m_aConnections.push_back(OWeakConnection(xConn));
 
     return xConn;
 }
