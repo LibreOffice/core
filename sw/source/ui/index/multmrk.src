@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:58:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_MULTMRK
     Text [ English ] = "Index marks" ;
     Text [ norwegian ] = "Stikkordregistermerker" ;
     Text [ italian ] = "Contrassegni indice" ;
-    Text [ portuguese_brazilian ] = "Marca��es do �ndice" ;
+    Text [ portuguese_brazilian ] = "Marca��es do �ndice" ;
     Text [ portuguese ] = "Marcas do �ndice" ;
     Text [ finnish ] = "Hakemiston merkinn�t" ;
     Text [ danish ] = "Indeksmarkeringer" ;
@@ -239,6 +239,7 @@ ModalDialog DLG_MULTMRK
     Text[ hindi ] = "अनुक्रमणिका चिह्न";
     Text[ slovak ] = "Značky obsahu";
 };
+
 
 
 
