@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2003-08-27 12:09:53 $
+#   last change: $Author: hr $ $Date: 2004-05-10 13:06:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,8 +63,10 @@
 PRJ=..$/..$/..
 PRJNAME=shell
 TARGET=exec
+
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+
 COMP1TYPELIST=syssh
 COMPRDB=$(SOLARBINDIR)$/types.rdb
 
@@ -76,10 +78,11 @@ COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 SLOFILES=$(SLO)$/shellexec.obj\
     $(SLO)$/shellexecentry.obj
+    
 SHL1OBJS=$(SLOFILES) 
     
-SHL1TARGET= syssh
-SHL1IMPLIB= isyssh
+SHL1TARGET=syssh
+SHL1IMPLIB=
 
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
