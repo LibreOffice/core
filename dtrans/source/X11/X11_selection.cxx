@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-17 14:51:44 $
+ *  last change: $Author: pl $ $Date: 2002-01-29 13:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,16 @@ OString SelectionManager::convertToCompound( const OUString& rText )
     {
         aRet = (char*)aProp.value;
         XFree( aProp.value );
+#ifdef SOLARIS
+        /*  #97070#
+         *  for currently unknown reasons XmbTextListToTextProperty on Solaris returns
+         *  no data in ISO8859-n encodings (at least for n = 1, 15)
+         *  in these encodings the directly converted text does the
+         *  trick, also.
+         */
+        if( ! aRet.getLength() && rText.getLength() )
+            aRet = OUStringToOString( rText, osl_getThreadTextEncoding() );
+#endif
     }
     else
         aRet = OString();
