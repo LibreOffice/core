@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_func2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,10 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/idl/i_function.hxx>
+#include <ary/idl/i_type.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_ce.hxx>
+#include <ary/idl/ip_type.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/pe_vari2.hxx>
@@ -83,28 +85,46 @@ namespace uidl
 {
 
 
-PE_Function::PE_Function( RFunction &           o_rResult,
-                          const RInterface &    i_rCurInterface )
+PE_Function::PE_Function( const RParent &       i_rCurInterface )
     :   eState(e_none),
         sData_Name(),
         nData_ReturnType(0),
-        bData_Const(false),
         bData_Oneway(false),
         pCurFunction(0),
-        pResult(&o_rResult),
-        pCurInterface(&i_rCurInterface),
+        pCurParent(&i_rCurInterface),
         pPE_Type(0),
         nCurParsedType(0),
         sName(),
         pPE_Variable(0),
         eCurParsedParam_Direction(ary::idl::param_in),
         nCurParsedParam_Type(0),
-        sCurParsedParam_Name()
+        sCurParsedParam_Name(),
+        bIsForConstructors(false)
 {
     pPE_Type        = new PE_Type(nCurParsedType);
     pPE_Variable    = new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
 }
 
+PE_Function::PE_Function( const RParent &     i_rCurService,
+                          E_Constructor       i_eCtorMarker )
+    :   eState(expect_name),
+        sData_Name(),
+        nData_ReturnType(0),
+        bData_Oneway(false),
+        pCurFunction(0),
+        pCurParent(&i_rCurService),
+        pPE_Type(0),
+        nCurParsedType(0),
+        sName(),
+        pPE_Variable(0),
+        eCurParsedParam_Direction(ary::idl::param_in),
+        nCurParsedParam_Type(0),
+        sCurParsedParam_Name(),
+        bIsForConstructors(true)
+{
+    pPE_Type        = new PE_Type(nCurParsedType);
+    pPE_Variable    = new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
+}
 
 void
 PE_Function::EstablishContacts( UnoIDL_PE *              io_pParentPE,
@@ -133,10 +153,6 @@ PE_Function::Process_Stereotype( const TokStereotype & i_rToken )
     {
         switch (i_rToken.Id())
         {
-            case TokStereotype::ste_const:
-                        bData_Const = true;
-                        SetResult(done, stay);
-                        break;
             case TokStereotype::ste_oneway:
                         bData_Oneway = true;
                         SetResult(done, stay);
@@ -161,16 +177,22 @@ PE_Function::Process_Identifier( const TokIdentifier & i_rToken )
                     sData_Name = i_rToken.Text();
                     SetResult(done,stay);
                     eState = expect_params_list;
-                    pCurFunction = &Gate().Ces().Store_Function(
-                                                    *pCurInterface,
-                                                    sData_Name,
-                                                    nData_ReturnType,
-                                                    bData_Oneway,
-                                                    bData_Const );
-                    *pResult = pCurFunction->CeId();
+
+                    if (NOT bIsForConstructors)
+                    {
+                        pCurFunction = &Gate().Ces().Store_Function(
+                                                        *pCurParent,
+                                                        sData_Name,
+                                                        nData_ReturnType,
+                                                        bData_Oneway );
+                    }
+                    else
+                    {
+                        pCurFunction = &Gate().Ces().Store_ServiceConstructor(
+                                                        *pCurParent,
+                                                        sData_Name );
+                    }
                     PassDocuAt(*pCurFunction);
-
-
                     break;
         case expect_parameter_variable:
                     GoIntoParameterVariable();
@@ -271,6 +293,34 @@ PE_Function::Process_Punctuation( const TokPunctuation & i_rToken )
 }
 
 void
+PE_Function::Process_BuiltInType( const TokBuiltInType & i_rToken )
+{
+    switch (eState)
+    {
+        case e_start:
+                GoIntoReturnType();
+                break;
+        case expect_parameter_variable:
+                   GoIntoParameterVariable();
+                break;
+        case expect_parameter_separator:
+        {
+                if (i_rToken.Id() != TokBuiltInType::bty_ellipse)
+                    csv_assert(false);
+
+                pCurFunction->Set_Ellipse();
+                   SetResult(done,stay);
+                // eState stays the same, because we wait for the closing ")" now.
+        }       break;
+        case expect_exception:
+                GoIntoException();
+                break;
+        default:
+            OnDefault();
+    }   // end switch
+}
+
+void
 PE_Function::Process_ParameterHandling( const TokParameterHandling & i_rToken )
 {
     if (eState != expect_parameter)
@@ -362,15 +412,18 @@ PE_Function::InitData()
 
     sData_Name.clear();
     nData_ReturnType = 0;
-    bData_Const = false;
     bData_Oneway = false;
     pCurFunction = 0;
 
-    *pResult = 0;
     nCurParsedType = 0;
     eCurParsedParam_Direction = ary::idl::param_in;
     nCurParsedParam_Type = 0;
     sCurParsedParam_Name.clear();
+
+    if (bIsForConstructors)
+    {
+        eState = expect_name;
+    }
 }
 
 void
@@ -401,7 +454,7 @@ PE_Function::ReceiveData()
                 break;
         default:
             csv_assert(false);
-    }
+    }   // end switch
 }
 
 void
