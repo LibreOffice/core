@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:16:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,11 @@ namespace func_provider
 #define css ::com::sun::star
 #define dcsss ::drafts::com::sun::star::script
 
-class MasterScriptProvider :
-            public ::cppu::WeakImplHelper4 < dcsss::provider::XScriptProvider,
-                dcsss::browse::XBrowseNode, css::lang::XServiceInfo,
-                css::lang::XInitialization >
+ typedef ::cppu::WeakImplHelper4<
+     dcsss::provider::XScriptProvider,
+     dcsss::browse::XBrowseNode, css::lang::XServiceInfo,
+     css::lang::XInitialization > t_helper;
+class MasterScriptProvider : public t_helper
 {
 public:
     MasterScriptProvider(
@@ -129,6 +130,8 @@ public:
     css::uno::Sequence< css::uno::Reference< dcsss::provider::XScriptProvider > > SAL_CALL
         getAllProviders() throw ( css::uno::RuntimeException );
 private:
+    ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
+    void  createPkgProvider();
     bool  isValid();
     const css::uno::Sequence< ::rtl::OUString >& getProviderNames();
 
@@ -138,6 +141,7 @@ private:
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Sequence< css::uno::Any > m_sAargs;
+    ::rtl::OUString m_sNodeName;
     // This component supports XInitialization, it can be created
     // using createInstanceXXX() or createInstanceWithArgumentsXXX using
     // the service Mangager.
@@ -152,6 +156,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > m_XScriptingContext;
     ProviderCache* m_pPCache;
     osl::Mutex m_mutex;
+    ::rtl::OUString m_sCtxString;
 };
 } // namespace func_provider
 #endif //_FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
