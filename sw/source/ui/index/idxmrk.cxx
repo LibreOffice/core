@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-08 11:58:19 $
+ *  last change: $Author: os $ $Date: 2001-11-26 17:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ void SwIndexMarkDlg::InsertMark()
     if (aOrgStr != aEntryED.GetText())
         aDesc.SetAltStr(aEntryED.GetText());
     BOOL bApplyAll = aApplyToAllCB.IsChecked();
-    BOOL bWordOnly = aApplyToAllCB.IsChecked();
+    BOOL bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
     BOOL bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
 
     pSh->StartAllAction();
