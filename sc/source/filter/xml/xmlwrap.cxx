@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 14:01:28 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
 #include <comphelper/genericpropertyset.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
 #ifndef _XMLEOHLP_HXX
@@ -290,6 +293,14 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         rtl::OUString sEmpty;
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
+        /** property map for export info set */
+        comphelper::PropertyMapEntry aExportInfoMap[] =
+        {
+            { MAP_LEN( "NumberStyles" ), 0, SEQTYPE(::getCppuType((uno::Reference<container::XNameAccess> *)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { NULL, 0, 0, NULL, 0, 0 }
+        };
+        uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+
         if(!bStylesOnly)
         {
             uno::Sequence<uno::Any> aMetaArgs(0);
@@ -318,11 +329,12 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
                 xObjectResolver = pObjectHelper;
             }
         }
-        uno::Sequence<uno::Any> aStylesArgs(3);
+        uno::Sequence<uno::Any> aStylesArgs(4);
         uno::Any* pStylesArgs = aStylesArgs.getArray();
         pStylesArgs[0] <<= xGrfContainer;
         pStylesArgs[1] <<= GetStatusIndicator(xModel);
         pStylesArgs[2] <<= xObjectResolver;
+        pStylesArgs[3] <<= xInfoSet;
 
         sal_Bool bStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
@@ -342,11 +354,12 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         sal_Bool bDocRetval(sal_False);
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aDocArgs(3);
+            uno::Sequence<uno::Any> aDocArgs(4);
             uno::Any* pDocArgs = aDocArgs.getArray();
             pDocArgs[0] <<= xGrfContainer;
             pDocArgs[1] <<= GetStatusIndicator(xModel);
             pDocArgs[2] <<= xObjectResolver;
+            pDocArgs[3] <<= xInfoSet;
 
             bDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentImporter")),
@@ -450,9 +463,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { MAP_LEN( "ProgressRange" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
-        { MAP_LEN( "ProgressMax" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
-        { MAP_LEN( "ProgressCurrent" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { MAP_LEN( "ProgressRange" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressMax" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressCurrent" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "WrittenNumberFormats" ), 0, SEQTYPE(::getCppuType((uno::Sequence<sal_Int32>*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
