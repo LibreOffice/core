@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:59:25 $
+ *  last change: $Author: os $ $Date: 2001-03-21 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,8 +318,8 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         aRightMF.SetRefValue(pTblData->GetSpace());
         aLeftMF.MetricField::SetMin(0); // wird vom Percentfield ueberschrieben
         aRightMF.MetricField::SetMin(0);//                 -""-
-        aLeftMF.SetValue(aLeftMF.Normalize( nLeft ), FUNIT_TWIP );
-        aRightMF.SetValue(aRightMF.Normalize( nRight ), FUNIT_TWIP );
+        aLeftMF.SetPrcntValue(aLeftMF.Normalize( nLeft ), FUNIT_TWIP );
+        aRightMF.SetPrcntValue(aRightMF.Normalize( nRight ), FUNIT_TWIP );
     }
     else
         ModifyHdl(&aLeftMF);    // Werte wieder korrigieren
@@ -346,10 +346,10 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
          bOthers = TRUE;
     if( (RadioButton *) pBox == &aFullBtn )
     {
-        aLeftMF.SetValue(0);
-        aRightMF.SetValue(0);
+        aLeftMF.SetPrcntValue(0);
+        aRightMF.SetPrcntValue(0);
         nSaveWidth = aWidthMF.Denormalize(aWidthMF.GetValue(FUNIT_TWIP ));
-        aWidthMF.SetValue(aWidthMF.Normalize( pTblData->GetSpace() ), FUNIT_TWIP );
+        aWidthMF.SetPrcntValue(aWidthMF.Normalize( pTblData->GetSpace() ), FUNIT_TWIP );
         aLeftMF.SetText( aEmptyStr );
         aRightMF.SetText( aEmptyStr );
         bFull = TRUE;
@@ -359,18 +359,18 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
     {
         bRightEnable = bWidthEnable = TRUE;
         aLeftMF.SetText( aEmptyStr );
-        aLeftMF.SetValue(0);
+        aLeftMF.SetPrcntValue(0);
     }
     else if( (RadioButton *) pBox == &aFromLeftBtn )
     {
         bLeftEnable = bWidthEnable = TRUE;
         aRightMF.SetText( aEmptyStr );
-        aRightMF.SetValue(0);
+        aRightMF.SetPrcntValue(0);
     }
     else if( (RadioButton *) pBox == &aRightBtn )
     {
         bLeftEnable = bWidthEnable = TRUE;
-        aRightMF.SetValue(0);
+        aRightMF.SetPrcntValue(0);
         aRightMF.SetText( aEmptyStr );
     }
     else if( ( RadioButton * ) pBox == &aCenterBtn )
@@ -401,7 +401,7 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
         // nachdem auf autom. geschaltet wurde, wurde die Breite gemerkt,
         // um sie beim Zurueckschalten restaurieren zu koennen
         bFull = FALSE;
-        aWidthMF.SetValue(aWidthMF.Normalize( nSaveWidth ), FUNIT_TWIP );
+        aWidthMF.SetPrcntValue(aWidthMF.Normalize( nSaveWidth ), FUNIT_TWIP );
     }
     ModifyHdl(&aWidthMF);
     bModified = TRUE;
@@ -552,9 +552,9 @@ void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
         }
     }
     if (nCurWidth != nPrevWidth )
-        aWidthMF.SetValue( aWidthMF.Normalize( nCurWidth ), FUNIT_TWIP );
-    aRightMF.SetValue( aRightMF.Normalize( nRight ), FUNIT_TWIP );
-    aLeftMF.SetValue( aLeftMF.Normalize( nLeft ), FUNIT_TWIP );
+        aWidthMF.SetPrcntValue( aWidthMF.Normalize( nCurWidth ), FUNIT_TWIP );
+    aRightMF.SetPrcntValue( aRightMF.Normalize( nRight ), FUNIT_TWIP );
+    aLeftMF.SetPrcntValue( aLeftMF.Normalize( nLeft ), FUNIT_TWIP );
     bModified = TRUE;
 }
 
@@ -646,14 +646,14 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         {
             aRelWidthCB.Check(TRUE);
             RelWidthClickHdl(&aRelWidthCB);
-            aWidthMF.SetValue(pTblData->GetWidthPercent(), FUNIT_CUSTOM);
+            aWidthMF.SetPrcntValue(pTblData->GetWidthPercent(), FUNIT_CUSTOM);
 
             aWidthMF.SaveValue();
             nSaveWidth = aWidthMF.GetValue(FUNIT_CUSTOM);
         }
         else
         {
-            aWidthMF.SetValue(aWidthMF.Normalize(
+            aWidthMF.SetPrcntValue(aWidthMF.Normalize(
                             pTblData->GetWidth()), FUNIT_TWIP);
             aWidthMF.SaveValue();
             nSaveWidth = pTblData->GetWidth();
@@ -665,9 +665,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
         aLeftMF.SetLast(aLeftMF.Normalize( pTblData->GetSpace() ));
         aRightMF.SetLast(aRightMF.Normalize( pTblData->GetSpace() ));
 
-        aLeftMF.SetValue(aLeftMF.Normalize(
+        aLeftMF.SetPrcntValue(aLeftMF.Normalize(
                                 pTblData->GetLeftSpace()), FUNIT_TWIP);
-        aRightMF.SetValue(aRightMF.Normalize(
+        aRightMF.SetPrcntValue(aRightMF.Normalize(
                             pTblData->GetRightSpace()), FUNIT_TWIP);
         aLeftMF.SaveValue();
         aRightMF.SaveValue();
@@ -767,14 +767,14 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
         if(pTblData->GetWidthPercent() == 0 &&
                 nCurWidth != aWidthMF.Denormalize(aWidthMF.GetValue(FUNIT_TWIP )))
         {
-            aWidthMF.SetValue(aWidthMF.Normalize(
+            aWidthMF.SetPrcntValue(aWidthMF.Normalize(
                             nCurWidth), FUNIT_TWIP);
             aWidthMF.SaveValue();
             nSaveWidth = nCurWidth;
-            aLeftMF.SetValue(aLeftMF.Normalize(
+            aLeftMF.SetPrcntValue(aLeftMF.Normalize(
                             pTblData->GetLeftSpace()), FUNIT_TWIP);
             aLeftMF.SaveValue();
-            aRightMF.SetValue(aRightMF.Normalize(
+            aRightMF.SetPrcntValue(aRightMF.Normalize(
                             pTblData->GetRightSpace()), FUNIT_TWIP);
             aRightMF.SaveValue();
         }
@@ -992,7 +992,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
         long nMaxTwips = pFieldArr[0]->Normalize( nTableWidth );
         for( i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
         {
-            pFieldArr[i]->SetValue( pFieldArr[i]->Normalize(
+            pFieldArr[i]->SetPrcntValue( pFieldArr[i]->Normalize(
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
             pFieldArr[i]->SetMin( nMinTwips , FUNIT_TWIP );
             pFieldArr[i]->SetMax( nMaxTwips , FUNIT_TWIP );
@@ -1286,7 +1286,7 @@ DEBUG_TBLDLG_TABLEREP(pTblData);
 
     for( i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
     {
-        pFieldArr[i]->SetValue(pFieldArr[i]->Normalize(
+        pFieldArr[i]->SetPrcntValue(pFieldArr[i]->Normalize(
                         GetVisibleWidth(aValueTbl[i]) ), FUNIT_TWIP);
         pFieldArr[i]->ClearModifyFlag();
     }
