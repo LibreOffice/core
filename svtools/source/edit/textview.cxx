@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-03 08:23:05 $
+ *  last change: $Author: pl $ $Date: 2001-07-25 12:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,6 @@
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef TF_SVDATA
-    #ifndef _SV_CLIP_HXX //autogen
-    #include <vcl/clip.hxx>
-    #endif
-
-    #ifndef _SV_DRAG_HXX //autogen
-    #include <vcl/drag.hxx>
-    #endif
 #endif
 
 #ifndef _SV_SOUND_HXX //autogen
