@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-14 14:48:34 $
+ *  last change: $Author: gt $ $Date: 2001-09-28 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2139,7 +2139,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
     BOOL    bMod1 = rKEvt.GetKeyCode().IsMod1();
 
     SvLBoxEntry* pNewCursor;
-//  long nThumb;
 
     switch( aCode )
     {
@@ -2316,15 +2315,12 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_RETURN:
-            if( bSubLstOpRet )
+            if( bSubLstOpRet && IsExpandable() )
             {
-                if( IsExpandable() )
-                {
-                    if( pView->IsExpanded( pCursor ) )
-                        pView->Collapse( pCursor );
-                    else
-                        pView->Expand( pCursor );
-                }
+                if( pView->IsExpanded( pCursor ) )
+                    pView->Collapse( pCursor );
+                else
+                    pView->Expand( pCursor );
             }
             else
                 bKeyUsed = FALSE;
