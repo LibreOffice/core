@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 14:44:43 $
+ *  last change: $Author: os $ $Date: 2000-10-20 08:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@
 #define WID_DOC_CHANGES_SHOW                    1004
 #define WID_DOC_CHANGES_RECORD                  1005
 #define WID_DOC_AUTO_MARK_URL                   1006
+#define WID_DOC_HIDE_TIPS                       1007
 
 //AutoText
 #define WID_GROUP_PATH                          0
