@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:05:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <svx/sizeitem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/svdview.hxx>
-#include <svx/zoom.hxx>
+//CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
@@ -108,6 +108,12 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+
+#ifndef _SVX_ZOOM_HXX
+#include <svx/zoom_def.hxx>
+#endif
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
 
@@ -616,22 +622,28 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxZoomItem     aZoomItem( SVX_ZOOM_PERCENT, pPreview->GetZoom(), SID_ATTR_ZOOM );
 
                     aSet.Put( aZoomItem );
-                    SvxZoomDialog* pDlg = pDlg = new SvxZoomDialog( NULL, aSet );
-                    pDlg->SetLimits( 20, 400 );
-                    pDlg->HideButton( ZOOMBTN_OPTIMAL );
-                    bCancel = ( RET_CANCEL == pDlg->Execute() );
-
-                    if ( !bCancel )
+                    //CHINA001 SvxZoomDialog* pDlg = pDlg = new SvxZoomDialog( NULL, aSet );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    if(pFact)
                     {
-                        const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
-                                                pDlg->GetOutputItemSet()->
-                                                    Get( SID_ATTR_ZOOM );
+                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet, ResId(RID_SVXDLG_ZOOM));
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        pDlg->SetLimits( 20, 400 );
+                        pDlg->HideButton( ZOOMBTN_OPTIMAL );
+                        bCancel = ( RET_CANCEL == pDlg->Execute() );
 
-                        eZoom = rZoomItem.GetType();
-                        nZoom = rZoomItem.GetValue();
+                        if ( !bCancel )
+                        {
+                            const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
+                                                    pDlg->GetOutputItemSet()->
+                                                        Get( SID_ATTR_ZOOM );
+
+                            eZoom = rZoomItem.GetType();
+                            nZoom = rZoomItem.GetValue();
+                        }
+
+                        delete pDlg;
                     }
-
-                    delete pDlg;
                 }
 
                 if ( !bCancel )
