@@ -111,6 +111,16 @@ namespace configmgr
            */
         rtl::OUString componentToPath(const rtl::OUString& aComponent);
 
+        /// character that can be used to delimit a sub-id within a layerid
+        const sal_Unicode k_cLayerIdSeparator   = ':';
+        /**
+           Convert layer id to Path name
+           Format of layer id is <component> [:<sub-id>]
+           @param aLayerId  layer id
+           */
+        rtl::OUString layeridToPath(const rtl::OUString& aLayerId);
+
+
         /**
            Checks if Arguement is Optional
           @param aArg   Argument
