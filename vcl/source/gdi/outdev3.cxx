@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: th $ $Date: 2001-04-06 12:47:30 $
+ *  last change: $Author: th $ $Date: 2001-04-09 16:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,11 +1155,11 @@ static BOOL ImplFontSubstitute( XubString& rFontName,
 
 // =======================================================================
 
-static char const aImplDefSansUnicode[] = "Andale WT UI;Arial Unicode MS;Lucida Sans Unicode";
-static char const aImplDefSansUI[] = "WarpSans;MS Sans Serif;Geneva;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Tahoma;Arial;Helmet;Interface System;Sans Serif";
+static char const aImplDefSansUnicode[] = "Andale WT UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma";
+static char const aImplDefSansUI[] = "Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif";
 static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Helmet;SansSerif";
 static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;Serif";
-static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Typewriter;Lucida Sans Typewriter;Monospaced";
+static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monospaced";
 static char const aImplDefSymbol[] = "StarBats;WingDings;Zapf Dingbats;Symbol";
 static char const aImplDef_CJK_JP_Mincho[] = "MS Mincho;HG Mincho J;HG Mincho L;HG Mincho";
 static char const aImplDef_CJK_JP_Gothic[] = "MS Gothic;HG Gothic J;HG Gothic";
@@ -2610,7 +2610,14 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.mnDStrikeoutOffset2        = 0;
 #ifndef REMOTE_APPSERVER
             pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
-            pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
+            // Query the first latin area, because we need a
+            // WidthFactor for some methods (e.g. GetTextBreak)
+            pFontEntry->mnWidthFactor = pGraphics->GetCharWidth( IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST,
+                                                                 pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX );
+            if ( pFontEntry->mnWidthFactor )
+                pFontEntry->mnWidthInit |= IMPL_CACHE_A1_BIT;
+            else
+                pFontEntry->mnWidthFactor = IMPL_FACTOR_NOTINIT;
 #else
             long nFactor = 0;
             pGraphics->GetFontMetric(
@@ -4222,15 +4229,17 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
             {
                 Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
                                (const Point*)aAccentPos,
-                               NULL ); // aAccentPolyFlags );
+                               aAccentPolyFlags );
                 double dScale = ((double)nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );
-                Rectangle aBoundRect = aPoly.GetBoundRect();
+                Polygon aTemp;
+                aPoly.GetSimple( aTemp );
+                Rectangle aBoundRect = aTemp.GetBoundRect();
                 rWidth = aBoundRect.GetWidth();
                 nDotSize = aBoundRect.GetHeight();
                 if ( nOrient )
-                    aPoly.Rotate( Point( 0, 0 ), nOrient );
-                rPolyPoly.Insert( aPoly );
+                    aTemp.Rotate( Point( 0, 0 ), nOrient );
+                rPolyPoly.Insert( aTemp );
             }
             break;
     }
