@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobexecutor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:17:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,12 @@
 #include <jobs/joburl.hxx>
 #endif
 
-#ifndef __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
-#include <jobs/configaccess.hxx>
+#ifndef __FRAMEWORK_CLASS_CONVERTER_HXX_
+#include <classes/converter.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#include <threadhelp/transactionguard.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -99,6 +103,14 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
 #endif
 
 //________________________________
@@ -130,24 +142,30 @@ namespace framework{
 //________________________________
 //  declarations
 
-DEFINE_XINTERFACE_3( JobExecutor                               ,
-                     OWeakObject                               ,
-                     DIRECT_INTERFACE(css::lang::XTypeProvider),
-                     DIRECT_INTERFACE(css::lang::XServiceInfo ),
-                     DIRECT_INTERFACE(css::task::XJobExecutor )
+DEFINE_XINTERFACE_6( JobExecutor                                                               ,
+                     OWeakObject                                                               ,
+                     DIRECT_INTERFACE(css::lang::XTypeProvider                                ),
+                     DIRECT_INTERFACE(css::lang::XServiceInfo                                 ),
+                     DIRECT_INTERFACE(css::task::XJobExecutor                                 ),
+                     DIRECT_INTERFACE(css::container::XContainerListener                      ),
+                     DIRECT_INTERFACE(css::document::XEventListener                           ),
+                     DERIVED_INTERFACE(css::lang::XEventListener,css::document::XEventListener)
                    )
 
-DEFINE_XTYPEPROVIDER_3( JobExecutor             ,
-                        css::lang::XTypeProvider,
-                        css::lang::XServiceInfo ,
-                        css::task::XJobExecutor
+DEFINE_XTYPEPROVIDER_6( JobExecutor                       ,
+                        css::lang::XTypeProvider          ,
+                        css::lang::XServiceInfo           ,
+                        css::task::XJobExecutor           ,
+                        css::container::XContainerListener,
+                        css::document::XEventListener     ,
+                        css::lang::XEventListener
                       )
 
-DEFINE_XSERVICEINFO_MULTISERVICE( JobExecutor                   ,
-                                  ::cppu::OWeakObject           ,
-                                  SERVICENAME_JOBEXECUTOR       ,
-                                  IMPLEMENTATIONNAME_JOBEXECUTOR
-                                )
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( JobExecutor                   ,
+                                        ::cppu::OWeakObject           ,
+                                        SERVICENAME_JOBEXECUTOR       ,
+                                        IMPLEMENTATIONNAME_JOBEXECUTOR
+                                      )
 
 DEFINE_INIT_SERVICE( JobExecutor,
                      {
@@ -156,28 +174,58 @@ DEFINE_INIT_SERVICE( JobExecutor,
                              to create a new instance of this class by our own supported service factory.
                              see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
                          */
+                        // read the list of all currently registered events inside configuration.
+                        // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
+                        // We need it later to check if an incoming event request can be executed successfully
+                        // or must be rejected. It's an optimization! Of course we must implement updating of this
+                        // list too ... Be listener at the configuration.
+
+                        m_aConfig.open(ConfigAccess::E_READONLY);
+                        if (m_aConfig.getMode() == ConfigAccess::E_READONLY)
+                        {
+                            css::uno::Reference< css::container::XNameAccess > xRegistry(m_aConfig.cfg(), css::uno::UNO_QUERY);
+                            if (xRegistry.is())
+                                m_lEvents = Converter::convert_seqOUString2OUStringList(xRegistry->getElementNames());
+
+                            css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
+                            if (xNotifier.is())
+                            {
+                                css::uno::Reference< css::container::XContainerListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+                                xNotifier->addContainerListener(xThis);
+                            }
+
+                            // don't close cfg here!
+                            // It will be done inside disposing ...
+                        }
                      }
                    )
 
 //________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance.
 
     @param      xSMGR
                     reference to the uno service manager
-*/
+ */
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xSMGR       (xSMGR                        )
+    : ThreadHelpBase      (&Application::GetSolarMutex()                                   )
+    , ::cppu::OWeakObject (                                                                )
+    , m_xSMGR             (xSMGR                                                           )
+    , m_aConfig           (xSMGR, ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
+    // Don't do any reference related code here! Do it inside special
+    // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further informations.
 }
 
 JobExecutor::~JobExecutor()
 {
+    LOG_ASSERT(m_aConfig.getMode() == ConfigAccess::E_CLOSED, "JobExecutor::~JobExecutor()\nConfiguration don't send dispoing() message!\n")
 }
 
 //________________________________
+
 /**
     @short  implementation of XJobExecutor interface
     @descr  We use the given event to locate any registered job inside our configuration
@@ -186,15 +234,23 @@ JobExecutor::~JobExecutor()
 
     @param  sEvent
                 is used to locate registered jobs
-*/
+ */
 void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::uno::RuntimeException)
 {
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+
+    // Optimization!
+    // Check if the given event name exist inside configuration and reject wrong requests.
+    // This optimization supress using of the cfg api for getting event and job descriptions ...
+    if (m_lEvents.find(sEvent) == m_lEvents.end())
+        return;
+
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
     css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, sEvent);
+
     aReadLock.unlock();
     /* } SAFE */
 
@@ -221,16 +277,148 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
         aReadLock.unlock();
         /* } SAFE */
 
-        try
-        {
-            pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
-        }
-        #ifdef ENABLE_WARNINGS
-        catch(const css::uno::Exception& exAny) {LOG_EXCEPTION("JobExecutor::trigger()", "catched on execute job", exAny.Message)}
-        #else
-        catch(const css::uno::Exception&) {}
-        #endif // ENABLE_WARNINGS
+        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
     }
+}
+
+//________________________________
+
+void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException)
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+
+    // Optimization!
+    // Check if the given event name exist inside configuration and reject wrong requests.
+    // This optimization supress using of the cfg api for getting event and job descriptions ...
+    if (m_lEvents.find(aEvent.EventName) == m_lEvents.end())
+        return;
+
+    // get list of all enabled jobs
+    // The called static helper methods read it from the configuration and
+    // filter disabled jobs using it's time stamp values.
+    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, aEvent.EventName);
+
+    // Special feature: If the events "OnNew" or "OnLoad" occures - we generate our own event "onDocumentOpened".
+    if (
+        (aEvent.EventName.equalsAscii("OnNew") ) ||
+        (aEvent.EventName.equalsAscii("OnLoad"))
+       )
+    {
+        css::uno::Sequence< ::rtl::OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(m_xSMGR, DECLARE_ASCII("onDocumentOpened"));
+        sal_Int32 count = lAdditionalJobs.getLength();
+        if (count > 0)
+        {
+            sal_Int32 dest   = lJobs.getLength();
+            sal_Int32 source = 0;
+            lJobs.realloc(dest+count);
+            while(source < count)
+            {
+                lJobs[dest] = lAdditionalJobs[source];
+                ++source;
+                ++dest;
+            }
+        }
+    }
+
+    aReadLock.unlock();
+    /* } SAFE */
+
+    // step over all enabled jobs and execute it
+    sal_Int32 c = lJobs.getLength();
+    for (sal_Int32 j=0; j<c; ++j)
+    {
+        /* SAFE { */
+        aReadLock.lock();
+
+        JobData aCfg(m_xSMGR);
+        aCfg.setEvent(aEvent.EventName, lJobs[j]);
+        aCfg.setEnvironment(JobData::E_DOCUMENTEVENT);
+
+        /*Attention!
+            Jobs implements interfaces and dies by ref count!
+            And freeing of such uno object is done by uno itself.
+            So we have to use dynamic memory everytimes.
+         */
+        css::uno::Reference< css::frame::XModel > xModel(aEvent.Source, css::uno::UNO_QUERY);
+        Job* pJob = new Job(m_xSMGR, xModel);
+        css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+        pJob->setJobData(aCfg);
+
+        aReadLock.unlock();
+        /* } SAFE */
+
+        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
+    }
+}
+
+//________________________________
+
+void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
+{
+    ::rtl::OUString sValue;
+    if (aEvent.Accessor >>= sValue)
+    {
+        ::rtl::OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
+        if (sEvent.getLength() > 0)
+        {
+            OUStringList::iterator pEvent = m_lEvents.find(sEvent);
+            if (pEvent == m_lEvents.end())
+                m_lEvents.push_back(sEvent);
+        }
+    }
+}
+
+void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
+{
+    ::rtl::OUString sValue;
+    if (aEvent.Accessor >>= sValue)
+    {
+        ::rtl::OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
+        if (sEvent.getLength() > 0)
+        {
+            OUStringList::iterator pEvent = m_lEvents.find(sEvent);
+            if (pEvent != m_lEvents.end())
+                m_lEvents.erase(pEvent);
+        }
+    }
+}
+
+void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
+{
+    // I'm not interested on changed items :-)
+}
+
+//________________________________
+
+/** @short  the used cfg changes notifier wish to be released in its reference.
+
+    @descr  We close our internal used configuration instance to
+            free this reference.
+
+    @attention  For the special feature "bind global document event broadcaster to job execution"
+                this job executor instance was registered from outside code as
+                css.document.XEventListener. So it can be, that this disposing call comes from
+                the global event broadcaster service. But we don't hold any reference to this service
+                which can or must be released. Because this broadcaster itself is an one instance service
+                too, we can ignore this request. On the other side we must relase our internal CFG
+                reference ... SOLUTION => check the given event source and react only, if it's our internal
+                hold configuration object!
+ */
+void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::uno::XInterface > xCFG(m_aConfig.cfg(), css::uno::UNO_QUERY);
+    if (
+        (xCFG                == aEvent.Source        ) &&
+        (m_aConfig.getMode() != ConfigAccess::E_CLOSED)
+       )
+    {
+        m_aConfig.close();
+    }
+    aReadLock.unlock();
+    /* } SAFE */
 }
 
 } // namespace framework
