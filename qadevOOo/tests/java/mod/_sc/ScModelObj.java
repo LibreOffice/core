@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScModelObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:14:48 $
+ *  last change:$Date: 2003-12-11 12:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._sc;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
@@ -83,6 +74,16 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XSelectionSupplier;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.SOfficeFactory;
+
 
 /**
 * Test for object which is represented by service
@@ -120,15 +121,15 @@ public class ScModelObj extends TestCase {
     /**
     * Disposes Spreadsheet documents.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xSheetDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xSheetDoc ");
 
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
+        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+                                   XComponent.class, xSpreadsheetDoc);
         oComp.dispose();
 
-        oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSecondsheetDoc);
+        oComp = (XComponent) UnoRuntime.queryInterface(XComponent.class,
+                                                       xSecondsheetDoc);
         oComp.dispose();
     }
 
@@ -154,25 +155,25 @@ public class ScModelObj extends TestCase {
     * </ul>
     * @see
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         // creation of the testobject here
         // first we write what we are intend to do to log file
-
         log.println("craeting a test environment");
 
         // get a soffice factory object
-
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) Param.getMSF());
 
         if (xSpreadsheetDoc != null) {
-            XComponent oComp = (XComponent)
-                UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
+            XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+                                       XComponent.class, xSpreadsheetDoc);
             oComp.dispose();
         }
+
         if (xSecondsheetDoc != null) {
-            XComponent oComp = (XComponent)
-                UnoRuntime.queryInterface (XComponent.class, xSecondsheetDoc);
+            XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+                                       XComponent.class, xSecondsheetDoc);
             oComp.dispose();
         }
 
@@ -181,59 +182,61 @@ public class ScModelObj extends TestCase {
             xSpreadsheetDoc = SOF.createCalcDoc(null);
             xSecondsheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document ", e);
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document ", e);
         }
 
-        XModel model1 = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
-        XModel model2 = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSecondsheetDoc);
+        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                           xSpreadsheetDoc);
+        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                           xSecondsheetDoc);
         XInterface oObj = model1;
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         XController cont1 = model1.getCurrentController();
         XController cont2 = model2.getCurrentController();
+        cont1.getFrame().setName("cont1");
+        cont2.getFrame().setName("cont2");
 
-        XSelectionSupplier sel = (XSelectionSupplier)
-            UnoRuntime.queryInterface(XSelectionSupplier.class, cont1);
+        XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
+                                         XSelectionSupplier.class, cont1);
 
         XCell toSel = null;
 
         try {
-            log.println("Getting spreadsheet") ;
-            XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
-                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+            log.println("Getting spreadsheet");
 
-            log.println("Getting a cell from sheet") ;
-            toSel = oSheet.getCellByPosition(2, 3) ;
+            XSpreadsheets oSheets = xSpreadsheetDoc.getSheets();
+            XIndexAccess oIndexSheets = (XIndexAccess) UnoRuntime.queryInterface(
+                                                XIndexAccess.class, oSheets);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                                          new Type(XSpreadsheet.class),
+                                          oIndexSheets.getByIndex(0));
+
+            log.println("Getting a cell from sheet");
+            toSel = oSheet.getCellByPosition(2, 3);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
+                    "Error getting cell object from spreadsheet document", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
+                    "Error getting cell object from spreadsheet document", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
             throw new StatusException(
-                "Error getting cell object from spreadsheet document", e);
+                    "Error getting cell object from spreadsheet document", e);
         }
 
-        log.println( "Adding SelectionSupplier and Shape to select for XModel");
+        log.println("Adding SelectionSupplier and Shape to select for XModel");
         tEnv.addObjRelation("SELSUPP", sel);
         tEnv.addObjRelation("TOSELECT", toSel);
 
-        log.println( "adding Controller as ObjRelation for XModel");
+        log.println("adding Controller as ObjRelation for XModel");
         tEnv.addObjRelation("CONT2", cont2);
 
         return tEnv;
     }
-
-
-}    // finish class ScModelObj
+} // finish class ScModelObj
