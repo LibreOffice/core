@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-14 12:49:34 $
+ *  last change: $Author: pb $ $Date: 2002-05-08 07:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,10 @@
 
 #define _SVX_CHARDLG_CXX
 
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#ifndef _SVTOOLS_ASIANLANGUAGESOPTIONS_HXX
+#include <svtools/asianlanguagesoptions.hxx>
 #endif
+
 #include "dialogs.hrc"
 #include "svxitems.hrc"
 #include "chardlg.hrc"
@@ -614,8 +615,8 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pImpl->m_aNoStyleText = String( ResId( STR_CHARNAME_NOSTYLE ) );
     m_pImpl->m_aTransparentText = String( ResId( STR_CHARNAME_TRANSPARENT ) );
 
-    SvtCJKOptions aCJKOptions;
-    BOOL bCJK = aCJKOptions.IsCJKFontEnabled();
+    SvtAsianLanguagesOptions aAsianLangOptions;
+    sal_Bool bCJK = ( aAsianLangOptions.IsCJKFontEnabled() || aAsianLangOptions.IsCTLFontEnabled() );
 
     m_pWestLine         = new FixedLine( this, ResId( FL_WEST ) );
     m_pWestFontNameFT   = new FixedText( this, ResId( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
@@ -645,6 +646,16 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pEastFontLanguageFT   = new FixedText( this, ResId( FT_EAST_LANG ) );
     m_pEastFontLanguageLB   = new SvxLanguageBox( this, ResId( LB_EAST_LANG ) );
 
+    m_pCTLLine              = new FixedLine( this, ResId( FL_CTL ) );
+    m_pCTLFontNameFT        = new FixedText( this, ResId( FT_CTL_NAME ) );
+    m_pCTLFontNameLB        = new FontNameBox( this, ResId( LB_CTL_NAME ) );
+    m_pCTLFontStyleFT       = new FixedText( this, ResId( FT_CTL_STYLE ) );
+    m_pCTLFontStyleLB       = new FontStyleBox( this, ResId( LB_CTL_STYLE ) );
+    m_pCTLFontSizeFT        = new FixedText( this, ResId( FT_CTL_SIZE ) );
+    m_pCTLFontSizeLB        = new FontSizeBox( this, ResId( LB_CTL_SIZE ) );
+    m_pCTLFontLanguageFT    = new FixedText( this, ResId( FT_CTL_LANG ) );
+    m_pCTLFontLanguageLB    = new SvxLanguageBox( this, ResId( LB_CTL_LANG ) );
+
     if( bCJK )
     {
         m_pColorFL  = new FixedLine( this, ResId( FL_COLOR2 ) );
@@ -653,6 +664,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     }
 
     m_pWestLine             ->Show( bCJK );
+    m_pColorFL              ->Show( bCJK );
+
+    bCJK = aAsianLangOptions.IsCJKFontEnabled();
     m_pEastLine             ->Show( bCJK );
     m_pEastFontNameFT       ->Show( bCJK );
     m_pEastFontNameLB       ->Show( bCJK );
@@ -662,12 +676,36 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pEastFontSizeLB       ->Show( bCJK );
     m_pEastFontLanguageFT   ->Show( bCJK );
     m_pEastFontLanguageLB   ->Show( bCJK );
-    m_pColorFL              ->Show( bCJK );
+
+    sal_Bool bShowCTL = aAsianLangOptions.IsCTLFontEnabled();
+    if ( bShowCTL && !bCJK )
+    {
+        // move CTL controls to the places of the CJK controls, if these controls aren't visible
+        m_pCTLLine             ->SetPosPixel( m_pEastLine->GetPosPixel() );
+        m_pCTLFontNameFT       ->SetPosPixel( m_pEastFontNameFT->GetPosPixel() );
+        m_pCTLFontNameLB       ->SetPosPixel( m_pEastFontNameLB->GetPosPixel() );
+        m_pCTLFontStyleFT      ->SetPosPixel( m_pEastFontStyleFT->GetPosPixel() );
+        m_pCTLFontStyleLB      ->SetPosPixel( m_pEastFontStyleLB->GetPosPixel() );
+        m_pCTLFontSizeFT       ->SetPosPixel( m_pEastFontSizeFT->GetPosPixel() );
+        m_pCTLFontSizeLB       ->SetPosPixel( m_pEastFontSizeLB->GetPosPixel() );
+        m_pCTLFontLanguageFT   ->SetPosPixel( m_pEastFontLanguageFT->GetPosPixel() );
+        m_pCTLFontLanguageLB   ->SetPosPixel( m_pEastFontLanguageLB->GetPosPixel() );
+    }
+    m_pCTLLine             ->Show( bShowCTL );
+    m_pCTLFontNameFT       ->Show( bShowCTL );
+    m_pCTLFontNameLB       ->Show( bShowCTL );
+    m_pCTLFontStyleFT      ->Show( bShowCTL );
+    m_pCTLFontStyleLB      ->Show( bShowCTL );
+    m_pCTLFontSizeFT       ->Show( bShowCTL );
+    m_pCTLFontSizeLB       ->Show( bShowCTL );
+    m_pCTLFontLanguageFT   ->Show( bShowCTL );
+    m_pCTLFontLanguageLB   ->Show( bShowCTL );
 
     FreeResource();
 
-    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN, TRUE, FALSE, TRUE );
-    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,     TRUE, FALSE, TRUE );
+    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,  TRUE, FALSE, TRUE );
+    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,      TRUE, FALSE, TRUE );
+    m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,       TRUE, FALSE, TRUE );
 
     Initialize();
 }
@@ -699,6 +737,16 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pEastFontSizeLB;
     delete m_pEastFontLanguageFT;
     delete m_pEastFontLanguageLB;
+
+    delete m_pCTLLine;
+    delete m_pCTLFontNameFT;
+    delete m_pCTLFontNameLB;
+    delete m_pCTLFontStyleFT;
+    delete m_pCTLFontStyleLB;
+    delete m_pCTLFontSizeFT;
+    delete m_pCTLFontSizeLB;
+    delete m_pCTLFontLanguageFT;
+    delete m_pCTLFontLanguageLB;
 
     delete m_pColorFL;
     delete m_pColorFT;
@@ -758,8 +806,15 @@ void SvxCharNamePage::Initialize()
     m_pEastFontNameLB->SetModifyHdl( aLink );
     m_pEastFontStyleLB->SetModifyHdl( aLink );
     m_pEastFontSizeLB->SetModifyHdl( aLink );
+    m_pCTLFontNameLB->SetModifyHdl( aLink );
+    m_pCTLFontStyleLB->SetModifyHdl( aLink );
+    m_pCTLFontSizeLB->SetModifyHdl( aLink );
 
     m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
+
+    m_pColorFL->Hide();
+    m_pColorFT->Hide();
+    m_pColorLB->Hide();
 }
 
 // -----------------------------------------------------------------------
@@ -903,19 +958,25 @@ void SvxCharNamePage::UpdatePreview_Impl()
 
 // -----------------------------------------------------------------------
 
-void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pBox )
+void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
 {
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    if ( m_pWestFontNameLB == pBox )
-        m_pWestFontStyleLB->Fill( m_pWestFontNameLB->GetText(), pFontList );
-    else if ( m_pEastFontNameLB == pBox )
-        m_pEastFontStyleLB->Fill( m_pEastFontNameLB->GetText(), pFontList );
+    FontStyleBox* pStyleBox = NULL;
+
+    if ( m_pWestFontNameLB == pNameBox )
+        pStyleBox = m_pWestFontStyleLB;
+    else if ( m_pEastFontNameLB == pNameBox )
+        pStyleBox = m_pEastFontStyleLB;
+    else if ( m_pCTLFontNameLB == pNameBox )
+        pStyleBox = m_pCTLFontStyleLB;
     else
     {
         DBG_ERRORFILE( "invalid font name box" );
     }
+
+    pStyleBox->Fill( pNameBox->GetText(), pFontList );
 
     if ( m_pImpl->m_bInSearchMode )
     {
@@ -924,46 +985,98 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pBox )
         String aEntry = m_pImpl->m_aNoStyleText;
         const sal_Char sS[] = "%s";
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetBoldStr() );
-        m_pImpl->m_nExtraEntryPos = ( m_pWestFontNameLB == pBox )
-            ? m_pWestFontStyleLB->InsertEntry( aEntry ) : m_pEastFontStyleLB->InsertEntry( aEntry );
+        m_pImpl->m_nExtraEntryPos = pStyleBox->InsertEntry( aEntry );
         aEntry = m_pImpl->m_aNoStyleText;
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetItalicStr() );
-        ( m_pWestFontNameLB == pBox ) ? m_pWestFontStyleLB->InsertEntry( aEntry )
-                                       : m_pEastFontStyleLB->InsertEntry( aEntry );
+        pStyleBox->InsertEntry( aEntry );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pBox )
+void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
 {
     const FontList* pFontList = GetFontList();
     DBG_ASSERT( pFontList, "no fontlist" );
 
-    if ( m_pWestFontNameLB == pBox )
-        m_pWestFontSizeLB->Fill( pFontList->Get( m_pWestFontNameLB->GetText(),
-                                                m_pWestFontStyleLB->GetText() ), pFontList );
-    else if ( m_pEastFontNameLB == pBox )
-        m_pEastFontSizeLB->Fill( pFontList->Get( m_pEastFontNameLB->GetText(),
-                                                m_pEastFontStyleLB->GetText() ), pFontList );
+    FontStyleBox* pStyleBox = NULL;
+    FontSizeBox* pSizeBox = NULL;
+
+    if ( m_pWestFontNameLB == pNameBox )
+    {
+        pStyleBox = m_pWestFontStyleLB;
+        pSizeBox = m_pWestFontSizeLB;
+    }
+    else if ( m_pEastFontNameLB == pNameBox )
+    {
+        pStyleBox = m_pEastFontStyleLB;
+        pSizeBox = m_pEastFontSizeLB;
+    }
+    else if ( m_pCTLFontNameLB == pNameBox )
+    {
+        pStyleBox = m_pCTLFontStyleLB;
+        pSizeBox = m_pCTLFontSizeLB;
+    }
     else
     {
         DBG_ERRORFILE( "invalid font name box" );
     }
+
+    pSizeBox->Fill( pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ), pFontList );
 }
 
 // -----------------------------------------------------------------------
 
-void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
+void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    FontNameBox* pNameBox = bWest ? m_pWestFontNameLB : m_pEastFontNameLB;
-    FixedText* pNameLabel = bWest ? m_pWestFontNameFT : m_pEastFontNameFT;
-    FontStyleBox* pStyleBox = bWest ? m_pWestFontStyleLB : m_pEastFontStyleLB;
-    FixedText* pStyleLabel = bWest ? m_pWestFontStyleFT : m_pEastFontStyleFT;
-    FontSizeBox* pSizeBox = bWest ? m_pWestFontSizeLB : m_pEastFontSizeLB;
-    FixedText* pSizeLabel = bWest ? m_pWestFontSizeFT : m_pEastFontSizeFT;
-    FixedText* pLangFT = bWest ? m_pWestFontLanguageFT : m_pEastFontLanguageFT;
-    SvxLanguageBox* pLangBox = bWest ? m_pWestFontLanguageLB : m_pEastFontLanguageLB;
+    FixedText* pNameLabel = NULL;
+    FontNameBox* pNameBox = NULL;
+    FixedText* pStyleLabel = NULL;
+    FontStyleBox* pStyleBox = NULL;
+    FixedText* pSizeLabel = NULL;
+    FontSizeBox* pSizeBox = NULL;
+    FixedText* pLangFT = NULL;
+    SvxLanguageBox* pLangBox = NULL;
+    USHORT nWhich = 0;
+
+    switch ( eLangGrp )
+    {
+        case Western :
+            pNameLabel = m_pWestFontNameFT;
+            pNameBox = m_pWestFontNameLB;
+            pStyleLabel = m_pWestFontStyleFT;
+            pStyleBox = m_pWestFontStyleLB;
+            pSizeLabel = m_pWestFontSizeFT;
+            pSizeBox = m_pWestFontSizeLB;
+            pLangFT = m_pWestFontLanguageFT;
+            pLangBox = m_pWestFontLanguageLB;
+            nWhich = GetWhich( SID_ATTR_CHAR_FONT );
+            break;
+
+        case Asian :
+            pNameLabel = m_pEastFontNameFT;
+            pNameBox = m_pEastFontNameLB;
+            pStyleLabel = m_pEastFontStyleFT;
+            pStyleBox = m_pEastFontStyleLB;
+            pSizeLabel = m_pEastFontSizeFT;
+            pSizeBox = m_pEastFontSizeLB;
+            pLangFT = m_pEastFontLanguageFT;
+            pLangBox = m_pEastFontLanguageLB;
+            nWhich = GetWhich( SID_ATTR_CHAR_CJK_FONT );
+            break;
+
+        case Ctl :
+            pNameLabel = m_pCTLFontNameFT;
+            pNameBox = m_pCTLFontNameLB;
+            pStyleLabel = m_pCTLFontStyleFT;
+            pStyleBox = m_pCTLFontStyleLB;
+            pSizeLabel = m_pCTLFontSizeFT;
+            pSizeBox = m_pCTLFontSizeLB;
+            pLangFT = m_pCTLFontLanguageFT;
+            pLangBox = m_pCTLFontLanguageLB;
+            nWhich = GetWhich( SID_ATTR_CHAR_CTL_FONT );
+            break;
+    }
 
     // die FontListBox fuellen
     const FontList* pFontList = GetFontList();
@@ -971,7 +1084,6 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
 
     // Font ermitteln
     const SvxFontItem* pFontItem = NULL;
-    USHORT nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONT : SID_ATTR_CHAR_CJK_FONT );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DEFAULT )
@@ -990,7 +1102,12 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
     FASTBOOL bStyleAvailable = TRUE;
     FontItalic eItalic = ITALIC_NONE;
     FontWeight eWeight = WEIGHT_NORMAL;
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
+    switch ( eLangGrp )
+    {
+        case Western : nWhich = GetWhich( SID_ATTR_CHAR_POSTURE ); break;
+        case Asian : nWhich = GetWhich( SID_ATTR_CHAR_CJK_POSTURE ); break;
+        case Ctl : nWhich = GetWhich( SID_ATTR_CHAR_CTL_POSTURE ); break;
+    }
     eState = rSet.GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DEFAULT )
@@ -1001,7 +1118,12 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
     }
     bStyleAvailable = bStyleAvailable && (eState >= SFX_ITEM_DONTCARE);
 
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
+    switch ( eLangGrp )
+    {
+        case Western : nWhich = GetWhich( SID_ATTR_CHAR_WEIGHT ); break;
+        case Asian : nWhich = GetWhich( SID_ATTR_CHAR_CJK_WEIGHT ); break;
+        case Ctl : nWhich = GetWhich( SID_ATTR_CHAR_CTL_WEIGHT ); break;
+    }
     eState = rSet.GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DEFAULT )
@@ -1036,7 +1158,12 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
 
     // SizeBox fuellen
     FillSizeBox_Impl( pNameBox );
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONTHEIGHT : SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    switch ( eLangGrp )
+    {
+        case Western : nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT ); break;
+        case Asian : nWhich = GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT ); break;
+        case Ctl : nWhich = GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ); break;
+    }
     eState = rSet.GetItemState( nWhich );
 
     if ( pSizeBox->IsRelativeMode() )
@@ -1072,7 +1199,12 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         }
     }
 
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
+    switch ( eLangGrp )
+    {
+        case Western : nWhich = GetWhich( SID_ATTR_CHAR_LANGUAGE ); break;
+        case Asian : nWhich = GetWhich( SID_ATTR_CHAR_CJK_LANGUAGE ); break;
+        case Ctl : nWhich = GetWhich( SID_ATTR_CHAR_CTL_LANGUAGE ); break;
+    }
     pLangBox->SetNoSelection();
     eState = rSet.GetItemState( nWhich );
 
@@ -1110,7 +1242,7 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         }
     }
 
-    if ( bWest )
+    if ( Western == eLangGrp )
         m_aFontTypeFT.SetText( pFontList->GetFontMapText(
             pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
 
@@ -1123,15 +1255,45 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
+BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
     BOOL bModified = FALSE;
 
-    FontNameBox* pNameBox = bWest ? m_pWestFontNameLB : m_pEastFontNameLB;
-    FontStyleBox* pStyleBox = bWest ? m_pWestFontStyleLB : m_pEastFontStyleLB;
-    FontSizeBox* pSizeBox = bWest ? m_pWestFontSizeLB : m_pEastFontSizeLB;
-    SvxLanguageBox* pLangBox = bWest ? m_pWestFontLanguageLB : m_pEastFontLanguageLB;
+    FontNameBox* pNameBox = NULL;
+    FontStyleBox* pStyleBox = NULL;
+    FontSizeBox* pSizeBox = NULL;
+    SvxLanguageBox* pLangBox = NULL;
+    USHORT nWhich = 0;
+    USHORT nSlot = 0;
 
+    switch ( eLangGrp )
+    {
+        case Western :
+            pNameBox = m_pWestFontNameLB;
+            pStyleBox = m_pWestFontStyleLB;
+            pSizeBox = m_pWestFontSizeLB;
+            pLangBox = m_pWestFontLanguageLB;
+            nSlot = SID_ATTR_CHAR_FONT;
+            break;
+
+        case Asian :
+            pNameBox = m_pEastFontNameLB;
+            pStyleBox = m_pEastFontStyleLB;
+            pSizeBox = m_pEastFontSizeLB;
+            pLangBox = m_pEastFontLanguageLB;
+            nSlot = SID_ATTR_CHAR_CJK_FONT;
+            break;
+
+        case Ctl :
+            pNameBox = m_pCTLFontNameLB;
+            pStyleBox = m_pCTLFontStyleLB;
+            pSizeBox = m_pCTLFontSizeLB;
+            pLangBox = m_pCTLFontLanguageLB;
+            nSlot = SID_ATTR_CHAR_CTL_FONT;
+            break;
+    }
+
+    nWhich = GetWhich( nSlot );
     const SfxPoolItem* pItem = NULL;
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOld = NULL;
@@ -1139,7 +1301,6 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
     const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
 
     FASTBOOL bChanged = TRUE;
-    USHORT nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONT : SID_ATTR_CHAR_CJK_FONT );
     const String& rFontName  = pNameBox->GetText();
     const FontList* pFontList = GetFontList();
     String aStyleBoxText =pStyleBox->GetText();
@@ -1149,7 +1310,7 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
     FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
     SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
-    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_FONT : SID_ATTR_CHAR_CJK_FONT );
+    pOld = GetOldItem( rSet, nSlot );
 
     if ( pOld )
     {
@@ -1177,12 +1338,18 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
 
 
     bChanged = TRUE;
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
+    switch ( eLangGrp )
+    {
+        case Western : nSlot = SID_ATTR_CHAR_WEIGHT; break;
+        case Asian : nSlot = SID_ATTR_CHAR_CJK_WEIGHT; break;
+        case Ctl : nSlot = SID_ATTR_CHAR_CTL_WEIGHT; break;
+    }
+    nWhich = GetWhich( nSlot );
     FontWeight eWeight = aInfo.GetWeight();
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         eWeight = WEIGHT_NORMAL;
     SvxWeightItem aWeightItem( eWeight, nWhich );
-    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
+    pOld = GetOldItem( rSet, nSlot );
 
     if ( pOld )
     {
@@ -1220,12 +1387,18 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
         CLEARTITEM;
 
     bChanged = TRUE;
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
+    switch ( eLangGrp )
+    {
+        case Western : nSlot = SID_ATTR_CHAR_POSTURE; break;
+        case Asian : nSlot = SID_ATTR_CHAR_CJK_POSTURE; break;
+        case Ctl : nSlot = SID_ATTR_CHAR_CTL_POSTURE; break;
+    }
+    nWhich = GetWhich( nSlot );
     FontItalic eItalic = aInfo.GetItalic();
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         eItalic = ITALIC_NONE;
     SvxPostureItem aPostureItem( eItalic, nWhich );
-    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
+    pOld = GetOldItem( rSet, nSlot );
 
     if ( pOld )
     {
@@ -1274,9 +1447,14 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
         bRel = FALSE;
     }
 
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONTHEIGHT : SID_ATTR_CHAR_CJK_FONTHEIGHT );
-    const SvxFontHeightItem* pOldHeight = (const SvxFontHeightItem*)
-        GetOldItem( rSet, bWest ? SID_ATTR_CHAR_FONTHEIGHT : SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    switch ( eLangGrp )
+    {
+        case Western : nSlot = SID_ATTR_CHAR_FONTHEIGHT; break;
+        case Asian : nSlot = SID_ATTR_CHAR_CJK_FONTHEIGHT; break;
+        case Ctl : nSlot = SID_ATTR_CHAR_CTL_FONTHEIGHT; break;
+    }
+    nWhich = GetWhich( nSlot );
+    const SvxFontHeightItem* pOldHeight = (const SvxFontHeightItem*)GetOldItem( rSet, nSlot );
     bChanged = ( nSize != nSavedSize );
 
     if ( !bChanged && pExampleSet &&
@@ -1316,8 +1494,14 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
         CLEARTITEM;
 
     bChanged = TRUE;
-    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
-    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
+    switch ( eLangGrp )
+    {
+        case Western : nSlot = SID_ATTR_CHAR_LANGUAGE; break;
+        case Asian : nSlot = SID_ATTR_CHAR_CJK_LANGUAGE; break;
+        case Ctl : nSlot = SID_ATTR_CHAR_CTL_LANGUAGE; break;
+    }
+    nWhich = GetWhich( nSlot );
+    pOld = GetOldItem( rSet, nSlot );
     USHORT nLangPos = pLangBox->GetSelectEntryPos();
     LanguageType eLangType = (LanguageType)(ULONG)pLangBox->GetEntryData( nLangPos );
 
@@ -1446,14 +1630,14 @@ IMPL_LINK( SvxCharNamePage, UpdateHdl_Impl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pBox )
+IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
 {
     m_pImpl->m_aUpdateTimer.Start();
 
-    if ( m_pWestFontNameLB == pBox || m_pEastFontNameLB == pBox )
+    if ( m_pWestFontNameLB == pNameBox || m_pEastFontNameLB == pNameBox || m_pCTLFontNameLB == pNameBox )
     {
-        FillStyleBox_Impl( (FontNameBox*)pBox );
-        FillSizeBox_Impl( (FontNameBox*)pBox );
+        FillStyleBox_Impl( (FontNameBox*)pNameBox );
+        FillSizeBox_Impl( (FontNameBox*)pNameBox );
     }
     return 0;
 }
@@ -1511,8 +1695,9 @@ USHORT* SvxCharNamePage::GetRanges()
 
 void SvxCharNamePage::Reset( const SfxItemSet& rSet )
 {
-    ResetWestOrEast_Impl( rSet, TRUE );
-    ResetWestOrEast_Impl( rSet, FALSE );
+    Reset_Impl( rSet, Western );
+    Reset_Impl( rSet, Asian );
+    Reset_Impl( rSet, Ctl );
     ResetColor_Impl( rSet );
     m_pColorLB->SaveValue();
 
@@ -1523,9 +1708,10 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
 
 BOOL SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bModified = FillItemSetWestOrEast_Impl( rSet, TRUE );
-    bModified |= FillItemSetWestOrEast_Impl( rSet, FALSE );
-    bModified |= FillItemSetColor_Impl( rSet );
+    BOOL bModified = FillItemSet_Impl( rSet, Western );
+    bModified |= FillItemSet_Impl( rSet, Asian );
+    bModified |= FillItemSet_Impl( rSet, Ctl );
+//! bModified |= FillItemSetColor_Impl( rSet );
     return bModified;
 }
 
@@ -1581,6 +1767,8 @@ void SvxCharNamePage::DisableControls( USHORT nDisable )
         if ( m_pWestFontLanguageLB ) m_pWestFontLanguageLB->Disable();
         if ( m_pEastFontLanguageFT ) m_pEastFontLanguageFT->Disable();
         if ( m_pEastFontLanguageLB ) m_pEastFontLanguageLB->Disable();
+        if ( m_pCTLFontLanguageFT ) m_pCTLFontLanguageFT->Disable();
+        if ( m_pCTLFontLanguageLB ) m_pCTLFontLanguageLB->Disable();
     }
 
     if ( DISABLE_HIDE_LANGUAGE & nDisable )
@@ -1589,6 +1777,8 @@ void SvxCharNamePage::DisableControls( USHORT nDisable )
         if ( m_pWestFontLanguageLB ) m_pWestFontLanguageLB->Hide();
         if ( m_pEastFontLanguageFT ) m_pEastFontLanguageFT->Hide();
         if ( m_pEastFontLanguageLB ) m_pEastFontLanguageLB->Hide();
+        if ( m_pCTLFontLanguageFT ) m_pCTLFontLanguageFT->Hide();
+        if ( m_pCTLFontLanguageLB ) m_pCTLFontLanguageLB->Hide();
     }
 }
 
@@ -1615,6 +1805,8 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aEmphasisLB           ( this, ResId( LB_EMPHASIS ) ),
     m_aPositionFT           ( this, ResId( FT_POSITION ) ),
     m_aPositionLB           ( this, ResId( LB_POSITION ) ),
+    m_aFontColorFT          ( this, ResId( FT_FONTCOLOR ) ),
+    m_aFontColorLB          ( this, ResId( LB_FONTCOLOR ) ),
 
     m_aEffectsFT            ( this, ResId( FT_EFFECTS ) ),
     m_aEffectsLB            ( this, 0 ),
@@ -1626,7 +1818,9 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
 
     m_aOutlineBtn           ( this, ResId( CB_OUTLINE ) ),
     m_aShadowBtn            ( this, ResId( CB_SHADOW ) ),
-    m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) )
+    m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
+
+    m_aTransparentColorName ( ResId( STR_CHARNAME_TRANSPARENT ) )
 
 {
     m_aEffectsLB.Hide();
@@ -1671,19 +1865,28 @@ void SvxCharEffectsPage::Initialize()
     }
 
     m_aColorLB.SetUpdateMode( FALSE );
+    m_aFontColorLB.SetUpdateMode( FALSE );
+
     {
         SfxPoolItem* pDummy;
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocSh );
-        if( !pFrame || SFX_ITEM_DEFAULT > pFrame->GetBindings().QueryState(
-                                    SID_ATTR_AUTO_COLOR_INVALID, pDummy ))
+        if ( !pFrame ||
+             SFX_ITEM_DEFAULT > pFrame->GetBindings().QueryState( SID_ATTR_AUTO_COLOR_INVALID, pDummy ) )
+        {
             m_aColorLB.InsertAutomaticEntry();
+            m_aFontColorLB.InsertAutomaticEntry();
+        }
     }
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
         m_aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        m_aFontColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
+
     m_aColorLB.SetUpdateMode( TRUE );
+    m_aFontColorLB.SetUpdateMode( TRUE );
+    m_aFontColorLB.SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
 
     if ( bKillTable )
         delete pColorTable;
@@ -1712,13 +1915,16 @@ void SvxCharEffectsPage::Initialize()
     aLink = LINK( this, SvxCharEffectsPage, TristClickHdl_Impl );
     m_aOutlineBtn.SetClickHdl( aLink );
     m_aShadowBtn.SetClickHdl( aLink );
-    SvtCJKOptions aCJKOptions;
-    if(!aCJKOptions.IsAsianTypographyEnabled())
+
+    if ( !SvtAsianLanguagesOptions().IsAsianTypographyEnabled() )
     {
         m_aEmphasisFT.Hide();
         m_aEmphasisLB.Hide();
         m_aPositionFT.Hide();
         m_aPositionLB.Hide();
+
+        m_aFontColorFT.SetPosPixel( m_aEmphasisFT.GetPosPixel() );
+        m_aFontColorLB.SetPosPixel( m_aEmphasisLB.GetPosPixel() );
     }
 }
 // -----------------------------------------------------------------------
@@ -1781,6 +1987,101 @@ void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 
 // -----------------------------------------------------------------------
 
+void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
+{
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    SfxItemState eState = rSet.GetItemState( nWhich );
+
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            m_aFontColorFT.Hide();
+            m_aFontColorLB.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aFontColorFT.Disable();
+            m_aFontColorLB.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aFontColorLB.SetNoSelection();
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            SvxFont& rFont = GetPreviewFont();
+            SvxFont& rCJKFont = GetPreviewCJKFont();
+            const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
+            Color aColor = rItem.GetValue();
+            rFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
+            rCJKFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
+            m_aPreviewWin.Invalidate();
+            USHORT nSelPos = m_aFontColorLB.GetEntryPos( aColor );
+            if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
+                nSelPos = m_aFontColorLB.GetEntryPos( m_aTransparentColorName );
+
+            if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+                m_aFontColorLB.SelectEntryPos( nSelPos );
+            else
+            {
+                nSelPos = m_aFontColorLB.GetEntryPos( aColor );
+                if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+                    m_aFontColorLB.SelectEntryPos( nSelPos );
+                else
+                    m_aFontColorLB.SelectEntryPos(
+                        m_aFontColorLB.InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+            }
+            break;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
+{
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    const SvxColorItem* pOld = (const SvxColorItem*)GetOldItem( rSet, SID_ATTR_CHAR_COLOR );
+    const SvxColorItem* pItem = NULL;
+    BOOL bChanged = TRUE;
+    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
+    const SfxItemSet& rOldSet = GetItemSet();
+
+    Color aSelectedColor;
+    if ( m_aFontColorLB.GetSelectEntry() == m_aTransparentColorName )
+        aSelectedColor = Color( COL_TRANSPARENT );
+    else
+        aSelectedColor = m_aFontColorLB.GetSelectEntryColor();
+
+    if ( pOld && pOld->GetValue() == aSelectedColor )
+        bChanged = FALSE;
+
+    if ( !bChanged )
+        bChanged = ( m_aFontColorLB.GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
+
+    if ( !bChanged && pExampleSet &&
+         pExampleSet->GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pItem ) == SFX_ITEM_SET &&
+         ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
+        bChanged = TRUE;
+
+    BOOL bModified = FALSE;
+
+    if ( bChanged && m_aFontColorLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    {
+        rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
+        bModified = TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        CLEARTITEM;
+
+    return bModified;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 {
     if ( &m_aEmphasisLB == pBox )
@@ -1833,6 +2134,23 @@ IMPL_LINK( SvxCharEffectsPage, CbClickHdl_Impl, CheckBox*, EMPTYARG )
 IMPL_LINK( SvxCharEffectsPage, TristClickHdl_Impl, TriStateBox*, EMPTYARG )
 {
     UpdatePreview_Impl();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
+{
+    SvxFont& rFont = GetPreviewFont();
+    SvxFont& rCJKFont = GetPreviewCJKFont();
+    Color aSelectedColor;
+    if ( pBox->GetSelectEntry() == m_aTransparentColorName )
+        aSelectedColor = Color( COL_TRANSPARENT );
+    else
+        aSelectedColor = pBox->GetSelectEntryColor();
+    rFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
+    rCJKFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
+    m_aPreviewWin.Invalidate();
     return 0;
 }
 
@@ -2166,6 +2484,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     SetPrevFontWidthScale( rSet );
 
+    ResetColor_Impl( rSet );
+
     // preview update
     m_aPreviewWin.Invalidate();
 
@@ -2181,6 +2501,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     m_aOutlineBtn.SaveValue();
     m_aShadowBtn.SaveValue();
     m_aBlinkingBtn.SaveValue();
+    m_aFontColorLB.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -2419,6 +2740,8 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( SvxBlinkItem( m_aBlinkingBtn.IsChecked(), nWhich ) );
         bModified = TRUE;
     }
+
+    bModified |= FillItemSetColor_Impl( rSet );
 
     return bModified;
 }

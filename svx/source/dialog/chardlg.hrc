@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: pb $ $Date: 2002-05-08 07:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,15 @@
 #define FT_EAST_LANG            117
 #define LB_EAST_LANG            118
 
-#define FL_ARABIAN              120
-#define FT_ARABIAN_NAME         121
-#define LB_ARABIAN_NAME         122
-#define FT_ARABIAN_STYLE        123
-#define LB_ARABIAN_STYLE        124
-#define FT_ARABIAN_SIZE         125
-#define LB_ARABIAN_SIZE         126
-#define FT_ARABIAN_LANG         127
-#define LB_ARABIAN_LANG         128
+#define FL_CTL                  120
+#define FT_CTL_NAME             121
+#define LB_CTL_NAME             122
+#define FT_CTL_STYLE            123
+#define LB_CTL_STYLE            124
+#define FT_CTL_SIZE             125
+#define LB_CTL_SIZE             126
+#define FT_CTL_LANG             127
+#define LB_CTL_LANG             128
 
 #define WIN_CHAR_PREVIEW        131
 #define FT_CHAR_FONTTYPE        132
@@ -118,6 +118,8 @@
 #define LB_EMPHASIS             208
 #define FT_POSITION             209
 #define LB_POSITION             210
+#define FT_FONTCOLOR            211
+#define LB_FONTCOLOR            212
 
 #define FT_EFFECTS              220
 #define LB_EFFECTS              221
