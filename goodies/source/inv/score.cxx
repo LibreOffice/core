@@ -2,9 +2,9 @@
  *
  *  $RCSfile: score.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ScoreWindow::ScoreWindow(Window* Parent, WinBits wBits, ResMgr* pP) :
                     nLives(3),
                     nScore(0L)
 {
-    SetBackgroundBrush( Brush( COL_GRAY, BRUSH_SOLID ));
+    SetBackground(Wallpaper( Color( COL_GRAY ) ) );
 }
 
 ScoreWindow::~ScoreWindow()
@@ -84,19 +84,15 @@ void ScoreWindow::Paint(const Rectangle& rRect)
     aFont.SetColor(COL_WHITE);
     aFont.SetFillColor(COL_GRAY);
     SetFont(*&aFont);
-    Brush aBrush = GetFillInBrush();
-    aBrush.SetColor(COL_GRAY);
-    SetFillInBrush(*&aBrush);
+
+    SetFillColor(COL_GRAY);
 
     if(bPaintBack)
     {
-        Pen aOldPen = GetPen();
-        Pen aPen = aOldPen;
-        aPen.SetStyle(PEN_NULL);
-        SetPen(aPen);
-
+        Push( PUSH_LINECOLOR );
+        SetLineColor()
         DrawRect(Rectangle(Point(0,0),GetOutputSizePixel()));
-        SetPen(aOldPen);
+        Pop();
     }
 
     if(nHero)
@@ -121,27 +117,20 @@ void ScoreWindow::Paint(const Rectangle& rRect)
 
     for(long i=0; i<5;i++)
     {
-        Pen aPen = GetPen();
         if(nRockets > i)
         {
-            aPen.SetColor(COL_GREEN);
-            aPen.SetStyle(PEN_SOLID);
-            SetPen(*&aPen);
-            aBrush.SetColor(COL_GREEN);
-            SetFillInBrush(*&aBrush);
+            SetLineColor(COL_GREEN);
+            SetFillColor(COL_GREEN);
         }
         else
         {
-            aPen.SetColor(COL_RED);
-            aPen.SetStyle(PEN_SOLID);
-            SetPen(*&aPen);
-            aBrush.SetColor(COL_RED);
-            SetFillInBrush(*&aBrush);
+            SetLineColor(COL_RED);
+            SetFillColor(COL_RED);
         }
 
         DrawRect(Rectangle(Point(250+i*8,5),Point(256+i*8,12)));
     }
-    SetBackgroundBrush( Brush( COL_GRAY, BRUSH_SOLID ));
+    SetBackground(Wallpaper( Color( COL_GRAY ) ) );
 
     bPaintBack = FALSE;
 }
@@ -150,7 +139,7 @@ void ScoreWindow::SetHero(long nName)
 {
     nHero = nName;
 
-    SetBackgroundBrush(BRUSH_NULL);
+    SetBackground();
     Invalidate();
 }
 
@@ -158,7 +147,7 @@ void ScoreWindow::SetRockets(USHORT nWert)
 {
     nRockets = nWert;
 
-    SetBackgroundBrush(BRUSH_NULL);
+    SetBackground();
     Invalidate();
 }
 
@@ -166,7 +155,7 @@ void ScoreWindow::SetLives(USHORT nWert)
 {
     nLives = nWert;
 
-//  SetBackgroundBrush(BRUSH_NULL);
+//  SetBackground();
     Invalidate();
 }
 
@@ -174,7 +163,7 @@ void ScoreWindow::SetScore(long nWert)
 {
     nScore = nWert;
 
-    SetBackgroundBrush(BRUSH_NULL);
+    SetBackground();
     Invalidate();
 }
 
@@ -182,7 +171,7 @@ void ScoreWindow::SetLevel(long nWert)
 {
     nLevel = nWert;
 
-//  SetBackgroundBrush(BRUSH_NULL);
+//  SetBackground();
     Invalidate();
 }
 
