@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-25 16:29:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,14 @@ private:
     // #90356#
     BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
 
+    /** This value controls the device to use for formatting documents.
+        The currently supported values are 0 for the current printer or 1
+        for the printer independent virtual device the can be retrieved from
+        the modules.
+    */
+    USHORT  mnPrinterIndependentLayout;     // Misc/Compatibility/PrinterIndependentLayout
+// Misc
+
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, ULONG& rCount ) const;
@@ -359,6 +367,12 @@ public:
     BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
     BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
     BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
+    /** Return the currently selected printer independent layout mode.
+        @return
+            Returns 1 for printer independent layout enabled and 0 when it
+            is disabled.  Other values are reserved for future use.
+    */
+    USHORT  GetPrinterIndependentLayout() const { Init(); return mnPrinterIndependentLayout; };
     // #90356#
     BOOL    IsShowUndoDeleteWarning() const { Init(); return (BOOL) bShowUndoDeleteWarning; }
     // #97016#
@@ -378,6 +392,13 @@ public:
     void    SetClickChangeRotation( BOOL bOn = TRUE ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( BOOL bOn = TRUE ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
     void    SetSummationOfParagraphs( BOOL bOn = TRUE ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
+    /** Set the printer independent layout mode.
+        @param nOn
+            The default value is to switch printer independent layout on,
+            hence the parameters name.  Use 0 for turning it off.  Other
+            values are reserved for future use.
+    */
+    void    SetPrinterIndependentLayout (USHORT nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
     void    SetPreviewQuality( ULONG nQual ) { if( nPreviewQuality != nQual ) { OptionsChanged(); nPreviewQuality = nQual; } }
     void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
