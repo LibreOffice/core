@@ -271,4 +271,4 @@ hedabu: ..\inc\moduleoptions.hxx %_DEST%\inc%_EXT%\svtools\moduleoptions.hxx
 hedabu: ..\inc\securityoptions.hxx %_DEST%\inc%_EXT%\svtools\securityoptions.hxx
 hedabu: ..\inc\localisationoptions.hxx %_DEST%\inc%_EXT%\svtools\localisationoptions.hxx
 hedabu: ..\inc\workingsetoptions.hxx %_DEST%\inc%_EXT%\svtools\workingsetoptions.hxx
-hedabu: ..\inc\filedialogoptions.hxx %_DEST%\inc%_EXT%\svtools\filedialogoptions.hxx
+hedabu: ..\inc\dialogoptions.hxx %_DEST%\inc%_EXT%\svtools\dialogoptions.hxx
