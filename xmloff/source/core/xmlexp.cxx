@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-18 16:28:34 $
+ *  last change: $Author: dvo $ $Date: 2001-09-18 17:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,8 +1672,8 @@ void SvXMLElementExport::StartElement( SvXMLExport& rExp,
                                        const OUString& rLName,
                                        sal_Bool bIWSOutside )
 {
-    OUString sName = rExp.GetNamespaceMap().GetQNameByKey(nPrefixKey, rLName);
-    rExp.StartElement(sName, bIWSOutside);
+    aName = rExp.GetNamespaceMap().GetQNameByKey(nPrefixKey, rLName);
+    rExp.StartElement(aName, bIWSOutside);
 }
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
