@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodDescription.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,96 +61,80 @@
 
 package com.sun.star.lib.uno.typedesc;
 
-
-import java.lang.reflect.Method;
-
-
 import com.sun.star.uno.IMethodDescription;
 import com.sun.star.uno.ITypeDescription;
+import java.lang.reflect.Method;
 
-
-import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
-import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
-import com.sun.star.lib.uno.typeinfo.TypeInfo;
-
-
-public class MethodDescription extends MethodTypeInfo implements IMethodDescription {
-    static private final TypeDescription __xInterface = TypeDescription.getTypeDescription(com.sun.star.uno.XInterface.class);
-    static private TypeDescription __xInterfaceArray;
-    static private TypeDescription __xInterfaceArrayArray;
-
-    static {
-        try {
-            __xInterfaceArray = TypeDescription.getTypeDescription(Class.forName("[Lcom.sun.star.uno.XInterface;"));
-            __xInterfaceArrayArray = TypeDescription.getTypeDescription(Class.forName("[[Lcom.sun.star.uno.XInterface;"));
-        }
-        catch(ClassNotFoundException classNotFoundException) {
-            System.err.println("##### MethodDescription - ERORR:" + classNotFoundException);
-        }
+final class MethodDescription implements IMethodDescription {
+    public MethodDescription(
+        String name, int index, boolean oneway, ITypeDescription[] inSignature,
+        ITypeDescription[] outSignature, ITypeDescription returnSignature,
+        Method method)
+    {
+        this.name = name;
+        this.index = index;
+        this.oneway = oneway;
+        this.inSignature = inSignature;
+        this.outSignature = outSignature;
+        this.returnSignature = returnSignature;
+        this.method = method;
     }
 
-    protected int  _offset;
-    protected TypeDescription _in_sig[];
-    protected TypeDescription _out_sig[];
-    protected TypeDescription _return_sig;
-    protected Method _method;
-
-    protected ParameterTypeInfo _parameterTypeInfos[];
-
-      public MethodDescription(String name, int index, int flags) {
-        super(name, index, flags);
+    public MethodDescription(MethodDescription other, int index) {
+        this(
+            other.name, index, other.oneway, other.inSignature,
+            other.outSignature, other.returnSignature, other.method);
     }
 
-    public MethodDescription(MethodTypeInfo methodTypeInfo) {
-        this(methodTypeInfo.getName(), methodTypeInfo.getIndex(), methodTypeInfo.getFlags());
+    public String getName() {
+        return name;
+    }
+
+    public boolean isUnsigned() {
+        return MemberDescriptionHelper.isUnsigned(returnSignature);
+    }
+
+    public boolean isAny() {
+        return MemberDescriptionHelper.isAny(returnSignature);
+    }
+
+    public boolean isInterface() {
+        return MemberDescriptionHelper.isInterface(returnSignature);
     }
 
     public int getIndex() {
-        return super.getIndex() + _offset;
+        return index;
     }
 
-
-    void init(Method method, ParameterTypeInfo parameterTypeInfos[], int offset) {
-        _method = method;
-        _offset = offset;
-
-        init(_method.getParameterTypes(), parameterTypeInfos, _method.getReturnType());
+    public boolean isOneway() {
+        return oneway;
     }
 
-    void init(Class signature[], ParameterTypeInfo parameterTypeInfos[], Class resultClass) {
-        _parameterTypeInfos = parameterTypeInfos;
-
-        // init _in_sig
-        _in_sig = new TypeDescription[signature.length];
-        for(int i = 0; i < _in_sig.length; ++i)
-            if(_parameterTypeInfos[i] == null || _parameterTypeInfos[i].isIN())
-                _in_sig[i] = TypeDescription.getTypeDescription(_parameterTypeInfos[i], signature[i]);
-
-        // init _out_sig
-        _out_sig = new TypeDescription[signature.length];
-        for(int i = 0; i < _out_sig.length; ++i)
-            if(_parameterTypeInfos[i] != null && _parameterTypeInfos[i].isOUT())
-                _out_sig[i] = TypeDescription.getTypeDescription(_parameterTypeInfos[i], signature[i]);
-
-        // init _return_sig
-        _return_sig = TypeDescription.getTypeDescription(this, resultClass);
+    public boolean isConst() {
+        return false;
     }
 
     public ITypeDescription[] getInSignature() {
-        return _in_sig;
+        return inSignature;
     }
 
     public ITypeDescription[] getOutSignature() {
-        return _out_sig;
+        return outSignature;
     }
 
     public ITypeDescription getReturnSignature() {
-        return _return_sig;
+        return returnSignature;
     }
 
     public Method getMethod() {
-        return _method;
+        return method;
     }
+
+    private final String name;
+    private final int index;
+    private final boolean oneway;
+    private final ITypeDescription[] inSignature;
+    private final ITypeDescription[] outSignature;
+    private final ITypeDescription returnSignature;
+    private final Method method;
 }
-
-
