@@ -1,4 +1,4 @@
-    <node oor:name="MultiMate Adv. 3.6 (W4W)" oor:op="replace">
+    <node oor:name="MultiMate Adv. 3.6 (W4W)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MultiMate_Adv_36_W4W</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
