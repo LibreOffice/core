@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:36:39 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     com::sun::star::uno::Sequence < sal_Int8 > aSequence;
-    sal_Int8 *pSequence;
+    const sal_Int8 *pSequence;
 
 public:
     ByteGrabber (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xIstream);
