@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 18:55:40 $
+ *  last change: $Author: nn $ $Date: 2001-03-12 09:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1004,6 +1004,9 @@ public:
                                        SvxBoxItem&      rLineOuter,
                                        SvxBoxInfoItem&  rLineInner );
     void            ApplySelectionFrame( const ScMarkData& rMark,
+                                         const SvxBoxItem* pLineOuter,
+                                         const SvxBoxInfoItem* pLineInner );
+    void            ApplyFrameAreaTab( const ScRange& rRange,
                                          const SvxBoxItem* pLineOuter,
                                          const SvxBoxInfoItem* pLineInner );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:20:44 $
+ *  last change: $Author: nn $ $Date: 2001-03-12 09:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3321,6 +3321,20 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                                                 aRange.aStart.Col(), aRange.aStart.Row(),
                                                 aRange.aEnd.Col(),   aRange.aEnd.Row() );
     }
+}
+
+
+void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
+                                    const SvxBoxItem* pLineOuter,
+                                    const SvxBoxInfoItem* pLineInner )
+{
+    USHORT nStartTab = rRange.aStart.Tab();
+    USHORT nEndTab = rRange.aStart.Tab();
+    for (USHORT nTab=nStartTab; nTab<=nEndTab; nTab++)
+        if (pTab[nTab])
+            pTab[nTab]->ApplyBlockFrame( pLineOuter, pLineInner,
+                                         rRange.aStart.Col(), rRange.aStart.Row(),
+                                         rRange.aEnd.Col(),   rRange.aEnd.Row() );
 }
 
 
