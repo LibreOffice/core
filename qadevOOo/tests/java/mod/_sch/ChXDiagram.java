@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChXDiagram.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:20:34 $
+ *  last change:$Date: 2003-09-08 12:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,28 +62,36 @@
 package mod._sch;
 
 import java.io.PrintWriter;
-import java.util.*;
 
-import util.*;
-import lib.*;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.XInterface;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.chart.XChartDataArray;
 import com.sun.star.chart.XChartDocument;
 import com.sun.star.chart.XDiagram;
-import com.sun.star.drawing.XShape;
-import com.sun.star.chart.XChartDataArray;
-import com.sun.star.sheet.*;
-import com.sun.star.table.*;
-import com.sun.star.document.XEmbeddedObjectSupplier;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.awt.Rectangle;
-
+import com.sun.star.document.XEmbeddedObjectSupplier;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XCellRangeAddressable;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.table.XCell;
+import com.sun.star.table.XCellRange;
+import com.sun.star.table.XTableChart;
+import com.sun.star.table.XTableCharts;
+import com.sun.star.table.XTableChartsSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by the following services:
