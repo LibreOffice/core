@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataFormatTranslator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module datatransfer {
     X11 uses so called Atoms etc.</p>
 */
 
-interface XDataFormatTranslator : com::sun::star::uno::XInterface
+published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Converts a <type>DataFlavor</type> to system dependend data type.
