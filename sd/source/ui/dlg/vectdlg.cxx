@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_OCTREE_HXX //autogen
  #include <vcl/octree.hxx>
