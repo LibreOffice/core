@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:40:07 $
+ *  last change: $Author: obo $ $Date: 2001-01-22 14:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ sal_Bool CurrentContext::hasElements()
 }
 */
 //==================================================================================================
-extern "C" static void SAL_CALL delete_IdContainer( void * p ) throw ()
+extern "C" void SAL_CALL delete_IdContainer( void * p ) throw ()
 {
     if (p)
     {
