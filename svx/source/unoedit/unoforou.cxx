@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
+ *  last change: $Author: thb $ $Date: 2002-04-11 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include <svtools/itemset.hxx>
 #include <editeng.hxx>
+#include <editdata.hxx>
 #include <outliner.hxx>
 
 #ifndef _SFXPOOLITEM_HXX
@@ -309,6 +310,21 @@ void SvxOutlinerForwarder::flushCache()
 LanguageType SvxOutlinerForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
 {
     return rOutliner.GetLanguage(nPara, nIndex);
+}
+
+USHORT SvxOutlinerForwarder::GetFieldCount( USHORT nPara ) const
+{
+    return rOutliner.GetEditEngine().GetFieldCount(nPara);
+}
+
+EFieldInfo SvxOutlinerForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
+{
+    return rOutliner.GetEditEngine().GetFieldInfo( nPara, nField );
+}
+
+EBulletInfo SvxOutlinerForwarder::GetBulletInfo( USHORT nPara ) const
+{
+    return rOutliner.GetBulletInfo( nPara );
 }
 
 Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const

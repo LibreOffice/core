@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
+ *  last change: $Author: thb $ $Date: 2002-04-11 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2233,6 +2233,21 @@ void SvxDummyTextSource::SetNotifyHdl( const Link& )
 LanguageType SvxDummyTextSource::GetLanguage( USHORT nPara, USHORT nIndex ) const
 {
     return LANGUAGE_DONTKNOW;
+}
+
+USHORT SvxDummyTextSource::GetFieldCount( USHORT nPara ) const
+{
+    return 0;
+}
+
+EFieldInfo SvxDummyTextSource::GetFieldInfo( USHORT nPara, USHORT nField ) const
+{
+    return EFieldInfo();
+}
+
+EBulletInfo SvxDummyTextSource::GetBulletInfo( USHORT nPara ) const
+{
+    return EBulletInfo();
 }
 
 Rectangle SvxDummyTextSource::GetCharBounds( USHORT nPara, USHORT nIndex ) const

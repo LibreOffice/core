@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
+ *  last change: $Author: thb $ $Date: 2002-04-11 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <svtools/itemset.hxx>
 #include <editeng.hxx>
 #include "editview.hxx"
+#include <editdata.hxx>
+#include <outliner.hxx>
 #include <editobj.hxx>      // nur fuer die GetText-Kruecke
 
 #include "unofored.hxx"
@@ -338,6 +340,21 @@ USHORT SvxEditEngineForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
 LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
 {
     return rEditEngine.GetLanguage(nPara, nIndex);
+}
+
+USHORT SvxEditEngineForwarder::GetFieldCount( USHORT nPara ) const
+{
+    return rEditEngine.GetFieldCount(nPara);
+}
+
+EFieldInfo SvxEditEngineForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
+{
+    return rEditEngine.GetFieldInfo( nPara, nField );
+}
+
+EBulletInfo SvxEditEngineForwarder::GetBulletInfo( USHORT nPara ) const
+{
+    return EBulletInfo();
 }
 
 Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
