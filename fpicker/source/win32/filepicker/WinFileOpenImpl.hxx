@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,20 @@
 #include "FileOpenDlg.hxx"
 #endif
 
-#ifndef _DIBPREVIEW_HXX_
-#include "dibpreview.hxx"
+#ifndef _PREVIEWADAPTER_HXX_
+#include "previewadapter.hxx"
 #endif
 
 #ifndef _HELPPOPUPWINDOW_HXX_
 #include "helppopupwindow.hxx"
+#endif
+
+#ifndef _CUSTOMCONTROL_HXX_
+#include "customcontrol.hxx"
+#endif
+
+#ifndef _CUSTOMCONTROLFACTORY_HXX_
+#include "customcontrolfactory.hxx"
 #endif
 
 #include <utility>
@@ -210,7 +218,15 @@ public:
     virtual sal_Bool SAL_CALL getShowState( )
         throw (::com::sun::star::uno::RuntimeException);
 
+    //------------------------------------------------
+    // XCancelable
+    //------------------------------------------------
+
     virtual void SAL_CALL cancel( );
+
+    //------------------------------------------------
+    // Implementation details
+    //------------------------------------------------
 
 protected:
     sal_Int16 SAL_CALL getFocused( );
@@ -231,17 +247,23 @@ protected:
 
     virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );
 
+
+    LRESULT SAL_CALL onWMSize(HWND hwnd, WPARAM type, WORD width, WORD height );
+    LRESULT SAL_CALL onWMShow(HWND hwnd, BOOL bShow, int fState);
+    LRESULT SAL_CALL onWMWindowPosChanged(HWND hwnd);
+    LRESULT SAL_CALL onCustomControlHelpRequest(LPHELPINFO lphi);
+
 private:
     inline void SAL_CALL appendFilterGroupSeparator( );
 
+    inline sal_Bool SAL_CALL IsCustomControlHelpRequested(LPHELPINFO lphi) const;
+
     // initialize all controls from cache
     void SAL_CALL InitControlLabel( HWND hWnd );
+    void SAL_CALL InitCustomControlContainer(HWND hCustomControl);
 
     // save the control state
     void SAL_CALL CacheControlState( HWND hWnd );
-
-    // checks wether there is the checkbox preview
-    sal_Bool SAL_CALL HasPreview( HWND hWnd );
 
     void SAL_CALL SetDefaultExtension( );
     void SAL_CALL InitialSetDefaultName( );
@@ -250,21 +272,19 @@ private:
 
     static BOOL CALLBACK EnumChildWndProc( HWND hWnd, LPARAM lParam );
 
-    typedef std::pair< int, int > DIMENSION_T;
-
 private:
-    std::auto_ptr< CFilterContainer >   m_filterContainer;
-    std::auto_ptr< CDIBPreview >        m_DIBPreview;
-    sal_Bool                            m_bPreviewExists;
-    CFilePicker*                        m_FilePicker;
-    DLGPROC                             m_pfnOldDlgProc;
-    DIMENSION_T                         m_SizeFileListBoxOriginal;
-    rtl::OUString                       m_defaultName;
-    sal_Bool                            m_bInitialSelChanged;
-    CHelpPopupWindow                    m_HelpPopupWindow;
-    CFilePickerState*                   m_FilePickerState;
-    CExecuteFilePickerState*            m_ExecuteFilePickerState;
-    CNonExecuteFilePickerState*         m_NonExecuteFilePickerState;
+    std::auto_ptr<CFilterContainer>         m_filterContainer;
+    std::auto_ptr<CPreviewAdapter>          m_Preview;
+    std::auto_ptr<CCustomControlFactory>    m_CustomControlFactory;
+    std::auto_ptr<CCustomControl>           m_CustomControls;
+    CFilePicker*                            m_FilePicker;
+    DLGPROC                                 m_pfnOldDlgProc;
+    rtl::OUString                           m_defaultName;
+    sal_Bool                                m_bInitialSelChanged;
+    CHelpPopupWindow                        m_HelpPopupWindow;
+    CFilePickerState*                       m_FilePickerState;
+    CExecuteFilePickerState*                m_ExecuteFilePickerState;
+    CNonExecuteFilePickerState*             m_NonExecuteFilePickerState;
 };
 
 

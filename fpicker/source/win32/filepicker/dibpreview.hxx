@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-11 09:20:28 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,8 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX
-#include <com/sun/star/uno/Sequence.hxx>
+#ifndef _PREVIEWBASE_HXX_
+#include "previewbase.hxx"
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -90,47 +86,37 @@
 // it's enough to go the simple way - KISS.
 //---------------------------------------------
 
-class CDIBPreview
+class CDIBPreview : public PreviewBase
 {
 public:
-    // clients can create instances only
-    // through the static create method
-    CDIBPreview(
-        sal_Int32 x,
-        sal_Int32 y,
-        sal_Int32 cx,
-        sal_Int32 cy,
-        HWND aParent,
-        HINSTANCE hInstance,
-        sal_Bool bShow = sal_True );
+
+    // ctor
+    CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow = sal_False);
 
     // dtor
-    ~CDIBPreview( );
+    virtual ~CDIBPreview( );
 
-    // window size information
+    // preview interface implementation
 
-    void SAL_CALL setWidth( sal_Int32 cx_new );
+    virtual sal_Int32 SAL_CALL getTargetColorDepth()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 SAL_CALL getWidth( ) const;
+    virtual sal_Int32 SAL_CALL getAvailableWidth()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    void SAL_CALL setHeight( sal_Int32 cy_new );
+    virtual sal_Int32 SAL_CALL getAvailableHeight()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 SAL_CALL getHeight( ) const;
+    virtual void SAL_CALL setImage(sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage)
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    // shows the preview window
-    // possible values see SHOW_STATE
-    sal_Bool SAL_CALL show( sal_Bool bShow );
+    virtual sal_Bool SAL_CALL setShowState(sal_Bool bShowState)
+        throw (::com::sun::star::uno::RuntimeException);
 
-    // returns true when the preview window is
-    // visible and
-    // false if not
-    sal_Bool SAL_CALL isVisible( ) const;
+    virtual sal_Bool SAL_CALL getShowState()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    // returns the currently supported color
-    // resolution of the preview window
-    int SAL_CALL getColorDepth( );
-
-    void SAL_CALL setImage( const ::com::sun::star::uno::Sequence< sal_Int8 >& pImageData );
+    virtual HWND SAL_CALL getWindowHandle() const;
 
 private:
     virtual void SAL_CALL onPaint( HWND hWnd, HDC hDC );
@@ -141,12 +127,10 @@ private:
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 private:
-    HWND                                        m_hwnd;
-    HINSTANCE                                   m_hInstance;
-    ::com::sun::star::uno::Sequence< sal_Int8 > m_ImageData;
-    sal_Int32                                   m_cx;
-    sal_Int32                                   m_cy;
-    sal_Bool                                    m_bWndClassRegistered;
+    HINSTANCE  m_Instance;
+    HWND       m_Hwnd;
+    com::sun::star::uno::Sequence<sal_Int8> m_Image;
+    osl::Mutex  m_PaintLock;
 
     // the preview window class has to be registered only
     // once per process, so multiple instance of this class
@@ -157,8 +141,8 @@ private:
 
 // prevent copy and assignment
 private:
-    CDIBPreview( const CDIBPreview& );
-    CDIBPreview& operator=( const CDIBPreview& );
+    CDIBPreview(const CDIBPreview&);
+    CDIBPreview& operator=(const CDIBPreview&);
 };
 
 
