@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:44:12 $
+ *  last change: $Author: dvo $ $Date: 2002-02-04 17:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,9 @@
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
+#include <com/sun/star/text/WritingMode2.hpp>
+#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -408,7 +411,7 @@ namespace comphelper
             case CPPUTYPE_REFTXTFIELD:  pType = &::getCppuType( (Reference<text::XTextField>*)0 ); break;
             case CPPUTYPE_REFTXTRANGE:  pType = &::getCppuType( (Reference<text::XTextRange>*)0 ); break;
             case CPPUTYPE_REFTXTTABLE:  pType = &::getCppuType( (Reference<text::XTextTable>*)0 ); break;
-
+            case CPPUTYPE_WRITINGMODE2: pType = &::getCppuType( (text::WritingMode2*)0); break;
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
         }
