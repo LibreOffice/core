@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-18 12:50:02 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ IMPL_LINK( PopupWindowTbx, SelectHdl, void*, EMPTYARG )
     return 0;
 }
 
-PopupWindowTbx::PopupWindowTbx( USHORT nId, ToolBoxAlign eAlign,
+PopupWindowTbx::PopupWindowTbx( USHORT nId, WindowAlign eAlign,
                                 ResId aRIdWin, ResId aRIdTbx,
                                 SfxBindings& rBind ) :
                 SfxPopupWindow  ( nId, aRIdWin, rBind ),
@@ -100,7 +100,7 @@ PopupWindowTbx::PopupWindowTbx( USHORT nId, ToolBoxAlign eAlign,
 
     ToolBox& rBox = aTbx.GetToolBox();
     rBox.SetAlign( eAlign );
-    if( eAlign == BOXALIGN_LEFT )
+    if( eAlign == WINDOWALIGN_LEFT )
         SetText( String() );
 
     Size aSize = aTbx.CalcWindowSizePixel();
@@ -236,7 +236,7 @@ SfxPopupWindow* TbxControls::CreatePopupWindow()
         PopupWindowTbx *pWin =
             new PopupWindowTbx( GetId(),
                                 GetToolBox().IsHorizontal() ?
-                                    BOXALIGN_LEFT : BOXALIGN_TOP,
+                                    WINDOWALIGN_LEFT : WINDOWALIGN_TOP,
                                 IDEResId( RID_TBXCONTROLS ),
                                 IDEResId( RID_TOOLBOX ),
                                 GetBindings() );
