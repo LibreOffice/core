@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:20:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,11 @@
 #endif
 
 // -----------------------------------------------------------------------------
-namespace drafts {
+
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
     class XLayerHandler;
 } } } } }
-}
+
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -166,7 +166,7 @@ namespace configmgr
         };
 
 // -----------------------------------------------------------------------------
-        typedef WriterService< drafts::com::sun::star::configuration::backend::XLayerHandler >
+        typedef WriterService< ::com::sun::star::configuration::backend::XLayerHandler >
             LayerWriterService_Base;
 // -----------------------------------------------------------------------------
     } // namespace xml
