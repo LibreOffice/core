@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 11:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ namespace dbaui
         ORelationTableConnectionData*   m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
     protected:
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
-        virtual void KeyInput( const KeyEvent& rEvt );
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
 
     public:
