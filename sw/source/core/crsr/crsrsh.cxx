@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:00:41 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@
 #endif
 
 #include <globals.hrc>
+
+#include <comcore.hrc>
 
 using namespace com::sun::star;
 using namespace com::sun::star::util;
