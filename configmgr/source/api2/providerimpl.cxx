@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 14:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,14 +214,12 @@ namespace configmgr
             m_xDefaultOptions->setDefaultUser(sDefaultUser);
         }
 
-#if 0
         if  (_rSettings.hasLocale())
         {
             bIntrinsicNeedProfile = false;
             rtl::OUString sDefaultLocale = _rSettings.getLocale();
             m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
         }
-#endif
 
     // call the template method
         this->initFromSettings(_rSettings, rNeedProfile);
