@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-07 13:06:39 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,9 +910,11 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             if ( pBC2 )
                 pCell1->SetBroadcaster( pBC2 );
             ScAddress aPos( nCol, nRow1, nTab );
-            pDocument->Broadcast( SC_HINT_DATACHANGED, aPos, pCell2 );
-            aPos.SetRow( nRow2 );
-            pDocument->Broadcast( SC_HINT_DATACHANGED, aPos, pCell1 );
+            ScHint aHint( SC_HINT_DATACHANGED, aPos, pCell2 );
+            pDocument->Broadcast( aHint );
+            aHint.GetAddress().SetRow( nRow2 );
+            aHint.SetCell( pCell1 );
+            pDocument->Broadcast( aHint );
         }
         else if ( pCell1 )
         {
@@ -931,8 +933,8 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             }
             // Einfuegen
             Insert( nRow2, pCell1 );
-            pDocument->Broadcast( SC_HINT_DATACHANGED,
-                ScAddress( nCol, nRow1, nTab ), pNew );
+            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                ScAddress( nCol, nRow1, nTab ), pNew ) );
         }
         else    // pCell2
         {
@@ -951,8 +953,8 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             }
             // Einfuegen
             Insert( nRow1, pCell2 );
-            pDocument->Broadcast( SC_HINT_DATACHANGED,
-                ScAddress( nCol, nRow2, nTab ), pNew );
+            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                ScAddress( nCol, nRow2, nTab ), pNew ) );
         }
 
         return ;
@@ -1072,9 +1074,9 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
     //  FormulaTrack-Listen landet, ohne die Broadcaster beruecksichtigt zu haben
     //  (erst hier, wenn beide Zellen eingefuegt sind)
     if ( pBC1 && eType2 == CELLTYPE_FORMULA )
-        pDocument->Broadcast( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab ), pNew1 );
+        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab ), pNew1 ) );
     if ( pBC2 && eType1 == CELLTYPE_FORMULA )
-        pDocument->Broadcast( SC_HINT_DATACHANGED, ScAddress( nCol, nRow2, nTab ), pNew2 );
+        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow2, nTab ), pNew2 ) );
 }
 
 
@@ -1221,31 +1223,59 @@ void ScColumn::InsertRow( USHORT nStartRow, USHORT nSize )
 
     USHORT nNewCount = nCount;
     BOOL bCountChanged = FALSE;
-    USHORT nLastBroadcast = MAXROW+1;
     ScAddress aAdr( nCol, 0, nTab );
-
-    for ( ; i < nCount; i++)
+    ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
+    ScAddress& rAddress = aHint.GetAddress();
+    // for sparse occupation use single broadcasts, not ranges
+    BOOL bSingleBroadcasts = (((pItems[nCount-1].nRow - pItems[i].nRow) /
+                (nCount - i)) > 1);
+    if ( bSingleBroadcasts )
     {
-        USHORT nOldRow = pItems[i].nRow;
-        // #43940# Aenderung Quelle broadcasten
-        if ( nLastBroadcast != nOldRow )
-        {   // direkt aufeinanderfolgende nicht doppelt broadcasten
-            aAdr.SetRow( nOldRow );
-            pDocument->Broadcast( SC_HINT_DATACHANGED, aAdr, NULL );    // nur Areas
-        }
-        USHORT nNewRow = (pItems[i].nRow += nSize);
-        // #43940# Aenderung Ziel broadcasten
-        aAdr.SetRow( nNewRow );
-        pDocument->Broadcast( SC_HINT_DATACHANGED, aAdr, NULL );    // nur Areas
-        nLastBroadcast = nNewRow;
-        ScBaseCell* pCell = pItems[i].pCell;
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-            ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
-        if ( nNewRow > MAXROW && !bCountChanged )
+        USHORT nLastBroadcast = MAXROW+1;
+        for ( ; i < nCount; i++)
         {
-            nNewCount = i;
-            bCountChanged = TRUE;
+            USHORT nOldRow = pItems[i].nRow;
+            // #43940# Aenderung Quelle broadcasten
+            if ( nLastBroadcast != nOldRow )
+            {   // direkt aufeinanderfolgende nicht doppelt broadcasten
+                rAddress.SetRow( nOldRow );
+                pDocument->AreaBroadcast( aHint );
+            }
+            USHORT nNewRow = (pItems[i].nRow += nSize);
+            // #43940# Aenderung Ziel broadcasten
+            rAddress.SetRow( nNewRow );
+            pDocument->AreaBroadcast( aHint );
+            nLastBroadcast = nNewRow;
+            ScBaseCell* pCell = pItems[i].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
+            if ( nNewRow > MAXROW && !bCountChanged )
+            {
+                nNewCount = i;
+                bCountChanged = TRUE;
+            }
         }
+    }
+    else
+    {
+        rAddress.SetRow( pItems[i].nRow );
+        ScRange aRange( rAddress );
+        for ( ; i < nCount; i++)
+        {
+            USHORT nNewRow = (pItems[i].nRow += nSize);
+            ScBaseCell* pCell = pItems[i].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
+            if ( nNewRow > MAXROW && !bCountChanged )
+            {
+                nNewCount = i;
+                bCountChanged = TRUE;
+                aRange.aEnd.SetRow( MAXROW );
+            }
+        }
+        if ( !bCountChanged )
+            aRange.aEnd.SetRow( pItems[nCount-1].nRow );
+        pDocument->AreaBroadcastInRange( aRange, aHint );
     }
 
     if (bCountChanged)
@@ -1608,9 +1638,14 @@ void ScColumn::MoveTo(USHORT nStartRow, USHORT nEndRow, ScColumn& rCol)
             USHORT nEndPos = nStartPos+nMoveCount-1;
             for (i=nStartPos; i<=nEndPos; i++)
                 pItems[i].pCell = pNoteCell;            // nicht auf die verschobenen zugreifen
+            ScAddress aAdr( nCol, 0, nTab );
+            ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
+            ScAddress& rAddress = aHint.GetAddress();
             for (i=nStartPos; i<=nEndPos; i++)
-                pDocument->Broadcast( SC_HINT_DYING,
-                    ScAddress( nCol, pItems[i].nRow, nTab ), NULL );    // nur Areas
+            {
+                rAddress.SetRow( pItems[i].nRow );
+                pDocument->AreaBroadcast( aHint );
+            }
             delete pNoteCell;
 
             nCount -= nMoveCount;
@@ -1643,21 +1678,42 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHO
         }
         else
         {
-            USHORT i, nRow;
+            // #90279# For performance reasons two loop bodies instead of
+            // testing for update mode in each iteration.
+            // Anyways, this is still a bottleneck on large arrays with few
+            // formulas cells.
             if ( eUpdateRefMode == URM_COPY )
-                Search( nRow1, i );
-            else
-                i = 0;
-            for ( ; i < nCount; i++ )
             {
-                nRow = pItems[i].nRow;
-                if ( eUpdateRefMode == URM_COPY && nRow > nRow2 )
-                    break;
-                ScFormulaCell* pCell = (ScFormulaCell*) pItems[i].pCell;
-                if( pCell->GetCellType() == CELLTYPE_FORMULA)
-                    pCell->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
-                if ( nRow != pItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
+                USHORT i;
+                Search( nRow1, i );
+                for ( ; i < nCount; i++ )
+                {
+                    USHORT nRow = pItems[i].nRow;
+                    if ( nRow > nRow2 )
+                        break;
+                    ScBaseCell* pCell = pItems[i].pCell;
+                    if( pCell->GetCellType() == CELLTYPE_FORMULA)
+                    {
+                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        if ( nRow != pItems[i].nRow )
+                            Search( nRow, i );  // Listener removed/inserted?
+                    }
+                }
+            }
+            else
+            {
+                USHORT i = 0;
+                for ( ; i < nCount; i++ )
+                {
+                    ScBaseCell* pCell = pItems[i].pCell;
+                    if( pCell->GetCellType() == CELLTYPE_FORMULA)
+                    {
+                        USHORT nRow = pItems[i].nRow;
+                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        if ( nRow != pItems[i].nRow )
+                            Search( nRow, i );  // Listener removed/inserted?
+                    }
+                }
             }
         }
     }
@@ -1894,6 +1950,7 @@ void ScColumn::SetDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
     USHORT nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
+    ScHint aHint( SC_HINT_DATACHANGED, aPos, NULL );
     USHORT nRow, nIndex;
     Search( rRange.aStart.Row(), nIndex );
     while ( nIndex < nCount && (nRow = pItems[nIndex].nRow) <= nRow2 )
@@ -1903,8 +1960,9 @@ void ScColumn::SetDirty( const ScRange& rRange )
             ((ScFormulaCell*)pCell)->SetDirty();
         else
         {
-            aPos.SetRow( nRow );
-            pDocument->Broadcast( SC_HINT_DATACHANGED, aPos, pCell );
+            aHint.GetAddress().SetRow( nRow );
+            aHint.SetCell( pCell );
+            pDocument->Broadcast( aHint );
         }
         nIndex++;
     }
@@ -1920,6 +1978,7 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( FALSE );    // no multiple recalculation
     USHORT nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
+    ScHint aHint( SC_HINT_TABLEOPDIRTY, aPos, NULL );
     USHORT nRow, nIndex;
     Search( rRange.aStart.Row(), nIndex );
     while ( nIndex < nCount && (nRow = pItems[nIndex].nRow) <= nRow2 )
@@ -1929,8 +1988,9 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
             ((ScFormulaCell*)pCell)->SetTableOpDirty();
         else
         {
-            aPos.SetRow( nRow );
-            pDocument->Broadcast( SC_HINT_TABLEOPDIRTY, aPos, pCell );
+            aHint.GetAddress().SetRow( nRow );
+            aHint.SetCell( pCell );
+            pDocument->Broadcast( aHint );
         }
         nIndex++;
     }
