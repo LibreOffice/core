@@ -12,6 +12,8 @@ using namespace ::rtl;
 
 int main( int argc, char *argv[] )
 {
+    osl_setCommandArgs (argc, argv);
+
     sal_Int32 nCount = rtl_getAppCommandArgCount();
 
 #if OSL_DEBUG_LEVEL > 1
