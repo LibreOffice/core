@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:49:45 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,6 @@
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
 #   define  NO_PTHREAD_PRIORITY
-#   define  CMD_ARG_PROC_STREAM
-#   define  CMD_ARG_PROC_NAME           "/proc/%u/cmdline"
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 #else
 #   include <shadow.h>
@@ -165,8 +163,6 @@
 #   define  pthread_testcancel()
 #   define  NO_PTHREAD_RTL
 #   define  NO_PTHREAD_PRIORITY
-#   define  CMD_ARG_PROC_STREAM
-#   define  CMD_ARG_PROC_NAME           "/proc/%u/cmdline"
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
 #endif
@@ -199,13 +195,6 @@
 #   define  NO_PTHREAD_PRIORITY
 #     define  NO_PTHREAD_SEMAPHORES
 #   define  NO_PTHREAD_RTL
-/* __progname isn't sufficient here. We need the full path as well
- * for e.g. setup and __progname only points to the binary name.
- */
-extern struct ps_strings *__ps_strings;
-#   define  CMD_ARG_PRG         *(__ps_strings->ps_argvstr)
-#   define  CMD_ARG_PRG_IS_DEFINED
-#   define  CMD_ARG_ENV         environ
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
 
@@ -239,12 +228,6 @@ extern struct ps_strings *__ps_strings;
 #   endif
 #endif
 #   define  NO_PTHREAD_RTL
-/* __progname isn't sufficient here. We need the full path as well
- * for e.g. setup and __progname only points to the binary name.
- */
-#   define  CMD_ARG_PRG_IS_DEFINED
-#   define  CMD_ARG_PRG         *((struct ps_strings *)PS_STRINGS)->ps_argvstr
-#   define  CMD_ARG_ENV         environ
 #endif
 
 #ifdef SCO
@@ -275,7 +258,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  PATH_MAX                    _POSIX_PATH_MAX
 #   define  S_ISSOCK                    S_ISFIFO
 #   define  PTHREAD_SIGACTION           pthread_sigaction
-#   define  CMD_ARG_ENV                 _environ
 #   define  STAT_PARENT                 stat
 #endif
 
@@ -300,7 +282,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  PTR_SIZE_T(s)               ((size_t *)&(s))
 #   define  NO_PTHREAD_SEMAPHORES
 #   define  NO_DL_FUNCTIONS
-#   define  CMD_ARG_PS                  "ps -p %u -o args=\"\""
 #endif
 
 #ifdef HPUX
@@ -327,8 +308,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  NO_PTHREAD_PRIORITY
 #   define  NO_PTHREAD_SEMAPHORES
 #   define  NO_DL_FUNCTIONS
-#   define  CMD_ARG_PRG                 $ARGV
-#   define  CMD_ARG_ENV                 environ
 #   undef   sigaction
 #   define  PTHREAD_SIGACTION           cma_sigaction
 #endif
@@ -356,7 +335,6 @@ extern unsigned int nanosleep(unsigned int);
 #   endif
 #   define  SA_FAMILY_DECL \
         union { struct { short sa_family2; } sa_generic; } sa_union
-#   define  CMD_ARG_ENV _environ
 #   define  PTR_SIZE_T(s)               ((int *)&(s))
 #   define  NO_PTHREAD_PRIORITY
 #   include <dlfcn.h>
@@ -379,11 +357,6 @@ extern char *strdup(const char *);
 #   define  IOCHANNEL_TRANSFER_BSD
 #   define  LIBPATH "LD_LIBRARY_PATH"
 #   define  PTR_SIZE_T(s)               ((int *)&(s))
-#   define  CMD_ARG_PROC_IOCTL          PIOCPSINFO
-#   define  CMD_ARG_PROC_NAME           "/proc/%u"
-#   define  CMD_ARG_PROC_TYPE           prpsinfo_t
-#   define  CMD_ARG_PROC_ARGC(t)        t.pr_argc
-#   define  CMD_ARG_PROC_ARGV(t)        t.pr_argv
 #endif
 
 #ifdef MACOSX
@@ -442,14 +415,6 @@ void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion,
 #else
 #   error undetermined endianess
 #endif
-#endif
-
-#ifndef CMD_ARG_MAX
-#   define CMD_ARG_MAX                  4096
-#endif
-
-#ifndef ENV_VAR_MAX
-#   define ENV_VAR_MAX                  4096
 #endif
 
 #ifndef PTR_SIZE_T
