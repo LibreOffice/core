@@ -690,6 +690,9 @@ BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 
 BOOL UCBStorageStream::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
+    if ( rName.CompareToAscii("Title") == COMPARE_EQUAL )
+        return FALSE;
+
     try
     {
         if ( pImp->m_pContent )
@@ -1818,6 +1821,9 @@ BOOL UCBStorage::IsStorageFile( SvStream* pFile )
 
 BOOL UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
+    if ( rName.CompareToAscii("Title") == COMPARE_EQUAL )
+        return FALSE;
+
     try
     {
         if ( pImp->m_pContent )
