@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 15:09:44 $
+ *  last change: $Author: cl $ $Date: 2000-11-21 17:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,13 +969,7 @@ void SAL_CALL SvxShape::removeEventListener( const Reference< lang::XEventListen
 Reference< beans::XPropertySetInfo > SAL_CALL
     SvxShape::getPropertySetInfo() throw(uno::RuntimeException)
 {
-    SfxItemPropertySetInfo aSet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
-
-    Reference< beans::XPropertySetInfo > aRet (
-        new SfxExtItemPropertySetInfo(
-                aPropSet.getPropertyMap(),
-                aSet.getProperties() ) );
-    return aRet;
+    return new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
 }
 
 //----------------------------------------------------------------------
@@ -987,7 +981,7 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& PropertyNa
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
-    SfxItemSet aSet( pModel->GetItemPool(), nWID, nWID );
+    SfxItemSet aSet( pModel->GetItemPool(), (USHORT)nWID, (USHORT)nWID );
     if( !SetFillAttribute( nWID, rName, aSet ) )
         return sal_False;
 
@@ -1004,12 +998,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     const SfxItemPool* pPool = rSet.GetPool();
 
     const String aSearchName( rName );
-    const USHORT nCount = pPool->GetItemCount(nWID);
+    const USHORT nCount = pPool->GetItemCount((USHORT)nWID);
     const NameOrIndex *pItem;
 
     for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)pPool->GetItem(nWID, nSurrogate);
+        pItem = (NameOrIndex*)pPool->GetItem((USHORT)nWID, nSurrogate);
         if( pItem && ( pItem->GetName() == aSearchName ) )
         {
             rSet.Put( *pItem );
@@ -1034,41 +1028,41 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
     if( pObj && pModel )
     {
-        if(pMap && pMap->nWID)
-        {
-            // check for readonly
-            if( ( pMap->nFlags & ::com::sun::star::beans::PropertyAttribute::READONLY ) != 0 )
-                throw beans::UnknownPropertyException();
+        if( pMap == NULL || ( pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
+            throw beans::UnknownPropertyException();
 
-            switch( pMap->nWID )
+        switch( pMap->nWID )
+        {
+        case OWN_ATTR_FRAMERECT:
+        {
+            awt::Rectangle aUnoRect;
+            if(rVal >>= aUnoRect)
             {
-            case OWN_ATTR_FRAMERECT:
-            {
-                awt::Rectangle aUnoRect;
-                if(rVal >>= aUnoRect)
-                {
-                    Point aTopLeft( aUnoRect.X, aUnoRect.Y );
-                    Size aObjSize( aUnoRect.Width, aUnoRect.Height );
-                    ForceMetricToItemPoolMetric(aTopLeft);
-                    ForceMetricToItemPoolMetric(aObjSize);
-                    Rectangle aRect;
-                    aRect.SetPos(aTopLeft);
-                    aRect.SetSize(aObjSize);
-                    pObj->SetSnapRect(aRect);
-                    return;
-                }
-                break;
+                Point aTopLeft( aUnoRect.X, aUnoRect.Y );
+                Size aObjSize( aUnoRect.Width, aUnoRect.Height );
+                ForceMetricToItemPoolMetric(aTopLeft);
+                ForceMetricToItemPoolMetric(aObjSize);
+                Rectangle aRect;
+                aRect.SetPos(aTopLeft);
+                aRect.SetSize(aObjSize);
+                pObj->SetSnapRect(aRect);
+                return;
             }
-            case OWN_ATTR_CLSID:
+            break;
+        }
+        case OWN_ATTR_CLSID:
+        {
+            OUString aCLSID;
+            if( rVal >>= aCLSID )
             {
-                OUString aCLSID;
-                if( rVal >>= aCLSID )
+                // init a ole object with a global name
+                if( pObj && pObj->ISA(SdrOle2Obj))
                 {
-                    // init a ole object with a global name
-                    if( pObj && pObj->ISA(SdrOle2Obj))
+                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+                    if (!rIPRef.Is() )
                     {
-                        const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-                        if (!rIPRef.Is() )
+                        SvGlobalName aClassName;
+                        if( aClassName.MakeId( aCLSID ) )
                         {
                             SvGlobalName aClassName;
                             if( aClassName.MakeId( aCLSID ) )
@@ -1132,170 +1126,154 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                         }
                     }
                 }
-                break;
             }
-            case OWN_ATTR_EDGE_START_OBJ:
-            case OWN_ATTR_EDGE_END_OBJ:
-            case OWN_ATTR_GLUEID_HEAD:
-            case OWN_ATTR_GLUEID_TAIL:
+            break;
+        }
+        case OWN_ATTR_EDGE_START_OBJ:
+        case OWN_ATTR_EDGE_END_OBJ:
+        case OWN_ATTR_GLUEID_HEAD:
+        case OWN_ATTR_GLUEID_TAIL:
+        {
+            SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
+            if(pEdgeObj)
             {
-                SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
-                if(pEdgeObj)
+                switch(pMap->nWID)
                 {
-                    switch(pMap->nWID)
+                case OWN_ATTR_EDGE_START_OBJ:
+                case OWN_ATTR_EDGE_END_OBJ:
                     {
-                    case OWN_ATTR_EDGE_START_OBJ:
-                    case OWN_ATTR_EDGE_END_OBJ:
+                        Reference< drawing::XShape > xShape;
+                        if( rVal >>= xShape )
                         {
-                            Reference< drawing::XShape > xShape;
-                            if( rVal >>= xShape )
+                            SdrObject* pNode = GetSdrObjectFromXShape( xShape );
+                            if( pNode )
                             {
-                                SdrObject* pNode = GetSdrObjectFromXShape( xShape );
-                                if( pNode )
-                                {
-                                    pEdgeObj->ConnectToNode( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, pNode );
-                                    pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, -1 );
-                                    return;
-                                }
-                            }
-                            break;
-                        }
-
-                    case OWN_ATTR_GLUEID_HEAD:
-                    case OWN_ATTR_GLUEID_TAIL:
-                        {
-                            sal_Int32 nId;
-                            if( rVal >>= nId )
-                            {
-                                pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD, nId );
+                                pEdgeObj->ConnectToNode( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, pNode );
+                                pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, -1 );
                                 return;
                             }
                         }
+                        break;
+                    }
+
+                case OWN_ATTR_GLUEID_HEAD:
+                case OWN_ATTR_GLUEID_TAIL:
+                    {
+                        sal_Int32 nId;
+                        if( rVal >>= nId )
+                        {
+                            pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD, nId );
+                            return;
+                        }
                     }
                 }
+            }
+            break;
+        }
+        case XATTR_FILLBITMAP:
+        case XATTR_FILLGRADIENT:
+        case XATTR_FILLHATCH:
+        case XATTR_FILLFLOATTRANSPARENCE:
+        case XATTR_LINEEND:
+        case XATTR_LINESTART:
+        // case XATTR_LINEDASH:
+        {
+            if( pMap->nMemberId == MID_NAME )
+            {
+                OUString aStr;
+                if( rVal >>= aStr )
+                    if( SetFillAttribute( pMap->nWID, aStr ) )
+                        return;
                 break;
             }
-            case XATTR_FILLBITMAP:
-            case XATTR_FILLGRADIENT:
-            case XATTR_FILLHATCH:
-            case XATTR_FILLFLOATTRANSPARENCE:
-            case XATTR_LINEEND:
-            case XATTR_LINESTART:
-            // case XATTR_LINEDASH:
-            {
-                if( pMap->nMemberId == MID_NAME )
-                {
-                    OUString aStr;
-                    if( rVal >>= aStr )
-                        if( SetFillAttribute( pMap->nWID, aStr ) )
-                            return;
-                    break;
-                }
 
-                // warning, this fall-through is intended
-            }
-            default:
-            {
-                SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
+            // warning, this fall-through is intended
+        }
+        default:
+        {
+            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
-                aSet.Put(pObj->GetItemSet());
+            aSet.Put(pObj->GetItemSet());
 
-                if( SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rVal, aSet ))
-                    return;
+            if( SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rVal, aSet ))
+                return;
 
-                if(!aSet.Count())
+            if(!aSet.Count())
+            {
+                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
                 {
-                    if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                    {
-                        // Not-Persistant Attribute, hole diese extra
-                        pObj->TakeNotPersistAttr(aSet, sal_False);
-                    }
+                    // Not-Persistant Attribute, hole diese extra
+                    pObj->TakeNotPersistAttr(aSet, sal_False);
                 }
+            }
 
-                if(!aSet.Count())
+            if(!aSet.Count())
+            {
+                if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
                 {
-                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-                    {
-                        // 3D-Attribut, eigenen Default
-                        // Diese sollten IMMER gesetzt sein, da TakeAttributes an
-                        // 3D-Objekten alle Items erzeugt und eintraegt
-                        DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
-                    }
-                    else
-                    {
-                        // Default aus ItemPool holen
-                        if(pModel->GetItemPool().IsWhich(pMap->nWID))
-                            aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
-                    }
+                    // 3D-Attribut, eigenen Default
+                    // Diese sollten IMMER gesetzt sein, da TakeAttributes an
+                    // 3D-Objekten alle Items erzeugt und eintraegt
+                    DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
                 }
-
-                if(aSet.Count())
+                else
                 {
-                    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(pMap->nWID);
-                    if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
-                    {
-                        // Umrechnen auf Metrik des ItemPools in 100stel mm
-                        // vorkommende Typen: sal_Int32, sal_uInt32, sal_uInt16
-                        uno::Any aVal( rVal );
+                    // Default aus ItemPool holen
+                    if(pModel->GetItemPool().IsWhich(pMap->nWID))
+                        aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                }
+            }
 
-                        switch(eMapUnit)
+            if(aSet.Count())
+            {
+                SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(pMap->nWID);
+                if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+                {
+                    // Umrechnen auf Metrik des ItemPools in 100stel mm
+                    // vorkommende Typen: sal_Int32, sal_uInt32, sal_uInt16
+                    uno::Any aVal( rVal );
+
+                    switch(eMapUnit)
+                    {
+                        case SFX_MAPUNIT_TWIP :
                         {
-                            case SFX_MAPUNIT_TWIP :
-                            {
-                                if( rVal.getValueType() == ::getCppuType(( const sal_Int32 *)0))
-                                    aVal <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)rVal.getValue()));
-                                else if( rVal.getValueType() == ::getCppuType(( const sal_uInt32*)0))
-                                    aVal <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rVal.getValue()));
-                                else if( rVal.getValueType() == ::getCppuType(( const sal_uInt16*)0))
-                                    aVal <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)rVal.getValue()));
-                                else
-                                    DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-                                break;
-                            }
-                            default:
-                            {
+                            if( rVal.getValueType() == ::getCppuType(( const sal_Int32 *)0))
+                                aVal <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)rVal.getValue()));
+                            else if( rVal.getValueType() == ::getCppuType(( const sal_uInt32*)0))
+                                aVal <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rVal.getValue()));
+                            else if( rVal.getValueType() == ::getCppuType(( const sal_uInt16*)0))
+                                aVal <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)rVal.getValue()));
+                            else
                                 DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-                            }
+                            break;
                         }
-                        aPropSet.setPropertyValue( pMap, aVal, aSet );
+                        default:
+                        {
+                            DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
+                        }
                     }
-                    else
-                    {
-                        aPropSet.setPropertyValue( pMap, rVal, aSet );
-                    }
+                    aPropSet.setPropertyValue( pMap, aVal, aSet );
+                }
+                else
+                {
+                    aPropSet.setPropertyValue( pMap, rVal, aSet );
+                }
 
-                    if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                    {
-                        // Not-Persist Attribute extra setzen
-                        pObj->ApplyNotPersistAttr( aSet );
-                    }
-                    else
-                    {
+                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+                {
+                    // Not-Persist Attribute extra setzen
+                    pObj->ApplyNotPersistAttr( aSet );
+                }
+                else
+                {
 //-/                        pObj->SetAttributes( aSet, sal_False );
 //-/                        SdrBroadcastItemChange aItemChange(*pObj);
-                        pObj->SetItemSetAndBroadcast(aSet);
+                    pObj->SetItemSetAndBroadcast(aSet);
 //-/                        pObj->BroadcastItemChange(aItemChange);
-                    }
                 }
-                return;
             }
-            }
-
-            throw lang::IllegalArgumentException();
+            return;
         }
-        else
-        {
-            Reference< beans::XPropertySet > xPropertySet;
-            if(!xTextAgg.is() ) { Reference< ::com::sun::star::text::XText > xText( (OWeakObject*)this, UNO_QUERY ); }
-            if(!xTextAgg.is() )
-            {
-                uno::Any aAny(
-                    xTextAgg->queryInterface( ::getCppuType((const Reference< beans::XPropertySet >*)0)));
-                aAny >>= xPropertySet;
-            }
-
-            if( xPropertySet.is() )
-                xPropertySet->setPropertyValue( rPropertyName, rVal );
         }
 
         pModel->SetChanged();
@@ -1307,7 +1285,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         // properties will be set when the sdr object is
         // created
 
-//      if(pMap && pMap->nWID)
+        if(pMap && pMap->nWID)
 // Fixme: We should throw a UnknownPropertyException here.
 //        But since this class is aggregated from classes
 //        that support additional properties that we don't
@@ -1330,241 +1308,235 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
     uno::Any aAny;
     if( pObj && pModel )
     {
-        if(pMap && pMap->nWID)
+        if(pMap == NULL )
+            throw beans::UnknownPropertyException();
+
+        switch( pMap->nWID )
         {
-            switch( pMap->nWID )
-            {
-            case OWN_ATTR_BITMAP:
-            {
-                aAny = GetBitmap();
-                if(!aAny.hasValue())
-                    throw uno::RuntimeException();
+        case OWN_ATTR_BITMAP:
+        {
+            aAny = GetBitmap();
+            if(!aAny.hasValue())
+                throw uno::RuntimeException();
 
-                break;
-            }
-            case OWN_ATTR_ISFONTWORK:
-            {
-                sal_Bool bIsFontWork = pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsFontwork();
-                aAny.setValue( &bIsFontWork, ::getBooleanCppuType() );
-                break;
-            }
-            case OWN_ATTR_FRAMERECT:
-            {
-                Rectangle aRect( pObj->GetSnapRect() );
-                Point aTopLeft( aRect.TopLeft() );
-                Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
-                ForceMetricTo100th_mm(aTopLeft);
-                ForceMetricTo100th_mm(aObjSize);
-                ::com::sun::star::awt::Rectangle aUnoRect(
-                    aTopLeft.X(), aTopLeft.Y(),
-                    aObjSize.getWidth(), aObjSize.getHeight() );
-                aAny <<= aUnoRect;
-                break;
-            }
-            case OWN_ATTR_BOUNDRECT:
-            {
-                Rectangle aRect( pObj->GetBoundRect() );
-                Point aTopLeft( aRect.TopLeft() );
-                Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
-                ForceMetricTo100th_mm(aTopLeft);
-                ForceMetricTo100th_mm(aObjSize);
-                ::com::sun::star::awt::Rectangle aUnoRect(
-                    aTopLeft.X(), aTopLeft.Y(),
-                    aObjSize.getWidth(), aObjSize.getHeight() );
-                aAny <<= aUnoRect;
-                break;
-            }
-            case OWN_ATTR_LDNAME:
-            {
-                OUString aName( pObj->GetName() );
-                aAny <<= aName;
-                break;
-            }
-            case OWN_ATTR_LDBITMAP:
-            {
-                sal_uInt16 nId;
-                if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
-                {
-                    nId = RID_UNODRAW_OLE2;
-                }
-                else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
-                {
-                    nId = RID_UNODRAW_GRAPHICS;
-                }
-                else
-                {
-                    nId = RID_UNODRAW_OBJECTS;
-                }
-
-                BitmapEx aBmp( SVX_RES(nId) );
-                Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
-
-                aAny <<= xBmp;
-                break;
-            }
-            case OWN_ATTR_OLESIZE:
-            {
-                awt::Size aSize;
-                if( pObj->ISA(SdrOle2Obj))
-                {
-                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
-                    if( xInplace.Is() )
-                    {
-                        Size aTmpSize( xInplace->GetVisArea().GetSize() );
-                        aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
-                    }
-                }
-                aAny <<= aSize;
-                break;
-            }
-            case OWN_ATTR_OLEMODEL:
-            {
-                uno::Reference< frame::XModel > xModel;
-                if( pObj->ISA(SdrOle2Obj))
-                {
-                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    xModel = ((SdrOle2Obj*)pObj)->getXModel();
-                }
-                aAny <<= xModel;
-                break;
-            }
-            case OWN_ATTR_MIRRORED:
-            {
-                sal_Bool bMirror = sal_False;
-                if( pObj && pObj->ISA(SdrGrafObj) )
-                    bMirror = ((SdrGrafObj*)pObj)->IsMirrored();
-
-                return uno::Any( &bMirror, ::getCppuBooleanType() );
-            }
-            case OWN_ATTR_CLSID:
-            {
-                OUString aCLSID;
-                if( pObj && pObj->ISA(SdrOle2Obj))
-                {
-                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-                    if (rIPRef.Is() )
-                    {
-                        const SvGlobalName &rClassName = rIPRef->GetClassName();
-                        aCLSID = rClassName.GetHexName();
-                    }
-                }
-                aAny <<= aCLSID;
-                break;
-            }
-            case OWN_ATTR_METAFILE:
-            {
-                if( pObj->ISA(SdrOle2Obj))
-                {
-                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-
-                    if(aObj.HasGDIMetaFile() && aObj.GetGDIMetaFile())
-                    {
-                        SvMemoryStream aDestStrm( 65535, 65535 );
-
-                        ConvertGDIMetaFileToWMF( *aObj.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
-                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
-                        aAny <<= aSeq;
-                    }
-                }
-                else
-                {
-                    aAny = GetBitmap( sal_True );
-                }
-                break;
-            }
-            case OWN_ATTR_EDGE_START_OBJ:
-            case OWN_ATTR_EDGE_START_POS:
-            case OWN_ATTR_EDGE_END_POS:
-            case OWN_ATTR_EDGE_END_OBJ:
-            case OWN_ATTR_GLUEID_HEAD:
-            case OWN_ATTR_GLUEID_TAIL:
-            {
-                SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
-                if(pEdgeObj)
-                {
-                    switch(pMap->nWID)
-                    {
-                    case OWN_ATTR_EDGE_START_OBJ:
-                    case OWN_ATTR_EDGE_END_OBJ:
-                        {
-                            SdrObject* pNode = pEdgeObj->GetConnectedNode(pMap->nWID == OWN_ATTR_EDGE_START_OBJ);
-                            if(pNode)
-                            {
-                                Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
-                                if(xShape.is())
-                                    aAny <<= xShape;
-
-                            }
-                            break;
-                        }
-
-                    case OWN_ATTR_EDGE_START_POS:
-                    case OWN_ATTR_EDGE_END_POS:
-                        {
-                            Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
-                            awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
-                            aAny <<= aUnoPoint;
-                            break;
-                        }
-                    case OWN_ATTR_GLUEID_HEAD:
-                    case OWN_ATTR_GLUEID_TAIL:
-                        {
-                            aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_TAIL );
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
-            default:
-            {
-                SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
-                aSet.Put(pObj->GetItemSet());
-
-                if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
-                    return aAny;
-
-                if(!aSet.Count())
-                {
-                    if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                    {
-                        // Not-Persistant Attribute, hole diese extra
-                        pObj->TakeNotPersistAttr(aSet, sal_False);
-                    }
-                }
-
-                if(!aSet.Count())
-                {
-                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-                    {
-                        // 3D-Attribut, eigenen Default
-                        // Diese sollten IMMER gesetzt sein, da TakeAttributes an
-                        // 3D-Objekten alle Items erzeugt und eintraegt
-                        DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
-                    }
-                    else
-                    {
-                        // Default aus ItemPool holen
-                        if(pModel->GetItemPool().IsWhich(pMap->nWID))
-                            aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
-                    }
-
-
-
-                }
-
-                if(aSet.Count())
-                    aAny = GetAnyForItem( aSet, pMap );
-            }
-            }
+            break;
         }
-        else
+        case OWN_ATTR_ISFONTWORK:
         {
-            GET_TEXT_INTERFACE( beans::XPropertySet, xPropertySet );
-            if( xPropertySet.is() )
-                aAny = xPropertySet->getPropertyValue( PropertyName );
+            sal_Bool bIsFontWork = pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsFontwork();
+            aAny.setValue( &bIsFontWork, ::getBooleanCppuType() );
+            break;
+        }
+        case OWN_ATTR_FRAMERECT:
+        {
+            Rectangle aRect( pObj->GetSnapRect() );
+            Point aTopLeft( aRect.TopLeft() );
+            Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
+            ForceMetricTo100th_mm(aTopLeft);
+            ForceMetricTo100th_mm(aObjSize);
+            ::com::sun::star::awt::Rectangle aUnoRect(
+                aTopLeft.X(), aTopLeft.Y(),
+                aObjSize.getWidth(), aObjSize.getHeight() );
+            aAny <<= aUnoRect;
+            break;
+        }
+        case OWN_ATTR_BOUNDRECT:
+        {
+            Rectangle aRect( pObj->GetBoundRect() );
+            Point aTopLeft( aRect.TopLeft() );
+            Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
+            ForceMetricTo100th_mm(aTopLeft);
+            ForceMetricTo100th_mm(aObjSize);
+            ::com::sun::star::awt::Rectangle aUnoRect(
+                aTopLeft.X(), aTopLeft.Y(),
+                aObjSize.getWidth(), aObjSize.getHeight() );
+            aAny <<= aUnoRect;
+            break;
+        }
+        case OWN_ATTR_LDNAME:
+        {
+            OUString aName( pObj->GetName() );
+            aAny <<= aName;
+            break;
+        }
+        case OWN_ATTR_LDBITMAP:
+        {
+            sal_uInt16 nId;
+            if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
+            {
+                nId = RID_UNODRAW_OLE2;
+            }
+            else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
+            {
+                nId = RID_UNODRAW_GRAPHICS;
+            }
+            else
+            {
+                nId = RID_UNODRAW_OBJECTS;
+            }
+
+            BitmapEx aBmp( SVX_RES(nId) );
+            Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
+
+            aAny <<= xBmp;
+            break;
+        }
+        case OWN_ATTR_OLESIZE:
+        {
+            awt::Size aSize;
+            if( pObj->ISA(SdrOle2Obj))
+            {
+                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+                const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
+                if( xInplace.Is() )
+                {
+                    Size aTmpSize( xInplace->GetVisArea().GetSize() );
+                    aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                }
+            }
+            aAny <<= aSize;
+            break;
+        }
+        case OWN_ATTR_OLEMODEL:
+        {
+            uno::Reference< frame::XModel > xModel;
+            if( pObj->ISA(SdrOle2Obj))
+            {
+                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+                xModel = ((SdrOle2Obj*)pObj)->getXModel();
+            }
+            aAny <<= xModel;
+            break;
+        }
+        case OWN_ATTR_MIRRORED:
+        {
+            sal_Bool bMirror = sal_False;
+            if( pObj && pObj->ISA(SdrGrafObj) )
+                bMirror = ((SdrGrafObj*)pObj)->IsMirrored();
+
+            return uno::Any( &bMirror, ::getCppuBooleanType() );
+        }
+        case OWN_ATTR_CLSID:
+        {
+            OUString aCLSID;
+            if( pObj && pObj->ISA(SdrOle2Obj))
+            {
+                const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+                if (rIPRef.Is() )
+                {
+                    const SvGlobalName &rClassName = rIPRef->GetClassName();
+                    aCLSID = rClassName.GetHexName();
+                }
+            }
+            aAny <<= aCLSID;
+            break;
+        }
+        case OWN_ATTR_METAFILE:
+        {
+            if( pObj->ISA(SdrOle2Obj))
+            {
+                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+
+                if(aObj.HasGDIMetaFile() && aObj.GetGDIMetaFile())
+                {
+                    SvMemoryStream aDestStrm( 65535, 65535 );
+
+                    ConvertGDIMetaFileToWMF( *aObj.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
+                    uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                    aAny <<= aSeq;
+                }
+            }
+            else
+            {
+                aAny = GetBitmap( sal_True );
+            }
+            break;
+        }
+        case OWN_ATTR_EDGE_START_OBJ:
+        case OWN_ATTR_EDGE_START_POS:
+        case OWN_ATTR_EDGE_END_POS:
+        case OWN_ATTR_EDGE_END_OBJ:
+        case OWN_ATTR_GLUEID_HEAD:
+        case OWN_ATTR_GLUEID_TAIL:
+        {
+            SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
+            if(pEdgeObj)
+            {
+                switch(pMap->nWID)
+                {
+                case OWN_ATTR_EDGE_START_OBJ:
+                case OWN_ATTR_EDGE_END_OBJ:
+                    {
+                        SdrObject* pNode = pEdgeObj->GetConnectedNode(pMap->nWID == OWN_ATTR_EDGE_START_OBJ);
+                        if(pNode)
+                        {
+                            Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
+                            if(xShape.is())
+                                aAny <<= xShape;
+
+                        }
+                        break;
+                    }
+
+                case OWN_ATTR_EDGE_START_POS:
+                case OWN_ATTR_EDGE_END_POS:
+                    {
+                        Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
+                        awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
+                        aAny <<= aUnoPoint;
+                        break;
+                    }
+                case OWN_ATTR_GLUEID_HEAD:
+                case OWN_ATTR_GLUEID_TAIL:
+                    {
+                        aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_TAIL );
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        default:
+        {
+            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
+//-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
+            aSet.Put(pObj->GetItemSet());
+
+            if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
+                return aAny;
+
+            if(!aSet.Count())
+            {
+                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+                {
+                    // Not-Persistant Attribute, hole diese extra
+                    pObj->TakeNotPersistAttr(aSet, sal_False);
+                }
+            }
+
+            if(!aSet.Count())
+            {
+                if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+                {
+                    // 3D-Attribut, eigenen Default
+                    // Diese sollten IMMER gesetzt sein, da TakeAttributes an
+                    // 3D-Objekten alle Items erzeugt und eintraegt
+                    DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
+                }
+                else
+                {
+                    // Default aus ItemPool holen
+                    if(pModel->GetItemPool().IsWhich(pMap->nWID))
+                        aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                }
+
+
+
+            }
+
+            if(aSet.Count())
+                aAny = GetAnyForItem( aSet, pMap );
+        }
         }
     }
     else
@@ -1572,7 +1544,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
 // Fixme: we should return default values for OWN_ATTR !
 
-//      if(pMap && pMap->nWID)
+        if(pMap && pMap->nWID)
 //      FixMe: see setPropertyValue
             aAny = aPropSet.getPropertyValue( pMap );
 
@@ -1689,53 +1661,42 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pObj == NULL )
-        throw uno::RuntimeException();
+    if( pObj == NULL || pMap == NULL )
+        throw beans::UnknownPropertyException();
 
-    if(pMap && pMap->nWID)
+    if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
     {
-        if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
-        {
-            return beans::PropertyState_DIRECT_VALUE;
-        }
-        else
-        {
-            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
-            aSet.Put(pObj->GetItemSet());
-
-            if(!aSet.Count())
-            {
-                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                {
-                    // Not-Persistant Attribute, hole diese extra
-                    pObj->TakeNotPersistAttr(aSet, sal_False);
-                }
-            }
-
-            switch( aSet.GetItemState( pMap->nWID, sal_False ) )
-            {
-            case SFX_ITEM_DONTCARE:
-            case SFX_ITEM_DISABLED:
-                return beans::PropertyState_AMBIGUOUS_VALUE;
-            case SFX_ITEM_READONLY:
-            case SFX_ITEM_SET:
-                return beans::PropertyState_DIRECT_VALUE;
-            case SFX_ITEM_DEFAULT:
-                return beans::PropertyState_DEFAULT_VALUE;
-            case SFX_ITEM_UNKNOWN:
-            default:
-                throw beans::UnknownPropertyException();
-            }
-        }
+        return beans::PropertyState_DIRECT_VALUE;
     }
     else
     {
-        GET_TEXT_INTERFACE( beans::XPropertyState, xPropertyState );
-        if( xPropertyState.is() )
-            return xPropertyState->getPropertyState( PropertyName );
-        else
+        SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
+//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
+        aSet.Put(pObj->GetItemSet());
+
+        if(!aSet.Count())
+        {
+            if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+            {
+                // Not-Persistant Attribute, hole diese extra
+                pObj->TakeNotPersistAttr(aSet, sal_False);
+            }
+        }
+
+        switch( aSet.GetItemState( pMap->nWID, sal_False ) )
+        {
+        case SFX_ITEM_DONTCARE:
+        case SFX_ITEM_DISABLED:
             return beans::PropertyState_AMBIGUOUS_VALUE;
+        case SFX_ITEM_READONLY:
+        case SFX_ITEM_SET:
+            return beans::PropertyState_DIRECT_VALUE;
+        case SFX_ITEM_DEFAULT:
+            return beans::PropertyState_DEFAULT_VALUE;
+        case SFX_ITEM_UNKNOWN:
+        default:
+            throw beans::UnknownPropertyException();
+        }
     }
 }
 
@@ -1761,52 +1722,42 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pObj == NULL || pModel == NULL )
-        throw uno::RuntimeException();
+    if( pObj == NULL || pModel == NULL || pMap == NULL )
+        throw beans::UnknownPropertyException();
 
-    if(pMap && pMap->nWID)
+    if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
     {
-        if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
-        {
-            return;
-        }
-        else
-        {
-            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
-            aSet.Put(pObj->GetItemSet());
-
-            if(!aSet.Count())
-            {
-                if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-                {
-                    // Not-Persistant Attribute, hole diese extra
-                    pObj->TakeNotPersistAttr(aSet, sal_False);
-                }
-            }
-
-            aSet.ClearItem( pMap->nWID );
-
-            if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-            {
-                // Not-Persist Attribute extra setzen
-                pObj->ApplyNotPersistAttr( aSet );
-            }
-            else
-            {
-//-/                pObj->SetAttributes( aSet, sal_False );
-//-/                SdrBroadcastItemChange aItemChange(*pObj);
-                pObj->SetItemSetAndBroadcast(aSet);
-//-/                pObj->BroadcastItemChange(aItemChange);
-            }
-        }
+        return;
     }
     else
     {
-        GET_TEXT_INTERFACE( beans::XPropertyState, xPropertyState );
+        SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
+//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
+        aSet.Put(pObj->GetItemSet());
 
-        if( xPropertyState.is() )
-            xPropertyState->setPropertyToDefault( PropertyName );
+        if(!aSet.Count())
+        {
+            if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+            {
+                // Not-Persistant Attribute, hole diese extra
+                pObj->TakeNotPersistAttr(aSet, sal_False);
+            }
+        }
+
+        aSet.ClearItem( pMap->nWID );
+
+        if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
+        {
+            // Not-Persist Attribute extra setzen
+            pObj->ApplyNotPersistAttr( aSet );
+        }
+        else
+        {
+//-/                pObj->SetAttributes( aSet, sal_False );
+//-/                SdrBroadcastItemChange aItemChange(*pObj);
+            pObj->SetItemSetAndBroadcast(aSet);
+//-/                pObj->BroadcastItemChange(aItemChange);
+        }
     }
 
     pModel->SetChanged();
@@ -1819,35 +1770,23 @@ uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pObj == NULL )
-        throw uno::RuntimeException();
+    if( pObj == NULL || pMap == NULL )
+        throw beans::UnknownPropertyException();
 
-    if(pMap && pMap->nWID)
+    if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
     {
-        if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
-        {
-            return getPropertyValue( aPropertyName );
-        }
-        else
-        {
-            // Default aus ItemPool holen
-            if(!pModel->GetItemPool().IsWhich(pMap->nWID))
-                throw beans::UnknownPropertyException();
-
-            SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
-
-            return GetAnyForItem( aSet, pMap );
-        }
+        return getPropertyValue( aPropertyName );
     }
     else
     {
-        GET_TEXT_INTERFACE( beans::XPropertyState, xPropertyState );
+        // Default aus ItemPool holen
+        if(!pModel->GetItemPool().IsWhich(pMap->nWID))
+            throw beans::UnknownPropertyException();
 
-        if( xPropertyState.is() )
-            return xPropertyState->getPropertyDefault( aPropertyName );
-        else
-            return uno::Any();
+        SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
+        aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+
+        return GetAnyForItem( aSet, pMap );
     }
 }
 
