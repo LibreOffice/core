@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:19:52 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,13 @@ private:
     virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
     virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
-    virtual SdrObject* ImportOLE( long nOLEId, const Graphic& rGrf,
-        const Rectangle& rBoundRect ) const;
+    // --> OD 2004-12-14 #i32596# - new parameter <_nCalledByGroup>, which
+    // indicates, if the OLE object is imported inside a group object
+    virtual SdrObject* ImportOLE( long nOLEId,
+                                  const Graphic& rGrf,
+                                  const Rectangle& rBoundRect,
+                                  const int _nCalledByGroup ) const;
+    // <--
 
     //No copying
     SwMSDffManager(const SwMSDffManager&);
