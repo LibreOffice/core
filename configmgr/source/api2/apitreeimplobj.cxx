@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: lla $ $Date: 2000-12-12 13:07:26 $
+ *  last change: $Author: jb $ $Date: 2000-12-13 13:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,12 +312,16 @@ bool ApiTreeImpl::disposeTree(bool bForce)
     {
         if (m_pParentTree != 0)
             return false;
+
+        checkAlive(); // may throw
     }
     else if (m_pParentTree)
         setParentTree(NULL);
 
-    checkAlive();
-    return implDisposeTree(); // may throw in checkAlive
+    implDisposeTree();
+    OSL_ASSERT(!isAlive());
+
+    return true;
 }
 //-------------------------------------------------------------------------
 
