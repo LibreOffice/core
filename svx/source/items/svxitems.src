@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:44:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5090,7 +5090,7 @@ String RID_ATTR_PARA_REGISTER
     Text[ arabic ] = "��������";
     Text[ catalan ] = "Registrat-cert";
     Text[ thai ] = "Register-true";
-    Text[ czech ] = "Registr";
+    Text[ czech ] = "Řádkový rejstřík";
     Text[ hebrew ] = "‮מיקום מדויק בדף‬";
     Text[ hindi ] = "Register-true";
     Text[ slovak ] = "Register";
@@ -10439,6 +10439,14 @@ String RID_SVXITEMS_PARASNAPTOGRID_OFF
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
 
 
 
