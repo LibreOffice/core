@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:49:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,22 @@
         Text [ en-US ] = "~New Page" ; \
         Text [ x-comment ] = " ";\
     };
+#define MN_DISPLAY_MASTER_BACKGROUND \
+    MenuItem\
+    {\
+        Identifier = SID_DISPLAY_MASTER_BACKGROUND ; \
+        HelpID = SID_DISPLAY_MASTER_BACKGROUND ; \
+        Text [ de ] = "Hintergrund des Masters anzeigen" ; \
+        Text [ en-US ] = "Display Background of Master" ; \
+    };
+#define MN_DISPLAY_MASTER_OBJECTS \
+    MenuItem\
+    {\
+        Identifier = SID_DISPLAY_MASTER_OBJECTS ; \
+        HelpID = SID_DISPLAY_MASTER_OBJECTS ; \
+        Text [ de ] = "Objekte des Masters anzeigen" ; \
+        Text [ en-US ] = "Display Objects from Master" ; \
+    };
 
 
 #define MN_PAGE_MENU \
@@ -224,6 +240,9 @@
                 MN_FORMAT_PAGE\
                 MN_PRESENTATION_LAYOUT\
                 MN_RENAME_PAGE\
+                SEPARATOR\
+                MN_DISPLAY_MASTER_BACKGROUND\
+                MN_DISPLAY_MASTER_OBJECTS\
                 SEPARATOR\
                 MN_INSERT_PAGE\
                 MN_DELETE_PAGE\
