@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-13 10:21:34 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
@@ -121,9 +121,6 @@
 #endif
 #ifndef _DBAUI_STRINGLISTITEM_HXX_
 #include "stringlistitem.hxx"
-#endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
 #endif
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
@@ -2300,6 +2297,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/03/13 10:21:34  fs
+ *  #84827# #84908# allow changes to be applied without re-initializing the page (which could lead to opening a connection)
+ *
  *  Revision 1.37  2001/03/05 15:32:14  fs
  *  #84620# remove the reset button
  *
