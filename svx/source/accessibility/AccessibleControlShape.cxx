@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-05-08 09:41:05 $
+ *  last change: $Author: af $ $Date: 2002-05-17 11:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #endif
 #include "ShapeTypeHandler.hxx"
 #include "SvxShapeTypes.hxx"
+#include "svdstr.hrc"
 
 using namespace accessibility;
 using namespace ::rtl;
@@ -163,7 +164,7 @@ void AccessibleControlShape::Init()
         //
 
         // get the control which belongs to our model (relative to our view)
-        const Window* pViewWindow = mShapeTreeInfo.GetWindow();
+        const Window* pViewWindow = maShapeTreeInfo.GetWindow();
         SdrUnoObj* pUnoObjectImpl = PTR_CAST( SdrUnoObj, getSdrObject() );
         OSL_ENSURE( pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no SdrUnoObj!" );
 
@@ -295,7 +296,7 @@ namespace
             ::rtl::OUString sDesc( getControlModelStringProperty( lcl_getDescPropertyName() ) );
             if ( !sDesc.getLength() )
             {   // no -> use the default
-                aDG.Initialize (OUString::createFromAscii("Control"));
+                aDG.Initialize (STR_ObjNameSingulUno);
                 aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
                     DescriptionGenerator::COLOR,
                     OUString());
@@ -364,7 +365,7 @@ void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSour
         mpParent->ReplaceChild (this,
             ShapeTypeHandler::Instance().CreateAccessibleObject (
                 AccessibleShapeInfo (mxShape, getAccessibleParent(), mpParent, mnIndex),
-                mShapeTreeInfo));
+                maShapeTreeInfo));
     }
     else
         AccessibleShape::disposing( _rSource );
