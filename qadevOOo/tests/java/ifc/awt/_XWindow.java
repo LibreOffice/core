@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XWindow.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:29 $
+ *  last change:$Date: 2003-02-12 15:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,10 +309,10 @@ public class _XWindow extends MultiMethodTest {
 
         // testing wListener.windowShown()
         wListener.init() ;
+        shortWait();
         oObj.setVisible(true) ;
         shortWait();
-        res = !wListener.resized && !wListener.moved &&
-                                    !wListener.hidden && wListener.shown;
+        res = !wListener.resized && !wListener.hidden && wListener.shown;
         result &= res;
         if (!res) {
             log.println("windowShown() wasn't called");
@@ -634,7 +634,7 @@ public class _XWindow extends MultiMethodTest {
     */
     private void shortWait() {
         try {
-            Thread.sleep(1000) ;
+            Thread.sleep(2000) ;
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
