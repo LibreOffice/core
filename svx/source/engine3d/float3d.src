@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:53:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,37 @@
 
 #include "dialogs.hrc"
 #include "float3d.hrc"
-#define WIDTH                       158
-//#define HEIGHT                        197
-#define HEIGHT                      209
-#define BORDER                      3
-#define BUTTON_WIDTH            13
+#define WIDTH               158
+#define HEIGHT              209
+#define BORDER              3
+#define BUTTON_WIDTH        13
 #define BUTTON_HEIGHT       13
 #define VT_BUTTON_WIDTH     18
-#define GROUP_Y                     (BORDER + BUTTON_HEIGHT + 3)
-#define GROUP_HEIGHT            95
-#define GROUP_WIDTH             (WIDTH - 2 * BORDER)
-#define GROUP_PREV_X            60
-#define GROUP_PREV_Y            (GROUP_Y + GROUP_HEIGHT + 1)
+#define GROUP_Y             (BORDER + BUTTON_HEIGHT + 3)
+#define GROUP_HEIGHT        95
+#define GROUP_WIDTH         (WIDTH - 2 * BORDER)
+#define GROUP_PREV_X        60
+#define GROUP_PREV_Y        (GROUP_Y + GROUP_HEIGHT + 1)
 #define GROUP_PREV_WIDTH    (WIDTH - BORDER - GROUP_PREV_X)
 #define GROUP_PREV_HEIGHT   (HEIGHT - GROUP_PREV_Y - BORDER)
-#define BUTTON_SIZE             MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH );
+#define IMG_BUTTON_HEIGHT   15
+#define IMG_BUTTON_NEXT     (IMG_BUTTON_HEIGHT + 2)
+#define IMG_BUTTON_SIZE     MAP_APPFONT( BUTTON_WIDTH, IMG_BUTTON_HEIGHT )
+#define FIXED_LINE_HEIGHT   8
+#define FIXED_LINE_SIZE     MAP_APPFONT( GROUP_WIDTH, FIXED_LINE_HEIGHT )
+#define TOP_FIXED_LINE_POS  MAP_APPFONT( BORDER, 2+BORDER + IMG_BUTTON_HEIGHT )
+#define FT_WIDTH_SHORT      56
+#define FT_WIDTH_LONG       89
+#define FT_HEIGHT           8
+#define FT_OFFSET_NEXT      (FT_HEIGHT + 6)
+#define FT_INDENT           (BORDER + 6)
+#define FIRST_FT_START_Y    (2+BORDER+IMG_BUTTON_HEIGHT + 13)
+#define SEGMENTS_START_Y    (FIRST_FT_START_Y + 3*FT_OFFSET_NEXT + 13)
+#define NORMALS_START_Y     (SEGMENTS_START_Y + 2*13)
+#define NORMALS_BT_START_Y  (SEGMENTS_START_Y + 2*13 +11)
+#define SHADOW_START_Y      (FIRST_FT_START_Y + 13)
+#define CAMERA_START_Y      (SHADOW_START_Y + FT_OFFSET_NEXT + 13)
+#define SPECULAR_START_Y    (FIRST_FT_START_Y + 2*FT_OFFSET_NEXT + 13)
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
@@ -101,7 +117,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_GEO
     {
         Pos = MAP_APPFONT ( 4 , BORDER ) ;
-        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Geometrie" ;
         ButtonImage = Image
@@ -114,7 +130,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_REPRESENTATION
     {
         Pos = MAP_APPFONT ( 22 , BORDER ) ;
-        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Darstellung" ;
         ButtonImage = Image
@@ -127,7 +143,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_LIGHT
     {
         Pos = MAP_APPFONT ( 40 , BORDER ) ;
-        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Beleuchtung" ;
         ButtonImage = Image
@@ -140,7 +156,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_TEXTURE
     {
         Pos = MAP_APPFONT ( 58 , BORDER ) ;
-        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         QuickHelpText [ de ] = "Texturen" ;
         ButtonImage = Image
         {
@@ -153,7 +169,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_MATERIAL
     {
         Pos = MAP_APPFONT ( 76 , BORDER ) ;
-        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         QuickHelpText [ de ] = "Material" ;
         ButtonImage = Image
@@ -167,7 +183,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_UPDATE
     {
         Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH * 2 , BORDER ) ;
-        Size = BUTTON_SIZE
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Aktualisieren" ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -180,7 +196,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_ASSIGN
     {
         Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH , BORDER ) ;
-        Size = BUTTON_SIZE
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Zuweisen" ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -194,7 +210,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_CHANGE_TO_3D
     {
         Pos = MAP_APPFONT ( 9 , 200 - BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Umwandeln in 3D" ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -208,7 +224,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_LATHE_OBJ
     {
         Pos = MAP_APPFONT ( 9 + BUTTON_WIDTH + 1 , 200 - BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Umwandeln in Rotationskörper" ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -222,7 +238,7 @@ DockingWindow RID_SVXFLOAT_3D
     ImageButton BTN_PERSPECTIVE
     {
         Pos = MAP_APPFONT ( 9 + ( BUTTON_WIDTH + 1 ) * 2 , 200 - BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Perspektive ein-/ausschalten" ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -247,65 +263,24 @@ DockingWindow RID_SVXFLOAT_3D
         Size = MAP_APPFONT ( 83 , 76 ) ;
         TabStop = TRUE ;
     };
-     // Geometrie
-    FixedText FT_HORIZONTAL
+    FixedLine FL_GEOMETRIE
     {
-        Pos = MAP_APPFONT ( 9 , 100 ) ;
-        Size = MAP_APPFONT ( 43 , 8 ) ;
-        Text [ de ] = "~Horizontal" ;
-        Text [ en-US ] = "~Horizontal" ;
-    };
-    NumericField NUM_HORIZONTAL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 98 ) ;
-        Size = MAP_APPFONT ( 22 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 2 ;
-        First = 2 ;
-        Maximum = 256 ;
-        Last = 256 ;
-    };
-    FixedText FT_VERTICAL
-    {
-        Pos = MAP_APPFONT ( 85 , 100 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Vertikal" ;
-        Text [ en-US ] = "~Vertical" ;
-    };
-    NumericField NUM_VERTICAL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 127 , 98 ) ;
-        Size = MAP_APPFONT ( 22 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 2 ;
-        First = 2 ;
-        Maximum = 256 ;
-        Last = 256 ;
-    };
-    FixedLine FL_SEGMENTS
-    {
-        Pos = MAP_APPFONT ( BORDER , 87 ) ;
-        Size = MAP_APPFONT ( 152, 8 ) ;
-        Text [ de ] = "~Segmente" ;
-        Text [ en-US ] = "Segments" ;
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
+        Text [ de ] = "Geometrie" ;
+        Text [ en-US ] = "Geometry" ;
     };
     FixedText FT_PERCENT_DIAGONAL
     {
-        Pos = MAP_APPFONT ( 9 , 32 ) ;
-        Size = MAP_APPFONT ( 72 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT, FIRST_FT_START_Y );
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
         Text [ de ] = "~Kantenrundung" ;
         Text [ en-US ] = "R~ounded edges" ;
     };
     MetricField MTR_PERCENT_DIAGONAL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 30 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 , FIRST_FT_START_Y - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -318,15 +293,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_BACKSCALE
     {
-        Pos = MAP_APPFONT ( 9 , 46 ) ;
-        Size = MAP_APPFONT ( 72 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
         Text [ de ] = "~Tiefenskalierung" ;
         Text [ en-US ] = "~Scaled depth" ;
     };
     MetricField MTR_BACKSCALE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 44 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
+                            FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -339,15 +315,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_END_ANGLE
     {
-        Pos = MAP_APPFONT ( 9 , 60 ) ;
-        Size = MAP_APPFONT ( 72 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 2*FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
         Text [ de ] = "~Endwinkel" ;
         Text [ en-US ] = "~Rotation angle" ;
     };
     MetricField MTR_END_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 58 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
+                            FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -362,15 +339,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_DEPTH
     {
-        Pos = MAP_APPFONT ( 9 , 74 ) ;
-        Size = MAP_APPFONT ( 72 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 3*FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
         Text [ de ] = "~Tiefe" ;
         Text [ en-US ] = "~Depth" ;
     };
     MetricField MTR_DEPTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 72 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
+                            FIRST_FT_START_Y + 3*FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -384,17 +362,66 @@ DockingWindow RID_SVXFLOAT_3D
         DecimalDigits = 2 ;
         SpinSize = 100 ;
     };
-    FixedLine FL_GEOMETRIE
+    FixedLine FL_SEGMENTS
     {
-        Pos = MAP_APPFONT ( BORDER , 19 ) ;
-        Size = MAP_APPFONT ( 152, 8 ) ;
-        Text [ de ] = "Geometrie" ;
-        Text [ en-US ] = "Geometry" ;
+        Pos = MAP_APPFONT ( BORDER , SEGMENTS_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ de ] = "~Segmente" ;
+        Text [ en-US ] = "Segments" ;
+    };
+     // Geometrie
+    FixedText FT_HORIZONTAL
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , SEGMENTS_START_Y+13 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ de ] = "~Horizontal" ;
+        Text [ en-US ] = "~Horizontal" ;
+    };
+    NumericField NUM_HORIZONTAL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + 42, SEGMENTS_START_Y+13-2 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        First = 2 ;
+        Maximum = 256 ;
+        Last = 256 ;
+    };
+    FixedText FT_VERTICAL
+    {
+        Pos = MAP_APPFONT ( FT_INDENT + 74 , SEGMENTS_START_Y+13 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ de ] = "~Vertikal" ;
+        Text [ en-US ] = "~Vertical" ;
+    };
+    NumericField NUM_VERTICAL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + 114+2 , SEGMENTS_START_Y+13-2 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        First = 2 ;
+        Maximum = 256 ;
+        Last = 256 ;
+    };
+
+    FixedLine FL_NORMALS
+    {
+        Pos = MAP_APPFONT ( BORDER , NORMALS_START_Y ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Text [ de ] = "Normalen" ;
+        Text [ en-US ] = "Normals" ;
     };
     ImageButton BTN_NORMALS_OBJ
     {
-        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 11 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Objektspezifisch" ;
         ButtonImage = Image
         {
@@ -406,8 +433,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_FLAT
     {
-        Pos = MAP_APPFONT ( BORDER + 5 + BUTTON_WIDTH , GROUP_PREV_Y + 11 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) , NORMALS_BT_START_Y ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Flach" ;
         ButtonImage = Image
         {
@@ -419,8 +446,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_SPHERE
     {
-        Pos = MAP_APPFONT ( BORDER + 5 + BUTTON_WIDTH * 2 , GROUP_PREV_Y + 11 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 , NORMALS_BT_START_Y ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Kugelförmig" ;
         ButtonImage = Image
         {
@@ -432,8 +459,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_INVERT
     {
-        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 28 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y + IMG_BUTTON_NEXT ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Normalen umkehren" ;
         ButtonImage = Image
         {
@@ -445,8 +472,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TWO_SIDED_LIGHTING
     {
-        Pos = MAP_APPFONT ( BORDER + 5 + BUTTON_WIDTH * 2 , GROUP_PREV_Y + 28 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 ,
+                            NORMALS_BT_START_Y + IMG_BUTTON_NEXT ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "2-seitige Beleuchtung" ;
         ButtonImage = Image
         {
@@ -456,17 +484,10 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Double-Sided Illumination" ;
     };
-    FixedLine FL_NORMALS
-    {
-        Pos = MAP_APPFONT ( 3 , 115 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
-        Text [ de ] = "Normalen" ;
-        Text [ en-US ] = "Normals" ;
-    };
     ImageButton BTN_DOUBLE_SIDED
     {
-        Pos = MAP_APPFONT ( 9 , 171 ) ;
-        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y + 2*IMG_BUTTON_NEXT ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Doppelseitig" ;
         ButtonImage = Image
         {
@@ -476,11 +497,12 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Double-Sided" ;
     };
-     // Darstellung
+
+    // Darstellung
     FixedText FT_SHADEMODE
     {
-        Pos = MAP_APPFONT ( 11 , 32 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Modus" ;
         Text [ en-US ] = "~Mode" ;
     };
@@ -503,17 +525,24 @@ DockingWindow RID_SVXFLOAT_3D
             < "Phong" ; > ;
             < "Gouraud" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < "; Flat" ; > ;
-        < "; Phong" ; > ;
-        < "; Gouraud" ; > ;
+        StringList [ x-comment ] =
+        {
+                < "; Flat" ; > ;
+            < "; Phong" ; > ;
+            < "; Gouraud" ; > ;
+        };
     };
+    FixedLine FL_SHADOW
+    {
+        Pos = MAP_APPFONT ( BORDER , SHADOW_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ de ] = "Schatten" ;
+        Text [ en-US ] = "Shadow" ;
     };
     ImageButton BTN_SHADOW_3D
     {
-        Pos = MAP_APPFONT ( 14 , 54 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT , SHADOW_START_Y + 11 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "3D-Schatten ein/-ausschalten" ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -526,18 +555,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_SLANT
     {
-        Pos = MAP_APPFONT ( 31 , 56 ) ;
-        Size = MAP_APPFONT ( 62 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + BUTTON_WIDTH + 3 , SHADOW_START_Y + 11 + 2 ) ;
+        Size = MAP_APPFONT ( 68 , FT_HEIGHT ) ;
         Right = TRUE;
-        /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
-        /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
         Text [ de ] = "~Papierneigung" ;
         Text [ en-US ] = "S~urface angle" ;
     };
     MetricField MTR_SLANT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 54 ) ;
+        Pos = MAP_APPFONT ( 99 , SHADOW_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -549,24 +576,26 @@ DockingWindow RID_SVXFLOAT_3D
         Last = 90 ;
         CustomUnitText [ en-US ] = " degree(s)";
     };
-    FixedLine FL_SHADOW
+
+    FixedLine FL_CAMERA
     {
-        Pos = MAP_APPFONT ( BORDER , 43 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Schatten" ;
-        Text [ en-US ] = "Shadow" ;
+        Pos = MAP_APPFONT ( BORDER , CAMERA_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ de ] = "Kamera" ;
+        Text [ en-US ] = "Camera" ;
     };
     FixedText FT_DISTANCE
     {
-        Pos = MAP_APPFONT ( 13 , 81 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , CAMERA_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
         Text [ de ] = "~Entfernung" ;
         Text [ en-US ] = "~Distance" ;
     };
     MetricField MTR_DISTANCE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 79 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 ,
+                            CAMERA_START_Y + 11 - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -582,15 +611,17 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_FOCAL_LENGTH
     {
-        Pos = MAP_APPFONT ( 13 , 97 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , CAMERA_START_Y + 11 + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ de ] = "~Entfernung" ;
         Text [ de ] = "~Brennweite" ;
         Text [ en-US ] = "~Focal length" ;
     };
     MetricField MTR_FOCAL_LENGTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 99 , 95 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 ,
+                            CAMERA_START_Y + 11 + FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -604,25 +635,25 @@ DockingWindow RID_SVXFLOAT_3D
         DecimalDigits = 2 ;
         SpinSize = 100 ;
     };
-    FixedLine FL_CAMERA
-    {
-        Pos = MAP_APPFONT ( 3 , 70 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Kamera" ;
-        Text [ en-US ] = "Camera" ;
-    };
     FixedLine FL_REPRESENTATION
     {
-        Pos = MAP_APPFONT ( 3 , 19 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
         Text [ de ] = "Darstellung" ;
         Text [ en-US ] = "Shading" ;
     };
      // Beleuchtung
+    FixedText FT_LIGHTSOURCE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ de ] = "Lichtquelle" ;
+        Text [ en-US ] = "~Light source" ;
+    };
     ImageButton BTN_LIGHT_1
     {
-        Pos = MAP_APPFONT ( 9 , 38 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 1" ;
         ButtonImage = Image
         {
@@ -634,8 +665,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_2
     {
-        Pos = MAP_APPFONT ( 22 , 38 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + 13 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 2" ;
         ButtonImage = Image
         {
@@ -647,8 +678,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_3
     {
-        Pos = MAP_APPFONT ( 35 , 38 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + 2*13 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 3" ;
         ButtonImage = Image
         {
@@ -660,8 +691,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_4
     {
-        Pos = MAP_APPFONT ( 48 , 38 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + 3*13 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 4" ;
         ButtonImage = Image
         {
@@ -673,8 +704,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_5
     {
-        Pos = MAP_APPFONT ( 9 , 51 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 5" ;
         ButtonImage = Image
         {
@@ -686,8 +717,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_6
     {
-        Pos = MAP_APPFONT ( 22 , 51 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + 13, FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 6" ;
         ButtonImage = Image
         {
@@ -699,8 +730,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_7
     {
-        Pos = MAP_APPFONT ( 35, 51 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + 2*13, FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 7" ;
         ButtonImage = Image
         {
@@ -712,8 +743,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_8
     {
-        Pos = MAP_APPFONT ( 48 , 51 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT +3*13 , FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Lichtquelle 8" ;
         ButtonImage = Image
         {
@@ -726,7 +757,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -734,7 +765,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -742,7 +773,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -750,7 +781,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_4
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -758,7 +789,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_5
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -766,7 +797,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_6
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -774,7 +805,7 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_7
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -782,43 +813,15 @@ DockingWindow RID_SVXFLOAT_3D
     ListBox LB_LIGHT_8
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 38 ) ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_LIGHT_COLOR
     {
-        Pos = MAP_APPFONT ( 137 , 38 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
-        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
-            MASKCOLOR
-        };
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Colors Dialog" ;
-    };
-    FixedText FT_LIGHTSOURCE
-    {
-        Pos = MAP_APPFONT ( 9 , 27 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Lichtquelle" ;
-        Text [ en-US ] = "~Light source" ;
-    };
-    ListBox LB_AMBIENTLIGHT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 70 ) ;
-        Size = MAP_APPFONT ( 68 , 100 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
-    ImageButton BTN_AMBIENT_COLOR
-    {
-        Pos = MAP_APPFONT ( 137 , 70 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
         QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
         ButtonImage = Image
         {
@@ -830,30 +833,53 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_AMBIENTLIGHT
     {
-        Pos = MAP_APPFONT ( 9, 72 ) ;
-        Size = MAP_APPFONT ( 56 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT, FIRST_FT_START_Y + 53 ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Umgebungslicht" ;
         Text [ en-US ] = "~Ambient light" ;
     };
+    ListBox LB_AMBIENTLIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 , FIRST_FT_START_Y + 53 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_AMBIENT_COLOR
+    {
+        Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 53 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Colors Dialog" ;
+    };
+
     FixedLine FL_LIGHT
     {
-        Pos = MAP_APPFONT ( BORDER , 19 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE ;
         Text [ de ] = "Beleuchtung" ;
         Text [ en-US ] = "Illumination" ;
     };
      // Texturen
     FixedText FT_TEX_KIND
     {
-        Pos = MAP_APPFONT ( 11 , 31 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Art" ;
         Text [ en-US ] = "~Type" ;
     };
     ImageButton BTN_TEX_LUMINANCE
     {
-        Pos = MAP_APPFONT ( 70 , 29 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Schwarzweiß" ;
         ButtonImage = Image
         {
@@ -865,8 +891,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_COLOR
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 29 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Farbe" ;
         ButtonImage = Image
         {
@@ -878,15 +905,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_TEX_MODE
     {
-        Pos = MAP_APPFONT ( 11 , 47 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Modus" ;
         Text [ en-US ] = "~Mode" ;
     };
     ImageButton BTN_TEX_REPLACE
     {
-        Pos = MAP_APPFONT ( 70 , 45 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Nur Textur" ;
         ButtonImage = Image
         {
@@ -898,8 +926,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_MODULATE
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 45 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Textur und Schattierung" ;
         ButtonImage = Image
         {
@@ -911,8 +940,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_BLEND
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH * 2 , 45 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
+                            FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Textur, Schattierung und Farbe" ;
         ButtonImage = Image
         {
@@ -924,15 +954,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_TEX_PROJECTION_X
     {
-        Pos = MAP_APPFONT ( 11 , 62 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Projektion X" ;
         Text [ en-US ] = "~Projection X" ;
     };
     ImageButton BTN_TEX_OBJECT_X
     {
-        Pos = MAP_APPFONT ( 70 , 60 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Objektspezifisch" ;
         ButtonImage = Image
         {
@@ -944,8 +975,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_PARALLEL_X
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 60 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Parallel" ;
         ButtonImage = Image
         {
@@ -957,8 +989,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_CIRCLE_X
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH * 2 , 60 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Kreisförmig" ;
         ButtonImage = Image
         {
@@ -970,15 +1003,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_TEX_PROJECTION_Y
     {
-        Pos = MAP_APPFONT ( 11 , 77 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Projektion Y" ;
         Text [ en-US ] = "P~rojection Y" ;
     };
     ImageButton BTN_TEX_OBJECT_Y
     {
-        Pos = MAP_APPFONT ( 70 , 75 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Objektspezifisch" ;
         ButtonImage = Image
         {
@@ -990,8 +1024,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_PARALLEL_Y
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 75 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Parallel" ;
         ButtonImage = Image
         {
@@ -1003,8 +1038,9 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_CIRCLE_Y
     {
-        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH * 2 , 75 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Kreisförmig" ;
         ButtonImage = Image
         {
@@ -1016,15 +1052,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_TEX_FILTER
     {
-        Pos = MAP_APPFONT ( 11 , 92 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 4*IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Filtern" ;
         Text [ en-US ] = "~Filtering" ;
     };
     ImageButton BTN_TEX_FILTER
     {
-        Pos = MAP_APPFONT ( 70 , 90 ) ;
-        Size = BUTTON_SIZE
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + 4*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
         QuickHelpText [ de ] = "Filtern ein/aus" ;
         ButtonImage = Image
         {
@@ -1036,8 +1073,8 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedLine FL_TEXTURE
     {
-        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
-        Size = MAP_APPFONT ( WIDTH - 2 * BORDER , 8 ) ;
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
         Text [ de ] = "Texturen" ;
         Text [ en-US ] = "Textures" ;
     };
@@ -1055,15 +1092,16 @@ DockingWindow RID_SVXFLOAT_3D
      // Materialeditor
     FixedText FT_MAT_FAVORITES
     {
-        Pos = MAP_APPFONT ( 9 , 32 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Favoriten" ;
         Text [ en-US ] = "~Favorites" ;
     };
     ListBox LB_MAT_FAVORITES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 30 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y - 2 ) ;
         Size = MAP_APPFONT ( 83 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1085,35 +1123,37 @@ DockingWindow RID_SVXFLOAT_3D
             < "Plastic" ; > ;
             < "Wood" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < "; Benutzerdefiniert" ; > ;
-        < "; Metall" ; > ;
-        < "; Gold" ; > ;
-        < "; Chrom" ; > ;
-        < "; Plastik" ; > ;
-        < "; Holz" ; > ;
-    };
+        StringList [ x-comment ] =
+        {
+                < "; Benutzerdefiniert" ; > ;
+            < "; Metall" ; > ;
+            < "; Gold" ; > ;
+            < "; Chrom" ; > ;
+            < "; Plastik" ; > ;
+            < "; Holz" ; > ;
+        };
     };
     FixedText FT_MAT_COLOR
     {
-        Pos = MAP_APPFONT ( 9 , 48 ) ;
-        Size = MAP_APPFONT ( 56 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Objektfarbe" ;
         Text [ en-US ] = "~Object color" ;
     };
     ListBox LB_MAT_COLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 46 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
+                            FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_MAT_COLOR
     {
-        Pos = MAP_APPFONT ( 137 , 46 ) ;
-        Size = MAP_APPFONT ( 12, 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
+                            FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 12, 14 ) ;
         QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
         ButtonImage = Image
         {
@@ -1125,23 +1165,25 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_MAT_EMISSION
     {
-        Pos = MAP_APPFONT ( 9, 64 ) ;
-        Size = MAP_APPFONT ( 56 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 2*FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Leuchtfarbe" ;
         Text [ en-US ] = "~Illumination color" ;
     };
     ListBox LB_MAT_EMISSION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 62 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
+                            FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_EMISSION_COLOR
     {
-        Pos = MAP_APPFONT ( 137 , 62 ) ;
-        Size = MAP_APPFONT ( 12, 12 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
+                            FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 12, 14 ) ;
         QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
         ButtonImage = Image
         {
@@ -1151,25 +1193,33 @@ DockingWindow RID_SVXFLOAT_3D
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Colors Dialog" ;
     };
+
+    FixedLine FL_MAT_SPECULAR
+    {
+        Pos = MAP_APPFONT ( BORDER , SPECULAR_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ de ] = "Glanzpunkt" ;
+        Text [ en-US ] = "Specular" ;
+    };
     FixedText FT_MAT_SPECULAR
     {
-        Pos = MAP_APPFONT ( 9 , 90 ) ;
-        Size = MAP_APPFONT ( 44 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , SPECULAR_START_Y + 13 ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Farbe" ;
         Text [ en-US ] = "~Color" ;
     };
     ListBox LB_MAT_SPECULAR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 88 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1, SPECULAR_START_Y + 13 - 2 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ImageButton BTN_SPECULAR_COLOR
     {
-        Pos = MAP_APPFONT ( 137 , 88 ) ;
-        Size = MAP_APPFONT ( 12, 12 ) ;
+        Pos = MAP_APPFONT ( 137 , SPECULAR_START_Y + 13 - 2 ) ;
+        Size = MAP_APPFONT ( 12, 14 ) ;
         QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
         ButtonImage = Image
         {
@@ -1181,15 +1231,16 @@ DockingWindow RID_SVXFLOAT_3D
     };
     FixedText FT_MAT_SPECULAR_INTENSITY
     {
-        Pos = MAP_APPFONT ( 9 , 106 ) ;
-        Size = MAP_APPFONT ( 44 , 8 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT , SPECULAR_START_Y + 13 + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
         Text [ de ] = "~Intensität" ;
         Text [ en-US ] = "I~ntensity" ;
     };
     MetricField MTR_MAT_SPECULAR_INTENSITY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 104 ) ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
+                            SPECULAR_START_Y + 13 + FT_OFFSET_NEXT ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1202,17 +1253,10 @@ DockingWindow RID_SVXFLOAT_3D
         Last = 100 ;
         SpinSize = 1 ;
     };
-    FixedLine FL_MAT_SPECULAR
-    {
-        Pos = MAP_APPFONT ( 3 , 77 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Glanzpunkt" ;
-        Text [ en-US ] = "Specular" ;
-    };
     /*
     ImageButton BTN_MAT_FAVORITES {
-            Pos = MAP_APPFONT( BORDER, GROUP_PREV_Y+1 );
-            Size = MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
+        Pos = MAP_APPFONT( BORDER, GROUP_PREV_Y+1 );
+        Size = IMG_BUTTON_SIZE;
       QuickHelpText = "Material Favoriten" ;
       ButtonImage = Image
       {
@@ -1223,7 +1267,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
     ImageButton BTN_MAT_EDITOR {
             Pos = MAP_APPFONT( BORDER + BUTTON_WIDTH, GROUP_PREV_Y+1 );
-            Size = MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
+            Size = IMG_BUTTON_SIZE;
       QuickHelpText = "Material Editor" ;
       ButtonImage = Image
       {
@@ -1235,8 +1279,8 @@ DockingWindow RID_SVXFLOAT_3D
 */
     FixedLine FL_MATERIAL
     {
-        Pos = MAP_APPFONT ( BORDER , 19 ) ;
-        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
         Text [ de ] = "Material" ;
         Text [ en-US ] = "Material" ;
     };
