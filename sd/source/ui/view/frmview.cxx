@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:50:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "optsitem.hxx"
+#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -161,7 +162,9 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                 {
                     nSdViewShellCount++;
 
-                    switch (pBase->GetSubShellManager().GetMainSubShellType())
+                    //AF
+                    switch (pBase->GetPaneManager().GetViewShellType(
+                        PaneManager::PT_CENTER))
                     {
                         case ViewShell::ST_IMPRESS:
                         case ViewShell::ST_NOTES:
@@ -291,8 +294,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         }
         nPreviewDrawMode = nDrawMode;
         bShowPreviewInPageMode = FALSE;
-        bShowPreviewInMasterPageMode = TRUE;
-        bShowPreviewInOutlineMode = TRUE;
+        bShowPreviewInMasterPageMode = FALSE;
+        bShowPreviewInOutlineMode = FALSE;
         nTabCtrlPercent = 0.0;
         SetPreviousViewShellType (ViewShell::ST_NONE);
 
