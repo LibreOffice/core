@@ -254,22 +254,50 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         ::rtl::OUString sVal;
         aValue >>= sVal;
 
-        // open string
-        aArgumentBuffer.appendAscii("\"");
-
-        // encode \" inside the string to \"\"
-        sal_Int32 nIndex = 0;
-        do
+        // encode non printable characters or '"' by using the CHR$ function
+        const sal_Unicode* pChars = sVal.getStr();
+        sal_Bool bInString = sal_False;
+        for ( sal_Int32 nChar=0; nChar<sVal.getLength(); nChar ++ )
         {
-            ::rtl::OUString aToken = sVal.getToken( 0, '"', nIndex );
-            aArgumentBuffer.append( aToken );
-            if ( nIndex>=0 )
-                aArgumentBuffer.appendAscii("\"\"");
+            if ( pChars[nChar] < 32 || pChars[nChar] == '"' )
+            {
+                // problematic character detected
+                if ( bInString )
+                {
+                    // close current string
+                    aArgumentBuffer.appendAscii("\"");
+                    bInString = sal_False;
+                }
+
+                if ( nChar>0 )
+                    // if this is not the first character, parts of the string have already been added
+                    aArgumentBuffer.appendAscii("+");
+
+                // add the character constant
+                aArgumentBuffer.appendAscii("CHR$(");
+                aArgumentBuffer.append( (sal_Int32) pChars[nChar] );
+                aArgumentBuffer.appendAscii(")");
+            }
+            else
+            {
+                if ( !bInString )
+                {
+                    if ( nChar>0 )
+                        // if this is not the first character, parts of the string have already been added
+                        aArgumentBuffer.appendAscii("+");
+
+                    // start a new string
+                    aArgumentBuffer.appendAscii("\"");
+                    bInString = sal_True;
+                }
+
+                aArgumentBuffer.append( pChars[nChar] );
+            }
         }
-        while ( nIndex >= 0 );
 
         // close string
-        aArgumentBuffer.appendAscii("\"");
+        if ( bInString )
+            aArgumentBuffer.appendAscii("\"");
     }
     else if (aValue.getValueType() == getCppuCharType())
     {
@@ -303,51 +331,6 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
 
         aArgumentBuffer.append(sVal);
     }
-/*
-    else if (aValue.getValueType() == getBooleanCppuType())
-    {
-        sal_Bool bVal;
-        aValue >>= bVal;
-        if (bVal)
-            aArgumentBuffer.appendAscii("true");
-        else
-            aArgumentBuffer.appendAscii("false");
-    }
-    else if (aValue.getValueType() == getCppuType((sal_Int8*)0))
-    {
-        sal_Int8 nVal;
-        aValue >>= nVal;
-        aArgumentBuffer.append((sal_Int32)nVal);
-    }
-    else if (aValue.getValueType() == getCppuType((sal_Int16*)0))
-    {
-        sal_Int16 nVal;
-        aValue >>= nVal;
-        aArgumentBuffer.append((sal_Int32)nVal);
-    }
-    else if (aValue.getValueType() == getCppuType((sal_Int32*)0))
-    {
-        sal_Int32 nVal;
-        aValue >>= nVal;
-        aArgumentBuffer.append((sal_Int32)nVal);
-    }
-    else if (aValue.getValueType() == getCppuType((float*)0))
-    {
-        float fVal;
-        aValue >>= fVal;
-        aArgumentBuffer.append(fVal);
-    }
-    else if (aValue.getValueType() == getCppuType((double*)0))
-    {
-        double fVal;
-        aValue >>= fVal;
-        aArgumentBuffer.append(fVal);
-    }
-    else
-    {
-        LOG_WARNING("","Type not scriptable!")
-    }
- */
 }
 
 void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
