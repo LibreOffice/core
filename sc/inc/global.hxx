@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:22:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,6 @@ extern "C" {
 #endif
 
 
-//------------------------------------------------------------------------
-struct LabelData;
 //------------------------------------------------------------------------
 
 //  die 1000 Namen des Calc...
@@ -1160,6 +1158,45 @@ struct ScPivotParam
 };
 
 
+//-----------------------------------------------------------------------
+
+struct ScSolveParam
+{
+    ScAddress   aRefFormulaCell;
+    ScAddress   aRefVariableCell;
+    String*     pStrTargetVal;
+
+    ScSolveParam();
+    ScSolveParam( const ScSolveParam& r );
+    ScSolveParam( const ScAddress&  rFormulaCell,
+                  const ScAddress&  rVariableCell,
+                  const String& rTargetValStr );
+    ~ScSolveParam();
+
+    ScSolveParam&   operator=   ( const ScSolveParam& r );
+    BOOL            operator==  ( const ScSolveParam& r ) const;
+};
+
+struct ScTabOpParam
+{
+    ScRefTripel     aRefFormulaCell;
+    ScRefTripel     aRefFormulaEnd;
+    ScRefTripel     aRefRowCell;
+    ScRefTripel     aRefColCell;
+    BYTE            nMode;
+
+    ScTabOpParam() {};
+    ScTabOpParam( const ScTabOpParam& r );
+    ScTabOpParam( const ScRefTripel& rFormulaCell,
+                  const ScRefTripel& rFormulaEnd,
+                  const ScRefTripel& rRowCell,
+                  const ScRefTripel& rColCell,
+                        BYTE         nMd);
+    ~ScTabOpParam() {};
+
+    ScTabOpParam&   operator=       ( const ScTabOpParam& r );
+    BOOL            operator==      ( const ScTabOpParam& r ) const;
+};
 extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
 extern const LocaleDataWrapper* GetScGlobalpLocaleData();
 
