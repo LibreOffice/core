@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+#   last change: $Author: mtg $ $Date: 2001-09-14 15:06:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
-
+#CFLAGS+=/Ob0 /Od
 SLOFILES= \
         $(SLO)$/Adler32.obj			\
         $(SLO)$/CRC32.obj			\
@@ -98,7 +98,6 @@ UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
 UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
 
 UNOTYPES=\
-    com.sun.star.packages.zip.ZipEntry \
     com.sun.star.packages.zip.ZipConstants \
     com.sun.star.packages.zip.ZipException
 
