@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:11:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ BOOL SvTreeList::Select( SvListView* pView, SvListEntry* pEntry, BOOL bSelect )
     SvViewData* pViewData = pView->GetViewData( pEntry );
     if ( bSelect )
     {
-        if ( pViewData->IsSelected() )
+        if ( pViewData->IsSelected() || !pViewData->IsSelectable() )
             return FALSE;
         else
         {
