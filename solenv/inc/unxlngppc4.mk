@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:17:02 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:38:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -fsigned-char -pipe -frtti
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
