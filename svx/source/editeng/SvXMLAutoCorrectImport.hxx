@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:50:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,15 @@ protected:
 public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
-    SvStorageRef            &rStorage;
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
+    //SvStorageRef            &rStorage;
 
     // #110680#
     SvXMLAutoCorrectImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvxAutocorrWordList *pNewAutocorr_List,
         SvxAutoCorrect &rNewAutoCorrect,
-        SvStorageRef & rNewStorage);
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage);
 
     ~SvXMLAutoCorrectImport ( void ) throw ();
 };
