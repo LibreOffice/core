@@ -6,9 +6,6 @@ sd.SdDrawPage::com::sun::star::drawing::XShapeGrouper
 sd.SdGenericDrawPage::com::sun::star::drawing::XShapeGrouper
 sd.SdMasterPage::com::sun::star::drawing::XShapeGrouper
 
-### 114164 ###
-sd.SdXShape::com::sun::star::beans::XPropertySet
-
 ### i22883 ###
 sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
 sd.SdUnoDrawView::com::sun::star::ui::XContextMenuInterception
@@ -32,3 +29,9 @@ sd.SdXImpressDocument::com::sun::star::document::XViewDataSupplier
 
 ### i22896 ###
 sd.SdXImpressDocument::com::sun::star::document::XEventBroadcaster
+
+### i26124 ###
+sd.AccessibleDrawDocumentView::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i26264 ###
+sd.SdXImpressDocument::com::sun::star::view::XPrintable
