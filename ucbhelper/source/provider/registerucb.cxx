@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerucb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 13:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,11 @@
  ************************************************************************/
 
 #ifndef _UCBHELPER_REGISTERUCB_HXX_
-#include <ucbhelper/registerucb.hxx>
+#include <registerucb.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_CONTENTPROVIDERSERVICEINFO2_HPP_
-#include <com/sun/star/ucb/ContentProviderServiceInfo2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -78,9 +75,21 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+
+#ifndef _UCBHELPER_CONFIGUREUCB_HXX_
+#include <ucbhelper/configureucb.hxx>
+#endif
 
 using namespace com::sun;
 using namespace com::sun::star;
+
+namespace ucb {
 
 //============================================================================
 //
@@ -88,112 +97,103 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-namespace ucb {
-
 void
 registerAtUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rUcb,
-    uno::Reference< lang::XMultiServiceFactory > const & rFactory,
-    uno::Sequence< star::ucb::ContentProviderServiceInfo2 > const &
-        rProviders,
-    std::vector< ContentProviderRegistrationInfo > * pResults)
+    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
+    rtl::OUString const & rName,
+    rtl::OUString const & rArguments,
+    rtl::OUString const & rTemplate,
+    ContentProviderRegistrationInfo * pInfo)
     throw (uno::RuntimeException)
 {
-    uno::Reference< star::ucb::XContentProviderFactory > xFac;
+    VOS_ENSURE(rServiceFactory.is(),
+               "ucb::registerAtUcb(): No service factory");
+
+    uno::Reference< star::ucb::XContentProviderFactory > xProxyFactory;
     try
     {
-        xFac = uno::Reference< star::ucb::XContentProviderFactory >(
-                    rFactory->createInstance(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.ucb.ContentProviderProxyFactory")),
-                    uno::UNO_QUERY);
+        xProxyFactory
+            = uno::Reference< star::ucb::XContentProviderFactory >(
+                  rServiceFactory->
+                      createInstance(
+                          rtl::OUString::createFromAscii(
+                              "com.sun.star.ucb."
+                                  "ContentProviderProxyFactory")),
+                  uno::UNO_QUERY);
     }
     catch (uno::RuntimeException const &) { throw; }
     catch (uno::Exception const &) {}
 
-    star::ucb::ContentProviderServiceInfo2 const * pInfo
-        = rProviders.getConstArray();
-    for (sal_Int32 n = rProviders.getLength(); n > 0; --n)
+    // First, try to instantiate proxy for provider:
+    uno::Reference< star::ucb::XContentProvider > xProvider;
+    if (xProxyFactory.is())
+        xProvider = xProxyFactory->createContentProvider(rName);
+
+    // Then, try to instantiate provider directly:
+    if (!xProvider.is())
+        try
+        {
+            xProvider = uno::Reference< star::ucb::XContentProvider >(
+                            rServiceFactory->createInstance(rName),
+                            uno::UNO_QUERY);
+        }
+        catch (uno::RuntimeException const &) { throw; }
+        catch (uno::Exception const &) {}
+
+    uno::Reference< star::ucb::XContentProvider >
+        xOriginalProvider(xProvider);
+    uno::Reference< star::ucb::XParameterizedContentProvider >
+        xParameterized(xProvider, uno::UNO_QUERY);
+    if (xParameterized.is())
     {
-        uno::Reference< star::ucb::XContentProvider > xProvider;
-        if (xFac.is())
+        uno::Reference< star::ucb::XContentProvider > xInstance;
+        try
         {
-            // Try to instantiate proxy for provider.
-            xProvider = xFac->createContentProvider(pInfo->Service);
+            xInstance
+                = xParameterized->registerInstance(rTemplate,
+                                                   rArguments,
+                                                   true);
+                //@@@ if this call replaces an old instance, the commit-or-
+                // rollback code below will not work
+        }
+        catch (lang::IllegalArgumentException const &) {}
+
+        if (xInstance.is())
+            xProvider = xInstance;
+    }
+
+    if (rManager.is() && xProvider.is())
+        try
+        {
+            rManager->registerContentProvider(xProvider, rTemplate, true);
+        }
+        catch (star::ucb::DuplicateProviderException const &)
+        {
+            if (xParameterized.is())
+                try
+                {
+                    xParameterized->deregisterInstance(rTemplate, rArguments);
+                }
+                catch (lang::IllegalArgumentException const &) {}
+            xOriginalProvider = 0;
+        }
+        catch (...)
+        {
+            if (xParameterized.is())
+                try
+                {
+                    xParameterized->deregisterInstance(rTemplate, rArguments);
+                }
+                catch (lang::IllegalArgumentException const &) {}
+            throw;
         }
 
-        if (!xProvider.is())
-        {
-            // Try to instantiate provider directly.
-            try
-            {
-                xProvider = uno::Reference< star::ucb::XContentProvider >(
-                                rFactory->createInstance(pInfo->Service),
-                                uno::UNO_QUERY);
-            }
-            catch (uno::RuntimeException const &) { throw; }
-            catch (uno::Exception const &) {}
-        }
-
-        uno::Reference< star::ucb::XContentProvider >
-            xOriginalProvider(xProvider);
-        uno::Reference< star::ucb::XParameterizedContentProvider >
-            xParameterized(xProvider, uno::UNO_QUERY);
-        if (xParameterized.is())
-        {
-            uno::Reference< star::ucb::XContentProvider > xInstance;
-            try
-            {
-                xInstance
-                    = xParameterized->registerInstance(pInfo->Scheme,
-                                                       pInfo->Arguments,
-                                                       pInfo->
-                                                           ReplaceExisting);
-                    //@@@ if this call replaces an old instance, the commit-
-                    // or-rollback code below will not work
-            }
-            catch (lang::IllegalArgumentException const &) {}
-
-            if (xInstance.is())
-                xProvider = xInstance;
-        }
-
-        if (rUcb.is() && xProvider.is())
-            try
-            {
-                rUcb->registerContentProvider(xProvider, pInfo->Scheme,
-                                              pInfo->ReplaceExisting);
-            }
-            catch (star::ucb::DuplicateProviderException const &)
-            {
-                if (xParameterized.is())
-                    try
-                    {
-                        xParameterized->deregisterInstance(pInfo->Scheme,
-                                                           pInfo->Arguments);
-                    }
-                    catch (lang::IllegalArgumentException const &) {}
-                xOriginalProvider = 0;
-            }
-            catch (...)
-            {
-                if (xParameterized.is())
-                    try
-                    {
-                        xParameterized->deregisterInstance(pInfo->Scheme,
-                                                           pInfo->Arguments);
-                    }
-                    catch (lang::IllegalArgumentException const &) {}
-                throw;
-            }
-
-        if (pResults)
-            pResults->
-                push_back(ContentProviderRegistrationInfo(xOriginalProvider,
-                                                          pInfo->Arguments,
-                                                          pInfo->Scheme));
-
-        ++pInfo;
+    if (pInfo)
+    {
+        pInfo->m_xProvider = xOriginalProvider;
+        pInfo->m_aArguments = rArguments;
+        pInfo->m_aTemplate = rTemplate;
     }
 }
 
@@ -205,45 +205,33 @@ registerAtUcb(
 
 void
 deregisterFromUcb(
-    uno::Reference< star::ucb::XContentProviderManager > const & rUcb,
-    std::vector< ContentProviderRegistrationInfo > const & rProviders)
+    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    ContentProviderRegistrationInfo const & rInfo)
     throw (uno::RuntimeException)
 {
-    std::vector< ContentProviderRegistrationInfo >::const_iterator
-        aEnd(rProviders.end());
-    for (std::vector< ContentProviderRegistrationInfo >::const_iterator
-             aIt(rProviders.begin());
-         aIt != aEnd; ++aIt)
+    uno::Reference< star::ucb::XContentProvider >
+        xProvider(rInfo.m_xProvider);
+    uno::Reference< star::ucb::XParameterizedContentProvider >
+        xParameterized(xProvider, uno::UNO_QUERY);
+    if (xParameterized.is())
     {
-        uno::Reference< star::ucb::XContentProvider >
-            xProvider(aIt->m_xProvider);
-        if (xProvider.is())
+        uno::Reference< star::ucb::XContentProvider > xInstance;
+        try
         {
-            uno::Reference< star::ucb::XParameterizedContentProvider >
-                xParameterized(xProvider, uno::UNO_QUERY);
-            if (xParameterized.is())
-            {
-                uno::Reference< star::ucb::XContentProvider > xInstance;
-                try
-                {
-                    xInstance
-                        = xParameterized->
-                              deregisterInstance(aIt->m_aTemplate,
-                                                 aIt->m_aArguments);
-                }
-                catch (lang::IllegalArgumentException const &) {}
-
-                if (xInstance.is())
-                    xProvider = xInstance;
-            }
-
-            if (rUcb.is() && xProvider.is())
-                rUcb->deregisterContentProvider(xProvider, aIt->m_aTemplate);
-                    //@@@ if this fails, a roll-back of deregisterInstance()
-                    // is missing
+            xInstance
+                = xParameterized->deregisterInstance(rInfo.m_aTemplate,
+                                                     rInfo.m_aArguments);
         }
+        catch (lang::IllegalArgumentException const &) {}
+
+        if (xInstance.is())
+            xProvider = xInstance;
     }
+
+    if (rManager.is() && xProvider.is())
+        rManager->deregisterContentProvider(xProvider, rInfo.m_aTemplate);
+            //@@@ if this fails, a roll-back of deregisterInstance() is
+            // missing
 }
 
 }
-
