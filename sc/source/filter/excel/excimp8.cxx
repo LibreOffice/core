@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:05:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ void ImportExcel8::ApplyEscherObjects()
                 {
                     sal_uInt32 nShapeId = pShapeInfo->nShapeId;
                     XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( pShapeInfo->nFilePos );
-                    if( pEscherObj && !pEscherObj->GetSdrObj() )
+                    if( pEscherObj && !pEscherObj->GetIsSkip() && !pEscherObj->GetSdrObj() )
                     {
                         SvxMSDffImportData aDffImportData;
                         rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
