@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,16 @@
  *
  ************************************************************************/
 
-#include "textaction.hxx"
-#include "outdevstate.hxx"
+#include <textaction.hxx>
+#include <outdevstate.hxx>
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -80,7 +88,7 @@
 #include <canvas/canvastools.hxx>
 #endif
 
-#include "mtftools.hxx"
+#include <mtftools.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -90,10 +98,37 @@ namespace cppcanvas
 {
     namespace internal
     {
-        void TextAction::init( const ::Point&       rStartPoint,
-                               const OutDevState&   rState       )
+        void TextAction::init( const ::Point&                                                   rStartPoint,
+                               const OutDevState&                                               rState,
+                               const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&    rTextTransform       )
         {
+            // ensure that mxFont is valid. It is possible that text actions
+            // are generated without previously setting a font. Then, just
+            // take a default font
+            if( !mxFont.is() )
+            {
+                // Use completely default FontRequest
+                const rendering::FontRequest aFontRequest;
+
+                geometry::Matrix2D aFontMatrix;
+                ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
+
+                mxFont =
+                    mpCanvas->getUNOCanvas()->createFont( aFontRequest,
+                                                          uno::Sequence< beans::PropertyValue >(),
+                                                          aFontMatrix );
+            }
+
             tools::initRenderState(maState,rState);
+
+            if( rTextTransform.isValid() )
+            {
+                // prepend extra font transform to render state
+                // (prepend it, because it's interpreted in the unit
+                // rect coordinate space)
+                ::canvas::tools::prependToRenderState( maState,
+                                                       rTextTransform.getValue() );
+            }
 
             ::basegfx::B2DHomMatrix aLocalTransformation( rState.fontTransform );
 
@@ -102,15 +137,26 @@ namespace cppcanvas
             ::canvas::tools::appendToRenderState( maState,
                                                   aLocalTransformation );
 
+            // append text transform, if given
+
             maState.DeviceColor = rState.textColor;
+
+            if( maOffsets.getLength() )
+            {
+                mxTextLayout = mxFont->createTextLayout( maStringContext, rState.textDirection, 0 );
+
+                if( mxTextLayout.is() )
+                    mxTextLayout->applyLogicalAdvancements( maOffsets );
+            }
         }
 
-        TextAction::TextAction( const ::Point&          rStartPoint,
-                                const ::rtl::OUString&  rText,
-                                sal_Int32               nStartPos,
-                                sal_Int32               nLen,
-                                const CanvasSharedPtr&  rCanvas,
-                                const OutDevState&      rState      ) :
+        TextAction::TextAction( const ::Point&                                                  rStartPoint,
+                                const ::rtl::OUString&                                          rText,
+                                sal_Int32                                                       nStartPos,
+                                sal_Int32                                                       nLen,
+                                const CanvasSharedPtr&                                          rCanvas,
+                                const OutDevState&                                              rState,
+                                const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform  ) :
             mxFont( rState.xFont ),
             maStringContext( rText, nStartPos, nLen ),
             maOffsets(),
@@ -118,16 +164,17 @@ namespace cppcanvas
             maState(),
             maTextDirection( rState.textDirection )
         {
-            init( rStartPoint, rState );
+            init( rStartPoint, rState, rTextTransform );
         }
 
-        TextAction::TextAction( const ::Point&              rStartPoint,
-                                const ::rtl::OUString&      rText,
-                                sal_Int32                   nStartPos,
-                                sal_Int32                   nLen,
-                                uno::Sequence< double >     aOffsets,
-                                const CanvasSharedPtr&      rCanvas,
-                                const OutDevState&          rState      ) :
+        TextAction::TextAction( const ::Point&                                                  rStartPoint,
+                                const ::rtl::OUString&                                          rText,
+                                sal_Int32                                                       nStartPos,
+                                sal_Int32                                                       nLen,
+                                ::com::sun::star::uno::Sequence< double >                       aOffsets,
+                                const CanvasSharedPtr&                                          rCanvas,
+                                const OutDevState&                                              rState,
+                                const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform  ) :
             mxFont( rState.xFont ),
             maStringContext( rText, nStartPos, nLen ),
             maOffsets( aOffsets ),
@@ -135,21 +182,26 @@ namespace cppcanvas
             maState(),
             maTextDirection( rState.textDirection )
         {
-            init( rStartPoint, rState );
+            init( rStartPoint, rState, rTextTransform );
         }
 
         TextAction::~TextAction()
         {
         }
 
-        bool TextAction::render() const
+        bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
-            if( maOffsets.getLength() )
-                mpCanvas->getUNOCanvas()->drawOffsettedText( maStringContext, mxFont, maOffsets,
-                                                             mpCanvas->getViewState(), maState, maTextDirection );
+            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextAction::render()" );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextAction: 0x%X", this );
+
+            rendering::RenderState aLocalState( maState );
+            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+            if( mxTextLayout.is() )
+                mpCanvas->getUNOCanvas()->drawTextLayout( mxTextLayout, mpCanvas->getViewState(), aLocalState );
             else
                 mpCanvas->getUNOCanvas()->drawText( maStringContext, mxFont,
-                                                    mpCanvas->getViewState(), maState, maTextDirection );
+                                                    mpCanvas->getViewState(), aLocalState, maTextDirection );
 
             return true;
         }
