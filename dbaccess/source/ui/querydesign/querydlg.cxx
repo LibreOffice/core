@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:27:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,11 +161,13 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
 
     aLB_JoinType.SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
 
-    if (static_cast<OQueryTableView*>(pParent)->getDesignView()->getController()->isReadOnly())
+    if ( static_cast<OQueryTableView*>(pParent)->getDesignView()->getController()->isReadOnly() )
     {
         aLB_JoinType.Disable();
         m_pTableControl->Disable();
     }
+    else if ( !(bFull && bOuter) )
+        aLB_JoinType.Disable();
     else
     {
         if ( !bFull )
