@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:40:20 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,10 +467,12 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
     nFwdId(FN_START_OF_NEXT_PAGE),
     nBackId(FN_START_OF_PREV_PAGE)
 {
+    USHORT i;
+
     aToolBox.SetHelpId(HID_NAVI_VS);
     aToolBox.SetLineCount( 2 );
     aToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
-    for(USHORT i = 0; i < NID_COUNT; i++)
+    for( i = 0; i < NID_COUNT; i++)
     {
         USHORT nId = aNavigationInsertIds[i];
         String sText;
