@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2005-02-02 16:47:56 $
+#   last change: $Author: vg $ $Date: 2005-03-11 13:25:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,10 @@ SRC1FILES =\
         versdlg.src			\
         printopt.src        \
         srchdlg.src
+
+.IF "$(BUILD_VER_STRING)"!=""
+CFLAGS+=-DBUILD_VER_STRING='"$(BUILD_VER_STRING)"'
+.ENDIF
 
 # --- Targets -------------------------------------------------------
 
