@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:23:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef CONFIGMGR_LOCALBE_LOCALFILELAYER_HXX_
 #define CONFIGMGR_LOCALBE_LOCALFILELAYER_HXX_
+
+#ifndef CONFIGMGR_MISC_PROPERTYSETHELPER_HXX
+#include "propertysethelper.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
 #include <com/sun/star/configuration/backend/XUpdatableLayer.hpp>
@@ -168,6 +172,28 @@ private :
     uno::Reference<backend::XLayer> mLayerReader ;
 
 } ;
+
+// provides properties for file layers
+class LayerPropertyHelper : public apihelper::PropertySetHelper
+{
+protected:
+    LayerPropertyHelper(){};
+    virtual ~LayerPropertyHelper(){};
+
+protected:
+    virtual rtl::OUString const & getLayerUrl() const = 0;
+
+protected:
+    // cppu::OPropertySetHelper
+    virtual cppu::IPropertyArrayHelper * SAL_CALL newInfoHelper();
+
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue )
+            throw (uno::Exception);
+
+    virtual void SAL_CALL getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const;
+
+};
+
 /**
   Implementation of the readonly XLayer interfaces for a local file access.
   The read data is accessible through a canned implementation of
@@ -176,8 +202,9 @@ private :
   contents.
   */
 class SimpleLocalFileLayer  : public BasicLocalFileLayer
-                             , public cppu::WeakImplHelper2<backend::XLayer,
-                                                            util::XTimeStamped>
+                             , public cppu::ImplInheritanceHelper2< LayerPropertyHelper,
+                                                                    backend::XLayer,
+                                                                    util::XTimeStamped>
 {
 public :
     /**
@@ -220,8 +247,11 @@ public :
     virtual rtl::OUString SAL_CALL getTimestamp()
         throw (uno::RuntimeException);
 
-
+protected:
+    virtual rtl::OUString const & getLayerUrl() const
+    { return getFileUrl(); }
 } ;
+
 /**
   Implementation of the XUpdatableLayer
   interface for a local file access.
@@ -234,8 +264,9 @@ public :
   The timestamp is refreshed on each read operation only.
   */
 class FlatLocalFileLayer : public BasicLocalFileLayer
-                     , public cppu::WeakImplHelper2<backend::XUpdatableLayer,
-                                                    util::XTimeStamped>
+                         , public cppu::ImplInheritanceHelper2< LayerPropertyHelper,
+                                                                backend::XUpdatableLayer,
+                                                                util::XTimeStamped>
 {
 public :
     /**
@@ -268,6 +299,10 @@ public :
     // XTimeStamped
     virtual rtl::OUString SAL_CALL getTimestamp()
         throw (uno::RuntimeException);
+
+protected:
+    virtual rtl::OUString const & getLayerUrl() const
+    { return getFileUrl(); }
 
 private :
     /** XLayerHandler implementation for getWriteHandler */
@@ -398,7 +433,9 @@ private :
   The timestamp is refreshed on each read operation only.
   */
 class FullCompositeLocalFileLayer : public BasicCompositeLocalFileLayer
-                     , public cppu::WeakImplHelper3<backend::XUpdatableLayer,
+                                    , public cppu::ImplInheritanceHelper3<
+                                                    LayerPropertyHelper,
+                                                    backend::XUpdatableLayer,
                                                     backend::XCompositeLayer,
                                                     util::XTimeStamped>
 {
@@ -449,6 +486,10 @@ public :
     // XTimeStamped
     virtual rtl::OUString SAL_CALL getTimestamp()
         throw (uno::RuntimeException);
+
+protected:
+    virtual rtl::OUString const & getLayerUrl() const
+    { return getFileUrl(); }
 
 private :
     /** XLayerHandler implementation for getWriteHandler */
