@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:23:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2521,12 +2521,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     else if (bTmp &&
              rSh.IsNumLabel(aDocPos))
     {
-        rView.SetNumRuleNodeFromDoc(rSh.GetNumRuleNodeAtPos(aDocPos));
+        SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPos );
+        rView.SetNumRuleNodeFromDoc( pNodeAtPos );
         rView.InvalidateRulerPos();
         SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
         rBind.Update();
 
-        if (RulerMarginDrag( rView , rMEvt))
+        // --> OD 2005-02-21 #i42921#
+        if ( RulerMarginDrag( rView ,rMEvt,
+                        rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPos ) ) )
+        // <--
         {
             rView.SetNumRuleNodeFromDoc( NULL );
             rView.InvalidateRulerPos();
@@ -3339,7 +3343,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         // #i23726#
         else if (rSh.IsNumLabel(aDocPt, RULER_MOUSE_MARGINWIDTH))
         {
-            SetPointer( POINTER_HSIZEBAR );
+            // --> OD 2005-02-21 #i42921# - consider vertical mode
+            SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
+            const USHORT nPointer =
+                    rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
+                    ? POINTER_VSIZEBAR
+                    : POINTER_HSIZEBAR;
+            SetPointer( nPointer );
+            // <--
 
             return;
         }
