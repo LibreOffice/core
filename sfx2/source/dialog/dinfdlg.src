@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:14:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,7 +888,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "Neobnovovat automaticky";
         Text[ hebrew ] = "‮לא לעדכן אוטומטית‬";
         Text[ catalan ] = "Do not refresh automatically";
-        Text[ portuguese_brazilian ] = "Do not refresh automatically";
+        Text[ portuguese_brazilian ] = "N�o atualizar automaticamente";
         Text[ thai ] = "Do not refresh automatically";
         Text[ hindi ] = "Do not refresh automatically";
         Text[ slovak ] = "Neobnovovať automaticky";
@@ -922,7 +922,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "Obnovit tento dokument";
         Text[ hebrew ] = "‮עידכון מסמך זה‬";
         Text[ catalan ] = "Refresh this document";
-        Text[ portuguese_brazilian ] = "Refresh this document";
+        Text[ portuguese_brazilian ] = "Atualizar este documento";
         Text[ thai ] = "Refresh this document";
         Text[ hindi ] = "Refresh this document";
         Text[ slovak ] = "Obnoviť dokument";
@@ -953,7 +953,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "����";
         Text[ catalan ] = "Tot";
         Text[ thai ] = "ทั้งหมด";
-        Text[ portuguese_brazilian ] = "Todos";
+        Text[ portuguese_brazilian ] = "a cada";
         Text[ czech ] = "každých";
         Text[ hebrew ] = "‮כל‬";
         Text[ hindi ] = "सब ";
@@ -1033,7 +1033,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "Přesměrovat z tohoto dokumentu";
         Text[ hebrew ] = "‮הפניה מקובץ זה‬";
         Text[ catalan ] = "Redirect from this document";
-        Text[ portuguese_brazilian ] = "Redirect from this document";
+        Text[ portuguese_brazilian ] = "Transferir a partir deste documento";
         Text[ thai ] = "Redirect from this document";
         Text[ hindi ] = "Redirect from this document";
         Text[ slovak ] = "Presmerovať z tohto dokumentu";
@@ -1065,7 +1065,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "po";
         Text[ hebrew ] = "‮אחרי‬";
         Text[ catalan ] = "after";
-        Text[ portuguese_brazilian ] = "after";
+        Text[ portuguese_brazilian ] = "depois de";
         Text[ thai ] = "after";
         Text[ hindi ] = "after";
         Text[ slovak ] = "po";
@@ -1133,7 +1133,7 @@ TabPage TP_DOCINFORELOAD
         Text[ danish ] = "URL";
         Text[ swedish ] = "till URL";
         Text[ polish ] = "Adres ~URL";
-        Text[ portuguese_brazilian ] = "~URL";
+        Text[ portuguese_brazilian ] = "para a ~URL";
         Text[ japanese ] = "URL へ";
         Text[ korean ] = "전송 URL";
         Text[ chinese_simplified ] = "送至 URL";
@@ -1186,7 +1186,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "do rámce";
         Text[ hebrew ] = "‮למסגרת‬";
         Text[ catalan ] = "to frame";
-        Text[ portuguese_brazilian ] = "to frame";
+        Text[ portuguese_brazilian ] = "para o frame";
         Text[ thai ] = "to frame";
         Text[ hindi ] = "to frame";
         Text[ slovak ] = "K rámcu";
@@ -1222,7 +1222,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "Pokud vyberete volbu \"%PLACEHOLDER%\", musíte zadat URL.";
         Text[ hebrew ] = "‮בחירת האפשרות \"%PLACEHOLDER%\" מצריכה ציון URL.‬";
         Text[ catalan ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
-        Text[ portuguese_brazilian ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ portuguese_brazilian ] = "Ao selecionar a op��o \"%PLACEHOLDER%\", deve-se indicar uma URL";
         Text[ thai ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ hindi ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ slovak ] = "V prípade že si vyberiete možnosť \"%PLACEHOLDER%\", musíte zadať URL.";
@@ -1402,6 +1402,7 @@ TabDialog SID_DOCINFO
     Text[ hindi ] = "का स्वभाव ";
     Text[ slovak ] = "Vlastnosti ";
 };
+
 
 
 

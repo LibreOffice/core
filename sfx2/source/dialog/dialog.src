@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:14:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,7 +632,7 @@ InfoBox MSG_TABPAGE_INVALIDSTYLE
     Message[ greek ] = "Το πρότυπο δεν υπάρχει.";
     Message[ korean ] = "μ΄ μ¤νƒ€μΌμ€ μ—†μµλ‹λ‹¤.";
     Message[ turkish ] = "Bu ώablon mevcut deπil.";
-    Message[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Message[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Message[ catalan ] = "Aquest estil no existeix.";
     Message[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΈ™ΰΈµΰΉ‰ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉ";
     Message[ czech ] = "Tento styl neexistuje";
@@ -680,7 +680,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE [ English ] = "Name is alreafy used by a default style.\nPlease choose another Name." ;
     MESSAGE [ norwegian ] = "Navnet er allerede I bruk av en standardstil.\nVelg et annet navn." ;
     MESSAGE [ italian ] = "Il nome θ giΰ usato da uno stile predefinito.\nScegliere un altro nome." ;
-    MESSAGE [ portuguese_brazilian ] = "O nome jα existe como um estilo padrγo.\nPor favor, escolha outro nome." ;
+    MESSAGE [ portuguese_brazilian ] = "O nome jα existe como um estilo padrγo.\nEscolha outro nome." ;
     MESSAGE [ portuguese ] = "O nome jα estα a ser usado por um estilo padrγo.\nEscolha outro nome por favor." ;
     MESSAGE [ finnish ] = "Nimi on jo mδδritetty oletustyylille.\nValitse toinen nimi." ;
     MESSAGE [ danish ] = "Navnet er allerede i brug som navn pε en standardtypografi.\nVζlg venligst et andet navn." ;
@@ -698,7 +698,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE[ greek ] = "Το όνομα αυτό υπάρχει ήδη ως όνομα προτύπου προεπιλογής.\nΠαρακαλώ επιλέξτε άλλο όνομα.";
     MESSAGE[ korean ] = "μ΄ μ΄λ¦„μ€ μ΄λ―Έ κΈ°λ³Έ μ¤νƒ€μΌμ μ΄λ¦„μΌλ΅ μ§€μ •λμ–΄ μμµλ‹λ‹¤.\nλ‹¤λ¥Έ μ΄λ¦„μ„ μ„ νƒν•μ‹­μ‹μ¤.";
     MESSAGE[ turkish ] = "Bu ad bir standart ώablon adύ olarak kullanύlύyor.\nBaώka bir ad seηin.";
-    MESSAGE[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    MESSAGE[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     MESSAGE[ catalan ] = "El nom ja existeix com a estil per defecte.\nTrieu un altre nom.";
     MESSAGE[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉΰΉΰΈ¥ΰΉ‰ΰΈ§ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°\nΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ·ΰΉΰΈ­ΰΈ­ΰΈ·ΰΉΰΈ™";
     MESSAGE[ czech ] = "NΓ΅zev uΕΎ existuje jako vΓ½chozΓ­ styl.\nZadejte prosΓ­m jinΓ½ nΓ΅zev.";
@@ -762,7 +762,7 @@ String STR_DELETE_STYLE
     Text[ greek ] = "Θέλετε σίγουρα να διαγράψετε το πρότυπο $1?";
     Text[ korean ] = "μ¤νƒ€μΌ $1μ„(λ¥Ό) μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "$1 ώablonlarύnύ gerηekten silmek istiyor musunuz?";
-    Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Text[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "Voleu suprimir realment l'estil $1?";
     Text[ finnish ] = "Haluatko varmasti poistaa tyylin $1?";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈ¥ΰΈΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ° $1 ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉ?";
@@ -793,7 +793,7 @@ String STR_DELETE_STYLE_USED
     Text[ greek ] = "Διαγράφετε ένα πρότυπο που εφαρμόστηκε!\n";
     Text[ korean ] = "μ‚¬μ©λ μ¤νƒ€μΌμ„ μ‚­μ ν•κ³  μμµλ‹λ‹¤.\n";
     Text[ turkish ] = "Kullanύlan bir ώablonu siliyorsunuz!\n";
-    Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Text[ language_user1 ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     Text[ catalan ] = "Esteu suprimint un estil ja aplicat!\n";
     Text[ finnish ] = "Olet poistamassa kδytφssδ olevaa tyyliδ.\n";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈΰΈ³ΰΈ¥ΰΈ±ΰΈ‡ΰΈ¥ΰΈΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΈ›ΰΈ£ΰΈ°ΰΈΆΰΈΈΰΈΰΈ•ΰΉ!\n";
@@ -1231,7 +1231,7 @@ String SID_NAVIGATOR
     Text[ chinese_simplified ] = "ε©ζ‰‹";
     Text[ chinese_traditional ] = "ε©ζ‰‹";
     Text[ arabic ] = "ΗαδΗένΜνΚζΡ";
-    Text[ greek ] = "Navigator";
+    Text[ greek ] = "Περιήγηση";
     Text[ korean ] = "λ„¤λΉ„κ²μ΄ν„°";
     Text[ turkish ] = "Navigatφr";
     Text[ language_user1 ] = " ";
@@ -1283,6 +1283,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
 
 
