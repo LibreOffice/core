@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2001-02-02 19:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@
 //#define _SFX_DOCFILT_HXX
 #define _SFX_DOCINF_HXX
 #define _SFX_DOCSH_HXX
-#define _SFXDOCFILE_HXX
 //#define _SFXDOCFILT_HXX
 //#define _SFXDOCINF_HXX
 //#define _SFXDOCSH_HXX
@@ -205,6 +204,7 @@
 #include <svx/dbexch.hrc>
 #include <svx/svdetc.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
 #include <offmgr/app.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/ptitem.hxx>
@@ -215,6 +215,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
+#include <tools/urlobj.hxx>
 
 #include "viewfunc.hxx"
 #include "tabvwsh.hxx"
@@ -224,13 +225,15 @@
 #include "refundo.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
-#include "dataobj.hxx"
+#include "transobj.hxx"
 #include "rangenam.hxx"
 #include "dbcolect.hxx"
 #include "impex.hxx"            // Sylk-ID fuer CB
 #include "chgtrack.hxx"
 #include "waitoff.hxx"
 #include "sc.hrc"
+
+using namespace com::sun::star;
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -332,14 +335,13 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
         ScDocument* pDoc = GetViewData()->GetDocument();
         ScMarkData& rMark = GetViewData()->GetMarkData();
         if ( !pDoc->HasSelectedBlockMatrixFragment(
-/*!*/                   aRange.aStart.Col(), aRange.aStart.Row(),
+                        aRange.aStart.Col(), aRange.aStart.Row(),
                         aRange.aEnd.Col(),   aRange.aEnd.Row(),
                         rMark ) )
         {
             if (bSysClip)
             {
-//?             Clipboard::Clear();         // loescht ggf. altes ScDataObject und gibt ClipDoc frei
-
+                // release clipboard
                 SvDataObjectRef pDummyObj = new SvDataObject;
                 pDummyObj->CopyClipboard();
             }
@@ -352,17 +354,23 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
             }
 
             pDoc->CopyToClip( aRange.aStart.Col(), aRange.aStart.Row(),
-/*!*/                         aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                              aRange.aEnd.Col(),   aRange.aEnd.Row(),
                               bCut, pClipDoc, FALSE, &rMark );
             ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
             pClipDoc->ExtendMerge( aRange, TRUE );
 
             if (bSysClip)
             {
-                SvDataObjectRef pClipObj = new ScDataObject(pClipDoc,FALSE,
-                                                            GetViewData()->GetDocShell(),
-                                                            &GetViewData()->GetOptions());
-                pClipObj->CopyClipboard();
+                ScDocShell* pDocSh = GetViewData()->GetDocShell();
+                TransferableObjectDescriptor aObjDesc;
+                pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+                aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+                // maSize is set in ScTransferObj ctor
+
+                ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+                uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+                pTransferObj->CopyToClipboard();
             }
         }
         else
