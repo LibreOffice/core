@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:57:37 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 09:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/XExecutableDialog.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1349,7 +1349,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 aInit[2] <<= xSup->getColumns();
 
 
-                Reference< com::sun::star::ui::XExecutableDialog> xDlg(
+                Reference< com::sun::star::ui::dialogs::XExecutableDialog> xDlg(
                     ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.OrderDialog"),aInit),UNO_QUERY);
 
                 if(xDlg.is())
