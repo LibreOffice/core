@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 15:17:07 $
+ *  last change: $Author: gh $ $Date: 2002-10-21 11:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ String S_NAME_NOT_THERE
 String S_DOUBLE_NAME
 {
     Text = "Name double: ($Arg1)";
-    Text[ french ] = "Nom double : ($Arg1)";
 };
 String S_READING_FILE
 {
@@ -101,8 +100,6 @@ String S_SHORTNAME_UNKNOWN
 String S_LONGNAME_UNKNOWN
 {
     Text = "Long-name unknown: ($Arg1)";
-    Text[ dutch ] = "Volledige naam onbekend: ($Arg1)";
-    Text[ danish ] = "Det lange navn er ukendt: ($Arg1)";
 };
 String S_FIRST_SHORTNAME_REQ_ASTRX
 {
@@ -111,22 +108,18 @@ String S_FIRST_SHORTNAME_REQ_ASTRX
 String S_TIMOUT_WAITING
 {
     Text = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ dutch ] = "Server-time-out bij het wachten op antwoord. Sequentie nr: ($Arg1)";
 };
 String S_APPLICATION_RESTARTED
 {
     Text = "Application has been restarted.";
-    Text[ dutch ] = "Toepassing is opnieuw gestart";
 };
 String S_APPLICATION_START_FAILED
 {
     Text = "Application \"($Arg1)\" cannot be started. ";
-    Text[ dutch ] = "Toepassing \"($Arg1)\" kan niet worden gestart.";
 };
 String S_TIMOUT_SENDING
 {
     Text = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ dutch ] = "Server-time-out bij het verzenden. Sequentie nr: ($Arg1)";
 };
 String S_NO_CONNECTION
 {
@@ -135,7 +128,6 @@ String S_NO_CONNECTION
 String S_NO_FILES_FOUND // Not used anymore. needed only for old *.res files
 {
     Text = "No ($Arg1) files found";
-    Text[ dutch ] = "Geen ($Arg1)-bestanden gevonden";
 };
 String S_ERRORS_DETECTED
 {
@@ -164,22 +156,18 @@ String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
 String S_UNKNOWN_SLOT_CONTROL
 {
     Text = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ dutch ] = "Sleuf/Control onbekend:\"($Arg1)\"";
 };
 String S_RETURN_SEQUENCE_MISSMATCH
 {
     Text = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ dutch ] = "Return Stream met foutieve sequentie: ($Arg1) in plaats van ($Arg2)";
 };
 String S_RETURNED_VALUE_ID_MISSMATCH
 {
     Text = "Return value received but different Id expected";
-    Text[ dutch ] = "Retourwaarde ontvangen, echter andere ID verwacht";
 };
 String S_RETURNED_VALUE_NO_RECEIVER
 {
     Text = "Return value received but no receiver defined";
-    Text[ dutch ] = "Retourwaarde ontvangen, echter geen ontvanger gedefinieerd";
 };
 String S_UNKNOWN_METHOD
 {
