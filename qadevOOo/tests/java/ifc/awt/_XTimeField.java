@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTimeField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:31 $
+ *  last change:$Date: 2003-02-25 11:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,13 @@ public class _XTimeField extends MultiMethodTest {
         requiredMethod("getTime()") ;
 
         boolean result = true ;
-        oObj.setTime(5087) ;
+        oObj.setTime(11150000) ;
 
-        result = oObj.getTime() == 5087 ;
+        result = oObj.getTime() == 11150000 ;
+
+        if (! result ) {
+            System.out.println("Getting "+oObj.getTime()+ " expected 11150000");
+        }
 
         tRes.tested("setTime()", result) ;
     }
