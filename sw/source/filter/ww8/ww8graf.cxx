@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-25 18:27:07 $
+ *  last change: $Author: cmc $ $Date: 2001-05-29 13:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,10 +838,15 @@ void SwWW8ImplReader::GetTxbxPapAndCharAttrs( SfxItemSet& rS,
                     rS.Put( SvxFontHeightItem(
                                 (const ULONG) ( (ULONG) nFSize * 10 ),
                                 100, EE_CHAR_FONTHEIGHT ) );
+                    rS.Put( SvxFontHeightItem(
+                                (const ULONG) ( (ULONG) nFSize * 10 ),
+                                100, EE_CHAR_FONTHEIGHT_CJK ) );
                  }
                  break;
     case 93:
-    case 0x4A4F:{
+    case 0x4A51:
+    case 0x4A4F:
+    case 0x4A50:{
                     USHORT nFCode = SVBT16ToShort( pData ); // Font-Nummer
                     FontFamily eFamily;
                     String aName;
@@ -851,11 +856,19 @@ void SwWW8ImplReader::GetTxbxPapAndCharAttrs( SfxItemSet& rS,
                     if( GetFontParams( nFCode, eFamily, aName, ePitch,
                                        eSrcCharSet ) )
                     {
-                        rS.Put( SvxFontItem( eFamily, aName, aEmptyStr, ePitch,
-                                             eSrcCharSet, EE_CHAR_FONTINFO ) );
+                        if (rRes.nSprmId != 0x4A50)
+                        {
+                            rS.Put( SvxFontItem( eFamily, aName, aEmptyStr, ePitch,
+                                eSrcCharSet, EE_CHAR_FONTINFO ) );
+                        }
+                        else
+                        {
+                            rS.Put( SvxFontItem( eFamily, aName, aEmptyStr, ePitch,
+                                eSrcCharSet, EE_CHAR_FONTINFO_CJK ) );
+                        }
                     }
                 }
-                 break;
+                break;
     }
 }
 
@@ -981,7 +994,10 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
         ITEMID_LINESPACING,
         ITEMID_TABSTOP,
         ITEMID_LRSPACE,
-        ITEMID_ULSPACE };
+        ITEMID_ULSPACE,
+        RES_CHRATR_CJK_FONT,
+        RES_CHRATR_CJK_FONTSIZE
+    };
 
     static USHORT __READONLY_DATA aDstTab[] = {
         EE_CHAR_FONTINFO,
@@ -1001,7 +1017,10 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
         EE_PARA_SBL,
         EE_PARA_TABS,
         EE_PARA_LRSPACE,
-        EE_PARA_ULSPACE };
+        EE_PARA_ULSPACE,
+        EE_CHAR_FONTINFO_CJK,
+        EE_CHAR_FONTHEIGHT_CJK
+    };
 
     if( nColl < nColls && pCollA[nColl].pFmt && pCollA[nColl].bColl ){
         const SfxPoolItem* pItem;
@@ -3186,11 +3205,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.24 2001-04-25 18:27:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.25 2001-05-29 13:52:03 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.24  2001/04/25 18:27:07  jp
+      Bug #83181#: don't insert in GroupObjects SW-OLE-Objects
+
       Revision 1.23  2001/04/25 12:55:01  cmc
       ##761## reenable auto for draw layer, keep auto for table borders and shadings disabled
 
