@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jb $ $Date: 2001-03-29 08:52:06 $
+#   last change: $Author: svesik $ $Date: 2001-03-29 12:16:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ TARGET=misc
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 # --- Files -------------------------------------
 
@@ -96,6 +97,10 @@ SLOFILES=	\
         $(SLO)$/strimpl.obj	\
         $(SLO)$/treemap.obj	\
         $(SLO)$/mergechange.obj
+
+.IF "$(OS)"=="MACOSX"
+SYMBOLPREFIX=$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
+.ENDIF
 
 # --- Targets ----------------------------------
 
