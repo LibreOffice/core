@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:57:58 $
+#   last change: $Author: vg $ $Date: 2004-01-06 13:47:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,37 +132,16 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/fontcfg.obj		\
             $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\
-            $(SLO)$/pdfwriter_impl.obj\
+            $(SLO)$/pdfwriter_impl.obj	\
+            $(SLO)$/sallayout.obj		\
+            $(SLO)$/salgdilayout.obj	\
             $(SLO)$/bmpconv.obj
 
-.IF "$(remote)"==""
-    SLOFILES += $(SLO)$/salgdilayout.obj
-.ENDIF
-
-.IF "$(ENABLE_CTL)"!=""
-    SLOFILES +=     $(SLO)$/sallayout.obj
-.ENDIF
-
-.IF "$(remote)"!=""
-EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
-                    $(SLO)$/color.obj		\
-                    $(SLO)$/gfxlink.obj		\
-                    $(SLO)$/impgraph.obj	\
-                    $(SLO)$/impvect.obj 	\
-                    $(SLO)$/outdev.obj		\
-                    $(SLO)$/outdev3.obj 	\
-                    $(SLO)$/outdev6.obj		\
-                    $(SLO)$/print.obj		\
-                    $(SLO)$/print2.obj		\
-                    $(SLO)$/virdev.obj		
-
-.ELSE
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/bmpconv.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
