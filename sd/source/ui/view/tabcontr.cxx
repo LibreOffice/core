@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:56:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,10 @@ void TabControl::Select()
 
 void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // eine saubere linke Maustaste ohne verwaessernde Modifier (damit koennte
-    //ja das Kontextmenue gemeint sein)
-    if ( rMEvt.IsLeft() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift())
+    if (rMEvt.IsLeft()
+        && !rMEvt.IsMod1()
+        && !rMEvt.IsMod2()
+        && !rMEvt.IsShift())
     {
         Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
         USHORT aPageId = GetPageId(aPos);
@@ -201,6 +202,21 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
         pDrViewSh->SwitchPage (GetPageId (rMEvt.GetPosPixel()) - 1);
     }
 
+    // When only the right button is pressed then first process a
+    // synthesized left button click to make the page the current one
+    // whose tab has been clicked.  When then the actual right button
+    // click is processed the resulting context menu relates to the
+    // now current page.
+    if (rMEvt.IsRight() && ! rMEvt.IsLeft())
+    {
+        MouseEvent aSyntheticEvent (
+            rMEvt.GetPosPixel(),
+            rMEvt.GetClicks(),
+            rMEvt.GetMode(),
+            MOUSE_LEFT,
+            rMEvt.GetModifier());
+        TabBar::MouseButtonDown(aSyntheticEvent);
+    }
 
     TabBar::MouseButtonDown(rMEvt);
 }
