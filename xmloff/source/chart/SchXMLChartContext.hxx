@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-29 11:08:57 $
+ *  last change: $Author: bm $ $Date: 2001-05-15 12:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,14 @@ private:
     SchXMLTable maTable;
     SchXMLImportHelper& mrImportHelper;
 
-    rtl::OUString maMainTitle, maSubTitle;
+    ::rtl::OUString maMainTitle, maSubTitle;
     com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
     sal_Bool mbHasOwnTable;
     sal_Bool mbHasLegend;
 
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
-    rtl::OUString msCategoriesAddress;
+    ::rtl::OUString msCategoriesAddress;
+    ::rtl::OUString msChartAddress;
 
 public:
     SchXMLChartContext( SchXMLImportHelper& rImpHelper,
