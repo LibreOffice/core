@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchdemo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:08:05 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,19 +83,19 @@ extern RandomAccessStream* theFile();
 
 
 
-//  ostream& operator<<( ostream& out,const rtl::OUString& bla )
-//  {
-//    out << bla.getLength() << endl;
-//    rtl::OString bluber = rtl::OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
-//    char* bluberChr = new char[ 1+bluber.getLength() ];
-//    const sal_Char* jux = bluber.getStr();
+void print_rtl_OUString( const rtl::OUString bla )
+{
+    rtl::OString bluber = rtl::OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
+    char* bluberChr = new char[ 1+bluber.getLength() ];
+    const sal_Char* jux = bluber.getStr();
 
-//    for( int i = 0; i < bluber.getLength(); ++i )
-//      bluberChr[i] = jux[i];
+    for( int i = 0; i < bluber.getLength(); ++i )
+        bluberChr[i] = jux[i];
 
-//    bluberChr[ bluber.getLength() ] = 0;
-//    return out << bluberChr;
-//  }
+    bluberChr[ bluber.getLength() ] = 0;
+    printf( "%s\n",bluberChr );
+    delete[] bluberChr;
+}
 
 
 extern void bla();
@@ -109,13 +109,13 @@ int main( int argc,char* argv[] )
 
     try
     {
-        rtl::OUString installDir = rtl::OUString::createFromAscii( "//./home/ab106281/work/index" );
+        rtl::OUString installDir = rtl::OUString::createFromAscii( "//./e|/index/" );
         QueryProcessor queryProcessor( installDir );
 
         std::vector<rtl::OUString> Query(1);
         Query[0] = ( rtl::OUString::createFromAscii( "text*" ) );
         rtl::OUString Scope = rtl::OUString::createFromAscii( "" );
-        int HitCount = 100;
+        int HitCount = 10;
 
         QueryStatement queryStatement( HitCount,Query,Scope );
         queryResults = queryProcessor.processQuery( queryStatement );
@@ -127,14 +127,22 @@ int main( int argc,char* argv[] )
         PrefixTranslator* translator =  PrefixTranslator::makePrefixTranslator( translations,2 );
 
         QueryHitIterator* it = queryResults->makeQueryHitIterator();
+        sal_Int32 j = 0;
         while( it->next() )
-            ; // cout << it->getHit( translator )->getDocument() << endl;
+        {
+            printf( "Ergebnis %2d    ",j );
+            QueryHitData* qhd = it->getHit( translator );
+            printf( "Penalty = %10.4f    ",qhd->getPenalty() );
+            print_rtl_OUString( qhd->getDocument() );
+            ++j;
+        }
 
         delete it;
     }
     catch( ... )
     {
-
+        printf( "catched exception" );
+        throw;
     }
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocGenerator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,20 @@ const sal_Int32 ConceptGroupGenerator::BitsInLabel = 4;
 RoleFiller RoleFiller::roleFiller_;
 
 
+RoleFiller::RoleFiller()
+    : conceptData_( 0 ),
+      fixedRole_( 0 ),
+      filled_( 0 ),
+      begin_( 0 ),
+      end_( 0 ),
+      limit_( 0 ),
+      parentContext_( 0 ),
+      next_( 0 ),
+      fillers_( 0 )
+{
+}
+
+
 RoleFiller::RoleFiller( sal_Int32 nColumns,
                         ConceptData* first,
                         sal_Int32 role,
@@ -86,7 +100,8 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
                         sal_Int32 limit )
     : next_( 0 ),
       conceptData_( first ),
-      fixedRole_( sal_Int8( role) )                    // primary/constitutive concept/role
+      fixedRole_( sal_uInt8( role & 0xF ) ),                    // primary/constitutive concept/role
+      fillers_( nColumns )
 {
     // cout << "RoleFiller constructed" << nColumns << ' ' << role << ' ' << pos << endl;
     filled_ = sal_Int16( 1 << fixedRole_ );
@@ -96,8 +111,7 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
     limit_ = limit;
     parentContext_ = parentContext;
     next_ = 0;
-    fillers_ = new RoleFiller*[ fillersL_ = nColumns ];
-    for( int i = 0; i < fillersL_; ++i )
+    for( sal_uInt32 i = 0; i < fillers_.size(); ++i )
         fillers_[i] = 0;
     fillers_[ role ] = this;
 }
@@ -105,9 +119,8 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
 
 RoleFiller::~RoleFiller()
 {
-    for( int i = 0; i < fillersL_; ++i )
+    for( sal_uInt32 i = 0; i < fillers_.size(); ++i )
         delete fillers_[i];
-    delete[] fillers_;
 }
 
 
@@ -251,6 +264,66 @@ double RoleFiller::penalty( Query* query,sal_Int32 nColumns )
 
 
 
+NextDocGenerator::NextDocGenerator( ConceptData* cd,XmlIndex* env )
+    : document_( 0 ),
+      concept_( cd ? cd->getConcept() : -1 ),
+      queryMask_( cd ? cd->getQueryMask() : -1 ),
+      terms_( cd ),
+      iterator_( env->getDocumentIterator( concept_ ) )
+{
+}
+
+
+
+void NextDocGeneratorHeap::reset()
+{
+    for( sal_Int32 i = 0; i < heapSize_; ++i )
+    {
+        delete heap_[i]; heap_[i] = 0;
+    }
+    free_ = 0;
+    nonEmpty_ = false;
+}
+
+
+
+void NextDocGeneratorHeap::addGenerator( NextDocGenerator* gen )
+{
+    if( sal_uInt32( free_ ) == heap_.size() )
+    {
+        heap_.push_back( 0 );
+    }
+
+    heap_[free_++] = gen;
+}
+
+
+
+void NextDocGeneratorHeap::start()
+{
+    if( ( heapSize_ = free_ ) > 0 )
+    {
+        for( sal_Int32 i = heapSize_ / 2; i >= 0; --i )
+            heapify(i);
+        nonEmpty_ = true;
+    }
+    else
+        nonEmpty_ = false;
+}
+
+
+void NextDocGeneratorHeap::step() throw( excep::XmlSearchException )
+{
+    if( heap_[0]->next() != NonnegativeIntegerGenerator::END )
+        heapify(0);
+    else if ( heapSize_ > 1 )
+    {
+        heap_[0] = heap_[--heapSize_];
+        heapify(0);
+    }
+    else
+        nonEmpty_ = false;
+}
 
 
 void NextDocGeneratorHeap::heapify( sal_Int32 i )
@@ -276,24 +349,12 @@ void NextDocGeneratorHeap::heapify( sal_Int32 i )
 }
 
 
-void NextDocGeneratorHeap::step() throw( excep::XmlSearchException )
-{
-    if( heap_[0]->next() != NonnegativeIntegerGenerator::END )
-        heapify(0);
-    else if ( heapSize_ > 1 )
-    {
-        heap_[0] = heap_[--heapSize_];
-        heapify(0);
-    }
-    else
-        nonEmpty_ = false;
-}
-
-
 bool NextDocGeneratorHeap::atDocument( sal_Int32 document )
 {
     return nonEmpty_ && heap_[0]->getDocument() == document;
 }
+
+
 
 
 ConceptGroupGenerator::ConceptGroupGenerator( sal_Int32 dataL,sal_Int8* data,sal_Int32 index,sal_Int32 k )
@@ -362,18 +423,79 @@ void ConceptGroupGenerator::init( sal_Int32 bytesL,sal_Int8* bytes,sal_Int32 ind
     last_ = 0;
     for( sal_Int32 i = 0;i < NConceptsInGroup; i++ )
     {
-        delete table_[i];
+//      delete table_[i];
         table_[i] = 0;
     }
 }
 
 
 
+void ConceptGroupGenerator::addTerms( sal_Int32 index,ConceptData* terms )
+{
+    table_[ index ] = terms;
+}
+
+
+
+void GeneratorHeap::reset()
+{
+    for( sal_Int32 i = 0; i < heapSize_; ++i )
+    {
+        delete heap_[i]; heap_[i] = 0;
+    }
+    free_ = 0;
+}
+
+
+void GeneratorHeap::addGenerator( ConceptGroupGenerator* cd )
+{
+    if( sal_uInt32( free_ ) == heap_.size() )
+    {
+        heap_.push_back( 0 );
+    }
+    else
+    {
+//      delete heap_[free_];
+    }
+
+    heap_[free_++] = cd;
+}
+
+
+void GeneratorHeap::buildHeap()
+{
+    for( sal_Int32 i = heapSize_/2; i >= 0; i-- )
+        heapify(i);
+}
+
+
+void GeneratorHeap::heapify( sal_Int32 root )
+{
+    for( sal_Int32 smallest = 0; ; )
+    {
+        const sal_Int32 right = ( root + 1 ) << 1;
+        const sal_Int32 left = right - 1;
+        smallest = ( left < heapSize_ && heap_[left]->position() < heap_[ root ]->position() ) ? left : root;
+        if( right< heapSize_ && heap_[right]->position() < heap_[smallest]->position() )
+            smallest = right;
+        if( smallest != root )
+        {
+            ConceptGroupGenerator* temp = heap_[smallest];
+            heap_[smallest] = heap_[root];
+            heap_[root] = temp;
+            root = smallest;
+        }
+        else
+            break;
+    }
+}
+
+
 bool GeneratorHeap::start( std::vector< RoleFiller* >& array ) throw( xmlsearch::excep::XmlSearchException )
 {
-    if( ( heapSize_ = heap_.size() ) > 0 )
+    if( ( heapSize_ = free_ ) > 0 )
     {
-        for( sal_Int32 i = 0; i < heapSize_; ++i )
+        for( sal_Int32 i = 0; i < free_; ++i )
             heap_[i]->next();
 
         buildHeap();
@@ -391,7 +513,10 @@ bool GeneratorHeap::next( std::vector< RoleFiller* >& array ) throw( xmlsearch::
     {
         if( ! heap_[0]->next() ) // no more
             if( heapSize_ > 1)
+            {
+                delete heap_[0];
                 heap_[0] = heap_[--heapSize_];
+            }
             else
             {
                 heapSize_ = 0;
@@ -404,44 +529,3 @@ bool GeneratorHeap::next( std::vector< RoleFiller* >& array ) throw( xmlsearch::
     else
         return false;
 }
-
-
-
-void GeneratorHeap::reset()
-{
-    for( sal_uInt32 i = 0; i < heap_.size(); ++i )
-        delete heap_[i];
-    heap_.clear();
-    heapSize_ = 0;
-}
-
-
-
-void GeneratorHeap::buildHeap()
-{
-    for( sal_Int32 i = heapSize_/2; i >= 0; i-- )
-        heapify(i);
-}
-
-
-void GeneratorHeap::heapify( sal_Int32 root )
-{
-    for( sal_Int32 smallest = 0; ; )
-    {
-        sal_Int32 right = ( root + 1 ) << 1;
-        sal_Int32 left = right - 1;
-        smallest = ( left < heapSize_ && heap_[left]->position() < heap_[ root ]->position() ) ? left : root;
-        if( right< heapSize_ && heap_[right]->position() < heap_[smallest]->position() )
-            smallest = right;
-        if( smallest != root )
-        {
-            ConceptGroupGenerator* temp = heap_[smallest];
-            heap_[smallest] = heap_[root];
-            heap_[root] = temp;
-            root = smallest;
-        }
-        else
-            break;
-    }
-}
-

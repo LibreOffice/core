@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Query.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@ using namespace xmlsearch::qe;
 
 HitStore::HitStore( double initialStandard,sal_Int32 limit,sal_Int32 nColumns )
     : standard_( initialStandard ),
-      heap_( limit_ = limit ),
+      limit_( limit ),
+      heap_( limit ),
       nColumns_( nColumns ),
       free_( 0 ),
       index_( 0 )
@@ -110,7 +111,6 @@ bool HitStore::goodEnough( double penalty, sal_Int32 begin, sal_Int32 end )
 {
     return free_ == limit_ ? heap_[0]->worseThan( penalty,begin,end ) : true;
 }
-
 
 
 QueryHit* HitStore::createQueryHit( double penalty,sal_Int32 doc,sal_Int32 begin,sal_Int32 end )
@@ -137,15 +137,63 @@ QueryHit* HitStore::createQueryHit( double penalty,sal_Int32 doc,sal_Int32 begin
 }
 
 
+struct CompareQueryHit
+{
+    inline int operator()( const QueryHit* l,const QueryHit* r );
+};
+
+
+int CompareQueryHit::operator()( const QueryHit* l,const QueryHit* r )
+{
+    return l->compareTo( r );
+}
+
+
 #include <stl/algorithm>
+
+
+sal_Int32 QueryHit::compareTo( const QueryHit* o ) const
+{
+    if( penalty_ != o->penalty_ )
+        return penalty_ < o->penalty_ ? -1 : 1;
+    else if( begin_ != o->begin_ )
+        return begin_ < o->begin_ ? -1 : 1;
+    else if( end_ != o->end_ )
+        return end_ < o->end_ ? -1 : 1;
+    else
+        return 0;
+}
 
 
 QueryHit* HitStore::firstBestQueryHit()
 {
+//      for( sal_uInt32 i = 0; i < heap_.size(); ++i )
+//      {
+//          heap_[i]->setNum( i );
+//          printf( " element %d = %x\n",i,heap_[i] );
+//      }
+
+//      printf( " and the size %d(%d)\n", free_,heap_.size() );
+
     if( free_ > 0)
     {
-        //      std::sort( heap_.begin(),heap_.end() );
-        //      Arrays.sort( heap_,0,free_ );
+//          std::vector< sal_Int32 > bla(100);
+//          for( i = 0; i < 100; ++i )
+//              bla[i] = i*(i-99);
+//          std::sort( bla.begin(),bla.end() );
+
+//          CompareQueryHit bla;
+
+//          std::sort( heap_.begin(),heap_.end(),bla );
+
+    //  quicksort( 0,free_ - 1 );
+
+//          for( i = 0; i < heap_.size(); ++i )
+//          {
+//              heap_[i]->setNum( i );
+//              printf( " element %d = %x\n",i,heap_[i] );
+//          }
+
         index_ = 0;
         return nextBestQueryHit();
     }
@@ -181,6 +229,38 @@ void HitStore::heapify( sal_Int32 i )
 }
 
 
+sal_Int32 HitStore::partition( sal_Int32 p,sal_Int32 r )
+{
+    QueryHit* x = heap_[ ((p + r) >> 1) & 0x7FFFFFFF ];
+    sal_Int32 i = p - 1, j = r + 1;
+    while( true )
+    {
+        while( x->compareTo( heap_[--j] ) )
+            ;
+        while( heap_[++i]->compareTo( x ) )
+            ;
+        if( i < j )
+        {
+            QueryHit* t = heap_[i];
+            heap_[i] = heap_[j];
+            heap_[j] = t;
+        }
+        else
+            return j;
+    }
+}
+
+
+void HitStore::quicksort( sal_Int32 p,sal_Int32 r )
+{
+    while( p < r )
+    {
+        sal_Int32 q = partition( p,r );
+        quicksort(p, q);
+        p = q + 1;
+    }
+}
+
 
 
 /******************************************************************************/
@@ -213,8 +293,6 @@ Query::Query( XmlIndex* env,
       ignoredElements_( 0 )
 {
     // for the EmptyQuery case (awaits arch improvement pass)
-
-    //cout << " upperboundTemplateL_ = " << upperboundTemplateL_ << endl;
 
     if( missingPenalties )
         for( sal_Int32 i = 0;i < nColumns_; ++i )
@@ -339,6 +417,12 @@ bool Query::vote()
     return vote_ = (sum <= currentStandard_ );
 }
 
+
+void Query::updateEstimate( sal_Int32 role,double penalty )
+{
+    if( penalty < upperboundTemplate_[ role ] )
+        upperboundTemplate_[ role ] = penalty;
+}
 
 
 /******************************************************************************/

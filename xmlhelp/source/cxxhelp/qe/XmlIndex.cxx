@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,3 +325,29 @@ void XmlIndex::readMicroindexes( sal_Int32 docNo ) throw( xmlsearch::excep::IOEx
     positionsFile_->seek( currentBatchOffset_ );
     positionsFile_->readBytes( positions_,upTo - currentBatchOffset_ );
 }
+
+
+#ifndef _XMLSEARCH_QE_QUERY_HXX_
+#include <qe/Query.hxx>
+#endif
+
+QueryHitData* XmlIndex::hitToData( QueryHit* hit )
+{
+    sal_Int32 termsL,matchesL;
+    sal_Int32 *matches = hit->getMatches( matchesL );
+    rtl::OUString *terms = new rtl::OUString[ termsL = matchesL >>/*>*/ 1 ];
+    for( sal_Int32 i = 0; i < termsL; ++i )
+        if( matches[ i << 1 ] > 0 )
+            terms[i] = fetch( matches[i << 1] );
+
+    sal_Int32 document = hit->getDocument();
+    QueryHitData *res = new QueryHitData( hit->getPenalty(),
+                                          documentName( document ),
+                                          termsL,terms );
+    contextTables_->setMicroindex( document );
+    contextTables_->resetContextSearch();
+//  contextTables_->hitLocation(terms, matches, result);
+    return res;
+}
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextTables.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,12 +189,6 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
             compr.decode( k0,kTable_ );
             // decompress initialWords into auxiliary array
             auxArray_.clear();
-#ifdef ABIDEBUG
-//        cout << kTable_[0] << endl;
-
-
-//        exit(1);
-#endif
             compr.ascDecode( kTable_[0],auxArray_ ); // _initialWords
 
             initialWords_ = new sal_Int32[ initialWordsL_ = auxArray_.size() ];
@@ -212,10 +206,6 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
             for( k = 0; k < destsL_; ++k )    //?opt
                 dests_[k] = auxArray_[k];
 
-#ifdef ABIDEBUG
-//        cout << " linkTypesL_ = " << destsL_ - nTextNodes_ - 1 << endl;
-#endif
-
             linkTypes_ = new sal_Int32[ linkTypesL_ = destsL_ - nTextNodes_ - 1 ];
             compr.decode( kTable_[2],linkTypes_ );
 
@@ -223,21 +213,9 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
             compr.decode( kTable_[ 3 ],seqNumbers_ );
 
             cache_[docNo] = new Tables( this );
-
-            /*
-              System.out.println("|_initialWords| = " + _nTextNodes);
-              System.out.println("|_dests| -1 = " + (_dests.length - 1));
-              System.out.println("|_seqNumbers| = " + _seqNumbers.length);
-              System.out.println("|_linkTypes| = " + _linkTypes.length);
-            */
         }
 
         lastDocNo_ = docNo;
-
-#ifdef ABIDEBUG
-//        cout << "destL_ = " << destsL_ << endl;
-#endif
-
         markers_ = new sal_Int32[ markersL_ = destsL_ ];
     }
     initialWordsIndex_ = 0;
@@ -296,10 +274,7 @@ bool ContextTables::notIgnored( sal_Int32 ctx,
     do
     {
         if( ignoredElements[ linkTypes_[ ctx ] ] )
-        {
-            // cout << rtl::OUString::createFromAscii( "hit ignored" ) << endl;
             return false;
-        }
     }
     while( ( ctx = dests_[ ctx ] ) > -1 ); // parentContext 'hand inlined'
     return true;

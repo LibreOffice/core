@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-08 12:08:05 $
+#   last change: $Author: abi $ $Date: 2001-05-10 15:26:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,48 +71,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
+
+
+.IF "$(GUI)"=="WNT"
+CFLAGS+=/GR
+.ENDIF
 
 # --- Files ---
-
-.IF "$(depend)" != ""
 
 OBJFILES=\
     $(OBJ)$/searchdemo.obj
 
-.ENDIF # depend
-
-#SRSFILES= $(SRS)$/ucbdemo.srs
-
-#
-# UCBDEMO
-#
 APP1TARGET=	searchdemo
 APP1OBJS=\
     $(OBJ)$/searchdemo.obj
 
-#APP1RES=	$(RES)$/searchdemo.res
-
-#.IF "$(COMPHELPERLIB)"==""
-
-#.IF "$(GUI)" == "UNX"
-#COMPHELPERLIB=-licomphelp2
-#.ENDIF # unx
-
-#.IF "$(GUI)"=="WNT"
-#COMPHELPERLIB=icomphelp2.lib
-#.ENDIF # wnt
-
-#.ENDIF
-
 APP1STDLIBS=\
     $(SALLIB) \
-    $(VOSLIB) \
-    jaqe.lib \
-    jadb.lib \
-    jautil.lib
+    $(VOSLIB)
+
+APP1LIBS=\
+    $(SLB)/jaqe.lib \
+    $(SLB)/jadb.lib \
+    $(SLB)/jautil.lib
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 

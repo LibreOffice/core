@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConceptData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #ifndef _XMLSEARCH_QE_QUERY_HXX_
 #include <qe/Query.hxx>
 #endif
+#include <stdio.h>
 
 using namespace xmlsearch::qe;
 
@@ -71,14 +72,42 @@ using namespace xmlsearch::qe;
 const sal_Int32 ConceptData::ProxPerTerm = 10;
 
 
+ConceptData::ConceptData( sal_Int32 id,
+                          sal_Int32 role,
+                          double score,
+                          sal_Int32 queryNo,
+                          sal_Int32 nColumns,
+                          ContextTables* contextTables )
+    : queryNo_( sal_uInt8( queryNo & 0xF ) ),
+      nColumns_( sal_uInt8( nColumns & 0xF ) ),
+      concept_( id ),
+      proximity_( nColumns * ProxPerTerm ),
+      role_( sal_uInt8( role & 0xF ) ),
+      penalty_( score ),
+      ctx_( contextTables ),
+      next_( 0 )
+{
+}
+
+
 void ConceptData::runBy( std::vector< Query* >& queries )
 {
     ConceptData* cd = this;
     do
     {
-        queries[ cd->queryNo_ ]->updateEstimate( cd->role_,cd->penalty_ );
+        Query* query = queries[ cd->queryNo_ ];
+        query->updateEstimate( cd->role_,cd->penalty_ );
     }
     while( cd = cd->next_ );
+}
+
+
+void ConceptData::addLast( ConceptData* r )
+{
+    if( next_ )
+        next_->addLast( r );
+    else
+        next_ = r;
 }
 
 
@@ -91,13 +120,14 @@ void ConceptData::generateFillers( std::vector< RoleFiller* >& array, sal_Int32 
 {
     if( array[ queryNo_ ] != RoleFiller::STOP() ) // not 'prohibited'
     {
-//      cout << "Conc " << sal_Int32( nColumns_ ) << endl;
-        ( new RoleFiller( nColumns_,
-                          this,
-                          role_,
-                          pos,
-                          ctx_->wordContextLin( pos ),
-                          pos + proximity_ ) )->use( array, queryNo_ );
+        sal_Int32 wcl = ctx_->wordContextLin( pos );
+        RoleFiller* p = new RoleFiller( nColumns_,
+                                        this,
+                                        role_,
+                                        pos,
+                                        wcl,
+                                        pos + proximity_ );
+        p->use( array, queryNo_ );
     }
     // !!! maybe eliminate tail recursion
     if( next_ )

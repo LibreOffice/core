@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Search.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ Search::Search( XmlIndex* env )
       dataL_( 0 ),
       data_( 0 ),
       base_( 0 ),
-      concepts_( new sal_Int32[ ConceptGroupGenerator::NConceptsInGroup ] )
+      concepts_( new sal_Int32[ ConceptGroupGenerator::NConceptsInGroup ] ),
+      free2_( 0 )
 {
 }
 
@@ -186,108 +187,85 @@ extern ostream& operator<<( ostream& out,const rtl::OUString& bla );
 
 void Search::startSearch()
 {
-#ifdef ABIDEBUG
-//    for( int k = 0; k < conceptData_.size(); ++k )
-//      {
-//        if( ! conceptData_[k] )
-//      continue;
+    sal_Int32 i,j;
+    // set up ConceptData lists
+    // order search terms
+    quicksort( 0, free2_ - 1);
 
-//        cout << conceptData_[k]->getConcept() << endl;
-//        cout << conceptData_[k]->getPenalty() << endl;
-//        cout << sal_Int32( conceptData_[k]->getRole() ) << endl;
-//        cout << sal_Int32( conceptData_[k]->getQuery() ) << endl;
-//        cout << conceptData_[k]->getScore() << endl;
-//      }
-#endif
-
-  sal_Int32 i,j;
-  // set up ConceptData lists
-  // order search terms
-  sal_Int32 _free2 = conceptData_.size();
-  quicksort( 0, _free2 - 1);
-
-  // remove duplicates
-  for (i = 0; i < _free2 - 1; i = j)
-    for (j = i + 1; j < _free2; j++)
-      if( conceptData_[i]->crqEquals( conceptData_[j] ) )
-    conceptData_[j] = 0;
-      else
-    i = j;
-
-  // create lists
-  for( i = 0; i < _free2 - 1; i = j )
-    for (j = i + 1; j < _free2; j++ )
-      if( conceptData_[j] )
-    if( conceptData_[i]->cEquals( conceptData_[j] ) )
-      {
-        conceptData_[i]->addLast( conceptData_[j] );
-        conceptData_[j] = 0;
-      }
-    else
-      i = j;
-
-  // densify
-  for (i = 0; i < _free2 - 1; i++)
-    if( ! conceptData_[i] )
-      for( j = i + 1; j < _free2; j++)
-    if (conceptData_[j] )
-      {
-          conceptData_[i] = conceptData_[j];
-          conceptData_[j] = 0;
-        break;
-      }
-
-#ifdef ABIDEBUG
-  for( i = 0; i < conceptData_.size(); ++i )
+    // remove duplicates
+    for (i = 0; i < free2_ - 1; i = j)
     {
-      if( ! conceptData_[i] )
-    continue;
-
-//        cout << conceptData_[i]->getConcept() << endl;
-//        cout << conceptData_[i]->getPenalty() << endl;
-//        cout << sal_Int32( conceptData_[i]->getRole() ) << endl;
-//        cout << sal_Int32( conceptData_[i]->getQuery() ) << endl;
-//        cout << conceptData_[i]->getScore() << endl;
-    }
-#endif
-
-  // set up new document generators
-  nextDocGenHeap_.reset();
-  for( i = 0; i < _free2 && conceptData_[i]; i++)
-    {
-#ifdef ABIDEBUG
-//        if( conceptData_[i] )
-//      cout << rtl::OUString::createFromAscii( "conceptData not zero" ) << endl;
-#endif
-
-      NextDocGenerator* gen = new NextDocGenerator( conceptData_[i],env_ );
-      try
-    {
-      sal_Int32 doc;
-      gen->first();
-      if( ( doc = gen->getDocument() ) != NonnegativeIntegerGenerator::END )
+        for (j = i + 1; j < free2_; j++)
         {
-          /* !!! ??? is concept length used any more in any way
-         conceptData_[i].
-         setConceptLength(_env.
-         getConceptLength(conceptData_[i].getConcept()));
-          */
-//            cout << "doc = " << doc << endl;
-          nextDocGenHeap_.addGenerator( gen );
+            if( conceptData_[i]->crqEquals( conceptData_[j] ) )
+                conceptData_[j] = 0;
+            else
+                i = j;
         }
     }
-      catch( ... )
+
+    // create lists
+    for( i = 0; i < free2_ - 1; i = j )
     {
-#ifdef ABIDEBUG
-        // cout << "Search::startSearch -> catched exception" << endl;
-#endif
-    }
+        for (j = i + 1; j < free2_; j++ )
+        {
+            if( conceptData_[j] )
+                if( conceptData_[i]->cEquals( conceptData_[j] ) )
+                {
+                    conceptData_[i]->addLast( conceptData_[j] );
+                    conceptData_[j] = 0;
+                }
+                else
+                    i = j;
+        }
     }
 
-  nextDocGenHeap_.start();
-  env_->reset();
-  env_->resetContextSearch();
-  searchDocument();
+    // densify
+    for( i = 0; i < free2_ - 1; i++)
+    {
+        if( ! conceptData_[i] )
+        {
+            for( j = i + 1; j < free2_; j++)
+            {
+                if (conceptData_[j] )
+                {
+                    conceptData_[i] = conceptData_[j];
+                    conceptData_[j] = 0;
+                    break;
+                }
+            }
+        }
+    }
+
+    // set up new document generators
+    nextDocGenHeap_.reset();
+    for( i = 0; i < free2_ && conceptData_[i]; i++)
+    {
+        NextDocGenerator* gen = new NextDocGenerator( conceptData_[i],env_ );
+        try
+        {
+            sal_Int32 doc;
+            gen->first();
+            if( ( doc = gen->getDocument() ) != NonnegativeIntegerGenerator::END )
+            {
+                /* !!! ??? is concept length used any more in any way
+                   conceptData_[i].
+                   setConceptLength(_env.
+                   getConceptLength(conceptData_[i].getConcept()));
+                */
+                nextDocGenHeap_.addGenerator( gen );
+            }
+        }
+        catch( ... )
+        {
+            printf( "Search::startSearch -> catched exception \n" );
+        }
+    }
+
+    nextDocGenHeap_.start();
+    env_->reset();
+    env_->resetContextSearch();
+    searchDocument();
 }
 
 
@@ -295,20 +273,16 @@ void Search::startSearch()
 
 void Search::addTerm( sal_Int32 col,sal_Int32 concept,double score )
 {
-#ifdef ABIDEBUG
-//    cout << concept << endl;
-#endif
     if( env_->occursInText( concept ) )
     {
-#ifdef ABIDEBUG
-//        cout << "occurs" << endl;
-#endif
-        conceptData_.push_back( queries_[queries_.size()-1]->makeConceptData( col,concept,score,queries_.size()-1 ) );
+        ConceptData* cd = queries_[queries_.size()-1]->makeConceptData( col,concept,score,queries_.size()-1 );
+        if( sal_uInt32( free2_ ) == conceptData_.size() )
+        {
+            conceptData_.push_back( 0 );
+            conceptVisitor_ = &conceptData_[0];
+        }
+        conceptData_[ free2_++ ] = cd;
     }
-#ifdef ABIDEBUG
-//    else
-//      cout << "does not occur" << endl;
-#endif
 }
 
 
@@ -322,7 +296,7 @@ void Search::searchDocument()
     {
         try
         {
-            switch( nextDocument( start ) )
+             switch( nextDocument( start ) )
             {
                 case 0:     // multi group
                     genHeap_.start( start );
@@ -362,6 +336,9 @@ void Search::searchDocument()
 }
 
 
+extern void print_rtl_OUString( const rtl::OUString bla );
+
+
 sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlsearch::excep::XmlSearchException )
 {
     while( nextDocGenHeap_.isNonEmpty() )
@@ -381,7 +358,8 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
         {
             docConcepts_.push_back( nextDocGenHeap_.getConcept() );
             queryMasks_.push_back( nextDocGenHeap_.getQueryMask() );
-            ( conceptData_[ index++ ] = nextDocGenHeap_.getTerms() )->runBy( queries_ );
+            ConceptData *conceptData = ( conceptData_[ index++ ] = nextDocGenHeap_.getTerms() );
+            conceptData->runBy( queries_ );
             nextDocGenHeap_.step();
         }
         while( nextDocGenHeap_.atDocument( document_) );
@@ -393,22 +371,10 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
         // and, with more care, creation of some GroupGenerators can be avoided
         // saturating queries with lots of good hits will lead to best results
 
-        rtl::OUString docName = env_->documentName( document_);
 
-
-#ifdef ABIDEBUG
-//          if( document_ == 148 )
-//          {
-//              cout << "_document = " << document_ << endl;
-//              cout << "docName = " <<  env_->documentName( document_) << endl;
-//          }
-//          else
-//          {
-//
-//              cout << "_document = " << document_ << endl;
-//              cout << "docName = " << docName << endl;
-//          }
-#endif
+//          printf( "docNo = %d",document_);
+//          print_rtl_OUString( ( rtl::OUString::createFromAscii( "   docName = ") +
+//                                env_->documentName( document_) ) );
 
         sal_Int32 voteMask = 0;
         Query* query;
@@ -468,15 +434,7 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
             {           // single group
                 for( sal_Int32 i = 0; i < index; i++ )
                     if( queryMasks_[i] & voteMask )
-//  #ifdef ABIDEBUG
-//                      {
-//                          sal_Int32 bla = indexOf( docConcepts_[i] );
-//              cout << "indexOf = " << bla << endl;
-//                          firstGenerator_.addTerms( bla,conceptData_[i] );
-//                      }
-//  #elif
-                firstGenerator_.addTerms( indexOf( docConcepts_[i] ),conceptData_[i] );
-//  #endif
+                        firstGenerator_.addTerms( indexOf( docConcepts_[i] ),conceptData_[i] );
                 return 1;
             }
         }
@@ -489,50 +447,50 @@ sal_Int32 Search::nextDocument( std::vector< RoleFiller* >& start ) throw( xmlse
 
 bool Search::openDocumentIndex( sal_Int32 docNo ) throw( excep::XmlSearchException )
 {
-  data_ = env_->getPositions( dataL_,docNo );
-  base_ = env_->getDocumentIndex( docNo );
+    data_ = env_->getPositions( dataL_,docNo );
+    base_ = env_->getDocumentIndex( docNo );
 
-  startingIndex_ = 0;
-  sal_Int32 kk = data_[ base_ ] & 0xFF, k2;
+    startingIndex_ = 0;
+    sal_Int32 kk = data_[ base_ ] & 0xFF, k2;
 
-  switch( kk >> 6 )
+    switch( kk >> 6 )
     {       // get type
-    case 0:         // single group, no extents
-      k2 = data_[base_ + 1];
-      firstGenerator_.init( dataL_,data_,base_ += 2,k2 );
-      // decode concept table
-      nConcepts_ = firstGenerator_.decodeConcepts( kk & 0x3F,0,concepts_ );
+        case 0:         // single group, no extents
+            k2 = data_[base_ + 1];
+            firstGenerator_.init( dataL_,data_,base_ += 2,k2 );
+            // decode concept table
+            nConcepts_ = firstGenerator_.decodeConcepts( kk & 0x3F,0,concepts_ );
 //        cout << "false" << endl;
-      return false;
+            return false;
 
-    case 2:         // multi group, no extents
-      {
-    kTable_.clear();
-    offsets_.clear();
-    maxConcepts_.clear();
-    util::ByteArrayDecompressor compr( dataL_,data_,base_ + 1 );
-    compr.decode( kk & 0x3F,kTable_ );
+        case 2:         // multi group, no extents
+        {
+            kTable_.clear();
+            offsets_.clear();
+            maxConcepts_.clear();
+            util::ByteArrayDecompressor compr( dataL_,data_,base_ + 1 );
+            compr.decode( kk & 0x3F,kTable_ );
 
-    sal_Int32 last = kTable_.back();
-    kTable_.pop_back();
-    compr.ascDecode( last,offsets_ );
-    last = kTable_.back();
-    kTable_.pop_back();
-    compr.ascDecode( last,maxConcepts_ );
+            sal_Int32 last = kTable_.back();
+            kTable_.pop_back();
+            compr.ascDecode( last,offsets_ );
+            last = kTable_.back();
+            kTable_.pop_back();
+            compr.ascDecode( last,maxConcepts_ );
 
-    base_ += 1 + compr.bytesRead();
-    limit_ = maxConcepts_.size();
-      }
+            base_ += 1 + compr.bytesRead();
+            limit_ = maxConcepts_.size();
+        }
 //        cout << "true" << endl;
-      return true;
+        return true;
 
-    case 1:         // single group, extents
-    case 3:         // multi group, extents
-      throw excep::XmlSearchException( rtl::OUString::createFromAscii( "extents not yet implemented\n" ) );
+        case 1:         // single group, extents
+        case 3:         // multi group, extents
+            throw excep::XmlSearchException( rtl::OUString::createFromAscii( "extents not yet implemented\n" ) );
     }
 
 //    cout << "false1" << endl;
-  return false;
+    return false;
 }
 
 
@@ -540,52 +498,52 @@ bool Search::openDocumentIndex( sal_Int32 docNo ) throw( excep::XmlSearchExcepti
 
 
 ConceptGroupGenerator* Search::makeGenerator( sal_Int32 group )
-  throw( excep::XmlSearchException )
+    throw( excep::XmlSearchException )
 {
-  sal_Int32 shift,index;
-  if( group > 0 )
+    sal_Int32 shift,index;
+    if( group > 0 )
     {
-      index = base_ + offsets_[ group - 1 ];
-      shift = maxConcepts_[ group - 1 ];
+        index = base_ + offsets_[ group - 1 ];
+        shift = maxConcepts_[ group - 1 ];
     }
-  else
+    else
     {
-      index = base_;
-      shift = 0;
+        index = base_;
+        shift = 0;
     }
 
-  // initialize generator
-  ConceptGroupGenerator* gen =
-    new ConceptGroupGenerator( dataL_,data_,index,kTable_[ 2*group + 1 ] );
-  // decode concept table
-  nConcepts_ = gen->decodeConcepts( kTable_[2*group],shift,concepts_ );
+    // initialize generator
+    ConceptGroupGenerator* gen =
+        new ConceptGroupGenerator( dataL_,data_,index,kTable_[ 2*group + 1 ] );
+    // decode concept table
+    nConcepts_ = gen->decodeConcepts( kTable_[2*group],shift,concepts_ );
 
-  if( group < limit_ )
-    max_ = concepts_[ nConcepts_ ] = maxConcepts_[ group ];
-  else
-    max_ = concepts_[ nConcepts_ - 1 ];
+    if( group < limit_ )
+        max_ = concepts_[ nConcepts_ ] = maxConcepts_[ group ];
+    else
+        max_ = concepts_[ nConcepts_ - 1 ];
 
-  genHeap_.addGenerator( gen );
-  startingIndex_ = 0;       // in _concepts; lower search index
-  return gen;
+    genHeap_.addGenerator( gen );
+    startingIndex_ = 0;     // in _concepts; lower search index
+    return gen;
 }
 
 
 
 sal_Int32 Search::indexOf(sal_Int32 concept) throw( excep::XmlSearchException )
 {
-  sal_Int32 i = startingIndex_,j = nConcepts_,k;
-  while( i <= j )
-    if( concepts_[ k = (i + j)/2 ] < concept )
-      i = k + 1;
-    else if( concept < concepts_[k] )
-      j = k - 1;
-    else
-      {
-    startingIndex_ = k + 1;
-    return k;
-      }
-  throw excep::XmlSearchException( rtl::OUString::createFromAscii( "indexOf not found" ) );
+    sal_Int32 i = startingIndex_,j = nConcepts_,k;
+    while( i <= j )
+        if( concepts_[ k = (i + j)/2 ] < concept )
+            i = k + 1;
+        else if( concept < concepts_[k] )
+            j = k - 1;
+        else
+        {
+            startingIndex_ = k + 1;
+            return k;
+        }
+    throw excep::XmlSearchException( rtl::OUString::createFromAscii( "indexOf not found" ) );
 }
 
 
@@ -593,22 +551,22 @@ sal_Int32 Search::indexOf(sal_Int32 concept) throw( excep::XmlSearchException )
 
 sal_Int32 Search::partition( sal_Int32 p,sal_Int32 r )
 {
-  ConceptData* x = conceptData_[ ((p + r) >> 1) & 0x7FFFFFFF ];
-  sal_Int32 i = p - 1, j = r + 1;
-  while( true )
+    ConceptData* x = conceptData_[ ((p + r) >> 1) & 0x7FFFFFFF ];
+    sal_Int32 i = p - 1, j = r + 1;
+    while( true )
     {
-      while( x->compareWith( conceptData_[--j] ) )
-    ;
-      while( conceptData_[++i]->compareWith( x ) )
-    ;
-      if( i < j )
-    {
-      ConceptData* t = conceptData_[i];
-      conceptData_[i] = conceptData_[j];
-      conceptData_[j] = t;
-    }
-      else
-    return j;
+        while( x->compareWith( conceptData_[--j] ) )
+            ;
+        while( conceptData_[++i]->compareWith( x ) )
+            ;
+        if( i < j )
+        {
+            ConceptData* t = conceptData_[i];
+            conceptData_[i] = conceptData_[j];
+            conceptData_[j] = t;
+        }
+        else
+            return j;
     }
 }
 
@@ -616,10 +574,10 @@ sal_Int32 Search::partition( sal_Int32 p,sal_Int32 r )
 
 void Search::quicksort( sal_Int32 p,sal_Int32 r )
 {
-  while (p < r)
+    while (p < r)
     {
-      sal_Int32 q = partition( p,r );
-      quicksort(p, q);
-      p = q + 1;
+        sal_Int32 q = partition( p,r );
+        quicksort(p, q);
+        p = q + 1;
     }
 }

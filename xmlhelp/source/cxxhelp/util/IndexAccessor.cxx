@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexAccessor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:05:06 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,26 +79,7 @@ class RandomAccessStreamImpl
 {
 public:
 
-    RandomAccessStreamImpl( const rtl::OUString& aPath,const rtl::OUString& how )
-        : file_( aPath )
-    {
-        sal_uInt32 flags = 0;
-        const sal_Unicode* bla = how.getStr();
-
-        for( int i = 0; i < how.getLength(); ++i )
-            if( bla[i] == sal_Unicode( 'r' ) )
-                flags |= Read;
-            else if( bla[i] == sal_Unicode( 'w' ) )
-                flags |= Write;
-            else if( bla[i] == sal_Unicode( 'c' ) )
-                flags |= Create;
-
-
-        if( file_.open( flags ) != osl::FileBase::E_None )
-        {
-            file_.close();
-        }
-    }
+    RandomAccessStreamImpl( const rtl::OUString& aPath,const rtl::OUString& how );
 
     ~RandomAccessStreamImpl()
     {
@@ -113,7 +94,11 @@ public:
     virtual sal_Int32 readBytes( sal_Int8* data,sal_Int32 num )
     {
         sal_uInt64 nbytesread;
-        file_.read( (void*)(data), sal_uInt64(num),nbytesread );
+        osl::FileBase::RC err = file_.read( (void*)(data), sal_uInt64(num),nbytesread );
+
+        if( err != osl::FileBase::E_None )
+            printf( "Bytes requested = %d, Bytes read = %d\n",num,sal_Int32( nbytesread ) );
+
         return sal_Int32( nbytesread );
     }
 
@@ -126,7 +111,7 @@ public:
     {
         osl::DirectoryItem aItem;
         osl::FileStatus aStatus( FileStatusMask_FileSize );
-        osl::DirectoryItem::get( file_,aItem );
+        osl::DirectoryItem::get( path_,aItem );
         aItem.getFileStatus( aStatus );
         return sal_Int32( aStatus.getFileSize() );
     }
@@ -139,13 +124,38 @@ public:
 
 private:
 
-    osl::File file_;
+    rtl::OUString   path_;
+    osl::File       file_;
 };
 
 
+RandomAccessStreamImpl::RandomAccessStreamImpl( const rtl::OUString& aPath,const rtl::OUString& how )
+    : path_( aPath ),
+      file_( aPath )
+{
+    sal_uInt32 flags = 0;
+    const sal_Unicode* bla = how.getStr();
 
-RandomAccessStreamImpl Dic( rtl::OUString::createFromAscii( "//./home/ab106281/work/index/DICTIONARY" ),
-                            rtl::OUString::createFromAscii( "how" ) );
+    for( int i = 0; i < how.getLength(); ++i )
+    {
+        if( bla[i] == sal_Unicode( 'r' ) )
+            flags |= Read;
+        else if( bla[i] == sal_Unicode( 'w' ) )
+            flags |= Write;
+        else if( bla[i] == sal_Unicode( 'c' ) )
+            flags |= Create;
+    }
+
+    if( file_.open( flags ) != osl::FileBase::E_None )
+    {
+        printf( "RandomAccessStreamImpl closed" );
+        file_.close();
+    }
+}
+
+
+RandomAccessStreamImpl Dic( rtl::OUString::createFromAscii( "//./e:/index/DICTIONARY" ),
+                            rtl::OUString::createFromAscii( "r" ) );
 
 
 RandomAccessStream* theFile()
