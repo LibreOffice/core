@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mscodec.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:54:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,17 @@
 #include "rtl/digest.h"
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace svx {
 
 // ============================================================================
 
 /** Encodes and decodes data from protected MSO 95- documents.
  */
-class MSCodec_Xor95
+class SVX_DLLPUBLIC MSCodec_Xor95
 {
 public:
     explicit            MSCodec_Xor95(int nRotateDistance);
@@ -157,8 +161,8 @@ protected:
     sal_Size            mnOffset;       /// Key offset.
 
 private:
-                        MSCodec_Xor95( const MSCodec_Xor95& );
-    MSCodec_Xor95&      operator=( const MSCodec_Xor95& );
+                        SVX_DLLPRIVATE MSCodec_Xor95( const MSCodec_Xor95& );
+    SVX_DLLPRIVATE MSCodec_Xor95&      operator=( const MSCodec_Xor95& );
 
     sal_uInt16          mnKey;          /// Base key from password.
     sal_uInt16          mnHash;         /// Hash value from password.
@@ -167,7 +171,7 @@ private:
 
 /** Encodes and decodes data from protected MSO XLS 95- documents.
  */
-class MSCodec_XorXLS95 : public MSCodec_Xor95
+class SVX_DLLPUBLIC MSCodec_XorXLS95 : public MSCodec_Xor95
 {
 public:
     explicit            MSCodec_XorXLS95() : MSCodec_Xor95(2) {}
@@ -188,7 +192,7 @@ public:
 
 /** Encodes and decodes data from protected MSO Word 95- documents.
  */
-class MSCodec_XorWord95 : public MSCodec_Xor95
+class SVX_DLLPUBLIC MSCodec_XorWord95 : public MSCodec_Xor95
 {
 public:
     explicit            MSCodec_XorWord95() : MSCodec_Xor95(7) {}
@@ -216,7 +220,7 @@ public:
     Implementation is based on the wvDecrypt package by Caolan McNamara:
     http://www.csn.ul.ie/~caolan/docs/wvDecrypt.html
  */
-class MSCodec_Std97
+class SVX_DLLPUBLIC MSCodec_Std97
 {
 public:
     explicit            MSCodec_Std97();
@@ -310,8 +314,8 @@ public:
     bool                Skip( sal_Size nDatLen );
 
 private:
-                        MSCodec_Std97( const MSCodec_Std97& );
-    MSCodec_Std97&      operator=( const MSCodec_Std97& );
+                        SVX_DLLPRIVATE MSCodec_Std97( const MSCodec_Std97& );
+    SVX_DLLPRIVATE MSCodec_Std97&      operator=( const MSCodec_Std97& );
 
     rtlCipher           m_hCipher;
     rtlDigest           m_hDigest;
