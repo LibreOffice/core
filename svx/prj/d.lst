@@ -635,6 +635,10 @@ hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 ..\xml\SvxUnoTextRangeEnumeration.xml %_DEST%\xml%_EXT%\SvxUnoTextRangeEnumeration.xml
 ..\xml\SvxGraphicExporter.xml %_DEST%\xml%_EXT%\SvxGraphicExporter.xml
 ..\xml\SvxGraphCtrlAccessibleContext.xml %_DEST%\xml%_EXT%\SvxGraphCtrlAccessibleContext.xml
+..\xml\AccessibleShape.xml %_DEST%\xml%_EXT%\AccessibleShape.xml
+..\xml\AccessibleGraphicShape.xml %_DEST%\xml%_EXT%\AccessibleGraphicShape.xml
+..\xml\AccessibleOLEShape.xml %_DEST%\xml%_EXT%\AccessibleOLEShape.xml
+..\xml\AccessibleControlShape.xml %_DEST%\xml%_EXT%\AccessibleControlShape.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
