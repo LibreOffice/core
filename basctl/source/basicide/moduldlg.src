@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 22:36:47 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ ModalDialog RID_DLG_LIBS
         Text[ japanese ] = "QΖ‚Ζ‚µ‚Δ‘}“ό(“Η‚έζ‚θκ—p)";
         Text[ chinese_traditional ] = "·ν§@°Ρ·Σ΄΅¤J(°ίΕª)";
         Text[ arabic ] = "ΕΟΡΗΜ ίγΡΜΪ (ααήΡΗΑΙ έήΨ)";
-        Text[ greek ] = "Προσθήκη ως αναφορά (μόνο για ανάγνωση)";
+        Text[ greek ] = "Εισαγωγή ως αναφορά (μόνο για ανάγνωση)";
         Text[ korean ] = "ΒόΑ¶·Ξ »πΐΤ (ΐΠ±βΈΈ)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
     };
