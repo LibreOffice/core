@@ -15,13 +15,18 @@ clear;
 AC_PREREQ(2.12)
 AC_INIT()
 AC_ARG_WITH(gcc-home,
-[  --with-gcc-home         if you built gcc-2.95.2 from source to a specific
+[  --with-gcc-home         if you built gcc from source to a specific
                           directory, and used the --with-shared option,
                           please supply your gcc home directory here.
                           Note that this is not the location of the gcc binary but the 
                           location of the entire distribution.
                           
                           Usage: --with-gcc-home=<absolute path to gcc home>
+],,)
+AC_ARG_ENABLE(gcc3,
+[  --enable-gcc3           if you want to use gcc 3.0.x instead of gcc 2.95.x
+
+                          Usage: --enable-gcc3
 ],,)
 AC_ARG_WITH(stlport4-home,
 [  --with-stlport4-home    The location that STLport4 is installed in. The STL
@@ -259,6 +264,15 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o \( \( "$_
       fi
    fi
 
+dnl parametrise the various gcc pathnames so we can reuse for gcc2.95 and gcc3
+if test -n "$enable_gcc3"; then
+   _gccincname1="g++-v3"
+else
+   _gccincname1="g++-3"
+fi
+
+dnl and here is the real horror...
+
    if test $GCC; then
       AC_MSG_CHECKING([the GNU gcc compiler version])
       _gcc_releasetype=`$GCC --version | $AWK -F"-" '{ print \$1 }'`
@@ -270,23 +284,32 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o \( \( "$_
          _gcc_version=`$GCC --version`
       fi
       _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'` 
-      if test "$_gcc_major" != "2"; then
-         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
-         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
-         COMPATH="NO_GCC"
+      if test -n "$enable_gcc3"; then 
+         if test "$_gcc_major" != "3"; then
+            AC_MSG_ERROR([found version "$_gcc_version", but use of gcc 3.x requested])
+         fi
       else
-         _gcc_middle=`$GCC --version | $AWK -F. '{ if ($2 != 95) print "false"; else print "true" }'` 
-         if test "$_gcc_middle" = "false"; then
-            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
-            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
-            COMPATH="NO_GCC"
-         else
-            _gcc_minor=`$GCC --version | $AWK -F. '{ if ($3 < 2) print "false"; else print "true" }'` 
-            if test "$_gcc_minor" = "false"; then
-               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
-               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
-               COMPATH="NO_GCC"
-            else
+        if test "$_gcc_major" != "2"; then
+           AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
+           AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
+           COMPATH="NO_GCC"
+        else
+           _gcc_middle=`$GCC --version | $AWK -F. '{ if ($2 != 95) print "false"; else print "true" }'` 
+           if test "$_gcc_middle" = "false"; then
+              AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
+              AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
+              COMPATH="NO_GCC"
+           else
+              _gcc_minor=`$GCC --version | $AWK -F. '{ if ($3 < 2) print "false"; else print "true" }'` 
+              if test "$_gcc_minor" = "false"; then
+                 AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
+                 AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
+                 COMPATH="NO_GCC"
+              fi
+           fi
+        fi
+      fi  
+            if test "$COMPATH" != "NO_GCC"; then
                dnl compiler will do
                AC_MSG_RESULT([checked (gcc $_gcc_version)])
                dnl find include paths now
@@ -297,7 +320,7 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o \( \( "$_
                   if test "$_multiple" = "false"; then
                      _gcc_include_path="$_gcc_include_path/include"
 
-                     _gxx_include_path=`find $_gxx_include_start -name "g++-3" -print 2> /dev/null`
+                     _gxx_include_path=`find $_gxx_include_start -name "$_gccincname1" -print 2> /dev/null`
                      if test "$_gxx_include_path"; then
                         _multiple=`echo $_gxx_include_path | $AWK '{ if ($2) print "true"; else print "false" }'`
                         if test "$_multiple" = "false"; then
@@ -349,13 +372,10 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o \( \( "$_
                   _gcc_include_path="NO_GCC_INCLUDE"
 		fi
                fi
-            fi
-         fi
       fi
    else
       AC_MSG_WARN([no gcc compiler found])
       AC_MSG_WARN([no gcc compiler found]) >> warn
-      COMPATH="NO_GCC"
    fi
 fi
 if test "$_os" = "SunOS"; then
@@ -1102,7 +1122,7 @@ fi
 if test -z "$with_lang"; then
    with_lang=,ENUS,
 else
-   with_lang=","$with_lang",ENUS,"
+   with_lang=","$with_lang","
 fi
 # Substituting blank spaces in windows pathnames with '#'
 if test "$_os" = "WINNT"; then
@@ -1112,6 +1132,12 @@ if test "$_os" = "WINNT"; then
    _LOCAL_SOLENV=`echo $_LOCAL_SOLENV | $SED "s/ /#/g"`
    _LOCAL_SOLVER=`echo $_LOCAL_SOLVER | $SED "s/ /#/g"`
    CYGWIN=`echo $CYGWIN | $SED "s/ /#/g"`
+fi
+
+if test -n "$enable_gcc3"; then
+   USE_GCC3="TRUE"
+else
+   USE_GCC3="FALSE"
 fi
 
 # Print args passed to set_soenv.
@@ -1140,12 +1166,13 @@ echo "\$with_asm_home="$with_asm_home
 echo "\$with_unzip_home="$with_unzip_home
 echo "\$MINGWIN32="$WITH_MINGWIN
 echo "\$with_use_shell="$with_use_shell
+echo "\$USE_GCC3="$USE_GCC3
 echo
 fi
 
 # Executing the set_soenv script to setup the environment variables.
 if test -z "$enable_check_only"; then
-   './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN $STLPORT4 $enable_xprint $with_lang $with_asm_home $with_unzip_home $WITH_MINGWIN $with_use_shell
+   './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN $STLPORT4 $enable_xprint $with_lang $with_asm_home $with_unzip_home $WITH_MINGWIN $with_use_shell $USE_GCC3
 else
    echo
    echo Test Complete
