@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapuserprof.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:05:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 14:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,14 @@
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPUSERPROF_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LDAPUSERPROF_HXX_
 
+#ifdef WITH_OPENLDAP
+#include <ldap.h>
+#else
 #ifndef LDAP_INCLUDED
 #define LDAP_INCLUDED
 #include <ldap/ldap.h>
 #endif // LDAP_INCLUDED
+#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-22 08:06:44 $
+#   last change: $Author: obo $ $Date: 2004-11-15 14:14:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,10 @@ all:
 
 # TODO: Add support for SYSTEM_MOZILLA
 LDAPSDKINCLUDES = -I$(SOLARINCDIR)$/mozilla
+.ENDIF
+
+.IF "$(WITH_OPENLDAP)" == "YES"
+CFLAGS += -DWITH_OPENLDAP
 .ENDIF
 
 SOLARINC+= $(LDAPSDKINCLUDES)
