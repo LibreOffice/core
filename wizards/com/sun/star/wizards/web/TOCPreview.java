@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TOCPreview.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:14:28 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGLayout;
 import com.sun.star.wizards.web.data.CGSettings;
