@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:49:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <unotools/processfactory.hxx>
 #endif
 
+#include <vector>
+
 #ifndef _SPELLIMP_HXX
 #include <spelldsp.hxx>
 #endif
@@ -109,6 +111,124 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+///////////////////////////////////////////////////////////////////////////
+// ProposalList: list of proposals for misspelled words
+//   The order of strings in the array should be left unchanged because the
+// spellchecker should have put the more likely suggestions at the top.
+// New entries will be added to the end but duplicates are to be avoided.
+// Removing entries is done by assigning the empty string.
+// The sequence is constructed from all non empty strings in the original
+// while maintaining the order.
+//
+class ProposalList
+{
+    std::vector< OUString > aVec;
+
+    BOOL    HasEntry( const OUString &rText ) const;
+
+    // make copy c-tor and assignment operator private
+    ProposalList( const ProposalList & );
+    ProposalList & operator = ( const ProposalList & );
+
+public:
+    ProposalList()  {}
+
+    //size_t  Size() const   { return aVec.size(); }
+    size_t  Count() const;
+    void    Append( const OUString &rNew );
+    void    Append( const std::vector< OUString > &rNew );
+    void    Append( const Sequence< OUString > &rNew );
+    void    Remove( const OUString &rText );
+    Sequence< OUString >    GetSequence() const;
+};
+
+
+BOOL ProposalList::HasEntry( const OUString &rText ) const
+{
+    BOOL bFound = FALSE;
+    size_t nCnt = aVec.size();
+    for (size_t i = 0;  !bFound && i < nCnt;  ++i)
+    {
+        if (aVec[i] == rText)
+            bFound = TRUE;
+    }
+    return bFound;
+}
+
+void ProposalList::Append( const OUString &rText )
+{
+    if (!HasEntry( rText ))
+        aVec.push_back( rText );
+}
+
+void ProposalList::Append( const std::vector< OUString > &rNew )
+{
+    size_t nLen = rNew.size();
+    for ( size_t i = 0;  i < nLen;  ++i)
+    {
+        const OUString &rText = rNew[i];
+        if (!HasEntry( rText ))
+            Append( rText );
+    }
+}
+
+void ProposalList::Append( const Sequence< OUString > &rNew )
+{
+    INT32 nLen = rNew.getLength();
+    const OUString *pNew = rNew.getConstArray();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        const OUString &rText = pNew[i];
+        if (!HasEntry( rText ))
+            Append( rText );
+    }
+}
+
+size_t ProposalList::Count() const
+{
+    // returns the number of non-empty strings in the vector
+
+    size_t nRes = 0;
+    size_t nLen = aVec.size();
+    for (size_t i = 0;  i < nLen;  ++i)
+    {
+        if (aVec[i].getLength() != 0)
+            ++nRes;
+    }
+    return nRes;
+}
+
+Sequence< OUString > ProposalList::GetSequence() const
+{
+    INT32 nCount = Count();
+    INT32 nIdx = 0;
+    Sequence< OUString > aRes( nCount );
+    OUString *pRes = aRes.getArray();
+    INT32 nLen = aVec.size();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        const OUString &rText = aVec[i];
+        DBG_ASSERT( nIdx < nCount, "index our of range" );
+        if (nIdx < nCount && rText.getLength() > 0)
+            pRes[ nIdx++ ] = rText;
+    }
+    return aRes;
+}
+
+void ProposalList::Remove( const OUString &rText )
+{
+    size_t nLen = aVec.size();
+    for (size_t i = 0;  i < nLen;  ++i)
+    {
+        OUString &rEntry = aVec[i];
+        if (rEntry == rText)
+        {
+            rEntry = OUString();
+            break;  // there should be only one matching entry
+        }
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -121,7 +241,7 @@ BOOL SvcListHasLanguage(
 
     const Reference< XSpellChecker >  *pRef  = rEntry.aSvcRefs .getConstArray();
     const Reference< XSpellChecker1 > *pRef1 = rEntry.aSvc1Refs.getConstArray();
-    INT32 nLen = rEntry.aSvcRefs.getLength();
+    sal_Int32 nLen = rEntry.aSvcRefs.getLength();
     DBG_ASSERT( nLen == rEntry.aSvc1Refs.getLength(),
             "sequence length mismatch" );
     for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
@@ -713,11 +833,13 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
         // list of proposals found (to be checked against entries of
         // neagtive dictionaries)
-        Sequence< OUString > aProposals;
+        ProposalList aProposalList;
+//        Sequence< OUString > aProposals;
         INT16 eFailureType = -1;    // no failure
         if (xRes.is())
         {
-            aProposals = xRes->getAlternatives();
+            aProposalList.Append( xRes->getAlternatives() );
+//            aProposals = xRes->getAlternatives();
             eFailureType = xRes->getFailureType();
         }
         Reference< XDictionaryList > xDicList;
@@ -750,20 +872,28 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     if (aAddRplcTxt.getLength() &&
                         !SearchDicList( xDicList, aAddRplcTxt, nLanguage, FALSE, TRUE ).is())
                     {
-                        // add suggestion if not already part of proposals
-                        if (!SeqHasEntry( aProposals, aAddRplcTxt))
-                        {
-                            INT32 nLen = aProposals.getLength();
-                            aProposals.realloc( nLen + 1);
-                            aProposals.getArray()[ nLen ] = aAddRplcTxt;
-                        }
+                        aProposalList.Append( aAddRplcTxt );
+//                        // add suggestion if not already part of proposals
+//                        if (!SeqHasEntry( aProposals, aAddRplcTxt))
+//                        {
+//                            INT32 nLen = aProposals.getLength();
+//                            aProposals.realloc( nLen + 1);
+//                            aProposals.getArray()[ nLen ] = aAddRplcTxt;
+//                        }
                     }
                 }
             }
         }
 
-        if (eFailureType != -1)     // word found in negative dictionary
+        if (eFailureType != -1)     // word misspelled or found in negative user-dictionary
         {
+            // search suitable user-dictionaries for suggestions that are
+            // similar to the misspelled word
+            std::vector< OUString > aDicListProps;   // list of proposals from user-dictionaries
+            SearchSimilarText( aChkWord, nLanguage, xDicList, aDicListProps );
+            aProposalList.Append( aDicListProps );
+            Sequence< OUString > aProposals = aProposalList.GetSequence();
+
             // remove entries listed in negative dictionaries
             if (bCheckDics  &&  xDicList.is())
                 SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
