@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-22 16:44:01 $
+ *  last change: $Author: pl $ $Date: 2002-07-24 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
 
 void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg )
 {
-    Point aPoint = OutputDevice::LogicToLogic( Point( rPoint.X(), rPoint.Y() ),
+    Point aPoint = OutputDevice::LogicToLogic( rPoint,
                                                m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                                                m_pWriter->m_aMapMode );
     sal_Int32 nValue    = aPoint.X();
@@ -319,6 +319,16 @@ void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& 
     rBuffer.append( ' ' );
     appendMappedLength( rRect.GetHeight(), rBuffer, true );
     rBuffer.append( " re" );
+}
+
+void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect )
+{
+    Rectangle aConvertRect = OutputDevice::LogicToLogic( rRect,
+                                                         m_pWriter->getMapMode(),
+                                                         m_pWriter->m_aMapMode );
+    sal_Int32 nMirror = m_nPageHeight ? m_nPageHeight : m_pWriter->m_nInheritedPageHeight;
+    rRect = Rectangle( Point( aConvertRect.BottomLeft().X(), 10*nMirror-aConvertRect.BottomLeft().Y() ),
+                       aConvertRect.GetSize() );
 }
 
 void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer& rBuffer, bool bClose )
@@ -392,15 +402,15 @@ void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
 
 PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion eVersion )
         :
-        m_aFileName( rFilename ),
         m_pReferenceDevice( NULL ),
+        m_aMapMode( MAP_POINT, Point(), Fraction( 1L, 10L ), Fraction( 1L, 10L ) ),
+        m_nNextFID( 1 ),
         m_nInheritedPageWidth( 595 ),  // default A4
         m_nInheritedPageHeight( 842 ), // default A4
         m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
         m_eVersion( eVersion ),
-        m_nNextFID( 1 ),
-        m_aMapMode( MAP_POINT, Point(), Fraction( 1L, 10L ), Fraction( 1L, 10L ) )
+        m_aFileName( rFilename )
 {
     Font aFont;
     aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ) );
@@ -516,7 +526,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
         pData = pFontList->Next();
     }
     // first the 14 PDF builtin fonts
-    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
     {
         ImplFontData* pNewData = new ImplFontData();
         pNewData->mpSysData     = (void*)&m_aBuiltinFonts[i];
@@ -545,7 +555,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 
 bool PDFWriterImpl::isBuiltinFont( ImplFontData* pFont ) const
 {
-    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
     {
         if( pFont->mpSysData == (void*)&m_aBuiltinFonts[i] )
             return true;
@@ -555,7 +565,7 @@ bool PDFWriterImpl::isBuiltinFont( ImplFontData* pFont ) const
 
 void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricData* pMetric ) const
 {
-    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
     {
         if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[i] )
         {
@@ -581,7 +591,7 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
 SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayoutArgs& rArgs ) const
 {
     GenericSalLayout* pLayout = NULL;
-    for( int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
+    for( unsigned int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
     {
         if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[n] )
         {
@@ -592,7 +602,6 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
 
             sal_Int32 nTextWidth = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
 
-            long nWidth = 0;
             Point aNewPos( 0, 0);
             for( int i = 0; i < nGlyphCount; ++i )
             {
@@ -656,6 +665,15 @@ void PDFWriterImpl::endPage()
             {
                 writeBitmapObject( *it );
                 it->m_aBitmap = BitmapEx();
+            }
+        }
+        for( std::list<TransparencyEmit>::iterator t = m_aTransparentObjects.begin();
+             t != m_aTransparentObjects.end(); ++t )
+        {
+            if( t->m_aContentStream.getLength() )
+            {
+                writeTransparentObject( *t );
+                t->m_aContentStream = OStringBuffer();
             }
         }
     }
@@ -925,7 +943,7 @@ bool PDFWriterImpl::emitHatches()
 sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
 {
     sal_Int32 nFontObject = 0;
-    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
     {
         if( pFont->mpSysData == (void*)&m_aBuiltinFonts[i] )
         {
@@ -964,7 +982,7 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
     const unsigned char* pFontData = NULL;
     long nFontLen = 0;
     sal_Int32 nLength1, nLength2;
-    if( pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, pWidths, aInfo, &nFontLen ) )
+    if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, pWidths, aInfo, &nFontLen )) )
     {
         if( aInfo.m_nFontType != SAL_FONTSUBSETINFO_TYPE_TYPE1 )
             goto streamend;
@@ -1674,6 +1692,16 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( it->m_nObject );
             aLine.append( " 0 R\r\n     " );
         }
+        for( std::list<TransparencyEmit>::const_iterator t = m_aTransparentObjects.begin();
+             t != m_aTransparentObjects.end(); ++t )
+        {
+            aLine.append( "/Tr" );
+            aLine.append( t->m_nObject );
+            aLine.append( ' ' );
+            aLine.append( t->m_nObject );
+            aLine.append( " 0 R\r\n     " );
+        }
+
         aLine.append( ">>\r\nendobj\r\n\r\n" );
         CHECK_RETURN( updateObject( nXObjectDict ) );
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -1794,7 +1822,6 @@ bool PDFWriterImpl::emitTrailer()
     // remember start
     sal_uInt64 nXRefOffset = 0;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nXRefOffset )) );
-    nXRefOffset;
     CHECK_RETURN( writeBuffer( "xref\r\n", 6 ) );
 
     sal_Int32 nObjects = m_aObjects.size();
@@ -1916,7 +1943,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     bool bPop = false;
     if( m_aCurrentPDFState.m_aFillColor != m_aCurrentPDFState.m_aFont.GetColor() )
     {
-        bool bPop = true;
+        bPop = true;
         aLine.append( "q " );
         appendNonStrokingColor( m_aCurrentPDFState.m_aFont.GetColor(), aLine );
         aLine.append( "\r\n" );
@@ -1937,7 +1964,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     Point aPos;
     bool bFirst = true;
     int nMinCharIndex = 0, nMaxCharIndex = rText.Len()-1;
-    while( nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices ) )
+    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices )) )
     {
         // add ascent since PDF calculates relative to baseline, VCL to upper left corner
         aPos.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
@@ -2176,8 +2203,30 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
         drawPolyPolygon( rPolyPoly );
         return;
     }
-    // TODO: build in transparency
-    drawPolyPolygon( rPolyPoly );
+
+    // create XObject
+    m_aTransparentObjects.push_back( TransparencyEmit() );
+    m_aTransparentObjects.back().m_aBoundRect   = rPolyPoly.GetBoundRect();
+    // convert rectangle to default user space
+    m_aPages.back().convertRect( m_aTransparentObjects.back().m_aBoundRect );
+    m_aTransparentObjects.back().m_nObject      = createObject();
+    m_aTransparentObjects.back().m_fAlpha       = (double)(100-nTransparentPercent) / 100.0;
+    // create XObject's content stream
+    m_aPages.back().appendPolyPolygon( rPolyPoly, m_aTransparentObjects.back().m_aContentStream );
+    if( m_aCurrentPDFState.m_aLineColor != Color( COL_TRANSPARENT ) &&
+        m_aCurrentPDFState.m_aFillColor != Color( COL_TRANSPARENT ) )
+        m_aTransparentObjects.back().m_aContentStream.append( " B*\r\n" );
+    else if( m_aCurrentPDFState.m_aLineColor != Color( COL_TRANSPARENT ) )
+        m_aTransparentObjects.back().m_aContentStream.append( " S\r\n" );
+    else
+        m_aTransparentObjects.back().m_aContentStream.append( " f*\r\n" );
+
+    OStringBuffer aLine( 80 );
+    // insert XObject
+    aLine.append( "/Tr" );
+    aLine.append( m_aTransparentObjects.back().m_nObject );
+    aLine.append( " Do\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 void PDFWriterImpl::drawRectangle( const Rectangle& rRect )
@@ -2390,7 +2439,6 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
     Point aPoint( (int)(halfWidth * cos(fStartAngle) ),
                   -(int)(halfHeight * sin(fStartAngle) ) );
     aPoint += aCenter;
-    Point aStart = aPoint;
     m_aPages.back().appendPoint( aPoint, aLine );
     aLine.append( " m " );
     for( int i = 0; i < nFragments; i++ )
@@ -2534,6 +2582,60 @@ public:
     ~AccessReleaser() { delete m_pAccess; }
 };
 
+bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
+{
+    CHECK_RETURN( updateObject( rObject.m_nObject ) );
+
+    OStringBuffer aProlog;
+    sal_Int32 nStateObject = createObject();
+    aProlog.append( "/EGS" );
+    aProlog.append( nStateObject );
+    aProlog.append( " gs\r\n" );
+
+    OStringBuffer aLine( 512 );
+    CHECK_RETURN( updateObject( rObject.m_nObject ) );
+    aLine.append( rObject.m_nObject );
+    aLine.append( " 0 obj\r\n  << /Type /XObject\r\n"
+                  "     /Subtype /Form\r\n"
+                  "     /BBox [ " );
+    appendDouble( ((double)rObject.m_aBoundRect.TopLeft().X())/10.0, aLine );
+    aLine.append( ' ' );
+    appendDouble( ((double)rObject.m_aBoundRect.TopLeft().Y())/10.0, aLine );
+    aLine.append( ' ' );
+    appendDouble( ((double)rObject.m_aBoundRect.BottomRight().X())/10.0, aLine );
+    aLine.append( ' ' );
+    appendDouble( ((double)rObject.m_aBoundRect.BottomRight().Y()+1)/10.0, aLine );
+    aLine.append( " ]\r\n     /Resources << /ExtGState << /EGS" );
+    aLine.append( nStateObject );
+    aLine.append( ' ' );
+    aLine.append( nStateObject );
+    aLine.append( " 0 R >> >>\r\n" );
+    aLine.append( "     /Group << /S /Transparency /CS /DeviceRGB >>\r\n" );
+    aLine.append( "     /Length " );
+    aLine.append( (sal_Int32)(rObject.m_aContentStream.getLength()+aProlog.getLength()) );
+    aLine.append( "  >>\r\nstream\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    CHECK_RETURN( writeBuffer( aProlog.getStr(), aProlog.getLength() ) );
+    CHECK_RETURN( writeBuffer( rObject.m_aContentStream.getStr(), rObject.m_aContentStream.getLength() ) );
+    aLine.setLength( 0 );
+    aLine.append( "endstream\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    // write ExtGState dict for this XObject
+    aLine.setLength( 0 );
+    CHECK_RETURN( updateObject( nStateObject ) );
+    aLine.append( nStateObject );
+    aLine.append( " 0 obj\r\n"
+                  "  << /CA " );
+    appendDouble( rObject.m_fAlpha, aLine );
+    aLine.append( "\r\n     /ca " );
+    appendDouble( rObject.m_fAlpha, aLine );
+    aLine.append( "\r\n  >>\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    return true;
+}
+
 bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 {
     sal_Int32 nFunctionObject = createObject();
@@ -2601,32 +2703,51 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
 
-    Bitmap  aBitmap = ( bMask ? rObject.m_aBitmap.GetMask() : rObject.m_aBitmap.GetBitmap() );
+    Bitmap  aBitmap;
     Color   aTransparentColor( COL_TRANSPARENT );
     bool    bDrawMask = false;
     if( ! bMask )
     {
-        switch( rObject.m_aBitmap.GetTransparentType() )
+        aBitmap = rObject.m_aBitmap.GetBitmap();
+        if( rObject.m_aBitmap.IsAlpha() )
         {
-            case TRANSPARENT_NONE:
-                // comes from drawMask
-                if( aBitmap.GetBitCount() == 1 &&
-                    rObject.m_aBitmap.GetTransparentColor() == Color(COL_BLACK) )
-                    bMask = true;
-                break;
-            case TRANSPARENT_COLOR:
-                aTransparentColor = rObject.m_aBitmap.GetTransparentColor();
-                break;
-            case TRANSPARENT_BITMAP:
+            if( m_eVersion >= PDFWriter::PDF_1_4 )
                 bDrawMask = true;
-                break;
+            // else draw without alpha channel
+        }
+        else
+        {
+            switch( rObject.m_aBitmap.GetTransparentType() )
+            {
+                case TRANSPARENT_NONE:
+                    // comes from drawMask
+                    if( aBitmap.GetBitCount() == 1 &&
+                        rObject.m_aBitmap.GetTransparentColor() == Color(COL_BLACK) )
+                        bMask = true;
+                    break;
+                case TRANSPARENT_COLOR:
+                    aTransparentColor = rObject.m_aBitmap.GetTransparentColor();
+                    break;
+                case TRANSPARENT_BITMAP:
+                    bDrawMask = true;
+                    break;
+            }
         }
     }
     else
     {
-            if( aBitmap.GetBitCount() > 1 )
-                aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+        if( m_eVersion < PDFWriter::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
+        {
+            aBitmap = rObject.m_aBitmap.GetMask();
+            aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
             DBG_ASSERT( aBitmap.GetBitCount() == 1, "mask conversion failed" );
+        }
+        else if( aBitmap.GetBitCount() != 8 )
+        {
+            aBitmap = rObject.m_aBitmap.GetAlpha().GetBitmap();
+            aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+            DBG_ASSERT( aBitmap.GetBitCount() == 8, "alpha mask conversion failed" );
+        }
     }
 
     BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
@@ -2691,13 +2812,21 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     }
     else
     {
-        aLine.append( "     /ImageMask true\r\n" );
-        sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
-        DBG_ASSERT( nBlackIndex == 0 || nBlackIndex == 1, "wrong black index" );
-        if( nBlackIndex )
-            aLine.append( "     /Decode [ 1 0 ]\r\n" );
-        else
-            aLine.append( "     /Decode [ 0 1 ]\r\n" );
+        if( aBitmap.GetBitCount() == 1 )
+        {
+            aLine.append( "     /ImageMask true\r\n" );
+            sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
+            DBG_ASSERT( nBlackIndex == 0 || nBlackIndex == 1, "wrong black index" );
+            if( nBlackIndex )
+                aLine.append( "     /Decode [ 1 0 ]\r\n" );
+            else
+                aLine.append( "     /Decode [ 0 1 ]\r\n" );
+        }
+        else if( aBitmap.GetBitCount() == 8 )
+        {
+            aLine.append( "     /ColorSpace /DeviceGray\r\n"
+                          "     /Decode [ 1 0 ]\r\n" );
+        }
     }
 
     if( ! bMask && m_eVersion > PDFWriter::PDF_1_2 )
@@ -2705,7 +2834,10 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         if( bDrawMask )
         {
             nMaskObject = createObject();
-            aLine.append( "     /Mask " );
+            if( rObject.m_aBitmap.IsAlpha() && m_eVersion > PDFWriter::PDF_1_3 )
+                aLine.append( "     /SMask " );
+            else
+                aLine.append( "     /Mask " );
             aLine.append( nMaskObject );
             aLine.append( " 0 R\r\n" );
         }
@@ -3064,15 +3196,10 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                 m_aBitmaps.back().m_nObject = createObject();
                 m_aBitmaps.back().m_aBitmap = aBitmap;
 
-                // convert to internal mapmode (10th point)
-                Rectangle aConvertRect = OutputDevice::LogicToLogic( Rectangle( aBmpPos, aBmpSize ),
-                                                                     getMapMode(),
-                                                                     m_aMapMode );
                 // convert to page coordinates; this needs to be done here
                 // since the emit does not know the page anymore
-                sal_Int32 nMirror = m_aPages.back().m_nPageHeight ? m_aPages.back().m_nPageHeight : m_nInheritedPageHeight;
-                aConvertRect = Rectangle( Point( aConvertRect.BottomLeft().X(), 10*nMirror-aConvertRect.BottomLeft().Y() ),
-                                          aConvertRect.GetSize() );
+                Rectangle aConvertRect( aBmpPos, aBmpSize );
+                m_aPages.back().convertRect( aConvertRect );
 
                 // push the pattern
                 m_aTilings.push_back( BitmapPatternEmit() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-22 12:44:39 $
+ *  last change: $Author: pl $ $Date: 2002-07-24 16:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,14 @@
 #ifndef _SV_OUTDATA_HXX
 #include <outdata.hxx>
 #endif
+#ifndef _RTL_STRBUF_HXX
+#include <rtl/strbuf.hxx>
+#endif
 
 #include <vector>
 #include <map>
 #include <list>
 
-namespace rtl { class OStringBuffer; }
 class SalLayout;
 class ImplLayoutArgs;
 struct ImplFontData;
@@ -153,6 +155,8 @@ public:
         void appendPoint( const Point& rPoint, rtl::OStringBuffer& rBuffer, bool bNeg = false );
         // appends a rectangle
         void appendRect( const Rectangle& rRect, rtl::OStringBuffer& rBuffer );
+        // converts a rectangle to 10th points page space
+        void convertRect( Rectangle& rRect );
         // appends a polygon optionally closing it
         void appendPolygon( const Polygon& rPoly, rtl::OStringBuffer& rBuffer, bool bClose = true );
         // appends a polypolygon optionally closing the subpaths
@@ -192,6 +196,15 @@ public:
         sal_Int32   m_nObject;
         sal_Int32   m_nBitmapObject;
         Rectangle   m_aRectangle;
+    };
+
+    // for transparency group XObjects
+    struct TransparencyEmit
+    {
+        sal_Int32           m_nObject;
+        double              m_fAlpha;
+        Rectangle           m_aBoundRect;
+        rtl::OStringBuffer  m_aContentStream;
     };
 
     // font subsets
@@ -244,6 +257,7 @@ private:
     std::list< HatchEmit >          m_aHatches;
     /* contains bitmap tiling patterns */
     std::list< BitmapPatternEmit >  m_aTilings;
+    std::list< TransparencyEmit >   m_aTransparentObjects;
     /*  contains all font subsets in use */
     FontSubsetData                  m_aSubsets;
     FontEmbedData                   m_aEmbeddedFonts;
@@ -324,6 +338,9 @@ private:
      *   state to the file
      */
     void updateGraphicsState();
+
+    /* writes a transparency group object */
+    bool writeTransparentObject( TransparencyEmit& rObject );
 
     /* writes an XObject of type image, may create
        a second for the mask
