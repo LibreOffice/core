@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:40:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,10 @@
 #include "ftools.hxx"
 #endif
 
+#include <sot/storage.hxx>
+
 #ifndef _COLOR_HXX
 #include <tools/color.hxx>
-#endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -233,36 +232,36 @@ void ScfTools::ConvertToScDefinedName( String& rName )
 
 // *** streams and storages *** -----------------------------------------------
 
-SvStorageRef ScfTools::OpenStorageRead( SvStorage* pStrg, const String& rStrgName )
+SotStorageRef ScfTools::OpenStorageRead( SotStorage* pStrg, const String& rStrgName )
 {
-    SvStorageRef xSubStrg;
+    SotStorageRef xSubStrg;
     if( pStrg && pStrg->IsContained( rStrgName ) )
-        xSubStrg = pStrg->OpenStorage( rStrgName, STREAM_STD_READ );
+        xSubStrg = pStrg->OpenSotStorage( rStrgName, STREAM_STD_READ );
     return xSubStrg;
 }
 
-SvStorageRef ScfTools::OpenStorageWrite( SvStorage* pStrg, const String& rStrgName )
+SotStorageRef ScfTools::OpenStorageWrite( SotStorage* pStrg, const String& rStrgName )
 {
-    SvStorageRef xSubStrg;
+    SotStorageRef xSubStrg;
     if( pStrg )
-        xSubStrg = pStrg->OpenStorage( rStrgName, STREAM_STD_WRITE );
+        xSubStrg = pStrg->OpenSotStorage( rStrgName, STREAM_STD_WRITE );
     return xSubStrg;
 }
 
-SvStorageStreamRef ScfTools::OpenStorageStreamRead( SvStorage* pStrg, const String& rStrmName )
+SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorage* pStrg, const String& rStrmName )
 {
-    SvStorageStreamRef xStrm;
+    SotStorageStreamRef xStrm;
     if( pStrg && pStrg->IsContained( rStrmName ) && pStrg->IsStream( rStrmName ) )
-        xStrm = pStrg->OpenStream( rStrmName, STREAM_STD_READ );
+        xStrm = pStrg->OpenSotStream( rStrmName, STREAM_STD_READ );
     return xStrm;
 }
 
-SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStrg, const String& rStrmName )
+SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorage* pStrg, const String& rStrmName )
 {
     DBG_ASSERT( !pStrg || !pStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
-    SvStorageStreamRef xStrm;
+    SotStorageStreamRef xStrm;
     if( pStrg )
-        xStrm = pStrg->OpenStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
+        xStrm = pStrg->OpenSotStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
     return xStrm;
 }
 
