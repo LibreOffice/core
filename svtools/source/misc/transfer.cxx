@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-14 16:38:16 $
+ *  last change: $Author: ka $ $Date: 2001-02-19 12:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <tools/postwin.h>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 #ifndef DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -186,9 +189,15 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
         maAny = Any();
 
         if( !maFormats.size() )
+        {
+            Application::GetSolarMutex().acquire();
             AddSupportedFormats();
+            Application::GetSolarMutex().release();
+        }
 
+        Application::GetSolarMutex().acquire();
         GetData( rFlavor );
+        Application::GetSolarMutex().release();
     }
 
     return maAny;
@@ -199,7 +208,11 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() throw( RuntimeException )
 {
     if( !maFormats.size() )
+    {
+        Application::GetSolarMutex().acquire();
         AddSupportedFormats();
+        Application::GetSolarMutex().release();
+    }
 
     Sequence< DataFlavor >      aRet( maFormats.size() );
     DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
@@ -218,7 +231,11 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
     sal_Bool bRet = sal_False;
 
     if( !maFormats.size() )
+    {
+        Application::GetSolarMutex().acquire();
         AddSupportedFormats();
+        Application::GetSolarMutex().release();
+    }
 
     DataFlavorExList::iterator  aIter( maFormats.begin() ), aEnd( maFormats.end() );
 
@@ -238,7 +255,9 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
 void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw( RuntimeException )
 {
+    Application::GetSolarMutex().acquire();
     ObjectReleased();
+    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
