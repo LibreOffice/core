@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:25:45 $
+ *  last change: $Author: er $ $Date: 2001-02-22 15:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,19 +88,6 @@ enum StackVar
     svMissing = 0x70,                   // 0 or ""
     svErr                               // unknown StackType
 };
-
-
-#if 0
-union {
-    double       nValue;
-    ComplRefData aRef;
-    BYTE         cByte;
-    ScMatrix*    pMat;
-    USHORT       nIndex;                // Index fuer Name-Tabelle
-    sal_Unicode  cStr[ MAXSTRLEN+1 ];   // String (bis 255 Zeichen + 0)
-    short        nJump[MAXJUMPCOUNT+1]; // If/Chose-Token
-};
-#endif
 
 
 class ScMatrix;
