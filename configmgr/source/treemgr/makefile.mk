@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jb $ $Date: 2001-02-13 17:22:35 $
+#   last change: $Author: jb $ $Date: 2001-06-20 20:43:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES=	\
         $(SLO)$/configgroup.obj	\
         $(SLO)$/configpath.obj	\
         $(SLO)$/configset.obj	\
+        $(SLO)$/valuemembernode.obj	\
         $(SLO)$/nodechange.obj	\
         $(SLO)$/nodechangeimpl.obj	\
         $(SLO)$/nodechangeinfo.obj	\
