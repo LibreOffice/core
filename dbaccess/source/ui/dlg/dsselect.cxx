@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 18:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 
 #if defined( WIN ) || defined( WNT )
 #define HWND    void*
+#define HMENU   void*
     // was unable to include windows.h, that's why this direct define
 #endif
 #ifndef _SV_SYSDATA_HXX
