@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:11:28 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:53:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,10 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(WITH_BINFILTER)" == "NO"
+SCPDEFS+=-DWITHOUT_BINFILTER
+.ENDIF
 
 SCP_PRODUCT_TYPE=osl
 PARFILES= \
