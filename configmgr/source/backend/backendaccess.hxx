@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:53:05 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,15 @@
 #include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif // _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 
 namespace configmgr { namespace backend {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
+namespace lang = css::lang ;
 //namespace backenduno = css::configuration::backend ;
 namespace backenduno = drafts::com::sun::star::configuration::backend ;
 
@@ -100,11 +101,14 @@ namespace backenduno = drafts::com::sun::star::configuration::backend ;
 class BackendAccess : public IMergedDataProvider {
     public :
         /**
-          Constructor using a meta-configuration accessor to
-          define the services that will be used to read/write
-          the configuration data.
+          Constructor using an XBackend implementation and a
+          service factory.
+
+          @param xBackend   backend used for access to data
+          @param xFactory   factory for instantiation of services
           */
-        BackendAccess(void) ;
+        BackendAccess(const uno::Reference<backenduno::XBackend>& xBackend,
+                const uno::Reference<lang::XMultiServiceFactory>& xFactory) ;
         /** Destructor */
         ~BackendAccess(void) ;
 
@@ -125,8 +129,8 @@ class BackendAccess : public IMergedDataProvider {
     protected :
 
     private :
-        /** Component context used for service invocation */
-        uno::Reference<uno::XComponentContext> mContext ;
+        /** Factory used for service invocation */
+        uno::Reference<lang::XMultiServiceFactory> mFactory ;
         /** Backend being accessed */
         uno::Reference<backenduno::XBackend> mBackend ;
 
