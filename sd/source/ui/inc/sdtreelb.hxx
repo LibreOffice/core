@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 13:02:30 $
+ *  last change: $Author: af $ $Date: 2002-11-14 15:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class SfxMedium;
 class SfxViewFrame;
 class SdNavigatorWin;
 class SdrObject;
+class SdPage;
 
 /*************************************************************************
 |*
@@ -129,6 +130,17 @@ private:
     };
 
     friend class SdPageObjsTLB::SdPageObjsTransferable;
+
+    /** Determine whether the specified page belongs to the current show
+        which is either the standard show or a custom show.
+        @param pPage
+            Pointer to the page for which to check whether it belongs to the
+            show.
+        @return
+            Returns <FALSE/> if there is no custom show or if the current
+            show does not contain the specified page at least once.
+    */
+    bool PageBelongsToCurrentShow (const SdPage* pPage) const;
 
 protected:
 
