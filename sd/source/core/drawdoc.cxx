@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dl $ $Date: 2001-07-03 14:21:16 $
+ *  last change: $Author: thb $ $Date: 2001-07-10 11:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     }
 
 #else
-    LanguageType eLang = System::GetLanguage();
+    AllSettings aSettings( Application::GetSettings() );
+    LanguageType eLang = aSettings.GetLanguage();
     SetLanguage( eLang, EE_CHAR_LANGUAGE );
     SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
     SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
