@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-09 13:55:15 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:31:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -168,6 +168,21 @@ sub resolving_archive_flag
 
                     if ($returnvalue) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
 
+                    if ( $^O =~ /cygwin/ and $ENV{'USE_SHELL'} ne "4nt" )
+                    {
+                        # Make dll's executable
+                        $systemcall = "cd $unzipdir; find . -name \\*.dll -exec chmod 775 \{\} \\\;";
+                        $returnvalue = system($systemcall);
+                        $infoline = "Systemcall: $systemcall\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        if ($returnvalue)
+                        {
+                            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                            push( @installer::globals::logfileinfo, $infoline);
+                        }
+                    }
+
                     if ( ! $installer::globals::iswindowsbuild )
                     {
                         # Setting unix rights to "775" for all created directories inside the package
@@ -210,7 +225,7 @@ sub resolving_archive_flag
 
                         $zipname =~ s/^\s*\.\///;
 
-                        if ($installer::globals::iswin) { $zipname =~ s/\//\\/g; }
+                        if ($installer::globals::iswin and $ENV{'USE_SHELL'} eq "4nt") { $zipname =~ s/\//\\/g; }
 
                         # if ( $zipsize == 0 )  # also files can have a size of 0
                         if ( $zipname =~ /\Q$installer::globals::separator\E\s*$/ ) # slash or backslash at the end characterizes a directory
