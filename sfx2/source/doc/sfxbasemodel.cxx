@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: as $ $Date: 2002-07-12 10:17:37 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 15:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,6 +1163,11 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
             nChangeFlags |= SFX_PRINTER_CHG_SIZE;
         }
     }
+
+    // #96772#: wait until printing is done
+    SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
+    while ( pDocPrinter->IsPrinting() )
+        Application::Yield();
 
     // set new printer
     pViewSh->SetPrinter( pPrinter, nChangeFlags );
