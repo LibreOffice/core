@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:59:55 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <tstpitem.hxx>
 
 #include <eertfpar.hxx>
+#include <editeng.hxx>
 #include <impedit.hxx>
 #include <editview.hxx>
 #include <eehtml.hxx>
@@ -1547,13 +1548,35 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 }
 
 
-sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nLang )
+sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
 {
 #ifdef SVX_LIGHT
     return sal_False;
 #else
     sal_Bool    bHasConvTxt = sal_False;
 
+    USHORT nParas = pEditEngine->GetParagraphCount();
+    for (USHORT k = 0;  k < nParas;  ++k)
+    {
+        SvUShorts aPortions;
+        pEditEngine->GetPortions( k, aPortions );
+        for ( USHORT nPos = 0; nPos < aPortions.Count(); ++nPos )
+        {
+            USHORT nEnd   = aPortions.GetObject( nPos );
+            USHORT nStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+            LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart );
+#ifdef DEBUG
+            lang::Locale aLocale( SvxCreateLocale( nLangFound ) );
+#endif
+            bHasConvTxt =   (nSrcLang == nLangFound) ||
+                            (svx::HangulHanjaConversion::IsChinese( nLangFound ) &&
+                             svx::HangulHanjaConversion::IsChinese( nSrcLang ));
+            if (bHasConvTxt)
+                return bHasConvTxt;
+       }
+    }
+
+#ifdef TL_OLD_CODE
     ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count() - 1 );
     EditSelection aCurSel( aEditDoc.GetStartPaM() );
 
@@ -1572,6 +1595,8 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nLang )
             bHasConvTxt = sal_True;
         aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     }
+#endif TL_OLD_CODE
+
 #endif
     return bHasConvTxt;
 }
@@ -1590,11 +1615,36 @@ void ImpEditEngine::Convert( EditView* pEditView,
     if ( bMultipleDoc )
         pEditView->pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
 
+    //
+    // initialize pConvInfo
+    //
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Adjust( aEditDoc );
     pConvInfo = new ConvInfo;
     pConvInfo->bMultipleDoc = bMultipleDoc;
     pConvInfo->aConvStart = CreateEPaM( aCurSel.Min() );
+    //
+    // if it is not just a selection and we are about to begin
+    // with the current conversion for the very first time
+    // we need to find the start of the current (initial)
+    // convertible unit in order for the text conversion to give
+    // the correct result for that. Since it is easier to obtain
+    // the start of the word we use that though.
+    if (!aCurSel.HasRange() && ImplGetBreakIterator().is())
+    {
+        EditPaM aWordStartPaM(  SelectWord( aCurSel, i18n::WordType::DICTIONARY_WORD ).Min() );
+
+        // since #118246 / #117803 still occurs if the cursor is placed
+        // between the two chinese characters to be converted (because both
+        // of them are words on their own!) using the word boundary here does
+        // not work. Thus since chinese conversion is not interactive we start
+        // at the begin of the paragraph to solve the problem, i.e. have the
+        // TextConversion service get those charcters together in the same call.
+        USHORT nStartIdx = ( svx::HangulHanjaConversion::IsChinese( nSrcLang ) ) ?
+                                0 : aWordStartPaM.GetIndex();
+        pConvInfo->aConvStart.nIndex = nStartIdx;
+    }
+    //
     pConvInfo->aConvContinue = pConvInfo->aConvStart;
 
     sal_Bool bIsStart = sal_False;
@@ -1611,7 +1661,23 @@ void ImpEditEngine::Convert( EditView* pEditView,
                           pDestFont,
                           nOptions, bIsInteractive,
                           bIsStart, pEditView );
+
+    //
+    //!! optimization does not work since when update mode is false
+    //!! the onject is 'lying' about it portions, paragraphs,
+    //!! EndPaM... later on.
+    //!! Should not be a grat problem since text boxes or cells in
+    //!! Calc usually have only a rather short text.
+    //
+    // disallow formatting, updating the view, ... while
+    // non-interactively converting the document. (saves time)
+    //if (!bIsInteractive)
+    //  SetUpdateMode( FALSE );
+
     aWrp.Convert();
+
+    //if (!bIsInteractive)
+    //SetUpdateMode( TRUE, 0, TRUE );
 
     if ( !bMultipleDoc )
     {
@@ -1629,16 +1695,19 @@ void ImpEditEngine::Convert( EditView* pEditView,
 }
 
 
-String ImpEditEngine::ImpConvert( EditView* pEditView,
-        LanguageType nSrcLang, const ESelection &rConvRange )
+void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang,
+        EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange )
 {
     // modified version of ImpEditEngine::ImpSpell
 
     // looks for next convertible text portion to be passed on to the wrapper
 
     String aRes;
+    LanguageType nResLang = LANGUAGE_NONE;
+
 #ifdef SVX_LIGHT
-    return aRes;
+    rConvTxt = rtl::OUString();
+    rConvTxtLang = LANGUAGE_NONE;
 #else
 
     ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count()-1 );
@@ -1666,7 +1735,56 @@ String ImpEditEngine::ImpConvert( EditView* pEditView,
         }
 */
 
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        USHORT nAttribStart = USHRT_MAX;
+        USHORT nAttribEnd   = USHRT_MAX;
+        USHORT nCurPos      = USHRT_MAX;
+        EPaM aCurStart = CreateEPaM( aCurSel.Min() );
+        SvUShorts aPortions;
+        pEditEngine->GetPortions( (USHORT)aCurStart.nPara, aPortions );
+        for ( USHORT nPos = 0; nPos < aPortions.Count(); ++nPos )
+        {
+            USHORT nEnd   = aPortions.GetObject( nPos );
+            USHORT nStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+            LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nStart );
+#ifdef DEBUG
+            lang::Locale aLocale( SvxCreateLocale( nLangFound ) );
+#endif
+            sal_Bool bLangOk =  (nLangFound == nSrcLang) ||
+                                (svx::HangulHanjaConversion::IsChinese( nLangFound ) &&
+                                 svx::HangulHanjaConversion::IsChinese( nSrcLang ));
+
+            if (nAttribEnd != USHRT_MAX) // start already found?
+            {
+                DBG_ASSERT(nEnd >= aCurStart.nIndex, "error while scanning attributes (a)" );
+                DBG_ASSERT(nEnd >= nAttribEnd, "error while scanning attributes (b)" );
+                if (/*nEnd >= aCurStart.nIndex &&*/ nLangFound == nResLang)
+                    nAttribEnd = nEnd;
+                else  // language attrib has changed
+                    break;
+            }
+            if (nAttribStart == USHRT_MAX && // start not yet found?
+                nEnd > aCurStart.nIndex && bLangOk)
+            {
+                nAttribStart = nStart;
+                nAttribEnd   = nEnd;
+                nResLang = nLangFound;
+            }
+
+            nCurPos = nEnd;
+        }
+
+        if (nAttribStart != USHRT_MAX  &&  nAttribEnd != USHRT_MAX)
+        {
+            aCurSel.Min().SetIndex( nAttribStart );
+            aCurSel.Max().SetIndex( nAttribEnd );
+        }
+        else if (nCurPos != USHRT_MAX)
+        {
+            // set selection to end of scanned text
+            // (used to set the position where to continue from later on)
+            aCurSel.Min().SetIndex( nCurPos );
+            aCurSel.Max().SetIndex( nCurPos );
+        }
 
         if ( !pConvInfo->bConvToEnd )
         {
@@ -1691,39 +1809,16 @@ String ImpEditEngine::ImpConvert( EditView* pEditView,
             aCurSel.Max().GetNode() == aPaM.GetNode() &&
             aCurSel.Max().GetIndex() > aPaM.GetIndex())
                 aCurSel.Max().SetIndex( aPaM.GetIndex() );
-/*
-        if (rConvRange.HasRange())
-        {
-            // check for end of range to be converted
-            ESelection aTmp = CreateESel( aCurSel );
-            if  (aTmp.nEndPara >  rConvRange.nEndPara ||
-                (aTmp.nEndPara == rConvRange.nEndPara &&
-                 aTmp.nEndPos  >  rConvRange.nEndPos))
-                return String();
-        }
-*/
+
         aWord = GetSelected( aCurSel );
 
-        // workaround for SelectWord (i.e. getWordBoundary) returning
-        // a string " " when a word is followed by " " and end of
-        // paragraph and the cursor is placed after the word and
-        // before the " ". See #112021#
-        aWord.EraseTrailingChars( ' ' );
-
-
-        // Wenn Punkt dahinter, muss dieser mit uebergeben werden !
-        // Falls Abkuerzung...
-        if ( aWord.Len() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
-        {
-            sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
-            if ( cNext == '.' )
-            {
-                aCurSel.Max().GetIndex()++;
-                aWord += cNext;
-            }
-        }
-
-        if ( aWord.Len() > 0  &&  GetLanguage( aCurSel.Max() ) == nSrcLang )
+/*
+        LanguageType nLang = GetLanguage( aCurSel.Min() );
+        sal_Bool bLangOk =  (nLang == nSrcLang) ||
+                            (svx::HangulHanjaConversion::IsChinese( nLang ) &&
+                             svx::HangulHanjaConversion::IsChinese( nSrcLang ));
+*/
+        if ( aWord.Len() > 0 /* && bLangOk */)
             aRes = aWord;
 
         if ( !aRes.Len() )
@@ -1737,7 +1832,9 @@ String ImpEditEngine::ImpConvert( EditView* pEditView,
     pEditView->pImpEditView->DrawSelection();
     pEditView->ShowCursor( sal_True, sal_False );
 
-    return aRes;
+    rConvTxt = aRes;
+    if (rConvTxt.getLength())
+        rConvTxtLang = nResLang;
 #endif
 }
 
