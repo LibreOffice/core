@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:59:33 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 07:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,9 @@ namespace connectivity
             OKeys(OAdabasTable* _pTable,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector
-                     ) : sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector)
+                     ) : sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector,sal_True)
                 ,m_pTable(_pTable)
             {}
-            //XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }
