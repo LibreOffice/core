@@ -1,10 +1,11 @@
-sh	shell	: offuh rdbmaker tools sal NULL
+sh	shell	: offuh rdbmaker tools sal expat NULL
 sh  shell\source\win32					nmake	-	w sh_win32 NULL
 sh	shell\source\win32\simplemail		nmake	-	w sh_win32_simplemail NULL
 sh  shell\source\unix\exec				nmake	-	u sh_win32 NULL
 sh	shell\source\proxysettings			nmake	-	all sh_proxysettings NULL
 sh	shell\source\cmdmail      			nmake	-	all sh_cmdmail NULL
-sh shell\source\unix\sysshell              nmake   -   u   sh_unix_sysshell NULL
+sh shell\source\all                     nmake   -   all sh_all NULL
+sh shell\source\unix\sysshell              nmake   -   u  sh_unix_sysshell sh_all NULL
 sh shell\source\win32\sysshell             nmake   -   w sh_win32_sysshell NULL
 shell shell\source\tools\lngconvex      nmake - w sh_win32_lngconv NULL
 sh shell\source\win32\shlxthandler nmake - w sh_win32_shlxthandler sh_win32_lngconv.w NULL
