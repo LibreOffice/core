@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 14:28:11 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,13 +177,14 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "~Tabell";
         Text[ polish ] = "Tabela";
         Text[ portuguese_brazilian ] = "Tabelle:";
-        Text[ japanese ] = "ﾃｰﾌﾞﾙ(~T)";
-        Text[ korean ] = "테이블(~T):";
+        Text[ japanese ] = "テーブル(~T)";
+        Text[ korean ] = "시트(~T):";
         Text[ chinese_simplified ] = "表格(~T)";
         Text[ chinese_traditional ] = "表格(~T)";
         Text[ turkish ] = "Tablo:";
         Text[ arabic ] = "����:";
-        Text[ catalan ] = "~Tabla:";
+        Text[ catalan ] = "~Taula:";
+        Text[ thai ] = "~ตาราง";
     };
     ComboBox CB_TABLES
     {
@@ -218,8 +219,9 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ chinese_traditional ] = "指定";
         Text[ arabic ] = "�����";
         Text[ turkish ] = "Atama";
-        Text[ catalan ] = "Asignaci�n";
+        Text[ catalan ] = "Asignaci�";
         Text[ finnish ] = "M��ritys";
+        Text[ thai ] = "กำหนด";
     };
     FixedText FT_TABLEINDEXES
     {
@@ -240,13 +242,14 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "T~abellindex";
         Text[ polish ] = "Indeksy tabeli";
         Text[ portuguese_brazilian ] = "Tabellenindizes:";
-        Text[ japanese ] = "ﾃｰﾌﾞﾙのｲﾝﾃﾞｯｸｽ(~A)";
-        Text[ korean ] = "표 색인(~A):";
+        Text[ japanese ] = "テーブルのインデックス(~A)";
+        Text[ korean ] = "시트 색인(~A):";
         Text[ chinese_simplified ] = "表格标志(~A)";
         Text[ chinese_traditional ] = "表格標誌(~A)";
         Text[ turkish ] = "Tablo dizinleri:";
         Text[ arabic ] = "����� ����:";
-        Text[ catalan ] = "�ndices de ta~bla:";
+        Text[ catalan ] = "�ndexs de la t~aula:";
+        Text[ thai ] = "ดัชนี~ตาราง:";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -275,13 +278,14 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "~Fria index";
         Text[ polish ] = "Wolne indeksy";
         Text[ portuguese_brazilian ] = "Freie Indizes";
-        Text[ japanese ] = "ﾌﾘｰｲﾝﾃﾞｯｸｽ(~F)";
-        Text[ korean ] = "임의의 색인(~F)";
+        Text[ japanese ] = "フリーインデックス(~F)";
+        Text[ korean ] = "모든 색인(~F)";
         Text[ chinese_simplified ] = "自由标志(~F)";
         Text[ chinese_traditional ] = "自由標誌(~F)";
         Text[ turkish ] = "Bo� dizinler:";
         Text[ arabic ] = "����� ���:";
-        Text[ catalan ] = "�ndices lib~res:";
+        Text[ catalan ] = "�~ndexs lliures:";
+        Text[ thai ] = "~ดัชนีว่าง:";
     };
     ListBox LB_FREEINDEXES
     {
@@ -374,19 +378,23 @@ ModalDialog DLG_DBASE_INDEXES
     Text[ chinese_simplified ] = "标志";
     Text[ russian ] = "�������";
     Text[ polish ] = "Indeksy";
-    Text[ japanese ] = "ｲﾝﾃﾞｯｸｽ";
+    Text[ japanese ] = "インデックス";
     Text[ chinese_traditional ] = "標誌";
     Text[ arabic ] = "�����";
     Text[ greek ] = "���������";
     Text[ korean ] = "색인";
     Text[ turkish ] = "Dizinler";
-    Text[ catalan ] = "�ndices";
+    Text[ catalan ] = "�ndexs";
     Text[ finnish ] = "Hakemistot";
+    Text[ thai ] = "ดัชนี";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2002/04/29 14:28:11  oj
+ *  #98772# new images
+ *
  *  Revision 1.18  2001/11/16 22:40:34  kz
  *  Merge SRC638: 16.11.01 - 22:38:51
  *
