@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:45:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #ifndef _IDLC_ASTOPERATION_HXX_
 #include <idlc/astoperation.hxx>
 #endif
+#include "idlc/idlc.hxx"
 
 #include "registry/version.h"
 #include "registry/writer.hxx"
@@ -104,17 +105,17 @@ AstInterface::DoubleDeclarations AstInterface::checkInheritedInterfaceClashes(
 }
 
 void AstInterface::addInheritedInterface(
-    AstInterface const * ifc, bool optional,
-    rtl::OUString const & documentation)
+    AstType const * ifc, bool optional, rtl::OUString const & documentation)
 {
     m_inheritedInterfaces.push_back(
         InheritedInterface(ifc, optional, documentation));
     if (!optional) {
         ++m_mandatoryInterfaces;
     }
-    addVisibleInterface(ifc, true, optional);
+    AstInterface const * resolved = resolveInterfaceTypedefs(ifc);
+    addVisibleInterface(resolved, true, optional);
     if (optional) {
-        addOptionalVisibleMembers(ifc);
+        addOptionalVisibleMembers(resolved);
     }
 }
 
@@ -174,8 +175,9 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
     sal_uInt16 nMethods = 0;
     sal_uInt16 nReferences = static_cast< sal_uInt16 >(
         m_inheritedInterfaces.size() - m_mandatoryInterfaces);
-    typereg_Version version = nBaseTypes <= 1 && nReferences == 0
-        ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1;
+    typereg_Version version
+        = (nBaseTypes <= 1 && nReferences == 0 && !m_bPublished
+           ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1);
     {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
           ++i)
     {
@@ -241,7 +243,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
     typereg::Writer aBlob(
         version, getDocumentation(),
         OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
-        RT_TYPE_INTERFACE,
+        RT_TYPE_INTERFACE, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), nBaseTypes,
         nAttributes, nMethods, nReferences);
 
@@ -352,7 +354,7 @@ void AstInterface::checkInheritedInterfaceClashes(
                   i != ifc->m_inheritedInterfaces.end(); ++i)
             {
                 checkInheritedInterfaceClashes(
-                    doubleDeclarations, seenInterfaces, i->getInterface(),
+                    doubleDeclarations, seenInterfaces, i->getResolved(),
                     false, i->isOptional(), mainOptional);
             }}
         }
@@ -416,7 +418,7 @@ void AstInterface::addVisibleInterface(
                   ifc->m_inheritedInterfaces.begin());
               i != ifc->m_inheritedInterfaces.end(); ++i)
         {
-            addVisibleInterface(i->getInterface(), false, i->isOptional());
+            addVisibleInterface(i->getResolved(), false, i->isOptional());
         }}
     }
 }
@@ -442,7 +444,7 @@ void AstInterface::addOptionalVisibleMembers(AstInterface const * ifc) {
           i != ifc->m_inheritedInterfaces.end(); ++i)
     {
         if (!i->isOptional()) {
-            addOptionalVisibleMembers(i->getInterface());
+            addOptionalVisibleMembers(i->getResolved());
         }
     }}
 }
