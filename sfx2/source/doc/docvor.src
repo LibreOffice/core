@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 13:14:16 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "닫기";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cerrar";
+        Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "ปิด";
     };
     PushButton BTN_FILES
     {
@@ -149,14 +150,15 @@ ModalDialog DLG_ORGANIZE
         Text[ chinese_simplified ] = "文件(~F)...";
         Text[ russian ] = "����...";
         Text[ polish ] = "Pli~k...";
-        Text[ japanese ] = "ﾌｧｲﾙ（~F)...";
+        Text[ japanese ] = "ファイル（~F)...";
         Text[ chinese_traditional ] = "檔案(~F)...";
         Text[ arabic ] = "...���";
         Text[ greek ] = "~������...";
         Text[ korean ] = "파일(~F)...";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Archivo...";
+        Text[ catalan ] = "~Fitxer...";
+        Text[ thai ] = "แ~ฟ้ม...";
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
@@ -172,11 +174,11 @@ ModalDialog DLG_ORGANIZE
         Text[ french ] = "Carnet d'~adresses...";
         Text[ spanish ] = "~Libreta de direcciones...";
         Text[ italian ] = "~Rubrica...";
-        Text[ danish ] = "~Address Book...";
+        Text[ danish ] = "~Adressekartotek...";
         Text[ swedish ] = "~Adressbok...";
         Text[ polish ] = "~Ksi��ka adresowa...";
         Text[ portuguese_brazilian ] = "~Address Book...";
-        Text[ japanese ] = "ｱﾄﾞﾚｽ帳(~A)...";
+        Text[ japanese ] = "アドレス帳(~A)...";
         Text[ korean ] = "주소록(~A)...";
         Text[ chinese_simplified ] = "通讯簿(~A)...";
         Text[ chinese_traditional ] = "通訊錄(~A)...";
@@ -184,6 +186,7 @@ ModalDialog DLG_ORGANIZE
         Text[ arabic ] = "���� ��������...";
         Text[ catalan ] = "~Libreta de direcciones...";
         Text[ finnish ] = "~Osoitekirja";
+        Text[ thai ] = "สมุด~ที่อยู่...";
     };
     ListBox LB_LEFT_TYP
     {
@@ -275,8 +278,8 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ japanese ] =
     {
-            < "ﾄﾞｷｭﾒﾝﾄﾃﾝﾌﾟﾚｰﾄ" ; Default ; > ;
-        < "ﾄﾞｷｭﾒﾝﾄ" ; Default ; > ;
+            < "ドキュメントテンプレート" ; Default ; > ;
+        < "ドキュメント" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
@@ -295,7 +298,7 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ korean ] =
     {
-            < "문서 서식파일" ; Default ; > ;
+            < "문서 템플릿" ; Default ; > ;
         < "문서" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -312,6 +315,11 @@ ModalDialog DLG_ORGANIZE
     {
             < "Plantillas de documento" ; Default ; > ;
         < "Documentos" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "แม่แบบ" ; Default ; > ;
+        < "เอกสาร" ; Default ; > ;
     };
     };
     ListBox LB_RIGHT_TYP
@@ -404,8 +412,8 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ japanese ] =
     {
-            < "ﾄﾞｷｭﾒﾝﾄﾃﾝﾌﾟﾚｰﾄ" ; Default ; > ;
-        < "ﾄﾞｷｭﾒﾝﾄ" ; Default ; > ;
+            < "ドキュメントテンプレート" ; Default ; > ;
+        < "ドキュメント" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
@@ -424,7 +432,7 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ korean ] =
     {
-            < "문서 서식파일" ; Default ; > ;
+            < "문서 템플릿" ; Default ; > ;
         < "문서" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -441,6 +449,11 @@ ModalDialog DLG_ORGANIZE
     {
             < "Plantillas de documento" ; Default ; > ;
         < "Documentos" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "แม่แบบ" ; Default ; > ;
+        < "เอกสาร" ; Default ; > ;
     };
     };
     Control LB_LEFT
@@ -533,10 +546,11 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "開啟新檔(~N)";
                     Text[ arabic ] = "����";
                     Text[ greek ] = "~����������";
-                    Text[ korean ] = "새로(~N)";
+                    Text[ korean ] = "새로 만들기(~N)";
                     Text[ turkish ] = "Y~eni";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Nuevo";
+                    Text[ catalan ] = "~Nou";
+                    Text[ thai ] = "ใ~หม่";
                 };
                 MenuItem
                 {
@@ -571,7 +585,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "삭제(~D)";
                     Text[ turkish ] = "~Sil";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Eliminar";
+                    Text[ catalan ] = "~Suprimeix";
+                    Text[ thai ] = "~ลบ";
                 };
                 MenuItem
                 {
@@ -600,7 +615,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "편집(~E)";
                     Text[ turkish ] = "~D�zenle";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "E~ditar";
+                    Text[ catalan ] = "~Edita";
+                    Text[ thai ] = "แ~ก้ไข";
                 };
                 MenuItem
                 {
@@ -623,17 +639,18 @@ ModalDialog DLG_ORGANIZE
                     Text [ dutch ] = "Sjabloon ~importeren..." ;
                     Text [ spanish ] = "I~mportar plantilla..." ;
                     Text [ english_us ] = "Import Template..." ;
-                    Text[ chinese_simplified ] = "输入样式(~M)...";
+                    Text[ chinese_simplified ] = "输入样式...";
                     Text[ russian ] = "������ �������...";
                     Text[ polish ] = "Importuj szablon...";
-                    Text[ japanese ] = "ﾃﾝﾌﾟﾚｰﾄのｲﾝﾎﾟｰﾄ...";
-                    Text[ chinese_traditional ] = "匯入樣式(~M)...";
+                    Text[ japanese ] = "テンプレートのインポート...";
+                    Text[ chinese_traditional ] = "匯入樣式...";
                     Text[ arabic ] = "������� ����...";
                     Text[ greek ] = "�~������� ��������...";
-                    Text[ korean ] = "서식파일 가져오기...";
+                    Text[ korean ] = "템플릿 가져오기...";
                     Text[ turkish ] = "�ablonu i�e aktar...";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "I~mportar plantilla...";
+                    Text[ thai ] = "นำเข้าแม่แบบ...";
                 };
                 MenuItem
                 {
@@ -652,17 +669,18 @@ ModalDialog DLG_ORGANIZE
                     Text [ dutch ] = "Sjabloon ~exporteren..." ;
                     Text [ spanish ] = "E~xportar plantilla..." ;
                     Text [ english_us ] = "Export Template..." ;
-                    Text[ chinese_simplified ] = "输出样式(~X)...";
+                    Text[ chinese_simplified ] = "输出样式...";
                     Text[ russian ] = "������� �������...";
                     Text[ polish ] = "Eksportuj szablon...";
-                    Text[ japanese ] = "ﾃﾝﾌﾟﾚｰﾄのｴｸｽﾎﾟｰﾄ...";
-                    Text[ chinese_traditional ] = "匯出樣式(~X)...";
+                    Text[ japanese ] = "テンプレートのエクスポート...";
+                    Text[ chinese_traditional ] = "匯出樣式...";
                     Text[ arabic ] = "����� ����...";
                     Text[ greek ] = "~������� ��������...";
-                    Text[ korean ] = "서식 파일 내보내기...";
+                    Text[ korean ] = "템플릿 내보내기...";
                     Text[ turkish ] = "�ablonu d��a aktar...";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "E~xportar plantilla...";
+                    Text[ thai ] = "ส่งออกแม่แบบ...";
                 };
                 MenuItem
                 {
@@ -695,7 +713,8 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "인쇄(~P)";
                     Text[ turkish ] = "~Yazd�r";
                     Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Imprimir";
+                    Text[ catalan ] = "~Imprimeix";
+                    Text[ thai ] = "~พิมพ์";
                 };
                 MenuItem
                 {
@@ -717,7 +736,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_simplified ] = "设定打印机...";
                     Text[ russian ] = "��������� ��������...";
                     Text[ polish ] = "Ustawienia drukarki...";
-                    Text[ japanese ] = "ﾌﾟﾘﾝﾀの設定...";
+                    Text[ japanese ] = "プリンタの設定...";
                     Text[ chinese_traditional ] = "設定印表機...";
                     Text[ arabic ] = "������� �������...";
                     Text[ greek ] = "��������� �~�������...";
@@ -725,6 +744,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ turkish ] = "Yaz�c� ayarlar�";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "~Configuraci�n de la impresora...";
+                    Text[ thai ] = "ตั้งค่าเครื่องพิมพ์...";
                 };
                 MenuItem
                 {
@@ -740,24 +760,25 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "~Aggiorna" ;
                     Text [ portuguese_brazilian ] = "~Atualizar" ;
                     Text [ portuguese ] = "~Actualizar" ;
-                    Text [ finnish ] = "P?ivit?" ;
+                    Text [ finnish ] = "P�ivit�" ;
                     Text [ danish ] = "Opdater" ;
                     Text [ french ] = "~Actualiser" ;
                     Text [ swedish ] = "Upp~datera" ;
                     Text [ dutch ] = "~Actualiseren" ;
                     Text [ spanish ] = "~Actualizar" ;
                     Text [ english_us ] = "Update" ;
-                    Text[ chinese_simplified ] = "更新(~U)";
+                    Text[ chinese_simplified ] = "更新";
                     Text[ russian ] = "��������";
                     Text[ polish ] = "Aktualizuj";
                     Text[ japanese ] = "更新";
-                    Text[ chinese_traditional ] = "更新(~U)";
+                    Text[ chinese_traditional ] = "更新";
                     Text[ arabic ] = "�����";
                     Text[ greek ] = "~���������";
                     Text[ korean ] = "업데이트";
                     Text[ turkish ] = "G�ncelle";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "~Actualizar";
+                    Text[ thai ] = "ปรับปรุง";
                 };
                 MenuItem
                 {
@@ -777,17 +798,18 @@ ModalDialog DLG_ORGANIZE
                     Text[ spanish ] = "Definir como plantilla predeterminada";
                     Text[ finnish ] = "Set As Default Template";
                     Text[ italian ] = "~Imposta come modello standard";
-                    Text[ danish ] = "Set As Default Template";
+                    Text[ danish ] = "Anvend som s~tandardskabelon";
                     Text[ swedish ] = "Definiera som s~tandardmall";
                     Text[ polish ] = "~Osad� jako szablon standardowy";
                     Text[ portuguese_brazilian ] = "Set As Default Template";
-                    Text[ japanese ] = "標準ﾃﾝﾌﾟﾚｰﾄとして設定";
-                    Text[ korean ] = "기본 서식 파일으로 설정";
+                    Text[ japanese ] = "標準テンプレートとして設定";
+                    Text[ korean ] = "기본 템플릿으로 설정";
                     Text[ chinese_simplified ] = "设定成标准样式";
                     Text[ chinese_traditional ] = "設定成標準樣式";
                     Text[ turkish ] = "Set As Default Template";
                     Text[ arabic ] = "Set As Default Template";
                     Text[ catalan ] = "Set As Default Template";
+                    Text[ thai ] = "ตั้งเป็นค่าเริ่มต้นแม่แบบ";
                 };
                 MenuItem
                 {
@@ -803,24 +825,25 @@ ModalDialog DLG_ORGANIZE
                     Text[ spanish ] = "Restaurar plantilla predeterminada";
                     Text[ finnish ] = "Reset Default Template";
                     Text[ italian ] = "~Ripristina il modello standard";
-                    Text[ danish ] = "Reset Default Template";
+                    Text[ danish ] = "Nulstil ~standardskabeloner";
                     Text[ swedish ] = "�terst�ll ~standardmall";
-                    Text[ polish ] = "~Zresetuj szablon standardowy";
+                    Text[ polish ] = "~Przywr�� szablon standardowy";
                     Text[ portuguese_brazilian ] = "Reset Default Template";
-                    Text[ japanese ] = "標準ﾃﾝﾌﾟﾚｰﾄを元に戻す";
-                    Text[ korean ] = "기본 서식 파일 초기화";
+                    Text[ japanese ] = "標準テンプレートを元に戻す";
+                    Text[ korean ] = "기본 템플릿 초기화";
                     Text[ chinese_simplified ] = "重设标准样式";
                     Text[ chinese_traditional ] = "重設標準樣式";
                     Text[ turkish ] = "Reset Default Template";
                     Text[ arabic ] = "Reset Default Template";
                     Text[ catalan ] = "Reset Default Template";
+                    Text[ thai ] = "ตั้งค่าเริ่มต้นแม่แบบใหม่";
                 };
             };
         };
         Text[ chinese_simplified ] = "命令";
         Text[ russian ] = "�������";
         Text[ polish ] = "Pole~cenia";
-        Text[ japanese ] = "ｺﾏﾝﾄﾞ";
+        Text[ japanese ] = "コマンド";
         Text[ chinese_traditional ] = "指令";
         Text[ arabic ] = "�����";
         Text[ greek ] = "�~������";
@@ -828,6 +851,7 @@ ModalDialog DLG_ORGANIZE
         Text[ turkish ] = "Komutlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comandos";
+        Text[ thai ] = "คำสั่ง";
     };
     Image IMG_OPENED_FOLDER
     {
@@ -895,14 +919,15 @@ ModalDialog DLG_ORGANIZE
     Text[ chinese_simplified ] = "管理文档样式";
     Text[ russian ] = "������������ ������� ���������";
     Text[ polish ] = "Zarz�dzaj szablonami dokument�w";
-    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄﾃﾝﾌﾟﾚｰﾄの管理";
+    Text[ japanese ] = "ドキュメントテンプレートの管理";
     Text[ chinese_traditional ] = "管理文件樣式";
     Text[ arabic ] = "����� ����� �������";
     Text[ greek ] = "���������� �������� ��������";
-    Text[ korean ] = "문서 서식파일 관리";
+    Text[ korean ] = "서식 문서 관리";
     Text[ turkish ] = "Belge �ablonlar�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Administrar plantillas";
+    Text[ thai ] = "การจัดการแม่แบบ";
 };
  // ********************************************************************** EOF
 
