@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 11:15:10 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 17:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,7 +1410,7 @@ void SwCntntFrm::MakeAll()
                     }
                 }
 #endif
-                SwFrm *pNxt = FindNext();
+                SwFrm *pNxt = HasFollow() ? NULL : FindNext();
                 while( pNxt && pNxt->IsSctFrm() )
                 {   // Leere Bereiche auslassen, in die anderen hinein
                     if( ((SwSectionFrm*)pNxt)->GetSection() )
@@ -1484,7 +1484,7 @@ void SwCntntFrm::MakeAll()
                 //Das bMoveFwdInvalid ist fuer #38407# notwendig. War urspruenglich
                 //in flowfrm.cxx rev 1.38 behoben, das unterbrach aber obiges
                 //Schema und spielte lieber Tuerme von Hanoi (#43669#).
-                SwFrm *pNxt = FindNext();
+                SwFrm *pNxt = HasFollow() ? NULL : FindNext();
                 // Bei Bereichen nehmen wir lieber den Inhalt, denn nur
                 // dieser kann ggf. die Seite wechseln
                 while( pNxt && pNxt->IsSctFrm() )
