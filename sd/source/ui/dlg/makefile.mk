@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
+#   last change: $Author: cl $ $Date: 2001-11-27 16:01:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         htmlattr.cxx	\
         vectdlg.cxx		\
         docprev.cxx     \
-        packgdlg.cxx	\
         TemplateThread.cxx
 
 SRCFILES =\
@@ -155,8 +154,7 @@ SRCFILES =\
     custsdlg.src\
     brkdlg.src\
     vectdlg.src\
-    dlgolbul.src\
-    packgdlg.src
+    dlgolbul.src
 
 
 SLOFILES =  \
@@ -205,7 +203,6 @@ SLOFILES =  \
         $(SLO)$/htmlattr.obj	\
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
-        $(SLO)$/packgdlg.obj	\
         $(SLO)$/TemplateThread.obj
 
 EXCEPTIONSFILES= \

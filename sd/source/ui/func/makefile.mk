@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ka $ $Date: 2001-09-04 14:36:59 $
+#   last change: $Author: cl $ $Date: 2001-11-27 16:02:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,12 +154,10 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         fucushow.cxx	\
         speedctl.cxx	\
         fuvect.cxx      \
-        bulmaper.cxx	\
-        fupngdlg.cxx
+        bulmaper.cxx
 
 EXCEPTIONSFILES= \
         $(SLO)$/futext2.obj		\
-        $(SLO)$/fupngdlg.obj	\
         $(SLO)$/fuinsfil.obj	\
         $(SLO)$/fuinsert.obj	
 
@@ -238,8 +236,7 @@ SLOFILES = \
         $(SLO)$/fucushow.obj	\
         $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
-        $(SLO)$/bulmaper.obj	\
-        $(SLO)$/fupngdlg.obj
+        $(SLO)$/bulmaper.obj
 
 
 .IF "$(GUI)" == "WNT"
