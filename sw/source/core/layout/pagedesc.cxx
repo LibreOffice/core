@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 08:03:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 13:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     nRegAscent = rSrc.nRegAscent;
     eUse = rSrc.eUse;
     bLandscape = rSrc.bLandscape;
+    return *this;
 }
 
 SwPageDesc::~SwPageDesc()
