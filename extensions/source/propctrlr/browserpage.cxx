@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:50:53 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,8 @@ namespace pcr
             :TabPage(pParent,nWinStyle)
             ,m_aListBox(this)
     {
-#ifdef TRANSPARENT_BACKGROUND_WORKS
         m_aListBox.SetBackground(GetBackground());
         m_aListBox.SetPaintTransparent( TRUE );
-#endif
         Point aPos(3,3);
         m_aListBox.SetPosPixel(aPos);
         m_aListBox.Show();
