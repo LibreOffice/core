@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:08:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #include "com/sun/star/bridge/oleautomation/Decimal.hpp"
 #include "typelib/typedescription.hxx"
 #include "ole2uno.hxx"
+
+#include "unotypewrapper.hxx"
 
 // for some reason DECIMAL_NEG (wtypes.h) which contains BYTE is not resolved.
 typedef unsigned char   BYTE;
@@ -575,6 +577,14 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                 else
                     bFail = true;
                 break;
+            case TypeClass_TYPE:
+                if(SUCCEEDED(hr = VariantChangeType(& var, &var, 0, VT_UNKNOWN)))
+                    variantToAny( & var, rAny);
+                else if (hr == DISP_E_TYPEMISMATCH)
+                    bCannotConvert = true;
+                else
+                    bFail = true;
+                break;
             default:
 // case TypeClass_SERVICE:  break;  // meta construct
 // case TypeClass_TYPEDEF: break;
@@ -966,6 +976,22 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             sal_uInt64 value;
             rAny >>= value;
             pVariant->decVal.Lo64 = value;
+            break;
+        }
+        case TypeClass_TYPE:
+        {
+            Type type;
+            rAny >>= type;
+            CComVariant var;
+            if (createUnoTypeWrapper(type.getTypeName(), & var) == false)
+                throw BridgeRuntimeError(
+                    OUSTR("[automation bridge] UnoConversionUtilities<T>::anyToVariant \n"
+                          "Error during conversion of UNO type to Automation object!"));
+
+            if (FAILED(VariantCopy(pVariant, &var)))
+                throw BridgeRuntimeError(
+                    OUSTR("[automation bridge] UnoConversionUtilities<T>::anyToVariant \n"
+                          "Unexpected error!"));
             break;
         }
         default:
@@ -1544,7 +1570,30 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 case VT_UNKNOWN:
                 case VT_DISPATCH:
                 {
-                     rAny = createOleObjectWrapper( & var);
+                    //check if it is a UNO type
+                    CComQIPtr<IUnoTypeWrapper> spType((IUnknown*) var.byref);
+                    if (spType)
+                    {
+                        CComBSTR sName;
+                        if (FAILED(spType->get_Name(&sName)))
+                            throw BridgeRuntimeError(
+                                OUSTR("[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
+                                    "Failed to get the type name from a UnoTypeWrapper!"));
+                        Type type;
+                        if (getType(sName, type) == false)
+                        {
+                            throw CannotConvertException(
+                                OUSTR("[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
+                                      "A UNO type with the name: ") + OUString(sName) +
+                                OUSTR("does not exist!"),
+                                0, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
+                        }
+                        rAny <<= type;
+                    }
+                    else
+                    {
+                        rAny = createOleObjectWrapper( & var);
+                    }
                     break;
                 }
                 case VT_ERROR:
@@ -1886,7 +1935,13 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, Any& 
                         if (varBool == VARIANT_FALSE)
                         {
                             if(SUCCEEDED(hr = spValue->GetValue( & bstrType, & varValue)))
-                                variantToAny( & varValue, any, getType(bstrType));
+                            {
+                                Type type;
+                                if (getType(bstrType, type))
+                                    variantToAny( & varValue, any, type);
+                                else
+                                    bFail = true;
+                            }
                             else
                                 bFail = true;
                         }
