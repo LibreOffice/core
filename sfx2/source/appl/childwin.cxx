@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:17:57 $
+ *  last change: $Author: as $ $Date: 2001-11-28 11:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "childwin.hxx"
@@ -97,12 +101,52 @@ SV_IMPL_PTRARR( SfxChildWinContextArr_Impl, SfxChildWinContextFactory* );
 struct SfxChildWindow_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      xListener;
     SfxChildWinFactory* pFact;
     sal_Bool                bHideNotDelete;
     sal_Bool                bVisible;
     sal_Bool                bHideAtToggle;
     SfxModule*          pContextModule;
     SfxWorkWindow*      pWorkWin;
+};
+
+// -----------------------------------------------------------------------
+
+class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+{
+    public:
+        DisposeListener( SfxChildWindow*      pOwner ,
+                         SfxChildWindow_Impl* pData  )
+            :   m_pOwner( pOwner )
+            ,   m_pData ( pData  )
+        {}
+
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw (::com::sun::star::uno::RuntimeException)
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > xSelfHold( this );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( aSource.Source, ::com::sun::star::uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->removeEventListener( this );
+
+            if( m_pOwner && m_pData )
+            {
+                m_pData->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >();
+                m_pData->xFrame    = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
+
+                // Attention: Do nothing after "Toogle" call with pOwner & pData!
+                // They will die insteandly ... We should forget these pointers only!!!
+                if( m_pData->pWorkWin )
+                    m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
+
+                m_pOwner = NULL;
+                m_pData  = NULL;
+            }
+        }
+
+    private:
+        SfxChildWindow*      m_pOwner;
+        SfxChildWindow_Impl* m_pData ;
 };
 
 // -----------------------------------------------------------------------
@@ -150,7 +194,8 @@ SfxChildWindow::~SfxChildWindow()
     DBG_DTOR(SfxChildWindow,0);
     if ( pContext )
         delete pContext;
-    delete pWindow;
+    if ( pWindow )
+        delete pWindow;
     delete pImp;
 }
 
@@ -728,7 +773,25 @@ sal_Bool SfxChildWindow::QueryClose()
 
 void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame )
 {
-    pImp->xFrame = rFrame;
+    // Do nothing if nothing will be changed ...
+    if( pImp->xFrame != rFrame )
+    {
+        // ... but stop listening on old frame, if connection exist!
+        if( pImp->xFrame.is() )
+            pImp->xFrame->removeEventListener( pImp->xListener );
+
+        // If new frame isnt NULL -> we must guarantee valid listener for disposing events.
+        // Use already existing or create new one.
+        if( rFrame.is() )
+            if( !pImp->xListener.is() )
+                pImp->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >( new DisposeListener( this, pImp ) );
+
+        // Set new frame in data container
+        // and build new listener connection, if neccessary.
+        pImp->xFrame = rFrame;
+        if( pImp->xFrame.is() )
+            pImp->xFrame->addEventListener( pImp->xListener );
+    }
 }
 
 sal_Bool SfxChildWindow::CanGetFocus() const

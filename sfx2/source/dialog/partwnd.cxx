@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 09:08:26 $
+ *  last change: $Author: as $ $Date: 2001-11-28 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,10 +197,23 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = GetFrame();
+
+    // If xFrame=NULL release pMgr! Because this window lives longer then the manager!
+    // In these case we got a xFrame->dispose() call from outside ... and has release our
+    // frame reference in our own DisposingListener.
+    // But don't do it, if xFrame already exist. Then dispose() must come from inside ...
+    // and we need a valid pMgr for further operations ...
     SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame = pWin->ForgetFrame();
+    if( pWin != NULL && !xFrame.is() )
+        pWin->ReleaseChildWindow_Impl();
+
+    // Release frame and window.
+    // If frame reference is valid here ... start dieing from inside by calling dispose().
+    SetFrame( NULL );
     pWindow = NULL;
-    xFrame->dispose();
+    if( xFrame.is() )
+        xFrame->dispose();
 }
 
 sal_Bool SfxPartChildWnd_Impl::QueryClose()
@@ -221,17 +234,17 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 )
     : SfxDockingWindow( pBindings, pChildWin, pParent, nBits )
 {
-    m_xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > (
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
             ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
-    m_xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-    pChildWin->SetFrame( m_xFrame );
+    xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+    pChildWin->SetFrame( xFrame );
     if ( pBindings->GetDispatcher() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
                 xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
         if ( xSupp.is() )
-            xSupp->getFrames()->append( m_xFrame );
+            xSupp->getFrames()->append( xFrame );
     }
     else
         DBG_ERROR("Bindings without Dispatcher!");
@@ -241,13 +254,6 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 
 SfxPartDockWnd_Impl::~SfxPartDockWnd_Impl()
 {
-}
-
-::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > SfxPartDockWnd_Impl::ForgetFrame()
-{
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xRet( m_xFrame );
-    m_xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ();
-    return xRet;
 }
 
 //****************************************************************************
@@ -272,18 +278,36 @@ void SfxPartDockWnd_Impl::Resize()
 sal_Bool SfxPartDockWnd_Impl::QueryClose()
 {
     sal_Bool bClose = sal_True;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >  xCtrl = m_xFrame->getController();
-    if ( xCtrl.is() )
-        bClose = xCtrl->suspend( sal_True );
-    return bClose;;
+    SfxChildWindow* pChild = GetChildWindow_Impl();
+    if( pChild )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pChild->GetFrame();
+        if( xFrame.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >  xCtrl = xFrame->getController();
+            if( xCtrl.is() )
+                bClose = xCtrl->suspend( sal_True );
+        }
+    }
+
+    return bClose;
 }
 
 //****************************************************************************
 
 long SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == EVENT_GETFOCUS && m_xFrame.is() )
-        m_xFrame->activate();
+    if( rEvt.GetType() == EVENT_GETFOCUS )
+    {
+        SfxChildWindow* pChild = GetChildWindow_Impl();
+        if( pChild )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pChild->GetFrame();
+            if( xFrame.is() )
+                xFrame->activate();
+        }
+    }
+
     return SfxDockingWindow::Notify( rEvt );
 }
 
