@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-13 16:12:04 $
+ *  last change: $Author: ka $ $Date: 2001-12-17 10:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,15 @@
 
 SFX_IMPL_INTERFACE( SdPresViewShell, SdDrawViewShell, SdResId( STR_PRESVIEWSHELL ) )
 {
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
+                                SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
+                                SdResId(RID_DRAW_TOOLBOX));
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OPTIONS | SFX_VISIBILITY_STANDARD |
+                                SFX_VISIBILITY_SERVER,
+                                SdResId(RID_DRAW_OPTIONS_TOOLBOX));
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_COMMONTASK | SFX_VISIBILITY_STANDARD |
+                                SFX_VISIBILITY_SERVER,
+                                SdResId(RID_DRAW_COMMONTASK_TOOLBOX));
 }
 
 // -----------------------------------------------------------------------------
