@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:15:12 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,11 @@ BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
-        SvxAutoCorrCfg::Get()->SetModified();
+    {
+        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+        pCfg->SetModified();
+        pCfg->Commit();
+    }
     return bReturn;
 }
 
@@ -755,7 +759,11 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet& rSet )
     pOpt->bAFmtByInpDelSpacesBetweenLines = bCheck;
 
     if(bModified || nFlags != pAutoCorrect->GetFlags())
-        SvxAutoCorrCfg::Get()->SetModified();
+    {
+        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+        pCfg->SetModified();
+        pCfg->Commit();
+    }
 
     return TRUE;
 }
@@ -2136,7 +2144,11 @@ BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet& rSet )
     }
 
     if(bReturn )
-        SvxAutoCorrCfg::Get()->SetModified();
+    {
+        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+        pCfg->SetModified();
+        pCfg->Commit();
+    }
     return bReturn;
 }
 /* -----------------23.11.98 16:15-------------------
@@ -2404,7 +2416,11 @@ BOOL OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& rSet )
         pOpt->pAutoCmpltList = pAutoCmpltList;
     }
     if( bModified )
-        SvxAutoCorrCfg::Get()->SetModified();
+    {
+        SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+        pCfg->SetModified();
+        pCfg->Commit();
+    }
     return TRUE;
 }
 
