@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 07:32:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 10:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,20 +152,20 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnection( const ::rtl::O
     MutexGuard aGuard(m_aMutex);
 
     Reference<XConnection> xConnection;
-    TConnectionMap::iterator aIter = m_aPool.find(_rURL);
+    pair<TConnectionMap::iterator, TConnectionMap::iterator> aThisURLConns =
+        m_aPool.equal_range(_rURL);
+    TConnectionMap::iterator aIter = aThisURLConns.first;
+
     if(aIter != m_aPool.end())
     {// we know the url so we have to check if we found one without properties
         do
         {
             if(!aIter->second.aProps.size())
-            {
                 xConnection = getPooledConnection(aIter);
-                break;
-            }
-            else
-                ++aIter;
+
+            ++aIter;
         }
-        while(aIter != m_aPool.end());
+        while ((aIter != aThisURLConns.second) && !xConnection.is());
     }
     if(!xConnection.is())
         xConnection = createNewConnection(_rURL,Sequence< PropertyValue >());
@@ -179,22 +179,24 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
     MutexGuard aGuard(m_aMutex);
 
     Reference<XConnection> xConnection;
-    TConnectionMap::iterator aIter = m_aPool.find(_rURL);
+
+    pair<TConnectionMap::iterator, TConnectionMap::iterator> aThisURLConns =
+        m_aPool.equal_range(_rURL);
+    TConnectionMap::iterator aIter = aThisURLConns.first;
+
     if(aIter != m_aPool.end())
     {// we know the url so we have to check if we found one without properties
         PropertyMap aMap;
         createPropertyMap(_rInfo,aMap);
+
         do
         {
             if(checkSequences(aIter->second.aProps,aMap))
-            {
                 xConnection = getPooledConnection(aIter);
-                break;
-            }
-            else
-                ++aIter;
+
+            ++aIter;
         }
-        while(aIter != m_aPool.end());
+        while ((aIter != aThisURLConns.second) && !xConnection.is());
     }
     if(!xConnection.is())
         xConnection = createNewConnection(_rURL,_rInfo);
