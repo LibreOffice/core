@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 13:17:44 $
+ *  last change: $Author: os $ $Date: 2002-10-25 13:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
 #endif
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
+#endif
 #ifndef _SVDETC_HXX
 #include <svx/svdetc.hxx>
 #endif
@@ -237,14 +240,25 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
                 if ( pObj )
                 {
-                    // calc a default position
-                    Size aWinSize( GetEditWin().GetSizePixel() );
-                    Point aCenter( aWinSize.Width()/2, aWinSize.Height() / 2 );
-                    aCenter = GetEditWin().PixelToLogic( aCenter );
+                    Size aDocSz(pWrtShell->GetDocSize());
+                    const SwRect& rVisArea = pWrtShell->VisArea();
+                    Point aStartPos = rVisArea.Center();
+                    if(rVisArea.Width() > aDocSz.Width())
+                        aStartPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+                    if(rVisArea.Height() > aDocSz.Height())
+                        aStartPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+
+                    //determine the size of the object
+                    if(pObj->IsGroupObject())
+                    {
+                        const Rectangle& rBoundRect = ((SdrObjGroup*)pObj)->GetBoundRect();
+                        aStartPos.X() -= rBoundRect.GetWidth()/2;
+                        aStartPos.Y() -= rBoundRect.GetHeight()/2;
+                    }
 
                     // TODO: unmark all other
                     pWrtShell->EnterStdMode();
-                    pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aCenter );
+                    pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aStartPos );
                 }
             }
         }

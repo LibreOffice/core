@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-10-17 13:37:22 $
+ *  last change: $Author: os $ $Date: 2002-10-25 13:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,9 +753,7 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
  ---------------------------------------------------------------------------*/
 void SwDrawBase::CreateDefaultObject()
 {
-    Size aWinSize = pWin->GetSizePixel();
-    Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
-    aStartPos = pWin->PixelToLogic(aStartPos);
+    Point aStartPos = GetDefaultCenterPos();
     Point aEndPos(aStartPos);
     aStartPos.X() -= 8 * MM50;
     aStartPos.Y() -= 4 * MM50;
@@ -764,5 +762,18 @@ void SwDrawBase::CreateDefaultObject()
     Rectangle aRect(aStartPos, aEndPos);
     pSh->CreateDefaultShape(pWin->GetDrawMode(), aRect, nSlotId);
 }
-
+/* -----------------25.10.2002 14:14-----------------
+ *
+ * --------------------------------------------------*/
+Point  SwDrawBase::GetDefaultCenterPos()
+{
+    Size aDocSz(pSh->GetDocSize());
+    const SwRect& rVisArea = pSh->VisArea();
+    Point aStartPos = rVisArea.Center();
+    if(rVisArea.Width() > aDocSz.Width())
+        aStartPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+    if(rVisArea.Height() > aDocSz.Height())
+        aStartPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+    return aStartPos;
+}
 

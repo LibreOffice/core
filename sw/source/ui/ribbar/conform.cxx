@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 12:28:21 $
+ *  last change: $Author: os $ $Date: 2002-10-25 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
-
 
 #include "view.hxx"
 #include "edtwin.hxx"
@@ -172,14 +171,13 @@ void ConstFormControl::Activate(const USHORT nSlotId)
  ---------------------------------------------------------------------------*/
 void ConstFormControl::CreateDefaultObject()
 {
-    Size aWinSize = pWin->GetSizePixel();
-    Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
-    aStartPos = pWin->PixelToLogic(aStartPos);
+    Point aStartPos(GetDefaultCenterPos());
     Point aEndPos(aStartPos);
     aStartPos.X() -= 2 * MM50;
     aStartPos.Y() -= MM50;
     aEndPos.X() += 2 * MM50;
     aEndPos.Y() += MM50;
+
     if(!pSh->HasDrawView())
         pSh->MakeDrawView();
 

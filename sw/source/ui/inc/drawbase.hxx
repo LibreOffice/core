@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 14:53:54 $
+ *  last change: $Author: os $ $Date: 2002-10-25 13:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ protected:
     BOOL            bCreateObj  :1;
     BOOL            bInsForm    :1;
 
+    Point           GetDefaultCenterPos();
 public:
     SwDrawBase(SwWrtShell *pSh, SwEditWin* pWin, SwView* pView);
     virtual ~SwDrawBase();
