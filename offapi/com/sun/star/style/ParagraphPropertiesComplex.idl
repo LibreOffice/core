@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphPropertiesComplex.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-15 13:35:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 /** contains settings for the style of paragraphs with complex text layout.
  */
-service ParagraphPropertiesComplex
+published service ParagraphPropertiesComplex
 {
     //-----------------------------------------------------------------------------
     /** contains the writing direction, as represented by the
