@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: os $ $Date: 2001-10-25 13:32:45 $
+#   last change: $Author: mi $ $Date: 2001-10-25 14:06:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssview.db \
     $(UCR)$/csssvg.db \
     $(UCR)$/csssync.db \
+    $(UCR)$/dcsssync.db \
     $(UCR)$/csssync2.db \
     $(UCR)$/cssxml.db \
     $(UCR)$/csssetup.db \
