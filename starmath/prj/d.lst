@@ -2,7 +2,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
-..\xml\*.xml %_DEST%\xml\*.xml
+..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\bin\sm?????.dll %_DEST%\bin%_EXT%\sm?????.dll
 ..\%__SRC%\bin\smd?????.dll %_DEST%\bin%_EXT%\smd?????.dll
 ..\%__SRC%\bin\sm?????.res %_DEST%\bin%_EXT%\sm?????.res
