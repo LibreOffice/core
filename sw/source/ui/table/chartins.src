@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:14:12 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 /* StarView ressource file */
-
 #include "chartins.hrc"
 #include "helpid.h"
 ModelessDialog DLG_INSERT_CHART
@@ -244,14 +243,14 @@ ModelessDialog DLG_INSERT_CHART
         Text [ danish ] = "Hvis de markerede celler ikke indeholder de ψnskede data, marker det ψnskede omrεde nu.\n\nInkluder cellerne med kolonne- og rζkkeetiketter, hvis de skal vises i dit diagram." ;
         Text [ portuguese_brazilian ] = "Se as cιlulas marcadas nγo representam os dados desejados, marque a αrea agora.\nInclua as cιlulas contendo os rσtulos das colunas e linhas se desejar tκ-las incluνdas em seu grαfico." ;
         Text [ portuguese ] = "Se as cιlulas marcadas nγo incluνrem os dados desejados, marque-os agora.\n\nInclua as cιlulas contendo os tνtulos das colunas e linhas se desejar vκ-las representadas no seu grαfico." ;
-        Text[ chinese_simplified ] = "ε¦‚ζι€‰δΈ­η„ε•ε…ƒζ Όζ²΅ζ‰ζ•°ζ®οΌι‚£δΉθ―·ζ‚¨ι€‰ζ‹©εΊεγ€‚\n\nζ‚¨ε―δ»¥δΉι€‰δΈ­ε—ζ ‡ιΆε’θ΅ζ ‡ιΆοΌε¦‚ζ­¤θΏ™δΊ›θµ„ζ–™δΉδΌθΆ«ζΎη¤Ίε¨ε›Ύθ΅¨ε†…γ€‚";
+        Text[ chinese_simplified ] = "ε¦‚ζι€‰ζ‹©η„ε•ε…ƒζ Όζζ›η„ζ•°ζ®οΌθ―·ι€‰ζ‹©εΊεγ€‚\n\nε¦‚ζζ‚¨θ¦ε¨ε›Ύθ΅¨δΈ­ε…ε«ε—ζ ‡η­Ύε’θ΅ζ ‡η­ΎοΌθ―·ε¨ι€‰ζ‹©ε•ε…ƒζ Όζ—¶εζ—¶ι€‰ζ‹©ε—ζ ‡η­Ύε’θ΅ζ ‡η­Ύγ€‚";
         Text[ russian ] = "Ερλθ βϋδελεννϋε ÿχεικθ νε ρξδεπζΰς ςπεασεμϋυ δΰννϋυ, βϋδελθςε ρειχΰρ δθΰοΰηξν ÿχεεκ ρ νσζνϋμ ρξδεπζθμϋμ.\n\nΒϋδελθςε ςΰκζε ÿχεικθ ρςξλαφξβ θλθ ρςπξκ, ερλθ ξνθ δξλζνϋ αϋςό οπεδρςΰβλενϋ νΰ δθΰγπΰμμε.";
         Text[ polish ] = "JeΏeli zaznaczone komσrki nie zawierajΉ potrzebnych danych, zaznacz teraz ten obszar.\nZaznacz rσwnieΏ komσrki z etykietami wierszy lub kolumn, jeΏeli chcesz do³Ήczyζ je do wykresu.";
         Text[ japanese ] = "εΏ…θ¦γªγƒ‡γƒΌγ‚Ώγε«γΎγ‚γ¦γ„γ‚‹η―„ε›²γιΈζγ•γ‚γ¦γ„γªγ„ε ΄εγ―γ€γƒ‡γƒΌγ‚Ώη―„ε›²γ‚’ιΈζγ—γ¦γγ γ•γ„γ€‚\n\nγ‚°γƒ©γƒ•γ«ι …η›®εγ‚’θ΅¨η¤Ίγ™γ‚‹γ«γ―γ€θ΅γ¨ε—γ®ι …η›®ζ¬„γ‚’ε«γ‚γγ‚»γƒ«η―„ε›²γ‚’ιΈζγ—γΎγ™γ€‚";
         Text[ chinese_traditional ] = "ε¦‚ζιΈε–η„ε„²ε­ζ Όζ²’ζ‰ι€θ¦η„θ³‡ζ–™οΌθ«‹ζ‚¨ηΎε¨ιΈε–θ³‡ζ–™η―„εγ€‚\n\nε¦‚ζθ¦ε¨ε–θ΅¨δΈ­ε…ε«ζ‰ε—ζ¨™η±¤ε’ζ¬„ζ¨™η±¤η„ε„²ε­ζ ΌοΌδΊ¦ε―ε°‡ε®ƒε€‘ε…ε«ε¨ιΈε–η―„εε…§γ€‚";
         Text[ arabic ] = "ΕΠΗ ίΗδΚ ΗαΞαΗνΗ ΗαγΝΟΟΙ αΗ ΚΝΚζν Ϊαμ ΗαΘνΗδΗΚ ΗαγΨαζΘΙ΅ ήγ ΘΚΝΟνΟ ΗαδΨΗή\n\nΘγΗ έν Παί ΗαΞαΗνΗ΅ ΗαΚν ΚΝΚζν Ϊαμ ΪδΗζνδ Υέζέ Γζ ΓΪγΟΙ΅ ζΠαί ΕΠ";
         Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten, markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- of de rijlabels als u deze in uw afbeelding wilt weergeven.";
-        Text[ chinese_simplified ] = "ε¦‚ζι€‰δΈ­η„ε•ε…ƒζ Όζ²΅ζ‰ζ•°ζ®οΌι‚£δΉθ―·ζ‚¨ι€‰ζ‹©εΊεγ€‚\n\nζ‚¨ε―δ»¥δΉι€‰δΈ­ε—ζ ‡ιΆε’θ΅ζ ‡ιΆοΌε¦‚ζ­¤θΏ™δΊ›θµ„ζ–™δΉδΌθΆ«ζΎη¤Ίε¨ε›Ύθ΅¨ε†…γ€‚";
+        Text[ chinese_simplified ] = "ε¦‚ζι€‰ζ‹©η„ε•ε…ƒζ Όζζ›η„ζ•°ζ®οΌθ―·ι€‰ζ‹©εΊεγ€‚\n\nε¦‚ζζ‚¨θ¦ε¨ε›Ύθ΅¨δΈ­ε…ε«ε—ζ ‡η­Ύε’θ΅ζ ‡η­ΎοΌθ―·ε¨ι€‰ζ‹©ε•ε…ƒζ Όζ—¶εζ—¶ι€‰ζ‹©ε—ζ ‡η­Ύε’θ΅ζ ‡η­Ύγ€‚";
         Text[ greek ] = "Στην περίπτωση που τα επιλεγμένα κελιά δεν περιέχουν τα δεδομένα που επιθυμείτε, επιλέξτε εσείς την σωστή περιοχή.\n\n Αν θέλετε να εμφανιστούν στο γραφικό σας και οι ετικέτες των στηλών και των γραμμών, τότε θα πρέπει να συμπεριληφθούν και αυτά τα δεδομένα στην περιοχή της επιλογής σας.";
         Text[ korean ] = "μ„ νƒλ μ…€μ΄ μ›ν•λ” λ°μ΄ν„°λ¥Ό ν¬ν•¨ν•κ³  μμ§€ μ•μ„ κ²½μ° μ§€κΈ λ°μ΄ν„° λ²”μ„λ¥Ό μ„ νƒν•μ‹­μ‹μ¤.\n\nμ—΄ λ‚΄μ§€ ν–‰ λ μ΄λΈ”μ„ κ·Έλν”½μ— ν‘μ‹ν•λ ¤λ©΄ μ—΄ λ° ν–‰ λ μ΄λΈ”μ΄ μλ” μ…€μ„ ν•¨κ» ν¬ν•¨μ‹ν‚¤μ‹­μ‹μ¤.";
         Text[ turkish ] = "Eπer seηilen hόcreler istenen verileri iηermiyorsa, ώimdi veri alanύ seη. \n\nSόtun ve satύr etiketlerinin grafiπinize dahil olmasύnύ isterseniz, satύr ve sόtun etiketi iηeren hόcreleri dahil edin. ";
