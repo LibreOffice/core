@@ -216,6 +216,7 @@ UDK_2_0_0 {
         rtl_locale_register;
         rtl_locale_setDefault;
         rtl_str_compare;
+        rtl_str_compareIgnoreCase;
         rtl_str_compare_WithLength;
         rtl_str_equalsIgnoreCase;
         rtl_str_equalsIgnoreCase_WithLength;
