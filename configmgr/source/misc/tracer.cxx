@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:17:59 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,6 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 
         if (s_pImpl->isTracing(OTracerSetup::TIME))
         {
-            static sal_Char szMessage[1024] = "";
             fprintf(s_pImpl->m_pOutputMedium, "(%06lu)", getGlobalTimer());
         }
     }
