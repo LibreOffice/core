@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,6 @@ class ScRangeList;
 class ScXMLConverter
 {
 protected:
-    static sal_Int32    GetStringToken(
-                            ::rtl::OUString& rToken,
-                            const ::rtl::OUString& rString,
-                            sal_Int32 nOffset,
-                            sal_Unicode cQuote = '\'' );
-
     static void         AssignString(
                             ::rtl::OUString& rString,
                             const ::rtl::OUString& rNewStr,
@@ -106,6 +100,14 @@ public:
     inline              ~ScXMLConverter()   {}
 
 // helper methods
+    static sal_Int32    GetTokenCount(
+                            const ::rtl::OUString& rString );
+    static sal_Int32    GetTokenByOffset(
+                            ::rtl::OUString& rToken,
+                            const ::rtl::OUString& rString,
+                            sal_Int32 nOffset,
+                            sal_Unicode cQuote = '\'' );
+
     static void         AppendString(
                             ::rtl::OUString& rString,
                             const ::rtl::OUString& rNewStr );
@@ -190,6 +192,8 @@ public:
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static ::com::sun::star::sheet::GeneralFunction
                         GetFunctionFromString(
+                            const ::rtl::OUString& sFunction );
+    static ScSubTotalFunc GetSubTotalFuncFromString(
                             const ::rtl::OUString& sFunction );
 
 // EXPORT: GeneralFunction / ScSubTotalFunc
