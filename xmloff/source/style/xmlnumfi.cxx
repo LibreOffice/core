@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-07 10:51:41 $
+ *  last change: $Author: nn $ $Date: 2001-01-12 19:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,22 +765,15 @@ void SvXMLNumFmtElementContext::EndElement()
         case XML_TOK_STYLE_DAY:
             rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
-                bEffLong = bLong ? rParent.GetInternational().IsLongDateDayLeadingZero() :
-                                   rParent.GetInternational().IsDateDayLeadingZero();
+                bEffLong = SvXMLNumFmtDefaults::IsSystemLongDay( rParent.GetInternational(), bLong );
             rParent.AddNfKeyword( bEffLong ? NF_KEY_DD : NF_KEY_D );
             break;
         case XML_TOK_STYLE_MONTH:
             rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
             {
-                if (bLong)
-                {
-                    MonthFormat eMonth = rParent.GetInternational().GetLongDateMonthFormat();
-                    bEffLong = ( eMonth == MONTH_ZERO  || eMonth == MONTH_LONG );
-                    bTextual = ( eMonth == MONTH_SHORT || eMonth == MONTH_LONG );
-                }
-                else
-                    bEffLong = rParent.GetInternational().IsDateMonthLeadingZero();
+                bEffLong = SvXMLNumFmtDefaults::IsSystemLongMonth( rParent.GetInternational(), bLong );
+                bTextual = SvXMLNumFmtDefaults::IsSystemTextualMonth( rParent.GetInternational(), bLong );
             }
             rParent.AddNfKeyword( bTextual ? ( bEffLong ? NF_KEY_MMMM : NF_KEY_MMM ) :
                                              ( bEffLong ? NF_KEY_MM : NF_KEY_M ) );
@@ -788,8 +781,7 @@ void SvXMLNumFmtElementContext::EndElement()
         case XML_TOK_STYLE_YEAR:
             rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
-                bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
-                                   rParent.GetInternational().IsDateCentury();
+                bEffLong = SvXMLNumFmtDefaults::IsSystemLongYear( rParent.GetInternational(), bLong );
             // Y after G (era) is replaced by E
             if ( rParent.HasEra() )
                 rParent.AddNfKeyword( bEffLong ? NF_KEY_EEC : NF_KEY_EC );
@@ -799,15 +791,14 @@ void SvXMLNumFmtElementContext::EndElement()
         case XML_TOK_STYLE_ERA:
             rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
-                bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
-                                   rParent.GetInternational().IsDateCentury();
+                bEffLong = SvXMLNumFmtDefaults::IsSystemLongEra( rParent.GetInternational(), bLong );
             rParent.AddNfKeyword( bEffLong ? NF_KEY_GGG : NF_KEY_G );
             //  HasEra flag is set
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
             rParent.UpdateCalendar( sCalendar );
-            if ( rParent.IsFromSystem() && bLong )
-                bEffLong = ( rParent.GetInternational().GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
+            if ( rParent.IsFromSystem() )
+                bEffLong = SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( rParent.GetInternational(), bLong );
             rParent.AddNfKeyword( bEffLong ? NF_KEY_NNNN : NF_KEY_NN );
             break;
         case XML_TOK_STYLE_WEEK_OF_YEAR:
@@ -870,6 +861,50 @@ void SvXMLNumFmtElementContext::EndElement()
         default:
             DBG_ERROR("invalid element ID");
     }
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const International& rIntn, BOOL bLong )
+{
+    return bLong ? rIntn.IsLongDateDayLeadingZero() : rIntn.IsDateDayLeadingZero();
+}
+
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const International& rIntn, BOOL bLong )
+{
+    if (bLong)
+    {
+        MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
+        return ( eMonth == MONTH_ZERO || eMonth == MONTH_LONG );
+    }
+    else
+        return rIntn.IsDateMonthLeadingZero();
+}
+
+sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const International& rIntn, BOOL bLong )
+{
+    if (bLong)
+    {
+        MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
+        return ( eMonth == MONTH_SHORT || eMonth == MONTH_LONG );
+    }
+    else
+        return sal_False;
+}
+
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const International& rIntn, BOOL bLong )
+{
+    return bLong ? rIntn.IsLongDateCentury() : rIntn.IsDateCentury();
+}
+
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongEra( const International& rIntn, BOOL bLong )
+{
+    return IsSystemLongYear( rIntn, bLong );        // no separate setting
+}
+
+sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const International& rIntn, BOOL bLong )
+{
+    return ( bLong && rIntn.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
 }
 
 //-------------------------------------------------------------------------
