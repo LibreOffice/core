@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpfinalpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:33:37 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ namespace abp
         OFileNotation aFileNotation( rSettings.sDataSourceName );
         m_aLocation.SetText(aFileNotation.get(OFileNotation::N_SYSTEM));
         String sName = aURL.getName( );
-        xub_StrLen nPos = sName.Search(aURL.GetExtension());
+        xub_StrLen nPos = sName.Search(String(aURL.GetExtension()));
         if ( nPos != STRING_NOTFOUND )
         {
             sName.Erase(nPos-1,4);
