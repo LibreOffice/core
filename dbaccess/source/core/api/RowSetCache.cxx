@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:09:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                             if(KeyType::PRIMARY == nKeyType)
                             {
-                                xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                                xColumnsSupplier.set(xProp,UNO_QUERY);
                                 break;
                             }
                         }
@@ -1718,7 +1718,7 @@ void ORowSetCache::clearInsertRow()
 ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 {
     sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
-    OSL_ENSURE(nValue >= 0 && nValue < m_pMatrix->size(),"Position is invalid!");
+    OSL_ENSURE(nValue >= 0 && nValue < static_cast<sal_Int32>(m_pMatrix->size()),"Position is invalid!");
     return ( nValue < 0 || nValue >= m_pMatrix->size() ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
 }
 // -----------------------------------------------------------------------------
@@ -1753,7 +1753,7 @@ sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPo
     sal_Int32 nNewSt = _nNewStartPos;
     sal_Bool bRet = fillMatrix(nNewSt,_nNewEndPos);
     m_nStartPos = nNewSt - 1;
-    rotateCacheIterator(m_nFetchSize+1); // forces that every iterator will be set to null
+    rotateCacheIterator(static_cast<sal_Int16>(m_nFetchSize+1)); // forces that every iterator will be set to null
     return bRet;
 }
 // -----------------------------------------------------------------------------
