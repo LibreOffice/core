@@ -79,29 +79,7 @@
 *End
 
 
-*% ===== Resolution =====
-
-*OpenUI *Resolution: PickOne
-*OrderDependency: 50 AnySetup *Resolution
 *DefaultResolution: 300dpi
-*Resolution 72dpi: "1 dict dup /HWResolution [72 72] put setpagedevice"
-*Resolution 144dpi: "1 dict dup /HWResolution [144 144] put setpagedevice"
-*Resolution 300dpi: "1 dict dup /HWResolution [300 300] put setpagedevice"
-*Resolution 360dpi: "1 dict dup /HWResolution [360 360] put setpagedevice"
-*Resolution 600dpi: "1 dict dup /HWResolution [600 600] put setpagedevice"
-*Resolution 720dpi: "1 dict dup /HWResolution [720 720] put setpagedevice"
-*Resolution 1200dpi: "1 dict dup /HWResolution [1200 1200] put setpagedevice"
-*Resolution 1440dpi: "1 dict dup /HWResolution [1440 1440] put setpagedevice"
-*Resolution 2400dpi: "1 dict dup /HWResolution [2400 2400] put setpagedevice"
-*?Resolution: "
- save
- currentpagedevice /HWResolution get
- 0 get
- (			) cvs print (dpi) = flush
- restore
-"
-*End
-*CloseUI: *Resolution
 
 *ResScreenFreq 72dpi: "60.0"
 *ResScreenFreq 144dpi: "60.0"
