@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:27:30 $
+ *  last change: $Author: rt $ $Date: 2003-05-02 14:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,14 +1100,17 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
         if( ++nStart >= mnGlyphCount )
             break;
 
-        // stop when x-position is unexpected
-        long nXPos = pG->maLinearPos.X();
-        ++pG;
+        // stop when next x-position is unexpected
         if( !pGlyphAdvAry )
-            if( pG->mnOrigWidth != (pG->maLinearPos.X() - nXPos) )
+        {
+            long nNextXPos = pG[1].maLinearPos.X();
+            if( pG->mnOrigWidth != (nNextXPos - pG->maLinearPos.X()) )
                 break;
+        }
 
-        // stop when y-position is unexpected
+        ++pG;
+
+        // stop when next y-position is unexpected
         if( nYPos != pG->maLinearPos.Y() )
             break;
 
