@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:15:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,6 +1382,7 @@ namespace dbaui
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
+
 
     //========================================================================
     //= OTextDetailsPage
