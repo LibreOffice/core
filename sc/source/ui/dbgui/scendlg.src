@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:35:26 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "~Rahmen anzeigen" ;
         Text [ ENGLISH ] = "Display ~border" ;
         Text[ english_us ] = "Display border in";
-        Text[ portuguese ] = "Mostrar moldura em";
+        Text[ portuguese ] = "~Mostrar moldura";
         Text[ russian ] = "Ïîêàçàòü ðàìêó";
         Text[ greek ] = "ÅìöÜíéóç ðëáéóßïõ";
         Text[ dutch ] = "Kader weergeven in";
@@ -195,7 +195,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ spanish ] = "Volver a copiar" ;
         Text [ french ] = "~Recopier" ;
         Text [ dutch ] = "Terugkopiëren" ;
-        Text [ portuguese ] = "Actualizar cenário com os valores da folha modificados" ;
+        Text [ portuguese ] = "~Recopiar" ;
         Text[ chinese_simplified ] = "¸´ÖÆ»ØÀ´";
         Text[ russian ] = "Îáðàòíîå êîïèðîâàíèå";
         Text[ polish ] = "Kopiuj z powrotem";
@@ -281,7 +281,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ spanish ] = "Copiar toda la hoja" ;
         Text [ french ] = "~Copier la feuille entière" ;
         Text [ dutch ] = "Hele tabel kopiëren" ;
-        Text [ portuguese ] = "Copiar tabela inteira" ;
+        Text [ portuguese ] = "Copiar ~tabela inteira" ;
         Text[ chinese_simplified ] = "¸´ÖÆÕû¸ö¹¤×÷±í";
         Text[ russian ] = "Êîïèðîâàòü âåñü ëèñò";
         Text[ polish ] = "Kopiuj ca³y arkusz";
@@ -384,7 +384,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH_US ] = "Name of scenario";
         Text[ italian ] = "Nome dello scenario";
         Text[ portuguese_brazilian ] = "Name des Szenarios";
-        Text[ portuguese ] = "Nome do cenário";
+        Text[ portuguese ] = "~Nome do cenário";
         Text[ danish ] = "Scenariets navn";
         Text[ french ] = "~Nom du scénario";
         Text[ swedish ] = "~Namn på scenariot";
@@ -412,7 +412,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH_US ] = "Comment";
         Text[ italian ] = "~Commento";
         Text[ portuguese_brazilian ] = "Kommentar";
-        Text[ portuguese ] = "Comentário";
+        Text[ portuguese ] = "~Comentário";
         Text[ danish ] = "Kommentar";
         Text[ french ] = "~Commentaire";
         Text[ swedish ] = "~Kommentar";
@@ -471,4 +471,5 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear escenario";
 };
+
 
