@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbedPersist.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 18:04:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/embed/XStorage.idl>
 #endif
 
+#ifndef __com_sun_star_embed_XCommonEmbedPersist_idl__
+#include <com/sun/star/embed/XCommonEmbedPersist.idl>
+#endif
+
 #ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
 #endif
@@ -97,7 +101,7 @@
     representation.
     </p>
  */
-interface XEmbedPersist: com::sun::star::uno::XInterface
+interface XEmbedPersist: XCommonEmbedPersist
 {
     //------------------------------------------------------------------------
     /** provides object with a parent storage and a name for object's entry.
@@ -161,23 +165,6 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
             [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
-
-    //------------------------------------------------------------------------
-    /** lets the object store itself to it's own entry
-
-        @throws com::sun::star::embed::WrongStateException
-            the object is in wrong state
-
-        @throws com::sun::star::io::IOException
-            in case of io problems during saving
-
-        @throws com::sun::star::uno::Exception
-            in case of other problems
-     */
-    void storeOwn()
-        raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
@@ -312,51 +299,6 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
      */
     string getEntryName()
         raises( ::com::sun::star::embed::WrongStateException );
-
-    //------------------------------------------------------------------------
-    /** allows to detect if the data store is read-only.
-
-        @returns
-            <TRUE/> if the data store is readonly or opened readonly
-            <FALSE/> otherwise
-
-        @throws com::sun::star::embed::WrongStateException
-            the object is in wrong state ( has no entry )
-     */
-    boolean isReadonly()
-        raises( ::com::sun::star::embed::WrongStateException );
-
-    //------------------------------------------------------------------------
-    /** lets the object reload itself from the persistent entry
-
-        @param aMediaArgs
-            optional parameters for document reloading, see also
-            <type scope="com::sun::star::document">MediaDescriptor</type>
-
-        @param aObjectArgs
-            optional parameters for object reloading, see also
-            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
-
-        @thrown ::com::sun::star::lang::IllegalArgumentException
-            one of arguments is illegal
-
-        @throws com::sun::star::embed::WrongStateException
-            the object is in wrong state
-
-        @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
-
-        @throws com::sun::star::uno::Exception
-            in case of other problems
-     */
-    void reload(
-            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
-            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
-        raises( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception );
-
 };
 
 //============================================================================

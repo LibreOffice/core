@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinkageSupport.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 18:06:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/embed/XStorage.idl>
 #endif
 
+#ifndef __com_sun_star_embed_XCommonEmbedPersist_idl__
+#include <com/sun/star/embed/XCommonEmbedPersist.idl>
+#endif
+
 #ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
@@ -84,11 +88,20 @@
 //============================================================================
 /** specifies an additional implementation for linked embedded object support.
  */
-interface XLinkageSupport: com::sun::star::uno::XInterface
+interface XLinkageSupport: XCommonEmbedPersist
 {
     //------------------------------------------------------------------------
     /** breaks the link and provides the object with a parent storage and a
         name for object's entry
+
+        <p>
+        This method can be used only for links implementations that implement
+        the whole set of embedded object interfaces. Usually the sets of
+        interfaces are the same for links and objects. An example of exception
+        from this are OOo links that do not implement
+        <type>XEmbedPersist</type> interface. For such cases the method will
+        throw an exception.
+        </p>
 
         <p>
         The link will be broken and the linked object will become a normal
@@ -114,7 +127,7 @@ interface XLinkageSupport: com::sun::star::uno::XInterface
             the object is in wrong state or not a linked object
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case object has not persistence or other io problems
 
         @throws com::sun::star::uno::Exception
             in case of other problems
@@ -131,6 +144,12 @@ interface XLinkageSupport: com::sun::star::uno::XInterface
 
     //------------------------------------------------------------------------
     /** allows to detect whether the object is a linked one.
+        <p>
+            Most of embedded objects will not support this interface, but some
+        of them can do it, to allow conversion from link to object. After
+        the conversion the object does not change, so interface set staies the
+        same, but the object is not a link any more.
+        </p>
 
         @return
             <TRUE/> - the object is a linked one.
