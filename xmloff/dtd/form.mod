@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.3 2001-02-06 14:08:19 dvo Exp $
+	$Id: form.mod,v 1.4 2001-02-13 13:42:35 fs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -60,7 +60,6 @@
 
 <!ENTITY % name "form:name CDATA #IMPLIED">
 <!ENTITY % service-name "form:service-name CDATA #IMPLIED">
-<!ENTITY % style-name "form:style-name CDATA #REQUIRED">
 
 <!ENTITY % navigation "(none|current|parent)">
 <!ENTITY % cycles "(records|current|page)">
@@ -96,8 +95,7 @@
 <!ELEMENT office:forms (form:form*)>
 
 <!ELEMENT form:text (form:properties?, office:events?)>
-<!ATTLIST form:text %style-name;
-					%current-value;
+<!ATTLIST form:text %current-value;
                     %disabled;
                     %max-length;
                     %printable;
@@ -109,9 +107,10 @@
                     %convert-empty;
                     %data-field;>
 
+<!ELEMENT form:textarea (form:properties?, script:events?)>
+<!ATTLIST form:textarea %current-value;
 <!ELEMENT form:textarea (form:properties?, office:events?)>
-<!ATTLIST form:textarea %style-name;
-					    %current-value;
+<!ATTLIST form:textarea %current-value;
                         %disabled;
                         %max-length;
                         %printable;
@@ -124,19 +123,19 @@
                         %data-field;>
 
 <!ELEMENT form:password (form:properties?, office:events?)>
-<!ATTLIST form:password %style-name;
-					    %disabled;
+<!ATTLIST form:password %disabled;
                         %max-length;
                         %printable;
                         %tab-index;
                         %tab-stop;
                         %title;
-                        %value;>
+                        %value;
+						%convert-empty;>
+
 <!ATTLIST form:password form:echo-char CDATA "*">
 
 <!ELEMENT form:file (form:properties?, office:events?)>
-<!ATTLIST form:file %style-name;
-					%current-value;
+<!ATTLIST form:file %current-value;
                     %disabled;
                     %max-length;
                     %printable;
@@ -147,8 +146,7 @@
                     %value;>
 
 <!ELEMENT form:formatted-text (form:properties?, office:events?)>
-<!ATTLIST form:formatted-text %style-name;
-					          %current-value;
+<!ATTLIST form:formatted-text %current-value;
                               %disabled;
                               %max-length;
                               %printable;
@@ -164,8 +162,7 @@
 <!ATTLIST form:formatted-text form:validation %boolean; "false">
 
 <!ELEMENT form:fixed-text (form:properties?, office:events?)>
-<!ATTLIST form:fixed-text %style-name;
-					      %for;
+<!ATTLIST form:fixed-text %for;
                           %disabled;
                           %label;
                           %printable;
@@ -173,8 +170,7 @@
 <!ATTLIST form:fixed-text form:multi-line %boolean; "false">
 
 <!ELEMENT form:combobox (form:properties?, office:events?, form:item*)>
-<!ATTLIST form:combobox %style-name;
-					    %current-value;
+<!ATTLIST form:combobox %current-value;
                         %disabled;
                         %dropdown;
                         %max-length;
@@ -195,8 +191,7 @@
 <!ATTLIST form:item %label;>
 
 <!ELEMENT form:listbox (form:properties?, office:events?, form:option*)>
-<!ATTLIST form:listbox %style-name;
-					   %disabled;
+<!ATTLIST form:listbox %disabled;
                        %dropdown;
                        %printable;
                        %size;
@@ -216,8 +211,7 @@
                       %value;>
 
 <!ELEMENT form:button (form:properties?, office:events?)>
-<!ATTLIST form:button %style-name;
-					  %button-type;
+<!ATTLIST form:button %button-type;
                       %disabled;
                       %label;
                       %image-data;
@@ -231,8 +225,7 @@
 <!ATTLIST form:button form:default-button %boolean; "false">
 
 <!ELEMENT form:image (form:properties?, office:events?)>
-<!ATTLIST form:image %style-name;
-					 %button-type;
+<!ATTLIST form:image %button-type;
                      %disabled;
                      %image-data;
                      %printable;
@@ -244,8 +237,7 @@
                      %value;>
 
 <!ELEMENT form:checkbox (form:properties?, office:events?)>
-<!ATTLIST form:checkbox %style-name;
-					    %disabled;
+<!ATTLIST form:checkbox %disabled;
                         %label;
                         %printable;
                         %tab-index;
@@ -259,8 +251,7 @@
 <!ATTLIST form:checkbox form:state %states; "unchecked">
 
 <!ELEMENT form:radio (form:properties?, office:events?)>
-<!ATTLIST form:radio %style-name;
-					 %current-selected;
+<!ATTLIST form:radio %current-selected;
                      %disabled;
                      %label;
                      %printable;
@@ -272,16 +263,14 @@
                      %data-field;>
 
 <!ELEMENT form:frame (form:properties?, office:events?)>
-<!ATTLIST form:frame %style-name;
-					 %disabled;
+<!ATTLIST form:frame %disabled;
                      %for;
                      %label;
                      %printable;
                      %title;>
 
 <!ELEMENT form:image-frame (form:properties?, office:events?)>
-<!ATTLIST form:image-frame %style-name;
-					       %disabled;
+<!ATTLIST form:image-frame %disabled;
                            %image-data;
                            %printable;
                            %readonly;
@@ -294,8 +283,7 @@
                       %value;>
 
 <!ELEMENT form:grid (form:properties?, office:events?, form:column*)>
-<!ATTLIST form:grid %style-name;
-					%disabled;
+<!ATTLIST form:grid %disabled;
                     %printable;
                     %tab-index;
                     %tab-stop;
@@ -307,7 +295,6 @@
                       %label;>
 
 <!ELEMENT form:generic-control (form:properties?, office:events?)>
-<!ATTLIST form:generic-control %style-name;>
 
 
 
