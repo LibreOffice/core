@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:21:08 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ using namespace ::com::sun::star::lang;
 {
     ::rtl::Reference< jvmaccess::VirtualMachine > xVM = getJavaVM();
     if ( !xVM.is() && _rxFactory.is() )
-        getJavaVM(InitJava(_rxFactory));
+        xVM = getJavaVM(InitJava(_rxFactory));
 
     return xVM;
 }
