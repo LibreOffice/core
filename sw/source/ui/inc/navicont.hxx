@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navicont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:53:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,6 @@ public:
     const String&   GetDescription() const      { return aDescr; }
     USHORT          GetDefaultDragType() const  { return nDefDrag; }
     long            GetDocShell() const         { return nDocSh; }
-
-    static BOOL     HasFormat( TransferableDataHelper& rData,
-                                const SwDocShell* pDocSh = 0 );
-
     void            Copy( TransferDataContainer& rData ) const;
     BOOL            Paste( TransferableDataHelper& rData );
 };
