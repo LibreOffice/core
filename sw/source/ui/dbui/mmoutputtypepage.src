@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputtypepage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:19:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,45 +65,45 @@
 TabPage DLG_MM_OUTPUTTYPE_PAGE
 {
     HelpID = HID_MM_OUTPUTTYPEPAGE ;
-    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Size = MAP_APPFONT ( 260 , 230 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Bitte wählen Sie einen Dokumenttyp" ;
         Text[ en-US ] = "Select a document type";
     };
     FixedText FT_TYPE
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Was für ein Dokument möchten Sie erstellen?" ;
         Text[ en-US ] = "What type of document do you want to create?";
     };
     RadioButton RB_LETTER
     {
-        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text [ de ] = "Brief" ;
         Text[ en-US ] = "~Letter";
     };
     RadioButton RB_MAIL
     {
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Pos = MAP_APPFONT ( 12 , 57 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text [ de ] = "E-Mail-Nachricht" ;
         Text[ en-US ] = "~E-mail message";
     };
     FixedText FI_HINTHEADER
     {
-        Pos = MAP_APPFONT ( 12 ,  67) ;
+        Pos = MAP_APPFONT ( 12 ,  72) ;
         Size = MAP_APPFONT ( 242 , 8 ) ;
     };
     FixedText FI_HINT
     {
-        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 242 , 26 ) ;
         WordBreak = TRUE;
     };
@@ -129,7 +129,7 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
     };
     FixedText FT_NOMAILHINT
     {
-        Pos = MAP_APPFONT ( 12 , 108 ) ;
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 242 , 26 ) ;
         WordBreak = TRUE;
         Hide = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmmergepage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:17:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,19 @@
 TabPage DLG_MM_MERGE_PAGE
 {
     HelpID = HID_MM_MERGEPAGE ;
-    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Size = MAP_APPFONT ( 260 , 230 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Personalisieren Sie die Serienbrief-Dokumente";
         Text [ en-US ] = "Personalize the mail merge documents";
     };
     FixedText  FI_EDIT
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 28 ) ;
         WordBreak = TRUE;
         Text [ de ] = "Sie können jetzt die Dokumente personalisieren. Ein Klick auf die Schaltfläche '%1' schließt vorübergehend den Assistenten. Durch Klicken der 'Zurück zum Seriendruck-Assistenten' Schaltfläche - sichtbar in einem kleinen Fenster - gelangen Sie zurück zum Assistenten.";
@@ -85,55 +85,55 @@ TabPage DLG_MM_MERGE_PAGE
     };
     PushButton PB_EDIT
     {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Pos = MAP_APPFONT ( 70 , 67 ) ;
         Size = MAP_APPFONT ( 120 , 14 ) ;
         Text [ de ] = "Individuelles Dokument bearbeiten...";
         Text [ en-US ] = "~Edit individual document...";
     };
     FixedLine  FL_FIND
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Suche";
         Text [ en-US ] = "~Find";
     };
     FixedText  FT_FIND
     {
-        Pos = MAP_APPFONT ( 6 , 86 ) ;
+        Pos = MAP_APPFONT ( 16 ,116 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
         Text [ de ] = "Suchen ~nach:";
         Text [ en-US ] = "~Search for:";
     };
     Edit       ED_FIND
     {
-        Pos = MAP_APPFONT ( 55 , 84 ) ;
+        Pos = MAP_APPFONT ( 55 ,114 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         Border = TRUE;
     };
     PushButton PB_FIND
     {
-        Pos = MAP_APPFONT ( 198 , 83 ) ;
+        Pos = MAP_APPFONT ( 198 ,113 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Suchen...";
         Text [ en-US ] = "~Find...";
     };
     CheckBox   CB_WHOLEWORDS
     {
-        Pos = MAP_APPFONT ( 55 , 101 ) ;
+        Pos = MAP_APPFONT ( 55 , 131 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         Text [ de ] = "Nur ganzes ~Wort suchen";
         Text [ en-US ] = "Whole wor~ds only";
     };
     CheckBox   CB_BACKWARDS
     {
-        Pos = MAP_APPFONT ( 55 , 114 ) ;
+        Pos = MAP_APPFONT ( 55 , 144 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         Text [ de ] = "Nach ~oben";
         Text [ en-US ] = "Back~wards";
     };
     CheckBox   CB_MATCHCASE
     {
-        Pos = MAP_APPFONT ( 55 , 127 ) ;
+        Pos = MAP_APPFONT ( 55 , 157 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         Text [ de ] = "~Groß-/Kleinschreibung";
         Text [ en-US ] = "Ma~tch case";
