@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: fs $ $Date: 2001-11-07 14:28:42 $
+#   last change: $Author: fs $ $Date: 2001-12-20 13:19:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,7 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
+    $(SLO)$/productregistration.obj	\
     $(SLO)$/templatefoldercache.obj	\
     $(SLO)$/helpagentwindow.obj		\
     $(SLO)$/imagemgr.obj			\
@@ -139,6 +140,7 @@ LIB3OBJFILES=\
     $(SLO)$/stringtransfer.obj
 
 EXCEPTIONSFILES=\
+    $(SLO)$/productregistration.obj	\
     $(SLO)$/templatefoldercache.obj	\
     $(SLO)$/strmadpt.obj			\
     $(SLO)$/transfer.obj			\
