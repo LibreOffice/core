@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
+ *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,12 @@
 #ifndef _CPPUHELPER_ACCESS_CONTROL_HXX_
 #define _CPPUHELPER_ACCESS_CONTROL_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
-#include <com/sun/star/uno/XCurrentContext.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SECURITY_XACCESSCONTROLLER_HPP_
 #include <com/sun/star/security/XAccessController.hpp>
 #endif
-
-#define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
 
 
 namespace cppu
@@ -149,50 +144,6 @@ public:
         ::rtl::OUString const & actions )
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 };
-
-
-/** Default implementation retieving the current access control restriction.
-
-    @param xCurrentContext current context
-    @return current access control restriction
-*/
-::com::sun::star::uno::Reference< ::com::sun::star::security::XAccessControlContext > SAL_CALL
-ac_defimpl_getRestriction(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XCurrentContext > const & xCurrentContext )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
-
-/** Default implementation performing a restricted action.
-
-    @param xAction action to be performed
-    @param xRestriction additional restriction to be in effect
-    @param xCurrentContext current context
-*/
-::com::sun::star::uno::Any SAL_CALL
-ac_defimpl_doRestricted(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::security::XAction > const & xAction,
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::security::XAccessControlContext > const & xRestriction,
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XCurrentContext > const & xCurrentContext )
-    SAL_THROW( (::com::sun::star::uno::Exception) );
-
-/** Default implementation performed a privileged action.
-
-    @param xAction action to be performed
-    @param xRestriction (the one and only) restriction to be in effect
-    @param xCurrentContext current context
-*/
-::com::sun::star::uno::Any SAL_CALL
-ac_defimpl_doPrivileged(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::security::XAction > const & xAction,
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::security::XAccessControlContext > const & xRestriction,
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XCurrentContext > const & xCurrentContext )
-    SAL_THROW( (::com::sun::star::uno::Exception) );
 
 }
 

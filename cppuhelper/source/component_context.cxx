@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-17 12:25:55 $
+ *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <cppuhelper/access_control.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -90,7 +89,7 @@
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
-
+#define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 

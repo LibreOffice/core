@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: dbo $ $Date: 2002-01-11 11:08:58 $
+#   last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ UNOTYPES= \
         com.sun.star.uno.XAggregation 			\
         com.sun.star.uno.XComponentContext		\
         com.sun.star.uno.XUnloadingPreference    	\
-        com.sun.star.uno.XCurrentContext		\
         com.sun.star.lang.XMultiServiceFactory 		\
         com.sun.star.lang.XSingleServiceFactory 	\
         com.sun.star.lang.XMultiComponentFactory 	\
@@ -98,7 +97,6 @@ UNOTYPES= \
         com.sun.star.lang.XServiceInfo 			\
         com.sun.star.lang.XInitialization 		\
         com.sun.star.lang.XEventListener 		\
-        com.sun.star.security.XAccessController		\
         com.sun.star.reflection.XIdlReflection 		\
         com.sun.star.reflection.XIdlClass 		\
         com.sun.star.reflection.XIdlClassProvider	\
@@ -123,6 +121,8 @@ UNOTYPES= \
         com.sun.star.loader.XImplementationLoader	\
         com.sun.star.lang.XTypeProvider			\
         com.sun.star.lang.XComponent			\
+        com.sun.star.uno.XCurrentContext		\
+        com.sun.star.security.XAccessController		\
         com.sun.star.security.RuntimePermission		\
         com.sun.star.io.FilePermission			\
         com.sun.star.connection.SocketPermission

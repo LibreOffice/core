@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-16 16:24:14 $
+ *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include <vector>
-//  #include <string.h>
 
 #include <rtl/process.h>
 #include <rtl/bootstrap.hxx>

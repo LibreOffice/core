@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
+ *  last change: $Author: dbo $ $Date: 2002-01-25 09:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifdef _DEBUG
+#include <stdio.h>
+#endif
 #include <vector>
 
 #include <rtl/process.h>
@@ -67,16 +70,16 @@
 #include <rtl/bootstrap.hxx>
 
 #include <osl/diagnose.h>
-#include <osl/file.hxx>
+#include <osl/file.h>
 #include <osl/module.h>
 #include <osl/thread.h>
+#include <osl/process.h>
 
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/access_control.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -171,7 +174,9 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
             createInstance( loadSharedLibComponentFactory(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ), rBootstrapPath,
                 OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.NestedRegistry") ),
-                Reference< lang::XMultiServiceFactory >(), Reference< registry::XRegistryKey >() ) ), UNO_QUERY );
+                Reference< lang::XMultiServiceFactory >(),
+                Reference< registry::XRegistryKey >() ) ),
+            UNO_QUERY );
     }
     catch (Exception &)
     {
@@ -181,6 +186,116 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     return Reference< registry::XSimpleRegistry >();
 }
 
+
+/** bootstrap variables:
+
+    UNO_AC=<mode> [mandatory]
+      -- mode := { on, off, dynamic-only, single-user, single-default-user }
+    UNO_AC_SERVICE=<service_name> [optional]
+      -- override ac singleton service name
+    UNO_AC_SINGLEUSER=<user-id|nothing> [optional]
+      -- run with this user id or with default user policy (<nothing>)
+         set UNO_AC=single-[default-]user
+
+    UNO_AC_POLICYSERVICE=<service_name> [optional]
+      -- override policy singleton service name
+    UNO_AC_POLICYFILE=<file_url> [optional]
+      -- read policy out of simple text file
+*/
+static void add_access_control_entries(
+    ::std::vector< ContextEntry_Init > * values,
+    Bootstrap const & bootstrap )
+    SAL_THROW( (Exception) )
+{
+    ContextEntry_Init entry;
+    ::std::vector< ContextEntry_Init > & context_values = *values;
+
+    OUString ac_policy;
+    if (bootstrap.getFrom( OUSTR("UNO_AC_POLICYSERVICE"), ac_policy )) // overridden service name
+    {
+        // - policy singleton
+        entry.bLateInitService = true;
+        entry.name = OUSTR("/singletons/com.sun.star.security.thePolicy");
+        entry.value <<= ac_policy;
+        context_values.push_back( entry );
+    }
+    else if (bootstrap.getFrom( OUSTR("UNO_AC_POLICYFILE"), ac_policy )) // check for file policy
+    {
+        // - file policy prop: file-name
+        if (0 != ac_policy.compareToAscii( RTL_CONSTASCII_STRINGPARAM("file:///") )) // no file url
+        {
+            OUString baseDir;
+            oslProcessError prc = ::osl_getProcessWorkingDir(
+                &baseDir.pData );
+            OSL_ASSERT( osl_Process_E_None == prc );
+            OUString fileURL;
+            oslFileError frc = ::osl_getAbsoluteFileURL(
+                baseDir.pData, ac_policy.pData, &fileURL.pData );
+            OSL_ASSERT( osl_File_E_None == frc );
+            ac_policy = fileURL;
+        }
+
+        entry.bLateInitService = false;
+        entry.name = OUSTR("/implementations/com.sun.star.security.comp.stoc.FilePolicy/file-name");
+        entry.value <<= ac_policy;
+        context_values.push_back( entry );
+        // - policy singleton
+        entry.bLateInitService = true;
+        entry.name = OUSTR("/singletons/com.sun.star.security.thePolicy");
+        entry.value <<= OUSTR("com.sun.star.security.comp.stoc.FilePolicy");
+        context_values.push_back( entry );
+    } // else policy singleton comes from storage
+
+    OUString ac_mode;
+    if (! bootstrap.getFrom( OUSTR("UNO_AC"), ac_mode ))
+    {
+        ac_mode = OUSTR("off"); // default
+    }
+    OUString ac_user;
+    if (bootstrap.getFrom( OUSTR("UNO_AC_SINGLEUSER"), ac_user )) // ac in single-user mode
+    {
+        if (ac_user.getLength())
+        {
+            // - ac prop: single-user-id
+            entry.bLateInitService = false;
+            entry.name = OUSTR("/services/com.sun.star.security.AccessController/single-user-id");
+            entry.value <<= ac_user;
+            context_values.push_back( entry );
+            if (! ac_mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single-user") ))
+            {
+                throw SecurityException(
+                    OUSTR("set UNO_AC=single-user if you set UNO_AC_SINGLEUSER=<user-id>!"),
+                    Reference< XInterface >() );
+            }
+        }
+        else
+        {
+            if (! ac_mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single-default-user") ))
+            {
+                throw SecurityException(
+                    OUSTR("set UNO_AC=single-default-user if you set UNO_AC_SINGLEUSER=<nothing>!"),
+                    Reference< XInterface >() );
+            }
+        }
+    }
+    OUString ac_service;
+    if (! bootstrap.getFrom( OUSTR("UNO_AC_SERVICE"), ac_service )) // override service name
+    {
+        ac_service = OUSTR("com.sun.star.security.AccessController"); // default
+//          ac = OUSTR("com.sun.star.security.comp.stoc.AccessController");
+    }
+
+    // - ac prop: mode { "off", "on", "dynamic-only", "single-user", "single-default-user" }
+    entry.bLateInitService = false;
+    entry.name = OUSTR("/services/com.sun.star.security.AccessController/mode");
+    entry.value <<= ac_mode;
+    context_values.push_back( entry );
+    // - ac singleton
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.security.theAccessController");
+    entry.value <<= ac_service;
+    context_values.push_back( entry );
+}
 //--------------------------------------------------------------------------------------------------
 Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
@@ -198,6 +313,8 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
         "defreg", "com.sun.star.comp.stoc.NestedRegistry",
         "tdmgr", "com.sun.star.comp.stoc.TypeDescriptionManager",
         "impreg", "com.sun.star.comp.stoc.ImplementationRegistration",
+        "sec", "com.sun.star.security.comp.stoc.AccessController",
+        "sec", "com.sun.star.security.comp.stoc.FilePolicy",
         0
     };
     addFactories(
@@ -227,7 +344,7 @@ Reference< XComponentContext > bootstrapInitialContext(
     // basic context values
     ContextEntry_Init entry;
     ::std::vector< ContextEntry_Init > context_values;
-    context_values.reserve( 6 );
+    context_values.reserve( 12 );
 
     // read out singleton infos from registry
     if (services_xRegistry.is())
@@ -270,28 +387,26 @@ Reference< XComponentContext > bootstrapInitialContext(
         }
     }
 
-    // smgr
+    // smgr:
+    // - smgr singleton
     entry.bLateInitService = false;
     entry.name = OUSTR("/singletons/com.sun.star.lang.theServiceManager");
     entry.value <<= xSF;
     context_values.push_back( entry );
 
-    // ac
-    entry.bLateInitService = false;
-    entry.name = OUSTR(AC_SINGLETON);
-    entry.value <<= createDefaultAccessController();
-    context_values.push_back( entry );
+    // ac, policy:
+    add_access_control_entries( &context_values, bootstrap );
 
-    // tdmgr
-    entry.bLateInitService = true;
-    entry.name = OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
-    entry.value <<= OUSTR("com.sun.star.reflection.TypeDescriptionManager");
-    context_values.push_back( entry );
-
-    // tdmgr: cache size
+    // tdmgr:
+    // - tdmgr prop: cache size
     entry.bLateInitService = false;
     entry.name = OUSTR("/implementations/com.sun.star.comp.stoc.TypeDescriptionManager/CacheSize");
     entry.value <<= (sal_Int32)512;
+    context_values.push_back( entry );
+    // - tdmgr singleton
+    entry.bLateInitService = true;
+    entry.name = OUSTR("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
+    entry.value <<= OUSTR("com.sun.star.comp.stoc.TypeDescriptionManager");
     context_values.push_back( entry );
 
     Reference< XComponentContext > xContext;
@@ -347,18 +462,6 @@ Reference< XComponentContext > bootstrapInitialContext(
     {
         // install callback
         installTypeDescriptionManager( xTDMgr );
-    }
-
-    // wrap ac for subsequent services
-    OUString ac_service;
-    if (bootstrap.getFrom( OUSTR("UNO_AC"), ac_service ) && ac_service.getLength())
-    {
-        // wrap ac
-        ContextEntry_Init entry;
-        entry.bLateInitService = true;
-        entry.name = OUSTR(AC_SINGLETON);
-        entry.value <<= ac_service;
-        xContext = createComponentContext( &entry, 1, xContext );
     }
 
     return xContext;
