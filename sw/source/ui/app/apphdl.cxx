@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:29:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,12 +338,14 @@ void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
     if(bOn && !(rVOpt.IsParagraph()     ||
             rVOpt.IsTab()       ||
             rVOpt.IsLineBreak() ||
+            rVOpt.IsShowHiddenChar() ||
             rVOpt.IsBlank()))
     {
         rVOpt.SetParagraph(bOn);
         rVOpt.SetTab(bOn);
         rVOpt.SetLineBreak(bOn);
         rVOpt.SetBlank(bOn);
+        rVOpt.SetShowHiddenChar(bOn);
     }
 }
 
