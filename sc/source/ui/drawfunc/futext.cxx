@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:29:27 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
     rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
+    // pseudo slots for Format menu
+    rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
+    rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
+    rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
 void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
