@@ -71,4 +71,5 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
+	-$(DEL) $(subst /,$(PS),$(OUT_LIB)/*$(COMPONENT_NAME).*)
 	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(COMPONENT_NAME).*)
