@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: accessiblestatesethelper.hxx,v $
+ *  $RCSfile: accessiblerelationsethelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sab $ $Date: 2002-02-05 16:33:03 $
  *
@@ -60,11 +60,11 @@
  ************************************************************************/
 
 
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
-#define _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#define _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -89,10 +89,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/servicehelper.hxx>
 
-class AccessibleStateSetHelperImpl;
+class AccessibleRelationSetHelperImpl;
 
 //=========================================================================
-//= XAccessibleStateSet helper classes
+//= XAccessibleRelationSet helper classes
 //=========================================================================
 
 //... namespace utl .......................................................
@@ -102,66 +102,81 @@ namespace utl
 
 /** @descr
         This base class provides an implementation of the
-        <code>AccessibleStateSet</code> service.
+        <code>AccessibleRelationSet</code> service.
 */
-class AccessibleStateSetHelper
+class AccessibleRelationSetHelper
     :   public cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet
+        ::drafts::com::sun::star::accessibility::XAccessibleRelationSet
         >
 {
 public:
     //=====  internal  ========================================================
-    AccessibleStateSetHelper ();
+    AccessibleRelationSetHelper ();
 protected:
-    virtual ~AccessibleStateSetHelper   (void);
+    virtual ~AccessibleRelationSetHelper    (void);
 public:
 
-    //=====  XAccessibleStateSet  ==============================================
+    //=====  XAccessibleRelationSet  ==========================================
 
-    /** Checks whether the current state set is empty.
-
-        @return
-            Returns <TRUE/> if there is no state in this state set and
-            <FALSE/> if there is at least one state set in it.
-    */
-    virtual sal_Bool SAL_CALL isEmpty ()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    /** Checks if the given state is a member of the state set of this
-        object.
-
-        @param aState
-            The state for which to check membership.  This has to be one of
-            the constants of <type>AccessibleStateType</type>.
+    /** Returns the number of relations in this relation set.
 
         @return
-            Returns <TRUE/> if the given state is a memeber of this object's
-            state set and <FALSE/> otherwise.
+            Returns the number of relations or zero if there are none.
     */
-    virtual sal_Bool SAL_CALL contains (sal_Int16 aState)
+    virtual sal_Int32 SAL_CALL getRelationCount(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Checks if all of the given states are in this object's state
-        set.
+    /** Returns the relation of this relation set that is specified by
+        the given index.
 
-        @param aStateSet
-            This sequence of states is interpreted as set and every of its
-            members, duplicates are ignored, is checked for membership in
-            this object's state set.  Each state has to be one of the
-            constants of <type>AccessibleStateType</type>.
+        @param nIndex
+            This index specifies the relatio to return.
 
         @return
-            Returns <TRUE/> if all states of the given state set are members
-            of this object's state set.  <FALSE/> is returned if at least
-            one of the states in the given state is not a member of this
-            object's state set.
+            For a valid index, i.e. inside the range 0 to the number of
+            relations minus one, the returned value is the requested
+            relation.  If the index is invalid then the returned relation
+            has the type INVALID.
+
     */
-    virtual sal_Bool SAL_CALL containsAll (
-        const ::com::sun::star::uno::Sequence<sal_Int16>& rStateSet)
+    virtual ::drafts::com::sun::star::accessibility::AccessibleRelation SAL_CALL
+        getRelation( sal_Int32 nIndex )
+            throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                    ::com::sun::star::uno::RuntimeException);
+
+    /** Tests whether the relation set contains a relation matching the
+        specified key.
+
+        @param aRelationType
+            The type of relation to look for in this set of relations.  This
+            has to be one of the constants of
+            <type>AccessibleRelationType</type>.
+
+        @return
+            Returns <TRUE/> if there is a (at least one) relation of the
+            given type and <FALSE/> if there is no such relation in the set.
+    */
+    virtual sal_Bool SAL_CALL containsRelation( sal_Int16 aRelationType )
         throw (::com::sun::star::uno::RuntimeException);
 
-    void    AddState(sal_Int16 aState)
-        throw (::com::sun::star::uno::RuntimeException);
+    /** Retrieve and return the relation with the given relation type.
+
+        @param aRelationType
+            The type of the relation to return.  This has to be one of the
+            constants of <type>AccessibleRelationType</type>.
+
+        @return
+            If a relation with the given type could be found than (a copy
+            of) this relation is returned.  Otherwise a relation with the
+            type INVALID is returned.
+    */
+    virtual ::drafts::com::sun::star::accessibility::AccessibleRelation SAL_CALL
+        getRelationByType( sal_Int16 aRelationType )
+            throw (::com::sun::star::uno::RuntimeException);
+
+    void AddRelation(
+        const ::drafts::com::sun::star::accessibility::AccessibleRelation& rRelation)
+            throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
 
@@ -183,7 +198,7 @@ protected:
 
 private:
     /// The implementation of this helper interface.
-    AccessibleStateSetHelperImpl*   mpHelperImpl;
+    AccessibleRelationSetHelperImpl*    mpHelperImpl;
 };
 
 //.........................................................................
