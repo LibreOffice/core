@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-18 17:22:41 $
+#   last change: $Author: hjs $ $Date: 2002-06-12 14:10:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,13 +136,13 @@ $(ZIP$(TNR)TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
     +-zip $(ZIP$(TNR)FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
-    @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
+    @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+if ( -r $@.new ) $(RENAME) $@.new $@
+    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
 #	@+if ( -r $@ ) $(TOUCH) $@
 .ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.new $(RENAME) $@.new $@
+    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
 #	@+if exist $@ $(TOUCH) $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
