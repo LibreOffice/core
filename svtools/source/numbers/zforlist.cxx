@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-01 13:12:01 $
+ *  last change: $Author: er $ $Date: 2001-10-04 08:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,6 +1099,9 @@ ULONG SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, BOOL bLoadingSO5 )
                     if ( i != j && xSeq[i].formatIndex == nIdx )
                     {
                         aDupes += ByteString::CreateFromInt32( i );
+                        aDupes += '(';
+                        aDupes += ByteString( String( xSeq[i].formatKey ), RTL_TEXTENCODING_UTF8 );
+                        aDupes += ')';
                         aDupes += ' ';
                     }
                 }
@@ -1108,6 +1111,9 @@ ULONG SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, BOOL bLoadingSO5 )
                     aMsg += ByteString::CreateFromInt32( nIdx );
                     aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nFormatElements: " ) );
                     aMsg += ByteString::CreateFromInt32( j );
+                    aMsg += '(';
+                    aMsg += ByteString( String( xSeq[j].formatKey ), RTL_TEXTENCODING_UTF8 );
+                    aMsg += ')';
                     aMsg += ' ';
                     aMsg += aDupes;
                     DBG_ERRORFILE( xLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
