@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:24:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,16 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
+struct SbClassData
+{
+    SbxArrayRef     mxIfaces;
+
+    SbClassData( void );
+    ~SbClassData( void )
+        { clear(); }
+    void clear( void );
+};
+
 // #115824: Factory class to create class objects (type command)
 // Implementation: sb.cxx
 class SbClassFactory : public SbxFactory
@@ -96,6 +106,8 @@ public:
 
     virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
+
+    SbModule* FindClass( const String& rClassName );
 };
 
 // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
