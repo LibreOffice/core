@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 11:10:26 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 12:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,6 +1256,7 @@ void FmFilterString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, S
 FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
                   ,m_aControlExchange(this)
+                  ,m_pEditingCurrently(NULL)
 {
     SetHelpId( HID_FILTER_NAVIGATOR );
 
@@ -1326,6 +1327,7 @@ void FmFilterNavigator::Update(const Reference< ::com::sun::star::container::XIn
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection )
 {
+    m_pEditingCurrently = pEntry;
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
         return sal_False;
 
@@ -1335,6 +1337,9 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
 {
+    DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
+    m_pEditingCurrently = NULL;
+
     if (EditingCanceled())
         return sal_True;
 
@@ -1721,6 +1726,11 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 {
     // der Entry zu den Daten
     SvLBoxEntry* pEntry = FindEntry(pItem);
+
+    if (pEntry == m_pEditingCurrently)
+        // cancel editing
+        EndEditing(sal_True);
+
     if (pEntry)
         GetModel()->Remove( pEntry );
 }
