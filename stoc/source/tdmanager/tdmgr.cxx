@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:47 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <stl/algorithm>
-#include <stl/vector>
+#include <algorithm>
+#include <vector>
 
 
 

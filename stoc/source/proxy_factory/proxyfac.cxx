@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-13 16:23:43 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
-#include <stl/vector>
+#include <vector>
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <stl/hash_map>
-#include <stl/hash_set>
+#include <hash_map>
+#include <hash_set>
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>

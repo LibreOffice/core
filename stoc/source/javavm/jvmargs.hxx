@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 17:35:43 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define __JVM_HXX
 
 #include <cstdarg>
-#include <stl/vector>
+#include <vector>
 
 
 #include <rtl/ustring>
