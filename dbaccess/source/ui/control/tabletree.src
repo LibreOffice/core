@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:47:43 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,10 +258,31 @@ String STR_NOTABLEINFO
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ arabic ] = " „  √”Ì” «·« ’«· »‰Ã«Õ° ≈·« √‰Â  ⁄–— «·Õ’Ê· ⁄·Ï „⁄·Ê„«  »Œ’Ê’ Ãœ«Ê· ﬁ«⁄œ… «·»Ì«‰« .";
 };
+String STR_ALL_TABLES
+{
+    Text = "Alle Tabellen";
+    Text [ english ] = "All tables";
+    Text [ english_us ] = "All tables";
+};
+String STR_ALL_VIEWS
+{
+    Text = "Alle Tabellensichten";
+    Text [ english ] = "All views";
+    Text [ english_us ] = "All views";
+};
+String STR_ALL_TABLES_AND_VIEWS
+{
+    Text = "Alle Tabellen und Tabellensichten";
+    Text [ english ] = "All tables and views";
+    Text [ english_us ] = "All tables and views";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/11/29 09:47:43  kz
+ *  Merge SRC614: 29.11.00 - 10:46:56 (NoBranch)
+ *
  *  Revision 1.4  2000/10/30 15:23:23  fs
  *  #79816# STR_INVALID_REGISTEREDDRIVER is obsolete
  *

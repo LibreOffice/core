@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:20:02 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,28 @@ public:
                         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables,
                         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rViews);
 
+    SvLBoxEntry*    getAllObjectsEntry() const;
+
+    /** does a wildcard check of the given entry
+        <p>There are two different 'checked' states: If the user checks all children of an entry, this is different
+        from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
+        table filter it's represented by a wildcard.</p>
+    */
+    void            checkWildcard(SvLBoxEntry* _pEntry);
+
+    /** determine if the given entry is 'wildcard checked'
+        @see checkWildcard
+    */
+    sal_Bool        isWildcardChecked(SvLBoxEntry* _pEntry) const;
+
 protected:
+    virtual void InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap);
+
     virtual void Command( const CommandEvent& rEvt );
+
+    virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
+
+    void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateRelatives = sal_True);
 };
 
 //.........................................................................
@@ -143,6 +163,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/30 15:20:02  fs
+ *  #79816# second UpdateTableList got other parameters
+ *
  *  Revision 1.1  2000/10/05 10:09:23  fs
  *  initial checkin
  *

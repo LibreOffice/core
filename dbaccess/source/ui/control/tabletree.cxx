@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 10:55:43 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
+#endif
+#ifndef _DBAUI_LISTVIEWITEMS_HXX_
+#include "listviewitems.hxx"
 #endif
 
 //.........................................................................
@@ -362,6 +365,16 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 
     try
     {
+        // the root entry saying "all objects"
+        String sRootEntryText;
+        if (!_rViews.getLength())
+            sRootEntryText = String(ModuleRes(STR_ALL_TABLES));
+        else if (!_rTables.getLength())
+            sRootEntryText = String(ModuleRes(STR_ALL_VIEWS));
+        else
+            sRootEntryText = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
+        SvLBoxEntry* pAllObjects = InsertEntry(sRootEntryText);
+
         // get the table/view names
         const ::rtl::OUString* pTables = NULL;
         const ::rtl::OUString* pViews = NULL;
@@ -371,6 +384,7 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         ::rtl::OUString sCatalog, sSchema, sName;
         SvLBoxEntry* pCat = NULL;
         SvLBoxEntry* pSchema = NULL;
+        SvLBoxEntry* pParent = pAllObjects;
 
         // loop through both sequences
         const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pTables + _rTables.getLength() - 1 : NULL;
@@ -388,6 +402,8 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
             )
         {
             pCat = pSchema = NULL;
+            pParent = pAllObjects;
+
             // the image : table or view
             Image& aImage = bIsView ? m_aViewImage : m_aTableImage;
             // split the complete name into it's components
@@ -396,24 +412,105 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
             if (sCatalog.getLength())
             {
                 pCat = GetEntryPosByName(sCatalog);
-                if(!pCat)
-                    pCat = InsertEntry(sCatalog);
+                if (!pCat)
+                    pCat = InsertEntry(sCatalog, pParent);
+                pParent = pCat;
             }
 
             if (sSchema.getLength())
             {
                 pSchema = GetEntryPosByName(sSchema);
-                if(!pSchema)
-                    pSchema = InsertEntry(sSchema, pCat);
+                if (!pSchema)
+                    pSchema = InsertEntry(sSchema, pParent);
+                pParent = pSchema;
             }
 
-            InsertEntry(sName, aImage, aImage, pSchema ? pSchema : pCat);
+            InsertEntry(sName, aImage, aImage, pParent);
         }
     }
     catch(RuntimeException&)
     {
         DBG_ERROR("OTableTreeListBox::UpdateTableList : caught a RuntimeException!");
     }
+}
+
+//------------------------------------------------------------------------
+sal_Bool OTableTreeListBox::isWildcardChecked(SvLBoxEntry* _pEntry) const
+{
+    if (_pEntry)
+    {
+        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+        if (pTextItem)
+            return pTextItem->isEmphasized();
+    }
+    return sal_False;
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::checkWildcard(SvLBoxEntry* _pEntry)
+{
+    SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
+    checkedButton_noBroadcast(_pEntry);
+}
+
+//------------------------------------------------------------------------
+SvLBoxEntry* OTableTreeListBox::getAllObjectsEntry() const
+{
+    return First();
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
+{
+    OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
+
+    // if an entry has children, it makes a difference if the entry is checked because alls children are checked
+    // or if the user checked it explicitly.
+    // So we track explicit (un)checking
+
+    SvButtonState eState = GetCheckButtonState(_pEntry);
+    DBG_ASSERT(SV_BUTTON_TRISTATE != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
+    implEmphasize(_pEntry, SV_BUTTON_CHECKED == eState);
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateRelatives)
+{
+    DBG_ASSERT(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
+    if (GetModel()->HasChilds(_pEntry))
+    {
+        OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
+        if (pTextItem)
+            pTextItem->emphasize(_bChecked);
+    }
+    if (_bUpdateRelatives)
+    {
+        // remove the mark for all children of the checked entry
+        SvLBoxEntry* pChildLoop = FirstChild(_pEntry);
+        while (pChildLoop)
+        {
+            if (GetModel()->HasChilds(pChildLoop))
+                implEmphasize(pChildLoop, sal_False, sal_False);
+            pChildLoop = NextSibling(pChildLoop);
+        }
+        // remove the mark for all ancestors of the entry
+        if (GetModel()->HasParent(_pEntry))
+            implEmphasize(GetParent(_pEntry), sal_False, sal_False);
+    }
+}
+
+//------------------------------------------------------------------------
+void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap)
+{
+    OMarkableTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap);
+
+    // replace the text item with our own one
+    SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
+    DBG_ASSERT(pTextItem, "OTableTreeListBox::InitEntry: no text item!?");
+    sal_uInt16 nTextPos = _pEntry->GetPos(pTextItem);
+    DBG_ASSERT(((sal_uInt16)-1) != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
+
+    _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
 }
 
 //.........................................................................
@@ -423,6 +520,9 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/15 10:55:43  oj
+ *  wrong image for table used
+ *
  *  Revision 1.5  2000/10/30 15:37:48  fs
  *  #79816# no need for a XDataDefinitionSupplier anymore - collect table/view names from the meta data
  *
