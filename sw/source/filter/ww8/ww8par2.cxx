@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 10:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1860,6 +1860,24 @@ void WW8TabDesc::CalcDefaults()
 
     nMinLeft = SHRT_MAX;
     nMaxRight = SHRT_MIN;
+
+    /*
+    #101175#
+    If we are an honestly inline centered table, then the normal rules of
+    engagement for left and right margins do not apply. The multiple rows are
+    centered regardless of the actual placement of rows, so we cannot have
+    mismatched rows as is possible in other configurations.
+
+    e.g. change the example bugdoc in word from text wrapping of none (inline)
+    to around (in frame (bApo)) and the table splits into two very disjoint
+    rows as the beginning point of each row are very different
+    */
+    if ((!pIo->bApo) && (eOri == HORI_CENTER))
+    {
+        for (pR = pFirstBand; pR; pR = pR->pNextBand)
+            for( short i = pR->nWwCols; i >= 0; --i)
+                pR->nCenter[i] -=  pR->nCenter[0];
+    }
 
     // 1. Durchlauf: aeusserste L- und R-Grenzen finden
     for( pR = pFirstBand; pR; pR = pR->pNextBand )
