@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-23 09:37:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-10 14:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@ namespace configmgr
         { c_sAnyLanguage,       c_sNoCountry }  // just take the first you find
     };
     const SequencePos c_nFallbackLocales = ARRAYSIZE(c_aFallbackLocales);
+
+// -----------------------------------------------------------------------------
+    void getAnyLocale(OUString& _rsString)
+    {
+        static OUString const sAnyLocale = OUString::createFromAscii( c_sAnyLanguage );
+        _rsString = sAnyLocale;
+    }
 
 // -----------------------------------------------------------------------------
     static inline sal_Int32 countrySeparatorPos(OUString const& aLocaleName_)
