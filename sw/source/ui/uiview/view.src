@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:57:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 03:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ QueryBox MSG_SEARCH_START
     Message[ russian ] = "%PRODUCTNAME Writer ξρσωερςβθλ οξθρκ β νΰχΰλε δξκσμενςΰ. Βϋ υξςθςε οπξδξλζθςό οξθρκ β κξνφε δξκσμενςΰ?";
     Message[ polish ] = "%PRODUCTNAME Writer przeszuka³ dokument do poczΉtku. Czy kontynuowaζ wyszukiwanie od koρca dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ‚ΝA•¶‘‚Μn‚ί‚ά‚Ευ‚µ‚ά‚µ‚½B•¶‘––‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
-    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤wΈg·j΄M¦ά¤ε¥σ°_©l¦μΈm΅C­nΔ~Δς·j΄M¦ά¤ε¥σªΊµ²§τ¦μΈm΅S";
+    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤wΈg·j΄M¦ά¤ε¥σ¶}©l¦μΈm΅C­nΔ~Δς·j΄M¦ά¤ε¥σªΊµ²§τ¦μΈm΅S";
     Message[ arabic ] = "ήΗγ %PRODUCTNAME Writer ΘΗαΘΝΛ ΝΚμ ΘΟΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ δεΗνΙ ΗαγΣΚδΟΏ";
     Message[ greek ] = "Το %PRODUCTNAME Writer ολοκλήρωσε την αναζήτηση ως την αρχή του εγγράφου. Θέλετε να συνεχιστεί η αναζήτηση από το τέλος του εγγράφου;";
     Message[ korean ] = "%PRODUCTNAME Writer°΅ Ή®Ό­ΐΗ ½ΓΐΫΊΞΊΠ±ξΑφ °Λ»φΗί½ΐ΄Ο΄Ω. Ή®Ό­ΐΗ ³΅ΊΞΊΠΏ΅Ό­ °Λ»φΐ» °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -971,7 +971,7 @@ String STR_SAVEAS_SRC
     Text[ chinese_traditional ] = "¶Χ¥X­μ©lΐΙ(~E)...";
     Text[ arabic ] = "ΚΥΟνΡ δΥ ΗαγΥΟΡ...";
     Text[ greek ] = "Εξαγωγή κειμένου προέλευσης...";
-    Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ® ³»ΊΈ³»±β...";
+    Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ® ³»ΊΈ³»±β(~E)...";
     Text[ turkish ] = "Kaynak kodu dύώa aktar...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Exportar texto fuente...";
@@ -1230,6 +1230,7 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
 
 
 
