@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-13 12:53:31 $
+#   last change: $Author: obo $ $Date: 2004-09-09 17:14:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -225,7 +225,7 @@ SHL4IMPLIB=		ifwk
 
 SHL4OBJS=       \
                 $(SLO)$/desktop.obj					\
-                $(SLO)$/loaddispatcher.obj          \
+          $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/documentproperties.obj		\
                 $(SLO)$/droptargetlistener.obj		\
@@ -247,8 +247,8 @@ SHL4OBJS=       \
                 $(SLO)$/targetfinder.obj		  	\
                 $(SLO)$/taskcreator.obj		  		\
                 $(SLO)$/timerhelper.obj				\
-                $(SLO)$/urltransformer.obj			\
-                $(SLO)$/documentlist.obj            \
+          $(SLO)$/urltransformer.obj			\
+          $(SLO)$/documentlist.obj            \
                 $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/configaccess.obj            \
                 $(SLO)$/job.obj                     \
@@ -304,10 +304,16 @@ SHL4OBJS=       \
                 $(SLO)$/addonstoolbarmanager.obj    \
                 $(SLO)$/toolbarsmenucontroller.obj  \
                 $(SLO)$/toolbarcontrollerfactory.obj\
-                $(SLO)$/moduleimagemanager.obj      \
-                $(SLO)$/imagemanager.obj            \
-                $(SLO)$/graphicnameaccess.obj		\
-                $(SLO)$/recentfilesmenucontroller.obj
+          $(SLO)$/moduleimagemanager.obj      \
+          $(SLO)$/imagemanager.obj            \
+                $(SLO)$/graphicnameaccess.obj       \
+                $(SLO)$/statusbarwrapper.obj        \
+                $(SLO)$/statusbar.obj               \
+                $(SLO)$/statusbarmanager.obj        \
+                $(SLO)$/statusbarfactory.obj			\
+                $(SLO)$/recentfilesmenucontroller.obj   \
+                $(SLO)$/progressbarwrapper.obj          \
+                $(SLO)$/statusindicatorinterfacewrapper.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
