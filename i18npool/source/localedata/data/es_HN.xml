@@ -13,7 +13,6 @@
 <Platform>
 <PlatformID>generic</PlatformID>
 </Platform>
-<Varient></Varient>
 </LC_INFO>
 <LC_CTYPE ref="es_NI"/>
 <LC_FORMAT ref="es_DO" replaceTo="[$L-480A]"/>
