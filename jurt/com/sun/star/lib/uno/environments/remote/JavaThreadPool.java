@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-20 10:48:05 $
+ *  last change: $Author: kr $ $Date: 2001-02-28 10:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-02-20 10:48:05 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-02-28 10:47:01 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -149,21 +149,18 @@ public class JavaThreadPool implements IThreadPool {
 
         if(DEBUG) System.err.println("##### ThreadPool.addThread:" + threadId);
 
-        JobQueue jobQueue = (JobQueue)_jobQueues.get(threadId);
-        if(jobQueue == null) { // see, if we already have a queue for the given threadId
-            synchronized(_jobQueues) {
-                jobQueue = (JobQueue)_jobQueues.get(threadId);
-                if(jobQueue == null) {
-                    jobQueue = new JobQueue(threadId, createWorkerThread);
-                    _jobQueues.put(threadId, jobQueue);
-                    if(disposeId != null)
-                        _disposeIds.put(threadId, disposeId);
-                    _jobQueues.notifyAll();
-                }
+        synchronized(_jobQueues) {
+            JobQueue jobQueue = (JobQueue)_jobQueues.get(threadId);
+            if(jobQueue == null) {
+                jobQueue = new JobQueue(threadId, createWorkerThread);
+                _jobQueues.put(threadId, jobQueue);
+                if(disposeId != null)
+                    _disposeIds.put(threadId, disposeId);
+                _jobQueues.notifyAll();
             }
+            else
+                ++ jobQueue._add_count;
         }
-        else
-            ++ jobQueue._add_count;
     }
 
     /**
@@ -252,12 +249,13 @@ public class JavaThreadPool implements IThreadPool {
         jobQueue = (JobQueue)_jobQueues.get(threadId);
 
 
+
         if(jobQueue == null) {
             synchronized(_jobQueues) {
                 jobQueue = (JobQueue)_jobQueues.get(threadId);
                 if(jobQueue == null) {
-                    if(jobQueue != null)
-                        removeThread(threadId);
+                    if(job.getOperation() == null) // a reply? and no thread for it?
+                        throw new RuntimeException(getClass().getName() + ".putJob - no thread for reply " + threadId);
 
                     // add a new JobQueue for this job
                     addThread(true, threadId, disposeId);
@@ -318,8 +316,10 @@ public class JavaThreadPool implements IThreadPool {
             Enumeration elements = _jobQueues.elements();
             while(elements.hasMoreElements()) {
                 JobQueue jobQueue = (JobQueue)elements.nextElement();
-                _jobQueues.remove(jobQueue.getThreadId());
                 jobQueue.interrupt(disposeId);
+
+                if(jobQueue._add_count == 0 && jobQueue._createThread) // if the queue already has a count of less zero
+                    _jobQueues.remove(jobQueue.getThreadId());
             }
         }
     }
@@ -352,5 +352,4 @@ public class JavaThreadPool implements IThreadPool {
             _jobQueues = null;
         }
     }
-
 }
