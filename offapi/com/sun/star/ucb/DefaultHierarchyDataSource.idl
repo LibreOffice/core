@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DefaultHierarchyDataSource.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:00:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module ucb {
     <type scope="com::sun::star::configuration">ConfigurationProvider</type>
     for reading and writing hierarchy data.
 */
-service DefaultHierarchyDataSource
+published service DefaultHierarchyDataSource
 {
     //-------------------------------------------------------------------------
     /** is a concrete implementation of service <type>HierarchyDataSource</type>,
