@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 13:48:46 $
+ *  last change: $Author: cmc $ $Date: 2001-06-07 12:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,22 @@ int MathType::Parse(SvStorage *pStor)
     return nRet;
 }
 
+static void lcl_InsertDummyTerm(String &rRet)
+{
+    sal_Bool bOk=sal_False;
+    for(xub_StrLen nI=rRet.Len()-1;nI >= 0; nI--)
+    {
+        sal_Char nChar = rRet.GetChar(nI);
+        if (nChar == ' ')
+            continue;
+        if (rRet.GetChar(nI) != '{')
+            bOk=sal_True;
+        break;
+    }
+    if (!bOk)   //No term, use dummy
+        APPEND(rRet," {}");
+}
+
 /*Fabously complicated as many tokens have to be reordered and generally
  *moved around from mathtypes paradigm to starmaths.*/
 int MathType::HandleRecords(int nLevel,BYTE nSelector,
@@ -668,6 +684,7 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
     BOOL bOpenString=FALSE;
     xub_StrLen nTextStart;
     xub_StrLen nSubSupStartPos;
+    xub_StrLen nLastTemplateBracket=STRING_NOTFOUND;
 
     do
     {
@@ -816,10 +833,16 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
                             nSubSupStartPos = rRet.Len();
                             if ((nVariation == 0) ||
                                     ((nVariation == 2) && (nPart==1)))
+                            {
+                                lcl_InsertDummyTerm(rRet);
                                 APPEND(rRet," rSup");
+                            }
                             else if ((nVariation == 1) ||
                                     ((nVariation == 2) && (nPart==0)))
+                            {
+                                lcl_InsertDummyTerm(rRet);
                                 APPEND(rRet," rSub");
+                            }
                             APPEND(rRet," {");
                             break;
                         case 0x10:
@@ -1694,7 +1717,7 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
                     nVariation,bSilent);
                  break;
             case TMPL:
-                nRet = HandleTemplate(nLevel,nSelector,nVariation);
+                nRet = HandleTemplate(nLevel,nSelector,nVariation,nLastTemplateBracket);
                 break;
             case PILE:
                 nRet = HandlePile(nSetAlign,nLevel,nSelector,nVariation);
@@ -1780,7 +1803,7 @@ void MathType::HandleMatrixSeperator(int nMatrixRows,int nMatrixCols,
             if (nMatrixRows!=-1)
                 rCurCol++;
             else
-            rRet += '\n';
+                rRet += '\n';
         }
     }
 }
@@ -2679,11 +2702,18 @@ int MathType::HandleMatrix(int nLevel,BYTE nSelector,
     pS->SeekRel(nBytes);
     APPEND(rRet," matrix {\n");
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
+
+    xub_StrLen nI = rRet.SearchBackward('#');
+    if ((nI != STRING_NOTFOUND) && (nI > 0))
+        if (rRet.GetChar(nI-1) != '#')  //missing column
+            APPEND(rRet,"{}");
+
     APPEND(rRet,"\n} ");
     return nRet;
 }
 
-int MathType::HandleTemplate(int nLevel,BYTE &rSelector,BYTE &rVariation)
+int MathType::HandleTemplate(int nLevel,BYTE &rSelector,BYTE &rVariation,
+    xub_StrLen &rLastTemplateBracket)
 {
     BYTE nOption; //This appears utterly unused
     //if (xfLMOVE(nTag))
@@ -2701,6 +2731,21 @@ int MathType::HandleTemplate(int nLevel,BYTE &rSelector,BYTE &rVariation)
     }
     //suborderlist
     int nRet = HandleRecords(nLevel+1,rSelector,rVariation);
+
+    //For the (broken) case where one subscript template ends, and there is
+    //another one after it, mathtype handles it as if the second one was
+    //inside the first one and renders it as sub of sub
+    if ((rLastTemplateBracket == STRING_NOTFOUND) && (rSelector == 0xf))
+        rLastTemplateBracket = rRet.SearchBackward('}');
+    else if (rSelector == 0xf)
+    {
+        rRet.Erase(rLastTemplateBracket,1);
+        APPEND(rRet,"} ");
+        rLastTemplateBracket = STRING_NOTFOUND;
+    }
+    else
+        rLastTemplateBracket = STRING_NOTFOUND;
+
     rSelector = -1;
     return nRet;
 }

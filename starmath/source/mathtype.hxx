@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
+ *  last change: $Author: cmc $ $Date: 2001-06-07 12:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ private:
     int HandleMatrix(int nLevel,BYTE nSelector,BYTE nVariarion);
     void HandleMatrixSeperator(int nMatrixRows,int nMatrixCols,
         int &rCurCol,int &rCurRow);
-    int HandleTemplate(int nLevel,BYTE &rSelector,BYTE &rVariation);
+    int HandleTemplate(int nLevel,BYTE &rSelector,BYTE &rVariation,
+        xub_StrLen &rLastTemplateBracket);
     void HandleEmblishments();
     void HandleSetSize();
     int HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,BYTE nTag,
