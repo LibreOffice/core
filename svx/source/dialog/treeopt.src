@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 09:37:43 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     OutputSize = TRUE ;
     SVLook = TRUE ;
 
-    Size = MAP_APPFONT ( 355 , 213 ) ;
+    Size = MAP_APPFONT ( COL_12 , ROW_5 ) ;
     Text = "Optionen";
     Text[ ENGLISH ] = "Options";
     Text[ english_us ] = "Options";
@@ -100,27 +100,27 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
 
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 137, 197 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( COL_4, ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         DefButton = TRUE;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 190, 197 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( COL_6, ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 243, 197) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( COL_8, ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
     };
     PushButton PB_BACK
     {
-        Pos = MAP_APPFONT ( 299, 197) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( COL_10, ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         TEXT = "~Zurück" ;
         TEXT [ ENGLISH ] = "~Reset" ;
@@ -157,40 +157,40 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     //TreeListBox
     Control TLB_PAGES
     {
-        Pos = MAP_APPFONT ( 3, 3 ) ;
-        Size = MAP_APPFONT ( 80, 207 ) ;
+        Pos = MAP_APPFONT ( COL_1, ROW_1 ) ;
+        Size = MAP_APPFONT ( (COL_2-COL_1), (ROW_4-ROW_1) );
         TabStop = TRUE ;
         Border = TRUE;
     };
     Control FB_BORDER
     {
-        Pos = MAP_APPFONT ( 86, 3 ) ;
-        Size = MAP_APPFONT ( 263, 191 ) ;
+        Pos = MAP_APPFONT ( COL_3, ROW_1 ) ;
+        Size = MAP_APPFONT ( WIDTH_PAGEFRAME, HEIGHT_PAGEFRAME ) ;
         Hide = TRUE;
     };
     FixedImage IMG_HELP
     {
-        Pos = MAP_APPFONT ( 92, 5 ) ;
-        Size = MAP_APPFONT ( 25, 30 ) ;
+        Pos = MAP_APPFONT ( COL_3_1, ROW_1_1 ) ;
+        Size = MAP_APPFONT ( WIDTH_IMG_HELP, HEIGHT_IMG_HELP ) ;
         Hide = TRUE;
     };
     FixedText FT_PAGE_TITLE
     {
-        Pos = MAP_APPFONT ( 120, 15 ) ;
-        Size = MAP_APPFONT ( 151, 15 ) ;
+        Pos = MAP_APPFONT ( COL_3_3, ROW_1_2 ) ;
+        Size = MAP_APPFONT ( (COL_3_5-COL_3_3), 15 ) ;
         Hide = TRUE;
     };
     FixedLine FL_LINE_1
     {
-        Pos = MAP_APPFONT ( 92 , 36 ) ;
-        Size = MAP_APPFONT ( 251 , 1 ) ;
+        Pos = MAP_APPFONT ( COL_3_1 , ROW_1_3 ) ;
+        Size = MAP_APPFONT ( (COL_3_5-COL_3_1), 1 ) ;
         Comment = "Trennlinie" ;
         Hide = TRUE;
     };
     FixedText FT_HELPTEXT
     {
-        Pos = MAP_APPFONT ( 120, 44 ) ;
-        Size = MAP_APPFONT ( 220, 105 ) ;
+        Pos = MAP_APPFONT ( COL_3_3, ROW_1_4 ) ;
+        Size = MAP_APPFONT ( (COL_3_5-COL_3_3), (HEIGHT_PAGEFRAME-ROW_1_4-1) ) ;
         WordBreak = TRUE;
         Hide = TRUE;
     };
@@ -1670,7 +1670,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Textdokument" ; 0; > ;
+            < "%PRODUCTNAME Writer" ; 0; > ;
             < "Allgemein" ;     RID_SW_TP_OPTLOAD_PAGE   ; > ;
             < "Ansicht" ;       RID_SW_TP_CONTENT_OPT   ;> ;
             < "Formatierungshilfen" ;        RID_SW_TP_OPTSHDWCRSR    ; > ;
@@ -1685,7 +1685,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ENGLISH] =
         {
-            < "Textdokument" ; 0; > ;
+            < "%PRODUCTNAME Writer" ; 0; > ;
             < "General" ;     RID_SW_TP_OPTLOAD_PAGE   ; > ;
             < "View" ;       RID_SW_TP_CONTENT_OPT   ;> ;
             < "Formatting aids" ;        RID_SW_TP_OPTSHDWCRSR    ; > ;
@@ -1700,7 +1700,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ english_us ] =
         {
-            < "Text Document" ; 0; > ;
+            < "%PRODUCTNAME Writer" ; 0; > ;
             < "General" ;     RID_SW_TP_OPTLOAD_PAGE   ; > ;
             < "View" ;       RID_SW_TP_CONTENT_OPT   ;> ;
             < "Formatting Aids" ;        RID_SW_TP_OPTSHDWCRSR    ; > ;
@@ -2093,7 +2093,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "HTML-Dokument" ; 0; > ;
+            < "%PRODUCTNAME Writer/Web" ; 0; > ;
             < "Ansicht" ;       RID_SW_TP_HTML_CONTENT_OPT      ;> ;
             < "Formatierungshilfen" ;        RID_SW_TP_HTML_OPTSHDWCRSR    ; > ;
             < "Raster" ;        RID_SW_TP_HTML_OPTGRID_PAGE ; > ;
@@ -2103,7 +2103,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ENGLISH] =
         {
-            < "HTML-Dokument" ; 0; > ;
+            < "%PRODUCTNAME Writer/Web" ; 0; > ;
             < "View" ;       RID_SW_TP_HTML_CONTENT_OPT      ;> ;
             < "Formatting aids" ;        RID_SW_TP_HTML_OPTSHDWCRSR    ; > ;
             < "Grid" ;        RID_SW_TP_HTML_OPTGRID_PAGE ; > ;
@@ -2123,7 +2123,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             };
         ItemList [ english_us ] =
         {
-            < "HTML Document" ; 0; > ;
+            < "%PRODUCTNAME Writer/Web" ; 0; > ;
             < "View" ;       RID_SW_TP_HTML_CONTENT_OPT      ;> ;
             < "Formatting Aids" ;        RID_SW_TP_HTML_OPTSHDWCRSR    ; > ;
             < "Grid" ;        RID_SW_TP_HTML_OPTGRID_PAGE ; > ;
@@ -2396,12 +2396,12 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Formel" ; 0; > ;
+            < "%PRODUCTNAME Math" ; 0; > ;
             < "Einstellungen" ; SID_SM_TP_PRINTOPTIONS;> ;
         };
         ItemList [ENGLISH] =
         {
-            < "Formel" ; 0; > ;
+            < "%PRODUCTNAME Math" ; 0; > ;
             < "Einstellungen" ; SID_SM_TP_PRINTOPTIONS;> ;
         };
         ItemList [ language_user1 ] =
@@ -2411,7 +2411,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ english_us ] =
         {
-            < "Formula" ; 0; > ;
+            < "%PRODUCTNAME Math" ; 0; > ;
             < "Settings" ; SID_SM_TP_PRINTOPTIONS;> ;
         };
         ItemList [ portuguese ] =
@@ -2549,7 +2549,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Tabellendokument" ; 0; > ;
+            < "%PRODUCTNAME Calc" ; 0; > ;
             < "Allgemein" ;         SID_SC_TP_LAYOUT            ;> ;
             < "Ansicht" ;           SID_SC_TP_CONTENT           ;> ;
             < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
@@ -2561,7 +2561,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ENGLISH] =
         {
-            < "Tabellendokument" ; 0; > ;
+            < "%PRODUCTNAME Calc" ; 0; > ;
             < "General" ;           SID_SC_TP_LAYOUT            ;> ;
             < "View" ;              SID_SC_TP_CONTENT           ;> ;
             < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
@@ -2585,7 +2585,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ english_us ] =
         {
-            < "Spreadsheet" ; 0; > ;
+            < "%PRODUCTNAME Calc" ; 0; > ;
             < "General" ;           SID_SC_TP_LAYOUT            ;> ;
             < "View" ;          SID_SC_TP_CONTENT           ;> ;
             < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
@@ -2912,7 +2912,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Präsentation" ; 0; > ;
+            < "%PRODUCTNAME Impress" ; 0; > ;
             < "Allgemein";          SID_SI_TP_MISC                  ; > ;
             < "Ansicht" ;           SID_SI_TP_CONTENTS              ; > ;
             < "Raster" ;            SID_SI_TP_SNAP                  ; > ;
@@ -2920,7 +2920,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ENGLISH] =
         {
-            < "Präsentation" ; 0; > ;
+            < "%PRODUCTNAME Impress" ; 0; > ;
             < "General";            SID_SI_TP_MISC                  ; > ;
             < "View" ;              SID_SI_TP_CONTENTS              ; > ;
             < "Raster" ;            SID_SI_TP_SNAP                  ; > ;
@@ -2936,7 +2936,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ english_us ] =
         {
-            < "Presentation" ; 0; > ;
+            < "%PRODUCTNAME Impress" ; 0; > ;
             < "General";            SID_SI_TP_MISC                  ; > ;
             < "View" ;          SID_SI_TP_CONTENTS              ; > ;
             < "Grid" ;          SID_SI_TP_SNAP                  ; > ;
@@ -3155,7 +3155,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Zeichnung" ; 0; > ;
+            < "%PRODUCTNAME Draw" ; 0; > ;
             < "Allgemein" ;         SID_SD_TP_MISC              ; > ;
             < "Ansicht" ;           SID_SD_TP_CONTENTS          ; > ;
             < "Raster" ;            SID_SD_TP_SNAP              ; > ;
@@ -3163,7 +3163,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ENGLISH] =
         {
-            < "Drawing" ; 0; > ;
+            < "%PRODUCTNAME Draw" ; 0; > ;
             < "General" ;           SID_SD_TP_MISC              ; > ;
             < "View" ;              SID_SD_TP_CONTENTS          ; > ;
             < "Grid" ;              SID_SD_TP_SNAP              ; > ;
@@ -3179,7 +3179,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ english_us ] =
         {
-            < "Drawing" ; 0; > ;
+            < "%PRODUCTNAME Draw" ; 0; > ;
             < "General" ;           SID_SD_TP_MISC              ; > ;
             < "View" ;          SID_SD_TP_CONTENTS          ; > ;
             < "Grid" ;          SID_SD_TP_SNAP              ; > ;
@@ -3398,17 +3398,17 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Diagramm" ; 0; > ;
+            < "Diagramme" ; 0; > ;
             < "Grundfarben" ;       SID_SCH_TP_DEFCOLORS ; > ;
         };
         ItemList [ ENGLISH ] =
         {
-            < "Chart" ; 0; > ;
+            < "Charts" ; 0; > ;
             < "Default colors" ;    SID_SCH_TP_DEFCOLORS ; > ;
         };
         ItemList [ english_us ] =
         {
-            < "Chart" ; 0; > ;
+            < "Charts" ; 0; > ;
             < "Default Colors" ;        SID_SCH_TP_DEFCOLORS ; > ;
         };
         ItemList [ language_user1 ] =
@@ -3794,17 +3794,12 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     {
         ItemList =
         {
-            < "Datenquellen" ; 0; > ;
+            < "%PRODUCTNAME Database" ; 0; > ;
             < "Verbindungen" ; SID_SB_CONNECTIONPOOLING; > ;
         };
         ItemList [ english ] =
         {
-            < "Data sources" ; 0; > ;
-            < "Connections" ; SID_SB_CONNECTIONPOOLING; > ;
-        };
-        ItemList [ english ] =
-        {
-            < "Data sources" ; 0; > ;
+            < "%PRODUCTNAME Database" ; 0; > ;
             < "Connections" ; SID_SB_CONNECTIONPOOLING; > ;
         };
         ItemList [ language_user1 ] =
@@ -3814,7 +3809,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         };
         ItemList [ english_us ] =
         {
-                 < "Data Sources" ; 0; > ;
+                 < "%PRODUCTNAME Database" ; 0; > ;
             < "Connections" ; SID_SB_CONNECTIONPOOLING; > ;
         };
         ItemList [ portuguese ] =
