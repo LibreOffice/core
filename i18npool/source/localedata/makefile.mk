@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.5 $
+#*  $Revision: 1.6 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-15 20:09:32 $
+#*  last change: $Author: hr $ $Date: 2003-07-16 17:43:07 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -110,7 +110,7 @@ APP1STDLIBS = \
 
 # Since saxparser is used to build other directories in this project, we need
 # to invoke deliver to push our updated libstatic*.dylib to $(SOLARLIBDIR)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 ALL : ALLTAR
     @+-deliver
 .ENDIF
