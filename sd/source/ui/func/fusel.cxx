@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:12:35 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,10 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
     BOOL bWaterCan = SD_MOD()->GetWaterCan();
     const bool bReadOnly = pDocSh->IsReadOnly();
+    // When the right mouse button is pressed then only select objects
+    // (and deselect others) as a preparation for showing the context
+    // menu.
+    const bool bSelectionOnly = rMEvt.IsRight();
 
     bMBDown = TRUE;
     bSelectionChanged = FALSE;
@@ -253,8 +257,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-    if (rMEvt.IsLeft() && !pView->IsAction() &&
-        (pView->IsFrameDragSingles() || !pView->HasMarkablePoints()))
+    if ((rMEvt.IsLeft() || rMEvt.IsRight())
+        && !pView->IsAction()
+        && (pView->IsFrameDragSingles() || !pView->HasMarkablePoints()))
     {
         /******************************************************************
         * KEIN BEZIER_EDITOR
@@ -382,8 +387,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if(pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
                 {
-                    // Objekt animieren
-                    bReturn = AnimateObj(pObj, aMDPos);
+                    // Animate object when not just selecting.
+                    if ( ! bSelectionOnly)
+                        bReturn = AnimateObj(pObj, aMDPos);
 
                     if (!bReturn && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
                     {
@@ -397,7 +403,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             // Neu: Doppelklick auf selektiertes Gruppenobjekt
                             // Gruppe betreten
-                            if(pObj && pObj->GetPage() == pPV->GetPage())
+                            if ( ! bSelectionOnly
+                                && pObj
+                                && pObj->GetPage() == pPV->GetPage())
                                 bReturn = pPV->EnterGroup(pObj);
                         }
                     }
@@ -496,7 +504,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
         }
     }
-    else if ( !bReadOnly && rMEvt.IsLeft() && !pView->IsAction())
+    else if ( !bReadOnly
+              && (rMEvt.IsLeft() || rMEvt.IsLeft())
+              && !pView->IsAction())
     {
         /**********************************************************************
         * BEZIER-EDITOR
@@ -689,6 +699,10 @@ BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
 BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
+    // When the right mouse button is pressed then only select objects
+    // (and deselect others) as a preparation for showing the context
+    // menu.
+    const bool bSelectionOnly = rMEvt.IsRight();
 
     if (bHideAndAnimate)
     {
@@ -748,9 +762,12 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     pSingleObj = pView->GetMarkList().GetMark(0)->GetObj();
                 }
 
-                if (nSlotId == SID_OBJECT_SELECT && pView->IsRotateAllowed() &&
-                     (pViewShell->GetFrameView()->IsClickChangeRotation() ||
-                      (pSingleObj && pSingleObj->GetObjInventor()==E3dInventor)))
+                if (nSlotId == SID_OBJECT_SELECT
+                    && pView->IsRotateAllowed()
+                    && (pViewShell->GetFrameView()->IsClickChangeRotation()
+                        || (pSingleObj
+                            && pSingleObj->GetObjInventor()==E3dInventor))
+                    && ! bSelectionOnly)
 
                 {
                     bTempRotation = TRUE;
@@ -799,9 +816,10 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
         }
-        else if (rMEvt.IsMod1() && !rMEvt.IsMod2() &&
-                 Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
-                 Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+        else if (rMEvt.IsMod1()
+            && !rMEvt.IsMod2()
+            && Abs(aPnt.X() - aMDPos.X()) < nDrgLog
+            && Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // Gruppe betreten
             pView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
