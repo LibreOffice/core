@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-01 16:12:25 $
+ *  last change: $Author: thb $ $Date: 2001-08-17 09:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ struct  SvxOpenGrf_Impl;
 class SvxOpenGraphicDialog
 {
 public:
-    /// New "insert graphics" dialog with given title
+    /// Create new "insert graphics" dialog with given title
     SvxOpenGraphicDialog    ( const String& rTitle );
     ~SvxOpenGraphicDialog   ();
 
