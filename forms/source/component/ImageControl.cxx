@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-22 09:35:33 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ Sequence<Type> OImageControlModel::_getTypes()
 DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
 OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
                     // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
     ,m_bReadOnly( sal_False )
@@ -362,17 +362,10 @@ void OImageControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(9)
-        DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
-        DECL_BOOL_PROP1(READONLY,                           BOUND);
-        DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
-        DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,    BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,       BOUND,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,       BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
-        DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
-    FRM_END_PROP_HELPER();
+    BEGIN_DESCRIBE_PROPERTIES( 2, OBoundControlModel )
+        DECL_BOOL_PROP1 ( READONLY,             BOUND );
+        DECL_PROP1      ( TABINDEX, sal_Int16,  BOUND );
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
