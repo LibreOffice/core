@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:33:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,14 +942,24 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, pButton)
     if(m_pTempPrinter)
     {
         m_pDocumentPrinterCopy->SetPrinterProps(m_pTempPrinter);
-        pTargetView->SetPrinter(m_pDocumentPrinterCopy);
+        pTargetView->SetPrinter(m_pDocumentPrinterCopy->Clone());
     }
 
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
     SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
-    SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
-    pDis->Execute(SID_PRINTDOCDIRECT,
-            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD/*, &aMergeSilent, 0L*/);
+    if(m_pTempPrinter)
+    {
+        SfxStringItem aPrinterName(SID_PRINTER_NAME, m_pTempPrinter->GetName());
+        pDis->Execute(SID_PRINTDOC,
+                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aPrinterName, 0L);
+    }
+    else
+    {
+        SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
+        pDis->Execute(SID_PRINTDOCDIRECT,
+                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD/*, &aMergeSilent, 0L*/);
+    }
+
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
     m_pWizard->enableButtons(WZB_FINISH, sal_True);
     return 0;
