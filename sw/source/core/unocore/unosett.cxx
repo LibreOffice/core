@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 09:36:46 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #endif
 #ifndef SVX_UNOFDESC_HXX
 #include <svx/unofdesc.hxx>
+#endif
+#ifndef _SVX_UNOMID_HXX
+#include <svx/unomid.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
@@ -1648,11 +1651,15 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
         if(SVX_NUM_BITMAP == rFmt.eType)
         {
             //GraphicURL
-            String sGrURL;
             const SvxBrushItem* pBrush = rFmt.GetGrfBrush();
-                if(pBrush && pBrush->GetGraphicLink())
-                sGrURL = *pBrush->GetGraphicLink();
-            aUString = sGrURL;
+            if(pBrush)
+            {
+                Any aAny;
+                pBrush->QueryValue( aAny, MID_GRAPHIC_URL );
+                aAny >>= aUString;
+            }
+            else
+                aUString = aEmptyStr;
             pData = new PropValData((void*)&aUString, UNO_NAME_GRAPHIC_URL, ::getCppuType((const OUString*)0));
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
@@ -1996,9 +2003,9 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                             pSetBrush = new SvxBrushItem(*pOrigBrush);
                         }
                         else
-                            pSetBrush = new SvxBrushItem(sBrushURL, aEmptyStr, GPOS_AREA);
+                            pSetBrush = new SvxBrushItem(aEmptyStr, aEmptyStr, GPOS_AREA);
                     }
-                    pSetBrush->SetGraphicLink( sBrushURL );
+                    pSetBrush->PutValue( pData->aVal, MID_GRAPHIC_URL );
                 }
                 break;
                 case 15: //UNO_NAME_GRAPHIC_BITMAP,
