@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XComboBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:39 $
+ *  last change:$Date: 2003-09-08 10:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,10 @@
 
 package ifc.awt;
 
-
-import com.sun.star.awt.XComboBox;
 import lib.MultiMethodTest;
 import lib.Status;
+
+import com.sun.star.awt.XComboBox;
 
 /**
 * Testing <code>com.sun.star.awt.XComboBox</code>
@@ -93,16 +93,17 @@ public class _XComboBox extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestActionListener implements com.sun.star.awt.XActionListener {
-        public boolean disposingCalled = false ;
-        public boolean actionPerformedCalled = false ;
+    protected class TestActionListener
+        implements com.sun.star.awt.XActionListener {
+        public boolean disposingCalled = false;
+        public boolean actionPerformedCalled = false;
 
         public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true ;
+            disposingCalled = true;
         }
 
         public void actionPerformed(com.sun.star.awt.ActionEvent e) {
-            actionPerformedCalled = true ;
+            actionPerformedCalled = true;
         }
 
     }
@@ -110,45 +111,44 @@ public class _XComboBox extends MultiMethodTest {
     /**
     * Listener implementation which sets flags on appropriate method calls
     */
-    protected class TestItemListener implements com.sun.star.awt.XItemListener {
-        public boolean disposingCalled = false ;
-        public boolean itemStateChangedCalled = false ;
+    protected class TestItemListener
+        implements com.sun.star.awt.XItemListener {
+        public boolean disposingCalled = false;
+        public boolean itemStateChangedCalled = false;
 
         public void disposing(com.sun.star.lang.EventObject e) {
-            disposingCalled = true ;
+            disposingCalled = true;
         }
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent e) {
-            itemStateChangedCalled = true ;
+            itemStateChangedCalled = true;
         }
 
     }
-    private TestActionListener actionListener = new TestActionListener() ;
-    private TestItemListener itemListener = new TestItemListener() ;
-    short lineCount = 0 ;
-    short itemCount = 0 ;
+    private TestActionListener actionListener = new TestActionListener();
+    private TestItemListener itemListener = new TestItemListener();
+    short lineCount = 0;
+    short itemCount = 0;
 
     /**
     * !!! Can be checked only interactively !!!
     */
     public void _addItemListener() {
 
-        boolean result = true ;
-        oObj.addItemListener(itemListener) ;
+        oObj.addItemListener(itemListener);
 
-        tRes.tested("addItemListener()", Status.skipped(true)) ;
+        tRes.tested("addItemListener()", Status.skipped(true));
     }
 
     /**
     * !!! Can be checked only interactively !!!
     */
     public void _removeItemListener() {
-        requiredMethod("addItemListener()") ;
+        requiredMethod("addItemListener()");
 
-        boolean result = true ;
-        oObj.removeItemListener(itemListener) ;
+        oObj.removeItemListener(itemListener);
 
-        tRes.tested("removeItemListener()", Status.skipped(true)) ;
+        tRes.tested("removeItemListener()", Status.skipped(true));
     }
 
     /**
@@ -156,22 +156,20 @@ public class _XComboBox extends MultiMethodTest {
     */
     public void _addActionListener() {
 
-        boolean result = true ;
-        oObj.addActionListener(actionListener) ;
+        oObj.addActionListener(actionListener);
 
-        tRes.tested("addActionListener()", Status.skipped(true)) ;
+        tRes.tested("addActionListener()", Status.skipped(true));
     }
 
     /**
     * !!! Can be checked only interactively !!!
     */
     public void _removeActionListener() {
-        requiredMethod("addActionListener()") ;
+        requiredMethod("addActionListener()");
 
-        boolean result = true ;
-        oObj.removeActionListener(actionListener) ;
+        oObj.removeActionListener(actionListener);
 
-        tRes.tested("removeActionListener()", Status.skipped(true)) ;
+        tRes.tested("removeActionListener()", Status.skipped(true));
     }
 
     /**
@@ -184,13 +182,13 @@ public class _XComboBox extends MultiMethodTest {
     * </ul>
     */
     public void _addItem() {
-        requiredMethod("getItemCount()") ;
+        requiredMethod("getItemCount()");
 
-        boolean result = true ;
-        oObj.addItem("Item1", itemCount) ;
-        result = oObj.getItemCount() == itemCount + 1 ;
+        boolean result = true;
+        oObj.addItem("Item1", itemCount);
+        result = oObj.getItemCount() == itemCount + 1;
 
-        tRes.tested("addItem()", result) ;
+        tRes.tested("addItem()", result);
     }
 
     /**
@@ -203,14 +201,14 @@ public class _XComboBox extends MultiMethodTest {
     * </ul>
     */
     public void _addItems() {
-        executeMethod("addItem()") ;
+        executeMethod("addItem()");
 
-        boolean result = true ;
-        short oldCnt = oObj.getItemCount() ;
-        oObj.addItems(new String[] {"Item2", "Item3"}, oldCnt) ;
-        result = oObj.getItemCount() == oldCnt + 2 ;
+        boolean result = true;
+        short oldCnt = oObj.getItemCount();
+        oObj.addItems(new String[] { "Item2", "Item3" }, oldCnt);
+        result = oObj.getItemCount() == oldCnt + 2;
 
-        tRes.tested("addItems()", result) ;
+        tRes.tested("addItems()", result);
     }
 
     /**
@@ -224,15 +222,15 @@ public class _XComboBox extends MultiMethodTest {
     * </ul>
     */
     public void _removeItems() {
-        executeMethod("getItems()") ;
-        executeMethod("getItem()") ;
+        executeMethod("getItems()");
+        executeMethod("getItem()");
 
-        boolean result = true ;
-        short oldCnt = oObj.getItemCount() ;
-        oObj.removeItems((short)0, oldCnt) ;
-        result = oObj.getItemCount() == 0 ;
+        boolean result = true;
+        short oldCnt = oObj.getItemCount();
+        oObj.removeItems((short) 0, oldCnt);
+        result = oObj.getItemCount() == 0;
 
-        tRes.tested("removeItems()", result) ;
+        tRes.tested("removeItems()", result);
     }
 
     /**
@@ -241,10 +239,9 @@ public class _XComboBox extends MultiMethodTest {
     */
     public void _getItemCount() {
 
-        boolean result = true ;
-        itemCount = oObj.getItemCount() ;
+        itemCount = oObj.getItemCount();
 
-        tRes.tested("getItemCount()", itemCount >= 0) ;
+        tRes.tested("getItemCount()", itemCount >= 0);
     }
 
     /**
@@ -258,13 +255,13 @@ public class _XComboBox extends MultiMethodTest {
     * </ul>
     */
     public void _getItem() {
-        requiredMethod("addItems()") ;
+        requiredMethod("addItems()");
 
-        boolean result = true ;
-        String item = oObj.getItem(itemCount) ;
-        result = "Item1".equals(item) ;
+        boolean result = true;
+        String item = oObj.getItem(itemCount);
+        result = "Item1".equals(item);
 
-        tRes.tested("getItem()", result) ;
+        tRes.tested("getItem()", result);
     }
 
     /**
@@ -279,15 +276,15 @@ public class _XComboBox extends MultiMethodTest {
     * </ul>
     */
     public void _getItems() {
-        requiredMethod("addItems()") ;
+        requiredMethod("addItems()");
 
-        boolean result = true ;
-        String[] items = oObj.getItems() ;
+        boolean result = true;
+        String[] items = oObj.getItems();
         for (int i = itemCount; i < (itemCount + 3); i++) {
-            result &= ("Item" + (i+1)).equals(items[i]) ;
+            result &= ("Item" + (i + 1)).equals(items[i]);
         }
 
-        tRes.tested("getItems()", result) ;
+        tRes.tested("getItems()", result);
     }
 
     /**
@@ -296,10 +293,10 @@ public class _XComboBox extends MultiMethodTest {
     */
     public void _getDropDownLineCount() {
 
-        boolean result = true ;
-        lineCount = oObj.getDropDownLineCount() ;
+        boolean result = true;
+        lineCount = oObj.getDropDownLineCount();
 
-        tRes.tested("getDropDownLineCount()", result) ;
+        tRes.tested("getDropDownLineCount()", result);
     }
 
     /**
@@ -311,14 +308,12 @@ public class _XComboBox extends MultiMethodTest {
     * </ul>
     */
     public void _setDropDownLineCount() {
-        requiredMethod("getDropDownLineCount()") ;
+        requiredMethod("getDropDownLineCount()");
 
-        boolean result = true ;
-        oObj.setDropDownLineCount((short)(lineCount + 1)) ;
-        result = oObj.getDropDownLineCount() == lineCount + 1 ;
+        boolean result = true;
+        oObj.setDropDownLineCount((short) (lineCount + 1));
+        result = oObj.getDropDownLineCount() == lineCount + 1;
 
-        tRes.tested("setDropDownLineCount()", result) ;
+        tRes.tested("setDropDownLineCount()", result);
     }
 }
-
-

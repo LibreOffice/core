@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XControl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:38 $
+ *  last change:$Date: 2003-09-08 10:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.awt;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XView;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.awt.XControl</code>
@@ -156,18 +157,12 @@ public class _XControl extends MultiMethodTest {
     * Test calls the method. Then the the object ralation 'WINPEER' is
     * obtained, and compared with the peer, gotten from (XControl) oObj
     * variable.<p>
-    * Has <b> OK </b> status if peer gotten equals to peer obtained from
-    * object relation 'WINPEER'<p>
+    * Has <b> OK </b> status if peer gotten isn't null
     * The following method tests are to be completed successfully before :
-    * <ul>
-    *  <li> <code> createPeer() </code> : create peer using 'TOOLKIT'
-    *  and 'WINPEER' object relations</li>
-    * </ul>
     */
     public void _getPeer() {
         requiredMethod("createPeer()");
         boolean res = false;
-        XWindowPeer the_win = (XWindowPeer) tEnv.getObjRelation("WINPEER");
         XWindowPeer get = oObj.getPeer();
         if (get == null) {
             log.println("The method 'getPeer' returns NULL");
