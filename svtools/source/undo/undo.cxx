@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+ *  last change: $Author: thb $ $Date: 2001-08-01 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,36 +110,22 @@ class SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
     public:
                             TYPEINFO();
 
-#ifndef ENABLEUNICODE
-                            SfxListUndoAction( const String &rComment,
-                                const String rRepeatComment, USHORT Id, SfxUndoArray *pFather);
-#else
                             SfxListUndoAction( const UniString &rComment,
                                 const UniString rRepeatComment, USHORT Id, SfxUndoArray *pFather);
-#endif
     virtual void            Undo();
     virtual void            Redo();
     virtual void            Repeat(SfxRepeatTarget&);
     virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
 
-#ifndef ENABLEUNICODE
-    virtual String          GetComment() const;
-    virtual String          GetRepeatComment(SfxRepeatTarget&) const;
-#else
     virtual UniString           GetComment() const;
     virtual UniString           GetRepeatComment(SfxRepeatTarget&) const;
-#endif
     virtual USHORT          GetId() const;
 
 
     private:
 
     USHORT                  nId;
-#ifndef ENABLEUNICODE
-    String                  aComment, aRepeatComment;
-#else
     UniString                   aComment, aRepeatComment;
-#endif
 
 };
 
@@ -854,6 +840,9 @@ SfxUndoArray::~SfxUndoArray()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:59:06  hr
+    initial import
+
     Revision 1.44  2000/09/18 14:13:48  willem.vandorp
     OpenOffice header added.
 

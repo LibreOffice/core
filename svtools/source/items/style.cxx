@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-19 13:26:58 $
+ *  last change: $Author: thb $ $Date: 2001-08-01 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,12 +978,6 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
         else
             rStream >> nHelpId;
 
-#ifndef ENABLEUNICODE
-        // bei Unicode keine Konvertierung erforderlich
-        aName.Convert( (CharSet) nCharSet );
-        aParent.Convert( (CharSet) nCharSet );
-        aFollow.Convert( (CharSet) nCharSet );
-#endif
         SfxStyleSheetBase& rSheet = Make( aName, (SfxStyleFamily)nFamily , nMask);
         rSheet.SetHelpId( aHelpFile, nHelpId );
         // Hier erst einmal Parent und Follow zwischenspeichern
