@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:59:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@
 #include "docfunc.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
+#include "fusel.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -271,13 +272,7 @@ void ScViewFunc::ShowNote()
             // insertion of more note text, the note sometimes
             // displays the height to the previous note position.
             // A similar problem is also in ScUndoEditNote::Undo().
-            ScRange aDrawRange;
-            aDrawRange.aStart.SetCol(0);
-            aDrawRange.aStart.SetRow(0);
-            aDrawRange.aStart.SetTab(nTab);
-            aDrawRange.aEnd.SetCol(MAXCOL);
-            aDrawRange.aEnd.SetRow(MAXROW);
-            aDrawRange.aEnd.SetTab(nTab);
+                        ScRange aDrawRange(pDoc->GetRange(nTab, aNote.GetRectangle()));
             pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
             if (pUndo)
                 pDocSh->GetUndoManager()->AddUndoAction( new ScUndoNote( pDocSh,
@@ -328,13 +323,7 @@ void ScViewFunc::HideNote()
             // the previous note height position - despite the fact
             // that we have chosen to hide the note.
             // A similar problem is also in ScUndoEditNote::Undo().
-            ScRange aDrawRange;
-            aDrawRange.aStart.SetCol(0);
-            aDrawRange.aStart.SetRow(0);
-            aDrawRange.aStart.SetTab(nTab);
-            aDrawRange.aEnd.SetCol(MAXCOL);
-            aDrawRange.aEnd.SetRow(MAXROW);
-            aDrawRange.aEnd.SetTab(nTab);
+                        ScRange aDrawRange(pDoc->GetRange(nTab, aNote.GetRectangle()));
             pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
             if (pUndo)
                 pDocSh->GetUndoManager()->AddUndoAction( new ScUndoNote( pDocSh,
@@ -377,6 +366,13 @@ void ScViewFunc::EditNote()
 
         if (pObject)
         {
+            FuPoor* pDraw = GetDrawFuncPtr();
+            if ( pDraw )
+            {
+                FuSelection* pSel = static_cast<FuSelection*>(pDraw);
+                // #i33764# Enable the resize handles before editing.
+                pSel->ActivateNoteHandles(pObject);
+            }
             //  Shown-Flag nicht veraendern
 
             //  Objekt aktivieren (wie in FuSelection::TestComment)
