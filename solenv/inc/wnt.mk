@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 15:00:31 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:46:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -377,7 +377,6 @@ STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
 
-.IF "$(COMEX)" =="8" || "$(COMEX)" > "9"
 .IF "$(COMEX)"=="10"
 LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
@@ -385,12 +384,8 @@ LIBSTLPORTST=stlport_vc71_static.lib
 LIBSTLPORT=stlport_vc7.lib
 LIBSTLPORTST=stlport_vc7_static.lib
 .ENDIF
-ATL_INCLUDE=$(COMPATH)$/atlmfc$/include
-.ELSE
-LIBSTLPORT=stlport_vc6.lib
-LIBSTLPORTST=stlport_vc6_static.lib
-ATL_INCLUDE=$(COMPATH)$/atl$/include
-.ENDIF
+ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include 
+ATL_LIB*=$(COMPATH)$/atlmfc$/lib 
 
 .IF "$(USE_SHELL)"=="4nt"
 LIBMGR=lib $(NOLOGO)
