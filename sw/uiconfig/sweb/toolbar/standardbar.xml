@@ -15,7 +15,7 @@
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:helpid="5509"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:PrintPreview" toolbar:helpid="5325"/>
- <toolbar:toolbaritem xlink:href=".uno:SourceView" toolbar:text="HTML Source" toolbar:helpid="5675"/>
+ <toolbar:toolbaritem xlink:href=".uno:SourceView" toolbar:helpid="5675"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"/>
@@ -30,7 +30,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:text="Insert Graphics" toolbar:helpid="10241"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="10593"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="5961"/>
