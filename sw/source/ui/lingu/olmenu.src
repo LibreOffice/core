@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ String STR_WORD
     Text [ portuguese ] = "Palavra em " ;
     Text [ english_us ] = "word is " ;
     Text [ portuguese_brazilian ] = "Wort ist " ;
-    Text [ swedish ] = "ord är " ;
+    Text [ swedish ] = "Ordet är  " ;
     Text [ danish ] = "Ordet er " ;
     Text [ italian ] = "Il termine è " ;
     Text [ spanish ] = "La palabra es " ;
@@ -224,7 +224,7 @@ String STR_PARAGRAPH
     Text [ portuguese ] = "Parágrafo em " ;
     Text [ english_us ] = "Paragraph is " ;
     Text [ portuguese_brazilian ] = "Absatz ist " ;
-    Text [ swedish ] = "Stycket är " ;
+    Text [ swedish ] = "Stycket är  " ;
     Text [ danish ] = "Afsnittet er " ;
     Text [ italian ] = "Il paragrafo è " ;
     Text [ spanish ] = "El párrafo es  " ;
