@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetstrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 16:36:48 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,8 +615,8 @@ int INetMessageOStream::PutMsgLine (
         if (pLB == NULL)
             return INETSTREAM_STATUS_WOULDBLOCK;
 
-        ULONG nDocSiz = pTargetMsg->GetDocumentSize();
-        ULONG nWrite  = 0;
+        sal_Size nDocSiz = pTargetMsg->GetDocumentSize();
+        sal_Size nWrite  = 0;
 
         ErrCode status = pLB->FillAppend ((sal_Char *)pData, nSize, &nWrite);
         pTargetMsg->SetDocumentSize (nDocSiz + nWrite);
@@ -978,12 +978,12 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine (
 
         if (eState == INETMSG_EOL_BEGIN)
         {
-            ULONG nRead = pMsgBuffer->Tell();
+            sal_Size nRead = pMsgBuffer->Tell();
             if (nRead > 0)
             {
                 // Emit buffer.
-                ULONG nDocSiz = pMsg->GetDocumentSize();
-                ULONG nWrite  = 0;
+                sal_Size nDocSiz = pMsg->GetDocumentSize();
+                sal_Size nWrite  = 0;
 
                 pLB->FillAppend (
                     (sal_Char *)(pMsgBuffer->GetData()), nRead, &nWrite);
@@ -1269,9 +1269,9 @@ int INetMessageDecode64Stream_Impl::PutMsgLine (
             if (*pData == '=')
             {
                 // Final pad character -> Done.
-                ULONG nDocSiz = pMsg->GetDocumentSize();
-                ULONG nRead   = pMsgWrite - pMsgBuffer;
-                ULONG nWrite  = 0;
+                sal_Size nDocSiz = pMsg->GetDocumentSize();
+                sal_Size nRead   = pMsgWrite - pMsgBuffer;
+                sal_Size nWrite  = 0;
 
                 pLB->FillAppend (pMsgBuffer, nRead, &nWrite);
                 pMsg->SetDocumentSize (nDocSiz + nWrite);
@@ -1287,9 +1287,9 @@ int INetMessageDecode64Stream_Impl::PutMsgLine (
                 if ((*pData == '\r') || (*pData == '\n')) pData++;
 
                 // Store decoded message buffer contents.
-                ULONG nDocSiz = pMsg->GetDocumentSize();
-                ULONG nRead   = pMsgWrite - pMsgBuffer;
-                ULONG nWrite  = 0;
+                sal_Size nDocSiz = pMsg->GetDocumentSize();
+                sal_Size nRead   = pMsgWrite - pMsgBuffer;
+                sal_Size nWrite  = 0;
 
                 pLB->FillAppend (pMsgBuffer, nRead, &nWrite);
                 pMsg->SetDocumentSize (nDocSiz + nWrite);
