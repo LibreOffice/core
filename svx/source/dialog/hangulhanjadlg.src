@@ -1,0 +1,230 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hangulhanjadlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:00:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#include "helpid.hrc"
+
+#ifndef SVX_HANGUL_HANJA_DLG_HRC
+#include "hangulhanjadlg.hrc"
+#endif
+
+ModalDialog RID_SVX_MDLG_HANGULHANJA
+{
+    HelpId = HID_DIALOG_HANGULHANJA;
+    Size = MAP_APPFONT( 287, 175 );
+    OutputSize = TRUE;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE;
+
+    Text = "Hangul/Hanja Konvertierung";
+    Text [ english_us ] = "Hangul/Hanja Conversion";
+
+    PushButton PB_FIND
+    {
+        Pos = MAP_APPFONT( 192, 23 );
+        Size = MAP_APPFONT( 30, 14 );
+
+        Text = "Suchen";
+        Text [ english_us ] = "~Find";
+    };
+
+    ListBox LB_SUGGESTIONS
+    {
+        Pos = MAP_APPFONT( 51, 46 );
+        Size = MAP_APPFONT( 171, 30 );
+        Border = TRUE;
+    };
+
+    FixedText FT_FORMAT
+    {
+        Pos = MAP_APPFONT( 6, 81 );
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text = "Format";
+        Text [ english_us ] = "Format";
+    };
+
+    RadioButton RB_SIMPLE_CONVERSION
+    {
+        Pos = MAP_APPFONT( 51, 81 );
+        Size = MAP_APPFONT( 55, 8 );
+
+        Group = TRUE;
+
+        Text = "Hangul/Hanja";
+        Text [ english_us ] = "~Hangul/Hanja";
+    };
+
+    RadioButton RB_HANJA_HANGUL_BRACKETED
+    {
+        Pos = MAP_APPFONT( 109, 81 );
+        Size = MAP_APPFONT( 55, 8 );
+
+        Text = "Hanja (Hangul)";
+        Text [ english_us ] = "Hanja (Han~gul)";
+    };
+
+    RadioButton RB_HANGUL_HANJA_BRACKETED
+    {
+        Pos = MAP_APPFONT( 167, 81 );
+        Size = MAP_APPFONT( 55, 8 );
+
+        Text = "Hangul (Hanja)";
+        Text [ english_us ] = "Hang~ul (Hanja)";
+    };
+
+    RadioButton RB_HANGUL_HANJA_ABOVE
+    {
+        Pos = MAP_APPFONT( 51, 95 );
+        Size = MAP_APPFONT( 55, 16 );
+
+        // this is the _primary_ text
+        Text = "Hangul";
+        Text [ english_us ] = "Hangu~l";
+    };
+
+    RadioButton RB_HANGUL_HANJA_BELOW
+    {
+        Pos = MAP_APPFONT( 109, 95 );
+        Size = MAP_APPFONT( 55, 16 );
+
+        // this is the _primary_ text
+        Text = "Hangul";
+        Text [ english_us ] = "Hang~ul";
+    };
+
+    RadioButton RB_HANJA_HANGUL_ABOVE
+    {
+        Pos = MAP_APPFONT( 51, 114 );
+        Size = MAP_APPFONT( 55, 16 );
+
+        // this is the _primary_ text
+        Text = "Hanja";
+        Text [ english_us ] = "Han~ja";
+    };
+
+    RadioButton RB_HANJA_HANGUL_BELOW
+    {
+        Pos = MAP_APPFONT( 109, 114 );
+        Size = MAP_APPFONT( 55, 16 );
+
+        // this is the _primary_ text
+        Text = "Hanja";
+        Text [ english_us ] = "Ha~nja";
+    };
+
+    FixedText FT_CONVERSION
+    {
+        Pos = MAP_APPFONT( 6, 134 );
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text = "Konvertierung";
+        Text [ english_us ] = "Conversion";
+    };
+
+    CheckBox CB_HANGUL_ONLY
+    {
+        Pos = MAP_APPFONT( 51, 134 );
+        Size = MAP_APPFONT( 55, 8 );
+
+        Text = "Nur Hangul";
+        Text [ english_us ] = "Hangul ~only";
+    };
+
+    CheckBox CB_HANJA_ONLY
+    {
+        Pos = MAP_APPFONT( 109, 134 );
+        Size = MAP_APPFONT( 55, 8 );
+
+        Text = "Nur Hanja";
+        Text [ english_us ] = "Hanja onl~y";
+    };
+
+    // this element is only for determining where our radio button group ends (in both directions)
+    FixedText FT_RESIZE_ANCHOR
+    {
+        Pos = MAP_APPFONT( 226, 133 );
+    };
+
+    CheckBox CB_REPLACE_BY_CHARACTER
+    {
+        Pos = MAP_APPFONT( 226, 81 );
+        Size = MAP_APPFONT( 55, 24 );
+
+        WordBreak = TRUE;
+
+        Text = "Replace b~y character";
+        Text [ english_us ] = "Einzelne Zeichen ersetzen";
+    };
+
+    String STR_HANGUL
+    {
+        Text = "Hangul";
+        Text [ english_us ] = "Hangul";
+    };
+
+    String STR_HANJA
+    {
+        Text = "Hanja";
+        Text [ english_us ] = "Hanja";
+    };
+};
