@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:18:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@ public:
     ~Slideshow();
 
     // actions
-    void startShow( PresentationSettings* pPresSettings = 0 );  // a.k.a. FuSlideShow::StartShow()
-    void startPreview(
+    bool startShow( PresentationSettings* pPresSettings = 0 );  // a.k.a. FuSlideShow::StartShow()
+    bool startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent = 0 );
@@ -151,6 +151,7 @@ public:
     bool pause( bool bPause );
 
     // settings
+    void setRehearseTimings( bool bRehearseTimings );
     bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
     bool isTerminated();                                // a.k.a. FuSlideShow::IsTerminated();
     bool isAlwaysOnTop();                               // a.k.a. FuSlideShow::IsAlwaysOnTop();
