@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-07 09:20:36 $
+ *  last change: $Author: lla $ $Date: 2001-03-19 14:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@ void Desktop::Main()
         catch(com::sun::star::uno::Exception &e)
         {
             bTerminate = true;
+            rtl::OUString sError = rtl::OUString::createFromAscii("Unable to retrieve application configuration data: ");
+            sError += e.Message;
+            Application::Abort(sError);
         }
     }
 
