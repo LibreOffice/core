@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidStorageException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:23:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,28 @@
 #ifndef __com_sun_star_embed_InvalidStorageException_idl__
 #define __com_sun_star_embed_InvalidStorageException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
-#include <com/sun/star/uno/Exception.idl>
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
+//============================================================================
 
-// DocMerge from xml: exception com::sun::star::embed::InvalidStorageException
 /** This exception can be thrown in case a storage is invalid.
+
+    <p>
     For example in case it is broken one.
+    </p>
  */
-exception InvalidStorageException: com::sun::star::uno::Exception
+exception InvalidStorageException: com::sun::star::io::IOException
 {
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
