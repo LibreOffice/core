@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM  *****  BASIC  *****
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM  *****  BASIC  *****
 Public DialogModel as Object
 Public DialogConvert as Object
 Public DialogPassword as Object
@@ -51,7 +51,7 @@ Function ConvertDocument()
 			Else
 				IncreaseStatusvalue(SBRelGet/3)
 			End If
-			RangeIndex = Ubound(RangeList(), 1)
+			RangeIndex = Ubound(RangeList())
 			If RangeIndex &gt; -1 Then
 				ConvertThehardWay(RangeList(), True, False)
 				MakeStyleEnumeration(True)
@@ -207,30 +207,33 @@ End Sub
 
 Sub SelectCurrency()
 Dim AddtoList as Boolean
-Dim UpRangeList as Integer
+Dim NullList()
 Dim OldCurrIndex as Integer
 	bRangeListDefined = False
 	OldCurrIndex = CurrIndex
 	CurrIndex = DialogModel.lstCurrencies.SelectedItems(0)
-	InitializeCurrencyValues(CurrIndex)
-	CurExtension(0) = LangIDValue(CurrIndex,0,2)
-	CurExtension(1) = LangIDValue(CurrIndex,1,2)
-	CurExtension(2) = LangIDValue(CurrIndex,2,2)
-	If DialogModel.Step = 1 Then
-		EnableStep1DialogControls(False,False, False)
-		If DialogModel.optCellTemplates.State = 1 Then
-			EnableStep1DialogControls(False, False, False)
-			CreateStyleEnumeration()
-		ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
-			UpRangeList = UBound(RangeList())
-			ReDim RangeList(UpRangeList) &apos;as String
-			CreateRangeEnumeration(False)
-		ElseIf DialogModel.optSelRange.State= 1 Then
-			&apos;Preselected Range
+	If OldCurrIndex &lt;&gt; CurrIndex Then
+		InitializeCurrencyValues(CurrIndex)
+		CurExtension(0) = LangIDValue(CurrIndex,0,2)
+		CurExtension(1) = LangIDValue(CurrIndex,1,2)
+		CurExtension(2) = LangIDValue(CurrIndex,2,2)
+		If DialogModel.Step = 1 Then
+			EnableStep1DialogControls(False,False, False)
+			If DialogModel.optCellTemplates.State = 1 Then
+				EnableStep1DialogControls(False, False, False)
+				CreateStyleEnumeration()
+			ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
+				CreateRangeEnumeration(False)
+				If Ubound(RangeList()) = -1 Then
+					DialogModel.lstSelection.StringItemList() = NullList()
+				End If
+			ElseIf DialogModel.optSelRange.State= 1 Then
+				&apos;Preselected Range
+			End If
+			EnableStep1DialogControls(True, True, True)
+		ElseIf DialogModel.Step = 2 Then
+			EnableStep2DialogControls(True)
 		End If
-		EnableStep1DialogControls(True, True, True)
-	ElseIf DialogModel.Step = 2 Then
-		EnableStep2DialogControls(True)
 	End If
 End Sub
 

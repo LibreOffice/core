@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
 REM  *****  BASIC  *****
 
 &apos; Zu diskutieren:
@@ -15,7 +15,7 @@ REM  *****  BASIC  *****
 Public Const SBRANGEUBOUND = 20
 Public StyleRangeAssignmentList(SBRANGEUBOUND)as String
 Public SelRangeList(SBRANGEUBOUND) as String
-Public RangeList(SBRANGEUBOUND, 1) as String
+Public RangeList(SBRANGEUBOUND) as String
 Public UnprotectList() as String
 Public FilterNames(2,1) as String
 Public bDoUnProtect as Boolean

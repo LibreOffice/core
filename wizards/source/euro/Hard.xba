@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Hard" script:language="StarBasic">REM  *****  BASIC  *****
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Hard" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
-&apos;ToDo: WÃ¤hrung wechseln und dann sehen, ob die Listbox mit den neuen Ranges aufgefrischt wird
 
 
 Sub CreateRangeList()
@@ -20,7 +19,7 @@ Dim MaxIndex as Integer
 		oRanges = osheet.CellFormatRanges.createEnumeration()
 		MaxIndex = AddSheetRanges(oRanges, MaxIndex, oSheet, False)
 		If MaxIndex &gt; -1 Then
-			ReDim Preserve RangeList(MaxIndex,1)
+			ReDim Preserve RangeList(MaxIndex)
 		End If
 	Else
 		CreateRangeEnumeration(False)
@@ -55,17 +54,17 @@ Dim sStatustext as String
 		If Not bAutoPilot Then
 			oStatusline.SetText(sStsRELRANGES)  	&apos;&quot;Erfassung der relevanten Bereiche...&quot;
 			&apos; Die Ranges sind schon definiert
-			For i = 0 To Ubound(RangeList(),1)
-				If RangeList(i,0) &lt;&gt; &quot;&quot; AND Rangelist(i,1) = True Then
+			For i = 0 To Ubound(RangeList())
+				If RangeList(i) &lt;&gt; &quot;&quot; Then
 					AddSingleItemToListBox(DialogModel.lstSelection, RangeList(i))
 				End If
 			Next
 		End If
 	End If
 	If MaxIndex &gt; -1 Then
-		ReDim Preserve RangeList(MaxIndex,1)
-&apos;	Else
-&apos;		ReDim RangeList(,1)
+		ReDim Preserve RangeList(MaxIndex)
+	Else
+		ReDim RangeList()
 	End If
 	Rangeindex = MaxIndex
 End Sub
@@ -88,14 +87,13 @@ Dim MaxIndex as Integer
 			End If
 			&apos; The Ranges are only passed to an Array when the whole Document is the basis
 			&apos; Redimension the RangeList Array if necessary
-			MaxIndex = Ubound(RangeList(),1)
+			MaxIndex = Ubound(RangeList())
 			r = r + 1
 			If r &gt; MaxIndex Then
 				MaxIndex = MaxIndex + SBRANGEUBOUND
-				ReDim Preserve RangeList(MaxIndex,1)
+				ReDim Preserve RangeList(MaxIndex)
 			End If
-			RangeList(r,0) = RangeName
-			RangeList(r,1) = True
+			RangeList(r) = RangeName
 		End If
 	Wend
 	AddSheetRanges = r

@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
 
 Public oPreSelRange as Object
 
-&apos; Todo Den Bug mit der Statuszeilengeschichte überprüfen
-&apos; Todo Vorselektion der Listbox
-&apos; Mauspointer umschalten:
-
-&apos; Todo: In der Hilfe sollte ein Hinweis erscheinen, dass immer zwei Nachkommastellen angezeigt werden
-&apos; und die resultierende Betrag ebenfalls bis auf zwei Stellen nach dem Komma gerundet wird
 
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
@@ -259,7 +253,6 @@ End Sub
 
 Sub AddRangeToListbox(oLocRange as Object)
 	EmptyListBox(DialogModel.lstSelection)
-	&apos; Den Namen der Range ermitteln und in ein Array packen
 	PreName = RetrieveRangeNamefromAddress(oLocRange)
 	AddSingleItemToListbox(DialogModel.lstSelection, Prename)&apos;, 0)
 	SelectListboxItem(DialogModel.lstCurrencies, CurrIndex)
@@ -268,7 +261,6 @@ End Sub
 
 
 Sub CheckRangeSelection(Optional oEvent)
-&apos; Todo: Beim Startup werden die folgenden zwei Zeilen doppelt ausgeführt
 	EmptySelection()
 	AddRangeToListbox(oPreSelRange)
 	oPreSelRange = AddSelectedRangeToSelRangesEnum()	
