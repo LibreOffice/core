@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:16:22 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,161 @@
 #ifndef DBAUI_TOOLBOX_HXX
 #include "toolbox.hrc"
 #endif
+
+#define IL_TABLESUBCRIPTION \
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
+\
+    IdList = {\
+        ID_NEW_TABLE_DESIGN;\
+        ID_EDIT_TABLE;\
+        ID_DROP_TABLE;\
+        };\
+    IdCount = {\
+    3;\
+    }
+
+ImageList IMG_TABLESUBCRIPTION_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_tblscr.bmp";
+    };
+    IL_TABLESUBCRIPTION ;
+};
+ImageList IMG_TABLESUBCRIPTION_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch_tblscr.bmp";
+    };
+    IL_TABLESUBCRIPTION ;
+};
+ImageList IMG_TABLESUBCRIPTION_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_tblscr.bmp";
+    };
+    IL_TABLESUBCRIPTION ;
+};
+ImageList IMG_TABLESUBCRIPTION_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lch_tblscr.bmp";
+    };
+    IL_TABLESUBCRIPTION ;
+};
+
+
+//-------------------------------------------------------------------------
+#define IL_QUERYADMINISTRATION \
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
+\
+    IdList = {\
+        ID_NEW_QUERY_DESIGN;\
+        ID_NEW_QUERY_SQL;\
+        ID_EDIT_QUERY_DESIGN;\
+        ID_EDIT_QUERY_SQL;\
+        ID_DROP_QUERY;\
+        ID_RENAME_ENTRY;\
+        };\
+    IdCount = {\
+    6;\
+    }
+
+ImageList IMG_QUERYADMINISTRATION_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_qryadmin.bmp";
+    };
+    IL_QUERYADMINISTRATION ;
+};
+ImageList IMG_QUERYADMINISTRATION_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch_qryadmin.bmp";
+    };
+    IL_QUERYADMINISTRATION ;
+};
+ImageList IMG_QUERYADMINISTRATION_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_qryadmin.bmp";
+    };
+    IL_QUERYADMINISTRATION ;
+};
+ImageList IMG_QUERYADMINISTRATION_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lch_qryadmin.bmp";
+    };
+    IL_QUERYADMINISTRATION ;
+};
+//-------------------------------------------------------------------------
+#define IL_DOCUMENTLINKS \
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
+\
+    IdList = {\
+        ID_NEW_LINK;\
+        ID_EDIT_LINK;\
+        ID_DROP_LINK;\
+        ID_OPEN_DOCUMENT;\
+        ID_EDIT_DOCUMENT;\
+        ID_CREATE_NEW_DOC;\
+        };\
+    IdCount = {\
+    6;\
+    }
+
+ImageList IMG_DOCUMENTLINKS_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_doclinks.bmp";
+    };
+    IL_DOCUMENTLINKS ;
+};
+ImageList IMG_DOCUMENTLINKS_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch_doclinks.bmp";
+    };
+    IL_DOCUMENTLINKS ;
+};
+ImageList IMG_DOCUMENTLINKS_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_doclinks.bmp";
+    };
+    IL_DOCUMENTLINKS ;
+};
+ImageList IMG_DOCUMENTLINKS_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lch_doclinks.bmp";
+    };
+    IL_DOCUMENTLINKS ;
+};
 
 //-------------------------------------------------------------------------
 TabDialog DLG_DATABASE_ADMINISTRATION
@@ -524,6 +679,26 @@ Image IMG_DATABASE_NEW
 Image IMG_DATABASE_DELETED
 {
     ImageBitmap = Bitmap { File = "db_deleted.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image IMG_DATABASE_SCH
+{
+    ImageBitmap = Bitmap { File = "db_sch.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image IMG_DATABASE_MODIFIED_SCH
+{
+    ImageBitmap = Bitmap { File = "db_modified_sch.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image IMG_DATABASE_NEW_SCH
+{
+    ImageBitmap = Bitmap { File = "db_new_sch.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image IMG_DATABASE_DELETED_SCH
+{
+    ImageBitmap = Bitmap { File = "db_deleted_sch.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
@@ -2257,22 +2432,20 @@ TabPage PAGE_TABLESUBSCRIPTION
         Align = BOXALIGN_TOP;
         Customize = FALSE;
         HelpId = HID_DSADMIN_TABLE_TOOLBOX;
+        ItemImageList = IMG_TABLESUBCRIPTION_SC ;
         ItemList =
         {
             ToolBoxItem
             {
                 MID_NEW_TABLE_DESIGN
-                ItemBitmap = Bitmap { File = "tablenew_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_EDIT_TABLE
-                ItemBitmap = Bitmap { File = "tableedit_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_DROP_TABLE
-                ItemBitmap = Bitmap { File = "tabledrop_sc.bmp"; };
             };
         };
     };
@@ -2417,37 +2590,32 @@ TabPage PAGE_QUERYADMINISTRATION
         Align = BOXALIGN_TOP;
         Customize = FALSE;
         HelpId = HID_DSADMIN_QUERY_TOOLBOX;
+        ItemImageList = IMG_QUERYADMINISTRATION_SC ;
         ItemList =
         {
             ToolBoxItem
             {
                 MID_QUERY_NEW_DESIGN
-                ItemBitmap = Bitmap { File = "querynewdesign_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_QUERY_NEW_SQL
-                ItemBitmap = Bitmap { File = "querynewsql_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_QUERY_EDIT_DESIGN
-                ItemBitmap = Bitmap { File = "queryeditdesign_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_QUERY_EDIT_SQL
-                ItemBitmap = Bitmap { File = "queryeditsql_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_QUERY_DROP
-                ItemBitmap = Bitmap { File = "querydrop_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_RENAME_ENTRY
-                ItemBitmap = Bitmap { File = "rename_sc.bmp"; };
             };
         };
     };
@@ -2506,22 +2674,20 @@ TabPage PAGE_DOCUMENTLINKS
         Align = BOXALIGN_TOP;
         Customize = FALSE;
         HelpId = HID_DSADMIN_BOOKMARK_TOOLBOX;
+        ItemImageList = IMG_DOCUMENTLINKS_SC ;
         ItemList =
         {
             ToolBoxItem
             {
                 MID_LINK_NEW
-                ItemBitmap = Bitmap { File = "linknew_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_LINK_EDIT
-                ItemBitmap = Bitmap { File = "linkedit_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_LINK_DROP
-                ItemBitmap = Bitmap { File = "linkdrop_sc.bmp"; };
             };
             ToolBoxItem
             {
@@ -2530,12 +2696,10 @@ TabPage PAGE_DOCUMENTLINKS
             ToolBoxItem
             {
                 MID_DOCUMENT_OPEN
-                ItemBitmap = Bitmap { File = "docopen_sc.bmp"; };
             };
             ToolBoxItem
             {
                 MID_DOCUMENT_EDIT
-                ItemBitmap = Bitmap { File = "docedit_sc.bmp"; };
             };
             ToolBoxItem
             {
@@ -2544,7 +2708,6 @@ TabPage PAGE_DOCUMENTLINKS
             ToolBoxItem
             {
                 MID_DOCUMENT_CREATE_NEW
-                ItemBitmap = Bitmap { File = "formnew_sc.bmp"; };
                 DropDown = TRUE ;
             };
         };
@@ -3387,6 +3550,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.94  2002/02/26 14:16:22  kz
+ *  Merge SRC641: 26.02.02 - 15:15:57
+ *
  *  Revision 1.93  2002/02/22 21:06:32  vg
  *  Merge SRC641: 22.02.02 - 22:05:53
  *
