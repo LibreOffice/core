@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:36:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,8 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
         for( i = 0; i < nTokenCount; i++ )
         {
             String sPth(aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
-            sPth = URIHelper::SmartRelToAbs(sPth);
+            sPth = URIHelper::SmartRel2Abs(
+                INetURLObject(), sPth, URIHelper::GetMaybeFileHdl());
 
             if(i && lcl_FindSameEntry(aDirArr, sPth))
             {
