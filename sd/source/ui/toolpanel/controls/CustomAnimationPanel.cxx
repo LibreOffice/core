@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPanel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:25:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "CustomAnimationPanel.hxx"
 
+#include "taskpane/TaskPaneControlFactory.hxx"
+
 #include "strings.hrc"
 #include "sdresid.hxx"
 
@@ -83,6 +85,12 @@ CustomAnimationPanel::CustomAnimationPanel(TreeNode* pParent, ViewShellBase& rBa
 CustomAnimationPanel::~CustomAnimationPanel()
 {
     delete mpWrappedControl;
+}
+
+std::auto_ptr<ControlFactory> CustomAnimationPanel::CreateControlFactory (ViewShellBase& rBase)
+{
+    return std::auto_ptr<ControlFactory>(
+        new ControlFactoryWithArgs1<CustomAnimationPanel,ViewShellBase>(rBase));
 }
 
 Size CustomAnimationPanel::GetPreferredSize()
