@@ -1,0 +1,5 @@
+#properties needed for dbbaccess
+
+jdbc.url=mysql://jakobus:3306/testDB
+jdbc.user=unxsols
+jdbc.password=unxsols
