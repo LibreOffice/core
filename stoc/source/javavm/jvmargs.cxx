@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 12:14:56 $
+ *  last change: $Author: jbu $ $Date: 2002-04-29 14:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,10 @@
 #include "jvmargs.hxx"
 
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace rtl;
 
@@ -126,10 +128,10 @@ namespace stoc_javavm {
             _vmtype = right;
 
         else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemClasspath"))))
-            setSystemClasspath(right);
+            addSystemClasspath(right);
 
         else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("UserClasspath"))))
-            setUserClasspath(right);
+            addUserClasspath(right);
 
         else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("DisableAsyncGC"))))
             setDisableAsyncGC(right.toInt32());
@@ -232,18 +234,37 @@ namespace stoc_javavm {
         _debugPort = jiValue;
     }
 
-    void JVM::setSystemClasspath(const OUString & classpath) throw() {
-        OString tmp = OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("JVM::setSystemClasspath: %s", tmp.getStr());
+    void JVM::addSystemClasspath(const OUString & classpath) throw() {
+        if( classpath.getLength() )
+        {
+            OString tmp = OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US);
+            OSL_TRACE("JVM::addSystemClasspath: %s", tmp.getStr());
 
-        _systemClasspath = classpath;
+            OUStringBuffer buf(_systemClasspath.getLength() +1 + classpath.getLength());
+            if( _systemClasspath.getLength() )
+            {
+                buf.append( _systemClasspath );
+                buf.appendAscii( CLASSPATH_DELIMETER );
+            }
+            buf.append( classpath );
+            _systemClasspath = buf.makeStringAndClear();
+        }
     }
 
-    void JVM::setUserClasspath(const OUString & classpath) throw() {
-        OString tmp = OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("JVM::setUserClasspath: %s", tmp.getStr());
-
-        _userClasspath = classpath;
+    void JVM::addUserClasspath(const OUString & classpath) throw() {
+        if( classpath.getLength() )
+        {
+            OString tmp = OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US);
+            OSL_TRACE("JVM::addUserClasspath: %s", tmp.getStr());
+            OUStringBuffer buf( _userClasspath.getLength() + 1 + classpath.getLength() );
+            if( _userClasspath.getLength() )
+            {
+                buf.append( _userClasspath );
+                buf.appendAscii( CLASSPATH_DELIMETER );
+            }
+            buf.append( classpath );
+            _userClasspath = buf.makeStringAndClear();
+        }
     }
 
     void JVM::setPrint(JNIvfprintf vfprintf) throw() {
@@ -266,7 +287,10 @@ namespace stoc_javavm {
         classpath += OUString(RTL_CONSTASCII_USTRINGPARAM(CLASSPATH_DELIMETER));
         classpath += _userClasspath;
 
-        pargs->classpath = strdup(OUStringToOString(classpath, RTL_TEXTENCODING_ASCII_US));
+#ifdef DEBUG
+        fprintf( stderr, "JavaVM: using classpath %s\n" , OUStringToOString(classpath, osl_getThreadTextEncoding()).getStr());
+#endif
+        pargs->classpath = strdup(OUStringToOString(classpath, osl_getThreadTextEncoding()));
 
         if(_is_debugPort) {
             pargs->debugging = JNI_TRUE;
