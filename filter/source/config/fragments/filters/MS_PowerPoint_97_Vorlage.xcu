@@ -1,0 +1,42 @@
+    <node oor:name="MS PowerPoint 97 Vorlage" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>impress_MS_PowerPoint_97_Vorlage</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>emp</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Microsoft PowerPoint 97/2000/XP - Szablon</value>
+            <value xml:lang="hu">Microsoft PowerPoint 97/2000/XP-sablon</value>
+            <value xml:lang="ja">Microsoft PowerPoint 97/2000/XP テンプレート</value>
+            <value xml:lang="es">Microsoft PowerPoint 97/2000/XP Plantilla</value>
+            <value xml:lang="tr"> Microsoft PowerPoint 97/2000/XP Şablonu</value>
+            <value xml:lang="ru">Microsoft PowerPoint 97/2000/XP Шаблон</value>
+            <value xml:lang="th">Microsoft PowerPoint 97/2000/XP Template</value>
+            <value xml:lang="x-comment">Microsoft PowerPoint 97/2000/XP Vorlage</value>
+            <value xml:lang="ca">Microsoft PowerPoint 97/2000/XP Template</value>
+            <value xml:lang="el">MS PowerPoint 97/2000/XP - Πρότυπο</value>
+            <value xml:lang="zh-CN">Microsoft PowerPoint 97/2000/XP 模板</value>
+            <value xml:lang="pt">Microsoft PowerPoint 97/2000/XP Modelo</value>
+            <value xml:lang="cs">Šablona Microsoft PowerPoint 97/2000/XP</value>
+            <value xml:lang="fr">Microsoft PowerPoint 97/2000/XP Modèle</value>
+            <value xml:lang="ar">MS PowerPoint 97/2000 قالب</value>
+            <value xml:lang="zh-TW">Microsoft PowerPoint 97/2000/XP 範本</value>
+            <value xml:lang="sl">Microsoft PowerPoint 97/2000/XP Predloga</value>
+            <value xml:lang="fi">MS PowerPoint 97/2000 -mallipohja</value>
+            <value xml:lang="hi-IN">Microsoft PowerPoint 97/2000/XP Template</value>
+            <value xml:lang="en-US">Microsoft PowerPoint 97/2000/XP Template</value>
+            <value xml:lang="sk">Šablóna Microsoft PowerPoint 97/2000/XP</value>
+            <value xml:lang="he">‮תבנית Microsoft PowerPoint 97/2000/XP‬</value>
+            <value xml:lang="sv">Microsoft PowerPoint 97/2000/XP mall</value>
+            <value xml:lang="da">Microsoft PowerPoint 97/2000/XP skabelon</value>
+            <value xml:lang="de">Microsoft PowerPoint 97/2000/XP Vorlage</value>
+            <value xml:lang="ko">Microsoft PowerPoint 97/2000/XP 서식 파일</value>
+            <value xml:lang="nl">Microsoft PowerPoint 97/2000/XP Sjabloon</value>
+            <value xml:lang="pt-BR">MS PowerPoint 97/2000 Vorlage</value>
+            <value xml:lang="it">Microsoft PowerPoint 97/2000/XP Modello</value>
+            <value xml:lang="x-translate">Microsoft PowerPoint 97/2000/XP Vorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
+    </node>
