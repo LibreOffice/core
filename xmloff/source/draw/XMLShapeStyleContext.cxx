@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:52:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include "com/sun/star/beans/XPropertySetInfo.hpp"
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -95,14 +98,20 @@
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
 #endif
+#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
+#include "maptype.hxx"
+#endif
 
 #include "sdpropls.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_PROPERTIES;
+using ::xmloff::token::XML_TEXT_PROPERTIES;
+using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
+using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -147,16 +156,26 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_PROPERTIES ) )
+    if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
-            pContext = new XMLShapePropertySetContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    GetProperties(),
-                                                    xImpPrMap );
+        sal_uInt32 nFamily = 0;
+        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_GRAPHIC;
+        if( nFamily )
+        {
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+                pContext = new XMLShapePropertySetContext( GetImport(), nPrefix,
+                                                        rLocalName, xAttrList,
+                                                        nFamily,
+                                                        GetProperties(),
+                                                        xImpPrMap );
+        }
     }
 
     if( !pContext )
@@ -228,7 +247,64 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         }
     }
 
-    XMLPropStyleContext::FillPropertySet(rPropSet);
+    const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
+    struct _ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
+    {
+        { CTF_DASHNAME , -1 },
+        { CTF_LINESTARTNAME , -1 },
+        { CTF_LINEENDNAME , -1 },
+        { CTF_FILLGRADIENTNAME, -1 },
+        { CTF_FILLTRANSNAME , -1 },
+        { CTF_FILLHATCHNAME , -1 },
+        { CTF_FILLBITMAPNAME , -1 },
+        { -1, -1 }
+    };
+    static sal_uInt16 aFamilies[MAX_SPECIAL_DRAW_STYLES] =
+    {
+        XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
+        XML_STYLE_FAMILY_SD_MARKER_ID,
+        XML_STYLE_FAMILY_SD_MARKER_ID,
+        XML_STYLE_FAMILY_SD_GRADIENT_ID,
+        XML_STYLE_FAMILY_SD_GRADIENT_ID,
+        XML_STYLE_FAMILY_SD_HATCH_ID,
+        XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+    };
+
+    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        GetStyles()->GetImportPropertyMapper( GetFamily() );
+    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    if( xImpPrMap.is() )
+        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+
+    Reference< XPropertySetInfo > xInfo;
+    for( sal_uInt16 i=0; i<MAX_SPECIAL_DRAW_STYLES; i++ )
+    {
+        sal_Int32 nIndex = aContextIDs[i].nIndex;
+        if( nIndex != -1 )
+        {
+            struct XMLPropertyState& rState = GetProperties()[nIndex];
+            OUString sStyleName;
+            rState.maValue >>= sStyleName;
+            sStyleName = GetImport().GetStyleDisplayName( aFamilies[i],
+                                                          sStyleName );
+            // get property set mapper
+            UniReference<XMLPropertySetMapper> rPropMapper =
+                                        xImpPrMap->getPropertySetMapper();
+
+            // set property
+            const OUString& rPropertyName =
+                    rPropMapper->GetEntryAPIName(rState.mnIndex);
+            if( !xInfo.is() )
+                xInfo = rPropSet->getPropertySetInfo();
+            if ( xInfo->hasPropertyByName( rPropertyName ) )
+            {
+                Any aAny;
+                aAny <<= sStyleName;
+
+                rPropSet->setPropertyValue( rPropertyName, aAny );
+            }
+        }
+    }
 
     if (m_sControlDataStyleName.getLength())
     {   // we had a data-style-name attribute
