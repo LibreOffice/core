@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:58:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3081,7 +3081,7 @@
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Specifies if hidden text is displayed on the screen.</desc>
+                        <desc xml:lang="en-US">Specifies if hidden text fields are displayed on the screen.</desc>
 							<desc xml:lang="el">Specifies if hidden text is displayed on the screen.</desc>
 							<desc xml:lang="nl">Specifies if hidden text is displayed on the screen.</desc>
 							<desc xml:lang="fr">Specifies if hidden text is displayed on the screen.</desc>
@@ -3109,7 +3109,7 @@
 							<desc xml:lang="hu">Specifies if hidden text is displayed on the screen.</desc>
 							<desc xml:lang="sk">Specifies if hidden text is displayed on the screen.</desc>
 							<desc xml:lang="sl">Specifies if hidden text is displayed on the screen.</desc>
-						<label xml:lang="en-US">Hidden text</label>
+                        <label xml:lang="en-US">Fields: Hidden text</label>
 						<label xml:lang="el">Κρυφό κείμενο</label>
 						<label xml:lang="nl">Verborgen tekst</label>
 						<label xml:lang="fr">Texte masqué</label>
@@ -3205,7 +3205,16 @@
 					</info>
 					<value>true</value>
 				</prop>
-			</group>
+                <prop oor:name="HiddenCharacter" oor:type="xs:boolean">
+                    <!-- UIHints: Tools - Options - Text document  Formatting aids - [Section] Display of -->
+                    <info>
+                        <author>OS</author>
+                        <desc xml:lang="en-US">Specifies if hidden paragraphs are displayed on the screen.</desc>
+                        <label xml:lang="en-US">Hidden text</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+            </group>
 			<group oor:name="Update">
 				<info>
 					<desc xml:lang="en-US">Contains settings for the automatic update of some elements.</desc>
