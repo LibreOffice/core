@@ -2,8 +2,8 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.16 $
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:57 $
+ *  $Revision: 1.17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ extern "C" {
 /* No warning for: C++ Exception Specification ignored */
 #pragma warning( disable : 4290 )
 
-#if defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
 /* No warning for: identifier was truncated to '255' characters in the browser information */
 #pragma warning( disable : 4786 )
 #endif
