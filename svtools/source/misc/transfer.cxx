@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-30 13:23:14 $
+ *  last change: $Author: ka $ $Date: 2001-02-02 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 
 #ifndef DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
@@ -873,7 +879,60 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 #ifdef WNT
         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
         {
-            DBG_ERROR( "SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR: not implemented" );
+            Sequence< sal_Int8 > aSeq;
+
+            if( GetSequence( rFlavor, aSeq ) && aSeq.getLength() )
+            {
+                FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getConstArray();
+
+                if( pFDesc->cItems )
+                {
+                    ByteString          aDesc( pFDesc->fgd[ 0 ].cFileName );
+                    rtl_TextEncoding    eTextEncoding = gsl_getSystemTextEncoding();
+
+                    if( ( aDesc.Len() > 4 ) && aDesc.Copy( aDesc.Len() - 4 ).EqualsIgnoreCaseAscii( ".URL" ) )
+                    {
+                        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( INetURLObject( String( aDesc, eTextEncoding ) ).GetMainURL(), STREAM_STD_READ );
+
+                        if( !pStream || pStream->GetError() )
+                        {
+                            DataFlavor aFileContentFlavor;
+
+                            aSeq.realloc( 0 );
+                            delete pStream;
+
+                            if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor ) &&
+                                GetSequence( aFileContentFlavor, aSeq ) && aSeq.getLength() )
+                            {
+                                pStream = new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ );
+                            }
+                            else
+                                pStream = NULL;
+                        }
+
+                        if( pStream )
+                        {
+                            ByteString  aLine;
+                            sal_Bool    bSttFnd = sal_False;
+
+                            while( pStream->ReadLine( aLine ) )
+                            {
+                                if( aLine.EqualsIgnoreCaseAscii( "[InternetShortcut]" ) )
+                                    bSttFnd = sal_True;
+                                else if( bSttFnd && aLine.Copy( 0, 4 ).EqualsIgnoreCaseAscii( "URL=" ) )
+                                {
+                                    rBmk = INetBookmark( String( aLine.Erase( 0, 4 ), eTextEncoding ),
+                                                         String( aDesc.Erase( aDesc.Len() - 4 ), eTextEncoding ) );
+                                    bRet = sal_True;
+                                    break;
+                                }
+                            }
+
+                            delete pStream;
+                        }
+                    }
+                }
+            }
         }
         break;
 #endif
