@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexChapterInfoEntryContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class XMLIndexChapterInfoEntryContext : public XMLIndexSimpleEntryContext
     // chapter format
     sal_Int16 nChapterInfo;
     sal_Bool bChapterInfoOK;
+    sal_Bool bTOC;
 
 public:
 
@@ -102,7 +103,8 @@ public:
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const ::rtl::OUString& rLocalName,
+        sal_Bool bTOC );
 
     ~XMLIndexChapterInfoEntryContext();
 
