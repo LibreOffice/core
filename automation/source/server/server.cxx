@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:39:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,7 +748,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
                 pDlg->SetText( String ( TTProperties::GetSvtResId( TT_GPF ) ) );
                 pDlg->Show();
                 DBG_ERROR("GPF");
-                pC->ReportError( 0, GEN_RES_STR0( S_GPF_ABORT ) );
+                pC->ReportError( GEN_RES_STR0( S_GPF_ABORT ) );
                 StatementList::bDying = TRUE;
                 while ( StatementList::pFirst )         // Kommandos werden übersprungen
                     StatementList::NormalReschedule();
@@ -841,8 +841,9 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
                 break;
             }
             case SIControl:
+            case SIStringControl:
             {
-                new StatementControl( pCmdStream );     // Wird im Konstruktor an Liste angehängt
+                new StatementControl( pCmdStream, nId );     // Wird im Konstruktor an Liste angehängt
                 break;
             }
             case SISlot:
@@ -963,7 +964,7 @@ ImplRemoteControl::~ImplRemoteControl()
 
     if ( StatementList::pFirst )
     {   // Es sind noch Kommandos da, also auch eine Möglichkeit zurückzusenden.
-        StatementList::pFirst->ReportError( 0, GEN_RES_STR0( S_APP_SHUTDOWN ) );
+        StatementList::pFirst->ReportError( GEN_RES_STR0( S_APP_SHUTDOWN ) );
         while ( StatementList::pFirst )             // Kommandos werden übersprungen
             StatementList::NormalReschedule();      // Fehler zurückgeschickt
     }
