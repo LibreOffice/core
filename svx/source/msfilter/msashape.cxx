@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-24 12:21:27 $
+ *  last change: $Author: sj $ $Date: 2001-01-31 11:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4058,6 +4058,167 @@ static const mso_AutoShape msoRibbon =
     0x80000000, 0x80000000
 };
 
+static const sal_Int32 mso_sptVerticalScrollVert[] =        // adjustment1 : 0 - 5400
+{
+    1 MSO_I,21600,
+    0,  2 MSO_I,
+    1 MSO_I, 3 MSO_I,
+    0 MSO_I, 3 MSO_I,
+    0 MSO_I, 1 MSO_I,
+    4 MSO_I, 0,
+    2 MSO_I, 0,
+    21600, 1 MSO_I,
+    2 MSO_I, 0 MSO_I,
+    3 MSO_I, 0 MSO_I,
+    3 MSO_I, 2 MSO_I,
+    5 MSO_I, 21600,
+
+    6 MSO_I, 1 MSO_I,
+    4 MSO_I, 0 MSO_I,
+    8 MSO_I, 9 MSO_I,
+    4 MSO_I, 1 MSO_I,
+
+    0 MSO_I, 2 MSO_I,
+    1 MSO_I, 21600,
+    0      , 2 MSO_I,
+    1 MSO_I, 3 MSO_I,
+    9 MSO_I, 10 MSO_I,
+    1 MSO_I, 2 MSO_I,
+
+    4 MSO_I, 0,
+    6 MSO_I, 1 MSO_I,
+
+    0 MSO_I, 3 MSO_I,
+    0 MSO_I, 2 MSO_I,
+
+    4 MSO_I, 0 MSO_I,
+    2 MSO_I, 0 MSO_I
+};
+static const sal_uInt16 mso_sptVerticalScrollSegm[] =
+{
+    0x4000, 0xa702, 0x0002, 0xa801, 0x0001, 0xa702, 0x0002, 0xa801, 0x6001, 0x8000,
+    0x4000, 0xa801, 0xa702, 0x6000, 0x8000,
+    0x4000, 0xa803, 0xa702, 0x6001, 0x8000,
+    0x4000, 0xa701, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptScrollCalc[] =
+{
+    0x2000, DFF_Prop_adjustValue, 0, 0,
+    0x2001, 0x400, 1, 2,
+    0x8000, 21600, 0, 0x401,
+    0x8000, 21600, 0, 0x400,
+    0x6000, 0x400, 0x401, 0,
+    0x8000, 21600, 0, 0x404,
+    0x2001, 0x400, 2, 1,
+    0x2001, 0x401, 1, 2,
+    0x6000, 0x400, 0x407, 0,
+    0x6000, 0x401, 0x407, 0,
+    0x8000, 21600, 0, 0x409
+};
+static const sal_Int32 mso_sptScrollTextRect[] =
+{
+    1, 0 MSO_I, 0 MSO_I, 3 MSO_I, 3 MSO_I
+};
+static const mso_AutoShape msoVerticalScroll =
+{
+    (sal_Int32*)mso_sptVerticalScrollVert, sizeof( mso_sptVerticalScrollVert ) >> 3,
+    (sal_uInt16*)mso_sptVerticalScrollSegm, sizeof( mso_sptVerticalScrollSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptScrollCalc, sizeof( mso_sptScrollCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault2700,
+    (sal_Int32*)mso_sptScrollTextRect,
+    (sal_Int32*)NULL,
+    11000, 10800
+};
+static const sal_Int32 mso_sptHorizontalScrollVert[] =      // adjustment1 : 0 - 5400
+{
+    0, 4 MSO_I,
+    1 MSO_I, 0 MSO_I,
+    3 MSO_I, 0 MSO_I,
+    3 MSO_I, 1 MSO_I,
+    2 MSO_I, 0,
+    21600,   1 MSO_I,
+    21600,   5 MSO_I,
+    2 MSO_I, 3 MSO_I,
+    0 MSO_I, 3 MSO_I,
+    0 MSO_I, 2 MSO_I,
+    1 MSO_I, 21600,
+    0,       2 MSO_I,
+
+    1 MSO_I, 4 MSO_I,
+    9 MSO_I, 8 MSO_I,
+    0 MSO_I, 4 MSO_I,
+    1 MSO_I, 6 MSO_I,
+
+    2 MSO_I, 1 MSO_I,
+    10 MSO_I,9 MSO_I,
+    3 MSO_I, 1 MSO_I,
+    2 MSO_I, 0,
+    21600,   1 MSO_I,
+    2 MSO_I, 0 MSO_I,
+
+    1 MSO_I, 6 MSO_I,
+    0,       4 MSO_I,
+
+    2 MSO_I, 0 MSO_I,
+    3 MSO_I, 0 MSO_I,
+
+    0 MSO_I, 4 MSO_I,
+    0 MSO_I, 2 MSO_I
+};
+static const sal_uInt16 mso_sptHorizontalScrollSegm[] =
+{
+    0x4000, 0xa801, 0x0002, 0xa802, 0x0001, 0xa801, 0x0002, 0xa802, 0x6001, 0x8000,
+    0x4000, 0xa803, 0x6000, 0x8000,
+    0x4000, 0xa803, 0xa702, 0x6000, 0x8000,
+    0x4000, 0xa701, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const mso_AutoShape msoHorizontalScroll =
+{
+    (sal_Int32*)mso_sptHorizontalScrollVert, sizeof( mso_sptHorizontalScrollVert ) >> 3,
+    (sal_uInt16*)mso_sptHorizontalScrollSegm, sizeof( mso_sptHorizontalScrollSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptScrollCalc, sizeof( mso_sptScrollCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault2700,
+    (sal_Int32*)mso_sptScrollTextRect,
+    (sal_Int32*)NULL,
+    10800, 11000
+};
+
+static const sal_Int32 mso_sptWaveVert[] =          // adjustment1 : 0 - 4459
+{                                                   // adjustment2 : 8640 - 12960
+    0, 0, 21600, 21600
+};
+static const SvxMSDffCalculationData mso_sptWaveCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
+};
+static const sal_uInt16 mso_sptWaveSegm[] =
+{
+    0x4000, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptWaveDefault[] =
+{
+    2, 2700, 10800
+};
+static const sal_Int32 mso_sptWaveTextRect[] =
+{
+    1, 0, 0, 21600, 21600
+};
+static const mso_AutoShape msoWave =
+{
+    (sal_Int32*)mso_sptWaveVert, sizeof( mso_sptWaveVert ) >> 3,
+    (sal_uInt16*)mso_sptWaveSegm, sizeof( mso_sptWaveSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptWaveCalc, sizeof( mso_sptWaveCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptWaveDefault,
+    (sal_Int32*)mso_sptWaveTextRect,
+    (sal_Int32*)NULL,
+    0x80000000, 0x80000000
+};
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -4293,9 +4454,33 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
             nColorData = 0x30dd0000;
         }
         break;
-//      case mso_sptEllipseRibbon2 :
-//      case mso_sptEllipseRibbon :
-
+        case mso_sptEllipseRibbon2 :            // !!!!!!!!!!
+        {
+            pDefAutoShape = &msoRibbon2;
+            nColorData = 0x30dd0000;
+        }
+        break;
+        case mso_sptEllipseRibbon :             // !!!!!!!!!!
+        {
+            pDefAutoShape = &msoRibbon;
+            nFlags |= DFF_AUTOSHAPE_FLIP_V;
+            nColorData = 0x30dd0000;
+        }
+        break;
+        case mso_sptVerticalScroll :
+        {
+            pDefAutoShape = &msoVerticalScroll;
+            nColorData = 0x30dd0000;
+        }
+        break;
+        case mso_sptHorizontalScroll :
+        {
+            pDefAutoShape = &msoHorizontalScroll;
+            nColorData = 0x30dd0000;
+        }
+        break;
+//      case mso_sptWave :                  pDefAutoShape = &msoWave; break;
+        break;
         default :
         break;
     }
