@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formhelpid.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:01:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,47 +185,7 @@
 
 // ----------------------------------------------------------------------------
 
-#define HID_EVT_START                           (HID_FORMS_START +  200)
-
-#define HID_EVT_ACTIONPERFORMED                 (HID_EVT_START +   0)
-#define HID_EVT_AFTERUPDATE                     (HID_EVT_START +   3)
-#define HID_EVT_BEFOREUPDATE                    (HID_EVT_START +   6)
-#define HID_EVT_CONFIRMDELETE                   (HID_EVT_START +  12)
-#define HID_EVT_ERROROCCURED                    (HID_EVT_START +  16)
-#define HID_EVT_FOCUSGAINED                     (HID_EVT_START +  18)
-#define HID_EVT_FOCUSLOST                       (HID_EVT_START +  19)
-#define HID_EVT_ITEMSTATECHANGED                (HID_EVT_START +  20)
-#define HID_EVT_KEYTYPED                        (HID_EVT_START +  21)
-#define HID_EVT_LOADED                          (HID_EVT_START +  22)
-#define HID_EVT_MOUSEDRAGGED                    (HID_EVT_START +  23)
-#define HID_EVT_MOUSEENTERED                    (HID_EVT_START +  24)
-#define HID_EVT_MOUSEEXITED                     (HID_EVT_START +  25)
-#define HID_EVT_MOUSEMOVED                      (HID_EVT_START +  26)
-#define HID_EVT_MOUSEPRESSED                    (HID_EVT_START +  27)
-#define HID_EVT_MOUSERELEASED                   (HID_EVT_START +  28)
-#define HID_EVT_POSITIONED                      (HID_EVT_START +  29)
-#define HID_EVT_RESETTED                        (HID_EVT_START +  33)
-#define HID_EVT_SUBMITTED                       (HID_EVT_START +  34)
-#define HID_EVT_TEXTCHANGED                     (HID_EVT_START +  35)
-#define HID_EVT_UNLOADED                        (HID_EVT_START +  36)
-#define HID_EVT_CHANGED                         (HID_EVT_START +  39)
-#define HID_EVT_APPROVEACTIONPERFORMED          (HID_EVT_START +  40)
-#define HID_EVT_APPROVERESETTED                 (HID_EVT_START +  41)
-#define HID_EVT_KEYUP                           (HID_EVT_START +  42)
-#define HID_EVT_APPROVEPARAMETER                (HID_EVT_START +  43)
-#define HID_EVT_POSITIONING                     (HID_EVT_START +  44)
-#define HID_EVT_RELOADED                        (HID_EVT_START +  45)
-#define HID_EVT_APPROVEROWCHANGE                (HID_EVT_START +  46)
-#define HID_EVT_ROWCHANGE                       (HID_EVT_START +  47)
-#define HID_EVT_RELOADING                       (HID_EVT_START +  48)
-#define HID_EVT_UNLOADING                       (HID_EVT_START +  49)
-#define HID_EVT_ADJUSTMENTVALUECHANGED          (HID_EVT_START +  50)
-
-#define UID_EVT_MACRODLG                        (HID_EVT_START +  99)
-
-// ----------------------------------------------------------------------------
-
-#define HID_FORM_DLG_START                                      (HID_FORMS_START + 400)
-#define HID_FM_PROPDLG_TAB_EVT                                  (HID_FORM_DLG_START +   8)
+#define HID_FORM_DLG_START                      (HID_FORMS_START + 400)
+#define HID_FM_PROPDLG_TAB_EVT                  (HID_FORM_DLG_START +   8)
 
 #endif // _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
