@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:40:23 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
     {
         if( rSect.IsFollow() )
         {
-            SwSectionFrm* pMaster = rSect.FindSectionMaster();
+            SwSectionFrm* pMaster = rSect.FindMaster();
             pMaster->SetFollow( this );
             bIsFollow = TRUE;
         }
@@ -206,7 +206,7 @@ SwSectionFrm::~SwSectionFrm()
             pRootFrm->RemoveFromList( this );
         if( IsFollow() )
         {
-            SwSectionFrm *pMaster = FindSectionMaster();
+            SwSectionFrm *pMaster = FindMaster();
             if( pMaster )
             {
                 PROTOCOL( this, PROT_SECTION, ACT_DEL_FOLLOW, pMaster )
@@ -226,58 +226,6 @@ SwSectionFrm::~SwSectionFrm()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwSectionFrm::FindSectionMaster()
-|*
-|*  Ersterstellung      AMA 17. Dec. 97
-|*  Letzte Aenderung    AMA 17. Dec. 97
-|*
-|*************************************************************************/
-
-SwSectionFrm *SwSectionFrm::FindSectionMaster()
-{
-    ASSERT( IsFollow(), "FindSectionMaster: !IsFollow" );
-    SwClientIter aIter( *(pSection->GetFmt()) );
-    SwClient *pLast = aIter.GoStart();
-    while ( pLast )
-    {
-        if ( pLast->ISA( SwFrm ) )
-        {
-            SwSectionFrm* pSect = (SwSectionFrm*)pLast;
-            if( pSect->GetFollow() == this )
-                return pSect;
-        }
-        pLast = aIter++;
-    }
-    return NULL;
-}
-
-SwSectionFrm *SwSectionFrm::FindFirstSectionMaster()
-{
-    ASSERT( IsFollow(), "FindSectionMaster: !IsFollow" );
-    SwClientIter aIter( *(pSection->GetFmt()) );
-    SwClient *pLast = aIter.GoStart();
-    while ( pLast )
-    {
-        if ( pLast->ISA( SwFrm ) )
-        {
-            SwSectionFrm* pSect = (SwSectionFrm*)pLast;
-            if( !pSect->IsFollow() )
-            {
-                SwSectionFrm *pNxt = pSect;
-                while ( pNxt )
-                {
-                    if( pNxt->GetFollow() == this )
-                        return pSect;
-                    pNxt = pNxt->GetFollow();
-                }
-            }
-        }
-        pLast = aIter++;
-    }
-    return NULL;
-}
 
 /*************************************************************************
 |*
@@ -299,7 +247,7 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
         _Cut( bRemove );
     if( IsFollow() )
     {
-        SwSectionFrm *pMaster = FindSectionMaster();
+        SwSectionFrm *pMaster = FindMaster();
         pMaster->SetFollow( GetFollow() );
         // Ein Master greift sich immer den Platz bis zur Unterkante seines
         // Uppers. Wenn er keinen Follow mehr hat, kann er diesen ggf. wieder
@@ -464,7 +412,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
                     while ( pTmp->GetNext() )
                         pTmp = pTmp->GetNext();
                     SwFrm* pSave = ::SaveCntnt( pCol );
-                    ::RestoreCntnt( pSave, pSibling->GetUpper(), pTmp );
+                    ::RestoreCntnt( pSave, pSibling->GetUpper(), pTmp, true );
                 }
             }
         }
@@ -590,7 +538,7 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
                             pLast = pLast->GetNext();
                 }
             }
-            ::RestoreCntnt( pTmp, pLay, pLast );
+            ::RestoreCntnt( pTmp, pLay, pLast, true );
         }
         SetFollow( pNxt->GetFollow() );
         pNxt->SetFollow( NULL );
@@ -644,7 +592,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
             // Search for last layout frame, e.g. for columned sections.
             while( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
                 pLay = (SwLayoutFrm*)pLay->Lower();
-            ::RestoreCntnt( pSav, pLay, NULL );
+            ::RestoreCntnt( pSav, pLay, NULL, true );
         }
         _InvalidateSize();
         if( HasFollow() )
@@ -691,6 +639,57 @@ void lcl_InvalidateInfFlags( SwFrm* pFrm, BOOL bInva )
     }
 }
 
+
+//
+// Works like SwCntntFrm::ImplGetNextCntntFrm, but starts with a LayoutFrm
+//
+SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
+{
+    if ( bFwd )
+    {
+        if ( pLay->GetNext() && pLay->GetNext()->IsCntntFrm() )
+            return (SwCntntFrm*)pLay->GetNext();
+    }
+    else
+    {
+        if ( pLay->GetPrev() && pLay->GetPrev()->IsCntntFrm() )
+            return (SwCntntFrm*)pLay->GetPrev();
+    }
+
+    // #100926#
+    const SwFrm* pFrm = pLay;
+    SwCntntFrm *pCntntFrm = 0;
+    FASTBOOL bGoingUp = TRUE;
+    do {
+        const SwFrm *p;
+        FASTBOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
+
+        bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
+        if ( !bGoingDown )
+        {
+            bGoingFwdOrBwd = ( 0 != ( p = pFrm->IsFlyFrm() ?
+                                          ( bFwd ? ((SwFlyFrm*)pFrm)->GetNextLink() : ((SwFlyFrm*)pFrm)->GetPrevLink() ) :
+                                          ( bFwd ? pFrm->GetNext() :pFrm->GetPrev() ) ) );
+            if ( !bGoingFwdOrBwd )
+            {
+                bGoingUp = (0 != (p = pFrm->GetUpper() ) );
+                if ( !bGoingUp )
+                    return 0;
+            }
+        }
+
+        bGoingUp = !( bGoingFwdOrBwd || bGoingDown );
+
+        if( !bFwd && bGoingDown && p )
+            while ( p->GetNext() )
+                p = p->GetNext();
+
+        pFrm = p;
+    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? (SwCntntFrm*)pFrm:0) ));
+
+    return pCntntFrm;
+}
+
 #define FIRSTLEAF( pLayFrm ) ( ( pLayFrm->Lower() && pLayFrm->Lower()->IsColumnFrm() )\
                     ? pLayFrm->GetNextLayoutLeaf() \
                     : pLayFrm )
@@ -721,9 +720,9 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
     // together and can be joined, *not* only if deleted section contains content.
     if ( pParent )
     {
-        SwFrm* pPrvCntnt = pDel->GetPrevCntntFrm();
+        SwFrm* pPrvCntnt = lcl_GetNextCntntFrm( pDel, false );
         pPrvSct = pPrvCntnt ? pPrvCntnt->FindSctFrm() : NULL;
-        SwFrm* pNxtCntnt = pDel->GetNextCntntFrm();
+        SwFrm* pNxtCntnt = lcl_GetNextCntntFrm( pDel, true );
         pNxtSct = pNxtCntnt ? pNxtCntnt->FindSctFrm() : NULL;
     }
     else
@@ -731,6 +730,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
         pParent = NULL;
         pPrvSct = pNxtSct = NULL;
     }
+
     // Jetzt wird der Inhalt beseite gestellt und der Frame zerstoert
     SwFrm *pSave = bSave ? ::SaveCntnt( pDel ) : NULL;
     BOOL bOldFtn = TRUE;
@@ -790,7 +790,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
     if( pSave )
     {
         lcl_InvalidateInfFlags( pSave, bSize );
-        ::RestoreCntnt( pSave, pUp, pPrv );
+        ::RestoreCntnt( pSave, pUp, pPrv, true );
         pUp->FindPageFrm()->InvalidateCntnt();
         if( !bOldFtn )
             ((SwFtnFrm*)pUp)->ColUnlock();
@@ -924,7 +924,7 @@ SwCntntFrm *SwSectionFrm::FindLastCntnt( BYTE nMode )
         if( pRet || !pSect->IsFollow() || !nMode ||
             ( FINDMODE_MYLAST == nMode && this == pSect ) )
             break;
-        pSect = pSect->FindSectionMaster();
+        pSect = pSect->FindMaster();
     } while( pSect );
     if( ( nMode == FINDMODE_ENDNOTE ) && pFtnFrm )
         pRet = pFtnFrm->ContainsCntnt();
@@ -1474,7 +1474,10 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     if( bWrongPage )
         pLayLeaf = 0;
     else if( IsTabFrm() )
-        pLayLeaf = ((SwTabFrm*)this)->FindLastCntnt()->GetUpper();
+    {
+        SwCntntFrm* pTmpCnt = ((SwTabFrm*)this)->FindLastCntnt();
+        pLayLeaf = pTmpCnt ? pTmpCnt->GetUpper() : 0;
+    }
     else
     {
         pLayLeaf = GetNextLayoutLeaf();
