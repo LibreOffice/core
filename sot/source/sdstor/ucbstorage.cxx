@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-10 13:07:34 $
+ *  last change: $Author: mav $ $Date: 2002-10-21 08:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,22 @@ public:
     ::ucb::Content*             GetContent()
                                 { if ( !m_pContent ) CreateContent(); return m_pContent; }
     UCBStorageElementList_Impl& GetChildrenList()
-                                { ReadContent(); return m_aChildrenList; }
+                                {
+                                  long nError = m_nError;
+                                  ReadContent();
+                                  if ( m_nMode & STREAM_WRITE )
+                                  {
+                                      m_nError = nError;
+                                      if ( m_pAntiImpl )
+                                      {
+                                          m_pAntiImpl->ResetError();
+                                          m_pAntiImpl->SetError( nError );
+                                      }
+                                  }
+
+                                  return m_aChildrenList;
+                                }
+
     void                        SetError( long nError );
 };
 
