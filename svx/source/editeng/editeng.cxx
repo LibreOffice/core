@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-25 16:07:14 $
+ *  last change: $Author: mt $ $Date: 2002-02-28 17:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2008,6 +2008,51 @@ sal_Bool EditEngine::ShouldCreateBigTextObject() const
     return ( nTextPortions >= pImpEditEngine->GetBigTextObjectStart() ) ? sal_True : sal_False;
 }
 
+USHORT EditEngine::GetFieldCount( USHORT nPara ) const
+{
+    USHORT nFields = 0;
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    if ( pNode )
+    {
+        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        for ( sal_uInt16 nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+        {
+            EditCharAttrib* pAttr = rAttrs[nAttr];
+            if ( pAttr->Which() == EE_FEATURE_FIELD )
+                nFields++;
+        }
+    }
+
+    return nFields;
+}
+
+EFieldInfo EditEngine::GetFieldInfo( USHORT nPara, USHORT nField ) const
+{
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    if ( pNode )
+    {
+        USHORT nCurrentField = 0;
+        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        for ( sal_uInt16 nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+        {
+            EditCharAttrib* pAttr = rAttrs[nAttr];
+            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            {
+                if ( nCurrentField == nField )
+                {
+                    EFieldInfo aInfo( *(const SvxFieldItem*)pAttr->GetItem(), nPara, pAttr->GetStart() );
+                    aInfo.aCurrentText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                    return aInfo;
+                }
+
+                nCurrentField++;
+            }
+        }
+    }
+    return EFieldInfo();
+}
+
+
 sal_Bool EditEngine::UpdateFields()
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2077,6 +2122,33 @@ void EditEngine::CompleteOnlineSpelling()
 USHORT EditEngine::FindParagraph( long nDocPosY )
 {
     return pImpEditEngine->GetParaPortions().FindParagraph( nDocPosY );
+}
+
+EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
+{
+    EPosition aPos;
+    // From the point of the API, this is const....
+    EditPaM aPaM = ((EditEngine*)this)->pImpEditEngine->GetPaM( rDocPos, FALSE );
+    if ( aPaM.GetNode() )
+    {
+        aPos.nPara = pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+        aPos.nIndex = aPaM.GetIndex();
+    }
+    return aPos;
+}
+
+Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
+{
+    Rectangle aBounds;
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( rPos.nPara );
+    if ( pNode && ( rPos.nPara < pNode->Len() ) )
+    {
+        aBounds = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex ), GETCRSR_TXTONLY );
+        Rectangle aR2 = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex+1 ), GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
+        if ( aR2.Right() > aBounds.Right() )
+            aBounds.Right() = aR2.Right();
+    }
+    return aBounds;
 }
 
 ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
