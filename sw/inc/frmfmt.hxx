@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2002-10-11 11:37:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #ifndef _FORMAT_HXX
 #include <format.hxx>
 #endif
+
+// --> OD 2004-08-06 #i28749#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
+#include <com/sun/star/text/PositionLayoutDir.hpp>
+#endif
+// <--
 
 class SwDrawContact;
 class SwFlyFrm;
@@ -144,6 +150,24 @@ public:
 
     BOOL IsLowerOf( const SwFrmFmt& rFmt ) const;
 
+    // --> OD 2004-07-27 #i31698#
+    enum tLayoutDir
+    {
+        HORI_L2R,
+        HORI_R2L,
+        VERT_R2L,
+        VERT_L2R    // not supported yet
+    };
+
+    virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
+    virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir );
+    // <--
+
+    // --> OD 2004-08-06 #i28749#
+    virtual sal_Int16 GetPositionLayoutDir() const;
+    virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
+    // <--
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwFrmFmt)
 };
 
@@ -220,14 +244,32 @@ class SwDrawFrmFmt: public SwFrmFmt
     SwDrawFrmFmt( const SwDrawFrmFmt &rCpy );
     SwDrawFrmFmt &operator=( const SwDrawFrmFmt &rCpy );
 
+    // --> OD 2004-07-27 #i31698#
+    SwFrmFmt::tLayoutDir meLayoutDir;
+    // <--
+    // --> OD 2004-08-06 #i28749#
+    sal_Int16 mnPositionLayoutDir;
+    // <--
 protected:
     SwDrawFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_DRAWFRMFMT )
+        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
+          // --> OD 2004-07-28 #i31698#
+          meLayoutDir( SwFrmFmt::HORI_L2R ),
+          // <--
+          // --> OD 2004-08-06 #i28749#
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor )
+          // <--
     {}
     SwDrawFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_DRAWFRMFMT )
+        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
+          // --> OD 2004-07-28 #i31698#
+          meLayoutDir( SwFrmFmt::HORI_L2R ),
+          // <--
+          // --> OD 2004-08-06 #i28749#
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor )
+          // <--
     {}
 
 public:
@@ -244,6 +286,15 @@ public:
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
+    // --> OD 2004-07-27 #i31698#
+    virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
+    virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir );
+    // <--
+
+    // --> OD 2004-08-06 #i28749#
+    virtual sal_Int16 GetPositionLayoutDir() const;
+    virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
+    // <--
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
 };
