@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:56:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,14 @@
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
@@ -506,6 +514,82 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
                         return;
                 }
+
+                // TODO/LATER: do the following GUI related actions in standalown method
+                // ========================================================================================================
+                // Introduce a status indicator for GUI operation
+                SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
+                if ( !pStatusIndicatorItem )
+                {
+                    // get statusindicator
+                    uno::Reference< task::XStatusIndicator > xStatusIndicator;
+                    SfxViewFrame *pFrame = GetFrame();
+                    if ( pFrame && pFrame->GetFrame() )
+                    {
+                        uno::Reference< task::XStatusIndicatorFactory > xStatFactory(
+                                                                    pFrame->GetFrame()->GetFrameInterface(),
+                                                                    uno::UNO_QUERY );
+                        if( xStatFactory.is() )
+                            xStatusIndicator = xStatFactory->createStatusIndicator();
+                    }
+
+
+                    OSL_ENSURE( xStatusIndicator.is(), "Can not retrieve default status indicator!\n" );
+                    if ( xStatusIndicator.is() )
+                    {
+                        SfxUnoAnyItem aStatIndItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::makeAny( xStatusIndicator ) );
+
+                        if ( nId == SID_SAVEDOC )
+                        {
+                            // in case of saving it is not possible to transport the parameters from here
+                            // but it is not clear here whether the saving will be done or saveAs operation
+                            GetMedium()->GetItemSet()->Put( aStatIndItem );
+                        }
+
+                        rReq.AppendItem( aStatIndItem );
+                    }
+                }
+                else if ( nId == SID_SAVEDOC )
+                {
+                    // in case of saving it is not possible to transport the parameters from here
+                    // but it is not clear here whether the saving will be done or saveAs operation
+                    GetMedium()->GetItemSet()->Put( *pStatusIndicatorItem );
+                }
+
+                // Introduce an interaction handler for GUI operation
+                SFX_REQUEST_ARG( rReq, pInteractionHandlerItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, FALSE );
+                if ( !pInteractionHandlerItem )
+                {
+                    uno::Reference< task::XInteractionHandler > xInteract;
+                    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+                    if( xServiceManager.is() )
+                    {
+                        xInteract = Reference< XInteractionHandler >(
+                            xServiceManager->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
+                            UNO_QUERY );
+                    }
+
+                    OSL_ENSURE( xInteract.is(), "Can not retrieve default status indicator!\n" );
+                    if ( xInteract.is() )
+                    {
+                        SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
+                        if ( nId == SID_SAVEDOC )
+                        {
+                            // in case of saving it is not possible to transport the parameters from here
+                            // but it is not clear here whether the saving will be done or saveAs operation
+                            GetMedium()->GetItemSet()->Put( aInteractionItem );
+                        }
+
+                        rReq.AppendItem( aInteractionItem );
+                    }
+                }
+                else if ( nId == SID_SAVEDOC )
+                {
+                    // in case of saving it is not possible to transport the parameters from here
+                    // but it is not clear here whether the saving will be done or saveAs operation
+                    GetMedium()->GetItemSet()->Put( *pInteractionHandlerItem );
+                }
+                // ========================================================================================================
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
