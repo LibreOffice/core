@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:03:17 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ enum WID_PAGE
     WID_PAGE_HEIGHT, WID_PAGE_EFFECT, WID_PAGE_CHANGE, WID_PAGE_SPEED, WID_PAGE_NUMBER,
     WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
     WID_PAGE_BACK, WID_PAGE_PREVIEW, WID_PAGE_VISIBLE, WID_PAGE_SOUNDFILE, WID_PAGE_BACKFULL,
-    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS
+    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS
 };
 
 #ifndef SEQTYPE
@@ -216,6 +216,9 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),         WID_PAGE_SOUNDFILE, &::getCppuType((const OUString*)0),             0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundVisible),  WID_PAGE_BACKVIS,   &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    &::getBooleanCppuType(),                        0, 0},
+#ifndef SVX_LIGHT
+        { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+#endif
         {0,0,0,0,0}
     };
 
@@ -233,6 +236,9 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+#ifndef SVX_LIGHT
+        { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+#endif
         {0,0,0,0,0}
     };
 
@@ -259,6 +265,9 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN("BackgroundFullSize"),           WID_PAGE_BACKFULL,  &::getBooleanCppuType(),                        0, 0},
+#ifndef SVX_LIGHT
+        { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+#endif
         {0,0,0,0,0}
     };
 
@@ -272,6 +281,9 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
+#ifndef SVX_LIGHT
+        { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,      0,     0},
+#endif
         {0,0,0,0,0}
     };
 
@@ -602,6 +614,13 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
             break;
         }
+#ifndef SVX_LIGHT
+        case WID_PAGE_USERATTRIBS:
+            if( !GetPage()->setAlienAttributes( aValue ) )
+                throw lang::IllegalArgumentException();
+            break;
+#endif
+
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -778,6 +797,11 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         }
         break;
     }
+#ifndef SVX_LIGHT
+    case WID_PAGE_USERATTRIBS:
+        GetPage()->getAlienAttributes( aAny );
+        break;
+#endif
     default:
         throw beans::UnknownPropertyException();
         break;

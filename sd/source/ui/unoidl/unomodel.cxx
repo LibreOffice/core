@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-06 12:52:34 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,10 @@
 #include <svx/forbiddencharacterstable.hxx>
 #endif
 
-// folgende fuer InsertSdPage()
+#ifndef _SVX_UNONAMESPACEMAP_HXX_
+#include <svx/UnoNamespaceMap.hxx>
+#endif
+
 #ifndef _SVDLAYER_HXX //autogen
 #include <svx/svdlayer.hxx>
 #endif
@@ -140,6 +143,7 @@
 
 #include <svx/unoshape.hxx>
 #include <svx/unonrule.hxx>
+#include <svx/eeitem.hxx>
 
 #ifndef SVX_LIGHT
 #include <docshell.hxx>
@@ -784,6 +788,13 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap") ) )
+    {
+        static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
+
+        return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool(), pDoc->GetStyleSheetPool() ? &pDoc->GetStyleSheetPool()->GetPool() : NULL );
+    }
+
     uno::Reference< uno::XInterface > xRet;
 
     const String aType( aServiceSpecifier );
@@ -873,7 +884,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 {
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? 24 : 13 );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? 25 : 14 );
 
     sal_uInt16 i = 0;
 
@@ -890,6 +901,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapRectangleObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapCircleObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapPolygonObject));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.NamespaceMap"));
 
     if(mbImpressDoc)
     {
