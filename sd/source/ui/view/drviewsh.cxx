@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:48:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,16 +123,19 @@ BOOL DrawViewShell::GotoBookmark(const String& rBookmark)
 |*
 \************************************************************************/
 
-void DrawViewShell::MakeVisible(const Rectangle& rRect, Window& rWin)
+void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
-    // #98568# In older versions, if in X or Y the size of the object was smaller than the
-    // visible area, the user-defined zoom was changed. This was decided to be a bug for 6.x,
-    // thus I developed a version which instead handles X/Y bigger/smaller and visibility
-    // questions seperately. The new behaviour is triggered with the bZoomAllowed parameter
-    // which for old behaviour should be set to sal_True. I looked at all uses of MakeVisible()
-    // in the application and found no valid reason for really changing the zoom factor, thus
-    // I decided to NOT expand (incompatible) this virtual method to get one more parameter. If
-    // this is wanted in later versions, feel free to add that bool to the parameter list.
+    // #98568# In older versions, if in X or Y the size of the object was
+    // smaller than the visible area, the user-defined zoom was
+    // changed. This was decided to be a bug for 6.x, thus I developed a
+    // version which instead handles X/Y bigger/smaller and visibility
+    // questions seperately. The new behaviour is triggered with the
+    // bZoomAllowed parameter which for old behaviour should be set to
+    // sal_True. I looked at all uses of MakeVisible() in the application
+    // and found no valid reason for really changing the zoom factor, thus I
+    // decided to NOT expand (incompatible) this virtual method to get one
+    // more parameter. If this is wanted in later versions, feel free to add
+    // that bool to the parameter list.
     sal_Bool bZoomAllowed(sal_False);
     Size aLogicSize(rRect.GetSize());
 
