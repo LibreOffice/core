@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 17:02:55 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 11:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,33 @@ of the current page is used as limit.
 /** contains the writing direction
  */
 [optional,property] com::sun::star::text::WritingMode2 WritingMode;
+//-----------------------------------------------------------------------------
+/** contains the mode of the text grid (none, lines, ...), as
+    represented by <type scope="com::sun::star::text">TextGridMode</type>
+    constants */
+[optional, property] short GridMode;
+//-----------------------------------------------------------------------------
+/** contains the display color of the text grid */
+[optional, property] long GridColor;
+//-----------------------------------------------------------------------------
+/** contains the number of lines in the text grid */
+[optional, property] short GridLines;
+//-----------------------------------------------------------------------------
+/** contains the height of the base text line inside the text grid */
+[optional, property] long GridBaseHeight;
+//-----------------------------------------------------------------------------
+/** contains the height of the ruby text line inside the text grid */
+[optional, property] long GridRubyHeight;
+//-----------------------------------------------------------------------------
+/** determines whether the text grid's ruby line is located below or
+    above the base line */
+[optional, property] boolean GridRubyBelow;
+//-----------------------------------------------------------------------------
+/** determines whether the text grid lines are printed */
+[optional, property] boolean GridPrint;
+//-----------------------------------------------------------------------------
+/** determines whether the text grid lines are visible or not */
+[optional, property] boolean GridDisplay;
 
 };
 //=============================================================================
