@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:25:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,9 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
     {
         BOOL bTmpNoNum = ! aNum.IsNum();
         aNum.SetNoNum( TRUE );
-        rTxtNd.UpdateOutlineNum( aNum );
+        rTxtNd.UpdateNum( aNum ); // #115901#
         aNum.SetNoNum( bTmpNoNum );
+
         return TRUE;
     }
 
@@ -302,7 +303,7 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
 
         aNum.GetLevelVal()[ nLevel ] = nSetValue;
         aNum.SetLevel( nLevel );
-        rTxtNd.UpdateOutlineNum( aNum );
+        rTxtNd.UpdateNum( aNum );
         aNum.SetSetValue( USHRT_MAX );
     }
     return bRet;
@@ -358,6 +359,7 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
     else if( !bSeekIdx )        // Update und Index nicht gefunden ??
         return ;
 
+#if 0
     if (GetDoc()->IsOldNumbering())
     {
         _OutlinePara aPara( *this, nSttPos, nOldLevel, nNewLevel );
@@ -384,20 +386,29 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
     }
     else // #111955#
+#endif
     {
         SwTxtNode & rTxtNd = (SwTxtNode &) rNd;
+        SwPaM aPam(rTxtNd); // #115901#
 
-        const SwNodeNum * pNum = rTxtNd.GetOutlineNum();
+        if (nNewLevel != NO_NUMBERING) // #115901#
+        {
+            const SwNodeNum * pNum = rTxtNd.GetOutlineNum();
 
-        SwNodeNum aNum(0);
+            SwNodeNum aNum(0);
 
-        if (0 != pNum)
-            aNum = *pNum;
+            if (0 != pNum)
+                aNum = *pNum;
 
-        aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
-        rTxtNd.UpdateOutlineNum(aNum);
+            aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
+            rTxtNd.UpdateNum(aNum);
 
-        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
+            GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
+        }
+        else
+        {
+            GetDoc()->DelNumRules(aPam);
+        }
     }
 
     // die Gliederungs-Felder Updaten
