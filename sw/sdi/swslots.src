@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:34:15 $
+ *  last change: $Author: os $ $Date: 2002-08-06 05:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9901,7 +9901,7 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
 
 SfxSlotInfo FN_TO_FOOTNOTE_AREA
 {
-    SlotName = "Fuﬂnote/Endnote editieren";
+    SlotName = "Fuﬂnote/Endnote bearbeiten";
     SlotName[ english_us ] = "Edit Footnote/Endnote";
     SlotName[ portuguese ] = "Edit Footnote/Endnote";
     SlotName[ russian ] = "Edit Footnote/Endnote";
