@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:04 $
+ *  last change: $Author: kso $ $Date: 2000-12-21 09:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,9 +333,13 @@ struct PropertySetRegistry_Impl
     Reference< XInterface >           m_xRootReadAccess;
     Reference< XInterface >           m_xRootWriteAccess;
     osl::Mutex                        m_aMutex;
+    sal_Bool                          m_bTriedToGetRootReadAccess;  // #82494#
+    sal_Bool                          m_bTriedToGetRootWriteAccess; // #82494#
 
     PropertySetRegistry_Impl( UcbStore& rCreator )
-    : m_pCreator( &rCreator )
+    : m_pCreator( &rCreator ),
+      m_bTriedToGetRootReadAccess( sal_False ),
+      m_bTriedToGetRootWriteAccess( sal_False )
     {
         m_pCreator->acquire();
     }
@@ -1296,6 +1300,14 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
         if ( !m_pImpl->m_xRootReadAccess.is() )
         {
+            if ( m_pImpl->m_bTriedToGetRootReadAccess ) // #82494#
+            {
+                OSL_ENSURE( sal_False,
+                            "PropertySetRegistry::getRootConfigReadAccess - "
+                            "Unable to read any config data! -> #82494#" );
+                return Reference< XInterface >();
+            }
+
             getConfigProvider();
 
             if ( m_pImpl->m_xConfigProvider.is() )
@@ -1303,6 +1315,8 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
                 Sequence< Any > aArguments( 1 );
                 aArguments[ 0 ] <<= OUString::createFromAscii(
                                                  STORE_CONTENTPROPERTIES_KEY );
+
+                m_pImpl->m_bTriedToGetRootReadAccess = sal_True;
 
                 m_pImpl->m_xRootReadAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
@@ -1345,6 +1359,14 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
         if ( !m_pImpl->m_xRootWriteAccess.is() )
         {
+            if ( m_pImpl->m_bTriedToGetRootWriteAccess ) // #82494#
+            {
+                OSL_ENSURE( sal_False,
+                            "PropertySetRegistry::getConfigWriteAccess - "
+                            "Unable to write any config data! -> #82494#" );
+                return Reference< XInterface >();
+            }
+
             getConfigProvider();
 
             if ( m_pImpl->m_xConfigProvider.is() )
@@ -1352,6 +1374,8 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 Sequence< Any > aArguments( 1 );
                 aArguments[ 0 ] <<= OUString::createFromAscii(
                                                  STORE_CONTENTPROPERTIES_KEY );
+
+                m_pImpl->m_bTriedToGetRootWriteAccess = sal_True;
 
                 m_pImpl->m_xRootWriteAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
