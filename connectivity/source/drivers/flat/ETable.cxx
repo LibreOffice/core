@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:21:41 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 10:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 
 using namespace connectivity;
@@ -282,20 +285,20 @@ void OFlatTable::fillColumns()
     {
         while(bRead && !aHeaderLine.Len())
         {
-            bRead = m_aFileStream.ReadLine(aHeaderLine);
+            bRead = m_pFileStream->ReadLine(aHeaderLine);
         }
     }
 
     // read first row
     OFlatString aFirstLine;
 
-    bRead = m_aFileStream.ReadLine(aFirstLine);
+    bRead = m_pFileStream->ReadLine(aFirstLine);
 
     if (!pConnection->isHeaderLine() || !aHeaderLine.Len())
     {
         while(bRead && !aFirstLine.Len())
         {
-            bRead = m_aFileStream.ReadLine(aFirstLine);
+            bRead = m_pFileStream->ReadLine(aFirstLine);
         }
         // use first row as headerline because we need the number of columns
         aHeaderLine = aFirstLine;
@@ -464,7 +467,7 @@ void OFlatTable::fillColumns()
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
     }
-    m_aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+    m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 }
 // -------------------------------------------------------------------------
 OFlatTable::OFlatTable(OFlatConnection* _pConnection) : OFlatTable_BASE(_pConnection)
@@ -504,26 +507,28 @@ OFlatTable::OFlatTable(OFlatConnection* _pConnection,
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
 
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetSmartURL(getEntry(), INetURLObject::ENCODE_ALL);
+    aURL.SetURL(getEntry());
 
     if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
 
     //  Content aContent(aURL.GetMainURL());
 
-    m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-    if(!m_aFileStream.IsOpen())
-        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+    String aFileName = aURL.GetURLNoPass();
 
-    if(m_aFileStream.IsOpen())
+    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+
+    if(!m_pFileStream)
+        m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+
+    if(m_pFileStream)
     {
-        m_aFileStream.Seek(STREAM_SEEK_TO_END);
-        sal_Int32 nSize = m_aFileStream.Tell();
-        m_aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+        m_pFileStream->Seek(STREAM_SEEK_TO_END);
+        sal_Int32 nSize = m_pFileStream->Tell();
+        m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
         // Buffersize abhaengig von der Filegroesse
-        m_aFileStream.SetBufferSize(nSize > 1000000 ? 32768 :
+        m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
                                     nSize > 100000  ? 16384 :
                                     nSize > 10000   ? 4096  : 1024);
 
@@ -659,12 +664,12 @@ sal_Bool OFlatTable::checkHeaderLine()
         BOOL bRead2;
         do
         {
-            bRead2 = m_aFileStream.ReadLine(m_aCurrentLine);
+            bRead2 = m_pFileStream->ReadLine(m_aCurrentLine);
         }
         while(bRead2 && !m_aCurrentLine.Len());
 
-        m_nFilePos = m_aFileStream.Tell();
-        if (m_aFileStream.IsEof())
+        m_nFilePos = m_pFileStream->Tell();
+        if (m_pFileStream->IsEof())
             return sal_False;
     }
     return sal_True;
@@ -688,8 +693,8 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
         case FILE_NEXT:
             if(eCursorPosition != FILE_FIRST)
                 ++m_nRowPos;
-            m_aFileStream.Seek(m_nFilePos);
-            if (m_aFileStream.IsEof() || !checkHeaderLine())
+            m_pFileStream->Seek(m_nFilePos);
+            if (m_pFileStream->IsEof() || !checkHeaderLine())
             {
                 m_nMaxRowCount = m_nRowPos;
                 return sal_False;
@@ -697,26 +702,26 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
 
             m_aRowToFilePos[m_nRowPos] = m_nFilePos;
 
-            m_aFileStream.ReadLine(m_aCurrentLine);
-            if (m_aFileStream.IsEof())
+            m_pFileStream->ReadLine(m_aCurrentLine);
+            if (m_pFileStream->IsEof())
             {
                 m_nMaxRowCount = m_nRowPos;
                 return sal_False;
             }
-            nCurPos = m_aFileStream.Tell();
+            nCurPos = m_pFileStream->Tell();
             break;
         case FILE_PRIOR:
             --m_nRowPos;
             if(m_nRowPos > 0)
             {
                 m_nFilePos = m_aRowToFilePos.find(m_nRowPos)->second;
-                m_aFileStream.Seek(m_nFilePos);
-                if (m_aFileStream.IsEof() || !checkHeaderLine())
+                m_pFileStream->Seek(m_nFilePos);
+                if (m_pFileStream->IsEof() || !checkHeaderLine())
                     return sal_False;
-                m_aFileStream.ReadLine(m_aCurrentLine);
-                if (m_aFileStream.IsEof())
+                m_pFileStream->ReadLine(m_aCurrentLine);
+                if (m_pFileStream->IsEof())
                     return sal_False;
-                nCurPos = m_aFileStream.Tell();
+                nCurPos = m_pFileStream->Tell();
             }
             else
                 m_nRowPos = 0;
@@ -729,13 +734,13 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
             {
                 m_nFilePos = m_aRowToFilePos.rbegin()->second;
                 m_nRowPos  = m_aRowToFilePos.rbegin()->first;
-                m_aFileStream.Seek(m_nFilePos);
-                if (m_aFileStream.IsEof() || !checkHeaderLine())
+                m_pFileStream->Seek(m_nFilePos);
+                if (m_pFileStream->IsEof() || !checkHeaderLine())
                     return sal_False;
-                m_aFileStream.ReadLine(m_aCurrentLine);
-                if (m_aFileStream.IsEof())
+                m_pFileStream->ReadLine(m_aCurrentLine);
+                if (m_pFileStream->IsEof())
                     return sal_False;
-                nCurPos = m_aFileStream.Tell();
+                nCurPos = m_pFileStream->Tell();
             }
             else
             {
@@ -764,13 +769,13 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
                 if(aIter != m_aRowToFilePos.end())
                 {
                     m_nFilePos = aIter->second;
-                    m_aFileStream.Seek(m_nFilePos);
-                    if (m_aFileStream.IsEof() || !checkHeaderLine())
+                    m_pFileStream->Seek(m_nFilePos);
+                    if (m_pFileStream->IsEof() || !checkHeaderLine())
                         return sal_False;
-                    m_aFileStream.ReadLine(m_aCurrentLine);
-                    if (m_aFileStream.IsEof())
+                    m_pFileStream->ReadLine(m_aCurrentLine);
+                    if (m_pFileStream->IsEof())
                         return sal_False;
-                    nCurPos = m_aFileStream.Tell();
+                    nCurPos = m_pFileStream->Tell();
                 }
                 else if(m_nMaxRowCount && nOffset > m_nMaxRowCount) // offset is outside the table
                 {
@@ -792,28 +797,28 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
                         --aIter;
                         m_nRowPos   = aIter->first;
                         m_nFilePos  = aIter->second;
-                        m_aFileStream.Seek(m_nFilePos);
-                        if (m_aFileStream.IsEof() || !checkHeaderLine())
+                        m_pFileStream->Seek(m_nFilePos);
+                        if (m_pFileStream->IsEof() || !checkHeaderLine())
                             return sal_False;
-                        m_aFileStream.ReadLine(m_aCurrentLine);
-                        if (m_aFileStream.IsEof())
+                        m_pFileStream->ReadLine(m_aCurrentLine);
+                        if (m_pFileStream->IsEof())
                             return sal_False;
-                        nCurPos = m_aFileStream.Tell();
+                        nCurPos = m_pFileStream->Tell();
                     }
                 }
             }
 
             break;
         case FILE_BOOKMARK:
-            m_aFileStream.Seek(nOffset);
-            if (m_aFileStream.IsEof())
+            m_pFileStream->Seek(nOffset);
+            if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_aFileStream.Tell();  // Byte-Position in der Datei merken (am ZeilenANFANG)
-            m_aFileStream.ReadLine(m_aCurrentLine);
-            if (m_aFileStream.IsEof())
+            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
+            m_pFileStream->ReadLine(m_aCurrentLine);
+            if (m_pFileStream->IsEof())
                 return sal_False;
-            nCurPos  = m_aFileStream.Tell();
+            nCurPos  = m_pFileStream->Tell();
             break;
     }
 

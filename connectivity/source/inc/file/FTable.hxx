@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 10:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace connectivity
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
             OConnection*                                        m_pConnection;
-            SvFileStream                                        m_aFileStream;
+            SvStream*                                           m_pFileStream;
             ::vos::ORef<OSQLColumns>                            m_aColumns;
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
@@ -154,7 +154,7 @@ namespace connectivity
             ::rtl::OUString SAL_CALL getName() { return m_Name; }
 
             ::rtl::OUString getSchema() { return m_SchemaName; }
-            sal_Bool isReadOnly() const { return m_aFileStream.IsOpen() && (m_aFileStream.GetStreamMode() & STREAM_READWRITE) != STREAM_READWRITE; }
+            sal_Bool isReadOnly() const { return m_pFileStream && (m_pFileStream->GetStreamMode() & STREAM_READWRITE) != STREAM_READWRITE; }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

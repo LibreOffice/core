@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 10:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,10 +199,11 @@ void OFileTable::FileClose()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if (m_aFileStream.IsOpen() && m_aFileStream.IsWritable())
-        m_aFileStream.Flush();
+    if (m_pFileStream && m_pFileStream->IsWritable())
+        m_pFileStream->Flush();
 
-    m_aFileStream.Close();
+    delete m_pFileStream;
+    m_pFileStream = NULL;
 
     if (m_pBuffer)
     {

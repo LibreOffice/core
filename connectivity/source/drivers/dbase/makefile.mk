@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+#   last change: $Author: oj $ $Date: 2000-11-16 10:44:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,7 @@ SHL1STDLIBS=\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
+    $(UNOTOOLSLIB)				\
     $(COMPHELPERLIB)
 
 .IF "$(COMPHELPERLIB)" == ""

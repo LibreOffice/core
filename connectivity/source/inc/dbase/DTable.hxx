@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:53:38 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 10:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace connectivity
 
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
-            SvFileStream    m_aMemoStream;
+            SvStream*       m_pMemoStream;
 
             void readHeader();
             void fillColumns();

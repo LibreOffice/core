@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-14 11:55:54 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 10:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 
 using namespace connectivity;
 using namespace connectivity::dbase;
@@ -138,16 +141,16 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
 {
-    m_aFileStream.RefreshBuffer(); // sicherstellen, dass die Kopfinformationen tatsaechlich neu gelesen werden
-    m_aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+    m_pFileStream->RefreshBuffer(); // sicherstellen, dass die Kopfinformationen tatsaechlich neu gelesen werden
+    m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
     BYTE aTyp;
-    m_aFileStream >> aTyp;
-    m_aFileStream.Read((char*)m_aHeader.db_aedat, 3*sizeof(BYTE));
-    m_aFileStream >> m_aHeader.db_anz;
-    m_aFileStream >> m_aHeader.db_kopf;
-    m_aFileStream >> m_aHeader.db_slng;
-    m_aFileStream.Read((char*)m_aHeader.db_frei, 20*sizeof(BYTE));
+    (*m_pFileStream) >> aTyp;
+    m_pFileStream->Read((char*)m_aHeader.db_aedat, 3*sizeof(BYTE));
+    (*m_pFileStream) >> m_aHeader.db_anz;
+    (*m_pFileStream) >> m_aHeader.db_kopf;
+    (*m_pFileStream) >> m_aHeader.db_slng;
+    m_pFileStream->Read((char*)m_aHeader.db_frei, 20*sizeof(BYTE));
 
     if (m_aHeader.db_anz  < 0 ||
         m_aHeader.db_kopf <= 0 ||
@@ -171,7 +174,7 @@ void ODbaseTable::readHeader()
             case dBaseIIIMemo:
             case dBaseIVMemo:
             case FoxProMemo:
-                m_aFileStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
                 break;
             default:
             {   // Dies ist keine DBase Datei
@@ -182,8 +185,8 @@ void ODbaseTable::readHeader()
 // -------------------------------------------------------------------------
 void ODbaseTable::fillColumns()
 {
-    m_aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
-    m_aFileStream.Seek(32L);
+    m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+    m_pFileStream->Seek(32L);
 
     // Anzahl Felder:
     sal_uInt32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
@@ -195,7 +198,7 @@ void ODbaseTable::fillColumns()
     for (sal_uInt32 i = 0; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
-        m_aFileStream.Read((char*)&aDBFColumn, sizeof(aDBFColumn));
+        m_pFileStream->Read((char*)&aDBFColumn, sizeof(aDBFColumn));
 
         // Info auslesen und in SdbColumn packen:
         String aColumnName((const char *)aDBFColumn.db_fnm,getConnection()->getTextEncoding());
@@ -266,7 +269,11 @@ void ODbaseTable::fillColumns()
 // -------------------------------------------------------------------------
 ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection) : ODbaseTable_BASE(_pConnection)
 {
-
+    // initialize the header
+    m_aHeader.db_typ    = dBaseIII;
+    m_aHeader.db_anz    = 0;
+    m_aHeader.db_kopf   = 0;
+    m_aHeader.db_slng   = 0;
 }
 // -------------------------------------------------------------------------
 ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
@@ -281,20 +288,27 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _SchemaName,
                                   _CatalogName)
 {
+    // initialize the header
+    m_aHeader.db_typ    = dBaseIII;
+    m_aHeader.db_anz    = 0;
+    m_aHeader.db_kopf   = 0;
+    m_aHeader.db_slng   = 0;
+
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetSmartURL(getEntry(), INetURLObject::ENCODE_ALL);
+    aURL.SetURL(getEntry());
 
     if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
 
-    //  Content aContent(aURL.GetMainURL());
+    //  Content aContent(aURL.GetURLNoPass());
+    String aFileName(getEntry());
 
-    m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-    if(!m_aFileStream.IsOpen())
-        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 
-    if(m_aFileStream.IsOpen())
+    if(!m_pFileStream)
+        m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+
+    if(m_pFileStream)
     {
         readHeader();
 
@@ -311,45 +325,30 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
             // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
             // allerdings koennen keine Updates durchgefuehrt werden
             // jedoch die Operation wird ausgefuehrt
-            m_aMemoStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-            if (m_aMemoStream.IsOpen())
+            m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            if (m_pMemoStream)
                 ReadMemoHeader();
-
-    //      if (aStatus.IsError())
-    //      {
-    //          String aText = String(SdbResId(STR_STAT_FILE_NOT_FOUND));
-    //          aText.SearchAndReplace(String::CreateFromAscii("%%d"),aFileEntry.GetName());
-    //          aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-    //          aStatus.Set(SDB_STAT_SUCCESS_WITH_INFO,
-    //                      String::CreateFromAscii("01000"),
-    //                      aStatus.CreateErrorMessage(aText),
-    //                      0, String() );
-    //          m_aMemoStream.Close();
-    //      }
         }
-    //  if (aStatus.IsError())
-    //      FileClose();
-    //
         fillColumns();
 
-        m_aFileStream.Seek(STREAM_SEEK_TO_END);
-        UINT32 nFileSize = m_aFileStream.Tell();
-        m_aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
+        m_pFileStream->Seek(STREAM_SEEK_TO_END);
+        UINT32 nFileSize = m_pFileStream->Tell();
+        m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
         // Buffersize abhaengig von der Filegroesse
-        m_aFileStream.SetBufferSize(nFileSize > 1000000 ? 32768 :
+        m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
                                   nFileSize > 100000 ? 16384 :
                                   nFileSize > 10000 ? 4096 : 1024);
 
-        if (m_aMemoStream.IsOpen())
+        if (m_pMemoStream)
         {
             // Puffer genau auf Laenge eines Satzes stellen
-            m_aMemoStream.Seek(STREAM_SEEK_TO_END);
-            nFileSize = m_aMemoStream.Tell();
-            m_aMemoStream.Seek(STREAM_SEEK_TO_BEGIN);
+            m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+            nFileSize = m_pMemoStream->Tell();
+            m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
 
             // Buffersize abhaengig von der Filegroesse
-            m_aMemoStream.SetBufferSize(nFileSize > 1000000 ? 32768 :
+            m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
                                           nFileSize > 100000 ? 16384 :
                                           nFileSize > 10000 ? 4096 :
                                           m_aMemoHeader.db_size);
@@ -364,18 +363,18 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
 //------------------------------------------------------------------
 BOOL ODbaseTable::ReadMemoHeader()
 {
-    m_aMemoStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-    m_aMemoStream.RefreshBuffer();          // sicherstellen das die Kopfinformationen tatsaechlich neu gelesen werden
-    m_aMemoStream.Seek(0L);
+    m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    m_pMemoStream->RefreshBuffer();         // sicherstellen das die Kopfinformationen tatsaechlich neu gelesen werden
+    m_pMemoStream->Seek(0L);
 
-    m_aMemoStream >> m_aMemoHeader.db_next;
+    (*m_pMemoStream) >> m_aMemoHeader.db_next;
     switch (m_aHeader.db_typ)
     {
         case dBaseIIIMemo:  // dBase III: feste Blockgröße
         case dBaseIVMemo:
             // manchmal wird aber auch dBase3 dBase4 Memo zugeordnet
-            m_aMemoStream.Seek(20L);
-            m_aMemoStream >> m_aMemoHeader.db_size;
+            m_pMemoStream->Seek(20L);
+            (*m_pMemoStream) >> m_aMemoHeader.db_size;
             if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size != 512)  // 1 steht auch fuer dBase 3
                 m_aMemoHeader.db_typ  = MemodBaseIV;
             else if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size == 512)
@@ -383,10 +382,10 @@ BOOL ODbaseTable::ReadMemoHeader()
                 // nun gibt es noch manche Dateien, die verwenden eine Gößenangabe,
                 // sind aber dennoch dBase Dateien
                 char sHeader[4];
-                m_aMemoStream.Seek(m_aMemoHeader.db_size);
-                m_aMemoStream.Read(sHeader,4);
+                m_pMemoStream->Seek(m_aMemoHeader.db_size);
+                m_pMemoStream->Read(sHeader,4);
 
-                if ((m_aMemoStream.GetErrorCode() != ERRCODE_NONE) || ((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
+                if ((m_pMemoStream->GetErrorCode() != ERRCODE_NONE) || ((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
                     m_aMemoHeader.db_typ  = MemodBaseIII;
                 else
                     m_aMemoHeader.db_typ  = MemodBaseIV;
@@ -399,9 +398,9 @@ BOOL ODbaseTable::ReadMemoHeader()
             break;
         case FoxProMemo:
             m_aMemoHeader.db_typ    = MemoFoxPro;
-            m_aMemoStream.Seek(6L);
-            m_aMemoStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
-            m_aMemoStream >> m_aMemoHeader.db_size;
+            m_pMemoStream->Seek(6L);
+            m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+            (*m_pMemoStream) >> m_aMemoHeader.db_size;
     }
     return TRUE;
 }
@@ -449,36 +448,33 @@ void ODbaseTable::refreshColumns()
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshIndexes()
 {
-//  Dir* pDir = m_pConnection->getDir();
-//  String aPath = pDir->GetName();
-//  aPath += m_Name.getStr();
-    INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetSmartURL(getEntry(), INetURLObject::ENCODE_ALL);
-
-    aURL.setExtension(String::CreateFromAscii("inf"));
-
-    Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
-    aInfFile.SetGroup(dBASE_III_GROUP);
-    sal_Int32 nKeyCnt = aInfFile.GetKeyCount();
-    ByteString aKeyName;
-    ByteString aIndexName;
-
     ::std::vector< ::rtl::OUString> aVector;
-
-    for (sal_Int32 nKey = 0,nPos=0; nKey < nKeyCnt; nKey++)
+    if(m_pFileStream)
     {
-        // Verweist der Key auf ein Indexfile?...
-        aKeyName = aInfFile.GetKeyName( nKey );
-        //...wenn ja, Indexliste der Tabelle hinzufuegen
-        if (aKeyName.Copy(0,3) == ByteString("NDX") )
+        INetURLObject aURL;
+        aURL.SetURL(getEntry());
+
+        aURL.setExtension(String::CreateFromAscii("inf"));
+        Config aInfFile(aURL.GetURLNoPass());
+        aInfFile.SetGroup(dBASE_III_GROUP);
+        sal_Int32 nKeyCnt = aInfFile.GetKeyCount();
+        ByteString aKeyName;
+        ByteString aIndexName;
+
+        for (sal_Int32 nKey = 0,nPos=0; nKey < nKeyCnt; nKey++)
         {
-            aIndexName = aInfFile.ReadKey(aKeyName);
-            aURL.setName(String(aIndexName,getConnection()->getTextEncoding()));
-            Content aCnt(aURL.GetMainURL(),Reference<XCommandEnvironment>());
-            if (aCnt.isDocument())
+            // Verweist der Key auf ein Indexfile?...
+            aKeyName = aInfFile.GetKeyName( nKey );
+            //...wenn ja, Indexliste der Tabelle hinzufuegen
+            if (aKeyName.Copy(0,3) == ByteString("NDX") )
             {
-                aVector.push_back(aURL.getBase());
+                aIndexName = aInfFile.ReadKey(aKeyName);
+                aURL.setName(String(aIndexName,getConnection()->getTextEncoding()));
+                Content aCnt(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+                if (aCnt.isDocument())
+                {
+                    aVector.push_back(aURL.getBase());
+                }
             }
         }
     }
@@ -612,12 +608,12 @@ sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, s
         OSL_ENSHURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
         sal_Int32 nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
 
-        ULONG nLen = m_aFileStream.Seek(nPos);
-        if (m_aFileStream.GetError() != ERRCODE_NONE)
+        ULONG nLen = m_pFileStream->Seek(nPos);
+        if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        nLen = m_aFileStream.Read((char*)m_pBuffer, nEntryLen);
-        if (m_aFileStream.GetError() != ERRCODE_NONE)
+        nLen = m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
+        if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
     }
     goto End;
@@ -777,7 +773,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
                 case DataType::LONGVARCHAR:
                 {
                     long nBlockNo = aStr.ToInt32(); // Blocknummer lesen
-                    if (nBlockNo > 0 && m_aMemoStream.IsOpen()) // Daten aus Memo-Datei lesen, nur wenn
+                    if (nBlockNo > 0 && m_pMemoStream) // Daten aus Memo-Datei lesen, nur wenn
                     {
                         if (!ReadMemo(nBlockNo, (*_rRow)[i]))
                             break;
@@ -804,7 +800,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
     BOOL bIsText = TRUE;
     //  SdbConnection* pConnection = GetConnection();
 
-    m_aMemoStream.Seek(nBlockNo * m_aMemoHeader.db_size);
+    m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
     {
         case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
@@ -817,7 +813,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 
             do
             {
-                m_aMemoStream.Read(&aBuf,512);
+                m_pMemoStream->Read(&aBuf,512);
 
                 USHORT i = 0;
                 while (aBuf[i] != cEOF && ++i < 512)
@@ -827,7 +823,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 aBuf[i] = 0;
                 aBStr += aBuf;
 
-            } while (!bReady && !m_aMemoStream.IsEof() && aBStr.Len() < STRING_MAXLEN);
+            } while (!bReady && !m_pMemoStream->IsEof() && aBStr.Len() < STRING_MAXLEN);
 
             ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),getConnection()->getTextEncoding());
             aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
@@ -837,14 +833,14 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
         case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
         {
             char sHeader[4];
-            m_aMemoStream.Read(sHeader,4);
+            m_pMemoStream->Read(sHeader,4);
             // Foxpro stores text and binary data
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
                 if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
                 {
 //                  String aText = String(SdbResId(STR_STAT_FILE_INVALID));
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_aMemoStream.GetFileName());
+//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
 //                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
 //                  aStatus.Set(SDB_STAT_ERROR,
 //                          String::CreateFromAscii("01000"),
@@ -858,7 +854,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
             {
 //              String aText = String(SdbResId(STR_STAT_FILE_INVALID));
-//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_aMemoStream.GetFileName());
+//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
 //              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
 //              aStatus.Set(SDB_STAT_ERROR,
 //                      String::CreateFromAscii("01000"),
@@ -868,7 +864,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             }
 
             ULONG nLength;
-            m_aMemoStream >> nLength;
+            (*m_pMemoStream) >> nLength;
 
             if (m_aMemoHeader.db_typ == MemodBaseIV)
                 nLength -= 8;
@@ -878,7 +874,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             {
                 ByteString aBStr;
                 aBStr.Expand(USHORT (nLength));
-                m_aMemoStream.Read(aBStr.AllocBuffer((USHORT)nLength),nLength);
+                m_pMemoStream->Read(aBStr.AllocBuffer((USHORT)nLength),nLength);
                 aBStr.ReleaseBufferAccess();
                 ::rtl::OUString aStr(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
                 aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
@@ -890,7 +886,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 sal_Char cChar;
                 for (ULONG i = 0; i < nLength; i++)
                 {
-                    m_aMemoStream.Read(&cChar,1);
+                    m_pMemoStream->Read(&cChar,1);
                     (*pData++) = cChar;
                 }
                 aVariable = aText;
@@ -905,17 +901,18 @@ void ODbaseTable::FileClose()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     // falls noch nicht alles geschrieben wurde
-    if (m_aMemoStream.IsOpen() && m_aMemoStream.IsWritable())
-        m_aMemoStream.Flush();
+    if (m_pMemoStream && m_pMemoStream->IsWritable())
+        m_pMemoStream->Flush();
 
-    m_aMemoStream.Close();
+    delete m_pMemoStream;
+    m_pMemoStream = NULL;
 
     ODbaseTable_BASE::FileClose();
 }
 // -------------------------------------------------------------------------
 BOOL ODbaseTable::CreateImpl()
 {
-    OSL_ENSHURE(!m_aFileStream.IsOpen(), "SequenceError");
+    OSL_ENSHURE(!m_pFileStream, "SequenceError");
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
@@ -926,25 +923,24 @@ BOOL ODbaseTable::CreateImpl()
         aIdent += m_Name;
         aName = aIdent.getStr();
     }
-    aURL.SetSmartURL(aName, INetURLObject::ENCODE_ALL);
+    aURL.SetURL(aName);
 
     if(aURL.getExtension() != m_pConnection->getExtension())
         aURL.setExtension(m_pConnection->getExtension());
 
-    Content aContent(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+    Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
 
     if (aContent.isDocument())
     {
         // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
-        SvFileStream m_aFileStream;
-        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT),STREAM_STD_READ);
+        SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
 
-        if (m_aFileStream.IsOpen() && m_aFileStream.Seek(STREAM_SEEK_TO_END))
+        if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
         {
             //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
             return sal_False;
         }
-        m_aFileStream.Close();
+        delete pFileStream;
     }
 
     BOOL bMemoFile = sal_False;
@@ -963,20 +959,20 @@ BOOL ODbaseTable::CreateImpl()
     {
         String aExt = aURL.getExtension();
         aURL.setExtension(String::CreateFromAscii("dbt"));                      // extension for memo file
-        Content aMemo1Content(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+        Content aMemo1Content(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
 
         if (aMemo1Content.isDocument())
         {
             //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,MEMO,aFile.GetFull());
             aURL.setExtension(aExt);      // kill dbf file
-            Content aMemoContent(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+            Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
             aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
             return sal_False;
         }
         if (!CreateMemoFile(aURL))
         {
             aURL.setExtension(aExt);      // kill dbf file
-            Content aMemoContent(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+            Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
             aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
             return sal_False;
         }
@@ -1002,25 +998,26 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     bCreateMemo = sal_False;
     Date aDate;                                     // aktuelles Datum
 
-    m_aFileStream.Open(aFile.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
-    if (!m_aFileStream.IsOpen())
+    m_pFileStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetURLNoPass(),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+
+    if (!m_pFileStream)
         return sal_False;
 
     char aBuffer[21];               // write buffer
     memset(aBuffer,0,sizeof(aBuffer));
 
-    m_aFileStream.Seek(0L);
-    m_aFileStream << (BYTE) dBaseIII;                                                                // dBase format
-    m_aFileStream << (BYTE) (aDate.GetYear() % 100);                 // aktuelles Datum
+    m_pFileStream->Seek(0L);
+    (*m_pFileStream) << (BYTE) dBaseIII;                                                                // dBase format
+    (*m_pFileStream) << (BYTE) (aDate.GetYear() % 100);                 // aktuelles Datum
 
 
-    m_aFileStream << (BYTE) aDate.GetMonth();
-    m_aFileStream << (BYTE) aDate.GetDay();
-    m_aFileStream << 0L;                                                                                                     // Anzahl der Datensätze
-    m_aFileStream << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);                // Kopfinformationen,
+    (*m_pFileStream) << (BYTE) aDate.GetMonth();
+    (*m_pFileStream) << (BYTE) aDate.GetDay();
+    (*m_pFileStream) << 0L;                                                                                                     // Anzahl der Datensätze
+    (*m_pFileStream) << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);                // Kopfinformationen,
                                                                         // pColumns erhält immer eine Spalte mehr
-    m_aFileStream << (USHORT) 0;                                                                                     // Satzlänge wird später bestimmt
-    m_aFileStream.Write(aBuffer, 20);
+    (*m_pFileStream) << (USHORT) 0;                                                                                     // Satzlänge wird später bestimmt
+    m_pFileStream->Write(aBuffer, 20);
 
     USHORT nRecLength = 1;                                                                                          // Länge 1 für deleted flag
     ULONG  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
@@ -1049,8 +1046,8 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         }
 
         ByteString aCol(aName.getStr(),gsl_getSystemTextEncoding());
-        m_aFileStream << aCol.GetBuffer();
-        m_aFileStream.Write(aBuffer, 11 - aCol.Len());
+        (*m_pFileStream) << aCol.GetBuffer();
+        m_pFileStream->Write(aBuffer, 11 - aCol.Len());
 
         switch (getINT32(xCol->getPropertyValue(PROPERTY_TYPE)))
         {
@@ -1088,8 +1085,8 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 }
         }
 
-        m_aFileStream << cTyp;
-        m_aFileStream.Write(aBuffer, 4);
+        (*m_pFileStream) << cTyp;
+        m_pFileStream->Write(aBuffer, 4);
 
         sal_Int32 nPrecision = 0;
         xCol->getPropertyValue(PROPERTY_PRECISION) >>= nPrecision;
@@ -1128,33 +1125,33 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 }
                 if (getBOOL(xCol->getPropertyValue(PROPERTY_ISCURRENCY))) // Currency wird gesondert behandelt
                 {
-                    m_aFileStream << (BYTE)10;          // Standard Laenge
-                    m_aFileStream << (BYTE)4;
+                    (*m_pFileStream) << (BYTE)10;          // Standard Laenge
+                    (*m_pFileStream) << (BYTE)4;
                     nRecLength += 10;
                 }
                 else
                 {
                     UINT16 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
 
-                    m_aFileStream << (BYTE)( nPrec);
-                    m_aFileStream << (BYTE)nScale;
+                    (*m_pFileStream) << (BYTE)( nPrec);
+                    (*m_pFileStream) << (BYTE)nScale;
                     nRecLength += (USHORT)nPrec;
                 }
                 break;
             case 'L':
-                m_aFileStream << (BYTE)1;
-                m_aFileStream << (BYTE)0;
+                (*m_pFileStream) << (BYTE)1;
+                (*m_pFileStream) << (BYTE)0;
                 nRecLength++;
                 break;
             case 'D':
-                m_aFileStream << (BYTE)8;
-                m_aFileStream << (BYTE)0;
+                (*m_pFileStream) << (BYTE)8;
+                (*m_pFileStream) << (BYTE)0;
                 nRecLength += 8;
                 break;
             case 'M':
                 bCreateMemo = TRUE;
-                m_aFileStream << (BYTE)10;
-                m_aFileStream << (BYTE)0;
+                (*m_pFileStream) << (BYTE)10;
+                (*m_pFileStream) << (BYTE)0;
                 nRecLength += 10;
                 break;
             default:
@@ -1164,20 +1161,20 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 //                      0, String() );
                 break;
         }
-        m_aFileStream.Write(aBuffer, 14);
+        m_pFileStream->Write(aBuffer, 14);
     }
 
 //  if (aStatus.IsError())
 //      return sal_False;
 
-    m_aFileStream << (BYTE)0x0d;                                     // kopf ende
-    m_aFileStream.Seek(10L);
-    m_aFileStream << nRecLength;                                     // satzlänge nachträglich eintragen
+    (*m_pFileStream) << (BYTE)0x0d;                                     // kopf ende
+    m_pFileStream->Seek(10L);
+    (*m_pFileStream) << nRecLength;                                     // satzlänge nachträglich eintragen
 
     if (bCreateMemo)
     {
-        m_aFileStream.Seek(0L);
-        m_aFileStream << (BYTE) dBaseIIIMemo;
+        m_pFileStream->Seek(0L);
+        (*m_pFileStream) << (BYTE) dBaseIIIMemo;
     }
     return TRUE;
 }
@@ -1187,28 +1184,31 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // Makro zum Filehandling fürs Erzeugen von Tabellen
-    m_aMemoStream.Open(aFile.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
-    if (!m_aMemoStream.IsOpen())
+    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aFile.GetURLNoPass(),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+
+    if (!m_pMemoStream)
         return sal_False;
 
     char aBuffer[512];              // write buffer
     memset(aBuffer,0,sizeof(aBuffer));
 
 #ifdef WIN
-    m_aMemoStream.Seek(0L);
+    m_pMemoStream->Seek(0L);
     for (UINT16 i = 0; i < 512; i++)
     {
-        m_aMemoStream << BYTE(0);
+        (*m_pMemoStream) << BYTE(0);
     }
 #else
-    m_aMemoStream.SetFiller('\0');
-    m_aMemoStream.SetStreamSize(512);
+    m_pMemoStream->SetFiller('\0');
+    m_pMemoStream->SetStreamSize(512);
 #endif
 
-    m_aMemoStream.Seek(0L);
-    m_aMemoStream << long(1);                  // Zeiger auf ersten freien Block
+    m_pMemoStream->Seek(0L);
+    (*m_pMemoStream) << long(1);                  // Zeiger auf ersten freien Block
 
-    m_aMemoStream.Close();
+    m_pMemoStream->Flush();
+    delete m_pMemoStream;
+    m_pMemoStream = NULL;
     return TRUE;
 }
 //------------------------------------------------------------------
@@ -1225,17 +1225,16 @@ BOOL ODbaseTable::DropImpl()
     FileClose();
 
     INetURLObject aURL;
-    aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetSmartURL(getEntry(), INetURLObject::ENCODE_ALL);
+    aURL.SetURL(getEntry());
 
-    Content aContent(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+    Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
     aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),
                                  makeAny( sal_Bool( sal_True ) ) );
 
     if (HasMemoFields())
     {
         aURL.setExtension(String::CreateFromAscii("dbt"));
-        Content aMemoContent(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+        Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
         aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
     }
 
@@ -1250,7 +1249,7 @@ BOOL ODbaseTable::DropImpl()
     }
     //  aFile.SetBase(m_Name);
     aURL.setExtension(String::CreateFromAscii("inf"));
-    Content aInfContent(aURL.GetMainURL(),Reference<XCommandEnvironment>());
+    Content aInfContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
     aInfContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
     return TRUE;
 }
@@ -1274,34 +1273,32 @@ BOOL ODbaseTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XInd
         return sal_False;
     }
 
-    String aName = m_aFileStream.GetFileName();
+    m_pFileStream->Seek(STREAM_SEEK_TO_END);
+    nFileSize = m_pFileStream->Tell();
 
-    m_aFileStream.Seek(STREAM_SEEK_TO_END);
-    nFileSize = m_aFileStream.Tell();
-
-    if (HasMemoFields() && m_aMemoStream.IsOpen())
+    if (HasMemoFields() && m_pMemoStream)
     {
-        m_aMemoStream.Seek(STREAM_SEEK_TO_END);
-        nMemoFileSize = m_aMemoStream.Tell();
+        m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        nMemoFileSize = m_pMemoStream->Tell();
     }
 
     if (!WriteBuffer())
     {
-        m_aFileStream.SetStreamSize(nFileSize);             // alte Größe restaurieren
+        m_pFileStream->SetStreamSize(nFileSize);                // alte Größe restaurieren
 
-        if (HasMemoFields() && m_aMemoStream.IsOpen())
-            m_aMemoStream.SetStreamSize(nMemoFileSize); // alte Größe restaurieren
+        if (HasMemoFields() && m_pMemoStream)
+            m_pMemoStream->SetStreamSize(nMemoFileSize);    // alte Größe restaurieren
         m_nFilePos = nTempPos;                              // Fileposition restaurieren
     }
     else
     {
         // Anzahl Datensaetze im Header erhoehen:
-        m_aFileStream.Seek( 4L );
-        m_aFileStream << (m_aHeader.db_anz + 1);
+        m_pFileStream->Seek( 4L );
+        (*m_pFileStream) << (m_aHeader.db_anz + 1);
 
         // beim AppendOnly kein Flush!
         if (bFlush)
-            m_aFileStream.Flush();
+            m_pFileStream->Flush();
 
         // bei Erfolg # erhöhen
         m_aHeader.db_anz++;
@@ -1320,23 +1317,23 @@ BOOL ODbaseTable::UpdateRow(file::OValueVector& rRow, OValueRow pOrgRow,const Re
 
     // Auf gewuenschten Record positionieren:
     long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
-    m_aFileStream.Seek(nPos);
-    m_aFileStream.Read((char*)m_pBuffer, m_aHeader.db_slng);
+    m_pFileStream->Seek(nPos);
+    m_pFileStream->Read((char*)m_pBuffer, m_aHeader.db_slng);
 
     UINT32 nMemoFileSize;
-    if (HasMemoFields() && m_aMemoStream.IsOpen())
+    if (HasMemoFields() && m_pMemoStream)
     {
-        m_aMemoStream.Seek(STREAM_SEEK_TO_END);
-        nMemoFileSize = m_aMemoStream.Tell();
+        m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        nMemoFileSize = m_pMemoStream->Tell();
     }
     if (!UpdateBuffer(rRow, pOrgRow,_xCols) || !WriteBuffer())
     {
-        if (HasMemoFields() && m_aMemoStream.IsOpen())
-            m_aMemoStream.SetStreamSize(nMemoFileSize); // alte Größe restaurieren
+        if (HasMemoFields() && m_pMemoStream)
+            m_pMemoStream->SetStreamSize(nMemoFileSize);    // alte Größe restaurieren
     }
     else
     {
-        m_aFileStream.Flush();
+        m_pFileStream->Flush();
     }
     return sal_True;
 }
@@ -1348,7 +1345,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     // oder nicht):
     // Auf gewuenschten Record positionieren:
     long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
-    m_aFileStream.Seek(nPos);
+    m_pFileStream->Seek(nPos);
 
     OValueRow aRow = new OValueVector(_rCols.size());
 
@@ -1388,9 +1385,9 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         }
     }
 
-    m_aFileStream.Seek(nPos);
-    m_aFileStream << (BYTE)'*';
-    m_aFileStream.Flush();
+    m_pFileStream->Seek(nPos);
+    (*m_pFileStream) << (BYTE)'*';
+    m_pFileStream->Flush();
     return sal_True;;
 }
 
@@ -1433,9 +1430,9 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
             case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
             {
                 char sHeader[4];
-                m_aMemoStream.Seek(rBlockNr * m_aMemoHeader.db_size);
-                m_aMemoStream.SeekRel(4L);
-                m_aMemoStream.Read(sHeader,4);
+                m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
+                m_pMemoStream->SeekRel(4L);
+                m_pMemoStream->Read(sHeader,4);
 
                 ULONG nOldSize;
                 if (m_aMemoHeader.db_typ == MemoFoxPro)
@@ -1460,16 +1457,16 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
     if (bAppend)
     {
         ULONG nStreamSize;
-        nStreamSize = m_aMemoStream.Seek(STREAM_SEEK_TO_END);
+        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         // letzten block auffuellen
         rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
-        m_aMemoStream.SetStreamSize(rBlockNr * m_aMemoHeader.db_size);
-        m_aMemoStream.Seek(STREAM_SEEK_TO_END);
+        m_pMemoStream->SetStreamSize(rBlockNr * m_aMemoHeader.db_size);
+        m_pMemoStream->Seek(STREAM_SEEK_TO_END);
     }
     else
     {
-        m_aMemoStream.Seek(rBlockNr * m_aMemoHeader.db_size);
+        m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
     }
 
     switch (m_aMemoHeader.db_typ)
@@ -1481,47 +1478,47 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 
 //          if (pData)
 //          {
-//              m_aMemoStream.Write((const char*) pData->getConstArray(), pData->getLength());
+//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
 //          }
 //          else
 //          {
-                m_aMemoStream.Write(aStr.GetBuffer(), aStr.Len());
+                m_pMemoStream->Write(aStr.GetBuffer(), aStr.Len());
             //  }
 
-            m_aMemoStream << cEOF << cEOF;
+            (*m_pMemoStream) << cEOF << cEOF;
         } break;
         case MemoFoxPro:
         case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
         {
-            m_aMemoStream << (BYTE)0xFF
+            (*m_pMemoStream) << (BYTE)0xFF
                                          << (BYTE)0xFF
                                          << (BYTE)0x08;
 
             UINT32 nWriteSize = nSize;
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
-                m_aMemoStream << (BYTE) 0x01; // ((pData = NULL) ? 0x01 : 0x00);
+                (*m_pMemoStream) << (BYTE) 0x01; // ((pData = NULL) ? 0x01 : 0x00);
                 for (int i = 4; i > 0; nWriteSize >>= 8)
                     nHeader[--i] = (BYTE) (nWriteSize % 256);
             }
             else
             {
-                m_aMemoStream << (BYTE) 0x00;
+                (*m_pMemoStream) << (BYTE) 0x00;
                 nWriteSize += 8;
                 for (int i = 0; i < 4; nWriteSize >>= 8)
                     nHeader[i++] = (BYTE) (nWriteSize % 256);
             }
 
-            m_aMemoStream.Write(nHeader,4);
+            m_pMemoStream->Write(nHeader,4);
 //          if (pData)
 //          {
-//              m_aMemoStream.Write((const char*) pData->getConstArray(), pData->getLength());
+//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
 //          }
 //          else
 //          {
-                m_aMemoStream.Write(aStr.GetBuffer(), aStr.Len());
+                m_pMemoStream->Write(aStr.GetBuffer(), aStr.Len());
             //  }
-            m_aMemoStream.Flush();
+            m_pMemoStream->Flush();
         }
     }
 
@@ -1529,13 +1526,13 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
     // Schreiben der neuen Blocknummer
     if (bAppend)
     {
-        nStreamSize = m_aMemoStream.Seek(STREAM_SEEK_TO_END);
+        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
         // Schreiben der neuen Blocknummer
-        m_aMemoStream.Seek(0L);
-        m_aMemoStream << m_aMemoHeader.db_next;
-        m_aMemoStream.Flush();
+        m_pMemoStream->Seek(0L);
+        (*m_pMemoStream) << m_aMemoHeader.db_next;
+        m_pMemoStream->Flush();
     }
     return sal_True;
 }
@@ -1792,7 +1789,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     // Naechstes Anfangszeichen wieder restaurieren:
                     pData[nLen] = cNext;
-                    if (!m_aMemoStream.IsOpen() || !WriteMemo(rRow[nPos], nBlockNo))
+                    if (!m_pMemoStream || !WriteMemo(rRow[nPos], nBlockNo))
                         break;
 
                     ByteString aStr;
@@ -1835,7 +1832,7 @@ BOOL ODbaseTable::WriteBuffer()
 
     // Auf gewuenschten Record positionieren:
     long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
-    m_aFileStream.Seek(nPos);
-    return m_aFileStream.Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
+    m_pFileStream->Seek(nPos);
+    return m_pFileStream->Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
 }
 // -----------------------------------------------------------------------------
