@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:19:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ polish ] = "Wiadomoζ z serwera";
         Text[ japanese ] = "γ‚µγƒΌγƒγƒΌγ‹γ‚‰γ®γƒ΅γƒƒγ‚»γƒΌγ‚Έ";
         Text[ chinese_traditional ] = "δΌΊζε™¨ε ±ε‘";
-        Text[ greek ] = "Μήνυμα του διακομιστή";
+        Text[ greek ] = "Μήνυμα από το διακομιστή";
         Text[ korean ] = "μ„λ²„λ΅λ¶€ν„° λ©”μ‹μ§€";
         Text[ arabic ] = "ΡΣΗαΙ γδ ΗαγÒζψΟ";
         Text[ turkish ] = "Sunucudan gelen mesaj";
@@ -138,7 +138,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ polish ] = "Wprowad tutaj nazwκ uΏytkownika i has³o do %1.";
         Text[ japanese ] = "%1 γ®γƒ¦γƒΌγ‚¶γƒΌεγ¨γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γ‚’γ“γ“γ«ε…¥ε›γ—γ¦γγ γ•γ„γ€‚";
         Text[ chinese_traditional ] = "θ«‹η² %1 θΌΈε…¥δ½Ώη”¨θ€…εη¨±ε’ε―†ηΆΌγ€‚";
-        Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
+        Text[ greek ] = "Παρακαλώ εισαγάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
         Text[ korean ] = "%1μ μ‚¬μ©μ μ΄λ¦„κ³Ό μ•”νΈλ¥Ό μ…λ ¥ν•μ‹­μ‹μ¤.";
         Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ αά %1 εδΗ.";
         Text[ turkish ] = "%1 iηin kullanύcύ adύ ve parolayύ buraya girin.";
@@ -374,7 +374,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ polish ] = "Zalogowanie";
         Text[ japanese ] = "γƒ­γ‚°γ‚¤γƒ³";
         Text[ chinese_traditional ] = "η™»ε…¥";
-        Text[ greek ] = "Δήλωση";
+        Text[ greek ] = "Σύνδεση";
         Text[ korean ] = "λ΅κ·ΈμΈ";
         Text[ arabic ] = "ΚΣΜνα ΗαΟΞζα";
         Text[ turkish ] = "Oturum aη";
@@ -420,7 +420,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ polish ] = "Podaj nazwκ uΏytkownika i has³o dla \"%2\" na %1.";
         Text[ japanese ] = "%1 γ® \"%2\" γ«εΏ…θ¦γªγƒ¦γƒΌγ‚¶γƒΌεγ¨γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γ‚’γ“γ“γ«ε…¥ε›γ—γ¦γγ γ•γ„γ€‚";
         Text[ chinese_traditional ] = "θ«‹ε¨ι€™θ£΅η² %1 θΌΈε…¥ %2 η„δ½Ώη”¨θ€…εη¨±ε’ε―†ηΆΌγ€‚";
-        Text[ greek ] = "στο";
+        Text[ greek ] = "Εισαγάγετε όνομα χρήστη και κωδικό πρόσβασης για το \"%2\" στο %1 εδώ.";
         Text[ korean ] = "μ—¬κΈ°μ— %1μ %2μ— ν•„μ”ν• μ‚¬μ©μ μ΄λ¦„κ³Ό μ•”νΈλ¥Ό μ…λ ¥ν•μ‹­μ‹μ¤.";
         Text[ arabic ] = "Ϊαμ";
         Text[ turkish ] = "%1 deki \"%2\" iηin kullanύcύ ismi ve parolayύ buraya girin.";
@@ -458,6 +458,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ hindi ] = "ΰ¤‰ΰ¤ªΰ¤­ΰ¥‹ΰ¤•ΰ¥ΰ¤¤ΰ¤Ύ ΰ¤•ΰ¤Ύ ΰ¤¨ΰ¤Ύΰ¤® ΰ¤”ΰ¤° ΰ¤•ΰ¥‚ΰ¤ΰ¤¶ΰ¤¬ΰ¥ΰ¤¦ ΰ¤ΰ¤Ύΰ¤Ήΰ¤Ώΰ¤ ";
     Text[ slovak ] = "Je vyΕΎadovanΓ© uΕΎΓ­vateΔΎskΓ© meno a heslo";
 };
+
 
 
 
