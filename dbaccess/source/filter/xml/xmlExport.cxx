@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:40:12 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,8 +791,10 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                     ::rtl::OUString sValue;
                     xProp->getPropertyValue(PROPERTY_HELPTEXT) >>= sValue;
+                    Any aColumnDefault;
+                    aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
 
-                    if ( bHidden || sValue.getLength() || pAtt->getLength() )
+                    if ( bHidden || sValue.getLength() || aColumnDefault.hasValue() || pAtt->getLength() )
                     {
                         AddAttribute(XML_NAMESPACE_DB, XML_NAME,*pIter);
                         if ( bHidden )
@@ -800,6 +802,14 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 
                         if ( sValue.getLength() )
                             AddAttribute(XML_NAMESPACE_DB, XML_HELP_MESSAGE,sValue);
+
+                        if ( aColumnDefault.hasValue() )
+                        {
+                            ::rtl::OUStringBuffer sValue,sType;
+                            SvXMLUnitConverter::convertAny(sValue,sType,aColumnDefault);
+                            AddAttribute(XML_NAMESPACE_DB, XML_TYPE_NAME,sType.makeStringAndClear());
+                            AddAttribute(XML_NAMESPACE_DB, XML_DEFAULT_VALUE,sValue.makeStringAndClear());
+                        }
 
                         if ( pAtt->getLength() )
                             AddAttributeList(xAtt);
