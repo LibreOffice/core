@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-08 08:02:47 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,7 +810,6 @@ class SwDefFontSave
 public:
     SwDefFontSave( const SwTxtSizeInfo &rInf );
    ~SwDefFontSave();
-    inline sal_Bool IsAlter(){ return bAlter; }
 };
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-23 08:46:21 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,19 +530,13 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 
             if( pSh->GetViewOptions()->IsParagraph() && Prt().Height() )
             {
-                const sal_Bool bAlter =
-                    ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SW_LATIN ) )
-#if defined( PM2 )
-                            || ( System::GetCharSet() != CHARSET_IBMPC_850 )
-#endif
-                    ;
-
-                if( bAlter && COMPARE_EQUAL !=
-                    pFnt->GetName( SW_LATIN ).CompareToAscii( sBulletFntName ) )
+                if( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SW_LATIN ) &&
+                    COMPARE_EQUAL != pFnt->GetName( SW_LATIN ).
+                                            CompareToAscii( sBulletFntName ) )
                 {
                     pFnt->SetFamily( FAMILY_DONTKNOW, SW_LATIN );
-                    pFnt->SetName( XubString( sBulletFntName,
-                        RTL_TEXTENCODING_MS_1252 ), SW_LATIN );
+                    pFnt->SetName( String::CreateFromAscii( sBulletFntName ),
+                                    SW_LATIN );
                     pFnt->SetStyleName( aEmptyStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
@@ -559,8 +553,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 else
                     pClip = NULL;
                 aPos.Y() += pFnt->GetAscent( pSh, pSh->GetOut() );
-                const XubString aTmp( sal_Char( bAlter ? CH_PAR_ALTER : CH_PAR ),
-                    RTL_TEXTENCODING_MS_1252 );
+                const XubString aTmp( CH_PAR );
                 SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
                 aDrawInf.SetLeft( rRect.Left() );
                 aDrawInf.SetRight( rRect.Right() );

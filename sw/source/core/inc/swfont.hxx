@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-18 15:14:17 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,22 +88,8 @@ class SwDoc;
 const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
 const xub_Unicode CH_BREAK = 0x0A;  //
 const xub_Unicode CH_TAB   = '\t';  // \t
-const xub_Unicode CH_PAR_ALTER = 0xDE;      // Paragraph (StarBats)
-
-#if defined(WIN) || defined(WNT) || defined(UNX)
 const xub_Unicode CH_PAR    = 0xB6;     // Paragraph
 const xub_Unicode CH_BULLET = 0xB7;     // mittiger Punkt
-#endif
-
-#ifdef PM2
-const xub_Unicode CH_PAR    = 0xF4;     // Paragraph
-const xub_Unicode CH_BULLET = 0xFA;         // mittiger Punkt
-#endif
-
-#ifdef MAC
-const xub_Unicode CH_PAR    = 0xA6;     // Paragraph
-const xub_Unicode CH_BULLET = 0xE1;     // mittiger Punkt
-#endif
 
 LanguageType GetSystemLang();
 

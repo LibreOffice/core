@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1460,11 +1460,8 @@ SwFontSave::~SwFontSave()
 SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         : pFnt( ((SwTxtSizeInfo&)rInf).GetFont()  )
 {
-    bAlter = pFnt->GetFixKerning() ||
-             ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
-#if defined( PM2 )
-             || ( System::GetCharSet() != CHARSET_IBMPC_850 )
-#endif
+    BOOL bAlter = pFnt->GetFixKerning() ||
+         ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
         ;
 
     const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
@@ -1478,8 +1475,8 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         if ( bFamily )
         {
             pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-            pNewFnt->SetName( XubString( sBulletFntName,
-                              RTL_TEXTENCODING_MS_1252 ), pFnt->GetActual() );
+            pNewFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
+                              pFnt->GetActual() );
             pNewFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
             pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
             pNewFnt->SetFixKerning( 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-28 10:51:34 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,8 +215,8 @@ const sal_Char* pBulletChar = "+*-\x96\x97";    // plus endash & emdash
 const int cnPosEnDash = 2, cnPosEmDash = 4, cnPosEnd = 5;
 #endif // PM2 / UNX
 #endif // MAC
-const sal_Unicode cStarBatsEnDash = 0xF096;
-const sal_Unicode cStarBatsEmDash = 0xF097;
+const sal_Unicode cStarSymbolEnDash = 0x2013;
+const sal_Unicode cStarSymbolEmDash = 0x2014;
 
 
 SvxSwAutoFmtFlags* SwEditShell::pAutoFmtFlags = 0;
@@ -1587,8 +1587,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     else
                     {
                         cBullChar = nBulletPos < cnPosEmDash
-                                        ? cStarBatsEnDash
-                                        : cStarBatsEmDash;
+                                        ? cStarSymbolEnDash
+                                        : cStarSymbolEmDash;
                         pBullFnt = &SwNumRule::GetDefBulletFont();
                     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:40:14 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,17 +133,11 @@ USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
         283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
 };
 
-#if defined UNX
-
-#if defined GCC
+#if defined( UNX ) && defined( GCC )
 extern const sal_Char __FAR_DATA sBulletFntName[];
-const sal_Char __FAR_DATA sBulletFntName[] = "starbats";
+const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
 #else
-extern const sal_Char __FAR_DATA sBulletFntName[] = "starbats";
-#endif
-
-#else
-extern const sal_Char __FAR_DATA sBulletFntName[] = "StarBats";
+extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
 #endif
 
 inline void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )

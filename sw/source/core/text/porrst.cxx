@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,7 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.OnWin() && rInf.GetOpt().IsParagraph() )
     {
         SwDefFontSave aSave( rInf );
-        const XubString aTmp( sal_Char(aSave.IsAlter() ? CH_PAR_ALTER : CH_PAR),
-            RTL_TEXTENCODING_MS_1252 );
+        const XubString aTmp( CH_PAR );
         rInf.DrawText( aTmp, *this );
     }
 }
