@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:23:49 $
+ *  last change: $Author: vg $ $Date: 2001-02-22 14:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,19 +165,11 @@ class ScRangeData;
  */
 #endif
 
-#ifndef PRODUCT
 #define SC_TOKEN_FIX_MEMBERS    \
     OpCode   eOp;               \
     StackVar eType;             \
     USHORT   nRefCnt;           \
     BOOL     bRaw;
-#else
-#define SC_TOKEN_FIX_MEMBERS    \
-    USHORT   eOp;               \
-    USHORT   eType;             \
-    USHORT   nRefCnt;           \
-    BOOL     bRaw;
-#endif
 
 struct ScDoubleRawToken
 {
