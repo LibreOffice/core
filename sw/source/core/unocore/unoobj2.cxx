@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-23 13:15:16 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 07:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,20 +1176,24 @@ BOOL SwXTextRange::supportsService(const OUString& rServiceName) throw( RuntimeE
          sServiceName.EqualsAscii("com.sun.star.style.CharacterProperties")||
         sServiceName.EqualsAscii("com.sun.star.style.CharacterPropertiesAsian")||
         sServiceName.EqualsAscii("com.sun.star.style.CharacterPropertiesComplex")||
-        sServiceName.EqualsAscii("com.sun.star.style.ParagraphProperties");
+        sServiceName.EqualsAscii("com.sun.star.style.ParagraphProperties") ||
+        sServiceName.EqualsAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
+        sServiceName.EqualsAscii("com.sun.star.style.ParagraphPropertiesComplex");
 }
 /* -----------------------------06.04.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextRange::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(5);
+    Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextRange");
      pArray[1] = C2U("com.sun.star.style.CharacterProperties");
     pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
     pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
     pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
+    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
+    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
     return aRet;
 }
 /*-- 10.12.98 12:54:42---------------------------------------------------
