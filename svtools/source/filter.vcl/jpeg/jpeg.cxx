@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:16:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <tools/solar.h>
 extern "C"
 {
     #include "stdio.h"
@@ -68,7 +69,6 @@ extern "C"
 }
 
 #define _JPEGPRIVATE
-
 #include <tools/new.hxx>
 #include <vcl/bmpacc.hxx>
 #include "jpeg.hxx"
