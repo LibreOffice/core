@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2001-06-20 07:55:28 $
+#   last change: $Author: sb $ $Date: 2001-08-21 10:12:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,7 @@ $(MISC)$/$(SHL1TARGET).flt : ucbhelper.flt
     @echo ??_G>>$@
     @echo ??_H>>$@
     @echo ??_I>>$@
+    @echo .cxx>>$@
 .ENDIF # MSC
 .IF "$(GUI)"=="WNT"
     @echo ?CreateType@>>$@
