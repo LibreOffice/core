@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 07:25:46 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 11:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,16 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         getView()->initialize();    // show the windows and fill with our informations
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
+        // set the title of the beamer
+        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+        {
+            ::rtl::OUString sName;
+            if(m_sDataSourceName.getLength())
+                sName = m_sDataSourceName + ::rtl::OUString::createFromAscii(": ") ;
+            sName += String(ModuleRes(STR_RELATIONDESIGN));
+            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
+        }
     }
     catch(SQLException&)
     {
