@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:17:43 $
+ *  last change: $Author: aw $ $Date: 2001-12-13 15:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,11 @@ public:
                                        const SdrInsertReason* pReason=NULL);
     virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
     virtual SdrObject* RemoveObject(ULONG nObjNum);
+
+    // #95876# Also overload ReplaceObject methods to realize when
+    // objects are removed with this mechanism instead of RemoveObject
+    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum);
+    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, ULONG nObjNum);
 
     virtual void SetLinkData(const String& rLinkName, const String& rLinkData);
 

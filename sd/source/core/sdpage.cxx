@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-13 13:18:21 $
+ *  last change: $Author: aw $ $Date: 2001-12-13 15:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1847,7 +1847,6 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
     return(pObj);
 }
 
-
 /*************************************************************************
 |*
 |* Objekt loeschen, ohne Broadcast
@@ -1875,6 +1874,31 @@ SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
     return(pObj);
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+// #95876# Also overload ReplaceObject methods to realize when
+// objects are removed with this mechanism instead of RemoveObject
+SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
+{
+    SdrObject* pOldObj = FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
+    if(pOldObj && pOldObj->GetUserCall()!=this && aPresObjList.GetPos(pOldObj) != LIST_ENTRY_NOTFOUND)
+        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetBoundRect());
+    return pOldObj;
+}
+
+// #95876# Also overload ReplaceObject methods to realize when
+// objects are removed with this mechanism instead of RemoveObject
+SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
+{
+    SdrObject* pOldObj = FmFormPage::ReplaceObject(pNewObj, nObjNum);
+    if(pOldObj && pOldObj->GetUserCall()!=this && aPresObjList.GetPos(pOldObj) != LIST_ENTRY_NOTFOUND)
+        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetBoundRect());
+    return pOldObj;
+}
 
 /*************************************************************************
 |*
