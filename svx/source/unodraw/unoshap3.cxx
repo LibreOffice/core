@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:11 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
                 // 3D object during it's creation.
                 Matrix4D aTransMat;
                 aTransMat.TranslateZ(rFirstPoint.Z());
-                aMat = aTransMat * aMat;
+                aMat = aMat * aTransMat; // #112587#
             }
         }
 
@@ -1027,7 +1027,7 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
                 // 3D object during it's creation.
                 Matrix4D aTransMat;
                 aTransMat.TranslateZ(rFirstPoint.Z());
-                aMat = aTransMat * aMat;
+                aMat = aMat * aTransMat; // #112587#
             }
         }
 
