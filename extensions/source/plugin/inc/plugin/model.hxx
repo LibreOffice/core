@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 21:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <rtl/alloc.h>
 
-#include <stl/list>
+#include <list>
 
 using namespace com::sun::star::uno;
 
