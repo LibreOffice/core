@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagewrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 07:43:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,14 @@ namespace framework
 {
 
 //MACOSX moved outside of class above
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
     static sal_uInt8 pGUID[16] = { 0x46, 0xAD, 0x69, 0xFB, 0xA7, 0xBE, 0x44, 0x83, 0xB2, 0xA7, 0xB3, 0xEC, 0x59, 0x4A, 0xB7, 0x00 };
     static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((sal_Int8*)pGUID,16) ;
 #endif
 
 static Sequence< sal_Int8 > impl_getStaticIdentifier()
 {
-#ifndef MACOSX
+#if !(defined(MACOSX) && (__GNUC__ < 3))
     //MACOSX moved outside of class above
     static sal_uInt8 pGUID[16] = { 0x46, 0xAD, 0x69, 0xFB, 0xA7, 0xBE, 0x44, 0x83, 0xB2, 0xA7, 0xB3, 0xEC, 0x59, 0x4A, 0xB7, 0x00 };
     static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((sal_Int8*)pGUID,16) ;
