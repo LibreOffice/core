@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XMailMessage.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:31:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_mail_XMailMessage_idl__
+#define __com_sun_star_mail_XMailMessage_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_mail_MailAttachment_idl__
+#include <com/sun/star/mail/MailAttachment.idl>
+#endif
+
+#ifndef __com_sun_star_datatransfer_XTransferable_idl__
+#include <com/sun/star/datatransfer/XTransferable.idl>
+#endif
+
+module com { module sun { module star { module mail {
+
+/**
+   Represents a mail message.
+
+   @see com::sun::star::mail::XMailServer
+
+   @since #116332#
+ */
+interface XMailMessage: ::com::sun::star::uno::XInterface {
+
+    /**
+        The e-mail address of the sender of this mail message.
+        The e-mail address has to conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>.
+    */
+    [attribute, readonly] string SenderAddress;
+
+    /**
+        The e-mail address where replies on this mail message should be sent to.
+        If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
+        sending the mail message later will fail.
+        If no ReplyToAddress is set replies go to the SenderAddress.
+    */
+    [attribute] string ReplyToAddress;
+
+    /**
+        Add an recipients e-mail address to the list of recipients of this mail message.
+        If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
+        sending the mail message will fail.
+
+        @param sRecipientAddress
+        [in] the e-mail address of the recipient.
+    */
+    void addRecipient([in] string sRecipientAddress);
+
+    /**
+        Add an Cc recipients e-mail address to the list of recipients of this mail message.
+        If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
+        sending the mail message will fail.
+
+        @param sRecipientAddress
+        [in] the e-mail address of the Cc recipient.
+    */
+    void addCcRecipient([in] string sRecipientAddress);
+
+    /**
+        Add an Bcc recipients e-mail address to the list of recipients of this mail message.
+        If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
+        sending the mail message will fail.
+
+        @param sRecipientAddress
+        [in] the e-mail address of the Bcc recipient.
+    */
+    void addBccRecipient([in] string sRecipientAddress);
+
+    /**
+        Return a sequence of the e-mail addresses of all recipients of
+        this mail message.
+    */
+    sequence<string> getRecipients();
+
+    /**
+        Return a sequence of the e-mail addresses of all the Cc recipients
+        of this mail message.
+    */
+    sequence<string> getCcRecipients();
+
+    /**
+        Return a sequence of the e-mail addresses of all the Bcc recipients
+        of this mail message.
+    */
+    sequence<string> getBccRecipients();
+
+    /**
+        The subject of a mail message.
+    */
+    [attribute] string Subject;
+
+    /**
+        The body of the mail message.
+        It is expected that the transferable delivers the data as
+        a string. Although a transferable may support multiple
+        data flavors only the first data flavor supplied will be
+        used to retrieve the data and it is expected that the data
+        will be provided as a string.
+
+        @see com::sun::star::datatransfer::XTransferable
+    */
+    [attribute] com::sun::star::datatransfer::XTransferable Body;
+
+    /**
+        Add a file attachment to a mail message.
+
+        param aMailAttachment
+        [in] specifies a file which should be attached to this mail message.
+
+        @see com::sun::star::mail::MailAttachment
+    */
+    void addAttachment([in] MailAttachment aMailAttachment);
+
+    /**
+        Return a sequence of <type>MailAttachment</type>'s that will
+        be attached to this mail message.
+
+        @see com::sun::star::mail::MailAttachment
+    */
+    sequence<MailAttachment> getAttachments();
+};
+
+}; }; }; };
+
+#endif
