@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:16:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,12 @@ public:
 
     // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
+    // <--
+
+    // --> FME 2005-02-25 #i42634# Overwrites SfxObjectShell::UpdateLinks
+    // This new function is necessary to trigger update of links in docs
+    // read by the binary filter:
+    virtual void UpdateLinks();
     // <--
 };
 
