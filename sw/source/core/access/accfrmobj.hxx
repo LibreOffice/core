@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:09:12 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,8 @@ public:
 inline void SwFrmOrObj::Init( const SdrObject *pO )
 {
     pObj = pO;
-    pFrm = pObj && pObj->IsWriterFlyFrame()
+    // #110094#-1
+    pFrm = pObj && pObj->ISA(SwVirtFlyDrawObj)
                 ? static_cast < const SwVirtFlyDrawObj * >( pObj )->GetFlyFrm()
                 : 0;
 }
@@ -246,7 +247,7 @@ inline SwRect SwFrmOrObj::GetBox() const
             return pFrm->Frm();
     }
     else if( pObj )
-        return SwRect( pObj->GetBoundRect() );
+        return SwRect( pObj->GetCurrentBoundRect() );
     else
         return SwRect();
 
@@ -266,7 +267,7 @@ inline SwRect SwFrmOrObj::GetBounds() const
             return pFrm->PaintArea();
     }
     else if( pObj )
-        return SwRect( pObj->GetBoundRect() );
+        return SwRect( pObj->GetCurrentBoundRect() );
 }
 
 
