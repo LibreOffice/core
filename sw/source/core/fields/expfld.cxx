@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 
 
@@ -977,10 +980,10 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
         LanguageType eLang = aSet.GetLanguage().GetLanguage();
         if( RTL_TEXTENCODING_SYMBOL != aSet.GetFont().GetCharSet())
         {
-            International aInt( eLang );
+            CharClass aCC( SvxCreateLocale( eLang ));
             sal_Unicode c0 = sNodeText.GetChar(0);
-            BOOL bIsAlphaNum = aInt.IsAlphaNumeric( c0 );
-            if(!bIsAlphaNum ||
+            BOOL bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
+            if( !bIsAlphaNum ||
                 (c0 == ' ' || c0 == '\t'))
             {
                 nRet++;
