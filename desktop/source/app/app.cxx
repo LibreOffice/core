@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 13:32:16 $
+ *  last change: $Author: pb $ $Date: 2000-12-12 11:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@ void ReplaceStringHookProc( UniString& rStr )
         aBrandName = aTmp;
     }
 
-    rStr.SearchAndReplaceAscii( "%PRODUCTNAME", aBrandName );
+    xub_StrLen nPos = rStr.SearchAndReplaceAscii( "%PRODUCTNAME", aBrandName );
+    while ( nPos != STRING_NOTFOUND )
+        nPos = rStr.SearchAndReplaceAscii( "%PRODUCTNAME", aBrandName );
 }
 
 Desktop aDesktop;
