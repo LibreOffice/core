@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:41:38 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     }
 
 
-    protected void enterStep(int nOldStep, int nNewStep) {
+    protected void enterStep(int nOldStep, int nNewStep){
         if ((nOldStep >= SOTEMPLATEPAGE) && (nNewStep < SOTEMPLATEPAGE)){
             CurReportDocument.oTextSectionHandler.removeTextSectionbyName("RecordSection");
             CurReportDocument.oTextTableHandler.removeTextTablebyName("Tbl_RecordSection");
@@ -252,14 +252,14 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
 
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
         ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             PropertyValue[] curproperties = new PropertyValue[3];
-//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
             curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
             curproperties[1] = Properties.createProperty("CommandType", new Integer(CommandType.QUERY));
             curproperties[2] = Properties.createProperty("Command", "Query1");
@@ -377,15 +377,14 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                         importReportData(xMSF, CurDataimport);
                         CurDBMetaData.openReportDocument(sReportName, false, true);
                     }
-                    break;
+                    return;
                 case 1:
                     if (bdisposeDialog == true)
                         CurReportDocument.unlockallControllers();
                     break;
             }
-            CurDBMetaData.dispose();
-
         }
+        CurDBMetaData.dispose();
     }
     catch(java.lang.Exception jexception ){
         jexception.printStackTrace(System.out);
