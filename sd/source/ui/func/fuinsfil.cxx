@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 12:26:49 $
+ *  last change: $Author: ka $ $Date: 2002-04-09 08:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
     const SfxFilter*    pFilter = NULL;
     ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
     BOOL                bDrawMode = pViewSh->ISA(SdDrawViewShell);
+    BOOL                bInserted = FALSE;
 
     if( pFilter )
     {
@@ -320,23 +321,41 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         // Storage
         SvStorage* pStorage = pMedium->GetStorage();
 
-        if( pStorage &&
-            ( pStorage->IsContained( pStarDrawDoc )  && pStorage->IsStream( pStarDrawDoc ) ) ||
-            ( pStorage->IsContained( pStarDrawDoc3 ) && pStorage->IsStream( pStarDrawDoc3 ) ) ||
-            ( pStorage->IsContained( pStarDrawXMLContent ) && pStorage->IsStream( pStarDrawXMLContent) ) ||
-            ( pStorage->IsContained( pStarDrawOldXMLContent ) && pStorage->IsStream( pStarDrawOldXMLContent) ) )
+        if( pStorage )
         {
-            pMedium->Close();
+            BOOL bOwnDocument = FALSE;
 
-            if( bDrawMode )
-                InsSDDinDrMode( pMedium );
-            else
-                InsSDDinOlMode( pMedium );
-        }
-        else
-        {
-            ErrorBox aErrorBox( pWindow, WB_OK, String(SdResId(STR_READ_DATA_ERROR)));
-            aErrorBox.Execute();
+            if( pStorage->IsStream( pStarDrawDoc ) || pStorage->IsStream( pStarDrawDoc3 ) )
+            {
+                // binary document
+                bOwnDocument = TRUE;
+            }
+            else if( ( pStorage->IsStream( pStarDrawXMLContent ) || pStorage->IsStream( pStarDrawOldXMLContent ) ) &&
+                     ( !pFilter ||
+                       ( aFilterName.SearchAscii( "StarOffice XML (Draw)" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "StarOffice XML (Impress)" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "draw_StarOffice_XML_Impress" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "impress_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "impress_StarOffice_XML_Impress_Template" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "draw_StarOffice_XML_Draw_Template" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "draw_StarOffice_XML_Draw" ) != STRING_NOTFOUND ||
+                         aFilterName.SearchAscii( "impress_StarOffice_XML_Impress" ) != STRING_NOTFOUND ) ) )
+            {
+                // XML document
+                bOwnDocument = TRUE;
+            }
+
+            if( bOwnDocument )
+            {
+                pMedium->Close();
+
+                if( bDrawMode )
+                    InsSDDinDrMode( pMedium );
+                else
+                    InsSDDinOlMode( pMedium );
+
+                bInserted = TRUE;
+            }
         }
     }
     else if( pFilter )
@@ -358,16 +377,19 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 InsTextOrRTFinDrMode(pMedium);
             else
                 InsTextOrRTFinOlMode(pMedium);
-        }
-        else
-        {
-            ErrorBox aErrorBox( pWindow, (WinBits) WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
-            aErrorBox.Execute();
+
+            bInserted = TRUE;
         }
     }
 
     delete pMedium;
     pDocSh->SetWaitCursor( FALSE );
+
+    if( !bInserted )
+    {
+        ErrorBox aErrorBox( pWindow, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
+        aErrorBox.Execute();
+    }
 }
 
 // -----------------------------------------------------------------------------
