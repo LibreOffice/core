@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: jb $ $Date: 2001-05-28 15:37:39 $
+#   last change: $Author: lla $ $Date: 2001-05-31 14:09:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,10 @@ SLOFILES=	\
         $(SLO)$/synchronize.obj	\
         $(SLO)$/filehelper.obj	\
         $(SLO)$/strimpl.obj	\
-        $(SLO)$/mergechange.obj
+        $(SLO)$/mergechange.obj \
+        $(SLO)$/trivialbufferedfile.obj \
+        $(SLO)$/memory.obj \
+
 
 .IF "$(OS)"=="MACOSX"
 SYMBOLPREFIX=$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
