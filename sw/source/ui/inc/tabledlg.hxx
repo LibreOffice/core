@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:31:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,10 @@
 
 #include "swtypes.hxx"
 #include "swtablerep.hxx" //CHINA001
+
 class SwWrtShell;
 class SwTabCols;
 struct TColumn;
-
-void lcl_ItemSetToTableParam( const SfxItemSet&, SwWrtShell& );
-extern const USHORT __FAR_DATA aUITableAttrRange[];
 
 /*-------------------------------------------------------
  Tabellendialog
