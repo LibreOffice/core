@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "layerupdate.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CONFIGURATION_BACKEND_TEMPLATEIDENTIFIER_HPP_
-#include <drafts/com/sun/star/configuration/backend/TemplateIdentifier.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_TEMPLATEIDENTIFIER_HPP_
+#include <com/sun/star/configuration/backend/TemplateIdentifier.hpp>
 #endif
 
 namespace configmgr
@@ -114,12 +114,12 @@ LayerUpdate & LayerUpdateBuilder::data()
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::setContext(OUString const & _aContext)
+bool LayerUpdateBuilder::init()
 {
     if (m_pCurrentNode) return false;
 
     LayerUpdate & update = data();
-    m_pCurrentNode = new NodeModification(NULL, _aContext, 0, 0, false);
+    m_pCurrentNode = new NodeModification(NULL, OUString(), 0, 0, false);
     update.setContextNode(m_pCurrentNode);
 
     OSL_ENSURE(m_pCurrentProp == NULL, "LayerUpdateBuilder: Internal error: got a current property for a new context");
