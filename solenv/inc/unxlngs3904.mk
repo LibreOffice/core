@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:38:46 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:30:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,20 +103,20 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -fsigned-char -pipe -fno-rtti 
 #CFLAGSCXX= -fsigned-char -pipe
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
-
+PICSWITCH:=-fPIC
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=-fPIC
+CFLAGSOBJGUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=-fPIC
+CFLAGSOBJCUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
-CFLAGSOBJGUIMT=-fPIC
+CFLAGSOBJGUIMT=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with character user interface
-CFLAGSOBJCUIMT=-fPIC
+CFLAGSOBJCUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fPIC
+CFLAGSSLOCUIMT=$(PICSWITCH)
 
 # Compiler flags for profiling
 CFLAGSPROF=
