@@ -3,9 +3,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:13:20 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ french ] = "~Distance";
         Text[ spanish ] = "~Distancia";
         Text[ finnish ] = "~Koko";
-        Text[ italian ] = "~Dimensione";
+        Text[ italian ] = "~Distanza";
         Text[ danish ] = "Størrelse";
         Text[ swedish ] = "~Distans";
         Text[ polish ] = "Odstêp";
@@ -510,7 +510,7 @@ TabPage RID_SVXPAGE_BORDER
         Text = "Far~be" ;
         Text [ ENGLISH ] = "C~olor" ;
         Text [ norwegian ] = "C~olor" ;
-        Text [ italian ] = "Colore" ;
+        Text [ italian ] = "~Colore" ;
         Text [ portuguese_brazilian ] = "C~or" ;
         Text [ portuguese ] = "C~or" ;
         Text [ finnish ] = "~Väri" ;
@@ -604,5 +604,6 @@ TabPage RID_SVXPAGE_BORDER
     Text[ catalan ] = "Borde";
 };
  // **********************************************************************
+
 
 
