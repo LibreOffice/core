@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:55:42 $
+ *  last change: $Author: ka $ $Date: 2001-03-06 16:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include <stl/utility>
+#include <stl/vector>
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -1118,7 +1121,7 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
                         for (ULONG nPara = nParaCount1; nPara < nParaCount2; nPara++)
                         {
                             pPara = pOutliner->GetParagraph(nPara);
-                            if(pPara && pOutliner->GetDepth( nPara ) !=1 )
+                            if(pPara && pOutliner->GetDepth( (USHORT) nPara ) !=1 )
                                 pOutliner->SetDepth(pPara, 1);
                         }
                     }
@@ -1403,74 +1406,90 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
         // Als Broschuere drucken ?
         if( bPrintBooklet )
         {
-            SdPage* pPage;
-            double fHorz = (double) aPrintSize.Width()  / (double) aPageSize.Width();
-            double fVert = (double) aPrintSize.Height() / (double) aPageSize.Height();
+            SdPage*                                         pPage;
+            MapMode                                         aStdMap( rPrinter.GetMapMode() );
+            ::std::vector< USHORT >                         aPageVector;
+            ::std::vector< ::std::pair< USHORT, USHORT > >  aPairVector;
+            double                                          fHorz = (double) aPrintSize.Width() / (double) aPageSize.Width();
+            double                                          fVert = (double) aPrintSize.Height() / (double) aPageSize.Height();
 
-            if ( fHorz < fVert )
+            if( fHorz < fVert )
                 aFract = Fraction( aPrintSize.Width(), aPageSize.Width() );
             else
                 aFract = Fraction( aPrintSize.Height(), aPageSize.Height() );
 
-            MapMode aStdMap = rPrinter.GetMapMode();
             aMap.SetScaleX( aFract );
             aMap.SetScaleY( aFract );
 
-            for( USHORT i = 0; i*2 < nPageMax; i+=2 )
+            // create vector of pages to print
+            while( nPage < nPageMax )
             {
-                if( bPrintFrontPage )
+                if( rSelPages.IsSelected( nPage + 1 )  )
                 {
-                    // Zuerst letzte Seite und erste Seite, ...
-                    // nPageMax - i /  1 + i
-                    rPrinter.StartPage();
-                    Point aPt;
+                    SdPage* pPage = pDoc->GetSdPage( nPage, ePageKind );
 
-                    if( nPageMax >= 4 )
-                    {
-                        pPage = pDoc->GetSdPage( nPageMax-i-1, ePageKind );
-                        aMap.SetOrigin( aPt );
-                        rPrinter.SetMapMode( aMap );
-                        PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
-                    }
-                    pPage = pDoc->GetSdPage( i, ePageKind );
-                    if( eOrientation == ORIENTATION_LANDSCAPE )
-                        aPt.X() = aPageSize.Width() + aPageOfs.X();
-                    else
-                        aPt.Y() = aPageSize.Height() + aPageOfs.Y();
-                    aMap.SetOrigin( aPt );
-                    rPrinter.SetMapMode( aMap );
-                    PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
-
-                    rPrinter.EndPage();
+                    if( pPage && ( !pPage->IsExcluded() || bPrintExcluded ) )
+                        aPageVector.push_back( nPage );
                 }
-                if( bPrintBackPage )
-                {
-                    // Dann 2. Seite und vorletzte Seite, ...
-                    // 2 + i / ( nPageMax - 1 ) - i
-                    rPrinter.StartPage();
-                    Point aPt;
 
-                    if( nPageMax >= 2 )
+                nPage++;
+            }
+
+            // create pairs of pages to print on each page
+            if( aPageVector.size() )
+            {
+                sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;
+
+                if( aPageVector.size() & 1 )
+                    aPairVector.push_back( ::std::make_pair( 65535, aPageVector[ nFirstIndex++ ] ) );
+                else
+                    aPairVector.push_back( ::std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
+
+                while( nFirstIndex < nLastIndex )
+                {
+                    if( nFirstIndex & 1 )
+                        aPairVector.push_back( ::std::make_pair( aPageVector[ nFirstIndex++ ], aPageVector[ nLastIndex-- ] ) );
+                    else
+                        aPairVector.push_back( ::std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
+                }
+            }
+
+            for( sal_uInt32 i = 0; i < aPairVector.size(); i++ )
+            {
+                if( ( !( i & 1 ) && bPrintFrontPage ) || ( ( i & 1 ) && bPrintBackPage ) )
+                {
+                    const ::std::pair< USHORT, USHORT > aPair( aPairVector[ i ] );
+                    Point                               aPt;
+
+                    rPrinter.StartPage();
+
+                    pPage = pDoc->GetSdPage( aPair.first, ePageKind );
+
+                    if( pPage )
                     {
-                        pPage = pDoc->GetSdPage( 1+i, ePageKind );
                         aMap.SetOrigin( aPt );
                         rPrinter.SetMapMode( aMap );
                         PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
                     }
-                    if( nPageMax >= 3 )
+
+                    pPage = pDoc->GetSdPage( aPair.second, ePageKind );
+
+                    if( pPage )
                     {
-                        pPage = pDoc->GetSdPage( nPageMax-2-i, ePageKind );
                         if( eOrientation == ORIENTATION_LANDSCAPE )
                             aPt.X() = aPageSize.Width() + aPageOfs.X();
                         else
                             aPt.Y() = aPageSize.Height() + aPageOfs.Y();
+
                         aMap.SetOrigin( aPt );
                         rPrinter.SetMapMode( aMap );
                         PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
                     }
+
                     rPrinter.EndPage();
                 }
             }
+
             rPrinter.SetMapMode( aStdMap );
         }
         else
