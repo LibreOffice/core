@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedContentResultSetStubFactory.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 11:35:26 $
+ *  last change:$Date: 2004-03-09 10:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,6 @@
 
 package mod._cached;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
@@ -81,10 +74,15 @@ import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
+import java.io.PrintWriter;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 
 /**
 * Test for object which is represented by service
@@ -92,12 +90,6 @@ import com.sun.star.uno.XInterface;
 * Object implements the following interfaces :
 * <ul>
 *  <li> <code>com::sun::star::ucb::XCachedContentResultSetStubFactory</code></li>
-* </ul> <p>
-* The following files used by this test :
-* <ul>
-*  <li><b> solibrary.jar </b> : this file is used for <code>
-*   PackageContentProvider</code> from which a list of contents is
-*   retrieved. </li>
 * </ul> <p>
 * This object test <b> is NOT </b> designed to be run in several
 * threads concurently.
@@ -131,6 +123,7 @@ public class CachedContentResultSetStubFactory extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+        Object relationContainer = null ;
 
 
         try {
@@ -158,7 +151,7 @@ public class CachedContentResultSetStubFactory extends TestCase {
             XContentIdentifierFactory ciFac = (XContentIdentifierFactory)
                 UnoRuntime.queryInterface(XContentIdentifierFactory.class, oUCB) ;
 
-            String url = util.utils.getFullTestURL("solibrary.jar") ;
+            String url = util.utils.getFullTestURL("SwXTextEmbeddedObject.sxw") ;
             String escUrl = "" ;
 
             // In base URL of a JAR file in content URL all directory
