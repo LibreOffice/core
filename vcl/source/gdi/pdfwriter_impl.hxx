@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ private:
         GraphicsState() :
                 m_aLineColor( COL_TRANSPARENT ),
                 m_aFillColor( COL_TRANSPARENT ),
-                m_aTextLineColor( COL_BLACK ),
+                m_aTextLineColor( COL_TRANSPARENT ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
                 m_nTransparentPercent( 0 ),
@@ -394,7 +394,7 @@ private:
     SvMemoryStream*                     m_pMemStream;
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects );
+    void registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, ImplFontData* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
