@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:49:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text [ english_us ] = "The table $name$ already exists. It is not visible because it has been filtered out.";
     Text[ portuguese ] = "A tabela $name$ jα existe. Como foi filtrada, nγo se encontra visνvel.";
     Text[ russian ] = "Òΰαλθφΰ $name$ σζε ρσωερςβσες. Ξνΰ νε βθδνΰ, ςΰκ κΰκ ξςτθλόςπξβΰνΰ.";
-    Text[ greek ] = "Ο πίνακας $name$ υπάρχει ήδη. Έχει φιλτραριστεί!";
+    Text[ greek ] = "Ο πίνακας $name$ υπάρχει ήδη. Δεν είναι ορατός επειδή έχει απορριφθεί από το φίλτρο.";
     Text[ dutch ] = "Tabel $name$ bestaat reeds. Hij is alleen niet zichtbaar omdat hij is uitgefilterd!";
     Text[ french ] = "La table $name$ existe dιjΰ ; comme elle a ιtι filtrιe, elle n'est pas visible.";
     Text[ spanish ] = "La tabla $name$ ya existe. Sin embargo no es visible por haber sido filtrada.";
@@ -192,7 +192,7 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
     Text [ english_us ] = "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.";
     Text[ portuguese ] = "Foi impossνvel estabelecer a ligaηγo ΰ fonte de dados externa. Ocorreu um erro desconhecido. Provavelmente o controlador estα com defeito.";
     Text[ russian ] = "Νεβξημξζνξ οξδκλώχθςόρÿ κ βνεψνεμσ θρςξχνθκσ δΰννϋυ. Νεθηβερςνΰÿ ξψθακΰ. Βξημξζνϋ νεοξλΰδκθ ρ δπΰιβεπξμ.";
-    Text[ greek ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης με την εξωτερική προέλευση δεδομένων. Παρουσιάστηκε ένα άγνωστο σφάλμα. Το πρόγραμμα οδήγησης ενδέχεται να είναι ελαττωματικό.";
     Text[ dutch ] = "Door een onbekende fout (waarschijnlijk is de driver niet in orde) kan de verbinding met de externe gegevensbron niet tot stand worden gebracht.";
     Text[ french ] = "Impossible d'ιtablir une connexion ΰ la source de donnιes externe : erreur inconnue. Le pilote fait probablement dιfaut.";
     Text[ spanish ] = "La conexiσn a la fuente de datos externa no se pudo realizar. Se ha producido un error desconocido. Es posible que el controlador estι defectuoso.";
@@ -223,7 +223,7 @@ String RID_STR_COULDNOTCONNECT_NODRIVER
     Text [ english_us ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
     Text[ portuguese ] = "Foi impossνvel estabelecer a ligaηγo ΰ fonte de dados externa. O controlador SDBC para o URL indicado nγo foi encontrado.";
     Text[ russian ] = "Νεβξημξζνξ οξδκλώχθςόρÿ κ βνεψνεμσ θρςξχνθκσ δΰννϋυ. Δλÿ ηΰδΰννξγξ URL νε νΰιδεν δπΰιβεπ SDBC.";
-    Text[ greek ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης με την εξωτερική προέλευση δεδομένων. Δεν βρέθηκε πρόγραμμα οδήγησης SDBC για το συγκεκριμένο URL.";
     Text[ dutch ] = "De verbinding met de externe gegevensbron kan niet tot stand worden gebracht omdat er geen SDBC-driver voor de opgegeven URL is gevonden.";
     Text[ french ] = "Impossible d'ιtablir une connexion ΰ la source de donnιes externe : le pilote SDBC n'a pas pu κtre dιtectι pour l'URL spιcifiι.";
     Text[ spanish ] = "No se pudo realizar la conexiσn a la fuente de datos externa porque no se encontrσ ningϊn controlador SDBC para la URL indicada.";
@@ -254,7 +254,7 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text [ english_us ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ portuguese ] = "Foi impossνvel estabelecer a ligaηγo ΰ base de dados externa. Nγo foi possνvel carregar o gestor de controladores SDBC.";
     Text[ russian ] = "Νεβξημξζνξ οξδκλώχθςόρÿ κ βνεψνεμσ θρςξχνθκσ δΰννϋυ. Δθροεςχεπ δπΰιβεπΰ SDBC νε ηΰγπσζΰεςρÿ.";
-    Text[ greek ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης με την εξωτερική προέλευση δεδομένων. Δεν ήταν δυνατή η φόρτωση της διαχείρισης προγραμμάτων οδήγησης SDBC.";
     Text[ dutch ] = "De verbinding met de externe gegevensbron kan niet tot stand worden gebracht omdat het SDBC-driverbeheer niet kan worden geladen. ";
     Text[ french ] = "Impossible d'ιtablir une connexion ΰ la source de donnιes externe : le gestionnaire de pilotes SDBC n'a pas pu κtre chargι.";
     Text[ spanish ] = "No se pudo realizar la conexiσn a la fuente de datos externa porque no se pudo cargar el gestor de controladores SDBC.";
@@ -263,7 +263,7 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. SDBC-drivermanageren kunne ikke indlζses.";
     Text[ swedish ] = "Det gick inte att skapa fφrbindelsen till den externa datakδllan. Det gick inte att ladda managern fφr SDBC-drivrutinen.";
     Text[ polish ] = "Nie uda³o siκ nawiΉzaζ po³Ήczenia z zewnκtrznym rσd³em danych. Nie moΏna za³adowaζ menedΏera sterownika SDCB.";
-    Text[ portuguese_brazilian ] = "Nγo foi possνvel estabelecer a conexγo com a base de dados externa. Nγo foi possνvel carregar o gerenciador de drivers SDBC.";
+    Text[ portuguese_brazilian ] = "Nγo foi possνvel estabelecer a conexγo com o banco de dados externa. Nγo foi possνvel carregar o gerenciador de drivers SDBC.";
     Text[ japanese ] = "ε¤–ιƒ¨γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚ΉγΈζ¥η¶γ§γγΎγ›γ‚“γ§γ—γγ€‚SDBC γƒ‰γƒ©γ‚¤γƒγ®γƒγƒγƒΌγ‚Έγƒ£γƒΌγ―θª­γΏθΎΌγΏγ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "μ™Έλ¶€ λ°μ΄ν„° μ›λ³ΈμΌλ΅ μ—°κ²°ν•μ§€ λª»ν–μµλ‹λ‹¤. SDBC λ“λΌμ΄λ²„ λ§¤λ‹μ €λ¥Ό λ΅λ“ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•δΈε¤–ιƒ¨ζ•°ζ®ζΊε»Ίη«‹θΏζ¥γ€‚ζ— ζ³•θ£…ε…¥ SDBC ι©±ε¨η¨‹εΊη®΅η†ε™¨γ€‚";
@@ -277,6 +277,7 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ hindi ] = "ΰ¤¬ΰ¤Ύΰ¤Ήΰ¤°ΰ¥€ ΰ¤΅ΰ¤Όΰ¥‰ΰ¤ΰ¤Ύ ΰ¤®ΰ¥‚ΰ¤² ΰ¤•ΰ¥‹ ΰ¤•ΰ¤¨ΰ¥‡ΰ¤•ΰ¥ΰ¤¶ΰ¤¨ ΰ¤Έΰ¥ΰ¤¥ΰ¤Ύΰ¤ªΰ¤Ώΰ¤¤ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤ SDBC ΰ¤΅ΰ¥ΰ¤°ΰ¤‡ΰ¤µΰ¤° ΰ¤ªΰ¥ΰ¤°ΰ¤¬ΰ¤‚ΰ¤§ΰ¤• ΰ¤•ΰ¥‹ ΰ¤²ΰ¥‹ΰ¤΅ΰ¤Ό ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "Spojenie k externΓ©mu zdroju dΓ΅t nemohlo byΕ¥ vytvorenΓ©. Nemohol byΕ¥ spustenΓ½ SDBC driver manager.";
 };
+
 
 
 
