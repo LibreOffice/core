@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:43:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,9 @@
 #include <svtools/transfer.hxx>
 #endif
 
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
+//REMOVE    #ifndef _EMBOBJ_HXX
+//REMOVE    #include <so3/embobj.hxx>
+//REMOVE    #endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -80,6 +80,7 @@
 
 class ScDocShell;
 class ScMarkData;
+class SfxObjectShell;
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
@@ -87,6 +88,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+#include <sfx2/objsh.hxx>
 
 class ScTransferObj : public TransferableHelper
 {
@@ -96,8 +98,10 @@ private:
     SCROW                           nNonFiltered;       // non-filtered rows
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
-    SvEmbeddedObjectRef             aDocShellRef;
-    SvEmbeddedObjectRef             aDrawPersistRef;
+//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
+//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
+    SfxObjectShellRef               aDocShellRef;
+    SfxObjectShellRef               aDrawPersistRef;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;
     SCCOL                           nDragHandleX;
     SCROW                           nDragHandleY;
@@ -137,7 +141,7 @@ public:
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
 
-    void                SetDrawPersist( const SvEmbeddedObjectRef& rRef );
+    void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragHandlePos( SCCOL nX, SCROW nY );
     void                SetVisibleTab( SCTAB nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
@@ -146,7 +150,7 @@ public:
 
     static ScTransferObj* GetOwnClipboard( Window* pUIWin );
 
-    static SvPersist*   SetDrawClipDoc( BOOL bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
+    static SfxObjectShell*  SetDrawClipDoc( BOOL bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
 };
 
 #endif
