@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-04 09:17:35 $
+#   last change: $Author: obo $ $Date: 2003-09-05 08:51:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,19 +86,19 @@ WINTARGETS=  \
     $(DESTDIR)$/regcomp.exe \
     $(DESTDIR)$/uno.exe \
     $(DESTDIR)$/regcomp.exe.config \
-    $(DESTDIR)$/uno.exe.config 
+    $(DESTDIR)$/uno.exe.config
 
 .ELSE
 MY_DLLPOSTFIX=.so
 DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
-GIVE_EXEC_RIGHTS=chmod +x 
+GIVE_EXEC_RIGHTS=chmod +x
 .ENDIF		$(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
         $(JAVATARGETS)
 
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc
@@ -111,7 +111,7 @@ INCPRE+=$(OUT)$/inc
 CFLAGS += -clr /AI $(OUT)$/bin /AI $(SOLARBINDIR)
 
 SLOFILES= \
-    $(SLO)$/cli_cpp_bridgetest.obj		
+    $(SLO)$/cli_cpp_bridgetest.obj
 
 SHL1OBJS = $(SLOFILES)
 
@@ -198,7 +198,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
     $(GNUCOPY) -p $(CLI_URE) $(DESTDIR)
 
 # Visual Basic ------------------------------------------
-$(DESTDIR)/cli_vb_bridgetest.uno.dll : \
+$(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         cli_vb_bridgetest.vb \
         $(CLI_TYPES) \
         $(CLI_URE)
@@ -212,7 +212,7 @@ $(DESTDIR)/cli_vb_bridgetest.uno.dll : \
         -reference:System.Windows.Forms.dll \
         cli_vb_bridgetest.vb
 
-$(DESTDIR)/cli_vb_testobj.uno.dll : \
+$(DESTDIR)$/cli_vb_testobj.uno.dll : \
         cli_vb_testobj.vb \
         $(CLI_TYPES) \
         $(CLI_URE)
