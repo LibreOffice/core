@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:12:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ polish ] = "Sk³adnika (%s) nie moΏna za³adowaζ.\nProszκ rozpocznij program instalacyjny i przeprowad naprawκ.";
     Text[ portuguese_brazilian ] = "The component (%s) could not be loaded.\nPlease start setup with the option -repair.";
     Text[ japanese ] = "ΊέΞί°ΘέΔ(%s)‚Ν“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B\nΎ―Δ±―Μί‚πJn‚µ‚ΔC•‚πΐs‚µ‚Δ‚­‚Ύ‚³‚ΆB";
-    Text[ chinese_simplified ] = "Ξή·¨Χ°Θλ³ΜΠς²ΏΌώ(%s)΅£\nΗλΔϊΡ΅Τρ°²Χ°³ΜΠςµΔΡ΅ΟξΠή²Ή΅£";
-    Text[ chinese_traditional ] = "µLªkΈό¤Jµ{¦΅³΅¥σ(%s)΅C\n½Π±zΏοΎά¦wΈΛµ{¦΅ªΊ­Χ½ΖΏο¶µ΅C";
+    Text[ chinese_simplified ] = "Ξή·¨Χ°Θλ³ΜΠςΧιΌώ(%s)΅£\nΗλΡ΅Τρ°²Χ°³ΜΠςµΔΠήΈ΄³ΜΠςµΔΡ΅Οξ΅£";
+    Text[ chinese_traditional ] = "µLªkΈό¤Jµ{¦΅¤Έ¥σ(%s)΅C\n½ΠΏοΎά¦wΈΛµ{¦΅ªΊ­Χ½ΖΏο¶µ΅C";
     Text[ arabic ] = "ΚΪΠΡ ΚΝγνα Ηαγίζδ (%s).\n ΗαΡΜΗΑ ΘΟΑ ΘΡδΗγΜ ΗαΕΪΟΗΟ΅ Λγ ΗαήνΗγ ΘΪγανΙ ΗαΕΥαΗΝ ΗααΗÒγΙ.";
     Text[ greek ] = "Δεν ήταν δυνατόν να φορτωθεί το στοιχείο (%s)\nΠαρακαλώ εκκινήστε ξανά το πρόγραμμα εγκατάστασης και εκτελέστε την επισκευή.";
     Text[ korean ] = "±ΈΌΊΏδΌÒ (%s)ΐ»(Έ¦) ·ΞµεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.\nΌΒΎχΐ» ½ΓΐΫΗΡ ΄Ωΐ½ ΊΉ±ΈΗΟ½Κ½ΓΏΐ.";
@@ -117,6 +117,7 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ catalan ] = "Do not warn me again.";
     Text[ finnish ] = "Diesen Hinweis nicht mehr anzeigen.";
 };
+
 
 
 
