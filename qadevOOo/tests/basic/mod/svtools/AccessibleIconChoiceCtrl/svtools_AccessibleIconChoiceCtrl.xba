@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleIconChoiceCtrl.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:17:48 $ 
+'*  last change:$Date: 2003-06-11 16:28:31 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -104,7 +104,8 @@ On Error Goto ErrHndl
         oWin = tk.getActiveTopWindow()
         xRoot = utils.at_getAccessibleObject(oWin)
         closeButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Close")
-        oObj = utils.at_getAccessibleObjectForRole(xRoot, 53)
+        oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+                                                com.sun.star.accessibility.AccessibleRole.TREE)
         Out.Log("Implementation Name: "+oObj.getImplementationName())
         multiSelection = false
      else
