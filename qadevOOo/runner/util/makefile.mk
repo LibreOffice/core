@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2003-03-31 16:24:13 $
+#   last change: $Date: 2003-05-22 08:36:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ JAVAFILES =	AccessibilityTools.java	\
             FormTools.java			\
             StyleFamilyDsc.java		\
             SysUtils.java           \
-            utils.java
+            utils.java \
+            WaitUnreachable.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
