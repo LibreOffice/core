@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
+ *  last change: $Author: ka $ $Date: 2001-12-05 15:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,35 +220,25 @@ void SdClient::ViewChanged(USHORT nAspect)
 
         if (pView)
         {
-            // Der sichtbare Ausschnitt hat sich eventuell geaendert
-            SvEmbeddedObject*   pObj = GetEmbedObj();
-            const MapMode       aMap100( MAP_100TH_MM );
-            Rectangle           aObjVisArea( OutputDevice::LogicToLogic( pObj->GetVisArea(),
-                                                                         pObj->GetMapUnit(),
-                                                                         aMap100 ) );
-            Size                aVisSize( aObjVisArea.GetSize() );
-            SvClientData*       pClientData = GetEnv();
+            SvClientData* pData = GetEnv();
 
-            if( pClientData )
+            if( pData )
             {
-                Fraction aFractX( pClientData->GetScaleWidth() );
-                Fraction aFractY( pClientData->GetScaleHeight() );
+                SvEmbeddedObject*   pObj = GetEmbedObj();
+                MapMode             aMap100( MAP_100TH_MM );
+                Rectangle           aVisArea( OutputDevice::LogicToLogic( pObj->GetVisArea(), pObj->GetMapUnit(), aMap100 ) );
+                Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
+                Size                aScaledSize( static_cast< long >( pData->GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
+                                                 static_cast< long >( pData->GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
 
-                aVisSize = Size( (long) ( aFractX *= aVisSize.Width() ), (long) ( aFractY *= aVisSize.Height() ) );
-
-                Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
-                Rectangle aObjArea( aLogicRect );
-
-                aObjArea.SetSize( aObjVisArea.GetSize() );
-                pClientData->SetObjArea( aObjArea );
-
-                const Size aVisSizePix( Application::GetDefaultDevice()->LogicToPixel( aVisSize, aMap100 ) );
-                const Size aObjSizePix( Application::GetDefaultDevice()->LogicToPixel( aLogicRect.GetSize(), aMap100 ) );
-
-                if( aVisSizePix != aObjSizePix )
+                if( Application::GetDefaultDevice()->LogicToPixel( aScaledSize, aMap100 ) !=
+                    Application::GetDefaultDevice()->LogicToPixel( aLogicRect.GetSize(), aMap100 ) )
                 {
-                    aLogicRect.SetSize(aVisSize);
-                    pSdrOle2Obj->SetLogicRect(aLogicRect);
+                    const sal_Bool bOldLock = pView->GetModel()->isLocked();
+
+                    pView->GetModel()->setLock( sal_True );
+                    pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
+                    pView->GetModel()->setLock( bOldLock );
                     pSdrOle2Obj->SendRepaintBroadcast();
                 }
             }
