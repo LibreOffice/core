@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:02:10 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:27:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..
 
 PRJNAME=xmloff
 TARGET=xo
+TARGET_FILTER=xof
 
 # --- Settings -----------------------------------------------------
 
@@ -82,7 +83,10 @@ LIB1FILES=	\
     $(SLB)$/text.lib \
     $(SLB)$/draw.lib \
     $(SLB)$/chart.lib \
-    $(SLB)$/forms.lib \
+    $(SLB)$/forms.lib
+
+LIB5TARGET= $(SLB)$/$(TARGET_FILTER).lib
+LIB5FILES= \
     $(SLB)$/transform.lib
 
 # --- Shared-Library -----------------------------------------------
@@ -122,6 +126,31 @@ SHL1STDLIBS+=-licg617mxp
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
 
+
+SHL5TARGET= $(TARGET_FILTER)$(UPD)$(DLLPOSTFIX)
+SHL5IMPLIB= _i$(TARGET_FILTER)
+
+SHL5STDLIBS= \
+        $(TOOLSLIB)         \
+        $(RTLLIB)           \
+        $(SALLIB)           \
+        $(SALHELPERLIB)     \
+        $(CPPULIB)          \
+        $(CPPUHELPERLIB)    \
+        $(ONELIB)           \
+        $(COMPHELPERLIB)
+
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+    SHL5STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
+.ELSE
+    SHL5STDLIBS += $(LIBPRE) ixo.lib
+.ENDIF
+
+SHL5DEF=    $(MISC)$/$(SHL5TARGET).def
+SHL5LIBS=   $(LIB5TARGET)
+
+SHL5VERSIONMAP=$(TARGET_FILTER).map 
+
 # --- Static-Lib ---------------------------------------------------------
 
 .IF "$(SVXLIGHT)" != "" 
@@ -145,6 +174,10 @@ DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =xo
 DEF1DES     =XML Office Lib
 DEF1EXPORTFILE=	exports.dxp
+
+DEF5NAME    =$(SHL5TARGET)
+
+
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE :  target.mk
