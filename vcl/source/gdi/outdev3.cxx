@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:45:53 $
+ *  last change: $Author: th $ $Date: 2000-11-06 20:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4012,7 +4012,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     {
         ::rtl::OUString aText( rStr );
         uno::Reference < text::XBreakIterator > xBI;
-        uno::Reference< linguistic::XHyphenator > xHyph;
+        uno::Reference< linguistic2::XHyphenator > xHyph;
         text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
         text::LineBreakUserOptions aUserOptions;
 
