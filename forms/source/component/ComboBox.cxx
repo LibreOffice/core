@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:37:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,15 +650,22 @@ void OComboBoxModel::loadData()
                     break;
 
                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT DISTINCT ");
+                OSL_ENSURE(xMeta.is(),"No database meta data!");
+                if ( xMeta.is() )
+                {
+                    ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
+                    ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT DISTINCT ");
 
-                aStatement += quoteName(aQuote, aFieldName);
-                aStatement += ::rtl::OUString::createFromAscii(" FROM ");
-                aStatement += quoteTableName(xMeta, m_aListSource,::dbtools::eInDataManipulation);
+                    aStatement += quoteName(aQuote, aFieldName);
+                    aStatement += ::rtl::OUString::createFromAscii(" FROM ");
 
-                xStmt = xConnection->createStatement();
-                xListCursor = xStmt->executeQuery(aStatement);
+                    sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                    sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                    aStatement += quoteTableName(xMeta, m_aListSource,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
+
+                    xStmt = xConnection->createStatement();
+                    xListCursor = xStmt->executeQuery(aStatement);
+                }
             }   break;
             case ListSourceType_QUERY:
             {
