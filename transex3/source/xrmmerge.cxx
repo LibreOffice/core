@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:54:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ XRMResOutputParser::XRMResOutputParser ( const ByteString &rOutputFile )
             String( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
             STREAM_STD_WRITE | STREAM_TRUNC
         );
-
+    pOutputStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     if ( !pOutputStream->IsOpen()) {
         ByteString sError( "Unable to open output file: " );
         sError += rOutputFile;
@@ -649,6 +649,11 @@ void XRMResExport::EndOfText(
                 //sOutput += ByteString::CreateFromInt64( Export::LangId[ i ] );
                 sOutput += sCur;
                 sOutput += "\t";
+
+//                if( sCur.EqualsIgnoreCaseAscii("de") ){
+//                   sAct = UTF8Converter::ConvertToUTF8( sAct, RTL_TEXTENCODING_MS_1252 );
+//                }
+
                 sOutput += sAct; sOutput += "\t\t\t\t";
                 sOutput += sTimeStamp;
 
@@ -656,6 +661,9 @@ void XRMResExport::EndOfText(
 //                  sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
+                //if( sCur.EqualsIgnoreCaseAscii("de") ){
+               //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
+                //}
 
                 pOutputStream->WriteLine( sOutput );
             }
