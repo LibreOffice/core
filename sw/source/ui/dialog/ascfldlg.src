@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:58:59 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "~CR & LF";
         Text[ polish ] = "~CR & LF";
         Text[ portuguese_brazilian ] = "CR & LF";
-        Text[ japanese ] = "CR & LF(~C)";
-        Text[ korean ] = "CR & LF(~C)";
+        Text[ japanese ] = "~CR & LF";
+        Text[ korean ] = "~CR & LF";
         Text[ chinese_simplified ] = "回车并换行(~C)";
         Text[ chinese_traditional ] = "~CR & LF";
         Text[ arabic ] = "CR & LF";
@@ -270,8 +270,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "C~R";
         Text[ polish ] = "C~R";
         Text[ portuguese_brazilian ] = "CR";
-        Text[ japanese ] = "CR(~R)";
-        Text[ korean ] = "CR(~R)";
+        Text[ japanese ] = "C~R";
+        Text[ korean ] = "C~R";
         Text[ chinese_simplified ] = "回车(~R)";
         Text[ chinese_traditional ] = "C~R";
         Text[ arabic ] = "CR";
@@ -297,8 +297,8 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "LF";
         Text[ polish ] = "~LF";
         Text[ portuguese_brazilian ] = "LF";
-        Text[ japanese ] = "LF(~L)";
-        Text[ korean ] = "LF(~L)";
+        Text[ japanese ] = "~LF";
+        Text[ korean ] = "~LF";
         Text[ chinese_simplified ] = "新行(~L)";
         Text[ chinese_traditional ] = "~LF";
         Text[ arabic ] = "LF";
