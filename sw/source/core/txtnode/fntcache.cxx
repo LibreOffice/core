@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:57:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2071,8 +2071,11 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     }
 
     // step back if position is before the middle of the character
-    if ( nIdx > rInf.GetIdx() && ( nRight > long( rInf.GetOfst() ) ) &&
-                 ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) )
+    // or if we do not want to go to the next character
+    if ( nIdx > rInf.GetIdx() &&
+         ( rInf.IsPosMatchesBounds() ||
+           ( ( nRight > long( rInf.GetOfst() ) ) &&
+             ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) ) ) )
         nCnt = nLastIdx - rInf.GetIdx(); // first half
     else
         nCnt = nIdx - rInf.GetIdx(); // second half
