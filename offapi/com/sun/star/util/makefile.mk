@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: as $ $Date: 2002-04-05 06:54:27 $
+#   last change: $Author: cd $ $Date: 2002-08-15 05:26:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,7 +155,10 @@ IDLFILES=\
     NotNumericException.idl\
     XAtomServer.idl\
     AtomClassRequest.idl\
-    AtomDescription.idl
+    AtomDescription.idl\
+    XStringSubstitution.idl\
+    PathSettings.idl\
+    PathSubstitution.idl
 
 # ------------------------------------------------------------------
 
