@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:43:49 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,14 +524,14 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             sal_Int32 nParmIndex = 0;
             rtl::OUString aParamType;
             rtl::OUString aParamName = aToken.getToken( 0, '=', nParmIndex );
-            rtl::OUString aValue = aToken.getToken( 0, '=', nParmIndex );
+            rtl::OUString aValue     = (nParmIndex!=-1) ? aToken.getToken( 0, '=', nParmIndex ) : ::rtl::OUString();
 
             if ( aParamName.getLength() > 0 )
             {
                 nParmIndex = 0;
                 aToken = aParamName;
-                aParamName = aToken.getToken( 0, ':', nParmIndex );
-                aParamType = aToken.getToken( 0, ':', nParmIndex );
+                aParamName = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : ::rtl::OUString();
+                aParamType = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : ::rtl::OUString();
             }
 
             sal_Int32 nLen = rArgs.getLength();
