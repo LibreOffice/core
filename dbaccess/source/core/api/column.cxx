@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:20 $
+ *  last change: $Author: vg $ $Date: 2002-10-30 14:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _DBA_CORE_TABLE_HXX_
-#include "table.hxx"
-#endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/sdbcx/VColumn.hxx>
 #endif
+#include <connectivity/TTableHelper.hxx>
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:17 $
+ *  last change: $Author: vg $ $Date: 2002-10-30 14:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 #ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
-#endif
-#ifndef _DBA_CORE_TABLE_HXX_
-#include "table.hxx"
 #endif
 #ifndef _CONNECTIVITY_SDBCX_INDEX_HXX_
 #include "connectivity/sdbcx/VIndex.hxx"
