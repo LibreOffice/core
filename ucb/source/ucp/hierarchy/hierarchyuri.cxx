@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyuri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 15:23:22 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 07:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,20 @@ void HierarchyUri::init() const
         m_aService = m_aParentUri = m_aName = rtl::OUString();
 
         // URI must match at least: <sheme>:
-        if ( ( m_aUri.getLength() >= HIERARCHY_URL_SCHEME_LENGTH + 1 ) &&
-             ( m_aUri.compareToAscii( HIERARCHY_URL_SCHEME ":",
-                                      HIERARCHY_URL_SCHEME_LENGTH + 1 ) == 0 ) )
+        if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )
         {
+            // error, but remember that we did a init().
+            m_aPath = rtl::OUString::createFromAscii( "/" );
+        }
+
+        // Scheme is case insensitive.
+        rtl::OUString aScheme
+            = m_aUri.copy( 0, HIERARCHY_URL_SCHEME_LENGTH ).toAsciiLowerCase();
+        if ( aScheme.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_URL_SCHEME ) ) )
+        {
+            m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
+
             sal_Int32 nPos = 0;
 
             // If the URI has no service specifier, insert default service.
