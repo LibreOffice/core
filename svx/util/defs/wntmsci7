@@ -23707,3 +23707,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ??R?$WeakChildAdapter@VAccessibleParaManager_DisposeChildren@accessibility@@@AccessibleParaManager@accessibility@@QAEXABU?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@_STL@@@Z
 ?Dispose@AccessibleParaManager@accessibility@@QAEXXZ
 ?Dispose@AccessibleEditableTextPara@accessibility@@QAEXXZ
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx1148018931@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx310607613@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
