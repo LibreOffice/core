@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:27:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OCommonAccessibleSelection::selectAllAccessible(  ) throw (RuntimeException)
+    void SAL_CALL OCommonAccessibleSelection::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         implSelect( ACCESSIBLE_SELECTION_CHILD_ALL, sal_True );
     }
@@ -193,10 +193,10 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleSelectionHelper::selectAllAccessible(  ) throw (RuntimeException)
+    void SAL_CALL OAccessibleSelectionHelper::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
-        OCommonAccessibleSelection::selectAllAccessible();
+        OCommonAccessibleSelection::selectAllAccessibleChildren();
     }
 
     //--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:27:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_SELECTION_HPP_
-#include <com/sun/star/awt/Selection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_TEXTSEGMENT_HPP_
+#include <com/sun/star/accessibility/TextSegment.hpp>
 #endif
 
 #include <algorithm>
@@ -387,22 +387,29 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, RuntimeException)
+    ::com::sun::star::accessibility::TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ::rtl::OUString sResult;
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
-        i18n::Boundary aBoundary;
 
         if ( !implIsValidIndex( nIndex, nLength ) && nIndex != nLength )
             throw IndexOutOfBoundsException();
+
+        i18n::Boundary aBoundary;
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         switch ( aTextType )
         {
             case AccessibleTextType::CHARACTER:
             {
                 if ( implIsValidIndex( nIndex, nLength ) )
-                    sResult = sText.copy( nIndex, 1 );
+                {
+                    aResult.SegmentText = sText.copy( nIndex, 1 );
+                    aResult.SegmentStart = nIndex;
+                    aResult.SegmentEnd = nIndex+1;
+                }
             }
             break;
             case AccessibleTextType::GLYPH:
@@ -410,7 +417,11 @@ namespace comphelper
                 // get glyph at index
                 implGetGlyphBoundary( aBoundary, nIndex );
                 if ( implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::WORD:
@@ -418,7 +429,11 @@ namespace comphelper
                 // get word at index
                 sal_Bool bWord = implGetWordBoundary( aBoundary, nIndex );
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::SENTENCE:
@@ -426,7 +441,11 @@ namespace comphelper
                 // get sentence at index
                 implGetSentenceBoundary( aBoundary, nIndex );
                 if ( implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::PARAGRAPH:
@@ -434,7 +453,11 @@ namespace comphelper
                 // get paragraph at index
                 implGetParagraphBoundary( aBoundary, nIndex );
                 if ( implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::LINE:
@@ -442,7 +465,11 @@ namespace comphelper
                 // get line at index
                 implGetLineBoundary( aBoundary, nIndex );
                 if ( implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             default:
@@ -451,27 +478,34 @@ namespace comphelper
             }
         }
 
-        return sResult;
+        return aResult;
     }
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OCommonAccessibleText::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, RuntimeException)
+    ::com::sun::star::accessibility::TextSegment OCommonAccessibleText::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ::rtl::OUString sResult;
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
-        i18n::Boundary aBoundary;
 
         if ( !implIsValidIndex( nIndex, nLength ) && nIndex != nLength )
             throw IndexOutOfBoundsException();
+
+        i18n::Boundary aBoundary;
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         switch ( aTextType )
         {
             case AccessibleTextType::CHARACTER:
             {
                 if ( implIsValidIndex( nIndex - 1, nLength ) )
-                    sResult = sText.copy( nIndex - 1, 1 );
+                {
+                    aResult.SegmentText = sText.copy( nIndex - 1, 1 );
+                    aResult.SegmentStart = nIndex-1;
+                    aResult.SegmentEnd = nIndex;
+                }
             }
             break;
             case AccessibleTextType::GLYPH:
@@ -483,7 +517,11 @@ namespace comphelper
                 {
                     implGetGlyphBoundary( aBoundary, aBoundary.startPos - 1 );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -496,7 +534,11 @@ namespace comphelper
                 while ( !bWord && aBoundary.startPos > 0 )
                     bWord = implGetWordBoundary( aBoundary, aBoundary.startPos - 1 );
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::SENTENCE:
@@ -508,7 +550,11 @@ namespace comphelper
                 {
                     implGetSentenceBoundary( aBoundary, aBoundary.startPos - 1 );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -521,7 +567,11 @@ namespace comphelper
                 {
                     implGetParagraphBoundary( aBoundary, aBoundary.startPos - 1 );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -534,7 +584,11 @@ namespace comphelper
                 {
                     implGetLineBoundary( aBoundary, aBoundary.startPos - 1 );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -544,27 +598,34 @@ namespace comphelper
             }
         }
 
-        return sResult;
+        return aResult;
     }
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OCommonAccessibleText::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, RuntimeException)
+    ::com::sun::star::accessibility::TextSegment OCommonAccessibleText::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
-        ::rtl::OUString sResult;
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
-        i18n::Boundary aBoundary;
 
         if ( !implIsValidIndex( nIndex, nLength ) && nIndex != nLength )
             throw IndexOutOfBoundsException();
+
+        i18n::Boundary aBoundary;
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         switch ( aTextType )
         {
             case AccessibleTextType::CHARACTER:
             {
                 if ( implIsValidIndex( nIndex + 1, nLength ) )
-                    sResult = sText.copy( nIndex + 1, 1 );
+                {
+                    aResult.SegmentText = sText.copy( nIndex + 1, 1 );
+                    aResult.SegmentStart = nIndex+1;
+                    aResult.SegmentEnd = nIndex+2;
+                }
             }
             break;
             case AccessibleTextType::GLYPH:
@@ -576,7 +637,11 @@ namespace comphelper
                 {
                     implGetGlyphBoundary( aBoundary, aBoundary.endPos );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -589,7 +654,11 @@ namespace comphelper
                 while ( !bWord && aBoundary.endPos < nLength )
                     bWord = implGetWordBoundary( aBoundary, aBoundary.endPos );
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::SENTENCE:
@@ -606,7 +675,11 @@ namespace comphelper
                     bFound = ( aBoundary.endPos > nEnd );
                 }
                 if ( bFound && implIsValidBoundary( aBoundary, nLength ) )
-                    sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                {
+                    aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    aResult.SegmentStart = aBoundary.startPos;
+                    aResult.SegmentEnd = aBoundary.endPos;
+                }
             }
             break;
             case AccessibleTextType::PARAGRAPH:
@@ -618,7 +691,11 @@ namespace comphelper
                 {
                     implGetParagraphBoundary( aBoundary, aBoundary.endPos );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -631,7 +708,11 @@ namespace comphelper
                 {
                     implGetLineBoundary( aBoundary, aBoundary.endPos );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
-                        sResult = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                    {
+                        aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
+                        aResult.SegmentStart = aBoundary.startPos;
+                        aResult.SegmentEnd = aBoundary.endPos;
+                    }
                 }
             }
             break;
@@ -641,15 +722,15 @@ namespace comphelper
             }
         }
 
-        return sResult;
+        return aResult;
     }
 
     // -----------------------------------------------------------------------------
     bool OCommonAccessibleText::implInitTextChangedEvent(
         const rtl::OUString& rOldString,
         const rtl::OUString& rNewString,
-        ::com::sun::star::uno::Any& rDeleteSelection,
-        ::com::sun::star::uno::Any& rInsertSelection) // throw()
+        ::com::sun::star::uno::Any& rDeleted,
+        ::com::sun::star::uno::Any& rInserted) // throw()
     {
         sal_uInt32 nLenOld = rOldString.getLength();
         sal_uInt32 nLenNew = rNewString.getLength();
@@ -658,29 +739,33 @@ namespace comphelper
         if ((0 == nLenOld) && (0 == nLenNew))
             return false;
 
-        ::com::sun::star::awt::Selection DelSel;
-        ::com::sun::star::awt::Selection InsSel;
+        ::com::sun::star::accessibility::TextSegment aDeletedText;
+        ::com::sun::star::accessibility::TextSegment aInsertedText;
 
-        DelSel.Min = -1;
-        DelSel.Max = -1;
-        InsSel.Min = -1;
-        InsSel.Max = -1;
+        aDeletedText.SegmentStart = -1;
+        aDeletedText.SegmentEnd = -1;
+        aInsertedText.SegmentStart = -1;
+        aInsertedText.SegmentEnd = -1;
 
         // insert only
         if ((0 == nLenOld) && (nLenNew > 0))
         {
-            InsSel.Min = 0;
-            InsSel.Max = nLenNew;
-            rInsertSelection <<= InsSel;
+            aInsertedText.SegmentStart = 0;
+            aInsertedText.SegmentEnd = nLenNew;
+            aInsertedText.SegmentText = rNewString.copy( aInsertedText.SegmentStart, aInsertedText.SegmentEnd - aInsertedText.SegmentStart );
+
+            rInserted <<= aInsertedText;
             return true;
         }
 
         // delete only
         if ((nLenOld > 0) && (0 == nLenNew))
         {
-            DelSel.Min = 0;
-            DelSel.Max = nLenOld;
-            rDeleteSelection <<= DelSel;
+            aDeletedText.SegmentStart = 0;
+            aDeletedText.SegmentEnd = nLenOld;
+            aDeletedText.SegmentText = rOldString.copy( aDeletedText.SegmentStart, aDeletedText.SegmentEnd - aDeletedText.SegmentStart );
+
+            rDeleted <<= aDeletedText;
             return true;
         }
 
@@ -703,9 +788,9 @@ namespace comphelper
             return false;
 
         // find last difference
-        while (((pLastDiffOld - 1) > pFirstDiffOld) &&
-               ((pLastDiffNew - 1) > pFirstDiffNew) &&
-               (pLastDiffOld[-1]  == pLastDiffNew[-1]))
+        while ( ( pLastDiffOld > pFirstDiffOld) &&
+                ( pLastDiffNew > pFirstDiffNew) &&
+                (pLastDiffOld[-1]  == pLastDiffNew[-1]))
         {
             pLastDiffOld--;
             pLastDiffNew--;
@@ -713,18 +798,20 @@ namespace comphelper
 
         if (pFirstDiffOld < pLastDiffOld)
         {
-            DelSel.Min = pFirstDiffOld - rOldString.getStr();
-            DelSel.Max = pLastDiffOld  - rOldString.getStr();
+            aDeletedText.SegmentStart = pFirstDiffOld - rOldString.getStr();
+            aDeletedText.SegmentEnd = pLastDiffOld  - rOldString.getStr();
+            aDeletedText.SegmentText = rOldString.copy( aDeletedText.SegmentStart, aDeletedText.SegmentEnd - aDeletedText.SegmentStart );
 
-            rDeleteSelection <<= DelSel;
+            rDeleted <<= aDeletedText;
         }
 
         if (pFirstDiffNew < pLastDiffNew)
         {
-            InsSel.Min = pFirstDiffNew - rNewString.getStr();
-            InsSel.Max = pLastDiffNew  - rNewString.getStr();
+            aInsertedText.SegmentStart = pFirstDiffNew - rNewString.getStr();
+            aInsertedText.SegmentEnd = pLastDiffNew  - rNewString.getStr();
+            aInsertedText.SegmentText = rNewString.copy( aInsertedText.SegmentStart, aInsertedText.SegmentEnd - aInsertedText.SegmentStart );
 
-            rInsertSelection <<= InsSel;
+            rInserted <<= aInsertedText;
         }
         return true;
     }
@@ -823,7 +910,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, RuntimeException)
+    ::com::sun::star::accessibility::TextSegment OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -832,7 +919,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, RuntimeException)
+    ::com::sun::star::accessibility::TextSegment OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -841,7 +928,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, RuntimeException)
+    ::com::sun::star::accessibility::TextSegment OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
