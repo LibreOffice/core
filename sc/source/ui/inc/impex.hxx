@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:24:44 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class ScImportExport
     ScDocument* pUndoDoc;
     ScRange     aRange;
     String      aStreamPath;
+    String      aNonConvertibleChars;
     ULONG       nSizeLimit;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
@@ -162,6 +163,8 @@ public:
                      ::com::sun::star::uno::Any & rValue  );
 
     BOOL IsOverflow() const { return bOverflow; }       // nach dem Importieren
+
+    const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 };
 
 

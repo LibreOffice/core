@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:54:23 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharS
                         UINT32 nDifOption = SC_DIFOPT_EXCEL );
 
 FltError ScExportHTML( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
-                        const String& rStreamPath );
+                        const String& rStreamPath, String& rNonConvertibleChars );
 
 FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
 

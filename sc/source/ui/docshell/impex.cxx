@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:59:09 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1507,8 +1507,9 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
 
 BOOL ScImportExport::Doc2HTML( SvStream& rStrm )
 {
-    //  CharSet is ignored in ScExportHTML
-    ScExportHTML( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll, aStreamPath );
+    // CharSet is ignored in ScExportHTML, read from Load/Save HTML options
+    ScExportHTML( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
+        aStreamPath, aNonConvertibleChars );
     return BOOL( rStrm.GetError() == SVSTREAM_OK );
 }
 

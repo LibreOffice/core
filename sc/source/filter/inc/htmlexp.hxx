@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ class ScHTMLExport : public ScExportBase
     OutputDevice*       pAppWin;        // fuer Pixelei
     SvStringsSortDtor*  pSrcArr;        // fuer CopyLocalFileToINet
     SvStringsSortDtor*  pDestArr;
+    String              aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding    eDestEnc;
     USHORT              nUsedTables;
     short               nIndent;
@@ -197,6 +198,8 @@ public:
                                         BOOL bAll, const String& aStreamPath );
     virtual             ~ScHTMLExport();
     ULONG               Write();
+    const String&       GetNonConvertibleChars() const
+                            { return aNonConvertibleChars; }
 };
 
 #endif

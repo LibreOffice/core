@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-26 18:52:37 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1943,6 +1943,11 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             ScImportExport aImExport( &aDocument );
             aImExport.SetStreamPath( rMed.GetName() );
             bRet = aImExport.ExportStream( *pStream, SOT_FORMATSTR_ID_HTML );
+            if ( bRet && aImExport.GetNonConvertibleChars().Len() )
+                SetError( *new StringErrorInfo(
+                    SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
+                    aImExport.GetNonConvertibleChars(),
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO ) );
         }
     }
     else

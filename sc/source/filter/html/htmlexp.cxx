@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-17 18:43:35 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
                                 << ScExportBase::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( rStrm, tag, FALSE )
-#define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, eDestEnc )
+#define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, eDestEnc, &aNonConvertibleChars )
+#define OUT_STR_NO_CONV( str )  HTMLOutFuncs::Out_String( rStrm, str, eDestEnc )
 #define OUT_LF()            rStrm << ScExportBase::sNewLine << GetIndentStr()
 #define lcl_OUT_LF()        rStrm << ScExportBase::sNewLine
 #define TAG_ON_LF( tag )    (TAG_ON( tag ) << ScExportBase::sNewLine << GetIndentStr())
@@ -184,7 +185,7 @@ const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
 #define OUT_COMMENT( comment )  (rStrm << sMyBegComment, OUT_STR( comment ) \
                                 << sMyEndComment << ScExportBase::sNewLine \
                                 << GetIndentStr())
-#define lcl_OUT_COMMENT( comment )  (rStrm << sMyBegComment, OUT_STR( comment ) \
+#define lcl_OUT_COMMENT( comment )  (rStrm << sMyBegComment, OUT_STR_NO_CONV( comment ) \
                                 << sMyEndComment << ScExportBase::sNewLine)
 
 #define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
@@ -200,10 +201,12 @@ extern BOOL bOderSo;
 
 FltError ScExportHTML( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const CharSet eNach, BOOL bAll,
-        const String& rStreamPath )
+        const String& rStreamPath, String& rNonConvertibleChars )
 {
     ScHTMLExport aEx( rStrm, pDoc, rRange, bAll, rStreamPath );
-    return aEx.Write();
+    FltError nErr = aEx.Write();
+    rNonConvertibleChars = aEx.GetNonConvertibleChars();
+    return nErr;
 }
 
 
@@ -418,7 +421,7 @@ void ScHTMLExport::WriteHeader()
 
     IncIndent(1); TAG_ON_LF( sHTML_head );
 
-    SfxFrameHTMLWriter::Out_DocInfo( rStrm, &rInfo, sIndent, eDestEnc );
+    SfxFrameHTMLWriter::Out_DocInfo( rStrm, &rInfo, sIndent, eDestEnc, &aNonConvertibleChars );
     OUT_LF();
 
     //----------------------------------------------------------
@@ -1145,7 +1148,7 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
         }
     }
     HTMLOutFuncs::CreateTableDataOptionsValNum( aStrTD, bValueData, fVal,
-        nFormat, *pFormatter, eDestEnc );
+        nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars );
 
     TAG_ON( aStrTD.GetBuffer() );
 
@@ -1164,7 +1167,8 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
             if ( nFonts == 1 )
             {
                 ByteString  aTmpStr;
-                HTMLOutFuncs::ConvertStringToHTML( rFontItem.GetFamilyName(), aTmpStr, eDestEnc );
+                HTMLOutFuncs::ConvertStringToHTML( rFontItem.GetFamilyName(),
+                    aTmpStr, eDestEnc, &aNonConvertibleChars );
                 aStr += aTmpStr;
             }
             else
@@ -1173,7 +1177,9 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
                 for ( xub_StrLen j = 0, nPos = 0; j < nFonts; j++ )
                 {
                     ByteString  aTmpStr;
-                    HTMLOutFuncs::ConvertStringToHTML( rList.GetToken( 0, ';', nPos ), aTmpStr, eDestEnc );
+                    HTMLOutFuncs::ConvertStringToHTML(
+                        rList.GetToken( 0, ';', nPos ), aTmpStr, eDestEnc,
+                        &aNonConvertibleChars );
                     aStr += aTmpStr;
                     if ( j < nFonts-1 )
                         aStr += ',';
