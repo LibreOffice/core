@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 07:55:56 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 16:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ namespace xmloff
         const Reference< sax::XAttributeList >& _rxAttrList)
     {
         static const ::rtl::OUString s_sEventTagName = ::rtl::OUString::createFromAscii("events");
-        if ((s_sEventTagName == _rLocalName) && (XML_NAMESPACE_SCRIPT == _nPrefix))
+        if ((s_sEventTagName == _rLocalName) && (XML_NAMESPACE_OFFICE == _nPrefix))
             return new OFormEventsImportContext(m_rFormImport.getGlobalContext(), _nPrefix, _rLocalName, *this);
 
         return OPropertyImport::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
@@ -1099,6 +1099,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/02/19 07:55:56  fs
+ *  recognize text-area (instead of textarea) for compatibility reasons ('til 624)
+ *
  *  Revision 1.11  2001/02/13 13:44:04  fs
  *  create an OPasswordImport if necessary
  *
