@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 16:22:28 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:59:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -190,21 +190,17 @@ sub add_root_directories
         my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
 
-        if ( $installer::globals::isopensourceproduct )
+        if ( $allvariableshashref->{'SUNDIR'} )
         {
-            $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey\n";
-            push(@{$directorytableref}, $oneline);
-        }
-        else
-        {
-            # my $manufacturer = $installer::globals::sundirname;
-            # my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");    # third parameter not used
-            # $shortmanufacturer =~ s/\s/\_/g;                                  # changing empty space to underline
-
             $oneline = "sundirectory\t$installer::globals::programfilesfolder\t$installer::globals::sundirname$sourcediraddon\n";
             push(@{$directorytableref}, $oneline);
 
             $oneline = "INSTALLLOCATION\tsundirectory\t$shortproductkey|$productkey$sourcediraddon\n";
+            push(@{$directorytableref}, $oneline);
+        }
+        else
+        {
+            $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey\n";
             push(@{$directorytableref}, $oneline);
         }
 
