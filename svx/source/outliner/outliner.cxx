@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:36 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1879,8 +1879,11 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust, BOOL bReturnP
         {
             // Bei zentriert/rechtsbuendig anpassen
             const SvxAdjustItem& rItem = (const SvxAdjustItem&)pEditEngine->GetParaAttrib( nPara, EE_PARA_JUST );
-            if ( rItem.GetAdjust() != SVX_ADJUST_LEFT )
+            if ( ( !pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SVX_ADJUST_LEFT ) ) ||
+                 ( pEditEngine->IsRightToLeft( nPara ) && ( rItem.GetAdjust() != SVX_ADJUST_RIGHT ) ) )
+            {
                 aTopLeft.X() = pEditEngine->GetFirstLineStartX( nPara ) - nBulletWidth;
+            }
         }
 
         // Vertikal:
