@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlImageControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,6 @@
 #include <com/sun/star/awt/UnoControl.idl>
 #endif
 
-#ifndef __com_sun_star_awt_XImageConsumer_idl__
-#include <com/sun/star/awt/XImageConsumer.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XImageProducer_idl__
-#include <com/sun/star/awt/XImageProducer.idl>
-#endif
-
 #ifndef __com_sun_star_awt_XLayoutConstrains_idl__
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 #endif
@@ -84,16 +76,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoImageControl
-/** specifies a control to display an image.
+/** specifies a control for displaying an image.
  */
 service UnoControlImageControl
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControl;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XLayoutConstrains;
+
 };
 
 //=============================================================================
