@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
+ *  last change: $Author: cmc $ $Date: 2000-12-15 15:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,11 +478,21 @@ class SwMSDffManager : public SvxMSDffManager
                                     SvStorageRef& rSrcStorage,
                                     SvStorageRef& rDestStorage ) const;
     virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
+    virtual SdrObject* ImportOLE( long nOLEId, const Graphic& rGrf,
+                                    const Rectangle& rBoundRect ) const;
+
 //  virtual void ProcessClientAnchor2( SvStream& rStData, DffRecordHeader& rHd, void* pData, DffObjData& );
 
 public:
-    SwMSDffManager( SwWW8ImplReader& rRdr );
     static UINT32 GetFilterFlags();
+    SwMSDffManager( SwWW8ImplReader& rRdr );
+    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+        GetLastOCXShape() const {return xShape;}
+private:
+// If we convert an OCX through this manager we will store the uno XShape
+// reference created through the conversion
+    mutable com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > xShape;
 };
 
 
@@ -1127,11 +1137,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.8 2000-12-04 14:08:08 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.9 2000-12-15 15:33:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2000/12/04 14:08:08  khz
+      #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
+
       Revision 1.7  2000/12/01 11:22:52  jp
       Task #81077#: im-/export of CJK documents
 

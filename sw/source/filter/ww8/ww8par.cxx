@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
+ *  last change: $Author: cmc $ $Date: 2000-12-15 15:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,14 @@
 
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
+#endif
+
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 
 #ifdef DEBUG
@@ -239,6 +247,8 @@
 #include <swerror.h>            // ERR_WW8_...
 #endif
 
+using namespace ::com::sun::star;
+
 
 //-----------------------------------------
 //              diverses
@@ -280,6 +290,36 @@ UINT32 SwMSDffManager::GetFilterFlags()
         nFlags |= OLE_POWERPOINT_2_STARIMPRESS;
     return nFlags;
 }
+
+
+/*
+ * I would like to override the default OLE importing to add a test
+ * and conversion of OCX controls from their native OLE type into our
+ * native nonOLE Form Control Objects.
+ *
+ * cmc
+ */
+SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
+                                        const Rectangle& rBoundRect ) const
+{
+    SdrObject* pRet = 0;
+    String sStorageName;
+    SvStorageRef xSrcStg, xDstStg;
+    if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
+    {
+        SvStorageRef xSrc = xSrcStg->OpenStorage( sStorageName,
+            STREAM_READWRITE| STREAM_SHARE_DENYALL );
+        ASSERT(rReader.pFormImpl, "No Form Implementation!");
+        if (rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,TRUE))
+            pRet = GetSdrObjectFromXShape(xShape);
+        else
+            pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
+                rGrf, rBoundRect, pStData, nSvxMSDffOLEConvFlags );
+    }
+    return pRet;
+}
+
+
 /***************************************************************************
 #  Spezial FastSave - Attribute
 #**************************************************************************/
@@ -2140,7 +2180,14 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     pDataStream = pStrm;
 
                 if( pWwFib->lcbPlcfspaHdr || pWwFib->lcbPlcfspaMom )
+                {
                     pMSDffManager = new SwMSDffManager( *this );
+                    //#79055# Now the dff manager always needs a controls
+                    //converter as well, but a control converter may still
+                    //exist without a dffmanager. cmc
+                    pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),
+                        pPaM);
+                }
                 break;
 
         default:// Programm-Fehler!
@@ -2934,11 +2981,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.5 2000-12-04 14:08:08 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.6 2000-12-15 15:33:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/04 14:08:08  khz
+      #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
+
       Revision 1.4  2000/11/23 13:37:53  khz
       #79474# Save/restore PLCF state before/after reading header or footer data
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-23 16:18:18 $
+ *  last change: $Author: cmc $ $Date: 2000-12-15 15:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,13 @@
 #endif
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
+#endif
+#ifndef _UNODRAW_HXX
+#include <unodraw.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -2343,12 +2350,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     && (    (UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier())
                          || (UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier()) ) );
 
-            //FormControl Text, cmc
-            UINT32 nTextId =
-                pMSDffManager->GetPropertyValue(DFF_Prop_pictureId,0);
-            if (nTextId)
-                bOrgObjectWasReplace=TRUE;
-
 
             // Umfluss-Modus ermitteln
             SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
@@ -2441,83 +2442,17 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 SwFrmFmt *pControl=NULL;
                 if( UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier() )
                 {
-                    SvInPlaceObjectRef xIPRef(
-                                ((SdrOle2Obj*)pObject)->GetObjRef() );
+
+                    SvInPlaceObjectRef xIPRef(((SdrOle2Obj*)pObject)->GetObjRef());
 
                     // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll, was die
                     // UI derzeit (27.1.99) noch nicht kann khz.
                     pRetFrmFmt = rDoc.Insert( *pPaM, &xIPRef, &aFlySet );
                 }
-                else if (nTextId) //i.e. This is possibly a FormControl or graphic
+                else //if (*/(UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier())
                 {
-                    UINT16 nTxBxS = (UINT16)(nTextId >> 16);
-                    UINT16 nSequence = (UINT16)nTextId;
-                    pRecord = aData.GetRecord(0);
-
-                    SdrObject* pTrueObject
-                        = (    bOrgObjectWasReplace
-                            && (pOrgShapeObject == pRecord->pObj) )
-                        ? pOurNewObject
-                        : pRecord->pObj;
-
-                    if( bOrgObjectWasReplace && pTrueObject )
-                    {
-                        if( pF->bBelowText )
-                            pTrueObject->SetLayer( nDrawHell );
-                        else
-                            pTrueObject->SetLayer( nDrawHeaven );
-                    }
-
-                    if( pTrueObject == pRecord->pObj )
-                    {
-                        MatchWrapDistancesIntoFlyFmt(    pRecord, pRetFrmFmt );
-                        if( bSetCrop )
-                            SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
-                    }
-
-                    SdrTextObj* pSdrTextObj =
-                        PTR_CAST(SdrTextObj,pRecord->pObj);
-
-                    if( pSdrTextObj )
-                    {
-                        Size aObjSize(
-                            pSdrTextObj->GetSnapRect().GetWidth(),
-                            pSdrTextObj->GetSnapRect().GetHeight());
-
-                        BOOL bEraseThisObject=FALSE;
-                        BOOL bOldFloatingCtrl=bFloatingCtrl;
-                        bFloatingCtrl=TRUE;
-                        pControl = InsertTxbxText(
-                            pSdrTextObj,
-                            &aObjSize,
-                            nTxBxS,
-                            nSequence,
-                            nGrafAnchorCp,
-                            pRetFrmFmt,
-                            FALSE,
-                            bEraseThisObject,
-                            FALSE,0,0,
-                            pRecord );
-
-                        if ((pControl) && (RES_DRAWFRMFMT==pControl->Which()))
-                        {
-                            SdrObject *pObj = pControl->FindSdrObject();
-                            if ((pObj) && (FmFormInventor == pObj->GetObjInventor()))
-                            {
-                                /*have a control*/
-                                pControl->SetAttr(aFlySet.Get(RES_VERT_ORIENT));
-                                pControl->SetAttr(aFlySet.Get(RES_HORI_ORIENT));
-                            }
-                        }
-                        bFloatingCtrl=bOldFloatingCtrl;
-                    bDone=TRUE;
-                    }
-                }
-
-
-                if ((UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier()) && (!pControl))
-                {
-                    const Graphic& rGraph = ((SdrGrafObj*)pObject)->GetGraphic();
+                    const Graphic& rGraph =
+                        ((SdrGrafObj*)pObject)->GetGraphic();
                     bSetCrop = TRUE;
                     BOOL bDone2 = FALSE;
 
@@ -2528,7 +2463,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                 ((SdrGrafObj*)pObject)->GetFileName() ) );
 
                         BOOL bExist = FALSE;
-                        INetURLObject aGrURL(URIHelper::SmartRelToAbs(aGrfName));
+                        INetURLObject aGrURL(URIHelper::SmartRelToAbs(
+                            aGrfName));
                         try
                         {
                             ::ucb::Content aTestContent(
@@ -2805,6 +2741,42 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                         }
                     }
                 }
+
+                if (FmFormInventor == pObject->GetObjInventor())
+                {
+                    //#79055# This was a FormControl. This means that the
+                    //msdffimp ole import has already converted it to the
+                    //SdrObject that we have in pObject here, *and* has
+                    //already inserted it as a StarWriter FlyFrm, tragically
+                    //though it does not have its position set correctly, and
+                    //the OCXConverter returns a uno XShape so we turn this
+                    //back into a FlyFrm through the uno api and then set its
+                    //correct position information.
+                    //
+                    //cmc
+                    uno::Reference< drawing::XShape > xRef =
+                        ((SwMSDffManager*)pMSDffManager)->GetLastOCXShape();
+                    uno::Reference< beans::XPropertySet >
+                        xPropSet( xRef, uno::UNO_QUERY );
+                    uno::Reference< lang::XUnoTunnel> xTunnel(
+                        xPropSet, uno::UNO_QUERY);
+                    SwXShape *pSwShape = 0;
+                    if(xTunnel.is())
+                    {
+                        pSwShape = (SwXShape*)xTunnel->getSomething(
+                            SwXShape::getUnoTunnelId());
+                    }
+                    pRetFrmFmt = pSwShape ?
+                        (SwFrmFmt*)(pSwShape->GetRegisteredIn()) : 0;
+                    if (pRetFrmFmt)
+                    {
+                        pRetFrmFmt->SetAttr(aFlySet.Get(RES_VERT_ORIENT));
+                        pRetFrmFmt->SetAttr(aFlySet.Get(RES_HORI_ORIENT));
+                    }
+                    bDone=TRUE;
+                }
+
+
                 if( !bDone )
                 {
                     if( pF->bBelowText )
@@ -3026,11 +2998,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.5 2000-11-23 16:18:18 sj Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.6 2000-12-15 15:33:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/23 16:18:18  sj
+      #78880# the SdrTextObjects needs to know the model
+
       Revision 1.4  2000/11/03 09:35:25  khz
       fault tolerant Winword parameter reading
 
