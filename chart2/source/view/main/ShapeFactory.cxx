@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 16:05:12 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 13:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,12 +193,15 @@ uno::Any createPolyPolygon_Cube(
     else if(!bRounded)
         fRoundedEdge = 0.0;
 
-    const double fWidthH = rSize.DirectionX/2.0; //fWidthH stands for Half Width
+    //fWidthH stands for Half Width
+    const double fWidthH = rSize.DirectionX >=0.0?  rSize.DirectionX/2.0  : -rSize.DirectionX/2.0;
     const double fHeight = rSize.DirectionY;
-    const double fDepth = rSize.DirectionZ;
+    const double fDepth  = rSize.DirectionZ >=0.0?  rSize.DirectionZ      : -rSize.DirectionZ ;
+
+    const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
     const double fOffset = (fDepth * fRoundedEdge) * 1.05;  // increase by 5% for safety
-    const bool bRoundEdges = fRoundedEdge && fOffset < fWidthH && 2.0 * fOffset < fHeight;
+    const bool bRoundEdges = fRoundedEdge && fOffset < fWidthH && 2.0 * fOffset < fHeightSign*fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 13 : 5;
 
     //--------------------------------------
@@ -242,14 +245,14 @@ uno::Any createPolyPolygon_Cube(
     {
         *pInnerSequenceY++ = 0.0; //1.
         *pInnerSequenceY++ = 0.0;
-        *pInnerSequenceY++ = fOffset;
-        *pInnerSequenceY++ = fHeight - fOffset;
+        *pInnerSequenceY++ = fHeightSign*fOffset;
+        *pInnerSequenceY++ = fHeight - fHeightSign*fOffset;
         *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = fHeight; //6.
         *pInnerSequenceY++ = fHeight;
         *pInnerSequenceY++ = fHeight;
-        *pInnerSequenceY++ = fHeight - fOffset;
-        *pInnerSequenceY++ = fOffset; //10.
+        *pInnerSequenceY++ = fHeight - fHeightSign*fOffset;
+        *pInnerSequenceY++ = fHeightSign*fOffset; //10.
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceY++ = 0.0;
@@ -560,8 +563,11 @@ uno::Reference<drawing::XShape>
         try
         {
             //depth
+            double fDepth = rGeometry.m_aSize.DirectionZ;
+            if(fDepth<0)
+                fDepth*=-1.0;
             xProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
-                , uno::makeAny((sal_Int32)rGeometry.m_aSize.DirectionZ) );
+                , uno::makeAny((sal_Int32)fDepth) );
 
             //PercentDiagonal
             sal_Int16 nPercentDiagonal = bRounded ? 5 : 0;
@@ -577,7 +583,7 @@ uno::Reference<drawing::XShape>
                 Matrix4D aM4;
                 aM4.Translate(rGeometry.m_aPosition.PositionX
                             , rGeometry.m_aPosition.PositionY
-                            , rGeometry.m_aPosition.PositionZ - (rGeometry.m_aSize.DirectionZ/2.0));
+                            , rGeometry.m_aPosition.PositionZ - (fDepth/2.0));
                 drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
