@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-28 17:21:37 $
+ *  last change: $Author: cp $ $Date: 2001-05-29 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SAL_I18N_CALLBACK_HXX
 #include "i18n_cb.hxx"
+#endif
+#ifdef SOLARIS
+extern "C" char * XSetIMValues(XIM im, ...);
 #endif
 
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-28 17:21:37 $
+ *  last change: $Author: cp $ $Date: 2001-05-29 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
 {
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
-      if (pPreeditData->eState == ePreeditStatusActive )
+     if (pPreeditData->eState == ePreeditStatusActive )
     {
         #ifdef __synchronous_extinput__
         pPreeditData->pFrame->maFrameData.Call(
@@ -575,48 +575,71 @@ PreeditCaretCallback ( XIC ic, XPointer client_data,
 //
 // -----------------------------------------------------------------------
 
+Bool
+IsControlCode(sal_Unicode nChar)
+{
+    if (   (0x00 <= nChar && nChar <= 0x1F) // C0 controls
+     /* || (0x80 <= nChar && nChar <= 0x9F) C1 controls */ )
+        return True;
+    else
+        return False;
+}
+
 int
 CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
 {
     preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
-
       XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data;
       sal_Unicode *p_unicode_data = (sal_Unicode*)cbtext->string.utf16_char;
-      // p_unicode_data[cbtext->length] = (sal_Unicode)0;
 
-    SalExtTextInputEvent aTextEvent;
+    // #86964# filter unexpected pure control events
+    if (cbtext->length == 1 && IsControlCode(p_unicode_data[0]) )
+    {
+        #ifdef __synchronous_extinput__
+           pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
+                (void*)NULL );
+        #else
+        pPreeditData->pFrame->maFrameData.PostExtTextEvent(SALEVENT_ENDEXTTEXTINPUT,
+                (void*)NULL );
+        #endif
+    }
+    else
+    {
+        #ifdef __synchronous_extinput__
 
-    aTextEvent.mnTime           = 0;
-    aTextEvent.mpTextAttr       = 0;
-    aTextEvent.mnCursorPos      = cbtext->length;
-    aTextEvent.maText           = p_unicode_data;
-    aTextEvent.mnCursorFlags    = 0; // default: make cursor visible
-    aTextEvent.mnDeltaStart     = 0;
-    aTextEvent.mbOnlyCursor     = False;
+        SalExtTextInputEvent aTextEvent;
 
-    #ifdef __synchronous_extinput__
-    pPreeditData->pFrame->maFrameData.Call( SALEVENT_EXTTEXTINPUT,
-            (void*)&aTextEvent);
-    pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
-            (void*)NULL );
-    #else
+        aTextEvent.mnTime           = 0;
+        aTextEvent.mpTextAttr       = 0;
+        aTextEvent.mnCursorPos      = cbtext->length;
+        aTextEvent.maText           = p_unicode_data;
+        aTextEvent.mnCursorFlags    = 0; // default: make cursor visible
+        aTextEvent.mnDeltaStart     = 0;
+        aTextEvent.mbOnlyCursor     = False;
 
-    SalExtTextInputEvent *pTextEvent = new SalExtTextInputEvent;
+        pPreeditData->pFrame->maFrameData.Call( SALEVENT_EXTTEXTINPUT,
+                (void*)&aTextEvent);
+        pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
+                (void*)NULL );
+        #else
 
-    pTextEvent->mnTime          = 0;
-    pTextEvent->mpTextAttr      = 0;
-    pTextEvent->mnCursorPos     = cbtext->length;
-    pTextEvent->maText          = UniString(p_unicode_data, cbtext->length);
-    pTextEvent->mnCursorFlags   = 0; // default: make cursor visible
-    pTextEvent->mnDeltaStart    = 0;
-    pTextEvent->mbOnlyCursor    = False;
+        SalExtTextInputEvent *pTextEvent = new SalExtTextInputEvent;
 
-    pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_EXTTEXTINPUT,
-            (void*)pTextEvent);
-    pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
-            (void*)NULL );
-    #endif
+        pTextEvent->mnTime          = 0;
+        pTextEvent->mpTextAttr      = 0;
+        pTextEvent->mnCursorPos     = cbtext->length;
+        pTextEvent->maText          = UniString(p_unicode_data, cbtext->length);
+        pTextEvent->mnCursorFlags   = 0; // default: make cursor visible
+        pTextEvent->mnDeltaStart    = 0;
+        pTextEvent->mbOnlyCursor    = False;
+
+        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_EXTTEXTINPUT,
+                (void*)pTextEvent);
+        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+                (void*)NULL );
+        #endif
+    }
     pPreeditData->eState = ePreeditStatusStartPending;
 
     GetPreeditSpotLocation(ic, (XPointer)pPreeditData);

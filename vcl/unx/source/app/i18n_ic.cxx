@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-28 17:21:37 $
+ *  last change: $Author: cp $ $Date: 2001-05-29 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,91 +105,6 @@ SalI18N_InputContext::~SalI18N_InputContext()
         XFree( mpStatusAttributes );
     if ( mpPreeditAttributes != NULL )
         XFree( mpPreeditAttributes );
-    #ifdef SOLARIS
-    if ( mpFontSet != NULL )
-        XFreeFontSet( mpDisplay, mpFontSet );
-    #endif
-}
-
-#ifdef DEBUG
-
-// ----------------------------------------------------------------------------
-// debug routines, that keep track of fonts we've chosen in a fontset
-// ----------------------------------------------------------------------------
-
-// report which fonts are missing for the requested
-// basefont and which fonts are actually selected
-
-static void
-v_print_missing_fonts( char **pp_list, int n_listsz, const char *p_pattern )
-{
-    if ( !(n_listsz > 0) || (pp_list == NULL) || (p_pattern == NULL) )
-        return;
-
-    for (int i = 0; i < n_listsz; i++ )
-          fprintf(stderr, "missing charset@%s:\"%s\"\n", p_pattern, pp_list[i] );
-}
-
-static void
-v_print_chosen_fonts( XFontSet a_fontset )
-{
-    if ( a_fontset == 0 )
-        return;
-
-    char         *p_locale_name;
-    XFontStruct **pp_font_struct_list;
-    char        **pp_font_name_list;
-    int           n_listsz;
-
-    p_locale_name = XLocaleOfFontSet( a_fontset );
-    n_listsz      = XFontsOfFontSet(  a_fontset,
-                                         &pp_font_struct_list,
-                                      &pp_font_name_list );
-    for ( int i = 0; i < n_listsz; i++ )
-    {
-         fprintf( stderr, "font@%s:\"%s\"\n",
-                  p_locale_name, pp_font_name_list[i] );
-    }
-}
-
-#endif // DEBUG
-
-// Wrapper for XCreateFontSet to create a default font set
-static XFontSet
-p_create_fontset( Display *p_display )
-{
-    // a fontset, as there is no valid default for russian and all other
-    // eastern european locales in solaris 8
-    const char *p_base_font[]       = {
-        "-*-application-medium-r-*-sans-12-*",
-        "-*-application-*-r-*-*-12-*",
-        "-*-*-*-r-*-*-12-*",
-        "-*" };
-    char **pp_missing_charset_list  = NULL;
-    int    n_missing_charset_count  = 0;
-    char  *p_def_string             = NULL;
-
-    XFontSet a_fontset;
-
-    for (int i = 0; i < (sizeof(p_base_font) / sizeof(char*)); i++ )
-    {
-        a_fontset = XCreateFontSet( p_display, p_base_font[i],
-                                     &pp_missing_charset_list,
-                                    &n_missing_charset_count, &p_def_string);
-        #ifdef DEBUG
-        v_print_missing_fonts ( pp_missing_charset_list,
-                                n_missing_charset_count, p_base_font[i] );
-        #endif
-
-        if ( a_fontset != 0 )
-            break;
-    }
-
-    #ifdef DEBUG
-    v_print_chosen_fonts( a_fontset );
-    #endif
-
-    return a_fontset;
 }
 
 // ----------------------------------------------------------------------------
@@ -236,9 +151,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
             mpAttributes( NULL ),
             mpStatusAttributes( NULL ),
             mpPreeditAttributes( NULL ),
-            #ifdef SOLARIS
-            mpFontSet( NULL ),
-            #endif
             mnStatusStyle( 0 ),
             mnPreeditStyle( 0 ),
             mnSupportedStatusStyle(
@@ -261,9 +173,8 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
     if (pInputMethod->UseMethod()
         && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
-        XLIB_Window  aClientWindow= pFrame->maFrameData.GetShellWindow();
-        XLIB_Window  aFocusWindow= pFrame->maFrameData.GetWindow();
-        Display     *pDisplay    = XDisplayOfIM( pInputMethod->GetMethod() );
+        XLIB_Window  aClientWindow = pFrame->maFrameData.GetShellWindow();
+        XLIB_Window  aFocusWindow  = pFrame->maFrameData.GetWindow();
 
         // for status callbacks and commit string callbacks
         maClientData.bIsMultilingual        = mbMultiLingual;
@@ -391,26 +302,13 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
         // deserves, because inappropriate attributes
         // let XCreateIC fail on Solaris (eg. for C locale)
 
-        maDestroyCallback.callback    = (XIMProc)IC_IMDestroyCallback;
-        maDestroyCallback.client_data = (XPointer)this;
         mpAttributes = XVaCreateNestedList(
                 0,
                 XNFocusWindow,       aFocusWindow,
                 XNClientWindow,      aClientWindow,
                 XNInputStyle,        mnPreeditStyle | mnStatusStyle,
-                XNDestroyCallback,  &maDestroyCallback,
                 0 );
 
-        #ifdef SOLARIS
-        mpDisplay = pDisplay;
-        if ( 0 && (mpFontSet = p_create_fontset(mpDisplay)) != NULL )
-        {
-            mpStatusAttributes = XVaAddToNestedList( mpStatusAttributes,
-                    XNFontSet, (XPointer)mpFontSet );
-            mpPreeditAttributes = XVaAddToNestedList( mpPreeditAttributes,
-                    XNFontSet, (XPointer)mpFontSet );
-        }
-        #endif
         if ( mnPreeditStyle != XIMPreeditNone )
         {
 #if defined LINUX || defined FREEBSD || defined(NETBSD)
@@ -457,7 +355,14 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
                 XNCommitStringCallback, &maCommitStringCallback,
                 NULL );
     }
-
+    if ( maContext != NULL)
+    {
+        maDestroyCallback.callback    = (XIMProc)IC_IMDestroyCallback;
+        maDestroyCallback.client_data = (XPointer)this;
+        XSetICValues( maContext,
+                XNDestroyCallback,      &maDestroyCallback,
+                NULL );
+    }
 }
 
 // ---------------------------------------------------------------------------

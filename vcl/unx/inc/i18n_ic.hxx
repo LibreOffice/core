@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-28 17:22:32 $
+ *  last change: $Author: cp $ $Date: 2001-05-29 14:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,6 @@ private:
     XVaNestedList mpAttributes;
     XVaNestedList mpStatusAttributes;
     XVaNestedList mpPreeditAttributes;
-    #ifdef SOLARIS
-    XFontSet      mpFontSet;
-    Display      *mpDisplay;
-    #endif
 
     Bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
     unsigned int GetWeightingOfIMStyle(   XIMStyle n_style ) const ;
