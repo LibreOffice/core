@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:26 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,9 @@ DocuFile_Html::WriteHeader( csv::File & io_aFile )
     static const char s1[] =
         "<html>\n<head>\n<title>";
     static const char s2[] =
-        "</title>\n<style>";
+        "</title>\n"
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
+        "<style>";
     static const char s3[] =
         "</style>\n</head>\n";
 
