@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:44:48 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+ /*
+  * encoding for resources: windows-1252
+  */
 
  #include "wizard.hrc"
 
@@ -291,8 +295,9 @@ TabPage TP_MIGRATION
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
         WordBreak = TRUE;
-        Text [ en-US ] = "Personal data from %OLDPRODUCT installation can be used in %PRODUCTNAME %PRODUCTVERSION.\n\nUnmark the check box below if you do not want data such as templates, dictionaries and Gallery themes to be copied to %PRODUCTNAME %PRODUCTVERSION.";
-        Text [ de ]    = "Sie können persönliche Daten aus %OLDPRODUCT nach %PRODUCTNAME %PRODUCTVERSION kopieren.\n\nDeaktivieren Sie das  Markierfeld weiter unten, um Benutzerdaten wie Dokumentvorlagen, Wörterbücher und Gallery-Themen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernehmen. ";
+        Text [ en-US ] = "Most personal data from %OLDPRODUCT installation can be reused in %PRODUCTNAME %PRODUCTVERSION.\n\nIf you do not want to reuse any settings in %PRODUCTNAME %PRODUCTVERSION, unmark the check box.";
+        Text [ de ]    = "Für %PRODUCTNAME %PRODUCTVERSION können die meisten persönlichen Daten aus %OLDPRODUCT übernommen werden.\n\nUm die Einstellungen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernehmen, deaktivieren Sie das Markierfeld.";
+
     };
 
     CheckBox CB_MIGRATION
