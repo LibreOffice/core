@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:46:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <tools/isolang.hxx>
 #include "analysis.hrc"
 
+#ifndef SCA_BESSEL_HXX
+#include "bessel.hxx"
+#endif
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
@@ -947,14 +950,14 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )
 
 double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-    double fRet = Bessel( fNum, nOrder, sal_True );
+    double fRet = sca::analysis::BesselI( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-    double fRet = Bessel( fNum, nOrder, sal_False );
+    double fRet = sca::analysis::BesselJ( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
@@ -964,7 +967,7 @@ double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROW
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
 
-    double fRet = Besselk( fNum, nOrder );
+    double fRet = sca::analysis::BesselK( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
@@ -975,7 +978,7 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
         THROW_IAE;
 
 //  return yn( nOrder, fNum );
-    double fRet = Bessely( fNum, nOrder );
+    double fRet = sca::analysis::BesselY( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
