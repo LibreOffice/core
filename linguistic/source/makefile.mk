@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-21 15:34:46 $
+#   last change: $Author: tl $ $Date: 2000-11-21 16:41:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,7 +172,9 @@ SHL1STDLIBS= \
 .IF "$(GUI)" == "UNX"
 SHL1STDLIBS += $(LNGLIB)
 .ENDIF
-#
+.IF "$(GUI)"=="WNT"
+LIB1STDLIBS += $(LNGLIB)
+.ENDIF
 
 # build DLL
 .IF "$(GUI)" == "WNT"
@@ -186,9 +188,11 @@ SHL1VERSIONMAP= $(TARGET1).map
 
 # build DEF file
 DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME =$(TARGET)
-DEF1DES     =Linguistic main DLL
+#DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
+#DEFLIB1NAME =$(TARGET)
+#DEF1DES     =Linguistic main DLL
+DEF1EXPORTFILE=	exports.dxp
+
 
 .ENDIF
 
@@ -198,8 +202,8 @@ DEF1DES     =Linguistic main DLL
 .INCLUDE : target.mk
 
 
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo lcl > $@
+#$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+#    @echo ------------------------------
+#    @echo Making: $@
+#    @echo lcl > $@
 
