@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:39:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ BOOL bPasteIsMove = FALSE;
 void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 {
 //  SdrPage* pPage = pData->GetDocument()->GetDrawLayer()->GetPage( pData->GetTabNo() );
-    SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( pData->GetTabNo() );
+    SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );
     DBG_ASSERT(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
@@ -180,7 +180,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         else
         {
             SdrModel* pModel = pDragEditView->GetModel();
-            SdrPage* pDestPage = pModel->GetPage( GetViewData()->GetTabNo() );
+            SdrPage* pDestPage = pModel->GetPage( static_cast<sal_uInt16>(GetViewData()->GetTabNo()) );
             DBG_ASSERT(pDestPage,"nanu, Page?");
 
             SdrMarkList aMark = pDragEditView->GetMarkList();
@@ -248,8 +248,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // #68991# Paste puts all objects on the active (front) layer
         // controls must be on SC_LAYER_CONTROLS
 
-        USHORT nTab = GetViewData()->GetTabNo();
-        SdrPage* pPage = pDrawView->GetModel()->GetPage(nTab);
+        SCTAB nTab = GetViewData()->GetTabNo();
+        SdrPage* pPage = pDrawView->GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page?");
         if (pPage)
         {
