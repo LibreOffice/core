@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:38:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,6 @@ using namespace ::com::sun::star::io;
 #include <unotools/progresshandlerwrap.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/stg.hxx>
-
-#include <storagehelper.hxx>
 
 #include "helper.hxx"
 #include "request.hxx"      // SFX_ITEMSET_SET
@@ -3058,7 +3056,7 @@ void SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
     ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xD(
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), ::com::sun::star::uno::UNO_QUERY );
 
-    if ( xD.is() )
+    if ( xD.is() && GetStorage().is() )
     {
         sal_Bool bSigned = sal_False;
 
