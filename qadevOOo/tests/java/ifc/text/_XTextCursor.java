@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:10 $
+ *  last change:$Date: 2003-09-08 11:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.text;
 
-import com.sun.star.text.XTextCursor;
 import lib.MultiMethodTest;
+
+import com.sun.star.text.XTextCursor;
 
 
 /**
@@ -251,7 +252,6 @@ public class _XTextCursor extends MultiMethodTest {
      */
     public void _isCollapsed(){
         boolean bCol = false;
-        short n = 1;
 
         oObj.gotoStart(false);
         bCol = oObj.isCollapsed();
