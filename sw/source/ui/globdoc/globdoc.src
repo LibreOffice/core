@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:49:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,17 +110,17 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ russian ] = "Ñîñòàâíîé äîêóìåíò (%PRODUCTNAME 6.0)";
     TEXT[ greek ] = "%PRODUCTNAME 6.0 - Êýñéï Ýããñáöï";
     TEXT[ dutch ] = "%PRODUCTNAME 6.0 Masterdocument";
-    TEXT[ french ] = "%PRODUCTNAME 6.0 Document maître";
-    TEXT[ spanish ] = "%PRODUCTNAME 6.0 Documento maestro";
-    TEXT[ italian ] = "Documento master %PRODUCTNAME 6.0";
+    TEXT[ french ] = "%PRODUCTNAME %PRODUCTVERSION Document maître";
+    TEXT[ spanish ] = "Documento maestro %PRODUCTNAME %PRODUCTVERSION ";
+    TEXT[ italian ] = "%PRODUCTNAME %PRODUCTVERSION Documento master";
     TEXT[ danish ] = "%PRODUCTNAME 6.0 Hoveddokument";
-    TEXT[ swedish ] = "Samlingsdokument %PRODUCTNAME 6.0";
+    TEXT[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-samlingsdokument";
     TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g³ówny";
     TEXT[ portuguese_brazilian ] = "Documento Mestre %PRODUCTNAME 6.0 ";
-    TEXT[ japanese ] = "%PRODUCTNAME 6.0 ãƒžã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    TEXT[ korean ] = "%PRODUCTNAME 6.0 ë§ˆìŠ¤í„° ë¬¸ì„œ";
-    TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 ä¸»æŽ§æ–‡æ¡£";
-    TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 ä¸»æŽ§æ–‡ä»¶";
+    TEXT[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION ãƒžã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+    TEXT[ korean ] = "%PRODUCTNAME %PRODUCTVERSION ë§ˆìŠ¤í„° ë¬¸ì„œ";
+    TEXT[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION ä¸»æŽ§æ–‡æ¡£";
+    TEXT[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION ä¸»æŽ§æ–‡ä»¶";
     TEXT[ turkish ] = "%PRODUCTNAME 6.0 Ana Belge";
     TEXT[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ catalan ] = "%PRODUCTNAME 6.0 Document mestre";
@@ -136,6 +136,7 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
 #include "swmn.hrc"
 #define MN_SW_PORTAL
 #include "swmn.hrc"
+
 
 
 
