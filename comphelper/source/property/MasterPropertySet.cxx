@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPropertySet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:37:41 $
+ *  last change: $Author: rt $ $Date: 2001-07-26 12:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
 }
 
 void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
+    throw()
 {
     maSlaveMap [ ++mnLastId ] = new SlaveData ( pNewSet );
     mpInfo->add ( pNewSet->mpInfo->maMap, mnLastId );
