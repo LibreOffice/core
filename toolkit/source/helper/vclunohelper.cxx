@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:43:39 $
+ *  last change: $Author: fs $ $Date: 2002-03-20 07:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,8 +202,12 @@ Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::s
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> VCLUnoHelper::GetInterface( Window* pWindow )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetComponentInterface();
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> xWin( xPeer, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWin;
+    if ( pWindow )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetComponentInterface();
+        xWin = xWin.query( xPeer );
+    }
     return xWin;
 }
 
