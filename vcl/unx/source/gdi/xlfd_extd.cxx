@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: mhu $ $Date: 2001-10-10 16:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <outfont.hxx>
 #endif
 
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
+
 // --------------------------------------------------------------------------
 //
 //  classes for Xlfd handling that contain more than a single encoding.
@@ -125,13 +129,13 @@ ExtendedXlfd::ExtendedXlfd()
 ExtendedXlfd::~ExtendedXlfd()
 {
     if ( mnEncodings != 0 )
-        free( mpEncodingInfo );
+        rtl_freeMemory( mpEncodingInfo );
 }
 
 inline void*
 Realloc( void *pPtr, sal_Size nSize )
 {
-    return pPtr == NULL ? malloc( nSize ) : realloc( pPtr, nSize );
+    return rtl_reallocateMemory( pPtr, nSize );
 }
 
 int
@@ -699,7 +703,7 @@ VirtualXlfd::VirtualXlfd() : mpExtEncodingInfo(NULL)
 VirtualXlfd::~VirtualXlfd()
 {
     if ( mpExtEncodingInfo != NULL )
-        free (mpExtEncodingInfo);
+        rtl_freeMemory( mpExtEncodingInfo );
 }
 
 int
@@ -870,7 +874,7 @@ XlfdStorage::Dispose()
     for ( int i = 0; i < mnCount; i++ )
         delete mpList[i];
     if ( mnSize != 0 )
-        delete mpList;
+        rtl_freeMemory( mpList );
 
     mnCount = 0;
     mnSize  = 0;
@@ -886,7 +890,7 @@ XlfdStorage::Reset()
 XlfdStorage::~XlfdStorage()
 {
     if ( mnSize != 0 )
-        delete mpList;
+        rtl_freeMemory( mpList );
 }
 
 XlfdStorage::XlfdStorage() :
@@ -982,4 +986,3 @@ BitmapXlfdStorage::AddBitmapFont( const Xlfd *pXlfd )
     const_cast<ExtendedXlfd*>(mpList[ mnCount ])->AddEncoding( pXlfd );
     ++mnCount;
 }
-
