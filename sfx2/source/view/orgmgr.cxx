@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,9 +336,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
                 delete pMed;
                 if ( pFilter )
                 {
-                    pEntry->aDocShell = (SfxObjectShell *)
-                        ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())
-                        ->GetFactory().CreateObject(SFX_CREATE_MODE_ORGANIZER);
+                    pEntry->aDocShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
                 }
 
 #if SUPD<583 //(mba)
