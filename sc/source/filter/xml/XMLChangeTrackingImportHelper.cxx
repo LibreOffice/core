@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:37 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ScMyCellInfo::ScMyCellInfo()
     : pCell(NULL),
     sFormulaAddress(),
     sFormula(),
-    sResult(),
+    sInputString(),
     fValue(0.0),
     nType(NUMBERFORMAT_ALL),
     nMatrixFlag(MM_NONE),
@@ -104,12 +104,13 @@ ScMyCellInfo::ScMyCellInfo()
 {
 }
 
-ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
+ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula, const rtl::OUString& rInputString,
             const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
             const sal_Int32 nTempMatrixRows)
     : pCell(pTempCell),
     sFormulaAddress(rFormulaAddress),
     sFormula(rFormula),
+    sInputString(rInputString),
     fValue(rValue),
     nType(nTempType),
     nMatrixFlag(nTempMatrixFlag),
@@ -137,12 +138,14 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
             static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<sal_uInt16>(nMatrixCols), static_cast<sal_uInt16>(nMatrixRows));
         }
 
-        if (nType != NUMBERFORMAT_ALL)
+        if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.Len() == 0)
         {
+            sal_uInt32 nFormat(0);
             if (nType == NUMBERFORMAT_DATE)
-                pDoc->GetFormatTable()->GetInputLineString(fValue, NF_DATE_SYS_DDMMYYYY, sResult);
+                nFormat = pDoc->GetFormatTable()->GetStandardFormat(NUMBERFORMAT_DATE);
             else if (nType == NUMBERFORMAT_TIME)
-                pDoc->GetFormatTable()->GetInputLineString(fValue, NF_TIME_HHMMSS, sResult);
+                nFormat = pDoc->GetFormatTable()->GetStandardFormat(NUMBERFORMAT_TIME);
+            pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
         }
     }
 
@@ -576,7 +579,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
     String sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionContent(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
-        pAction->aBigRange, aUser, aDateTime, sComment, pCell, pDoc, pAction->pCellInfo->sResult);
+        pAction->aBigRange, aUser, aDateTime, sComment, pCell, pDoc, pAction->pCellInfo->sInputString);
     return pNewAction;
 }
 
@@ -595,7 +598,7 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
 
                 if (pCell)
                 {
-                    (*aItr)->nID = pTrack->AddLoadedGenerated(pCell, (*aItr)->aBigRange );
+                    (*aItr)->nID = pTrack->AddLoadedGenerated(pCell, (*aItr)->aBigRange, (*aItr)->pCellInfo->sInputString );
                     DBG_ASSERT((*aItr)->nID, "could not insert generated action");
                 }
             }
@@ -702,7 +705,10 @@ void ScXMLChangeTrackingImportHelper::SetContentDependences(ScMyContentAction* p
                 {
                     ScBaseCell* pNewCell = pOldCell->Clone(pDoc);
                     if (pNewCell)
+                    {
                         pPrevActContent->SetNewCell(pNewCell, pDoc);
+                        pPrevActContent->SetNewValue(pActContent->GetOldCell(), pDoc);
+                    }
                 }
             }
         }
@@ -737,7 +743,10 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
                     {
                         ScBaseCell* pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
                         if (!ScBaseCell::CellEqual(pCell, pContentAct->GetNewCell()))
+                        {
                             pContentAct->SetNewCell(pCell, pDoc);
+                            pContentAct->SetNewValue((*aItr)->pCellInfo->sInputString, pDoc);
+                        }
                     }
                 }
                 if (*aItr)
@@ -803,6 +812,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             }
                         }
                         pChangeActionContent->SetNewCell(pNewCell, pDoc);
+                        pChangeActionContent->SetNewValue(pCell, pDoc);
                     }
                 }
                 else
