@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 13:55:32 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:54:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,12 +101,11 @@ CFLAGSENABLESYMBOLS=-g
 # flags for the C++ Compiler
 CFLAGSCC= -pipe 
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+CFLAGSEXCEPTIONS=-fexceptions 
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -fno-rtti 
+CFLAGSCXX= -pipe 
 
 # HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
 .IF "$(BUILD_SPECIAL)"==""
@@ -131,11 +130,10 @@ CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
-# CFLAGSOPT=-O2
+CFLAGSOPT=-O2 -fno-strict-aliasing
 # reduce to -O1 to avoid optimisation problems
-CFLAGSOPT=-O1 -fno-strict-aliasing
+# CFLAGSOPT=-O1 -fno-strict-aliasing
 # Compiler flags for disabling optimazations
-#CFLAGSNOOPT=
 CFLAGSNOOPT=-fno-strict-aliasing
 # Compiler flags for discibing the output path
 CFLAGSOUTOBJ=-o
@@ -228,4 +226,3 @@ RCSETVERSION=
 DLLPOSTFIX=ls
 DLLPRE=lib
 DLLPOST=.so
-
