@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:16:26 $
+ *  last change: $Author: tl $ $Date: 2002-01-16 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ private:
     sal_Bool            bInSelection : 1; // Trennen von selektiertem Text
     sal_Bool            bShowError : 1; // nicht vorhandene Sprache melden
     sal_Bool            bAutomatic : 1; // Trennstellen ohne Rueckfrage einfuegen
+    sal_Bool            bInfoBox : 1;   // display info-box when ending
     DECL_LINK( SpellError, void * );
 
 public:

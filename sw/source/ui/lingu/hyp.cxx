@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:37:43 $
+ *  last change: $Author: tl $ $Date: 2002-01-16 12:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     nPageStart( 0 ),
     bInSelection( bSelect ),
     bShowError( sal_False ),
+    bInfoBox( sal_False ),
     pView( pVw )
 {
     uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
@@ -194,9 +195,7 @@ IMPL_LINK( SwHyphWrapper, SpellError, void *, nLang )
 // -----------------------------------------------------------------------
 sal_Bool SwHyphWrapper::SpellMore()
 {
-    PSH->Push();
-    InfoBox( &pView->GetEditWin(), SW_RESSTR(STR_HYP_OK) ).Execute();
-    PSH->Combine();
+    bInfoBox = sal_True;
     return sal_False;
 }
 
@@ -217,5 +216,7 @@ SwHyphWrapper::~SwHyphWrapper()
 {
     if( nPageCount )
         ::EndProgress( pView->GetDocShell() );
+    if( bInfoBox )
+        InfoBox( &pView->GetEditWin(), SW_RESSTR(STR_HYP_OK) ).Execute();
 }
 
