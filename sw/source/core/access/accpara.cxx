@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-19 19:11:48 $
+ *  last change: $Author: dvo $ $Date: 2002-02-20 15:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
     const OUString& rText = GetString();
 
     if( (nStartIndex >= 0) &&
-        (nEndIndex < rText.getLength()) &&
+        (nEndIndex <= rText.getLength()) &&
         (nStartIndex <= nEndIndex) )
     {
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
@@ -762,6 +762,9 @@ sal_Bool SwAccessibleParagraph::replaceText(
         // now create XTextRange as helper and set string
         SwXTextRange::CreateTextRangeFromPosition(
             pNode->GetDoc(), aStartPos, &aEndPos)->setString( sReplacement );
+
+        // delete portion data
+        ClearPortionData();
 
         return sal_True;    // We always succeed! :-)
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-19 19:11:48 $
+ *  last change: $Author: dvo $ $Date: 2002-02-20 15:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace com { namespace sun { namespace star {
  */
 class SwAccessiblePortionData : public SwPortionHandler
 {
-    // variables for collection the data
+    // variables used while collecting the data
     rtl::OUStringBuffer aBuffer;
     sal_Int32 nModelPosition;
     sal_Bool bFinished;

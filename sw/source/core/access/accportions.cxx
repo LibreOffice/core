@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-19 19:11:48 $
+ *  last change: $Author: dvo $ $Date: 2002-02-20 15:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,16 @@ void SwAccessiblePortionData::Finish()
 {
     DBG_ASSERT( !bFinished, "We are already done!" );
 
-    bFinished = sal_True;
-    sAccessibleString = aBuffer.makeStringAndClear();
+    // include terminator values: always include two 'last character'
+    // markers in the position arrays to make sure we always find one
+    // position before the end
+    Text( 0 );
+    Text( 0 );
+    LineBreak();
+    LineBreak();
 
-    // include 'final' positions in positions array(s)
-    aModelPositions.push_back( nModelPosition );
-    aAccessiblePositions.push_back( sAccessibleString.getLength() );
-    aLineBreaks.push_back( sAccessibleString.getLength() );
+    sAccessibleString = aBuffer.makeStringAndClear();
+    bFinished = sal_True;
 }
 
 const OUString& SwAccessiblePortionData::GetAccesibleString()
@@ -202,7 +205,7 @@ void SwAccessiblePortionData::GetLineBoundary(
 sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
 {
     DBG_ASSERT( nPos >= 0, "illegal position" );
-    DBG_ASSERT( nPos < sAccessibleString.getLength(), "illegal position" );
+    DBG_ASSERT( nPos <= sAccessibleString.getLength(), "illegal position" );
 
     // find the portion number
     sal_Int32 nPortionNo = FindBreak( aAccessiblePositions, nPos );
@@ -245,8 +248,10 @@ sal_Int32 SwAccessiblePortionData::FindBreak(
 {
     DBG_ASSERT( rPositions.size() >= 2, "need min + may value" );
     DBG_ASSERT( rPositions[0] == 0, "need min value" );
-    DBG_ASSERT( rPositions[rPositions.size()-1] ==
-                sAccessibleString.getLength(), "need max value" );
+    DBG_ASSERT( rPositions[rPositions.size()-1] >= nValue,
+                "need first terminator value" );
+    DBG_ASSERT( rPositions[rPositions.size()-2] >= nValue,
+                "need second terminator value" );
 
     sal_Int32 nMin = 0;
 
@@ -277,6 +282,9 @@ sal_Int32 SwAccessiblePortionData::FindBreak(
                 nMax = nMiddle - 1;
         }
     }
+
+    DBG_ASSERT( nMin < rPositions.size()-1,
+                "shouldn't return last position (due to termintator values)" );
 
     return nMin;
 }
@@ -320,6 +328,7 @@ void SwAccessiblePortionData::GetWordBoundary(
                      nCurrent = nLength;
              }
              while (nCurrent < nLength);
+             pWords->push_back( nLength );  // terminators
              pWords->push_back( nLength );
          }
          else
@@ -370,6 +379,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
                      nCurrent = nLength;
              }
              while (nCurrent < nLength);
+             pSentences->push_back( nLength );  // terminators
              pSentences->push_back( nLength );
          }
          else
