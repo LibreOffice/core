@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:52:04 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,8 +865,8 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         // dann ist ihre Groesse unabhaengig von harten Attributierungen.
         SwFont* pFldFnt = ((SwFldPortion*)pPor)->pFnt;
         SwFontSave aSave( rInf, pFldFnt );
-        ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), rInf.GetOut() ) );
-        ((SwFldPortion*)pPor)->SetAscent( pFldFnt->GetAscent( rInf.GetVsh(), rInf.GetOut() ) );
+        ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
+        ((SwFldPortion*)pPor)->SetAscent( pFldFnt->GetAscent( rInf.GetVsh(), *rInf.GetOut() ) );
     }
     else
     {
