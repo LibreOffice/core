@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:29:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String RID_OUTLUNDO_DEPTH
     Text [ swedish ] = "Dra in" ;
     Text [ danish ] = "Indryk" ;
     Text [ portuguese ] = "Avançar" ;
-    Text [ portuguese_brazilian ] = "Einrücken" ;
+    Text [ portuguese_brazilian ] = "Einr?ken" ;
     Text[ chinese_simplified ] = "Ëõ½ø";
     Text[ russian ] = "Îòñóï";
     Text[ polish ] = "Wysuniêcie";
@@ -133,7 +133,7 @@ String RID_OUTLUNDO_EXPAND
     Text [ swedish ] = "Visa understycken" ;
     Text [ danish ] = "Vis underafsnit" ;
     Text [ portuguese ] = "Mostrar subparágrafos" ;
-    Text [ portuguese_brazilian ] = "Unterabsätze zeigen" ;
+    Text [ portuguese_brazilian ] = "Unterabs?tze zeigen" ;
     Text[ chinese_simplified ] = "ÏÔÊ¾·Ö¶ÎÂä";
     Text[ russian ] = "Ğàçâåğóíòü ïîäàáçàöû";
     Text[ polish ] = "Poka¿ akapity podrzêdne";
@@ -163,7 +163,7 @@ String RID_OUTLUNDO_COLLAPSE
     Text [ swedish ] = "Dölj understycken" ;
     Text [ danish ] = "Skjul underafsnit" ;
     Text [ portuguese ] = "Ocultar subparágrafos" ;
-    Text [ portuguese_brazilian ] = "Unterabsätze verstecken" ;
+    Text [ portuguese_brazilian ] = "Unterabs?tze verstecken" ;
     Text[ chinese_simplified ] = "ÒşÈë·Ö¶ÎÂä";
     Text[ russian ] = "Ñâåğíóòü ïîäàáçàöû";
     Text[ polish ] = "Zwiñ akapity podrzêdne";
