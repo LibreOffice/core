@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:28:19 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,17 +93,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationListener.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
+#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <com/sun/star/ui/XImageManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -163,19 +163,19 @@ private:
     bool        bReadOnly;
 
     ::com::sun::star::uno::Reference
-        < drafts::com::sun::star::ui::XUIConfigurationManager > m_xCfgMgr;
+        < com::sun::star::ui::XUIConfigurationManager > m_xCfgMgr;
 
     ::com::sun::star::uno::Reference
-        < drafts::com::sun::star::ui::XImageManager > m_xImgMgr;
+        < com::sun::star::ui::XImageManager > m_xImgMgr;
 
     static ::com::sun::star::uno::Reference
-        < drafts::com::sun::star::ui::XImageManager >* xDefaultImgMgr;
+        < com::sun::star::ui::XImageManager >* xDefaultImgMgr;
 
 public:
 
     SaveInData(
         const ::com::sun::star::uno::Reference <
-            drafts::com::sun::star::ui::XUIConfigurationManager >& xCfgMgr,
+            ::com::sun::star::ui::XUIConfigurationManager >& xCfgMgr,
         const rtl::OUString& aModuleId,
         bool docConfig );
 
@@ -192,11 +192,11 @@ public:
     bool IsDocConfig( ) { return bDocConfig; }
 
     ::com::sun::star::uno::Reference
-        < drafts::com::sun::star::ui::XUIConfigurationManager >
+        < ::com::sun::star::ui::XUIConfigurationManager >
             GetConfigManager() { return m_xCfgMgr; };
 
     ::com::sun::star::uno::Reference
-        < drafts::com::sun::star::ui::XImageManager >
+        < ::com::sun::star::ui::XImageManager >
             GetImageManager() { return m_xImgMgr; };
 
     ::com::sun::star::uno::Reference
@@ -265,7 +265,7 @@ public:
 
     MenuSaveInData(
         const ::com::sun::star::uno::Reference <
-            drafts::com::sun::star::ui::XUIConfigurationManager >&,
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
 
@@ -477,7 +477,7 @@ protected:
 
     virtual SaveInData* CreateSaveInData(
         const ::com::sun::star::uno::Reference <
-            drafts::com::sun::star::ui::XUIConfigurationManager >&,
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig ) = 0;
 
@@ -554,7 +554,7 @@ public:
 
     SaveInData* CreateSaveInData(
         const ::com::sun::star::uno::Reference <
-            drafts::com::sun::star::ui::XUIConfigurationManager >&,
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
 };
@@ -666,7 +666,7 @@ public:
 
     SaveInData*     CreateSaveInData(
         const ::com::sun::star::uno::Reference <
-            drafts::com::sun::star::ui::XUIConfigurationManager >&,
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
 };
@@ -697,7 +697,7 @@ public:
 
     ToolbarSaveInData(
         const ::com::sun::star::uno::Reference <
-            drafts::com::sun::star::ui::XUIConfigurationManager >&,
+            ::com::sun::star::ui::XUIConfigurationManager >&,
         const rtl::OUString& aModuleId,
         bool docConfig );
 
@@ -774,7 +774,7 @@ private:
     sal_Int32       m_nExpectedSize;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::ui::XImageManager > m_xImageManager;
+        ::com::sun::star::ui::XImageManager > m_xImageManager;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
@@ -789,7 +789,7 @@ public:
     SvxIconSelectorDialog(
         Window *pWindow,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::ui::XImageManager >& rXImageManager
+            ::com::sun::star::ui::XImageManager >& rXImageManager
         );
 
     ~SvxIconSelectorDialog();
