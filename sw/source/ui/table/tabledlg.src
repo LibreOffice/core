@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:07:19 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
     };
@@ -313,7 +313,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¼e(~I)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~I)";
         Text[ turkish ] = "G~enişlik";
         Text[ language_user1 ] = " ";
     };
@@ -358,7 +358,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¬Û¹ïªº(~V)";
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "ºñ·Ê";
+        Text[ korean ] = "ºñ·Ê(~V)";
         Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
     };
@@ -407,14 +407,14 @@ TabPage TP_FORMAT_TABLE
         Text [ danish ] = "Automatisk" ;
         Text [ portuguese_brazilian ] = "~Automatisch" ;
         Text [ portuguese ] = "~Automático" ;
-        Text[ chinese_simplified ] = "×Ô¶¯(~A)";
+        Text[ chinese_simplified ] = "×Ô¶¯(~U)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ polish ] = "Automatycznie";
-        Text[ japanese ] = "©“®(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê(~A)";
+        Text[ japanese ] = "©“®(~U)";
+        Text[ chinese_traditional ] = "¦Û°Ê(~U)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿";
+        Text[ korean ] = "ÀÚµ¿(~U)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
     };
@@ -443,7 +443,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¥ª(~L)";
         Text[ arabic ] = "íÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ";
+        Text[ korean ] = "¿ŞÂÊ(~L)";
         Text[ turkish ] = "S~ola";
         Text[ language_user1 ] = " ";
     };
@@ -491,14 +491,14 @@ TabPage TP_FORMAT_TABLE
         Text [ spanish ] = "~Derecha" ;
         Text [ english_us ] = "R~ight" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÓÒ(~R)";
+        Text[ chinese_simplified ] = "ÓÒ(~I)";
         Text[ russian ] = "Ñïğàâà";
         Text[ polish ] = "Z p~rawej";
-        Text[ japanese ] = "‰E(~R)";
-        Text[ chinese_traditional ] = "¥k(~R)";
+        Text[ japanese ] = "‰E(~I)";
+        Text[ chinese_traditional ] = "¥k(~I)";
         Text[ arabic ] = "íãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ";
+        Text[ korean ] = "¿À¸¥ÂÊ(~I)";
         Text[ turkish ] = "Sa~ğa";
         Text[ language_user1 ] = " ";
     };
@@ -527,7 +527,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¸m¤¤(~C)";
         Text[ arabic ] = "ÊæÓíØ";
         Text[ greek ] = "Êåíôñáñéóìİíá";
-        Text[ korean ] = "°¡¿îµ¥";
+        Text[ korean ] = "°¡¿îµ¥(~C)";
         Text[ turkish ] = "~Ortala";
         Text[ language_user1 ] = " ";
     };
@@ -554,7 +554,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¤â°Ê(~M)";
         Text[ arabic ] = "íÏæí";
         Text[ greek ] = "×åéñïêßíçôá";
-        Text[ korean ] = "¼öµ¿";
+        Text[ korean ] = "¼öµ¿(~M)";
         Text[ turkish ] = "~Manüel";
         Text[ language_user1 ] = " ";
     };
@@ -639,7 +639,7 @@ TabPage TP_FORMAT_TABLE
         Text[ arabic ] = "Åáì ÇáíÓÇÑ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ğñïò ôá áñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ";
+        Text[ korean ] = "¿ŞÂÊ(~T)";
         Text[ turkish ] = "S~ola";
     };
     MetricField ED_LEFT_DIST
@@ -683,7 +683,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¦V¥k(~G)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "Ğñïò ôá äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ";
+        Text[ korean ] = "¿À¸¥ÂÊ(~G)";
         Text[ turkish ] = "Sa~ğa";
         Text[ language_user1 ] = " ";
     };
@@ -729,7 +729,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¦V¤W(~A)";
         Text[ arabic ] = "Åáì ÃÚáì";
         Text[ greek ] = "Ğñ~ïò ôá ğÜíù";
-        Text[ korean ] = "À§";
+        Text[ korean ] = "À§(~A)";
         Text[ turkish ] = "Ön~ce";
         Text[ language_user1 ] = " ";
     };
@@ -774,7 +774,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "¦V¤U(~B)";
         Text[ arabic ] = "Åáì ÃÓİá";
         Text[ greek ] = "Ğñïò ôá êÜôù";
-        Text[ korean ] = "¾Æ·¡";
+        Text[ korean ] = "¾Æ·¡(~B)";
         Text[ turkish ] = "So~nra";
         Text[ language_user1 ] = " ";
     };
@@ -822,14 +822,14 @@ TabPage TP_TABLE_COLUMN
         Text [ danish ] = "Tilpas tabelbredde" ;
         Text [ portuguese_brazilian ] = "Tabellenbreite anpassen" ;
         Text [ portuguese ] = "Ajustar largura da tabela" ;
-        Text[ chinese_simplified ] = "µ÷Õû±í¸ñ¿í¶È";
+        Text[ chinese_simplified ] = "µ÷Õû±í¸ñ¿í¶È(~W)";
         Text[ russian ] = "Ñîãëàñîâàòü øèğèíó òàáëèöû";
         Text[ polish ] = "Dopasuj szerokoœæ tabeli";
-        Text[ japanese ] = "•\\‚Ì•‚Ö‚Ìì—p‚ğ”F‚ß‚é";
-        Text[ chinese_traditional ] = "½Õ¾ãªí®æ¼e«×";
+        Text[ japanese ] = "•\\‚Ì•‚Ö‚Ìì—p‚ğ”F‚ß‚é(~W)";
+        Text[ chinese_traditional ] = "½Õ¾ãªí®æ¼e«×(~W)";
         Text[ arabic ] = "ãáÇÁãÉ áÚÑÖ ÇáÌÏæá";
         Text[ greek ] = "ĞñïóáñìïãŞ ğëÜ~ôïõò ğßíáêá";
-        Text[ korean ] = "Ç¥ ³Êºñ ¸ÂÃã";
+        Text[ korean ] = "Ç¥ ³Êºñ ¸ÂÃã(~W)";
         Text[ turkish ] = "Tablo genişliğine göre ayarla";
         Text[ language_user1 ] = " ";
     };
@@ -849,14 +849,14 @@ TabPage TP_TABLE_COLUMN
         Text [ french ] = "Modifier les colonnes proportionnellement" ;
         Text [ dutch ] = "Kolommen gelijkmatig wijzigen" ;
         Text [ portuguese ] = "Ajustar colunas proporcionalmente" ;
-        Text[ chinese_simplified ] = "¶Ô³ÆµØµ÷ÕûÁĞ¿í";
+        Text[ chinese_simplified ] = "¶Ô³ÆµØµ÷ÕûÁĞ¿í(~J)";
         Text[ russian ] = "Èçìåíèòü ğàâíîìåğíî ñòîëáöû";
         Text[ polish ] = "Z~modyfikuj równomiernie kolumny";
-        Text[ japanese ] = "‘S—ñ‚ğ“¯—l‚É’²®";
-        Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
+        Text[ japanese ] = "‘S—ñ‚ğ“¯—l‚É’²®(~J)";
+        Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e(~J)";
         Text[ arabic ] = "ÊÛííÑ ÇáÃÚãÏÉ ÈÔßá ãÊßÇİÆ";
         Text[ greek ] = "Ïìïéüìïñöç áëëáãŞ ~óôçëşí";
-        Text[ korean ] = " ¿­ ÀÏÁ¤ÇÏ°Ô¡¡º¯°æ";
+        Text[ korean ] = " ¿­ ÀÏÁ¤ÇÏ°Ô¡¡º¯°æ(~J)";
         Text[ turkish ] = "Sütunları orantılı değiştir";
         Text[ language_user1 ] = " ";
     };
@@ -1154,7 +1154,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "´«­¶(~B)";
         Text[ arabic ] = "İÇÕá";
         Text[ greek ] = "ÁëëáãŞ";
-        Text[ korean ] = "³ª´©±â";
+        Text[ korean ] = "³ª´©±â(~B)";
         Text[ turkish ] = "Kesme";
         Text[ language_user1 ] = " ";
     };
@@ -1184,7 +1184,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "­¶(~P)";
         Text[ arabic ] = "ÕİÍÉ";
         Text[ greek ] = "Óåëßäá";
-        Text[ korean ] = "ÂÊ";
+        Text[ korean ] = "ÂÊ(~P)";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
     };
@@ -1207,14 +1207,14 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ dutch ] = "~Kolom" ;
         Text [ spanish ] = "~Columna" ;
         Text [ english_us ] = "Col~umn" ;
-        Text[ chinese_simplified ] = "À¸(~M)";
+        Text[ chinese_simplified ] = "À¸(~U)";
         Text[ russian ] = "Ñòîëáåö";
         Text[ polish ] = "Kolumna";
-        Text[ japanese ] = "—ñ(~M)";
-        Text[ chinese_traditional ] = "Äæ(~M)";
+        Text[ japanese ] = "—ñ(~U)";
+        Text[ chinese_traditional ] = "Äæ(~U)";
         Text[ arabic ] = "ÚãæÏ";
         Text[ greek ] = "ÓôŞëç";
-        Text[ korean ] = "¿­";
+        Text[ korean ] = "¿­(~U)";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -1245,7 +1245,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "¤§«e(~F)";
         Text[ arabic ] = "ŞÈá";
         Text[ greek ] = "Ğñéí áğü";
-        Text[ korean ] = "Àü¿¡";
+        Text[ korean ] = "Àü¿¡(~F)";
         Text[ turkish ] = "Ön~ce";
         Text[ language_user1 ] = " ";
     };
@@ -1267,14 +1267,14 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ dutch ] = "Ern~a" ;
         Text [ spanish ] = "~detrás" ;
         Text [ english_us ] = "~After" ;
-        Text[ chinese_simplified ] = "Ö®ºó(~E)";
+        Text[ chinese_simplified ] = "Ö®ºó(~A)";
         Text[ russian ] = "ïîñëå";
         Text[ polish ] = "za";
-        Text[ japanese ] = "Œã(~E)";
-        Text[ chinese_traditional ] = "¤§«á(~E)";
+        Text[ japanese ] = "Œã(~A)";
+        Text[ chinese_traditional ] = "¤§«á(~A)";
         Text[ arabic ] = "ÈÚÏ";
         Text[ greek ] = "ìåôÜ áğü";
-        Text[ korean ] = "ÈÄ¿¡";
+        Text[ korean ] = "ÈÄ¿¡(~A)";
         Text[ turkish ] = "Son~ra";
         Text[ language_user1 ] = " ";
     };
@@ -1305,7 +1305,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "±a­¶­±¼Ë¦¡(~Y)";
         Text[ arabic ] = "ÈäãØ ÕİÍÉ";
         Text[ greek ] = "ìå ğñüôõğï óåëßäáò";
-        Text[ korean ] = "ÂÊ À¯Çü°ú ÇÔ²²";
+        Text[ korean ] = "ÂÊ À¯Çü°ú ÇÔ²²(~Y)";
         Text[ turkish ] = "Sayfa düzeni ile";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
@@ -1338,7 +1338,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "­¶½X(~N)";
         Text[ arabic ] = "ÑŞã ÇáÕİÍÉ";
         Text[ greek ] = "Áñéèìüò óåëßäáò";
-        Text[ korean ] = "ÂÊ ¹øÈ£";
+        Text[ korean ] = "ÂÊ ¹øÈ£(~N)";
         Text[ turkish ] = "Sayfa ~numaraları";
         Text[ language_user1 ] = " ";
     };
@@ -1373,14 +1373,14 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ french ] = "Ne pas ~diviser le tableau" ;
         Text [ dutch ] = "~Tabel niet splitsen" ;
         Text [ portuguese ] = "~Não dividir tabela" ;
-        Text[ chinese_simplified ] = "²»·Ö¸ô±í¸ñ";
+        Text[ chinese_simplified ] = "²»·Ö¸ô±í¸ñ(~D)";
         Text[ russian ] = "Íå ğàçáèâàòü òàáëèöó";
         Text[ polish ] = "Nie dziel ta~beli";
         Text[ japanese ] = "•\\‚ğ•ªŠ„‚µ‚È‚¢(~D)";
-        Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
+        Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ(~D)";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "Íá ìç äéáéñåèåß ï ğßíáêáò";
-        Text[ korean ] = "Ç¥ ³ª´©Áö ¾ÊÀ½.";
+        Text[ korean ] = "Ç¥ ³ª´©Áö ¾ÊÀ½.(~D)";
         Text[ turkish ] = "Tabloyu ayırma";
         Text[ language_user1 ] = " ";
     };
@@ -1407,7 +1407,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "©M¤U¤@¬q¸¨«O«ù³sµ²(~K)";
         Text[ arabic ] = "ÊÑÇÈØ ÇáİŞÑÇÊ";
         Text[ greek ] = "ÄéáôŞñçóç ìå åğüìåíç ğáñÜãñáöï";
-        Text[ korean ] = "´ÙÀ½ ´Ü¶ôÀ» °°Àº ÂÊ¿¡";
+        Text[ korean ] = "´ÙÀ½ ´Ü¶ôÀ» °°Àº ÂÊ¿¡(~K)";
         Text[ turkish ] = "Alttaki paragraf ile birlikte tut";
         Text[ language_user1 ] = " ";
     };
@@ -1436,7 +1436,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "­«½Æ¼ĞÃD(~E)";
         Text[ arabic ] = "ÊßÑÇÑ ÇáÚäæÇä";
         Text[ greek ] = "ÅğáíÜëçøç åğéêåöáëßäáò";
-        Text[ korean ] = "Ç¥Á¦ ¹İº¹";
+        Text[ korean ] = "Ç¥Á¦ ¹İº¹(~E)";
         Text[ turkish ] = "Başlığı yinele";
         Text[ language_user1 ] = " ";
     };
@@ -1481,14 +1481,14 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ dutch ] = "Boven" ;
         Text [ portuguese_brazilian ] = "Oben" ;
         Text [ portuguese ] = "Em cima" ;
-        Text[ chinese_simplified ] = "ÉÏ";
+        Text[ chinese_simplified ] = "ÉÏ(~O)";
         Text[ russian ] = "Ââåğõó";
         Text[ polish ] = "Na g~órze";
-        Text[ japanese ] = "ã";
-        Text[ chinese_traditional ] = "¤W";
+        Text[ japanese ] = "ã(~O)";
+        Text[ chinese_traditional ] = "¤W(~O)";
         Text[ arabic ] = "ÃÚáì";
         Text[ greek ] = "ĞÜíù";
-        Text[ korean ] = "À§";
+        Text[ korean ] = "À§(~O)";
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
     };
@@ -1507,14 +1507,14 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ dutch ] = "Midden" ;
         Text [ portuguese_brazilian ] = "Mitte" ;
         Text [ portuguese ] = "Centro" ;
-        Text[ chinese_simplified ] = "ÖĞ";
+        Text[ chinese_simplified ] = "ÖĞ(~R)";
         Text[ russian ] = "Ïî ñåğåäèíå";
         Text[ polish ] = "Poœrodku";
-        Text[ japanese ] = "’†‰›";
-        Text[ chinese_traditional ] = "¤¤";
+        Text[ japanese ] = "’†‰›(~R)";
+        Text[ chinese_traditional ] = "¤¤(~R)";
         Text[ arabic ] = "ÇáæÓØ";
         Text[ greek ] = "Êİíôñï";
-        Text[ korean ] = "°¡¿îµ¥";
+        Text[ korean ] = "°¡¿îµ¥(~R)";
         Text[ turkish ] = "Aşağı";
         Text[ language_user1 ] = " ";
     };
