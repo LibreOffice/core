@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:09 $
+ *  last change: $Author: os $ $Date: 2002-12-09 13:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,12 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 using namespace svx;
 using namespace ::com::sun::star;
@@ -329,8 +335,34 @@ namespace
 {
 
 }
-// -----------------------------------------------------------------------------
+/* -----------------09.12.2002 12:35-----------------
+ *
+ * --------------------------------------------------*/
 
+class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
+< com::sun::star::lang::XEventListener >
+{
+    SwNewDBMgr&     rDBMgr;
+
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+public:
+    SwConnectionDisposedListener_Impl(SwNewDBMgr& rMgr);
+    ~SwConnectionDisposedListener_Impl();
+
+};
+// -----------------------------------------------------------------------------
+struct SwNewDBMgr_Impl
+{
+    SwDSParam*          pMergeData;
+    SwMailMergeDlg*     pMergeDialog;
+    Reference<XEventListener> xDisposeListener;
+
+    SwNewDBMgr_Impl(SwNewDBMgr& rDBMgr)
+       :pMergeData(0)
+       ,pMergeDialog(0)
+       ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBMgr))
+        {}
+};
 /* -----------------------------17.07.00 17:04--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -425,10 +457,23 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         if(pTemp)
             *pTemp = *pImpl->pMergeData;
         else
-            aDataSourceParams.Insert(new SwDSParam(*pImpl->pMergeData), aDataSourceParams.Count());
+        {
+            SwDSParam* pInsert = new SwDSParam(*pImpl->pMergeData);
+            aDataSourceParams.Insert(pInsert, aDataSourceParams.Count());
+            try
+            {
+                Reference<XComponent> xComponent(pInsert->xConnection, UNO_QUERY);
+                if(xComponent.is())
+                    xComponent->addEventListener(pImpl->xDisposeListener);
+            }
+            catch(Exception&)
+            {
+            }
+        }
     }
     if(!pImpl->pMergeData->xConnection.is())
         pImpl->pMergeData->xConnection = xConnection;
+    // add an XEventListener
 
     try{
         //set to start position
@@ -813,7 +858,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
  --------------------------------------------------------------------*/
 
 SwNewDBMgr::SwNewDBMgr() :
-            pImpl(new SwNewDBMgr_Impl),
+            pImpl(new SwNewDBMgr_Impl(*this)),
             bInMerge(FALSE),
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
@@ -1863,7 +1908,18 @@ Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rDataSourc
     SwDSParam* pFound = SwNewDBMgr::FindDSConnection(rDataSource, TRUE);
     Reference< XDataSource> xSource;
     if(!pFound->xConnection.is())
+    {
         pFound->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource );
+        try
+        {
+            Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
+            if(xComponent.is())
+                xComponent->addEventListener(pImpl->xDisposeListener);
+        }
+        catch(Exception&)
+        {
+        }
+    }
     return pFound->xConnection;
 }
 /* -----------------------------17.07.00 15:55--------------------------------
@@ -1921,9 +1977,9 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
 SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 {
     SwDSParam* pFound = 0;
-    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    for(USHORT nPos = aDataSourceParams.Count(); nPos; nPos--)
     {
-        SwDSParam* pParam = aDataSourceParams[nPos];
+        SwDSParam* pParam = aDataSourceParams[nPos - 1];
         if(rData.sDataSource == pParam->sDataSource &&
             rData.sCommand == pParam->sCommand &&
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
@@ -1935,7 +1991,6 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
                 if(bCreate && pParam->nCommandType == -1)
                     pParam->nCommandType = rData.nCommandType;
                 pFound = pParam;
-
                 break;
             }
     }
@@ -1945,6 +2000,15 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
         {
             pFound = new SwDSParam(rData);
             aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
+            try
+            {
+                Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
+                if(xComponent.is())
+                    xComponent->addEventListener(pImpl->xDisposeListener);
+            }
+            catch(Exception&)
+            {
+            }
         }
     }
     return pFound;
@@ -1970,6 +2034,15 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL 
         aData.sDataSource = rDataSource;
         pFound = new SwDSParam(aData);
         aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
+        try
+        {
+            Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
+            if(xComponent.is())
+                xComponent->addEventListener(pImpl->xDisposeListener);
+        }
+        catch(Exception&)
+        {
+        }
     }
     return pFound;
 }
@@ -2238,5 +2311,34 @@ Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSour
         DBG_ASSERT(0,"Catched exception while creating a new RowSet!");
     }
     return xResultSet;
+}
+/* -----------------09.12.2002 12:38-----------------
+ *
+ * --------------------------------------------------*/
+SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwNewDBMgr& rMgr) :
+    rDBMgr(rMgr)
+{};
+/* -----------------09.12.2002 12:39-----------------
+ *
+ * --------------------------------------------------*/
+SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
+{};
+/* -----------------09.12.2002 12:39-----------------
+ *
+ * --------------------------------------------------*/
+void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
+        throw (RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
+    for(USHORT nPos = rDBMgr.aDataSourceParams.Count(); nPos; nPos--)
+    {
+        SwDSParam* pParam = rDBMgr.aDataSourceParams[nPos - 1];
+        if(pParam->xConnection.is() &&
+                (xSource == pParam->xConnection))
+        {
+            rDBMgr.aDataSourceParams.DeleteAndDestroy(nPos - 1);
+        }
+    }
 }
 

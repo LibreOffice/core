@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:00:22 $
+ *  last change: $Author: os $ $Date: 2002-12-09 13:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,18 +193,11 @@ struct SwDSParam : public SwDBData
 typedef SwDSParam* SwDSParamPtr;
 SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 
-struct SwNewDBMgr_Impl
-{
-    SwDSParam*          pMergeData;
-    SwMailMergeDlg*     pMergeDialog;
-
-    SwNewDBMgr_Impl()
-       :pMergeData(0)
-       ,pMergeDialog(0)
-        {}
-};
+struct SwNewDBMgr_Impl;
+class SwConnectionDisposedListener_Impl;
 class SwNewDBMgr
 {
+friend class SwConnectionDisposedListener_Impl;
     String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
     String              sSubject;       // Mailing: Subject
     String              sAttached;      // Mailing: Attachte Files
