@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-13 10:32:58 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog RID_FONTDIALOG
         Text[ dutch ] = "~Lettertype";
         Text[ french ] = "Police";
         Text[ spanish ] = "~Fuente";
-        Text[ finnish ] = "~Fontti:";
+        Text[ finnish ] = "~Fontti";
         Text[ italian ] = "~Tipo di carattere:";
         Text[ danish ] = "Skrifttype:";
         Text[ swedish ] = "Tecken~snitt:";
@@ -285,7 +285,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ dutch ] = "~Basisgrootte";
         Text[ french ] = "Taille de base";
         Text[ spanish ] = "~Tamaño de base";
-        Text[ finnish ] = "~Peruskoko:";
+        Text[ finnish ] = "~Peruskoko";
         Text[ italian ] = "Dim. di ~base:";
         Text[ danish ] = "Basisstørrelse:";
         Text[ swedish ] = "~Basstorlek:";
@@ -326,7 +326,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ dutch ] = "~Tekst";
         Text[ french ] = "Texte";
         Text[ spanish ] = "~Texto";
-        Text[ finnish ] = "~Teksti:";
+        Text[ finnish ] = "~Teksti";
         Text[ italian ] = "~Testo";
         Text[ danish ] = "~Tekst:";
         Text[ swedish ] = "~Text:";
@@ -368,7 +368,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ dutch ] = "~Indices";
         Text[ french ] = "Index";
         Text[ spanish ] = "Í~ndices";
-        Text[ finnish ] = "~Hakemistot:";
+        Text[ finnish ] = "~Hakemistot";
         Text[ italian ] = "~Indici";
         Text[ danish ] = "Sub-/Superscript:";
         Text[ swedish ] = "~Index";
@@ -410,7 +410,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ dutch ] = "~Functies";
         Text[ french ] = "Fonctions";
         Text[ spanish ] = "~Funciones";
-        Text[ finnish ] = "~Toiminnot:";
+        Text[ finnish ] = "~Toiminnot";
         Text[ italian ] = "~Funzioni";
         Text[ danish ] = "~Funktioner:";
         Text[ swedish ] = "~Funktioner";
@@ -452,7 +452,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ dutch ] = "~Operatoren";
         Text[ french ] = "Opérateurs";
         Text[ spanish ] = "~Operadores";
-        Text[ finnish ] = "~Operaattorit:";
+        Text[ finnish ] = "~Operaattorit";
         Text[ italian ] = "~Operatori";
         Text[ danish ] = "~Operatorer:";
         Text[ swedish ] = "~Operatorer";
@@ -494,7 +494,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ dutch ] = "~Grenzen";
         Text[ french ] = "Limites";
         Text[ spanish ] = "~Límites";
-        Text[ finnish ] = "~Rajat:";
+        Text[ finnish ] = "~Rajat";
         Text[ italian ] = "~Bordi";
         Text[ danish ] = "~Grænser:";
         Text[ swedish ] = "~Gränser";
@@ -543,7 +543,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_simplified ] = "ç›¸å¯¹çš„å¤§å°";
         Text[ russian ] = "Îòíîñèòåëüíûå ğàçìåğû";
         Text[ polish ] = "Wzglêdne wielkoœci";
-        Text[ japanese ] = "ç›¸å¯¾ï½»ï½²ï½½ï¾";
+        Text[ japanese ] = "æ¯”è¼ƒï½»ï½²ï½½ï¾";
         Text[ chinese_traditional ] = "ç›¸å°å¤§å°";
         Text[ arabic ] = "ÃÍÌÇã äÓÈíÉ";
         Text[ greek ] = "Ó÷åôéêÜ ìåãİèç";
@@ -625,7 +625,7 @@ ModalDialog RID_FONTTYPEDIALOG
     Text [ italian ] = "Tipi di carattere" ;
     Text [ portuguese_brazilian ] = "Fontes" ;
     Text [ portuguese ] = "Tipos de letra" ;
-    Text [ finnish ] = "Fonttilajit" ;
+    Text [ finnish ] = "Fontit" ;
     Text [ danish ] = "Skrifttyper" ;
     Text [ french ] = "Polices" ;
     Text [ swedish ] = "Teckensnitt" ;
@@ -705,7 +705,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ dutch ] = "~Variabelen";
         Text[ french ] = "Variables";
         Text[ spanish ] = "~Predeterminaciones";
-        Text[ finnish ] = "~Muuttujat:";
+        Text[ finnish ] = "~Muuttujat";
         Text[ italian ] = "~Variabili";
         Text[ danish ] = "~Variabler:";
         Text[ swedish ] = "~Variabler";
@@ -741,7 +741,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ dutch ] = "~Functies";
         Text[ french ] = "Fonctions";
         Text[ spanish ] = "~Funciones";
-        Text[ finnish ] = "~Toiminnot:";
+        Text[ finnish ] = "~Toiminnot";
         Text[ italian ] = "~Funzioni";
         Text[ danish ] = "~Funktioner:";
         Text[ swedish ] = "~Funktioner";
@@ -777,7 +777,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ dutch ] = "~Getallen";
         Text[ french ] = "Nombres";
         Text[ spanish ] = "~Números";
-        Text[ finnish ] = "~Luvut:";
+        Text[ finnish ] = "~Numerot";
         Text[ italian ] = "~Numeri";
         Text[ danish ] = "Tal:";
         Text[ swedish ] = "T~al:";
@@ -813,7 +813,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ dutch ] = "~Tekst";
         Text[ french ] = "Texte";
         Text[ spanish ] = "~Texto";
-        Text[ finnish ] = "~Teksti:";
+        Text[ finnish ] = "~Teksti";
         Text[ italian ] = "~Testo";
         Text[ danish ] = "Tekst:";
         Text[ swedish ] = "~Text";
@@ -842,6 +842,26 @@ ModalDialog RID_FONTTYPEDIALOG
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Serif" ;
         Text[ english ] = "~Serif" ;
+        Text[ english_us ] = "~Serif";
+        Text[ portuguese ] = "~Serif";
+        Text[ russian ] = "~Serif";
+        Text[ greek ] = "~Serif";
+        Text[ dutch ] = "~Serif";
+        Text[ french ] = "~Serif";
+        Text[ spanish ] = "~Serif";
+        Text[ finnish ] = "~Serif";
+        Text[ italian ] = "~Serif";
+        Text[ danish ] = "~Serif";
+        Text[ swedish ] = "~Serif";
+        Text[ polish ] = "~Serif";
+        Text[ portuguese_brazilian ] = "~Serif";
+        Text[ japanese ] = "~Serif";
+        Text[ korean ] = "~Serif";
+        Text[ chinese_simplified ] = "~Serif";
+        Text[ chinese_traditional ] = "~Serif";
+        Text[ turkish ] = "~Serif";
+        Text[ arabic ] = "~Serif";
+        Text[ catalan ] = "~Serif";
     };
     ListBox 5
     {
@@ -858,6 +878,26 @@ ModalDialog RID_FONTTYPEDIALOG
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "S~ans" ;
         Text[ english ] = "S~ans" ;
+        Text[ english_us ] = "S~ans";
+        Text[ portuguese ] = "S~ans";
+        Text[ russian ] = "S~ans";
+        Text[ greek ] = "S~ans";
+        Text[ dutch ] = "S~ans";
+        Text[ french ] = "S~ans";
+        Text[ spanish ] = "S~ans";
+        Text[ finnish ] = "S~ans";
+        Text[ italian ] = "S~ans";
+        Text[ danish ] = "S~ans";
+        Text[ swedish ] = "S~ans";
+        Text[ polish ] = "S~ans";
+        Text[ portuguese_brazilian ] = "S~ans";
+        Text[ japanese ] = "S~ans";
+        Text[ korean ] = "S~ans";
+        Text[ chinese_simplified ] = "S~ans";
+        Text[ chinese_traditional ] = "S~ans";
+        Text[ turkish ] = "S~ans";
+        Text[ arabic ] = "S~ans";
+        Text[ catalan ] = "S~ans";
     };
     ListBox 6
     {
@@ -874,6 +914,26 @@ ModalDialog RID_FONTTYPEDIALOG
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "F~ixed" ;
         Text[ english ] = "F~ixed" ;
+        Text[ english_us ] = "F~ixed";
+        Text[ portuguese ] = "F~ixed";
+        Text[ russian ] = "F~ixed";
+        Text[ greek ] = "F~ixed";
+        Text[ dutch ] = "F~ixed";
+        Text[ french ] = "F~ixed";
+        Text[ spanish ] = "F~ijo";
+        Text[ finnish ] = "F~ixed";
+        Text[ italian ] = "F~isso";
+        Text[ danish ] = "F~ixed";
+        Text[ swedish ] = "F~ixed";
+        Text[ polish ] = "F~ixed";
+        Text[ portuguese_brazilian ] = "F~ixed";
+        Text[ japanese ] = "F~ixed";
+        Text[ korean ] = "F~ixed";
+        Text[ chinese_simplified ] = "F~ixed";
+        Text[ chinese_traditional ] = "F~ixed";
+        Text[ turkish ] = "F~ixed";
+        Text[ arabic ] = "F~ixed";
+        Text[ catalan ] = "F~ixed";
     };
     ListBox 7
     {
@@ -977,7 +1037,7 @@ ModalDialog RID_DISTANCEDIALOG
     Text [ italian ] = "Distanze" ;
     Text [ portuguese_brazilian ] = "Dist?ncias" ;
     Text [ portuguese ] = "Espaçamento" ;
-    Text [ finnish ] = "Välit" ;
+    Text [ finnish ] = "Objektiv?lit" ;
     Text [ danish ] = "Afstand" ;
     Text [ french ] = "Écarts" ;
     Text [ swedish ] = "Avstånd" ;
@@ -1083,7 +1143,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ polish ] = "Skaluj wszystkie nawiasy";
         Text[ portuguese_brazilian ] = "Scale all Brackets";
         Text[ japanese ] = "ã™ã¹ã¦ã®ã‹ã£ã“ã‚’èª¿æ•´";
-        Text[ chinese_simplified ] = "ä½¿ç”¨æ‰€æœ‰æ‹¬å·çš„æ˜¾ç¤ºæ¯”åˆ—";
+        Text[ chinese_simplified ] = "æ‰€æœ‰æ‹¬å·ä½¿ç”¨æ˜¾ç¤ºæ¯”ä¾‹";
         Text[ chinese_traditional ] = "é¡¯ç¤ºæ‰€æœ‰æ‹¬è™Ÿçš„åˆ»åº¦";
         Text[ arabic ] = "ÊÏÑíÌ ßá ÇáÃŞæÇÓ";
         Text[ greek ] = "ÊëéìÜêùóç üëùí ôùí ğáñåíèİóåùí";
@@ -1273,7 +1333,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text [ italian ] = "Distanze" ;
             Text [ portuguese_brazilian ] = "Dist?ncias" ;
             Text [ portuguese ] = "Espaçamento" ;
-            Text [ finnish ] = "Välit" ;
+            Text [ finnish ] = "Objektiv?lit" ;
             Text [ danish ] = "Afstand" ;
             Text [ french ] = "Écarts" ;
             Text [ swedish ] = "Avstånd" ;
@@ -1303,7 +1363,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Afstand";
             Text[ french ] = "Écart";
             Text[ spanish ] = "~Espacio";
-            Text[ finnish ] = "~Välit:";
+            Text[ finnish ] = "~Objektiv?lit";
             Text[ italian ] = "~Distanza";
             Text[ danish ] = "Afstand:";
             Text[ swedish ] = "~Avstånd";
@@ -1332,7 +1392,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Regelafstand";
             Text[ french ] = "Interligne";
             Text[ spanish ] = "~Interlineado";
-            Text[ finnish ] = "~Riviväli:";
+            Text[ finnish ] = "~Riviv?li";
             Text[ italian ] = "Distanza linee";
             Text[ danish ] = "Linjeafstand:";
             Text[ swedish ] = "Ra~davstånd";
@@ -1361,13 +1421,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "Afstand tot ~wortel";
             Text[ french ] = "Espacement de la racine";
             Text[ spanish ] = "Intervalo de ~raíz";
-            Text[ finnish ] = "~Perusvälit:";
+            Text[ finnish ] = "~Perusv?lit";
             Text[ italian ] = "Distanza radice";
             Text[ danish ] = "Rodafstand:";
             Text[ swedish ] = "R~otavstånd";
             Text[ polish ] = "od pierwiastka";
             Text[ portuguese_brazilian ] = "~Espa?amento de raiz:";
-            Text[ japanese ] = "ï¾™ï½°ï¾„ã®é–“éš”(~R)";
+            Text[ japanese ] = "ï¾™ï½°ï¾„é–“éš”(~R)";
             Text[ korean ] = "ìê°„(~R):";
             Text[ chinese_simplified ] = "æ ¹å¼é—´éš”(~R)";
             Text[ chinese_traditional ] = "æ ¹å¼é–“éš”(~R)";
@@ -1418,7 +1478,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Superscript";
             Text[ french ] = "Exposant";
             Text[ spanish ] = "~Superíndice";
-            Text[ finnish ] = "~Yläindeksi:";
+            Text[ finnish ] = "~Yl?indeksi";
             Text[ italian ] = "A~pice";
             Text[ danish ] = "~Hævet:";
             Text[ swedish ] = "Upp~höjning";
@@ -1447,7 +1507,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "S~ubscript";
             Text[ french ] = "Indice";
             Text[ spanish ] = "S~ubíndice";
-            Text[ finnish ] = "~Alaindeksi:";
+            Text[ finnish ] = "~Alaindeksi";
             Text[ italian ] = "Pe~dice";
             Text[ danish ] = "~Sænket:";
             Text[ swedish ] = "Ned~sänkning";
@@ -1508,7 +1568,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Noemerhoogte";
             Text[ french ] = "Numérateur";
             Text[ spanish ] = "Altura del ~numerador";
-            Text[ finnish ] = "~Osoittaja:";
+            Text[ finnish ] = "~Osoittaja";
             Text[ italian ] = "Contatore";
             Text[ danish ] = "~Tællerhøjde:";
             Text[ swedish ] = "~Täljare, höjd";
@@ -1537,7 +1597,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Delerdiepte";
             Text[ french ] = "Dénominateur";
             Text[ spanish ] = "~Altura del denominador";
-            Text[ finnish ] = "~Nimittäjä:";
+            Text[ finnish ] = "~Nimitt?j?";
             Text[ italian ] = "Prof. del denominatore";
             Text[ danish ] = "~Nævnerdybde:";
             Text[ swedish ] = "~Nämnare, djup:";
@@ -1597,7 +1657,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Extra lang";
             Text[ french ] = "Longueur excessive";
             Text[ spanish ] = "Longitud ~excesiva";
-            Text[ finnish ] = "~Liiallinen pituus:";
+            Text[ finnish ] = "~Liiallinen pituus";
             Text[ italian ] = "L~ungh. in eccesso";
             Text[ danish ] = "~Overlængde:";
             Text[ swedish ] = "~Överskjutning";
@@ -1627,7 +1687,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Lijndikte";
             Text[ french ] = "Épaisseur de trait";
             Text[ spanish ] = "Espesor del ~trazo";
-            Text[ finnish ] = "~Paino:";
+            Text[ finnish ] = "~Paino";
             Text[ italian ] = "~Spessore del tratto";
             Text[ danish ] = "~Stregstyrke:";
             Text[ swedish ] = "Linje~styrka";
@@ -1687,7 +1747,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "Maximum ~hoogte";
             Text[ french ] = "Hauteur maximale";
             Text[ spanish ] = "~Altura máxima";
-            Text[ finnish ] = "~Yläraja:";
+            Text[ finnish ] = "~Yl?raja";
             Text[ italian ] = "Valore massimo";
             Text[ danish ] = "Grænsehøjde:";
             Text[ swedish ] = "Gräns~höjd";
@@ -1716,7 +1776,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Maximum diepte";
             Text[ french ] = "Hauteur minimale";
             Text[ spanish ] = "Altura ~mínima";
-            Text[ finnish ] = "~Alaraja:";
+            Text[ finnish ] = "~Alaraja";
             Text[ italian ] = "Limi~te profondità";
             Text[ danish ] = "Grænsedybde:";
             Text[ swedish ] = "Gräns~djup";
@@ -1775,7 +1835,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~links/rechts extra groot:";
             Text[ french ] = "Dépassement latéral";
             Text[ spanish ] = "~Sobredimensión izq./der.";
-            Text[ finnish ] = "~Liiallinen koko (vasen/oikea):";
+            Text[ finnish ] = "~Liiallinen koko (vasen/oikea)";
             Text[ italian ] = "Sovradim. (sin./des.)";
             Text[ danish ] = "Venstre/højre overstørrelse:";
             Text[ swedish ] = "~Vänster/höger överstorlek";
@@ -1804,7 +1864,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Afstand";
             Text[ french ] = "Écart";
             Text[ spanish ] = "~Espacio";
-            Text[ finnish ] = "~Välit:";
+            Text[ finnish ] = "~Objektiv?lit";
             Text[ italian ] = "~Distanza";
             Text[ danish ] = "Afstand:";
             Text[ swedish ] = "~Avstånd";
@@ -1833,7 +1893,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Extra groot";
             Text[ french ] = "Dépassement";
             Text[ spanish ] = "~Sobredimensión";
-            Text[ finnish ] = "~Liiallinen koko:";
+            Text[ finnish ] = "~Liiallinen koko";
             Text[ italian ] = "Sovradimensionato";
             Text[ danish ] = "Overstørrelse:";
             Text[ swedish ] = "~Överstorlek";
@@ -1892,7 +1952,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Regelafstand";
             Text[ french ] = "Interligne";
             Text[ spanish ] = "~Interlineado";
-            Text[ finnish ] = "~Riviväli:";
+            Text[ finnish ] = "~Riviv?li";
             Text[ italian ] = "Distanza linee";
             Text[ danish ] = "Linjeafstand:";
             Text[ swedish ] = "~Radavstånd";
@@ -1921,7 +1981,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Kolomafstand";
             Text[ french ] = "Écart entre les colonnes";
             Text[ spanish ] = "Distancia entre ~columnas";
-            Text[ finnish ] = "~Sarakkeiden välit:";
+            Text[ finnish ] = "~Sarakkeiden v?lit";
             Text[ italian ] = "Distanza colonne";
             Text[ danish ] = "~Kolonneafstand:";
             Text[ swedish ] = "~Kolumnavstånd";
@@ -1981,7 +2041,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Primaire hoogte";
             Text[ french ] = "Hauteur primaire";
             Text[ spanish ] = "Altura ~primaria";
-            Text[ finnish ] = "~Ensisijainen korkeus:";
+            Text[ finnish ] = "~Ensisijainen korkeus";
             Text[ italian ] = "Valore ~primario";
             Text[ danish ] = "~Primærhøjde:";
             Text[ swedish ] = "~Primärhöjd";
@@ -2010,7 +2070,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Minimum afstand";
             Text[ french ] = "Écart minimum";
             Text[ spanish ] = "Distancia ~mínima";
-            Text[ finnish ] = "~Vähimmäisväli:";
+            Text[ finnish ] = "~V?himm?isv?li";
             Text[ italian ] = "Distanza ~minima";
             Text[ danish ] = "~Mindste afstand:";
             Text[ swedish ] = "~Minimiavstånd";
@@ -2070,7 +2130,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Extra groot";
             Text[ french ] = "Dépassement";
             Text[ spanish ] = "~Sobredimensión";
-            Text[ finnish ] = "~Liiallinen koko:";
+            Text[ finnish ] = "~Liiallinen koko";
             Text[ italian ] = "~Sovradimensionato";
             Text[ danish ] = "~Overstørrelse:";
             Text[ swedish ] = "~Överstorlek";
@@ -2099,7 +2159,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Afstand";
             Text[ french ] = "Écart";
             Text[ spanish ] = "~Espacio";
-            Text[ finnish ] = "~Välit:";
+            Text[ finnish ] = "~Objektiv?lit";
             Text[ italian ] = "~Distanza";
             Text[ danish ] = "~Afstand:";
             Text[ swedish ] = "~Avstånd";
@@ -2157,7 +2217,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Links";
             Text[ french ] = "À gauche";
             Text[ spanish ] = "~Izquierda";
-            Text[ finnish ] = "~Vasemmalla:";
+            Text[ finnish ] = "~Vasen:";
             Text[ italian ] = "~Sinistra";
             Text[ danish ] = "~Venstre:";
             Text[ swedish ] = "~Vänster";
@@ -2186,7 +2246,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Rechts";
             Text[ french ] = "À droite";
             Text[ spanish ] = "~Derecha";
-            Text[ finnish ] = "~Oikealla:";
+            Text[ finnish ] = "~Oikea";
             Text[ italian ] = "Dest~ra";
             Text[ danish ] = "Høj~re:";
             Text[ swedish ] = "Höge~r";
@@ -2215,7 +2275,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Boven";
             Text[ french ] = "En haut";
             Text[ spanish ] = "~Arriba";
-            Text[ finnish ] = "~Ylhäällä:";
+            Text[ finnish ] = "~Yl?osa";
             Text[ italian ] = "In ~alto";
             Text[ danish ] = "Foroven:";
             Text[ swedish ] = "~Uppe";
@@ -2244,7 +2304,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ dutch ] = "~Beneden";
             Text[ french ] = "En bas";
             Text[ spanish ] = "~Abajo";
-            Text[ finnish ] = "~Alhaalla:";
+            Text[ finnish ] = "~Alaosa";
             Text[ italian ] = "~In basso";
             Text[ danish ] = "Forneden:";
             Text[ swedish ] = "~Nere";
@@ -2308,7 +2368,7 @@ ModalDialog RID_ALIGNDIALOG
         Text [ italian ] = "~Sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasen" ;
+        Text [ finnish ] = "~Vasen:" ;
         Text [ danish ] = "~Venstre" ;
         Text [ french ] = "À ~gauche" ;
         Text [ swedish ] = "~Vänster" ;
@@ -2716,7 +2776,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ spanish ] = "~Escala" ;
         Text [ english_us ] = "~Scaling" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”åˆ—(~S)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹(~S)";
         Text[ russian ] = "Ìàñøòàáèğîâàíèå";
         Text[ polish ] = "~Skalowanie";
         Text[ japanese ] = "å€ç‡(~S)";
@@ -2837,7 +2897,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ dutch ] = "S~ymbolenset";
         Text[ french ] = "Jeu de symboles";
         Text[ spanish ] = "Conjunto de ~símbolos";
-        Text[ finnish ] = "~Symbolijoukko:";
+        Text[ finnish ] = "~Symbolijoukko";
         Text[ italian ] = "~Simboli";
         Text[ danish ] = "~Symbolsæt:";
         Text[ swedish ] = "~Symbolset";
@@ -2937,7 +2997,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ turkish ] = "Kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aplicar";
-        Text[ finnish ] = "~Lisää";
+        Text[ finnish ] = "~Lis??";
     };
     PushButton 3
     {
@@ -3056,7 +3116,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "~Oud symbool";
         Text[ french ] = "Symbole précédent";
         Text[ spanish ] = "~Símbolo anterior";
-        Text[ finnish ] = "~Vanha merkki:";
+        Text[ finnish ] = "~Vanha symboli";
         Text[ italian ] = "Simbolo precedente:";
         Text[ danish ] = "Oprindeligt symbol:";
         Text[ swedish ] = "~Gammal symbol";
@@ -3092,7 +3152,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "Oud s~ymbolenset";
         Text[ french ] = "Jeu précédent";
         Text[ spanish ] = "Conjunto ~anterior";
-        Text[ finnish ] = "Va~nha merkkijoukko:";
+        Text[ finnish ] = "Va~nha symbolijoukko";
         Text[ italian ] = "Set simboli preced.:";
         Text[ danish ] = "Oprindeligt symbolsæt:";
         Text[ swedish ] = "Gammalt s~ymbolset";
@@ -3136,7 +3196,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "~Symbool";
         Text[ french ] = "Symbole";
         Text[ spanish ] = "Sím~bolo";
-        Text[ finnish ] = "~Symboli:";
+        Text[ finnish ] = "~Symboli";
         Text[ italian ] = "Simbolo";
         Text[ danish ] = "Symbol:";
         Text[ swedish ] = "~Symbol";
@@ -3172,7 +3232,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "S~ymbolenset";
         Text[ french ] = "Jeu de symboles";
         Text[ spanish ] = "Con~junto de símbolos";
-        Text[ finnish ] = "~Symbolijoukko:";
+        Text[ finnish ] = "~Symbolijoukko";
         Text[ italian ] = "Simboli";
         Text[ danish ] = "Symbolsæt:";
         Text[ swedish ] = "S~ymbolset";
@@ -3208,7 +3268,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "~Lettertype";
         Text[ french ] = "Police";
         Text[ spanish ] = "~Fuente";
-        Text[ finnish ] = "~Fontti:";
+        Text[ finnish ] = "~Fontti";
         Text[ italian ] = "~Tipo di carattere";
         Text[ danish ] = "Skrifttype:";
         Text[ swedish ] = "Te~ckensnitt";
@@ -3251,7 +3311,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ polish ] = "~Obszar";
         Text[ portuguese_brazilian ] = "~Subset";
         Text[ japanese ] = "ç¨®é¡(~S)";
-        Text[ korean ] = "ë²”ìœ„(~S)";
+        Text[ korean ] = "ì˜ì—­(~S)";
         Text[ chinese_simplified ] = "å­é›†(~S)";
         Text[ chinese_traditional ] = "å­é›†(~S)";
         Text[ turkish ] = "~Subset";
@@ -3282,7 +3342,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ dutch ] = "~Type";
         Text[ french ] = "Style";
         Text[ spanish ] = "~Estilo";
-        Text[ finnish ] = "~Tyyppi:";
+        Text[ finnish ] = "~Kirjasinlaji";
         Text[ italian ] = "S~tile";
         Text[ danish ] = "Typografi:";
         Text[ swedish ] = "Teckens~til:";
@@ -3369,7 +3429,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ italian ] = "~Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "Lägg t~ill" ;
@@ -3465,7 +3525,7 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message [ italian ] = "Il carattere \"StarMath\" non è installato.\nSenza questo carattere %PRODUCTNAME Math non funzionerà in modo corretto.\nInstallate questo carattere e riavviate %PRODUCTNAME Math." ;
     Message [ portuguese_brazilian ] = "A Fonte \"%PRODUCTNAME Math\" n?o est? instalada!\nSem esta Fonte o %PRODUCTNAME Math n?o est? operando corretamente...\nPor favor instale esta Fonte e reinicie%PRODUCTNAME Math." ;
     Message [ portuguese ] = "O tipo de letra \"StarMath\" não está instalado!\nSem este tipo de letra o %PRODUCTNAME Math não operará correctamente.\nInstale o tipo de letra e reinicie a aplicação." ;
-    Message [ finnish ] = "Fonttia StarMath ei ole asennettu.\nIlman tätä fonttia %PRODUCTNAME Math ei toimi kunnolla.\nAsenna fontti ja käynnistä %PRODUCTNAME Math uudelleen." ;
+    Message [ finnish ] = "Fonttia StarMath ei ole asennettu.\nIlman t?t? fonttia %PRODUCTNAME Math ei toimi kunnolla.\nAsenna fontti ja k?ynnist? %PRODUCTNAME Math uudelleen." ;
     Message [ danish ] = "Skrifttypen \"StarMath\" er ikke installeret!\nUden denne skrifttype kan %PRODUCTNAME Math ikke arbejde korrekt...\nInstaller venligst skrifttypen og genstart %PRODUCTNAME Math." ;
     Message [ french ] = "La police \"StarMath\" n'est pas installée !\nSans cette police, %PRODUCTNAME Math ne fonctionne pas correctement...\nInstallez la police et redémarrez %PRODUCTNAME Math." ;
     Message [ swedish ] = "Teckensnittet \"StarMath\" är inte installerat!\nUtan detta teckensnitt kan %PRODUCTNAME Math inte arbeta korrekt....\nInstallera teckensnittet och starta om %PRODUCTNAME Math." ;
@@ -3496,7 +3556,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message [ italian ] = "Salvare le modifiche correnti come predefinite?\n\nLe modifiche verranno applicate a tutte le nuove formule." ;
     Message [ portuguese_brazilian ] = "Gravar as mudan?as atuais como default?\n\nEstas mudan?asser o v?lidas para todas as novas Equa??s." ;
     Message [ portuguese ] = "Guardar modificações como padrão?\n\nEstas modificações serão válidas para todas as novas equações." ;
-    Message [ finnish ] = "Tallennetaanko muutokset uusiksi oletusarvoiksi?\n\nNäitä muutoksia käytetään kaikkiin uusiin kaavoihin." ;
+    Message [ finnish ] = "Tallennetaanko muutokset uusiksi oletusarvoiksi?\n\nN?it? muutoksia k?ytet??n kaikkiin uusiin kaavoihin." ;
     Message [ danish ] = "Skal ændringerne gemmes som standard?\n\nÆndringerne vil påvirke alle nye formler." ;
     Message [ french ] = "Enregistrer les modifications comme défaut ?\n\nCes modifications s'appliqueront à toutes les nouvelles formules." ;
     Message [ swedish ] = "Skall ändringarna sparas som standard?\n\nDessa ändringar påverkar alla nya formler." ;
@@ -3523,25 +3583,25 @@ String RID_FONTREGULAR
     Text [ norwegian ] = "Standard" ;
     Text [ italian ] = "Standard" ;
     Text [ portuguese_brazilian ] = "Padr?o" ;
-    Text [ portuguese ] = "Padrão" ;
-    Text [ finnish ] = "Vakio" ;
-    Text [ danish ] = "Normal" ;
+    Text [ portuguese ] = ", Padrão" ;
+    Text [ finnish ] = ", Vakio" ;
+    Text [ danish ] = ", Normal" ;
     Text [ french ] = "Par défaut" ;
     Text [ swedish ] = "Normal" ;
-    Text [ dutch ] = "Normaal" ;
-    Text [ spanish ] = "Predeterminado" ;
+    Text [ dutch ] = ", Normaal" ;
+    Text [ spanish ] = "Normal" ;
     Text [ english_us ] = "Standard" ;
-    Text[ chinese_simplified ] = "æ™®é€š";
-    Text[ russian ] = "Îáû÷íûé";
+    Text[ chinese_simplified ] = ", æ™®é€š";
+    Text[ russian ] = ", Îáû÷íûé";
     Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = "é€šå¸¸";
+    Text[ japanese ] = ",é€šå¸¸";
     Text[ chinese_traditional ] = "ï¼Œæ™®é€š";
-    Text[ arabic ] = "ÚÇÏí";
-    Text[ greek ] = "ÊáíïíéêÜ";
-    Text[ korean ] = "ë³´í†µ";
-    Text[ turkish ] = "standart";
+    Text[ arabic ] = "ÚÇÏí ,";
+    Text[ greek ] = ", ÊáíïíéêÜ";
+    Text[ korean ] = ", ë³´í†µ";
+    Text[ turkish ] = ", standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estándar";
+    Text[ catalan ] = ", Estándar";
 };
 String RID_FONTITALIC
 {
@@ -3550,25 +3610,25 @@ String RID_FONTITALIC
     Text [ norwegian ] = "Kursiv" ;
     Text [ italian ] = "Corsivo" ;
     Text [ portuguese_brazilian ] = "It?lico" ;
-    Text [ portuguese ] = "Itálico" ;
-    Text [ finnish ] = "Kursivoi" ;
-    Text [ danish ] = "Kursiv" ;
+    Text [ portuguese ] = ", Itálico" ;
+    Text [ finnish ] = ", Kursivoi" ;
+    Text [ danish ] = ", Kursiv" ;
     Text [ french ] = "Italique" ;
     Text [ swedish ] = "Kursiv" ;
-    Text [ dutch ] = "Cursief" ;
+    Text [ dutch ] = ", Cursief" ;
     Text [ spanish ] = "Cursiva" ;
     Text [ english_us ] = "Italic" ;
-    Text[ chinese_simplified ] = "æ–œä½“";
-    Text[ russian ] = "Íàêëîííûé";
+    Text[ chinese_simplified ] = ", æ–œä½“";
+    Text[ russian ] = ", Íàêëîííûé";
     Text[ polish ] = "Kursywa";
-    Text[ japanese ] = "æ–œä½“";
-    Text[ chinese_traditional ] = "æ–œé«”";
+    Text[ japanese ] = ",æ–œä½“";
+    Text[ chinese_traditional ] = ", æ–œé«”";
     Text[ arabic ] = "ãÇÆá";
-    Text[ greek ] = "ĞëÜãéá";
+    Text[ greek ] = ", ĞëÜãéá";
     Text[ korean ] = "ì´íƒ¤ë¦­ì²´";
-    Text[ turkish ] = "italik";
+    Text[ turkish ] = ", italik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cursiva";
+    Text[ catalan ] = ", Cursiva";
 };
 String RID_FONTBOLD
 {
@@ -3577,25 +3637,25 @@ String RID_FONTBOLD
     Text [ norwegian ] = "Fet" ;
     Text [ italian ] = "Grassetto" ;
     Text [ portuguese_brazilian ] = "Negrito" ;
-    Text [ portuguese ] = "Negrito" ;
-    Text [ finnish ] = "Lihavoi" ;
-    Text [ danish ] = "Fed" ;
+    Text [ portuguese ] = ", Negrito" ;
+    Text [ finnish ] = ", Lihavoi" ;
+    Text [ danish ] = ", Fed" ;
     Text [ french ] = "Gras" ;
-    Text [ swedish ] = "Fett" ;
-    Text [ dutch ] = "Vet" ;
+    Text [ swedish ] = "Fet" ;
+    Text [ dutch ] = ", Vet" ;
     Text [ spanish ] = "Negrita" ;
     Text [ english_us ] = "Bold" ;
-    Text[ chinese_simplified ] = "ç²—ä½“";
-    Text[ russian ] = "Æèğíûé";
+    Text[ chinese_simplified ] = ", ç²—ä½“";
+    Text[ russian ] = ", Æèğíûé";
     Text[ polish ] = "Pogrubienie";
-    Text[ japanese ] = "å¤ªå­—";
-    Text[ chinese_traditional ] = "ç²—é«”";
+    Text[ japanese ] = ",å¤ªå­—";
+    Text[ chinese_traditional ] = ", ç²—é«”";
     Text[ arabic ] = "ÚÑíÖ";
-    Text[ greek ] = "¸íôïíï";
-    Text[ korean ] = "êµµê²Œ";
-    Text[ turkish ] = "kalın";
+    Text[ greek ] = ";¸íôïíï";
+    Text[ korean ] = ", êµµê²Œ";
+    Text[ turkish ] = ", kalın";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Negrita";
+    Text[ catalan ] = ", Negrita";
 };
 String RID_APPLICATION
 {
@@ -3635,7 +3695,7 @@ Menu RID_VIEWMENU
             Text [ italian ] = "Zoom 50%" ;
             Text [ portuguese_brazilian ] = "Zoom 50%" ;
             Text [ portuguese ] = "Zoom ~50%" ;
-            Text [ finnish ] = "~Näytä 50 %" ;
+            Text [ finnish ] = "~N?yt? 50%" ;
             Text [ danish ] = "Zoom 50%" ;
             Text [ french ] = "Zoom ~50 %" ;
             Text [ swedish ] = "Visa ~50%" ;
@@ -3664,7 +3724,7 @@ Menu RID_VIEWMENU
             Text [ italian ] = "Zoom 100%" ;
             Text [ portuguese_brazilian ] = "Zoom 100%" ;
             Text [ portuguese ] = "Zoom ~100%" ;
-            Text [ finnish ] = "~Näytä 100 %" ;
+            Text [ finnish ] = "~N?yt? 100%" ;
             Text [ danish ] = "Zoom 100%" ;
             Text [ french ] = "Zoom ~100 %" ;
             Text [ swedish ] = "Visa ~100%" ;
@@ -3693,7 +3753,7 @@ Menu RID_VIEWMENU
             Text [ italian ] = "Zoom 200%" ;
             Text [ portuguese_brazilian ] = "Zoom 200%" ;
             Text [ portuguese ] = "Zoom ~200%" ;
-            Text [ finnish ] = "~Näytä 200 %" ;
+            Text [ finnish ] = "~N?yt? 200%" ;
             Text [ danish ] = "Zoom 200%" ;
             Text [ french ] = "Zoom ~200 %" ;
             Text [ swedish ] = "Visa ~200%" ;
@@ -3723,7 +3783,7 @@ Menu RID_VIEWMENU
             Text [ italian ] = "Zoom avanti" ;
             Text [ portuguese_brazilian ] = "Mais zoom" ;
             Text [ portuguese ] = "Apro~ximar" ;
-            Text [ finnish ] = "~Lähennä" ;
+            Text [ finnish ] = "~L?henn?" ;
             Text [ danish ] = "Forstør" ;
             Text [ french ] = "A~grandir" ;
             Text [ swedish ] = "För~stora" ;
@@ -3781,7 +3841,7 @@ Menu RID_VIEWMENU
             Text [ italian ] = "Mostra tutto" ;
             Text [ portuguese_brazilian ] = "Mostrar tudo" ;
             Text [ portuguese ] = "Mostrar ~tudo" ;
-            Text [ finnish ] = "~Näytä kaikki" ;
+            Text [ finnish ] = "~N?yt? kaikki" ;
             Text [ danish ] = "Vis alt" ;
             Text [ french ] = "A~fficher tout" ;
             Text [ swedish ] = "Visa ~allt" ;
@@ -3814,7 +3874,7 @@ Menu RID_VIEWMENU
             Text [ italian ] = "Aggiorna" ;
             Text [ portuguese_brazilian ] = "Atualizar" ;
             Text [ portuguese ] = "A~ctualizar" ;
-            Text [ finnish ] = "~Päivitä" ;
+            Text [ finnish ] = "P~?ivit?" ;
             Text [ danish ] = "Opdater" ;
             Text [ french ] = "~Actualiser" ;
             Text [ swedish ] = "~Uppdatera" ;
@@ -3848,7 +3908,7 @@ Menu RID_DISTANCEMENU
             Text [ italian ] = "Distanze" ;
             Text [ portuguese_brazilian ] = "Dist?ncias" ;
             Text [ portuguese ] = "Espaçamento" ;
-            Text [ finnish ] = "Välit" ;
+            Text [ finnish ] = "Objektiv?lit" ;
             Text [ danish ] = "Afstand" ;
             Text [ french ] = "Écarts" ;
             Text [ swedish ] = "Avstånd" ;
@@ -4243,7 +4303,7 @@ Menu RID_FONTMENU
             Text [ dutch ] = "Schreefletters" ;
             Text [ spanish ] = "Serif" ;
             Text [ english_us ] = "Serif" ;
-            Text[ chinese_simplified ] = "ç»†ä½“";
+            Text[ chinese_simplified ] = "Serif";
             Text[ russian ] = "Ñåğèô";
             Text[ polish ] = "Serif";
             Text[ japanese ] = "Serif";
@@ -4290,7 +4350,7 @@ Menu RID_FONTMENU
             Text [ italian ] = "Fisso" ;
             Text [ portuguese_brazilian ] = "Fixo" ;
             Text [ portuguese ] = "Fixo" ;
-            Text [ finnish ] = "Kiinteä" ;
+            Text [ finnish ] = "Kiinte?" ;
             Text [ danish ] = "Fixed" ;
             Text [ french ] = "Fixe" ;
             Text [ swedish ] = "Fixed" ;
@@ -4300,7 +4360,7 @@ Menu RID_FONTMENU
             Text[ chinese_simplified ] = "å›ºå®šçš„";
             Text[ russian ] = "Ôèêñèğîâàííûé";
             Text[ polish ] = "Sta³y";
-            Text[ japanese ] = "å›ºå®š";
+            Text[ japanese ] = "Fixed";
             Text[ chinese_traditional ] = "å›ºå®šçš„";
             Text[ arabic ] = "ËÇÈÊ";
             Text[ greek ] = "ÓôáèåñÜ";
@@ -4330,7 +4390,7 @@ ErrorBox RID_WRITESYMBOLERROR
     Message[ russian ] = "Ñîõğàíèòü ôàéë ñèìâîëîâ '%FILE%' íå óäàåòñÿ !";
     Message[ polish ] = "Pliku symboli '%FILE%' nie mo¿na zapisaæ!";
     Message[ japanese ] = "'%FILE%' è¨˜å·ï¾Œï½§ï½²ï¾™ã‚’ä¿å­˜ã§ãã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ç„¡æ³•å„²å­˜æª”æ¡ˆ'%FILE%' ï¼";
+    Message[ chinese_traditional ] = "ç„¡æ³•å„²å­˜æª”æ¡ˆ<%FILE%>ï¼";
     Message[ arabic ] = "áÇ íãßä ÍİÙ ãáİ ÇáÑãæÒ '%FILE%'!";
     Message[ greek ] = "Ôï áñ÷åßï óõìâüëùí '%FILE%' äåí åßíáé äõíáôüí íá áğïèçêåõôåß!";
     Message[ korean ] = "ê¸°í˜¸ íŒŒì¼'%FILE%'ì„(ë¥¼) ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!";
@@ -4357,7 +4417,7 @@ ErrorBox RID_READSYMBOLERROR
     Message[ russian ] = "Çàãğóçèòü ôàéë ñèìâîëîâ '%FILE%' íå óäàåòñÿ !";
     Message[ polish ] = "Pliku symboli '%FILE%' nie mo¿na za³adowaæ!";
     Message[ japanese ] = "'%FILE%' è¨˜å·ï¾Œï½§ï½²ï¾™ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥åœ–ç¤ºæª”æ¡ˆ'%FILE%' ï¼";
+    Message[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥åœ–ç¤ºæª”æ¡ˆ<%FILE%>ï¼";
     Message[ arabic ] = "áÇ íãßä ÊÍãíá ãáİ ÇáÑãæÒ '%FILE%'!";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé öüñôùóç ôïõ áñ÷åßïõ óõìâüëùí '%FILE%'!";
     Message[ korean ] = "ê¸°í˜¸ íŒŒì¼'%FILE%'ì„(ë¥¼) ë¡œë“œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!";
@@ -4734,7 +4794,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Çıkarma -";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restas -";
-                Text[ finnish ] = "Vähennyslasku -";
+                Text[ finnish ] = "V?hennyslasku -";
             };
             ToolBoxItem
             {
@@ -4790,7 +4850,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Bölme (÷)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "División (dos puntos-raya)";
-                Text[ finnish ] = "Jakolasku (÷)";
+                Text[ finnish ] = "Jakolasku (?";
             };
             ToolBoxItem
             {
@@ -4878,7 +4938,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Zincirleme";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Encadenamiento";
-                TEXT[ finnish ] = "Yhdistä";
+                TEXT[ finnish ] = "Yhdist?";
             };
         };
     };
@@ -4955,7 +5015,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es igual";
-                Text[ finnish ] = "On yhtäsuuri";
+                Text[ finnish ] = "On yht?suuri";
             };
             ToolBoxItem
             {
@@ -4983,7 +5043,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Eşit değil";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "no es igual";
-                Text[ finnish ] = "Ei ole yhtäsuuri";
+                Text[ finnish ] = "Ei ole yht?suuri";
             };
             ToolBoxItem
             {
@@ -5011,7 +5071,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Yaklaşık olarak eşit";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es aprox. igual";
-                Text[ finnish ] = "On suunnilleen yhtäsuuri";
+                Text[ finnish ] = "On suunnilleen yht?suuri";
             };
             ToolBoxItem
             {
@@ -5156,7 +5216,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Benzer ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es parecido o igual";
-                Text[ finnish ] = "On samanlainen tai yhtäsuuri";
+                Text[ finnish ] = "On samanlainen tai yht?suuri";
             };
             ToolBoxItem
             {
@@ -5245,7 +5305,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Küçüktür ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a (oblicuo)";
-                Text[ finnish ] = "On pienempi tai yhtäsuuri kuin";
+                Text[ finnish ] = "On pienempi tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -5273,7 +5333,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Büyüktür ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que o igual a (oblicuo)";
-                Text[ finnish ] = "On suurempi tai yhtäsuuri kuin";
+                Text[ finnish ] = "On suurempi tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -5329,7 +5389,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Örtüşür";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es congruente con";
-                Text[ finnish ] = "On yhtäpitävä suhteessa kohteeseen";
+                Text[ finnish ] = "On yht?pit?v? suhteessa kohteeseen";
             };
             ToolBoxItem
             {
@@ -5365,7 +5425,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Küçüktür ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a";
-                Text[ finnish ] = "On pienempi tai yhtäsuuri kuin";
+                Text[ finnish ] = "On pienempi tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -5393,7 +5453,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Büyük ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que o igual a";
-                Text[ finnish ] = "On suurempi tai yhtäsuuri kuin";
+                Text[ finnish ] = "On suurempi tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -5707,7 +5767,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ korean ] = "ê³µì§‘í•©";
                 TEXT[ turkish ] = "Boş küme";
                 TEXT[ catalan ] = "Conjunto vacío";
-                TEXT[ finnish ] = "Tyhjennä joukko";
+                TEXT[ finnish ] = "Tyhjenn? joukko";
             };
             ToolBoxItem
             {
@@ -5823,7 +5883,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Bölüm kümesi ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto cociente ";
-                Text[ finnish ] = "Osamääräjoukko ";
+                Text[ finnish ] = "Osam??r?joukko ";
             };
             ToolBoxItem
             {
@@ -5911,7 +5971,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Alt kümesi ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto parcial o igual";
-                Text[ finnish ] = "Alijoukko tai yhtäsuuri kuin";
+                Text[ finnish ] = "Alijoukko tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -5967,7 +6027,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst kümesi ya da eşittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto superior o igual";
-                Text[ finnish ] = "Ylijoukko tai yhtäsuuri kuin";
+                Text[ finnish ] = "Ylijoukko tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -6031,7 +6091,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Alt kümesi ya da eşit değil";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto no parcial o igual";
-                Text[ finnish ] = "Ei alijoukko tai yhtäsuuri kuin";
+                Text[ finnish ] = "Ei alijoukko tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -6087,7 +6147,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst kümesi ya da eşit değil";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto no superior o igual";
-                Text[ finnish ] = "Ei ylijoukko tai yhtäsuuri kuin";
+                Text[ finnish ] = "Ei ylijoukko tai yht?suuri kuin";
             };
             ToolBoxItem
             {
@@ -6167,7 +6227,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ swedish ] = "Mängd rationella tal";
                 TEXT[ dutch ] = "Hoeveelheid rationele getallen";
                 TEXT[ spanish ] = "Conjunto de números racionales";
-                TEXT[ english_us ] = "Relational Numbers Set";
+                TEXT[ english_us ] = "Rational Numbers Set";
                 TEXT[ chinese_simplified ] = "æœ‰ç†æ•°é›†";
                 TEXT[ russian ] = "Ìíîæåñòâî ğàöèîíàëüíûõ ÷èñåë";
                 TEXT[ polish ] = "Zbiór liczb wymiernych";
@@ -6429,7 +6489,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Üs";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Potencia";
-                TEXT[ finnish ] = "Potenssi";
+                TEXT[ finnish ] = "Potenssim??ritys";
             };
             ToolBoxItem
             {
@@ -6573,7 +6633,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Karekök";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Raíz cuadrada";
-                Text[ finnish ] = "Neliöjuuri";
+                Text[ finnish ] = "Neli?uuri";
             };
             ToolBoxItem
             {
@@ -6882,7 +6942,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ french ] = "Argument sinus hyperbolique" ;
                 Text [ dutch ] = "Area sinus hyperbolicus" ;
                 Text [ portuguese ] = "Seno hiperbólico de área" ;
-                Text[ chinese_simplified ] = "æ­£å¼¦åŒæ›²é¢";
+                Text[ chinese_simplified ] = "ååŒæ›²æ­£å¼¦";
                 Text[ russian ] = "Àğåà-ñèíóñ ãèïåğáîëè÷åñêèé";
                 Text[ polish ] = "Arcus sinus hiperboliczny";
                 Text[ japanese ] = "åŒæ›²ç·šé€†ï½»ï½²ï¾";
@@ -7102,7 +7162,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Toplam";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Suma";
-                Text[ finnish ] = "Summa";
+                Text[ finnish ] = "Sum";
             };
             ToolBoxItem
             {
@@ -7186,7 +7246,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Alt ve üst limit";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Límites superior e inferior";
-                Text[ finnish ] = "Ylä- ja alaraja";
+                Text[ finnish ] = "Yl?- ja alaraja";
             };
             ToolBoxItem
             {
@@ -7338,7 +7398,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Eğri integrali";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral curvilínea";
-                Text[ finnish ] = "Käyräintegraali";
+                Text[ finnish ] = "K?yr?integraali";
             };
             ToolBoxItem
             {
@@ -7366,7 +7426,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Çift eğri integrali";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Doble integral curvilínea";
-                Text[ finnish ] = "Kaksinkertainen käyräintegraali";
+                Text[ finnish ] = "Kaksinkertainen k?yr?integraali";
             };
             ToolBoxItem
             {
@@ -7394,7 +7454,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üçlü eğri integrali";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Triple integral curvilínea";
-                Text[ finnish ] = "Kolminkertainen käyräintegraali";
+                Text[ finnish ] = "Kolminkertainen k?yr?integraali";
             };
             ToolBoxItem
             {
@@ -7426,7 +7486,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst limit";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Límite superior";
-                Text[ finnish ] = "Yläraja";
+                Text[ finnish ] = "Yl?raja";
             };
         };
     };
@@ -7485,7 +7545,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_ACUTEX ;
                 Text = "Akzent nach rechts oben" ;
                 Text [ ENGLISH ] = "Accent to the upper-right" ;
-                Text[ english_us ] = "Accent To The Right";
+                Text[ english_us ] = "Acute Accent";
                 Text[ portuguese ] = "Acento agudo";
                 Text[ russian ] = "Óäàğåíèå âïğàâî ââåğõ";
                 Text[ greek ] = "Ôüíïò ğñïò ôá äåîéÜ";
@@ -7499,7 +7559,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ polish ] = "Akcent w prawo do góry";
                 Text[ portuguese_brazilian ] = "Accent nach rechts";
                 Text[ japanese ] = "ï½±ï½·ï½­ï½°ï¾„";
-                Text[ korean ] = "ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì•…ì„¼íŠ¸";
+                Text[ korean ] = "ì•¡ì„¼íŠ¸, ì˜¤ë¥¸ìª½ ìœ„ë¡œ";
                 Text[ chinese_simplified ] = "å³å‘é‡éŸ³å­—æ¯";
                 Text[ chinese_traditional ] = "å³å‘é‡éŸ³å­—æ¯";
                 Text[ turkish ] = "Sağa vurgu";
@@ -7512,7 +7572,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_GRAVEX ;
                 Text = "Akzent nach rechts unten" ;
                 Text [ ENGLISH ] = "Accent to the lower-right" ;
-                Text[ english_us ] = "Accent To The Left";
+                Text[ english_us ] = "Grave Accent";
                 Text[ portuguese ] = "Acento grave";
                 Text[ russian ] = "Óäàğåíèå âïğàâî âíèç";
                 Text[ greek ] = "Ôüíïò ğñïò ôá áñéóôåñÜ";
@@ -7526,7 +7586,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ polish ] = "Akcent w prawo na dó³";
                 Text[ portuguese_brazilian ] = "Accent nach links";
                 Text[ japanese ] = "ï½¸ï¾ï¾šï½°ï¾Œï¾";
-                Text[ korean ] = "ì•…ì„¼íŠ¸ ì™¼ìª½ìœ¼ë¡œ";
+                Text[ korean ] = "ì•¡ì„¼íŠ¸, ì˜¤ë¥¸ìª½ ì•„ë˜ë¡œ";
                 Text[ chinese_simplified ] = "å·¦å‘é‡éŸ³ç¬¦å·";
                 Text[ chinese_traditional ] = "å·¦å‘é‡éŸ³ç¬¦è™Ÿ";
                 Text[ turkish ] = "Sola vurgu";
@@ -7559,7 +7619,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Ters şapka";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "circunflejo inverso";
-                Text[ finnish ] = "Käänteinen sirkumfleksi";
+                Text[ finnish ] = "K??nteinen sirkumfleksi";
             };
             ToolBoxItem
             {
@@ -7587,7 +7647,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Kısaltma işareti";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Breve";
-                Text[ finnish ] = "Yläkaari";
+                Text[ finnish ] = "Yl?kaari";
             };
             ToolBoxItem
             {
@@ -7615,7 +7675,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Daire";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Círculo";
-                Text[ finnish ] = "Ympyrä";
+                Text[ finnish ] = "Ympyr?";
             };
             ToolBoxItem
             {
@@ -7731,7 +7791,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst çizgi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Línea superior";
-                Text[ finnish ] = "Yläpuolinen rivi";
+                Text[ finnish ] = "Yl?puolinen rivi";
             };
             ToolBoxItem
             {
@@ -7759,7 +7819,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Nokta";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Punto";
-                Text[ finnish ] = "Piste";
+                Text[ finnish ] = "Pilkku";
             };
             ToolBoxItem
             {
@@ -7879,7 +7939,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Çift nokta";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "punto doble";
-                Text[ finnish ] = "Kaksi pistettä";
+                Text[ finnish ] = "Kaksi pistett?";
             };
             ToolBoxItem
             {
@@ -7911,7 +7971,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üzerinde çizgi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Línea sobre";
-                Text[ finnish ] = "Yläviiva";
+                Text[ finnish ] = "Yl?viiva";
             };
             ToolBoxItem
             {
@@ -7999,7 +8059,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üç nokta";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Punto triple";
-                Text[ finnish ] = "Kolme pistettä";
+                Text[ finnish ] = "Kolme pistett?";
             };
             ToolBoxItem
             {
@@ -8031,7 +8091,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Saydam";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "transparente";
-                Text[ finnish ] = "Läpinäkyvä";
+                Text[ finnish ] = "L?pin?kyv?";
             };
             ToolBoxItem
             {
@@ -8302,7 +8362,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Tek çizgiler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Líneas simples";
-                Text[ finnish ] = "Yksittäiset rivit";
+                Text[ finnish ] = "Yksitt?iset rivit";
             };
             ToolBoxItem
             {
@@ -8376,7 +8436,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "vinkelparenteser" ;
                 Text [ italian ] = "Parentesi uncinate" ;
                 Text [ spanish ] = "Paréntesis angulares" ;
-                Text [ french ] = "Parenthèses pointues" ;
+                Text [ french ] = "Crochets angulaires" ;
                 Text [ dutch ] = "spitse haakjes" ;
                 Text [ portuguese ] = "Parênteses pontiagudos" ;
                 Text[ chinese_simplified ] = "è§’æ‹¬å·";
@@ -8450,7 +8510,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Gruplama ayraçları";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Paréntesis de agrupamiento";
-                Text[ finnish ] = "Ryhmäsulkeet";
+                Text[ finnish ] = "Ryhm?sulkeet";
             };
             ToolBoxItem
             {
@@ -8566,7 +8626,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Tek çizgiler (ölçeklendirilebilir)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "líneas simples (graduables)";
-                Text[ finnish ] = "Yksittäiset rivit (skaalattavat)";
+                Text[ finnish ] = "Yksitt?iset rivit (skaalattavat)";
             };
             ToolBoxItem
             {
@@ -8640,7 +8700,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "vinkelparenteser (skalerbare)" ;
                 Text [ italian ] = "Parentesi uncinate (in scala)" ;
                 Text [ spanish ] = "Paréntesis angulares (graduables)" ;
-                Text [ french ] = "Parenthèses pointues (taille variable)" ;
+                Text [ french ] = "Crochets angulaires (taille variable)" ;
                 Text [ dutch ] = "spitse haakjes (scaleerbaar)" ;
                 Text [ portuguese ] = "Parênteses pontiagudos (graduáveis)" ;
                 Text[ chinese_simplified ] = "è§’æ‹¬å·(å¯å˜)";
@@ -8714,7 +8774,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst kavisli ayraç (ölçeklendirilebilir)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "llaves arriba (graduables)";
-                Text[ finnish ] = "Aaltosulkeet ylhäällä (skaalattavat)";
+                Text[ finnish ] = "Aaltosulkeet ylh??ll? (skaalattavat)";
             };
             ToolBoxItem
             {
@@ -8813,7 +8873,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst simge (sol)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Superíndice a la izquierda";
-                Text[ finnish ] = "Yläindeksi vasemmalle";
+                Text[ finnish ] = "Yl?indeksi vasemmalle";
             };
             ToolBoxItem
             {
@@ -8841,7 +8901,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Üst simge (üst)";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Superíndice arriba";
-                TEXT[ finnish ] = "Yläindeksi päälle";
+                TEXT[ finnish ] = "Yl?indeksi p??lle";
             };
             ToolBoxItem
             {
@@ -8869,7 +8929,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Üst simge (sağ)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Superíndice derecha";
-                Text[ finnish ] = "Yläindeksi oikealle";
+                Text[ finnish ] = "Yl?indeksi oikealle";
             };
             ToolBoxItem
             {
@@ -8897,7 +8957,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Dikey sıralama (2 öğe)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "disposición vertical (2 elementos)";
-                Text[ finnish ] = "Pystypino (2 elementtiä)";
+                Text[ finnish ] = "Pystypino (2 elementti?)";
             };
             ToolBoxItem
             {
@@ -9069,7 +9129,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Küçük aralık";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Espacio pequeño";
-                Text[ finnish ] = "Pieni väli";
+                Text[ finnish ] = "Pieni v?li";
             };
             ToolBoxItem
             {
@@ -9214,7 +9274,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Aralık";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Espacio";
-                Text[ finnish ] = "Väli";
+                Text[ finnish ] = "V?li";
             };
         };
     };
@@ -9289,7 +9349,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Sonsuz";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "infinito";
-                TEXT[ finnish ] = "Äärettömyys";
+                TEXT[ finnish ] = "p??ttym?t?";
             };
             ToolBoxItem
             {
@@ -9471,7 +9531,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "real part" ;
                             TEXT[ italian ] = "Parte reale";
                 TEXT[ portuguese_brazilian ] = "Realteil";
-                TEXT[ portuguese ] = "Parte real";
+                TEXT[ portuguese ] = "Número real";
                 TEXT[ danish ] = "realdel";
                 TEXT[ french ] = "Partie réelle";
                 TEXT[ swedish ] = "Realdel";
@@ -9499,7 +9559,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "imaginary part" ;
                             TEXT[ italian ] = "Coefficiente immaginario";
                 TEXT[ portuguese_brazilian ] = "Imagin?rteil";
-                TEXT[ portuguese ] = "Parte imaginária";
+                TEXT[ portuguese ] = "Número imaginário";
                 TEXT[ danish ] = "imaginærdel";
                 TEXT[ french ] = "Partie imaginaire";
                 TEXT[ swedish ] = "Imaginärdel";
@@ -9633,7 +9693,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Yukarı ok";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha hacia arriba";
-                TEXT[ finnish ] = "Ylänuoli";
+                TEXT[ finnish ] = "Yl?nuoli";
             };
             ToolBoxItem
             {
@@ -9725,7 +9785,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Noktalar (orta)";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos en el medio";
-                TEXT[ finnish ] = "Pisteet keskellä";
+                TEXT[ finnish ] = "Pisteet keskell?";
             };
             ToolBoxItem
             {
@@ -9781,7 +9841,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Noktalar (üst)";
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos hacia arriba";
-                TEXT[ finnish ] = "Pisteet ylös";
+                TEXT[ finnish ] = "Pisteet yl?";
             };
             ToolBoxItem
             {
@@ -9873,7 +9933,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Birli/ikili işleçler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Operadores unarios/binarios";
-                Text[ finnish ] = "Unaari-/binäärioperaattorit";
+                Text[ finnish ] = "Unaari-/bin??rioperaattorit";
             };
             ToolBoxItem
             {
@@ -9929,7 +9989,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Küme işlemleri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Operaciones de conjuntos";
-                Text[ finnish ] = "Määritä toiminnot";
+                Text[ finnish ] = "M??rit? toiminnot";
             };
             ToolBoxItem
             {
@@ -10017,7 +10077,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Öznitelikler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Atributos";
-                Text[ finnish ] = "Määritteet";
+                Text[ finnish ] = "M??ritteet";
             };
             ToolBoxItem
             {
@@ -10287,20 +10347,20 @@ String STR_STATSTR_READING
     Text [ portuguese ] = "A carregar documento..." ;
     Text [ finnish ] = "Ladataan asiakirjaa..." ;
     Text [ danish ] = "Indlæser dokument..." ;
-    Text [ french ] = "Document en cours de chargement..." ;
+    Text [ french ] = "Chargement du document..." ;
     Text [ swedish ] = "Dokument laddas..." ;
     Text [ dutch ] = "Document wordt gemaakt..." ;
     Text [ spanish ] = "Cargando el documento..." ;
     Text [ english_us ] = "Loading document..." ;
-    Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£...";
+    Text[ chinese_simplified ] = "æ­£åœ¨è£…å…¥æ–‡æ¡£...";
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Äîêóìåíò çàãğóæàåòñÿ...";
-    Text[ polish ] = "£adowanie dokumentu...";
-    Text[ japanese ] = "æ–‡æ›¸ã®èª­ã¿è¾¼ã¿...";
-    Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶...";
+    Text[ polish ] = "Trwa ³adowanie dokumentu...";
+    Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã¾ã™...";
+    Text[ chinese_traditional ] = "æ­£åœ¨è¼‰å…¥æ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÊÍãíá ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt gemaakt...";
-    Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£...";
+    Text[ chinese_simplified ] = "æ­£åœ¨è£…å…¥æ–‡æ¡£...";
     Text[ greek ] = "Ôï İããñáöï öïñôşíåôáé...";
     Text[ korean ] = "ë¬¸ì„œ ë¡œë“œ ì¤‘...";
     Text[ turkish ] = "Belge yükleniyor...";
@@ -10317,22 +10377,22 @@ String STR_STATSTR_WRITING
     Text [ portuguese ] = "A guardar documento..." ;
     Text [ finnish ] = "Tallennetaan asiakirjaa..." ;
     Text [ danish ] = "Gemmer dokument..." ;
-    Text [ french ] = "Enreg. du document en cours..." ;
+    Text [ french ] = "Enregistrement du document..." ;
     Text [ swedish ] = "Dokument sparas..." ;
     Text [ dutch ] = "Document wordt opgeslagen..." ;
     Text [ spanish ] = "Guardando el documento..." ;
     Text [ english_us ] = "Saving document..." ;
     Text = "Dokument wird gespeichert..." ;
-    Text[ chinese_simplified ] = "å­˜ç›˜æ–‡æ¡£...";
+    Text[ chinese_simplified ] = "æ­£åœ¨å­˜ç›˜æ–‡æ¡£...";
     Text[ russian ] = "Äîêóìåíò ñîõğàíÿåòñÿ...";
-    Text[ polish ] = "Zapisywanie dokumentu...";
-    Text[ japanese ] = "æ–‡æ›¸ã®ä¿å­˜...";
+    Text[ polish ] = "Trwa zapisywanie dokumentu...";
+    Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’ä¿å­˜ã—ã¦ã„ã¾ã™...";
     Text[ chinese_traditional ] = "æ­£åœ¨å„²å­˜æ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÍİÙ ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt opgeslagen...";
-    Text[ chinese_simplified ] = "å­˜ç›˜æ–‡æ¡£...";
+    Text[ chinese_simplified ] = "æ­£åœ¨å­˜ç›˜æ–‡æ¡£...";
     Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ...";
-    Text[ korean ] = "ë¬¸ì„œ ì €ì¥...";
+    Text[ korean ] = "ë¬¸ì„œ ì €ì¥ ì¤‘...";
     Text[ turkish ] = "Belge kaydediliyor...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardando el documento...";
@@ -10415,7 +10475,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text[ turkish ] = "%PRODUCTNAME 4.0 - Formül";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 Fórmula";
-    Text[ finnish ] = "%PRODUCTNAME 4.0 -kaava";
+    Text[ finnish ] = "%PRODUCTNAME 4,0 -kaava";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_31
@@ -10442,7 +10502,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text[ turkish ] = "%PRODUCTNAME 3.0 - Formül";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 3.0 Fórmula";
-    Text[ finnish ] = "%PRODUCTNAME 3.0 -kaava";
+    Text[ finnish ] = "%PRODUCTNAME 3,0 -kaava";
 };
 
 String RID_SYMBOLFILESSTR
@@ -10603,7 +10663,7 @@ String RID_ERR_OVERFLOW
     Text[ turkish ] = "Formül girişi çok karmaşık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La fórmula es muy compleja";
-    Text[ finnish ] = "Kaavamerkintä liian monimutkainen";
+    Text[ finnish ] = "Kaavamerkint? liian monimutkainen";
 };
 
 String RID_ERR_LGROUPEXPECTED
@@ -10623,7 +10683,7 @@ String RID_ERR_LGROUPEXPECTED
     Text[ russian ] = "'{' îæèäàåòñÿ";
     Text[ polish ] = "'{' powinien wyst¹piæ";
     Text[ japanese ] = "'{'ãŒå¿…è¦ã§ã™";
-    Text[ chinese_traditional ] = "æœŸå¾… '{'";
+    Text[ chinese_traditional ] = "æœŸå¾…<{>";
     Text[ arabic ] = "ãØáæÈ '{'";
     Text[ greek ] = "'{' áíáìİíåôáé";
     Text[ korean ] = "'{' í•„ìš”í•¨";
@@ -10650,7 +10710,7 @@ String RID_ERR_RGROUPEXPECTED
     Text[ polish ] = "'}' oczekiwany";
     Text[ japanese ] = "'}'ãŒå¿…è¦ã§ã™";
     Text[ chinese_simplified ] = "æœŸå¾… '}'";
-    Text[ chinese_traditional ] = "æœŸå¾… '}'";
+    Text[ chinese_traditional ] = "æœŸå¾…<}>";
     Text[ arabic ] = "ãÊæŞÚ '}'";
     Text[ greek ] = "'}' áíáìİíåôáé";
     Text[ korean ] = "'}' ê°€ í•„ìš”í•¨";
@@ -10677,7 +10737,7 @@ String RID_ERR_LBRACEEXPECTED
     Text[ russian ] = "'(' îæèäàåòñÿ";
     Text[ polish ] = "'('powinien wyst¹piæ";
     Text[ japanese ] = "'('ãŒå¿…è¦ã§ã™";
-    Text[ chinese_traditional ] = "æœŸå¾… '('";
+    Text[ chinese_traditional ] = "æœŸå¾…<(>";
     Text[ arabic ] = "ãØáæÈ'('";
     Text[ greek ] = "'(' áíáìİíåôáé";
     Text[ korean ] = "'(' í•„ìš”í•¨";
@@ -10704,7 +10764,7 @@ String RID_ERR_RBRACEEXPECTED
     Text[ russian ] = "')' îæèäàåòñÿ";
     Text[ polish ] = "')' powinien wyst¹piæ";
     Text[ japanese ] = "')'ãŒå¿…è¦ã§ã™";
-    Text[ chinese_traditional ] = "æœŸå¾… ')'";
+    Text[ chinese_traditional ] = "æœŸå¾…<)>";
     Text[ arabic ] = "ãØáæÈ ')'";
     Text[ greek ] = "')' áíáìİíåôáé";
     Text[ korean ] = "')' í•„ìš”í•¨";
@@ -10794,7 +10854,7 @@ String RID_ERR_BINOPEREXPECTED
     Text[ turkish ] = "İkili işleç gerekli";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se espera un operador binario";
-    Text[ finnish ] = "Binäärioperattori oletuksena";
+    Text[ finnish ] = "Bin??rioperattori oletuksena";
 };
 
 String RID_ERR_SYMBOLEXPECTED
@@ -10868,14 +10928,14 @@ String RID_ERR_POUNDEXPECTED
     Text[ russian ] = "'#' îæèäàåòñÿ";
     Text[ polish ] = "'#' powinien wyst¹piæ";
     Text[ japanese ] = "'#'ãŒå¿…è¦ã§ã™";
-    Text[ chinese_traditional ] = "æœŸå¾… '#'";
+    Text[ chinese_traditional ] = "æœŸå¾…<#>";
     Text[ arabic ] = "ãØáæÈ '#'";
     Text[ greek ] = "'#' áíáìİíåôáé";
     Text[ korean ] = "'#' í•„ìš”í•¨";
     Text[ turkish ] = "'#' gerekli";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere '#'";
-    Text[ finnish ] = "'' oletuksena";
+    Text[ finnish ] = "'#' oletuksena";
 };
 
 String RID_ERR_COLOREXPECTED
@@ -10902,7 +10962,7 @@ String RID_ERR_COLOREXPECTED
     Text[ turkish ] = "Renk gerekli";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere un color";
-    Text[ finnish ] = "Vaadittu väri";
+    Text[ finnish ] = "Vaadittu v?ri";
 };
 
 String RID_ERR_LPARENTEXPECTED
@@ -10976,7 +11036,7 @@ String RID_ERR_RIGHTEXPECTED
     Text[ russian ] = "Îæèäàåòñÿ 'RIGHT'";
     Text[ polish ] = "Powinien wyst¹piæ 'RIGHT'";
     Text[ japanese ] = "'RIGHT'ãŒå¿…è¦ã§ã™";
-    Text[ chinese_traditional ] = "æœŸå¾… 'RIGHT'";
+    Text[ chinese_traditional ] = "æœŸå¾…<RIGHT>";
     Text[ arabic ] = "'RIGHT' ãØáæÈ";
     Text[ greek ] = "Áíáìİíåôáé 'RIGHT'";
     Text[ korean ] = "'RIGHT' í•„ìš”í•¨";
@@ -11010,7 +11070,7 @@ String RID_PLUGINTOOLBOX
     Text[ turkish ] = "Plug-in çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de Plug-ins";
-    Text[ finnish ] = "Lisäosapalkki";
+    Text[ finnish ] = "Lis?osapalkki";
 };
 
 #include "menu.src"
@@ -11269,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
