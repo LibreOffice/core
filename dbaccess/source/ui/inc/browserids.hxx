@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-11 09:19:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,10 @@
 #define ID_TREE_ADMINISTRATE                1
 #define ID_TREE_CLOSE_CONN                  2
 #define ID_TREE_REBUILD_CONN                3
-#define ID_TREE_QUERY_CREATE                4
-#define ID_TREE_QUERY_EDIT                  5
-#define ID_TREE_QUERY_DELETE                6
+#define ID_TREE_QUERY_CREATE_DESIGN         4
+#define ID_TREE_QUERY_CREATE_TEXT           5
+#define ID_TREE_QUERY_EDIT                  6
+#define ID_TREE_QUERY_DELETE                7
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              (SID_SBA_START+130)
@@ -116,6 +117,12 @@
 #define ID_BROWSER_CLOSE                    SID_CLOSEDOC
 #define ID_BROWSER_ESACPEPROCESSING         SID_FM_NATIVESQL
 
+#define ID_QUERY_FUNCTION                   (SID_SBA_START + 41) // Funktionen anzeigen
+#define ID_QUERY_TABLENAME                  (SID_SBA_START + 42) // Tabellennamen anzeigen
+#define ID_QUERY_ALIASNAME                  (SID_SBA_START + 43) // Aliasnamen anzeigen
+#define ID_QUERY_DISTINCT                   (SID_SBA_START + 44) // Distinct anzeigen
+#define ID_QUERY_ZOOM_IN                    SID_ZOOM_IN
+#define ID_QUERY_ZOOM_OUT                   SID_ZOOM_OUT
 
 
 #endif // DBACCESS_UI_BROWSER_ID_HXX

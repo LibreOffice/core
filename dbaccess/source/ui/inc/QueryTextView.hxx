@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:02:43 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef DBAUI_QUERYVIEWSWITCH_HXX
+#include "QueryViewSwitch.hxx"
+#endif
+
 
 class Splitter;
 
@@ -79,12 +83,12 @@ namespace dbaui
         OBeamer(Window* _pParent) : Window(_pParent){}
     };
 
-    class OQueryTextView;
+    class OQueryViewSwitch;
     class OQueryContainerWindow : public Window
     {
-        OQueryTextView* m_pView;
-        OBeamer*        m_pBeamer;
-        Splitter*       m_pSplitter;
+        OQueryViewSwitch*   m_pView;
+        OBeamer*            m_pBeamer;
+        Splitter*           m_pSplitter;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBeamer;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
 
@@ -97,13 +101,15 @@ namespace dbaui
         void showBeamer(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
         void hideBeamer();
         void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
-        OQueryTextView * getView() { return m_pView; }
+        OQueryViewSwitch* getView() { return m_pView; }
+        void switchView();
     };
     // end of temp classes
 
     class OSqlEdit;
     class OQueryTextView : public OQueryView
     {
+        friend class OQueryViewSwitch;
         OSqlEdit*   m_pEdit;
     public:
         OQueryTextView(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
