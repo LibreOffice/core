@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commtest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,11 +161,11 @@ public:
 CommunicationTester IchSelber;
 
 CommunicationTester::CommunicationTester()
-: pBCSTSend( NULL )
-, pBCSTListen( NULL )
-, pClientTcp( NULL )
-, pBCSTBrooker( NULL )
+: pClientTcp( NULL )
 , pServerTcp( NULL )
+, pBCSTSend( NULL )
+, pBCSTListen( NULL )
+, pBCSTBrooker( NULL )
 {}
 
 void CommunicationTester::Main()
