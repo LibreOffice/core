@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:57:08 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2706,7 +2706,7 @@ String STR_POOLCOLL_FOOTNOTE
     Text [ portuguese_brazilian ] = "Fuﬂnote" ;
     Text[ chinese_simplified ] = "◊¢Ω≈";
     Text[ russian ] = "—ÌÓÒÍ‡";
-    Text[ polish ] = "Stopka";
+    Text[ polish ] = "Przypis dolny";
     Text[ japanese ] = "ãríç";
     Text[ chinese_traditional ] = "µ˘∏}";
     Text[ arabic ] = "Õ«‘Ì… ”›·Ì…";
@@ -4972,7 +4972,7 @@ String STR_POOLCHR_RUBYTEXT
     Text[ polish ] = "Symbole fonetyczne";
     Text[ portuguese_brazilian ] = "Phonetic Symbols";
     Text[ japanese ] = "Ç”ÇËÇ™Ç»";
-    Text[ korean ] = "Phonetic Symbols";
+    Text[ korean ] = "πﬂ¿Ω ±‚»£";
     Text[ chinese_simplified ] = "◊¢“Ù∑˚∫≈";
     Text[ chinese_traditional ] = "™`≠µ¶r§∏";
     Text[ turkish ] = "Phonetic Symbols";
