@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docary.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-23 10:42:57 $
+ *  last change: $Author: jp $ $Date: 2001-03-30 13:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,18 +174,6 @@ SV_DECL_PTRARR_DEL( SwUnoCrsrTbl, SwUnoCrsrPtr, 0, 4 )
 typedef SwOLENode* SwOLENodePtr;
 SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16,16)
 
-
-DECLARE_TABLE( _SwForbiddenCharacterTable_Impl,
-                com::sun::star::i18n::ForbiddenCharacters* )
-
-class SwForbiddenCharacterTable : public _SwForbiddenCharacterTable_Impl
-{
-public:
-    SwForbiddenCharacterTable( USHORT nISize = 4, USHORT nGrow = 4 )
-        : _SwForbiddenCharacterTable_Impl( nISize, nGrow )
-    {}
-    ~SwForbiddenCharacterTable();
-};
 
 #endif  //_DOCARY_HXX
 
