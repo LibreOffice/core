@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:12:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,21 +176,6 @@ void SwAccessiblePage::_InvalidateFocus()
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && bSelected );
     }
-}
-
-SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
-                                    const SwPageFrm *pFrame ) :
-    SwAccessibleContext( pMap, AccessibleRole::PANEL, pFrame )
-{
-    DBG_ASSERT( pFrame != NULL, "need frame" );
-    DBG_ASSERT( pMap != NULL, "need map" );
-
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    OUString sPage = OUString::valueOf(
-        static_cast<sal_Int32>(
-            static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() ) );
-    SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );
 }
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
