@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-18 10:47:27 $
+ *  last change: $Author: ka $ $Date: 2001-09-18 10:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,7 @@ void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, 
                 break;
         }
 
-        *ppObjRef = &xNewRef;
+        *ppObjRef = reinterpret_cast< SvInPlaceObject*>( &xNewRef );
     }
 }
 
