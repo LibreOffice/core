@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-13 16:08:25 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,13 +491,13 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharRelief",              STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
 
     // RES_TXTATR_INETFMT
-    // TODO
+    M_E( "HyperLinkURL",            TEXT,       XMLNS,                      XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_HYPERLINK_URL ),
     // RES_TXTATR_REFMARK
     // TODO
     // RES_TXTATR_TOXMARK
     // TODO
     // RES_TXTATR_CHARFMT
-//  M_E_SI( TEXT,   style_name,         RES_TXTATR_CHARFMT, 0 ),
+    M_E( "CharStyleName",           TEXT,       STYLE_NAME,                 XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_CHAR_STYLE_NAME ),
     // RES_TXTATR_CJK_RUBY
     // TODO
     // RES_TXTATR_FIELD

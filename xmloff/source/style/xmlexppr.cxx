@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,8 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
     }
 
     // Call centext-filter
-    ContextFilter( aPropStateArray, xPropSet );
+    if( aPropStateArray.size() > 0 )
+        ContextFilter( aPropStateArray, xPropSet );
 
     // Have to do if we change from a vector to a list or something like that
     /*vector< XMLPropertyState >::iterator aItr = aPropStateArray.begin();

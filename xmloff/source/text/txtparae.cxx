@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             rPropSet->getPropertySetInfo();
         OUString sParent, sCondParent;
         Any aAny;
+        sal_uInt16 nIgnoreProps = 0;
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -418,10 +419,28 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             }
             break;
         case XML_STYLE_FAMILY_TEXT_TEXT:
-            if( xPropSetInfo->hasPropertyByName( sCharStyleName ) )
             {
-                aAny = rPropSet->getPropertyValue( sCharStyleName );
-                aAny >>= sParent;
+                // Get parent and remove hyperlinks (they aren't of interest)
+                UniReference< XMLPropertySetMapper > xPM =
+                    xPropMapper->getPropertySetMapper();
+                for( ::std::vector< XMLPropertyState >::iterator i
+                           = xPropStates.begin();
+                      nIgnoreProps < 2 && i != xPropStates.end();
+                      i++ )
+                {
+                    switch( xPM->GetEntryContextId(i->mnIndex) )
+                    {
+                    case CTF_CHAR_STYLE_NAME:
+                        i->maValue >>= sParent;
+                        i->mnIndex = -1;
+                        nIgnoreProps++;
+                        break;
+                    case CTF_HYPERLINK_URL:
+                        i->mnIndex = -1;
+                        nIgnoreProps++;
+                        break;
+                    }
+                }
             }
             break;
         case XML_STYLE_FAMILY_TEXT_FRAME:
@@ -436,7 +455,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             ; // section styles have no parents
             break;
         }
-        if( xPropStates.size() > 0 )
+        if( (xPropStates.size() - nIgnoreProps) > 0 )
         {
             GetAutoStylePool().Add( nFamily, sParent, xPropStates );
             if( sCondParent.getLength() && sParent != sCondParent )
@@ -601,6 +620,35 @@ OUString XMLTextParagraphExport::Find(
             ppAddStates++;
         }
     }
+    OSL_ENSURE( XML_STYLE_FAMILY_TEXT_TEXT != nFamily,
+                "Calling find for text styles is ineffeicent, use FindTextStyle" );
+    if( XML_STYLE_FAMILY_TEXT_TEXT == nFamily )
+    {
+        // Get parent and remove hyperlinks (they aren't of interest)
+        UniReference< XMLPropertySetMapper > xPM =
+            xPropMapper->getPropertySetMapper();
+        for( ::std::vector< XMLPropertyState >::iterator
+                i = xPropStates.begin();
+              i != xPropStates.end();
+             i++ )
+        {
+            switch( xPM->GetEntryContextId(i->mnIndex) )
+            {
+            case CTF_CHAR_STYLE_NAME:
+                {
+                    OUString sTmp;
+                    i->maValue >>= sTmp;
+                    i->mnIndex = -1;
+                    OSL_ENSURE( sTmp == sName, "parent inconsistent" );
+                    sName = sTmp;
+                }
+                break;
+            case CTF_HYPERLINK_URL:
+                i->mnIndex = -1;
+                break;
+            }
+        }
+    }
 
     if( xPropStates.size() > 0L )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
@@ -608,20 +656,51 @@ OUString XMLTextParagraphExport::Find(
     return sName;
 }
 
+OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
+           const Reference < XPropertySet > & rPropSet,
+        sal_Bool& rHyperlink  ) const
+{
+    UniReference < SvXMLExportPropertyMapper > xPropMapper
+        = GetTextPropMapper();
+    vector< XMLPropertyState > xPropStates =
+            xPropMapper->Filter( rPropSet );
+
+    // Get parent and remove hyperlinks (they aren't of interest)
+    OUString sName;
+    rHyperlink = sal_False;
+    sal_uInt16 nIgnoreProps = 0;
+    UniReference< XMLPropertySetMapper > xPM =
+        xPropMapper->getPropertySetMapper();
+    for( ::std::vector< XMLPropertyState >::iterator
+            i = xPropStates.begin();
+         nIgnoreProps < 2 && i != xPropStates.end();
+         i++ )
+    {
+        switch( xPM->GetEntryContextId(i->mnIndex) )
+        {
+        case CTF_CHAR_STYLE_NAME:
+            i->maValue >>= sName;
+            i->mnIndex = -1;
+            nIgnoreProps++;
+            break;
+        case CTF_HYPERLINK_URL:
+            rHyperlink = sal_True;
+            i->mnIndex = -1;
+            nIgnoreProps++;
+            break;
+        }
+    }
+    if( (xPropStates.size() - nIgnoreProps) > 0L )
+        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sName, xPropStates );
+
+    return sName;
+}
+
 OUString XMLTextParagraphExport::FindTextStyle(
            const Reference < XPropertySet > & rPropSet ) const
 {
-    Reference< XPropertySetInfo > xPropSetInfo =
-        rPropSet->getPropertySetInfo();
-
-    OUString sStyle;
-    if( xPropSetInfo->hasPropertyByName( sCharStyleName ) )
-    {
-        Any aAny = rPropSet->getPropertyValue( sCharStyleName );
-        aAny >>= sStyle;
-    }
-
-    return Find( XML_STYLE_FAMILY_TEXT_TEXT, rPropSet, sStyle );
+    sal_Bool bDummy;
+    return FindTextStyleAndHyperlink( rPropSet, bDummy );
 }
 
 
@@ -1345,6 +1424,22 @@ void XMLTextParagraphExport::exportText(
         }
     }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
+                                  bProgress, bExportParagraph   );
+}
+
+void XMLTextParagraphExport::exportText(
+        const Reference < XText > & rText,
+        const Reference < XTextSection > & rBaseSection,
+        sal_Bool bAutoStyles,
+        sal_Bool bProgress,
+        sal_Bool bExportParagraph )
+{
+    if( bAutoStyles )
+        GetExport().GetShapeExport(); // make sure the graphics styles family
+                                      // is added
+    Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
+    Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
+    exportTextContentEnumeration( xParaEnum, bAutoStyles, rBaseSection,
                                   bProgress, bExportParagraph   );
 }
 
@@ -2516,27 +2611,6 @@ void XMLTextParagraphExport::setTextEmbeddedGraphicURL(
 {
 }
 
-void XMLTextParagraphExport::_exportTextRange(
-        const Reference < XTextRange > & rTextRange,
-        const Reference < XPropertySet > & rPropSet,
-        sal_Bool& rPrevCharIsSpace )
-{
-    OUString sStyle = FindTextStyle( rPropSet );
-    OUString sText = rTextRange->getString();
-    if( sStyle.getLength() )
-    {
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                  sStyle );
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                  XML_SPAN, sal_False, sal_False );
-        exportText( sText, rPrevCharIsSpace );
-    }
-    else
-    {
-        exportText( sText, rPrevCharIsSpace );
-    }
-}
-
 sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertyState > & rPropState,
@@ -2669,18 +2743,19 @@ void XMLTextParagraphExport::exportTextRange(
     }
     else
     {
-        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        Reference < XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-        if( xPropState.is() &&
-            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
-            PropertyState_DIRECT_VALUE ==
-                                xPropState->getPropertyState( sHyperLinkURL ) )
+        sal_Bool bHyperlink = sal_False;
+        OUString sStyle = FindTextStyleAndHyperlink( xPropSet, bHyperlink );
+        Reference < XPropertySetInfo > xPropSetInfo;
+        if( bHyperlink )
         {
+            Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+            xPropSetInfo = xPropSet->getPropertySetInfo();
             addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      XML_A, sal_False, sal_False );
-
+        }
+        SvXMLElementExport aElem( GetExport(), bHyperlink, XML_NAMESPACE_TEXT,
+                                  XML_A, sal_False, sal_False );
+        if( bHyperlink )
+        {
             // export events (if supported)
             OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
                 "HyperLinkEvents"));
@@ -2691,12 +2766,18 @@ void XMLTextParagraphExport::exportTextRange(
                 aAny >>= xName;
                 GetExport().GetEventExport().Export(xName, sal_False);
             }
-
-            _exportTextRange( rTextRange, xPropSet, rPrevCharIsSpace );
         }
-        else
+
+        OUString sText = rTextRange->getString();
+        if( sStyle.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                      sStyle );
         {
-            _exportTextRange( rTextRange, xPropSet, rPrevCharIsSpace );
+            // in a block to make sure it is destroyed before the text:a element
+            SvXMLElementExport aElem( GetExport(), sStyle.getLength() > 0,
+                                      XML_NAMESPACE_TEXT, XML_SPAN, sal_False,
+                                      sal_False );
+            exportText( sText, rPrevCharIsSpace );
         }
     }
 }
