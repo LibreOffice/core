@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIntroTest.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,15 +81,15 @@
 
 module com { module sun { module star { module beans {
 
-interface XPropertyChangeListener;
-interface XPropertiesChangeListener;
+ published interface XPropertyChangeListener;
+ published interface XPropertiesChangeListener;
 
 //=============================================================================
 /** This is a test interface for introspection.
 
     @deprecated
 */
-interface XIntroTest: com::sun::star::uno::XInterface
+published interface XIntroTest: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** contains the ID-String of the implementation.
