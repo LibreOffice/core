@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:29:36 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 12:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,12 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
         }
     }
 
-    LoadDocument( aEntered, EMPTY_STRING, EMPTY_STRING );
+    String aFilter;
+    String aOptions;
+    //  get filter name by looking at the file content (bWithContent = TRUE)
+    ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE );
+
+    LoadDocument( aEntered, aFilter, aOptions );
 
     UpdateSourceRanges();
     UpdateEnable();
@@ -212,10 +217,16 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
         String aNewFilter = rFilter;
         String aNewOptions = rOptions;
 
+        SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
+
         ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions );
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {
+            ULONG nErr = pSourceShell->GetErrorCode();
+            if (nErr)
+                ErrorHandler::HandleError( nErr );      // including warnings
+
             aSourceRef = pSourceShell;
             aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
         }
