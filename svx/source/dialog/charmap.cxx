@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-27 11:11:52 $
+ *  last change: $Author: hdu $ $Date: 2001-08-14 17:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
 #pragma hdrstop
 
 #include <rtl/textenc.h>
@@ -94,6 +97,28 @@
 
 #include "charmap.hxx"
 #include "dialmgr.hxx"
+
+// class SvxShowText =====================================================
+
+class SvxShowText : public Control
+{
+public:
+                    SvxShowText( Window* pParent,
+                                 const ResId& rResId,
+                                 BOOL bCenter = FALSE );
+                    ~SvxShowText();
+
+    void            SetFont( const Font& rFont );
+    void            SetText( const String& rText );
+
+protected:
+    virtual void    Paint( const Rectangle& );
+
+private:
+    long            nY;
+    BOOL            bCenter;
+
+};
 
 // class SvxCharMapData ==================================================
 
@@ -108,19 +133,20 @@ private:
 friend class SvxCharacterMap;
     SfxModalDialog* mpDialog;
 
-    SvxShowCharSet  aShowSet;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aDeleteBtn;
     FixedText       aFontText;
     ListBox         aFontLB;
     FixedText       aSubsetText;
     ListBox         aSubsetLB;
     FixedText       aSymbolText;
-    SvxShowText     aShowText;
     SvxShowText     aShowChar;
     FixedText       aCharCodeText;
+    SvxShowCharSet  aShowSet;
+//    Edit            aShowText;
+    SvxShowText     aShowText;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
+    PushButton      aDeleteBtn;
 
     Font            aFont;
     BOOL            bOne;
@@ -136,6 +162,12 @@ friend class SvxCharacterMap;
     DECL_LINK( DeleteHdl, PushButton* pBtn );
 };
 
+
+// -----------------------------------------------------------------------
+
+long SvxShowCharSet::nSelectedIndex = -1;// TODO: remove "static" at next incompatible build
+static sal_Unicode cSelectedChar = ' '; // keeps selected character over app livetime
+
 // -----------------------------------------------------------------------
 
 static int UnicodeToMapIndex( const FontCharMap& rMap, sal_UCS4 cChar )
@@ -147,10 +179,10 @@ static int UnicodeToMapIndex( const FontCharMap& rMap, sal_UCS4 cChar )
         sal_UCS4 cFirst, cLast;
         rMap.GetRange( i, cFirst, cLast );
         if( cChar < cLast )
-            if( cChar >= cFirst )
-                return nIndex + (cChar - cFirst);
+            if( cChar < cFirst )
+                break;
             else
-                return nIndex;
+                return nIndex + (cChar - cFirst);
         nIndex += cLast - cFirst;
     }
 
@@ -177,14 +209,14 @@ static sal_UCS4 MapIndexToUnicode( const FontCharMap& rMap, unsigned nIndex )
 
 // class SvxShowCharSet ==================================================
 
-long SvxShowCharSet::nSelectedIndex = 0;
-
 #define SBWIDTH 16
 
 SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
     aVscrollSB( this, WB_VERT)
 {
+    nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
+
     aOrigSize = GetOutputSizePixel();
     aOrigPos = GetPosPixel();
 
@@ -209,7 +241,7 @@ void SvxShowCharSet::GetFocus()
 void SvxShowCharSet::LoseFocus()
 {
     Control::LoseFocus();
-    SelectIndex( nSelectedIndex, TRUE );
+    SelectIndex( nSelectedIndex, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -316,8 +348,8 @@ inline int SvxShowCharSet::FirstInView( void ) const
 inline int SvxShowCharSet::LastInView( void ) const
 {
     ULONG nIndex = FirstInView();
-    nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    return Min( nIndex, maFontCharMap.GetCharCount() - 1 );
+    nIndex += ROW_COUNT * COLUMN_COUNT;
+    return Min( nIndex, maFontCharMap.GetCharCount() ) - 1;
 }
 
 // -----------------------------------------------------------------------
@@ -352,7 +384,6 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 
     int tmpSelected = nSelectedIndex;
 
-
     switch ( aCode.GetCode() )
     {
         case KEY_SPACE:
@@ -381,6 +412,12 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             break;
         case KEY_END:
             tmpSelected = maFontCharMap.GetCharCount() - 1;
+            break;
+        case KEY_TAB:   // some fonts have a character at these unicode control codes
+        case KEY_ESCAPE:
+        case KEY_RETURN:
+            Control::KeyInput( rKEvt );
+            tmpSelected = - 1;  // mark as invalid
             break;
         default:
             {
@@ -505,7 +542,9 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
-    return MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+    if( nSelectedIndex >= 0 )
+        cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+    return cSelectedChar;
 }
 
 // -----------------------------------------------------------------------
@@ -513,7 +552,8 @@ sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
     // save last selected unicode
-    sal_Unicode cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
+    if( nSelectedIndex >= 0 )
+        cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
 
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
@@ -522,12 +562,6 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
     GetFontCharMap( maFontCharMap );
-
-    // restore last selected unicode
-    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cSelectedChar );
-    if( nMapIndex < FirstInView() || nMapIndex > LastInView() )
-        cSelectedChar = MapIndexToUnicode( maFontCharMap, FirstInView() );
-    SelectIndex( nMapIndex );
 
     // hide scrollbar when there is nothing to scroll
     BOOL bNeedVscroll = (maFontCharMap.GetCharCount() > ROW_COUNT*COLUMN_COUNT);
@@ -545,6 +579,10 @@ void SvxShowCharSet::SetFont( const Font& rFont )
         aVscrollSB.SetVisibleSize( ROW_COUNT );
     }
 
+    // restore last selected unicode
+    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cSelectedChar );
+    SelectIndex( nMapIndex );
+
     // rearrange CharSet element in sync with nX- and nY-multiples
     Size aNewSize( nX * COLUMN_COUNT + (bNeedVscroll ? SBWIDTH : 0), nY * ROW_COUNT );
     Point aNewPos = aOrigPos + Point( (aOrigSize.Width() - aNewSize.Width()) / 2, 0 );
@@ -559,10 +597,18 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 
 void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 {
-    if ( (nSelectedIndex == nNewIndex) && !bFocus )
-        return;
-
-    if( nNewIndex < FirstInView() )
+    if( nNewIndex < 0 )
+    {
+        // need to scroll see closest unicode
+        int nNewPos = aVscrollSB.GetThumbPos();
+        sal_Unicode cPrev = maFontCharMap.GetPrevChar( cSelectedChar );
+        int nMapIndex = UnicodeToMapIndex( maFontCharMap, cPrev );
+        nNewPos = nMapIndex / COLUMN_COUNT;
+        aVscrollSB.SetThumbPos( nNewPos );
+        nSelectedIndex = bFocus ? nMapIndex+1 : -1;
+        Invalidate();
+    }
+    else if( nNewIndex < FirstInView() )
     {
         // need to scroll up to see selected item
         int nNewPos = aVscrollSB.GetThumbPos();
@@ -600,6 +646,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
         DrawChars_Impl( nOldIndex, nOldIndex );
         DrawChars_Impl( nNewIndex, nNewIndex );
     }
+
+    if( nSelectedIndex >= 0 )
+        cSelectedChar = MapIndexToUnicode( maFontCharMap, nSelectedIndex );
 
     aHighHdl.Call( this );
 }
@@ -664,8 +713,6 @@ void SvxShowText::Paint( const Rectangle& )
 
 void SvxShowText::SetFont( const Font& rFont )
 {
-    Invalidate();
-
     long nWinHeight = GetOutputSizePixel().Height();
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_NORMAL );
@@ -673,6 +720,8 @@ void SvxShowText::SetFont( const Font& rFont )
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
     nY = ( nWinHeight - GetTextHeight() ) / 2;
+
+    Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -816,6 +865,12 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
     aDeleteBtn.SetClickHdl( LINK( this, SvxCharMapData, DeleteHdl ) );
 
     aOKBtn.Disable();
+
+    // left align aShowText field
+    int nLeftEdge = aSymbolText.GetPosPixel().X();
+    nLeftEdge += aSymbolText.GetTextWidth( aSymbolText.GetText() );
+    Size aNewSize = aShowText.GetOutputSizePixel();
+    aShowText.SetPosPixel( Point( nLeftEdge+4, aShowText.GetPosPixel().Y() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -830,9 +885,8 @@ void SvxCharacterMap::DisableFontSelection()
 
 void SvxCharMapData::SetCharFont( const Font& rFont )
 {
-    //Font ersteinmal ermitteln lassen, damit auch auch Fonts mit dem
-    //Namen "Times New Roman;Times" auf der jeweiligen Plattform richtig
-    //funktionieren.
+    // first get the underlying info in order to get font names
+    // like "Times New Roman;Times" resolved
     Font aTmp( mpDialog->GetFontMetric( rFont ) );
 
     if ( aFontLB.GetEntryPos( aTmp.GetName() ) == LISTBOX_ENTRY_NOTFOUND )
@@ -879,8 +933,14 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 
     // notify children using this font
     aShowSet.SetFont( aFont );
-    aShowText.SetFont( aFont );
     aShowChar.SetFont( aFont );
+    aShowText.SetFont( aFont );
+
+    // right align some fields to aShowSet
+    int nRightEdge = aShowSet.GetPosPixel().X() + aShowSet.GetOutputSizePixel().Width();
+    Size aNewSize = aSubsetLB.GetOutputSizePixel();
+    aNewSize.setWidth( nRightEdge - aSubsetLB.GetPosPixel().X() );
+    aSubsetLB.SetOutputSizePixel( aNewSize );
 
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
@@ -899,7 +959,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
         // update subset listbox for new font's unicode subsets
         aSubsetLB.Clear();
         const Subset* s = 0;
-        // TODO: is it worth to improve stupid linear search?
+        // TODO: is it worth to improve the stupid linear search?
         for( int i = 0; (s = pSubsetMap->GetSubsetByIndex( i)) != 0; ++i )
         {
             USHORT nPos = aSubsetLB.InsertEntry( s->GetName());
@@ -911,6 +971,7 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
         if( aSubsetLB.GetEntryCount() <= 1)
             bNeedSubset = FALSE;
     }
+
     aSubsetText.Show( bNeedSubset);
     aSubsetLB.Show( bNeedSubset);
 
