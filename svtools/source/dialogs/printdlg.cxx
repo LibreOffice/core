@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 12:30:42 $
+ *  last change: $Author: gt $ $Date: 2002-11-18 15:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
         Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
         if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
         {
-            svt::SetDialogHelpId( xFilePicker, HID_PRINTDIALOG_TOFILE );
+//          svt::SetDialogHelpId( xFilePicker, HID_PRINTDIALOG_TOFILE );
 
             Sequence< Any > aServiceType( 1 );
             aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
