@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-19 17:54:43 $
+ *  last change: $Author: svesik $ $Date: 2001-02-16 01:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,11 @@
  ************************************************************************/
 
 #include <stdio.h>
-#include <alloca.h>
+#if defined(NETBSD)
+# include <stdlib.h>
+#else
+# include <alloca.h>
+#endif
 
 #include <prex.h>
 #include <X11/Xlocale.h>
@@ -406,7 +410,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
         #endif
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined(NETBSD)
             if ( mpPreeditAttributes != NULL )
 #endif
             mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -414,7 +418,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined(NETBSD)
             if ( mpStatusAttributes != NULL )
 #endif
             mpAttributes = XVaAddToNestedList( mpAttributes,
