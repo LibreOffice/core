@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-08-23 11:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
                     ? SwFrmOrObjMapKey::HELL
                     : ((nControlsId == nLayer) ? SwFrmOrObjMapKey::CONTROLS
                                                : SwFrmOrObjMapKey::HEAVEN);
-    SwFrmOrObjMapKey aKey( eLayerId, pObj->GetOrdNumDirect() );
+    SwFrmOrObjMapKey aKey( eLayerId, pObj->GetOrdNum() );
     value_type aEntry( aKey, rLower );
     return _SwFrmOrObjMap::insert( aEntry );
 }
