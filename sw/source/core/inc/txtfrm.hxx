@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:41:01 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,11 @@ struct SwCrsrMoveState;
 struct SwFillData;
 
 #ifdef VERTICAL_LAYOUT
-#define GRID_DIST 0
-#define RUBY_HEIGHT 1
-#define INTER_LINE_HEIGHT 2
+#define GRID_ON         0
+#define GRID_HEIGHT     1
+#define RUBY_HEIGHT     2
+#define RUBY_TOP        3
+#define GRID_CELLS      4
 #endif
 
 class SwTxtFrm: public SwCntntFrm

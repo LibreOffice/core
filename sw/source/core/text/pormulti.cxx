@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,8 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
 
 #ifdef VERTICAL_LAYOUT
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-    const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs, sal_Bool bForceRubyTop )
+    const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
+    const sal_Bool* pForceRubyPos )
      : SwMultiPortion( nEnd )
 #else
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
@@ -610,12 +611,17 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     const SwFmtRuby& rRuby = rCreate.pAttr->GetRuby();
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
+
 #ifdef VERTICAL_LAYOUT
-    // in grid mode we force the ruby text to the upper line
-    SetTop( ! rRuby.GetPosition() || bForceRubyTop );
+    // in grid mode we force the ruby text to the upper or lower line
+    if ( pForceRubyPos )
+        SetTop( *pForceRubyPos );
+    else
+        SetTop( ! rRuby.GetPosition() );
 #else
     SetTop( !rRuby.GetPosition() );
 #endif
+
     const SwCharFmt* pFmt = ((SwTxtRuby*)rCreate.pAttr)->GetCharFmt();
     SwFont *pRubyFont;
     if( pFmt )
@@ -1309,17 +1315,22 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti )
 {
 #ifdef VERTICAL_LAYOUT
-    const USHORT nGridDist = GetTxtFrm()->GetGridValue( GRID_DIST );
+    const sal_Bool bHasGrid = pFrm->GetGridValue( GRID_ON );
+    const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
+    const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
+    const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
 
     // do not allow grid mode for first line in ruby portion
-    const sal_Bool bRubyInGrid = nGridDist && rMulti.IsRuby();
-    GetTxtFrm()->SetGridModeAllowed( ! bRubyInGrid );
-    const USHORT nRubyHeight = GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
+    const sal_Bool bRubyInGrid = bHasGrid && rMulti.IsRuby();
 
-    USHORT nOldHeight = rMulti.Height();
+    const USHORT nOldHeight = rMulti.Height();
+    const sal_Bool bOldGridModeAllowed = GetTxtFrm()->GetGridModeAllowed();
 
     if ( bRubyInGrid )
+    {
+        GetTxtFrm()->SetGridModeAllowed( ! bRubyTop );
         rMulti.Height( pCurr->Height() );
+    }
 #endif
 
     if( rMulti.Width() > 1 )
@@ -1405,46 +1416,53 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     do
     {
 #ifdef VERTICAL_LAYOUT
-        if ( ! nGridDist )
+        if ( bHasGrid )
         {
             if( rMulti.HasRotation() )
             {
+                const USHORT nAdjustment = ( pLay->Height() - pPor->Height() ) / 2 +
+                                            pPor->GetAscent();
                 if( rMulti.IsRevers() )
-                    GetInfo().X( nOfst - AdjustBaseLine( *pLay, pPor, 0, 0, sal_True ) );
+                    GetInfo().X( nOfst - nAdjustment );
                 else
-                    GetInfo().X( nOfst + AdjustBaseLine( *pLay, pPor ) );
+                    GetInfo().X( nOfst + nAdjustment );
             }
             else
-                GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
+            {
+                // special treatment for ruby portions in grid mode
+
+                // Portions which are bigger than on grid distance
+                // are centered inside the whole line.
+                // this does not apply to portions inside the ruby line
+                USHORT nAdjustment = 0;
+                if ( rMulti.IsRuby() &&
+                    ( ( bRubyTop && pLay != &rMulti.GetRoot() ) ||
+                    ( ! bRubyTop && pLay == &rMulti.GetRoot() ) ) )
+                {
+                    ASSERT( pCurr->Height() - nRubyHeight >= pPor->Height(),
+                            "Wrong adjusting of ruby portion" )
+                    nAdjustment = ( pCurr->Height() - nRubyHeight - pPor->Height() ) / 2;
+                }
+
+                GetInfo().Y( nOfst + nAdjustment + pPor->GetAscent() );
+            }
+        }
+        else if( rMulti.HasRotation() )
+        {
+            if( rMulti.IsRevers() )
+                GetInfo().X( nOfst - AdjustBaseLine( *pLay, pPor, 0, 0, sal_True ) );
+            else
+                GetInfo().X( nOfst + AdjustBaseLine( *pLay, pPor ) );
         }
         else
-        {
-            // special treatment for ruby portions in grid mode
-
-            // Portions which are bigger than on grid distance
-            // are centered inside the whole line.
-            // this does not apply to portions inside the ruby line
-            USHORT nAdjustment = 0;
-            if ( rMulti.IsRuby() && pLay != &rMulti.GetRoot() )
-            {
-                nAdjustment = ( pPor->Height() > nGridDist ) ?
-                               pCurr->Height() - nRubyHeight :
-                               nGridDist;
-
-                ASSERT( nAdjustment >= pPor->Height(),
-                        "Wrong adjusting of ruby portion" )
-                nAdjustment = ( nAdjustment - pPor->Height() ) / 2;
-            }
-
-            GetInfo().Y( nOfst + nAdjustment + pPor->GetAscent() );
-        }
+            GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
 #else
         if( rMulti.HasRotation() )
         {
             if( rMulti.IsRevers() )
-                GetInfo().X( nOfst - AdjustBaseLine( *pLay, *pPor, sal_True ) );
+                GetInfo().X( nOfst - AdjustBaseLine( *pLay, pPor, 0, 0, sal_True ) );
             else
-                GetInfo().X( nOfst + AdjustBaseLine( *pLay, *pPor ) );
+                GetInfo().X( nOfst + AdjustBaseLine( *pLay, pPor ) );
         }
         else
             GetInfo().Y( nOfst + AdjustBaseLine( *pLay, *pPor ) );
@@ -1530,11 +1548,19 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                 }
             }
 #ifdef VERTICAL_LAYOUT
-            else if ( nGridDist )
+            else if ( bHasGrid && rMulti.IsRuby() )
             {
                 GetInfo().X( nTmpX );
-                nOfst += nRubyHeight;
-                GetTxtFrm()->SetGridModeAllowed( sal_True );
+                if ( bRubyTop )
+                {
+                    nOfst += nRubyHeight;
+                    GetTxtFrm()->SetGridModeAllowed( sal_True );
+                }
+                else
+                {
+                    nOfst += pCurr->Height() - nRubyHeight;
+                    GetTxtFrm()->SetGridModeAllowed( sal_False );
+                }
             }
 #endif
             else
@@ -1545,6 +1571,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             }
         }
     } while( pPor );
+
+#ifdef VERTICAL_LAYOUT
+    if ( bRubyInGrid )
+        GetTxtFrm()->SetGridModeAllowed( bOldGridModeAllowed );
+#endif
 
     // delete underline font
     delete GetInfo().GetUnderFnt();
@@ -1703,6 +1734,13 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwLinePortion *pNextSecond = NULL;
     BOOL bRet = FALSE;
 
+#ifdef VERTICAL_LAYOUT
+    const sal_Bool bHasGrid = pFrm->GetGridValue( GRID_ON );
+    const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
+    const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
+    const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+#endif
+
     do
     {
         pCurr = &rMulti.GetRoot();
@@ -1725,14 +1763,19 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         aInf.SetRuby( rMulti.IsRuby() && rMulti.OnTop() );
 #ifdef VERTICAL_LAYOUT
-        GetTxtFrm()->SetGridModeAllowed( ! aInf.IsRuby() );
+
+        // in grid mode we temporarily have to disable the grid for the ruby line
+        const sal_Bool bOldGridModeAllowed =
+                GetTxtFrm()->GetGridModeAllowed();
+        if ( bHasGrid && aInf.IsRuby() && bRubyTop )
+            GetTxtFrm()->SetGridModeAllowed( sal_False );
 #endif
         // If there's no more rubytext, then buildportion is forbidden
         if( pFirstRest || !aInf.IsRuby() )
             BuildPortions( aInf );
 
 #ifdef VERTICAL_LAYOUT
-        GetTxtFrm()->SetGridModeAllowed( sal_True );
+        GetTxtFrm()->SetGridModeAllowed( bOldGridModeAllowed );
 #endif
 
         rMulti.CalcSize( *this, aInf );
@@ -1767,7 +1810,18 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             else
                 aTmp.SetRest( aInf.GetRest() );
             aInf.SetRest( NULL );
+
+#ifdef VERTICAL_LAYOUT
+            // in grid mode we temporarily have to disable the grid for the ruby line
+            if ( bHasGrid && aTmp.IsRuby() && ! bRubyTop )
+                GetTxtFrm()->SetGridModeAllowed( sal_False );
+#endif
             BuildPortions( aTmp );
+
+#ifdef VERTICAL_LAYOUT
+            GetTxtFrm()->SetGridModeAllowed( bOldGridModeAllowed );
+#endif
+
             rMulti.CalcSize( *this, aInf );
             rMulti.GetRoot().SetRealHeight( rMulti.GetRoot().Height() );
             pCurr->SetRealHeight( pCurr->Height() );
@@ -1891,8 +1945,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             {
                 // the ruby portion has to be split in two portions
 #ifdef VERTICAL_LAYOUT
-                const sal_Bool bRubyTop = rMulti.OnTop() ||
-                                          GetTxtFrm()->GetGridValue( GRID_DIST );
+                const sal_Bool bRubyTop = rMulti.OnTop() || bHasGrid;
                 pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
                     ((SwRubyPortion&)rMulti).GetAdjustment(), ! bRubyTop,
                     ((SwRubyPortion&)rMulti).GetRubyOffset() );
@@ -2070,12 +2123,17 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         else if( pMulti->IsRuby() )
 #ifdef VERTICAL_LAYOUT
         {
-            // ruby has to be on top in grid mode
-            const sal_Bool bForceRubyTop =
-                    (sal_Bool)GetTxtFrm()->GetGridValue( GRID_DIST );
+            sal_Bool bRubyTop;
+            sal_Bool* pRubyPos = 0;
+            if ( pFrm->GetGridValue( GRID_ON ) )
+            {
+                bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+                pRubyPos = &bRubyTop;
+            }
+
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
                     *GetInfo().GetDoc(), nMultiPos,
-                    ((SwRubyPortion*)pMulti)->GetRubyOffset(), bForceRubyTop );
+                    ((SwRubyPortion*)pMulti)->GetRubyOffset(), pRubyPos );
         }
 #else
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),

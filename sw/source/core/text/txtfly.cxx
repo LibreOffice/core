@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,13 +721,18 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             rInf.Width( pFly->Fix() );
 
 #ifdef VERTICAL_LAYOUT
-        const USHORT nGridWidth = pFrm->GetGridValue( GRID_DIST );
-
-        if ( nGridWidth )
+        if ( pFrm->GetGridValue( GRID_ON ) )
         {
-            SwPageFrm* pPageFrm = pFrm->FindPageFrm();
+            const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
+            const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
+
             SWRECTFN( pPageFrm )
-            const long nGridOrigin = (pPageFrm->*fnRect->fnGetPrtLeft)();
+
+            const long nGridOrigin = pBody ?
+                                    (pBody->*fnRect->fnGetPrtLeft)() :
+                                    (pPageFrm->*fnRect->fnGetPrtLeft)();
+
+            const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-25 15:55:59 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,17 @@
 #include "paratr.hxx"
 #include "errhdl.hxx"
 
-#ifdef VERTICAL_LAYOUT
-#include "pormulti.hxx"
-#endif
-
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
 #endif
 #ifndef _SVX_PARAVERTALIGNITEM_HXX //autogen
 #include <svx/paravertalignitem.hxx>
 #endif
+
+#ifdef VERTICAL_LAYOUT
+#include "pormulti.hxx"
+#endif
+
 #include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
@@ -162,28 +163,30 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
     pCurr->SetClipping( sal_False );
 
 #ifdef VERTICAL_LAYOUT
-    const USHORT nGridHeight = pFrm->GetGridValue( GRID_DIST );
-    if ( nGridHeight )
+    if ( pFrm->GetGridValue( GRID_ON ) )
     {
+        const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
         const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
-        const USHORT nInterLineHeight = pFrm->GetGridValue( INTER_LINE_HEIGHT );
+        const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
 
-        USHORT nLineHeight = nGridHeight + nRubyHeight;
-        USHORT nLineDist = nLineHeight + nInterLineHeight;
+        USHORT nLineHeight = nGridWidth + nRubyHeight;
+        USHORT nLineDist = nLineHeight;
 
         while ( pCurr->Height() > nLineHeight )
             nLineHeight += nLineDist;
 
-        KSHORT nAsc = ( nRubyHeight + nLineHeight - pCurr->Height() ) / 2 +
-                      pCurr->GetAscent();
+        KSHORT nAsc = pCurr->GetAscent() +
+                      ( bRubyTop ?
+                       ( nLineHeight - pCurr->Height() + nRubyHeight ) / 2 :
+                       ( nLineHeight - pCurr->Height() - nRubyHeight ) / 2 );
 
         pCurr->Height( nLineHeight );
         pCurr->SetAscent( nAsc );
         pInf->GetParaPortion()->SetFixLineHeight();
 
         // Zwischenraum
-        if( !IsParaLine() )
-            nLineHeight += pFrm->GetGridValue( INTER_LINE_HEIGHT );
+//        if( !IsParaLine() )
+//            nLineHeight += nInterLineHeight;
 
         pCurr->SetRealHeight( nLineHeight );
         return;
@@ -498,37 +501,36 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     }
 
     USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
-    const USHORT nGridDist = GetTxtFrm()->GetGridValue( GRID_DIST );
 
-    // always centered in grid mode
-    if ( nGridDist )
+    const sal_Bool bHasGrid = pFrm->GetGridValue( GRID_ON );
+
+    if ( bHasGrid )
     {
-        const USHORT nRubyHeight = GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
+        const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
+        const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
+        const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
 
         if ( GetInfo().IsMulti() )
-        {
             // we are inside the GetCharRect recursion for multi portions
-            USHORT nAdjustment = ( nPorHeight > nGridDist ) ?
-                                 pCurr->Height() - nRubyHeight :
-                                 nGridDist;
-
-            nOfst = ( nAdjustment - nPorHeight ) / 2 + nPorAscent;
-        }
+            // we center the portion in its surrounding line
+            nOfst = ( pCurr->Height() - nPorHeight ) / 2 + nPorAscent;
         else
         {
             // We have to take care for ruby portions.
             // The ruby portion is NOT centered
-            if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsRuby() )
-                nOfst += pPor->GetAscent() + nRubyHeight -
-                        ((SwMultiPortion*)pPor)->GetRoot().Height();
-            else
+            nOfst += nPorAscent;
+
+            if ( ! pPor || ! pPor->IsMultiPortion() ||
+                 ! ((SwMultiPortion*)pPor)->IsRuby() )
             {
-                // Portions which are bigger than on grid distance are centered inside
-                // the whole line.
-                const USHORT nLineNetto = ( nPorHeight > nGridDist ) ?
+                // Portions which are bigger than on grid distance are
+                // centered inside the whole line.
+                const USHORT nLineNetto = ( nPorHeight > nGridWidth ) ?
                                             rLine.Height() - nRubyHeight :
-                                            nGridDist;
-                nOfst += nRubyHeight + ( nLineNetto - nPorHeight ) / 2 + nPorAscent;
+                                            nGridWidth;
+                nOfst += ( nLineNetto - nPorHeight ) / 2;
+                if ( bRubyTop )
+                    nOfst += nRubyHeight;
             }
         }
     }

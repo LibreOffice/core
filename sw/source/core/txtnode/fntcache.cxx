@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-25 16:07:56 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,16 +697,17 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
 {
     if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
             ( cChar < 0x3008 || cChar > 0x3011 ) &&
-            ( cChar < 0x3014 || cChar > 0x301F ) )
+            ( cChar < 0x3014 || cChar > 0x301F ) &&
+              0xFF62 != cChar && 0xFF63 != cChar )
         // no punctuation
         return SwScriptInfo::NONE;
-    else if ( cChar == 0x3001 || cChar == 0x3002 ||
-                cChar == 0x3009 || cChar == 0x300B ||
-                cChar == 0x300D || cChar == 0x300F ||
-                cChar == 0x3011 || cChar == 0x3015 ||
-                cChar == 0x3017 || cChar == 0x3019 ||
-                cChar == 0x301B || cChar == 0x301E ||
-                cChar == 0x301F )
+    else if ( 0x3001 == cChar || 0x3002 == cChar ||
+              0x3009 == cChar || 0x300B == cChar ||
+              0x300D == cChar || 0x300F == cChar ||
+              0x3011 == cChar || 0x3015 == cChar ||
+              0x3017 == cChar || 0x3019 == cChar ||
+              0x301B == cChar || 0x301E == cChar ||
+              0x301F == cChar || 0xFF63 == cChar )
         // right punctuation
         return SwScriptInfo::SPECIAL_RIGHT;
 
@@ -800,12 +801,18 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
-        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        if ( rInf.GetFrm()->GetGridValue( GRID_ON ) && rInf.GetFont() &&
+             SW_CJK == rInf.GetFont()->GetActual() )
         {
+            const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
             long* pKernArray = new long[rInf.GetLen()];
-            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+
+            if ( pPrinter )
+                pPrinter->GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );
+            else
+                rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                            rInf.GetIdx(), rInf.GetLen() );
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
@@ -1443,6 +1450,44 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     Size aTxtSize;
     const xub_StrLen nLn = ( STRING_LEN != rInf.GetLen() ) ? rInf.GetLen() :
                            rInf.GetText().Len();
+
+#ifdef VERTICAL_LAYOUT
+    if ( rInf.GetFrm() && nLn )
+    {
+        if ( rInf.GetFrm()->GetGridValue( GRID_ON ) && rInf.GetFont() &&
+             SW_CJK == rInf.GetFont()->GetActual() )
+        {
+            const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+
+            OutputDevice* pOutDev;
+
+            if ( pPrinter )
+            {
+                if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
+                    pPrinter->SetFont(*pPrtFont);
+                pOutDev = pPrinter;
+            }
+            else
+                pOutDev = rInf.GetpOut();
+
+            aTxtSize.Width() =
+                    pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
+            aTxtSize.Height() = pOutDev->GetTextHeight() + nLeading;
+
+            long nWidthPerChar = aTxtSize.Width() / nLn;
+
+            const USHORT i = nWidthPerChar ?
+                             ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                             1;
+
+            aTxtSize.Width() = i * nGridWidth * nLn;
+
+            rInf.SetKanaDiff( 0 );
+            return aTxtSize;
+        }
+    }
+#endif
+
     BOOL bCompress = rInf.GetKanaComp() && nLn;
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
@@ -1541,23 +1586,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     if ( rInf.GetKern() && nLn )
         aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
 
-#ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() && nLn )
-    {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
-        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
-        {
-            long nWidthPerChar = aTxtSize.Width() / nLn;
-
-            const USHORT i = nWidthPerChar ?
-                             ( nWidthPerChar - 1 ) / nGridWidth + 1:
-                             1;
-
-            aTxtSize.Width() = i * nGridWidth * nLn;
-        }
-    }
-#endif
-
     aTxtSize.Height() += nLeading;
     return aTxtSize;
 }
@@ -1594,9 +1622,11 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() && rInf.GetLen() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
-        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        if ( rInf.GetFrm()->GetGridValue( GRID_ON ) && rInf.GetFont() &&
+             SW_CJK == rInf.GetFont()->GetActual() )
         {
+            const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
             USHORT i = nWidthPerChar ?
@@ -1778,9 +1808,11 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
-        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        if ( rInf.GetFrm()->GetGridValue( GRID_ON ) && rInf.GetFont() &&
+             SW_CJK == rInf.GetFont()->GetActual() )
         {
+            const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+
             long* pKernArray = new long[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,11 @@
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
+#endif
+#ifdef VERTICAL_LAYOUT
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
 #endif
 
 #include "flyfrms.hxx"
@@ -351,8 +356,9 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
 #ifdef VERTICAL_LAYOUT
-    const USHORT nGridDist = GetTxtFrm()->GetGridValue( GRID_DIST );
-    sal_Bool bAdjustBaseLine = GetLineInfo().HasSpecialAlign() || nGridDist;
+    SwPageFrm* pPageFrm = GetTxtFrm()->FindPageFrm();
+    const sal_Bool bHasGrid = pPageFrm->HasGrid();
+    sal_Bool bAdjustBaseLine = GetLineInfo().HasSpecialAlign() || bHasGrid;
     if ( ! bAdjustBaseLine )
 #else
     if ( ! GetLineInfo().HasSpecialAlign() )
@@ -410,14 +416,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 #ifdef VERTICAL_LAYOUT
         if ( bAdjustBaseLine )
         {
-            // For ruby portions AdjustBaseLine returns the base line of
-            // the non-ruby line.
-            if ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsRuby() &&
-                 nGridDist )
-                GetInfo().Y( GetInfo().GetPos().Y() + pCurr->GetRealHeight() -
-                             pCurr->Height() + pPor->GetAscent() );
-            else
-                GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, pPor ) );
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, pPor ) );
 #else
         if ( GetLineInfo().HasSpecialAlign() )
         {

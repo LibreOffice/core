@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-25 15:55:59 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     SwLinePortion *pPor = NewPortion( rInf );
 
 #ifdef VERTICAL_LAYOUT
-    const USHORT nGridWidth = pFrm->GetGridValue( GRID_DIST );
+    const sal_Bool bHasGrid =
+        pFrm->GetGridValue( GRID_ON );
+    const USHORT nGridWidth =
+        pFrm->GetGridValue( GRID_HEIGHT );
+
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
     // the width of the kerning portion has to be adjusted
@@ -515,7 +519,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             ((SwFldPortion*)pPor)->CheckScript( rInf );
 
 #ifdef VERTICAL_LAYOUT
-        if( ! nGridWidth && rInf.HasScriptSpace() &&
+        if( ! bHasGrid && rInf.HasScriptSpace() &&
             rInf.GetLast() && rInf.GetLast()->InTxtGrp()
 #else
         if( rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
@@ -588,7 +592,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             }
         }
 #ifdef VERTICAL_LAYOUT
-        else if ( nGridWidth && ! pGridKernPortion && ! pMulti )
+        else if ( bHasGrid && ! pGridKernPortion && ! pMulti )
         {
             // insert a grid kerning portion
             if ( ! pGridKernPortion )
@@ -599,8 +603,12 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             // if we have a new GridKernPortion, we initially calculate
             // its size so that its ends on the grid
             const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
+            const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
             SWRECTFN( pPageFrm )
-            const long nGridOrigin = (pPageFrm->*fnRect->fnGetPrtLeft)();
+
+            const long nGridOrigin = pBody ?
+                                    (pBody->*fnRect->fnGetPrtLeft)() :
+                                    (pPageFrm->*fnRect->fnGetPrtLeft)();
 
             SwTwips nStartX = rInf.X() + GetLeftMargin();
             if ( bVert )
@@ -673,7 +681,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
 #ifdef VERTICAL_LAYOUT
                    // 5. Grid Mode
-                     || ( nGridWidth && SW_CJK != pFnt->GetActual() )
+                     || ( bHasGrid && SW_CJK != pFnt->GetActual() )
 #endif
                    )
                 )
@@ -696,7 +704,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         {
             rInf.ClrUnderFlow();
 #ifdef VERTICAL_LAYOUT
-            if( ! nGridWidth && rInf.HasScriptSpace() && pPor->InTxtGrp() &&
+            if( ! bHasGrid && rInf.HasScriptSpace() && pPor->InTxtGrp() &&
 #else
             if( rInf.HasScriptSpace() && pPor->InTxtGrp() &&
 #endif
@@ -730,7 +738,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         }
 
 #ifdef VERTICAL_LAYOUT
-        if ( nGridWidth && pPor != pGridKernPortion && ! pMulti )
+        if ( bHasGrid && pPor != pGridKernPortion && ! pMulti )
         {
             xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
@@ -1077,9 +1085,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         }
 
 #ifdef VERTICAL_LAYOUT
-        if ( ! pPor && GetTxtFrm()->GetGridValue( GRID_DIST ) &&
-             ! pCurr->GetPortion() )
-            pPor = new SwKernPortion( *pCurr );
+        if ( ! pPor && ! pCurr->GetPortion() )
+        {
+            SwPageFrm* pPageFrm = GetTxtFrm()->FindPageFrm();
+            if ( pPageFrm->HasGrid() )
+                pPor = new SwKernPortion( *pCurr );
+        }
 #endif
 
         // 2) Die Zeilenreste (mehrzeilige Felder)
@@ -1131,9 +1142,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             pPor = (SwLinePortion*)NewDropPortion( rInf );
 
 #ifdef VERTICAL_LAYOUT
-        if ( ! pPor && GetTxtFrm()->GetGridValue( GRID_DIST ) &&
-             ! pCurr->GetPortion() )
-            pPor = new SwKernPortion( *pCurr );
+        if ( ! pPor && ! pCurr->GetPortion() )
+        {
+            SwPageFrm* pPageFrm = GetTxtFrm()->FindPageFrm();
+            if ( pPageFrm->HasGrid() )
+                pPor = new SwKernPortion( *pCurr );
+        }
 #endif
     }
     return pPor;
@@ -1251,10 +1265,16 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 {
                     Seek( rInf.GetIdx() );
 #ifdef VERTICAL_LAYOUT
-                    const sal_Bool bForceRubyTop =
-                            (sal_Bool)GetTxtFrm()->GetGridValue( GRID_DIST );
+                    sal_Bool bRubyTop;
+                    sal_Bool* pRubyPos = 0;
+                    if ( pFrm->GetGridValue( GRID_ON ) )
+                    {
+                        bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+                        pRubyPos = &bRubyTop;
+                    }
+
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
-                                              *rInf.GetDoc(), nEnd, 0, bForceRubyTop );
+                                              *rInf.GetDoc(), nEnd, 0, pRubyPos );
 #else
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
                                               *rInf.GetDoc(), nEnd );

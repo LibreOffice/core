@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ public:
 #ifdef VERTICAL_LAYOUT
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
-        sal_Bool bForceRubyTop );
+        const sal_Bool* pForceRubyPos );
 #else
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs = 0 );

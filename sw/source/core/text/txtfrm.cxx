@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,29 +337,31 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
 USHORT SwTxtFrm::GetGridValue( BYTE nWhich ) const
 {
     const SwPageFrm* pPageFrm = FindPageFrm();
-    SwPageDesc* pDesc = ((SwPageFrm*)pPageFrm)->FindPageDesc();
 
-    if( pDesc )
+    if ( GRID_ON == nWhich )
+        return bGridMode && pPageFrm->HasGrid();
+
+    long nGrid, nRuby, nLines;
+    BOOL bLower, bCell;
+    pPageFrm->GetGrid( nGrid, nRuby, nLines, bLower, bCell );
+
+    switch ( nWhich )
     {
-        switch ( nWhich )
-        {
-        case GRID_DIST :
-            return bGridMode ? pDesc->GetRegHeight() : 0;
-            break;
-        case RUBY_HEIGHT :
-            // for testing purposed only
-            return pDesc->GetRegHeight() / 4;
-//            return pDesc->GetRubyHeight();
-            break;
-        case INTER_LINE_HEIGHT :
-            // for testing purposed only
-            return pDesc->GetRegHeight() / 2;
-//            return pDesc->GetInterLineHeight();
-            break;
-        default :
-            ASSERT( sal_False, "Unknown grid value" )
-            break;
-        }
+    case GRID_HEIGHT :
+        return nGrid;
+        break;
+    case RUBY_HEIGHT :
+        return nRuby;
+        break;
+    case RUBY_TOP :
+        return ! bLower;
+        break;
+    case GRID_CELLS :
+        return bCell;
+        break;
+    default :
+        ASSERT( sal_False, "Unknown grid value" )
+        break;
     }
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-25 15:55:59 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,9 +546,32 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pCurr = &((SwMultiPortion*)pPor)->GetRoot();
                         if( ((SwMultiPortion*)pPor)->IsDouble() )
                             SetPropFont( 50 );
+#ifdef VERTICAL_LAYOUT
+                        const sal_Bool bHasGrid =
+                            GetTxtFrm()->GetGridValue( GRID_ON );
+                        const USHORT nRubyHeight =
+                            GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
+
+                        if( nStart + pCurr->GetLen() <= nOfst && GetNext() &&
+                            ( ! ((SwMultiPortion*)pPor)->IsRuby() ||
+                                ((SwMultiPortion*)pPor)->OnTop() ) )
+                        {
+                            USHORT nOffset;
+                            // in grid mode we may only add the height of the
+                            // ruby line if ruby line is on top
+                            if ( bHasGrid &&
+                                ((SwMultiPortion*)pPor)->IsRuby() &&
+                                ((SwMultiPortion*)pPor)->OnTop() )
+                                nOffset = nRubyHeight;
+                            else
+                                nOffset = GetLineHeight();
+
+                            pOrig->Pos().Y() += nOffset;
+#else
                         if( nStart + pCurr->GetLen() <= nOfst && GetNext() )
                         {
                             pOrig->Pos().Y() += GetLineHeight();
+#endif
                             Next();
                         }
 
@@ -561,19 +584,26 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // temporarily set the inner line height to the
                         // outer line height because that value is needed
                         // for the adjustment inside the recursion
-                        USHORT nOldRubyHeight = pCurr->Height();
+                        const USHORT nOldRubyHeight = pCurr->Height();
+                        const USHORT nOldRubyRealHeight = pCurr->GetRealHeight();
                         const sal_Bool bChgHeight =
-                                ((SwMultiPortion*)pPor)->IsRuby() &&
-                                GetTxtFrm()->GetGridValue( GRID_DIST );
+                                ((SwMultiPortion*)pPor)->IsRuby() && bHasGrid;
 
                         if ( bChgHeight )
-                            pCurr->Height( pOldCurr->Height() );
+                        {
+                            pCurr->Height( pOldCurr->Height() - nRubyHeight );
+                            pCurr->SetRealHeight( pOldCurr->GetRealHeight() -
+                                                  nRubyHeight );
+                        }
 #endif
                         _GetCharRect( pOrig, nOfst, pCMS );
 
 #ifdef VERTICAL_LAYOUT
                         if ( bChgHeight )
+                        {
                             pCurr->Height( nOldRubyHeight );
+                            pCurr->SetRealHeight( nOldRubyRealHeight );
+                        }
 #endif
 
                         // if we are still in the first row of
