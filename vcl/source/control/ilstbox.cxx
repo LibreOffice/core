@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #pragma hdrstop
@@ -2637,7 +2637,7 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ImplListBoxFloatingWindow::CreateAccessible()
+uno::Reference< ::com::sun::star::accessibility::XAccessible > ImplListBoxFloatingWindow::CreateAccessible()
 {
     // Hide Accessible for this Window, because it's a top window we don't want to see as a top window.
     // Must be handled in the ListBox/ComboBox Accessibility Implementation
