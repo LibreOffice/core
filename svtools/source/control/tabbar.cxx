@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2632,9 +2632,9 @@ Rectangle TabBar::GetPageArea() const
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > TabBar::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabBar::CreateAccessible()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessible*) new svt::AccessibleTabBar( this );
+    return (::com::sun::star::accessibility::XAccessible*) new svt::AccessibleTabBar( this );
 }
 
 // -----------------------------------------------------------------------
