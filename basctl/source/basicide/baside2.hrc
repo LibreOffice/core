@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-19 10:56:50 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,6 @@
 
 // RID_POPUP_TABBAR
 #define RID_INSERT              1
-
-
-// BasicTreeListBox
-#define IMGID_APPICON           ( SID_BASICIDE_IMAGESTART + 1 )
-#define IMGID_LIB               ( SID_BASICIDE_IMAGESTART + 2 )
-#define IMGID_MODULE            ( SID_BASICIDE_IMAGESTART + 3 )
-#define IMGID_MACRO             ( SID_BASICIDE_IMAGESTART + 4 )
-#define IMGID_OBJECT            ( SID_BASICIDE_IMAGESTART + 5 )
-#define IMGID_SUBOBJ            ( SID_BASICIDE_IMAGESTART + 6 )
-#define IMGID_PROP              ( SID_BASICIDE_IMAGESTART + 7 )
-#define IMGID_DOCUMENT          ( SID_BASICIDE_IMAGESTART + 8 )
-#define IMGID_LIBNOTLOADED      ( SID_BASICIDE_IMAGESTART + 9 )
 
 // ModulWindowLayout
 #define IMGID_BRKENABLED        ( SID_BASICIDE_IMAGESTART + 20 )
