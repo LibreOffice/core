@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:36:59 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 09:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-01-26 21:36:59 $
- // $Revision: 1.6 $
+ //     $Date: 2001-02-12 09:26:33 $
+ // $Revision: 1.7 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -151,7 +151,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -215,7 +215,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_traditional ] = "¥iÅÜªºÀx¦s®æ(~C)";
         Text[ arabic ] = "ÎáíÉ ãÊÛíÑÉ";
         Text[ greek ] = "ìåôáâëçôü êåëß";
-        Text[ korean ] = "º¯¼ö ¼¿(~C)";
+        Text[ korean ] = "°¡º¯ ¼¿(~C)";
         Text[ turkish ] = "~Değişken hücre";
         Text[ language_user1 ] = " ";
     };
@@ -249,7 +249,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "Min/Max!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -324,7 +324,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_traditional ] = "¥Ø¼Ğ¼Æ­ÈµL®Ä¡I";
         Text[ arabic ] = "ŞíãÉ åÏİ ÛíÑ ÕÇáÍÉ!";
         Text[ greek ] = "Ìç İãêõñç ôéìŞ ğñïïñéóìïı!";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¸ñÇ¥°ª.";
+        Text[ korean ] = "Çã¿ëµÇÁö ¾Ê´Â ¸ñÇ¥°ª.";
         Text[ turkish ] = "Geçerli olmayan hedef değer!";
         Text[ language_user1 ] = " ";
     };
@@ -350,7 +350,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_traditional ] = "¥¼©w¸qªº¦WºÙ³Q·í§@¥iÅÜ¶qªºÀx¦s®æ¡I";
         Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ ßÎáíÉ ãÊÛíÑÉ!";
         Text[ greek ] = "Áüñéóôï üíïìá ùò ìåôáâëçôü êåëß!";
-        Text[ korean ] = "º¯¼ö ¼¿¿¡ ÀÌ¸§ÀÌ Á¤ÀÇµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "°¡º¯ ¼¿·Î¼­¡¡Á¤ÀÇµÇÁö¡¡¾ÊÀº ÀÌ¸§";
         Text[ turkish ] = "Tanımlanmamış hücresi için tanımlanmamış ad!";
         Text[ language_user1 ] = " ";
     };
@@ -376,7 +376,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_traditional ] = "¥¼©w¸qªº¦WºÙ³Q·í§@¤½¦¡Àx¦s®æ¡I";
         Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ ßÎáíÉ ÕíÛÉ!";
         Text[ greek ] = "Áüñéóôï üíïìá ùò êåëß ôığïõ!";
-        Text[ korean ] = "¼ö½Ä ¼¿¿¡ ÀÌ¸§ÀÌ Á¤ÀÇµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "¼ö½Ä ¼¿·Î¼­¡¡Á¤ÀÇµÇÁö¡¡¾ÊÀº ÀÌ¸§.";
         Text[ turkish ] = "Formül hücresi için tanımlanmamış ad!";
         Text[ language_user1 ] = " ";
     };
@@ -414,7 +414,7 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ chinese_traditional ] = "¥Ø¼Ğ·j´M";
     Text[ arabic ] = "ÇáÈÍË Úä ÇáŞíãÉ ÇáåÏİ";
     Text[ greek ] = "ÁíáæŞôçóç óôü÷ïõ";
-    Text[ korean ] = "¸ñÇ¥ Ã£±â";
+    Text[ korean ] = "¸ñÇ¥°ª Ã£±â";
     Text[ turkish ] = "Hedef değer ara";
     Text[ language_user1 ] = " ";
 };
