@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAutoFormattable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:59 $
+ *  last change:$Date: 2003-05-27 12:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public class _XAutoFormattable extends MultiMethodTest {
     */
     public void _autoFormat() {
         boolean bResult = true;
-        XMultiServiceFactory oMSF = tParam.getMSF();
+        XMultiServiceFactory oMSF = (XMultiServiceFactory)tParam.getMSF();
         String name = "Default";
 
         try {
