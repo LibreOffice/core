@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 18:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ String SV_BUTTONTEXT_OK
     TEXT[ catalan ] = "D'acord";
     TEXT[ finnish ] = "OK";
     TEXT[ thai ] = "ตกลง";
+    TEXT[ czech ] = "OK";
+    TEXT[ hebrew ] = "‮אישור‬";
+    TEXT[ hindi ] = "ठीक";
 };
 
 String SV_BUTTONTEXT_CANCEL
@@ -123,6 +126,9 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ catalan ] = "Cancel.la";
     TEXT[ finnish ] = "Peruuta";
     TEXT[ thai ] = "ยกเลิก";
+    TEXT[ czech ] = "~Zrušit";
+    TEXT[ hebrew ] = "‮ביטול‬";
+    TEXT[ hindi ] = "रद्द करो";
 };
 
 String SV_BUTTONTEXT_YES
@@ -153,6 +159,9 @@ String SV_BUTTONTEXT_YES
     TEXT[ catalan ] = "~S�";
     TEXT[ finnish ] = "~Kyll�";
     TEXT[ thai ] = "ใ~ช่";
+    TEXT[ czech ] = "~Ano";
+    TEXT[ hebrew ] = "‮כן‬";
+    TEXT[ hindi ] = "~हाँ";
 };
 
 String SV_BUTTONTEXT_NO
@@ -160,7 +169,7 @@ String SV_BUTTONTEXT_NO
     Text = "~Nein";
     Text [ English ] = "~No";
     TEXT[ italian ] = "No";
-    TEXT[ portuguese_brazilian ] = "~N?o";
+    TEXT[ portuguese_brazilian ] = "~N�o";
     TEXT[ portuguese ] = "~N�o";
     TEXT[ danish ] = "~Nej";
     TEXT[ french ] = "~Non";
@@ -183,6 +192,9 @@ String SV_BUTTONTEXT_NO
     TEXT[ catalan ] = "~No";
     TEXT[ finnish ] = "~Ei";
     TEXT[ thai ] = "ไ~ม่ใช่";
+    TEXT[ czech ] = "~Ne";
+    TEXT[ hebrew ] = "‮לא‬";
+    TEXT[ hindi ] = "~नहीं";
 };
 
 String SV_BUTTONTEXT_RETRY
@@ -199,7 +211,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ spanish ] = "~Repetir";
     TEXT[ english_us ] = "~Retry";
     TEXT[ russian ] = "���������";
-    TEXT[ polish ] = "P~rzywr��";
+    TEXT[ polish ] = "~Powt�rz pr�b�";
     TEXT[ japanese ] = "やり直し(~R)";
     TEXT[ chinese_simplified ] = "重试(~R)";
     TEXT[ chinese_traditional ] = "重試(~R)";
@@ -208,11 +220,14 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ chinese_simplified ] = "重试(~R)";
     TEXT[ greek ] = "���������";
     TEXT[ korean ] = "다시 시도(~R)";
-    TEXT[ turkish ] = "Y~inele";
+    TEXT[ turkish ] = "~Tekrarla";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Reintenta";
     TEXT[ finnish ] = "~Yrit� uudelleen";
     TEXT[ thai ] = "~ลองใหม่";
+    TEXT[ czech ] = "Zkusit znovu";
+    TEXT[ hebrew ] = "‮לנסות שוב‬";
+    TEXT[ hindi ] = "~फ़िर से प्रयत्न करना";
 };
 
 String SV_BUTTONTEXT_HELP
@@ -229,7 +244,7 @@ String SV_BUTTONTEXT_HELP
     TEXT[ spanish ] = "Ay~uda";
     TEXT[ english_us ] = "~Help";
     TEXT[ russian ] = "��~�����";
-    TEXT[ polish ] = "~Pomoc";
+    TEXT[ polish ] = "Po~moc";
     TEXT[ japanese ] = "ヘルプ(~H)";
     TEXT[ chinese_simplified ] = "帮助(~H)";
     TEXT[ chinese_traditional ] = "說明(~H)";
@@ -243,6 +258,9 @@ String SV_BUTTONTEXT_HELP
     TEXT[ catalan ] = "~Ajuda";
     TEXT[ finnish ] = "~Ohje";
     TEXT[ thai ] = "~ช่วยเหลือ";
+    TEXT[ czech ] = "~Nápověda";
+    TEXT[ hebrew ] = "‮עזרה‬";
+    TEXT[ hindi ] = "~सहायता";
 };
 
 String SV_BUTTONTEXT_MORE
@@ -259,7 +277,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ spanish ] = "~Opciones";
     TEXT[ english_us ] = "~More";
     TEXT[ russian ] = "������";
-    TEXT[ polish ] = "~Dodatki";
+    TEXT[ polish ] = "~Wi�cej";
     TEXT[ japanese ] = "オプション(~M)";
     TEXT[ chinese_simplified ] = "其他(~M)";
     TEXT[ chinese_traditional ] = "其他(~M)";
@@ -268,11 +286,14 @@ String SV_BUTTONTEXT_MORE
     TEXT[ chinese_simplified ] = "其他(~M)";
     TEXT[ greek ] = "��������";
     TEXT[ korean ] = "옵션(~M)";
-    TEXT[ turkish ] = "A~yr�nt�lar";
+    TEXT[ turkish ] = "~Fazla";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~M�s";
     TEXT[ finnish ] = "~Lis��";
     TEXT[ thai ] = "~รายละเอียด";
+    TEXT[ czech ] = "Více";
+    TEXT[ hebrew ] = "‮עוד‬";
+    TEXT[ hindi ] = "~अधिक";
 };
 
 String SV_BUTTONTEXT_IGNORE
@@ -280,26 +301,29 @@ String SV_BUTTONTEXT_IGNORE
     Text = "~Ignorieren";
     Text [ English ] = "~Ignore";
     Text[ english_us ] = "~Ignore";
-    Text[ portuguese ] = "~Ignore";
-    Text[ russian ] = "~Ignore";
-    Text[ greek ] = "~Ignore";
-    Text[ dutch ] = "~Ignore";
+    Text[ portuguese ] = "~Ignorar";
+    Text[ russian ] = "����������";
+    Text[ greek ] = "���������";
+    Text[ dutch ] = "~Negeren";
     Text[ french ] = "Ignorer";
     Text[ spanish ] = "~Ignorar";
-    Text[ finnish ] = "~Ignore";
+    Text[ finnish ] = "~Ohita";
     Text[ italian ] = "~Ignora";
-    Text[ danish ] = "~Ignore";
+    Text[ danish ] = "Ignorer";
     Text[ swedish ] = "~Ignorera";
-    Text[ polish ] = "~Ignore";
-    Text[ portuguese_brazilian ] = "~Ignore";
+    Text[ polish ] = "Ignoruj";
+    Text[ portuguese_brazilian ] = "~Ignorar";
     Text[ japanese ] = "無視する";
     Text[ korean ] = "무시(~I)";
     Text[ chinese_simplified ] = "忽略(~I)";
     Text[ chinese_traditional ] = "忽略(~I)";
-    Text[ turkish ] = "~Ignore";
-    Text[ arabic ] = "~Ignore";
-    Text[ catalan ] = "~Ignore";
-    Text[ thai ] = "~Ignore";
+    Text[ turkish ] = "~Yoksay";
+    Text[ arabic ] = "�����";
+    Text[ catalan ] = "~Ignora";
+    Text[ thai ] = "เ~พิกเฉย";
+    Text[ czech ] = "~Ignorovat";
+    Text[ hebrew ] = "‮להתעלם‬";
+    Text[ hindi ] = "~उपेक्षा करो";
 };
 
 String SV_BUTTONTEXT_ABORT
@@ -307,26 +331,29 @@ String SV_BUTTONTEXT_ABORT
     Text = "~Abbrechen";
     Text [ English ] = "~Abort";
     Text[ english_us ] = "~Abort";
-    Text[ portuguese ] = "~Abort";
-    Text[ russian ] = "~Abort";
-    Text[ greek ] = "~Abort";
-    Text[ dutch ] = "~Abort";
+    Text[ portuguese ] = "~Cancelar";
+    Text[ russian ] = "������";
+    Text[ greek ] = "~�������";
+    Text[ dutch ] = "~Stoppen";
     Text[ french ] = "~Interrompre";
     Text[ spanish ] = "~Cancelar";
-    Text[ finnish ] = "~Abort";
-    Text[ italian ] = "~Annulla";
-    Text[ danish ] = "~Abort";
+    Text[ finnish ] = "~Peruuta";
+    Text[ italian ] = "~Interrompi";
+    Text[ danish ] = "~Cancel";
     Text[ swedish ] = "~Avbryt";
-    Text[ polish ] = "~Abort";
-    Text[ portuguese_brazilian ] = "~Abort";
+    Text[ polish ] = "Anuluj";
+    Text[ portuguese_brazilian ] = "~Cancelar";
     Text[ japanese ] = "中止(~A)";
     Text[ korean ] = "중단(~A)";
     Text[ chinese_simplified ] = "取消(~A)";
     Text[ chinese_traditional ] = "中止(~A)";
-    Text[ turkish ] = "~Abort";
-    Text[ arabic ] = "~Abort";
-    Text[ catalan ] = "~Abort";
-    Text[ thai ] = "~Abort";
+    Text[ turkish ] = "~Vazge�";
+    Text[ arabic ] = "����� �����";
+    Text[ catalan ] = "~Cancel�la";
+    Text[ thai ] = "~ยกเลิก";
+    Text[ czech ] = "Přerušit";
+    Text[ hebrew ] = "~Abbrechen";
+    Text[ hindi ] = "~रद्द करो";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
@@ -363,6 +390,19 @@ YES         ~Kyll�
 NO          ~Ei
 RETRY       ~Yrit�uudelleen
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
