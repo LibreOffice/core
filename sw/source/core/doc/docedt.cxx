@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:41:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
+#ifndef _HHCWRP_HXX
+#include <hhcwrp.hxx>
+#endif
+
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -1692,17 +1696,17 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
 uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-                    sal_Bool bIsConversion ) const
+                    SwHHCWrapper *pConvWrapper ) const
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bReverse = (!bIsConversion && xProp.is()) ?
+    sal_Bool bReverse = (!pConvWrapper && xProp.is()) ?
             *(sal_Bool*)xProp->getPropertyValue( S2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
     SwSpellArgs      *pSpellArgs = 0;
     SwConversionArgs *pConvArgs  = 0;
-    if (bIsConversion)
-        pConvArgs =  new SwConversionArgs(
+    if (pConvWrapper)
+        pConvArgs =  new SwConversionArgs( pConvWrapper->GetSourceLanguage(),
                             pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
     else
@@ -1760,9 +1764,9 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     nPageNr + *pPageCnt - *pPageSt + 1;
                             ::SetProgressState( nStat, (SwDocShell*)GetDocShell() );
                         }
-                        if( (!bIsConversion &&
+                        if( (!pConvWrapper &&
                                 ((SwTxtNode*)pNd)->Spell( pSpellArgs )) ||
-                            ( bIsConversion &&
+                            ( pConvWrapper &&
                                 ((SwTxtNode*)pNd)->Convert( *pConvArgs )))
                         {
                             // Abbrechen und Position merken
@@ -1806,7 +1810,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     }
 
     uno::Any aRes;
-    if (bIsConversion)
+    if (pConvWrapper)
         aRes <<= pConvArgs->aConvText;
     else
         aRes <<= pSpellArgs->xSpellAlt;
