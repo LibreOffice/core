@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:08:03 $
+ *  last change: $Author: os $ $Date: 2001-06-18 12:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2054,6 +2054,13 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aBracketFT.Show(nType & TO_AUTHORITIES);
     aBracketLB.Show(nType & TO_AUTHORITIES);
     aAuthorityFormatFL.Show(nType & TO_AUTHORITIES);
+
+    sal_Bool bEnableSortLanguage = 0 != (nType & (TO_INDEX|TO_AUTHORITIES));
+    aSortOptionsFL.Show(bEnableSortLanguage);
+    aLanguageFT.Show(bEnableSortLanguage);
+    aLanguageLB.Show(bEnableSortLanguage);
+    aSortAlgorithmFT.Show(bEnableSortLanguage);
+    aSortAlgorithmLB.Show(bEnableSortLanguage);
 
     String sStr;
     if(nType & TO_CONTENT)
