@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:54:45 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ String KEY_VERSION_CHECK
     Text[ polish ] = "Uwaga: Nie wszystkie importowane grafiki EPS mog³y zostaζ zapisane na poziomie1, \nponiewaΏ niektσre znajdujΉ siκ na wyΏszym poziomie!";
     Text[ japanese ] = "ζ³¨ζ„: ο½²οΎοΎοΎο½°οΎ„γ•γ‚γ EPS η”»εƒγ®γ„γγ¤γ‹γ―γ€δΈ€γ¤δΈγ®οΎοΎοΎοΎ™γ«γ‚γ‚\nγ«γ™γΉγ¦γ‚’οΎοΎοΎοΎ™οΌ‘ζ Όη΄γ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Text[ greek ] = "Προσοχή: Δεν ήταν δυνατόν να γίνει αποθήκευση όλων των εισηγμένων γραφικών EPS,\nεπειδή μερικά από αυτά υπάρχουν σε μορφή υψηλότερου επιπέδο? ";
-    Text[ korean ] = "μ£Όμ: μΌλ¶€ κ·Έλν”½μ΄ μƒμ„ λ λ²¨μ— μκΈ° λ•λ¬Έμ—\nκ°€μ Έμ¨ EPS κ·Έλν”½ λª¨λ‘λ¥Ό λ λ²¨1μ— μ €μ¥ν•  μλ” μ—†μ—μµλ‹λ‹¤.";
+    Text[ korean ] = "μ£Όμ: μΌλ¶€ κ·Έλν”½μ΄ μƒμ„ λ λ²¨μ— μμ–΄ \nκ°€μ Έμ¨ EPS κ·Έλν”½ λª¨λ‘λ¥Ό λ λ²¨ 1μ— μ €μ¥ν•  μλ” μ—†μ—μµλ‹λ‹¤.";
     Text[ chinese_traditional ] = "θ¨»ζ„οΌη„΅ζ³•ε°‡ζ‰€ζ‰η„ε―ε…¥ε–ε½Άδ»¥ level 1 ε„²ε­οΉ\nε› η‚ΊδΈ€δΊ›ε–ε½Άι«ζ–Ό level 1 οΌ";
     Text[ arabic ] = "ΚΝΠνΡ: ΚΪΠΡ ΝέΩ ία ΥζΡ EPS ΗαγΣΚζΡΟΙ έν ΗαγΣΚζμ 1΅\nαΚζΗΜΟ ΘΪΦ γδεΗ έν γΣΚζμ ΓΪαμ!";
     Text[ turkish ] = "Dikkat: Bazύ EPS grafikleri daha όst dόzeyde olduπu iηin, iηe aktarύlan tόm grafikler dόzey 1'e kaydedilemedi.";
@@ -90,6 +90,7 @@ String KEY_VERSION_CHECK
     Text[ finnish ] = "Varoitus: Kaikkien tuotujen EPS-kuvien tallentaminen ei onnistunut tasolla 1,\nkoska joidenkin kuvien taso on korkeampi.";
     Text[ catalan ] = "΅Atenciσn: No han podido ser guardados en Level1 todos los grαficos EPS importados\nporque existen algunos en un nivel mαs alto!";
 };
+
 
 
 
