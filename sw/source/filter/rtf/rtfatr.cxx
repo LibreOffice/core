@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-01 10:42:52 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 12:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -3902,11 +3905,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.20 2001-06-01 10:42:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.21 2001-07-05 12:40:10 ama Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/06/01 10:42:52  jp
+      Bug #87720#: im-/export of ruby attribute and combined characters
+
       Revision 1.19  2001/05/25 16:03:48  jp
       Bug #82965#/#82962#: Im-/Export of NumRules
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 12:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2082,8 +2082,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     {
         // Bereich aus Quelle ( kein Switch ) ?
         ConvertUFName( aBook );
-        aPara += cTokenSeperator;
-        aPara += cTokenSeperator;
+        aPara += so3::cTokenSeperator;
+        aPara += so3::cTokenSeperator;
         aPara += aBook;
     }
     String aStr(WW8_ASCII2STR( "WW" ));
@@ -3155,12 +3155,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.19 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.20 2001-07-05 12:41:56 ama Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.18  2001/04/11 14:34:22  cmc
       Minor merge error fixes
 
