@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:04:18 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ void ORelationController::Execute(sal_uInt16 _nId)
 // -----------------------------------------------------------------------------
 void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
-    OGenericUnoController::initialize(aArguments);
+    OJoinController::initialize(aArguments);
 
     //  m_pWindow->initialize(m_xCurrentFrame);
 
@@ -446,7 +446,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
 sal_Bool ORelationController::Construct(Window* pParent)
 {
     m_pView = new ORelationDesignView(pParent,this,m_xMultiServiceFacatory);
-    OGenericUnoController::Construct(pParent);
+    OJoinController::Construct(pParent);
     m_pView->Construct(NULL);
     m_pView->Show();
     return sal_True;
