@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:18:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 aNotReallyThere.resize(WW8ListManager::nMaxLevel);
                 pLFOInfo->maParaSprms.resize(WW8ListManager::nMaxLevel);
                 pLFOInfo->maOverrides.resize(pLFOInfo->nLfoLvl);
-                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                sal_uInt8 nLevel;
+                for ( nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     WW8LFOLVL aLFOLVL;
                     bLVLOk = false;
