@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:58:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ class SwNodes: private BigPtrArray
            *pEndOfAutotext, *pEndOfRedlines,
            *pEndOfContent;
 
-    SwOutlineNodes* pOutlineNds;        // Array aller GliederiungsNodes
+    mutable SwOutlineNodes* pOutlineNds;        // Array aller GliederiungsNodes
 
     BOOL bInNodesDel : 1;               // falls rekursiv aufgerufen wird
                                         // Num/Outline nicht aktualisierem
@@ -286,8 +286,9 @@ public:
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); // in ndole.cxx
 
+    void UpdateOutlineNodeList() const;
         // Array aller GliederiungsNodes;
-    const SwOutlineNodes& GetOutLineNds() const { return *pOutlineNds; }
+    const SwOutlineNodes& GetOutLineNds() const;
         // ab einem bestimmten TextNode alle Updaten
     void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );
         // alle Nodes Updaten - Rule/Format-Aenderung
