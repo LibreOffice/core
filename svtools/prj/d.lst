@@ -60,7 +60,6 @@ hedabu: ..\inc\ctrlbox.hxx %_DEST%\inc%_EXT%\svtools\ctrlbox.hxx
 hedabu: ..\inc\ctrltool.hxx %_DEST%\inc%_EXT%\svtools\ctrltool.hxx
 hedabu: ..\inc\collatorres.hxx %_DEST%\inc%_EXT%\svtools\collatorres.hxx
 hedabu: ..\inc\cntwids.hrc %_DEST%\inc%_EXT%\svtools\cntwids.hrc
-hedabu: ..\inc\currencyconfigitem.hxx %_DEST%\inc%_EXT%\svtools\currencyconfigitem.hxx
 hedabu: ..\inc\dateitem.hxx %_DEST%\inc%_EXT%\svtools\dateitem.hxx
 hedabu: ..\inc\dtritem.hxx %_DEST%\inc%_EXT%\svtools\dtritem.hxx
 hedabu: ..\inc\frqitem.hxx %_DEST%\inc%_EXT%\svtools\frqitem.hxx
@@ -295,6 +294,7 @@ hedabu: ..\inc\defaultoptions.hxx %_DEST%\inc%_EXT%\svtools\defaultoptions.hxx
 hedabu: ..\inc\printwarningoptions.hxx %_DEST%\inc%_EXT%\svtools\printwarningoptions.hxx
 hedabu: ..\inc\printoptions.hxx %_DEST%\inc%_EXT%\svtools\printoptions.hxx
 hedabu: ..\inc\dynamicmenuoptions.hxx %_DEST%\inc%_EXT%\svtools\dynamicmenuoptions.hxx
+hedabu: ..\inc\syslocaleoptions.hxx %_DEST%\inc%_EXT%\svtools\syslocaleoptions.hxx
 hedabu: ..\inc\localresaccess.hxx %_DEST%\inc%_EXT%\svtools\localresaccess.hxx
 hedabu: ..\inc\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx
 hedabu: ..\inc\helpagentwindow.hxx %_DEST%\inc%_EXT%\svtools\helpagentwindow.hxx
