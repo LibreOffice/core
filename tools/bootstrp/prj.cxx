@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-01 18:12:30 $
+ *  last change: $Author: nf $ $Date: 2001-02-08 11:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,8 +465,8 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
             if ( pDataDeps )
             {
                 ByteString* pString;
-                USHORT nDataDepsCount = pDataDeps->Count();
-                for ( USHORT j = nDataDepsCount; j > 0; j-- )
+                ULONG nDataDepsCount = pDataDeps->Count();
+                for ( ULONG j = nDataDepsCount; j > 0; j-- )
                 {
                     pString = pDataDeps->GetObject( j - 1 );
                     if ( pString->GetToken( 0, '.') == aLogFileName )
@@ -488,17 +488,44 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 Star::Star()
 /*****************************************************************************/
 {}
+
 /*****************************************************************************/
-Star::Star(UniString aFileName)
+Star::Star(UniString aFileName, USHORT nMode )
 /*****************************************************************************/
+                : nStarMode( nMode )
 {
     ByteString aString;
+    aFileList.Insert( new String( aFileName ));
 
-    SimpleConfig aSolarConfig ( aFileName );
-    while ( (aString = aSolarConfig.GetNext()) != "")
-        InsertToken ( (char *) aString.GetBuffer() );
+    DirEntry aEntry( aFileName );
+    aEntry.ToAbs();
+    aEntry = aEntry.GetPath().GetPath().GetPath();
+    sSourceRoot = aEntry.GetFull();
+
+    while( aFileList.Count()) {
+        SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+        delete aFileList.Remove(( ULONG ) 0 );
+
+        while (( aString = aSolarConfig.GetNext()) != "" )
+            InsertToken (( char * ) aString.GetBuffer());
+    }
 
     // Die gefundenen Abhaengigkeiten rekursiv aufloesen
+    Expand_Impl();
+}
+
+/*****************************************************************************/
+Star::Star( SolarFileList *pSolarFiles )
+/*****************************************************************************/
+                : nStarMode( STAR_MODE_MULTIPLE_PARSE )
+{
+    for ( ULONG i = 0; i < pSolarFiles->Count(); i++ ) {
+        ByteString aString;
+
+        SimpleConfig aSolarConfig( *pSolarFiles->GetObject( i ));
+        while ( (aString = aSolarConfig.GetNext()) != "")
+            InsertToken ( (char *) aString.GetBuffer() );
+    }
     Expand_Impl();
 }
 
@@ -506,6 +533,39 @@ Star::Star(UniString aFileName)
 Star::~Star()
 /*****************************************************************************/
 {
+}
+
+/*****************************************************************************/
+UniString Star::CreateFileName( UniString sProject )
+/*****************************************************************************/
+{
+    UniString sPrjDir( UniString::CreateFromAscii( "prj" ));
+    UniString sSolarFile( UniString::CreateFromAscii( "build.lst" ));
+
+    DirEntry aEntry( sSourceRoot );
+    aEntry += DirEntry( sProject );
+    aEntry += DirEntry( sPrjDir );
+    aEntry += DirEntry( sSolarFile );
+
+    return aEntry.GetFull();
+}
+
+/*****************************************************************************/
+void Star::InsertSolarList( UniString sProject )
+/*****************************************************************************/
+{
+    UniString sFileName( CreateFileName( sProject ));
+
+    for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
+        if (( *aFileList.GetObject( i )) == sFileName )
+            return;
+    }
+
+    ByteString ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
+    if ( HasProject( ssProject ))
+        return;
+
+    aFileList.Insert( new UniString( sFileName ), LIST_APPEND );
 }
 
 /*****************************************************************************/
@@ -602,7 +662,7 @@ void Star::InsertToken ( char *yytext )
                     else if ( aWhat == "get" )
                         nCommandType = COMMAND_GET;
                     else {
-                        USHORT nOffset = aWhat.Copy( 3 ).ToInt32();
+                        ULONG nOffset = aWhat.Copy( 3 ).ToInt32();
                         nCommandType = COMMAND_USER_START + nOffset - 1;
                     }
                 }
@@ -694,6 +754,11 @@ void Star::InsertToken ( char *yytext )
                         }
                         pPrj->AddDependencies( aItem );
                         pPrj->HasHardDependencies( bHardDep );
+
+                        if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
+                            UniString sItem( aItem, RTL_TEXTENCODING_ASCII_US );
+                            InsertSolarList( sItem );
+                        }
                     }
 
                 }
@@ -815,6 +880,7 @@ void StarWriter::CleanUp()
 {
     Expand_Impl();
 }
+
 /*****************************************************************************/
 /*****************************************************************************/
 USHORT StarWriter::Read( UniString aFileName, BOOL bReadComments )
@@ -1093,6 +1159,9 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             }
                             pPrj->AddDependencies( aItem );
                             pPrj->HasHardDependencies( bHardDep );
+
+//                          if ( nMode == STAR_MODE_RECURSIVE_PARSE )
+//                              InsertSolarList( aItem );
                         }
 
                     }
