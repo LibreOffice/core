@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ ModalDialog DLG_CAPTION
         Text [ norwegian ] = "~Caption" ;
         Text [ italian ] = "~Dicitura" ;
         Text [ portuguese_brazilian ] = "~Legenda" ;
-        Text [ portuguese ] = "~Legenda" ;
+        Text [ portuguese ] = "~Texto para etiqueta" ;
         Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Billedtekst" ;
         Text [ french ] = "~Texte de légende" ;
@@ -701,7 +701,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     Text [ english_us ] = "Number range options" ;
     Text [ portuguese_brazilian ] = "Nummernkreis Optionen" ;
-    Text [ swedish ] = "Sekvens alternativ" ;
+    Text [ swedish ] = "Sekvensalternativ" ;
     Text [ danish ] = "Sekvensnummerering-indstillinger" ;
     Text [ italian ] = "Opzioni sequenza" ;
     Text [ spanish ] = "Opciones de secuencias" ;
