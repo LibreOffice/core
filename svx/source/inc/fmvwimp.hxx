@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:31:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ class FmXFormController;
 
 namespace svx {
     class ODataAccessDescriptor;
+    struct OXFormsDescriptor;
 }
 
 //==================================================================
@@ -278,7 +279,7 @@ private:
     void Deactivate(BOOL bDeactivateController = TRUE);
 
     SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
-    SdrObject*  implCreateXFormsControl();
+    SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
 
     /// does some initializations to the newly created control model, returns the ClassId
     sal_Int16   implInitializeNewControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel, const SdrObject* _pObject ) const;
