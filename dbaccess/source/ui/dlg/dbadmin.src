@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:17:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4804,5 +4804,280 @@ ModalDialog DLG_DOMAINPASSWORD
     {
         Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+//.........................................................................
+TabPage PAGE_USERDRIVER
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_USERDRIVER;
+
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Benutzername" ;
+        Text [ english ] = "~Username" ;
+        Text [ NORWEGIAN ] = "~Username" ;
+        Text [ DANISH ] = "Brugernavn" ;
+        Text [ english_US ] = "~User name" ;
+        Text [ SPANISH ] = "N~ombre del usuario" ;
+        Text [ FINNISH ] = "Käyttäjätunnus" ;
+        Text [ FRENCH ] = "Nom d'~utilisateur" ;
+        Text [ ITALIAN ] = "Nome ~utente" ;
+        Text [ DUTCH ] = "~Gebruikersnaam" ;
+        Text [ SWEDISH ] = "A~nvändarnamn" ;
+        Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
+        Text [ portuguese_brazilian ] = "Nome do ~usuário" ;
+        Text [ chinese_simplified ] = "ä½¿ç”¨å(~U)";
+        Text [ russian ] = "Èìÿ ïîëüçîâàòåëÿ";
+        Text [ polish ] = "Nazwa ~u¿ytkownika";
+        Text [ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å(~U)";
+        Text [ chinese_traditional ] = "ä½¿ç”¨è€…åç¨±(~U)";
+        Text [ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
+        Text [ greek ] = "¼íïìá ÷ñŞóôç";
+        Text [ korean ] = "ì‚¬ìš©ì ì´ë¦„(~U)";
+        Text [ turkish ] = "~Kullanıcı ismi";
+        Text [ language_user1 ] = " ";
+        Text[ catalan ] = "Nom d'~usuari";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
+        Text[ czech ] = "UÅ¾ivatelskÃ© jmÃ©no";
+        Text[ hebrew ] = "~Benutzername";
+        Text[ hindi ] = "~à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¨à¤¾à¤®";
+    };
+    Edit ET_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_USER_ODBC;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 90 , 21 ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
+        Text = "Kennwort erforderlich";
+        Text [ english ] = "Password required";
+        Text [ english_us ] = "Password required";
+        HelpId = HID_DSADMIN_PWDREC_ODBC;
+        Text [ portuguese ] = "Necessário senha";
+        Text [ russian ] = "Íåîáõîäèìî ââåñòè ïàğîëü";
+        Text [ greek ] = "Áğáéôåßôáé êùäéêüò ğñüóâáóçò";
+        Text [ dutch ] = "Wachtwoord vereist";
+        Text [ french ] = "Mot de passe requis";
+        Text [ spanish ] = "Se requiere una contraseña";
+        Text [ italian ] = "Password necessaria";
+        Text [ danish ] = "Adgangskode nødvendig";
+        Text [ swedish ] = "Lösenord krävs";
+        Text [ polish ] = "Wymagane has³o";
+        Text [ portuguese_brazilian ] = "Senha obrigatória";
+        Text [ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå¿…è¦";
+        Text [ korean ] = "ì•”í˜¸ í•„ìš”";
+        Text [ chinese_simplified ] = "å¿…é¡»è¾“å…¥å¯†ç ";
+        Text [ chinese_traditional ] = "å¿…é ˆè¼¸å…¥å¯†ç¢¼";
+        Text [ turkish ] = "Şifre gerekli";
+        Text [ arabic ] = "ãØáæÈ ßáãÉ ÓÑ";
+        Text[ finnish ] = "Salasana pakollinen";
+        Text[ catalan ] = "Es necessita una contrasenya";
+        Text[ thai ] = "à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
+        Text[ czech ] = "PoÅ¾adovanÃ© heslo";
+        Text[ hebrew ] = "Kennwort erforderlich";
+        Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤•à¤¾ à¤†à¤µà¤¶à¥à¤¯à¤•à¤¤à¤¾";
+    };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , 32 ) ;
+        Size = MAP_APPFONT ( 252 , 1 ) ;
+    };
+    FixedText FT_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Treibereinstellungen" ;
+        Text [ english ] = "ODBC ~options" ;
+        Text [ NORWEGIAN ] = "ODBC ~options" ;
+        Text [ DANISH ] = "Driverindstillinger" ;
+        Text [ english_US ] = "Driver settings" ;
+        Text [ SPANISH ] = "Opciones del ~controlador" ;
+        Text [ FINNISH ] = "Ohjainasetukset" ;
+        Text [ FRENCH ] = "~Paramètres du pilote" ;
+        Text [ ITALIAN ] = "Imposta~zioni drive" ;
+        Text [ DUTCH ] = "~Driveropties" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Definições do driver" ;
+        Text [ SWEDISH ] = "Drivru~tinsinställningar" ;
+        Text [ PORTUGUESE ] = "Definições do ~controlador" ;
+        Text [ chinese_simplified ] = "è®¾å®šé©±åŠ¨ç¨‹åº";
+        Text [ russian ] = "Íàñòğîéêè äğàéâåğà";
+        Text [ polish ] = "Ustawienia sterownika";
+        Text [ japanese ] = "ãƒ‰ãƒ©ã‚¤ãƒã®è¨­å®š";
+        Text [ chinese_traditional ] = "è¨­å®šé©…å‹•ç¨‹å¼";
+        Text [ arabic ] = "ÅÚÏÇÏÇÊ ÈÑäÇãÌ ÇáÊÔÛíá";
+        Text [ greek ] = "Ñõèìßóåéò ğñïãñÜììá~ôïò ïäŞãçóçò";
+        Text [ korean ] = "ë“œë¼ì´ë²„ ì„¤ì •";
+        Text [ turkish ] = "Sürücü ayarları";
+        Text [ language_user1 ] = " ";
+        Text[ catalan ] = "Paràmetres del programa de control";
+        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¹„à¸”à¸£à¹‰à¸Ÿà¹Œà¹€à¸§à¸­à¸£à¹Œ ";
+        Text[ czech ] = "NastavenÃ­ ovladaÄe";
+        Text[ hebrew ] = "~Treibereinstellungen";
+        Text[ hindi ] = "à¤¡à¥à¤°à¤‡à¤µ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
+    };
+    Edit ET_OPTIONS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 91 , 37 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_ODBC_OPTIONS;
+    };
+    FixedText FT_CHARSET
+    {
+        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Zeichensatz" ;
+        Text [ english ] = "~Character set" ;
+        Text [ NORWEGIAN ] = "~Character set" ;
+        Text [ DANISH ] = "Tegnsæt" ;
+        Text [ english_US ] = "~Character set" ;
+        Text [ SPANISH ] = "J~uego de caracteres" ;
+        Text [ FINNISH ] = "~Merkistö" ;
+        Text [ FRENCH ] = "~Jeu de caractères" ;
+        Text [ ITALIAN ] = "~Tipo di carattere" ;
+        Text [ DUTCH ] = "~Tekenset" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
+        Text [ SWEDISH ] = "~Teckenuppsättning" ;
+        Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
+        Text [ chinese_simplified ] = "å­—ç¬¦é›†(~C)";
+        Text [ russian ] = "Êîäèğîâêà";
+        Text [ polish ] = "Z~estaw znaków";
+        Text [ japanese ] = "æ–‡å­—åˆ—(~C)";
+        Text [ chinese_traditional ] = "å­—å‹(~C)";
+        Text [ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
+        Text [ greek ] = "Óåô ÷áñáêôŞñùí";
+        Text [ korean ] = "ë¬¸ìì§‘í•©(~C)";
+        Text [ turkish ] = "~Karakter kümesi";
+        Text [ language_user1 ] = " ";
+        Text[ catalan ] = "Joc de ~caràcters";
+        Text[ thai ] = "à¸Šà¸¸à¸”à¸•à¸±à¸§~à¸­à¸±à¸à¸‚à¸£à¸°";
+        Text[ czech ] = "ZnakovÃ¡ sada";
+        Text[ hebrew ] = "~Zeichensatz";
+        Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤° à¤¸à¤®à¥‚à¤¹";
+    };
+    ListBox LB_CHARSET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 91 , 52 ) ;
+        Size = MAP_APPFONT ( 130 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        HelpId = HID_DSADMIN_CHARSET_ODBC;
+    };
+
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 68 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Allgemein";
+        Text [ english ] = "General";
+        Text[ english_us ] = "General";
+        Text[ portuguese ] = "Geral";
+        Text[ russian ] = "Îáùèå";
+        Text[ greek ] = "ÃåíéêÜ";
+        Text[ dutch ] = "Algemeen";
+        Text[ french ] = "Général";
+        Text[ spanish ] = "General";
+        Text[ finnish ] = "Yleistä";
+        Text[ italian ] = "Generale";
+        Text[ danish ] = "Generelt";
+        Text[ swedish ] = "Allmänt";
+        Text[ polish ] = "Ogólne";
+        Text[ japanese ] = "å…¨èˆ¬";
+        Text[ korean ] = "ì¼ë°˜";
+        Text[ chinese_simplified ] = "ä¸€èˆ¬";
+        Text[ chinese_traditional ] = "ä¸€èˆ¬";
+        Text[ turkish ] = "Genel";
+        Text[ arabic ] = "ÚÇã";
+        Text[ catalan ] = "Continguts";
+        Text[ thai ] = "à¸—à¸±à¹ˆà¸§à¹„à¸›";
+        Text[ portuguese_brazilian ] = "Geral";
+        Text[ czech ] = "ObecnÃ©";
+        Text[ hebrew ] = "â€®×›×œ×œ×™â€¬";
+        Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯";
+    };
+
+    AUTO_INCREMENT_CONTROLS (80 )
+
+    CheckBox CB_SQL92CHECK
+    {
+        Pos     = MAP_APPFONT ( 6 , 79 + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + UNRELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SQL92CHECK;
+        Text = "SQL92 Namensbeschränkung verwenden";
+        Text [ english ] = "Use SQL92 naming constraints";
+        Text[ english_us ] = "Use SQL92 naming constraints";
+        Text[ portuguese ] = "Use SQL92 naming convention";
+        Text[ russian ] = "Use SQL92 naming convention";
+        Text[ greek ] = "Use SQL92 naming convention";
+        Text[ dutch ] = "Use SQL92 naming convention";
+        Text[ french ] = "Utiliser les contraintes de nom SQL92";
+        Text[ spanish ] = "Utilizar las restricciones del nombre SQL92 ";
+        Text[ finnish ] = "Use SQL92 naming convention";
+        Text[ italian ] = "Usa vincolo del nome SQL92";
+        Text[ danish ] = "Use SQL92 naming convention";
+        Text[ swedish ] = "Använd SQL92-namnbegränsningar";
+        Text[ polish ] = "Use SQL92 naming convention";
+        Text[ japanese ] = "SQL92 ã§è¨±ã•ã‚ŒãŸå‹ã®åå‰ã‚’ä½¿ç”¨ã™ã‚‹";
+        Text[ korean ] = "SQL92 ì´ë¦„ ì œì•½ ì¡°ê±´ ì‚¬ìš©";
+        Text[ chinese_simplified ] = "ä½¿ç”¨ SQL92 å‘½åè§„åˆ™";
+        Text[ chinese_traditional ] = "ä½¿ç”¨ SQL92 å‘½åè¦å‰‡";
+        Text[ turkish ] = "SQL92 adındaki sınırlandırmayı kullan";
+        Text[ arabic ] = "Use SQL92 naming convention";
+        Text[ czech ] = "PouÅ¾Ã­t omezenÃ­ v pojmenovÃ¡nÃ­ SQL92";
+        Text[ hebrew ] = "SQL92 NamensbeschrÃ¤nkung verwenden";
+        Text[ catalan ] = "Use SQL92 naming constraints";
+        Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
+        Text[ thai ] = "Use SQL92 naming constraints";
+        Text[ hindi ] = "Use SQL92 naming constraints";
+    };
+
+    CheckBox CB_USECATALOG
+    {
+
+        Pos     = MAP_APPFONT ( 6 ,79 + 2*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT + 2*UNRELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_USECATALOG;
+        Text = "Katalog verwenden bei dateibasierten Datenbanken";
+        Text [ english ] = "Use catalog on filebased databases";
+        Text[ english_us ] = "Use catalog for file-based databases";
+        Text[ portuguese ] = "Utilizar catálogo em bases de dados baseadas em ficheiros";
+        Text[ russian ] = "Èñïîëüçîâàíèå Êàòàëîãà";
+        Text[ greek ] = "Use catalog on filebased databases";
+        Text[ dutch ] = "Bij op bestand gebaseerde databasescatalogus gebruiken";
+        Text[ french ] = "Utiliser le catalogue pour les bases de données basées sur des fichiers";
+        Text[ spanish ] = "Usar catálogo con bases de datos basadas en archivo";
+        Text[ italian ] = "Utilizza il catalogo per database basati su file";
+        Text[ danish ] = "Anvend bibliotek ved filbaserede databaser";
+        Text[ swedish ] = "Använd katalog för filbaserade databaser";
+        Text[ polish ] = "W przypadku baz danych opartych na plikach u¿yj katalogu";
+        Text[ portuguese_brazilian ] = "Usar catálogo para bancos de dados baseados em arquivos";
+        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ãŒãƒ™ãƒ¼ã‚¹ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã§ã¯ Catalog ã‚’ä½¿ç”¨";
+        Text[ korean ] = "íŒŒì¼ ê¸°ë°˜ ë°ì´í„°ë² ì´ìŠ¤ì—ì„œ ëª©ë¡ ì‚¬ìš©";
+        Text[ chinese_simplified ] = "å¦‚æœæ˜¯æ–‡ä»¶å¼æ•°æ®åº“å°±é‡‡ç”¨åˆ†ç±»";
+        Text[ chinese_traditional ] = "è‹¥æ˜¯æª”æ¡ˆå¼è³‡æ–™åº«å°±æ¡ç”¨åˆ†é¡";
+        Text[ turkish ] = "Dosya tabanlı veritabanı için katalog kullan";
+        Text[ arabic ] = "Use catalog on filebased databases";
+        Text[ finnish ] = "Käytä luetteloa tiedostopohjaisissa tietokannoissa";
+        Text[ catalan ] = "Utilitza el catàleg per a les bases de dades basades en fitxers";
+        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸ªà¹ˆà¸§à¸™à¹à¸ªà¸”à¸‡à¸£à¸²à¸¢à¸à¸²à¸£à¸ªà¸³à¸«à¸£à¸±à¸šà¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸Ÿà¹‰à¸¡à¸à¸·à¹‰à¸™à¸à¸²à¸™";
+        Text[ czech ] = "Pro souborovÃ© databÃ¡ze pouÅ¾Ã­t katalog";
+        Text[ hebrew ] = "Catalog verwenden bei dateibasierten Datenbanken";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤²-à¤†à¤§à¤¾à¤°à¤¿à¤¤ à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤•à¥‡à¤²à¤¿à¤ à¤¸à¥‚à¤šà¥€à¤ªà¤¤à¥à¤° à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¥‹";
     };
 };
