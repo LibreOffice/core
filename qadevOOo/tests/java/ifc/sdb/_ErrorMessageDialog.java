@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ErrorMessageDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:51:05 $
+ *  last change:$Date: 2004-11-02 11:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,11 @@ public class _ErrorMessageDialog extends MultiPropertyTest {
         log.println("Testing with custom Property tester") ;
         testProperty("SQLException", tEnv.getObjRelation("ERR1"),
             tEnv.getObjRelation("ERR2")) ;
+    }
+
+    public void _ParentWindow(){
+        log.println("Testing with custom Property tester");
+        testProperty("ParentWindow", tEnv.getObjRelation("ERR_XWindow"), null);
     }
 
 }  // finish class _ErrorMessageDialog
