@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-18 14:26:10 $
+ *  last change: $Author: bc $ $Date: 2002-07-18 14:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,7 +1289,7 @@ public class ReportWizard {
         DBMetaData.InitializeWidthList();
         int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
         CurUNODialog = UNODialogs.initializeDialog(xMSF, new String[] {"Height", "HelpURL",  "PositionX", "PositionY", "Step", "Title", "Width"},
-                                 new Object[] {new Integer(210), "HID:34362", new Integer(100), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)},
+                                 new Object[] {new Integer(210), "HID:34320", new Integer(100), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)},
                                 iWidth);
         CurReportDocument.ProgressBar.setValue(35);
         fillFirstStep(xMSF, CurReportDocument, DatabaseNames, CurPropertyValue);
