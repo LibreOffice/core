@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:33:00 $
+ *  last change: $Author: obo $ $Date: 2005-03-16 15:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,8 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
@@ -725,7 +725,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
                                         // Layout manager should not layout while the size is still not restored
                                         // so it will stay locked for this time
-                                        Reference< ::drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                                        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
                                         if ( xFrame.is() )
                                         {
                                             try
