@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdconsts.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:48:06 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#include "registry/reader.hxx"
+#include "registry/version.h"
 
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
@@ -107,12 +109,11 @@ ConstantsTypeDescriptionImpl::getConstants()
 {
     if ( !_pMembers )
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
+        typereg::Reader aReader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
 
-        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< Reference< XConstantTypeDescription > > * pTempConsts
             = new Sequence< Reference< XConstantTypeDescription > >( nFields );
         Reference< XConstantTypeDescription > * pConsts
@@ -124,7 +125,7 @@ ConstantsTypeDescriptionImpl::getConstants()
             aName.appendAscii( "." );
             aName.append( aReader.getFieldName( nFields ) );
 
-            Any aValue( getRTValue( aReader.getFieldConstValue( nFields ) ) );
+            Any aValue( getRTValue( aReader.getFieldValue( nFields ) ) );
 
             pConsts[ nFields ]
                 = new ConstantTypeDescriptionImpl( aName.makeStringAndClear(),
