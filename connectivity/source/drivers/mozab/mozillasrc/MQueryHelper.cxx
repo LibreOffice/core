@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
+ *  last change: $Author: dkenny $ $Date: 2002-01-09 10:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,9 @@ MQueryHelper::getRealCount() const
 // -------------------------------------------------------------------------
 NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
 {
-        OSL_TRACE( "IN MQueryHelper::OnQueryItem()\n" );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    OSL_TRACE( "IN MQueryHelper::OnQueryItem()\n" );
 
     nsresult rv;
     PRInt32 resultType;
@@ -386,21 +388,23 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     NS_ENSURE_SUCCESS(rv, rv);
 
     // Check for errors of the executeQuery() call.
-    m_bQueryComplete = sal_True;    // Default to True
     switch ( resultType ) {
     case nsIAbDirectoryQueryResult::queryResultError:
         OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultError\n");
+        m_bQueryComplete = sal_True;
         m_bErrorCondition = sal_True;
         notifyResultOrComplete();
         return NS_OK;
         break;
     case nsIAbDirectoryQueryResult::queryResultStopped:
         OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultStopped\n");
+        m_bQueryComplete = sal_True;
         notifyResultOrComplete();
         return NS_OK;
         break;
     case nsIAbDirectoryQueryResult::queryResultComplete:
         OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultComplete\n");
+        m_bQueryComplete = sal_True;
         notifyResultOrComplete();
         return NS_OK;
         break;
@@ -410,12 +414,12 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         break;
     default:
         OSL_TRACE("\t******** Unexpected : resultType\n");
+        m_bQueryComplete = sal_True;
         return NS_OK;
         break;
     }
 
     // Initialise an array that holds the resultset of the query.
-    m_bQueryComplete = sal_False;
     nsCOMPtr<nsISupportsArray> properties;
     rv = result -> GetResult(getter_AddRefs (properties));
     NS_ENSURE_SUCCESS(rv, rv);
