@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:03:17 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
             aInfos[n].SignatureTime = aTime.GetTime();
             // <--
 
-            DBG_ASSERT( rInfo.nStatus != ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN, "Signature not processed!" );
+            DBG_ASSERT( rInfo.nStatus != ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN, "Signature not processed!" );
 
             aInfos[n].SignatureIsValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
