@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-11 09:21:51 $
+ *  last change: $Author: oj $ $Date: 2001-11-05 10:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ namespace framework
         osl_incrementInterlockedCount( &m_refCount );
             // we may create new references to ourself below, so ensure the dtor is not called twice ....
         closeAgentWindow();
+        if(m_xAutoCloseTimer.isValid())
+            m_xAutoCloseTimer->setListener(NULL);
     }
 
     //--------------------------------------------------------------------
@@ -423,6 +425,9 @@ namespace framework
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/10/11 09:21:51  pb
+ *  fix: #93014# dont show tooltip
+ *
  *  Revision 1.2  2001/08/17 08:47:41  pb
  *  fix: #91160# ignore the url also on click closer
  *
