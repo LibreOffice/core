@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 12:22:55 $
+#   last change: $Author: hr $ $Date: 2004-08-06 12:03:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -279,6 +279,7 @@ SRSFILELIST=\
                 $(SRS)$/unodraw.srs \
                 $(SRS)$/svxlink.srs \
                 $(SRS)$/accessibility.srs \
+                $(SRS)$/toolbars.srs \
                 $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=svx
