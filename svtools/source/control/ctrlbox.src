@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-17 08:39:43 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,26 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     /* alphanumeric sorting algorithm */
     Text = "Alphanumerisch" ;
      Text [ ENGLISH ] = "Alphanumeric" ;
+    Text[ english_us ] = "Alphanumeric";
+    Text[ portuguese ] = "Alfanumérico";
+    Text[ russian ] = "Àëôàâèòíî-öèôğîâîé";
+    Text[ greek ] = "Alphanumeric";
+    Text[ dutch ] = "Alphanumeric";
+    Text[ french ] = "Alphanumérique";
+    Text[ spanish ] = "Alfanumérico";
+    Text[ finnish ] = "Alphanumeric";
+    Text[ italian ] = "Alfanumerico";
+    Text[ danish ] = "Alphanumeric";
+    Text[ swedish ] = "Alfanumeriskt";
+    Text[ polish ] = "Alphanumeric";
+    Text[ portuguese_brazilian ] = "Alphanumeric";
+    Text[ japanese ] = "è‹±æ•°å­—";
+    Text[ korean ] = "Alphanumeric";
+    Text[ chinese_simplified ] = "å­—æ¯æ•°å­—å¼";
+    Text[ chinese_traditional ] = "å­—æ¯æ•¸å­—å¼";
+    Text[ turkish ] = "Alphanumeric";
+    Text[ arabic ] = "Alphanumeric";
+    Text[ catalan ] = "Alphanumeric";
 };
 
 String STR_SVT_COLLATE_NORMAL
@@ -159,14 +179,14 @@ String STR_SVT_COLLATE_CHARSET
     Text[ dutch ] = "Charset";
     Text[ french ] = "Jeu de caractères";
     Text[ spanish ] = "Juego de caracteres";
-    Text[ italian ] = "Set caratteri";
+    Text[ italian ] = "Tipo di carattere";
     Text[ danish ] = "Character Set";
     Text[ swedish ] = "Teckenuppsättning";
     Text[ polish ] = "Zbiór znaków";
     Text[ portuguese_brazilian ] = "Character Set";
-    Text[ japanese ] = "æ–‡å­—ç¨®ã®å¤‰æ›";
+    Text[ japanese ] = "æ–‡å­—ç¨®";
     Text[ korean ] = "ë¬¸ì ì§‘í•©";
-    Text[ chinese_simplified ] = "å­—ä½“";
+    Text[ chinese_simplified ] = "å­—ç¬¦é›†";
     Text[ chinese_traditional ] = "å­—å‹";
     Text[ turkish ] = "Character Set";
     Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
@@ -188,7 +208,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ spanish ] = "Diccionario";
     Text[ italian ] = "Dizionario";
     Text[ danish ] = "Dictionary";
-    Text[ swedish ] = "Lexikon";
+    Text[ swedish ] = "Ordbok";
     Text[ polish ] = "S³ownik";
     Text[ portuguese_brazilian ] = "Dictionary";
     Text[ japanese ] = "è¾æ›¸";
@@ -308,6 +328,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
