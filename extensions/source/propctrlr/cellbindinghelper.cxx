@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:34:18 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 #include "cellbindinghelper.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
-#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HPP_
-#include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -135,7 +135,7 @@ namespace pcr
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::i18n;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
 
     namespace
     {
