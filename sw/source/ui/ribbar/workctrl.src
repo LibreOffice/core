@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:33:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ chinese_traditional ] = "­¶½X";
             Text[ arabic ] = "Ρήγ ΗαΥέΝΙ";
             Text[ greek ] = "Αριθμός σελίδας";
-            Text[ korean ] = "ΖδΐΜΑφ Όφ";
+            Text[ korean ] = "ΒΚ ΉψΘ£";
             Text[ turkish ] = "Sayfa numarasύ";
             Text[ language_user1 ] = " ";
         };
@@ -346,7 +346,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ chinese_traditional ] = "­¶ΌΖ";
             Text[ arabic ] = "ΪΟΟ ΗαΥέΝΗΚ";
             Text[ greek ] = "Σύνολο σελιδών";
-            Text[ korean ] = "ΖδΐΜΑφ Όφ";
+            Text[ korean ] = "ΒΚ Όφ";
             Text[ turkish ] = "Sayfa sayύsύ";
             Text[ language_user1 ] = " ";
         };
@@ -567,7 +567,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "­¶";
         Text[ arabic ] = "ΥέΝΙ";
         Text[ greek ] = "Σελίδα";
-        Text[ korean ] = "ΖδΐΜΑφ";
+        Text[ korean ] = "ΒΚ";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
     };
@@ -601,11 +601,11 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ portuguese_brazilian ] = "Zeichenobjekt";
     Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔ";
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσ";
-    Text[ chinese_traditional ] = "ΉΟ¤ωª«¥σ";
+    Text[ chinese_traditional ] = "ΉΟ§Ξª«¥σ";
         Text[ arabic ] = "ίΗΖδ ΡΣζγν";
         Text[ greek ] = "Αντικείμενο σχεδίασης";
-        Text[ korean ] = "±ΧΈ®±β";
-        Text[ turkish ] = "Ηizim";
+        Text[ korean ] = "±ΧΈ®±β °³ΓΌ";
+        Text[ turkish ] = "Ηizim nesnesi";
         Text[ language_user1 ] = " ";
     };
     String ST_CTRL
@@ -697,7 +697,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ russian ] = "Πθρσνξκ";
         Text[ polish ] = "Grafika";
         Text[ japanese ] = "ΈήΧΜ¨―Έ";
-        Text[ chinese_traditional ] = "ΉΟ¤ω";
+        Text[ chinese_traditional ] = "ΉΟ§Ξ";
         Text[ arabic ] = "ΥζΡΙ";
         Text[ greek ] = "Γραφικό";
         Text[ korean ] = "±Χ·΅ΗΘ";
@@ -749,7 +749,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ΌΠΓD";
         Text[ arabic ] = "ΪδζΗδ";
         Text[ greek ] = "Επικεφαλίδα";
-        Text[ korean ] = "Α¦Έρ";
+        Text[ korean ] = "Η¥Α¦";
         Text[ turkish ] = "Baώlύk";
         Text[ language_user1 ] = " ";
     };
@@ -773,7 +773,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "Ώο¨ϊ";
         Text[ arabic ] = "ΚΝΟνΟ";
         Text[ greek ] = "Επιλογή";
-        Text[ korean ] = "Ό±ΕΓ";
+        Text[ korean ] = "Έ¶Ε·";
         Text[ turkish ] = "Seηim";
         Text[ language_user1 ] = " ";
     };
@@ -798,7 +798,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "µωΈ}";
         Text[ arabic ] = "ΝΗΤνΙ ΣέανΙ";
         Text[ greek ] = "Υποσημείωση";
-        Text[ korean ] = "°Ά ΑΦ";
+        Text[ korean ] = "°ΆΑΦ";
         Text[ turkish ] = "Dipnot";
         Text[ language_user1 ] = " ";
     };
@@ -822,7 +822,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "΄£Ώτ";
         Text[ arabic ] = "ΪαΗγΙ ΚΠίνΡ";
         Text[ greek ] = "Υπενθύμιση";
-        Text[ korean ] = "³ªΈΣΑφ";
+        Text[ korean ] = "Έ¶ΔΏ";
         Text[ turkish ] = "Anύmsatύcύ";
         Text[ language_user1 ] = " ";
     };
@@ -870,7 +870,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "­«½Ζ·j΄M";
         Text[ arabic ] = "ΚίΡΗΡ ΗαΘΝΛ";
         Text[ greek ] = "Επανάληψη αναζήτησης";
-        Text[ korean ] = "ΉέΊΉ °Λ»φ";
+        Text[ korean ] = "Γ£±β΅΅ΉέΊΉ";
         Text[ turkish ] = "Aramayύ yinele";
         Text[ language_user1 ] = " ";
     };
@@ -918,7 +918,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "¤u§@ªν¤½¦΅";
         Text[ arabic ] = "ΥνΫΙ ΜΟζα";
         Text[ greek ] = "Τύπος πίνακα";
-        Text[ korean ] = "Η¥ Όφ½Δ";
+        Text[ korean ] = "Η¥ Ύη½Δ";
         Text[ turkish ] = "Tablo formόlό";
         Text[ language_user1 ] = " ";
     };
@@ -942,7 +942,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "Ώω»~ªΊ¤u§@ªν¤½¦΅";
         Text[ arabic ] = "ΥνΫΙ ΜΟζα ΞΗΨΖΙ";
         Text[ greek ] = "Λανθασμένος τύπος πίνακα";
-        Text[ korean ] = "ΐίΈψµΘ Η¥ Όφ½Δ";
+        Text[ korean ] = "ΐίΈψµΘ Η¥ Ύη½Δ";
         Text[ turkish ] = "Hatalύ tablo formόlό";
         Text[ language_user1 ] = " ";
     };
@@ -1075,7 +1075,7 @@ String STR_IMGBTN_PGE_DOWN
     Text[ chinese_traditional ] = "¤U¤@­¶";
     Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενη σελίδα";
-    Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφ";
+    Text[ korean ] = "΄Ωΐ½ ΒΚ";
     Text[ turkish ] = "Sonraki sayfa";
     Text[ language_user1 ] = " ";
 };
@@ -1100,8 +1100,8 @@ String STR_IMGBTN_DRW_DOWN
     Text[ chinese_traditional ] = "¤U¤@­Σ¦r¤Έª«¥σ";
     Text[ arabic ] = "ΗαίΗΖδ ΗαΡΣζγν ΗαΚΗαν";
     Text[ greek ] = "Επόμενο αντικείμενο σχεδίασης";
-    Text[ korean ] = "΄Ωΐ½ ±ΧΈ®±β";
-    Text[ turkish ] = "Sonraki ηizim";
+    Text[ korean ] = "΄Ωΐ½ ±ΧΈ®±β °³ΓΌ";
+    Text[ turkish ] = "Sonraki ηizim nesnesi";
     Text[ language_user1 ] = " ";
 };
 String STR_IMGBTN_CTRL_DOWN
@@ -1197,7 +1197,7 @@ String STR_IMGBTN_GRF_DOWN
     Text[ russian ] = "Ρλεδσώωθι πθρσνξκ";
     Text[ polish ] = "Nastκpna grafika";
     Text[ japanese ] = "‚ΜΈήΧΜ¨―Έ";
-    Text[ chinese_traditional ] = "¤U¤@­ΣΉΟ¤ω";
+    Text[ chinese_traditional ] = "¤U¤@­ΣΉΟ§Ξ";
     Text[ arabic ] = "ΗαΥζΡΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενο γραφικό";
     Text[ korean ] = "΄Ωΐ½ ±Χ·΅ΗΘ";
@@ -1251,7 +1251,7 @@ String STR_IMGBTN_OUTL_DOWN
     Text[ chinese_traditional ] = "¤U¤@­ΣΌΠΓD";
     Text[ arabic ] = "ΗαΪδζΗδ ΗαΚΗαν";
     Text[ greek ] = "Επόμενη επικεφαλίδα";
-    Text[ korean ] = "΄Ωΐ½ Α¦Έρ";
+    Text[ korean ] = "΄Ωΐ½ Η¥Α¦";
     Text[ turkish ] = "Sonraki baώlύk";
     Text[ language_user1 ] = " ";
 };
@@ -1276,7 +1276,7 @@ String STR_IMGBTN_SEL_DOWN
     Text[ chinese_traditional ] = "¤U¤@­ΣΏο¨ϊ";
     Text[ arabic ] = "ΗαΚΝΟνΟ ΗαΚΗαν";
     Text[ greek ] = "Επόμενη επιλογή";
-    Text[ korean ] = "΄Ωΐ½ Ό±ΕΓ";
+    Text[ korean ] = "΄Ωΐ½ Έ¶Ε·";
     Text[ turkish ] = "Φnceki seηim";
     Text[ language_user1 ] = " ";
 };
@@ -1326,7 +1326,7 @@ String STR_IMGBTN_MARK_DOWN
     Text[ chinese_traditional ] = "¤U¤@­Σ΄£Ώτ";
     Text[ arabic ] = "ΪαΗγΙ ΗαΚΠίνΡ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενη υπενθύμιση";
-    Text[ korean ] = "΄Ωΐ½ ³ªΈΣΑφ";
+    Text[ korean ] = "΄Ωΐ½ Έ¶ΔΏ";
     Text[ turkish ] = "Sonraki anύmsatύcύ";
     Text[ language_user1 ] = " ";
 };
@@ -1431,7 +1431,7 @@ String STR_IMGBTN_TBL_UP
     Text[ chinese_traditional ] = "¤W¤@­Σªν®ζ";
     Text[ arabic ] = "ΗαΜΟζα ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενος πίνακας";
-    Text[ korean ] = "ΐΜΐόΗ¥";
+    Text[ korean ] = "ΐΜΐό Η¥";
     Text[ turkish ] = "Φnceki tablo";
     Text[ language_user1 ] = " ";
 };
@@ -1479,7 +1479,7 @@ String STR_IMGBTN_PGE_UP
     Text[ chinese_traditional ] = "¤W¤@­¶";
     Text[ arabic ] = "ΗαΥέΝΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενη σελίδα";
-    Text[ korean ] = "ΐΜΐό ΖδΐΜΑφ";
+    Text[ korean ] = "ΐΜΐό ΒΚ";
     Text[ turkish ] = "Φnceki sayfa";
     Text[ language_user1 ] = " ";
 };
@@ -1503,8 +1503,8 @@ String STR_IMGBTN_DRW_UP
     Text[ chinese_traditional ] = "¤W¤@­Σ¦r¤Έª«¥σ";
     Text[ arabic ] = "ΗαίΗΖδ ΗαΡΣζγν ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενο αντικείμενο σχεδίασης";
-    Text[ korean ] = "ΐΜΐό ±ΧΈ®±β";
-    Text[ turkish ] = "Φnceki ηizim";
+    Text[ korean ] = "ΐΜΐό ±ΧΈ®±β °³ΓΌ";
+    Text[ turkish ] = "Φnceki ηizim nesnesi";
     Text[ language_user1 ] = " ";
 };
 String STR_IMGBTN_CTRL_UP
@@ -1596,7 +1596,7 @@ String STR_IMGBTN_GRF_UP
     Text[ russian ] = "Οπεδϋδσωθι πθρσνξκ";
     Text[ polish ] = "Poprzednia grafika";
     Text[ japanese ] = "‘O‚Μ}";
-    Text[ chinese_traditional ] = "¤W¤@­ΣΉΟ¤ω";
+    Text[ chinese_traditional ] = "¤W¤@­ΣΉΟ§Ξ";
     Text[ arabic ] = "ΗαΥζΡΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενο γραφικό";
     Text[ korean ] = "ΐΜΐό ±ΧΈ²";
@@ -1649,7 +1649,7 @@ String STR_IMGBTN_OUTL_UP
     Text[ chinese_traditional ] = "¤W¤@­ΣΌΠΓD";
     Text[ arabic ] = "ΗαΪδζΗδ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη επικεφαλίδα";
-    Text[ korean ] = "ΐΜΐόΑ¦Έρ";
+    Text[ korean ] = "ΐΜΐό Η¥Α¦";
     Text[ turkish ] = "Φnceki baώlύk";
     Text[ language_user1 ] = " ";
 };
@@ -1673,7 +1673,7 @@ String STR_IMGBTN_SEL_UP
     Text[ chinese_traditional ] = "¤W¤@­ΣΏο¨ϊ";
     Text[ arabic ] = "ΗαΚΝΟνΟ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη επιλογή";
-    Text[ korean ] = "ΐΜΐό Ό±ΕΓ";
+    Text[ korean ] = "ΐΜΐό Έ¶Ε·";
     Text[ turkish ] = "Sonraki seηim";
     Text[ language_user1 ] = " ";
 };
@@ -1722,7 +1722,7 @@ String STR_IMGBTN_MARK_UP
     Text[ chinese_traditional ] = "¤W¤@­Σ΄£Ώτ";
     Text[ arabic ] = "ΪαΗγΙ ΗαΚΠίνΡ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενη υπενθύμιση";
-    Text[ korean ] = "ΐΜΐό ³ªΈΣΑφ";
+    Text[ korean ] = "ΐΜΐό Έ¶ΔΏ";
     Text[ turkish ] = "Φnceki anύmsatύcύ";
     Text[ language_user1 ] = " ";
 };
@@ -1818,7 +1818,7 @@ String STR_IMGBTN_TBLFML_UP
     Text[ chinese_traditional ] = "¤W¤@­Σ¤u§@ªν¤½¦΅";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενος τύπος πίνακα";
-    Text[ korean ] = "ΐΜΐό Η¥ Όφ½Δ";
+    Text[ korean ] = "ΐΜΐό Η¥ Ύη½Δ";
     Text[ turkish ] = "Φnceki tablo formόlό";
     Text[ language_user1 ] = " ";
 };
@@ -1842,7 +1842,7 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ chinese_traditional ] = "¤U¤@­Σ¤u§@ªν®ζ¦΅";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενος τύπος πίνακα";
-    Text[ korean ] = "΄Ωΐ½ Η¥ Όφ½Δ";
+    Text[ korean ] = "΄Ωΐ½ Η¥ Ύη½Δ";
     Text[ turkish ] = "Sonraki tablo formόlό";
     Text[ language_user1 ] = " ";
 };
@@ -1866,7 +1866,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ chinese_traditional ] = "¤W¤@­ΣΏω»~ªΊ¤u§@ªν®ζ¦΅";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΞΗΨΖΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενος λανθασμένος τύπος πίνακα";
-    Text[ korean ] = "ΐίΈψµΘ ΐΜΐό Η¥ Όφ½Δ";
+    Text[ korean ] = "ΐίΈψµΘ ΐΜΐό Η¥ Ύη½Δ";
     Text[ turkish ] = "Φnceki hatalύ tablo formόlό";
     Text[ language_user1 ] = " ";
 };
@@ -1890,7 +1890,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ chinese_traditional ] = "¤U¤@­ΣΏω»~ªΊ¤u§@ªν®ζ¦΅";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΞΗΨΖΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενος λανθασμένος τύπος πίνακα";
-    Text[ korean ] = "ΐίΈψµΘ ΄Ωΐ½ Η¥ Όφ½Δ";
+    Text[ korean ] = "ΐίΈψµΘ ΄Ωΐ½ Η¥ Ύη½Δ";
     Text[ turkish ] = "Sonraki hatalύ tablo formόlό";
     Text[ language_user1 ] = " ";
 };
