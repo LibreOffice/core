@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 08:51:49 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:48:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,15 +106,11 @@ OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
 .ENDIF
 .ENDIF
 
+SRS1NAME=	desktop
 SRC1FILES=	desktop.src	\
             ssodlg.src
-SRS1NAME=	desktop
 
 # --- Targets ------------------------------------------------------
-
-.IF "$(depend)" != ""
-SRCFILES=$(SRC1FILES)
-.ENDIF
 
 .INCLUDE :  target.mk
 
