@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:47:23 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 21:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,7 @@ class ZipOutputStream
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     ::std::vector < ZipEntry *>         aZipList;
-    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
-    com::sun::star::uno::Sequence < sal_Int8 > aEncryptionBuffer;
+    com::sun::star::uno::Sequence < sal_Int8 > aBuffer, aEncryptionBuffer;
     ::rtl::OUString     sComment;
     Deflater            aDeflater;
     rtlCipher           aCipher;
@@ -100,15 +99,13 @@ protected:
     CRC32               aCRC;
     ByteChucker         aChucker;
     ZipEntry            *pCurrentEntry;
-    sal_Int16           nMethod, nLevel;
+    sal_Int16           nMethod, nLevel, mnDigested;
     sal_Bool            bFinished, bEncryptCurrentEntry, bSpanning;
-    sal_Int16           nCurrentDiskNumber;
     ::vos::ORef < EncryptionData >  xCurrentEncryptData;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Bool bNewSpanning );
     ~ZipOutputStream(void);
-    void setDiskNumber ( sal_Int16 nNewDiskNumber ) { nCurrentDiskNumber = nNewDiskNumber; }
 
     // rawWrite to support a direct write to the output stream
     void SAL_CALL rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
