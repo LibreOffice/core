@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 07:44:17 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 11:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,10 @@ public:
     virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
 
 protected:
+    /// throws a NotConnectedException if the object is not connected anymore
+    void checkConnected() const;
     /// throws an exception according to the error flag of m_pSvStream
-    void checkError();
+    void checkError() const;
 };
 
 //==================================================================

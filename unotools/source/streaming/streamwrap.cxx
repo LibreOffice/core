@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 07:44:56 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,7 @@ OInputStreamWrapper::~OInputStreamWrapper()
 sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                 throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
-    if (!m_pSvStream)
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+    checkConnected();
 
     if (nBytesToRead < 0)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
@@ -171,8 +170,7 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( star
 sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedException, staruno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_pSvStream)
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+    checkConnected();
 
     sal_uInt32 nPos = m_pSvStream->Tell();
     checkError();
@@ -190,8 +188,8 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedE
 //------------------------------------------------------------------------------
 void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedException, staruno::RuntimeException )
 {
-    if (!m_pSvStream)
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkConnected();
 
     if (m_bSvStreamOwner)
         delete m_pSvStream;
@@ -200,14 +198,20 @@ void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedExcep
 }
 
 //------------------------------------------------------------------------------
-void OInputStreamWrapper::checkError()
+void OInputStreamWrapper::checkConnected() const
 {
     if (!m_pSvStream)
-        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(::rtl::OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
+}
+
+//------------------------------------------------------------------------------
+void OInputStreamWrapper::checkError() const
+{
+    checkConnected();
 
     if (m_pSvStream->SvStream::GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(::rtl::OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
 //==================================================================
@@ -250,6 +254,7 @@ void SAL_CALL OSeekableInputStreamWrapper::release(  ) throw ()
 void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    checkConnected();
 
     m_pSvStream->Seek((sal_uInt32)_nLocation);
     checkError();
@@ -259,6 +264,7 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (I
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  ) throw (IOException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    checkConnected();
 
     sal_uInt32 nPos = m_pSvStream->Tell();
     checkError();
@@ -269,6 +275,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  ) throw (IOExcepti
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  ) throw (IOException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    checkConnected();
 
     sal_uInt32 nCurrentPos = m_pSvStream->Tell();
     checkError();
