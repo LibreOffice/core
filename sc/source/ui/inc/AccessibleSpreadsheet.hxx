@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 09:52:47 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 08:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,15 @@ public:
         const com::sun::star::uno::Reference <
         com::sun::star::sheet::XSpreadsheetView >& rxSheetView);
     virtual ~ScAccessibleSpreadsheet ();
+
+    //=====  XAccessibleContext  ==============================================
+
+    /// Return the set of current states.
+    // perhaps sometimes to be implemented
+    virtual ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+        getAccessibleStateSet (void)
+        throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 

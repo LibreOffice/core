@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 09:54:14 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 08:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
@@ -99,6 +102,31 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet (
 
 ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet ()
 {
+}
+
+    //=====  XAccessibleContext  ==============================================
+
+uno::Reference<XAccessibleStateSet> SAL_CALL
+    ScAccessibleSpreadsheet::getAccessibleStateSet (void)
+    throw (uno::RuntimeException)
+{
+/*  SvAccessibleStateSet* pStateSet = new SvAccessibleStateSet();
+//  if (IsDefunc())
+        pStateSet->AddState(AccessibleStateType::DEFUNC);
+//  if (!IsSheetProtected())
+        pStateSet->AddState(AccessibleStateType::EDITABLE);
+    pStateSet->AddState(AccessibleStateType::ENABLED);
+    pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
+    pStateSet->AddState(AccessibleStateType::OPAQUE)
+    pStateSet->AddState(AccessibleStateType::SELECTABLE);
+//  if (IsCompleteSheetSelected)
+        pStateSet->AddState(AccessibleStateType::SELECTED);
+//  if (IsShowing())
+        pStateSet->AddState(AccessibleStateType::SHOWING);
+//  if (IsVisible())
+        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    return pStateSet;*/
+    return uno::Reference<XAccessibleStateSet>();
 }
 
     //=====  XServiceInfo  ====================================================
