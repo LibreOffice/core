@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 10:55:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <unotools/bootstrap.hxx>
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
 #endif
 
 #include "sfxuno.hxx"
@@ -240,6 +243,17 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     // explizite Help-Id
     SetHelpId( SID_ABOUT );
+
+    //#112429# replace occurences of "StarOffice" in the "StarSuite" version
+    rtl::OUString sProduct;
+    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
+    if(sProduct.equals(rtl::OUString::createFromAscii("StarSuite")))
+    {
+        String sCopyright(aCopyrightText.GetText());
+        String sSO(String::CreateFromAscii("StarOffice"));
+        sCopyright.SearchAndReplaceAll(sSO, sProduct);
+        aCopyrightText.SetText(sCopyright);
+    }
 }
 
 // -----------------------------------------------------------------------
