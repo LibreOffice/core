@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-11 18:07:16 $
+ *  last change: $Author: vg $ $Date: 2002-01-15 11:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,18 @@ class Content
 protected:
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
                                                 rtl::OUString >& rPropertyNames,
-                                                  ResultSetInclude eMode );
+                                                  ResultSetInclude eMode )
+            throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
                                                 sal_Int32 >& rPropertyHandles,
-                                                  ResultSetInclude eMode );
+                                                  ResultSetInclude eMode )
+            throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
 public:
     /**
       * Constructor.
