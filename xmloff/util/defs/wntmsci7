@@ -10956,3 +10956,5 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?find@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@4@U?$less@VOUString@rtl@@@4@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@4@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@2@@2@ABVOUString@rtl@@@Z
 ?GetExport@XMLShapeExport@@IAEAAVSvXMLExport@@XZ
 ?onExport@XMLShapeExport@@UAEXABV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@@Z
+_real@8@4000c000000000000000
+?ProcessCommandType@XMLTextFieldExport@@IAEXF@Z
