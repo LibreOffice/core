@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:32:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,35 +136,35 @@ using namespace ::com::sun::star;
 SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
 {
     if ( aAppName == SvGlobalName( SO3_SM_CLASSID_60 ) )
-            return SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 );
+            return SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 );
     else if ( aAppName == SvGlobalName( SO3_SW_CLASSID_60 ) )
-            return SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 );
+            return SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 );
     else if ( aAppName == SvGlobalName( SO3_SC_CLASSID_60 ) )
-            return SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 );
+            return SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 );
     else if ( aAppName == SvGlobalName( SO3_SDRAW_CLASSID_60 ) )
-            return SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 );
+            return SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 );
     else if ( aAppName == SvGlobalName( SO3_SIMPRESS_CLASSID_60 ) )
-            return SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 );
+            return SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 );
     else if ( aAppName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
-            return SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 );
+            return SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 );
 
     return SvGlobalName();
 }
 
 String GetStorageType( const SvGlobalName& aEmbName )
 {
-    if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
-            return String::CreateFromAscii( "soffice.StarMathDocument.6" );
-    else if ( aEmbName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
-            return String::CreateFromAscii( "soffice.StarWriterDocument.6" );
-    else if ( aEmbName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
-            return String::CreateFromAscii( "soffice.StarCalcDocument.6" );
-    else if ( aEmbName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
-            return String::CreateFromAscii( "soffice.StarDrawDocument.6" );
-    else if ( aEmbName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
-            return String::CreateFromAscii( "soffice.StarImpressDocument.6" );
-    else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
-            return String::CreateFromAscii( "soffice.StarChartDocument.6" );
+    if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
+            return String::CreateFromAscii( "opendocument.MathDocument.1" );
+    else if ( aEmbName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
+            return String::CreateFromAscii( "opendocument.WriterDocument.1" );
+    else if ( aEmbName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
+            return String::CreateFromAscii( "opendocument.CalcDocument.1" );
+    else if ( aEmbName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
+            return String::CreateFromAscii( "opendocument.DrawDocument.1" );
+    else if ( aEmbName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
+            return String::CreateFromAscii( "opendocument.ImpressDocument.1" );
+    else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
+            return String::CreateFromAscii( "opendocument.ChartDocument.1" );
 
     return String();
 }
