@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-08 16:38:00 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:35:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,19 +79,21 @@ my $img_module = '%MODULE%';  # 'module' image prefix
 my $img_custom = '%CUSTOM%';  # 'custom' image prefix
 
 my $out_file;                # path to output archive
+my $tmp_out_file;            # path to temporary output file
 my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
 my $custom_path;             # path to custom images directory
 my $imagelist_path;          # path to directory containing the image lists
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
+my $do_rebuild = 0;          # is rebuilding zipfile required?
 
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.5 $ ';
+my $id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -101,9 +103,21 @@ print "$script_name -- version: $script_rev\n";
 
 parse_options();
 my $image_lists_ref = get_image_lists();
+my %image_lists_hash;
+foreach ( @{$image_lists_ref} ) {
+    $image_lists_hash{$_}="";
+}
+$do_rebuild = is_file_newer(\%image_lists_hash) if $do_rebuild == 0;
 my ($global_hash_ref, $module_hash_ref, $custom_hash_ref) = iterate_image_lists($image_lists_ref);
 my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref);
-create_zip_archive($zip_hash_ref);
+$do_rebuild = is_file_newer($zip_hash_ref) if $do_rebuild == 0;
+if ( $do_rebuild == 1 ) {
+    create_zip_archive($zip_hash_ref);
+    replace_file($tmp_out_file, $out_file);
+    print_message("packing  $out_file finished.");
+} else {
+    print_message("$out_file up to date. nothing to do.");
+}
 
 exit(0);
 
@@ -131,6 +145,8 @@ sub parse_options
         exit(1);
     }
 
+    #define intermediate output file
+    $tmp_out_file="$out_file"."$$".$ENV{INPATH};
     # Sanity checks.
 
     # Check if out_file can be written.
@@ -255,6 +271,27 @@ sub create_zip_list
     return \%zip_hash
 }
 
+sub is_file_newer
+{
+    my $test_hash_ref = shift;
+    my $reference_stamp = 0;
+
+    print_message("checking timestamps ...") if $verbose;
+    if ( -e $out_file ) {
+        $reference_stamp = (stat($out_file))[9];
+        print_message("found $out_file with $reference_stamp ...") if $verbose;
+    }
+    return 1 if $reference_stamp == 0;
+
+    foreach ( sort keys %{$test_hash_ref} ) {
+        my $path = $test_hash_ref->{$_} . "/$_";
+        print_message("checking '$path' ...") if $extra_verbose;
+        my $mtime = (stat($path))[9];
+        return 1 if $reference_stamp < $mtime;
+    }
+    return 0;
+}
+
 sub create_zip_archive
 {
     my $zip_hash_ref = shift;
@@ -269,9 +306,27 @@ sub create_zip_archive
             print_error("can't add file '$path' to image zip archive: $!", 5);
         }
     }
-    my $status = $zip->writeToFileNamed($out_file);
+    my $status = $zip->writeToFileNamed($tmp_out_file);
     if ( $status != AZ_OK ) {
-        print_error("write image zip archive '$out_file' failed. Reason: $status", 6);
+        print_error("write image zip archive '$tmp_out_file' failed. Reason: $status", 6);
+    }
+    return;
+}
+
+sub replace_file
+{
+    my $source_file = shift;
+    my $dest_file = shift;
+
+    my $result = unlink($dest_file) if -f $dest_file;
+    if ( $result != 1 && -f $dest_file ) {
+        unlink $source_file;
+        print_error("couldn't remove '$dest_file'",1);
+    }  else {
+        if ( !rename($source_file, $dest_file)) {
+            unlink $source_file;
+            print_error("couldn't rename '$source_file'",1);
+        }
     }
     return;
 }
