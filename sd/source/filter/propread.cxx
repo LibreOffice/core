@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2002-01-11 11:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,31 @@ void PropItem::Clear()
 
 //  -----------------------------------------------------------------------
 
-BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign )
+BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign, sal_uInt16 nCodePage )
 {
+    sal_uInt16 nEncoding;
+    switch ( nCodePage )
+    {
+        default :
+        case 1252: nEncoding = RTL_TEXTENCODING_MS_1252; break;
+        case 1250: nEncoding = RTL_TEXTENCODING_MS_1250; break;
+        case 1251: nEncoding = RTL_TEXTENCODING_MS_1251; break;
+        case 1253: nEncoding = RTL_TEXTENCODING_MS_1253; break;
+        case 1254: nEncoding = RTL_TEXTENCODING_MS_1254; break;
+        case 1255: nEncoding = RTL_TEXTENCODING_MS_1255; break;
+        case 1256: nEncoding = RTL_TEXTENCODING_MS_1256; break;
+        case 1257: nEncoding = RTL_TEXTENCODING_MS_1257; break;
+        case 1258: nEncoding = RTL_TEXTENCODING_MS_1258; break;
+        case 874: nEncoding = RTL_TEXTENCODING_MS_874; break;
+        case 932: nEncoding = RTL_TEXTENCODING_MS_932; break;
+        case 936: nEncoding = RTL_TEXTENCODING_MS_936; break;
+        case 949: nEncoding = RTL_TEXTENCODING_MS_949; break;
+        case 950: nEncoding = RTL_TEXTENCODING_MS_950; break;
+        case 1361: nEncoding = RTL_TEXTENCODING_MS_1361; break;
+        case 65000 : nEncoding = RTL_TEXTENCODING_UTF7; break;
+        case 65001 : nEncoding = RTL_TEXTENCODING_UTF8; break;
+    }
+
     UINT32  nSize, nType, nPos;
     BOOL    bRetValue = FALSE;
 
@@ -146,7 +169,7 @@ BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign )
                 if ( pString[ nSize - 1 ] == 0 )
                 {
                     if ( nSize > 1 )
-                        rString = String( ByteString( pString ), RTL_TEXTENCODING_MS_1252 );
+                        rString = String( ByteString( pString ), nEncoding );
                     else
                         rString = String();
                     bRetValue = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-20 16:12:28 $
+ *  last change: $Author: sj $ $Date: 2002-01-11 11:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,13 @@ BOOL SdPPTImport::Import()
         Section* pSection = (Section*)pDInfoSec2->GetSection( aPropSetGUID );
         if ( pSection )
         {
+            sal_uInt16 nCodePage = 0;
+            if ( pSection->GetProperty( 1, aPropItem ) )
+            {
+                aPropItem >> nType;
+                if ( nType == VT_I2 )
+                    aPropItem >> nCodePage;
+            }
             if ( pSection->GetProperty( PID_SLIDECOUNT, aPropItem ) )
             {
                 aPropItem >> nType;
@@ -410,7 +417,7 @@ BOOL SdPPTImport::Import()
                                 }
                                 for ( i = 0; i < nSlideTitleCount; i++ )
                                 {
-                                    if ( !aPropItem.Read( aUString, nType, FALSE ) )
+                                    if ( !aPropItem.Read( aUString, nType, FALSE, nCodePage ) )
                                         break;
                                     String* pString = new String( aUString );
                                     if ( pString->EqualsAscii( "No Slide Title" ))

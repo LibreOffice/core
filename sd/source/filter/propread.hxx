@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2002-01-11 11:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ class PropItem : public SvMemoryStream
                         PropItem(){};
         void            Clear();
 
-        BOOL            Read( String& rString, UINT32 nType = VT_EMPTY, BOOL bDwordAlign = TRUE );
+        BOOL            Read( String& rString, UINT32 nType = VT_EMPTY, BOOL bDwordAlign = TRUE, sal_uInt16 nCodePage = 0 );
         PropItem&       operator=( PropItem& rPropItem );
 };
 
