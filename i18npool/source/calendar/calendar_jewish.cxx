@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_jewish.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:06:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 16:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,10 +325,12 @@ OUString SAL_CALL
 Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
     throw (RuntimeException)
 {
+    nNativeNumberMode = NativeNumberMode::NATNUM2;  // make Hebrew number for Jewish calendar
+
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR) {
         sal_Int32 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
-        return OUString::valueOf( value );
+        return aNatNum.getNativeNumberString(OUString::valueOf(value), aLocale, nNativeNumberMode );
     }
     else
-        return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
+        return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode );
 }
