@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 11:44:10 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 12:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1811,13 +1811,14 @@ void WW8TabDesc::CreateSwTable()
             aL.SetLeft( GetMinLeft() );
             pFrmFmt->SetAttr( aL );
         }
-        else if (pIo->pSFlyPara->pFlyFmt)
+        else if ((pIo->pSFlyPara->pFlyFmt) && (GetMinLeft()))
         {
             //If we are inside a frame and we have a border, the frames
             //placement does not consider the tables border, which word
             //displays outside the frame, so adjust here.
             SwFmtHoriOrient aHori(pIo->pSFlyPara->pFlyFmt->GetHoriOrient());
             aHori.SetPos(aHori.GetPos()+GetMinLeft());
+            aHori.SetHoriOrient(HORI_NONE);
             pIo->pSFlyPara->pFlyFmt->SetAttr( aHori );
         }
     }
