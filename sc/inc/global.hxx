@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:32:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,7 @@ const BYTE   CR_MANUALSIZE  = 32;
 #define SC_LAYER_BACK       1
 #define SC_LAYER_INTERN     2
 #define SC_LAYER_CONTROLS   3
+#define SC_LAYER_HIDDEN     4
 
                                         //  Tabellen linken
 #define SC_LINK_NONE        0
