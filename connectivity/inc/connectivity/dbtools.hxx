@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 13:33:36 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 16:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,11 @@ namespace dbtools
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(
+            const ::rtl::OUString& _rsTitleOrPath,
+            const ::rtl::OUString& _rsUser,
+            const ::rtl::OUString& _rsPwd,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** returns the columns of the named table of the given connection
     */
