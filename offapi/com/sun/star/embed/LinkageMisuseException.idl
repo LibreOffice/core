@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkageMisuseException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:50:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,23 @@
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
+//============================================================================
 
-// DocMerge from xml: exception com::sun::star::embed::LinkageMisuseException
 /** This exception can be thrown in case a linked object is misused.
+
+    <p>
     Or if embedded object is misused as a linked object.
+    </p>
  */
 exception LinkageMisuseException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
