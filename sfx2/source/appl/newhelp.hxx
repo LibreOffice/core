@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-23 13:04:59 $
+ *  last change: $Author: pb $ $Date: 2002-10-16 12:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } };
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } };
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
 
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
@@ -263,6 +264,9 @@ private:
     Size                    aMinSize;
     String                  aFactory;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
+                            xBreakIterator;
+
     void                ClearSearchResults();
     void                RememberSearchText( const String& rSearchText );
 
@@ -406,24 +410,27 @@ class SfxHelpTextWindow_Impl : public Window
 private:
     ToolBox                 aToolBox;
     Timer                   aSelectTimer;
+    Image                   aIndexOnImage;
+    Image                   aIndexOffImage;
+    String                  aIndexOnText;
+    String                  aIndexOffText;
+    String                  aSearchText;
 
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
+                            xBreakIterator;
     sal_Bool                bIsDebug;
     sal_Bool                bIsIndexOn;
     sal_Bool                bIsInClose;
     sal_Bool                bIsFullWordSearch;
 
-    String                  aIndexOnText;
-    String                  aIndexOffText;
-    String                  aSearchText;
-    Image                   aIndexOnImage;
-    Image                   aIndexOffImage;
-
     sal_Bool                HasSelection() const;
     void                    InitToolBoxImages();
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
+                            GetBreakIterator();
 
     DECL_LINK(              SelectHdl, Timer* );
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );
