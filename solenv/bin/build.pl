@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-26 12:34:24 $
+#   last change: $Author: vg $ $Date: 2001-06-26 12:54:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.22 $ ';
+$id_str = ' $Revision: 1.23 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -178,7 +178,7 @@ sub BuildAll {
             print   "=============\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
             BuildPrj($PrjDir);
-            #system ("$ENV{DELIVER}");
+            system ("$ENV{DELIVER}");
             RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
@@ -200,7 +200,7 @@ sub MakeDir {
     chdir ($BuildDir);
     print $BuildDir, "\n";
     cwd();
-    $error = 0; #system ("$dmake");
+    $error = system ("$dmake");
     if (!$error) {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
