@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nochaos.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 12:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ CntItemPool::CntItemPool()
 : SfxItemPool( DEFINE_CONST_UNICODE("chaos"), WID_CHAOS_START, WID_CHAOS_START, NULL ),
   _nRefs( 0 )
 {
-    SetFileFormatVersion( SOFFICE_FILEFORMAT_NOW );
+    SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
 
     FreezeIdRanges();
 
