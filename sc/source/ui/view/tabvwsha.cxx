@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-15 19:46:03 $
+ *  last change: $Author: nn $ $Date: 2000-12-15 20:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,11 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */ )
                                 aString,
                                 pObject );
 
-        pHdl->NotifyChange( &aState, bForce );
+        //  if using the view's local input handler, this view can always be set
+        //  as current view inside NotifyChange.
+        ScTabViewShell* pSourceSh = pInputHandler ? this : NULL;
+
+        pHdl->NotifyChange( &aState, bForce, pSourceSh );
     }
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
