@@ -9,30 +9,30 @@
 mkdir: %_DEST%\inc%_EXT%\basegfx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\matrix
-..\inc\basegfx\matrix\b2dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\sdr\matrix\b2dhommatrix.hxx
-..\inc\basegfx\matrix\b3dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\sdr\matrix\b3dhommatrix.hxx
+..\inc\basegfx\matrix\b2dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b2dhommatrix.hxx
+..\inc\basegfx\matrix\b3dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b3dhommatrix.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\point
-..\inc\basegfx\point\b2dpoint.hxx %_DEST%\inc%_EXT%\basegfx\sdr\point\b2dpoint.hxx
-..\inc\basegfx\point\b3dpoint.hxx %_DEST%\inc%_EXT%\basegfx\sdr\point\b3dpoint.hxx
-..\inc\basegfx\point\b2dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\sdr\point\b2dhompoint.hxx
-..\inc\basegfx\point\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\sdr\point\b3dhompoint.hxx
+..\inc\basegfx\point\b2dpoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b2dpoint.hxx
+..\inc\basegfx\point\b3dpoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3dpoint.hxx
+..\inc\basegfx\point\b2dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b2dhompoint.hxx
+..\inc\basegfx\point\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3dhompoint.hxx
 
 #mkdir: %_DEST%\inc%_EXT%\basegfx\range
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\vector
-..\inc\basegfx\vector\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\sdr\vector\b2dvector.hxx
-..\inc\basegfx\vector\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\sdr\vector\b3dvector.hxx
+..\inc\basegfx\vector\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dvector.hxx
+..\inc\basegfx\vector\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dvector.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\curve
-..\inc\basegfx\curve\b2dcubicbezier.hxx %_DEST%\inc%_EXT%\basegfx\sdr\curve\b2dcubicbezier.hxx
-..\inc\basegfx\curve\b2dquadraticbezier.hxx %_DEST%\inc%_EXT%\basegfx\sdr\curve\b2dquadraticbezier.hxx
+..\inc\basegfx\curve\b2dcubicbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dcubicbezier.hxx
+..\inc\basegfx\curve\b2dquadraticbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dquadraticbezier.hxx
 
 #mkdir: %_DEST%\inc%_EXT%\basegfx\numeric
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
-..\inc\basegfx\polygon\b2dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\sdr\polygon\b2dpolygon.hxx
-..\inc\basegfx\polygon\b2dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\sdr\polygon\b2dpolypolygon.hxx
-..\inc\basegfx\polygon\b2dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\sdr\polygon\b2dpolygontools.hxx
+..\inc\basegfx\polygon\b2dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygon.hxx
+..\inc\basegfx\polygon\b2dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygon.hxx
+..\inc\basegfx\polygon\b2dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontools.hxx
 
 #mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
