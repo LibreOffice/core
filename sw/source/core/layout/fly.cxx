@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-02 14:35:02 $
+ *  last change: $Author: ama $ $Date: 2002-07-04 08:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2643,6 +2643,15 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
         }
         nRelWidth  = Min( nRelWidth,  pRel->Prt().Width() );
         nRelHeight = Min( nRelHeight, pRel->Prt().Height() );
+        if( !pRel->IsPageFrm() )
+        {
+            const SwPageFrm* pPage = FindPageFrm();
+            if( pPage )
+            {
+                nRelWidth  = Min( nRelWidth,  pPage->Prt().Width() );
+                nRelHeight = Min( nRelHeight, pPage->Prt().Height() );
+            }
+        }
 
         if ( rSz.GetWidthPercent() && rSz.GetWidthPercent() != 0xFF )
             aRet.Width() = nRelWidth * rSz.GetWidthPercent() / 100;
