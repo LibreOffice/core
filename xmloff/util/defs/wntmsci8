@@ -11231,3 +11231,14 @@ _real@41607ac000000000
 ?StaticType@XMLDropDownFieldImportContext@@SAP6APAXXZXZ
 ?Type@XMLDropDownFieldImportContext@@UBEP6APAXXZXZ
 ?lcl_ProcessLabel@@YA_NABVSvXMLImport@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@AAVOUString@rtl@@AA_N@Z
+??0bad_alloc@std@@QAE@ABV01@@Z
+??0bad_alloc@std@@QAE@PBD@Z
+??1bad_alloc@std@@UAE@XZ
+??_R0?AVbad_alloc@std@@@8
+??_R0?AVexception@@@8
+_TI2?AVbad_alloc@std@@
+?getArray@?$Sequence@V?$Reference@VXDependentTextField@text@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Reference@VXDependentTextField@text@star@sun@com@@@2345@XZ
+?getArray@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Sequence@UPropertyValue@beans@star@sun@com@@@2345@XZ
+?getArray@?$Sequence@V?$Sequence@J@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Sequence@J@2345@XZ
+?getArray@?$Sequence@UChartSeriesAddress@chart@star@sun@com@@@uno@star@sun@com@@QAAPAUChartSeriesAddress@chart@345@XZ
+?getArray@?$Sequence@F@uno@star@sun@com@@QAAPAFXZ
