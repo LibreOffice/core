@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:29:32 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #include <charreliefitem.hxx>
 #include <frmdiritem.hxx>
 #include <emphitem.hxx>
+#ifndef _TEXTCONV_HXX
+#include <textconv.hxx>
+#endif
 
 #include <rtl/tencinfo.h>
 
@@ -1550,6 +1553,198 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     return eState;
 #endif
 }
+
+
+sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nLang )
+{
+#ifdef SVX_LIGHT
+    return sal_False;
+#else
+    sal_Bool    bHasConvTxt = sal_False;
+
+    ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count() - 1 );
+    EditSelection aCurSel( aEditDoc.GetStartPaM() );
+
+    String aWord;
+    while ( !bHasConvTxt )
+    {
+        if ( ( aCurSel.Max().GetNode() == pLastNode ) &&
+             ( aCurSel.Max().GetIndex() >= pLastNode->Len() ) )
+        {
+            return sal_False;
+        }
+
+        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aWord = GetSelected( aCurSel );
+        if ( aWord.Len() > 0  &&  GetLanguage( aCurSel.Max() ) == nLang )
+            bHasConvTxt = sal_True;
+        aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+    }
+#endif
+    return bHasConvTxt;
+}
+
+
+void ImpEditEngine::Convert( EditView* pEditView,
+        LanguageType nLang, sal_Bool bMultipleDoc )
+{
+    // modified version of ImpEditEngine::Spell
+
+#ifdef SVX_LIGHT
+#else
+
+    // Bei MultipleDoc immer von vorne/hinten...
+    if ( bMultipleDoc )
+        pEditView->pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
+
+    EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
+    aCurSel.Adjust( aEditDoc );
+    pConvInfo = new ConvInfo;
+    pConvInfo->bMultipleDoc = bMultipleDoc;
+    pConvInfo->aConvStart = CreateEPaM( aCurSel.Min() );
+    pConvInfo->aConvContinue = pConvInfo->aConvStart;
+
+    sal_Bool bIsStart = sal_False;
+    if ( bMultipleDoc )
+        bIsStart = sal_True;    // Immer von Vorne bzw. von hinten...
+    else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
+        bIsStart = sal_True;
+
+    bImpConvertFirstCall = sal_True;    // next ImpConvert call is the very first in this conversion turn
+
+    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    TextConvWrapper aWrp( Application::GetDefModalDialogParent(), xMSF,
+                          SvxCreateLocale( nLang ), bIsStart, pEditView );
+    aWrp.Convert();
+
+    if ( !bMultipleDoc )
+    {
+        pEditView->pImpEditView->DrawSelection();
+        if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
+            aCurSel.Max().GetIndex() = aCurSel.Max().GetNode()->Len();
+        aCurSel.Min() = aCurSel.Max();
+        pEditView->pImpEditView->SetEditSelection( aCurSel );
+        pEditView->pImpEditView->DrawSelection();
+        pEditView->ShowCursor( sal_True, sal_False );
+    }
+    delete pConvInfo;
+    pConvInfo = 0;
+#endif
+}
+
+
+String ImpEditEngine::ImpConvert( EditView* pEditView,
+        LanguageType nLang, const ESelection &rConvRange )
+{
+    // modified version of ImpEditEngine::ImpSpell
+
+    // looks for next convertible text portion to be passed on to the wrapper
+
+    String aRes;
+#ifdef SVX_LIGHT
+    return aRes;
+#else
+
+    ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count()-1 );
+
+    EditPaM aPos( CreateEditPaM( pConvInfo->aConvContinue ) );
+    EditSelection aCurSel = EditSelection( aPos, aPos );
+
+    String aWord;
+
+    while (!aRes.Len())
+    {
+        if (pConvInfo->aConvContinue.nPara  == pConvInfo->aConvTo.nPara &&
+            pConvInfo->aConvContinue.nIndex >= pConvInfo->aConvTo.nIndex)
+            break;
+
+/*
+        // Bekannter (wahrscheinlicher) Bug: Wenn SpellToCurrent, muss
+        // Current bei jeder Ersetzung korrigiert werden, sonst passt
+        // das Ende evtl. nicht mehr genau...
+        if ( pConvInfo->bConvToEnd || pConvInfo->bMultipleDoc )
+        {
+            if ( aCurSel.Max().GetNode() == pLastNode &&
+                 aCurSel.Max().GetIndex() >= pLastNode->Len() )
+                break;
+        }
+*/
+
+        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+
+        if ( !pConvInfo->bConvToEnd )
+        {
+            EPaM aEPaM( CreateEPaM( aCurSel.Min() ) );
+            if ( !( aEPaM < pConvInfo->aConvTo ) )
+                break;
+        }
+
+        // clip selected word to the converted area
+        // (main use when conversion starts/ends **within** a word)
+        EditPaM aPaM( CreateEditPaM( pConvInfo->aConvStart ) );
+        if (pConvInfo->bConvToEnd &&
+            aCurSel.Min().GetNode() == aPaM.GetNode() &&
+            aCurSel.Min().GetIndex() < aPaM.GetIndex())
+                aCurSel.Min().SetIndex( aPaM.GetIndex() );
+        aPaM = CreateEditPaM( pConvInfo->aConvContinue );
+        if (aCurSel.Min().GetNode() == aPaM.GetNode() &&
+            aCurSel.Min().GetIndex() < aPaM.GetIndex())
+                aCurSel.Min().SetIndex( aPaM.GetIndex() );
+        aPaM = CreateEditPaM( pConvInfo->aConvTo );
+        if ((!pConvInfo->bConvToEnd || rConvRange.HasRange())&&
+            aCurSel.Max().GetNode() == aPaM.GetNode() &&
+            aCurSel.Max().GetIndex() > aPaM.GetIndex())
+                aCurSel.Max().SetIndex( aPaM.GetIndex() );
+/*
+        if (rConvRange.HasRange())
+        {
+            // check for end of range to be converted
+            ESelection aTmp = CreateESel( aCurSel );
+            if  (aTmp.nEndPara >  rConvRange.nEndPara ||
+                (aTmp.nEndPara == rConvRange.nEndPara &&
+                 aTmp.nEndPos  >  rConvRange.nEndPos))
+                return String();
+        }
+*/
+        aWord = GetSelected( aCurSel );
+
+        // workaround for SelectWord (i.e. getWordBoundary) returning
+        // a string " " when a word is followed by " " and end of
+        // paragraph and the cursor is placed after the word and
+        // before the " ". See #112021#
+        aWord.EraseTrailingChars( ' ' );
+
+
+        // Wenn Punkt dahinter, muss dieser mit uebergeben werden !
+        // Falls Abkuerzung...
+        if ( aWord.Len() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
+        {
+            sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
+            if ( cNext == '.' )
+            {
+                aCurSel.Max().GetIndex()++;
+                aWord += cNext;
+            }
+        }
+
+        if ( aWord.Len() > 0  &&  GetLanguage( aCurSel.Max() ) == nLang )
+            aRes = aWord;
+
+        if ( !aRes.Len() )
+            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+
+        pConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
+    }
+
+    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->SetEditSelection( aCurSel );
+    pEditView->pImpEditView->DrawSelection();
+    pEditView->ShowCursor( sal_True, sal_False );
+
+    return aRes;
+#endif
+}
+
 
 Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 {
