@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2001-07-02 11:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 /*
 /*
 /*  (C) 1995 - 2000 StarDivision GmbH, Hamburg, Germany
-/*  $Author: fme $ $Date: 2001-06-01 10:20:44 $ $Revision: 1.2 $
+/*  $Author: os $ $Date: 2001-07-02 11:46:36 $ $Revision: 1.3 $
 /*  $Logfile:   T:/sw/source/ui/inc/chartins.hxv  $ $Workfile:   CHARTINS.HXX  $
 /*
 /*  Dialog Einfuegen StarChart
@@ -103,18 +103,22 @@ class SchMemChart;
 
 class SwInsertChartDlg : public SfxModelessDialog
 {
-    FixedText       aTextFt;
+    FixedLine       aFL1;
+    CheckBox        aFirstRow;
+    CheckBox        aFirstCol;
     FixedText       aRangeFt;
     AutoEdit        aRangeEd;
+
+    FixedText       aTextFt;
+
     HelpButton      aHelp;
     CancelButton    aCancel;
-    FixedText       aHLine;
+
+    FixedLine       aHLine;
     PushButton      aPrev;
     PushButton      aNext;
     PushButton      aFinish;
-    CheckBox        aFirstRow;
-    CheckBox        aFirstCol;
-    FixedLine        aFL1;
+
     SchMemChart *   pChartData;
     ModalDialog*    pChartDlg;
     SfxItemSet*     pInItemSet;
