@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 15:36:59 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 18:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
+#ifndef _SFXDOCINF_HXX
+#include <sfx2/docinf.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -103,6 +106,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_RASTERSYNC),   0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_AUTOCALC),     0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((rtl::OUString*)0),    0},
+        {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -235,6 +239,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 else
                     throw uno::RuntimeException();
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
+                pDocShell->GetDocInfo().SetUseUserData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -309,6 +315,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 else
                     throw uno::RuntimeException();
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsUseUserData() );
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
