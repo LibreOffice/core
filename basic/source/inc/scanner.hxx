@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:57:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ protected:
     BOOL   bHash;                       // TRUE: # eingelesen
     BOOL   bError;                      // TRUE: Fehler generieren
     BOOL   bUsedForHilite;              // TRUE: Nutzung fuer Highlighting
+    BOOL   bCompatible;                 // TRUE: OPTION Compatible
 
     void   GenError( SbError );
 public:
@@ -113,6 +114,7 @@ public:
 
     void  EnableErrors()            { bError = FALSE; }
     BOOL  IsHash()                  { return bHash;   }
+    BOOL  IsCompatible()            { return bCompatible; }
     BOOL  WhiteSpace()              { return bSpaces; }
     short GetErrors()               { return nErrors; }
     short GetLine()                 { return nLine;   }
@@ -132,12 +134,29 @@ public:
     double    GetDbl()              { return nVal;  }
 };
 
+class IsoLatinLetterTable
+{
+    bool    IsLetterTab[256];
+
+public:
+    IsoLatinLetterTable( void );
+
+    inline bool isLetter( sal_Unicode c )
+    {
+        bool bRet = IsLetterTab[c];
+        return bRet;
+    }
+};
+
 class BasicSimpleCharClass
 {
+    static IsoLatinLetterTable aLetterTable;
+
 public:
-    static BOOL isAlpha( sal_Unicode c )
+    static BOOL isAlpha( sal_Unicode c, bool bCompatible )
     {
-        BOOL bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        BOOL bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                    || (bCompatible && aLetterTable.isLetter( c ));
         return bRet;
     }
 
@@ -147,12 +166,11 @@ public:
         return bRet;
     }
 
-    static BOOL isAlphaNumeric( sal_Unicode c )
+    static BOOL isAlphaNumeric( sal_Unicode c, bool bCompatible )
     {
-        BOOL bRet = isDigit( c ) || isAlpha( c );
+        BOOL bRet = isDigit( c ) || isAlpha( c, bCompatible );
         return bRet;
     }
 };
-
 
 #endif
