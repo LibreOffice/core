@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@
             Text[ swedish ] = "~Använd på alla liknande texter.";               \
             Text[ polish ] = "Zastosuj w podobnych tekstach.";                  \
             Text[ portuguese_brazilian ] = "~Apply to all similar texts.";      \
-            Text[ japanese ] = "•Ê‚ÌŒÂŠ‚Ì“¯‚¶Œê‹å‚É“K—p(~A)";               \
+            Text[ japanese ] = "•Ê‚Ì‰ÓŠ‚É‚à‚ ‚é“¯‚¶Œê‹å‚É“K—p(~A)";               \
             Text[ chinese_simplified ] = "ÊÊÓÃÓÚÏàÍ¬µÄÕıÎÄ(~A)";           \
             Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
             Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
@@ -640,9 +640,9 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ swedish ] = "Ny användarförteckning";
         Text[ polish ] = "Nowy indeks u¿ytkownika";
         Text[ portuguese_brazilian ] = "New user index name";
-        Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìí—Ş";
+        Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìí—Ş";
         Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ »öÀÎ";
-        Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§Ä¿Â¼";
+        Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕßÄ¿Â¼";
         Text[ chinese_traditional ] = "·s«Ø¦Û­q¥Ø¿ı";
         Text[ arabic ] = "İåÑÓ ÌÏíÏ ááãÓÊÎÏã";
         Text[ turkish ] = "Yeni kullanıcı dizini";
@@ -1293,4 +1293,5 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ catalan ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
     MESSAGE[ finnish ] = "The bibliography entry is already contained in the document with different data. ";
 };
+
 
