@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:25:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,13 +430,13 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, FASTBOOL bChk )
 *************************************************************************/
 
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
-    : aBound1( rPos ), aBound2( rPos ), Ring( pRing )
+    : aBound1( rPos ), aBound2( rPos ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     pPoint = pMark = &aBound1;
 }
 
 SwPaM::SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), Ring( pRing )
+    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     pMark = &aBound1;
     pPoint = &aBound2;
@@ -444,7 +444,7 @@ SwPaM::SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing )
 
 SwPaM::SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
                 long nMkOffset, long nPtOffset, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), Ring( pRing )
+    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     if( nMkOffset )
         aBound1.nNode += nMkOffset;
@@ -459,7 +459,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
 
 SwPaM::SwPaM( const SwNode& rMk, const SwNode& rPt,
                 long nMkOffset, long nPtOffset, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), Ring( pRing )
+    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     if( nMkOffset )
         aBound1.nNode += nMkOffset;
@@ -474,7 +474,7 @@ SwPaM::SwPaM( const SwNode& rMk, const SwNode& rPt,
 
 SwPaM::SwPaM( const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
               const SwNodeIndex& rPt, xub_StrLen nPtCntnt, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), Ring( pRing )
+    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     aBound1.nContent.Assign( rMk.GetNode().GetCntntNode(), nMkCntnt );
     aBound2.nContent.Assign( rPt.GetNode().GetCntntNode(), nPtCntnt );
@@ -484,7 +484,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
 
 SwPaM::SwPaM( const SwNode& rMk, xub_StrLen nMkCntnt,
               const SwNode& rPt, xub_StrLen nPtCntnt, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), Ring( pRing )
+    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     aBound1.nContent.Assign( aBound1.nNode.GetNode().GetCntntNode(), nMkCntnt );
     aBound2.nContent.Assign( aBound2.nNode.GetNode().GetCntntNode(), nPtCntnt );
@@ -493,14 +493,15 @@ SwPaM::SwPaM( const SwNode& rMk, xub_StrLen nMkCntnt,
 }
 
 SwPaM::SwPaM( SwPaM &rPam )
-    : aBound1( *(rPam.pPoint) ), aBound2( *(rPam.pMark) ), Ring( &rPam )
+    : aBound1( *(rPam.pPoint) ), aBound2( *(rPam.pMark) ),
+      bIsInFrontOfLabel(FALSE), Ring( &rPam )
 {
     pPoint = &aBound1;
     pMark  = rPam.HasMark() ? &aBound2 : pPoint;
 }
 
 SwPaM::SwPaM( const SwNode& rNd, xub_StrLen nCntnt, SwPaM* pRing )
-    : aBound1( rNd ), aBound2( rNd ), Ring( pRing )
+    : aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     aBound1.nContent.Assign( aBound1.nNode.GetNode().GetCntntNode(), nCntnt );
     aBound2.nContent = aBound1.nContent;
@@ -508,7 +509,7 @@ SwPaM::SwPaM( const SwNode& rNd, xub_StrLen nCntnt, SwPaM* pRing )
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt, SwPaM* pRing )
-    : aBound1( rNd ), aBound2( rNd ), Ring( pRing )
+    : aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE), Ring( pRing )
 {
     aBound1.nContent.Assign( rNd.GetNode().GetCntntNode(), nCntnt );
     aBound2.nContent = aBound1.nContent;
@@ -539,6 +540,15 @@ void SwPaM::Exchange()
 }
 #endif
 
+FASTBOOL SwPaM::IsInFrontOfLabel() const
+{
+    return bIsInFrontOfLabel;
+}
+
+void SwPaM::SetInFrontOfLabel(FASTBOOL _bIsInFrontOfLabel)
+{
+    bIsInFrontOfLabel = _bIsInFrontOfLabel;
+}
 
 SwPaM &SwPaM::operator=( SwPaM &rPam )
 {
@@ -558,7 +568,11 @@ SwPaM &SwPaM::operator=( SwPaM &rPam )
 
 FASTBOOL SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 {
-    return (*fnGo)( *this, fnMove );
+    FASTBOOL bRet = (*fnGo)( *this, fnMove );
+
+    bIsInFrontOfLabel = FALSE;
+
+    return bRet;
 }
 
 
