@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:34:03 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ private:
     ScAddress           aSrcPos;
     USHORT              nValMode;       // enum ScValidationMode
     BOOL                bIgnoreBlank;
+    sal_Int16           nShowList;
     BOOL                bShowInput;
     String              aInputTitle;
     String              aInputMessage;
