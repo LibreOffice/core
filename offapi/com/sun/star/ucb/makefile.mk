@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:58:16 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:50:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,9 @@ IDLFILES=\
     FTPContent.idl\
     FTPContentProvider.idl\
     GlobalTransferCommandArgument.idl\
+    GnomeVFSContentProvider.idl\
+    GnomeVFSDocumentContent.idl\
+    GnomeVFSFolderContent.idl\
     HandleCookiesRequest.idl\
     HelpContent.idl\
     HelpContentProvider.idl\
