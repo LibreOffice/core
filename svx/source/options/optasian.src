@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:12:54 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Kerning";
         Text[ polish ] = "Kerning";
         Text[ portuguese_brazilian ] = "Kerning";
-        Text[ japanese ] = "¶°Æİ¸Ş";
-        Text[ korean ] = "Ä¿´×";
-        Text[ chinese_simplified ] = "×Ö·û¼ä¸ô";
-        Text[ chinese_traditional ] = "¦r¤¸¶¡¹j";
+        Text[ japanese ] = "ï½¶ï½°ï¾†ï¾ï½¸ï¾";
+        Text[ korean ] = "ì»¤ë‹";
+        Text[ chinese_simplified ] = "å­—ç¬¦é—´éš”";
+        Text[ chinese_traditional ] = "å­—å…ƒé–“éš”";
         Text[ turkish ] = "Kerning";
         Text[ arabic ] = "ÊŞäíä ÃÍÑİ";
         Text[ catalan ] = "Kerning";
@@ -118,10 +118,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Bara västliga tecke~n";
         Text[ polish ] = "Tylko znaki zachodnie";
         Text[ portuguese_brazilian ] = "Western characters only";
-        Text[ japanese ] = "‰pš‚Ì‚İ(~W)";
-        Text[ korean ] = "¾ËÆÄºª ¹®ÀÚ¸¸(~W)";
-        Text[ chinese_simplified ] = "½öÊÊÓÃÓÚÎ÷ÎÄ(~W)";
-        Text[ chinese_traditional ] = "¶È¥Î©ó¦è¤å(~W)";
+        Text[ japanese ] = "è‹±å­—ã®ã¿(~W)";
+        Text[ korean ] = "ì•ŒíŒŒë²³ ë¬¸ìë§Œ(~W)";
+        Text[ chinese_simplified ] = "ä»…é€‚ç”¨äºè¥¿æ–‡(~W)";
+        Text[ chinese_traditional ] = "åƒ…ç”¨æ–¼è¥¿æ–‡(~W)";
         Text[ turkish ] = "Western characters only";
         Text[ arabic ] = "ÃÍÑİ ÛÑÈíÉ İŞØ";
         Text[ catalan ] = "Solo caracteres del alfabeto occidental";
@@ -145,10 +145,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "~Västlig text och interpunktion";
         Text[ polish ] = "Tekst i interpunkcja zachodnia";
         Text[ portuguese_brazilian ] = "Western text and punctuation";
-        Text[ japanese ] = "”¼Šp‰pš‚Æ‹æØ‚è‹L†(~T)";
-        Text[ korean ] = "¾ËÆÄºª ¹®ÀÚ ÅØ½ºÆ®¿Í ±¸µÎÁ¡(~T)";
-        Text[ chinese_simplified ] = "Î÷ÎÄºÍ±êµã·ûºÅ(~T)";
-        Text[ chinese_traditional ] = "¦è¤å©M¼ĞÂI²Å¸¹(~T)";
+        Text[ japanese ] = "åŠè§’è‹±å­—ã¨åŒºåˆ‡ã‚Šè¨˜å·(~T)";
+        Text[ korean ] = "ì•ŒíŒŒë²³ ë¬¸ì í…ìŠ¤íŠ¸ì™€ êµ¬ë‘ì (~T)";
+        Text[ chinese_simplified ] = "è¥¿æ–‡å’Œæ ‡ç‚¹ç¬¦å·(~T)";
+        Text[ chinese_traditional ] = "è¥¿æ–‡å’Œæ¨™é»ç¬¦è™Ÿ(~T)";
         Text[ turkish ] = "Western text and punctuation";
         Text[ arabic ] = "äÕ ÛÑÈí æÚáÇãÇÊ ÊäŞíØ";
         Text[ catalan ] = "Texto y puntuación occidentales";
@@ -172,10 +172,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Teckenavstånd";
         Text[ polish ] = "Odstêpy miêdzy znakami";
         Text[ portuguese_brazilian ] = "Character distance";
-        Text[ japanese ] = "•¶šŠÔŠu‚Ì’²®";
-        Text[ korean ] = "ÀÚ°£";
-        Text[ chinese_simplified ] = "×Ö·û¼ä¸ô";
-        Text[ chinese_traditional ] = "¦r¤¸¶¡¹j";
+        Text[ japanese ] = "æ–‡å­—é–“éš”ã®èª¿æ•´";
+        Text[ korean ] = "ìê°„";
+        Text[ chinese_simplified ] = "å­—ç¬¦é—´éš”";
+        Text[ chinese_traditional ] = "å­—å…ƒé–“éš”";
         Text[ turkish ] = "Character distance";
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÃÍÑİ";
         Text[ catalan ] = "Character distance";
@@ -199,10 +199,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Ingen ~kompression";
         Text[ polish ] = "Bez kompresji";
         Text[ portuguese_brazilian ] = "No compression";
-        Text[ japanese ] = "ŠÔŠu‚ğ‹l‚ß‚È‚¢(~N)";
-        Text[ korean ] = "¾ĞÃà ¾øÀ½(~N)";
-        Text[ chinese_simplified ] = "²»Ñ¹Ëõ(~N)";
-        Text[ chinese_traditional ] = "¤£À£ÁY(~N)";
+        Text[ japanese ] = "é–“éš”ã‚’è©°ã‚ãªã„(~N)";
+        Text[ korean ] = "ì••ì¶• ì—†ìŒ(~N)";
+        Text[ chinese_simplified ] = "ä¸å‹ç¼©(~N)";
+        Text[ chinese_traditional ] = "ä¸å£“ç¸®(~N)";
         Text[ turkish ] = "No compression";
         Text[ arabic ] = "ÈÏæä ÖÛØ";
         Text[ catalan ] = "Sin compresión";
@@ -226,10 +226,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Komprimera bara ~interpunktion";
         Text[ polish ] = "Skompresuj tylko interpunkcjê";
         Text[ portuguese_brazilian ] = "Compress punctuation only";
-        Text[ japanese ] = "‹å“Ç“_‚Ì‚İ‚ğ‹l‚ß‚é(~C)";
-        Text[ korean ] = "±¸µÎÁ¡¸¸ ¾ĞÃà(~C)";
-        Text[ chinese_simplified ] = "Ö»Ñ¹Ëõ±êµã·ûºÅ(~C)";
-        Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹(~C)";
+        Text[ japanese ] = "å¥èª­ç‚¹ã®ã¿ã‚’è©°ã‚ã‚‹(~C)";
+        Text[ korean ] = "êµ¬ë‘ì ë§Œ ì••ì¶•(~C)";
+        Text[ chinese_simplified ] = "åªå‹ç¼©æ ‡ç‚¹ç¬¦å·(~C)";
+        Text[ chinese_traditional ] = "åƒ…å£“ç¸®æ¨™é»ç¬¦è™Ÿ(~C)";
         Text[ turkish ] = "Compress punctuation only";
         Text[ arabic ] = "ÖÛØ ÚáÇãÇÊ ÇáÊäŞíØ İŞØ";
         Text[ catalan ] = "Comprimir solo puntuación";
@@ -253,10 +253,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Komprimera interpunktion och ~japansk Kana";
         Text[ polish ] = "Skompresuj interpunkcjê i japoñsk¹ Kanê";
         Text[ portuguese_brazilian ] = "Compress punctuation and japanese Kana";
-        Text[ japanese ] = "‹å“Ç“_‚Æ‚©‚È‚ğ‹l‚ß‚é(~P)";
-        Text[ korean ] = "±¸µÎÁ¡°ú ÀÏº» °¡³ª¹®ÀÚ¸¸ ¾ĞÃà(~P)";
-        Text[ chinese_simplified ] = "Ñ¹Ëõ±êµã·ûºÅºÍÈÕÎÄ¼ÙÃû(~P)";
-        Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹©M¤é¤å°²¦W(~P)";
+        Text[ japanese ] = "å¥èª­ç‚¹ã¨ã‹ãªã‚’è©°ã‚ã‚‹(~P)";
+        Text[ korean ] = "êµ¬ë‘ì ê³¼ ì¼ë³¸ ê°€ë‚˜ë¬¸ìë§Œ ì••ì¶•(~P)";
+        Text[ chinese_simplified ] = "å‹ç¼©æ ‡ç‚¹ç¬¦å·å’Œæ—¥æ–‡å‡å(~P)";
+        Text[ chinese_traditional ] = "åƒ…å£“ç¸®æ¨™é»ç¬¦è™Ÿå’Œæ—¥æ–‡å‡å(~P)";
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
         Text[ catalan ] = "Comprimir puntuación y Kana japonés";
@@ -280,10 +280,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Start- och sluttecken";
         Text[ polish ] = "Znaki wiod¹ce i koñcowe";
         Text[ portuguese_brazilian ] = "Start and end characters";
-        Text[ japanese ] = "s“ª‹Ö‘¥•¶š‚Æs––‹Ö‘¥•¶š";
-        Text[ korean ] = "½ÃÀÛ¹®ÀÚ¿Í ³¡¹®ÀÚ";
-        Text[ chinese_simplified ] = "¿ªÍ·ºÍ½áÎ²×Ö·û";
-        Text[ chinese_traditional ] = "¶}ÀY¦r¤¸©Mµ²§À¦r¤¸";
+        Text[ japanese ] = "è¡Œé ­ç¦å‰‡æ–‡å­—ã¨è¡Œæœ«ç¦å‰‡æ–‡å­—";
+        Text[ korean ] = "ì‹œì‘ë¬¸ìì™€ ëë¬¸ì";
+        Text[ chinese_simplified ] = "å¼€å¤´å’Œç»“å°¾å­—ç¬¦";
+        Text[ chinese_traditional ] = "é–‹é ­å­—å…ƒå’Œçµå°¾å­—å…ƒ";
         Text[ turkish ] = "Start and end characters";
         Text[ arabic ] = "ÃÍÑİ ÇáÈÏÇíÉ æÇáäåÇíÉ";
         Text[ catalan ] = "Start and end characters";
@@ -307,10 +307,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "~Språk";
         Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language";
-        Text[ japanese ] = "Œ¾Œê(~L)";
-        Text[ korean ] = "¾ğ¾î(~L)";
-        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
-        Text[ chinese_traditional ] = "»y¨¥(~L)";
+        Text[ japanese ] = "è¨€èª(~L)";
+        Text[ korean ] = "ì–¸ì–´(~L)";
+        Text[ chinese_simplified ] = "è¯­è¨€(~L)";
+        Text[ chinese_traditional ] = "èªè¨€(~L)";
         Text[ turkish ] = "Language";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ catalan ] = "Idioma";
@@ -341,10 +341,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "S~tandard";
         Text[ polish ] = "Domyœlnie";
         Text[ portuguese_brazilian ] = "Standard";
-        Text[ japanese ] = "•W€(~D)";
-        Text[ korean ] = "Ç¥ÁØ(~D)";
-        Text[ chinese_simplified ] = "±ê×¼(~D)";
-        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+        Text[ japanese ] = "æ¨™æº–(~D)";
+        Text[ korean ] = "í‘œì¤€(~D)";
+        Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
+        Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ turkish ] = "Standard";
         Text[ arabic ] = "ŞíÇÓí";
         Text[ catalan ] = "Predeterminado";
@@ -368,10 +368,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Inte i ~början av rad:";
         Text[ polish ] = "Nie na pocz¹tku wiersza:";
         Text[ portuguese_brazilian ] = "No start of line:";
-        Text[ japanese ] = "s“ª‹Ö‘¥•¶š:";
-        Text[ korean ] = "Çà ½ÃÀÛ ¾Æ´Ô:";
-        Text[ chinese_simplified ] = "ĞĞÊ×½ûÖ¹Ê¹ÓÃ×Ö·û£º";
-        Text[ chinese_traditional ] = "¦æ­º¸T¤î¨Ï¥Î¦r¤¸¡G";
+        Text[ japanese ] = "è¡Œé ­ç¦å‰‡æ–‡å­—:";
+        Text[ korean ] = "í–‰ ì‹œì‘ ì•„ë‹˜:";
+        Text[ chinese_simplified ] = "è¡Œé¦–ç¦æ­¢ä½¿ç”¨å­—ç¬¦ï¼š";
+        Text[ chinese_traditional ] = "è¡Œé¦–ç¦æ­¢ä½¿ç”¨å­—å…ƒï¼š";
         Text[ turkish ] = "No start of line:";
         Text[ arabic ] = "ÈÏæä ÈÏÇíÉ ÇáÓØÑ:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
@@ -402,10 +402,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Inte i slut~et av rad:";
         Text[ polish ] = "Nie na koñcu wiersza:";
         Text[ portuguese_brazilian ] = "No end of line:";
-        Text[ japanese ] = "s––‹Ö‘¥•¶š:";
-        Text[ korean ] = "Çà ³¡ ¾Æ´Ô:";
-        Text[ chinese_simplified ] = "ĞĞÄ©½ûÖ¹Ê¹ÓÃ×Ö·û£º";
-        Text[ chinese_traditional ] = "¦æ¥½¸T¤î¨Ï¥Î¦r¤¸¡G";
+        Text[ japanese ] = "è¡Œæœ«ç¦å‰‡æ–‡å­—:";
+        Text[ korean ] = "í–‰ ë ì•„ë‹˜:";
+        Text[ chinese_simplified ] = "è¡Œæœ«ç¦æ­¢ä½¿ç”¨å­—ç¬¦ï¼š";
+        Text[ chinese_traditional ] = "è¡Œæœ«ç¦æ­¢ä½¿ç”¨å­—å…ƒï¼š";
         Text[ turkish ] = "No end of line:";
         Text[ arabic ] = "ÈÏæä äåÇíÉ ÓØÑ:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
@@ -436,10 +436,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Utan användardefinierade radbrytningstecken";
         Text[ polish ] = "Bez zdefiniowanych indywidualnie znaków podzia³u wiersza";
         Text[ portuguese_brazilian ] = "Without user-defined line break symbols";
-        Text[ japanese ] = "Õ°»Ş°’è‹`‚Ì‰üs‚Ì‹Ö‘¥•¶š‚Íœ‚­";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ ÁÙ¹Ù²Ù±â ±âÈ£ ¾øÀ½";
-        Text[ chinese_simplified ] = "²»¸½´øÊ¹ÓÃÕß×Ô¶¨µÄ»»ĞĞ·ûºÅ";
-        Text[ chinese_traditional ] = "¤£ªş±a¨Ï¥ÎªÌ¦Û­qªº´«¦æ²Å¸¹";
+        Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®æ”¹è¡Œæ™‚ã®ç¦å‰‡æ–‡å­—ã¯é™¤ã";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ì¤„ë°”ê¾¸ê¸° ê¸°í˜¸ ì—†ìŒ";
+        Text[ chinese_simplified ] = "ä¸é™„å¸¦ä½¿ç”¨è€…è‡ªå®šçš„æ¢è¡Œç¬¦å·";
+        Text[ chinese_traditional ] = "ä¸é™„å¸¶ä½¿ç”¨è€…è‡ªè¨‚çš„æ›è¡Œç¬¦è™Ÿ";
         Text[ turkish ] = "Without user-defined line break symbols";
         Text[ arabic ] = "ÈÏæä ÚáÇãÇÊ İÕá ÃÓØÑ ãÎÕÕÉ";
         Text[ catalan ] = "Sin carácter de cambio de fila definido por el usuario";
@@ -457,15 +457,16 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ swedish ] = "Proxy";
     Text[ polish ] = "Proxy";
     Text[ portuguese_brazilian ] = "Proxy";
-    Text[ japanese ] = "ÌßÛ·¼";
-    Text[ korean ] = "ÇÁ·Ï½Ã";
-    Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷";
-    Text[ chinese_traditional ] = "¥N²z¦øªA¾¹";
+    Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï½·ï½¼";
+    Text[ korean ] = "í”„ë¡ì‹œ";
+    Text[ chinese_simplified ] = "ä»£ç†æœåŠ¡å™¨";
+    Text[ chinese_traditional ] = "ä»£ç†ä¼ºæœå™¨";
     Text[ turkish ] = "Proxy";
     Text[ arabic ] = "Proxy";
     Text[ catalan ] = "Proxy";
     Text[ finnish ] = "Välityspalvelin";
 };
+
 
 
 
