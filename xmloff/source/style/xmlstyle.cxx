@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:33:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         }
         else if( IsXMLToken( rLocalName, XML_PARENT_STYLE_NAME ) )
         {
-            aParent = rValue;
+            aParentName = rValue;
         }
         else if( IsXMLToken( rLocalName, XML_NEXT_STYLE_NAME ) )
         {
