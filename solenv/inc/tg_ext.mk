@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: armin $ $Date: 2002-03-19 11:32:19 $
+#   last change: $Author: hjs $ $Date: 2002-03-22 11:03:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,27 @@
 
 .IF "$(L10N_framework)"==""
 
+# setup INCLUDE variable for use by VC++
 .IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"=="4nt"
+.IF "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
+.ELSE			# "$(EXT_USE_STLPORT)"==""
+INCLUDE!:=$(shell echo $(INCLUDE) | sed "s/[ \t]*-I/;/g" )
+.ENDIF			# "$(EXT_USE_STLPORT)"==""
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(EXT_USE_STLPORT)"==""
+INCLUDE!:=$(shell echo "$(EXT_INCLUDE:s/\stl//)" )
+.ELSE			# "$(EXT_USE_STLPORT)"==""
+INCLUDE!:=$(shell echo "$(EXT_INCLUDE))" )
+.ENDIF			# "$(EXT_USE_STLPORT)"==""
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .EXPORT : INCLUDE
 .ENDIF			# "$(GUI)"=="WNT"
+
+.IF "$(OS)"!="NETBSD"
+PATCHFLAGS=-b
+.ENDIF			# "$(OS)"=="NETBSD"
 
 #override
 PACKAGE_DIR=$(MISC)$/build
@@ -160,20 +177,12 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +$(TOUCH) $@
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && ( $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && ( $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-.IF "$(OS)"=="NETBSD"
-    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
-.ELSE
-    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
-.ENDIF		# "$(OS)"=="NETBSD"
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(BSCLIENT)"!=""
-.IF "$(OS)"=="NETBSD"
-    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | patch -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
-.ELSE
-    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
-.ENDIF          # "$(OS)"=="NETBSD"
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
