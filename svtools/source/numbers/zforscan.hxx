@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-05-31 16:51:30 $
+ *  last change: $Author: er $ $Date: 2001-06-25 12:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 
 #include "zformat.hxx"  // just for NfKeywordTable
 
-class International;
 class SvNumberFormatter;
 struct ImpSvNumberformatInfo;
 
