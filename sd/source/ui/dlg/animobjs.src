@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 21:00:12 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "√π°°¿ÃπÃ¡ˆ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Erstes Bild";
+        QuickHelpText[ catalan ] = "Primera imagen";
     };
     ImageButton BTN_REVERSE
     {
@@ -159,6 +160,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "µ⁄∑Œ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "R¸ckw‰rts";
+        QuickHelpText[ catalan ] = "Atr·s";
     };
     ImageButton BTN_STOP
     {
@@ -189,6 +191,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "¡§¡ˆ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Stopp";
+        QuickHelpText[ catalan ] = "Finalizar";
     };
     ImageButton BTN_PLAY
     {
@@ -218,6 +221,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "¿Áª˝!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abspielen";
+        QuickHelpText[ catalan ] = "Reproducir";
     };
     ImageButton BTN_LAST
     {
@@ -247,6 +251,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "∏∂¡ˆ∏∑°°¿ÃπÃ¡ˆ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Letztes Bild";
+        QuickHelpText[ catalan ] = "⁄ltima imagen";
     };
     NumericField NUM_FLD_BITMAP
     {
@@ -286,6 +291,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "¿ÃπÃ¡ˆ°°π¯»£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bildnummer";
+        QuickHelpText[ catalan ] = "N˙mero de imagen";
     };
     TimeField TIME_FIELD
     {
@@ -328,6 +334,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "µΩ∫«√∑π¿Ãº“ø‰Ω√∞£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Anzeigedauer";
+        QuickHelpText[ catalan ] = "DuraciÛn";
     };
     ListBox LB_LOOP_COUNT
     {
@@ -798,6 +805,29 @@ DockingWindow FLT_WIN_ANIMATION
         < " " ; > ;
     };
         QuickHelpText[ turkish ] = "Anzahl der Durchl‰ufe";
+        QuickHelpText[ catalan ] = "Cantidad de secuencias";
+    StringList [ catalan ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "M·x." ; > ;
+    };
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
@@ -834,6 +864,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "∞≥√º°°¿˚øÎ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekt ¸bernehmen";
+        QuickHelpText[ catalan ] = "Aceptar objeto";
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
@@ -859,7 +890,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ danish ] = "Overtag objekter enkeltvis" ;
         QuickHelpText [ portuguese ] = "Aplicar objectos um por um" ;
         QuickHelpText [ portuguese_brazilian ] = "Objekte einzeln ¸bernehmen" ;
-        QuickHelpText [ swedish ] = "÷verta objekt en och en" ;
+        QuickHelpText [ swedish ] = "÷verta objekt ett och ett!" ;
         QuickHelpText[ russian ] = "œËÌˇÚ¸ Ó·˙ÂÍÚ˚ ÔÓ Ó‰ÌÓÏÛ";
         QuickHelpText[ polish ] = "Zastosuj obiekty pojedynczo";
         QuickHelpText[ japanese ] = "µÃﬁºﬁ™∏ƒÇå¬ÅXÇ…à¯Ç´åpÇÆ";
@@ -870,6 +901,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "∞≥√º∏¶°°∞≥∫∞¿˚¿∏∑Œ°°¿˚øÎ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekte einzeln ¸bernehmen";
+        QuickHelpText[ catalan ] = "Aceptar objetos uno a uno";
     };
     ImageButton BTN_REMOVE_BITMAP
     {
@@ -906,6 +938,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "«ˆ¿Á°°¿ÃπÃ¡ˆ°°ªË¡¶!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aktuelles Bild lˆschen";
+        QuickHelpText[ catalan ] = "Eliminar imagen actual";
     };
     ImageButton BTN_REMOVE_ALL
     {
@@ -942,6 +975,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "∏µÁ°°¿ÃπÃ¡ˆ°°ªË¡¶!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Alle Bilder lˆschen";
+        QuickHelpText[ catalan ] = "Eliminar todas las im·genes";
     };
     FixedText FT_COUNT
     {
@@ -970,6 +1004,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "∞≥ºˆ";
         Text[ turkish ] = "Say˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad";
     };
     FixedText FI_COUNT
     {
@@ -1004,6 +1039,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "∫Ò∆Æ∏ ";
         Text[ turkish ] = "Resim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imagen";
     };
     RadioButton RBT_GROUP
     {
@@ -1030,6 +1066,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "±◊∑Ï ∞≥√º(~G)";
         Text[ turkish ] = "Grup nesnesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objeto de grupo";
     };
     RadioButton RBT_BITMAP
     {
@@ -1056,6 +1093,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "∫Ò∆Æ∏  ∞≥√º(~B)";
         Text[ turkish ] = "Bit e˛lem nesnesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objeto bitmap";
     };
     FixedText FT_COLOR
     {
@@ -1082,6 +1120,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "≈ı∏Ìªˆ";
         Text[ turkish ] = "Saydaml˝k rengi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Color de transparencia";
     };
     ListBox LB_COLOR
     {
@@ -1121,6 +1160,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "∏¬√„";
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajuste";
     };
     ListBox LB_ADJUSTMENT
     {
@@ -1407,6 +1447,18 @@ DockingWindow FLT_WIN_ANIMATION
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Izquierda/Arriba" ; Default ; > ;
+        < "A la izquierda" ; Default ; > ;
+        < "Izquierda/Abajo" ; Default ; > ;
+        < "Arriba" ; Default ; > ;
+        < "Centrado" ; Default ; > ;
+        < "Abajo" ; Default ; > ;
+        < "Derecha/Arriba" ; Default ; > ;
+        < "Derecha" ; Default ; > ;
+        < "Derecha/Abajo" ; Default ; > ;
+    };
     };
     PushButton BTN_CREATE_GROUP
     {
@@ -1434,6 +1486,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "¿€º∫(~C)";
         Text[ turkish ] = "Olu˛tur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Crear";
     };
     GroupBox GRP_ANIMATION_GROUP
     {
@@ -1462,6 +1515,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ korean ] = "æ÷¥œ∏ﬁ¿Ãº« ±◊∑Ï";
         Text[ turkish ] = "Canland˝rma grubu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Grupo de animaciÛn";
     };
     Text[ chinese_simplified ] = "∂Øª≠";
     Text[ russian ] = "¿ÌËÏ‡ˆËˇ";
@@ -1473,4 +1527,5 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ korean ] = "æ÷¥œ∏ﬁ¿Ãº«";
     Text[ turkish ] = "Canland˝rma";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AnimaciÛn";
 };
