@@ -61,9 +61,9 @@
         <tr> 
           <td colspan="4">
             <p>The [PRODUCTNAME] SDK comes with a set of development tools, base libraries and jar files
-               which can be used to develop Java/C++ components, to embed [PRODUCTNAME] application in 
-               your own programs or to use the API (scripting or remote control the office). For a 
-               complete working environment we have some additional requirements.
+               which can be used to develop Java/C++ components, to embed the [PRODUCTNAME] application in 
+               your own programs, or to use the API (scripting or remote control the office). For a 
+               complete working environment, we have some additional requirements:
             </p>
             <dl>
               <dt><b>StarOffice&#153 6.0 PP2 or OpenOffice.org 1.0.2 installation</b>
@@ -86,10 +86,10 @@
                   <a target="_blank" href="ftp://ftp.gnu.org/gnu/make">ftp://ftp.gnu.org/gnu/make</a><br> 
                   NOTE: Windows user can find an executable of gnu make under 
                   <a target="_blank" href="http://www.nextgeneration.dk/gnu/make.zip">
-                  http://www.nextgeneration.dk/gnu/make.zip</a>. It is not recommendable to use the Cygwin
-                  make because it don't work.
+                  http://www.nextgeneration.dk/gnu/make.zip</a>. It is not recommended to use the Cygwin
+                  make, because it does not work well.
               <dt><b>STLPORT (4.5.3)</b>
-              <dd>Some examples uses the STL, if you want to test this exmaples you have to install
+              <dd>Some examples use the STL.  If you want to test this example, you have to install
                   a vesion of the STLPORT library on your machine. The STLPORT library is available from 
                   <a target="_blank" href="http://www.stlport.org">http://www.stlport.org</a>.
             </dl>
@@ -109,7 +109,7 @@
             <ul>
               <li><a href="../setsdkenv_windows.bat">setsdkenv_windows.bat</a>
             </ul>
-            <p>The first time you use the batch program you have to prepare it for your environment. 
+            <p>The first time you use the batch program, you must prepare it for your environment. 
 	        Edit the script and set the following variables:
             </p>
             <p> 
@@ -145,12 +145,12 @@
                    <td widht=65%>if this variable is set, the component examples will be automatically
                         deployed into the Office installation referenced by OFFICE_HOME. See also chapter
                         <a href="DevelopersGuide/Components/Components.htm#1+7+1+UNO+Package+Installation">
-                        "UNO Package installation"</a> from the Developers Guide.
+                        "UNO Package installation"</a> from the Developer's Guide.
                  </tr>
                </table>
             </p>
-            <p>If you don't want to use the script to set your working environment you have to set the appropriate 
-               environment variables by yourself. The script sets the following environment variables.
+            <p>If you do not want to use the script to set your working environment, you must set the appropriate 
+               environment variables by yourself. The script sets the following environment variables:
             </p>
             <p><b>Environment variables for UNIX</b></p>
             <p>Solaris</p>	    
@@ -160,7 +160,7 @@
                    <td widht=35%>OFFICE_PROGRAM_PATH</td>
                    <td widht=65%><b>=<i>$OFFICE_HOME/program</i></b><br>
                        This variable is used to register example components
-                       automatically in your Office installation. If you don't want automatic registration,
+                       automatically in your Office installation. If you do not want automatic registration,
                        pleace comment this variable out in the script.</td>
                  </tr>
                  <tr> 
@@ -176,7 +176,7 @@
                    <td widht=35%>PATH</td>
                    <td widht=65%><b>=<i>$OO_SDK_HOME/solsparc/bin:$OO_SDK_MAKE_HOME:$OO_SDK_CPP_HOME:$OO_SDK_JAVA_HOME/bin:
                        $PATH</i></b><br>
-                       The PATH variable will be extended by the pathes for the SDK development tools, 
+                       The PATH variable will be extended by the paths for the SDK development tools, 
                        the compiler, the JDK and GNU make.
                    </td>
                  </tr>
@@ -189,8 +189,8 @@
                    <td widht=35%>OFFICE_PROGRAM_PATH</td>
                    <td widht=65%><b>=<i>$OFFICE_HOME/program</i></b><br>
                        This variable is used to register example components
-                       automatically in your Office installation. If you don't want automatic registration,
-                       pleace comment this variable out in the script.</td>
+                       automatically in your Office installation. If you do not want automatic registration,
+                       comment this variable out in the script.</td>
                  </tr>
                  <tr> 
                    <td widht=35%>LD_LIBRARY_PATH</td>
@@ -212,9 +212,9 @@
                </table>
             </p>
             <p><b>Environment variables for Windows</b></p>
-            <p> Additionally to setting these environment varibales the script calls the "vcvar32.bat" 
-               batch file which is provided by the Microsoft Develper Studio to set the necessary 
-               environment varibales for the compiler.
+            <p> In addition to setting these environment variables, the script calls the "vcvar32.bat" 
+               batch file, which is provided by the Microsoft Develper Studio to set the necessary 
+               environment variables for the compiler.
                <table width="100%" border=1 cellpadding=4 cellspacing=0>
                  <tr> 
                    <td widht=35%>OFFICE_PROGRAM_PATH</td>
@@ -278,9 +278,7 @@
   </tr>
   <tr> 
     <td colspan="3">
-      <p align=center><font size=2><b>Copyright 2002 Sun Microsystems,
-        Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.</b></font>
-      </p>
+      <p align=center><font size=2><b>Copyright 2003 Sun Microsystems, Inc.</b></font>
       &nbsp
     </td>
   </tr>
