@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:18:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@ void TaskPaneViewShell::Implementation::Setup (
         SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE),
         HID_SD_SLIDE_LAYOUTS);
     AddPanel (nId, PID_LAYOUT);
+    pMenu->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS) );
 
 /*
     // AnimationSchemesPanel
@@ -329,6 +330,7 @@ TaskPaneViewShell::TaskPaneViewShell (
         pDockingWindow->InitializeTitleToolBox();
         mnMenuId = pDockingWindow->AddMenu (
             String(SdResId(STR_TASKPANEL_MASTER_PAGE_MENU_TITLE)),
+            HID_SD_TASK_PANE_VIEW_MENU,
             LINK(this, TaskPaneViewShell, ToolboxClickHandler));
     }
 
