@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ class   SalGraphics;
 class   SalFrame;
 class   SalColormap;
 class   SalI18N_InputContext;
-namespace vcl_sal { class WMAdaptor; }
+
+namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 
 class SalFrameDelData
 {
@@ -125,6 +126,8 @@ class SalFrameData
 {
     friend  class           SalFrame;
     friend class            ::vcl_sal::WMAdaptor;
+    friend class            ::vcl_sal::NetWMAdaptor;
+    friend class            ::vcl_sal::GnomeWMAdaptor;
     friend  SalFrame* SalInstance::CreateFrame( SalFrame*, ULONG );
     friend  SalFrame* SalInstance::CreateChildFrame( SystemParentData*, ULONG );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-03 16:37:24 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,7 +1338,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         if( !XtWindow( hComposite_ ) )
             XtRealizeWidget( hComposite_ );
     }
-    m_pWMAdaptor = new ::vcl_sal::WMAdaptor( this );
+    m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
 #ifdef DBG_UTIL
     PrintInfo();
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-30 09:35:07 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,39 @@
 #include <stdio.h>
 #endif
 
+namespace vcl_sal {
+
+class NetWMAdaptor : public WMAdaptor
+{
+    void setNetWMState( SalFrame* pFrame ) const;
+    void initAtoms();
+    virtual bool isValid() const;
+public:
+    NetWMAdaptor( SalDisplay* );
+    virtual ~NetWMAdaptor();
+
+    virtual void setWMName( SalFrame* pFrame, const String& rWMName ) const;
+    virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
+    virtual bool supportsICCCMPos() const;
+};
+
+class GnomeWMAdaptor : public WMAdaptor
+{
+    bool m_bValid;
+
+    void setGnomeWMState( SalFrame* pFrame ) const;
+    void initAtoms();
+    virtual bool isValid() const;
+public:
+    GnomeWMAdaptor( SalDisplay * );
+    virtual ~GnomeWMAdaptor();
+
+    virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+};
+
+}
+
 using namespace vcl_sal;
 
 struct WMAdaptorProtocol
@@ -125,7 +158,16 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_WM_WINDOW_TYPE_MENU", WMAdaptor::NET_WM_WINDOW_TYPE_MENU },
     { "_NET_WM_WINDOW_TYPE_NORMAL", WMAdaptor::NET_WM_WINDOW_TYPE_NORMAL },
     { "_NET_WM_WINDOW_TYPE_TOOLBAR", WMAdaptor::NET_WM_WINDOW_TYPE_TOOLBAR },
-    { "_NET_WORKAREA", WMAdaptor::NET_WORKAREA }
+    { "_NET_WORKAREA", WMAdaptor::NET_WORKAREA },
+    { "_WIN_APP_STATE", WMAdaptor::WIN_APP_STATE },
+    { "_WIN_CLIENT_LIST", WMAdaptor::WIN_CLIENT_LIST },
+    { "_WIN_EXPANDED_SIZE", WMAdaptor::WIN_EXPANDED_SIZE },
+    { "_WIN_HINTS", WMAdaptor::WIN_HINTS },
+    { "_WIN_ICONS", WMAdaptor::WIN_ICONS },
+    { "_WIN_LAYER", WMAdaptor::WIN_LAYER },
+    { "_WIN_STATE", WMAdaptor::WIN_STATE },
+    { "_WIN_WORKSPACE", WMAdaptor::WIN_WORKSPACE },
+    { "_WIN_WORKSPACE_COUNT", WMAdaptor::WIN_WORKSPACE_COUNT }
 };
 
 /*
@@ -153,13 +195,48 @@ static int compareProtocol( const void* pLeft, const void* pRight )
 }
 }
 
+WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
+{
+    WMAdaptor*          pAdaptor    = NULL;
+
+    // try a NetWM
+    pAdaptor = new NetWMAdaptor( pSalDisplay );
+    if( ! pAdaptor->isValid() )
+        delete pAdaptor, pAdaptor = NULL;
+#ifdef DEBUG
+    else
+        fprintf( stderr, "WM supports extended WM hints\n" );
+#endif
+
+    // try a GnomeWM
+    if( ! pAdaptor )
+    {
+        pAdaptor = new GnomeWMAdaptor( pSalDisplay );
+        if( ! pAdaptor->isValid() )
+            delete pAdaptor, pAdaptor = NULL;
+#ifdef DEBUG
+        else
+            fprintf( stderr, "WM supports GNOME WM hints\n" );
+#endif
+    }
+
+    if( ! pAdaptor )
+        pAdaptor = new WMAdaptor( pSalDisplay );
+
+#ifdef DEBUG
+    fprintf( stderr, "Window Manager's name is \"%s\"\n",
+             ByteString( pAdaptor->getWindowManagerName(), RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
+#endif
+    return pAdaptor;
+}
+
+
 /*
  *  WMAdaptor constructor
  */
 
 WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
-        m_pSalDisplay( pDisplay ),
-        m_bNetWM( false )
+        m_pSalDisplay( pDisplay )
 {
     Atom                aRealType   = None;
     int                 nFormat     = 8;
@@ -176,97 +253,72 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     memset( m_aWMAtoms, 0, sizeof( m_aWMAtoms ) );
     m_pDisplay = m_pSalDisplay->GetDisplay();
 
-    // get basic atoms
-    for( int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
-        m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
+    initAtoms();
 
-    // check for NetWM
-    m_aWMAtoms[ NET_SUPPORTED ]             = XInternAtom( m_pDisplay, "_NET_SUPPORTED", True );
-    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
-    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
-    if( m_aWMAtoms[ NET_SUPPORTED ] && m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ NET_WM_NAME ] )
+    // check for dtwm running
+    if( m_aWMAtoms[ DTWM_IS_RUNNING ] )
     {
-        XLIB_Window         aWMChild    = None;
-        if( XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow(),
-                                m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
-                                0, 1,
-                                False,
-                                XA_WINDOW,
-                                &aRealType,
-                                &nFormat,
-                                &nItems,
-                                &nBytesLeft,
-                                &pProperty ) == 0
-            && aRealType == XA_WINDOW
-            && nFormat == 32
-            && nItems != 0
-            )
-        {
-            aWMChild = *(XLIB_Window*)pProperty;
-            XFree( pProperty );
-            pProperty = NULL;
-            XLIB_Window aCheckWindow = None;
-            BOOL bIgnore = m_pSalDisplay->GetXLib()->GetIgnoreXErrors();
-            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
-            if( XGetWindowProperty( m_pDisplay,
-                                    aWMChild,
-                                    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
+        if (   (XGetWindowProperty( m_pDisplay,
+                                    m_pSalDisplay->GetRootWindow(),
+                                    m_aWMAtoms[ DTWM_IS_RUNNING ],
                                     0, 1,
                                     False,
-                                    XA_WINDOW,
+                                    XA_INTEGER,
                                     &aRealType,
                                     &nFormat,
                                     &nItems,
                                     &nBytesLeft,
-                                    &pProperty ) == 0
-                && aRealType == XA_WINDOW
-                && nFormat == 32
-                && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->WasXError()
-                )
+                                    &pProperty) == 0
+                && nItems)
+               || (XGetWindowProperty( m_pDisplay,
+                                       m_pSalDisplay->GetRootWindow(),
+                                       m_aWMAtoms[ DTWM_IS_RUNNING ],
+                                       0, 1,
+                                       False,
+                                       m_aWMAtoms[ DTWM_IS_RUNNING ],
+                                       &aRealType,
+                                       &nFormat,
+                                       &nItems,
+                                       &nBytesLeft,
+                                       &pProperty) == 0
+                   && nItems))
+        {
+            if (*(XLIB_Boolean*)pProperty)
             {
-                aCheckWindow =  *(XLIB_Window*)pProperty;
-                XFree( pProperty );
-                pProperty = NULL;
-                if( aCheckWindow == aWMChild )
-                {
-                    m_bNetWM = true;
-                    // get name of WM
-                    m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
-                    if( XGetWindowProperty( m_pDisplay,
-                                            aWMChild,
-                                            m_aWMAtoms[ NET_WM_NAME ],
-                                            0, 256,
-                                            False,
-                                            AnyPropertyType, /* m_aWMAtoms[ UTF8_STRING ],*/
-                                            &aRealType,
-                                            &nFormat,
-                                            &nItems,
-                                            &nBytesLeft,
-                                            &pProperty ) == 0
-                        && nItems != 0
-                        )
-                    {
-                        if (aRealType == m_aWMAtoms[ UTF8_STRING ])
-                        {
-                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
-                        }
-                        else
-                        if (aRealType == XA_STRING)
-                        {
-                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
-                        }
-
-                        XFree( pProperty );
-                        pProperty = NULL;
-                    }
-                }
+                m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
             }
-            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+            XFree (pProperty);
         }
     }
-    if( m_bNetWM
+}
+
+/*
+ *  WMAdaptor destructor
+ */
+
+WMAdaptor::~WMAdaptor()
+{
+}
+
+/*
+ *  NetWMAdaptor constructor
+ */
+
+NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
+        WMAdaptor( pSalDisplay )
+{
+    Atom                aRealType   = None;
+    int                 nFormat     = 8;
+    unsigned long       nItems      = 0;
+    unsigned long       nBytesLeft  = 0;
+    unsigned char*  pProperty   = NULL;
+    bool                bNetWM      = false;
+
+    initAtoms();
+
+    // check for NetWM
+    bNetWM = getNetWmName();
+    if( bNetWM
         && XGetWindowProperty( m_pDisplay,
                                m_pSalDisplay->GetRootWindow(),
                                m_aWMAtoms[ NET_SUPPORTED ],
@@ -402,75 +454,366 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                 }
             }
         }
-        // some necessary sanity checks; there are WMs out there
-        // which implement some of the WM hints spec without
-        // real functionality
-        if( m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ] == 0
-            || m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ] == 0
-            )
-            m_bNetWM = false;
     }
-    else
-    {
-        // check for dtwm running
-        if( m_aWMAtoms[ DTWM_IS_RUNNING ] )
-        {
-            if (   (XGetWindowProperty( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
-                        m_aWMAtoms[ DTWM_IS_RUNNING ],
-                        0, 1,
-                        False,
-                        XA_INTEGER,
-                        &aRealType,
-                        &nFormat,
-                        &nItems,
-                        &nBytesLeft,
-                        &pProperty) == 0
-                    && nItems)
-                || (XGetWindowProperty( m_pDisplay,
-                        m_pSalDisplay->GetRootWindow(),
-                        m_aWMAtoms[ DTWM_IS_RUNNING ],
-                        0, 1,
-                        False,
-                        m_aWMAtoms[ DTWM_IS_RUNNING ],
-                        &aRealType,
-                        &nFormat,
-                        &nItems,
-                        &nBytesLeft,
-                        &pProperty) == 0
-                    && nItems))
-            {
-                if (*(XLIB_Boolean*)pProperty)
-                {
-                    m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
-                }
-                XFree (pProperty);
-            }
-        }
-    }
-
-#ifdef DEBUG
-    fprintf( stderr, "WM %s NET_WM\n", m_bNetWM ? "supports" : "does not support" );
-    fprintf( stderr, "Window Manager's name is \"%s\"\n",
-                 ByteString( m_aWMName, RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
-#endif
 }
 
 /*
- *  WMAdaptor destructor
+ *  NetWMAdaptor destructor
+ */
+NetWMAdaptor::~NetWMAdaptor()
+{
+}
+
+/*
+ *  GnomeWMAdaptor constructor
  */
 
-WMAdaptor::~WMAdaptor()
+GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
+        WMAdaptor( pSalDisplay ),
+        m_bValid( false )
 {
+    Atom                aRealType   = None;
+    int                 nFormat     = 8;
+    unsigned long       nItems      = 0;
+    unsigned long       nBytesLeft  = 0;
+    unsigned char*  pProperty   = NULL;
+    bool                bGnomeWM    = false;
+
+    initAtoms();
+
+    // check for GnomeWM
+    if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] )
+    {
+        XLIB_Window         aWMChild    = None;
+        if( XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
+                                0, 1,
+                                False,
+                                XA_CARDINAL,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0
+            && aRealType == XA_CARDINAL
+            && nFormat == 32
+            && nItems != 0
+            )
+        {
+            aWMChild = *(XLIB_Window*)pProperty;
+            XFree( pProperty );
+            pProperty = NULL;
+            XLIB_Window aCheckWindow = None;
+            BOOL bIgnore = m_pSalDisplay->GetXLib()->GetIgnoreXErrors();
+            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+            if( XGetWindowProperty( m_pDisplay,
+                                    aWMChild,
+                                    m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
+                                    0, 1,
+                                    False,
+                                    XA_CARDINAL,
+                                    &aRealType,
+                                    &nFormat,
+                                    &nItems,
+                                    &nBytesLeft,
+                                    &pProperty ) == 0
+                && aRealType == XA_CARDINAL
+                && nFormat == 32
+                && nItems != 0
+                && ! m_pSalDisplay->GetXLib()->WasXError()
+                )
+            {
+                aCheckWindow =  *(XLIB_Window*)pProperty;
+                XFree( pProperty );
+                pProperty = NULL;
+                if( aCheckWindow == aWMChild )
+                {
+                    m_bValid = true;
+                    /*
+                     *  get name of WM
+                     *  this is NOT part of the GNOME WM hints, but e.g. Sawfish
+                     *  already supports this part of the extended WM hints
+                     */
+                    m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
+                    getNetWmName();
+                }
+            }
+            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+        }
+    }
+    if( m_bValid
+        && XGetWindowProperty( m_pDisplay,
+                               m_pSalDisplay->GetRootWindow(),
+                               m_aWMAtoms[ WIN_PROTOCOLS ],
+                               0, 0,
+                               False,
+                               XA_ATOM,
+                               &aRealType,
+                               &nFormat,
+                               &nItems,
+                               &nBytesLeft,
+                               &pProperty ) == 0
+        && aRealType == XA_ATOM
+        && nFormat == 32
+        )
+    {
+        if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+        // collect supported protocols
+        if( XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                m_aWMAtoms[ WIN_PROTOCOLS ],
+                                0, nBytesLeft/4,
+                                False,
+                                XA_ATOM,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0 )
+        {
+            Atom* pAtoms = (Atom*)pProperty;
+            char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
+            if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
+            {
+#ifdef DEBUG
+                fprintf( stderr, "supported protocols:\n" );
+#endif
+                for( int i = 0; i < nItems; i++ )
+                {
+                    int nProtocol = -1;
+                    WMAdaptorProtocol aSearch;
+                    aSearch.pProtocol = pAtomNames[i];
+                    WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
+                        bsearch( &aSearch,
+                                 aProtocolTab,
+                                 sizeof( aProtocolTab )/sizeof( aProtocolTab[0] ),
+                                 sizeof( struct WMAdaptorProtocol ),
+                                 compareProtocol );
+                    if( pMatch )
+                    {
+                        nProtocol = pMatch->nProtocol;
+                        m_aWMAtoms[ nProtocol ] = pAtoms[ i ];
+                    }
+#ifdef DEBUG
+                    fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
+#endif
+
+                    XFree( pAtomNames[i] );
+                }
+            }
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+
+        // get number of desktops
+        if( m_aWMAtoms[ WIN_WORKSPACE_COUNT ]
+            && XGetWindowProperty( m_pDisplay,
+                                   m_pSalDisplay->GetRootWindow(),
+                                   m_aWMAtoms[ WIN_WORKSPACE_COUNT ],
+                                   0, 1,
+                                   False,
+                                   XA_CARDINAL,
+                                   &aRealType,
+                                   &nFormat,
+                                   &nItems,
+                                   &nBytesLeft,
+                                   &pProperty ) == 0
+            )
+        {
+            m_nDesktops = *(sal_uInt32*)pProperty;
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+    }
+}
+
+/*
+ *  GnomeWMAdaptor destructor
+ */
+GnomeWMAdaptor::~GnomeWMAdaptor()
+{
+}
+
+/*
+ *  getNetWmName()
+ */
+bool WMAdaptor::getNetWmName()
+{
+    Atom                aRealType   = None;
+    int                 nFormat     = 8;
+    unsigned long       nItems      = 0;
+    unsigned long       nBytesLeft  = 0;
+    unsigned char*  pProperty   = NULL;
+    bool                bNetWM      = false;
+
+    if( m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ NET_WM_NAME ] )
+    {
+        XLIB_Window         aWMChild = None;
+        if( XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
+                                0, 1,
+                                False,
+                                XA_WINDOW,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0
+            && aRealType == XA_WINDOW
+            && nFormat == 32
+            && nItems != 0
+            )
+        {
+            aWMChild = *(XLIB_Window*)pProperty;
+            XFree( pProperty );
+            pProperty = NULL;
+            XLIB_Window aCheckWindow = None;
+            BOOL bIgnore = m_pSalDisplay->GetXLib()->GetIgnoreXErrors();
+            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+            if( XGetWindowProperty( m_pDisplay,
+                                    aWMChild,
+                                    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
+                                    0, 1,
+                                    False,
+                                    XA_WINDOW,
+                                    &aRealType,
+                                    &nFormat,
+                                    &nItems,
+                                    &nBytesLeft,
+                                    &pProperty ) == 0
+                && aRealType == XA_WINDOW
+                && nFormat == 32
+                && nItems != 0
+                && ! m_pSalDisplay->GetXLib()->WasXError()
+                )
+            {
+                aCheckWindow =  *(XLIB_Window*)pProperty;
+                XFree( pProperty );
+                pProperty = NULL;
+                if( aCheckWindow == aWMChild )
+                {
+                    bNetWM = true;
+                    // get name of WM
+                    m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
+                    if( XGetWindowProperty( m_pDisplay,
+                                            aWMChild,
+                                            m_aWMAtoms[ NET_WM_NAME ],
+                                            0, 256,
+                                            False,
+                                            AnyPropertyType, /* m_aWMAtoms[ UTF8_STRING ],*/
+                                            &aRealType,
+                                            &nFormat,
+                                            &nItems,
+                                            &nBytesLeft,
+                                            &pProperty ) == 0
+                        && nItems != 0
+                        )
+                    {
+                        if (aRealType == m_aWMAtoms[ UTF8_STRING ])
+                        {
+                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                        }
+                        else
+                        if (aRealType == XA_STRING)
+                        {
+                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
+                        }
+
+                        XFree( pProperty );
+                        pProperty = NULL;
+                    }
+                }
+            }
+            m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+        }
+    }
+    return bNetWM;
+}
+
+/*
+ *  WMAdaptor::isValid()
+ */
+bool WMAdaptor::isValid() const
+{
+    return true;
+}
+
+/*
+ *  NetWMAdaptor::isValid()
+ */
+bool NetWMAdaptor::isValid() const
+{
+    // some necessary sanity checks; there are WMs out there
+    // which implement some of the WM hints spec without
+    // real functionality
+    return
+        m_aWMAtoms[ NET_SUPPORTED ]
+        && m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]
+        && m_aWMAtoms[ NET_WM_NAME ]
+        && m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ]
+        && m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ]
+        ;
+}
+
+/*
+ *  GnomeWMAdaptor::isValid()
+ */
+bool GnomeWMAdaptor::isValid() const
+{
+    return m_bValid;
+}
+
+/*
+ *  WMAdaptor::initAtoms
+ */
+
+void WMAdaptor::initAtoms()
+{
+    // get basic atoms
+    for( int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
+        m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
+
+}
+
+/*
+ *  NetWMAdaptor::initAtoms
+ */
+
+void NetWMAdaptor::initAtoms()
+{
+    WMAdaptor::initAtoms();
+
+    m_aWMAtoms[ NET_SUPPORTED ]             = XInternAtom( m_pDisplay, "_NET_SUPPORTED", True );
+    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
+    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
+}
+
+/*
+ *  GnomeWMAdaptor::initAtoms
+ */
+
+void GnomeWMAdaptor::initAtoms()
+{
+    WMAdaptor::initAtoms();
+
+    m_aWMAtoms[ WIN_PROTOCOLS ]             = XInternAtom( m_pDisplay, "_WIN_PROTOCOLS", True );
+    m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_WIN_SUPPORTING_WM_CHECK", True );
+    m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
+    m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
 }
 
 /*
  *  WMAdaptor::setWMName
  *  sets WM_NAME
- *       _NET_WM_NAME
  *       WM_ICON_NAME
- *       _NET_WM_ICON_NAME
  */
+
 void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
 {
     ByteString aTitle( rWMName, osl_getThreadTextEncoding() );
@@ -491,42 +834,51 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
                      PropModeReplace,
                      (unsigned char*)aTitle.GetBuffer(),
                      aTitle.Len() );
-    if( m_bNetWM )
-    {
-        aTitle = ByteString( rWMName, RTL_TEXTENCODING_UTF8 );
-        if( m_aWMAtoms[ NET_WM_NAME ] )
-            XChangeProperty( m_pDisplay,
-                             pFrame->maFrameData.GetShellWindow(),
-                             m_aWMAtoms[ NET_WM_NAME ],
-                             m_aWMAtoms[ UTF8_STRING ],
-                             8,
-                             PropModeReplace,
-                             (unsigned char*)aTitle.GetBuffer(),
-                             aTitle.Len()+1 );
-        if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
-            XChangeProperty( m_pDisplay,
-                             pFrame->maFrameData.GetShellWindow(),
-                             m_aWMAtoms[ NET_WM_ICON_NAME ],
-                             m_aWMAtoms[ UTF8_STRING ],
-                             8,
-                             PropModeReplace,
-                             (unsigned char*)aTitle.GetBuffer(),
-                             aTitle.Len()+1 );
-        // The +1 copies the terminating null byte. Although
-        // the spec says, this should not be necessary
-        // at least the kwin implementation seems to depend
-        // on the null byte
-    }
 }
 
 /*
- *  WMAdaptor::setNetWMState
+ *  NetWMAdaptor::setWMName
+ *  sets WM_NAME
+ *       _NET_WM_NAME
+ *       WM_ICON_NAME
+ *       _NET_WM_ICON_NAME
+ */
+void NetWMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
+{
+    WMAdaptor::setWMName( pFrame, rWMName );
+
+    ByteString aTitle( rWMName, RTL_TEXTENCODING_UTF8 );
+    if( m_aWMAtoms[ NET_WM_NAME ] )
+        XChangeProperty( m_pDisplay,
+                         pFrame->maFrameData.GetShellWindow(),
+                         m_aWMAtoms[ NET_WM_NAME ],
+                         m_aWMAtoms[ UTF8_STRING ],
+                         8,
+                         PropModeReplace,
+                         (unsigned char*)aTitle.GetBuffer(),
+                         aTitle.Len()+1 );
+    if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
+        XChangeProperty( m_pDisplay,
+                         pFrame->maFrameData.GetShellWindow(),
+                         m_aWMAtoms[ NET_WM_ICON_NAME ],
+                         m_aWMAtoms[ UTF8_STRING ],
+                         8,
+                         PropModeReplace,
+                         (unsigned char*)aTitle.GetBuffer(),
+                         aTitle.Len()+1 );
+    // The +1 copies the terminating null byte. Although
+    // the spec says, this should not be necessary
+    // at least the kwin implementation seems to depend
+    // on the null byte
+}
+
+/*
+ *  NetWMAdaptor::setNetWMState
  *  sets _NET_WM_STATE
  */
-void WMAdaptor::setNetWMState( SalFrame* pFrame ) const
+void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
 {
-    if( m_bNetWM
-        && m_aWMAtoms[ NET_WM_STATE ] )
+    if( m_aWMAtoms[ NET_WM_STATE ] )
     {
         Atom aStateAtoms[ 4 ];
         int nStateAtoms = 0;
@@ -645,10 +997,115 @@ void WMAdaptor::setNetWMState( SalFrame* pFrame ) const
 }
 
 /*
+ *  GnomeWMAdaptor::setNetWMState
+ *  sets _WIN_STATE
+ */
+void GnomeWMAdaptor::setGnomeWMState( SalFrame* pFrame ) const
+{
+    if( m_aWMAtoms[ WIN_STATE ] )
+    {
+        sal_uInt32 nWinWMState = 0;
+
+        if( pFrame->maFrameData.mbMaximizedVert )
+            nWinWMState |= 1 << 2;
+        if( pFrame->maFrameData.mbMaximizedHorz )
+            nWinWMState |= 1 << 3;
+
+        XChangeProperty( m_pDisplay,
+                         pFrame->maFrameData.GetShellWindow(),
+                         m_aWMAtoms[ WIN_STATE ],
+                         XA_CARDINAL,
+                         32,
+                         PropModeReplace,
+                         (unsigned char*)&nWinWMState,
+                         1
+                         );
+        if( pFrame->maFrameData.mbMaximizedHorz
+           && pFrame->maFrameData.mbMaximizedVert
+           && ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+        {
+            /*
+             *  for maximizing use NorthWestGravity (including decoration)
+             */
+            XSizeHints  hints;
+            long        supplied;
+            bool bHint = false;
+            if( XGetWMNormalHints( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   &hints,
+                                   &supplied ) )
+            {
+                bHint = true;
+                hints.flags |= PWinGravity;
+                hints.win_gravity = NorthWestGravity;
+                XSetWMNormalHints( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   &hints );
+                XSync( m_pDisplay, False );
+            }
+
+            // SetPosSize necessary to set width/height, min/max w/h
+            sal_Int32 nCurrent = 0;
+            /*
+             *  get current desktop here if work areas have different size
+             *  (does this happen on any platform ?)
+             */
+            if( ! m_bEqualWorkAreas
+                && m_aWMAtoms[ NET_CURRENT_DESKTOP ]
+                )
+            {
+                Atom                aRealType   = None;
+                int                 nFormat     = 8;
+                unsigned long       nItems      = 0;
+                unsigned long       nBytesLeft  = 0;
+                unsigned char*  pProperty   = NULL;
+                if( XGetWindowProperty( m_pDisplay,
+                                        m_pSalDisplay->GetRootWindow(),
+                                        m_aWMAtoms[ NET_CURRENT_DESKTOP ],
+                                        0, 1,
+                                        False,
+                                        XA_CARDINAL,
+                                        &aRealType,
+                                        &nFormat,
+                                        &nItems,
+                                        &nBytesLeft,
+                                        &pProperty ) == 0
+                    )
+                {
+                    nCurrent = *(sal_Int32*)pProperty;
+                    XFree( pProperty );
+                }
+            }
+            Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+            aPosSize = Rectangle( Point( aPosSize.Left() + pFrame->maFrameData.nLeft_,
+                                         aPosSize.Top()  + pFrame->maFrameData.nTop_ ),
+                                  Size( aPosSize.GetWidth()
+                                        - pFrame->maFrameData.nLeft_
+                                        - pFrame->maFrameData.nRight_,
+                                        aPosSize.GetHeight()
+                                        - pFrame->maFrameData.nTop_
+                                        - pFrame->maFrameData.nBottom_ )
+                                  );
+            pFrame->maFrameData.SetPosSize( aPosSize );
+
+            /*
+             *  reset gravity hint to static gravity
+             *  (this should not move window according to ICCCM)
+             */
+            if( bHint && pFrame->maFrameData.nShowState_ != SHOWSTATE_UNKNOWN )
+            {
+                hints.win_gravity = StaticGravity;
+                XSetWMNormalHints( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   &hints );
+            }
+        }
+    }
+}
+
+/*
  *  WMAdaptor::setFrameDecoration
  *  sets _MOTIF_WM_HINTS
- *       _NET_WM_WINDOW_TYPE
- *       _NET_WM_STATE
  *       WM_TRANSIENT_FOR
  */
 
@@ -657,7 +1114,7 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
     pFrame->maFrameData.meWindowType        = eType;
     pFrame->maFrameData.mnDecorationFlags   = nDecorationFlags;
 
-    // first set mwm hints
+    // set mwm hints
     struct _mwmhints {
         unsigned long flags, func, deco;
         long input_mode;
@@ -707,40 +1164,6 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
                       (unsigned char*)&aHint,
                       5 );
 
-    if( m_bNetWM )
-    {
-        setNetWMState( pFrame );
-
-        // set NET_WM_WINDOW_TYPE
-        if( m_aWMAtoms[ NET_WM_WINDOW_TYPE ] )
-        {
-            WMAtom eWMType;
-            switch( eType )
-            {
-                case windowType_ModalDialogue:
-                    eWMType = NET_WM_WINDOW_TYPE_DIALOG;
-                    break;
-                default:
-                    eWMType = NET_WM_WINDOW_TYPE_NORMAL;
-                    break;
-            }
-            XChangeProperty( m_pDisplay,
-                             pFrame->maFrameData.GetShellWindow(),
-                             m_aWMAtoms[ NET_WM_WINDOW_TYPE ],
-                             XA_ATOM,
-                             32,
-                             PropModeReplace,
-                             (unsigned char*)&m_aWMAtoms[ eWMType ],
-                             1 );
-        }
-        if( ( eType == windowType_ModalDialogue ||
-              eType == windowType_ModelessDialogue )
-              && ! pReferenceFrame )
-            XSetTransientForHint( m_pDisplay,
-                                  pFrame->maFrameData.GetShellWindow(),
-                                  m_pSalDisplay->GetRootWindow() );
-    }
-
     // set transientFor hint
     /*  #91030# dtwm will not map a dialogue if the transient
      *  window is iconified. This is deemed undesireable because
@@ -757,8 +1180,51 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
 }
 
 /*
+ *  NetWMAdaptor::setFrameDecoration
+ *  sets _MOTIF_WM_HINTS
+ *       _NET_WM_WINDOW_TYPE
+ *       _NET_WM_STATE
+ *       WM_TRANSIENT_FOR
+ */
+
+void NetWMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pReferenceFrame ) const
+{
+    WMAdaptor::setFrameTypeAndDecoration( pFrame, eType, nDecorationFlags, pReferenceFrame );
+
+    setNetWMState( pFrame );
+
+    // set NET_WM_WINDOW_TYPE
+    if( m_aWMAtoms[ NET_WM_WINDOW_TYPE ] )
+    {
+        WMAtom eWMType;
+        switch( eType )
+        {
+            case windowType_ModalDialogue:
+                eWMType = NET_WM_WINDOW_TYPE_DIALOG;
+                break;
+            default:
+                eWMType = NET_WM_WINDOW_TYPE_NORMAL;
+                break;
+        }
+        XChangeProperty( m_pDisplay,
+                         pFrame->maFrameData.GetShellWindow(),
+                         m_aWMAtoms[ NET_WM_WINDOW_TYPE ],
+                         XA_ATOM,
+                         32,
+                             PropModeReplace,
+                         (unsigned char*)&m_aWMAtoms[ eWMType ],
+                         1 );
+    }
+    if( ( eType == windowType_ModalDialogue ||
+          eType == windowType_ModelessDialogue )
+        && ! pReferenceFrame )
+        XSetTransientForHint( m_pDisplay,
+                              pFrame->maFrameData.GetShellWindow(),
+                              m_pSalDisplay->GetRootWindow() );
+}
+
+/*
  *  WMAdaptor::maximizeFrame
- *  changes _NET_WM_STATE by sending a client message
  */
 
 void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertical ) const
@@ -766,8 +1232,99 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
     pFrame->maFrameData.mbMaximizedVert = bVertical;
     pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
 
-    if( m_bNetWM
-        && m_aWMAtoms[ NET_WM_STATE ]
+    if( bHorizontal || bVertical )
+    {
+        const Size& aScreenSize( m_pSalDisplay->GetScreenSize() );
+        Rectangle aTarget( Point( pFrame->maFrameData.nLeft_,
+                                  pFrame->maFrameData.nTop_ ),
+                           Size( aScreenSize.Width() - pFrame->maFrameData.nLeft_ - pFrame->maFrameData.nRight_,
+                                 aScreenSize.Height() - pFrame->maFrameData.nTop_ - pFrame->maFrameData.nBottom_ )
+                           );
+        if( ! bHorizontal )
+        {
+            aTarget.SetSize(
+                            Size(
+                                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
+                                 pFrame->maFrameData.aPosSize_.GetWidth() :
+                                 pFrame->maFrameData.aRestoreFullScreen_.GetWidth(),
+                                 aTarget.GetHeight()
+                                 )
+                            );
+            aTarget.Left() =
+                pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
+                pFrame->maFrameData.aPosSize_.Left() :
+                pFrame->maFrameData.aRestoreFullScreen_.Left();
+        }
+        else if( ! bVertical )
+        {
+            aTarget.SetSize(
+                            Size(
+                                 aTarget.GetWidth(),
+                                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
+                                 pFrame->maFrameData.aPosSize_.GetHeight() :
+                                 pFrame->maFrameData.aRestoreFullScreen_.GetHeight()
+                                 )
+                            );
+            aTarget.Top() =
+                pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
+                pFrame->maFrameData.aPosSize_.Top() :
+                pFrame->maFrameData.aRestoreFullScreen_.Top();
+        }
+        if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
+            pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
+        delete pFrame->maFrameData.pFreeGraphics_;
+        pFrame->maFrameData.pFreeGraphics_ = NULL;
+
+        if( pFrame->maFrameData.bMapped_ )
+        {
+            XSetInputFocus( m_pDisplay,
+                            pFrame->maFrameData.GetShellWindow(),
+                            RevertToNone,
+                            CurrentTime
+                            );
+        }
+        else if( ! pFrame->maFrameData.mpParent )
+        {
+            // this lets some window managers override
+            // user positioning style (e.g. fvwm2)
+            XSetTransientForHint( m_pDisplay,
+                                  pFrame->maFrameData.GetShellWindow(),
+                                  m_pSalDisplay->GetRootWindow() );
+        }
+        pFrame->maFrameData.SetPosSize( aTarget );
+        pFrame->maFrameData.nWidth_     = aTarget.GetWidth();
+        pFrame->maFrameData.nHeight_    = aTarget.GetHeight();
+        XRaiseWindow( m_pDisplay,
+                      pFrame->maFrameData.GetShellWindow()
+                      );
+        if( pFrame->maFrameData.GetStackingWindow() )
+            XRaiseWindow( m_pDisplay,
+                          pFrame->maFrameData.GetStackingWindow()
+                          );
+    }
+    else
+    {
+        delete pFrame->maFrameData.pFreeGraphics_;
+        pFrame->maFrameData.pFreeGraphics_ = NULL;
+
+        pFrame->maFrameData.SetPosSize( pFrame->maFrameData.aRestoreFullScreen_ );
+        pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
+        pFrame->maFrameData.nWidth_             = pFrame->maFrameData.aPosSize_.GetWidth();
+        pFrame->maFrameData.nHeight_            = pFrame->maFrameData.aPosSize_.GetHeight();
+    }
+}
+
+/*
+ *  NetWMAdaptor::maximizeFrame
+ *  changes _NET_WM_STATE by sending a client message
+ */
+
+void NetWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertical ) const
+{
+    pFrame->maFrameData.mbMaximizedVert = bVertical;
+    pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
+
+    if( m_aWMAtoms[ NET_WM_STATE ]
         && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ]
         && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ]
         && ( pFrame->maFrameData.nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
@@ -817,87 +1374,76 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
             pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
     }
     else
-    {
-        // since the WM won't let us, do it the ugly way
-        if( bHorizontal || bVertical )
-        {
-            const Size& aScreenSize( m_pSalDisplay->GetScreenSize() );
-            Rectangle aTarget( Point( pFrame->maFrameData.nLeft_,
-                                      pFrame->maFrameData.nTop_ ),
-                               Size( aScreenSize.Width() - pFrame->maFrameData.nLeft_ - pFrame->maFrameData.nRight_,
-                                     aScreenSize.Height() - pFrame->maFrameData.nTop_ - pFrame->maFrameData.nBottom_ )
-                               );
-            if( ! bHorizontal )
-            {
-                aTarget.SetSize(
-                                Size(
-                                     pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                                     pFrame->maFrameData.aPosSize_.GetWidth() :
-                                     pFrame->maFrameData.aRestoreFullScreen_.GetWidth(),
-                                     aTarget.GetHeight()
-                                     )
-                                 );
-                aTarget.Left() =
-                    pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                    pFrame->maFrameData.aPosSize_.Left() :
-                    pFrame->maFrameData.aRestoreFullScreen_.Left();
-            }
-            else if( ! bVertical )
-            {
-                aTarget.SetSize(
-                                Size(
-                                     aTarget.GetWidth(),
-                                     pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                                     pFrame->maFrameData.aPosSize_.GetHeight() :
-                                     pFrame->maFrameData.aRestoreFullScreen_.GetHeight()
-                                     )
-                                );
-                aTarget.Top() =
-                    pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                    pFrame->maFrameData.aPosSize_.Top() :
-                    pFrame->maFrameData.aRestoreFullScreen_.Top();
-            }
-            if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
-                pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
-            delete pFrame->maFrameData.pFreeGraphics_;
-            pFrame->maFrameData.pFreeGraphics_ = NULL;
+        WMAdaptor::maximizeFrame( pFrame, bHorizontal, bVertical );
+}
 
-            if( pFrame->maFrameData.bMapped_ )
-            {
-                XSetInputFocus( m_pDisplay,
-                                pFrame->maFrameData.GetShellWindow(),
-                                RevertToNone,
-                                CurrentTime
-                                );
-            }
-            else if( ! pFrame->maFrameData.mpParent )
-            {
-                // this lets some window managers override
-                // user positioning style (e.g. fvwm2)
-                XSetTransientForHint( m_pDisplay,
-                                      pFrame->maFrameData.GetShellWindow(),
-                                      m_pSalDisplay->GetRootWindow() );
-            }
-            pFrame->maFrameData.SetPosSize( aTarget );
-            pFrame->maFrameData.nWidth_     = aTarget.GetWidth();
-            pFrame->maFrameData.nHeight_    = aTarget.GetHeight();
-            XRaiseWindow( m_pDisplay,
-                          pFrame->maFrameData.GetShellWindow()
-                          );
-            if( pFrame->maFrameData.GetStackingWindow() )
-                XRaiseWindow( m_pDisplay,
-                              pFrame->maFrameData.GetStackingWindow()
-                              );
+/*
+ *  GnomeWMAdaptor::maximizeFrame
+ *  changes _WIN_STATE by sending a client message
+ */
+
+void GnomeWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertical ) const
+{
+    pFrame->maFrameData.mbMaximizedVert = bVertical;
+    pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
+
+    if( m_aWMAtoms[ WIN_STATE ]
+        && ( pFrame->maFrameData.nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+        )
+    {
+        if( pFrame->maFrameData.bMapped_ )
+        {
+             // window already mapped, send WM a message
+            XEvent aEvent;
+            aEvent.type                 = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = pFrame->maFrameData.GetShellWindow();
+            aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = (1<<2)|(1<<3);
+            aEvent.xclient.data.l[1]    =
+                (bVertical ? (1<<2) : 0)
+                | (bHorizontal ? (1<<3) : 0);
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            XSendEvent( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        False,
+                        SubstructureNotifyMask,
+                        &aEvent
+                        );
         }
         else
         {
-            delete pFrame->maFrameData.pFreeGraphics_;
-            pFrame->maFrameData.pFreeGraphics_ = NULL;
-
-            pFrame->maFrameData.SetPosSize( pFrame->maFrameData.aRestoreFullScreen_ );
-            pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
-            pFrame->maFrameData.nWidth_             = pFrame->maFrameData.aPosSize_.GetWidth();
-            pFrame->maFrameData.nHeight_            = pFrame->maFrameData.aPosSize_.GetHeight();
+            // window not mapped yet, set _NET_WM_STATE directly
+            setGnomeWMState( pFrame );
         }
+        if( !bHorizontal && !bVertical )
+            pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
+        else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
+            pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
     }
+    else
+        WMAdaptor::maximizeFrame( pFrame, bHorizontal, bVertical );
+}
+
+/*
+ *  WMAdaptor::supportsICCCMPos
+ */
+
+bool WMAdaptor::supportsICCCMPos() const
+{
+    return
+        m_aWMName.EqualsAscii( "Sawfish" )
+        || m_aWMName.EqualsAscii( "Dtwm" );
+}
+
+/*
+ *  NetWMAdaptor::supportsICCCMPos
+ */
+
+bool NetWMAdaptor::supportsICCCMPos() const
+{
+    return true;
 }

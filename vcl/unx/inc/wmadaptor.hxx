@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-06 11:07:20 $
+ *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,10 @@ class WMAdaptor
 {
 public:
     enum WMAtom {
+        // atoms for types
         UTF8_STRING,
+
+        // atoms for extended WM hints
         NET_SUPPORTED,
         NET_SUPPORTING_WM_CHECK,
         NET_WM_NAME,
@@ -108,12 +111,30 @@ public:
         NET_NUMBER_OF_DESKTOPS,
         NET_CURRENT_DESKTOP,
         NET_WORKAREA,
+
+        // atoms for Gnome WM hints
+        WIN_SUPPORTING_WM_CHECK,
+        WIN_PROTOCOLS,
+        WIN_WORKSPACE_COUNT,
+        WIN_WORKSPACE,
+        WIN_LAYER,
+        WIN_STATE,
+        WIN_HINTS,
+        WIN_APP_STATE,
+        WIN_EXPANDED_SIZE,
+        WIN_ICONS,
+        WIN_WORKSPACE_NAMES,
+        WIN_CLIENT_LIST,
+
+        // atoms for general WM hints
         WM_STATE,
         MOTIF_WM_HINTS,
         WM_PROTOCOLS,
         WM_DELETE_WINDOW,
         WM_SAVE_YOURSELF,
         WM_COMMAND,
+
+        // special atoms
         SAL_QUITEVENT,
         SAL_USEREVENT,
         SAL_EXTTEXTEVENT,
@@ -143,10 +164,9 @@ public:
         windowType_OverrideRedirect
     };
 
-private:
+protected:
     SalDisplay*             m_pSalDisplay;      // Display to use
     Display*                m_pDisplay;         // X Display of SalDisplay
-    bool                    m_bNetWM;           // true: _NET supporting WM is available
     String                  m_aWMName;
     Atom                    m_aWMAtoms[ NetAtomMax];
     int                     m_nDesktops;
@@ -154,10 +174,24 @@ private:
     ::std::vector< Rectangle >
                             m_aWMWorkAreas;
 
-    void setNetWMState( SalFrame* pFrame ) const;
+    WMAdaptor( SalDisplay * )
+;
+    void initAtoms();
+    bool getNetWmName();
+
+    /*
+     *  returns whether this instance is useful
+     *  only useful for createWMAdaptor
+     */
+    virtual bool isValid() const;
+
 public:
-    WMAdaptor( SalDisplay * );
-    ~WMAdaptor();
+    virtual ~WMAdaptor();
+
+    /*
+     *  creates a vaild WMAdaptor instance for the SalDisplay
+     */
+    static WMAdaptor* createWMAdaptor( SalDisplay* );
 
     /*
      *  may return an empty string if the window manager could
@@ -167,24 +201,23 @@ public:
     { return m_aWMName; }
 
     /*
-     *  sets WM_NAME and _NET_WM_NAME
+     *  sets window title
      */
-    void setWMName( SalFrame* pFrame, const String& rWMName ) const;
+    virtual void setWMName( SalFrame* pFrame, const String& rWMName ) const;
 
     /*
-     *  maximizes frame, if _NET is present and _NET_WM_STATE supported,
-     *  then this is done via request to WM
+     *  maximizes frame
      *  maximization can be toggled in either direction
      *  to get the original position and size
      *  use maximizeFrame( pFrame, false, false )
      */
-    void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
 
     /*
      *  set hints what decoration is needed;
      *  must be called before showing the frame
      */
-    void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
+    virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
 
     /*
      *  gets a WM atom
@@ -196,12 +229,7 @@ public:
      * supports correct positioning
      */
 
-    bool supportsICCCMPos () const
-    {
-        return     m_bNetWM
-                || m_aWMName.EqualsAscii ("Sawfish")
-                || m_aWMName.EqualsAscii ("Dtwm");
-    }
+    virtual bool supportsICCCMPos () const;
 
     int getPositionWinGravity () const
     {
