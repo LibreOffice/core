@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColorMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** The <type>ColorMode</type> defines the output style of colors
     for a graphic.
  */
-enum ColorMode
+published enum ColorMode
 {
     //-------------------------------------------------------------------------
 
