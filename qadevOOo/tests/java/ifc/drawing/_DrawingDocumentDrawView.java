@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _DrawingDocumentDrawView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:24 $
+ *  last change:$Date: 2003-09-08 10:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 package ifc.drawing;
 
+import lib.MultiPropertyTest;
+
 import com.sun.star.container.XNamed;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 
 /**
 * Testing <code>com.sun.star.drawing.DrawingDocumentDrawView</code>
