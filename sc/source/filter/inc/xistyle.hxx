@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:13 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #endif
 
 class XclImpStream;
+class ScDocumentPool;
 
 
 /* ============================================================================
@@ -133,12 +134,12 @@ inline Color XclImpPalette::GetColor( sal_uInt16 nXclIndex, ColorData nDefault )
 
 // FONT record - font information =============================================
 
-/** Enumeration to choose the which IDs for font items. */
+/** Enumeration to choose the Which-IDs for font items. */
 enum XclFontWhichIDMode
 {
-    xlFontScIDs,                /// Calc which IDs (ATTR_*).
-    xlFontEEIDs,                /// Edit engine which IDs (EE_CHAR_*).
-    xlFontHFIDs                 /// Header/footer edit engine which IDs (EE_CHAR_*).
+    xlFontScIDs,                /// Calc Which-IDs (ATTR_*).
+    xlFontEEIDs,                /// Edit engine Which-IDs (EE_CHAR_*).
+    xlFontHFIDs                 /// Header/footer edit engine Which-IDs (EE_CHAR_*).
 };
 
 
@@ -174,11 +175,15 @@ public:
     void                        ReadFont( XclImpStream& rStrm );
 
     /** Fills all font properties to the item set.
+        @descr  If the pointer to an item pool is passed, it will be used to
+        compare all items with the pool defaults and to not put items equal to the default.
         @param rItemSet  The destination item set.
-        @param eMode  The type of which IDs. */
+        @param eMode  The type of Which-IDs.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                        FillToItemSet(
                                     SfxItemSet& rItemSet,
-                                    XclFontWhichIDMode eMode ) const;
+                                    XclFontWhichIDMode eMode,
+                                    bool bSkipPoolDefs = false ) const;
 
     /** Calculates the Calc font family from the Excel family. */
     static FontFamily           GetScFontFamily( sal_uInt8 nXclFamily, const String& rName, CharSet eDefCharSet );
@@ -233,14 +238,18 @@ public:
     /** Reads a FONT record. */
     void                        ReadFont( XclImpStream& rStrm );
 
-    /** Fills all font properties to the item set.
-        @param nFontIndex  The Excel index of the font.
+    /** Fills all font properties from a FONT record to the item set.
+        @descr  If the pointer to an item pool is passed, it will be used to
+        compare all items with the pool defaults and to not put items equal to the default.
         @param rItemSet  The destination item set.
-        @param eMode  The type of which IDs. */
+        @param eMode  The type of Which-IDs.
+        @param nFontIndex  The Excel index of the font.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                        FillToItemSet(
-                                    sal_uInt16 nFontIndex,
                                     SfxItemSet& rItemSet,
-                                    XclFontWhichIDMode eMode ) const;
+                                    XclFontWhichIDMode eMode,
+                                    sal_uInt16 nFontIndex,
+                                    bool bSkipPoolDefs = false ) const;
 };
 
 
@@ -274,66 +283,118 @@ private:
 
 // XF, STYLE record - Cell formatting =========================================
 
-/** Contains color and line style for each cell border line. */
-struct XclImpXFBorder
+/** Extends the XclCellProt struct for import.
+    @descr  Provides functions to fill from Excel record data and to fill to item sets. */
+struct XclImpCellProt : public XclCellProt
 {
-    sal_uInt16                  mnLeftColor;    /// Index to color for left line.
-    sal_uInt16                  mnRightColor;   /// Index to color for right line.
-    sal_uInt16                  mnTopColor;     /// Index to color for top line.
-    sal_uInt16                  mnBottomColor;  /// Index to color for bottom line.
-    sal_uInt8                   mnLeftLine;     /// Style of left line.
-    sal_uInt8                   mnRightLine;    /// Style of right line.
-    sal_uInt8                   mnTopLine;      /// Style of top line.
-    sal_uInt8                   mnBottomLine;   /// Style of bottom line.
+    /** Fills this struct with BIFF2 XF record data. */
+    void                        FillFromXF2( sal_uInt8 nNumFmt );
+    /** Fills this struct with BIFF3-BIFF8 XF record data. */
+    void                        FillFromXF3( sal_uInt16 nProt );
+
+    /** Inserts items representing this protection style into the item set.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
+    void                        FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 };
 
 
 // ----------------------------------------------------------------------------
 
-/** Contains background colors and pattern. */
-struct XclImpXFArea
+/** Extends the XclCellAlign struct for import.
+    @descr  Provides functions to fill from Excel record data and to fill to item sets. */
+struct XclImpCellAlign : public XclCellAlign
 {
-    sal_uInt16                  mnForeColor;    /// Index to foreground color.
-    sal_uInt16                  mnBackColor;    /// Index to background color.
-    sal_uInt8                   mnPattern;      /// Fill pattern.
+    /** Fills this struct with BIFF2 XF record data. */
+    void                        FillFromXF2( sal_uInt8 nFlags );
+    /** Fills this struct with BIFF3 XF record data. */
+    void                        FillFromXF3( sal_uInt16 nAlign );
+    /** Fills this struct with BIFF4 XF record data. */
+    void                        FillFromXF4( sal_uInt16 nAlign );
+    /** Fills this struct with BIFF5/BIFF7 XF record data. */
+    void                        FillFromXF5( sal_uInt16 nAlign );
+    /** Fills this struct with BIFF8 XF record data. */
+    void                        FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib );
+
+    /** Inserts items representing this alignment style into the item set.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
+    void                        FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 };
 
 
 // ----------------------------------------------------------------------------
 
-class SvxBorderLine;
+/** Extends the XclCellBorder struct for import.
+    @descr  Provides functions to fill from Excel record data and to fill to item sets. */
+struct XclImpCellBorder : public XclCellBorder
+{
+    /** Fills this struct with BIFF2 XF record data. */
+    void                        FillFromXF2( sal_uInt8 nFlags );
+    /** Fills this struct with BIFF3/BIFF4 XF record data. */
+    void                        FillFromXF3( sal_uInt32 nBorder );
+    /** Fills this struct with BIFF5/BIFF7 XF record data. */
+    void                        FillFromXF5( sal_uInt32 nBorder, sal_uInt32 nArea );
+    /** Fills this struct with BIFF8 XF record data. */
+    void                        FillFromXF8( sal_uInt32 nBorder1, sal_uInt32 nBorder2 );
+
+    /** Fills this struct with BIFF8 CF (conditional format) record data. */
+    void                        FillFromCF8( sal_uInt16 nLine, sal_uInt32 nColor );
+
+    /** Inserts a box item representing this border style into the item set.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
+    void                        FillToItemSet(
+                                    SfxItemSet& rItemSet,
+                                    const XclImpPalette& rPalette,
+                                    bool bSkipPoolDefs = false ) const;
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Extends the XclCellArea struct for import.
+    @descr  Provides functions to fill from Excel record data and to fill to item sets. */
+struct XclImpCellArea : public XclCellArea
+{
+    /** Fills this struct with BIFF2 XF record data. */
+    void                        FillFromXF2( sal_uInt8 nFlags );
+    /** Fills this struct with BIFF3/BIFF4 XF record data. */
+    void                        FillFromXF3( sal_uInt16 nArea );
+    /** Fills this struct with BIFF5/BIFF7 XF record data. */
+    void                        FillFromXF5( sal_uInt32 nArea );
+    /** Fills this struct with BIFF8 XF record data. */
+    void                        FillFromXF8( sal_uInt32 nBorder2, sal_uInt16 nArea );
+
+    /** Fills this struct with BIFF8 CF (conditional format) record data. */
+    void                        FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor );
+
+    /** Inserts a brush item representing this area style into the item set.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
+    void                        FillToItemSet(
+                                    SfxItemSet& rItemSet,
+                                    const XclImpPalette& rPalette,
+                                    bool bSkipPoolDefs = false ) const;
+};
+
+
+// ----------------------------------------------------------------------------
 
 /** Contains all data of a XF record and a Calc item set. */
-class XclImpXF : protected XclImpRoot, ScfNoCopy
+class XclImpXF : public XclXFBase, protected XclImpRoot, ScfNoCopy
 {
 private:
     typedef ::std::auto_ptr< ScPatternAttr >    ScPatternAttrPtr;
 
-    mutable ScPatternAttrPtr    mpPattern;          /// Calc item set.
+    ScPatternAttrPtr            mpPattern;          /// Calc item set.
+    String                      maStyleName;        /// Name of the style sheet.
+    ScStyleSheet*               mpStyleSheet;       /// Calc cell style sheet.
 
-    XclImpXFBorder              maBorder;           /// Border line style.
-    XclImpXFArea                maArea;             /// Background area style.
-    XclHorAlign                 meHorAlign;         /// Horizontal alignment.
-    XclVerAlign                 meVerAlign;         /// Vertical alignment.
-    XclTextOrient               meOrient;           /// Text orientation.
-    XclTextDirection            meTextDir;          /// CTL text direction.
-
-    sal_uInt16                  mnParent;           /// Index to parent style XF.
-    sal_uInt32                  mnNumFmt;           /// Id for value format.
+    XclImpCellProt              maProtection;       /// Cell protection flags.
+    XclImpCellAlign             maAlignment;        /// All alignment attributes.
+    XclImpCellBorder            maBorder;           /// Border line style.
+    XclImpCellArea              maArea;             /// Background area style.
+    sal_uInt16                  mnNumFmt;           /// Index to number format.
     sal_uInt16                  mnFont;             /// Index to font record.
-    sal_uInt16                  mnIndent;           /// Text indent.
-    sal_uInt8                   mnRotation;         /// Rotation angle.
 
-    bool                        mbCellXF;           /// true = cell XF, false = style XF.
-    bool                        mbLocked;           /// true = cell is locked.
-    bool                        mbHidden;           /// true = formulas are hidden.
-    bool                        mbWrapped;          /// true = automatic line break.
-    bool                        mbProtUsed;         /// true = locked/hidden flags used.
-    bool                        mbFontUsed;         /// true = font index used.
-    bool                        mbFmtUsed;          /// true = number format used.
-    bool                        mbAlignUsed;        /// true = alignment used.
-    bool                        mbBorderUsed;       /// true = border data used.
-    bool                        mbAreaUsed;         /// true = area data used.
+    bool                        mbWasBuiltIn;       /// true = XF was an Excel built-in style.
 
 public:
     explicit                    XclImpXF( const XclImpRoot& rRoot );
@@ -342,28 +403,24 @@ public:
     /** Reads an XF record. */
     void                        ReadXF( XclImpStream& rStrm );
 
-    /** Creates a Calc item set containing an item set with all cell properties.
-        @return  A read-only reference to the item set stored internally. */
-    const ScPatternAttr&        GetPattern() const;
+    /** Sets the style name of this XF, if it is a style XF.
+        @descr  Additionally creates this user-defined style in the Calc document. */
+    void                        SetStyleName( const String& rStyleName );
+    /** Sets the style name of this XF from a built-in Excel style, if it is a style XF.
+        @descr  Does not create the style in the Calc document. This is done on demand
+        in CreatePattern(), if the style is really used. */
+    void                        SetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
 
-    inline bool                 IsCellXF() const    { return mbCellXF; }
-    inline bool                 IsStyleXF() const   { return !IsCellXF(); }
+    inline const String&        GetStyleName() const    { return maStyleName; }
+    inline XclHorAlign          GetHorAlign() const     { return maAlignment.meHorAlign; }
+    inline XclVerAlign          GetVerAlign() const     { return maAlignment.meVerAlign; }
+    inline sal_uInt16           GetFont() const         { return mnFont; }
 
-    inline XclHorAlign          GetHorAlign() const { return meHorAlign; }
-    inline XclVerAlign          GetVerAlign() const { return meVerAlign; }
-    inline sal_uInt16           GetFont() const     { return mnFont; }
-
-    /** Inserts the border line styles into the item set. */
-    static void                 SetBorder(
-                                    SfxItemSet& rItemSet,
-                                    const XclImpPalette& rPalette,
-                                    const XclImpXFBorder& rBorder );
-
-    /** Inserts the area style into the item set. */
-    static void                 SetArea(
-                                    SfxItemSet& rItemSet,
-                                    const XclImpPalette& rPalette,
-                                    const XclImpXFArea& rArea );
+    /** Inserts all formatting attributes to the specified area in the Calc document. */
+    void                        ApplyPattern(
+                                    sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
+                                    sal_uInt16 nLastCol, sal_uInt16 nLastRow,
+                                    sal_uInt16 nTab );
 
 private:
     void                        ReadXF2( XclImpStream& rStrm );
@@ -372,10 +429,21 @@ private:
     void                        ReadXF5( XclImpStream& rStrm );
     void                        ReadXF8( XclImpStream& rStrm );
 
-    /** Creates a new border line struct from passed line style. */
-    static SvxBorderLine*       CreateBorderLine(
-                                    const XclImpPalette& rPalette,
-                                    sal_uInt8 nXclLine, sal_uInt16 nXclColor );
+    /** Sets all "attribute used" flags according to the passed mask.
+        @descr  In cell XFs, a set bit represents "used", in style XFs it is a cleared bit.
+        Therefore mbCellXF must be set correctly before calling this method. */
+    void                        SetUsedFlags( sal_uInt8 nUsedFlags );
+    /** Sets own "attribute used" flags, if attributes are different from passed parent XF. */
+    void                        UpdateUsedFlags( const XclImpXF& rParentXF );
+
+    /** Creates a Calc item set containing an item set with all cell properties.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items.
+        @return  A read-only reference to the item set stored internally. */
+    const ScPatternAttr&        CreatePattern( bool bSkipPoolDefs = false );
+    /** Creates a cell style sheet and inserts it into the Calc document.
+        @descr  Creates a style sheet only for style XFs with a valid style name.
+        @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
+    ScStyleSheet*               CreateStyleSheet();
 };
 
 
@@ -387,7 +455,6 @@ class XclImpXFBuffer : protected XclImpRoot, ScfNoCopy
 {
 private:
     ScfDelList< XclImpXF >      maXFList;       /// List of contents of all XF record.
-    ScPatternAttr               maDefPattern;   /// Used if no styles could be found or created.
 
 public:
     explicit                    XclImpXFBuffer( const XclImpRoot& rRoot );
@@ -397,17 +464,19 @@ public:
     /** Reads a STYLE record. */
     void                        ReadStyle( XclImpStream& rStrm );
 
-    /** Creates a item set with all properties stored in the XF record.
-        @return  A read-only reference to the item set stored internally. */
-    const ScPatternAttr&        GetPattern( sal_uInt32 nXFIndex ) const;
-
     /** Returns the object that stores all contents of an XF record. */
-    inline const XclImpXF*      GetXF( sal_uInt32 nXFIndex ) const
+    inline XclImpXF*            GetXF( sal_uInt32 nXFIndex ) const
                                     { return maXFList.GetObject( nXFIndex ); }
     /** Returns the index to the Excel font used in this XF record. */
     sal_uInt16                  GetFontIndex( sal_uInt32 nXFIndex ) const;
     /** Returns true, if either superscript or subscript is used in the font. */
     bool                        HasEscapement( sal_uInt32 nXFIndex ) const;
+
+    /** Inserts formatting attributes from an XF to the specified area in the Calc document. */
+    void                        ApplyPattern(
+                                    sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
+                                    sal_uInt16 nLastCol, sal_uInt16 nLastRow,
+                                    sal_uInt16 nTab, sal_uInt16 nXFIndex );
 };
 
 
@@ -543,7 +612,7 @@ private:
 
     /** Copies border of the last cell of the range to the first cell to keep it visible
         when the range is merged.
-        @param  nLine
+        @param nLine
         BOX_LINE_RIGHT = copy most-right border of top row;
         BOX_LINE_BOTTOM = copy most-bottom border of first column. */
     void                        SetBorderLine( const ScRange& rRange, sal_uInt16 nTab, sal_uInt16 nLine );
