@@ -1,4 +1,12 @@
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
-..\source\win32\sysdtrans.xml %_DEST%\xml%_EXT%\sysdtrans.xml
+..\source\win32\sysdtrans.xml %_DEST%\xml%_EXT%\sysdtrans.xml..\%__SRC%\bin\xml2cmp.exe %_DEST%\bin%_EXT%\xml2cmp.exe
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
