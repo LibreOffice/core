@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:48:44 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Automatic";
         Text[ portuguese ] = "~Automático";
         Text[ danish ] = "Automatisk";
-        Text[ french ] = "~Automatique";
+        Text[ french ] = "Automatique";
         Text[ swedish ] = "~Automatiskt";
         Text[ dutch ] = "~Automatisch";
         Text[ spanish ] = "~Automático";
@@ -798,7 +798,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ portuguese ] = "~Numeração" ;
         Text [ finnish ] = "~Numerointi" ;
         Text [ danish ] = "Nummerering" ;
-        Text [ french ] = "~Numérotation" ;
+        Text [ french ] = "Numérotation" ;
         Text [ swedish ] = "~Numrering" ;
         Text [ dutch ] = "~Nummering" ;
         Text [ spanish ] = "Nu~meración" ;
