@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfigurationManager.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-07-23 10:46:35 $
+ *  last change: $Date: 2004-11-02 11:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.XInterface;
 import drafts.com.sun.star.ui.UIElementType;
+import drafts.com.sun.star.ui.XImageManager;
 import drafts.com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import drafts.com.sun.star.ui.XUIConfigurationManager;
 import java.io.PrintWriter;
@@ -87,6 +89,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
     private XIndexContainer mxSettings = null;
     private XIndexAccess mxMenuBarSettings = null;
     private XMultiServiceFactory mxMSF = null;
+    private String sShortCutManagerServiceName = null;
 
 
     /**
@@ -95,6 +98,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
      */
     protected void before() {
         mxMSF = (XMultiServiceFactory)tParam.getMSF();
+        sShortCutManagerServiceName = (String)tEnv.getObjRelation("XConfigurationManager.ShortCutManager");
 
     }
 
@@ -293,14 +297,34 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         tRes.tested("insertSettings()", result);
     }
 
+    /**
+     * Only a short test.
+     * See complex.imageManager.CheckImageManager for a more extensive test of
+     * this implementation.
+     */
     public void _getImageManager() {
         Object o = oObj.getImageManager();
-        tRes.tested("getImageManager()", o != null);
+        System.out.println("###### ImageManager ");
+        XImageManager xImageManager = (XImageManager)UnoRuntime.queryInterface(XImageManager.class, o);
+        tRes.tested("getImageManager()", xImageManager != null);
     }
 
+
+    /**
+     * get a shortcut manager
+     */
     public void _getShortCutManager() {
         Object o = oObj.getShortCutManager();
-        tRes.tested("getShortCutManager()", o == null);
+        XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class,o);
+        String[] serviceNames = xSI.getSupportedServiceNames();
+        boolean bSupportedServiceFound = false;
+        for (int i=0; i<serviceNames.length; i++) {
+            System.out.println("SuppService: " + serviceNames[i]);
+            if (serviceNames[i].equals(sShortCutManagerServiceName)) {
+                bSupportedServiceFound = true;
+            }
+        }
+        tRes.tested("getShortCutManager()", bSupportedServiceFound);
     }
 
     public void _getEventsManager() {
