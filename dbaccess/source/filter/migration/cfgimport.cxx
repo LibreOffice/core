@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 11:00:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,30 +663,30 @@ void OCfgImport::createObject(sal_Bool _bQuery ,const ::rtl::OUString& _sName)
     }
 }
 // -----------------------------------------------------------------------------
-void OCfgImport::setProperties()
+void OCfgImport::setProperties(sal_Int16 _eType)
 {
-    if ( m_aValues.getLength() )
+    if ( m_aValues[_eType].getLength() )
     {
-        OSL_ENSURE(m_aProperties.getLength() == m_aValues.getLength(),"Count is not equal!");
+        OSL_ENSURE(m_aProperties[_eType].getLength() == m_aValues[_eType].getLength(),"Count is not equal!");
         try
         {
             Reference< XMultiPropertySet >  xFormMultiSet;
-            if ( m_xCurrentColumn.is() )
+            if ( _eType == COLUMN )
                 xFormMultiSet.set(m_xCurrentColumn,UNO_QUERY);
-            else if ( m_xCurrentObject.is() )
+            else if ( _eType == TABLE || _eType == QUERY )
                 xFormMultiSet.set(m_xCurrentObject,UNO_QUERY);
-            else if ( m_xCurrentDS.is() )
+            else if ( _eType == DATASOURCE )
                 xFormMultiSet.set(m_xCurrentDS,UNO_QUERY);
 
             if ( xFormMultiSet.is() )
-                xFormMultiSet->setPropertyValues(m_aProperties, m_aValues);
+                xFormMultiSet->setPropertyValues(m_aProperties[_eType], m_aValues[_eType]);
         }
         catch(const Exception& e)
         {
             throw WrappedTargetException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property could not be set.")),*this,makeAny(e));
         }
-        m_aValues = Sequence< Any>();
-        m_aProperties = Sequence< ::rtl::OUString>();
+        m_aValues[_eType] = Sequence< Any>();
+        m_aProperties[_eType] = Sequence< ::rtl::OUString>();
     }
 }
 // -----------------------------------------------------------------------------
@@ -830,11 +830,15 @@ void SAL_CALL  OCfgImport::endNode()
 {
     if ( !m_aStack.empty() )
     {
-        switch(m_aStack.top().second)
+        sal_Int16 nElementType = m_aStack.top().second;
+        ::rtl::OUString sName = m_aStack.top().first;
+        m_aStack.pop();
+
+        switch(nElementType)
         {
             case DATASOURCE:
                 {
-                    setProperties();
+                    setProperties(nElementType);
                     Reference<XStorable> xStr(m_xModel,UNO_QUERY);
                     if ( xStr.is() )
                     {
@@ -872,7 +876,7 @@ void SAL_CALL  OCfgImport::endNode()
                 break;
             case TABLE:
                 {
-                    setProperties();
+                    setProperties(nElementType);
                     Reference<XTablesSupplier> xSupplier(m_xCurrentDS,UNO_QUERY);
                     Reference<XNameContainer> xTables(xSupplier->getTables(),UNO_QUERY);
                     ::rtl::OUString sName;
@@ -884,10 +888,10 @@ void SAL_CALL  OCfgImport::endNode()
                 break;
             case QUERY:
                 {
-                    setProperties();
+                    setProperties(nElementType);
                     Reference<XQueryDefinitionsSupplier> xQueriesSupplier(m_xCurrentDS,UNO_QUERY);
                     Reference<XNameContainer> xQueries(xQueriesSupplier->getQueryDefinitions(),UNO_QUERY);
-                    xQueries->insertByName(m_aStack.top().first,makeAny(m_xCurrentObject));
+                    xQueries->insertByName(sName,makeAny(m_xCurrentObject));
                     m_xCurrentObject = NULL;
                 }
                 break;
@@ -895,7 +899,7 @@ void SAL_CALL  OCfgImport::endNode()
                 try
                 {
                     if ( !UCBContentHelper::IsDocument(m_sDocumentLocation) )
-                        return;
+                        break;
 
                     sal_Bool bForm = sal_True;
                     bForm = !isDocumentReport(m_xORB,m_sDocumentLocation);
@@ -951,7 +955,7 @@ void SAL_CALL  OCfgImport::endNode()
             case COLUMN:
                 if ( m_xCurrentColumn.is() )
                 {
-                    setProperties();
+                    setProperties(nElementType);
                     Reference<XColumnsSupplier> xSupplier(m_xCurrentObject,UNO_QUERY);
                     Reference<XAppend> xAppend(xSupplier->getColumns(),UNO_QUERY);
                     if ( xAppend.is() )
@@ -960,8 +964,6 @@ void SAL_CALL  OCfgImport::endNode()
                 }
                 break;
         }
-
-        m_aStack.pop();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1010,9 +1012,11 @@ void SAL_CALL  OCfgImport::overrideProperty(
 
                     if ( sProp.getLength() )
                     {
-                        sal_Int32 nPos = m_aProperties.getLength();
-                        m_aProperties.realloc(nPos+1);
-                        m_aProperties[nPos] = sProp;
+                        if ( m_aProperties.find(m_aStack.top().second) == m_aProperties.end() )
+                            m_aProperties.insert(::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >::value_type(m_aStack.top().second,Sequence< ::rtl::OUString>()));
+                        sal_Int32 nPos = m_aProperties[m_aStack.top().second].getLength();
+                        m_aProperties[m_aStack.top().second].realloc(nPos+1);
+                        m_aProperties[m_aStack.top().second][nPos] = sProp;
                     }
                     else if ( aName == CONFIGKEY_DBLINK_LOGINTIMEOUT )
                         m_aStack.push(TElementStack::value_type(aName,LOGINTIMEOUT));
@@ -1039,9 +1043,11 @@ void SAL_CALL  OCfgImport::overrideProperty(
 
                     if ( sProp.getLength() )
                     {
-                        sal_Int32 nPos = m_aProperties.getLength();
-                        m_aProperties.realloc(nPos+1);
-                        m_aProperties[nPos] = sProp;
+                        if ( m_aProperties.find(m_aStack.top().second) == m_aProperties.end() )
+                            m_aProperties.insert(::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >::value_type(m_aStack.top().second,Sequence< ::rtl::OUString>()));
+                        sal_Int32 nPos = m_aProperties[m_aStack.top().second].getLength();
+                        m_aProperties[m_aStack.top().second].realloc(nPos+1);
+                        m_aProperties[m_aStack.top().second][nPos] = sProp;
                     }
                     else
                         m_aStack.push(TElementStack::value_type(aName,NO_PROP));
@@ -1079,9 +1085,11 @@ void SAL_CALL  OCfgImport::overrideProperty(
 
                     if ( sProp.getLength() )
                     {
-                        sal_Int32 nPos = m_aProperties.getLength();
-                        m_aProperties.realloc(nPos+1);
-                        m_aProperties[nPos] = sProp;
+                        if ( m_aProperties.find(m_aStack.top().second) == m_aProperties.end() )
+                            m_aProperties.insert(::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >::value_type(m_aStack.top().second,Sequence< ::rtl::OUString>()));
+                        sal_Int32 nPos = m_aProperties[m_aStack.top().second].getLength();
+                        m_aProperties[m_aStack.top().second].realloc(nPos+1);
+                        m_aProperties[m_aStack.top().second][nPos] = sProp;
                     }
                     else
                         m_aStack.push(TElementStack::value_type(aName,NO_PROP));
@@ -1102,9 +1110,11 @@ void SAL_CALL  OCfgImport::overrideProperty(
 
                     if ( sProp.getLength() )
                     {
-                        sal_Int32 nPos = m_aProperties.getLength();
-                        m_aProperties.realloc(nPos+1);
-                        m_aProperties[nPos] = sProp;
+                        if ( m_aProperties.find(m_aStack.top().second) == m_aProperties.end() )
+                            m_aProperties.insert(::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >::value_type(m_aStack.top().second,Sequence< ::rtl::OUString>()));
+                        sal_Int32 nPos = m_aProperties[m_aStack.top().second].getLength();
+                        m_aProperties[m_aStack.top().second].realloc(nPos+1);
+                        m_aProperties[m_aStack.top().second][nPos] = sProp;
                     }
                     else
                         m_aStack.push(TElementStack::value_type(aName,NO_PROP));
@@ -1151,20 +1161,22 @@ void SAL_CALL  OCfgImport::setPropertyValue(
                 m_aStack.pop();
                 break;
             default:
-                OSL_ENSURE(m_aProperties.getLength(),"Properties are zero!");
-                if ( m_aProperties.getLength() )
+                OSL_ENSURE(m_aProperties[m_aStack.top().second].getLength(),"Properties are zero!");
+                if ( m_aProperties[m_aStack.top().second].getLength() )
                 {
-                    if ( m_aProperties[m_aProperties.getLength()-1] != PROPERTY_LAYOUTINFORMATION )
+                    if ( m_aProperties[m_aStack.top().second][m_aProperties[m_aStack.top().second].getLength()-1] != PROPERTY_LAYOUTINFORMATION )
                     {
                         if ( !m_bPropertyMayBeVoid && !aValue.hasValue() )
                         {
-                            m_aProperties.realloc(m_aProperties.getLength()-1);
+                            m_aProperties[m_aStack.top().second].realloc(m_aProperties[m_aStack.top().second].getLength()-1);
                         }
                         else
                         {
-                            sal_Int32 nPos = m_aValues.getLength();
-                            m_aValues.realloc(nPos+1);
-                            m_aValues[nPos] = aValue;
+                            if ( m_aValues.find(m_aStack.top().second) == m_aValues.end() )
+                                m_aValues.insert(::std::map< sal_Int16 ,Sequence< Any> >::value_type(m_aStack.top().second,Sequence< Any>()));
+                            sal_Int32 nPos = m_aValues[m_aStack.top().second].getLength();
+                            m_aValues[m_aStack.top().second].realloc(nPos+1);
+                            m_aValues[m_aStack.top().second][nPos] = aValue;
                         }
                     }
                     else
@@ -1173,8 +1185,10 @@ void SAL_CALL  OCfgImport::setPropertyValue(
                         {
                             Sequence< sal_Int8 > aInputSequence;
                             aValue >>= aInputSequence;
-                            sal_Int32 nPos = m_aValues.getLength();
-                            m_aValues.realloc(nPos+1);
+                            if ( m_aValues.find(m_aStack.top().second) == m_aValues.end() )
+                                m_aValues.insert(::std::map< sal_Int16 ,Sequence< Any> >::value_type(m_aStack.top().second,Sequence< Any>()));
+                            sal_Int32 nPos = m_aValues[m_aStack.top().second].getLength();
+                            m_aValues[m_aStack.top().second].realloc(nPos+1);
                             Sequence< PropertyValue > aLayout;
                             if ( aInputSequence.getLength() )
                             {
@@ -1191,7 +1205,7 @@ void SAL_CALL  OCfgImport::setPropertyValue(
                                 else if ( QUERY == m_aStack.top().second )
                                     LoadTableFields(xInStream,aLayout);
                             }
-                            m_aValues[nPos] <<= aLayout;
+                            m_aValues[m_aStack.top().second][nPos] <<= aLayout;
                         }
                         catch(const Exception& e)
                         {
