@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:40:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,7 @@
  *
  ************************************************************************/
 
-#if defined _MSC_VER
-#include <malloc.h>
-#else
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include "jni_bridge.h"
 
