@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdcst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class ScBaseCell;
 
 #define SC_HINT_DYING       SFX_HINT_DYING
 #define SC_HINT_DATACHANGED SFX_HINT_DATACHANGED
+#define SC_HINT_TABLEOPDIRTY    SFX_HINT_USER00
 
 class ScHint : public SfxSimpleHint
 {

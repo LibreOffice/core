@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-22 14:08:26 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ public:
     void        SetDirty( const ScRange& );
     void        SetDirtyAfterLoad();
     void        SetDirtyVar();
+    void        SetTableOpDirty( const ScRange& );
     void        CalcAll();
     void        CalcAfterLoad();
     void        CompileAll();

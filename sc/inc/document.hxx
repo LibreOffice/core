@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 19:30:20 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include "rangelst.hxx"
 #endif
 
+#ifndef _SC_BRDCST_HXX
+#include "brdcst.hxx"
+#endif
 
 class KeyEvent;
 class OutputDevice;
@@ -382,6 +385,7 @@ private:
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
     USHORT              nInterpretLevel;                // >0 wenn im Interpreter
     USHORT              nMacroInterpretLevel;           // >0 wenn Macro im Interpreter
+    USHORT              nInterpreterTableOpLevel;       // >0 if in Interpreter TableOp
     USHORT              nMaxTableNumber;
     USHORT              nSrcVer;                        // Dateiversion (Laden/Speichern)
     USHORT              nSrcMaxRow;                     // Zeilenzahl zum Laden/Speichern
@@ -781,6 +785,7 @@ public:
     void            SetDirty();
     void            SetDirty( const ScRange& );
     void            SetDirtyVar();
+    void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void            CalcAll();
     void            CalcAfterLoad();
     void            CompileAll();
@@ -1367,7 +1372,7 @@ public:
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
-    void                TrackFormulas();
+    void                TrackFormulas( ULONG nHintId = SC_HINT_DATACHANGED );
     USHORT              GetFormulaTrackCount() const { return nFormulaTrackCount; }
     BOOL                IsInFormulaTree( ScFormulaCell* pCell ) const;
     BOOL                IsInFormulaTrack( ScFormulaCell* pCell ) const;
@@ -1401,6 +1406,18 @@ public:
                             {
                                 if ( nMacroInterpretLevel )
                                     nMacroInterpretLevel--;
+                            }
+    BOOL                IsInInterpreterTableOp() const { return nInterpreterTableOpLevel != 0; }
+    USHORT              GetInterpreterTableOpLevel() { return nInterpreterTableOpLevel; }
+    void                IncInterpreterTableOpLevel()
+                            {
+                                if ( nInterpreterTableOpLevel < USHRT_MAX )
+                                    nInterpreterTableOpLevel++;
+                            }
+    void                DecInterpreterTableOpLevel()
+                            {
+                                if ( nInterpreterTableOpLevel )
+                                    nInterpreterTableOpLevel--;
                             }
     BOOL                IsInDtorClear() const { return bInDtorClear; }
     void                SetExpandRefs( BOOL bVal ) { bExpandRefs = bVal; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:20:12 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ private:
     BOOL            bSubTotal   : 1;    // ist ein SubTotal
     BOOL            bIsIterCell : 1;    // kennzeichnet Zellen mit cirk. Refs.
     BOOL            bInChangeTrack: 1;  // Zelle ist im ChangeTrack
+    BOOL            bTableOpDirty : 1;  // dirty for TableOp
     BYTE            cMatrixFlag;        // 1 = links oben, 2 = Restmatrix, 0 = keine
 
 public:
@@ -317,6 +318,8 @@ public:
 
     void            SetDirty();
     inline void     SetDirtyVar() { bDirty = TRUE; }
+    void            SetTableOpDirty();
+    BOOL            IsDirtyOrInTableOpDirty();
     BOOL            GetDirty() const { return bDirty; }
     void            Compile(const String& rFormula, BOOL bNoListening = FALSE );
     void            CompileTokenArray( BOOL bNoListening = FALSE );
