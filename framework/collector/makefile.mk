@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: cd $ $Date: 2003-12-11 16:00:14 $
+#   last change: $Author: kz $ $Date: 2004-08-02 13:14:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,9 +63,8 @@ PRJ=..
 
 PRJNAME=			framework
 TARGET=				framework_collector
-TARGETTYPE=CUI
+TARGETTYPE=GUI
 
-USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
 
