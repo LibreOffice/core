@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilterAdapter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:04:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {   module sun {   module star {   module document {
 
         @since #107627#
       */
-      interface XFilterAdapter : com::sun::star::uno::XInterface
+published interface XFilterAdapter : com::sun::star::uno::XInterface
       {
         void convert(
              [in] com::sun::star::io::XInputStream xml,
