@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@ namespace configmgr
 
 namespace
 {
-    inline void fillInfo(NodeInfo& rInfo,OUString const& sName, Attributes const& aAttributes)
+/*  inline void fillInfo(NodeInfo& rInfo,OUString const& sName, Attributes const& aAttributes)
     {
         rInfo.aName = Name(sName,Name::NoValidate());
         rInfo.aAttributes = aAttributes;
     }
-    inline void fetchInfo(NodeInfo& rInfo,INode const& rNode)
+*/  inline Attributes fetchAttributes(INode const& rNode)
     {
-        fillInfo(rInfo,rNode.getName(),rNode.getAttributes());
+        return rNode.getAttributes();
     }
 }
 
@@ -139,21 +139,21 @@ GroupNodeImpl::GroupNodeImpl(GroupNodeImpl& rOriginal)
 }
 //-----------------------------------------------------------------------------
 
+OUString GroupNodeImpl::getOriginalNodeName() const
+{
+    return m_rOriginal.getName();
+}
+//-----------------------------------------------------------------------------
+
 NodeType::Enum  GroupNodeImpl::doGetType() const
 {
     return NodeType::eGROUP;
 }
 //-----------------------------------------------------------------------------
 
-void GroupNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
+Attributes GroupNodeImpl::doGetAttributes() const
 {
-    fetchInfo(rInfo,m_rOriginal);
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::doSetNodeName(Name const& aName)
-{
-    m_rOriginal.setName(aName.toString());
+    return fetchAttributes(m_rOriginal);
 }
 //-----------------------------------------------------------------------------
 
@@ -230,6 +230,12 @@ SetNodeImpl::~SetNodeImpl()
 }
 //-----------------------------------------------------------------------------
 
+OUString SetNodeImpl::getOriginalNodeName() const
+{
+    return m_rOriginal.getName();
+}
+//-----------------------------------------------------------------------------
+
 TreeImpl*   SetNodeImpl::getParentTree() const
 {
     OSL_ENSURE(m_pParentTree,"Set Node: Parent tree not set !");
@@ -292,18 +298,12 @@ SetNodeVisitor::Result SetNodeImpl::dispatchToElements(SetNodeVisitor& aVisitor)
 }
 //-----------------------------------------------------------------------------
 
-void SetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
+Attributes SetNodeImpl::doGetAttributes() const
 {
-    fetchInfo(rInfo,m_rOriginal);
+    return fetchAttributes(m_rOriginal);
 }
 //-----------------------------------------------------------------------------
 
-void SetNodeImpl::doSetNodeName(Name const& aName)
-{
-    m_rOriginal.setName(aName.toString());
-}
-
-//-----------------------------------------------------------------------------
 NodeType::Enum  SetNodeImpl::doGetType() const
 {
     return NodeType::eSET;
@@ -389,6 +389,12 @@ ValueNodeImpl::ValueNodeImpl(ValueNodeImpl& rOriginal)
 }
 //-----------------------------------------------------------------------------
 
+OUString ValueNodeImpl::getOriginalNodeName() const
+{
+    return m_rOriginal.getName();
+}
+//-----------------------------------------------------------------------------
+
 bool ValueNodeImpl::isDefault() const
 {
     return m_rOriginal.isDefault();
@@ -431,16 +437,11 @@ void ValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void ValueNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
+Attributes ValueNodeImpl::doGetAttributes() const
 {
-    fetchInfo(rInfo,m_rOriginal);
-    rInfo.aAttributes.bDefaultable = m_rOriginal.hasDefault();
-}
-//-----------------------------------------------------------------------------
-
-void ValueNodeImpl::doSetNodeName(Name const& aName)
-{
-    m_rOriginal.setName(aName.toString());
+    Attributes  aResult = fetchAttributes(m_rOriginal);
+    aResult.bDefaultable = m_rOriginal.hasDefault();
+    return aResult;
 }
 //-----------------------------------------------------------------------------
 

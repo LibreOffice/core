@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:09:24 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@ namespace configmgr
     {
 
 //-----------------------------------------------------------------------------
+inline
+static
+Name nodeName(INode const& aNode)
+{
+    return Name(aNode.getName(),Name::NoValidate());
+}
+//-----------------------------------------------------------------------------
 // class TreeImplBuilder - friend of TreeImpl
 //-----------------------------------------------------------------------------
 
@@ -145,7 +152,7 @@ void TreeImplBuilder::addValue(ValueNode& rValue)
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
     if( aValueNode.isValid() )
     {
-        m_rTree.m_aNodes.push_back( Node(aValueNode,m_nParent) );
+        m_rTree.m_aNodes.push_back( Node(aValueNode,nodeName(rValue),m_nParent) );
     }
 }
 //-----------------------------------------------------------------------------
@@ -158,7 +165,7 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
     if( aGroupNode.isValid() )
     {
-        m_rTree.m_aNodes.push_back( Node(aGroupNode,m_nParent) );
+        m_rTree.m_aNodes.push_back( Node(aGroupNode,nodeName(rTree),m_nParent) );
 
         // now fill in group members
         if (m_nDepthLeft > 0)
@@ -191,7 +198,7 @@ void TreeImplBuilder::addSet(ISubtree& rTree)
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
     if( aSetNode.isValid() )
     {
-        m_rTree.m_aNodes.push_back( Node(aSetNode,m_nParent) );
+        m_rTree.m_aNodes.push_back( Node(aSetNode,nodeName(rTree),m_nParent) );
 
         // this also relies on one based offsets
         NodeOffset nNodeAdded = m_rTree.m_aNodes.size() + m_rTree.root() - 1;
@@ -204,44 +211,20 @@ void TreeImplBuilder::addSet(ISubtree& rTree)
 // class Node
 //-----------------------------------------------------------------------------
 
-Node::Node(NodeImplHolder const& aSpecificNode, NodeOffset nParent)
+Node::Node(NodeImplHolder const& aSpecificNode, Name const& aName, NodeOffset nParent)
 : m_pSpecificNode(aSpecificNode)
 , m_nParent(nParent)
+, m_aName(aName)
 {
-}
-//-----------------------------------------------------------------------------
-
-static
-inline
-NodeInfo implInfo(NodeImpl const& aNode)
-{
-    NodeInfo info;
-    aNode.getNodeInfo(info);
-    return info;
-}
-//-----------------------------------------------------------------------------
-
-Name Node::name()   const
-{
-    return implInfo(*m_pSpecificNode).aName;
-}
-//-----------------------------------------------------------------------------
-
-Attributes Node::attributes()   const
-{
-    return implInfo(*m_pSpecificNode).aAttributes;
 }
 //-----------------------------------------------------------------------------
 
 NodeInfo Node::info()   const
 {
-    return implInfo(*m_pSpecificNode);
-}
-//-----------------------------------------------------------------------------
-
-void Node::renameNode(Name const& aName)
-{
-    m_pSpecificNode->setNodeName(aName);
+    NodeInfo info;
+    info.aName      = this->name();
+    info.aAttributes = this->attributes();
+    return info;
 }
 //-----------------------------------------------------------------------------
 
@@ -1031,6 +1014,7 @@ void ElementTreeImpl::attachTo(ISubtree& rOwningSet, Name const& aElementName)
 
     if (m_pOwnedNode)
     {
+        OSL_ENSURE(this->name(root()) == aElementName,"ElementTree: Attaching with unexpected element name");
         m_pOwnedNode->setName(aElementName.toString());
 
         std::auto_ptr<INode> aNode(m_pOwnedNode);
@@ -1047,6 +1031,7 @@ void ElementTreeImpl::detachFrom(ISubtree& rOwningSet, Name const& aElementName)
     OSL_ENSURE(!m_pOwnedNode,"ERROR: Cannot detach a already owned node from a subtree");
     if (!m_pOwnedNode)
     {
+        OSL_ENSURE(this->name(root()) == aElementName,"ElementTree: Detaching with unexpected element name");
         std::auto_ptr<INode> aNode( rOwningSet.removeChild(aElementName.toString()) );
         OSL_ENSURE(aNode.get(),"ERROR: Detached node not found in the given subtree");
 
@@ -1071,6 +1056,11 @@ void ElementTreeImpl::takeNodeFrom(std::auto_ptr<INode>& rOldOwner)
 void ElementTreeImpl::releaseTo(std::auto_ptr<INode>& rNewOwner)
 {
     OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot release a non-owned node");
+    if (m_pOwnedNode)
+    {
+        Name aNodeName = node(root())->name();
+        m_pOwnedNode->setName( aNodeName.toString() );
+    }
 
     rNewOwner.reset(m_pOwnedNode);
     m_pOwnedNode = 0;
@@ -1085,8 +1075,7 @@ void ElementTreeImpl::releaseAs(std::auto_ptr<INode>& rNewOwner, Name const& aEl
     if (m_pOwnedNode)
         renameTree(aElementName);
 
-    rNewOwner.reset(m_pOwnedNode);
-    m_pOwnedNode = 0;
+    this->releaseTo(rNewOwner);
 }
 //-----------------------------------------------------------------------------
 

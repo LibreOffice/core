@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@ static void failReadOnly()
     throw ConstraintViolation("INTERNAL ERROR: Trying to update a read-only node");
 }
 
+static
+inline
+Attributes forceReadOnly(Attributes aAttributes)
+{
+    aAttributes.bWritable = false;
+    return aAttributes;
+}
 // Specific types of nodes for direct or read only access
 //-----------------------------------------------------------------------------
 
@@ -133,16 +140,9 @@ void ReadOnlyValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueNodeImpl::doSetNodeName(Name const& )
+Attributes ReadOnlyValueNodeImpl::doGetAttributes() const
 {
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    ValueNodeImpl::doGetNodeInfo(rInfo);
-    rInfo.aAttributes.bWritable = false;
+    return forceReadOnly( ValueNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
 
@@ -228,12 +228,6 @@ void DirectValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void DirectValueNodeImpl::doSetNodeName(Name const& aName)
-{
-    ValueNodeImpl::doSetNodeName(aName);
-}
-//-----------------------------------------------------------------------------
-
 bool DirectValueNodeImpl::doHasChanges()    const
 {
     return false;
@@ -268,7 +262,6 @@ NodeImplHolder DirectValueNodeImpl::doCloneIndirect(bool bIndirect)
 
 DeferredValueNodeImpl::DeferredValueNodeImpl(ValueNode& rOriginal)
 : ValueNodeImpl(rOriginal)
-, m_pNewName(0)
 , m_pNewValue(0)
 , m_bDefault(false)
 {
@@ -277,7 +270,6 @@ DeferredValueNodeImpl::DeferredValueNodeImpl(ValueNode& rOriginal)
 
 DeferredValueNodeImpl::DeferredValueNodeImpl(DirectValueNodeImpl& rOriginal)
 : ValueNodeImpl(rOriginal)
-, m_pNewName(0)
 , m_pNewValue(0)
 , m_bDefault(false)
 {
@@ -286,7 +278,6 @@ DeferredValueNodeImpl::DeferredValueNodeImpl(DirectValueNodeImpl& rOriginal)
 
 DeferredValueNodeImpl::~DeferredValueNodeImpl()
 {
-    delete m_pNewName;
     delete m_pNewValue;
 }
 //-----------------------------------------------------------------------------
@@ -369,31 +360,14 @@ void DeferredValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    ValueNodeImpl::doGetNodeInfo(rInfo);
-    if (m_pNewName)
-        rInfo.aName = *m_pNewName;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueNodeImpl::doSetNodeName(Name const& aNewName)
-{
-    std::auto_ptr<Name> pNewName( new Name(aNewName) );
-    delete m_pNewName;
-    m_pNewName = pNewName.release();
-}
-//-----------------------------------------------------------------------------
-
 bool DeferredValueNodeImpl::doHasChanges() const
 {
-    return m_pNewValue || m_pNewName || m_bDefault;
+    return m_pNewValue || m_bDefault;
 }
 //-----------------------------------------------------------------------------
 
 NodeChangeImpl* DeferredValueNodeImpl::doCollectChange() const
 {
-    OSL_ENSURE(!m_pNewName,"No support for renaming existing value nodes in current changes lists");
     // TODO
     if (m_bDefault)
     {
@@ -414,8 +388,6 @@ NodeChangeImpl* DeferredValueNodeImpl::doCollectChange() const
 
 NodeChangeImpl* DeferredValueNodeImpl::doAdjustToChange(ValueChange const& rExternalChange)
 {
-    OSL_ENSURE(!m_pNewName,"Renamed value node may be the wrong one for update adjustment");
-
     if (m_bDefault && rExternalChange.getMode() == ValueChange::changeDefault)
     {
         OSL_ASSERT(!m_pNewValue);
@@ -451,20 +423,11 @@ void DeferredValueNodeImpl::doCommitChanges()
 
     delete m_pNewValue, m_pNewValue = 0;
     m_bDefault = false;
-
-    if (m_pNewName)
-    {
-        ValueNodeImpl::doSetNodeName(*m_pNewName);
-
-        delete m_pNewName, m_pNewName = 0;
-    }
 }
 //-----------------------------------------------------------------------------
 
 std::auto_ptr<ValueChange> DeferredValueNodeImpl::doPreCommitChange()
 {
-    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
-
     // first find the mode of the change
     // initial value is harmless (done locally) or produces an error elsewhere
     ValueChange::Mode eMode = ValueChange::changeDefault;
@@ -486,13 +449,9 @@ std::auto_ptr<ValueChange> DeferredValueNodeImpl::doPreCommitChange()
     else
         eMode = ValueChange::wasDefault;
 
-    // now get the name of this node
-    NodeInfo aInfo;
-    doGetNodeInfo(aInfo);
-
     // now make a ValueChange
-    ValueChange* pChange = new ValueChange( aInfo.aName.toString(), getValue(),
-                                            aInfo.aAttributes, eMode, ValueNodeImpl::getValue());
+    ValueChange* pChange = new ValueChange( this->getOriginalNodeName(), getValue(),
+                                            this->getAttributes(), eMode, ValueNodeImpl::getValue());
 
     return std::auto_ptr<ValueChange>( pChange);
 }
@@ -547,19 +506,11 @@ NodeImplHolder DeferredValueNodeImpl::doCloneIndirect(bool bIndirect)
 // class ReadOnlyGroupNodeImpl
 //-----------------------------------------------------------------------------
 
-void ReadOnlyGroupNodeImpl::doSetNodeName(Name const& )
+Attributes ReadOnlyGroupNodeImpl::doGetAttributes() const
 {
-    failReadOnly();
+    return forceReadOnly( GroupNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
-
-void ReadOnlyGroupNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    GroupNodeImpl::doGetNodeInfo(rInfo);
-    rInfo.aAttributes.bWritable = false;
-}
-//-----------------------------------------------------------------------------
-
 
 bool ReadOnlyGroupNodeImpl::doHasChanges() const
 {
@@ -600,12 +551,6 @@ DirectGroupNodeImpl::DirectGroupNodeImpl(DeferredGroupNodeImpl& rOriginal)
 {}
 //-----------------------------------------------------------------------------
 
-void DirectGroupNodeImpl::doSetNodeName(Name const& rName)
-{
-    GroupNodeImpl::doSetNodeName(rName);
-}
-//-----------------------------------------------------------------------------
-
 bool DirectGroupNodeImpl::doHasChanges() const
 {
     return false;
@@ -639,7 +584,6 @@ NodeImplHolder DirectGroupNodeImpl::doCloneIndirect(bool bIndirect)
 
 DeferredGroupNodeImpl::DeferredGroupNodeImpl(ISubtree& rOriginal)
 : GroupNodeImpl(rOriginal)
-, m_pNewName(0)
 , m_bChanged(false)
 {
 }
@@ -647,7 +591,6 @@ DeferredGroupNodeImpl::DeferredGroupNodeImpl(ISubtree& rOriginal)
 
 DeferredGroupNodeImpl::DeferredGroupNodeImpl(DirectGroupNodeImpl& rOriginal)
 : GroupNodeImpl(rOriginal)
-, m_pNewName(0)
 , m_bChanged(false)
 {
 }
@@ -655,35 +598,17 @@ DeferredGroupNodeImpl::DeferredGroupNodeImpl(DirectGroupNodeImpl& rOriginal)
 
 DeferredGroupNodeImpl::~DeferredGroupNodeImpl()
 {
-    delete m_pNewName;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredGroupNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    GroupNodeImpl::doGetNodeInfo(rInfo);
-    if (m_pNewName)
-        rInfo.aName = *m_pNewName;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredGroupNodeImpl::doSetNodeName(Name const& aNewName)
-{
-    std::auto_ptr<Name> pNewName( new Name(aNewName) );
-    delete m_pNewName;
-    m_pNewName = pNewName.release();
 }
 //-----------------------------------------------------------------------------
 
 bool DeferredGroupNodeImpl::doHasChanges() const
 {
-    return m_bChanged || m_pNewName;
+    return m_bChanged;
 }
 //-----------------------------------------------------------------------------
 
 void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
 {
-    OSL_ENSURE(!m_pNewName,"No support for renaming value nodes in current changes tree");
     // TODO
 }
 //-----------------------------------------------------------------------------
@@ -691,30 +616,19 @@ void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* 
 void DeferredGroupNodeImpl::doCommitChanges()
 {
     m_bChanged = false;
-
-    if (m_pNewName)
-    {
-        GroupNodeImpl::doSetNodeName(*m_pNewName);
-
-        delete m_pNewName, m_pNewName = 0;
-    }
 }
 //-----------------------------------------------------------------------------
 
 std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::doPreCommitChanges()
 {
-    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
-
     std::auto_ptr<SubtreeChange> aRet;
 
     if (m_bChanged)
     {
         // get the name of this node
-        NodeInfo aInfo;
-        doGetNodeInfo(aInfo);
-        aRet.reset( new SubtreeChange(aInfo.aName.toString(),
+        aRet.reset( new SubtreeChange(this->getOriginalNodeName(),
                                       rtl::OUString(),
-                                      aInfo.aAttributes) );
+                                      this->getAttributes()) );
     }
     return aRet;
 }
@@ -789,16 +703,9 @@ ReadOnlyTreeSetNodeImpl::Element ReadOnlyTreeSetNodeImpl::doMakeAdditionalElemen
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyTreeSetNodeImpl::doSetNodeName(Name const& )
+Attributes ReadOnlyTreeSetNodeImpl::doGetAttributes() const
 {
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    TreeSetNodeImpl::doGetNodeInfo(rInfo);
-    rInfo.aAttributes.bWritable = false;
+    return forceReadOnly( TreeSetNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
 
@@ -859,16 +766,9 @@ ReadOnlyValueSetNodeImpl::Element ReadOnlyValueSetNodeImpl::doMakeAdditionalElem
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueSetNodeImpl::doSetNodeName(Name const& )
+Attributes ReadOnlyValueSetNodeImpl::doGetAttributes() const
 {
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    ValueSetNodeImpl::doGetNodeInfo(rInfo);
-    rInfo.aAttributes.bWritable = false;
+    return forceReadOnly( ValueSetNodeImpl::doGetAttributes() );
 }
 //-----------------------------------------------------------------------------
 
@@ -941,12 +841,6 @@ void DirectTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProv
 DirectTreeSetNodeImpl::Element DirectTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
 {
     return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDirectAccessFactory(), aAddNodeChange, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doSetNodeName(Name const& aNewName)
-{
-    TreeSetNodeImpl::doSetNodeName(aNewName);
 }
 //-----------------------------------------------------------------------------
 
@@ -1024,12 +918,6 @@ DirectValueSetNodeImpl::Element DirectValueSetNodeImpl::doMakeAdditionalElement(
 }
 //-----------------------------------------------------------------------------
 
-void DirectValueSetNodeImpl::doSetNodeName(Name const& aName)
-{
-    ValueSetNodeImpl::doSetNodeName(aName);
-}
-//-----------------------------------------------------------------------------
-
 bool DirectValueSetNodeImpl::doHasChanges() const
 {
     return false;
@@ -1069,7 +957,6 @@ NodeImplHolder DirectValueSetNodeImpl::doCloneIndirect(bool bIndirect)
 DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
 : TreeSetNodeImpl(rOriginal,pTemplate)
 , m_aChangedData()
-, m_pNewName(0)
 , m_bChanged(false)
 {
 }
@@ -1078,7 +965,6 @@ DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(ISubtree& rOriginal, Template* 
 DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(DirectTreeSetNodeImpl& rOriginal)
 : TreeSetNodeImpl(rOriginal)
 , m_aChangedData()
-, m_pNewName(0)
 , m_bChanged(false)
 {
     implMakeIndirect(true);
@@ -1157,22 +1043,6 @@ SetNodeVisitor::Result DeferredTreeSetNodeImpl::doDispatchToElements(SetNodeVisi
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    TreeSetNodeImpl::doGetNodeInfo(rInfo);
-    if (m_pNewName)
-        rInfo.aName = *m_pNewName;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredTreeSetNodeImpl::doSetNodeName(Name const& aNewName)
-{
-    std::auto_ptr<Name> pNewName( new Name(aNewName) );
-    delete m_pNewName;
-    m_pNewName = pNewName.release();
-}
-//-----------------------------------------------------------------------------
-
 void DeferredTreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
 {
     implInsertNewElement(aName, TreeSetNodeImpl::implMakeElement(aNewEntry.tree()));
@@ -1200,14 +1070,12 @@ DeferredTreeSetNodeImpl::Element DeferredTreeSetNodeImpl::doMakeAdditionalElemen
 
 bool DeferredTreeSetNodeImpl::doHasChanges() const
 {
-    return m_bChanged || m_pNewName || !m_aChangedData.isEmpty();
+    return m_bChanged || !m_aChangedData.isEmpty();
 }
 //-----------------------------------------------------------------------------
 
 void DeferredTreeSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
 {
-    OSL_ENSURE(!m_pNewName,"No real support for renaming nodes preexisting trees");
-
     // collect added and deleted nodes
     {for(NativeIterator it = m_aChangedData.beginNative(), stop = m_aChangedData.endNative();
         it != stop;
@@ -1326,28 +1194,18 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
     }
 
     m_bChanged = false;
-
-    if (m_pNewName)
-    {
-        TreeSetNodeImpl::doSetNodeName(*m_pNewName);
-
-        delete m_pNewName, m_pNewName = 0;
-    }
 }
 //-----------------------------------------------------------------------------
 
 std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges()
 {
-    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
-
     // nowfirst get the name of this node
-    NodeInfo aInfo;
-    doGetNodeInfo(aInfo);
+    OUString aName = this->getOriginalNodeName();
 
     // and make a SubtreeChange
-    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.aName.toString(),
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aName,
                                                                getElementTemplate()->getPath().toString(),
-                                                               aInfo.aAttributes) );
+                                                               this->getAttributes()) );
 
     // commit preexisting nodes
     {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
@@ -1851,7 +1709,6 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aN
 DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
 : ValueSetNodeImpl(rOriginal,pTemplate)
 , m_aChangedData()
-, m_pNewName(0)
 , m_bChanged(false)
 {
 }
@@ -1860,7 +1717,6 @@ DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(ISubtree& rOriginal, Template
 DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(DirectValueSetNodeImpl& rOriginal)
 : ValueSetNodeImpl(rOriginal)
 , m_aChangedData()
-, m_pNewName(0)
 , m_bChanged(false)
 {
     implMakeIndirect(true);
@@ -1939,22 +1795,6 @@ SetNodeVisitor::Result DeferredValueSetNodeImpl::doDispatchToElements(SetNodeVis
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
-{
-    ValueSetNodeImpl::doGetNodeInfo(rInfo);
-    if (m_pNewName)
-        rInfo.aName = *m_pNewName;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doSetNodeName(Name const& aNewName)
-{
-    std::auto_ptr<Name> pNewName( new Name(aNewName) );
-    delete m_pNewName;
-    m_pNewName = pNewName.release();
-}
-//-----------------------------------------------------------------------------
-
 void DeferredValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
 {
     implInsertNewElement(aName, ValueSetNodeImpl::implMakeElement(aNewEntry.tree()));
@@ -1981,14 +1821,12 @@ DeferredValueSetNodeImpl::Element DeferredValueSetNodeImpl::doMakeAdditionalElem
 
 bool DeferredValueSetNodeImpl::doHasChanges() const
 {
-    return m_bChanged || m_pNewName || !m_aChangedData.isEmpty();
+    return m_bChanged || !m_aChangedData.isEmpty();
 }
 //-----------------------------------------------------------------------------
 
 void DeferredValueSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
 {
-    OSL_ENSURE(!m_pNewName,"No real support for renaming nodes preexisting trees");
-
     // collect added and deleted nodes
     {for(NativeIterator it = m_aChangedData.beginNative(), stop = m_aChangedData.endNative();
         it != stop;
@@ -2106,26 +1944,15 @@ void DeferredValueSetNodeImpl::doCommitChanges()
     }
 
     m_bChanged = false;
-
-    if (m_pNewName)
-    {
-        ValueSetNodeImpl::doSetNodeName(*m_pNewName);
-
-        delete m_pNewName, m_pNewName = 0;
-    }
 }
 //-----------------------------------------------------------------------------
 
 std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges()
 {
-    OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
-
-    // nowfirst get the name of this node
-    NodeInfo aInfo;
-    doGetNodeInfo(aInfo);
-
     // and make a SubtreeChange
-    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.aName.toString(), getElementTemplate()->getPath().toString(), aInfo.aAttributes) );
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(this->getOriginalNodeName(),
+                                                                getElementTemplate()->getPath().toString(),
+                                                                this->getAttributes()) );
 
     // commit preexisting nodes
     {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();

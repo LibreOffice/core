@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace configmgr
         class TreeImpl;
         class ElementTreeImpl;
 
+        struct Attributes;
         struct NodeInfo;
         class NodeChangeImpl;
         class NodeChange;
@@ -137,15 +138,13 @@ namespace configmgr
 
             static void makeIndirect(NodeImplHolder&    aThis, bool bIndirect);
 
-            NodeType::Enum  getType()         const { return doGetType(); }
-            void getNodeInfo(NodeInfo& rInfo) const { doGetNodeInfo(rInfo); }
-            void setNodeName(Name const& rName_)    { doSetNodeName(rName_); }
+            NodeType::Enum  getType()   const   { return doGetType(); }
+            Attributes getAttributes()  const   { return doGetAttributes(); };
             void dispatch(INodeHandler& rHandler_)  { doDispatch(rHandler_); }
 
         private:
-            virtual NodeType::Enum  doGetType()                     const = 0;
-            virtual void            doGetNodeInfo(NodeInfo& rInfo_) const = 0;
-            virtual void            doSetNodeName(Name const& rName_)    = 0;
+            virtual NodeType::Enum  doGetType()         const = 0;
+            virtual Attributes      doGetAttributes()   const = 0;
             virtual void            doDispatch(INodeHandler& rHandler_) = 0;
 
             virtual bool doHasChanges() const = 0;
@@ -173,6 +172,9 @@ namespace configmgr
             explicit GroupNodeImpl(ISubtree& rOriginal);
             explicit GroupNodeImpl(GroupNodeImpl& rOriginal); // only for makeIndirect
 
+            /// retrieve the name of the underlying node
+            OUString getOriginalNodeName() const;
+
             std::auto_ptr<SubtreeChange> preCommitChanges();
             void finishCommit(SubtreeChange& rChanges) { doFinishCommit(rChanges); }
             void revertCommit(SubtreeChange& rChanges) { doRevertCommit(rChanges); }
@@ -189,8 +191,7 @@ namespace configmgr
             virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
 
         // NodeImpl implementation
-            virtual void            doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void            doSetNodeName(Name const& rName) = 0;
+            virtual Attributes      doGetAttributes() const;
 
         private:
             virtual NodeType::Enum  doGetType() const;
@@ -233,6 +234,9 @@ namespace configmgr
             explicit SetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
             /// 'Moving constructor': Constructs a set that takes the data from rOriginal, leaves rOriginal empty
             explicit SetNodeImpl(SetNodeImpl& rOriginal); // only for makeIndirect
+
+            /// retrieve the name of the underlying node
+            OUString getOriginalNodeName() const;
 
         // the following willmostly  be implemented by derived classes (using the virtual equivalents)
             /// does this set contain any elements (loads elements if needed)
@@ -300,8 +304,7 @@ namespace configmgr
 
         // NodeImpl implementation - direct clients don't need it
         protected:
-            virtual void            doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void            doSetNodeName(Name const& rName) = 0;
+            virtual Attributes      doGetAttributes() const;
             virtual NodeType::Enum  doGetType() const;
 
         private:
@@ -324,6 +327,9 @@ namespace configmgr
         public:
             explicit ValueNodeImpl(ValueNode& rOriginal) ;
             explicit ValueNodeImpl(ValueNodeImpl& rOriginal) ; // only for makeIndirect
+
+            /// retrieve the name of the underlying node
+            OUString getOriginalNodeName() const;
 
         // the following are implemented, though pure
         // they delegate directly to m_rOriginal
@@ -358,8 +364,7 @@ namespace configmgr
 
 
         protected:
-            virtual void            doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void            doSetNodeName(Name const& rName) = 0;
+            virtual Attributes      doGetAttributes() const;
 
         // NodeImpl implementation - direct clients don't need it
             virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,7 @@ namespace configmgr
 
         protected:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
+            virtual Attributes doGetAttributes() const;
 
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
@@ -130,8 +129,6 @@ namespace configmgr
 
         protected:
         // NodeImpl implementation
-            virtual void doSetNodeName(Name const& rName);
-
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -169,16 +166,12 @@ namespace configmgr
             virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
         protected:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
-
             virtual bool doHasChanges() const;
             virtual NodeChangeImpl* doCollectChange() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
         private:
-            Name*   m_pNewName;
             UnoAny* m_pNewValue;
             bool    m_bDefault;
         };
@@ -200,8 +193,7 @@ namespace configmgr
         // Base obverrideables
         private:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
+            virtual Attributes doGetAttributes() const;
 
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
@@ -223,8 +215,6 @@ namespace configmgr
         // Base obverrideables
         private:
         // NodeImpl implementation
-            virtual void doSetNodeName(Name const& rName);
-
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -252,16 +242,12 @@ namespace configmgr
         // Base obverrideables
         private:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
-
             virtual bool doHasChanges() const;
             virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
             virtual NodeImplHolder doCloneIndirect(bool bIndirect);
 
-            Name*   m_pNewName;
             bool    m_bChanged;
         };
 //-----------------------------------------------------------------------------
@@ -281,8 +267,7 @@ namespace configmgr
         // Base Overrideables
         private:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
+            virtual Attributes doGetAttributes() const;
 
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
@@ -316,8 +301,7 @@ namespace configmgr
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
+            virtual Attributes doGetAttributes() const;
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -341,8 +325,6 @@ namespace configmgr
         // Base Overrideables
         private:
         // NodeImpl implementation
-            virtual void doSetNodeName(Name const& rName);
-
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
@@ -370,8 +352,6 @@ namespace configmgr
         // Base Overrideables
         private:
         // NodeImpl implementation
-            virtual void doSetNodeName(Name const& rName);
-
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
@@ -405,9 +385,6 @@ namespace configmgr
         // Base Overrideables
         private:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
-
             virtual bool        doIsEmpty() const;
             virtual SetEntry    doFindElement(Name const& aName) ;
             virtual void        doClearElements();
@@ -436,7 +413,6 @@ namespace configmgr
             void implRemoveOldElement(Name const& aName);
 
             ElementSet m_aChangedData;
-            Name*   m_pNewName;
             bool    m_bChanged;
         };
 //-----------------------------------------------------------------------------
@@ -461,9 +437,6 @@ namespace configmgr
         // Base Overrideables
         private:
         // NodeImpl implementation
-            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
-            virtual void doSetNodeName(Name const& rName);
-
             virtual bool        doIsEmpty() const;
             virtual SetEntry    doFindElement(Name const& aName) ;
             virtual void        doClearElements();
@@ -492,7 +465,6 @@ namespace configmgr
             void implRemoveOldElement(Name const& aName);
 
             ElementSet m_aChangedData;
-            Name*   m_pNewName;
             bool    m_bChanged;
         };
 //-----------------------------------------------------------------------------

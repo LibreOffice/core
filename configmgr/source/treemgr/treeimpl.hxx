@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:09:24 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,17 +160,20 @@ namespace configmgr
         */
         class Node
         {
+            Name                m_aName; // cached for better performance
             NodeImplHolder      m_pSpecificNode;
             NodeOffset          m_nParent;
+
+            friend class ElementTreeImpl; // can rename root nodes
         public:
-            Node(NodeImplHolder const& aSpecificNodeImpl, NodeOffset nParent);
+            Node(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
 
         // COMMON: information
             NodeOffset          parent()        const { return m_nParent; }
             NodeType::Enum      getNodeType()   const { return m_pSpecificNode->getType(); }
 
-            Name                name()          const;
-            Attributes          attributes()    const;
+            Name                name()          const { return m_aName; }
+            Attributes          attributes()    const { return m_pSpecificNode->getAttributes(); }
             NodeInfo            info()          const;
 
         // change management
@@ -181,9 +184,6 @@ namespace configmgr
 
             void collectChanges(NodeChanges& rChanges, TreeImpl* pTree, NodeOffset nContext)    const
             { m_pSpecificNode->collectChanges(rChanges,pTree,nContext); }
-
-        /// renames a node without concern for context consistency ! Only works for nodes without parent
-            void    renameNode(Name const& aName);
 
         // COMMON: handler dispatch
             void dispatch(INodeHandler& rHandler) { m_pSpecificNode->dispatch(rHandler); }
@@ -204,10 +204,12 @@ namespace configmgr
             GroupNodeImpl const&groupImpl()     const { return implGetGroupImpl(); }
 
         private:
+            void renameNode(Name const& aNewName) { m_aName = aNewName; }
+            friend class ElementTreeImpl; // can rename root nodes
+        private:
             SetNodeImpl&   implGetSetImpl()   const;
             GroupNodeImpl& implGetGroupImpl() const ;
             ValueNodeImpl& implGetValueImpl() const ;
-
         };
 //-----------------------------------------------------------------------------
         class RootTreeImpl; // for 'dynamic-casting'
