@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: nn $ $Date: 2002-10-22 13:23:11 $
+#   last change: $Author: sab $ $Date: 2002-11-13 06:19:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,30 @@ PACKAGE=com$/sun$/star$/sheet
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    CellAnnotationsEnumeration.idl\
+    CellAreaLinksEnumeration.idl\
+    DatabaseRangesEnumeration.idl\
+    DataPilotFieldsEnumeration.idl\
+    DataPilotTablesEnumeration.idl\
+    DDELinksEnumeration.idl\
+    FunctionCategory.idl\
+    FunctionDescriptionEnumeration.idl\
+    LabelRangesEnumeration.idl\
+    MoveDirection.idl\
+    NamedRangesEnumeration.idl\
+    ScenariosEnumeration.idl\
+    SheetCellRangesEnumeration.idl\
+    SheetLinksEnumeration.idl\
+    SpreadsheetsEnumeration.idl\
+    SpreadsheetViewPanesEnumeration.idl\
+    StatusBarFunction.idl\
+    SubTotalFieldsEnumeration.idl\
+    TableAutoFormatEnumeration.idl\
+    TableAutoFormatsEnumeration.idl\
+    TableCellStyle.idl\
+    TableConditionalEntryEnumeration.idl\
+    UniqueCellFormatRanges.idl\
+    UniqueCellFormatRangesEnumeration.idl\
     RangeSelectionArguments.idl\
     RangeSelectionEvent.idl\
     XRangeSelection.idl\
@@ -155,7 +179,7 @@ IDLFILES=\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
-    SpreadsheetDrawPage.idl\
+        SpreadsheetDrawPage.idl\
     Spreadsheets.idl\
     SpreadsheetView.idl\
     SpreadsheetViewPane.idl\
