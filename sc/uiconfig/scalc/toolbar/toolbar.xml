@@ -9,7 +9,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:10242" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ChooseDesign" toolbar:helpid="helpid:26082" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:Spelling" toolbar:helpid="helpid:10243" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="helpid:10243" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="helpid:12021" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Thesaurus" toolbar:helpid="helpid:10245" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="helpid:5961" toolbar:text="" />
