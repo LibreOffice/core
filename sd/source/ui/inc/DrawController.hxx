@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-22 10:11:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,22 @@ class SdXImpressDocument;
 
 namespace {
 
-typedef ::cppu::ImplHelper5 <
+typedef ::cppu::ImplInheritanceHelper5  <
+    SfxBaseController,
     ::com::sun::star::view::XSelectionSupplier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XDrawView,
     ::com::sun::star::awt::XWindow,
     ::com::sun::star::view::XSelectionChangeListener
     > DrawControllerInterfaceBase;
+
+class BroadcastHelperOwner
+{
+public:
+    BroadcastHelperOwner (::osl::Mutex& rMutex) : maBroadcastHelper(rMutex) {};
+    ::cppu::OBroadcastHelper maBroadcastHelper;
+};
+
 
 } // end of anonymous namespace.
 
@@ -115,26 +124,16 @@ class ViewShellBase;
 class ViewShell;
 class View;
 
-/** Main controller for all sub-shells that are stacked on a single
-    view shell.
+/** The DrawController is the base class of the specialzed controllers that
+    represent the center pane of the Multi Pane GUI.
 
-    <p>With the stacked sub-shells it is not possible to have one
-    controller for all sub-shell.  Instead there is this generic
-    controller which handles general requests regarding dispatching
-    and selection.  It concentrates on the currently active/focused
-    sub-shell.  In order to offer more specific access to each of the
-    sub-shells associated whith one of the panes of a multi-pane GUI,
-    it provides access to sub-controllers.  Each sub-controller
-    represents a single sub-shell.  So, if you want to have a slot
-    dispatched or want to manipulate the selection of a specific pane,
-    you get the sub-controller of that pane and use that as
-    controller.</p>
+    At the moment the side panes do not have controllers.
+
 */
 class DrawController
-    : public SfxBaseController,
-      public ::cppu::OBroadcastHelper,
-      public ::cppu::OPropertySetHelper,
-      public DrawControllerInterfaceBase
+    : public DrawControllerInterfaceBase,
+      private BroadcastHelperOwner,
+      public ::cppu::OPropertySetHelper
 {
 public:
     enum properties
