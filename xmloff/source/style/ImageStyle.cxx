@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 11:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,8 @@ sal_Bool XMLImageStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::
             // uri
             AddAttribute( XML_NAMESPACE_XLINK, sXML_href, aURL );
             AddAttribute( XML_NAMESPACE_XLINK, sXML_type, OUString::createFromAscii(sXML_simple) );
-            AddAttribute( XML_NAMESPACE_XLINK, sXML_show, OUString::createFromAscii(sXML_parsed) );
-            AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate, OUString::createFromAscii(sXML_auto) );
+            AddAttribute( XML_NAMESPACE_XLINK, sXML_show, OUString::createFromAscii(sXML_embed) );
+            AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate, OUString::createFromAscii(sXML_onLoad) );
 
 /*
             // size
