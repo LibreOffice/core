@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnloadingPreference.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-20 10:20:42 $
+ *  last change: $Author: jl $ $Date: 2001-11-20 11:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,10 @@
 module com {  module sun {  module star {  module uno {
 
 //=============================================================================
-/** When someone calls <code>rtl_unloadUnusedModules</code> then the unloading
+/** Components can implement <code>XUnloadingPreference</code> in order to indicate
+    how they should be treated when their hosting library is to be unloaded.
+
+   When someone calls <code>rtl_unloadUnusedModules</code> then the unloading
     listeners are notified by calling previously registered callback
     functions. A listener is an entity that employs, registers, and
     unregisters the callback functions on its behalf. Upon notification
@@ -83,7 +86,6 @@ module com {  module sun {  module star {  module uno {
     object; otherwise, it calls <code>releaseOnNotification</code>. If the function
     returns false then the listener should keep the reference, otherwise
     it may release it.
-    <!-- jrh: Please review this comment, that the sense is retained. -->
 */
 interface XUnloadingPreference: com::sun::star::uno::XInterface
 {
