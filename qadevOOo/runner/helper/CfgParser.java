@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CfgParser.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:35 $
+ *  last change:$Date: 2003-05-27 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,14 @@ import java.io.FileInputStream;
  */
 public class CfgParser {
 
-    protected static String iniFile="";
+    protected String iniFile="";
 
     public CfgParser(String ini) {
-        this.iniFile = ini;
+        if (ini != null)
+            this.iniFile = ini;
     }
 
-    public static void getIniParameters(TestParameters param) {
+    public void getIniParameters(TestParameters param) {
         Properties cfg = null;
         if (iniFile.equals("")) {
             //no iniFile given, search one in the users home directory
@@ -96,7 +97,9 @@ public class CfgParser {
             while (cfgEnum.hasMoreElements()) {
                 String pName = (String) cfgEnum.nextElement();
                 Object pValue = cfg.getProperty(pName);
-                param.put(pName,pValue);
+                if (pValue instanceof String)
+                    pValue = ((String)pValue).trim();
+                param.put(pName.trim(),pValue);
 
                 if (pName.equals("TestDocumentPath")) {
                     System.setProperty("DOCPTH",(String)pValue);
@@ -105,7 +108,7 @@ public class CfgParser {
         }
     }
 
-    protected static Properties getProperties(String name) {
+    protected Properties getProperties(String name) {
         Properties prop = new Properties();
         FileInputStream propFile = null;
         try {
@@ -119,7 +122,7 @@ public class CfgParser {
         return prop;
     }
 
-    protected static String getDefaultFileName(boolean home) {
+    protected String getDefaultFileName(boolean home) {
         String fileSeparator = System.getProperty("file.separator");
         String path = "";
         if (home) {
