@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-08 14:59:48 $
+ *  last change: $Author: nn $ $Date: 2002-04-23 18:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,10 @@ enum ScPreviewLocationType
     SC_PLOC_CELLRANGE,
     SC_PLOC_COLHEADER,
     SC_PLOC_ROWHEADER,
-    SC_PLOC_HEADER,
-    SC_PLOC_FOOTER,
+    SC_PLOC_LEFTHEADER,
+    SC_PLOC_RIGHTHEADER,
+    SC_PLOC_LEFTFOOTER,
+    SC_PLOC_RIGHTFOOTER,
     SC_PLOC_NOTEMARK,
     SC_PLOC_NOTETEXT
 };
@@ -249,12 +251,14 @@ void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, USHORT nStart
     aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_ROWHEADER, aPixelRect, aRange, FALSE, bRepRow ) );
 }
 
-void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect, BOOL bHeader )
+void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft )
 {
     ScRange aRange;     //! ?
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
-    ScPreviewLocationType eType = bHeader ? SC_PLOC_HEADER : SC_PLOC_FOOTER;
+    ScPreviewLocationType eType = bHeader ?
+                ( bLeft ? SC_PLOC_LEFTHEADER : SC_PLOC_RIGHTHEADER ) :
+                ( bLeft ? SC_PLOC_LEFTFOOTER : SC_PLOC_RIGHTFOOTER );
     aEntries.Insert( new ScPreviewLocationEntry( eType, aPixelRect, aRange, FALSE, FALSE ) );
 }
 
@@ -422,7 +426,7 @@ BOOL ScPreviewLocationData::GetHeaderPosition( Rectangle& rRect ) const
     for (ULONG nListPos=0; nListPos<nCount; nListPos++)
     {
         ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_HEADER )
+        if ( pEntry->eType == SC_PLOC_LEFTHEADER || pEntry->eType == SC_PLOC_RIGHTHEADER )
         {
             rRect = pEntry->aPixelRect;
             return TRUE;
@@ -437,10 +441,77 @@ BOOL ScPreviewLocationData::GetFooterPosition( Rectangle& rRect ) const
     for (ULONG nListPos=0; nListPos<nCount; nListPos++)
     {
         ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
-        if ( pEntry->eType == SC_PLOC_FOOTER )
+        if ( pEntry->eType == SC_PLOC_LEFTFOOTER || pEntry->eType == SC_PLOC_RIGHTFOOTER )
         {
             rRect = pEntry->aPixelRect;
             return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+BOOL ScPreviewLocationData::IsHeaderLeft() const
+{
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == SC_PLOC_LEFTHEADER )
+            return TRUE;
+        if ( pEntry->eType == SC_PLOC_RIGHTHEADER )
+            return FALSE;
+    }
+    return FALSE;
+}
+
+BOOL ScPreviewLocationData::IsFooterLeft() const
+{
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == SC_PLOC_LEFTFOOTER )
+            return TRUE;
+        if ( pEntry->eType == SC_PLOC_RIGHTFOOTER )
+            return FALSE;
+    }
+    return FALSE;
+}
+
+long ScPreviewLocationData::GetNoteCountInRange( const Rectangle& rVisiblePixel, BOOL bNoteMarks ) const
+{
+    ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
+
+    ULONG nRet = 0;
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+            ++nRet;
+    }
+    return nRet;
+}
+
+BOOL ScPreviewLocationData::GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, BOOL bNoteMarks,
+                                            ScAddress& rCellPos, Rectangle& rNoteRect ) const
+{
+    ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
+
+    ULONG nPos = 0;
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+        {
+            if ( nPos == nIndex )
+            {
+                rCellPos = pEntry->aCellRange.aStart;
+                rNoteRect = pEntry->aPixelRect;
+                return TRUE;
+            }
+            ++nPos;
         }
     }
     return FALSE;

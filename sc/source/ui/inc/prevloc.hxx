@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-08 14:58:54 $
+ *  last change: $Author: nn $ $Date: 2002-04-23 18:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ public:
     void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow );
     void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol );
     void    AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow, BOOL bRepRow );
-    void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader );
+    void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
 
@@ -148,6 +148,12 @@ public:
 
     BOOL    GetHeaderPosition( Rectangle& rHeaderRect ) const;
     BOOL    GetFooterPosition( Rectangle& rFooterRect ) const;
+    BOOL    IsHeaderLeft() const;
+    BOOL    IsFooterLeft() const;
+
+    long    GetNoteCountInRange( const Rectangle& rVisiblePixel, BOOL bNoteMarks ) const;
+    BOOL    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, BOOL bNoteMarks,
+                            ScAddress& rCellPos, Rectangle& rNoteRect ) const;
 
     //  Check if any cells (including column/row headers) are in the visible area
     BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;

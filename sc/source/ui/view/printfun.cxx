@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:28:00 $
+ *  last change: $Author: nn $ $Date: 2002-04-23 18:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1815,7 +1815,7 @@ void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
     if ( pLocationData )
     {
         Rectangle aHeaderRect( aBorderStart, aBorderSize );
-        pLocationData->AddHeaderFooter( aHeaderRect, bHeader );
+        pLocationData->AddHeaderFooter( aHeaderRect, bHeader, bLeft );
     }
 }
 
