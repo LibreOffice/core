@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:40:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,87 @@ SbxObject* SbiFactory::CreateObject( const String& rClass )
         return NULL;
 }
 
+
+// Factory class to create OLE objects
+class SbOLEFactory : public SbxFactory
+{
+public:
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxObject* CreateObject( const String& );
+};
+
+SbxBase* SbOLEFactory::Create( UINT16 nSbxId, UINT32 )
+{
+    // Not supported
+    return NULL;
+}
+
+SbUnoObject* createOLEObject_Impl( const String& aType );   // sbunoobj.cxx
+
+SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
+{
+    SbxObject* pRet = createOLEObject_Impl( rClassName );
+    return pRet;
+}
+
+
+// Factory class to create user defined objects (type command)
+class SbTypeFactory : public SbxFactory
+{
+    SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+
+public:
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxObject* CreateObject( const String& );
+};
+
+SbxBase* SbTypeFactory::Create( UINT16 nSbxId, UINT32 )
+{
+    // Not supported
+    return NULL;
+}
+
+SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
+{
+    SbxObject* pRet = new SbxObject( rTypeObj );
+    pRet->PutObject( pRet );
+
+    // Copy the properties, not only the reference to them
+    SbxArray* pProps = pRet->GetProperties();
+    UINT32 nCount = pProps->Count32();
+    for( UINT32 i = 0 ; i < nCount ; i++ )
+    {
+        SbxVariable* pVar = pProps->Get32( i );
+        SbxProperty* pProp = PTR_CAST( SbxProperty, pVar );
+        if( pProp )
+        {
+            SbxProperty* pNewProp = new SbxProperty( *pProp );
+            pProps->PutDirect( pNewProp, i );
+        }
+    }
+    return pRet;
+}
+
+SbxObject* SbTypeFactory::CreateObject( const String& rClassName )
+{
+    SbxObject* pRet = NULL;
+    SbModule* pMod = pMOD;
+    if( pMod )
+    {
+        const SbxObject* pObj = pMod->FindType( rClassName );
+        if( pObj )
+            pRet = cloneTypeObjectImpl( *pObj );
+    }
+    return pRet;
+}
+
+SbxObject* createUserTypeImpl( const String& rClassName )
+{
+    SbxObject* pRetObj = pTYPEFAC->CreateObject( rClassName );
+    return pRetObj;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////
 
 StarBASIC::StarBASIC( StarBASIC* p )
@@ -305,6 +386,10 @@ StarBASIC::StarBASIC( StarBASIC* p )
         AddFactory( pSBFAC );
         pUNOFAC = new SbUnoFactory;
         AddFactory( pUNOFAC );
+        pTYPEFAC = new SbTypeFactory;
+        AddFactory( pTYPEFAC );
+        pOLEFAC = new SbOLEFactory;
+        AddFactory( pOLEFAC );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Suche ueber StarBASIC ist immer global
