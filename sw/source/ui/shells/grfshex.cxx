@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:42:20 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
+    BOOL bShowError = !pName;
     if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
 
@@ -339,10 +340,10 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
                 break;
         }
 
+        rSh.EndAction();
         if( nResId )
         {
-            rSh.EndAction();
-            if( !rReq.GetArgs() )
+            if( bShowError )
             {
                 InfoBox aInfoBox( rVw.GetWindow(), SW_RESSTR( nResId ));
                 aInfoBox.Execute();
@@ -352,7 +353,6 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
         else
         {
             // set the specific graphic attrbutes to the graphic
-            rSh.EndAction();
             bReturn = TRUE;
             rVw.AutoCaption( GRAPHIC_CAP );
             rReq.Done();
