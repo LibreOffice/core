@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:54:18 $
+ *  last change: $Author: aw $ $Date: 2002-02-26 14:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,19 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
             }
             else if ( pView->HasMarkedObj() )
             {
-                pView->UnmarkAll();
+                // #97016# II
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                if(pHdl)
+                {
+                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                }
+                else
+                {
+                    pView->UnmarkAll();
+                }
+
                 bReturn = TRUE;
             }
         }
@@ -585,6 +597,11 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->UnmarkAllObj();
                     pView->MarkNextObj(!aCode.IsShift());
                 }
+
+                // #97016# II
+                if(pView->HasMarkedObj())
+                    pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
+
                 bReturn = TRUE;
             }
         }
@@ -600,6 +617,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 pView->UnmarkAllObj();
                 pView->MarkNextObj(FALSE);
 
+                // #97016# II
+                if(pView->HasMarkedObj())
+                    pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
+
                 bReturn = TRUE;
             }
         }
@@ -614,6 +635,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // #97016# mark first object
                 pView->UnmarkAllObj();
                 pView->MarkNextObj(TRUE);
+
+                // #97016# II
+                if(pView->HasMarkedObj())
+                    pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                 bReturn = TRUE;
             }
