@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:09:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ void XclExpChTrData::Clear()
 {
     DELETEZ( pString );
     mxTokArr.reset();
-    aRefLog.clear();
+    maRefLog.clear();
     fValue = 0.0;
     nRKValue = 0;
     nType = EXC_CHTR_TYPE_EMPTY;
@@ -687,24 +687,23 @@ void XclExpChTrData::WriteFormula(
     DBG_ASSERT( mxTokArr.is() && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
     rStrm << *mxTokArr;
 
-    XclExpRefLogVec::const_iterator aEnd = aRefLog.end();
-    for( XclExpRefLogVec::const_iterator aIter = aRefLog.begin(); aIter != aEnd; ++aIter )
+    XclExpLinkManager& rLinkMan = rRootData.pER->GetLocalLinkManager();
+    for( XclExpRefLog::const_iterator aIt = maRefLog.begin(), aEnd = maRefLog.end(); aIt != aEnd; ++aIt )
     {
-        sal_uInt16 nXclFirst = aIter->first;
-        sal_uInt16 nXclLast = aIter->second;
-        const XclExpString* pUrl = rRootData.pER->GetLinkManager().GetUrl( nXclFirst );
-        const XclExpString* pTabName = rRootData.pER->GetLinkManager().GetTabName( nXclFirst );
-        if( pUrl && pTabName )
-            rStrm << *pUrl << (sal_uInt8) 0x01 << *pTabName << (sal_uInt8) 0x02;
+        if( aIt->mpUrl && aIt->mpFirstTab )
+        {
+            rStrm << *aIt->mpUrl << (sal_uInt8) 0x01 << *aIt->mpFirstTab << (sal_uInt8) 0x02;
+        }
         else
         {
-            rStrm.SetSliceSize( (nXclFirst == nXclLast) ? 6 : 8 );
+            bool bSingleTab = aIt->mnFirstXclTab == aIt->mnLastXclTab;
+            rStrm.SetSliceSize( bSingleTab ? 6 : 8 );
             rStrm << (sal_uInt8) 0x01 << (sal_uInt8) 0x02 << (sal_uInt8) 0x00;
-            rStrm << rTabIdBuffer.GetId( nXclFirst );
-            if( nXclFirst == nXclLast )
+            rStrm << rTabIdBuffer.GetId( aIt->mnFirstXclTab );
+            if( bSingleTab )
                 rStrm << (sal_uInt8) 0x02;
             else
-                rStrm << (sal_uInt8) 0x00 << rTabIdBuffer.GetId( nXclLast );
+                rStrm << (sal_uInt8) 0x00 << rTabIdBuffer.GetId( aIt->mnLastXclTab );
         }
     }
     rStrm.SetSliceSize( 0 );
@@ -828,25 +827,20 @@ void XclExpChTrCellContent::GetCellData(
             if( pTokenArray )
             {
                 XclExpTabInfo& rTabInfo = pExcRoot->pER->GetTabInfo();
-                XclExpLinkManager& rLinkMan = pExcRoot->pER->GetLinkManager();
+                XclExpLinkManager& rLinkMan = pExcRoot->pER->GetLocalLinkManager();
+                XclExpFormulaCompiler& rFmlaComp = pExcRoot->pER->GetFormulaCompiler();
+                XclExpRefLog& rRefLog = rpData->maRefLog;
 
-                rTabInfo.StartRefLog();
-                rpData->mxTokArr = pExcRoot->pER->GetFormulaCompiler().CreateCellFormula( *pTokenArray, pFmlCell->aPos );
-                rpData->aRefLog = rTabInfo.EndRefLog();
+                rpData->mxTokArr = rFmlaComp.CreateFormula( EXC_FMLATYPE_CELL, *pTokenArray, &pFmlCell->aPos, &rRefLog );
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
                 sal_uInt32 nSize = rpData->mxTokArr->GetSize() + 3;
 
-                XclExpRefLogVec::const_iterator aEnd = rpData->aRefLog.end();
-                for( XclExpRefLogVec::const_iterator aIter = rpData->aRefLog.begin(); aIter != aEnd; ++aIter )
+                for( XclExpRefLog::const_iterator aIt = rRefLog.begin(), aEnd = rRefLog.end(); aIt != aEnd; ++aIt )
                 {
-                    sal_uInt16 nXclFirst = aIter->first;
-                    sal_uInt16 nXclLast = aIter->second;
-                    const XclExpString* pUrl = pExcRoot->pER->GetLinkManager().GetUrl( nXclFirst );
-                    const XclExpString* pTabName = pExcRoot->pER->GetLinkManager().GetTabName( nXclFirst );
-                    if( pUrl && pTabName )
-                        nSize += pUrl->GetSize() + pTabName->GetSize() + 2;
+                    if( aIt->mpUrl && aIt->mpFirstTab )
+                        nSize += aIt->mpUrl->GetSize() + aIt->mpFirstTab->GetSize() + 2;
                     else
-                        nSize += (nXclFirst == nXclLast) ? 6 : 8;
+                        nSize += (aIt->mnFirstXclTab == aIt->mnLastXclTab) ? 6 : 8;
                 }
                 rpData->nSize = (sal_uInt16) Min( nSize, (sal_uInt32) 0x0000FFFF );
                 rXclLength1 = 0x00000052;
@@ -910,12 +904,12 @@ XclExpChTrInsert::XclExpChTrInsert(
     if( nOpCode & EXC_CHTR_OP_COLFLAG )
     {
         aRange.aStart.SetRow( 0 );
-        aRange.aEnd.SetRow( static_cast<SCROW>(rRootData.nRowMax) );
+        aRange.aEnd.SetRow( rRootData.pER->GetXclMaxPos().Row() );
     }
     else
     {
         aRange.aStart.SetCol( 0 );
-        aRange.aEnd.SetCol( static_cast<SCCOL>(rRootData.nColMax) );
+        aRange.aEnd.SetCol( rRootData.pER->GetXclMaxPos().Col() );
     }
 
     if( nOpCode & EXC_CHTR_OP_DELFLAG )
