@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:21:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,16 +578,6 @@ void SwPaM::Exchange()
     }
 }
 #endif
-
-FASTBOOL SwPaM::IsInFrontOfLabel() const
-{
-    return bIsInFrontOfLabel;
-}
-
-void SwPaM::SetInFrontOfLabel(FASTBOOL _bIsInFrontOfLabel)
-{
-    bIsInFrontOfLabel = _bIsInFrontOfLabel;
-}
 
 // Bewegen des Cursors
 
