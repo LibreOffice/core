@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ class   SalPolyLine;
 class   SalPrinter;
 class   SalInfoPrinter;
 class   ServerFont;
-class   SalLayout;
 class   ImplLayoutArgs;
 class   X11FontLayout;
 class   ServerFontLayout;
@@ -112,6 +111,8 @@ class SalGraphicsData
     friend  class           SalGraphics;
     friend  class           SalPrinter;
     friend  class           SalInfoPrinter;
+    friend class            X11FontLayout;
+    friend class            ServerFontLayout;
 
     STDAPI( SalGraphicsData );
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
@@ -227,63 +228,23 @@ class SalGraphicsData
                                 SalColor          nTransparentColor );
 #endif
 
-#if defined _SV_SALGDI3_CXX
-    GC              SelectFont();
-    void            SetFont( const ImplFontSelectData* pEntry );
+    GC                      SelectFont();
+    void                    SetFont( const ImplFontSelectData* pEntry );
 
 protected:
-    void            DrawStringMB( int nX, int nY,
-                        const sal_Unicode* pStr, int nLength );
+    ULONG                   GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 
-    void            DrawStringUCS2( int nX, int nY,
-                        const sal_Unicode* pStr, int nLength );
+    void                    DrawStringUCS2MB( const Point&, const sal_Unicode* pStr, int nLength );
 
-    ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+    void                    DrawPrinterString( const SalLayout& );
 
-#ifdef ENABLE_CTL
-    void            DrawPrinterString( const SalLayout& );
+    void                    DrawServerFontString( const ServerFontLayout& );
+    void                    DispatchServerFontString( const ServerFontLayout& );
+    void                    DrawServerSimpleFontString( const ServerFontLayout& );
+    void                    DrawServerAAFontString( const ServerFontLayout& );
+    bool                    DrawServerAAForcedString( const ServerFontLayout& );
 
-    void            DrawX11FontString( const X11FontLayout& );
-
-    void            DrawServerFontString( const ServerFontLayout& );
-    void            DispatchServerFontString( const ServerFontLayout& );
-    void            DrawServerSimpleFontString( const ServerFontLayout& );
-    void            DrawServerAAFontString( const ServerFontLayout& );
-    bool            DrawServerAAForcedString( const ServerFontLayout& );
-
-    SalLayout*      LayoutText( const ImplLayoutArgs& );
-#else // ENABLE_CTL
-    void            DrawText( long          nX,
-                              long          nY,
-                              const xub_Unicode* pStr,
-                              USHORT        nLen,
-                              const long*   pDXAry );
-    void            DrawText( long nX,
-                              long nY,
-                              const xub_Unicode* pStr,
-                              USHORT nLen );
-
-    void            DispatchServerFontString( int nX, int nY,
-                                              ServerFont *pFont, const sal_uInt32* pGlyph,
-                                              int nLength, const long* pDXAry );
-
-    void            DrawServerSimpleFontString( int nX, int nY,
-                        ServerFont *pFont, const sal_uInt32* pGlyph,
-                        int nLength, const long* pDXAry );
-
-    void            DrawServerAAFontString( int nX, int nY,
-                        ServerFont *pFont, const sal_uInt32* pGlyph,
-                        int nLength, const long* pDXAry );
-
-    bool            DrawServerAAForcedString( int nX, int nY,
-                        ServerFont *pFont, const sal_uInt32* pGlyph,
-                        int nLength, const long* pDXAry );
-
-    void            DrawServerFontString( int nX, int nY,
-                        const sal_Unicode* pStr,
-                        int nLength, const long* pDXAry );
-#endif // ENABLE_CTL
-#endif // _SV_SALGDI3_CXX
+    SalLayout*              LayoutText( ImplLayoutArgs& );
 public:
                             SalGraphicsData();
                             ~SalGraphicsData();
@@ -305,6 +266,7 @@ public:
 
             bool            FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int& rStart, int& rStop ) const;
 };
+
 
 #ifdef _SV_SALDATA_HXX
 
@@ -377,5 +339,6 @@ inline Pixel SalGraphicsData::GetPixel( SalColor nSalColor ) const
 #define stderr3( s, a, b, c )   ;
 #define stdass0( b )            ;
 #endif
+
 #endif // _SV_SALGDI_H
 
