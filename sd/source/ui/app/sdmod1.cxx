@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:30:40 $
+ *  last change: $Author: dl $ $Date: 2001-03-21 07:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,8 @@ void SdModule::Execute(SfxRequest& rReq)
                         if (pViewSh)
                         {
                             // AutoLayouts muessen fertig sein
-                            pDocSh->GetDoc()->StopWorkStartupDelay();
+                            SdDrawDocument* pDoc = pDocSh->GetDoc();
+                            pDoc->StopWorkStartupDelay();
 
                             // hide preview
                             SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
@@ -724,7 +725,13 @@ void SdModule::Execute(SfxRequest& rReq)
                             if (pViewSh)
                             {
                                 SvStream* pStream = (SvStream*) pBytes->GetStream();
-                                ULONG nErr = pViewSh->Read(*pStream, EE_FORMAT_RTF);
+                                if ( pViewSh->Read(*pStream, EE_FORMAT_RTF) == 0 )
+                                {
+                                    // Remove the first empty pages
+                                    USHORT nPageCount = pDoc->GetPageCount();
+                                    pDoc->RemovePage( --nPageCount );  // notes page
+                                    pDoc->RemovePage( --nPageCount );  // standard page
+                                }
                             }
                         }
                     }
