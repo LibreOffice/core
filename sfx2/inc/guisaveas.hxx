@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:36:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ public:
                                 sal_Bool bNoModify );
 
     static void ExecuteInfoDlg( const ::rtl::OUString& aTargetURL,
-                                const ::rtl::OUString& aTitle,
+                                const ::rtl::OUString& aTitle, const String& rBaseURL,
                                 SfxDocumentInfo &aDocInfo );
 
     static sal_Bool WarnUnacceptableFormat(
