@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:12:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,18 +229,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
             switch (nLength)
             {
-            case 5 :
-                {
-                    if (IsXMLToken(aLocalName, XML_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                }
-                break;
             case 7 :
                 {
                     if (IsXMLToken(aLocalName, XML_FORMULA))
@@ -248,72 +236,22 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                         if (sValue.getLength())
                         {
                             DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                            pOUFormula = new rtl::OUString(sValue);
+                            pOUFormula = new rtl::OUString();
+                            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                                    GetKeyByAttrName( sValue, pOUFormula );
+                            if (XML_NAMESPACE_OOOC != nPrefix)
+                            {
+                                delete pOUFormula;
+                                pOUFormula = new rtl::OUString(sValue);
+                            }
                         }
                     }
-                }
-                break;
-            case 8 :
-                {
-                    if (IsXMLToken(aLocalName, XML_CURRENCY))
-                        pCurrencySymbol = new rtl::OUString(sValue);
                 }
                 break;
             case 10 :
                 {
-                    if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
-                    {
-                        nCellType = GetCellType(sValue);
-                        bIsEmpty = sal_False;
-                    }
-                    else if (IsXMLToken(aLocalName, XML_STYLE_NAME))
+                    if (IsXMLToken(aLocalName, XML_STYLE_NAME))
                         pStyleName = new rtl::OUString(sValue);
-                    else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
-                    {
-                        if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
-                        {
-                            rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                    else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                }
-                break;
-            case 12 :
-                {
-                    if (IsXMLToken(aLocalName, XML_STRING_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            DBG_ASSERT(!pOUTextValue, "here should be only one string value");
-                            pOUTextValue = new rtl::OUString(sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
-                }
-                break;
-            case 13 :
-                {
-                    if (IsXMLToken(aLocalName, XML_BOOLEAN_VALUE))
-                    {
-                        if (sValue.getLength())
-                        {
-                            if ( IsXMLToken(sValue, XML_TRUE) )
-                                fValue = 1.0;
-                            else if ( IsXMLToken(sValue, XML_FALSE) )
-                                fValue = 0.0;
-                            else
-                                rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                            bIsEmpty = sal_False;
-                        }
-                    }
                 }
                 break;
             case 15 :
@@ -364,6 +302,87 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     {
                         bIsMatrix = sal_True;
                         nMatrixCols = sValue.toInt32();
+                    }
+                }
+                break;
+            }
+        }
+        else if (nPrefix == XML_NAMESPACE_OFFICE)
+        {
+            sal_uInt32 nLength(aLocalName.getLength());
+
+            switch (nLength)
+            {
+            case 5 :
+                {
+                    if (IsXMLToken(aLocalName, XML_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
+                }
+                break;
+            case 8 :
+                {
+                    if (IsXMLToken(aLocalName, XML_CURRENCY))
+                        pCurrencySymbol = new rtl::OUString(sValue);
+                }
+                break;
+            case 10 :
+                {
+                    if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
+                    {
+                        nCellType = GetCellType(sValue);
+                        bIsEmpty = sal_False;
+                    }
+                    else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
+                    {
+                        if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
+                        {
+                            rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
+                    else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
+                }
+                break;
+            case 12 :
+                {
+                    if (IsXMLToken(aLocalName, XML_STRING_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            DBG_ASSERT(!pOUTextValue, "here should be only one string value");
+                            pOUTextValue = new rtl::OUString(sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
+                }
+                break;
+            case 13 :
+                {
+                    if (IsXMLToken(aLocalName, XML_BOOLEAN_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            if ( IsXMLToken(sValue, XML_TRUE) )
+                                fValue = 1.0;
+                            else if ( IsXMLToken(sValue, XML_FALSE) )
+                                fValue = 0.0;
+                            else
+                                rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
                     }
                 }
                 break;
@@ -529,9 +548,24 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             }
         }
         break;
-    case XML_TOK_TABLE_ROW_CELL_SUBTABLE:
+    case XML_TOK_TABLE_ROW_CELL_TABLE:
         {
-            bHasSubTable = sal_True;
+            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            rtl::OUString aLocalName;
+            rtl::OUString sValue;
+            for( sal_Int16 i=0; i < nAttrCount; i++ )
+            {
+                sal_uInt16 nPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
+                                                    xAttrList->getNameByIndex( i ), &aLocalName );
+                sValue = xAttrList->getValueByIndex( i );
+
+                if (nPrefix == XML_NAMESPACE_TABLE)
+                {
+                    if (IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
+                        bHasSubTable = IsXMLToken(sValue, XML_TRUE);
+                }
+            }
+            DBG_ASSERT(bHasSubTable, "it should be a subtable");
             pContext = new ScXMLTableContext( rXMLImport , nPrefix,
                                                         rLName, xAttrList,
                                                         sal_True, nMergedCols);
