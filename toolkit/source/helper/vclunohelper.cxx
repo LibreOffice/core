@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-20 07:17:45 $
+ *  last change: $Author: pb $ $Date: 2002-03-22 08:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,8 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     ::com::sun::star::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetName();
     aFD.StyleName = rFont.GetStyleName();
-    aFD.Height = rFont.GetSize().Height();
-    aFD.Width = rFont.GetSize().Width();
+    aFD.Height = (sal_Int16)rFont.GetSize().Height();
+    aFD.Width = (sal_Int16)rFont.GetSize().Width();
     aFD.Family = rFont.GetFamily();
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = rFont.GetPitch();
@@ -420,7 +420,7 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDes
         aFont.SetStrikeout( (FontStrikeout)rDescr.Strikeout );
 
     // Kein DONTKNOW
-    aFont.SetOrientation( rDescr.Orientation );
+    aFont.SetOrientation( (short)rDescr.Orientation );
     aFont.SetKerning( rDescr.Kerning );
     aFont.SetWordLineMode( rDescr.WordLineMode );
 
@@ -440,10 +440,10 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::com::su
 ::com::sun::star::awt::SimpleFontMetric VCLUnoHelper::CreateFontMetric( const FontMetric& rFontMetric )
 {
     ::com::sun::star::awt::SimpleFontMetric aFM;
-    aFM.Ascent = rFontMetric.GetAscent();
-    aFM.Descent = rFontMetric.GetDescent();
-    aFM.Leading = rFontMetric.GetLeading();
-    aFM.Slant = rFontMetric.GetSlant();
+    aFM.Ascent = (sal_Int16)rFontMetric.GetAscent();
+    aFM.Descent = (sal_Int16)rFontMetric.GetDescent();
+    aFM.Leading = (sal_Int16)rFontMetric.GetLeading();
+    aFM.Slant = (sal_Int16)rFontMetric.GetSlant();
     aFM.FirstChar = rFontMetric.getFirstChar();
     aFM.LastChar = rFontMetric.getLastChar();
     return aFM;
