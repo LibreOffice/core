@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-26 11:39:55 $
+ *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,6 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     aCntSharedBox   ( this, ResId( CB_SHARED ) ),
     aFrm            ( this, ResId( FL_FRAME ) ),
     aBspWin         ( this, ResId( WN_BSP ) ),
-    aBspFrm         ( this, ResId( FL_BSP ) ),
     aBackgroundBtn  ( this, ResId( BTN_EXTRAS ) ),
 
     pBBSet                      ( NULL ),
@@ -444,13 +443,6 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         {
             aCntSharedBox.Hide();
             aBackgroundBtn.Hide();
-            Size aFrmSize = aBspFrm.GetSizePixel();
-            long nDiff = aFrmSize.Height() -  aBspWin.GetSizePixel().Height();
-            aFrmSize.Height() = aFrm.GetSizePixel().Height();
-            aBspFrm.SetSizePixel(aFrmSize);
-            aFrmSize.Height() -= nDiff;
-            aBspWin.SetSizePixel(aFrmSize);
-
         }
     }
 

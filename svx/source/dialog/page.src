@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:40:26 $
+ *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_PAPER_WIDTH
     {
-        Pos = MAP_APPFONT ( 7 , 31 ) ;
+        Pos = MAP_APPFONT ( 7 , 32 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_PAPER_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 42, 29 ) ;
+        Pos = MAP_APPFONT ( 42, 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -225,8 +225,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_PAPER_HEIGHT
     {
-        Pos = MAP_APPFONT ( 7 , 46 ) ;
-        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Pos = MAP_APPFONT ( 90 , 32 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "H~eight" ;
         Text [ norwegian ] = "H~eight" ;
@@ -255,7 +255,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_PAPER_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 42 , 44 ) ;
+        Pos = MAP_APPFONT ( 122 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -268,7 +268,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_PAPER_TRAY
     {
-        Pos = MAP_APPFONT ( 7 , 61 ) ;
+        Pos = MAP_APPFONT ( 7 , 48 ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
         Text = "~Schacht" ;
         Text [ ENGLISH ] = "~Tray" ;
@@ -297,15 +297,15 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_PAPER_TRAY
     {
-        Pos = MAP_APPFONT ( 42 , 59 ) ;
-        Size = MAP_APPFONT ( 80 , 49 ) ;
+        Pos = MAP_APPFONT ( 42 , 46 ) ;
+        Size = MAP_APPFONT ( 120 , 49 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedText FT_PAGELAYOUT
     {
-        Pos = MAP_APPFONT ( 142 , 61 ) ;
-        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Pos = MAP_APPFONT ( 7 , 64 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "Seitenlayout" ;
         Text [ ENGLISH ] = "Page layout" ;
         Text [ norwegian ] = "Side oppsett" ;
@@ -333,8 +333,8 @@ TabPage RID_SVXPAGE_PAGE
     ListBox LB_LAYOUT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 190 , 59 ) ;
-        Size = MAP_APPFONT ( 62 , 44 ) ;
+        Pos = MAP_APPFONT ( 42 , 62 ) ;
+        Size = MAP_APPFONT ( 120 , 44 ) ;
         DropDown = TRUE ;
         StringList =
         {
@@ -617,8 +617,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_TOP_MARGIN
     {
-        Pos = MAP_APPFONT ( 105 , 87 ) ;
-        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Pos = MAP_APPFONT ( 90 , 87 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "T~op" ;
         Text [ norwegian ] = "T~opp" ;
@@ -647,7 +647,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_TOP_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 142 , 85 ) ;
+        Pos = MAP_APPFONT ( 122 , 85 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -660,8 +660,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_BOTTOM_MARGIN
     {
-        Pos = MAP_APPFONT ( 105 , 103 ) ;
-        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Pos = MAP_APPFONT ( 90 , 103 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "~Unten" ;
         Text [ ENGLISH ] = "~Bottom" ;
         Text [ norwegian ] = "~Bottom" ;
@@ -690,7 +690,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_BOTTOM_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 142 , 100 ) ;
+        Pos = MAP_APPFONT ( 122 , 100 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -703,7 +703,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedLine FL_MARGIN
     {
-        Pos = MAP_APPFONT ( 4 , 74 ) ;
+        Pos = MAP_APPFONT ( 4 , 75 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Ränder" ;
         Text [ ENGLISH ] = "Margins" ;
@@ -759,7 +759,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 42 , 126 ) ;
-        Size = MAP_APPFONT ( 64 , 64 ) ;
+        Size = MAP_APPFONT ( 60 , 64 ) ;
         DropDown = TRUE ;
         StringList =
         {
@@ -1003,35 +1003,6 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 176 , 12 ) ;
         Size = MAP_APPFONT ( 72 , 41 ) ;
     };
-    FixedLine FL_BSP
-    {
-        Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 8 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Example" ;
-        Text [ norwegian ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Exemplo" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Malli" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-    };
-
 
     CheckBox CB_HORZ
     {

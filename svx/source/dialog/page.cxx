@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-27 12:44:59 $
+ *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,6 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aNumberFormatText   ( this, ResId( FT_NUMBER_FORMAT ) ),
     aNumberFormatFl     ( this, ResId( FL_NUMBER_FORMAT ) ),
     aBspWin             ( this, ResId( WN_BSP ) ),
-    aBspFl              ( this, ResId( FL_BSP ) ),
     aPaperFormatText    ( this, ResId( FT_PAPER_FORMAT ) ),
     aPaperSizeBox       ( this, ResId( LB_PAPER_SIZE ) ),
     aPortraitBtn        ( this, ResId( RB_PORTRAIT ) ),
