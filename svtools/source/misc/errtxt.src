@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:13:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
         Text[ chinese_simplified ] = "$(ERR)·ΆΙϊΤΪΧ°ΘλΡωΚ½$(ARG1)Κ±";
         Text[ greek ] = "$(ERR) κατά τη φόρτωση του προτύπου $(ARG1)";
-        Text[ korean ] = "Ό­½Δ ΖΔΐΟ $(ARG1)ΐ»£¨Έ¦£© ·ΞµεΗΟ΄ψΑί $(ERR)";
+        Text[ korean ] = "Ό­½Δ ΖΔΐΟ $(ARG1)ΐ»(Έ¦) ·ΞµεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) ώablonu yόklenirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al cargar la plantilla $(ARG1)";
@@ -169,7 +169,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
         Text[ chinese_simplified ] = "΄ζΕΜΞΔµµ $(ARG1) Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την αποθήκευσητου εγγράφου $(ARG1)";
-        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© ΐϊΐεΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»(Έ¦) ΐϊΐεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al guardar el documento $(ARG1)";
@@ -196,7 +196,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
         Text[ chinese_simplified ] = "΄ζΕΜΞΔµµ $(ARG1) Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την αποθήκευσητου εγγράφου $(ARG1)";
-        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© ΐϊΐεΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»(Έ¦) ΐϊΐεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al guardar el documento $(ARG1)";
@@ -251,7 +251,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1) als sjabloon";
         Text[ chinese_simplified ] = "ΤΪΈ²Π΄ΡωΚ½ΞΔµµ$(ARG1)Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την εγγραφή του εγγράφου $(ARG1) ως πρότυπο";
-        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© Ό­½Δ ΖΔΐΟ·ΞΌ­ ±β·ΟΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»(Έ¦) Ό­½Δ ΖΔΐΟ·Ξ ±β·ΟΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi ώablon olarak yazύlύrken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al escribir el documento $(ARG1) como plantilla";
@@ -333,7 +333,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij openen van document $(ARG1)";
         Text[ chinese_simplified ] = "Χ°ΘλΞΔµµ $(ARG1) Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά το φόρτωμα του εγγράφου $(ARG1)";
-        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© ·ΞµεΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»(Έ¦) ·ΞµεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi yόklenirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al cargar el documento $(ARG1)";
@@ -417,7 +417,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij openen van een rubriek";
         Text[ chinese_simplified ] = "΄ςΏª·ΦΐΰΜυΔΏΚ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά το άνοιγμα μιας κατηγορίας";
-        Text[ korean ] = "Η¥Α¦Έ¦΅΅ΐό°³ΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Η¥Α¦Έ¦ Ώ­±βΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "Giriώi aηarken $(ERR)";
         Text[ catalan ] = "$(ERR) al abrir una rϊbrica";
         Text[ finnish ] = "$(ERR) laajennettaessa merkintδδ";
@@ -504,7 +504,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Object bestaat niet";
         Text[ chinese_simplified ] = "²»΄ζΤΪµΔ¶ΤΟσ";
         Text[ greek ] = "Μη υπαρκτό αντικείμενο";
-        Text[ korean ] = "ΑΈΐηΗΟΑφ΅΅ΎΚ΄Β °³ΓΌ";
+        Text[ korean ] = "Ύψ΄Β °³ΓΌΐΤ΄Ο΄Ω";
         Text[ turkish ] = "Mevcut olmayan nesne";
         Text[ catalan ] = "Objeto no existente";
         Text[ finnish ] = "Objektia ei ole";
@@ -775,7 +775,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Onbekend";
         Text[ chinese_simplified ] = "²»Γχ";
         Text[ greek ] = "Άγνωστο";
-        Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐ½";
+        Text[ korean ] = "ΎΛ·ΑΑ® ΐΦΑφ ΎΚΐ½";
         Text[ turkish ] = "Bilinmiyor";
         Text[ catalan ] = "Desconocido";
         Text[ finnish ] = "tuntematon";
@@ -1211,7 +1211,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Er bestaat geen recht op toegang\n tot object.";
         Text[ chinese_simplified ] = "Θ±ΙΩ¶ΑΘ΅Θ¨ΐϋ£¬\nΞή·¨¶ΑΘ΅ΥβΈφ¶ΤΟσ";
         Text[ greek ] = "Η πρόσβαση στο αντικείμενο δεν είναι δυνατή\nλόγω έλλειψης δικαιωμάτων";
-        Text[ korean ] = "»ηΏλΐΪ ±ΗΗΡΐΜ ΎψΎξ °³ΓΌΏ΅\nΑΆ±ΩΗÒ Όφ Ύψΐ½";
+        Text[ korean ] = "»ηΏλΐΪ ±ΗΗΡΐΜ ΎψΎξ °³ΓΌΏ΅\nΑΆ±ΩΗÒ Όφ Ύψ½ΐ΄Ο΄Ω";
         Text[ turkish ] = "Gerekli eriώim haklarύnύn olmamasύ nedeniyle \nnesneye eriώim saπlanamύyor";
         Text[ catalan ] = "No es posible acceder al objeto\npor falta de derechos.";
         Text[ finnish ] = "Objektin kδyttδminen ei onnistu,\nkoska kδyttδjδoikeudet eivδt riitδ";
@@ -1238,7 +1238,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Fout bij gelijktijdige toegang tot object";
         Text[ chinese_simplified ] = "ΤΪΝ¬Κ±¶ΑΘ΅ΥβΈφ¶ΤΟσΚ±·ΆΙϊ΄νΞσ";
         Text[ greek ] = "Σφάλμα κατά την κοινή πρόσβαση στο αντικείμενο";
-        Text[ korean ] = "°³ΓΌΏ΅ °ψµΏ΅΅ΑΆ±Ω½ΓΏ΅ Ώΐ·ω";
+        Text[ korean ] = "°³ΓΌΏ΅ °ψµΏ ΑΆ±Ω½ΓΏ΅ Ώΐ·ω";
         Text[ turkish ] = "Nesneye eriώimde bir paylaώύm hatasύ oluώtu";
         Text[ catalan ] = "Error al acceder conjuntamente al objeto.";
         Text[ finnish ] = "Objektin yhteiskδyttφvirhe";
@@ -1292,7 +1292,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd bij bestanden \ndie wildcards bevatten";
         Text[ chinese_simplified ] = "Ξή·¨ΤΪΊ¬ΣΠΝ¨Εδ·ϋµΔ\nΞΔΌώΦΠΦ΄ΠΠΥβΈφ²ΩΧχ";
         Text[ greek ] = "Αυτή η λειτουργία δεν είναι δυνατόν να εφαρμοστεί σε αρχεία τα οποία \n περιέχουν χαρακτήρες μπαλαντέρ";
-        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΏΝΐΟµε Δ«µε°΅ ΖχΗΤµΘ ΖΔΐΟ\n Ώ΅Ό­ ΌφΗΰµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ ΐΫΎχΐΊ ΏΝΐΟµε Δ«µε°΅ ΖχΗΤµΘ ΖΔΐΟ\n Ώ΅Ό­ ½ΗΗΰµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έώlem, genel arama karakterleri\n iηeren dosyalar όzerinde gerηekleώtirilemiyor";
         Text[ catalan ] = "La operaciσn no se puede ejecutar en\narchivos que contengan Wildcards.";
         Text[ finnish ] = "Tδtδ toimintoa ei voi suorittaa,\njos tiedostot sisδltδvδt yleismerkkejδ";
@@ -1319,7 +1319,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Deze opdracht wordt niet ondersteund door het bestaande besturingssysteem";
         Text[ chinese_simplified ] = "µ±Η°µΔ²ΩΧχΖ½Μ¨²»Φ§³ΦΥβΈφ²ΩΧχ";
         Text[ greek ] = "Η λειτουργία αυτή δεν υποστηρίζεται σε αυτό το λειτουργικό σύστημα";
-        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΐΜ ΏξΏµΓΌΑ¦Ώ΅Ό­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΫΎχΐΜ ΐΜ ΏξΏµΓΌΑ¦Ώ΅Ό­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu iώlem, iώletim sistemi tarafύndan desteklenmiyor";
         Text[ catalan ] = "La operaciσn no es apoyada por este sistema operativo.";
         Text[ finnish ] = "Kδyttφjδrjestelmδ ei tue toimintoa";
@@ -1373,7 +1373,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kon niet worden gelezen";
         Text[ chinese_simplified ] = "Ξή·¨¶ΑΘ΅ΥβΈφΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάγνωση του αρχείου";
-        Text[ korean ] = "ΖΔΐΟΏ΅Ό­ ΐΠΐ»Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΏ΅Ό­ ΐΠΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosyadan veri okunamadύ";
         Text[ catalan ] = "No se pudo leer del archivo.";
         Text[ finnish ] = "Tietojen lukeminen tiedostosta ei onnistu";
@@ -1400,7 +1400,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kon niet worden opgeslagen";
         Text[ chinese_simplified ] = "Ξή·¨Π΄ΘλΥβΈφΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατή η εγγραφή του αρχείου";
-        Text[ korean ] = "ΖΔΐΟΏ΅ ΎµΌφ ΎψΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΏ΅ Ύµ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya yazύlamadύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo guardar el archivo";
@@ -1428,7 +1428,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De opdracht kon niet worden uitgevoerd bij gebrek aan vrij geheugen.";
         Text[ chinese_simplified ] = "ÒςΞªΔΪ΄ζ²»Χγ¶ψΞή·¨Φ΄ΠΠΥβΈφ²ΩΧχ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί η λειτουργία λόγω έλλειψης μνήμης";
-        Text[ korean ] = "ΈήΈπΈ® ΊΞΑ·ΐΈ·Ξ ΐΞΗΨ, µΏΐΫΐΜ ½ΗΗΰµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈήΈπΈ® ΊΞΑ·ΐΈ·Ξ ΐΞΗΨ, ΐΫΎχΐ» ½ΗΗΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έώlem, bellek yetersizliπi nedeniyle yόrόtόlemedi";
         Text[ catalan ] = "La operaciσn no se pudo ejecutar por falta de memoria.";
         Text[ finnish ] = "Toiminnon suorittaminen ei onnistunut muistin loppumisen takia.";
@@ -1455,7 +1455,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De zoekopdracht kon niet worden uitgevoerd";
         Text[ chinese_simplified ] = "Ξή·¨Φ΄ΠΠΛΡΡ°²ΩΧχ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί η λειτουργία αναζήτησης";
-        Text[ korean ] = "Γ£±β µΏΐΫΐΜ ½ΗΗΰµΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΪΈ® Γ£±β ΐΫΎχΐ» ½ΗΗΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Arama iώlemi yόrόtόlemedi";
         Text[ catalan ] = "No se pudo ejecutar la operaciσn Seek.";
         Text[ finnish ] = "Hakutoimintoa ei voitu suorittaa";
@@ -1644,7 +1644,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kon niet worden gemaakt";
         Text[ chinese_simplified ] = "Ξή·¨½¨ΑΆΥβΈφΞΔΌώ";
         Text[ greek ] = "Το αρχείο δεν ήταν δυνατόν να δημιουργηθεί";
-        Text[ korean ] = "ΖΔΐΟΐ» ΈΈµιΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐ» ΈΈµιΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya oluώturulamadύ";
         Text[ catalan ] = "No se pudo crear el archivo.";
         Text[ finnish ] = "Tiedoston luominen ei onnistunut.";
@@ -1860,7 +1860,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Lezen van documentinfo niet mogelijk.\nDocumentformaat onbekend of geen documentinfo\nvoorhanden";
         Text[ chinese_simplified ] = "Ξή·¨¶Α³φΥβΈφΞΔΌώµΔΞΔµµΠΕΟΆ£¬\nÒςΞªΥβΈφΞΔµµΠΕΟΆµΔΈρΚ½²»Γχ»ςΞΔµµΠΕΟΆ²»΄ζΤΪ\n";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάγνωση των πληροφοριών του εγγράφου από το αρχείο\nείτε επειδή είναι άγνωστη η μορφή του εγγράφου πληροφοριών\\";
-        Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφΎΚΐΊ Ή®Ό­ Ό­½ΔΐΜ°Ε³ª\nΉ®Ό­ Α¤ΊΈ°΅ ΑΈΐηΗΟΑφ ΎΚ±β ¶§Ή®Ώ΅ ΖΔΐΟΏ΅Ό­΅΅Ή®Ό­ΐΗ Α¤ΊΈΈ¦\nΐΠΐ»Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΎΛ·ΑΑ® ΐΦΑφ ΎΚΐΊ Ή®Ό­ Α¤ΊΈ Ό­½ΔΐΜ°Ε³ª\n¶Η΄Β Ή®Ό­ Α¤ΊΈ°΅ ΎψΐΈΉΗ·Ξ ΖΔΐΟΏ΅Ό­ Ή®Ό­ Α¤ΊΈΈ¦\nΐΠΐ» Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belge bilgileri formatύ, bilinmediπi ya da belge\nbilgisi mevcut olmadύπύ iηin\ndosyadan okunamadύ\n";
         Text[ catalan ] = "La informaciσn del documento no se pudo leer del\narchivo ya que su formato es desconocido o no\nexiste ninguna informaciσn acerca del documento.";
         Text[ finnish ] = "Tiedoston asiakirjatietojen lukeminen ei onnistunut,\nkoska asiakirjan muoto on tuntematon tai koska asiakirjan tietoja ei\nole";
@@ -1914,7 +1914,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Foutief wachtwoord";
         Text[ chinese_simplified ] = "ΚδΘλΑΛÒ»Έφ΄νΞσµΔΓάΒλ";
         Text[ greek ] = "Ορίστηκε εσφαλμένος κωδικός πρόσβασης";
-        Text[ korean ] = "Ζ²Έ°΅΅ΖΠ½ΊΏφµε°΅ ΐΤ·ΒµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ζ²Έ° ΖΠ½ΊΏφµε°΅ ΐΤ·ΒµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Girilen ώifre yanlύώ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se empleσ una contraseρa falsa";
@@ -1997,7 +1997,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Computernaam $(ARG1) kon niet worden herleid";
         Text[ chinese_simplified ] = "Ξή·¨ΥÒµ½ΌΖΛγ»ϊµΨΦ· $(ARG1)";
         Text[ greek ] = "Δεν ήταν δυνατόν γίνει ανάλυση του ονόματος του υπολογιστή $(ARG1)";
-        Text[ korean ] = "Θ£½ΊΖ® ΐΜΈ§ $(ARG1)ΐ» Θ®ΐΞΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Θ£½ΊΖ® ΐΜΈ§ $(ARG1)ΐ» ΓλΌÒΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "$(ARG1) sunucu adύ ηφzόlemedi";
         Text[ catalan ] = "No se pudo resolver el nombre del ordenador $(ARG1)";
         Text[ finnish ] = "Pδδkoneen $(ARG1) nimen selvittδminen ei onnistunut";
@@ -2162,7 +2162,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Opmaakprofiel $(ARG1) vervangen?";
         Text[ chinese_simplified ] = "ÒªΈόΜζΡωΚ½ $(ARG1) £Ώ";
         Text[ greek ] = "Να αντικατασταθεί το στυλ $(ARG1);";
-        Text[ korean ] = "½ΊΕΈΐΟ$(ARG1)ΐ»(Έ¦)  ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+        Text[ korean ] = "½ΊΕΈΐΟ$(ARG1)ΐ»(Έ¦) ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "$(ARG1) biηimi deπiώtirilsin mi?";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00 - - - -";
         Text[ catalan ] = "ΏDesea sustituir el estilo $(ARG1)?";
@@ -2303,7 +2303,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Ongeldig link-formaat";
         Text[ chinese_simplified ] = "ΞήΠ§µΔΑ΄½ΣΈρΚ½";
         Text[ greek ] = "Η μορφή της σύνδεσης δεν είναι έγκυρη.";
-        Text[ korean ] = "ΈµΕ©ΐΗ ΖχΈΛΐΜ΅΅ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈµΕ©ΐΗ ΖχΈΛΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Baπlantύnύn formatύ geηerli deπil";
         Text[ catalan ] = "El formato del vνnculo no es vαlido";
         Text[ finnish ] = "Linkkimuoto on virheellinen.";
@@ -2357,7 +2357,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Configuration van pictogram kan niet worden opgeslagen";
         Text[ chinese_simplified ] = "Ξή·¨΄ζΕΜΝΌ±κΟΤΚΎµΔΕδΦΓΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτεί η διαμόρφωση της εμφάνισης των συμβόλων";
-        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ±ΈΌΊΐ» ΐϊΐεΗÒ΅΅Όφ΅΅Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ΔΑΗΗ±Τ·ΉΐΜΌΗΐ» ΐϊΐεΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Simge gφrόntόleme konfigόrasyonu kaydedilemiyor";
         Text[ catalan ] = "No se puede guardar la configuraciσn del panel de sνmbolos";
         Text[ finnish ] = "Kuvakenδytφn kokoonpanon tallentaminen ei onnistunut.";
@@ -2384,7 +2384,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Configuratie van pictogram kon niet worden gewist.";
         Text[ chinese_simplified ] = "Ξή·¨ΙΎ³ύΝΌ±κΟΤΚΎµΔΕδΦΓΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να διαγραφεί η διαμόρφωση της εμφάνισης των συμβόλων";
-        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ±ΈΌΊΐ» »θΑ¦ΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ΔΑΗΗ±Τ·ΉΐΜΌΗΐ» »θΑ¦ΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Simge gφrόntόleme konfigόrasyonu silinemedi.";
         Text[ catalan ] = "No se pudo eliminar la configuraciσn del panel de sνmbolos.";
         Text[ finnish ] = "Kuvakenδytφn kokoonpanon poistaminen ei onnistunut.";
@@ -2465,7 +2465,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen";
         Text[ chinese_simplified ] = "Ξή·¨΄ζΕΜÒªΎΦ²Ώ΄Ά΄ζ URL µΨΦ·µΔΕδΦΓΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτεί η διαμόρφωση των URL που πρόκειται να αποθηκευτούν τοπικά";
-        Text[ korean ] = "·ΞΔΓΏ΅ ΐϊΐεµΙ URL ±ΈΌΊΐ» ΐϊΐεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "·ΞΔΓ·Ξ ΐϊΐεΗÒ URL ΔΑΗΗ±Τ·ΉΐΜΌΗΐ» ΐϊΐεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'Lerin konfigόrasyonu kaydedilemedi";
         Text[ catalan ] = "No se pudo guardar la configuraciσn de las URLs a guardar localmente.";
         Text[ finnish ] = "Paikallisiksi tallennettavien URL-osoitteiden kokoonpanon tallentaminen ei onnistunut";
@@ -2492,7 +2492,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen daar het formaat ongeldig is.";
         Text[ chinese_simplified ] = "ΎΦ²Ώ΄Ά΄ζ URL µΨΦ·µΔΕδΦΓΞΔΌώΈρΚ½ΞήΠ§";
         Text[ greek ] = "Η μορφή των ρυθμίσεων του URL, το οποίο πρόκειται να αποθηκευτεί τοπικά, δεν είναι έγκυρη.";
-        Text[ korean ] = "·ΞΔΓΏ΅ ΐϊΐεµΙ URL ±ΈΌΊΐΊ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "·ΞΔΓ·Ξ ΐϊΐεΗÒ URL ΔΑΗΗ±Τ·ΉΐΜΌΗΐΗ Ό­½ΔΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'lerin konfigόrasyon formatύ geηerli deπil";
         Text[ catalan ] = "No es vαlido el formato de la configuraciσn de las URLs a guardar localmente.";
         Text[ finnish ] = "Paikallisiksi tallennettavien URL-osoitteiden kokoonpanomuoto on virheellinen";
@@ -2601,7 +2601,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Het item kon niet worden hersteld";
         Text[ chinese_simplified ] = "Ξή·¨ΠήΈ΄ΥβΈφΜυΔΏ";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η επαναφορά της καταχώρισης";
-        Text[ korean ] = "ΐΤ·Βΐ» ΊΉ±ΈΗÒ Όφ Ύψΐ½";
+        Text[ korean ] = "ΐΤ·Βΐ» ΊΉ±ΈΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω";
         Text[ turkish ] = "Giriώ geri yόklenemedi";
         Text[ catalan ] = "No se pudo restaurar la entrada.";
         Text[ finnish ] = "Merkinnδn palauttaminen ei onnistunut";
@@ -2791,7 +2791,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De server mag niet leeg zijn.";
         Text[ chinese_simplified ] = "·ώΞρΖχ²»ΏΙÒΤΏΥΘ±";
         Text[ greek ] = "Ο διακομιστής δεν επιτρέπεται να είναι κενός";
-        Text[ korean ] = "Ό­Ήφ°΅ ΊρΎξ΅΅ΐΦΎξΌ­΄Β ΎΘµΚ";
+        Text[ korean ] = "Ό­Ήφ°΅ ΊρΎξ ΐΦΎξΌ­΄Β ΎΘµΚ";
         Text[ turkish ] = "Sunucu boώ olmamalύdύr";
         Text[ catalan ] = "El servidor no debe estar vacνo.";
         Text[ finnish ] = "Palvelin ei saa olla tyhjδ";
@@ -2989,6 +2989,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
