@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:07:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,76 +70,21 @@ Resource RID_WRNHDLSC
 {
     String ERRCODE_SC_EXPORT_WRN_ASCII & SH_MAX
     {
-        Text = "Es wurde nur die aktuelle Tabelle gespeichert." ;
-        Text [ ENGLISH ] = "The current table has only been saved." ;
-        Text [ english_us ] = "Only the active sheet could be saved." ;
-        Text [ italian ] = "È stata salvata solo la tabella attiva." ;
-        Text [ spanish ] = "Sólo se ha guardado la hoja actual." ;
-        Text [ french ] = "Seule la feuille active a été enregistrée." ;
-        Text [ dutch ] = "Alleen de huidige tabel is opgeslagen." ;
-        Text [ swedish ] = "Det är bara den aktuella tabellen som har sparats." ;
-        Text [ danish ] = "Kun det nuværende ark kunne gemmes." ;
-        Text [ portuguese_brazilian ] = "Somente a planilha ativa pôde ser salva." ;
-        Text [ portuguese ] = "Só foi guardada a tabela activa." ;
-        Text[ chinese_simplified ] = "åªå­˜ç›˜äº†å½“å‰çš„è¡¨æ ¼ã€‚";
-        Text[ russian ] = "Ñîõğàíåí òîëüêî àêòèâíûé ëèñò.";
-        Text[ polish ] = "Zosta³ zapisany tylko aktywny arkusz.";
-        Text[ japanese ] = "ç¾åœ¨ã®è¡¨ã ã‘ãŒä¿å­˜ã•ã‚Œã¾ã—ãŸã€‚";
-        Text[ chinese_traditional ] = "åªå„²å­˜äº†ç›®å‰çš„è¡¨æ ¼ã€‚";
-        Text[ arabic ] = "Êã ÍİÙ ÇáÌÏæá ÇáÍÇáí İŞØ.";
-        Text[ greek ] = "Áğïèçêåıôçêå ìüíï ôï ôñİ÷ïí öıëëï.";
-        Text[ korean ] = "í™œì„±í™”ëœ ì‹œíŠ¸ë§Œì´ ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Yalnızca yürürlükteki tablo kaydedildi.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Només s'ha pogut desar el full actiu.";
-        Text[ finnish ] = "Vain aktiivinen taulukko voitiin tallentaa.";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™à¹„à¸”à¹‰";
-        Text[ czech ] = "Pouze aktivnÃ­ list bude uloÅ¾en.";
-        Text[ hebrew ] = "Es wurde nur die aktuelle Tabelle gespeichert.";
-        Text[ hindi ] = "à¤•à¥‡à¤µà¤² à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤² à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "UloÅ¾enÃ½ bol len aktÃ­vny list.";
-        Text[ hungarian ] = "Csak az aktÃ­v munkalapot lehetett menteni.";
-        Text[ slovenian ] = "Shraniti je mogoÄe le aktivni list.";
+        Text [ de ] = "Es wurde nur die aktuelle Tabelle gespeichert." ;
+        Text [ en-US ] = "Only the active sheet could be saved." ;
+        Text [ x-comment ] = " ";
     };
     String ERRCODE_SC_IMPORT_WRN_RNGOVRFLW & SH_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde ³berschritten. ³berzõhlige Zeilen wurden nicht mitimportiert! */
-        Text = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
-        Text [ ENGLISH ] = "The number of rows exceeded the maximum. Additional rows were not importet!" ;
-        Text [ dutch ] = "Het maximale aantal regels is overschreden. Het teveel aan regels is niet geïmporteerd." ;
-        Text [ english_us ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
-        Text [ italian ] = "È stato superato il numero massimo di righe. Le righe in eccesso non sono state importate!" ;
-        Text [ spanish ] = "¡Se ha excedido el número máximo de filas, las filas adicionales no se importaron!" ;
-        Text [ french ] = "Le nombre de lignes maximum a été dépassé. Les lignes en surplus n'ont pas été importées !" ;
-        Text [ swedish ] = "Det maximala antalet rader överskreds. Övertaliga rader importerades inte!" ;
-        Text [ danish ] = "Det maksimale antal rækker blev overskredet. De ekstra rækker blev ikke importeret!" ;
-        Text [ portuguese ] = "O número máximo de linhas foi ultrapassado. As linhas em excesso não foram importadas!" ;
-        Text [ portuguese_brazilian ] = "O número máximo de linhas foi ultrapassado. As linhas em excesso não foram importadas!" ;
-        Text[ chinese_simplified ] = "å·²ç»è¶…è¿‡è¡Œçš„æœ€å¤§æ•°ç›®ï¼Œè¶…è¿‡çš„è¡Œæ²¡æœ‰è¢«è¾“å…¥ï¼";
-        Text[ russian ] = "Ìàêñèìàëüíîå ÷èñëî ñòğîê ïğåâûøåíî. Ñòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, èìïîğòèğîâàíû íå áóäóò!";
-        Text[ polish ] = "Zosta³a przekroczona maksymalna liczba wierszy. Pozosta³e wiersze nie bêd¹ importowane!";
-        Text[ japanese ] = "è¡Œã®æœ€é«˜æ•°ã‚’è¶…ãˆã¦ã„ã¾ã™ã€‚éå‰°ã®è¡Œã¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
-        Text[ chinese_traditional ] = "å·²ç¶“è¶…éåˆ—çš„æœ€å¤§æ•¸ç›®ï¼Œæ²’æœ‰åŒ¯å…¥è¶…éçš„åˆ—ï¼";
-        Text[ arabic ] = "Êã ÊÌÇæÒ ÇáÚÏÏ ÇáÃŞÕì ááÕİæİ¡ áåĞÇ áã íÊã ÇÓÊíÑÇÏ ÇáÕİæİ ÇáÒÇÆÏÉ!";
-        Text[ greek ] = "¸ãéíå õğİñâáóç ôïõ ìİãéóôïõ áñéèìïı ãñáììşí. Äåí èá ãßíåé åéóáãùãŞ ôùí ãñáììşí ğïõ îåğåñíïıí ôï üñéï!";
-        Text[ korean ] = "í–‰ì˜ ìµœëŒ€ì¹˜ë¥¼ ì´ˆê³¼í–ˆìŠµë‹ˆë‹¤. ì´ˆê³¼í–‰ì€ ê°€ì ¸ì˜¤ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Azami satır sayısı aşıldı. Fazla satırlar içe aktarılmadı!";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S'ha excedit el nombre màxim de files. Les files addicionals no s'han importat.";
-        Text[ finnish ] = "Rivimäärä on ylittänyt sallitun enimmäisrajan. Ylimääräisiä rivejä ei tuotu.";
-        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¹à¸–à¸§à¹€à¸à¸´à¸™à¸ˆà¸³à¸™à¸§à¸™à¸—à¸µà¹ˆà¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸” à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸™à¸³à¹€à¸‚à¹‰à¸²à¹à¸–à¸§à¹€à¸à¸´à¹ˆà¸¡!";
-        Text[ czech ] = "PoÄet Å™Ã¡dek pÅ™ekroÄil maximÃ¡lnÃ­ hodnotu. DalÅ¡Ã­ Å™Ã¡dky uÅ¾ nebudou importovÃ¡ny!";
-        Text[ hebrew ] = "Die Maximalanzahl von Zeilen wurde Ã¼berschritten. Ã¼berzÃ¤hlige Zeilen wurden nicht mitimportiert";
-        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤…à¤§à¤¿à¤•à¤¤à¤® à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¸à¥‡ à¤­à¥€ à¤…à¤§à¤¿à¤• à¤¹à¥ˆ à¥¤ à¤…à¤§à¤¿à¤•à¤¤à¤° à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ!";
-        Text[ slovak ] = "PoÄet riadkov presiahol maximum. ÄalÅ¡ie riadky neboli vloÅ¾enÃ©!";
-        Text[ hungarian ] = "A sorok szÃ¡ma nagyobb a megengedettnÃ©l. Az ezen felÃ¼li sorok nem kerÃ¼ltek importÃ¡lÃ¡sra!";
-        Text[ slovenian ] = "Dovoljeno Å¡tevilo vrstic je bilo preseÅ¾eno. Dodatne vrstice niso bile uvoÅ¾ene!";
+        Text [ de ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ en-US ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
+        Text [ x-comment ] = " ";
     };
     /*
     String ERRCODE_SC_  & SH_MAX
         {
     Text = "";
-    Text[ENGLISH] = "";
         };
 */
 };
