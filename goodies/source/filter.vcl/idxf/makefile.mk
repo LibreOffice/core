@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2001-07-12 11:46:32 $
+#   last change: $Author: thb $ $Date: 2001-08-14 14:22:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,6 @@ PROJECTPCHSOURCE=eeng_pch
 
 # --- Settings -----------------------------------------------------------
 
-.IF "$(VCL)" != ""
-
 .INCLUDE :  settings.mk
 
 # --- Allgemein ----------------------------------------------------------
@@ -122,7 +120,3 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
         @echo     GraphicImport                         >>$@
 
 .ENDIF
-.ELSE
-dummy:
-    @+echo No VCL - do nothing!
-.ENDIF #VCL

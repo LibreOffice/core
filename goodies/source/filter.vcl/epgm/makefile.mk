@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sj $ $Date: 2001-03-08 10:15:03 $
+#   last change: $Author: thb $ $Date: 2001-08-14 14:22:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,6 @@ PROJECTPCHSOURCE=eeng_pch
 
 
 # --- Settings -----------------------------------------------------------
-
-.IF "$(VCL)" != ""
 
 .INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
@@ -175,8 +173,3 @@ $(MISC)$/$(SHL1TARGET).flt:
 .ENDIF
 
 .INCLUDE :	target.mk
-
-.ELSE
-dummy:
-    @+echo No VCL - do nothing!
-.ENDIF #VCL

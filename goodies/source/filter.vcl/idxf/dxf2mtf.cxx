@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 14:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,16 +91,6 @@ void DXF2GDIMetaFile::MayCallback(ULONG nMainEntitiesProcessed)
     }
 }
 
-#ifndef VCL
-Color DXF2GDIMetaFile::ConvertColor(BYTE nColor)
-{
-    return Color(
-        ((USHORT)pDXF->aPalette.GetRed(nColor))<<8,
-        ((USHORT)pDXF->aPalette.GetGreen(nColor))<<8,
-        ((USHORT)pDXF->aPalette.GetBlue(nColor))<<8
-    );
-}
-#else
 Color DXF2GDIMetaFile::ConvertColor(BYTE nColor)
 {
     return Color(
@@ -108,7 +98,6 @@ Color DXF2GDIMetaFile::ConvertColor(BYTE nColor)
         pDXF->aPalette.GetGreen( nColor ),
         pDXF->aPalette.GetBlue( nColor ) );
 }
-#endif
 
 long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
 {
