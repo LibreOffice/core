@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:56:29 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,34 +62,18 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #define _CONNECTIVITY_DBTOOLS_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
-#include <com/sun/star/sdb/SQLErrorEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
-#include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
-#include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-
+//#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+//#include <com/sun/star/sdbc/XConnection.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
+//#include <com/sun/star/sdbc/XRowSet.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+//#include <com/sun/star/sdb/SQLContext.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+//#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -98,14 +82,28 @@ namespace com { namespace sun { namespace star {
 
 namespace sdb {
     class XSQLQueryComposer;
+    class SQLContext;
 }
-
+namespace sdbc {
+    class XConnection;
+    class XDatabaseMetaData;
+    class XRowSet;
+    class SQLException;
+}
+namespace beans {
+    class XPropertySet;
+}
 namespace lang {
     struct Locale;
+    class XMultiServiceFactory;
+}
+namespace container {
+    class XNameAccess;
 }
 
 namespace util {
     class XNumberFormatTypes;
+    class XNumberFormatsSupplier;
 }
 
 } } }
@@ -115,25 +113,17 @@ namespace dbtools
 {
 //.........................................................................
 
-    namespace starutil      = ::com::sun::star::util;
-    namespace staruno       = ::com::sun::star::uno;
-    namespace starsdb       = ::com::sun::star::sdb;
-    namespace starsdbc      = ::com::sun::star::sdbc;
-    namespace starcontainer = ::com::sun::star::container;
-    namespace starbeans     = ::com::sun::star::beans;
-    namespace starlang      = ::com::sun::star::lang;
-
 //=========================================================================
     // date conversion
 
-//  extern starutil::Date STANDARD_DB_DATE;
-//  double ToStandardDbDate(const starutil::Date& rNullDate, double rVal);
-//  double ToNullDate(const starutil::Date& rNullDate, double rVal);
+//  extern ::com::sun::star::util::Date STANDARD_DB_DATE;
+//  double ToStandardDbDate(const ::com::sun::star::util::Date& rNullDate, double rVal);
+//  double ToNullDate(const ::com::sun::star::util::Date& rNullDate, double rVal);
 
     // calculates the default numberformat for a given datatype and a give language
-    sal_Int32 getDefaultNumberFormat(const staruno::Reference< starbeans::XPropertySet >& _xColumn,
-                                     const staruno::Reference< starutil::XNumberFormatTypes >& _xTypes,
-                                     const starlang::Locale& _rLocale);
+    sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
+                                     const ::com::sun::star::lang::Locale& _rLocale);
 
 //=========================================================================
 
@@ -146,23 +136,23 @@ namespace dbtools
         In any of these cases the calculated connection is <b>forwarded</b> to the RowSet, that means before
         returning from the function the connection is set as ActiveConnection property on the RowSet !
     */
-    staruno::Reference<starsdbc::XConnection> calcConnection(
-        const staruno::Reference<starsdbc::XRowSet>& _rxRowSet,
-        const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
-            throw (starsdbc::SQLException, staruno::RuntimeException);
+    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection> calcConnection(
+        const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+        const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+            throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */
-    staruno::Reference<starsdbc::XConnection> getConnection(const staruno::Reference<starsdbc::XRowSet>& _rxRowSet) throw (staruno::RuntimeException);
+    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
 
     /** returns the columns of the named table of the given connection
     */
-    staruno::Reference<starcontainer::XNameAccess> getTableFields(const staruno::Reference<starsdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
+    ::com::sun::star::uno::Reference<::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
 
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).
     */
-    starsdb::SQLContext prependContextInfo(starsdbc::SQLException& _rException, const staruno::Reference< staruno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails = ::rtl::OUString());
+    ::com::sun::star::sdb::SQLContext prependContextInfo(::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails = ::rtl::OUString());
 
     /** quote the given name with the given quote string.
     */
@@ -170,7 +160,7 @@ namespace dbtools
 
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */
-    ::rtl::OUString quoteTableName(const staruno::Reference<starsdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName);
+    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
         @param  _rxConnMetaData     meta data describing the connection where you got the table name from
@@ -179,7 +169,7 @@ namespace dbtools
         @param  _rSchema            (out parameter) upon return, contains the schema name
         @param  _rName              (out parameter) upon return, contains the table name
     */
-    void qualifiedNameComponents(const staruno::Reference< starsdbc::XDatabaseMetaData >& _rxConnMetaData,
+    void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
         const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName);
 
     /** calculate a NumberFormatsSupplier for use with an given connection
@@ -190,10 +180,10 @@ namespace dbtools
         @param      _rxFactory      required (only of _bAllowDefault is sal_True) for creating the DatabaseEnvironment.
         @return     the formatter all object related to the given connection should work with.
     */
-    staruno::Reference<starutil::XNumberFormatsSupplier> getNumberFormats(
-        const staruno::Reference<starsdbc::XConnection>& _rxConn,
+    ::com::sun::star::uno::Reference<::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
+        const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>& _rxConn,
         sal_Bool _bAllowDefault = sal_False,
-        const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory = staruno::Reference<starlang::XMultiServiceFactory>()
+        const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory = ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>()
     );
 
     /** create an XSQLQueryComposer which represents the current settings (Command/CommandType/Filter/Order)
@@ -202,9 +192,9 @@ namespace dbtools
         is using via calcConnection. This implies that a connection will be set on the RowSet if needed.
         (need to changes this sometimes ...)
     */
-    staruno::Reference<starsdb::XSQLQueryComposer> getCurrentSettingsComposer(
-                    const staruno::Reference<starbeans::XPropertySet>& _rxRowSetProps,
-                    const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    ::com::sun::star::uno::Reference<::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
+                    const ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
+                    const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** transfer and translate properties between two FormComponents
         @param      _rxOld      the source property set
@@ -212,23 +202,33 @@ namespace dbtools
         @param      _rLocale    the locale for converting number related properties
     */
     void TransferFormComponentProperties(
-        const staruno::Reference<starbeans::XPropertySet>& _rxOld,
-        const staruno::Reference<starbeans::XPropertySet>& _rxNew,
-        const starlang::Locale& _rLocale
+        const ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet>& _rxOld,
+        const ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet>& _rxNew,
+        const ::com::sun::star::lang::Locale& _rLocale
         );
 
-    /** check if the property "Privileges" supports starsdbcx::Privilege::INSERT
+    /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
         @param      _rxCursorSet    the property set
     */
-    sal_Bool canInsert(const staruno::Reference< starbeans::XPropertySet>& _rxCursorSet);
-    /** check if the property "Privileges" supports starsdbcx::Privilege::UPDATE
+    sal_Bool canInsert(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+    /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::UPDATE
         @param      _rxCursorSet    the property set
     */
-    sal_Bool canUpdate(const staruno::Reference< starbeans::XPropertySet>& _rxCursorSet);
-    /** check if the property "Privileges" supports starsdbcx::Privilege::DELETE
+    sal_Bool canUpdate(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+    /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::DELETE
         @param      _rxCursorSet    the property set
     */
-    sal_Bool canDelete(const staruno::Reference< starbeans::XPropertySet>& _rxCursorSet);
+    sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet);
+    //----------------------------------------------------------------------------------
+    /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
+    */
+    void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+                            const ::rtl::OUString& _rCatalog,
+                            const ::rtl::OUString& _rSchema,
+                            const ::rtl::OUString& _rName,
+                            ::rtl::OUString& _rComposedName,
+                            sal_Bool _bQuote);
+
 
 //.........................................................................
 }   // namespace dbtools

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:50 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,6 @@ namespace connectivity
     rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
     rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime);
     rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime);
-
-    // base class for all classes who are derived from OPropertySet and from OComponent
-    class OBaseMutex
-    {
-    protected:
-        ::osl::Mutex m_aMutex;
-    };
 
     // typedefs
     typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
