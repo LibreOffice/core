@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: sab $ $Date: 2001-10-23 12:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,7 +1202,8 @@ ScCellRangesBase::ScCellRangesBase() :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
-    bValueChangePosted( FALSE )
+    bValueChangePosted( FALSE ),
+    pMarkData( NULL )
 {
 }
 
@@ -1215,7 +1216,8 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
-    bValueChangePosted( FALSE )
+    bValueChangePosted( FALSE ),
+    pMarkData( NULL )
 {
     ScRange aCellRange = rR;
     aCellRange.Justify();
@@ -1235,7 +1237,8 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
-    bValueChangePosted( FALSE )
+    bValueChangePosted( FALSE ),
+    pMarkData( NULL )
 {
     if (pDocShell)  // Null, wenn per createInstance erzeugt...
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -1259,9 +1262,11 @@ void ScCellRangesBase::ForgetCurrentAttrs()
     delete pCurrentFlat;
     delete pCurrentDeep;
     delete pCurrentDataSet;
+    delete pMarkData;
     pCurrentFlat = NULL;
     pCurrentDeep = NULL;
     pCurrentDataSet = NULL;
+    pMarkData = NULL;
 }
 
 const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsFlat()
@@ -1270,10 +1275,8 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsFlat()
 
     if ( !pCurrentFlat && pDocShell )
     {
-        ScMarkData aMark;
-        aMark.MarkFromRangeList( aRanges, FALSE );
         ScDocument* pDoc = pDocShell->GetDocument();
-        pCurrentFlat = pDoc->CreateSelectionPattern( aMark, FALSE );
+        pCurrentFlat = pDoc->CreateSelectionPattern( *GetMarkData(), FALSE );
     }
     return pCurrentFlat;
 }
@@ -1284,10 +1287,8 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
 
     if ( !pCurrentDeep && pDocShell )
     {
-        ScMarkData aMark;
-        aMark.MarkFromRangeList( aRanges, FALSE );
         ScDocument* pDoc = pDocShell->GetDocument();
-        pCurrentDeep = pDoc->CreateSelectionPattern( aMark, TRUE );
+        pCurrentDeep = pDoc->CreateSelectionPattern( *GetMarkData(), TRUE );
     }
     return pCurrentDeep;
 }
@@ -1305,6 +1306,16 @@ SfxItemSet* ScCellRangesBase::GetCurrentDataSet()
         }
     }
     return pCurrentDataSet;
+}
+
+const ScMarkData* ScCellRangesBase::GetMarkData()
+{
+    if (!pMarkData)
+    {
+        pMarkData = new ScMarkData();
+        pMarkData->MarkFromRangeList( aRanges, FALSE );
+    }
+    return pMarkData;
 }
 
 void ScCellRangesBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1348,6 +1359,8 @@ void ScCellRangesBase::RefChanged()
             pDoc->StartListeningArea( *aRanges.GetObject(i), pValueListener );
     }
     //! Test !!!
+
+    ForgetCurrentAttrs();
 }
 
 ScDocument* ScCellRangesBase::GetDocument() const
@@ -1481,8 +1494,7 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
                                                 throw(uno::Exception, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScMarkData aMark;
-    aMark.MarkFromRangeList( aRanges, FALSE );
+    ScMarkData aMark(*GetMarkData());
     aMark.MarkToSimple();
     if (!aMark.IsMarked())
         aMark.SetMarkNegative(TRUE);    // um Dummy Position angeben zu koennen
@@ -1504,16 +1516,13 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(u
     ScUnoGuard aGuard;
     if ( aRanges.Count() )
     {
-        ScMarkData aMark;
-        aMark.MarkFromRangeList( aRanges, FALSE );
-
         // only for clearContents: EDITATTR is only used if no contents are deleted
         USHORT nDelFlags = nContentFlags & IDF_ALL;
         if ( ( nContentFlags & IDF_EDITATTR ) && ( nContentFlags & IDF_CONTENTS ) == 0 )
             nDelFlags |= IDF_EDITATTR;
 
         ScDocFunc aFunc(*pDocShell);
-        aFunc.DeleteContents( aMark, nDelFlags, TRUE, TRUE );
+        aFunc.DeleteContents( *GetMarkData(), nDelFlags, TRUE, TRUE );
     }
     // sonst ist nichts zu tun
 }
@@ -1597,9 +1606,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
         else if ( pMap->nWID == SC_WID_UNO_CELLSTYL )
         {
             //  a style is always set, there's no default state
-            ScMarkData aMark;
-            aMark.MarkFromRangeList( aRanges, FALSE );
-            const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(aMark);
+            const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(*GetMarkData());
             if (pStyle)
                 eRet = beans::PropertyState_DIRECT_VALUE;
             else
@@ -1663,8 +1670,6 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
         {
             if ( aRanges.Count() )      // leer = nichts zu tun
             {
-                ScMarkData aMark;
-                aMark.MarkFromRangeList( aRanges, FALSE );
                 ScDocument* pDoc = pDocShell->GetDocument();
                 ScDocFunc aFunc(*pDocShell);
 
@@ -1682,7 +1687,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
                 }
                 else
                     aWIDs[1] = 0;
-                aFunc.ClearItems( aMark, aWIDs, TRUE );
+                aFunc.ClearItems( *GetMarkData(), aWIDs, TRUE );
             }
         }
         else if ( pMap )
@@ -1693,10 +1698,8 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
                 bChartRowAsHdr = FALSE;
             else if ( pMap->nWID == SC_WID_UNO_CELLSTYL )
             {
-                ScMarkData aMark;
-                aMark.MarkFromRangeList( aRanges, FALSE );
                 ScDocFunc aFunc(*pDocShell);
-                aFunc.ApplyStyle( aMark, ScGlobal::GetRscString(STR_STYLENAME_STANDARD), TRUE, TRUE );
+                aFunc.ApplyStyle( *GetMarkData(), ScGlobal::GetRscString(STR_STYLENAME_STANDARD), TRUE, TRUE );
             }
         }
     }
@@ -1941,8 +1944,6 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
         {
             if ( aRanges.Count() )      // leer = nichts zu tun
             {
-                ScMarkData aMark;
-                aMark.MarkFromRangeList( aRanges, FALSE );
                 ScDocument* pDoc = pDocShell->GetDocument();
                 ScDocFunc aFunc(*pDocShell);
 
@@ -1964,7 +1965,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                     if ( nWhich != nFirstItem && nWhich != nSecondItem )
                         rSet.ClearItem(nWhich);
 
-                aFunc.ApplyAttributes( aMark, aPattern, TRUE, TRUE );
+                aFunc.ApplyAttributes( *GetMarkData(), aPattern, TRUE, TRUE );
             }
         }
         else        // implemented here
@@ -1983,10 +1984,8 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                         aValue >>= aStrVal;
                         String aString = ScStyleNameConversion::ProgrammaticToDisplayName(
                                                             aStrVal, SFX_STYLE_FAMILY_PARA );
-                        ScMarkData aMark;
-                        aMark.MarkFromRangeList( aRanges, FALSE );
                         ScDocFunc aFunc(*pDocShell);
-                        aFunc.ApplyStyle( aMark, aString, TRUE, TRUE );
+                        aFunc.ApplyStyle( *GetMarkData(), aString, TRUE, TRUE );
                     }
                     break;
                 case SC_WID_UNO_TBLBORD:
@@ -2022,13 +2021,11 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                                 pFormat->FillFormat( aNew, pDoc, bEnglish, bXML );
                                 ULONG nIndex = pDoc->AddCondFormat( aNew );
 
-                                ScMarkData aMark;
-                                aMark.MarkFromRangeList( aRanges, FALSE );
                                 ScDocFunc aFunc(*pDocShell);
 
                                 ScPatternAttr aPattern( pDoc->GetPool() );
                                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-                                aFunc.ApplyAttributes( aMark, aPattern, TRUE, TRUE );
+                                aFunc.ApplyAttributes( *GetMarkData(), aPattern, TRUE, TRUE );
                             }
                         }
                     }
@@ -2054,13 +2051,11 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                                 ULONG nIndex = pDoc->AddValidationEntry( *pNewData );
                                 delete pNewData;
 
-                                ScMarkData aMark;
-                                aMark.MarkFromRangeList( aRanges, FALSE );
                                 ScDocFunc aFunc(*pDocShell);
 
                                 ScPatternAttr aPattern( pDoc->GetPool() );
                                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
-                                aFunc.ApplyAttributes( aMark, aPattern, TRUE, TRUE );
+                                aFunc.ApplyAttributes( *GetMarkData(), aPattern, TRUE, TRUE );
                             }
                         }
                     }
@@ -2154,10 +2149,8 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                     break;
                 case SC_WID_UNO_CELLSTYL:
                     {
-                        ScMarkData aMark;
-                        aMark.MarkFromRangeList( aRanges, FALSE );
                         String aStyleName;
-                        const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(aMark);
+                        const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(*GetMarkData());
                         if (pStyle)
                             aStyleName = pStyle->GetName();
                         rAny <<= rtl::OUString( ScStyleNameConversion::DisplayToProgrammaticName(
@@ -2396,10 +2389,8 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 
         if ( pNewPattern && aRanges.Count() )
         {
-            ScMarkData aMark;
-            aMark.MarkFromRangeList( aRanges, FALSE );
             ScDocFunc aFunc(*pDocShell);
-            aFunc.ApplyAttributes( aMark, *pNewPattern, TRUE, TRUE );
+            aFunc.ApplyAttributes( *GetMarkData(), *pNewPattern, TRUE, TRUE );
         }
 
         delete pNewPattern;
@@ -2510,10 +2501,8 @@ void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::R
     ScUnoGuard aGuard;
     if ( pDocShell && aRanges.Count() )     // leer = nichts zu tun
     {
-        ScMarkData aMark;
-        aMark.MarkFromRangeList( aRanges, FALSE );
         ScDocFunc aFunc(*pDocShell);
-        aFunc.ChangeIndent( aMark, FALSE, TRUE );
+        aFunc.ChangeIndent( *GetMarkData(), FALSE, TRUE );
     }
 }
 
@@ -2522,10 +2511,8 @@ void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::R
     ScUnoGuard aGuard;
     if ( pDocShell && aRanges.Count() )     // leer = nichts zu tun
     {
-        ScMarkData aMark;
-        aMark.MarkFromRangeList( aRanges, FALSE );
         ScDocFunc aFunc(*pDocShell);
-        aFunc.ChangeIndent( aMark, TRUE, TRUE );
+        aFunc.ChangeIndent( *GetMarkData(), TRUE, TRUE );
     }
 }
 
@@ -2920,8 +2907,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
         //! fuer alle Tabellen getrennt, wenn Markierungen pro Tabelle getrennt sind!
         USHORT nTab = lcl_FirstTab(aRanges);
 
-        ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList( aRanges, FALSE );
+        ScMarkData aMarkData(*GetMarkData());
 
         ScDocument* pDoc = pDocShell->GetDocument();
         for (USHORT nCol=0; nCol<=MAXCOL; nCol++)
@@ -2955,8 +2941,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
     {
         ScDocument* pDoc = pDocShell->GetDocument();
 
-        ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList( aRanges, FALSE );
+        ScMarkData aMarkData(*GetMarkData());
 
         //  belegte Zellen wegmarkieren
         ULONG nCount = aRanges.Count();
@@ -3278,8 +3263,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
         {
             bFound = FALSE;
 
-            ScMarkData aMarkData;
-            aMarkData.MarkFromRangeList( aNewRanges, FALSE );
+            ScMarkData aMarkData(*GetMarkData());
             aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             ULONG nCount = aNewRanges.Count();
@@ -3334,8 +3318,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
             bFound = FALSE;
             ULONG nRangesCount = aNewRanges.Count();
 
-            ScMarkData aMarkData;
-            aMarkData.MarkFromRangeList( aNewRanges, FALSE );
+            ScMarkData aMarkData(*GetMarkData());
             aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             USHORT nTab = lcl_FirstTab(aNewRanges);                 //! alle Tabellen
@@ -3411,8 +3394,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
-                ScMarkData aMark;
-                aMark.MarkFromRangeList( aRanges, FALSE );
+                ScMarkData aMark(*GetMarkData());
 
                 String aDummyUndo;
                 USHORT nCol = 0, nRow = 0, nTab = 0;
@@ -3449,8 +3431,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
-                ScMarkData aMark;
-                aMark.MarkFromRangeList( aRanges, FALSE );
+                ScMarkData aMark(*GetMarkData());
 
                 USHORT nCol, nRow, nTab;
                 if (pLastPos)
@@ -3533,8 +3514,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
-                ScMarkData aMark;
-                aMark.MarkFromRangeList( aRanges, FALSE );
+                ScMarkData aMark(*GetMarkData());
                 USHORT i;
 
                 USHORT nTabCount = pDoc->GetTableCount();
