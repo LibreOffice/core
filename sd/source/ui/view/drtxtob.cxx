@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-24 17:01:12 $
+ *  last change: $Author: dl $ $Date: 2000-11-30 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,9 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                 USHORT nScriptType = pView->GetScriptType();
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
-                    rSet.Put( *pI, nWhich );
+                    aAttrSet.Put( *pI, nWhich );
                 else
-                    rSet.InvalidateItem( nWhich );
+                    aAttrSet.InvalidateItem( nWhich );
             }
             break;
 
