@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterlayoutdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 16:31:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     }
     else if( !mpCurrentPage->IsMasterPage() )
     {
-        mpCurrentPage = (SdPage*)mpCurrentPage->GetMasterPage(0);
+        mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
     }
 
 
