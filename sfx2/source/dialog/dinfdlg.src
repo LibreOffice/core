@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:44:22 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ TabPage TP_DOCINFODOC
         Text [ ENGLISH ] = "~Readonly" ;
         Text [ english_us ] = "~Read-only" ;
         Text [ portuguese_brazilian ] = "~Schreibgeschützt" ;
-        Text [ swedish ] = "~Skrivskyddad" ;
+        Text [ swedish ] = "~Skrivskyddat" ;
         Text [ danish ] = "Skrivebeskyttet" ;
         Text [ italian ] = "~Sola lettura" ;
         Text [ spanish ] = "~Solo lectura" ;
