@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:33 $
+ *  last change: $Author: jp $ $Date: 2001-08-07 17:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,9 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                     if( pMacro )
                         aINetFmt.SetMacro(SFX_EVENT_MOUSEOUT_OBJECT, *pMacro);
                 }
+                rSh.SttSelect();
                 rSh.InsertURL( aINetFmt, rName, TRUE );
+                rSh.EndSelect();
                 rSh.EndAction();
             }
             break;
