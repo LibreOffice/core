@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: nn $ $Date: 2000-12-20 11:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,12 @@
 #include <tools/stack.hxx>
 #endif
 
+namespace utl { class TempFile; }
 
 // --- class XclEscherEx ---------------------------------------------
 
 struct RootData;
 class SvStream;
-class TempFile;
-class SvFileStream;
 class XclObj;
 class XclEscherHostAppData;
 class XclEscherClientData;
@@ -91,8 +90,8 @@ private:
         List                aOffsetMap;
         Stack               aStack;
         RootData&           rRootData;
-        TempFile*           pPicTempFile;
-        SvFileStream*       pPicStrm;
+        utl::TempFile*      pPicTempFile;
+        SvStream*           pPicStrm;
         XclObj*             pCurrXclObj;
         XclEscherHostAppData*   pCurrAppData;
         XclEscherClientData*    pTheClientData; // always the same
@@ -144,14 +143,12 @@ inline ULONG XclEscherEx::GetLastOffsetMapPos() const
 // --- class XclEscher -----------------------------------------------
 
 struct RootData;
-class TempFile;
-class SvFileStream;
 
 class XclEscher
 {
 private:
-        TempFile*           pTempFile;
-        SvFileStream*       pStrm;
+        utl::TempFile*      pTempFile;
+        SvStream*           pStrm;
         XclEscherEx*        pEx;
 
 public:

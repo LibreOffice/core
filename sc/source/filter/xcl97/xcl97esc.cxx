@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: nn $ $Date: 2000-12-20 11:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,11 @@
 #ifndef _SV_OUTDEV_HXX //autogen wg. OutputDevice
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen wg. SvFileStream
-#include <tools/stream.hxx>
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ERRORFILE
 #include <tools/debug.hxx>
@@ -132,7 +132,6 @@ XclEscherEx::~XclEscherEx()
     delete pTheClientData;
     if ( pPicStrm )
     {
-        pPicStrm->Close();
         delete pPicStrm;
     }
     if ( pPicTempFile )
@@ -146,7 +145,7 @@ SvStream* XclEscherEx::QueryPicStream()
     {
         if ( !pPicTempFile )
         {
-            pPicTempFile = new TempFile;
+            pPicTempFile = new utl::TempFile;
             if ( pPicTempFile->IsValid() )
                 pPicTempFile->EnableKillingFile();
             else
@@ -157,7 +156,7 @@ SvStream* XclEscherEx::QueryPicStream()
         }
         if ( pPicTempFile )
         {
-            pPicStrm = new SvFileStream( pPicTempFile->GetName(), STREAM_STD_READWRITE );
+            pPicStrm = utl::UcbStreamHelper::CreateStream( pPicTempFile->GetURL(), STREAM_STD_READWRITE );
             pPicStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         }
     }
@@ -350,12 +349,11 @@ void XclEscherEx::EndDocument()
 
 // --- class XclEscher -----------------------------------------------
 
-#include <osl/file.hxx>
 XclEscher::XclEscher( UINT32 nDrawings, RootData& rRoot )
 {
-    pTempFile = new TempFile;
+    pTempFile = new utl::TempFile;
     pTempFile->EnableKillingFile();
-    pStrm = new SvFileStream( pTempFile->GetName(), STREAM_STD_READWRITE );
+    pStrm = utl::UcbStreamHelper::CreateStream( pTempFile->GetURL(), STREAM_STD_READWRITE );
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     pEx = new XclEscherEx( *pStrm, nDrawings, rRoot );
 }
@@ -363,7 +361,6 @@ XclEscher::XclEscher( UINT32 nDrawings, RootData& rRoot )
 
 XclEscher::~XclEscher()
 {
-    pStrm->Close();
     delete pEx;
     delete pStrm;
     delete pTempFile;
