@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:15:17 $
+ *  last change: $Author: kz $ $Date: 2002-01-22 21:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Type de calcul : Mode=0 pour le nombre de semaines dans l'intervalle, Mode=1 pour les semaines du calendrier.";
             Text[ spanish ] = "Tipo de calculación: Tipo=0 significa el número de semanas y Tipo=1 el número de semanas del calendario.";
             Text[ finnish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
-            Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di settimane del'intervallo, tipo=1 indica la settimana.";
+            Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di settimane nell'intervallo, tipo=1 indica la settimana.";
             Text[ danish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
             Text[ swedish ] = "Typ av beräkning: typ=0 för veckoantal i intervallet, typ=1 för kalenderveckor.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczbê tygodni, Typ=1 - tygodnie kalendarzowe.";
