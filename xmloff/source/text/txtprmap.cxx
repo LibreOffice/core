@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 07:59:23 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,7 +836,7 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     MS_E( "FootnoteNumberingType",      TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_FOOTNOTE_NUM_TYPE ),
     MS_E( "FootnoteNumberingPrefix",        TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_FOOTNOTE_NUM_PREFIX ),
     MS_E( "FootnoteNumberingSuffix",        TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_FOOTNOTE_NUM_SUFFIX ),
-    MS_E( "FootnoteIsCollectAtTextEnd", TEXT,   FOOTNOTES_CONFIGURATION,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_END ),
+    MS_E( "FootnoteIsCollectAtTextEnd", TEXT,   NOTES_CONFIGURATION,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_END ),
 
     // section footnote settings
     MS_E( "EndnoteIsOwnNumbering",      TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_NUM_OWN ),
@@ -845,7 +845,7 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     MS_E( "EndnoteNumberingType",       TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_ENDNOTE_NUM_TYPE ),
     MS_E( "EndnoteNumberingPrefix",     TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_PREFIX ),
     MS_E( "EndnoteNumberingSuffix",     TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
-    MS_E( "EndnoteIsCollectAtTextEnd",  TEXT,   ENDNOTES_CONFIGURATION,     MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
+    MS_E( "EndnoteIsCollectAtTextEnd",  TEXT,   NOTES_CONFIGURATION,        MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
     MS_E( "UserDefinedAttributes",      TEXT,   XMLNS,      XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     M_END()
