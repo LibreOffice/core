@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-22 12:43:05 $
+ *  last change: $Author: tl $ $Date: 2001-06-28 07:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,30 +540,34 @@ void SmSymSetManager::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 
 UINT32 SmSymSetManager::GetHashIndex(const String& rSymbolName)
 {
-    UINT32 x = 0;
+    UINT32 x = 1;
     for (xub_StrLen i = 0; i < rSymbolName.Len(); i++)
-        x += x * rSymbolName.GetChar(i);
+        x += x * rSymbolName.GetChar(i) + i;
 
     return x % pImpl->NoHashEntries;
+}
+
+
+void SmSymSetManager::EnterHashTable(SmSym& rSymbol)
+{
+    int j = GetHashIndex( rSymbol.GetName() );
+    if (pImpl->HashEntries[j] == 0)
+        pImpl->HashEntries[j] = &rSymbol;
+    else
+    {
+        SmSym *p = pImpl->HashEntries[j];
+        while (p->pHashNext)
+            p = p->pHashNext;
+        p->pHashNext = &rSymbol;
+    }
+    rSymbol.pHashNext = 0;
 }
 
 
 void SmSymSetManager::EnterHashTable(SmSymSet& rSymbolSet)
 {
     for (int i = 0; i < rSymbolSet.GetCount(); i++)
-    {
-        int j = GetHashIndex(rSymbolSet.GetSymbol(i).GetName());
-        if (pImpl->HashEntries[j] == 0)
-            pImpl->HashEntries[j] = rSymbolSet.SymbolList.GetObject(i);
-        else
-        {
-            SmSym *p = pImpl->HashEntries[j];
-            while (p->pHashNext)
-                p = p->pHashNext;
-            p->pHashNext = rSymbolSet.SymbolList.GetObject(i);
-        }
-        rSymbolSet.SymbolList.GetObject(i)->pHashNext = 0;
-    }
+        EnterHashTable( *rSymbolSet.SymbolList.GetObject(i) );
 }
 
 void SmSymSetManager::FillHashTable()
@@ -696,7 +700,9 @@ void SmSymSetManager::AddReplaceSymbol( const SmSym &rSymbol )
             nPos = GetSymbolSetPos( rSymbol.GetSetName() );
         }
         DBG_ASSERT( nPos != SYMBOLSET_NONE, "SymbolSet not found");
-        GetSymbolSet( nPos )->AddSymbol( new SmSym( rSymbol ) );
+        SmSym *pSym = new SmSym( rSymbol );
+        GetSymbolSet( nPos )->AddSymbol( pSym );
+        EnterHashTable( *pSym );
     }
     SetModified( TRUE );
 }
