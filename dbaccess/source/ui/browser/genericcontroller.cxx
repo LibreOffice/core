@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:47:58 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 13:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@
 #ifndef _DBAUI_DATASOURCECONNECTOR_HXX_
 #include "datasourceconnector.hxx"
 #endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
