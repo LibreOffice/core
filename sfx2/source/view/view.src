@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:56:58 $
+ *  last change: $Author: pb $ $Date: 2001-02-09 13:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ String STR_EXPLORERVIEW
     Text[ language_user1 ] = " ";
 };
  // -----------------------------------------------------------------------
-MessBox MSG_CANT_CLOSE
+InfoBox MSG_CANT_CLOSE
 {
     Message = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
     Message [ English ] = "Can't close the document,\na print job is running." ;

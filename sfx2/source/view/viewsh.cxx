@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-25 15:56:13 $
+ *  last change: $Author: pb $ $Date: 2001-02-09 13:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,14 +903,8 @@ USHORT SfxViewShell::PrepareClose
     {
         if ( bUI )
         {
-            MessBox aInfoBox( &GetViewFrame()->GetWindow(), SfxResId(MSG_CANT_CLOSE) );
-
-//(mba)            if ( bForBrowsing && GetViewFrame()->GetFrame()->GetTask() )
-//                aInfoBox.AddButton( String( SfxResId( RID_STR_NEW_TASK ) ), RET_NEWTASK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-
-            USHORT nRet = aInfoBox.Execute();
-            if ( nRet == RET_NEWTASK )
-                return nRet;
+            InfoBox aInfoBox( &GetViewFrame()->GetWindow(), SfxResId( MSG_CANT_CLOSE ) );
+            aInfoBox.Execute();
         }
 
         return FALSE;
