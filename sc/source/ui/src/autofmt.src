@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:24:44 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "~Pattern" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Í¼°¸(~P)";
-        Text[ russian ] = "Îáðàçåö";
+        Text[ russian ] = "~Óçîð";
         Text[ polish ] = "Deseñ";
         Text[ japanese ] = "ÊßÀ°Ý(~P)";
         Text[ chinese_traditional ] = "¹Ï®×(~P)";
