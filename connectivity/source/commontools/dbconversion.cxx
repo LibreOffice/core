@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:29:40 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 12:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ static sal_Int32 implRelativeToAbsoluteNull(const Date& _rDate)
     nDays += (nNormalizedYear / 4) - (nNormalizedYear / 100) + (nNormalizedYear / 400);
 
     for (sal_Int32 i = 1; i < _rDate.Month; ++i)
-        nDays += implDaysInMonth(i, _rDate.Month);
+        nDays += implDaysInMonth(i, _rDate.Year);
 
     nDays += _rDate.Day;
     return nDays;
@@ -790,6 +790,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/11/30 15:29:40  oj
+ *  #80934# standarddate is no longer public
+ *
  *  Revision 1.7  2000/11/09 08:46:09  oj
  *  some new methods for db's
  *
