@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:31:37 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 10:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,17 +1194,7 @@ uno::Any SAL_CALL SdDocLinkTargets::getByName( const OUString& aName )
 
     uno::Any aAny;
 
-    uno::Reference< drawing::XDrawPage >  aRef( SvxDrawPage::GetPageForSdrPage( pPage ) );
-    if( !aRef.is() )
-    {
-        if( pPage->IsMasterPage() )
-            aRef = (presentation::XPresentationPage*)new SdMasterPage( &rModel, pPage );
-        else
-            aRef = (drawing::XDrawPage*)(presentation::XPresentationPage*)new SdDrawPage( &rModel, pPage );
-    }
-
-    uno::Reference< beans::XPropertySet > xProps( aRef, uno::UNO_QUERY );
-
+    uno::Reference< beans::XPropertySet > xProps( pPage->getUnoPage(), uno::UNO_QUERY );
     if( xProps.is() )
         aAny <<= xProps;
 
