@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-19 12:09:14 $
+ *  last change: $Author: dbo $ $Date: 2002-06-07 16:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( " failed, but success was expected! [" );
         printf( aExcMsg.getStr() );
         printf( "]\n" );
+        aRet = s_xConverter->convertTo( rVal, rDestType );
 #ifdef DEBUG
         // for debugging, to trace again
         try
@@ -518,12 +519,12 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==DOUBLE==
-    aVal <<= OUString::createFromAscii( "-1.7976931348623158e+308" );
+    aVal <<= OUString::createFromAscii( "-1.7976931348623155e+308" );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MIN_DOUBLE );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "1.7976931348623158e+308" );
+    aVal <<= OUString::createFromAscii( "1.7976931348623155e+308" );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MAX_DOUBLE );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
