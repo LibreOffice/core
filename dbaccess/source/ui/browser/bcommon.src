@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:40:39 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String RID_STR_QRY_TITLE
     Text [ english_us ] = "Query #" ;
     Text [ portuguese ] = "Consulta #" ;
     Text [ portuguese_brazilian ] = "Abfrage #" ;
-    Text [ swedish ] = "Sökning #" ;
+    Text [ swedish ] = "Förfrågan #" ;
     Text [ danish ] = "Forespørgsel #" ;
     Text [ italian ] = "Ricerca #" ;
     Text [ spanish ] = "Consulta #" ;
