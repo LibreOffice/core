@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: ka $ $Date: 2002-04-09 12:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
         while( pSfxDocShell )
         {
             SdDrawDocShell* pDocShell = PTR_CAST( SdDrawDocShell, pSfxDocShell );
-            if( pDocShell  && !pDocShell->IsInDestruction())
+            if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) )
             {
                 NavDocInfo* pInfo = new NavDocInfo();
                 pInfo->pDocShell = pDocShell;
