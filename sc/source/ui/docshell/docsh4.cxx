@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:12:54 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #endif
 
 #include "scitems.hxx"
+#include <sfx2/fcontnr.hxx>
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
@@ -795,7 +796,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     //  GetFilter needs name without the prefix.
                     ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
-                    const SfxFilter* pFilter = pApp->GetFilter( ScDocShell::Factory(), aFilterName );
+                    const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
                     SfxItemSet* pSet = new SfxAllItemSet( pApp->GetPool() );
                     if ( aOptions.Len() )
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
