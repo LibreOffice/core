@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Cell.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module table {
 
 /** represents a singe cell within a table.
  */
-service Cell
+published service Cell
 {
     //-------------------------------------------------------------------------
 

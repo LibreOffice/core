@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BorderLine.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:43:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module table {
 
 /** describes the line type for a single cell edge.
  */
-struct BorderLine
+published struct BorderLine
 {
     //-------------------------------------------------------------------------
 
