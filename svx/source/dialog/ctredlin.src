@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:33:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,6 +1202,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ slovak ] = "Komentár";
     };
 };
+
+
 
 
 
