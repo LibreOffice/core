@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:42:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-31 09:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
             m_ftBody.SetText( aText );
         }
         if (checkEval()) {
-            String aText(DesktopResId(STR_WELCOME_EVAL));
+            String aText(WizardResId(STR_WELCOME_EVAL));
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%EVALDAYS"), UniString::CreateFromAscii("90"));
             m_ftBody.SetText( aText );
         }
