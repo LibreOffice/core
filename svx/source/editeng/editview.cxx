@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:48:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
         aPopupMenu.RemoveDisabledEntries( sal_True, sal_True );
 
-        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), rPosPixel );
+        Rectangle aTempRect = PIMPEE->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY );
+        Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );
+        aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
+        aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
+
+        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect );
         if ( nId == MN_IGNORE )
         {
             String aWord = pImpEditView->SpellIgnoreOrAddWord( sal_False );
