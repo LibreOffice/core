@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:54:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ namespace dbaui
             return;
         }
 
-        DBG_ERROR("OInteractionHandler::handle: unsupported request type!");
+        OSL_VERIFY( implHandleUnknown( _rxRequest ) );
     }
 
     //-------------------------------------------------------------------------
@@ -475,6 +475,20 @@ namespace dbaui
         }
         else if ( -1 != nDisApprovePos )
                 _rContinuations[nDisApprovePos]->select();
+    }
+
+    //-------------------------------------------------------------------------
+    bool OInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
+    {
+        Reference< XInteractionHandler > xFallbackHandler;
+        if ( m_xORB.is() )
+            xFallbackHandler = xFallbackHandler.query( m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ) );
+        if ( xFallbackHandler.is() )
+        {
+            xFallbackHandler->handle( _rxRequest );
+            return true;
+        }
+        return false;
     }
 
     //-------------------------------------------------------------------------
