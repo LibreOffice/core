@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormShellManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-03 07:44:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ class FmFormShell;
 
 namespace sd {
 
+class PaneManagerEvent;
+class ViewShell;
 class ViewShellBase;
 
 /** This simple class is responsible for putting the form shell at the top
@@ -83,13 +85,17 @@ class ViewShellBase;
 class FormShellManager
 {
 public:
-    FormShellManager (const ViewShellBase& rBase);
+    FormShellManager (ViewShellBase& rBase);
     ~FormShellManager (void);
 
 private:
-    const ViewShellBase& mrBase;
+    ViewShellBase& mrBase;
 
     enum StackPosition {SP_BELOW_VIEW_SHELL, SP_ABOVE_VIEW_SHELL, SP_UNKNOWN};
+
+    void RegisterAtCenterPane (ViewShell* pShell);
+    void UnregisterAtCenterPane (ViewShell* pShell);
+
     /** Remember whether the form shell is currently at the top of the shell
         stack or below the view shell.  Until one of the event handlers is
         called the stack position is unknown.
@@ -101,6 +107,12 @@ private:
         moved to the bottom of the shell stack.
     */
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
+
+    /** This call back is called when the PaneManager switches shells in a
+        pane.  When this happens in the center pane we unregister at the
+        window of the old and register at the window of the new shell.
+    */
+    DECL_LINK(PaneManagerEventHandler, PaneManagerEvent*);
 
     /** This call back is called by the form shell when it gets the focus.
         In this case the form shell is moved to the top of the shell stack.
