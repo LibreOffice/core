@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-06 17:14:38 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 17:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,8 @@ struct LOGFONTW
 #define W_HS_BDIAGONAL          3
 #define W_HS_CROSS              4
 #define W_HS_DIAGCROSS          5
+
+#define RDH_RECTANGLES  1
 
 //============================ WMFReader ==================================
 

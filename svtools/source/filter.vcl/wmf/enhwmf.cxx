@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-31 16:35:09 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 17:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,41 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
 #endif
     }
     return rIn;
+}
+
+static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nLen )
+{
+    sal_Bool bOk = sal_False;
+    if ( nLen )
+    {
+        sal_uInt32 nHdSize, nType, nCount, nRgnSize, i;
+        rSt >> nHdSize
+            >> nType
+            >> nCount
+            >> nRgnSize;
+
+        rSt.SeekRel( nHdSize - 16 );
+        if ( nCount &&
+            ( nType == RDH_RECTANGLES ) &&
+                ( nLen >= ( ( nCount << 4 ) + nHdSize ) ) )
+        {
+            sal_Int32 nx1, ny1, nx2, ny2;
+
+            for ( i = 0; i < nCount; i++ )
+            {
+                rSt >> nx1 >> ny1 >> nx2 >> ny2;
+
+                Rectangle aRect( Point( nx1, ny1 ), Point( nx2, ny2 ) );
+                Polygon aPolygon( aRect );
+                PolyPolygon aPolyPolyOr1( aPolygon );
+                PolyPolygon aPolyPolyOr2( rPolyPoly );
+                rPolyPoly.GetUnion( aPolyPolyOr1, aPolyPolyOr2 );
+                rPolyPoly = aPolyPolyOr2;
+            }
+            bOk = sal_True;
+        }
+    }
+    return bOk;
 }
 
 BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
@@ -785,6 +820,16 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                     aTmp.Seek( 0 );
                     aBitmap.Read( aTmp, TRUE );
+
+                    // test if it is sensible to crop
+                    if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                        ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                            ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                    {
+                        Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                        aBitmap.Crop( aCropRect );
+                    }
                 }
                 aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
             }
@@ -819,6 +864,17 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                 aTmp.Seek( 0 );
                 aBitmap.Read( aTmp, TRUE );
+
+                // test if it is sensible to crop
+                if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                    ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                        ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                            ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                {
+                    Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                    aBitmap.Crop( aCropRect );
+                }
+
                 aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
             }
             break;
@@ -1019,12 +1075,29 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             };
             break;
 
+            case EMR_FILLRGN :
+            {
+                sal_uInt32 nLen;
+                PolyPolygon aPolyPoly;
+                pWMF->SeekRel( 0x10 );
+                *pWMF >> nLen >> nIndex;
+
+                if ( ImplReadRegion( aPolyPoly, *pWMF, nRecSize ) )
+                {
+                    pOut->Push();
+                    pOut->SelectObject( nIndex );
+                    pOut->DrawPolyPolygon( aPolyPoly, sal_False );
+                    pOut->Pop();
+                }
+            }
+            break;
+
+
 #ifdef WIN_MTF_ASSERT
             default :                           WinMtfAssertHandler( "Unknown Meta Action" );       break;
             case EMR_MASKBLT :                  WinMtfAssertHandler( "MaskBlt" );                   break;
             case EMR_PLGBLT :                   WinMtfAssertHandler( "PlgBlt" );                    break;
             case EMR_SETDIBITSTODEVICE :        WinMtfAssertHandler( "SetDIBitsToDevice" );         break;
-            case EMR_FILLRGN :                  WinMtfAssertHandler( "FillRgn" );                   break;
             case EMR_FRAMERGN :                 WinMtfAssertHandler( "FrameRgn" );                  break;
             case EMR_INVERTRGN :                WinMtfAssertHandler( "InvertRgn" );                 break;
             case EMR_PAINTRGN :                 WinMtfAssertHandler( "PaintRgn" );                  break;

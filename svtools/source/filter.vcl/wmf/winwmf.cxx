@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-07 18:18:25 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 17:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,8 +524,8 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_DIBSTRETCHBLT:
         case W_META_STRETCHDIB:
         {
-            long        nWinROP;
-            short       nSx, nSy, nSxe, nSye, nUsage;
+            sal_Int32   nWinROP;
+            sal_uInt16  nSx, nSy, nSxe, nSye, nUsage;
             Bitmap      aBmp;
 
             *pWMF >> nWinROP;
@@ -533,9 +533,13 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             if( nFunction == W_META_STRETCHDIB )
                 *pWMF >> nUsage;
 
-            if( nFunction==W_META_STRETCHDIB || nFunction==W_META_STRETCHBLT || nFunction==W_META_DIBSTRETCHBLT )
+            // nSye and nSxe is the number of pixels that has to been used
+            if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
                 *pWMF >> nSye >> nSxe;
+            else
+                nSye = nSxe = 0;    // set this to zero as indicator not to scale the bitmap later
 
+            // nSy and nx is the offset of the first pixel
             *pWMF >> nSy >> nSx;
 
             if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
@@ -552,6 +556,15 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                     Rectangle aDestRect( ReadYX(), aDestSize );
                     if ( nWinROP != PATCOPY )
                         aBmp.Read( *pWMF, FALSE );
+
+                    // test if it is sensible to crop
+                    if ( nSye && nSxe &&
+                        ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
+                            ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
+                    {
+                        Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
+                        aBmp.Crop( aCropRect );
+                    }
                     aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
                 }
             }
@@ -705,9 +718,6 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_CREATEREGION:
         {
             pOut->CreateObject( GDI_DUMMY );
-#ifdef DBG_ASSERT
-            DBG_ASSERT( 0, "WMF-Import : W_META_CREATEREGION needs to be implemented (SJ)" );
-#endif
         }
         break;
 
