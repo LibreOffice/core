@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:35:35 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,11 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
     try
     {
         xParser->setDocumentHandler(_xHandler);
-        xParser->parseStream( m_aInputSource );
+
+        sax::InputSource aInputSourceCopy = m_aInputSource;
+        //Set the sax input stream to null, an input stream can only be parsed once
+        m_aInputSource.aInputStream = NULL;
+        xParser->parseStream( aInputSourceCopy );
     }
     catch (sax::SAXException & e)
     {
