@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 19:50:39 $
+ *  last change: $Author: nn $ $Date: 2001-12-20 19:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@
 #include "markdata.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
-#include "drwlayer.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -1476,39 +1475,12 @@ BOOL ScDocument::CheckMacroWarn()
     return TRUE;
 }
 
-BOOL ScDocument::HasMacroCallsAfterLoad()   // wird direkt nach dem Laden abgefragt
+BOOL ScDocument::HasMacroCallsAfterLoad()
 {
-    //  1. ocMacro in formulas
-    //  bHasMacroFunc is set when a formula with ocMacro is loaded
+    //  not used any longer
 
-    if ( bHasMacroFunc )
-        return TRUE;
-
-    //  2. Gueltigkeit mit Makro-Aufruf
-    //  (direkt nach dem Laden sind nur Eintraege in der Liste, die auch verwendet werden)
-
-    if (pValidationList)
-    {
-        USHORT nCount = pValidationList->Count();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            const ScValidationData* pData = (*pValidationList)[i];
-            if ( pData->HasErrMsg() )
-            {
-                String aTitle, aMsg;
-                ScValidErrorStyle eStyle;
-                if ( pData->GetErrMsg( aTitle, aMsg, eStyle ) && eStyle == SC_VALERR_MACRO )
-                    return TRUE;
-            }
-        }
-    }
-
-    //  3. macros in form controls
-
-    if ( pDrawLayer && pDrawLayer->containsActiveCode( String::CreateFromAscii("StarBasic") ) )
-        return TRUE;
-
-    return FALSE;       // nichts gefunden
+    DBG_ERROR("obsolete method HasMacroCallsAfterLoad called");
+    return FALSE;
 }
 
 //------------------------------------------------------------------------
