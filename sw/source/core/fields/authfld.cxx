@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 09:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
         SwTOXSortTabBases aSortArr;
         SwClientIter aIter( *this );
 
-        SwTOXInternational aIntl(m_eLanguage, m_sSortAlgorithm);
+        SwTOXInternational aIntl(m_eLanguage, 0, m_sSortAlgorithm);
 
         for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
                                 pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )

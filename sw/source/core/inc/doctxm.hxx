@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:12:10 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 09:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,9 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                             const SwTOXInternational& rIntl );
 
     // Bereich fuer Stichwort einfuegen suchen
-    Range GetKeyRange(const String& rStr, USHORT nLevel, const Range& rRange,
-                        const SwTOXInternational& rIntl );
+    Range GetKeyRange( const String& rStr, const String& rStrReading,
+                       const SwTOXSortTabBase& rNew, USHORT nLevel,
+                       const Range& rRange );
 
     // returne die TextCollection ueber den Namen / aus Format-Pool
     SwTxtFmtColl* GetTxtFmtColl( USHORT nLevel );

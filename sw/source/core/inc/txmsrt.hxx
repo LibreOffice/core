@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 09:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,32 +103,45 @@ SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0, 10 )
 class SwTOXInternational
 {
     IndexEntrySupplierWrapper* pIndexWrapper;
-    CollatorWrapper *pCollator, *pIgnCsCollator;
     CharClass* pCharClass;
     LanguageType eLang;
     String sSortAlgorithm;
+    USHORT nOptions;
 
     void Init();
 
 public:
-    SwTOXInternational( LanguageType nLang, const String& rSortAlgorithm );
+    SwTOXInternational( LanguageType nLang, USHORT nOptions,
+                        const String& rSortAlgorithm );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
 
-    sal_Int32 Compare( const String& rTxt1, const String& rTxt2,
-                        BOOL bIgnoreCase ) const;
-    inline BOOL IsEqual( const String& rTxt1, const String& rTxt2,
-                            BOOL bIgnoreCase ) const
+    sal_Int32 Compare( const String& rTxt1, const String& rTxtReading1,
+                       const ::com::sun::star::lang::Locale& rLocale1,
+                       const String& rTxt2, const String& rTxtReading2,
+                       const ::com::sun::star::lang::Locale& rLocale2 ) const;
+
+    inline BOOL IsEqual( const String& rTxt1, const String& rTxtReading1,
+                         const ::com::sun::star::lang::Locale& rLocale1,
+                         const String& rTxt2, const String& rTxtReading2,
+                         const ::com::sun::star::lang::Locale& rLocale2 ) const
     {
-        return 0 == Compare( rTxt1, rTxt2, bIgnoreCase );
-    }
-    inline BOOL IsLess( const String& rTxt1, const String& rTxt2,
-                            BOOL bIgnoreCase ) const
-    {
-        return -1 == Compare( rTxt1, rTxt2, bIgnoreCase );
+        return 0 == Compare( rTxt1, rTxtReading1, rLocale1,
+                             rTxt2, rTxtReading2, rLocale2 );
     }
 
-    String GetIndexChar( const String& rTxt ) const;
+    inline BOOL IsLess( const String& rTxt1, const String& rTxtReading1,
+                        const ::com::sun::star::lang::Locale& rLocale1,
+                        const String& rTxt2, const String& rTxtReading2,
+                        const ::com::sun::star::lang::Locale& rLocale2 ) const
+    {
+        return -1 == Compare( rTxt1, rTxtReading1, rLocale1,
+                              rTxt2, rTxtReading2, rLocale2 );
+    }
+
+    String GetIndexKey( const String& rTxt, const String& rTxtReading,
+                        const ::com::sun::star::lang::Locale& rLcl ) const;
+
     String GetFollowingText( BOOL bMorePages ) const;
 
     String ToUpper( const String& rStr, xub_StrLen nPos ) const;
@@ -142,18 +155,20 @@ public:
 struct SwTOXSortTabBase
 {
     SwTOXSources aTOXSources;
+    ::com::sun::star::lang::Locale aLocale;
     const SwTxtNode* pTOXNd;
     const SwTxtTOXMark* pTxtMark;
     const SwTOXInternational* pTOXIntl;
     ULONG nPos;
     xub_StrLen nCntPos;
-    USHORT nType, nLanguage;
+    USHORT nType;
     static USHORT nOpt;
 
     SwTOXSortTabBase( TOXSortType nType,
                       const SwCntntNode* pTOXSrc,
                       const SwTxtTOXMark* pTxtMark,
-                      const SwTOXInternational* pIntl );
+                      const SwTOXInternational* pIntl,
+                      const ::com::sun::star::lang::Locale* pLocale = NULL );
 
     USHORT  GetType() const         { return nType; }
     USHORT  GetOptions() const      { return nOpt; }
@@ -165,22 +180,34 @@ struct SwTOXSortTabBase
 
     virtual String  GetURL() const;
 
-    inline const String& GetTxt() const;
+    inline void GetTxt( String&, String& ) const;
+    inline const ::com::sun::star::lang::Locale& GetLocale() const;
+
 private:
     BOOL bValidTxt;
     String sSortTxt;
-    virtual void _GetText( String& ) = 0;
+    String sSortTxtReading;
+
+    virtual void _GetText( String&, String& ) = 0;
 };
 
-inline const String& SwTOXSortTabBase::GetTxt() const
+inline void SwTOXSortTabBase::GetTxt( String& rSortTxt,
+                                      String& rSortTxtReading ) const
 {
     if( !bValidTxt )
     {
         SwTOXSortTabBase* pThis = (SwTOXSortTabBase*)this;
-        pThis->_GetText( pThis->sSortTxt );
+        pThis->_GetText( pThis->sSortTxt, pThis->sSortTxtReading );
         pThis->bValidTxt = TRUE;
     }
-    return sSortTxt;
+
+    rSortTxt = sSortTxt;
+    rSortTxtReading = sSortTxtReading;
+}
+
+inline const ::com::sun::star::lang::Locale& SwTOXSortTabBase::GetLocale() const
+{
+    return aLocale;
 }
 
 /*--------------------------------------------------------------------
@@ -190,7 +217,9 @@ inline const String& SwTOXSortTabBase::GetTxt() const
 struct SwTOXIndex : public SwTOXSortTabBase
 {
     SwTOXIndex( const SwTxtNode&, const SwTxtTOXMark*, USHORT nOptions, BYTE nKeyLevel,
-                    const SwTOXInternational& rIntl );
+                const SwTOXInternational& rIntl,
+                const ::com::sun::star::lang::Locale& rLocale );
+
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
@@ -198,21 +227,24 @@ struct SwTOXIndex : public SwTOXSortTabBase
     virtual BOOL    operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void _GetText( String& );
+    virtual void _GetText( String&, String& );
+
     BYTE    nKeyLevel;
 };
 
 struct SwTOXCustom : public SwTOXSortTabBase
 {
     SwTOXCustom( const String& rKey, USHORT nLevel,
-                    const SwTOXInternational& rIntl );
+                 const SwTOXInternational& rIntl,
+                 const ::com::sun::star::lang::Locale& rLocale );
 
     virtual USHORT GetLevel() const;
     virtual BOOL   operator==( const SwTOXSortTabBase& );
     virtual BOOL   operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void _GetText( String& );
+    virtual void _GetText( String&, String& );
+
     String  aKey;
     USHORT  nLev;
 };
@@ -229,7 +261,8 @@ struct SwTOXContent : public SwTOXSortTabBase
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
 private:
-    virtual void _GetText( String& );
+    virtual void _GetText( String&, String& );
+
 };
 
 struct SwTOXPara : public SwTOXSortTabBase
@@ -244,7 +277,8 @@ struct SwTOXPara : public SwTOXSortTabBase
 
     virtual String  GetURL() const;
 private:
-    virtual void _GetText( String& );
+    virtual void _GetText( String&, String& );
+
     SwTOXElement eType;
     USHORT m_nLevel;
     xub_StrLen nStartIndex;
@@ -260,7 +294,8 @@ struct SwTOXTable : public SwTOXSortTabBase
 
     virtual String  GetURL() const;
 private:
-    virtual void _GetText( String& );
+    virtual void _GetText( String&, String& );
+
     USHORT nLevel;
 };
 
@@ -269,7 +304,8 @@ struct SwTOXAuthority : public SwTOXSortTabBase
 private:
     SwFmtFld& m_rField;
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
-    virtual void _GetText( String& );
+    virtual void _GetText( String&, String& );
+
 public:
     SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
     SwFmtFld& GetFldFmt() {return m_rField;}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-06 16:39:22 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 09:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 const sal_Unicode cNumRepl      = '@';
@@ -911,7 +914,10 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr)
     pDoc->SetModified();
 
     // get current Language
-    SwTOXInternational aIntl(  GetLanguage(), GetSortAlgorithm() );
+    SwTOXInternational aIntl(  GetLanguage(),
+                               TOX_INDEX == GetTOXType()->GetType() ?
+                               GetOptions() : 0,
+                               GetSortAlgorithm() );
 
     aSortArr.DeleteAndDestroy( 0, aSortArr.Count() );
 
@@ -1135,7 +1141,11 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
         if( nLevel == FORM_ALPHA_DELIMITTER )
             continue;
 
-        sDeli = rIntl.GetIndexChar( aSortArr[i]->GetTxt() );
+        String sMyString, sMyStringReading;
+        aSortArr[i]->GetTxt( sMyString, sMyStringReading );
+
+        sDeli = rIntl.GetIndexKey( sMyString, sMyStringReading,
+                                   aSortArr[i]->GetLocale() );
 
         // Delimitter schon vorhanden ??
         if( sDeli.Len() && sLastDeli != sDeli )
@@ -1144,7 +1154,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
             if( ' ' <= sDeli.GetChar( 0 ) )
             {
                 SwTOXCustom* pCst = new SwTOXCustom( sDeli, FORM_ALPHA_DELIMITTER,
-                                                rIntl );
+                                                     rIntl, aSortArr[i]->GetLocale() );
                 aSortArr.Insert( pCst, i++ );
             }
             sLastDeli = sDeli;
@@ -1250,19 +1260,26 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 if(TOX_INDEX == eTOXTyp)
                 {
                     // Stichwortverzeichnismarkierung
+                    ::com::sun::star::lang::Locale aLocale;
+                    if ( pBreakIt->xBreak.is() )
+                    {
+                        aLocale = pBreakIt->GetLocale(
+                                        pTOXSrc->GetLang( *pTxtMark->GetStart() ) );
+                    }
+
                     pBase = new SwTOXIndex( *pTOXSrc, pTxtMark,
-                                            GetOptions(), FORM_ENTRY, rIntl );
+                                            GetOptions(), FORM_ENTRY, rIntl, aLocale );
                     InsertSorted(pBase);
                     if(GetOptions() & TOI_KEY_AS_ENTRY &&
                         pTxtMark->GetTOXMark().GetPrimaryKey().Len())
                     {
                         pBase = new SwTOXIndex( *pTOXSrc, pTxtMark,
-                                                GetOptions(), FORM_PRIMARY_KEY, rIntl );
+                                                GetOptions(), FORM_PRIMARY_KEY, rIntl, aLocale );
                         InsertSorted(pBase);
                         if(pTxtMark->GetTOXMark().GetSecondaryKey().Len())
                         {
                             pBase = new SwTOXIndex( *pTOXSrc, pTxtMark,
-                                                    GetOptions(), FORM_SECONDARY_KEY, rIntl );
+                                                    GetOptions(), FORM_SECONDARY_KEY, rIntl, aLocale );
                             InsertSorted(pBase);
                         }
                     }
@@ -1918,7 +1935,10 @@ void SwTOXBaseSection::UpdatePageNum()
     USHORT      nPage       = 0;
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
 
-    SwTOXInternational aIntl( GetLanguage(), GetSortAlgorithm() );
+    SwTOXInternational aIntl( GetLanguage(),
+                              TOX_INDEX == GetTOXType()->GetType() ?
+                              GetOptions() : 0,
+                              GetSortAlgorithm() );
 
     for( USHORT nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
     {
@@ -2207,11 +2227,14 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
         if( 0 == (GetOptions() & TOI_KEY_AS_ENTRY) &&
             rMark.GetPrimaryKey().Len() )
         {
-            aRange = GetKeyRange( rMark.GetPrimaryKey(), FORM_PRIMARY_KEY,
-                                    aRange, *pNew->pTOXIntl );
+            aRange = GetKeyRange( rMark.GetPrimaryKey(),
+                                  rMark.GetPrimaryKeyReading(),
+                                  *pNew, FORM_PRIMARY_KEY, aRange );
+
             if( rMark.GetSecondaryKey().Len() )
-                aRange = GetKeyRange( rMark.GetSecondaryKey(), FORM_SECONDARY_KEY,
-                                      aRange, *pNew->pTOXIntl );
+                aRange = GetKeyRange( rMark.GetSecondaryKey(),
+                                      rMark.GetSecondaryKeyReading(),
+                                      *pNew, FORM_SECONDARY_KEY, aRange );
         }
     }
     //search for identical entries and remove the trailing one
@@ -2287,12 +2310,14 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
      Beschreibung: Schluessel-Bereich suchen und evtl einfuegen
  --------------------------------------------------------------------*/
 
-Range SwTOXBaseSection::GetKeyRange(const   String& rStr,
-                                     USHORT nLevel,
-                                     const  Range& rRange,
-                                     const SwTOXInternational& rIntl )
+Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReading,
+                                    const SwTOXSortTabBase& rNew,
+                                    USHORT nLevel, const Range& rRange )
 {
+    const SwTOXInternational& rIntl = *rNew.pTOXIntl;
     String sToCompare(rStr);
+    String sToCompareReading(rStrReading);
+
     if( 0 != (TOI_INITIAL_CAPS & GetOptions()) )
     {
         String sUpper( rIntl.ToUpper( sToCompare, 0 ));
@@ -2307,19 +2332,25 @@ Range SwTOXBaseSection::GetKeyRange(const   String& rStr,
     USHORT nOptions = GetOptions();
     BOOL bIgnoreCase = ( nOptions & TOI_SAME_ENTRY ) &&
                         0 == ( nOptions & TOI_CASE_SENSITIVE );
+
     for(USHORT i = nMin; i < nMax; ++i)
     {
         SwTOXSortTabBase* pBase = aSortArr[i];
-        String aTmp = pBase->GetTxt();
-        if( rIntl.IsEqual( aTmp, sToCompare, bIgnoreCase )  &&
-                pBase->GetLevel() == nLevel &&
-                    pBase->GetType() == TOX_SORT_CUSTOM)
+
+        String sMyString, sMyStringReading;
+        pBase->GetTxt( sMyString, sMyStringReading );
+
+        if( rIntl.IsEqual( sMyString, sMyStringReading, pBase->GetLocale(),
+                           sToCompare, sToCompareReading, rNew.GetLocale() )  &&
+                    pBase->GetLevel() == nLevel &&
+                    pBase->GetType() == TOX_SORT_CUSTOM )
             break;
     }
     if(i == nMax)
     {   // Falls nicht vorhanden erzeugen und einfuegen
         //
-        SwTOXCustom* pKey = new SwTOXCustom( sToCompare, nLevel, rIntl );
+        SwTOXCustom* pKey = new SwTOXCustom( sToCompare, nLevel, rIntl,
+                                             rNew.GetLocale() );
         for(i = nMin; i < nMax; ++i)
         {
             if(nLevel == aSortArr[i]->GetLevel() &&  *pKey < *(aSortArr[i]))

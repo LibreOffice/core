@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-29 13:12:39 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 09:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_XINDEXENTRYSUPPLIER_HPP_
-#include <com/sun/star/i18n/XIndexEntrySupplier.hpp>
+#include <drafts/com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -98,7 +98,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper(
         if( xI.is() )
         {
             UNO_NMSPC::Any x = xI->queryInterface( ::getCppuType(
-                    (const STAR_REFERENCE( i18n::XIndexEntrySupplier )*)0) );
+                    (const com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) );
             x >>= xIES;
         }
     }
@@ -116,17 +116,18 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 {
 }
 
-String IndexEntrySupplierWrapper::GetIndexChar( const String& rTxt,
-                                           const String& rSortAlgorithm ) const
+String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
+                                               const String& rTxtReading,
+                                               const STAR_NMSPC::lang::Locale& rLocale ) const
 {
     String sRet;
     try {
-        sRet = xIES->getIndexCharacter( rTxt, aLcl, rSortAlgorithm );
+        sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
     catch ( UNO_NMSPC::Exception& e )
     {
 #ifndef PRODUCT
-        ByteString aMsg( "getIndexCharacter: Exception caught\n" );
+        ByteString aMsg( "getIndexKey: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
@@ -143,7 +144,7 @@ String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
     catch ( UNO_NMSPC::Exception& e )
     {
 #ifndef PRODUCT
-        ByteString aMsg( "getIndexCharacter: Exception caught\n" );
+        ByteString aMsg( "getIndexFollowPageWord: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
@@ -151,4 +152,62 @@ String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
     return sRet;
 }
 
+STAR_NMSPC::uno::Sequence< ::rtl::OUString >
+IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > sRet;
 
+    try {
+        sRet = xIES->getAlgorithmList( rLcl );
+    }
+    catch ( UNO_NMSPC::Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "getAlgorithmList: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return sRet;
+}
+
+sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
+        const STAR_NMSPC::lang::Locale& rLcl,
+        const String& sSortAlgorithm, long nOptions ) const
+{
+    sal_Bool bRet = sal_False;
+    try {
+        bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
+    }
+    catch ( UNO_NMSPC::Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "loadAlgorithm: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return bRet;
+}
+
+sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
+            const String& rTxt1, const String& rTxtReading1,
+            const STAR_NMSPC::lang::Locale& rLocale1,
+            const String& rTxt2, const String& rTxtReading2,
+            const STAR_NMSPC::lang::Locale& rLocale2 ) const
+{
+    sal_Int16 nRet = 0;
+    try {
+        nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
+                                        rTxt2, rTxtReading2, rLocale2 );
+    }
+    catch ( UNO_NMSPC::Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "compareIndexEntry: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    return nRet;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-29 13:12:50 $
+ *  last change: $Author: fme $ $Date: 2002-06-26 09:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #include <swunodef.hxx>
 #endif
 
-namespace com { namespace sun { namespace star {
+namespace drafts { namespace com { namespace sun { namespace star {
 namespace i18n {
-    class XIndexEntrySupplier;
+    class XExtendedIndexEntrySupplier;
 }
 namespace lang {
     class XMultiServiceFactory;
 }
-}}};
+}}}};
 
 
 class String;
@@ -91,16 +91,29 @@ class String;
 class IndexEntrySupplierWrapper
 {
     STAR_NMSPC::lang::Locale aLcl;
-    STAR_REFERENCE( i18n::XIndexEntrySupplier ) xIES;
+    STAR_NMSPC::uno::Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
+
 public:
     IndexEntrySupplierWrapper(
             const STAR_NMSPC::lang::Locale& rLcl,
             STAR_REFERENCE( lang::XMultiServiceFactory )& rxMSF );
     ~IndexEntrySupplierWrapper();
 
-    String GetIndexChar( const String& rTxt,
-                         const String& rSortAlgorithm ) const;
+    String GetIndexKey( const String& rTxt, const String& rTxtReading,
+                        const STAR_NMSPC::lang::Locale& rLocale ) const;
+
     String GetFollowingText( BOOL bMorePages ) const;
+
+    STAR_NMSPC::uno::Sequence< ::rtl::OUString >
+    GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const;
+
+    sal_Bool LoadAlgorithm( const STAR_NMSPC::lang::Locale& rLcl,
+                            const String& sSortAlgorithm, long nOptions ) const;
+
+    sal_Int16 CompareIndexEntry( const String& rTxt1, const String& rTxtReading1,
+                                 const STAR_NMSPC::lang::Locale& rLcl1,
+                                 const String& rTxt2, const String& rTxtReading2,
+                                 const STAR_NMSPC::lang::Locale& rLcl2 ) const;
 };
 
 #endif
