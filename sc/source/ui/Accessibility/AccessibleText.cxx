@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 12:28:17 $
+ *  last change: $Author: sab $ $Date: 2002-06-20 08:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,12 +896,12 @@ void ScAccessibleEditLineTextData::StartEdit()
 
 void ScAccessibleEditLineTextData::EndEdit()
 {
-    ResetEditMode();
-    mpEditView = NULL;
-
     // send HINT_ENDEDIT
     SdrHint aHint(HINT_ENDEDIT);
     GetBroadcaster().Broadcast( aHint );
+
+    ResetEditMode();
+    mpEditView = NULL;
 }
 
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
