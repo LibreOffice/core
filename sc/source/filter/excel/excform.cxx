@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:00:22 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -245,7 +244,7 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
 {
     BYTE            nOp, nLen, nByte;
-    UINT16          nUINT16, nIndexToFunc;
+    UINT16          nUINT16;
     INT16           nINT16;
     double          fDouble;
     String          aString;
@@ -384,6 +383,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 break;
             case 0x11: // Range                                 [314 265]
             {
+                aStack >> nMerk0;
+                aPool << aStack << ocRange << nMerk0;
+                aPool >> aStack;
+#if 0
                 // wenn erster und zweiter Ausdruck auf'm Stack Single Referenzen
                 // sind, dann Area Reference erzeugen, ansonsten Fehlerhaften Aus-
                 // druck generieren
@@ -414,6 +417,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                     aPool >> aStack;
                 }
+#endif
             }
                 break;
             case 0x12: // Unary Plus                            [312 264]
@@ -670,22 +674,13 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
-                aIn.Ignore( 6 );
-                break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
-                aIn.Ignore( (meBiff == xlBiff2) ? 4 : 6 );
-                break;
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
                 aIn.Ignore( (meBiff == xlBiff2) ? 4 : 6 );
-                break;
-            case 0x49:
-            case 0x69:
-            case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( (meBiff == xlBiff2) ? 1 : 2 );
                 break;
             case 0x4C:
             case 0x6C:
@@ -729,11 +724,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 aStack << aPool.Store( aCRD );
             }
                 break;
+            case 0x49:
+            case 0x69:
+            case 0x29: // Variable Reference Subexpression      [331 281]
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
-                aIn.Ignore( (meBiff == xlBiff2) ? 1 : 2 );
-                break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
@@ -1171,8 +1167,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
-                nIgnore = 6;
-                break;
             case 0x47:
             case 0x67:
             case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
@@ -1180,11 +1174,6 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
                 nIgnore = (meBiff == xlBiff2) ? 4 : 6;
-                break;
-            case 0x49:
-            case 0x69:
-            case 0x29: // Variable Reference Subexpression      [331 281]
-                nIgnore = (meBiff == xlBiff2) ? 1 : 2;
                 break;
             case 0x4A:
             case 0x6A:
@@ -1238,6 +1227,9 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 rRangeList.Append( aCRD );
             }
                 break;
+            case 0x49:
+            case 0x69:
+            case 0x29: // Variable Reference Subexpression      [331 281]
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
