@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:27:45 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,10 @@ ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiSe
     if (bInitialise)
     {
         if ( readCEN() == -1 )
+        {
             aEntries.clear();
+            throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "stream data looks to be broken" ) ), Reference < XInterface > () );
+        }
     }
 }
 
