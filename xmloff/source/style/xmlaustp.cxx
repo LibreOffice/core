@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:26:02 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,28 @@ void SvXMLAutoStylePoolP::RegisterName( sal_Int32 nFamily,
                                          const OUString& rName )
 {
     pImpl->RegisterName( nFamily, rName );
+}
+
+void SvXMLAutoStylePoolP::GetRegisteredNames(
+    uno::Sequence<sal_Int32>& rFamilies,
+    uno::Sequence<OUString>& rNames )
+{
+    pImpl->GetRegisteredNames( rFamilies, rNames );
+}
+
+void SvXMLAutoStylePoolP::RegisterNames(
+    uno::Sequence<sal_Int32>& aFamilies,
+    uno::Sequence<OUString>& aNames )
+{
+    DBG_ASSERT( aFamilies.getLength() == aNames.getLength(),
+                "aFamilies != aNames" );
+
+    // iterate over sequence(s) and call RegisterName(..) for each pair
+    const sal_Int32* pFamilies = aFamilies.getConstArray();
+    const OUString* pNames = aNames.getConstArray();
+    sal_Int32 nCount = min( aFamilies.getLength(), aNames.getLength() );
+    for( sal_Int32 n = 0; n < nCount; n++ )
+        RegisterName( pFamilies[n], pNames[n] );
 }
 
 OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
