@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 13:42:25 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //____________________________________________________________________________________________________________
 //  my own includes
 //____________________________________________________________________________________________________________
@@ -122,8 +121,8 @@ ProgressBar::ProgressBar( const Reference< XMultiServiceFactory >& xFactory )
     : BaseControl           (    xFactory                   )
     , m_bHorizontal         (    DEFAULT_HORIZONTAL         )
     , m_aBlockSize          (    DEFAULT_BLOCKDIMENSION     )
-    , m_nBackgroundColor    (    DEFAULT_BACKGROUNDCOLOR    )
     , m_nForegroundColor    (    DEFAULT_FOREGROUNDCOLOR    )
+    , m_nBackgroundColor    (    DEFAULT_BACKGROUNDCOLOR    )
     , m_nMinRange           (    DEFAULT_MINRANGE           )
     , m_nMaxRange           (    DEFAULT_MAXRANGE           )
     , m_nBlockValue         (    DEFAULT_BLOCKVALUE         )
