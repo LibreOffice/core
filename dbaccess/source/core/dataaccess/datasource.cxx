@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:18:16 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,8 +296,7 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_bReadOnly(sal_False) // we're created as service and have to allow the setting of properties
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
-            ,m_aForms(*this, m_aMutex)
-            ,m_aReports(*this, m_aMutex)
+            ,m_aBookmarks(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
 {
     // some kind of default
@@ -321,8 +320,7 @@ ODatabaseSource::ODatabaseSource(
             ,m_bReadOnly(sal_True)      // assume readonly for the moment, adjusted below
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
-            ,m_aForms(*this, m_aMutex)
-            ,m_aReports(*this, m_aMutex)
+            ,m_aBookmarks(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
 {
     m_aConfigurationNode = _rConfigRoot.cloneAsRoot();
@@ -850,21 +848,15 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
 
 
 //------------------------------------------------------------------------------
-Reference< XNameAccess > SAL_CALL ODatabaseSource::getFormDocuments( ) throw(RuntimeException)
-{
-    return static_cast< XNameContainer* >(&m_aForms);
-}
-
-//------------------------------------------------------------------------------
 void ODatabaseSource::flush_NoBroadcast_NoCommit()
 {
     flushToConfiguration();
 }
 
 //------------------------------------------------------------------------------
-Reference< XNameAccess > SAL_CALL ODatabaseSource::getReportDocuments( ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException)
 {
-    return static_cast< XNameContainer* >(&m_aReports);
+    return static_cast< XNameContainer* >(&m_aBookmarks);
 }
 
 //------------------------------------------------------------------------------
@@ -907,8 +899,7 @@ void ODatabaseSource::removed()
     DBG_ASSERT(m_xParent.is(), "ODatabaseSource::removed : not connected to a parent !");
 
     // dispose the document containers so they release the documents and the configuration resources
-//  m_aForms.dispose();
-//  m_aReports.dispose();
+    m_aBookmarks.dispose();
     m_aCommandDefinitions.dispose();
 
     m_xParent = NULL;
@@ -922,8 +913,7 @@ void ODatabaseSource::removed()
 void ODatabaseSource::initializeDocuments(sal_Bool _bRead)
 {
     // initialize the document containers
-//  m_aForms.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_FORMDOCUMENTS).cloneAsRoot(), _bRead);
-//  m_aReports.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_REPORTDOCUMENTS).cloneAsRoot(), _bRead);
+    m_aBookmarks.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_BOOKMARKS).cloneAsRoot(), _bRead);
     m_aCommandDefinitions.initialize(m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS).cloneAsRoot(), _bRead);
 }
 
@@ -970,8 +960,7 @@ void ODatabaseSource::initializeFromConfiguration()
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushDocuments()
 {
-//  m_aForms.flush();
-//  m_aReports.flush();
+    m_aBookmarks.flush();
     m_aCommandDefinitions.flush();
 }
 // -----------------------------------------------------------------------------

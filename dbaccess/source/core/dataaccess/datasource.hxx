@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:24:28 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,8 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
+#ifndef _COM_SUN_STAR_SDB_XBOOKMARKSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
@@ -101,8 +98,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -110,8 +107,8 @@
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
 #endif
-#ifndef _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
-#include "documentcontainer.hxx"
+#ifndef _DBA_CORE_BOOKMARKCONTAINER_HXX_
+#include "bookmarkcontainer.hxx"
 #endif
 #ifndef _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 #include "commandcontainer.hxx"
@@ -164,11 +161,10 @@ typedef std::vector< OWeakConnection > OWeakConnectionArray;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::ImplHelper8 <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::lang::XUnoTunnel
                             ,   ::com::sun::star::sdbc::XDataSource
-                            ,   ::com::sun::star::sdb::XFormDocumentsSupplier
-                            ,   ::com::sun::star::sdb::XReportDocumentsSupplier
+                            ,   ::com::sun::star::sdb::XBookmarksSupplier
                             ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
                             ,   ::com::sun::star::sdb::XCompletedConnection
                             ,   ::com::sun::star::lang::XEventListener
@@ -193,8 +189,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                                         m_xServiceFactory;
 
-    ODocumentContainer      m_aForms;
-    ODocumentContainer      m_aReports;
+    OBookmarkContainer      m_aBookmarks;
     OCommandContainer       m_aCommandDefinitions;
 
 // <properties>
@@ -286,11 +281,8 @@ public:
     virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-// :: com::sun::star::sdb::XFormDocumentsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getFormDocuments(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// :: com::sun::star::sdb::XReportDocumentsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getReportDocuments(  ) throw(::com::sun::star::uno::RuntimeException);
+// :: com::sun::star::sdb::XBookmarksSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getBookmarks(  ) throw (::com::sun::star::uno::RuntimeException);
 
 // :: com::sun::star::sdb::XQueryDefinitionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) throw(::com::sun::star::uno::RuntimeException);
