@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-18 15:42:37 $
+ *  last change: $Author: thb $ $Date: 2002-10-21 14:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3053,14 +3053,17 @@ BOOL Window::ImplUpdatePos()
 
     if ( ImplIsOverlapWindow() )
     {
-        mnOutOffX  = mnX;
-        mnOutOffY  = mnY;
+        // #102532# Calc total offset
+        mnOutOffX  = mnX + mnOutOffOrigX;
+        mnOutOffY  = mnY + mnOutOffOrigY;
     }
     else
     {
         Window* pParent = ImplGetParent();
-        mnOutOffX  = mnX+pParent->mnOutOffX;
-        mnOutOffY  = mnY+pParent->mnOutOffY;
+
+        // #102532# Calc total offset
+        mnOutOffX  = mnX + pParent->mnOutOffX + mnOutOffOrigX;
+        mnOutOffY  = mnY + pParent->mnOutOffY + mnOutOffOrigY;
     }
 
     Window* pChild = mpFirstChild;
