@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-18 20:44:31 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,66 +119,275 @@ Resource RSC_CHARSETS
         Text = "Ansi";
         Text [ english ] = "Ansi";
         Text [ english_us ] = "Ansi";
+        Text[ portuguese ] = "Ansi";
+        Text[ russian ] = "Ansi";
+        Text[ greek ] = "Ansi";
+        Text[ dutch ] = "Ansi";
+        Text[ french ] = "Ansi";
+        Text[ spanish ] = "Ansi";
+        Text[ finnish ] = "Ansi";
+        Text[ italian ] = "Ansi";
+        Text[ danish ] = "Ansi";
+        Text[ swedish ] = "Ansi";
+        Text[ polish ] = "Ansi";
+        Text[ portuguese_brazilian ] = "Ansi";
+        Text[ japanese ] = "Ansi";
+        Text[ korean ] = "Ansi";
+        Text[ chinese_simplified ] = "Ansi";
+        Text[ chinese_traditional ] = "Ansi";
+        Text[ turkish ] = "Ansi";
+        Text[ arabic ] = "Ansi";
+        Text[ catalan ] = "Ansi";
     };
     String 2
     {
         Text = "Mac";
         Text [ english ] = "Mac";
         Text [ english_us ] = "Mac";
+        Text[ portuguese ] = "Mac";
+        Text[ russian ] = "Mac";
+        Text[ greek ] = "Mac";
+        Text[ dutch ] = "Mac";
+        Text[ french ] = "Mac";
+        Text[ spanish ] = "Mac";
+        Text[ finnish ] = "Mac";
+        Text[ italian ] = "Mac";
+        Text[ danish ] = "Mac";
+        Text[ swedish ] = "Mac";
+        Text[ polish ] = "Mac";
+        Text[ portuguese_brazilian ] = "Mac";
+        Text[ japanese ] = "Mac";
+        Text[ korean ] = "Mac";
+        Text[ chinese_simplified ] = "Mac";
+        Text[ chinese_traditional ] = "Mac";
+        Text[ turkish ] = "Mac";
+        Text[ arabic ] = "Mac";
+        Text[ catalan ] = "Mac";
     };
     String 3
     {
         Text = "IBMPC (437)";
         Text [ english ] = "IBMPC (437)";
         Text [ english_us ] = "IBMPC (437)";
+        Text[ portuguese ] = "IBMPC (437)";
+        Text[ russian ] = "IBMPC (437)";
+        Text[ greek ] = "IBMPC (437)";
+        Text[ dutch ] = "IBMPC (437)";
+        Text[ french ] = "IBMPC (437)";
+        Text[ spanish ] = "IBMPC (437)";
+        Text[ finnish ] = "IBMPC (437)";
+        Text[ italian ] = "IBMPC (437)";
+        Text[ danish ] = "IBMPC (437)";
+        Text[ swedish ] = "IBMPC (437)";
+        Text[ polish ] = "IBMPC (437)";
+        Text[ portuguese_brazilian ] = "IBMPC (437)";
+        Text[ japanese ] = "IBMPC (437)";
+        Text[ korean ] = "IBMPC (437)";
+        Text[ chinese_simplified ] = "IBMPC (437)";
+        Text[ chinese_traditional ] = "IBMPC (437)";
+        Text[ turkish ] = "IBMPC (437)";
+        Text[ arabic ] = "IBMPC (437)";
+        Text[ catalan ] = "IBMPC (437)";
     };
     String 4
     {
         Text = "IBMPC (850) / DOS";
         Text [ english ] = "IBMPC (850) / DOS";
         Text [ english_us ] = "IBMPC (850) / DOS";
+        Text[ portuguese ] = "IBMPC (850) / DOS";
+        Text[ russian ] = "IBMPC (850) / DOS";
+        Text[ greek ] = "IBMPC (850) / DOS";
+        Text[ dutch ] = "IBMPC (850) / DOS";
+        Text[ french ] = "IBMPC (850) / DOS";
+        Text[ spanish ] = "IBMPC (850) / DOS";
+        Text[ finnish ] = "IBMPC (850) / DOS";
+        Text[ italian ] = "IBMPC (850) / DOS";
+        Text[ danish ] = "IBMPC (850) / DOS";
+        Text[ swedish ] = "IBMPC (850)/DOS";
+        Text[ polish ] = "IBMPC (850) / DOS";
+        Text[ portuguese_brazilian ] = "IBMPC (850) / DOS";
+        Text[ japanese ] = "IBMPC (850) / DOS";
+        Text[ korean ] = "IBMPC (850) / DOS";
+        Text[ chinese_simplified ] = "IBMPC (850) / DOS";
+        Text[ chinese_traditional ] = "IBMPC (850) / DOS";
+        Text[ turkish ] = "IBMPC (850) / DOS";
+        Text[ arabic ] = "IBMPC (850) / DOS";
+        Text[ catalan ] = "IBMPC (850) / DOS";
     };
     String 5
     {
         Text = "IBMPC (860)";
         Text [ english ] = "IBMPC (860)";
         Text [ english_us ] = "IBMPC (860)";
+        Text[ portuguese ] = "IBMPC (860)";
+        Text[ russian ] = "IBMPC (860)";
+        Text[ greek ] = "IBMPC (860)";
+        Text[ dutch ] = "IBMPC (860)";
+        Text[ french ] = "IBMPC (860)";
+        Text[ spanish ] = "IBMPC (860)";
+        Text[ finnish ] = "IBMPC (860)";
+        Text[ italian ] = "IBMPC (860)";
+        Text[ danish ] = "IBMPC (860)";
+        Text[ swedish ] = "IBMPC (860)";
+        Text[ polish ] = "IBMPC (860)";
+        Text[ portuguese_brazilian ] = "IBMPC (860)";
+        Text[ japanese ] = "IBMPC (860)";
+        Text[ korean ] = "IBMPC (860)";
+        Text[ chinese_simplified ] = "IBMPC (860)";
+        Text[ chinese_traditional ] = "IBMPC (860)";
+        Text[ turkish ] = "IBMPC (860)";
+        Text[ arabic ] = "IBMPC (860)";
+        Text[ catalan ] = "IBMPC (860)";
     };
     String 6
     {
         Text = "IBMPC (861)";
         Text [ english ] = "IBMPC (861)";
         Text [ english_us ] = "IBMPC (861)";
+        Text[ portuguese ] = "IBMPC (861)";
+        Text[ russian ] = "IBMPC (861)";
+        Text[ greek ] = "IBMPC (861)";
+        Text[ dutch ] = "IBMPC (861)";
+        Text[ french ] = "IBMPC (861)";
+        Text[ spanish ] = "IBMPC (861)";
+        Text[ finnish ] = "IBMPC (861)";
+        Text[ italian ] = "IBMPC (861)";
+        Text[ danish ] = "IBMPC (861)";
+        Text[ swedish ] = "IBMPC (861)";
+        Text[ polish ] = "IBMPC (861)";
+        Text[ portuguese_brazilian ] = "IBMPC (861)";
+        Text[ japanese ] = "IBMPC (861)";
+        Text[ korean ] = "IBMPC (861)";
+        Text[ chinese_simplified ] = "IBMPC (861)";
+        Text[ chinese_traditional ] = "IBMPC (861)";
+        Text[ turkish ] = "IBMPC (861)";
+        Text[ arabic ] = "IBMPC (861)";
+        Text[ catalan ] = "IBMPC (861)";
     };
     String 7
     {
         Text = "IBMPC (863)";
         Text [ english ] = "IBMPC (863)";
         Text [ english_us ] = "IBMPC (863)";
+        Text[ portuguese ] = "IBMPC (863)";
+        Text[ russian ] = "IBMPC (863)";
+        Text[ greek ] = "IBMPC (863)";
+        Text[ dutch ] = "IBMPC (863)";
+        Text[ french ] = "IBMPC (863)";
+        Text[ spanish ] = "IBMPC (863)";
+        Text[ finnish ] = "IBMPC (863)";
+        Text[ italian ] = "IBMPC (863)";
+        Text[ danish ] = "IBMPC (863)";
+        Text[ swedish ] = "IBMPC (863)";
+        Text[ polish ] = "IBMPC (863)";
+        Text[ portuguese_brazilian ] = "IBMPC (863)";
+        Text[ japanese ] = "IBMPC (863)";
+        Text[ korean ] = "IBMPC (863)";
+        Text[ chinese_simplified ] = "IBMPC (863)";
+        Text[ chinese_traditional ] = "IBMPC (863)";
+        Text[ turkish ] = "IBMPC (863)";
+        Text[ arabic ] = "IBMPC (863)";
+        Text[ catalan ] = "IBMPC (863)";
     };
     String 8
     {
         Text = "IBMPC (865)";
         Text [ english ] = "IBMPC (865)";
         Text [ english_us ] = "IBMPC (865)";
+        Text[ portuguese ] = "IBMPC (865)";
+        Text[ russian ] = "IBMPC (865)";
+        Text[ greek ] = "IBMPC (865)";
+        Text[ dutch ] = "IBMPC (865)";
+        Text[ french ] = "IBMPC (865)";
+        Text[ spanish ] = "IBMPC (865)";
+        Text[ finnish ] = "IBMPC (865)";
+        Text[ italian ] = "IBMPC (865)";
+        Text[ danish ] = "IBMPC (865)";
+        Text[ swedish ] = "IBMPC (865)";
+        Text[ polish ] = "IBMPC (865)";
+        Text[ portuguese_brazilian ] = "IBMPC (865)";
+        Text[ japanese ] = "IBMPC (865)";
+        Text[ korean ] = "IBMPC (865)";
+        Text[ chinese_simplified ] = "IBMPC (865)";
+        Text[ chinese_traditional ] = "IBMPC (865)";
+        Text[ turkish ] = "IBMPC (865)";
+        Text[ arabic ] = "IBMPC (865)";
+        Text[ catalan ] = "IBMPC (865)";
     };
     String 9
     {
         Text = "IBMPC (866)";
         Text [ english ] = "IBMPC (866)";
         Text [ english_us ] = "IBMPC (866)";
+        Text[ portuguese ] = "IBMPC (866)";
+        Text[ russian ] = "IBMPC (866)";
+        Text[ greek ] = "IBMPC (866)";
+        Text[ dutch ] = "IBMPC (866)";
+        Text[ french ] = "IBMPC (866)";
+        Text[ spanish ] = "IBMPC (866)";
+        Text[ finnish ] = "IBMPC (866)";
+        Text[ italian ] = "IBMPC (866)";
+        Text[ danish ] = "IBMPC (866)";
+        Text[ swedish ] = "IBMPC (866)";
+        Text[ polish ] = "IBMPC (866)";
+        Text[ portuguese_brazilian ] = "IBMPC (866)";
+        Text[ japanese ] = "IBMPC (866)";
+        Text[ korean ] = "IBMPC (866)";
+        Text[ chinese_simplified ] = "IBMPC (866)";
+        Text[ chinese_traditional ] = "IBMPC (866)";
+        Text[ turkish ] = "IBMPC (866)";
+        Text[ arabic ] = "IBMPC (866)";
+        Text[ catalan ] = "IBMPC (866)";
     };
     String 10
     {
         Text = "System";
         Text [ english ] = "System";
         Text [ english_us ] = "System";
+        Text[ portuguese ] = "Sistema";
+        Text[ russian ] = "Ñèñòåìà";
+        Text[ greek ] = "Óýóôçìá";
+        Text[ dutch ] = "Systeem";
+        Text[ french ] = "Système";
+        Text[ spanish ] = "Sistema";
+        Text[ finnish ] = "J?rjestelm?";
+        Text[ italian ] = "Sistema";
+        Text[ danish ] = "System";
+        Text[ swedish ] = "System";
+        Text[ polish ] = "System";
+        Text[ portuguese_brazilian ] = "System";
+        Text[ japanese ] = "ï½¼ï½½ï¾ƒï¾‘";
+        Text[ korean ] = "ì‹œìŠ¤í…œ";
+        Text[ chinese_simplified ] = "ç³»ç»Ÿ";
+        Text[ chinese_traditional ] = "ç³»çµ±";
+        Text[ turkish ] = "Sistem";
+        Text[ arabic ] = "ÇáäÙÇã";
+        Text[ catalan ] = "System";
     };
     String 11
     {
         Text = "UTF-8";
         Text [ english ] = "UTF-8";
         Text [ english_us ] = "UTF-8";
+        Text[ portuguese ] = "UTF-8";
+        Text[ russian ] = "UTF-8";
+        Text[ greek ] = "UTF-8";
+        Text[ dutch ] = "UTF-8";
+        Text[ french ] = "UTF-8";
+        Text[ spanish ] = "UTF-8";
+        Text[ finnish ] = "UTF-8";
+        Text[ italian ] = "UTF-8";
+        Text[ danish ] = "UTF-8";
+        Text[ swedish ] = "UTF-8";
+        Text[ polish ] = "UTF-8";
+        Text[ portuguese_brazilian ] = "UTF-8";
+        Text[ japanese ] = "UTF-8";
+        Text[ korean ] = "UTF-8";
+        Text[ chinese_simplified ] = "UTF-8";
+        Text[ chinese_traditional ] = "UTF-8";
+        Text[ turkish ] = "UTF-8";
+        Text[ arabic ] = "UTF-8";
+        Text[ catalan ] = "UTF-8";
     };
 };
 
@@ -344,6 +553,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37  2001/10/18 20:44:31  vg
+ *  Merge SRC641: 18.10.01 - 22:45:04
+ *
  *  Revision 1.36  2001/10/15 13:38:09  fs
  *  #93204# new supported charset IBM866 (cyrillic)
  *
@@ -412,6 +624,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
