@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: shane $ $Date: 2000-10-02 19:06:48 $
+ *  last change: $Author: dl $ $Date: 2000-12-11 15:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ static const sal_Char* aFormatArray_Impl[] =
 /*  9 EMPTY*/                               "",
 /* 10 SOT_FORMAT_RTF*/                      "Rich Text Format",
 
-/* 11 SOT_FORMATSTR_ID_DRAWING*/            "StarOffice Drawing Format",
+/* 11 SOT_FORMATSTR_ID_DRAWING*/            "Drawing Format",
 /* 12 SOT_FORMATSTR_ID_SVXB*/               "SVXB (StarView Bitmap/Animation)",
 /* 13 SOT_FORMATSTR_ID_SVIM*/               "SVIM (StarView ImageMap)",
 /* 14 SOT_FORMATSTR_ID_XFA*/                "XFA (XOutDev FillAttr)",
