@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 12:08:36 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 12:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,6 @@
 #include <vcl/imagebtn.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _SVX_TXENCBOX_HXX
 #include <svx/txencbox.hxx>
 #endif
@@ -113,13 +109,13 @@ public:
     void GetImportOptions( ScImportOptions& rOptions ) const;
 
 private:
+    FixedLine           aFlFieldOpt;
     FixedText           aFtFont;
     SvxTextEncodingBox  aLbFont;
     FixedText           aFtFieldSep;
     ComboBox            aEdFieldSep;
     FixedText           aFtTextSep;
     ComboBox            aEdTextSep;
-    GroupBox            aGbFieldOpt;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-22 01:28:14 $
+ *  last change: $Author: dr $ $Date: 2001-05-31 12:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
         aFtFont     ( this, ScResId( FT_FONT ) ),
         aLbFont     ( this, ScResId( bAsciiImport ? DDLB_FONT : LB_FONT ) ),
-        aGbFieldOpt ( this, ScResId( GB_FIELDOPT ) )
+        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -204,7 +204,7 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         else
             aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE |
                 RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME );
-        aGbFieldOpt.SetText( aFtFont.GetText() );
+        aFlFieldOpt.SetText( aFtFont.GetText() );
         aFtFieldSep.Hide();
         aFtTextSep .Hide();
         aFtFont    .Hide();
