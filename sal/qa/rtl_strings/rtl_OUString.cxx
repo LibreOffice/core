@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OUString.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:34:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1458,7 +1458,7 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
     sal_Char    methName[MAXBUFLENGTH];
     sal_Char*   pMeth = methName;
     sal_Int32   i;
-    static sal_Unicode aUchar[50]={0x12};
+//    static sal_Unicode aUchar[50]={0x12};
 
     for (i = 0; i < n; i++)
     {
@@ -1466,8 +1466,11 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
 
         OSL_ENSURE( i < 50, "ERROR: leave aUchar bound");
 
-        AStringToUStringCopy(aUchar,resArray[i]);
-        ::rtl::OUString aStr2(aUchar);
+//        AStringToUStringCopy(aUchar,resArray[i]);
+//        ::rtl::OUString aStr2(aUchar);
+        rtl::OUString aStr2;
+        aStr2 = OUString::createFromAscii(resArray[i]);
+
         ::rtl::OUString aStr3( "-",1,kEncodingRTLTextUSASCII,
                                kConvertFlagsOStringToOUString);
 
@@ -1480,6 +1483,8 @@ sal_Bool test_valueOf( const char** resArray, int n, sal_Int16 radix,
             if ( inArray[i] < 0 )
             {
                 sal_Unicode   aStr4[100];
+                OSL_ASSERT(strlen(resArray[i]) < 100);
+
                 if(AStringToUStringCopy(aStr4,resArray[i]))
                 {
                     aStr2 = aStr3;
@@ -2488,10 +2493,10 @@ sal_Bool test_index( const T* input1, int num,const sal_Int32* input2,
 // LLA:             OUString s4(&input1[i]);
 // LLA:             rtl::OString sStr;
 // LLA:             sStr <<= str;
-// LLA:             printf("# str = %s\n", sStr.getStr());
+// LLA:             t_print("str = %s\n", sStr.getStr());
 // LLA:             rtl::OString sInput1;
 // LLA:             sInput1 <<= s4; // rtl::OUString((sal_Unicode*)input1[i]);
-// LLA:             printf("# %d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
+// LLA:             t_print("%d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
 // LLA: */
 // LLA:             lastRes=(str.lastIndexOf(input1[i],input2[i])==expVal[i]);
 // LLA:             meth="lastIndexOf_002(sal_Unicode , sal_Int32 )";
@@ -2550,10 +2555,10 @@ sal_Bool test_indexStr( const T** input1, int num,const sal_Int32* input2,
 // LLA:
 // LLA:             rtl::OString sStr;
 // LLA:             sStr <<= str;
-// LLA:             printf("# str = \"%s\"\n", sStr.getStr());
+// LLA:             t_print("str = \"%s\"\n", sStr.getStr());
 // LLA:             rtl::OString sInput1;
 // LLA:             sInput1 <<= s4; // rtl::OUString((sal_Unicode*)input1[i]);
-// LLA:             printf("# %d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
+// LLA:             t_print("%d = lastIndexOf(\"%s\", %d) =? %d\n", str.lastIndexOf(input1[i], input2[i]), sInput1.getStr(), input2[i], expVal[i]);
 // LLA:
 // LLA:             lastRes=(str.lastIndexOf(s4,input2[i])==expVal[i]);
 // LLA:             meth="lastIndexOf_004(const OUString,sal_Int32)";
@@ -3185,14 +3190,16 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_trim(
 
 template <class T>
 sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
-                      const T* expVal,int base,rtlTestResult hRtlTestResult)
+                      const T* expVal,int base,
+                      const T* _fPrecision,
+                      rtlTestResult hRtlTestResult)
 {
     sal_Bool    res=sal_True;
     sal_Char    methName[MAXBUFLENGTH];
     sal_Char    *meth;
     sal_Char*   pMeth=methName;
     sal_Int32   i;
-    static      sal_Unicode aUchar[60]={0x00};
+//  static      sal_Unicode aUchar[60]={0x00};
     T           intRes;
     sal_Bool    lastRes=sal_False;
 
@@ -3200,9 +3207,13 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
     {
         OSL_ENSURE( i < 60, "ERROR: leave aUchar bound");
 
-        AStringToUStringCopy(aUchar,input[i]);
+// LLA: stored for the posterity
+//      AStringToUStringCopy(aUchar,input[i]);
+//      OUString str(aUchar);
 
-        OUString str(aUchar);
+        OUString str;
+        str = OUString::createFromAscii(input[i]);
+
 
         if(base==0)
         {
@@ -3228,16 +3239,18 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
             lastRes=(intRes==expVal[i]);
             meth="toInt64normal";
         }
-        if(base==4)
-        {
-            intRes=str.toDouble();
-            lastRes=(fabs(intRes-expVal[i])<=1e-35);
-            meth="toDouble";
-        }
+// LLA: does no longer exist, moved to rtl/oustring
+// LLA:         if(base==4)
+// LLA:         {
+// LLA:             intRes=str.toDouble();
+// LLA:             lastRes=(fabs(intRes-expVal[i])<=1e-35);
+// LLA:             meth="toDouble";
+// LLA:         }
         if(base==5)
         {
             intRes=str.toFloat();
-            lastRes=(fabs(intRes-expVal[i])<=1e-35);
+            T nPrec = _fPrecision[i];
+            lastRes=(fabs(intRes-expVal[i])<= nPrec /* 1e-35 */ );
             meth="toFloat";
         }
         if(base==6)
@@ -3301,8 +3314,13 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toFloat(
     bRes=c_rtl_tres_state
         (
               hRtlTestResult,
-              test_toData<float>((const char**)inputFloat,nFloatCount,10,
-                               expValFloat,5,hRtlTestResult),
+              test_toData<float>((const char**)inputFloat,
+                               nFloatCount,
+                               10, /* radix */
+                               expValFloat,
+                               5,  /* float */
+                               fPrecision,
+                               hRtlTestResult),
               "toFloat",
               "toFloat()"
               );
@@ -3324,7 +3342,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toChar(
         (
               hRtlTestResult,
               test_toData<sal_Unicode>((const char**)inputChar,nCharCount,
-                                     10,expValChar,6,hRtlTestResult),
+                                     10,expValChar,6,NULL,hRtlTestResult),
               "toChar",
               "toChar()"
               );
@@ -3400,7 +3418,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kBinaryNumsStr,kBinaryNumsCount,
-                                    kRadixBinary,expValues,1,hRtlTestResult ),
+                                    kRadixBinary,expValues,1,NULL,hRtlTestResult ),
             "kBinaryNumsStr",
             "toInt32( radix 2 )"
             );
@@ -3408,7 +3426,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kBinaryMaxNumsStr,kInt32MaxNumsCount,
-                                    kRadixBinary,kInt32MaxNums,1,hRtlTestResult ),
+                                    kRadixBinary,kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kBinaryMaxNumsStr",
             "toInt32_Boundaries( radix 2 )"
             );
@@ -3417,7 +3435,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kOctolNumsStr,kOctolNumsCount,
-                                    kRadixOctol,expValues,1,hRtlTestResult ),
+                                    kRadixOctol,expValues,1,NULL,hRtlTestResult ),
             "kOctolNumsStr",
             "toInt32( radix 8 )"
             );
@@ -3426,7 +3444,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kOctolMaxNumsStr,kInt32MaxNumsCount,
-                                    kRadixOctol,(sal_Int32*)kInt32MaxNums,1,hRtlTestResult ),
+                                    kRadixOctol,(sal_Int32*)kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kOctolMaxNumsStr",
             "toInt32_Boundaries( radix 8 )"
             );
@@ -3435,7 +3453,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kDecimalNumsStr,kDecimalNumsCount,
-                                    kRadixDecimal,expValues,1,hRtlTestResult ),
+                                    kRadixDecimal,expValues,1,NULL,hRtlTestResult ),
             "kDecimalNumsStr",
             "toInt32( radix 10 )"
             );
@@ -3444,7 +3462,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kDecimalMaxNumsStr,kInt32MaxNumsCount,
-                                    kRadixDecimal,(sal_Int32*)kInt32MaxNums,1,hRtlTestResult ),
+                                    kRadixDecimal,(sal_Int32*)kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt32_Boundaries( radix 10 )"
             );
@@ -3453,7 +3471,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kHexDecimalNumsStr,kHexDecimalNumsCount,
-                                    kRadixHexdecimal,expValues,1,hRtlTestResult ),
+                                    kRadixHexdecimal,expValues,1,NULL,hRtlTestResult ),
             "kHexDecimalNumsStr",
             "toInt32( radix 16 )"
             );
@@ -3462,7 +3480,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>(  kHexDecimalMaxNumsStr,kInt32MaxNumsCount,
-                                     kRadixHexdecimal,(sal_Int32*)kInt32MaxNums,1,hRtlTestResult ),
+                                     kRadixHexdecimal,(sal_Int32*)kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kHexDecimalMaxNumsStr",
             "toInt32_Boundaries( radix 16 )"
             );
@@ -3471,7 +3489,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>(  kBase36NumsStr,kBase36NumsCount,
-                                     kRadixBase36, expValues,1,hRtlTestResult ),
+                                     kRadixBase36, expValues,1,NULL,hRtlTestResult ),
             "kBase36NumsStr",
             "toInt32( radix 36 )"
             );
@@ -3480,7 +3498,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kBase36MaxNumsStr,kInt32MaxNumsCount,
-                                    kRadixBase36,(sal_Int32*)kInt32MaxNums,1,hRtlTestResult ),
+                                    kRadixBase36,(sal_Int32*)kInt32MaxNums,1,NULL,hRtlTestResult ),
             "kBase36MaxNumsStr",
             "toInt32_Boundaries( radix 36 )"
             );
@@ -3508,7 +3526,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( spString,nSpecCases,
-                                    kRadixDecimal,expSpecVal,1,hRtlTestResult ),
+                                    kRadixDecimal,expSpecVal,1,NULL,hRtlTestResult ),
             "special cases",
             "toInt32( specialcases )"
             );
@@ -3547,7 +3565,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_defaultParam(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kDecimalNumsStr,kDecimalNumsCount,
-                                    kRadixDecimal,expValues,0,hRtlTestResult ),
+                                    kRadixDecimal,expValues,0,NULL,hRtlTestResult ),
             "kBinaryNumsStr",
             "toInt32( radix 2 )"
             );
@@ -3555,7 +3573,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_defaultParam(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( kDecimalMaxNumsStr,kInt32MaxNumsCount,
-                                    kRadixDecimal,(sal_Int32*)kInt32MaxNums,0,hRtlTestResult ),
+                                    kRadixDecimal,(sal_Int32*)kInt32MaxNums,0,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt32_Boundaries( radix 10 )"
             );
@@ -3582,7 +3600,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt32_defaultParam(
         (
             hRtlTestResult,
             test_toData<sal_Int32>( spString,nSpecCases,
-                                    kRadixDecimal,expSpecVal,0,hRtlTestResult ),
+                                    kRadixDecimal,expSpecVal,0,NULL,hRtlTestResult ),
             "special cases",
             "toInt32( specialcases )"
             );
@@ -3619,7 +3637,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kBinaryNumsStr,kBinaryNumsCount,
-                                    kRadixBinary,expValues,3,hRtlTestResult ),
+                                    kRadixBinary,expValues,3,NULL,hRtlTestResult ),
             "kBinaryNumsStr",
             "toInt64( radix 2 )"
             );
@@ -3639,7 +3657,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kOctolNumsStr,kOctolNumsCount,
-                                    kRadixOctol,expValues,3,hRtlTestResult ),
+                                    kRadixOctol,expValues,3,NULL,hRtlTestResult ),
             "kOctolNumsStr",
             "toInt64( radix 8 )"
             );
@@ -3648,7 +3666,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kOctolMaxNumsStr,kInt64MaxNumsCount,
-                                    kRadixOctol,(sal_Int64*)kInt64MaxNums,3,hRtlTestResult ),
+                                    kRadixOctol,(sal_Int64*)kInt64MaxNums,3,NULL,hRtlTestResult ),
             "kOctolMaxNumsStr",
             "toInt64_Boundaries( radix 8 )"
             );
@@ -3657,7 +3675,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kDecimalNumsStr,kDecimalNumsCount,
-                                    kRadixDecimal,expValues,3,hRtlTestResult ),
+                                    kRadixDecimal,expValues,3,NULL,hRtlTestResult ),
             "kDecimalNumsStr",
             "toInt64( radix 10 )"
             );
@@ -3666,7 +3684,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kDecimalMaxNumsStr,kInt64MaxNumsCount,
-                                    kRadixDecimal,(sal_Int64*)kInt64MaxNums,3,hRtlTestResult ),
+                                    kRadixDecimal,(sal_Int64*)kInt64MaxNums,3,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt64_Boundaries( radix 10 )"
             );
@@ -3675,7 +3693,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kHexDecimalNumsStr,kHexDecimalNumsCount,
-                                    kRadixHexdecimal,expValues,3,hRtlTestResult ),
+                                    kRadixHexdecimal,expValues,3,NULL,hRtlTestResult ),
             "kHexDecimalNumsStr",
             "toInt64( radix 16 )"
             );
@@ -3684,7 +3702,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>(  kHexDecimalMaxNumsStr,kInt64MaxNumsCount,
-                                     kRadixHexdecimal,(sal_Int64*)kInt64MaxNums,3,hRtlTestResult ),
+                                     kRadixHexdecimal,(sal_Int64*)kInt64MaxNums,3,NULL,hRtlTestResult ),
             "kHexDecimalMaxNumsStr",
             "toInt64_Boundaries( radix 16 )"
             );
@@ -3693,7 +3711,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>(  kBase36NumsStr,kBase36NumsCount,
-                                     kRadixBase36, expValues,3,hRtlTestResult ),
+                                     kRadixBase36, expValues,3,NULL,hRtlTestResult ),
             "kBase36NumsStr",
             "toInt64( radix 36 )"
             );
@@ -3702,7 +3720,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kBase36MaxNumsStr,kInt64MaxNumsCount,
-                                    kRadixBase36,(sal_Int64*)kInt64MaxNums,3,hRtlTestResult ),
+                                    kRadixBase36,(sal_Int64*)kInt64MaxNums,3,NULL,hRtlTestResult ),
             "kBase36MaxNumsStr",
             "toInt64_Boundaries( radix 36 )"
             );
@@ -3732,7 +3750,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_normal(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( spString,nSpecCases,
-                                    kRadixDecimal,expSpecVal,3,hRtlTestResult ),
+                                    kRadixDecimal,expSpecVal,3,NULL,hRtlTestResult ),
             "special cases",
             "toInt64( specialcases )"
             );
@@ -3771,7 +3789,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_defaultParam(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kDecimalNumsStr,kDecimalNumsCount,
-                                    kRadixDecimal,expValues,2,hRtlTestResult ),
+                                    kRadixDecimal,expValues,2,NULL,hRtlTestResult ),
             "kBinaryNumsStr",
             "toInt64( radix 10 )"
             );
@@ -3779,7 +3797,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_defaultParam(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( kDecimalMaxNumsStr,kInt64MaxNumsCount,
-                                    kRadixDecimal,(sal_Int64*)kInt64MaxNums,2,hRtlTestResult ),
+                                    kRadixDecimal,(sal_Int64*)kInt64MaxNums,2,NULL,hRtlTestResult ),
             "kDecimalMaxNumsStr",
             "toInt64_Boundaries( radix 10 )"
             );
@@ -3806,7 +3824,7 @@ sal_Bool SAL_CALL test_rtl_OUString_toInt64_defaultParam(
         (
             hRtlTestResult,
             test_toData<sal_Int64>( spString,nSpecCases,
-                                    kRadixDecimal,expSpecVal,2,hRtlTestResult ),
+                                    kRadixDecimal,expSpecVal,2,NULL,hRtlTestResult ),
             "special cases",
             "toInt64( specialcases )"
             );
