@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+#   last change: $Author: mh $ $Date: 2000-11-23 14:46:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,17 +76,6 @@ PROJECTPCHSOURCE=..$/core_1st$/core_pch
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
-
-.IF "$(GUI)" != "MAC"
-CDEFS+=-Is:\solar\inc\hm
-
-.IF "$(debug)" != ""
-CDEFS+=-DDEBUG
-.ENDIF
-.IF "$(mydebug)" != ""
-CDEFS+=-Dmydebug
-.ENDIF
-.ENDIF #Mac
 
 # --- Files --------------------------------------------------------
 
