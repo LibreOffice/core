@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 11:57:22 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 11:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -131,13 +132,18 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 {
                 }
             }
-/*
+
             try
             {
                 // make sure that the desired file exists before trying to open
+                SvMemoryStream aStream(0,0);
+                ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
+                Reference< XInputStream > xInput( pInput );
+
                 ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
                 InsertCommandArgument aInsertArg;
-                aInsertArg.Data = Reference< XInputStream >();
+                aInsertArg.Data = xInput;
+
                 aInsertArg.ReplaceExisting = sal_False;
                 Any aCmdArg;
                 aCmdArg <<= aInsertArg;
@@ -155,7 +161,6 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
             catch ( Exception& )
             {
             }
- */
         }
 
         try
