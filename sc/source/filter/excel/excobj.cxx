@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,126 +67,18 @@
 
 //------------------------------------------------------------------------
 
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM        // Transformationen, selten verwendet
-#define _SDR_NOTOUCH            // Hit-Tests, selten verwendet
-#define _SDR_NOEXTDEV           // ExtOutputDevice
-//#define   _SDR_NOUNDO             // Undo-Objekte
-#define _SDR_NOSURROGATEOBJ     // SdrObjSurrogate
-#define _SDR_NOPAGEOBJ          // SdrPageObj
-#define _SDR_NOVIRTOBJ          // SdrVirtObj
-#define _SDR_NOGROUPOBJ         // SdrGroupObj
-#define _SDR_NOTEXTOBJ          // SdrTextObj
-#define _SDR_NOPATHOBJ          // SdrPathObj
-#define _SDR_NOEDGEOBJ          // SdrEdgeObj
-#define _SDR_NORECTOBJ          // SdrRectObj
-#define _SDR_NOCAPTIONOBJ       // SdrCaptionObj
-#define _SDR_NOCIRCLEOBJ        // SdrCircleObj
-#define _SDR_NOGRAFOBJ          // SdrGrafObj
-#define _SDR_NOOLE2OBJ          // SdrOle2Obj
-#define SI_NOOTHERFORMS
-#define SI_NOSBXCONTROLS
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-
-//------------------------------------------------------------------------
-
-//#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
-//#include <com/sun/star/form/XFormsSupplier.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
-//#include <com/sun/star/form/XForm.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FORM_XIMAGEPRODUCERSUPPLIER_HPP_
-//#include <com/sun/star/form/XImageProducerSupplier.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-//#include <com/sun/star/form/XFormController.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLERLISTENER_HPP_
-//#include <com/sun/star/form/XFormControllerListener.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-//#include <com/sun/star/frame/XStorable.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-//#include <com/sun/star/frame/XModel.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XCONNECTABLESHAPE_HPP_
-//#include <com/sun/star/drawing/XConnectableShape.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XCONNECTORSHAPE_HPP_
-//#include <com/sun/star/drawing/XConnectorShape.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-//#include <com/sun/star/drawing/XShape.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEALIGNER_HPP_
-//#include <com/sun/star/drawing/XShapeAligner.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUP_HPP_
-//#include <com/sun/star/drawing/XShapeGroup.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEDESCRIPTOR_HPP_
-//#include <com/sun/star/drawing/XShapeDescriptor.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XUNIVERSALSHAPEDESCRIPTOR_HPP_
-//#include <com/sun/star/drawing/XUniversalShapeDescriptor.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEMIRROR_HPP_
-//#include <com/sun/star/drawing/XShapeMirror.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEARRANGER_HPP_
-//#include <com/sun/star/drawing/XShapeArranger.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
-//#include <com/sun/star/drawing/XDrawPage.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEBINDER_HPP_
-//#include <com/sun/star/drawing/XShapeBinder.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUPER_HPP_
-//#include <com/sun/star/drawing/XShapeGrouper.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPECOMBINER_HPP_
-//#include <com/sun/star/drawing/XShapeCombiner.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
-//#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-//#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
-//#include <com/sun/star/loader/XImplementationLoader.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
-//#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
-//#include <com/sun/star/text/VertOrientation.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
-//#include <com/sun/star/text/TextContentAnchorType.hpp>
-//#endif
 
 
 #include <stdio.h>
@@ -234,13 +126,15 @@
 #include "editutil.hxx"
 
 #include "imp_op.hxx"
-#include "excimp8.hxx"
 #include "fontbuff.hxx"
 #include "fltprgrs.hxx"
 #include "scmsocximexp.hxx"
 
 #ifndef _SC_XCLIMPHELPER_HXX
 #include "XclImpHelper.hxx"
+#endif
+#ifndef _SC_XCLIMPEXTERNSHEET_HXX
+#include "XclImpExternsheet.hxx"
 #endif
 #ifndef _SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
@@ -658,18 +552,6 @@ void ImportExcel::EndAllChartObjects( void )
 #ifdef WNT
 #pragma optimize("",on)
 #endif
-
-
-
-
-void ImportExcel8::EndAllChartObjects( void )
-{
-}
-
-
-void ImportExcel8::EndChartObj( void )
-{
-}
 
 
 

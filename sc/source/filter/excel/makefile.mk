@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dr $ $Date: 2001-02-26 06:49:14 $
+#   last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,11 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        XclImpStream.cxx \
-        XclImpHelper.cxx \
-        XclExpStream.cxx \
-        XclExpHelper.cxx \
+        XclImpStream.cxx					\
+        XclImpHelper.cxx					\
+        XclImpExternsheet.cxx				\
+        XclExpStream.cxx					\
+        XclExpHelper.cxx					\
         flttools.cxx \
         read.cxx \
         readchrt.cxx \
@@ -112,10 +113,11 @@ CXXFILES = \
 
 
 SLOFILES =	\
-        $(SLO)$/XclImpStream.obj \
-        $(SLO)$/XclImpHelper.obj \
-        $(SLO)$/XclExpStream.obj \
-        $(SLO)$/XclExpHelper.obj \
+        $(SLO)$/XclImpStream.obj			\
+        $(SLO)$/XclImpHelper.obj			\
+        $(SLO)$/XclImpExternsheet.obj		\
+        $(SLO)$/XclExpStream.obj			\
+        $(SLO)$/XclExpHelper.obj			\
         $(SLO)$/flttools.obj \
         $(SLO)$/read.obj \
         $(SLO)$/readchrt.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,43 +361,6 @@ ExtSheetBuffer::~ExtSheetBuffer()
 void ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const BOOL bSWB )
 {
     List::Insert( new Cont( rFPAN, rTN, bSWB ), LIST_APPEND );
-}
-
-
-void ExtSheetBuffer::AddLink( const String& rComplStr )
-{
-    String              aAppl;
-    String              aDoc;
-
-    const sal_Unicode*  pAct = rComplStr.GetBuffer();
-    sal_Unicode         cAct = *pAct;
-    BOOL                bDDE = FALSE;
-
-    while( cAct )
-    {
-        if( cAct == 0x03 )
-        {
-            *( ( sal_Unicode* ) pAct ) = 0x00;
-            aAppl = rComplStr.GetBuffer();
-            *( ( sal_Unicode* ) pAct ) = cAct;
-            cAct = 0x00;
-            bDDE = TRUE;
-            aDoc = pAct + 1;
-        }
-        else
-        {
-            pAct++;
-            cAct = *pAct;
-        }
-    }
-
-    if( !bDDE )
-        aDoc = rComplStr;   // ????????????????????????????????????????????
-
-    Cont*               pNew = new Cont( aAppl, aDoc );
-    pNew->bLink = bDDE;
-
-    List::Insert( pNew, LIST_APPEND );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-13 14:06:57 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
+#endif
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
+#ifndef _SC_XCLIMPEXTERNSHEET_HXX
+#include "XclImpExternsheet.hxx"
 #endif
 
 
@@ -641,31 +647,30 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x59:
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
+            {
                 aIn >> nINT16 >> nUINT16;
                 aIn.Ignore( 2 );
-                if( nINT16 == 0 || ( nINT16 > 0 && !pExcRoot->pExtsheetBuffer->IsSelf( ULONG( nINT16 - 1 ) ) ) )
+                ULONG nXti = (ULONG)nINT16;
+                const XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( nXti );
+                if( !pSupbook || pSupbook->IsSelf() )
+                    aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
+                else
                 {
-                    const ExtName*  pExtName;
-                    pExtName = pExcRoot->pExtNameBuff->GetName( nUINT16 );
-
+                    const XclImpExtName* pExtName = pSupbook->GetExtName( nUINT16 );
                     if( pExtName )
                     {
-                        nINT16++;
-                        if( pExtName->IsDDE() && pExcRoot->pExtSheetBuff->IsLink( ( UINT16 ) nINT16 ) )
+                        String aAppl, aExtDoc;
+                        if( (pExtName->GetType() == xienDDE) && pSupbook->GetLink( aAppl, aExtDoc ) )
                         {
-                            String          aAppl, aExtDoc;
-                            TokenId         nPar1, nPar2;
-
-                            pExcRoot->pExtSheetBuff->GetLink( ( UINT16 ) nINT16 , aAppl, aExtDoc );
-                            nPar1 = aPool.Store( aAppl );
-                            nPar2 = aPool.Store( aExtDoc );
-                            nMerk0 = aPool.Store( pExtName->aName );
+                            TokenId nPar1 = aPool.Store( aAppl );
+                            TokenId nPar2 = aPool.Store( aExtDoc );
+                            nMerk0 = aPool.Store( pExtName->GetName() );
                             aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
                                     << nMerk0 << ocClose;
                             aPool >> aStack;
                         }
                         else
-                            aStack << aPool.Store( ocNoName, pExtName->aName );
+                            aStack << aPool.Store( ocNoName, pExtName->GetName() );
                     }
                     else
                     {
@@ -674,8 +679,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                         aPool >> aStack;
                     }
                 }
-                else
-                    aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
+            }
                 break;
             case 0x5A:
             case 0x7A:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-13 13:57:18 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,38 +80,28 @@
 #ifndef _EXCSCEN_HXX
 #include "excscen.hxx"
 #endif
+#ifndef _EXCDEFS_HXX
+#include "excdefs.hxx"
+#endif
 #ifndef _SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
 #endif
 #ifndef _SC_XCLIMPOBJECTS_HXX
 #include "XclImpObjects.hxx"
 #endif
-#ifndef _EXCDEFS_HXX
-#include "excdefs.hxx"
-#endif
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
-#ifndef _MSDFFIMP_HXX
-#include <svx/msdffimp.hxx>
-#endif
 #include <string.h>
 
-struct ClientAnchorData;
 class FilterProgressBar;
-class PosBuffer;
-class ExcEscherObj;
-class ExcEscherObjList;
 class ExcChart;
 class ScBaseCell;
 class SvStorage;
-class DffRecordHeader;
-struct DffObjData;
 class ScRangeList;
 
 class ScConditionalFormat;
-class ExcEscherTxo;
 
 class ScDBData;
 
@@ -330,11 +320,6 @@ class ImportExcel8 : public ImportExcel
         void                    ChartGelframe( void );          // 0x1066
         void                    ChartBoppcustom( void );        // 0x1067
 
-        // Subrecords fuer OBJ (nach Obj( void )
-        ExcEscherObj*           ObjFtCmo( void );               // 0x15
-        void                    ObjFtPioGrbit( ExcEscherObj* pObj );    // 0x08
-        void                    ObjFtPictFmla( ExcEscherObj* pObj, UINT16 nLen );   // 0x09
-
         virtual void            GetHFString( String& rStr );
         void                    EndSheet( void );
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
@@ -361,192 +346,6 @@ class ImportExcel8 : public ImportExcel
         virtual                 ~ImportExcel8( void );
 
         virtual FltError        Read( void );
-};
-
-
-
-//___________________________________________________________________
-// internal and external 3D reference handling
-
-class XclImpTabIdBuffer : protected UINT16List
-{
-private:
-    void                        Append( UINT16 nTabId );
-
-public:
-    void                        Fill( XclImpStream& rStrm, UINT16 nCount );
-    UINT16                      GetIndex( UINT16 nTabId, UINT16 nMaxTabId = 0xFFFF ) const;
-};
-
-
-
-class XclImpCrnBase
-{
-protected:
-    USHORT                      nCol;
-    USHORT                      nRow;
-
-    inline                      XclImpCrnBase( USHORT _nCol, USHORT _nRow ) :
-                                    nCol( _nCol ), nRow( _nRow ) {}
-
-public:
-    virtual                     ~XclImpCrnBase();
-    virtual void                SetCell( ScDocument* pDoc, USHORT nTab ) = 0;
-};
-
-class XclImpCrnDouble : public XclImpCrnBase
-{
-protected:
-    double                      fValue;
-
-public:
-    inline                      XclImpCrnDouble( USHORT nCol, USHORT nRow, double fVal ) :
-                                    XclImpCrnBase( nCol, nRow ), fValue( fVal ) {}
-
-    virtual void                SetCell( ScDocument* pDoc, USHORT nTab );
-};
-
-class XclImpCrnString : public XclImpCrnBase
-{
-protected:
-    String                      aText;
-
-public:
-    inline                      XclImpCrnString( USHORT nCol, USHORT nRow, const String& rText ) :
-                                    XclImpCrnBase( nCol, nRow ), aText( rText ) {}
-
-    virtual void                SetCell( ScDocument* pDoc, USHORT nTab );
-};
-
-class XclImpCrnFormula : public XclImpCrnDouble
-{
-protected:
-    const ScTokenArray*         pTokArr;
-
-public:
-    inline                      XclImpCrnFormula( USHORT nCol, USHORT nRow, double fVal, const ScTokenArray* pTokenArray ) :
-                                    XclImpCrnDouble( nCol, nRow, fVal ),
-                                    pTokArr( pTokenArray ? new ScTokenArray( *pTokenArray ) : NULL ) {}
-    virtual                     ~XclImpCrnFormula();
-
-    virtual void                SetCell( ScDocument* pDoc, USHORT nTab );
-};
-
-
-
-class XclImpSupbookTab : private List
-{
-private:
-    String                      aName;
-    UINT16                      nScTab;
-
-    inline XclImpCrnBase*       _First()    { return (XclImpCrnBase*) List::First(); }
-    inline XclImpCrnBase*       _Next()     { return (XclImpCrnBase*) List::Next(); }
-
-public:
-    inline                      XclImpSupbookTab( const String& rName ) :
-                                    aName( rName ), nScTab( EXC_TAB_INVALID ) {}
-    virtual                     ~XclImpSupbookTab();
-
-    inline const String&        GetName() const                 { return aName; }
-    inline UINT16               GetScTab() const                { return nScTab; }
-
-    inline void                 SetScTab( UINT16 nTab )         { nScTab = nTab; }
-
-    inline void                 AppendCrn( XclImpCrnBase* pCrn )
-                                    { if( pCrn ) List::Insert( pCrn, LIST_APPEND ); }
-
-    void                        CreateTable( ScDocument* pDoc, const String& rURL );
-};
-
-class XclImpSupbook : private List
-{
-private:
-    String                      aFileName;
-    UINT16                      nCurrExcTab;
-    BOOL                        bSelf;
-
-    inline XclImpSupbookTab*    _First()    { return (XclImpSupbookTab*) List::First(); }
-    inline XclImpSupbookTab*    _Next()     { return (XclImpSupbookTab*) List::Next(); }
-    inline XclImpSupbookTab*    _Get( ULONG nIndex ) const
-                                    { return (XclImpSupbookTab*) List::GetObject( nIndex ); }
-
-    inline void                 Append( XclImpSupbookTab* pTab )
-                                    { List::Insert( pTab, LIST_APPEND ); }
-
-public:
-                                XclImpSupbook( XclImpStream& rIn, RootData& rExcRoot );
-    virtual                     ~XclImpSupbook();
-
-    static void                 ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rSelf );
-    static void                 ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName );
-
-    inline const String&        GetName() const         { return aFileName; }
-    UINT16                      GetScTabNum( UINT16 nExcTabNum ) const;
-    UINT16                      GetScTabNum( const String& rTabName ) const;
-
-    inline void                 SetCurrExcTab( UINT16 nExcTabNum )  { nCurrExcTab = nExcTabNum; }
-    void                        AppendCrn( XclImpCrnBase*& rpCrn );
-    void                        CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast ) const;
-
-    inline BOOL                 IsSelf( void ) const    { return bSelf; }
-};
-
-class XclImpSupbookBuffer : private List
-{
-private:
-    inline XclImpSupbook*       _First()    { return (XclImpSupbook*) List::First(); }
-    inline XclImpSupbook*       _Next()     { return (XclImpSupbook*) List::Next(); }
-    inline XclImpSupbook*       _Last()     { return (XclImpSupbook*) List::Last(); }
-
-public:
-    virtual                     ~XclImpSupbookBuffer();
-
-    inline void                 Append( XclImpSupbook* pNewSupbook )
-                                    { List::Insert( pNewSupbook, LIST_APPEND ); }
-    void                        CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast );
-
-                                List::Count;
-    inline const XclImpSupbook* Get( ULONG nIndex ) const   { return (XclImpSupbook*) List::GetObject( nIndex ); }
-    const XclImpSupbook*        Get( const String& rDocName ) const;
-    inline XclImpSupbook*       GetCurrSupbook() { return _Last(); }
-};
-
-
-
-struct XclImpXti
-{
-    UINT16                      nSupbook;       // index to supbook
-    UINT16                      nFirst;         // first sheet tab
-    UINT16                      nLast;          // last sheet tab
-};
-
-class XclImpExternsheetBuffer : private List
-{
-private:
-    XclImpSupbookBuffer         aSupbookBuffer;
-    BOOL                        bCreated;
-
-    inline XclImpXti*           _First()    { return (XclImpXti*) List::First(); }
-    inline XclImpXti*           _Next()     { return (XclImpXti*) List::Next(); }
-
-    BOOL                        FindNextTabRange( UINT16 nSupb, UINT16 nStart, UINT16& rnFirst, UINT16& rnLast );
-
-public:
-    inline                      XclImpExternsheetBuffer() : bCreated( FALSE ) {}
-    virtual                     ~XclImpExternsheetBuffer();
-
-    void                        Read( XclImpStream& rIn );
-    inline void                 AppendSupbook( XclImpSupbook* pSupbook )    { aSupbookBuffer.Append( pSupbook ); }
-    void                        CreateTables( RootData& rRootData );
-
-    inline const XclImpXti*     GetXti( ULONG nXtiIndex ) const { return (const XclImpXti*) List::GetObject( nXtiIndex ); }
-
-    const XclImpSupbook*        GetSupbook( ULONG nXtiIndex ) const;
-    inline const XclImpSupbook* GetSupbook( const String& rDocName ) const  { return aSupbookBuffer.Get( rDocName ); }
-    inline XclImpSupbook*       GetCurrSupbook()    { return aSupbookBuffer.GetCurrSupbook(); }
-
-    BOOL                        IsSelf( ULONG nIndex ) const;
 };
 
 

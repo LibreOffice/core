@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-12 17:06:50 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,12 @@
 // (0x001C) NOTE
 
 #define EXC_NOTE5_MAXTEXT           2048
+
+//_________________________________________________________
+// (0x0023) EXTERNNAME
+
+#define EXC_EXTN_BUILTIN            0x0001
+#define EXC_EXTN_OLE                0x0010
 
 //_________________________________________________________
 // (0x0031) FONT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-28 09:14:56 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2326,36 +2326,7 @@ void ImportExcel::NeueTabelle( void )
 
 const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, double& rVal )
 {
-    BoolError   eType;
-    if( bErrOrVal )
-    {// Error Value
-        switch( nError )
-        {
-            case 0x00:  eType = BE_NULL;    break;
-            case 0x07:  eType = BE_DIV0;    break;
-            case 0x0F:  eType = BE_VALUE;   break;
-            case 0x17:  eType = BE_REF;     break;
-            case 0x1D:  eType = BE_NAME;    break;
-            case 0x24:  eType = BE_NUM;     break;
-            case 0x2A:  eType = BE_NA;      break;
-            default:    eType = BE_UNKNOWN; break;
-        }
-        rVal = 0.0;
-    }
-    else
-    {// Boolean Value
-        if( nError )
-        {
-            eType = BE_TRUE;
-            rVal = 1.0;
-        }
-        else
-        {
-            eType = BE_FALSE;
-            rVal = 0.0;
-        }
-    }
-    return pFormConv->GetBoolErr( eType );
+    return pFormConv->GetBoolErr( XclImpHelper::ErrorToEnum( bErrOrVal, nError, rVal ) );
 }
 
 

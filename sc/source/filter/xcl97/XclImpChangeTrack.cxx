@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:53:16 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
+#endif
+#ifndef _SC_XCLIMPEXTERNSHEET_HXX
+#include "XclImpExternsheet.hxx"
 #endif
 
 //___________________________________________________________________
@@ -188,6 +191,11 @@ void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
     DoAcceptRejectAction( nFirst, nLast );
 }
 
+sal_uInt16 XclImpChangeTrack::ReadTabNum()
+{
+    return pExcRoot->pImpTabIdBuffer->GetIndex( pStrm->ReaduInt16(), nTabIdCount );
+}
+
 void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
 {
     sal_uInt16 nYear;
@@ -232,7 +240,7 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
         sal_Bool bSelf;
         XclImpSupbook::ReadDocName( *pStrm, sDocName, bSelf );
         pStrm->Ignore( 1 );
-        XclImpSupbook::ReadTabName( *pStrm, *pExcRoot, sTabName );
+        XclImpSupbook::ReadTabName( *pStrm, sTabName );
         pStrm->Ignore( 1 );
         const XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( sDocName );
         rFirstTab = rLastTab = pSupbook ? pSupbook->GetScTabNum( sTabName ) : EXC_TAB_INVALID;

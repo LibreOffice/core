@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:51:32 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
 #endif
-#ifndef _EXCIMP8_HXX
-#include "excimp8.hxx"
-#endif
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
 #endif
@@ -142,7 +139,7 @@ private:
     inline sal_Bool             ReadBool();
     inline void                 Read2DAddress( ScAddress& rAddress );
     inline void                 Read2DRange( ScRange& rRange );
-    inline sal_uInt16           ReadTabNum();
+    sal_uInt16                  ReadTabNum();
     void                        ReadDateTime( DateTime& rDateTime );
 
     inline void                 ReadString( String& rString );
@@ -213,11 +210,6 @@ inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
     rRange.aEnd.SetRow( pStrm->ReaduInt16() );
     rRange.aStart.SetCol( pStrm->ReaduInt16() );
     rRange.aEnd.SetCol( pStrm->ReaduInt16() );
-}
-
-inline sal_uInt16 XclImpChangeTrack::ReadTabNum()
-{
-    return pExcRoot->pImpTabIdBuffer->GetIndex( pStrm->ReaduInt16(), nTabIdCount );
 }
 
 inline void XclImpChangeTrack::ReadString( String& rString )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _FLTPRGRS_HXX
 #include "fltprgrs.hxx"
+#endif
+#ifndef _SC_XCLIMPEXTERNSHEET_HXX
+#include "XclImpExternsheet.hxx"
 #endif
 #ifndef _SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-13 14:06:57 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/colritem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
@@ -96,13 +95,8 @@
 #include <svx/crsditem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/msdffdef.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svx/linkmgr.hxx>
-
-#include <svx/svdorect.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 
 #include <vcl/graph.hxx>
@@ -141,6 +135,9 @@
 #endif
 #ifndef _SC_XCLIMPHELPER_HXX
 #include "XclImpHelper.hxx"
+#endif
+#ifndef _SC_XCLIMPEXTERNSHEET_HXX
+#include "XclImpExternsheet.hxx"
 #endif
 
 #include "excimp8.hxx"
@@ -705,31 +702,6 @@ void ImportExcel8::Format( void )
 {
     UINT16  nInd = aIn.ReaduInt16();
     pValueFormBuffer->NewValueFormat( nInd, aIn.ReadUniString() );
-}
-
-
-void ImportExcel8::Externname( void )
-{
-    UINT32          nRes;
-    UINT16          nOpt;
-    UINT8           nLen;
-
-    aIn >> nOpt >> nRes >> nLen;
-
-    String aName( aIn.ReadUniString( nLen ) );
-
-    if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
-    {
-        // external name
-        ScFilterTools::ConvertName( aName );
-        pExcRoot->pExtNameBuff->AddName( aName );
-    }
-    else if( nOpt & 0x0010 )
-        // ole link
-        pExcRoot->pExtNameBuff->AddOLE( aName, nRes );      // nRes is storage ID
-    else
-        // dde link
-        pExcRoot->pExtNameBuff->AddDDE( aName );
 }
 
 
@@ -1821,101 +1793,45 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 }
 
 
+void ImportExcel8::EndAllChartObjects( void )
+{
+}
+
+
+void ImportExcel8::EndChartObj( void )
+{
+}
+
+
 
 //___________________________________________________________________
 // 3D references, external references
-//  --> records SUPBOOK, XCT, CRN, EXTERNSHEET
-
-void XclImpTabIdBuffer::Append( UINT16 nTabId )
-{
-    DBG_ASSERT( nTabId, "XclImpTabIdBuffer::Append - zero value not allowed" );
-    if( nTabId )
-        UINT16List::Append( nTabId );
-}
-
-void XclImpTabIdBuffer::Fill( XclImpStream& rStrm, UINT16 nCount )
-{
-    Clear();
-    UINT16 nTabId;
-    for( UINT16 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        rStrm >> nTabId;
-        Append( nTabId );
-    }
-}
-
-UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
-{
-    UINT16 nReturn = 0;
-    for( UINT32 nIndex = 0; nIndex < Count(); nIndex++ )
-    {
-        UINT16 nValue = Get( nIndex );
-        if( nValue == nTabId )
-            return nReturn;
-        if( nValue <= nMaxTabId )
-            nReturn++;
-    }
-    return 0;
-}
-
-
+//  --> records SUPBOOK, XCT, CRN, EXTERNNAME, EXTERNSHEET
 
 void ImportExcel8::Supbook( void )
 {
-    pExcRoot->pExtsheetBuffer->AppendSupbook( new XclImpSupbook( aIn, *pExcRoot ) );
+    pExcRoot->pExtsheetBuffer->AppendSupbook( new XclImpSupbook( aIn ) );
 }
 
 void ImportExcel8::Xct( void )
 {
     XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
     if( pSupbook )
-    {
-        aIn.Ignore( 2 );
-        pSupbook->SetCurrExcTab( aIn.ReaduInt16() );
-    }
+        pSupbook->ReadXct( aIn );
 }
 
 void ImportExcel8::Crn( void )
 {
     XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
-    if( !pSupbook ) return;
+    if( pSupbook )
+        pSupbook->ReadCrn( aIn, pFormConv );
+}
 
-    UINT8 nLastCol, nFirstCol, nValType;
-    UINT16 nRow;
-    aIn >> nLastCol >> nFirstCol >> nRow;
-
-    XclImpCrnBase* pCrn;
-    for( USHORT nCol = nFirstCol; (nCol <= nLastCol) && (aIn.GetRecLeft() > 1); nCol++ )
-    {
-        aIn >> nValType;
-        switch( nValType )
-        {
-            case EXC_CRN_DOUBLE:
-                pCrn = new XclImpCrnDouble( nCol, nRow, aIn.ReadDouble() );
-            break;
-            case EXC_CRN_STRING:
-                pCrn = new XclImpCrnString( nCol, nRow, aIn.ReadUniString() );
-            break;
-            case EXC_CRN_BOOL:
-            case EXC_CRN_ERROR:
-            {
-                BOOL bIsErr = (nValType == EXC_CRN_ERROR);
-                UINT16 nErrBool;
-                double fVal;
-                aIn >> nErrBool;
-                aIn.Ignore( 6 );
-
-                const ScTokenArray* pTok = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
-                pCrn = new XclImpCrnFormula( nCol, nRow, fVal, pTok );
-            }
-            break;
-            default:
-                DBG_ERROR( "ImportExcel8::Crn - unknown data type" );
-                pCrn = NULL;
-        }
-        if( pCrn )
-            pSupbook->AppendCrn( pCrn );
-    }
+void ImportExcel8::Externname( void )
+{
+    XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
+    if( pSupbook )
+        pSupbook->ReadExternname( aIn, *pExcRoot );
 }
 
 void ImportExcel8::Externsheet( void )
@@ -1925,243 +1841,6 @@ void ImportExcel8::Externsheet( void )
 }
 
 
-
-XclImpCrnBase::~XclImpCrnBase()
-{
-}
-
-
-
-void XclImpCrnDouble::SetCell( ScDocument* pDoc, USHORT nTab )
-{
-    pDoc->SetValue( nCol, nRow, nTab, fValue );
-}
-
-
-
-void XclImpCrnString::SetCell( ScDocument* pDoc, USHORT nTab )
-{
-    ScStringCell* pStrCell = new ScStringCell( aText );
-    pDoc->PutCell( ScAddress( nCol, nRow, nTab ), pStrCell );
-}
-
-
-
-XclImpCrnFormula::~XclImpCrnFormula()
-{
-    if( pTokArr )
-        delete pTokArr;
-}
-
-void XclImpCrnFormula::SetCell( ScDocument* pDoc, USHORT nTab )
-{
-    ScAddress aPos( nCol, nRow, nTab );
-    ScFormulaCell* pFmlaCell = new ScFormulaCell( pDoc, aPos, pTokArr );
-    pFmlaCell->SetDouble( fValue );
-    pDoc->PutCell( aPos, pFmlaCell );
-}
-
-
-
-XclImpSupbookTab::~XclImpSupbookTab()
-{
-    for( XclImpCrnBase* pCrn = _First(); pCrn; pCrn = _Next() )
-        delete pCrn;
-}
-
-void XclImpSupbookTab::CreateTable( ScDocument* pDoc, const String& rURL )
-{
-    if( pDoc->LinkEmptyTab( nScTab, ScGlobal::GetDocTabName( rURL, aName ), rURL, aName ) )
-    {
-        for( XclImpCrnBase* pCrn = _First(); pCrn; pCrn = _Next() )
-            pCrn->SetCell( pDoc, nScTab );
-    }
-    else
-        nScTab = EXC_TAB_INVALID;
-}
-
-
-
-XclImpSupbook::XclImpSupbook( XclImpStream& rIn, RootData& rExcRoot )
-{
-    UINT16 nTabCnt;
-    rIn >> nTabCnt;
-
-    bSelf = (rIn.GetRecLeft() < (ULONG)(2 + 2 * nTabCnt));
-    if( bSelf ) return;
-
-    ReadDocName( rIn, aFileName, bSelf );
-
-    if( nTabCnt )
-    {
-        for( UINT16 nTab = 0; nTab < nTabCnt; nTab++ )
-        {
-            String aTabName;
-            ReadTabName( rIn, rExcRoot, aTabName );
-            Append( new XclImpSupbookTab( aTabName ) );
-        }
-    }
-    else
-        // create dummy list entry
-        Append( new XclImpSupbookTab( aFileName ) );
-}
-
-XclImpSupbook::~XclImpSupbook()
-{
-    for( XclImpSupbookTab* pTab = _First(); pTab; pTab = _Next() )
-        delete pTab;
-}
-
-//static
-void XclImpSupbook::ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rSelf )
-{
-    String sTabName;
-    XclImpHelper::DecodeExternsheetUni( rStrm, rDocName, sTabName, rSelf );
-}
-
-//static
-void XclImpSupbook::ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName )
-{
-    rStrm.AppendUniString( rTabName );
-    ScFilterTools::ConvertName( rTabName );
-}
-
-UINT16 XclImpSupbook::GetScTabNum( UINT16 nTab ) const
-{
-    if( bSelf )
-        return nTab;
-    const XclImpSupbookTab* pTab = _Get( nTab );
-    return pTab ? pTab->GetScTab() : EXC_TAB_INVALID;
-}
-
-UINT16 XclImpSupbook::GetScTabNum( const String& rTabName ) const
-{
-    for( UINT32 nIndex = 0; nIndex < List::Count(); nIndex++ )
-    {
-        const XclImpSupbookTab* pTab = _Get( nIndex );
-        if( pTab && (pTab->GetName() == rTabName) )
-            return pTab->GetScTab();
-    }
-    return EXC_TAB_INVALID;
-}
-
-void XclImpSupbook::AppendCrn( XclImpCrnBase*& rpCrn )
-{
-    XclImpSupbookTab* pTab = _Get( nCurrExcTab );
-    if( pTab )
-        pTab->AppendCrn( rpCrn );
-    else
-        delete rpCrn;
-    rpCrn = NULL;
-}
-
-void XclImpSupbook::CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast ) const
-{
-    if( bSelf || (rRootData.pExtDocOpt->nLinkCnt >= 1) )
-        return;
-
-    String aURL( ScGlobal::GetAbsDocName( aFileName, rRootData.pDoc->GetDocumentShell() ) );
-
-    for( UINT16 nTab = nFirst; nTab <= nLast; nTab++ )
-    {
-        XclImpSupbookTab* pSBTab = _Get( nTab );
-        if( pSBTab )
-            pSBTab->CreateTable( rRootData.pDoc, aURL );
-    }
-}
-
-
-
-XclImpSupbookBuffer::~XclImpSupbookBuffer()
-{
-    for( XclImpSupbook* pSupbook = _First(); pSupbook; pSupbook = _Next() )
-        delete pSupbook;
-}
-
-const XclImpSupbook* XclImpSupbookBuffer::Get( const String& rDocName ) const
-{
-    for( UINT32 nIndex = 0; nIndex < List::Count(); nIndex++ )
-    {
-        const XclImpSupbook* pSupbook = Get( nIndex );
-        if( pSupbook && (pSupbook->GetName() == rDocName) )
-            return pSupbook;
-    }
-    return NULL;
-}
-
-
-
-XclImpExternsheetBuffer::~XclImpExternsheetBuffer()
-{
-    for( XclImpXti* pXti = _First(); pXti; pXti = _Next() )
-        delete pXti;
-}
-
-BOOL XclImpExternsheetBuffer::FindNextTabRange( UINT16 nSupb, UINT16 nStart, UINT16& rnFirst, UINT16& rnLast )
-{
-    rnFirst = rnLast = 0xFFFF;
-    for( const XclImpXti* pXti = _First(); pXti; pXti = _Next() )
-    {
-        if( (nSupb == pXti->nSupbook) && (nStart <= pXti->nLast) && (pXti->nFirst < rnFirst) )
-        {
-            rnFirst = Max( nStart, pXti->nFirst );
-            rnLast = pXti->nLast;
-        }
-    }
-    return (rnFirst < 0xFFFF);
-}
-
-void XclImpExternsheetBuffer::Read( XclImpStream& rIn )
-{
-    UINT16 nXtiCount;
-    rIn >> nXtiCount;
-
-    XclImpXti* pXti;
-    while( nXtiCount )
-    {
-        pXti = new XclImpXti;
-        rIn >> pXti->nSupbook >> pXti->nFirst >> pXti->nLast;
-        List::Insert( pXti, LIST_APPEND );
-        nXtiCount--;
-    }
-}
-
-void XclImpExternsheetBuffer::CreateTables( RootData& rRootData )
-{
-    DBG_ASSERT( !bCreated, "XclImpExternsheetBuffer::CreateTables - multiple call!!" );
-    if( bCreated ) return;
-
-    UINT16 nFirst, nLast;
-
-    for( UINT16 nSupbook = 0; nSupbook < aSupbookBuffer.Count(); nSupbook++ )
-    {
-        const XclImpSupbook* pSupbook = aSupbookBuffer.Get( nSupbook );
-        BOOL bLoop = FindNextTabRange( nSupbook, 0, nFirst, nLast );
-        while( bLoop && pSupbook )
-        {
-            pSupbook->CreateTables( rRootData, nFirst, nLast );
-            bLoop = FindNextTabRange( nSupbook, nLast + 1, nFirst, nLast );
-        }
-    }
-
-    bCreated = TRUE;
-}
-
-const XclImpSupbook* XclImpExternsheetBuffer::GetSupbook( ULONG nXtiIndex ) const
-{
-    const XclImpXti* pXti = GetXti( nXtiIndex );
-    return pXti ? aSupbookBuffer.Get( pXti->nSupbook ) : NULL;
-}
-
-BOOL XclImpExternsheetBuffer::IsSelf( ULONG n ) const
-{
-    const XclImpSupbook*        p = GetSupbook( n );
-
-    if( p )
-        return p->IsSelf();
-    else
-        return TRUE;
-}
 
 //___________________________________________________________________
 // web queries

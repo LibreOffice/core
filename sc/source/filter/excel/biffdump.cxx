@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,22 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
     rStr += ")]: \'";
 
     ByteString aData( rStrm.ReadRawUniString( nLen, b16Bit ), RTL_TEXTENCODING_MS_1252 );
+
+    xub_StrLen nIndex = 0;
+    while( (nIndex < aData.Len()) && (nIndex < 255) )
+    {
+        UINT8 nChar = (UINT8)aData.GetChar( nIndex );
+        if( nChar < ' ' )
+        {
+            ByteString aIns( '<' );
+            __AddHex( aIns, nChar );
+            aIns += '>';
+            aData.Erase( nIndex, 1 ).Insert( aIns, nIndex );
+            nIndex += 5;
+        }
+        nIndex++;
+    }
+
     rStr += aData.Copy( 0, 255 );
     rStr += '\'';
     if( aData.Len() > 255 )
@@ -4733,8 +4749,10 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                             if ( sizeof(nFmlaLen) + nFmlaLen == nL )
                             {
                                 ADDTEXT( "linked\n    OLE stream: LNK........ (ID in EXTERNNAME of SUPBOOK)\n    XTI: " );
-                                IGNORE(7);      // MAY be right
                                 ADDHEX(2);
+                                ADDTEXT( "   Externname: " );
+                                ADDHEX(2);
+                                IGNORE(3);      // MAY be right
                             }
                             else
                             {

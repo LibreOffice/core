@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-29 08:10:13 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "xcl97rec.hxx"
 #include "XclAddInNameTrans.hxx"
 
+#include "XclImpExternsheet.hxx"
 #include "XclImpPivotTables.hxx"
 #include "XclExpPivotTables.hxx"
 

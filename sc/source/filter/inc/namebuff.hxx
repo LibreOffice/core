@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-14 12:02:39 $
+ *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,8 +372,6 @@ public:
 
     void            Add( const String& rFilePathAndName,
                         const String& rTabName, const BOOL bSameWorkbook = FALSE );
-
-    void            AddLink( const String& rComplStr );
 
     BOOL            GetScTabIndex( UINT16 nExcSheetIndex, UINT16& rIn_LastTab_Out_ScIndex );
     BOOL            IsLink( const UINT16 nExcSheetIndex ) const;
