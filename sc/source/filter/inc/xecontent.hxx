@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:21:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef SC_XLCONTENT_HXX
 #include "xlcontent.hxx"
+#endif
+#ifndef SC_XLADDRESS_HXX
+#include "xladdress.hxx"
 #endif
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
@@ -182,7 +185,7 @@ typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
 // Label ranges ===============================================================
 
 /** Provides export of the row/column label range list of a sheet. */
-class XclExpLabelranges : public XclExpRecord
+class XclExpLabelranges : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     /** Fills the cell range lists with all ranges of the current sheet. */
@@ -196,10 +199,8 @@ private:
         @param rRanges  The cell range list to fill.
         @param xLabelRangesRef  The core range list with all ranges.
         @param nScTab  The current Calc sheet index. */
-    void                FillRangeList( ScRangeList& rRanges, ScRangePairListRef xLabelRangesRef, SCTAB nScTab );
-
-    /** Writes the body of the LABELRANGES record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    void                FillRangeList( ScRangeList& rScRanges,
+                            ScRangePairListRef xLabelRangesRef, SCTAB nScTab );
 
 private:
     ScRangeList         maRowRanges;    /// Cell range list for row labels.
@@ -253,7 +254,7 @@ private:
     typedef XclExpRecordList< XclExpCF > XclExpCFList;
 
     XclExpCFList        maCFList;       /// List of CF records.
-    ScRangeList         maRanges;       /// Cell ranges for this conditional format.
+    XclRangeList        maXclRanges;    /// Cell ranges for this conditional format.
 };
 
 // ----------------------------------------------------------------------------
@@ -293,16 +294,17 @@ public:
 
     /** Inserts a new cell range into the cell range list. */
     void                InsertCellRange( const ScRange& rPos );
-    /** Checks the record contents and crops the range list.
-        @return  false = Do not write this record. */
-    bool                CheckWriteRecord();
+    /** Converts the Calc range list to the Excel range list.
+        @return  false = Resulting range list empty - do not write this record. */
+    bool                Finalize();
 
 private:
     /** Writes the body of the DV record. */
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    ScRangeList         maRanges;       /// A list with all affected cells.
+    ScRangeList         maScRanges;     /// Calc range list with all affected cells.
+    XclRangeList        maXclRanges;    /// Excel range list with all affected cells.
     XclExpString        maPromptTitle;  /// The prompt title.
     XclExpString        maPromptText;   /// The prompt text.
     XclExpString        maErrorTitle;   /// The error title.
