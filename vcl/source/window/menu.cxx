@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-26 11:57:38 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,12 +582,14 @@ void Menu::ImplLoadRes( const ResId& rResId )
 void Menu::Activate()
 {
     bInCallback = TRUE;
+    ImplCallEventListeners( VCLEVENT_MENU_ACTIVATE );
     if ( !aActivateHdl.Call( this ) )
     {
         Menu* pStartMenu = ImplGetStartMenu();
         if ( pStartMenu && ( pStartMenu != this ) )
         {
             pStartMenu->bInCallback = TRUE;
+            // MT 11/01: Call EventListener here? I don't know...
             pStartMenu->aActivateHdl.Call( this );
             pStartMenu->bInCallback = FALSE;
         }
@@ -606,6 +608,7 @@ void Menu::Deactivate()
 
     bInCallback = TRUE;
     Menu* pStartMenu = ImplGetStartMenu();
+    ImplCallEventListeners( VCLEVENT_MENU_DEACTIVATE );
     if ( !aDeactivateHdl.Call( this ) )
     {
         if ( pStartMenu && ( pStartMenu != this ) )
@@ -624,6 +627,7 @@ void Menu::Deactivate()
 void Menu::Highlight()
 {
     Menu* pStartMenu = ImplGetStartMenu();
+    ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT );
     if ( !aHighlightHdl.Call( this ) )
     {
         if ( pStartMenu && ( pStartMenu != this ) )
@@ -657,6 +661,7 @@ void Menu::ImplSelect()
 
 void Menu::Select()
 {
+    ImplCallEventListeners( VCLEVENT_MENU_SELECT );
     if ( !aSelectHdl.Call( this ) )
     {
         Menu* pStartMenu = ImplGetStartMenu();
@@ -670,6 +675,49 @@ void Menu::Select()
 
 void Menu::RequestHelp( const HelpEvent& rHEvt )
 {
+}
+
+void Menu::ImplCallEventListeners( ULONG nEvent )
+{
+    VclMenuEvent aEvent( this, nEvent );
+
+/*
+    if ( !mpDummy3_WindowEventListeners->empty() )
+        mpDummy3_WindowEventListeners->Call( &aEvent );
+
+    Window* pWindow = this;
+    while ( pWindow )
+    {
+        if ( !mpDummy4_WindowChildEventListeners->empty() )
+            mpDummy4_WindowChildEventListeners->Call( &aEvent );
+
+        pWindow = GetParent();
+    }
+*/
+}
+
+void Menu::AddEventListener( const Link& rEventListener )
+{
+//    mpDummy3_WindowEventListeners->push_back( rEventListener );
+}
+
+void Menu::RemoveEventListener( const Link& rEventListener )
+{
+//    mpDummy3_WindowEventListeners->remove( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Menu::AddChildEventListener( const Link& rEventListener )
+{
+//    mpDummy4_WindowChildEventListeners->push_back( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Menu::RemoveChildEventListener( const Link& rEventListener )
+{
+//    mpDummy4_WindowChildEventListeners->remove( rEventListener );
 }
 
 void Menu::InsertItem( USHORT nItemId, const XubString& rStr, MenuItemBits nItemBits, USHORT nPos )

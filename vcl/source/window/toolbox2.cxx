@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-12 09:49:41 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ void ToolBox::ImplUpdateItem( USHORT nIndex )
 
 void ToolBox::Click()
 {
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK );
     maClickHdl.Call( this );
 }
 
@@ -282,6 +283,7 @@ void ToolBox::Click()
 
 void ToolBox::DoubleClick()
 {
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_DOUBLECLICK );
     maDoubleClickHdl.Call( this );
 }
 
@@ -289,6 +291,7 @@ void ToolBox::DoubleClick()
 
 void ToolBox::Activate()
 {
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ACTIVATE );
     maActivateHdl.Call( this );
 }
 
@@ -296,6 +299,7 @@ void ToolBox::Activate()
 
 void ToolBox::Deactivate()
 {
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_DEACTIVATE );
     maDeactivateHdl.Call( this );
 
     if ( mbHideStatusText )
@@ -309,6 +313,7 @@ void ToolBox::Deactivate()
 
 void ToolBox::Highlight()
 {
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
     maHighlightHdl.Call( this );
 
     XubString aStr = GetHelpText( mnCurItemId );
@@ -323,6 +328,7 @@ void ToolBox::Highlight()
 
 void ToolBox::Select()
 {
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_SELECT );
     maSelectHdl.Call( this );
 }
 

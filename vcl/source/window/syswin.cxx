@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,15 +163,15 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
 
 BOOL SystemWindow::Close()
 {
-    if ( mxWindowPeer.is() )
-    {
-        // #76482# This window can be destroyed in WindowEvent_Close.
-        // => Don't use members after calling WindowEvent_Close
-        BOOL bCreatedWithToolkit = IsCreatedWithToolkit();
-        Application::GetUnoWrapper()->WindowEvent_Close( this );
-        if ( bCreatedWithToolkit )
-            return FALSE;
-    }
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+    ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
+    if ( aDelData.IsDelete() )
+        return FALSE;
+    ImplRemoveDel( &aDelData );
+
+    if ( mxWindowPeer.is() && IsCreatedWithToolkit() )
+        return FALSE;
 
     // Is Window not closeable, ignore close
     Window*     pBorderWin = ImplGetBorderWindow();

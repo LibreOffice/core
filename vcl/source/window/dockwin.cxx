@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:05:32 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
 #endif
 
 #include <unowrap.hxx>
@@ -588,12 +591,15 @@ BOOL DockingWindow::PrepareToggleFloatingMode()
 
 BOOL DockingWindow::Close()
 {
-    if ( mxWindowPeer.is() )
-    {
-        Application::GetUnoWrapper()->WindowEvent_Close( this );
-        if ( IsCreatedWithToolkit() )
-            return FALSE;
-    }
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+    ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
+    if ( aDelData.IsDelete() )
+        return FALSE;
+    ImplRemoveDel( &aDelData );
+
+    if ( mxWindowPeer.is() && IsCreatedWithToolkit() )
+        return FALSE;
 
     Show( FALSE, SHOW_NOFOCUSCHANGE );
     return TRUE;

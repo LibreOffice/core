@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,6 +823,7 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 void StatusBar::Click()
 {
+    ImplCallEventListeners( VCLEVENT_STATUSBAR_CLICK );
     maClickHdl.Call( this );
 }
 
@@ -830,6 +831,7 @@ void StatusBar::Click()
 
 void StatusBar::DoubleClick()
 {
+    ImplCallEventListeners( VCLEVENT_STATUSBAR_DOUBLECLICK );
     maDoubleClickHdl.Call( this );
 }
 

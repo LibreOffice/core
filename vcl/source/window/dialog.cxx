@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-07 08:33:55 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,12 +552,15 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 
 BOOL Dialog::Close()
 {
-    if ( mxWindowPeer.is() )
-    {
-        Application::GetUnoWrapper()->WindowEvent_Close( this );
-        if ( IsCreatedWithToolkit()  && !IsInExecute() )
-            return FALSE;
-    }
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+    ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
+    if ( aDelData.IsDelete() )
+        return FALSE;
+    ImplRemoveDel( &aDelData );
+
+    if ( mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
+        return FALSE;
 
     mbInClose = TRUE;
 
