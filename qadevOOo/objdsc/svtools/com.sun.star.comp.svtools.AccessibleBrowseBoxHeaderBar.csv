@@ -1,3 +1,5 @@
+"AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
+"AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
 "AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleChildCount()"
 "AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleChild()"
 "AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleParent()"
@@ -8,5 +10,3 @@
 "AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleRelationSet()"
 "AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleStateSet()"
 "AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleContext";"getLocale()"
-"AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
-"AccessibleBrowseBoxHeaderBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
