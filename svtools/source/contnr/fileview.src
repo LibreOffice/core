@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:38:06 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 08:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,13 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ arabic ] = " «—ÌŒ «· ⁄œÌ·";
     Text[ finnish ] = "Muokkausp‰iv‰m‰‰r‰";
     Text[ catalan ] = "Modified Date";
+};
+
+String STR_SVT_FILEVIEW_COLUMN_TYPE
+{
+    Text = "Typ";
+    Text[English] = "Type";
+    Text[ english_us ] = "Type";
 };
 
 String STR_SVT_FILEVIEW_ERR_MAKEFOLDER

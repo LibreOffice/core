@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 12:50:24 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 08:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,9 +394,10 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParent, sal_Int16 nFlags ) :
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER );
     if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
     {
-        mpHeaderBar->InsertItem( 1, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 220, nBits );
-        mpHeaderBar->InsertItem( 2, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_SIZE ) ), 80, nBits );
-        mpHeaderBar->InsertItem( 3, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_DATE ) ), 500, nBits );
+        mpHeaderBar->InsertItem( 1, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 180, nBits );
+        mpHeaderBar->InsertItem( 2, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TYPE ) ), 140, nBits );
+        mpHeaderBar->InsertItem( 3, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_SIZE ) ), 80, nBits );
+        mpHeaderBar->InsertItem( 4, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_DATE ) ), 500, nBits );
     }
     else
         mpHeaderBar->InsertItem( 1, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 600, nBits );
@@ -525,6 +526,8 @@ void SvtFileView::OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUSt
         // build new row
         String aNewRow = aTitle;
         aNewRow += '\t';
+        aNewRow += SvFileInformationManager::GetDescription( aURL );
+        aNewRow += '\t';
         if ( !bIsFolder && aSize.Len() > 0 )
         {
             // folder haven't a size
@@ -595,9 +598,9 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     if ( bMultiSelection )
         nFlags |= FILEVIEW_MULTISELECTION;
     mpView = new ViewTabListBox_Impl( this, nFlags );
-    long pTabs[] = { 4, 20, 220, 300, 600 };
+    long pTabs[] = { 5, 20, 180, 320, 400, 600 };
     mpView->SetTabs( &pTabs[0], MAP_PIXEL );
-    mpView->SetTabJustify( 1, AdjustRight ); // column "Size"
+    mpView->SetTabJustify( 2, AdjustRight ); // column "Size"
     maAllFilter = String::CreateFromAscii( "*.*" );
     if ( bMultiSelection )
         mpView->SetSelectionMode( MULTIPLE_SELECTION );
@@ -615,9 +618,9 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags 
     mpView = new ViewTabListBox_Impl( this, nFlags );
     if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
     {
-        long pTabs[] = { 4, 20, 220, 300, 600 };
+        long pTabs[] = { 5, 20, 180, 320, 400, 600 };
         mpView->SetTabs( &pTabs[0], MAP_PIXEL );
-        mpView->SetTabJustify( 1, AdjustRight ); // column "Size"
+        mpView->SetTabJustify( 2, AdjustRight ); // column "Size"
     }
     else
     {
