@@ -110,7 +110,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP1LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) \
+        $(APP1RES) \
         $(APP1OBJS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
@@ -128,7 +128,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP1LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) \
+        $(APP1RES) \
         $(APP1OBJS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
@@ -266,7 +266,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP2LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) \
+        $(APP2RES) \
         $(APP2OBJS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
@@ -284,7 +284,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP2LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) \
+        $(APP2RES) \
         $(APP2OBJS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
@@ -422,7 +422,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP3LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) \
+        $(APP3RES) \
         $(APP3OBJS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
@@ -440,7 +440,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP3LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) \
+        $(APP3RES) \
         $(APP3OBJS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
@@ -578,7 +578,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP4LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) \
+        $(APP4RES) \
         $(APP4OBJS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
@@ -596,7 +596,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP4LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) \
+        $(APP4RES) \
         $(APP4OBJS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
@@ -734,7 +734,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP5LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) \
+        $(APP5RES) \
         $(APP5OBJS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
@@ -752,7 +752,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP5LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) \
+        $(APP5RES) \
         $(APP5OBJS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
@@ -890,7 +890,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP6LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) \
+        $(APP6RES) \
         $(APP6OBJS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
@@ -908,7 +908,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP6LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) \
+        $(APP6RES) \
         $(APP6OBJS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
@@ -1046,7 +1046,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP7LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) \
+        $(APP7RES) \
         $(APP7OBJS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
@@ -1064,7 +1064,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP7LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) \
+        $(APP7RES) \
         $(APP7OBJS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
@@ -1202,7 +1202,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP8LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) \
+        $(APP8RES) \
         $(APP8OBJS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
@@ -1220,7 +1220,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP8LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) \
+        $(APP8RES) \
         $(APP8OBJS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
@@ -1358,7 +1358,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP9LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) \
+        $(APP9RES) \
         $(APP9OBJS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
@@ -1376,7 +1376,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP9LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) \
+        $(APP9RES) \
         $(APP9OBJS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
@@ -1514,7 +1514,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP10LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) \
+        $(APP10RES) \
         $(APP10OBJS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
@@ -1532,7 +1532,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP10LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) \
+        $(APP10RES) \
         $(APP10OBJS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
