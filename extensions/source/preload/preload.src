@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
+ *  last change: $Author: os $ $Date: 2001-12-18 09:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ ModalDialog RID_DLG_OEMWIZARD
     String ST_INSERT_USER_DATA
     {
         Text = " - Benutzerdaten";
-        Text[english_us] = "- User Data";
+        Text[english_us] = " - User Data";
     };
 };
 TabPage RID_TP_WELCOME
