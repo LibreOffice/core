@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-07 17:34:25 $
+ *  last change: $Author: mt $ $Date: 2002-04-18 16:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <txtrange.hxx>
 #include <cscoitem.hxx>
 #include <colritem.hxx>
+#include <udlnitem.hxx>
 #include <fhgtitem.hxx>
 #include <kernitem.hxx>
 #include <lrspitem.hxx>
@@ -2202,7 +2203,13 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
     sal_uInt16 nRelWidth = ((const SvxCharScaleWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH)).GetValue();
 
     if ( pOut )
-        pOut->SetTextLineColor();
+    {
+        const SvxUnderlineItem& rTextLineColor = (const SvxUnderlineItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_UNDERLINE );
+        if ( rTextLineColor.GetColor() != COL_TRANSPARENT )
+            pOut->SetTextLineColor( rTextLineColor.GetColor() );
+        else
+            pOut->SetTextLineColor();
+    }
 
     const SvxLanguageItem* pCJKLanguageItem = NULL;
 
