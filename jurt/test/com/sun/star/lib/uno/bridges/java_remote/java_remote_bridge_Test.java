@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:11:39 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
+import util.WaitUnreachable;
 
 public final class java_remote_bridge_Test extends ComplexTestCase {
     public String getTestObjectName() {
@@ -188,15 +189,17 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
         assure("bridge B life count", bridgeB.getLifeCount() == 2 * COUNT);
         assure("proxy count", ProxyFactory.getDebugCount() == 2 * COUNT);
 
-        System.out.println("waiting for gc to clear all proxies");
-        proxyBXInterface = null;
-        proxyBTestInterface = null;
-        while (ProxyFactory.getDebugCount() > 0)
-        {
-            System.gc();
-            System.runFinalization();
-            byte[] bytes = new byte[1024];
+        System.out.println("waiting for proxies to become unreachable:");
+        for (int i = 0; i < COUNT; ++i) {
+            WaitUnreachable u1 = new WaitUnreachable(proxyBXInterface[i]);
+            WaitUnreachable u2 = new WaitUnreachable(proxyBTestInterface[i]);
+            proxyBXInterface[i] = null;
+            proxyBTestInterface[i] = null;
+            u1.waitUnreachable();
+            u2.waitUnreachable();
         }
+
+        assure("proxy count", ProxyFactory.getDebugCount() == 0);
 
         System.out.println("waiting for pending messages to be done");
         while (bridgeB.getProtocol().getRequestsSendCount()
