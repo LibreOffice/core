@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:44:13 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 21:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,7 @@ ModalDialog DLG_SNAPLINE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nuevo objeto de captura";
 };
+
 
 
 
