@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2002-02-18 12:15:13 $
+#   last change: $Author: hr $ $Date: 2002-03-04 15:44:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,8 @@ TARGET=so_stlport
 TARFILE_NAME=STLport-4.0
 PATCH_FILE_NAME=STLport-4.0.patch
 .ELSE
-TARFILE_NAME=STLport-4.5
-PATCH_FILE_NAME=STLport-4.5.patch
+TARFILE_NAME=STLport-4.5.3
+PATCH_FILE_NAME=STLport-4.5.3.patch
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
