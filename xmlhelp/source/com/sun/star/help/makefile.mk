@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-12-12 14:09:08 $
+#*    last change       $Author: obo $ $Date: 2000-12-13 16:16:06 $
 #*
-#*    $Revision: 1.8 $
+#*    $Revision: 1.9 $
 #*
 #*    $Logfile:$
 #*
@@ -67,9 +67,7 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
-    $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class                    \
-    $(CLASSDIR)$/$(PACKAGE)$/dummy.class
-
+    $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class 
 
 JARCLASSDIRS	= com
 JARTARGET		= $(PRJNAME).jar
