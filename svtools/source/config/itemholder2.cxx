@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-25 11:29:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#include <helpopt.hxx>
 #include <syslocaleoptions.hxx>
 #include <undoopt.hxx>
 #include <useroptions.hxx>
@@ -170,6 +171,10 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
         case E_USEROPTIONS :
             rItem.pItem = new SvtUserOptions();
             break;
+
+        case E_HELPOPTIONS :
+            rItem.pItem = new SvtHelpOptions();
+            break;
     }
 }
 
@@ -192,6 +197,11 @@ void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
         case E_USEROPTIONS :
             delete (SvtUserOptions*)rItem.pItem;
             break;
+
+        case E_HELPOPTIONS :
+            delete (SvtHelpOptions*)rItem.pItem;
+            break;
+
     }
 
     rItem.pItem = 0;

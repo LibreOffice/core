@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-25 11:30:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <addxmltostorageoptions.hxx>
 #include <extendedsecurityoptions.hxx>
 #include <fontoptions.hxx>
-#include <helpopt.hxx>
 #include <historyoptions.hxx>
 #include <inetoptions.hxx>
 #include <internaloptions.hxx>
@@ -188,10 +187,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem = new SvtFontOptions();
             break;
 
-        case E_HELPOPTIONS :
-            rItem.pItem = new SvtHelpOptions();
-            break;
-
         case E_HISTORYOPTIONS :
             rItem.pItem = new SvtHistoryOptions();
             break;
@@ -252,10 +247,6 @@ void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
 
         case E_FONTOPTIONS :
             delete (SvtFontOptions*)rItem.pItem;
-            break;
-
-        case E_HELPOPTIONS :
-            delete (SvtHelpOptions*)rItem.pItem;
             break;
 
         case E_HISTORYOPTIONS :
