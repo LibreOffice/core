@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-02 07:59:38 $
+ *  last change: $Author: ssa $ $Date: 2002-10-10 13:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3331,7 +3331,12 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
         if ( ImplIsMouseFollow() || ( rMEvt.GetButtons() == MOUSE_LEFT ) )
-            ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+        {
+            // #102461# do not remove highlight if a popup menu is open at this position
+            MenuItemData* pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
+            if( !pActivePopup || pData->pSubMenu != pActivePopup )
+                ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+        }
         if ( IsScrollMenu() )
             ImplScroll( rMEvt.GetPosPixel() );
     }
