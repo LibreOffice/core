@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 09:02:45 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,15 +252,15 @@ void SectRepr::SetFile( const String& rFile )
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
     String sOldFileName( aSection.GetLinkFileName() );
-    String sSub( sOldFileName.GetToken( 2, cTokenSeperator ) );
+    String sSub( sOldFileName.GetToken( 2, so3::cTokenSeperator ) );
 
     if( rFile.Len() || sSub.Len() )
     {
-        sNewFile += cTokenSeperator;
+        sNewFile += so3::cTokenSeperator;
         if( rFile.Len() ) // Filter nur mit FileName
-            sNewFile += sOldFileName.GetToken( 1, cTokenSeperator );
+            sNewFile += sOldFileName.GetToken( 1, so3::cTokenSeperator );
 
-        sNewFile += cTokenSeperator;
+        sNewFile += so3::cTokenSeperator;
         sNewFile += sSub;
     }
 
@@ -277,14 +277,14 @@ void SectRepr::SetFilter( const String& rFilter )
 {
     String sNewFile;
     String sOldFileName( aSection.GetLinkFileName() );
-    String sFile( sOldFileName.GetToken( 0, cTokenSeperator ) );
-    String sSub( sOldFileName.GetToken( 2, cTokenSeperator ) );
+    String sFile( sOldFileName.GetToken( 0, so3::cTokenSeperator ) );
+    String sSub( sOldFileName.GetToken( 2, so3::cTokenSeperator ) );
 
     if( sFile.Len() )
-        (((( sNewFile = sFile ) += cTokenSeperator ) += rFilter )
-                                += cTokenSeperator ) += sSub;
+        (((( sNewFile = sFile ) += so3::cTokenSeperator ) += rFilter )
+                                += so3::cTokenSeperator ) += sSub;
     else if( sSub.Len() )
-        (( sNewFile = cTokenSeperator ) += cTokenSeperator ) += sSub;
+        (( sNewFile = so3::cTokenSeperator ) += so3::cTokenSeperator ) += sSub;
 
     aSection.SetLinkFileName( sNewFile );
 
@@ -296,12 +296,12 @@ void SectRepr::SetSubRegion(const String& rSubRegion)
 {
     String sNewFile;
     String sOldFileName( aSection.GetLinkFileName() );
-    String sFilter( sOldFileName.GetToken( 1, cTokenSeperator ) );
-    sOldFileName = sOldFileName.GetToken( 0, cTokenSeperator );
+    String sFilter( sOldFileName.GetToken( 1, so3::cTokenSeperator ) );
+    sOldFileName = sOldFileName.GetToken( 0, so3::cTokenSeperator );
 
     if( rSubRegion.Len() || sOldFileName.Len() )
-        (((( sNewFile = sOldFileName ) += cTokenSeperator ) += sFilter )
-                                       += cTokenSeperator ) += rSubRegion;
+        (((( sNewFile = sOldFileName ) += so3::cTokenSeperator ) += sFilter )
+                                       += so3::cTokenSeperator ) += rSubRegion;
 
     aSection.SetLinkFileName( sNewFile );
 
@@ -320,12 +320,13 @@ String SectRepr::GetFile() const
 #ifdef DDE_AVAILABLE
         if( DDE_LINK_SECTION == aSection.GetType() )
         {
-            USHORT n = sLinkFile.SearchAndReplace( cTokenSeperator, ' ' );
-            sLinkFile.SearchAndReplace( cTokenSeperator, ' ',  n );
+            USHORT n = sLinkFile.SearchAndReplace( so3::cTokenSeperator, ' ' );
+            sLinkFile.SearchAndReplace( so3::cTokenSeperator, ' ',  n );
         }
         else
 #endif
-            sLinkFile = INetURLObject::decode( sLinkFile.GetToken( 0, cTokenSeperator ),
+            sLinkFile = INetURLObject::decode( sLinkFile.GetToken( 0,
+                                               so3::cTokenSeperator ),
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
@@ -338,7 +339,7 @@ String SectRepr::GetSubRegion() const
 {
     String sLinkFile( aSection.GetLinkFileName() );
     if( sLinkFile.Len() )
-        sLinkFile = sLinkFile.GetToken( 2, cTokenSeperator );
+        sLinkFile = sLinkFile.GetToken( 2, so3::cTokenSeperator );
     return sLinkFile;
 }
 
@@ -1203,8 +1204,8 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
             while( STRING_NOTFOUND != (nPos = sLink.SearchAscii( "  ", nPos )) )
                 sLink.Erase( nPos--, 1 );
 
-            nPos = sLink.SearchAndReplace( ' ', cTokenSeperator );
-            sLink.SearchAndReplace( ' ', cTokenSeperator, nPos );
+            nPos = sLink.SearchAndReplace( ' ', so3::cTokenSeperator );
+            sLink.SearchAndReplace( ' ', so3::cTokenSeperator, nPos );
 
             pSectRepr->GetSection().SetLinkFileName( sLink );
             pSectRepr->GetSection().SetType( DDE_LINK_SECTION );
@@ -1806,8 +1807,8 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
             while( STRING_NOTFOUND != (nPos = aLinkFile.SearchAscii( "  ", nPos )) )
                 aLinkFile.Erase( nPos--, 1 );
 
-            nPos = aLinkFile.SearchAndReplace( ' ', cTokenSeperator );
-            aLinkFile.SearchAndReplace( ' ', cTokenSeperator, nPos );
+            nPos = aLinkFile.SearchAndReplace( ' ', so3::cTokenSeperator );
+            aLinkFile.SearchAndReplace( ' ', so3::cTokenSeperator, nPos );
         }
         else
         {
@@ -1817,9 +1818,9 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
                 aSection.SetLinkFilePassWd( sFilePasswd );
             }
 
-            aLinkFile += cTokenSeperator;
+            aLinkFile += so3::cTokenSeperator;
             aLinkFile += sFilterName;
-            aLinkFile += cTokenSeperator;
+            aLinkFile += so3::cTokenSeperator;
             aLinkFile += sSubRegion;
         }
 
@@ -2364,6 +2365,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/07/04 09:02:45  os
+    #89021# redesign
+
     Revision 1.12  2001/06/20 11:20:01  os
     #87139# use default font for tree
 
