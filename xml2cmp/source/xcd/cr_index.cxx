@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: np $ $Date: 2002-08-08 16:08:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,16 +185,22 @@ void
 Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
                             const ModuleDescription &   i_rModule )
 {
-    strcpy( o_sOutputHtml, sOutputDirectory.str() );
+    if ( strlen(sOutputDirectory.str()) + strlen(i_rModule.ModuleName()) > 1000 )
+    {
+         strcpy( o_sOutputHtml, "too-long-filename.html");   // STRCPY SAFE HERE
+        return;
+    }
+
+    strcpy( o_sOutputHtml, sOutputDirectory.str() );        // STRCPY SAFE HERE
 #ifdef WNT
-    strcat(o_sOutputHtml, "\\");
+    strcat(o_sOutputHtml, "\\");                            // STRCAT SAFE HERE
 #elif defined(UNX)
-    strcat(o_sOutputHtml, "/");
+    strcat(o_sOutputHtml, "/");                             // STRCAT SAFE HERE
 #else
 #error  WNT or UNX have to be defined.
 #endif
-    strcat( o_sOutputHtml, i_rModule.ModuleName() );
-    strcat( o_sOutputHtml, ".html" );
+    strcat( o_sOutputHtml, i_rModule.ModuleName() );        // STRCAT SAFE HERE
+    strcat( o_sOutputHtml, ".html" );                       // STRCAT SAFE HERE
 }
 
 
