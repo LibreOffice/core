@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-09-11 14:35:56 $
+ *  last change: $Author: thb $ $Date: 2002-09-17 12:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
+#include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
