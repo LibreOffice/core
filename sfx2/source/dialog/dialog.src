@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:19:49 $
+ *  last change: $Author: os $ $Date: 2002-02-27 08:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,6 +1063,10 @@ String SID_NAVIGATOR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador";
     Text[ finnish ] = "Navigaattori";
+};
+String STR_BASICNAME
+{
+    Text = "%PRODUCTNAME Basic" ;
 };
 
 ErrorBox MSG_ERROR_WRONG_CONFIRM

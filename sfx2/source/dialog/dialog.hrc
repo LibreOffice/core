@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-22 08:07:53 $
+ *  last change: $Author: os $ $Date: 2002-02-27 08:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@
 #define RID_WARN_PRINTTRANSPARENCY      ( RC_DIALOG_BEGIN + 91 )
 
 #define MSG_ERROR_SEND_MAIL             ( RC_DIALOG_BEGIN + 92 )
+#define STR_BASICNAME                   ( RC_DIALOG_BEGIN + 93 )
 
 #define STR_TOOLBAR_SEPARATOR           ( RC_DIALOG_BEGIN + 93 )
 #define STR_TOOLBAR_SPACE               ( RC_DIALOG_BEGIN + 94 )

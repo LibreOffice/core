@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:42:53 $
+ *  last change: $Author: os $ $Date: 2002-02-27 08:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,13 +346,13 @@ void SfxConfigFunctionListBox_Impl::FunctionSelected()
 SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
-        , aScriptType( DEFINE_CONST_UNICODE("StarBasic") )
         , nMode( nConfigMode )
 /*  Beschreibung
     Diese Listbox zeigt alle Funktionsgruppen und Basics an, die zur Konfiguration
     zur Verf"ugung stehen. Basics werden noch in Bibliotheken und Module untergliedert.
 */
 {
+    aScriptType = String(SfxResId(STR_BASICNAME));
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
     SetNodeBitmaps( Image( BMP_COLLAPSED ), Image( BMP_EXPANDED ) );
 }

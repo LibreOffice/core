@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 14:33:36 $
+ *  last change: $Author: os $ $Date: 2002-02-27 08:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,8 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
             sNew = pMacro->GetMacroName();
         }
 
-        if ( aLanguage.EqualsAscii("StarBasic") )
+        String sBasicName(SfxResId(STR_BASICNAME));
+        if ( aLanguage == sBasicName )
             pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, sGroup, STARBASIC ) );
         else
             pThis->aTbl.Insert( nEvent, new SvxMacro( sMacro, aLanguage ) );
@@ -459,14 +460,9 @@ void _SfxMacroTabPage::InitAndSetHandler()
     pMacroLB->Enable( TRUE );
 
     pScriptTypeLB->SetDropDownLineCount( 3 );
-    pScriptTypeLB->InsertEntry( DEFINE_CONST_UNICODE("StarBasic") );
-
-#if SUPD<582
-    pScriptTypeLB->InsertEntry( DEFINE_CONST_UNICODE("StarScript") );
-    pScriptTypeLB->InsertEntry( DEFINE_CONST_UNICODE("JavaScript") );
-#endif
-
-    pScriptTypeLB->SelectEntry( DEFINE_CONST_UNICODE("StarBasic") );
+    String sBasicName(SfxResId(STR_BASICNAME));
+    pScriptTypeLB->InsertEntry( sBasicName );
+    pScriptTypeLB->SelectEntry( sBasicName );
 
     pGroupLB->SetFunctionListBox( pMacroLB );
     FillMacroList();
@@ -478,7 +474,7 @@ void _SfxMacroTabPage::FillMacroList()
     if( ! aLanguage.EqualsAscii("JavaScript") )
     {
         // 2 Listboxen
-        SvStringsDtor* pArr = (*fnGetRange)( this, DEFINE_CONST_UNICODE("StarBasic") );
+        SvStringsDtor* pArr = (*fnGetRange)( this, String(SfxResId(STR_BASICNAME)) );
         if( pArr )
         {
             pGroupLB->Init( pArr );
@@ -641,7 +637,7 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId,
 
     InitAndSetHandler();
 
-    ScriptChanged( DEFINE_CONST_UNICODE("StarBasic") );
+    ScriptChanged( String(SfxResId(STR_BASICNAME)) );
 }
 
 SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
@@ -673,7 +669,7 @@ SfxSmallMacroTabPage::SfxSmallMacroTabPage( Window* pParent, const ResId& rResId
 
     InitAndSetHandler();
 
-    ScriptChanged( DEFINE_CONST_UNICODE("StarBasic") );
+    ScriptChanged( String(SfxResId(STR_BASICNAME)) );
 }
 
 SfxTabPage* SfxSmallMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
