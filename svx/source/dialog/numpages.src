@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-10-31 13:35:59 $
+ *  last change: $Author: kz $ $Date: 2003-02-27 13:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ swedish ] = "Urval" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "Selezione" ;
@@ -91,7 +91,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Selekcja";
+        Text[ polish ] = "Wybór";
         Text[ japanese ] = "é¸æŠ";
         Text[ chinese_traditional ] = "é¸æ“‡";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -127,7 +127,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ swedish ] = "Urval" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "Selezione" ;
@@ -137,7 +137,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Selekcja";
+        Text[ polish ] = "Wybór";
         Text[ japanese ] = "é¸æŠ";
         Text[ chinese_traditional ] = "é¸æ“‡";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -173,7 +173,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ swedish ] = "Urval" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "Selezione" ;
@@ -183,7 +183,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Selekcja";
+        Text[ polish ] = "Wybór";
         Text[ japanese ] = "é¸æŠ";
         Text[ chinese_traditional ] = "é¸æ“‡";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -220,7 +220,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text [ ENGLISH ] = "Selection" ;
         Text [ portuguese ] = "Selecção" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ swedish ] = "Urval" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "Selezione" ;
@@ -229,7 +229,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text [ dutch ] = "Selectie" ;
         Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Selekcja";
+        Text[ polish ] = "Wybór";
         Text[ japanese ] = "é¸æŠ";
         Text[ chinese_traditional ] = "é¸æ“‡";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -256,7 +256,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         TabStop = TRUE ;
         Text[ english_us ] = "~Link graphics";
         Text[ portuguese ] = "~Ligar imagens";
-        Text[ russian ] = "Ïğèâÿçàòü ãğàôèêè";
+        Text[ russian ] = "Ñâÿçàòü ãğàôè÷åñêèå îáúåêòû";
         Text[ greek ] = "Óıíäåóç ãñáöéêşí";
         Text[ dutch ] = "~Afbeeldingen koppelen";
         Text[ french ] = "~Lier les images";
@@ -264,8 +264,8 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ italian ] = "Collega ~immagini";
         Text[ danish ] = "Kæd grafik";
         Text[ swedish ] = "~Länka grafik";
-        Text[ polish ] = "P~o³¹czyæ grafiki";
-        Text[ portuguese_brazilian ] = "~Link bitmaps";
+        Text[ polish ] = "~Do³¹cz grafikê";
+        Text[ portuguese_brazilian ] = "~Vincular imagens";
         Text[ japanese ] = "å›³ã‚’ãƒªãƒ³ã‚¯ã™ã‚‹(~L)";
         Text[ korean ] = "ê·¸ë˜í”½ ì—°ê²°(~L)";
         Text[ chinese_simplified ] = "é“¾æ¥å›¾å½¢(~L)";
@@ -274,7 +274,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ turkish ] = "Grafiğe bağlantı oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vincular imágenes";
-        Text[ finnish ] = "~Linkitä kuvat";
+        Text[ finnish ] = "~Linkitä grafiikka";
     };
     FixedText FT_ERROR
     {
@@ -284,7 +284,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text [ English ] = "Thera are no bitmaps in the Gallery theme 'Bullets'." ;
         Text [ portuguese ] = "Não existem imagens no tema 'Marcas' da Gallery." ;
         Text [ english_us ] = "The Gallery theme 'Bullets' is empty (no graphics)." ;
-        Text [ portuguese_brazilian ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden." ;
+        Text [ portuguese_brazilian ] = "Não há imagens no tema 'Bullets' da Galeria." ;
         Text [ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'." ;
         Text [ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'." ;
         Text [ italian ] = "Nella gallery con argomento 'Punti' non ci sono immagini." ;
@@ -294,8 +294,8 @@ TabPage RID_SVXPAGE_PICK_BMP
         Hide = TRUE ;
         WordBreak = TRUE ;
         Text[ chinese_simplified ] = "ç”»å»Šä¸»é¢˜'é¡¹ç›®ç¬¦å·'å†…æ²¡æœ‰å›¾å½¢ã€‚";
-        Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ğèñóíêîâ íå èìååòñÿ.";
-        Text[ polish ] = "Nie znaleziono grafik w temacie galerii 'Wypunktowanie'.";
+        Text[ russian ] = "Òåìå ãàëåğåè 'Ìàğêåğû' ïóñòà (íåò ãğàôè÷åñêèõ îáúåêòîâ).";
+        Text[ polish ] = "Temat Galerii 'Znaki wypunktowania' jest pusty (nie ma w nim ¿adnych grafik).";
         Text[ japanese ] = "ã‚®ãƒ£ãƒ©ãƒªãƒ†ãƒ¼ãƒã®ã€Œç®‡æ¡æ›¸ãã‚·ãƒ³ãƒœãƒ«ã€ã«ã¯å›³ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "ç•«å»Šä¸»é¡Œ[é …ç›®ç¬¦è™Ÿ]å…§æ²’æœ‰åœ–å½¢ã€‚";
         Text[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ İí ãæÖæÚ ÇáÌÇáíÑí 'Bullets'.";
@@ -304,7 +304,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ turkish ] = "'Madde işaretleri' galeri konusu altında grafik mevcut değil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay imágenes en el tema 'Bullets' de la Galería.";
-        Text[ finnish ] = "Galleriateema \"Luettelomerkit\" on tyhjä (ei kuvia).";
+        Text[ finnish ] = "Galleriateema Luettelomerkit on tyhjä (ei kuvia).";
     };
 };
 /**************************************************************************/
@@ -328,7 +328,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ italian ] = "~Livello" ;
         Text [ portuguese_brazilian ] = "Nível" ;
         Text [ portuguese ] = "~Nível" ;
-        Text [ finnish ] = "Taso " ;
+        Text [ finnish ] = "Taso" ;
         Text [ danish ] = "~Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "~Nivå" ;
@@ -336,7 +336,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ spanish ] = "Nivel" ;
         Text [ english_us ] = "Level" ;
         Text[ chinese_simplified ] = "çº§";
-        Text[ russian ] = "Óğîâåíü";
+        Text[ russian ] = "Ïîêàçàòü óğîâíè";
         Text[ polish ] = "Poziom";
         Text[ japanese ] = "ãƒ¬ãƒ™ãƒ«";
         Text[ chinese_traditional ] = "ç´š";
@@ -369,7 +369,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ dutch ] = "Formaat" ;
         Text [ swedish ] = "Format" ;
         Text [ danish ] = "Format" ;
-        Text [ portuguese_brazilian ] = "Format" ;
+        Text [ portuguese_brazilian ] = "Formato" ;
         Text [ portuguese ] = "Formato" ;
         Text[ chinese_simplified ] = "æ ¼å¼";
         Text[ russian ] = "Ôîğìàò";
@@ -382,7 +382,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formata";
-        Text[ finnish ] = "Muoto";
+        Text[ finnish ] = "Muotoilu";
     };
     FixedText FT_FMT
     {
@@ -397,11 +397,11 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ spanish ] = "Nu~meración" ;
         Text [ french ] = "Numérotation" ;
         Text [ dutch ] = "~Nummering" ;
-        Text [ portuguese_brazilian ] = "~Numerierung" ;
+        Text [ portuguese_brazilian ] = "~Numeração" ;
         Text [ portuguese ] = "~Numeração" ;
         Text[ chinese_simplified ] = "ç¼–å·(~N)";
         Text[ russian ] = "Íóìåğàöèÿ";
-        Text[ polish ] = "Numeracja";
+        Text[ polish ] = "~Numeracja";
         Text[ japanese ] = "ç•ªå·ä»˜ã‘(~N)";
         Text[ chinese_traditional ] = "ç·¨è™Ÿ(~N)";
         Text[ arabic ] = "ÇáÊÑŞíã";
@@ -485,9 +485,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "Ğèñóíîê" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Ãğàôèêà" ;                   8/*SVX_NUM_BITMAP              */; > ;
-            < "Ïğèâÿçàííàÿ ãğàôèêà" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "áåç" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Ãğàôè÷åñêèé îáúåêò" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Ñâÿçàííûé ãğàôè÷åñêèé îáúåêò" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Íåò" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ greek ] =
         {
@@ -590,30 +590,30 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         StringList [ polish ] =
         {
             < "1,2,3, ..." ;                4/*SVX_NUM_ARABIC              */; > ;
-            < "A,B,C, ..." ;                0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < "a,b,c, ..." ;                1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < "I,II,III, ..." ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < "i,ii,iii, ..." ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "A, .., AA, ..,AAA, ..." ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Znaki wypunktowania" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Znak wypunktowania" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Grafika" ;                   8/*SVX_NUM_BITMAP              */; > ;
-            < "Grafika po³¹czona" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Do³¹czone grafiki" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "Brak" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "A, B, C, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-            < "a, b, c, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < "I, II, III, ..." ;               1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < "i, ii, iii, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < "1, 2, 3, ..." ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "Keine" ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-            < "Bullet" ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Grafik" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "A, .., AA, .., AAA, ..." ;                   8/*SVX_NUM_BITMAP              */; > ;
-            < "a, .., aa, .., aaa, ..." ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Marcador" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Imagem" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Imagem vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Nenhuma" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ japanese ] =
         {
@@ -737,7 +737,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "Luettelomerkki" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Kuvat" ;                     8/*SVX_NUM_BITMAP              */; > ;
+            < "Grafiikka" ;                     8/*SVX_NUM_BITMAP              */; > ;
             < "Linkitetyt kuvat" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "Ei mitään" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
@@ -789,7 +789,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "~After" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "~Dietro" ;
-        Text [ portuguese_brazilian ] = "Atr?s" ;
+        Text [ portuguese_brazilian ] = "Depois" ;
         Text [ portuguese ] = "A~trás" ;
         Text [ finnish ] = "Jälkeen" ;
         Text [ danish ] = "Efter" ;
@@ -801,7 +801,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Left = TRUE ;
         Text[ chinese_simplified ] = "ç¼–å·å";
         Text[ russian ] = "Ïîñëå";
-        Text[ polish ] = "Za";
+        Text[ polish ] = "~Za";
         Text[ japanese ] = "ç•ªå·å¾Œ";
         Text[ chinese_traditional ] = "ä¹‹å¾Œ";
         Text[ arabic ] = "ÈÚÏ ÇáÊÑŞíã";
@@ -833,11 +833,11 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ spanish ] = "Es~tilo de carácter:" ;
         Text [ french ] = "Style de caractères" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
-        Text [ portuguese_brazilian ] = "Zeichenv~orlage" ;
+        Text [ portuguese_brazilian ] = "~Estilo de caracteres" ;
         Text [ portuguese ] = "~Estilo de caracteres" ;
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼(~C)";
-        Text[ russian ] = "Ñòèëü çíàêîâ";
-        Text[ polish ] = "Styl znaku:";
+        Text[ russian ] = "Ñòèëü ñèìâîëà";
+        Text[ polish ] = "~Styl znaku";
         Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«(~C)";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼(~C)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ:";
@@ -846,7 +846,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Karakter şablonu:";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Es~tilo de carácter:";
-        Text[ finnish ] = "~Merkistön tyyli:";
+        Text[ finnish ] = "~Merkkityyli";
     };
     ListBox LB_CHARFMT
     {
@@ -863,7 +863,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "Co~lor" ;
         Hide = TRUE;
         Text[ italian ] = "Colore";
-        Text[ portuguese_brazilian ] = "~Color:";
+        Text[ portuguese_brazilian ] = "Cor";
         Text[ portuguese ] = "~Cor";
         Text[ danish ] = "~Farve";
         Text[ french ] = "Couleur";
@@ -882,7 +882,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Renk:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color:";
-        Text[ finnish ] = "Väri:";
+        Text[ finnish ] = "Väri";
     };
     ListBox LB_BUL_COLOR
     {
@@ -900,7 +900,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "R~elatize size" ;
         Hide = TRUE;
         Text[ italian ] = "Dimensione relativa";
-        Text[ portuguese_brazilian ] = "~Relatize size:";
+        Text[ portuguese_brazilian ] = "~Tamanho relativo";
         Text[ portuguese ] = "~Tamanho relativo";
         Text[ danish ] = "~Relativ størrelse";
         Text[ french ] = "Taille relative";
@@ -910,7 +910,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ english_us ] = "~Relative size";
         Text[ chinese_simplified ] = "ç›¸å¯¹çš„å¤§å°(~R)";
         Text[ russian ] = "Îòíîñèò. ğàçìåğ";
-        Text[ polish ] = "Rozmiar wzglêdny";
+        Text[ polish ] = "~Rozmiar wzglêdny";
         Text[ japanese ] = "ç›¸å¯¾çš„ãªã‚µã‚¤ã‚º(~R)";
         Text[ chinese_traditional ] = "ç›¸å°çš„å¤§å°(~R)";
         Text[ arabic ] = ":ÍÌã äÓÈí";
@@ -945,9 +945,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "Sh~ow sublevels" ;
         Text [ norwegian ] = "~Fullstendig" ;
         Text [ italian ] = "~Completa" ;
-        Text [ portuguese_brazilian ] = "~Completar" ;
+        Text [ portuguese_brazilian ] = "Co~mpleto" ;
         Text [ portuguese ] = "Co~mpleto" ;
-        Text [ finnish ] = "Näytä alatasot" ;
+        Text [ finnish ] = "Näytä alitasot" ;
         Text [ danish ] = "F~uldstændig" ;
         Text [ french ] = "Complet" ;
         Text [ swedish ] = "F~ullständig" ;
@@ -956,7 +956,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "Show sublevels" ;
         Text[ chinese_simplified ] = "å®Œæ•´";
         Text[ russian ] = "Âñå óğîâíè";
-        Text[ polish ] = "Wszystkie poziomy";
+        Text[ polish ] = "Poka¿ podpoziomy";
         Text[ japanese ] = "ç·ãƒ¬ãƒ™ãƒ«æ•°";
         Text[ chinese_traditional ] = "å®Œæ•´";
         Text[ arabic ] = "ßÇãá";
@@ -989,7 +989,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "S~tart at" ;
         Text [ norwegian ] = "~Start på" ;
         Text [ italian ] = "~Comincia con" ;
-        Text [ portuguese_brazilian ] = "~Come?ar em" ;
+        Text [ portuguese_brazilian ] = "~Começar em" ;
         Text [ portuguese ] = "~Começar em" ;
         Text [ finnish ] = "Aloita kohdasta" ;
         Text [ danish ] = "Be~gyndelse ved" ;
@@ -1035,7 +1035,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ English ] = "Show sym~bol" ;
         Hide = TRUE;
         Text[ italian ] = "Mostra simbolo";
-        Text[ portuguese_brazilian ] = "~Show symbol";
+        Text[ portuguese_brazilian ] = "~Mostrar símbolo";
         Text[ portuguese ] = "~Mostrar símbolo";
         Text[ danish ] = "Vis symbol";
         Text[ french ] = "~Afficher le symbole";
@@ -1065,7 +1065,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "~Alignment" ;
         Hide = TRUE;
         Text[ italian ] = "Allineamento";
-        Text[ portuguese_brazilian ] = "~Alignment";
+        Text[ portuguese_brazilian ] = "~Alinhamento";
         Text[ portuguese ] = "~Alinhamento";
         Text[ danish ] = "Justering";
         Text[ french ] = "Alignement";
@@ -1074,7 +1074,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ spanish ] = "~Alineación";
         Text[ chinese_simplified ] = "å¯¹é½(~A)";
         Text[ russian ] = "Âûğàâíèâàíèå";
-        Text[ polish ] = "Wyrównanie";
+        Text[ polish ] = "~Wyrównanie";
         Text[ japanese ] = "é…ç½®(~A)";
         Text[ chinese_traditional ] = "å°é½Š(~A)";
         Text[ arabic ] = "ãÍÇĞÇÉ";
@@ -1112,9 +1112,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
+            < "Esquerda" ; > ;
+            < "Centrado" ; > ;
+            < "Direita" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -1178,8 +1178,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         StringList [ polish ] =
         {
-            < "Z lewej strony" ; > ;
-            < "Do œrodka" ; > ;
+            < "Z lewej" ; > ;
+            < "Poœrodku" ; > ;
             < "Z prawej strony" ; > ;
         };
         StringList [ japanese ] =
@@ -1237,7 +1237,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "~Character" ;
         Text [ norwegian ] = "Character" ;
         Text [ italian ] = "Ca~rattere" ;
-        Text [ portuguese_brazilian ] = "Caractere" ;
+        Text [ portuguese_brazilian ] = "Caracter" ;
         Text [ portuguese ] = "~Carácter" ;
         Text [ finnish ] = "Merkki" ;
         Text [ danish ] = "Tegn" ;
@@ -1247,7 +1247,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ spanish ] = "C~arácter" ;
         Text [ english_us ] = "Character" ;
         Text[ chinese_simplified ] = "å­—ç¬¦";
-        Text[ russian ] = "Çíàê";
+        Text[ russian ] = "Ñèìâîëû";
         Text[ polish ] = "Znak";
         Text[ japanese ] = "æ–‡å­—";
         Text[ chinese_traditional ] = "å­—å…ƒ";
@@ -1274,7 +1274,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "Grafik" ;
         Text [ English ] = "Graphic" ;
         Text [ english_us ] = "Graphics" ;
-        Text [ portuguese_brazilian ] = "Grafik" ;
+        Text [ portuguese_brazilian ] = "Imagem" ;
         Text [ swedish ] = "Grafik" ;
         Text [ danish ] = "Grafik" ;
         Text [ italian ] = "Immagine" ;
@@ -1293,7 +1293,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Gràfics";
-        Text[ finnish ] = "Kuvat";
+        Text[ finnish ] = "Grafiikka";
     };
     MenuButton MB_BITMAP
     {
@@ -1315,7 +1315,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                      //                    HelpID = HID_NUM_NAMED_NUMS ;
                     Text [ portuguese ] = "Do ficheiro..." ;
                     Text [ english_us ] = "From file..." ;
-                    Text [ portuguese_brazilian ] = "Aus Datei..." ;
+                    Text [ portuguese_brazilian ] = "Do arquivo..." ;
                     Text [ swedish ] = "Från fil..." ;
                     Text [ danish ] = "Fra fil..." ;
                     Text [ italian ] = "Dal file..." ;
@@ -1352,7 +1352,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ danish ] = "Gallery";
                     Text[ swedish ] = "Gallery";
                     Text[ polish ] = "Galeria";
-                    Text[ portuguese_brazilian ] = "Gallery";
+                    Text[ portuguese_brazilian ] = "Galeria";
                     Text[ japanese ] = "ã‚®ãƒ£ãƒ©ãƒª";
                     Text[ korean ] = "ê°¤ëŸ¬ë¦¬";
                     Text[ chinese_simplified ] = "ç”»å»Š";
@@ -1364,7 +1364,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             };
         };
         Text [ english_us ] = "Select..." ;
-        Text [ portuguese_brazilian ] = "Aus~wahl..." ;
+        Text [ portuguese_brazilian ] = "Selecionar..." ;
         Text [ swedish ] = "~Urval..." ;
         Text [ danish ] = "Vælg..." ;
         Text [ italian ] = "Scelta..." ;
@@ -1374,7 +1374,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "~Seleccionar..." ;
         Text[ chinese_simplified ] = "é€‰æ‹©...";
         Text[ russian ] = "Âûáîğ...";
-        Text[ polish ] = "Wybór...";
+        Text[ polish ] = "Wybierz...";
         Text[ japanese ] = "é¸æŠ...";
         Text[ chinese_traditional ] = "é¸æ“‡...";
         Text[ arabic ] = "...ÊÍÏíÏ";
@@ -1393,7 +1393,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Breite" ;
         Text [ English ] = "~Width" ;
         Text [ english_us ] = "Width" ;
-        Text [ portuguese_brazilian ] = "~Breite" ;
+        Text [ portuguese_brazilian ] = "Largura" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ danish ] = "Bredde" ;
         Text [ italian ] = "Larghezza" ;
@@ -1403,7 +1403,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "~Largura" ;
         Text[ chinese_simplified ] = "å®½åº¦";
         Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "Szerokoœæ";
         Text[ japanese ] = "å¹…";
         Text[ chinese_traditional ] = "å¯¬åº¦";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -1441,7 +1441,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "H~öhe" ;
         Text [ English ] = "Hei~ght" ;
         Text [ english_us ] = "Height" ;
-        Text [ portuguese_brazilian ] = "~H?e" ;
+        Text [ portuguese_brazilian ] = "Altura" ;
         Text [ swedish ] = "H~öjd" ;
         Text [ danish ] = "H~øjde" ;
         Text [ italian ] = "Altezza" ;
@@ -1489,8 +1489,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "Abg~leich" ;
         Text [ English ] = "~Keep ratio" ;
         Text [ english_us ] = "Keep ratio" ;
-        Text [ portuguese_brazilian ] = "Abgleich" ;
-        Text [ swedish ] = "~Synkronisering" ;
+        Text [ portuguese_brazilian ] = "Manter aspecto" ;
+        Text [ swedish ] = "Anpassa ~proportionellt" ;
         Text [ danish ] = "Proportional" ;
         Text [ italian ] = "Sin~cronizza" ;
         Text [ spanish ] = "~Sincronización" ;
@@ -1499,7 +1499,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "Pr~oporcional" ;
         Text[ chinese_simplified ] = "åŒæ­¥åŒ–";
         Text[ russian ] = "Ïğîïîğöèîíàëüíî";
-        Text[ polish ] = "Synchronizacja";
+        Text[ polish ] = "Zachowaj proporcje";
         Text[ japanese ] = "èª¿æ•´";
         Text[ chinese_traditional ] = "åŒæ­¥åŒ–";
         Text[ arabic ] = "ÊÒÇãä";
@@ -1518,7 +1518,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "A~usrichtung" ;
         Text [ English ] = "Align~ment" ;
         Text [ english_us ] = "Alignment" ;
-        Text [ portuguese_brazilian ] = "Ausrichtung" ;
+        Text [ portuguese_brazilian ] = "Alinhamento" ;
         Text [ swedish ] = "~Justering" ;
         Text [ danish ] = "Justering" ;
         Text [ italian ] = "Allineamento" ;
@@ -1585,15 +1585,15 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Basis oben" ; > ;
-            < "Basis zentriert" ; > ;
-            < "Basis unten" ; > ;
-            < "Zeichen oben" ; > ;
-            < "Zeichen zentriert" ; > ;
-            < "Zeichen unten" ; > ;
-            < "Zeile oben" ; > ;
-            < "Zeile zentriert" ; > ;
-            < "Zeile unten" ; > ;
+            < "Acima da linha de referência" ; > ;
+            < "Centro da linha de referência" ; > ;
+            < "Abaixo da linha de referência" ; > ;
+            < "Topo do caracter" ; > ;
+            < "Centro do caracter" ; > ;
+            < "Base do caracter" ; > ;
+            < "Topo da linha" ; > ;
+            < "Centro da linha" ; > ;
+            < "Base da linha" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -1708,24 +1708,24 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "Îñíîâíàÿ ëèíèÿ ñâåğõó" ; > ;
             < "Îñíîâíàÿ ëèíèÿ â öåíòğå" ; > ;
             < "Îñíîâíàÿ ëèíèÿ ñíèçó" ; > ;
-            < "Çíàê ñâåğõó" ; > ;
-            < "Çíàê â öåíòğå" ; > ;
-            < "Çíàê ñíèçó" ; > ;
+            < "Ñèìâîë ñâåğõó" ; > ;
+            < "Ñèìâîë â öåíòğå" ; > ;
+            < "Ñèìâîë ñíèçó" ; > ;
             < "Ñòğîêà ñâåğõó" ; > ;
             < "Ñòğîêà â öåíòğå" ; > ;
             < "Ñòğîêà ñíèçó" ; > ;
         };
         StringList [ polish ] =
         {
-            < "Linia odniesienia w górze" ; > ;
-            < "Wyœrodkowana linia odniesienia" ; > ;
-            < "Linia odniesienia w dole" ; > ;
-            < "Znak w górze" ; > ;
-            < "Wyœrodkuj znaki" ; > ;
-            < "Znak w dole" ; > ;
-            < "Wiersz w górze" ; > ;
-            < "Wyœrodkuj wiersz" ; > ;
-            < "Wiersz w dole" ; > ;
+            < "Góra linii odniesienia" ; > ;
+            < "Œrodek linii odniesienia" ; > ;
+            < "Dó³ linii odniesienia" ; > ;
+            < "Góra znaku" ; > ;
+            < "Œrodek znaku" ; > ;
+            < "Dó³ znaku" ; > ;
+            < "Góra wiersza" ; > ;
+            < "Œrodek wiersza" ; > ;
+            < "Dó³ wiersza" ; > ;
         };
         StringList [ japanese ] =
         {
@@ -1813,15 +1813,15 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         StringList [ finnish ] =
         {
-            < "Perusviivan yläosa" ; > ;
+            < "Perusviivan yläreuna" ; > ;
             < "Perusviivan keskipiste" ; > ;
-            < "Perusviivan alaosa" ; > ;
-            < "Merkin yläosa" ; > ;
-            < "Merkin keskiosa" ; > ;
-            < "Merkin alaosa" ; > ;
-            < "Viivan yläosa" ; > ;
-            < "Viivan keskiosa" ; > ;
-            < "Viivan alaosa" ; > ;
+            < "Perusviivan alareuna" ; > ;
+            < "Merkin yläreuna" ; > ;
+            < "Merkin keskikohta" ; > ;
+            < "Merkin alareuna" ; > ;
+            < "Viivan yläreuna" ; > ;
+            < "Viivan keskikohta" ; > ;
+            < "Viivan alareuna" ; > ;
         };
     };
     FixedLine FL_SAME_LEVEL
@@ -1831,7 +1831,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "Alle Ebenen" ;
         Text [ ENGLISH ] = "All levels" ;
         Text [ english_us ] = "All levels" ;
-        Text [ portuguese_brazilian ] = "Alle Ebenen" ;
+        Text [ portuguese_brazilian ] = "Todos os níveis" ;
         Text [ swedish ] = "Alla nivåer" ;
         Text [ danish ] = "Alle niveauer" ;
         Text [ italian ] = "Tutti i livelli" ;
@@ -1859,7 +1859,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Fortlaufende Nu~mmerierung" ;
         Text [ ENGLISH ] = "Continuous n~umbering" ;
         Text [ english_us ] = "~Consecutive numbering" ;
-        Text [ portuguese_brazilian ] = "~Fortlaufende Numerierung" ;
+        Text [ portuguese_brazilian ] = "Numeração c~ontínua" ;
         Text [ swedish ] = "Fort~löpande numrering" ;
         Text [ danish ] = "~Fortløbende nu~mmerering" ;
         Text [ italian ] = "~Numerazione continua" ;
@@ -1869,7 +1869,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "Numeração c~ontínua" ;
         Text[ chinese_simplified ] = "è¿ç»­ç¼–å·(~C)";
         Text[ russian ] = "Ïîñëåäîâàòåëüíàÿ íóìåğàöèÿ";
-        Text[ polish ] = "~Kontynuacja poprzedniej numeracji";
+        Text[ polish ] = "Numeracja ~ci¹g³a";
         Text[ japanese ] = "é€šã—ç•ªå·(~C)";
         Text[ chinese_traditional ] = "é€£çºŒç·¨è™Ÿ(~C)";
         Text[ arabic ] = "ÇáÊÑŞíã ÈÔßá ãÊÓáÓá";
@@ -1892,7 +1892,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ English ] = "Thera are no bitmaps in the Gallery theme 'Bullets'." ;
         Text[ english_us ] = "There are no graphics in the 'Bullets' Gallery theme.";
         Text[ portuguese ] = "Não existem imagens no tema \"Bullets\" da Gallery.";
-        Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ğèñóíêîâ íå èìååòñÿ.";
+        Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ãğàôè÷åñêèõ îáúåêòîâ íå ñóùåñòâóåò.";
         Text[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôï èİìá ôçò Gallery 'Êïõêßäåò'.";
         Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp 'Bullets'.";
         Text[ french ] = "Il n'existe pas d'image pour le thème 'Puces' dans la Gallery..";
@@ -1900,8 +1900,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ italian ] = "La cartella 'Bullets' della Gallery è vuota.";
         Text[ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'.";
         Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Punkter'.";
-        Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
-        Text[ portuguese_brazilian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
+        Text[ polish ] = "Temat Galerii 'Znaki wypunktowania' jest pusty (nie ma w nim ¿adnych grafik).";
+        Text[ portuguese_brazilian ] = "Não há imagens no tema 'Bullets' da Galeria.";
         Text[ japanese ] = "ã‚®ãƒ£ãƒ©ãƒªãƒ†ãƒ¼ãƒã€Œç®‡æ¡æ›¸ãè¨˜å·ã€ã«å›³ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "ê°¤ëŸ¬ë¦¬ ì£¼ì œ 'ê¸€ë¨¸ë¦¬ ê¸°í˜¸'ì— ê·¸ë˜í”½ì´ ì—†ìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "ç”»å»Šæ–‡ä»¶â€˜é¡¹ç›®ç¬¦å·â€™å†…ä¸å­˜åœ¨å›¾å½¢ã€‚";
@@ -1934,7 +1934,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ italian ] = "~Livello" ;
         Text [ portuguese_brazilian ] = "Nível" ;
         Text [ portuguese ] = "~Nível" ;
-        Text [ finnish ] = "Taso " ;
+        Text [ finnish ] = "Taso" ;
         Text [ danish ] = "~Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "~Nivå" ;
@@ -1976,7 +1976,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ dutch ] = "Positie en afstand" ;
         Text [ swedish ] = "Position och avstånd" ;
         Text [ danish ] = "Placering og afstand" ;
-        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Posição e espaçamento" ;
         Text [ portuguese ] = "Posição e espaçamento" ;
         Text[ chinese_simplified ] = "ä½ç½®å’Œé—´éš”";
         Text[ russian ] = "Ïîëîæåíèå è èíòåğâàë";
@@ -2004,11 +2004,11 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ spanish ] = "~Sangría" ;
         Text [ french ] = "Retrait" ;
         Text [ dutch ] = "In~springing" ;
-        Text [ portuguese_brazilian ] = "Ab~stand Text <-> Rand" ;
+        Text [ portuguese_brazilian ] = "Avanço" ;
         Text [ portuguese ] = "A~vanço" ;
         Text[ chinese_simplified ] = "ç¼©è¿›";
         Text[ russian ] = "Îòñòóï";
-        Text[ polish ] = "Wciêcie pierwsz. wiersza";
+        Text[ polish ] = "Wciêcie";
         Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆ";
         Text[ chinese_traditional ] = "ç¸®æ’";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáåÇãÔ";
@@ -2027,7 +2027,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ ENGLISH ] = "Relati~ve" ;
         Text [ portuguese ] = "~Relativo" ;
         Text [ english_us ] = "Relati~ve" ;
-        Text [ portuguese_brazilian ] = "Relati~v" ;
+        Text [ portuguese_brazilian ] = "~Relativo" ;
         Text [ swedish ] = "Relati~vt" ;
         Text [ danish ] = "Relativ" ;
         Text [ italian ] = "Relativo" ;
@@ -2078,10 +2078,10 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ spanish ] = "~Distancia al texto" ;
         Text [ french ] = "Écart du texte" ;
         Text [ dutch ] = "Afstand tot ~tekst" ;
-        Text [ portuguese_brazilian ] = "Einr~?kung" ;
+        Text [ portuguese_brazilian ] = "Distância do ~texto" ;
         Text [ portuguese ] = "Distância do ~texto" ;
         Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»";
-        Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
+        Text[ russian ] = "Ğàññòîÿíèå äî òåêñòà";
         Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã¾ã§ã®é–“éš”";
         Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»";
@@ -2124,11 +2124,11 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ spanish ] = "Distancia mínima número <-> texto" ;
         Text [ french ] = "Écart ~minimum numérotation <-> texte" ;
         Text [ dutch ] = "~Minimale afstand nummer <-> tekst" ;
-        Text [ portuguese_brazilian ] = "Abstand Te~xt <-> Numerierung" ;
+        Text [ portuguese_brazilian ] = "~Distância mínima texto <-> numeração" ;
         Text [ portuguese ] = "~Distância mínima texto <-> numeração" ;
         Text[ chinese_simplified ] = "ç¼–å·å’Œæ­£æ–‡ä¹‹é—´çš„æœ€å°‘é—´éš”";
         Text[ russian ] = "Ìèí. ğàññòîÿíèå íîìåğ <-> òåêñò";
-        Text[ polish ] = "Minimalny odstêp numeracja <-> tekst";
+        Text[ polish ] = "Minim~alny odstêp numeracja <-> tekst";
         Text[ japanese ] = "ç•ªå·ã¨ãƒ†ã‚­ã‚¹ãƒˆã®æœ€å°é–“éš”";
         Text[ chinese_traditional ] = "ç·¨è™Ÿå’Œå…§æ–‡ä¹‹é–“çš„æœ€å°‘é–“éš”";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
@@ -2137,7 +2137,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Asgari aralık: Numara <-> Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia mínima número <-> texto";
-        Text[ finnish ] = "Vähimmäistila numerointi <-> teksti";
+        Text[ finnish ] = "Numeroinnin ja tekstin välillä vähintään";
     };
     MetricField MF_NUMDIST
     {
@@ -2170,7 +2170,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ spanish ] = "~Alineación de numeración" ;
         Text [ french ] = "~Alignement de la numérotation" ;
         Text [ dutch ] = "~Uitlijning van nummering" ;
-        Text [ portuguese_brazilian ] = "Ausri~chtung der Numerierung" ;
+        Text [ portuguese_brazilian ] = "A~linhamento da numeração" ;
         Text [ portuguese ] = "A~linhamento da numeração" ;
         Text[ chinese_simplified ] = "ç¼–å·å¯¹é½(~U)";
         Text[ russian ] = "Âûğàâíèâàíèå íóìåğàöèè";
@@ -2183,7 +2183,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Numara hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Alineación de numeración";
-        Text[ finnish ] = "~Numeroiden tasaus";
+        Text[ finnish ] = "Numeroiden ~tasaus";
     };
     ListBox LB_ALIGN
     {
@@ -2211,9 +2211,9 @@ TabPage RID_SVXPAGE_NUM_POSITION
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
+            < "Esquerda" ; > ;
+            < "Centrado" ; > ;
+            < "Direita" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -2277,7 +2277,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         };
         StringList [ polish ] =
         {
-            < "Z lewej strony" ; > ;
+            < "Do lewej" ; > ;
             < "Do œrodka" ; > ;
             < "Do prawej" ; > ;
         };
@@ -2337,7 +2337,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text = "~Standard" ;
         Text [ ENGLISH ] = "~Default" ;
         Text [ english_us ] = "Default" ;
-        Text [ portuguese_brazilian ] = "~Standard" ;
+        Text [ portuguese_brazilian ] = "Padrão" ;
         Text [ swedish ] = "S~tandard" ;
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "~Standard" ;
@@ -2356,7 +2356,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estàndard";
-        Text[ finnish ] = "Oletusarvo";
+        Text[ finnish ] = "Oletus";
     };
     Window WIN_PREVIEW
     {
@@ -2372,7 +2372,7 @@ String RID_STR_EDIT_GRAPHIC
     Text [ English ] = "Link to" ;
     Text [ norwegian ] = "Link to" ;
     Text [ italian ] = "Collega" ;
-    Text [ portuguese_brazilian ] = "Liga??o com" ;
+    Text [ portuguese_brazilian ] = "Vincular" ;
     Text [ portuguese ] = "Ligar" ;
     Text [ finnish ] = "Linkki" ;
     Text [ danish ] = "Kæd" ;
@@ -2382,8 +2382,8 @@ String RID_STR_EDIT_GRAPHIC
     Text [ spanish ] = "Vincular" ;
     Text [ english_us ] = "Link" ;
     Text[ chinese_simplified ] = "é“¾æ¥";
-    Text[ russian ] = "Ñâÿçü";
-    Text[ polish ] = "Po³¹cz";
+    Text[ russian ] = "Ñâÿçü ñ ôàéëîì";
+    Text[ polish ] = "Do³¹cz";
     Text[ japanese ] = "ãƒªãƒ³ã‚¯";
     Text[ chinese_traditional ] = "æ·å¾‘";
     Text[ arabic ] = "ÑÈØ";
