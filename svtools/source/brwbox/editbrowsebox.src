@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 12:49:31 $
+ *  last change: $Author: os $ $Date: 2002-03-27 07:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
 {
-    ImageBitmap = Bitmap { File = "editbrowse.bmp"; };
+    ImageBitmap = Bitmap { File = "ed_itbrowse.bmp"; };
     MaskColor   = Color {
             Red   = 0xC000;
             Green = 0xC000;
@@ -82,11 +82,4 @@ ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
     };
     IdCount = { 8; };
 };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 15.06.01 13:39:56  fs
- ************************************************************************/
 
