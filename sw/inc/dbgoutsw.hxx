@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:02:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ class SwPosition;
 class SwPaM;
 class SwNodeNum;
 
+#define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
 #define DBG_OUT(x) printf("%s\n", dbg_out(x))
 #define DBG_OUT_LN(x) printf("%s(%d): %s\n", __FILE__, __LINE__, dbg_out(x))
 
