@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 14:03:26 $
+ *  last change: $Author: er $ $Date: 2001-02-09 14:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ BOOL ScChangeAction::LoadLinks( SvStream& rStrm, ScChangeTrack* pTrack )
 
 BOOL ScChangeAction::IsVisible() const
 {
-    //! Reihenfolge ist wichtig
+    //! sequence order of execution is significant
     if ( IsRejected() || GetType() == SC_CAT_DELETE_TABS || IsDeletedIn() )
         return FALSE;
     if ( GetType() == SC_CAT_CONTENT )
@@ -261,10 +261,10 @@ BOOL ScChangeAction::IsVisible() const
 
 BOOL ScChangeAction::IsTouchable() const
 {
-    //! Reihenfolge ist wichtig
+    //! sequence order of execution is significant
     if ( IsRejected() || GetType() == SC_CAT_REJECT || IsDeletedIn() )
         return FALSE;
-    // Content kann rejecten und touchable sein, wenn on top
+    // content may reject and be touchable if on top
     if ( GetType() == SC_CAT_CONTENT )
         return ((ScChangeActionContent*)this)->IsTopContent();
     if ( IsRejecting() )
@@ -275,29 +275,69 @@ BOOL ScChangeAction::IsTouchable() const
 
 BOOL ScChangeAction::IsClickable() const
 {
-    //! Reihenfolge ist wichtig
+    //! sequence order of execution is significant
     if ( !IsVirgin() )
         return FALSE;
     if ( IsDeletedIn() )
         return FALSE;
     if ( GetType() == SC_CAT_CONTENT )
-        return TRUE;        // fuer Select muss es nicht anfassbar sein
-    return IsTouchable();   // Accept/Reject nur auf anfassbaren
+    {
+        ScChangeActionContentCellType eCCT =
+            ScChangeActionContent::GetContentCellType(
+            ((ScChangeActionContent*)this)->GetNewCell() );
+        if ( eCCT == SC_CACCT_MATREF )
+            return FALSE;
+        if ( eCCT == SC_CACCT_MATORG )
+        {   // no Accept-Select if one of the references is in a deleted col/row
+            const ScChangeActionLinkEntry* pL =
+                ((ScChangeActionContent*)this)->GetFirstDependentEntry();
+            while ( pL )
+            {
+                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                if ( p && p->IsDeletedIn() )
+                    return FALSE;
+                pL = pL->GetNext();
+            }
+        }
+        return TRUE;    // for Select() a content doesn't have to be touchable
+    }
+    return IsTouchable();   // Accept()/Reject() only on touchables
 }
 
 
 BOOL ScChangeAction::IsRejectable() const
 {
-    //! Reihenfolge ist wichtig
+    //! sequence order of execution is significant
     if ( !IsClickable() )
+        return FALSE;
+    if ( GetType() == SC_CAT_CONTENT )
+    {
+        if ( ((ScChangeActionContent*)this)->IsOldMatrixReference() )
+            return FALSE;
+        ScChangeActionContent* pNextContent =
+            ((ScChangeActionContent*)this)->GetNextContent();
+        if ( pNextContent == NULL )
+            return TRUE;        // *this is TopContent
+        return pNextContent->IsRejected();      // *this is next rejectable
+    }
+    return IsTouchable();
+}
+
+
+BOOL ScChangeAction::IsInternalRejectable() const
+{
+    //! sequence order of execution is significant
+    if ( !IsVirgin() )
+        return FALSE;
+    if ( IsDeletedIn() )
         return FALSE;
     if ( GetType() == SC_CAT_CONTENT )
     {
         ScChangeActionContent* pNextContent =
             ((ScChangeActionContent*)this)->GetNextContent();
         if ( pNextContent == NULL )
-            return TRUE;        // this ist TopContent
-        return pNextContent->IsRejected();      // this ist naechster rejectable
+            return TRUE;        // *this is TopContent
+        return pNextContent->IsRejected();      // *this is next rejectable
     }
     return IsTouchable();
 }
@@ -305,16 +345,19 @@ BOOL ScChangeAction::IsRejectable() const
 
 BOOL ScChangeAction::IsDialogRoot() const
 {
-    return IsRejectable();      // nur Rejectables in der Root
+    return IsInternalRejectable();      // only rejectables in root
 }
 
 
 BOOL ScChangeAction::IsDialogParent() const
 {
+    //! sequence order of execution is significant
     if ( GetType() == SC_CAT_CONTENT )
     {
         if ( !IsDialogRoot() )
             return FALSE;
+        if ( ((ScChangeActionContent*)this)->IsMatrixOrigin() && HasDependent() )
+            return TRUE;
         ScChangeActionContent* pPrevContent =
             ((ScChangeActionContent*)this)->GetPrevContent();
         return pPrevContent && pPrevContent->IsVirgin();
@@ -1656,9 +1699,11 @@ ScChangeActionContent::ScChangeActionContent( SvStream& rStrm,
     }
 }
 
-ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
-                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String& sComment,
-                                                ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sResult)
+ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
+            const ScChangeActionState eState, const ULONG nRejectingNumber,
+            const ScBigRange& aBigRange, const String& aUser,
+            const DateTime& aDateTime, const String& sComment,
+            ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sResult )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
         pOldCell(pTempOldCell),
@@ -1674,7 +1719,9 @@ ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, const Sc
         ScChangeActionContent::GetStringOfCell(aNewValue, pOldCell, pDoc, 0);
 }
 
-ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, ScBaseCell* pTempOldCell, const ScBigRange& aBigRange, ScDocument* pDoc)
+ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
+            ScBaseCell* pTempOldCell, const ScBigRange& aBigRange,
+            ScDocument* pDoc )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
         pOldCell(pTempOldCell),
@@ -1904,6 +1951,19 @@ void ScChangeActionContent::GetRefString( String& rStr, ScDocument* pDoc,
     USHORT nFlags = ( GetBigRange().IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( nFlags )
     {
+        const ScBaseCell* pCell = GetNewCell();
+        if ( ScChangeActionContent::GetContentCellType( pCell ) == SC_CACCT_MATORG )
+        {
+            ScBigRange aBigRange( GetBigRange() );
+            USHORT nC, nR;
+            ((const ScFormulaCell*)pCell)->GetMatColsRows( nC, nR );
+            aBigRange.aEnd.IncCol( nC-1 );
+            aBigRange.aEnd.IncRow( nR-1 );
+            rStr = ScChangeAction::GetRefString( aBigRange, pDoc, bFlag3D );
+
+            return ;
+        }
+
         ScAddress aTmpAddress( GetBigRange().aStart.MakeAddress() );
         if ( bFlag3D )
             nFlags |= SCA_TAB_3D;
@@ -1934,19 +1994,31 @@ BOOL ScChangeActionContent::Reject( ScDocument* pDoc )
 
 
 BOOL ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
-        BOOL bOldest )
+        BOOL bOldest, Stack* pRejectActions )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return FALSE;
 
     ScChangeActionContent* pContent = this;
-    // vorherige Werte akzeptieren
-    while ( (pContent = pContent->pPrevContent) && pContent->IsVirgin() )
-        pContent->SetState( SC_CAS_ACCEPTED );
+    // accept previous contents
+    while ( pContent = pContent->pPrevContent )
+    {
+        if ( pContent->IsVirgin() )
+            pContent->SetState( SC_CAS_ACCEPTED );
+    }
     ScChangeActionContent* pEnd = pContent = this;
-    // nachfolgende Werte ablehnen
+    // reject subsequent contents
     while ( pContent = pContent->pNextContent )
     {
+        // MatrixOrigin may have dependents, no dependency recursion needed
+        const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
+        while ( pL )
+        {
+            ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+            if ( p )
+                p->SetRejected();
+            pL = pL->GetNext();
+        }
         pContent->SetRejected();
         pEnd = pContent;
     }
@@ -1964,10 +2036,15 @@ BOOL ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
         else
             PutNewValueToDoc( pDoc, 0, 0 );
 
-        pNew->SetNewValue( pDoc->GetCell( rPos ), pDoc );
         pNew->SetRejectAction( bOldest ? GetActionNumber() : pEnd->GetActionNumber() );
         pNew->SetState( SC_CAS_ACCEPTED );
-        pTrack->Append( pNew );
+        if ( pRejectActions )
+            pRejectActions->Push( pNew );
+        else
+        {
+            pNew->SetNewValue( pDoc->GetCell( rPos ), pDoc );
+            pTrack->Append( pNew );
+        }
     }
 
     if ( bOldest )
@@ -1999,7 +2076,7 @@ void ScChangeActionContent::GetStringOfCell( String& rStr,
 void ScChangeActionContent::GetStringOfCell( String& rStr,
         const ScBaseCell* pCell, const ScDocument* pDoc, ULONG nFormat )
 {
-    if ( ScChangeActionContent::IsContentCellType( pCell ) )
+    if ( ScChangeActionContent::GetContentCellType( pCell ) )
     {
         switch ( pCell->GetCellType() )
         {
@@ -2029,7 +2106,7 @@ void ScChangeActionContent::GetStringOfCell( String& rStr,
 
 
 // static
-BOOL ScChangeActionContent::IsContentCellType( const ScBaseCell* pCell )
+ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScBaseCell* pCell )
 {
     if ( pCell )
     {
@@ -2038,14 +2115,29 @@ BOOL ScChangeActionContent::IsContentCellType( const ScBaseCell* pCell )
             case CELLTYPE_VALUE :
             case CELLTYPE_STRING :
             case CELLTYPE_EDIT :
+                return SC_CACCT_NORMAL;
+            break;
             case CELLTYPE_FORMULA :
-                return TRUE;
+                switch ( ((const ScFormulaCell*)pCell)->GetMatrixFlag() )
+                {
+                    case MM_NONE :
+                        return SC_CACCT_NORMAL;
+                    break;
+                    case MM_FORMULA :
+                    case MM_FAKE :
+                        return SC_CACCT_MATORG;
+                    break;
+                    case MM_REFERENCE :
+                        return SC_CACCT_MATREF;
+                    break;
+                }
+                return SC_CACCT_NORMAL;
             break;
             default:
-                return FALSE;
+                return SC_CACCT_NONE;
         }
     }
-    return FALSE;
+    return SC_CACCT_NONE;
 }
 
 
@@ -2078,7 +2170,7 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
     rStr.Erase();
     if ( pCell )
         pCell->Delete();
-    if ( ScChangeActionContent::IsContentCellType( pOrgCell ) )
+    if ( ScChangeActionContent::GetContentCellType( pOrgCell ) )
     {
         pCell = pOrgCell->Clone( pToDoc );
         switch ( pOrgCell->GetCellType() )
@@ -2204,7 +2296,33 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
                     pDoc->SetString( aPos.Col(), aPos.Row(), aPos.Tab(), rValue );
                 break;
                 default:
-                    pDoc->PutCell( aPos, pCell->Clone( pDoc ) );
+                    switch ( ScChangeActionContent::GetContentCellType( pCell ) )
+                    {
+                        case SC_CACCT_MATORG :
+                        {
+                            USHORT nC, nR;
+                            ((const ScFormulaCell*)pCell)->GetMatColsRows( nC, nR );
+                            DBG_ASSERT( nC>0 && nR>0, "ScChangeActionContent::PutValueToDoc: MatColsRows?" );
+                            ScRange aRange( aPos );
+                            if ( nC > 1 )
+                                aRange.aEnd.IncCol( nC-1 );
+                            if ( nR > 1 )
+                                aRange.aEnd.IncRow( nR-1 );
+                            ScMarkData aDestMark;
+                            aDestMark.SelectOneTable( aPos.Tab() );
+                            aDestMark.SetMarkArea( aRange );
+                            pDoc->InsertMatrixFormula( aPos.Col(), aPos.Row(),
+                                aRange.aEnd.Col(), aRange.aEnd.Row(),
+                                aDestMark, EMPTY_STRING,
+                                ((const ScFormulaCell*)pCell)->GetCode() );
+                        }
+                        break;
+                        case SC_CACCT_MATREF :
+                            // nothing
+                        break;
+                        default:
+                            pDoc->PutCell( aPos, pCell->Clone( pDoc ) );
+                    }
             }
         }
         else
@@ -3111,7 +3229,7 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
         ScBaseCell* pCell = aIter.GetFirst();
         while ( pCell )
         {
-            if ( ScChangeActionContent::IsContentCellType( pCell ) )
+            if ( ScChangeActionContent::GetContentCellType( pCell ) )
             {
                 aBigPos.Set( aIter.GetCol() + nDx, aIter.GetRow() + nDy,
                     aIter.GetTab() + nDz );
@@ -3141,6 +3259,22 @@ void ScChangeTrack::AppendMove( const ScRange& rFromRange,
 }
 
 
+// static
+BOOL ScChangeTrack::IsMatrixFormulaRangeDifferent( const ScBaseCell* pOldCell,
+        const ScBaseCell* pNewCell )
+{
+    USHORT nC1, nR1, nC2, nR2;
+    nC1 = nR1 = nC2 = nR2 = 0;
+    if ( pOldCell && (pOldCell->GetCellType() == CELLTYPE_FORMULA) &&
+            ((const ScFormulaCell*)pOldCell)->GetMatrixFlag() == MM_FORMULA )
+        ((const ScFormulaCell*)pOldCell)->GetMatColsRows( nC1, nR1 );
+    if ( pNewCell && (pNewCell->GetCellType() == CELLTYPE_FORMULA) &&
+            ((const ScFormulaCell*)pNewCell)->GetMatrixFlag() == MM_FORMULA )
+        ((const ScFormulaCell*)pNewCell)->GetMatColsRows( nC1, nR1 );
+    return nC1 != nC2 || nR1 != nR2;
+}
+
+
 void ScChangeTrack::AppendContent( const ScAddress& rPos,
         const String& rNewValue )
 {
@@ -3154,12 +3288,56 @@ void ScChangeTrack::AppendContent( const ScAddress& rPos,
 {
     String aOldValue;
     ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pDoc, rPos );
-    if ( aOldValue != rNewValue )
+    if ( aOldValue != rNewValue ||
+            IsMatrixFormulaRangeDifferent( pOldCell, NULL ) )
     {   // nur wirkliche Aenderung tracken
         ScRange aRange( rPos );
         ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
         pAct->SetOldValue( pOldCell, pDoc, pDoc );
         pAct->SetNewValue( rNewValue, pDoc );
+        Append( pAct );
+    }
+}
+
+
+void ScChangeTrack::AppendContent( const ScAddress& rPos,
+        const ScBaseCell* pOldCell, ULONG nOldFormat, ScDocument* pRefDoc )
+{
+    if ( !pRefDoc )
+        pRefDoc = pDoc;
+    String aOldValue;
+    ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pRefDoc, nOldFormat );
+    String aNewValue;
+    ScBaseCell* pNewCell = pDoc->GetCell( rPos );
+    ScChangeActionContent::GetStringOfCell( aNewValue, pNewCell, pDoc, rPos );
+    if ( aOldValue != aNewValue ||
+            IsMatrixFormulaRangeDifferent( pOldCell, pNewCell ) )
+    {   // nur wirkliche Aenderung tracken
+        ScRange aRange( rPos );
+        ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
+        pAct->SetOldValue( pOldCell, pRefDoc, pDoc, nOldFormat );
+        pAct->SetNewValue( pNewCell, pDoc );
+        Append( pAct );
+    }
+}
+
+
+void ScChangeTrack::AppendContent( const ScAddress& rPos,
+        ScDocument* pRefDoc )
+{
+    String aOldValue;
+    ScBaseCell* pOldCell = pRefDoc->GetCell( rPos );
+    ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pRefDoc, rPos );
+    String aNewValue;
+    ScBaseCell* pNewCell = pDoc->GetCell( rPos );
+    ScChangeActionContent::GetStringOfCell( aNewValue, pNewCell, pDoc, rPos );
+    if ( aOldValue != aNewValue ||
+            IsMatrixFormulaRangeDifferent( pOldCell, pNewCell ) )
+    {   // nur wirkliche Aenderung tracken
+        ScRange aRange( rPos );
+        ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
+        pAct->SetOldValue( pOldCell, pRefDoc, pDoc );
+        pAct->SetNewValue( pNewCell, pDoc );
         Append( pAct );
     }
 }
@@ -3182,47 +3360,6 @@ void ScChangeTrack::AppendContent( const ScAddress& rPos,
         AppendContent( rPos, pOldCell, pRefDoc->GetNumberFormat( rPos ), pRefDoc );
     else
         AppendContent( rPos, pOldCell, 0, pRefDoc );
-}
-
-
-void ScChangeTrack::AppendContent( const ScAddress& rPos,
-        const ScBaseCell* pOldCell, ULONG nOldFormat, ScDocument* pRefDoc )
-{
-    if ( !pRefDoc )
-        pRefDoc = pDoc;
-    String aOldValue;
-    ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pRefDoc, nOldFormat );
-    String aNewValue;
-    ScBaseCell* pNewCell = pDoc->GetCell( rPos );
-    ScChangeActionContent::GetStringOfCell( aNewValue, pNewCell, pDoc, rPos );
-    if ( aOldValue != aNewValue )
-    {   // nur wirkliche Aenderung tracken
-        ScRange aRange( rPos );
-        ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
-        pAct->SetOldValue( pOldCell, pRefDoc, pDoc, nOldFormat );
-        pAct->SetNewValue( pNewCell, pDoc );
-        Append( pAct );
-    }
-}
-
-
-void ScChangeTrack::AppendContent( const ScAddress& rPos,
-        ScDocument* pRefDoc )
-{
-    String aOldValue;
-    ScBaseCell* pOldCell = pRefDoc->GetCell( rPos );
-    ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pRefDoc, rPos );
-    String aNewValue;
-    ScBaseCell* pNewCell = pDoc->GetCell( rPos );
-    ScChangeActionContent::GetStringOfCell( aNewValue, pNewCell, pDoc, rPos );
-    if ( aOldValue != aNewValue )
-    {   // nur wirkliche Aenderung tracken
-        ScRange aRange( rPos );
-        ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
-        pAct->SetOldValue( pOldCell, pRefDoc, pDoc );
-        pAct->SetNewValue( pNewCell, pDoc );
-        Append( pAct );
-    }
 }
 
 
@@ -3492,16 +3629,33 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
             (eActType == SC_CAT_MOVE && pAct->IsRejecting()) )
         return ;        // diese Rejects sind nicht abhaengig
 
-    if ( eActType == SC_CAT_CONTENT &&
-            !(((ScChangeActionContent*)pAct)->GetNextContent() ||
+    if ( eActType == SC_CAT_CONTENT )
+    {
+        if ( !(((ScChangeActionContent*)pAct)->GetNextContent() ||
             ((ScChangeActionContent*)pAct)->GetPrevContent()) )
-    {   // Contents an gleicher Position verketten
-        ScChangeActionContent* pContent = SearchContentAt(
-            pAct->GetBigRange().aStart, pAct );
-        if ( pContent )
+        {   // Contents an gleicher Position verketten
+            ScChangeActionContent* pContent = SearchContentAt(
+                pAct->GetBigRange().aStart, pAct );
+            if ( pContent )
+            {
+                pContent->SetNextContent( (ScChangeActionContent*) pAct );
+                ((ScChangeActionContent*)pAct)->SetPrevContent( pContent );
+            }
+        }
+        const ScBaseCell* pCell = ((ScChangeActionContent*)pAct)->GetNewCell();
+        if ( ScChangeActionContent::GetContentCellType( pCell ) == SC_CACCT_MATREF )
         {
-            pContent->SetNextContent( (ScChangeActionContent*) pAct );
-            ((ScChangeActionContent*)pAct)->SetPrevContent( pContent );
+            ScAddress aOrg;
+            ((const ScFormulaCell*)pCell)->GetMatrixOrigin( aOrg );
+            ScChangeActionContent* pContent = SearchContentAt( aOrg, pAct );
+            if ( pContent && pContent->IsMatrixOrigin() )
+            {
+                AddDependentWithNotify( pContent, pAct );
+            }
+            else
+            {
+                DBG_ERRORFILE( "ScChangeTrack::Dependencies: MatOrg not found" );
+            }
         }
     }
 
@@ -4474,6 +4628,25 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                 if ( !pContent->IsRejected() )
                     rTable.Insert( pContent->GetActionNumber(), pContent );
             }
+            // all MatrixReferences of a MatrixOrigin
+            const ScChangeActionLinkEntry* pL = pCur->GetFirstDependentEntry();
+            while ( pL )
+            {
+                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                if ( p != pAct )
+                {
+                    if ( bAllFlat )
+                    {
+                        ULONG n = p->GetActionNumber();
+                        if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
+                            if ( p->HasDependent() )
+                                pStack->Push( p );
+                    }
+                    else
+                        rTable.Insert( p->GetActionNumber(), p );
+                }
+                pL = pL->GetNext();
+            }
         }
         else if ( pCur->GetType() == SC_CAT_REJECT )
         {
@@ -4508,7 +4681,63 @@ BOOL ScChangeTrack::SelectContent( ScChangeAction* pAct, BOOL bOldest )
     if ( !pContent->IsClickable() )
         return FALSE;
 
-    return pContent->Select( pDoc, this, bOldest );
+    ScBigRange aBigRange( pContent->GetBigRange() );
+    const ScBaseCell* pCell = (bOldest ? pContent->GetOldCell() :
+        pContent->GetNewCell());
+    if ( ScChangeActionContent::GetContentCellType( pCell ) == SC_CACCT_MATORG )
+    {
+        USHORT nC, nR;
+        ((const ScFormulaCell*)pCell)->GetMatColsRows( nC, nR );
+        aBigRange.aEnd.IncCol( nC-1 );
+        aBigRange.aEnd.IncRow( nR-1 );
+    }
+
+    if ( !aBigRange.IsValid( pDoc ) )
+        return FALSE;
+
+    ScRange aRange( aBigRange.MakeRange() );
+    if ( !pDoc->IsBlockEditable( aRange.aStart.Tab(), aRange.aStart.Col(),
+            aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row() ) )
+        return FALSE;
+
+    if ( pContent->HasDependent() )
+    {
+        BOOL bOk = TRUE;
+        Stack aRejectActions;
+        const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
+        while ( pL )
+        {
+            ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+            if ( p != pContent )
+            {
+                if ( p->GetType() == SC_CAT_CONTENT )
+                {
+                    // we don't need no recursion here, do we?
+                    bOk &= ((ScChangeActionContent*)p)->Select( pDoc, this,
+                        bOldest, &aRejectActions );
+                }
+                else
+                {
+                    DBG_ERRORFILE( "ScChangeTrack::SelectContent: content dependent no content" );
+                }
+            }
+            pL = pL->GetNext();
+        }
+
+        bOk &= pContent->Select( pDoc, this, bOldest, NULL );
+        // now the matrix is inserted and new content values are ready
+
+        ScChangeActionContent* pNew;
+        while ( pNew = (ScChangeActionContent*) aRejectActions.Pop() )
+        {
+            ScAddress aPos( pNew->GetBigRange().aStart.MakeAddress() );
+            pNew->SetNewValue( pDoc->GetCell( aPos ), pDoc );
+            Append( pNew );
+        }
+        return bOk;
+    }
+    else
+        return pContent->Select( pDoc, this, bOldest, NULL );
 }
 
 
@@ -4546,7 +4775,7 @@ BOOL ScChangeTrack::RejectAll()
     BOOL bOk = TRUE;
     for ( ScChangeAction* p = GetLast(); p && bOk; p = p->GetPrev() )
     {   //! rueckwaerts, weil abhaengige hinten und RejectActions angehaengt
-        if ( p->IsRejectable() )
+        if ( p->IsInternalRejectable() )
             bOk = Reject( p );
     }
     return bOk;
@@ -4574,7 +4803,7 @@ BOOL ScChangeTrack::Reject( ScChangeAction* pAct )
 BOOL ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
         BOOL bRecursion )
 {
-    if ( !pAct->IsRejectable() )
+    if ( !pAct->IsInternalRejectable() )
         return FALSE;
 
     BOOL bOk = TRUE;
