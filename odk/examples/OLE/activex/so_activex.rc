@@ -95,7 +95,7 @@ END
 // Generated from the TEXTINCLUDE 3 resource.
 //
 
-1 TYPELIB .\..\..\..\WINexample.out\misc\so_activex.tlb
+1 TYPELIB .\..\..\..\WINexample.out\misc\so_activex\so_activex.tlb
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED

@@ -1,48 +1,74 @@
-# Builds the ActiveX control.
+# Builds the OLE activx C++ component example of the SDK.
 
-PRJ=..$(PS)..$(PS)..
-SETTINGS=../../../settings
+PRJ=../../..
+SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
-
 include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
 
-CC_INCLUDES+=-I$(OUT_MISC)
+# Define non-platform/compiler specific settings
+COMPONENT_NAME=so_activex
+COMPONENT_IMPL_NAME=$(SHAREDLIB_PRE)$(COMPONENT_NAME).$(SHAREDLIB_EXT) 
+COMPONENT_IMPL=$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(COMPONENT_NAME).$(SHAREDLIB_EXT) 
+OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
+OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
+OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
 
-#######################################################
-# add path to ATL headers - REQUIRES TO BE EDIT BY USER
+MIDLFILES = so_activex.idl
 
-CC_INCLUDES+=-Ir:$(PS)MSVC603$(PS)ATL$(PS)Include
+CXXFILES = SOActiveX.cpp \
+	 SOComWindowPeer.cpp \
+	 so_activex.cpp \
+	 StdAfx2.cpp
 
-#######################################################
+SLOFILES = $(patsubst %.cpp,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-ifeq "$(OS)" "WIN"
 # Targets
-
 .PHONY: ALL
-ALL : $(OUT) $(OUT_MISC)\so_activex.h so_activex_dll
+ALL : \
+	OleActvieXComponentExample
 
 include $(SETTINGS)/stdtarget.mk
 
-# source files
-$(OUT_SLO)$(PS)so_activex.$(OBJ_EXT) : so_activex.cpp 
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$@ $<
+$(OUT_COMP_GEN) : $(OUT)
+	$(MKDIR) $(subst /,$(PS),$@)
+	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_INC))
+	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_SLO))
 
-$(OUT_SLO)$(PS)SOActiveX.$(OBJ_EXT) : SOActiveX.cpp 
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$@ $<
+# Attention: so_activex.idl is no UNOIDL file!
+$(OUT_COMP_INC)/so_activex.h : so_activex.idl $(OUT_COMP_GEN)
+	midl.exe /tlb $(OUT_COMP_GEN)/so_activex.tlb /h $(OUT_COMP_INC)/so_activex.h \
+	/iid $(OUT_COMP_INC)/so_activex_i.c /proxy $(OUT_COMP_INC)/so_activex_p.c /dlldata \
+	$(OUT_MISC)/dlldata.c /Oicf $<
 
-$(OUT_SLO)$(PS)SOComWindowPeer.$(OBJ_EXT) : SOComWindowPeer.cpp 
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$@ $<
+$(OUT_COMP_GEN)/so_activex.res : so_activex.rc $(OUT_COMP_INC)/so_activex.h $(OUT_COMP_GEN)
+	rc $(CC_INCLUDES) /R /FO$@ so_activex.rc			       
 
-$(OUT_SLO)$(PS)StdAfx2.$(OBJ_EXT) : StdAfx2.cpp 
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$@ $<
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cpp $(OUT_COMP_GEN)
+	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(SHAREDLIB_OUT)$(PS)$(SHAREDLIB_PRE)so_activex.$(SHAREDLIB_EXT) : 	$(OUT_SLO)$(PS)so_activex.$(OBJ_EXT) $(OUT_SLO)$(PS)SOActiveX.$(OBJ_EXT) $(OUT_SLO)$(PS)SOComWindowPeer.$(OBJ_EXT) $(OUT_SLO)$(PS)StdAfx2.$(OBJ_EXT)
-	rc $(CC_INCLUDES) /R /FO$(OUT_MISC)$(PS)so_activex.res so_activex.rc
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /DEF:so_activex.def /MAP:$(OUT_MISC)$(PS)so_activex.map /IMPLIB:$(OUT_LIB)$(PS)iso_activex.lib $^ msvcrt.lib kernel32.lib user32.lib uuid.lib advapi32.lib ole32.lib oleaut32.lib gdi32.lib urlmon.lib Shlwapi.lib oldnames.lib $(OUT_MISC)$(PS)so_activex.res
+$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/so_activex.res so_activex.def $(OUT_COMP_GEN)
+	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(COMPONENT_NAME).map \
+	/DEF:so_activex.def /IMPLIB:$(OUT_LIB)/iso_activex.lib $(SLOFILES) \
+	msvcrt.lib kernel32.lib user32.lib uuid.lib advapi32.lib ole32.lib oleaut32.lib gdi32.lib \
+	urlmon.lib Shlwapi.lib oldnames.lib $(OUT_COMP_GEN)/so_activex.res
 
-so_activex_dll : $(SHAREDLIB_OUT)$(PS)$(SHAREDLIB_PRE)so_activex.$(SHAREDLIB_EXT)
-
-$(OUT_MISC)\so_activex.h: so_activex.idl
-	midl.exe /tlb $(OUT_MISC)\so_activex.tlb /h $(OUT_MISC)\so_activex.h /iid $(OUT_MISC)\so_activex_i.c /proxy $(OUT_MISC)\so_activex_p.c /dlldata $(OUT_MISC)\dlldata.c /Oicf so_activex.idl
+OleActvieXComponentExample : $(COMPONENT_IMPL)
+ifeq "$(OS)" "WIN"
+	@echo --------------------------------------------------------------------------------
+	@echo The activex control was created, pleae use the example.html file to use this
+	@echo activex control in the InternetExplorer.
+	@echo --------------------------------------------------------------------------------
+else
+	@echo --------------------------------------------------------------------------------
+	@echo This example works only under Windows!
+	@echo --------------------------------------------------------------------------------
 endif
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
+	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(COMPONENT_NAME).*)
