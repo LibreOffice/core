@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:16 $
+ *  last change: $Author: aidan $ $Date: 2002-12-10 15:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1687,16 +1687,45 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
         else
             *pWork = Custom8BitToUnicode(hConverter, nBCode);
     }
-
-    if (sPlainCharsBuf.Len())
-        rDoc.Insert (*pPaM, sPlainCharsBuf);
-
+    AddTextToParagraph(sPlainCharsBuf);
     rPos += nL2;
 
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
     return nL2 >= nLen;
 }
+
+
+bool SwWW8ImplReader::AddTextToParagraph(String& sAddString)
+{
+    const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
+    if (sAddString.Len())
+    {
+        if((pNd->GetTxt().Len()+ sAddString.Len())< STRING_MAXLEN -1 )
+        {
+            rDoc.Insert (*pPaM, sAddString);
+        }
+        else
+        {
+
+            if(pNd->GetTxt().Len()< STRING_MAXLEN -1)
+            {
+                String sTempStr (sAddString,0,STRING_MAXLEN - pNd->GetTxt().Len() -1);
+                rDoc.Insert (*pPaM, sTempStr);
+                sTempStr=sAddString.Copy(sTempStr.Len(),sAddString.Len()-sTempStr.Len());
+                AppendTxtNode(*pPaM->GetPoint());
+                rDoc.Insert (*pPaM,sTempStr );
+            }
+            else
+            {
+                AppendTxtNode(*pPaM->GetPoint());
+                rDoc.Insert (*pPaM, sAddString);
+            }
+        }
+    }
+    return true;
+}
+
 
 
 // Returnwert: true for para end
@@ -1922,8 +1951,9 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
 
     if( '\x0' != cInsert )
     {
-        rDoc.Insert( *pPaM, ByteString::ConvertToUnicode(cInsert,
-            RTL_TEXTENCODING_MS_1252 ) );
+        String sInsert = ByteString::ConvertToUnicode(cInsert,
+            RTL_TEXTENCODING_MS_1252 );
+        AddTextToParagraph(sInsert);
     }
     return bRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:16 $
+ *  last change: $Author: aidan $ $Date: 2002-12-10 15:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@ friend class WW8FormulaControl;
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
     void DeleteRefStk()     { DeleteStk( pRefStck ); pRefStck = 0; }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
-
+    bool AddTextToParagraph(String& sAddString);
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(long& rPos, long nEnd, long nCpOfs);
     bool ReadChars(long& rPos, long nNextAttr, long nTextEnd, long nCpOfs);
