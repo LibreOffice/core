@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLParser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:27:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ void SAXParser::processingInstruction( const ::rtl::OUString& aTarget, const ::r
 
 void SAXParser::setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ::rtl::OUString aTester;
     aTester = xLocator->getPublicId();
     aTester = xLocator->getSystemId();
