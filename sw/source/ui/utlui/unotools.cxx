@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:28:50 $
+ *  last change: $Author: os $ $Date: 2001-07-10 07:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,11 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             //rWindow.Enable(sal_True, sal_False);
                aInitializedLink.Call(this);
         }
+
+        uno::Reference< text::XTextViewCursorSupplier >  xCrsrSupp(_xController, uno::UNO_QUERY);
+        uno::Reference< view::XScreenCursor >  xScrCrsr(xCrsrSupp->getViewCursor(), uno::UNO_QUERY);
+        if(xScrCrsr.is())
+            xScrCrsr->screenUp();
 
         uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
         xWin->setVisible( sal_True );
