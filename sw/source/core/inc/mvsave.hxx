@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvsave.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: os $ $Date: 2001-01-10 14:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,13 @@ class SaveBookmark
     xub_StrLen nCntnt1, nCntnt2;
     KeyCode aCode;
     SaveBookmarkType eBkmkType;
+    BOOKMARK_TYPE    eOrigBkmType;
 
 public:
     SaveBookmark( int, const SwBookmark&, const SwNodeIndex&,
                                     const SwIndex* pIdx = 0 );
     void SetInDoc( SwDoc* pDoc, const SwNodeIndex&, const SwIndex* pIdx = 0);
+    BOOKMARK_TYPE   GetOriginalBkmType() const {return eOrigBkmType;}
 };
 
 SV_DECL_PTRARR_DEL( SaveBookmarks, SaveBookmark*, 0, 10 )
