@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:56:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     return nNext;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                      SwAttrIter::Dump()
  *************************************************************************/
