@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:08:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,8 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
                 if (!increment(&nAttributes, "attributes")) {
                     return false;
                 }
-                AstAttribute * attr = static_cast< AstAttribute * >(*i);
+//                AstAttribute * attr = static_cast< AstAttribute * >(*i);
+                AstAttribute * attr = (AstAttribute *)(*i);
                 if (attr->isBound()) {
                     version = TYPEREG_VERSION_1;
                 }
@@ -240,10 +241,9 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
         }
     }}
 
+    OUString emptyStr;
     typereg::Writer aBlob(
-        version, getDocumentation(),
-        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
-        RT_TYPE_INTERFACE, m_bPublished,
+        version, getDocumentation(), emptyStr, RT_TYPE_INTERFACE, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), nBaseTypes,
         nAttributes, nMethods, nReferences);
 
@@ -275,12 +275,15 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
     {
         switch ((*i)->getNodeType()) {
         case NT_attribute:
-            static_cast< AstAttribute * >(*i)->dumpBlob(
+//           static_cast< AstAttribute * >(*i)->dumpBlob(
+
+            ((AstAttribute *)(*i))->dumpBlob(
                 aBlob, attributeIndex++, &methodIndex);
             break;
 
         case NT_operation:
-            static_cast< AstOperation * >(*i)->dumpBlob(aBlob, methodIndex++);
+//            static_cast< AstOperation * >(*i)->dumpBlob(aBlob, methodIndex++);
+            ((AstOperation *)(*i))->dumpBlob(aBlob, methodIndex++);
             break;
 
         default:
@@ -292,8 +295,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-    if (localKey.setValue(
-            OUString(), RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
+    if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
