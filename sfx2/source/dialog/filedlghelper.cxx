@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-27 08:13:21 $
+ *  last change: $Author: dv $ $Date: 2001-08-29 10:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,21 +1165,20 @@ OUString FileDialogHelper_Impl::getRealFilter() const
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::setPath( const OUString& rPath )
 {
+    // We check wether the path points to a dirctory or not
+    //
     // We set the display directory only, when it is on a local / remote(?)
     // filesystem
-    /*
-    String aTmp;
-    utl::LocalFileHelper::ConvertURLToSystemPath( aPath, aTmp );
-    if ( aTmp.Len() )
-        ...
-    */
-    if ( ! rPath.getLength() ||
-         ! utl::LocalFileHelper::IsLocalFile( rPath ) )
+
+    if ( ! rPath.getLength() )
+        return;
+    /* if (! utl::LocalFileHelper::IsLocalFile( rPath ) )
     {
         return;
-    }
+    }*/
 
     OUString aName;
+    OUString aPath;
 
     INetURLObject aObj( rPath );
 
@@ -1193,7 +1192,12 @@ void FileDialogHelper_Impl::setPath( const OUString& rPath )
         aObj.removeSegment();
     }
 
-    maPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    aPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
+
+    if ( ! utl::UCBContentHelper::IsFolder( aPath ) )
+        return;
+    else
+        maPath = aPath;
 
     // set the path
     if ( mxFileDlg.is() )
@@ -1498,6 +1502,9 @@ void FileDialogHelper_Impl::saveConfig()
         if ( bWriteConfig )
             aDlgOpt.SetUserData( aUserData );
     }
+
+    SfxApplication *pSfxApp = SFX_APP();
+    pSfxApp->SetLastDir_Impl( getPath() );
 }
 
 // ------------------------------------------------------------------------
@@ -1532,7 +1539,14 @@ void FileDialogHelper_Impl::loadConfig()
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
                 if ( ! maPath.getLength() )
-                    setPath( aUserData.GetToken( 2, ' ' ) );
+                {
+                    SfxApplication *pSfxApp = SFX_APP();
+                    OUString aPath = pSfxApp->GetLastDir_Impl();
+                    if ( !aPath.getLength() )
+                        aPath = aUserData.GetToken( 2, ' ' );
+
+                    setPath( aPath );
+                }
 
                 if ( ! maCurFilter.getLength() )
                 {
@@ -1559,7 +1573,14 @@ void FileDialogHelper_Impl::loadConfig()
             aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
         if ( ! maPath.getLength() )
-            setPath( aUserData.GetToken( 1, ' ' ) );
+        {
+            SfxApplication *pSfxApp = SFX_APP();
+            OUString aPath = pSfxApp->GetLastDir_Impl();
+            if ( !aPath.getLength() )
+                aPath = aUserData.GetToken( 1, ' ' );
+
+            setPath( aPath );
+        }
 
         if ( mbHasAutoExt )
         {
