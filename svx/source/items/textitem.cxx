@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-09 13:34:39 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2586,6 +2586,12 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
     }
     return sal_True;
+}
+
+// class SvxNoLinebreakItem ----------------------------------------------
+SvxNoLinebreakItem::SvxNoLinebreakItem( const sal_Bool bBreak, const USHORT nId ) :
+      SfxBoolItem( nId, bBreak )
+{
 }
 
 // -----------------------------------------------------------------------
