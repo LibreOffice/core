@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:06:08 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 14:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1892,6 +1892,9 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         pEndFrm->GetCharRect  ( aEndRect, *pEndPos, &aTmpState );
         Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
 
+        SwRect aStFrm ( pStartFrm->PaintArea() );
+        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->PaintArea() );
+
         // If there's no doubleline portion involved or start and end are both
         // in the same doubleline portion, all works fine, but otherwise
         // we need the following...
@@ -1908,6 +1911,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     Point( pSt2Pos->aPortion.Right(), aStRect.Bottom() ) );
                 if( pSt2Pos->aPortion.Top() == aStRect.Top() )
                     aTmp.Top( pSt2Pos->aLine.Top() );
+                aTmp.Intersection( aStFrm );
                 Sub( aRegion, aTmp );
                 if( aStRect.Bottom() < pSt2Pos->aLine.Bottom() )
                 {
@@ -1915,6 +1919,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     aTmp.Bottom( pSt2Pos->aLine.Bottom() );
                     if( aStRect.Bottom() < pSt2Pos->aPortion.Bottom() )
                         aTmp.Left( pSt2Pos->aPortion.Left() );
+                    aTmp.Intersection( aStFrm );
                     Sub( aRegion, aTmp );
                 }
                 aStRect = SwRect( Point( pSt2Pos->aPortion.Right(),
@@ -1927,6 +1932,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                            aEndRect.Top() + aEndRect.Height() ) );
                 if( pEnd2Pos->aPortion.Bottom() == aEndRect.Bottom() )
                     aTmp.Bottom( pEnd2Pos->aLine.Bottom() );
+                aTmp.Intersection( aEndFrm );
                 Sub( aRegion, aTmp );
                 if( aEndRect.Top() > pEnd2Pos->aLine.Top() )
                 {
@@ -1934,12 +1940,34 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     aTmp.Top( pEnd2Pos->aLine.Top() );
                     if( aEndRect.Top() > pEnd2Pos->aPortion.Top() )
                         aTmp.Right( pEnd2Pos->aPortion.Right() );
+                    aTmp.Intersection( aEndFrm );
                     Sub( aRegion, aTmp );
                 }
                 aEndRect = SwRect( Point( pEnd2Pos->aPortion.Left(),
                     pEnd2Pos->aLine.Top()), Size( 1, pEnd2Pos->aLine.Height()));
             }
         }
+
+        // The charrect may be outside the paintarea (for cursortravelling)
+        // but the selection has to be restricted to the paintarea
+        if( aStRect.Left() < aStFrm.Left() )
+            aStRect.Left( aStFrm.Left() );
+        else if( aStRect.Left() > aStFrm.Right() )
+            aStRect.Left( aStFrm.Right() );
+        SwTwips nTmp = aStRect.Right();
+        if( nTmp < aStFrm.Left() )
+            aStRect.Right( aStFrm.Left() );
+        else if( nTmp > aStFrm.Right() )
+            aStRect.Right( aStFrm.Right() );
+        if( aEndRect.Left() < aEndFrm.Left() )
+            aEndRect.Left( aEndFrm.Left() );
+        else if( aEndRect.Left() > aEndFrm.Right() )
+            aEndRect.Left( aEndFrm.Right() );
+        nTmp = aEndRect.Right();
+        if( nTmp < aEndFrm.Left() )
+            aEndRect.Right( aEndFrm.Left() );
+        else if( nTmp > aEndFrm.Right() )
+            aEndRect.Right( aEndFrm.Right() );
 
         //Fall 1: (Gleicher Frame und gleiche Zeile)
         if( pStartFrm == pEndFrm && aStRect.Top() == aEndRect.Top() )
@@ -1957,6 +1985,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                                     GetCursorSize();
                 aTmp.Width( pOut->PixelToLogic( Size( nCrsrWidth, 0 ) ).Width() );
             }
+            aTmp.Intersection( aStFrm );
             Sub( aRegion, aTmp );
         }
         //Fall 2: (Gleicher Frame ueber mehr als eine Zeile)
@@ -1973,7 +2002,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 lLeft = pStartFrm->Frm().Left() + pStartFrm->Prt().Left();
                 lRight = pStartFrm->Frm().Left() + pStartFrm->Prt().Right();
             }
-
+            if( lLeft < aStFrm.Left() )
+                lLeft = aStFrm.Left();
+            if( lRight > aStFrm.Right() )
+                lRight = aStFrm.Right();
             //Erste Zeile
             Sub( aRegion, SwRect( aStRect.Pos(),Point( lRight, aStRect.Bottom())));
 
@@ -1992,11 +2024,6 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         //         dazwischen)
         else
         {
-            SwRect aStFrm ( pStartFrm->Prt() );
-            SwRect aEndFrm( pEndFrm->Prt() );
-            aStFrm.Pos()  += pStartFrm->Frm().Pos();
-            aEndFrm.Pos() += pEndFrm->Frm().Pos();
-
                 //Erst den StartFrm verknurpseln...
             Sub( aRegion, SwRect( aStRect.Pos(),
                             Point( aStFrm.Right(), aStRect.Bottom())));
@@ -2027,8 +2054,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 //die im Body liegen und umgekehrt.
                 if ( bBody == pCntnt->IsInDocBody() )
                 {
-                    SwRect aCRect( pCntnt->Prt() );
-                    aCRect.Pos() += pCntnt->Frm().Pos();
+                    SwRect aCRect( pCntnt->PaintArea() );
                     if( aCRect.IsOver( aRegion.GetOrigin() ))
                     {
                         SwRect aTmp( aPrvRect );
