@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 09:27:29 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
 #endif
+#ifndef _SVTREEBOX_HXX
+#include <svtools/svtreebx.hxx>
+#endif
 
 //#ifndef _DLGSIZE_HXX
 //#include "dlgsize.hxx"
@@ -110,6 +113,9 @@
 #include <vcl/wrkwin.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
@@ -134,11 +140,32 @@
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _SVX_ALGITEM_HXX //autogen
 #include <svx/algitem.hxx>
@@ -152,8 +179,12 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef DBAUI_DBTREEMODEL_HXX
 #include "dbtreemodel.hxx"
+#endif
+#ifndef DBACCESS_UI_DBTREEVIEW_HXX
 #include "dbtreeview.hxx"
+#endif
 #ifndef _SVLBOXITM_HXX
 #include <svtools/svlbitm.hxx>
 #endif
@@ -181,6 +212,12 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -191,7 +228,15 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace dbaui;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::task;
+using namespace ::dbtools;
+
+// .........................................................................
+namespace dbaui
+{
+// .........................................................................
+
 //==================================================================
 //= SbaTableQueryBrowser
 //==================================================================
@@ -277,8 +322,19 @@ void SAL_CALL SbaTableQueryBrowser::dispose()
     // and it will live longer than we do.
     if (getContent())
         getContent()->setTreeView(NULL);
+
+    // clear the user data of the tree model
+    SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+    while (pEntryLoop)
+    {
+        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+         delete pData;
+         pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+    }
+    // clear the tree model
     delete m_pTreeModel;
     m_pTreeModel = NULL;
+
     SbaXDataBrowserController::dispose();
 }
 
@@ -302,6 +358,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         m_pTreeView = new DBTreeView(getContent(), WB_TABSTOP);
         m_pTreeView->Show();
+        m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
         m_pSplitter->SetSplitPosPixel( getContent()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
@@ -310,9 +367,10 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         getContent()->setTreeView(m_pTreeView);
 
         // fill view with data
-        m_pTreeModel = new DBTreeListModel(m_xMultiServiceFacatory);
+        m_pTreeModel = new DBTreeListModel;
         m_pTreeView->setModel(m_pTreeModel);
         m_pTreeView->setSelectHdl(LINK(this, SbaTableQueryBrowser, OnSelectEntry));
+        initializeTreeModel();
 
         // TODO
         //  getContent()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
@@ -1155,6 +1213,201 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             break;
     }
 }
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::initializeTreeModel()
+{
+    DBG_ASSERT(m_xMultiServiceFacatory.is(), "DBTreeListModel::DBTreeListModel : need a service factory !");
+    try
+    {
+        m_xDatabaseContext = Reference< XNameAccess >(m_xMultiServiceFacatory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+    }
+    catch(Exception&)
+    {
+    }
+
+    if (m_xDatabaseContext.is())
+    {
+        String aNames[2];
+        aNames[0] = String(ModuleRes(STR_QRY_TITLE)).GetToken(0,' ');
+        aNames[1] = String(ModuleRes(STR_TBL_TITLE)).GetToken(0,' ');
+
+        // images for the table and query folders
+        Image aFolderImage[2] = {
+                    Image(ModuleRes(QUERYFOLDER_TREE_ICON)),
+                    Image(ModuleRes(TABLEFOLDER_TREE_ICON))
+                };
+
+        Image aDBImage(ModuleRes(IMG_DATABASE));
+        // fill the model with the names of the registered datasources
+        Sequence< ::rtl::OUString > aDatasources = m_xDatabaseContext->getElementNames();
+        const ::rtl::OUString* pBegin   = aDatasources.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aDatasources.getLength();
+        for (; pBegin != pEnd; ++pBegin)
+        {
+            // add items
+            SvLBoxEntry* pEntry = m_pTreeView->getListBox()->InsertEntry(*pBegin, aDBImage, aDBImage, NULL, sal_False);
+            pEntry->SetUserData(new DBTreeListModel::DBTreeListUserData);
+
+
+
+            for(sal_Int32 i=0;i<2;++i)
+            {
+                SvLBoxEntry* pChild = m_pTreeView->getListBox()->InsertEntry(aNames[i], aFolderImage[i], aFolderImage[i], pEntry, sal_True);
+                DBTreeListModel::DBTreeListUserData* pData = new DBTreeListModel::DBTreeListUserData;
+                pData->bTable = (i != 0);
+                pChild->SetUserData(pData);
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage)
+{
+    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pParent->GetUserData());
+    if(pData)
+        pData->xObject = _xNameAccess;
+
+    try
+    {
+        Sequence< ::rtl::OUString > aNames = _xNameAccess->getElementNames();
+        const ::rtl::OUString* pBegin   = aNames.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+        for (; pBegin != pEnd; ++pBegin)
+            m_pTreeView->getListBox()->InsertEntry(*pBegin, _rImage, _rImage, _pParent, sal_False);
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+        return sal_False;
+    }
+    return sal_True;
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
+{
+    if (_pParent->HasChilds())
+        // nothing to to ...
+        return 1L;
+
+    SvLBoxEntry* pFirstParent = m_pTreeView->getListBox()->GetRootLevelParent(_pParent);
+    OSL_ENSHURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
+
+    DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >(_pParent->GetUserData());
+    OSL_ENSHURE(pData,"SbaTableQueryBrowser::OnExpandEntry: No user data!");
+    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    OSL_ENSHURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
+    String aName(pString->GetText());
+    Any aValue(m_xDatabaseContext->getByName(aName));
+    if(pData->bTable)
+    {
+        Reference<XPropertySet> xProp;
+        aValue >>= xProp;
+        ::rtl::OUString sPwd, sUser;
+        sal_Bool bPwdReq = sal_False;
+        try
+        {
+            xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+            bPwdReq = cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
+            xProp->getPropertyValue(PROPERTY_USER) >>= sUser;
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: error while retrieving data source properties!");
+        }
+
+        SQLExceptionInfo aInfo;
+        try
+        {
+
+            Reference<XConnection> xConnection;  // supports the service sdb::connection
+            if(bPwdReq && !sPwd.getLength())
+            {   // password required, but empty -> connect using an interaction handler
+                Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
+                if (!xConnectionCompletion.is())
+                {
+                    DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: missing an interface ... need an error message here!");
+                }
+                else
+                {   // instantiate the default SDB interaction handler
+                    Reference< XInteractionHandler > xHandler(m_xMultiServiceFacatory->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+                    if (!xHandler.is())
+                    {
+                        ShowServiceNotAvailableError(getContent(), String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
+                            // TODO: a real parent!
+                    }
+                    else
+                    {
+                        xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
+                    }
+                }
+            }
+            else
+            {
+                Reference<XDataSource> xDataSource(xProp,UNO_QUERY);
+                xConnection = xDataSource->getConnection(sUser, sPwd);
+            }
+
+            if(xConnection.is())
+            {
+                DBTreeListModel::DBTreeListUserData* pFirstData = (DBTreeListModel::DBTreeListUserData*)pFirstParent->GetUserData();
+                if(!pFirstData->xObject.is())
+                    pFirstData->xObject = xConnection;
+
+                Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
+                if(xTabSup.is())
+                {
+                    Image aImage(ModuleRes(TABLE_TREE_ICON));
+                    populateTree(xTabSup->getTables(),_pParent,aImage);
+                }
+
+                Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
+                if(xViewSup.is())
+                {
+                    Image aImage(ModuleRes(VIEW_TREE_ICON));
+                    populateTree(xViewSup->getViews(),_pParent,aImage);
+                }
+            }
+        }
+        catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
+        catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
+        catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
+        catch(Exception&) { DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
+
+        if (aInfo.isValid())
+        {
+            try
+            {
+                Sequence< Any > aArgs(1);
+                aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, aInfo.get(), PropertyState_DIRECT_VALUE);
+                Reference< XExecutableDialog > xErrorDialog(
+                    m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
+                if (xErrorDialog.is())
+                    xErrorDialog->execute();
+            }
+            catch(Exception&)
+            {
+                DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not display the error message!");
+            }
+            return 0L;
+                // 0 indicates that an error occured
+        }
+    }
+    else // we have to expand the queries
+    {
+        Reference<XQueryDefinitionsSupplier> xQuerySup;
+        if(aValue >>= xQuerySup)
+        {
+            Image aImage(ModuleRes(QUERY_TREE_ICON));
+            populateTree(xQuerySup->getQueryDefinitions(),_pParent,aImage);
+        }
+    }
+
+    return 1L;
+}
+
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 {
@@ -1176,7 +1429,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     SvLBoxEntry* pConnection = m_pTreeModel->GetParent(pTables);
     DBTreeListModel::DBTreeListUserData* pConData = (DBTreeListModel::DBTreeListUserData*)pConnection->GetUserData();
 
-    Reference<XConnection> xConnection(pConData->xInterface,UNO_QUERY);
+    Reference<XConnection> xConnection(pConData->xObject,UNO_QUERY);
     sal_Int32 nCommandType = pData->bTable ? CommandType::TABLE : CommandType::QUERY;
 
     sal_Bool bRebuild = xOldConnection != xConnection || nOldType != nCommandType || aName != aOldName;
@@ -1204,5 +1457,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     return 0L;
 }
 // -------------------------------------------------------------------------
+
+// .........................................................................
+}   // namespace dbaui
+// .........................................................................
 
 
