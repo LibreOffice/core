@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-03 13:00:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <vcl/bitmapex.hxx>
 #endif
 
-#ifndef _SV_COLOR_HXX
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
