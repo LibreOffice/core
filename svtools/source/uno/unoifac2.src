@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:37:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ Menu RID_CONTEXTMENU
             Text[ russian ] = "Îòêðûòü";
             Text[ polish ] = "Otwórz";
             Text[ japanese ] = "ŠJ‚­(~O)";
-            Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~O)";
+            Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ(~O)";
             Text[ arabic ] = "ÝÊÍ";
             Text[ dutch ] = "Ope~nen";
             Text[ chinese_simplified ] = "´ò¿ª(~O)";
@@ -230,5 +230,6 @@ Menu RID_CONTEXTMENU
         };
     };
 };
+
 
 
