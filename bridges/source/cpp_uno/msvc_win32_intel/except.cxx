@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ public:
 
     inline __type_info( void * m_data, const char * m_d_name ) throw ()
         : _m_data( m_data )
-        { ::strcpy( _m_d_name, m_d_name ); }
+        { ::strcpy( _m_d_name, m_d_name ); } // #100211# - checked
 
 private:
     void * _m_data;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ void Bridge::map_to_uno(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         if (! assign)
@@ -280,6 +281,7 @@ void Bridge::map_to_uno(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
@@ -293,6 +295,7 @@ void Bridge::map_to_uno(
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii(
                 RTL_CONSTASCII_STRINGPARAM("] incomplete type object: no type name!") );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         OUString type_name( jstring_to_oustring( jni, (jstring)jo_type_name.get() ) );
@@ -304,6 +307,7 @@ void Bridge::map_to_uno(
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
             buf.append( type_name );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
@@ -315,7 +319,7 @@ void Bridge::map_to_uno(
         *(typelib_TypeDescriptionReference **)uno_data = td.get()->pWeakRef;
         break;
     }
-    case typelib_TypeClass_ANY: // xxx todo: possible opt on anys
+    case typelib_TypeClass_ANY:
     {
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
@@ -324,42 +328,22 @@ void Bridge::map_to_uno(
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
-        if (0 == java_data.l)
-        {
-            OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
-        }
 
         uno_Any * pAny = (uno_Any *)uno_data;
-        if (0 == java_data.l) // null-ref maps to empty any
+        if (0 == java_data.l) // null-ref maps to XInterface null-ref
         {
             if (assign)
                 uno_any_destruct( pAny, 0 );
-            uno_any_construct( pAny, 0, 0, 0 );
+            uno_any_construct( pAny, 0, m_jni_info->m_XInterface_type_info->m_td.get(), 0 );
             break;
         }
-
-        // dynamic type
-        JLocalAutoRef jo_class(
-            jni, jni->CallObjectMethodA(
-                java_data.l, m_jni_info->m_method_Object_getClass, 0 ) );
-        jni.ensure_no_exception();
-        jvalue arg;
-        arg.l = jo_class.get();
-        bool is_any =
-            (JNI_FALSE != jni->CallBooleanMethodA(
-                m_jni_info->m_class_Any, m_jni_info->m_method_Object_equals, &arg ));
-        jni.ensure_no_exception();
 
         JLocalAutoRef jo_type( jni );
         JLocalAutoRef jo_wrapped_holder( jni );
 
-        if (is_any)
+        if (JNI_FALSE != jni->IsInstanceOf( java_data.l, m_jni_info->m_class_Any ))
         {
-            // wrapped value type
+            // boxed any
             jo_type.reset( jni->GetObjectField( java_data.l, m_jni_info->m_field_Any__type ) );
             if (! jo_type.is())
             {
@@ -368,6 +352,7 @@ void Bridge::map_to_uno(
                 buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
                 buf.appendAscii(
                     RTL_CONSTASCII_STRINGPARAM("] no type set at com.sun.star.uno.Any!") );
+                buf.append( jni.get_stack_trace() );
                 throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
             // wrapped value
@@ -377,19 +362,16 @@ void Bridge::map_to_uno(
         }
         else
         {
-            // check whether this is a proxy
-            if (JNI_FALSE != jni->IsAssignableFrom(
-                    (jclass)jo_class.get(), m_jni_info->m_class_TypedProxy ))
-            {
-                // is proxy => determine exact type
-                jo_type.reset( jni->CallObjectMethodA(
-                                   java_data.l, m_jni_info->m_method_TypedProxy_getType, 0 ) );
-                jni.ensure_no_exception();
-            }
-            else
-            {
-                jo_type.reset( create_type( jni, (jclass)jo_class.get() ) );
-            }
+            // create type out of class
+            JLocalAutoRef jo_class( jni, jni->GetObjectClass( java_data.l ) );
+            jo_type.reset( create_type( jni, (jclass)jo_class.get() ) );
+#if defined DEBUG
+            JLocalAutoRef jo_toString(
+                jni, jni->CallObjectMethodA(
+                    java_data.l, m_jni_info->m_method_Object_toString, 0 ) );
+            jni.ensure_no_exception();
+            OUString toString( jstring_to_oustring( jni, (jstring)jo_toString.get() ) );
+#endif
         }
 
         // get type name
@@ -406,22 +388,15 @@ void Bridge::map_to_uno(
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
             buf.append( type_name );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         typelib_TypeClass type_class = value_td.get()->eTypeClass;
 
-        // just as fallback: should never happen
-        OSL_ENSURE( typelib_TypeClass_ANY != type_class, "forbidden nested any!" );
-        if (typelib_TypeClass_ANY == type_class)
-        {
-            map_to_uno(
-                jni, uno_data, java_data, value_td.get()->pWeakRef, 0,
-                assign, false /* no out param */ );
-            break;
-        }
-
         if (assign)
+        {
             uno_any_destruct( pAny, 0 );
+        }
         try
         {
             switch (type_class)
@@ -430,45 +405,45 @@ void Bridge::map_to_uno(
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_CHAR:
-                pAny->pData = &pAny->pReserved;
                 *(jchar *)&pAny->pReserved = jni->CallCharMethodA(
                     java_data.l, m_jni_info->m_method_Character_charValue, 0 );
                 jni.ensure_no_exception();
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_BOOLEAN:
-                pAny->pData = &pAny->pReserved;
                 *(jboolean *)&pAny->pReserved = jni->CallBooleanMethodA(
                     java_data.l, m_jni_info->m_method_Boolean_booleanValue, 0 );
                 jni.ensure_no_exception();
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_BYTE:
-                pAny->pData = &pAny->pReserved;
                 *(jbyte *)&pAny->pReserved = jni->CallByteMethodA(
                     java_data.l, m_jni_info->m_method_Byte_byteValue, 0 );
                 jni.ensure_no_exception();
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                pAny->pData = &pAny->pReserved;
                 *(jshort *)&pAny->pReserved = jni->CallShortMethodA(
                     java_data.l, m_jni_info->m_method_Short_shortValue, 0 );
                 jni.ensure_no_exception();
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
-                pAny->pData = &pAny->pReserved;
                 *(jint *)&pAny->pReserved = jni->CallIntMethodA(
                     java_data.l, m_jni_info->m_method_Integer_intValue, 0 );
                 jni.ensure_no_exception();
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
                 if (sizeof (sal_Int64) <= sizeof (void *))
                 {
-                    pAny->pData = &pAny->pReserved;
                     *(jlong *)&pAny->pReserved = jni->CallLongMethodA(
                         java_data.l, m_jni_info->m_method_Long_longValue, 0 );
                     jni.ensure_no_exception();
+                    pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
@@ -482,10 +457,10 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_FLOAT:
                 if (sizeof (float) <= sizeof (void *))
                 {
-                    pAny->pData = &pAny->pReserved;
                     *(jfloat *)&pAny->pReserved = jni->CallFloatMethodA(
                         java_data.l, m_jni_info->m_method_Float_floatValue, 0 );
                     jni.ensure_no_exception();
+                    pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
@@ -499,10 +474,10 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_DOUBLE:
                 if (sizeof (double) <= sizeof (void *))
                 {
-                    pAny->pData = &pAny->pReserved;
                     *(jdouble *)&pAny->pReserved = jni->CallDoubleMethodA(
                         java_data.l, m_jni_info->m_method_Double_doubleValue, 0 );
                     jni.ensure_no_exception();
+                    pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
@@ -513,21 +488,20 @@ void Bridge::map_to_uno(
                     pAny->pData = mem.release();
                 }
                 break;
-            case typelib_TypeClass_STRING: // anies often contain strings; copy string directly
-                pAny->pData = &pAny->pReserved;
+            case typelib_TypeClass_STRING: // opt: anies often contain strings; copy string directly
                 pAny->pReserved = 0;
                 jstring_to_ustring(
                     jni, (rtl_uString **)&pAny->pReserved, (jstring)java_data.l );
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_TYPE:
             case typelib_TypeClass_ENUM:
             case typelib_TypeClass_SEQUENCE:
             case typelib_TypeClass_INTERFACE:
-                pAny->pData = &pAny->pReserved;
-                pAny->pReserved = 0;
                 map_to_uno(
                     jni, &pAny->pReserved, java_data, value_td.get()->pWeakRef, 0,
                     false /* no assign */, false /* no out param */ );
+                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
@@ -545,6 +519,7 @@ void Bridge::map_to_uno(
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
                 buf.append( type_name );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported value type of any!") );
+                buf.append( jni.get_stack_trace() );
                 throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
             }
@@ -552,7 +527,10 @@ void Bridge::map_to_uno(
         catch (...)
         {
             if (assign)
-                uno_any_construct( pAny, 0, 0, 0 ); // restore some valid any
+            {
+                // restore to valid any
+                uno_any_construct( pAny, 0, 0, 0 );
+            }
             throw;
         }
         typelib_typedescriptionreference_acquire( value_td.get()->pWeakRef );
@@ -574,6 +552,7 @@ void Bridge::map_to_uno(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
@@ -597,16 +576,17 @@ void Bridge::map_to_uno(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
         if (0 == info)
-        {
-            TypeDescr td( type );
-            info = m_jni_info->get_type_info( jni, td.get() );
-        }
+            info = m_jni_info->get_type_info( jni, type );
+        JNI_compound_type_info const * comp_info =
+            static_cast< JNI_compound_type_info const * >( info );
+
         typelib_CompoundTypeDescription * comp_td =
-            (typelib_CompoundTypeDescription *)info->m_td.get();
+            (typelib_CompoundTypeDescription *)comp_info->m_td.get();
 
         sal_Int32 nPos = 0;
         sal_Int32 nMembers = comp_td->nMembers;
@@ -617,7 +597,7 @@ void Bridge::map_to_uno(
                 map_to_uno(
                     jni, uno_data, java_data,
                     ((typelib_TypeDescription *)comp_td->pBaseTypeDescription)->pWeakRef,
-                    info->m_base,
+                    comp_info->m_base,
                     assign, false /* no out param */ );
             }
 
@@ -625,7 +605,7 @@ void Bridge::map_to_uno(
             {
                 void * p = (char *)uno_data + comp_td->pMemberOffsets[ nPos ];
                 typelib_TypeDescriptionReference * member_type = comp_td->ppTypeRefs[ nPos ];
-                jfieldID field_id = info->m_fields[ nPos ];
+                jfieldID field_id = comp_info->m_fields[ nPos ];
                 switch (member_type->eTypeClass)
                 {
                 case typelib_TypeClass_CHAR:
@@ -661,15 +641,21 @@ void Bridge::map_to_uno(
                     if (0 == field_id) // special for Message: call Throwable.getMessage()
                     {
                         OSL_ASSERT(
-                            typelib_typedescriptionreference_equals(
+                            type_equals(
                                 type, m_jni_info->m_Exception_type.getTypeLibType() ) ||
-                            typelib_typedescriptionreference_equals(
+                            type_equals(
                                 type, m_jni_info->m_RuntimeException_type.getTypeLibType() ) );
                         OSL_ASSERT( 0 == nPos ); // first member
                         // call getMessage()
                         jo_field.reset(
                             jni->CallObjectMethodA(
                                 java_data.l, m_jni_info->m_method_Throwable_getMessage, 0 ) );
+                        jni.ensure_no_exception();
+                        if (! jo_field.is()) // message may be null
+                        {
+                            jo_field.reset( jni->NewStringUTF( "" ) );
+                            jni.ensure_no_exception();
+                        }
                     }
                     else
                     {
@@ -720,6 +706,7 @@ void Bridge::map_to_uno(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
@@ -852,6 +839,7 @@ void Bridge::map_to_uno(
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element type: ") );
             buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         }
@@ -875,20 +863,19 @@ void Bridge::map_to_uno(
         {
             if (assign)
             {
-                uno_Interface * pUnoI = *(uno_Interface **)uno_data;
-                if (0 != pUnoI)
-                    (*pUnoI->release)( pUnoI );
+                uno_Interface * p = *(uno_Interface **)uno_data;
+                if (0 != p)
+                    (*p->release)( p );
             }
             *(uno_Interface **)uno_data = 0;
         }
         else
         {
             if (0 == info)
-            {
-                TypeDescr td( type );
-                info = m_jni_info->get_type_info( jni, td.get() );
-            }
-            uno_Interface * pUnoI = map_java2uno( jni, java_data.l, info );
+                info = m_jni_info->get_type_info( jni, type );
+            JNI_interface_type_info const * iface_info =
+                static_cast< JNI_interface_type_info const * >( info );
+            uno_Interface * pUnoI = map_to_uno( jni, java_data.l, iface_info );
             if (assign)
             {
                 uno_Interface * p = *(uno_Interface **)uno_data;
@@ -905,6 +892,7 @@ void Bridge::map_to_uno(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
         buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     }
@@ -1267,8 +1255,8 @@ void Bridge::map_to_java(
             JLocalAutoRef jo_in( jni );
             if (in_param)
             {
-                jo_in.reset( create_type(
-                                 jni, *(typelib_TypeDescriptionReference * const *)uno_data ) );
+                jo_in.reset(
+                    create_type( jni, *(typelib_TypeDescriptionReference * const *)uno_data ) );
             }
             if (0 == java_data->l)
             {
@@ -1286,8 +1274,8 @@ void Bridge::map_to_java(
         else
         {
             OSL_ASSERT( in_param );
-            java_data->l = create_type(
-                jni, *(typelib_TypeDescriptionReference * const *)uno_data );
+            java_data->l =
+                create_type( jni, *(typelib_TypeDescriptionReference * const *)uno_data );
         }
         break;
     }
@@ -1297,24 +1285,122 @@ void Bridge::map_to_java(
         if (in_param)
         {
             uno_Any const * pAny = (uno_Any const *)uno_data;
-            if (typelib_TypeClass_VOID != pAny->pType->eTypeClass)
+
+#if defined BRIDGES_JNI_UNO_FORCE_BOXED_ANY
+            if (typelib_TypeClass_VOID == pAny->pType->eTypeClass)
+            {
+                jo_any.reset( jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
+            }
+            else
             {
                 jvalue args[ 2 ];
-                // map value
                 map_to_java(
-                    jni, args, pAny->pData, pAny->pType, 0,
+                    jni, &args[ 1 ], pAny->pData, pAny->pType, 0,
                     true /* in */, false /* no out */, true /* create integral wrappers */ );
-                switch (pAny->pType->eTypeClass)
+                jo_any.reset( args[ 1 ].l );
+                // build up com.sun.star.uno.Any
+                JLocalAutoRef jo_type( jni, create_type( jni, pAny->pType ) );
+                args[ 0 ].l = jo_type.get();
+                jo_any.reset(
+                    jni->NewObjectA(
+                        m_jni_info->m_class_Any,
+                        m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                jni.ensure_no_exception();
+            }
+#else
+            switch (pAny->pType->eTypeClass)
+            {
+            case typelib_TypeClass_VOID:
+                jo_any.reset( jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
+                break;
+            case typelib_TypeClass_UNSIGNED_SHORT:
+            {
+                jvalue args[ 2 ];
+                args[ 0 ].s = *(jshort const *)&pAny->pReserved;
+                JLocalAutoRef jo_val(
+                    jni, jni->NewObjectA(
+                        m_jni_info->m_class_Short, m_jni_info->m_ctor_Short_with_short, args ) );
+                jni.ensure_no_exception();
+                // box up in com.sun.star.uno.Any
+                args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_SHORT;
+                args[ 1 ].l = jo_val.get();
+                jo_any.reset(
+                    jni->NewObjectA(
+                        m_jni_info->m_class_Any,
+                        m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                jni.ensure_no_exception();
+                break;
+            }
+            case typelib_TypeClass_UNSIGNED_LONG:
+            {
+                jvalue args[ 2 ];
+                args[ 0 ].i = *(jint const *)&pAny->pReserved;
+                JLocalAutoRef jo_val(
+                    jni, jni->NewObjectA(
+                        m_jni_info->m_class_Integer, m_jni_info->m_ctor_Integer_with_int, args ) );
+                jni.ensure_no_exception();
+                // box up in com.sun.star.uno.Any
+                args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_LONG;
+                args[ 1 ].l = jo_val.get();
+                jo_any.reset(
+                    jni->NewObjectA(
+                        m_jni_info->m_class_Any,
+                        m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                jni.ensure_no_exception();
+                break;
+            }
+            case typelib_TypeClass_UNSIGNED_HYPER:
+            {
+                jvalue args[ 2 ];
+                args[ 0 ].j = *(jlong const *)pAny->pData;
+                JLocalAutoRef jo_val(
+                    jni, jni->NewObjectA(
+                        m_jni_info->m_class_Long, m_jni_info->m_ctor_Long_with_long, args ) );
+                jni.ensure_no_exception();
+                // box up in com.sun.star.uno.Any
+                args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_HYPER;
+                args[ 1 ].l = jo_val.get();
+                jo_any.reset(
+                    jni->NewObjectA(
+                        m_jni_info->m_class_Any,
+                        m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                jni.ensure_no_exception();
+                break;
+            }
+            case typelib_TypeClass_STRING: // opt strings
+                jo_any.reset( ustring_to_jstring( jni, (rtl_uString *)pAny->pReserved ) );
+                break;
+            case typelib_TypeClass_SEQUENCE:
+            {
+                jvalue java_data;
+                // prefetch sequence td
+                TypeDescr seq_td( pAny->pType );
+                map_to_java(
+                    jni, &java_data, pAny->pData, seq_td.get()->pWeakRef, 0,
+                    true /* in */, false /* no out */, true /* create integral wrappers */ );
+                jo_any.reset( java_data.l );
+
+                // determine inner element type
+                ::com::sun::star::uno::Type element_type(
+                    ((typelib_IndirectTypeDescription *)seq_td.get())->pType );
+                while (typelib_TypeClass_SEQUENCE == element_type.getTypeLibType()->eTypeClass)
+                {
+                    TypeDescr element_td( element_type.getTypeLibType() );
+                    typelib_typedescriptionreference_assign(
+                        reinterpret_cast< typelib_TypeDescriptionReference ** >( &element_type ),
+                        ((typelib_IndirectTypeDescription *)element_td.get())->pType );
+                }
+                // box up only if unsigned element type
+                switch (element_type.getTypeLibType()->eTypeClass)
                 {
                 case typelib_TypeClass_UNSIGNED_SHORT:
                 case typelib_TypeClass_UNSIGNED_LONG:
                 case typelib_TypeClass_UNSIGNED_HYPER:
                 {
-                    // build up com.sun.star.uno.Any
-                    JLocalAutoRef jo_val( jni, args[ 0 ].l );
-                    JLocalAutoRef jo_type( jni, create_type( jni, pAny->pType ) );
+                    jvalue args[ 2 ];
+                    JLocalAutoRef jo_type( jni, create_type( jni, seq_td.get()->pWeakRef ) );
                     args[ 0 ].l = jo_type.get();
-                    args[ 1 ].l = jo_val.get();
+                    args[ 1 ].l = jo_any.get();
                     jo_any.reset(
                         jni->NewObjectA(
                             m_jni_info->m_class_Any,
@@ -1322,12 +1408,55 @@ void Bridge::map_to_java(
                     jni.ensure_no_exception();
                     break;
                 }
-                default:
-                    jo_any.reset( args[ 0 ].l );
-                    break;
                 }
+                break;
             }
+            case typelib_TypeClass_INTERFACE:
+            {
+                uno_Interface * pUnoI = (uno_Interface *)pAny->pReserved;
+                if (is_XInterface( pAny->pType ))
+                {
+                    if (0 != pUnoI)
+                    {
+                        jo_any.reset(
+                            map_to_java( jni, pUnoI, m_jni_info->m_XInterface_type_info ) );
+                    }
+                    // else: empty XInterface ref maps to null-ref
+                }
+                else
+                {
+                    JNI_interface_type_info const * iface_info =
+                        static_cast< JNI_interface_type_info const * >(
+                            m_jni_info->get_type_info( jni, pAny->pType ) );
+                    if (0 != pUnoI)
+                    {
+                        jo_any.reset( map_to_java( jni, pUnoI, iface_info ) );
+                    }
+                    // box up in com.sun.star.uno.Any
+                    jvalue args[ 2 ];
+                    args[ 0 ].l = iface_info->m_type;
+                    args[ 1 ].l = jo_any.get();
+                    jo_any.reset(
+                        jni->NewObjectA(
+                            m_jni_info->m_class_Any,
+                            m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                    jni.ensure_no_exception();
+                }
+                break;
+            }
+            default:
+            {
+                jvalue java_data;
+                map_to_java(
+                    jni, &java_data, pAny->pData, pAny->pType, 0,
+                    true /* in */, false /* no out */, true /* create integral wrappers */ );
+                jo_any.reset( java_data.l );
+                break;
+            }
+            }
+#endif
         }
+
         if (out_param)
         {
             if (0 == java_data->l)
@@ -1401,10 +1530,9 @@ void Bridge::map_to_java(
     case typelib_TypeClass_EXCEPTION:
     {
         if (0 == info)
-        {
-            TypeDescr td( type );
-            info = m_jni_info->get_type_info( jni, td.get() );
-        }
+            info = m_jni_info->get_type_info( jni, type );
+        JNI_compound_type_info const * comp_info =
+            static_cast< JNI_compound_type_info const * >( info );
 
         JLocalAutoRef jo_comp( jni );
         if (in_param)
@@ -1415,16 +1543,18 @@ void Bridge::map_to_java(
                     jni, ustring_to_jstring( jni, *(rtl_uString **)uno_data ) );
                 jvalue arg;
                 arg.l = jo_message.get();
-                jo_comp.reset( jni->NewObjectA( info->m_class, info->m_ctor, &arg ) );
+                jo_comp.reset( jni->NewObjectA( comp_info->m_class, comp_info->m_exc_ctor, &arg ) );
                 jni.ensure_no_exception();
             }
             else
             {
-                jo_comp.reset( jni->NewObjectA( info->m_class, info->m_ctor, 0 ) );
+                jo_comp.reset( jni->AllocObject( comp_info->m_class ) );
                 jni.ensure_no_exception();
             }
 
-            for ( JNI_type_info const * linfo = info; 0 != linfo; linfo = linfo->m_base )
+            for ( JNI_compound_type_info const * linfo = comp_info;
+                  0 != linfo;
+                  linfo = static_cast< JNI_compound_type_info const * >( linfo->m_base ) )
             {
                 typelib_CompoundTypeDescription * comp_td =
                     (typelib_CompoundTypeDescription *)linfo->m_td.get();
@@ -1500,7 +1630,7 @@ void Bridge::map_to_java(
         {
             if (0 == java_data->l)
             {
-                java_data->l = jni->NewObjectArray( 1, info->m_class, jo_comp.get() );
+                java_data->l = jni->NewObjectArray( 1, comp_info->m_class, jo_comp.get() );
                 jni.ensure_no_exception();
             }
             else
@@ -1719,9 +1849,7 @@ void Bridge::map_to_java(
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
         {
-            TypeDescr element_td( element_type );
-            JNI_type_info const * element_info =
-                m_jni_info->get_type_info( jni, element_td.get() );
+            JNI_type_info const * element_info = m_jni_info->get_type_info( jni, element_type );
 
             jo_ar.reset( jni->NewObjectArray( nElements, element_info->m_class, 0 ) );
             jni.ensure_no_exception();
@@ -1729,7 +1857,7 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 char * p = (char *)seq->elements;
-                sal_Int32 nSize = element_td.get()->nSize;
+                sal_Int32 nSize = element_info->m_td.get()->nSize;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
                     jvalue val;
@@ -1747,7 +1875,7 @@ void Bridge::map_to_java(
         case typelib_TypeClass_SEQUENCE:
         {
             OStringBuffer buf( 64 );
-            m_jni_info->append_sig( &buf, element_type );
+            JNI_info::append_sig( &buf, element_type, false /* use class XInterface */ );
             OString class_name( buf.makeStringAndClear() );
             JLocalAutoRef jo_seq_class( jni, find_class( jni, class_name.getStr() ) );
 
@@ -1774,27 +1902,26 @@ void Bridge::map_to_java(
         }
         case typelib_TypeClass_INTERFACE:
         {
-            TypeDescr element_td( element_type );
-            JNI_type_info const * element_info =
-                m_jni_info->get_type_info( jni, element_td.get() );
+            JNI_interface_type_info const * iface_info =
+                static_cast< JNI_interface_type_info const * >(
+                    m_jni_info->get_type_info( jni, element_type ) );
 
-            jo_ar.reset( jni->NewObjectArray( nElements, element_info->m_class, 0 ) );
+            jo_ar.reset( jni->NewObjectArray( nElements, iface_info->m_class, 0 ) );
             jni.ensure_no_exception();
 
             if (0 < nElements)
             {
-                char * p = (char *)seq->elements;
-                sal_Int32 nSize = element_td.get()->nSize;
+                uno_Interface ** pp = (uno_Interface **)seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
-                    jvalue val;
-                    map_to_java(
-                        jni, &val, p + (nSize * nPos), element_type, element_info,
-                        true /* in */, false /* no out */ );
-                    JLocalAutoRef jo_element( jni, val.l );
-                    jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_element.get() );
-                    jni.ensure_no_exception();
+                    uno_Interface * pUnoI = pp[ nPos ];
+                    if (0 != pUnoI)
+                    {
+                        JLocalAutoRef jo_element( jni, map_to_java( jni, pUnoI, iface_info ) );
+                        jni->SetObjectArrayElement(
+                            (jobjectArray)jo_ar.get(), nPos, jo_element.get() );
+                        jni.ensure_no_exception();
+                    }
                 }
             }
             break;
@@ -1806,6 +1933,7 @@ void Bridge::map_to_java(
             buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported element type: ") );
             buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+            buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         }
@@ -1814,7 +1942,7 @@ void Bridge::map_to_java(
         {
             if (0 == java_data->l)
             {
-                JLocalAutoRef jo_element_class( jni, get_class( jni, jo_ar.get() ) );
+                JLocalAutoRef jo_element_class( jni, jni->GetObjectClass( jo_ar.get() ) );
                 if (in_param)
                 {
                     java_data->l =
@@ -1849,39 +1977,20 @@ void Bridge::map_to_java(
             if (0 != pUnoI)
             {
                 if (0 == info)
-                {
-                    TypeDescr td( type );
-                    info = m_jni_info->get_type_info( jni, td.get() );
-                }
-                jo_iface.reset( map_uno2java( jni, pUnoI, info ) );
+                    info = m_jni_info->get_type_info( jni, type );
+                JNI_interface_type_info const * iface_info =
+                    static_cast< JNI_interface_type_info const * >( info );
+                jo_iface.reset( map_to_java( jni, pUnoI, iface_info ) );
             }
         }
         if (out_param)
         {
             if (0 == java_data->l)
             {
-                if (typelib_typedescriptionreference_equals(
-                        type, m_jni_info->m_XInterface_td.get()->pWeakRef ))
-                {
-                    java_data->l = jni->NewObjectArray(
-                        1, m_jni_info->m_class_Object, jo_iface.get() );
-                    jni.ensure_no_exception();
-                }
-                else
-                {
-                    OUString const & type_name =
-                        *reinterpret_cast< OUString const * >( &type->pTypeName );
-                    OString class_name(
-                        OUStringToOString(
-                            type_name.replace( '.', '/' ),
-                            RTL_TEXTENCODING_ASCII_US ) );
-                    JLocalAutoRef jo_iface_class(
-                        jni, find_class( jni, class_name.getStr() ) );
-
-                    java_data->l = jni->NewObjectArray(
-                        1, (jclass)jo_iface_class.get(), jo_iface.get() );
-                    jni.ensure_no_exception();
-                }
+                if (0 == info)
+                    info = m_jni_info->get_type_info( jni, type );
+                java_data->l = jni->NewObjectArray( 1, info->m_class, jo_iface.get() );
+                jni.ensure_no_exception();
             }
             else
             {
@@ -1902,6 +2011,7 @@ void Bridge::map_to_java(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_java():") );
         buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ int main( int argc, char *argv[] )
     {
         printf( "usage : testserver [-r] connectionstring\n"
                 "        -r does a reverse test (server calls client)\n" );
-        return 1;
+        return 0;
     }
 
     OUString sConnectionString;

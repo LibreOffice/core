@@ -4,7 +4,7 @@
 #
 #   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 19:07:12 $
+#   last change: $Author: hr $ $Date: 2003-03-18 19:07:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,63 +59,28 @@
 #
 #
 #*************************************************************************
-PRJ=..$/..
+PRJ=..$/..$/..$/..$/..$/..$/..$/..
 
 PRJNAME=bridges
-TARGET=inter
-LIBTARGET=NO
-TARGETTYPE=CUI
-ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
-USE_DEFFILE=TRUE
+TARGET=java_uno
+PACKAGE=com$/sun$/star$/bridges$/jni_uno
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-# --- Files --------------------------------------------------------
+JARFILES=jurt.jar sandbox.jar ridl.jar
+JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
-SLOFILES=$(SLO)$/starter.obj $(SLO)$/thrower.obj
+JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/JNI_proxy.class		\
+    $(CLASSDIR)$/$(PACKAGE)$/JNI_info_holder.class
 
-SHL1TARGET=starter
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-SHL1IMPLIB=i$(SHL1TARGET)
-SHL1OBJS=$(SLO)$/starter.obj
-DEF1NAME=$(SHL1TARGET)
-SHL1STDLIBS+= $(CPPULIB) $(SALLIB)
-SHL1VERSIONMAP=$(SHL1TARGET).map
+JARCLASSDIRS=$(PACKAGE)
+JARTARGET=$(TARGET).jar
+JARCOMPRESS=TRUE
 
-SHL2TARGET=thrower
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
-SHL2IMPLIB=i$(SHL2TARGET)
-SHL2OBJS=$(SLO)$/thrower.obj
-DEF2NAME=$(SHL2TARGET)
-SHL2STDLIBS+= $(CPPULIB) $(SALLIB)
-SHL2VERSIONMAP=$(SHL2TARGET).map
-
-OBJFILES=$(OBJ)$/inter.obj
-APP1TARGET=inter
-APP1OBJS=$(OBJ)$/inter.obj
-APP1STDLIBS+=\
-        $(SALLIB)	\
-        $(LIBCIMT)
-
-#APP1DEF=	$(MISC)$/$(APP1TARGET).def
-
-.IF "$(depend)" == ""
-ALL : $(OUT)$/misc/inter_libs.flag ALLTAR 
-.ELSE
-ALL: 	ALLDEP
-.ENDIF
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-TYPES :=	-Tcom.sun.star.lang.IllegalArgumentException \
-        -Tcom.sun.star.uno.DeploymentException
-
-$(OUT)$/misc/inter_libs.flag : $(SOLARBINDIR)$/udkapi.rdb
-    $(RM) $(OUT)$/misc/inter_libs.flag
-    +cppumaker $(CPPUMAKERFLAGS) -C -BUCR -O$(UNOUCROUT) $(TYPES) $(SOLARBINDIR)$/udkapi.rdb
-    touch $(OUT)$/misc/inter_libs.flag

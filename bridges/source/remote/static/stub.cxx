@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stub.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2002-08-27 13:38:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#if defined(SOLARIS) || defined(IRIX)
+#ifdef SOLARIS
 #include <alloca.h>
 #elif defined MACOSX
 #include <sys/types.h>

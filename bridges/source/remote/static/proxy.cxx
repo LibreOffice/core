@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2002-08-27 13:38:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #include <assert.h>
-#if defined(SOLARIS) || defined(IRIX)
+#ifdef SOLARIS
 #include <alloca.h>
 #elif defined MACOSX
 #include <sys/types.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testoffice.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,9 @@ void testWriter(  const Reference < XComponent > & rCmp )
             break;
         }
 
-        strcat( pcText , " " );
+        if ( strlen( pcText ) < sizeof(pcText)-1 )
+            strcat( pcText , " " ); // #100211# - checked
+
         rText->insertString( rRange , OUString::createFromAscii( pcText ) , sal_False );
     }
 }
@@ -240,12 +242,12 @@ void doSomething( const  Reference < XInterface > &r )
 }
 
 
-void main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
     if( argc < 2 )
     {
         printf( "usage : testclient host:port" );
-        exit( 1 );
+        return 0;
     }
 
     OUString sConnectionString;
@@ -308,4 +310,5 @@ void main( int argc, char *argv[] )
         rComp->dispose();
     }
     //_getch();
+    return 0;
 }

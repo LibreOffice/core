@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,30 +115,6 @@ inline jclass find_class( JNI_context const & jni, char const * class_name )
     jclass jo_class = jni->FindClass( class_name );
     jni.ensure_no_exception();
     return jo_class;
-}
-//--------------------------------------------------------------------------------------------------
-inline jclass find_class( JNI_context const & jni, ::rtl::OUString const & class_name )
-{
-    ::rtl::OString cstr_name( ::rtl::OUStringToOString( class_name, RTL_TEXTENCODING_ASCII_US ) );
-    return find_class( jni, cstr_name );
-}
-//--------------------------------------------------------------------------------------------------
-inline jclass get_class( JNI_context const & jni, jobject jo )
-{
-    jclass jo_class = (jclass)jni->CallObjectMethodA(
-        jo, jni.get_info()->m_method_Object_getClass, 0 );
-    jni.ensure_no_exception();
-    return jo_class;
-}
-//--------------------------------------------------------------------------------------------------
-inline ::rtl::OUString get_class_name( JNI_context const & jni, jobject jo )
-{
-    JLocalAutoRef jo_class( jni, get_class( jni, jo ) );
-    JLocalAutoRef jo_name(
-        jni, jni->CallObjectMethodA(
-            jo_class.get(), jni.get_info()->m_method_Class_getName, 0 ) );
-    jni.ensure_no_exception();
-    return jstring_to_oustring( jni, (jstring)jo_name.get() );
 }
 
 //##################################################################################################

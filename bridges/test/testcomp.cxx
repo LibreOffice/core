@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ void parseCommandLine( char *argv[] ,
     }
 }
 
-Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeException )
+Any OInstanceProvider::queryInterface( const  Type & aType )
 {
     Any a = ::cppu::queryInterface( aType ,
             SAL_STATIC_CAST( XInstanceProvider * , this ) );
@@ -192,9 +192,9 @@ public:
         }
         return aRet;
     }
-    virtual void SAL_CALL acquire() throw()
+    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
         { osl_incrementInterlockedCount( &_nRef ); }
-    virtual void SAL_CALL release() throw()
+    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
         { if (! osl_decrementInterlockedCount( &_nRef )) delete this; }
 
     // XServiceInfo
@@ -325,7 +325,7 @@ Sequence< OUString > ServiceImpl::getSupportedServiceNames()
  *
  *****************/
 
-Any OCallMe::queryInterface( const  Type & aType )  throw ( RuntimeException )
+Any OCallMe::queryInterface( const  Type & aType )
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XCallMe * , this ) );
@@ -421,7 +421,7 @@ void OCallMe::callAgain( const Reference< ::test::XCallMe >& callAgain,
  * OInterfaceTest
  *
  *******************/
-Any OInterfaceTest::queryInterface( const Type & aType )  throw ( RuntimeException )
+Any OInterfaceTest::queryInterface( const Type & aType )
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XInterfaceTest * , this ) );
@@ -473,7 +473,7 @@ void OInterfaceTest::call()
 }
 
 
-Any OTestFactory::queryInterface( const Type & aType )  throw ( RuntimeException )
+Any OTestFactory::queryInterface( const Type & aType )
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XTestFactory * , this ) );
@@ -500,6 +500,42 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
 
 
 
+/********************************************************
+ *
+ ********************************************************/
+/*Any OConnectCallback::queryInterface( const Type & aType )
+{
+    Any a = ::cppu::queryInterface( aType,
+            SAL_STATIC_CAST( XConnectCallback * , this ) );
+    if( a.hasValue() )
+    {
+        return a;
+    }
+    return OWeakObject::queryInterface( aType );
+}
+
+
+void SAL_CALL OConnectCallback::attemptConnect(
+        const Reference< XConnectionServerSide >& connection )
+        throw(SecurityException, ::com::sun::star::uno::RuntimeException)
+{
+    // TODO
+    // user verification
+    if( L"bad guy" == connection->getUser() &&
+        L"secret" == connection->getPassword() )
+    {
+        Reference< XInterface > rInterface(
+            ( XInterface * ) (::cppu::OWeakObject *) new OTestFactory() );
+        connection->provideRemoteObject( rInterface );
+    }
+    else
+    {
+        throw SecurityException();
+    }
+}
+
+*/
+
 
 //  class OInstanceProvider :
 //      public ::cppu::OWeakObject,
@@ -515,6 +551,7 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
 //      void        SAL_CALL release()                       { OWeakObject::release(); }
 
 //  public:
+//      // XConnectCallback
 //      virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
 //             getInstance( const ::rtl::OUString& sObjectName )
 //                   throw( ::com::sun::star::container::NoSuchElementException,

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-29 07:09:02 $
+#   last change: $Author: hr $ $Date: 2003-03-18 19:07:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 ALLIDLFILES = test_bridge.idl
-#CPPUMAKERFLAGS += -C
+CPPUMAKERFLAGS += -C
 
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-05 14:38:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,13 @@ static void deleteException( void* pExc )
 
 void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
+#if defined DEBUG
+    OString cstr(
+        OUStringToOString(
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+            RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
+#endif
     typelib_TypeDescription * pTypeDescr = 0;
     // will be released by deleteException
     typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
@@ -394,24 +401,35 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
 void cc50_solaris_intel_fillUnoException(
     void* pCppExc,
     const char* pInfo,
-    uno_Any* pExc,
+    uno_Any* pUnoExc,
     uno_Mapping * pCpp2Uno )
 {
-    OUString aName( OStringToOUString( toUNOname( pInfo ), RTL_TEXTENCODING_ASCII_US ) );
+    OString uno_name( toUNOname( pInfo ) );
+#if defined DEBUG
+    fprintf( stderr, "> c++ exception occured: %s\n", uno_name.getStr() );
+#endif
     typelib_TypeDescription * pExcTypeDescr = 0;
-    typelib_typedescription_getByName(
-        &pExcTypeDescr,
-        aName.pData );
-    if (pExcTypeDescr)
+    OUString aName( OStringToOUString( uno_name, RTL_TEXTENCODING_ASCII_US ) );
+    typelib_typedescription_getByName( &pExcTypeDescr, aName.pData );
+    if (0 == pExcTypeDescr) // the thing that should not be
     {
-        // construct cpp exception any
-        Any aAny( pCppExc, pExcTypeDescr ); // const_cast
-        typelib_typedescription_release( pExcTypeDescr );
+        RuntimeException aRE(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("exception type not found: ") ) + aName,
+            Reference< XInterface >() );
+        Type const & rType = ::getCppuType( &aRE );
+        uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
+#if defined _DEBUG
+        OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, cstr.getStr() );
+#endif
+        // though this unknown exception leaks now, no user-defined exception
+        // is ever thrown thru the binary C-UNO dispatcher call stack.
+    }
+    else
+    {
         // construct uno exception any
-        typelib_TypeDescription* pAnyDescr = 0;
-        getCppuType( (const Any *)0 ).getDescription( &pAnyDescr );
-        uno_copyAndConvertData( pExc, &aAny, pAnyDescr, pCpp2Uno );
-        typelib_typedescription_release( pAnyDescr );
+        uno_any_constructAndConvert( pUnoExc, pCppExc, pExcTypeDescr, pCpp2Uno );
+        typelib_typedescription_release( pExcTypeDescr );
     }
 }
 

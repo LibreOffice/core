@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 16:29:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,31 +78,67 @@
 namespace jni_uno
 {
 
+//--------------------------------------------------------------------------------------------------
+inline bool type_equals(
+    typelib_TypeDescriptionReference * type1, typelib_TypeDescriptionReference * type2 )
+{
+    return ((type1 == type2) ||
+            ((type1->eTypeClass == type2->eTypeClass) &&
+             reinterpret_cast< ::rtl::OUString const * >( &type1->pTypeName )->equals(
+                 *reinterpret_cast< ::rtl::OUString const * >( &type2->pTypeName ) )));
+}
+//--------------------------------------------------------------------------------------------------
+inline bool is_XInterface( typelib_TypeDescriptionReference * type )
+{
+    return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
+            reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName )->equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ));
+}
+
 //==================================================================================================
 struct JNI_type_info
 {
+    JNI_type_info const *                       m_base;
     ::com::sun::star::uno::TypeDescription      m_td;
     jclass                                      m_class;
-    JNI_type_info const *                       m_base;
-    jobject                                     m_jo_type; // is unused (0) for compound types
+
+    virtual void destroy( JNIEnv * jni_env ) = 0;
+protected:
+    inline void destruct( JNIEnv * jni_env )
+        { jni_env->DeleteGlobalRef( m_class ); }
+    inline ~JNI_type_info() {}
+    JNI_type_info(
+        JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td );
+};
+//==================================================================================================
+struct JNI_interface_type_info : public JNI_type_info
+{
+    jobject                                     m_proxy_ctor; // proxy ctor
+    jobject                                     m_type;
     // sorted via typelib function index
     jmethodID *                                 m_methods;
+
+    virtual void destroy( JNIEnv * jni_env );
+    JNI_interface_type_info(
+        JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td );
+};
+//==================================================================================================
+struct JNI_compound_type_info : public JNI_type_info
+{
+    jmethodID                                   m_exc_ctor; // ctor( msg ) for exceptions
     // sorted via typelib member index
     jfieldID *                                  m_fields;
-    jmethodID                                   m_ctor;
 
-    JNI_type_info( JNI_context const & jni, typelib_InterfaceTypeDescription * td );
-    JNI_type_info( JNI_context const & jni, typelib_CompoundTypeDescription * td );
-
-    void destroy( JNI_context const & jni );
-private:
-    inline ~JNI_type_info() {}
+    virtual void destroy( JNIEnv * jni_env );
+    JNI_compound_type_info(
+        JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td );
 };
+
 //==================================================================================================
 struct JNI_type_info_holder
 {
     JNI_type_info * m_info;
-    inline JNI_type_info_holder() SAL_THROW( () )
+    inline JNI_type_info_holder()
         : m_info( 0 )
         {}
 };
@@ -115,20 +151,13 @@ class JNI_info
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
 
-    //
-    jmethodID                   m_method_IEnvironment_getRegisteredInterface;
-    jmethodID                   m_method_IEnvironment_registerInterface;
-    jmethodID                   m_method_IEnvironment_revokeInterface;
-
 public:
     //
     jobject                     m_object_java_env;
-
-    //
-    ::com::sun::star::uno::TypeDescription m_XInterface_td;
-    ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
-    ::com::sun::star::uno::Type const & m_Exception_type;
-    ::com::sun::star::uno::Type const & m_RuntimeException_type;
+    jobject                     m_object_Any_VOID;
+    jobject                     m_object_Type_UNSIGNED_SHORT;
+    jobject                     m_object_Type_UNSIGNED_LONG;
+    jobject                     m_object_Type_UNSIGNED_HYPER;
 
     //
     jclass                      m_class_Object;
@@ -147,12 +176,9 @@ public:
     jclass                      m_class_Any;
     jclass                      m_class_Type;
     jclass                      m_class_TypeClass;
-    jclass                      m_class_TypedProxy;
     jclass                      m_class_JNI_proxy;
 
     //
-    jmethodID                   m_method_Object_getClass;
-    jmethodID                   m_method_Object_equals;
     jmethodID                   m_method_Object_toString;
     jmethodID                   m_method_Class_getName;
     jmethodID                   m_method_Throwable_getMessage;
@@ -173,6 +199,9 @@ public:
     jmethodID                   m_method_Long_longValue;
     jmethodID                   m_method_Short_shortValue;
 
+    //
+    jmethodID                   m_method_IEnvironment_getRegisteredInterface;
+    jmethodID                   m_method_IEnvironment_registerInterface;
     jmethodID                   m_method_UnoRuntime_generateOid;
     jmethodID                   m_method_UnoRuntime_queryInterface;
     jmethodID                   m_ctor_Any_with_Type_Object;
@@ -183,8 +212,9 @@ public:
     jfieldID                    m_field_Type__typeName;
     jmethodID                   m_method_TypeClass_fromInt;
     jfieldID                    m_field_Enum_m_value;
-    jmethodID                   m_method_TypedProxy_getType;
 
+    //
+    jmethodID                   m_method_JNI_proxy_get_proxy_ctor;
     jmethodID                   m_method_JNI_proxy_create;
     jfieldID                    m_field_JNI_proxy_m_receiver_handle;
     jfieldID                    m_field_JNI_proxy_m_td_handle;
@@ -192,31 +222,48 @@ public:
     jfieldID                    m_field_JNI_proxy_m_oid;
 
     //
+    ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
+    ::com::sun::star::uno::Type const & m_Exception_type;
+    ::com::sun::star::uno::Type const & m_RuntimeException_type;
+    ::com::sun::star::uno::Type const & m_void_type;
+    //
+    JNI_interface_type_info const * m_XInterface_type_info;
+
+    //
     JNI_type_info const * get_type_info(
-        JNI_context const & jni, typelib_TypeDescription * td ) const;
+        JNI_context const & jni, typelib_TypeDescription * type ) const;
+    JNI_type_info const * get_type_info(
+        JNI_context const & jni, typelib_TypeDescriptionReference * type ) const;
     JNI_type_info const * get_type_info(
         JNI_context const & jni, ::rtl::OUString const & uno_name ) const;
     //
-    inline void append_sig(
-        ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const;
-    //
-    inline jobject java_env_getRegisteredInterface(
-        JNI_context const & jni, jstring oid, jobject type ) const;
-    inline jobject java_env_registerInterface(
-        JNI_context const & jni, jobject javaI, jstring oid, jobject type ) const;
-    inline void java_env_revokeInterface(
-        JNI_context const & jni, jstring oid, jobject type ) const;
+    inline static void append_sig(
+        ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
+        bool use_Object_for_type_XInterface = true );
 
-    //
-    static JNI_info const * get_jni_info( JNI_context const & jni );
-    void destroy( JNI_context const & jni );
+    // get this
+    static JNI_info const * get_jni_info( JNIEnv * jni_env );
+    inline void destroy( JNIEnv * jni_env );
+
 private:
-    JNI_info( JNI_context const & jni );
+    JNI_type_info const * create_type_info(
+        JNI_context const & jni, typelib_TypeDescription * td ) const;
+
+    void destruct( JNIEnv * jni_env );
+
+    JNI_info( JNIEnv * jni_env );
     inline ~JNI_info() {}
 };
 //__________________________________________________________________________________________________
+inline void JNI_info::destroy( JNIEnv * jni_env )
+{
+    destruct( jni_env );
+    delete this;
+}
+//__________________________________________________________________________________________________
 inline void JNI_info::append_sig(
-    ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const
+    ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
+    bool use_Object_for_type_XInterface )
 {
     switch (type->eTypeClass)
     {
@@ -276,11 +323,13 @@ inline void JNI_info::append_sig(
     {
         buf->append( '[' );
         TypeDescr td( type );
-        append_sig( buf, ((typelib_IndirectTypeDescription *)td.get())->pType );
+        append_sig(
+            buf, ((typelib_IndirectTypeDescription *)td.get())->pType,
+            use_Object_for_type_XInterface );
         break;
     }
     case typelib_TypeClass_INTERFACE:
-        if (typelib_typedescriptionreference_equals( type, m_XInterface_td.get()->pWeakRef ))
+        if (use_Object_for_type_XInterface && is_XInterface( type ))
         {
             buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
         }
@@ -300,43 +349,6 @@ inline void JNI_info::append_sig(
             OUSTR("unsupported type: ") +
             *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName ) );
     }
-}
-//__________________________________________________________________________________________________
-inline jobject JNI_info::java_env_getRegisteredInterface(
-    JNI_context const & jni, jstring oid, jobject type ) const
-{
-    jvalue args[ 2 ];
-    args[ 0 ].l = oid;
-    args[ 1 ].l = type;
-    jobject jo_iface = jni->CallObjectMethodA(
-        m_object_java_env, m_method_IEnvironment_getRegisteredInterface, args );
-    jni.ensure_no_exception();
-    return jo_iface;
-}
-//__________________________________________________________________________________________________
-inline jobject JNI_info::java_env_registerInterface(
-    JNI_context const & jni, jobject javaI, jstring oid, jobject type ) const
-{
-    JLocalAutoRef jo_string_array( jni, jni->NewObjectArray( 1, m_class_String, oid ) );
-    jni.ensure_no_exception();
-    jvalue args[ 3 ];
-    args[ 0 ].l = javaI;
-    args[ 1 ].l = jo_string_array.get();
-    args[ 2 ].l = type;
-    jobject jo_iface = jni->CallObjectMethodA(
-        m_object_java_env, m_method_IEnvironment_registerInterface, args );
-    jni.ensure_no_exception();
-    return jo_iface;
-}
-//__________________________________________________________________________________________________
-inline void JNI_info::java_env_revokeInterface(
-    JNI_context const & jni, jstring oid, jobject type ) const
-{
-    jvalue args[ 2 ];
-    args[ 0 ].l = oid;
-    args[ 1 ].l = type;
-    jni->CallVoidMethodA( m_object_java_env, m_method_IEnvironment_revokeInterface, args );
-    jni.ensure_no_exception();
 }
 
 }

@@ -1,4 +1,4 @@
-br	bridges	:	cppuhelper jurt NULL
+br	bridges	:	cppuhelper jurt jvmaccess NULL
 br	bridges									usr1	-	all	br_mkout NULL
 br	bridges\unotypes						nmake	-	all	br_unotypes NULL
 br	bridges\source\remote\static			nmake	-	all	br_rem_static br_unotypes NULL
@@ -9,8 +9,11 @@ br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_linux_intel	nmake	-	u	br_gccli br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_linux_intel	nmake	-	u	br_gcc3li br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_freebsd_intel	nmake	-	u	br_gccfi br_unotypes NULL
+br	bridges\source\cpp_uno\gcc2_freebsd_intel-sjlj	nmake	-	u	br_gccfi br_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_freebsd_intel	nmake	-	u	br_gcc3fi br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_linux_powerpc	nmake	-	u	br_gcclp br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_linux_powerpc	nmake	-	u	br_gcclp3 br_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gccl33 br_unotypes NULL
 br	bridges\source\cpp_uno\gcc2_macosx_powerpc			nmake	-	u	br_gccmacoxp br_unotypes NULL
 br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes NULL
 br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli br_unotypes NULL
@@ -21,4 +24,4 @@ br	bridges\source\cpp_uno\gcc2_netbsd_powerpc	nmake	-	u	br_gccnp br_unotypes NUL
 br	bridges\source\prot_uno					nmake	-	all	br_pruno br_unotypes NULL
 #br	bridges\source\java_uno					nmake	-	all	br_java_uno br_rcon NULL
 br	bridges\source\jni_uno					nmake	-	all	br_jni_uno br_unotypes NULL
-br	bridges\source\jni_uno\java				nmake	-	all	br_jni_uno_java br_unotypes NULL
+br	bridges\source\jni_uno\java\com\sun\star\bridges\jni_uno				nmake	-	all	br_jni_uno_java br_unotypes NULL

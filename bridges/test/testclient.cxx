@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-18 10:09:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ int main( int argc, char *argv[] )
             "usage : testclient [-r] connectionstring\n"
             "        -r reverse call me test (server calls client)"
              );
-        return 1;
+        return 0;
     }
 
     OUString sConnectionString;

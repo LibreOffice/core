@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: urp_dispatch.cxx,v $
+ *  $RCSfile: share.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,83 +58,63 @@
  *
  *
  ************************************************************************/
-#ifdef SOLARIS
-#include <alloca.h>
-#elif MACOSX
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
 
-#include <osl/mutex.hxx>
-#include <osl/diagnose.h>
+#include <typeinfo>
+#include <exception>
+#include <cstddef>
 
-#include <rtl/alloc.h>
-#include <rtl/ustrbuf.hxx>
-
-#include <uno/mapping.hxx>
-#include <uno/threadpool.h>
-
-#include <bridges/remote/remote.h>
-#include <bridges/remote/stub.hxx>
-#include <bridges/remote/proxy.hxx>
-#include <bridges/remote/remote.hxx>
-
-#include "urp_bridgeimpl.hxx"
-#include "urp_marshal.hxx"
-#include "urp_dispatch.hxx"
-#include "urp_job.hxx"
-#include "urp_writer.hxx"
-#include "urp_log.hxx"
-
-using namespace ::rtl;
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-
-namespace bridges_urp
+namespace CPPU_CURRENT_NAMESPACE
 {
 
-void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote )
+// ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
+
+struct _Unwind_Exception
 {
-    remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
-    urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
+    unsigned exception_class __attribute__((__mode__(__DI__)));
+    void * exception_cleanup;
+    unsigned private_1 __attribute__((__mode__(__word__)));
+    unsigned private_2 __attribute__((__mode__(__word__)));
+} __attribute__((__aligned__));
 
-    {
-        MutexGuard guard( pImpl->m_marshalingMutex );
-        sal_uInt8 nBitfield = 0;
-
-        // send immeadiatly
-        if( ! pImpl->m_blockMarshaler.empty() )
-        {
-            pImpl->m_pWriter->touch( sal_True );
-        }
-
-        pImpl->m_pWriter->sendEmptyMessage();
-        // no more data via this connection !
-        pImpl->m_pWriter->abort();
-    }
-}
-void SAL_CALL urp_sendRequest(
-    uno_Environment *pEnvRemote,
-    typelib_TypeDescription * pMemberType,
-    rtl_uString *pOid,
-    typelib_InterfaceTypeDescription *pInterfaceType,
-    void *pReturn,
-    void *ppArgs[],
-    uno_Any **ppException )
+struct __cxa_exception
 {
-    remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
-    urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
+    ::std::type_info *exceptionType;
+    void (*exceptionDestructor)(void *);
 
-    ClientJob job(pEnvRemote, pImpl, pOid, pMemberType, pInterfaceType, pReturn, ppArgs, ppException);
+    ::std::unexpected_handler unexpectedHandler;
+    ::std::terminate_handler terminateHandler;
 
-    if( job.pack() && ! job.isOneway() )
-    {
-        job.wait();
-    }
+    __cxa_exception *nextException;
+
+    int handlerCount;
+
+    int handlerSwitchValue;
+    const unsigned char *actionRecord;
+    const unsigned char *languageSpecificData;
+    void *catchTemp;
+    void *adjustedPtr;
+
+    _Unwind_Exception unwindHeader;
+};
+
+extern "C" void *__cxa_allocate_exception(
+    std::size_t thrown_size ) throw();
+extern "C" void __cxa_throw (
+    void *thrown_exception, std::type_info *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
+
+struct __cxa_eh_globals
+{
+    __cxa_exception *caughtExceptions;
+    unsigned int uncaughtExceptions;
+};
+extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
+
+// -----
+
+//==================================================================================================
+void raiseException(
+    uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
+//==================================================================================================
+void fillUnoException(
+    __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
-
-}
-
-

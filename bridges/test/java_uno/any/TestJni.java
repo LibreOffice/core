@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: urp_dispatch.cxx,v $
+ *  $RCSfile: TestJni.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -58,83 +58,24 @@
  *
  *
  ************************************************************************/
-#ifdef SOLARIS
-#include <alloca.h>
-#elif MACOSX
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
 
-#include <osl/mutex.hxx>
-#include <osl/diagnose.h>
+package test.java_uno.anytest;
 
-#include <rtl/alloc.h>
-#include <rtl/ustrbuf.hxx>
-
-#include <uno/mapping.hxx>
-#include <uno/threadpool.h>
-
-#include <bridges/remote/remote.h>
-#include <bridges/remote/stub.hxx>
-#include <bridges/remote/proxy.hxx>
-#include <bridges/remote/remote.hxx>
-
-#include "urp_bridgeimpl.hxx"
-#include "urp_marshal.hxx"
-#include "urp_dispatch.hxx"
-#include "urp_job.hxx"
-#include "urp_writer.hxx"
-#include "urp_log.hxx"
-
-using namespace ::rtl;
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-
-namespace bridges_urp
+public class TestJni
 {
+    static { System.loadLibrary( "test_javauno_any" ); }
+    private static native XTransport create_jni_transport();
 
-void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote )
-{
-    remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
-    urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
-
+    public static void main( String args [] )
     {
-        MutexGuard guard( pImpl->m_marshalingMutex );
-        sal_uInt8 nBitfield = 0;
-
-        // send immeadiatly
-        if( ! pImpl->m_blockMarshaler.empty() )
+        if (TestAny.test( create_jni_transport(), false ))
         {
-            pImpl->m_pWriter->touch( sal_True );
+            System.out.println( "jni any test succeeded." );
         }
-
-        pImpl->m_pWriter->sendEmptyMessage();
-        // no more data via this connection !
-        pImpl->m_pWriter->abort();
+        else
+        {
+            System.err.println( "jni any test failed!" );
+            System.exit( 1 );
+        }
     }
 }
-void SAL_CALL urp_sendRequest(
-    uno_Environment *pEnvRemote,
-    typelib_TypeDescription * pMemberType,
-    rtl_uString *pOid,
-    typelib_InterfaceTypeDescription *pInterfaceType,
-    void *pReturn,
-    void *ppArgs[],
-    uno_Any **ppException )
-{
-    remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
-    urp_BridgeImpl *pImpl = (urp_BridgeImpl*) ( pContext->m_pBridgeImpl );
-
-    ClientJob job(pEnvRemote, pImpl, pOid, pMemberType, pInterfaceType, pReturn, ppArgs, ppException);
-
-    if( job.pack() && ! job.isOneway() )
-    {
-        job.wait();
-    }
-}
-
-}
-
-

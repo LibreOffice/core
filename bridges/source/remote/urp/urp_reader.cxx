@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ namespace bridges_urp
         //---------------------------
     }; // end struct MessageFlags
 
-
 inline sal_Bool OReaderThread::getMemberTypeDescription(
     typelib_InterfaceAttributeTypeDescription **ppAttributeType,
     typelib_InterfaceMethodTypeDescription **ppMethodType,
@@ -142,9 +141,10 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
 {
     if( pITypeRef->eTypeClass != typelib_TypeClass_INTERFACE )
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "interface type is not of typeclass interface (" ));
-        sMessage += OUString::valueOf( (sal_Int32) pITypeRef->eTypeClass );
-        m_pBridgeImpl->addError( sMessage );
+        OUStringBuffer sMessage;
+        sMessage.appendAscii( "interface type is not of typeclass interface (" );
+        sMessage.append( (sal_Int32) pITypeRef->eTypeClass );
+        m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
         OSL_ENSURE( 0 , "type is not an interface" );
         return sal_False;
     }
@@ -154,9 +154,10 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         (typelib_TypeDescription **)&pInterfaceType , pITypeRef );
     if( ! pInterfaceType )
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "No typedescription can be retrieved for type " ));
-        sMessage += pITypeRef->pTypeName;
-        m_pBridgeImpl->addError( sMessage );
+        OUStringBuffer sMessage;
+        sMessage.appendAscii( "No typedescription can be retrieved for type " );
+        sMessage.append( OUString( pITypeRef->pTypeName ) );
+        m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
         OSL_ENSURE( 0 , "urp: unknown type " );
         return sal_False;
     }
@@ -166,32 +167,31 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         typelib_typedescription_complete( (typelib_TypeDescription **) &pInterfaceType );
     }
 
-    if( nMethodId < 0 || nMethodId > pInterfaceType->nAllMembers *2 )
+    if ( nMethodId < 0 || nMethodId >= pInterfaceType->nMapFunctionIndexToMemberIndex )
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "vtable out of range for type " ));
-        sMessage += pITypeRef->pTypeName;
-        sMessage += OUString::createFromAscii( " (" );
-        sMessage += OUString::valueOf( (sal_Int32) nMethodId );
-        sMessage += OUString::createFromAscii( " )" );
-        m_pBridgeImpl->addError( sMessage );
+        OUStringBuffer sMessage;
+        sMessage.appendAscii( "vtable out of range for type " );
+        sMessage.append( OUString( pITypeRef->pTypeName ) );
+        sMessage.appendAscii( " (" );
+        sMessage.append( (sal_Int32) nMethodId );
+        sMessage.appendAscii( " )" );
+        m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
 
-        // (nMethodId > pInterfaceType->nAllMembers *2) is an essential condition
-        // for the vtable index to be correct
-            OSL_ENSURE( 0 , "vtable index out of range" );
-            return sal_False;
+        OSL_ENSURE( 0 , "vtable index out of range" );
+        return sal_False;
     }
 
-        // TODO : check the range of nMethodId
     sal_Int32 nMemberIndex = pInterfaceType->pMapFunctionIndexToMemberIndex[ nMethodId ];
 
     if( !( pInterfaceType->nAllMembers > nMemberIndex && nMemberIndex >= 0 ) )
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "vtable out of range for type " ));
-        sMessage += pITypeRef->pTypeName;
-        sMessage += OUString::createFromAscii( " (" );
-        sMessage += OUString::valueOf( (sal_Int32) nMethodId );
-        sMessage += OUString::createFromAscii( " )" );
-        m_pBridgeImpl->addError( sMessage );
+        OUStringBuffer sMessage;
+        sMessage.appendAscii( "vtable out of range for type " );
+        sMessage.append( OUString( pITypeRef->pTypeName ) );
+        sMessage.appendAscii( " (" );
+        sMessage.append( (sal_Int32) nMethodId );
+        sMessage.appendAscii( " )" );
+        m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
 
         OSL_ENSURE( 0 , "vtable index out of range" );
         return sal_False;
@@ -203,12 +203,13 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
 
     if(! pMemberType )
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "unknown method type description for type" ) );
-        sMessage += pITypeRef->pTypeName;
-        sMessage += OUString::createFromAscii( " (" );
-        sMessage += OUString::valueOf( (sal_Int32) nMethodId );
-        sMessage += OUString::createFromAscii( " )" );
-        m_pBridgeImpl->addError( sMessage );
+        OUStringBuffer sMessage;
+        sMessage.appendAscii( "unknown method type description for type" );
+        sMessage.append( OUString( pITypeRef->pTypeName ) );
+        sMessage.appendAscii( " (" );
+        sMessage.append( (sal_Int32) nMethodId );
+        sMessage.appendAscii( " )" );
+        m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
 
         OSL_ENSURE( 0 , "unknown method type description" );
         return sal_False;
@@ -216,6 +217,9 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
 
     if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pMemberType->aBase.eTypeClass )
     {
+        // Note: pMapMemberIndexToFunctionIndex always contains the function
+        // index of the attribute getter! setter function index is getter index
+        // + 1.
         *ppAttributeType = (typelib_InterfaceAttributeTypeDescription *) pMemberType;
         *pbIsSetter = ! (
             pInterfaceType->pMapMemberIndexToFunctionIndex[nMemberIndex] == nMethodId );
@@ -316,10 +320,11 @@ inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
         // buffer too big
         // no exception can be thrown, because there is no thread id, which could be
         // used. -> terminate !
-        OUString s( RTL_CONSTASCII_USTRINGPARAM( "Packet-size too big (" ) );
-        s += OUString::valueOf( (sal_Int64) (sal_uInt32 ) nSize );
-        s += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
-        m_pBridgeImpl->addError( s );
+        OUStringBuffer s;
+        s.appendAscii( "Packet-size too big (" );
+        s.append( (sal_Int64) (sal_uInt32 ) nSize );
+        s.append( sal_Unicode( ')' ) );
+        m_pBridgeImpl->addError( s.makeStringAndClear() );
         OSL_ENSURE( 0 , "urp bridge: Packet-size too big" );
         disposeEnvironment();
         return sal_False;
@@ -334,10 +339,11 @@ inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
     // allocate the necessary memory
     if( ! m_unmarshal.setSize( nSize ) )
     {
-        OUString s( RTL_CONSTASCII_USTRINGPARAM( "Packet-size too big, couln't allocate necessary memory (" ) );
-        s += OUString::valueOf( (sal_Int64) (sal_uInt32 ) nSize );
-        s += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
-        m_pBridgeImpl->addError( s );
+        OUStringBuffer s;
+        s.appendAscii( "Packet-size too big, couln't allocate necessary memory (" );
+        s.append( (sal_Int64) (sal_uInt32 ) nSize );
+        s.append( sal_Unicode( ')' ) );
+        m_pBridgeImpl->addError( s.makeStringAndClear() );
         OSL_ENSURE( 0 , "urp bridge: messages size too large, terminating connection" );
         return sal_False;
     }
@@ -346,12 +352,13 @@ inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
 
     if( nSize != nRead )
     {
-        OUString s( RTL_CONSTASCII_USTRINGPARAM( "Unexpected connection closure, inconsistent packet (" ) );
-        s += OUString::valueOf( (sal_Int64) (sal_uInt32 ) nSize );
-        s += OUString( RTL_CONSTASCII_USTRINGPARAM( " asked, " ) );
-        s += OUString::valueOf( (sal_Int64) (sal_uInt32 ) nRead );
-        s += OUString( RTL_CONSTASCII_USTRINGPARAM( " got )" ) );
-        m_pBridgeImpl->addError( s );
+        OUStringBuffer s;
+        s.appendAscii( "Unexpected connection closure, inconsistent packet (" );
+        s.append( (sal_Int64) (sal_uInt32 ) nSize );
+        s.appendAscii( " asked, " );
+        s.append( (sal_Int64) (sal_uInt32 ) nRead );
+        s.appendAscii( " got )" );
+        m_pBridgeImpl->addError( s.makeStringAndClear() );
         // couldn't get the asked amount of bytes, quit
         // should only occur, when the environment has already been disposed
         OSL_ENSURE( m_pBridgeImpl->m_bDisposed , "urp bridge: inconsistent packet, terminating connection." );
@@ -524,9 +531,10 @@ void OReaderThread::run()
                 }
                 if( m_pBridgeImpl->m_lastInType.getTypeClass() != typelib_TypeClass_INTERFACE )
                 {
-                    OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "interface type is not of typeclass interface (" ));
-                    sMessage += OUString::valueOf( (sal_Int32) m_pBridgeImpl->m_lastInType.getTypeClass() );
-                    m_pBridgeImpl->addError( sMessage );
+                    OUStringBuffer sMessage;
+                    sMessage.appendAscii( "interface type is not of typeclass interface (" );
+                    sMessage.append( (sal_Int32) m_pBridgeImpl->m_lastInType.getTypeClass() );
+                    m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
                     OSL_ENSURE( 0 , "urp-bridge : not an interface type" );
                     disposeEnvironment();
                     break;
@@ -597,9 +605,10 @@ void OReaderThread::run()
                             *ppLastType );
                         if( !pInterfaceType )
                         {
-                            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "Couldn't retrieve type description for type " ) );
-                            sMessage += (*ppLastType)->pTypeName;
-                            m_pBridgeImpl->addError( sMessage );
+                            OUStringBuffer sMessage;
+                            sMessage.appendAscii( "Couldn't retrieve type description for type " );
+                            sMessage.append( OUString( (*ppLastType)->pTypeName ) );
+                            m_pBridgeImpl->addError( sMessage.makeStringAndClear() );
                             delete pMultiJob;
                             pMultiJob = 0;
                             disposeEnvironment();

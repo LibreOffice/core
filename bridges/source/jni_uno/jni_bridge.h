@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 16:29:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,13 +122,13 @@ struct Bridge
     void handle_uno_exc(
         JNI_context const & jni, uno_Any * uno_exc ) const;
     void call_java(
-        jobject javaI, JNI_type_info const * info, sal_Int32 function_pos,
+        jobject javaI, JNI_interface_type_info const * info, sal_Int32 function_pos,
         typelib_TypeDescriptionReference * return_type,
         typelib_MethodParameter * params, sal_Int32 nParams,
         void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const;
-    jobject map_uno2java(
+    jobject map_to_java(
         JNI_context const & jni,
-        uno_Interface * pUnoI, JNI_type_info const * info ) const;
+        uno_Interface * pUnoI, JNI_interface_type_info const * info ) const;
 
     // jni_java2uno.cxx
     void handle_java_exc(
@@ -139,9 +139,9 @@ struct Bridge
         typelib_TypeDescriptionReference * return_tdref,
         sal_Int32 nParams, typelib_MethodParameter const * pParams,
         jobjectArray jo_args ) const;
-    uno_Interface * map_java2uno(
+    uno_Interface * map_to_uno(
         JNI_context const & jni,
-        jobject javaI, JNI_type_info const * info ) const;
+        jobject javaI, JNI_interface_type_info const * info ) const;
 };
 
 }

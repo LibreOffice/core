@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:26:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 19:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ typedef __va_list va_list;
 
 namespace jni_uno
 {
+
 class JNI_info;
 
 //==================================================================================================
@@ -101,62 +102,6 @@ struct BridgeRuntimeError
 //##################################################################################################
 
 //==================================================================================================
-struct rtl_mem
-{
-    inline static void * operator new ( size_t nSize )
-        { return rtl_allocateMemory( nSize ); }
-    inline static void operator delete ( void * mem )
-        { if (mem) rtl_freeMemory( mem ); }
-    inline static void * operator new ( size_t, void * mem )
-        { return mem; }
-    inline static void operator delete ( void *, void * )
-        {}
-
-    static inline ::std::auto_ptr< rtl_mem > allocate( ::std::size_t bytes );
-};
-//--------------------------------------------------------------------------------------------------
-inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
-{
-    void * p = rtl_allocateMemory( bytes );
-    if (0 == p)
-        throw BridgeRuntimeError( OUSTR("out of memory!") );
-    return ::std::auto_ptr< rtl_mem >( (rtl_mem *)p );
-}
-
-//##################################################################################################
-
-//==================================================================================================
-class TypeDescr
-{
-    typelib_TypeDescription * m_td;
-
-    TypeDescr( TypeDescr & ); // not impl
-    void operator = ( TypeDescr ); // not impl
-
-public:
-    inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
-    inline ~TypeDescr() SAL_THROW( () )
-        { TYPELIB_DANGER_RELEASE( m_td ); }
-
-    inline typelib_TypeDescription * get() const
-        { return m_td; }
-};
-//__________________________________________________________________________________________________
-inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
-    : m_td( 0 )
-{
-    TYPELIB_DANGER_GET( &m_td, td_ref );
-    if (0 == m_td)
-    {
-        throw BridgeRuntimeError(
-            OUSTR("cannot get comprehensive type description for ") +
-            *reinterpret_cast< ::rtl::OUString const * >( &td_ref->pTypeName ) );
-    }
-}
-
-//##################################################################################################
-
-//==================================================================================================
 class JNI_context
 {
     JNI_info const * m_jni_info;
@@ -165,7 +110,7 @@ class JNI_context
     JNI_context( JNI_context & ); // not impl
     void operator = ( JNI_context ); // not impl
 
-    void throw_bridge_error() const;
+    void java_exc_occured() const;
 public:
     inline explicit JNI_context( JNI_info const * jni_info, JNIEnv * env )
         : m_jni_info( jni_info ),
@@ -180,9 +125,30 @@ public:
     inline JNIEnv * get_jni_env() const
         { return m_env; }
 
-    inline void ensure_no_exception() const
-        { if (JNI_FALSE != m_env->ExceptionCheck()) throw_bridge_error(); }
+    inline void ensure_no_exception() const; // throws BridgeRuntimeError
+    inline bool assert_no_exception() const; // asserts and clears exception
+
+    ::rtl::OUString get_stack_trace( jobject jo_exc = 0 ) const;
 };
+//__________________________________________________________________________________________________
+inline void JNI_context::ensure_no_exception() const
+{
+    if (JNI_FALSE != m_env->ExceptionCheck())
+    {
+        java_exc_occured();
+    }
+}
+//__________________________________________________________________________________________________
+inline bool JNI_context::assert_no_exception() const
+{
+    if (JNI_FALSE != m_env->ExceptionCheck())
+    {
+        m_env->ExceptionClear();
+        OSL_ENSURE( 0, "unexpected java exception occured!" );
+        return false;
+    }
+    return true;
+}
 
 //==================================================================================================
 class JNI_guarded_context
@@ -193,17 +159,11 @@ class JNI_guarded_context
     void operator = ( JNI_guarded_context ); // not impl
 
 public:
-    JNI_guarded_context(
+    inline explicit JNI_guarded_context(
         JNI_info const * jni_info, ::jvmaccess::VirtualMachine * vm_access )
-        // workaround this by catching internally CreationException
-//         try
         : AttachGuard( vm_access ),
           JNI_context( jni_info, AttachGuard::getEnvironment() )
         {}
-//         catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
-//         {
-//             throw BridgeRuntimeError( OUSTR("attaching to java vm failed!") );
-//         }
 };
 
 //##################################################################################################
@@ -279,6 +239,62 @@ inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef & auto_ref )
     reset( auto_ref.m_jo );
     auto_ref.m_jo = 0;
     return *this;
+}
+
+//##################################################################################################
+
+//==================================================================================================
+struct rtl_mem
+{
+    inline static void * operator new ( size_t nSize )
+        { return rtl_allocateMemory( nSize ); }
+    inline static void operator delete ( void * mem )
+        { if (mem) rtl_freeMemory( mem ); }
+    inline static void * operator new ( size_t, void * mem )
+        { return mem; }
+    inline static void operator delete ( void *, void * )
+        {}
+
+    static inline ::std::auto_ptr< rtl_mem > allocate( ::std::size_t bytes );
+};
+//--------------------------------------------------------------------------------------------------
+inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
+{
+    void * p = rtl_allocateMemory( bytes );
+    if (0 == p)
+        throw BridgeRuntimeError( OUSTR("out of memory!") );
+    return ::std::auto_ptr< rtl_mem >( (rtl_mem *)p );
+}
+
+//##################################################################################################
+
+//==================================================================================================
+class TypeDescr
+{
+    typelib_TypeDescription * m_td;
+
+    TypeDescr( TypeDescr & ); // not impl
+    void operator = ( TypeDescr ); // not impl
+
+public:
+    inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
+    inline ~TypeDescr() SAL_THROW( () )
+        { TYPELIB_DANGER_RELEASE( m_td ); }
+
+    inline typelib_TypeDescription * get() const
+        { return m_td; }
+};
+//__________________________________________________________________________________________________
+inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
+    : m_td( 0 )
+{
+    TYPELIB_DANGER_GET( &m_td, td_ref );
+    if (0 == m_td)
+    {
+        throw BridgeRuntimeError(
+            OUSTR("cannot get comprehensive type description for ") +
+            *reinterpret_cast< ::rtl::OUString const * >( &td_ref->pTypeName ) );
+    }
 }
 
 }
