@@ -25,7 +25,12 @@ $(BIN)$/$(ZIPFILE) .SETDIR=$(DESTDIR)$/.. .PHONY:
 
 $(BIN)$/$(TARGZFILE) .SETDIR=$(DESTDIR)$/.. .PHONY:
 #	tar does not properly support update
+.IF "$(OS)"=="SOLARIS"
+#	always use the system tar on Solaris
+    +/usr/bin/tar cf - $(ZIPDIR) | gzip - > $(TARGZFILE)
+.ELSE
     +tar cf - $(ZIPDIR) | gzip - > $(TARGZFILE)
+.ENDIF
     
 
 
