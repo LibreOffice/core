@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-08 15:38:52 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 13:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ SFX_IMPL_INTERFACE(SdDrawDocShell, SfxObjectShell, SdResId(0))
 }
 
 SFX_IMPL_OBJECTFACTORY_LOD(SdDrawDocShell, simpress,
-                           SvGlobalName(SO3_SIMPRESS_CLASSID_50), Sd)
+                           SvGlobalName(SO3_SIMPRESS_CLASSID), Sd)
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 13:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ SFX_IMPL_INTERFACE(SdGraphicDocShell, SfxObjectShell, SdResId(0))
 }
 
 SFX_IMPL_OBJECTFACTORY_LOD(SdGraphicDocShell, sdraw,
-                           SvGlobalName(SO3_SDRAW_CLASSID_50), Sd)
+                           SvGlobalName(SO3_SDRAW_CLASSID), Sd)
 
 /*************************************************************************
 |*
