@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 16:23:44 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,20 +102,6 @@
 #define STR_PREVIEW_DOCINFO                 (RID_SFX_VIEW_START+25)
 #define STR_PREVIEW_NODOCINFO               (RID_SFX_VIEW_START+26)
 
-#define RID_MAILATTACHDOC_DLG               (RID_SFX_VIEW_START+30)
-#define FT_DOC                          10
-#define BTN_ATTACH                      11
-#define BTN_SAVE_AND_ATTACH             12
-#define BTN_MAILBODY                    13
-#define BTN_SAVE_AND_MAILBODY           14
-#define BTN_SELECTION                   15
-#define BTN_NO_ATTACH                   16
-#define GB_DOC                          17
-#define BTN_OK                          18
-#define BTN_CANCEL                      19
-#define BTN_HELP                        20
-
-
 #define MSG_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
 
 #define STR_MDIFRAME_INTERFACE              (RID_SFX_VIEW_START+32)
@@ -125,10 +111,7 @@
 #define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
 #define MSG_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
 
-#define RID_FRAMEDLG                        (RID_SFX_VIEW_START+43)
 #define TP_FRAMEPROPERTIES                  (RID_SFX_VIEW_START+44)
-#define TP_FRAMESIZE                        (RID_SFX_VIEW_START+45)
-#define TP_FRAMESPACING                     (RID_SFX_VIEW_START+46)
 
 #define FT_FRAMENAME                    3
 #define ED_FRAMENAME                    4
