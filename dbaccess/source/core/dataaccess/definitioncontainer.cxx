@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:02:13 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 06:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,12 @@ void ODefinitionContainer::dispose()
             ++aLoop
         )
     {
-        removeObjectListener(aLoop->xObject);
         Reference<XPropertySet> xProp = aLoop->xObject;
-        ::comphelper::disposeComponent(xProp);
+        if ( xProp.is() )
+        {
+            removeObjectListener(xProp);
+            ::comphelper::disposeComponent(xProp);
+        }
     }
 
     // remove our elements
