@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-19 11:13:52 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,7 +1008,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ turkish ] = "Konum ve boyut";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posici�n y tama�o";
-                Text[ thai ] = "Position and Size";
+                Text[ thai ] = "ตำแหน่งและขนาด";
             };
             PageItem
             {
