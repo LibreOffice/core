@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-11-18 14:57:52 $
+#   last change: $Author: dfoster $ $Date: 2002-11-18 17:20:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,6 +114,7 @@
               includes="**/MemoryUsage.java" classpathref="idlclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
     <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/MemoryUsage/parcel-descriptor.xml"/>
+    <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/MemoryUsage/"/>
   </target>
 
   <!-- ===================== Build UNO package ========================= -->
@@ -149,7 +150,7 @@
         basedir="${out}/class/sframework">
     </zip>
     <copy file="${prj}/common/bin/scripting64401.res"
-        todir="${out}/class/sframework"/>
+        todir="${out}/class/sframeworkinstall/sframework/"/>
   </target>
   <!-- ===================== Package regsingletons ========================= -->
   <target name="packagesingletons">
