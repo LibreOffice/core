@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:16:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,8 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
 
     if ( mpFloatWin )
         mpFloatWin->SetImplListBox( mpImplLB );
-//  else
-//      mpImplLB->GetMainWindow()->AllowGrabFocus( TRUE );
+    else
+        mpImplLB->GetMainWindow()->AllowGrabFocus( TRUE );
 
     ImplCalcEditHeight();
 
@@ -628,7 +628,7 @@ void ComboBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight,
     if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
     {
         Size aPrefSz = mpFloatWin->GetPrefSize();
-        if ( ( nFlags & WINDOW_POSSIZE_HEIGHT ) && ( nHeight > mnDDHeight ) )
+        if ( ( nFlags & WINDOW_POSSIZE_HEIGHT ) && ( nHeight >= 2*mnDDHeight ) )
             aPrefSz.Height() = nHeight-mnDDHeight;
         if ( nFlags & WINDOW_POSSIZE_WIDTH )
             aPrefSz.Width() = nWidth;
@@ -651,9 +651,48 @@ void ComboBox::Resize()
     if( IsDropDownBox() )
     {
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        nSBWidth = CalcZoom( nSBWidth );
-        mpSubEdit->SetSizePixel( Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
-        mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+        long    nTop = 0;
+        long    nBottom = aOutSz.Height();
+
+        Window *pBorder = GetWindow( WINDOW_BORDER );
+        ImplControlValue aControlValue;
+        Point aPoint;
+        Region aContent, aBound;
+
+        // use the full extent of the control
+        Region aArea( Rectangle(aPoint, pBorder->GetOutputSizePixel()) );
+
+        if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+                aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            // convert back from border space to local coordinates
+            aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
+            aContent.Move(-aPoint.X(), -aPoint.Y());
+
+            // use the themes drop down size for the button
+            aOutSz.Width() = aContent.GetBoundRect().Left();
+            mpBtn->SetPosSizePixel( aContent.GetBoundRect().Left(), nTop, aContent.GetBoundRect().getWidth(), (nBottom-nTop) );
+
+            // adjust the size of the edit field
+            if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
+                        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+            {
+                // convert back from border space to local coordinates
+                aContent.Move(-aPoint.X(), -aPoint.Y());
+
+                // use the themes drop down size
+                Rectangle aContentRect = aContent.GetBoundRect();
+                mpSubEdit->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
+            }
+            else
+                mpSubEdit->SetSizePixel( aOutSz );
+        }
+        else
+        {
+            nSBWidth = CalcZoom( nSBWidth );
+            mpSubEdit->SetSizePixel( Size( aOutSz.Width() - nSBWidth, aOutSz.Height() ) );
+            mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, nTop, nSBWidth, (nBottom-nTop) );
+        }
     }
     else
     {
@@ -766,6 +805,8 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
         }
         Resize();
         mpImplLB->Resize(); // Wird nicht durch ComboBox::Resize() gerufen, wenn sich die ImplLB nicht aendert.
+        SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
+                            // otherwise it will overpaint NWF drawn comboboxes
     }
 }
 
