@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-01 17:28:22 $
+ *  last change: $Author: obr $ $Date: 2001-08-31 07:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,14 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
  * from the ISO language codes.
  */
 
+const _pair _full_locale_list[] = {
+    { "ja_JP.EUC",    RTL_TEXTENCODING_EUC_JP      },
+    { "ko_KR.EUC",    RTL_TEXTENCODING_EUC_KR      },
+    { "zh_CN.EUC",    RTL_TEXTENCODING_EUC_CN      },
+    { "zh_TW.EUC",    RTL_TEXTENCODING_EUC_TW      },
+    { NULL,           RTL_TEXTENCODING_DONTKNOW    }
+};
+
 const _pair _locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
     { "euc",          RTL_TEXTENCODING_EUC_JP      },
@@ -641,17 +649,26 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         }
     }
 
-    /*
-     *  check if there is a charset qualifier at the end of the given locale string
-     *  e.g. de.ISO8859-15 or de.ISO8859-15@euro which strongly indicates what
-     *  charset to use
-     */
-    cp = strrchr( locale_buf, "." );
-
-    if( NULL != cp )
+    /* check special handling list (EUC) first */
     {
-        const unsigned int members = sizeof( _locale_extension_list ) / sizeof( _pair );
-        language = _pair_search( cp + 1, _locale_extension_list, members);
+        const unsigned int members = sizeof( _full_locale_list ) / sizeof( _pair );
+        language = _pair_search( cp + 1, _full_locale_list, members);
+    }
+
+    if( NULL == language )
+    {
+        /*
+         *  check if there is a charset qualifier at the end of the given locale string
+         *  e.g. de.ISO8859-15 or de.ISO8859-15@euro which strongly indicates what
+         *  charset to use
+         */
+        cp = strrchr( locale_buf, '.' );
+
+        if( NULL != cp )
+        {
+            const unsigned int members = sizeof( _locale_extension_list ) / sizeof( _pair );
+            language = _pair_search( cp + 1, _locale_extension_list, members);
+        }
     }
 
     /* use iso language code to determine the charset */
