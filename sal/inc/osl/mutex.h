@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex);
 /** Returns a unique and global mutex.
     @return the global mutex.
 */
-oslMutex * SAL_CALL osl_getGlobalMutex();
+oslMutex * SAL_CALL osl_getGlobalMutex(void);
 
 #ifdef __cplusplus
 }
