@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kr $ $Date: 2001-10-05 08:00:22 $
+#   last change: $Author: sb $ $Date: 2001-10-12 11:09:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ APP1OBJS=	\
                 $(OBJ)$/testuuid.obj		\
                 $(OBJ)$/teststrbuf.obj		\
                 $(OBJ)$/testbyteseq.obj		\
+                $(OBJ)$/testtextenc.obj		\
                 $(OBJ)$/testuri.obj			\
                 $(OBJ)$/test.obj			\
                 $(OBJ)$/testlogfile.obj		\
