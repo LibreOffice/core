@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-16 14:56:35 $
+#   last change: $Author: hjs $ $Date: 2002-01-24 12:30:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -221,10 +221,12 @@ $(USE_SHL$(TNR)VERSIONMAP): \
 
 .ELSE			# "$(SHL$(TNR)FILTERFILE)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) .PHONY: 
+$(USE_SHL$(TNR)VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL$(TNR)FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL$(TNR)FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""

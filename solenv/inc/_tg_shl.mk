@@ -121,10 +121,12 @@ $(USE_SHL1VERSIONMAP): \
 
 .ELSE			# "$(SHL1FILTERFILE)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) .PHONY: 
+$(USE_SHL1VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL1FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL1FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL1VERSIONMAP)"!=""
@@ -556,10 +558,12 @@ $(USE_SHL2VERSIONMAP): \
 
 .ELSE			# "$(SHL2FILTERFILE)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) .PHONY: 
+$(USE_SHL2VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL2FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL2FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL2VERSIONMAP)"!=""
@@ -991,10 +995,12 @@ $(USE_SHL3VERSIONMAP): \
 
 .ELSE			# "$(SHL3FILTERFILE)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) .PHONY: 
+$(USE_SHL3VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL3FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL3FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL3VERSIONMAP)"!=""
@@ -1426,10 +1432,12 @@ $(USE_SHL4VERSIONMAP): \
 
 .ELSE			# "$(SHL4FILTERFILE)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) .PHONY: 
+$(USE_SHL4VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL4FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL4FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL4VERSIONMAP)"!=""
@@ -1861,10 +1869,12 @@ $(USE_SHL5VERSIONMAP): \
 
 .ELSE			# "$(SHL5FILTERFILE)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) .PHONY: 
+$(USE_SHL5VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL5FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL5FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL5VERSIONMAP)"!=""
@@ -2296,10 +2306,12 @@ $(USE_SHL6VERSIONMAP): \
 
 .ELSE			# "$(SHL6FILTERFILE)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) .PHONY: 
+$(USE_SHL6VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL6FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL6FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL6VERSIONMAP)"!=""
@@ -2731,10 +2743,12 @@ $(USE_SHL7VERSIONMAP): \
 
 .ELSE			# "$(SHL7FILTERFILE)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) .PHONY: 
+$(USE_SHL7VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL7FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL7FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL7VERSIONMAP)"!=""
@@ -3166,10 +3180,12 @@ $(USE_SHL8VERSIONMAP): \
 
 .ELSE			# "$(SHL8FILTERFILE)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) .PHONY: 
+$(USE_SHL8VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL8FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL8FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL8VERSIONMAP)"!=""
@@ -3601,10 +3617,12 @@ $(USE_SHL9VERSIONMAP): \
 
 .ELSE			# "$(SHL9FILTERFILE)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) .PHONY: 
+$(USE_SHL9VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL9FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL9FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL9VERSIONMAP)"!=""
@@ -4036,10 +4054,12 @@ $(USE_SHL10VERSIONMAP): \
 
 .ELSE			# "$(SHL10FILTERFILE)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) .PHONY: 
+$(USE_SHL10VERSIONMAP) : 
     @+echo -----------------------------
     @+echo SHL10FILTERFILE not set!
     @+echo -----------------------------
+    @$(TOUCH) $@
+    @+echo dummy file to keep the dependencies for later use.
 #	force_dmake_to_error
 .ENDIF			# "$(SHL10FILTERFILE)"!=""
 .ELSE			# "$(USE_SHL10VERSIONMAP)"!=""
