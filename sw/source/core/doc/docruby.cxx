@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-01 10:38:39 $
+ *  last change: $Author: jp $ $Date: 2001-06-15 12:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,21 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                 aPam.Move( fnMoveForward, fnGoNode );
              }
              else
-                break;
+            {
+                const SwRubyListEntry* pEntry = rList[ nListEntry++ ];
+
+                // set/reset the attribut
+                if( pEntry->GetRubyAttr().GetText().Len() &&
+                    pEntry->GetText().Len() )
+                {
+                    aPam.SetMark();
+                    Insert( aPam, pEntry->GetText().Len() );
+                    Insert( aPam, pEntry->GetRubyAttr(), SETATTR_DONTEXPAND );
+                }
+                else
+                    break;
+                aPam.DeleteMark();
+            }
         }
     } while( nListEntry < rList.Count() && *aPam.GetPoint() < *pEnd );
 
