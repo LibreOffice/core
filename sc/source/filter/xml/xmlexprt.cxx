@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 07:43:01 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 08:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,15 @@
 #endif
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
+#endif
+#ifndef _SC_XMLEXPORTDATAPILOT_HXX
+#include "XMLExportDataPilot.hxx"
+#endif
+#ifndef SC_XMLEXPORTDATABASERANGES_HXX
+#include "XMLExportDatabaseRanges.hxx"
+#endif
+#ifndef _SC_XMLEXPORTDDELINKS_HXX
+#include "XMLExportDDELinks.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -284,8 +293,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     bRowHeaderOpen(sal_False),
     aGroupColumns(*this, sXML_table_column_group),
     aGroupRows(*this, sXML_table_row_group),
-    aExportDataPilot(*this),
-    aExportDatabaseRanges(*this),
     nProgressReference(0),
     nProgressValue(0),
     nProgressObjects(0),
@@ -1022,6 +1029,7 @@ void ScXMLExport::FillColumnRowGroups()
 void ScXMLExport::_ExportContent()
 {
     nOldProgressValue = nProgressValue;
+    ScXMLExportDatabaseRanges aExportDatabaseRanges(*this);
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
     {
@@ -1152,8 +1160,11 @@ void ScXMLExport::_ExportContent()
         }
         WriteNamedExpressions(xSpreadDoc);
         aExportDatabaseRanges.WriteDatabaseRanges(xSpreadDoc);
+        ScXMLExportDataPilot aExportDataPilot(*this);
         aExportDataPilot.WriteDataPilots(xSpreadDoc);
         WriteConsolidation();
+        ScXMLExportDDELinks aExportDDELinks(*this);
+        aExportDDELinks.WriteDDELinks();
         GetProgressBarHelper()->SetValue(nProgressReference);
     }
 }

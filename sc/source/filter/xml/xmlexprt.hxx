@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 08:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#endif
 
 #ifndef _SC_XMLEXPORTITERATOR_HXX
 #include "XMLExportIterator.hxx"
@@ -78,12 +81,6 @@
 #endif
 #ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
 #include "XMLStylesExportHelper.hxx"
-#endif
-#ifndef _SC_XMLEXPORTDATAPILOT_HXX
-#include "XMLExportDataPilot.hxx"
-#endif
-#ifndef SC_XMLEXPORTDATABASERANGES_HXX
-#include "XMLExportDatabaseRanges.hxx"
 #endif
 
 class ScOutlineArray;
@@ -135,8 +132,6 @@ class ScXMLExport : public SvXMLExport
     ScMyValidationsContainer    aValidationsContainer;
     ScMyDetectiveObjContainer   aDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
-    ScXMLExportDataPilot        aExportDataPilot;
-    ScXMLExportDatabaseRanges   aExportDatabaseRanges;
 
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
