@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #endif
 #include <hash_map>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
@@ -173,7 +174,7 @@ public:
         { return _xMgr; }
 
     // ctor/ dtor
-    IdlReflectionServiceImpl( const Reference< XMultiServiceFactory > & xMgr );
+    IdlReflectionServiceImpl( const Reference< XComponentContext > & xContext );
     virtual ~IdlReflectionServiceImpl();
 
     // XInterface

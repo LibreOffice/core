@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,15 @@ inline static Sequence< OUString > getSupportedServiceNames()
 }
 
 //__________________________________________________________________________________________________
-IdlReflectionServiceImpl::IdlReflectionServiceImpl( const Reference< XMultiServiceFactory > & xMgr )
+IdlReflectionServiceImpl::IdlReflectionServiceImpl(
+    const Reference< XComponentContext > & xContext )
     : OComponentHelper( _aComponentMutex )
-    , _xMgr( xMgr )
-    , _xTDMgr( xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ),
-               UNO_QUERY )
+    , _xMgr( xContext->getServiceManager(), UNO_QUERY )
     , _aElements( CACHE_SIZE )
 {
-    OSL_ENSURE( _xTDMgr.is(), "### cannot get service \"com.sun.star.reflection.TypeDescriptionManager\"!" );
+    xContext->getValueByName( OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= _xTDMgr;
+    OSL_ENSURE( _xTDMgr.is(), "### cannot get \"com.sun.star.reflection.TypeDescriptionManager\"!" );
 }
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl()
@@ -412,10 +413,10 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
 
 //==================================================================================================
 Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
-    const Reference< XMultiServiceFactory > & xMgr )
+    const Reference< XComponentContext > & xContext )
     throw(::com::sun::star::uno::Exception)
 {
-    return Reference< XInterface >( (XWeak *)(OWeakObject *)new IdlReflectionServiceImpl( xMgr ) );
+    return Reference< XInterface >( (XWeak *)(OWeakObject *)new IdlReflectionServiceImpl( xContext ) );
 }
 
 }
@@ -468,11 +469,10 @@ void * SAL_CALL component_getFactory(
 
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+        Reference< XSingleServiceFactory > xFactory( createSingleComponentFactory(
             stoc_corefl::IdlReflectionServiceImpl_create,
-            stoc_corefl::getSupportedServiceNames() ) );
+            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+            stoc_corefl::getSupportedServiceNames() ), UNO_QUERY );
 
         if (xFactory.is())
         {
