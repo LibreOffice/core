@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
+ *  last change: $Author: os $ $Date: 2001-06-15 12:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,9 @@
 #include <mailmrge.hxx>
 #endif
 
-
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
@@ -136,9 +138,6 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
-#include <com/sun/star/ui/XFolderPicker.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
@@ -172,10 +171,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
-using namespace ::com::sun::star::ui;
 using namespace com::sun::star::form;
 using namespace com::sun::star;
 using namespace com::sun::star::view;
+using namespace ::com::sun::star::ui::dialogs;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define C2U(cChar) OUString::createFromAscii(cChar)
