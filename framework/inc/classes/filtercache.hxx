@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-12 13:10:35 $
+ *  last change: $Author: as $ $Date: 2001-02-26 08:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,9 +658,18 @@ class FilterCache
 
     #ifdef ENABLE_FILTERCACHEDEBUG
 
-    private:
+    public:
 
-        void impldbg_showCacheContent();
+        void impldbg_generateHTMLView           ();
+
+        void impl_generateTypeListHTML          ();
+        void impl_generateFilterListHTML        ();
+        void impl_generateDetectorListHTML      ();
+        void impl_generateLoaderListHTML        ();
+
+        void impl_generateInvalidFiltersHTML    ();
+        void impl_generateInvalidDetectorsHTML  ();
+        void impl_generateInvalidLoadersHTML    ();
 
     #endif  //  #ifdef ENABLE_FILTERCACHEDEBUG
 
