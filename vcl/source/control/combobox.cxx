@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:28:16 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,13 +1157,6 @@ void ComboBox::GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const
 
 void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
 {
-    // Call Edit::Draw before changing the MapMode...
-    if ( IsDropDownBox() )
-    {
-        mpSubEdit->Draw( pDev, rPos, rSize, nFlags );
-        // DD-Button ?
-    }
-
     mpImplLB->GetMainWindow()->ImplInitSettings( TRUE, TRUE, TRUE );
 
     Point aPos = pDev->LogicToPixel( rPos );
@@ -1234,6 +1227,14 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
     }
 
     pDev->Pop();
+
+    // Call Edit::Draw after restoring the MapMode...
+    if ( IsDropDownBox() )
+    {
+        mpSubEdit->Draw( pDev, rPos, rSize, nFlags );
+        // DD-Button ?
+    }
+
 }
 
 // -----------------------------------------------------------------------
