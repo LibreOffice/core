@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:41:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,11 @@
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
-
 #ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include <toolkit/controls/formattedcontrol.hxx>
+#endif
+#ifndef TOOLKIT_ROADMAP_CONTROL_HXX
+#include <toolkit/controls/roadmapcontrol.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #include <toolkit/controls/unocontrols.hxx>
@@ -266,6 +268,8 @@ UnoEditControl::UnoEditControl()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
+    mnMaxTextLen = 0;
+    mbSetMaxTextLenInPeer = FALSE;
 }
 
 uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
@@ -1040,6 +1044,7 @@ void UnoImageControlControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
     else
         UnoControl::ImplSetPeerProperty( rPropName, rVal );
 }
+
 
 sal_Bool SAL_CALL UnoImageControlControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
 {
