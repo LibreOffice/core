@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 16:37:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -408,14 +412,18 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 SfxApplication* SfxApplication::GetOrCreate()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-#if 0                                   // SFX on demand
+
+    // SFX on demand
     if ( !pApp )
     {
-        SfxApplication *pNew = new SfxApplication;
-        pNew->StartUpScreen( NULL );
-        SetApp( pNew );
+        com::sun::star::uno::Reference < com::sun::star::lang::XInitialization >
+            xWrp(::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper")), com::sun::star::uno::UNO_QUERY );
+            xWrp->initialize( com::sun::star::uno::Sequence < com::sun::star::uno::Any >() );
+//        SfxApplication *pNew = new SfxApplication;
+//        pNew->StartUpScreen( NULL );
+//        SetApp( pNew );
     }
-#endif
+
     return pApp;
 }
 
