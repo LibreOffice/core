@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 09:55:20 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ catalan ] = "~Administrar...";
     };
 };
+
 
 
 
