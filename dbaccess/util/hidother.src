@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:54:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,11 +312,19 @@ hidspecial SID_SBA_CLEAR_QUERY                          { HelpId = SID_SBA_CLEAR
 hidspecial SID_FM_EXECUTE                               { HelpId = SID_FM_EXECUTE ; };
 
 hidspecial HID_DSADMIN_SQL92CHECK                       { HelpId = HID_DSADMIN_SQL92CHECK ; };
+hidspecial HID_DSADMIN_AUTOINCREMENTVALUE               { HelpId = HID_DSADMIN_AUTOINCREMENTVALUE ; };
+hidspecial HID_TAB_AUTOINCREMENTVALUE                   { HelpId = HID_TAB_AUTOINCREMENTVALUE ; };
+hidspecial HID_DOCUMENT_CREATE_REPWIZ                   { HelpId = HID_DOCUMENT_CREATE_REPWIZ ; };
+hidspecial HID_DSADMIN_RETRIEVE_AUTO                    { HelpId = HID_DSADMIN_RETRIEVE_AUTO ; };
+hidspecial HID_DSADMIN_AUTORETRIEVEENABLED              { HelpId = HID_DSADMIN_AUTORETRIEVEENABLED ; };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2002/07/09 12:54:27  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.42  2002/07/09 07:42:45  oj
  *  #96306# remove unused helpids
  *

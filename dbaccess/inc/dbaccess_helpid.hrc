@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:54:58 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,11 @@
 #define HID_BROWSER_UNDO_RECORD                     (HID_DBACCESS_START + 224)
 
 #define HID_DSADMIN_SQL92CHECK                      (HID_DBACCESS_START + 225)
+#define HID_DSADMIN_AUTOINCREMENTVALUE              (HID_DBACCESS_START + 226)
+#define HID_DOCUMENT_CREATE_REPWIZ                  (HID_DBACCESS_START + 227)
+#define HID_TAB_AUTOINCREMENTVALUE                  (HID_DBACCESS_START + 228)
+#define HID_DSADMIN_RETRIEVE_AUTO                   (HID_DBACCESS_START + 229)
+#define HID_DSADMIN_AUTORETRIEVEENABLED             (HID_DBACCESS_START + 230)
 
 // don't forget to update the file util/hidother.src
 
@@ -323,6 +328,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2002/07/09 12:54:58  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.48  2002/07/09 07:41:23  oj
  *  #96306# remove unused helpids
  *
@@ -332,44 +340,6 @@
  *  Revision 1.46  2002/02/27 10:20:16  oj
  *  #97666##97667# insert new helpids and unique ids
  *
- *  Revision 1.45  2002/02/06 09:01:50  oj
- *  #90580# introduce new file for relation control
- *
- *  Revision 1.44  2001/09/25 13:28:23  oj
- *  #91719# implementing the XRename handling
- *
- *  Revision 1.43  2001/08/16 10:57:02  fs
- *  #90573# +HID_BROWSER_REFRESH_REBUILDVIEW
- *
- *  Revision 1.42  2001/08/06 11:58:31  oj
- *  #90563# new helpid for sql mode
- *
- *  Revision 1.41  2001/08/06 07:42:40  fs
- *  #90558# #90529# new help ids
- *
- *  Revision 1.40  2001/07/17 07:25:54  oj
- *  #89575# new pwd change dialog
- *
- *  Revision 1.39  2001/07/16 06:16:15  oj
- *  #86731# some helpids for toolbars
- *
- *  Revision 1.38  2001/07/03 13:59:25  oj
- *  #86890# impl query paste in contextmenu
- *
- *  Revision 1.37  2001/06/25 08:23:31  oj
- *  #88699# new helpids
- *
- *  Revision 1.36  2001/06/20 06:55:29  oj
- *  #88434# new helpids for useradmin page
- *
- *  Revision 1.35  2001/06/18 15:12:33  fs
- *  #88393# HID_DSBROWSER_DIRECTSQL
- *
- *  Revision 1.34  2001/06/13 16:58:08  fs
- *  #87724# +HID_DSBROWSER_DISCONNECTING
- *
- *  Revision 1.33  2001/06/13 16:29:05  fs
- *  #87724# +HID_DSBROWSER_BOOKMARKSELECTED
  *
  *  Revision 1.0 30.10.00 14:03:48  fs
  ************************************************************************/
