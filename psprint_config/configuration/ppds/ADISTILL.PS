@@ -1,0 +1,416 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+
+*FormatVersion: "4.3"
+*FileVersion: "1.1"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "ADISTILL.PPD"
+*Manufacturer: "Adobe"
+*Product: "(Acrobat Distiller)"
+*PSVersion: "(2017.0801) 1"
+*ModelName: "Acrobat Distiller 3.0"
+*ShortNickName: "Acrobat Distiller 3.0"
+*NickName: "Acrobat Distiller 2017.801"
+
+*% === Options and Constraints =========
+
+*% ==== Device Capabilities ===============
+*ColorDevice: True
+*DefaultColorSpace: RGB
+*FileSystem: True
+*?FileSystem: "(True) == flush"
+*LanguageLevel: "2"
+*FreeVM: "4194304"
+*VMOption None/Standard: "4194304"
+*FCacheSize None/Standard: 204800
+*Throughput: "400"
+*VariablePaperSize: True
+
+*TTRasterizer: Type42
+
+*Password: "()" 
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+
+*% Multiple Resolution support for Distiller 3.0 ==============
+*OpenUI *Resolution: PickOne
+*OrderDependency: 50 AnySetup *Resolution
+*DefaultResolution: 600dpi
+*Resolution 72dpi: "1 dict dup /HWResolution [72 72] put setpagedevice"
+*Resolution 144dpi: "1 dict dup /HWResolution [144 144] put setpagedevice"
+*Resolution 300dpi: "1 dict dup /HWResolution [300 300] put setpagedevice"
+*Resolution 600dpi: "1 dict dup /HWResolution [600 600] put setpagedevice"
+*Resolution 1200dpi: "1 dict dup /HWResolution [1200 1200] put setpagedevice"
+*Resolution 2400dpi: "1 dict dup /HWResolution [2400 2400] put setpagedevice"
+*?Resolution: "
+   save
+   currentpagedevice /HWResolution get
+   0 get
+   (          ) cvs print (dpi) = flush
+   restore"
+*End
+*CloseUI: *Resolution
+
+*ResScreenFreq 72dpi: "60.0"
+*ResScreenFreq 144dpi: "60.0"
+*ResScreenFreq 300dpi: "60.0"
+*ResScreenFreq 600dpi: "60.0"
+*ResScreenFreq 1200dpi: "60.0"
+*ResScreenFreq 2400dpi: "60.0"
+
+*ResScreenAngle 72dpi: "45.0"
+*ResScreenAngle 144dpi: "45.0"
+*ResScreenAngle 300dpi: "45.0"
+*ResScreenAngle 600dpi: "45.0"
+*ResScreenAngle 1200dpi: "45.0"
+*ResScreenAngle 2400dpi: "45.0"
+
+*% Halftone Information ===============
+*ContoneOnly: False
+*DefaultHalftoneType: 1
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "{ abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub 
+dup mul add 1 sub} {dup mul exch dup mul add 1 exch sub}ifelse } bind"
+*End
+*ScreenProc Line: "{ exch pop abs neg } bind"
+*ScreenProc Ellipse: "{abs exch abs 2 copy mul exch 4 mul add 3 sub dup 0 
+lt { pop dup mul exch .75 div dup mul add 4 div 1 exch sub } { dup 1 gt { 
+pop 1 exch sub dup mul exch 1 exch sub  .75 div dup mul add 4 div 1 sub } 
+{ .5 exch sub exch pop exch pop } ifelse  } ifelse } bind"
+*End
+*ScreenProc Cross: "{ abs exch abs 2 copy gt { exch } if pop neg } bind"
+
+
+*DefaultTransfer: Null
+*Transfer Null: "{ } bind"
+*Transfer Null.Inverse: "{ 1 exch sub } bind"
+
+*% Paper Handling ===================
+
+
+*% Code in this section both selects a tray and sets up a frame buffer.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 50 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter: "
+  2 dict dup /PageSize [612 792] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize Legal: "
+  2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize Executive: "
+  2 dict dup /PageSize [522 756] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize Ledger: "
+  2 dict dup /PageSize [1224 792] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize Tabloid/11 x 17: "
+  2 dict dup /PageSize [792 1224] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize Screen: "
+  2 dict dup /PageSize [468 373] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize A3: "
+  2 dict dup /PageSize [842 1191] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageSize A4: "
+  2 dict dup /PageSize [595 842] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*?PageSize: " 
+ save 
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if 
+   (Unknown) 
+   8 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [522 756] (Executive) put
+   dup [1224 792] (Ledger) put
+   dup [792 1224] (Tabloid) put
+   dup [468 373] (Screen) put
+   dup [842 1191] (A3) put
+   dup [595 842] (A4) put
+  { exch aload pop 4 index sub abs 5 le exch 
+    5 index sub abs 5 le and
+      { exch pop exit } { pop } ifelse
+   } bind forall 
+   = flush pop pop
+   restore
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 50 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter: "
+  2 dict dup /PageSize [612 792] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion Legal: "
+  2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion Executive: "
+  2 dict dup /PageSize [522 756] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion Ledger: "
+  2 dict dup /PageSize [1224 792] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion Tabloid/11 x 17: "
+  2 dict dup /PageSize [792 1224] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion Screen: "
+  2 dict dup /PageSize [468 373] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion A3: "
+  2 dict dup /PageSize [842 1191] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*PageRegion A4: "
+  2 dict dup /PageSize [595 842] put dup /ImagingBBox null put
+setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+
+*ImageableArea Letter: "0.0 0.0 612.0 792.0"
+*ImageableArea Legal: "0.0 0.0 612.0 1008.0"
+*ImageableArea Executive: "0.0 0.0 522.0 756.0"
+*ImageableArea Ledger: "0.0 0.0 1224.0 792.0"
+*ImageableArea Tabloid/11 x 17: "0.0 0.0 792.0 1224.0"
+*ImageableArea Screen: "0.0 0.0 468.0 373.0"
+*ImageableArea A3: "0.0 0.0 842.0 1191.0"
+*ImageableArea A4: "0.0 0.0 595.0 842.0"
+*?ImageableArea: "
+save
+  /cvp { (                ) cvs print ( ) print } bind def
+  /upperright {10000 mul floor 10000 div} bind def
+  /lowerleft {10000 mul ceiling 10000 div} bind def
+  newpath clippath pathbbox
+  4 -2 roll exch 2 {lowerleft cvp} repeat
+  exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter: "612 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Executive: "522 756"
+*PaperDimension Ledger: "1224 792"
+*PaperDimension Tabloid/11 x 17: "792 1224"
+*PaperDimension Screen: "468 373"
+*PaperDimension A3: "842 1191"
+*PaperDimension A4: "595 842"
+
+*% Custom Page Sizes
+*CustomPageSize True: "
+   4 dict begin
+   pop	% pop /Orientation value off the stack to fix bug in PageMaker 5.0
+   2 array astore /PageOffset exch def
+   2 array astore /PageSize exch def
+   /ImagingBBox null def
+   currentdict end setpagedevice"
+*End
+*ParamCustomPageSize Width: 1 points 72 3240
+*ParamCustomPageSize Height: 2 points 72 3240
+*ParamCustomPageSize WidthOffset: 3 points 0 3240
+*ParamCustomPageSize HeightOffset: 4 points 0 3240
+*ParamCustomPageSize Orientation: 5 int 0 3
+*MaxMediaWidth: "3240"
+*MaxMediaHeight: "3240"
+*CenterRegistered: False
+*LeadingEdge Forced: ""
+*DefaultLeadingEdge: Forced
+
+*% Support for Custom Page Sizes on cut sheet devices
+*% Note: These are comment out because
+*% QuarkXPress 3.3x and earlier versions don't recognize 
+*% custom page sizes when HWMargins are present.
+*%*UseHWMargins True:""
+*%*UseHWMargins False:""
+*%*DefaultUseHWMargins: False 
+*%*HWMargins: 0 0 0 0
+
+*RequiresPageRegion All: True
+
+*OpenUI *InputSlot: PickOne
+*DefaultInputSlot: OnlyOne
+*InputSlot OnlyOne: ""
+*CloseUI: *InputSlot
+
+*AccurateScreensSupport: True
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font Courier: Standard "(002.004)" Standard ROM
+*Font Courier-Bold: Standard "(002.004)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004)" Standard ROM
+*Font Helvetica: Standard "(001.006)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006)" Standard ROM
+*Font Times-Bold: Standard "(001.007)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009)" Standard ROM
+*Font Times-Italic: Standard "(001.007)" Standard ROM
+*Font Times-Roman: Standard "(001.007)" Standard ROM
+*Font Symbol: Special "(001.007)" Special ROM
+*Font ZapfDingbats: Special "(001.004)" Special ROM
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse 
+   } bind loop
+   (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi
+
+*%  For 60 lpi / 72 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.72dpi/60 lpi / 72 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.72dpi/60 lpi / 72 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.72dpi/60 lpi / 72 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.72dpi/60 lpi / 72 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.72dpi/60 lpi / 72 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.72dpi/60 lpi / 72 dpi: "60"
+
+*%  For 60 lpi / 144 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.144dpi/60 lpi / 144 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.144dpi/60 lpi / 144 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.144dpi/60 lpi / 144 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.144dpi/60 lpi / 144 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.144dpi/60 lpi / 144 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.144dpi/60 lpi / 144 dpi: "60"
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%  For 71 lpi / 600 dpi  ===============================
+*ColorSepScreenAngle ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "66.6667"
+
+
+*% For 100 lpi / 1200 dpi ==============================================
+
+*ColorSepScreenAngle ProcessBlack.100lpi.1200dpi/100 lpi / 1200 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.100lpi.1200dpi/100 lpi / 1200 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.100lpi.1200dpi/100 lpi / 1200 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.100lpi.1200dpi/100 lpi / 1200 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.100lpi.1200dpi/100 lpi / 1200 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq CustomColor.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessCyan.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessMagenta.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessYellow.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+
+*% For 175 lpi / 2400 dpi ==============================================
+
+*ColorSepScreenAngle ProcessBlack.175lpi.2400dpi/175 lpi / 2400 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.175lpi.2400dpi/175 lpi / 2400 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.175lpi.2400dpi/175 lpi / 2400 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.175lpi.2400dpi/175 lpi / 2400 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.175lpi.2400dpi/175 lpi / 2400 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq CustomColor.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessCyan.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessMagenta.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessYellow.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+
+*% Last Edit Date: Jan 30 1997
+*% End of PPD file for Acrobat Distiller
+*% The byte count of this file should be exactly 014706 or 015122
+*% depending on the filesystem it resides in.
+*% end of PPD file for Acrobat Distiller 

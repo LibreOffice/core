@@ -1,0 +1,1814 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+
+
+*% All Rights Reserved. 
+
+*% Permission is granted for redistribution of this file as
+
+*% long as this copyright notice is intact and the contents
+
+*% of the file is not altered in any way from its original form.
+
+*% End of Copyright statement
+
+*% '
+
+*% Modification Date: July 02, 1997
+
+*% ================================================================
+
+
+
+*FormatVersion: "4.3"
+
+*FileVersion: "1.0"
+
+*LanguageEncoding: ISOLatin1
+
+*LanguageVersion: English
+
+*PSVersion: "(2013.114) 9"
+
+*Product: "(Linotype)"
+
+*% 31 Chars      *******************************
+
+*Manufacturer: "LHAG Linotype-Hell"
+
+*ModelName: "Lino ColorFlash V 4.3"
+
+*ShortNickName: "Lino ColorFlash V 4.3"
+
+*NickName: "Lino ColorFlash V 4.3"
+
+*PCFileName: "LHCOFLR5.PPD"
+
+
+
+*% ================================================================
+
+*% Basic Device Capabilities
+
+*% ================================================================
+
+
+
+*FreeVM: "5242880"
+
+*PrintPSErrors: False
+
+*LanguageLevel: "2"
+
+*ColorDevice: True
+
+*ContoneOnly: True
+
+*DefaultColorSpace: CMYK
+
+*Throughput: "1"
+
+*FileSystem: True
+
+
+
+*?FileSystem: "
+
+save
+
+ statusdict /diskonline get exec {(True)}{(False)} ifelse = flush
+
+restore
+
+"
+
+*End
+
+
+
+*Password: "0"
+
+*ExitServer: "
+
+ count 0 eq { % is the password on the stack?
+
+ true
+
+ }{
+
+ dup % potential password
+
+ statusdict /checkpassword get exec not
+
+ } ifelse
+
+ { % if no password or not valid
+
+ (WARNING : Cannot perform the exitserver command.) =
+
+ (Password supplied is not valid.) =
+
+ (Please contact the author of this software.) = flush
+
+ quit
+
+ } if
+
+ serverdict /exitserver get exec
+
+"
+
+*End
+
+
+
+*Reset: "
+
+ count 0 eq { % is the password on the stack?
+
+ true
+
+ }{
+
+ dup % potential password
+
+ statusdict /checkpassword get exec not
+
+ } ifelse
+
+ { % if no password or not valid
+
+ (WARNING : Cannot reset printer.) =
+
+ (Password supplied is not valid.) =
+
+ (Please contact the author of this software.) = flush
+
+ quit
+
+ } if
+
+ serverdict /exitserver get exec
+
+ systemdict /quit get exec
+
+ (WARNING : Printer Reset Failed.) = flush
+
+"
+
+*End
+
+
+
+*DefaultResolution: 400dpi
+
+
+
+*?Resolution: "
+
+ save 
+
+ 72 72 matrix defaultmatrix dtransform
+
+ pop abs round cvi =print (dpi\n) print
+
+ restore 
+
+"
+
+*End
+
+
+
+*% ================================================================
+
+*% ================================================================
+
+*% Group  -  CMM_Options
+
+*% ================================================================
+
+*% ================================================================
+
+
+
+*%----*OpenGroup: CMM_Options/CMM Options
+
+
+
+*% ================================================================
+
+*% CMM On + RenderingIntent / Off
+
+*% ================================================================
+
+
+
+*OpenUI *LHCMM_ON/Color Matching      : PickOne
+
+*OrderDependency: 20 DocumentSetup *LHCMM_ON
+
+*DefaultLHCMM_ON: DeltaDefault
+
+
+
+*LHCMM_ON DeltaDefault/Printer's Default: ""
+
+
+
+*LHCMM_ON OnPrint/On - Print: "
+
+%LHCBeginUserItem: *CMM_ON
+
+% True
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *RenderingIntent
+
+% 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHCMM_ON OnProof/On - Proof: "
+
+%LHCBeginUserItem: *CMM_ON
+
+% True
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *RenderingIntent
+
+% 3
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHCMM_ON Off/Off: "
+
+%LHCBeginUserItem: *CMM_ON
+
+% False
+
+%LHCEndUserItem
+
+"
+
+*End
+
+ 
+
+*CloseUI: *LHCMM_ON
+
+
+
+*% ================================================================
+
+*% CMM - ICCPrintProfile
+
+*% ================================================================
+
+
+
+*OpenUI *LHICCPrintProfile/Printing Process    :  PickOne
+
+*OrderDependency: 21 DocumentSetup *LHICCPrintProfile
+
+*DefaultLHICCPrintProfile: DeltaDefault
+
+
+
+*LHICCPrintProfile DeltaDefault/Printer's Default: ""
+
+
+
+*LHICCPrintProfile Euro/Euro: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Euro
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile SWOP/SWOP: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% SWOP
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom1/Custom1: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom2/Custom2: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom2
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom3/Custom3: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom3
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom4/Custom4: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom4
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom5/Custom5: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom5
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom6/Custom6: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom6
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom7/Custom7: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom7
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom8/Custom8: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom8
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom9/Custom9: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom9
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCPrintProfile Custom10/Custom10: "
+
+%LHCBeginUserItem: *ICCPrintProfile
+
+% Custom10
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *LHICCPrintProfile
+
+
+
+*% ================================================================
+
+*% CMM - ICCProofProfile
+
+*% ================================================================
+
+
+
+*OpenUI *LHICCProofProfile/Proof Media Type  :  PickOne
+
+*OrderDependency: 22 DocumentSetup *LHICCProofProfile
+
+*DefaultLHICCProofProfile: DeltaDefault
+
+
+
+*LHICCProofProfile DeltaDefault/Printer's Default: ""
+
+
+
+*LHICCProofProfile MediaType1/MediaType1: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType2/MediaType2: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType2
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType3/MediaType3: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType3
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType4/MediaType4: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType4
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType5/MediaType5: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType5
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType6/MediaType6: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType6
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType7/MediaType7: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType7
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType8/MediaType8: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType8
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType9/MediaType9: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType9
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHICCProofProfile MediaType10/MediaType10: "
+
+%LHCBeginUserItem: *ICCProofProfile
+
+% MediaType10
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *LHICCProofProfile
+
+
+
+*%----*CloseGroup: CMM_Options
+
+
+
+*% ================================================================
+
+*% ================================================================
+
+*% Group  -  Other Options
+
+*% ================================================================
+
+*% ================================================================
+
+
+
+*%----*OpenGroup: OtherOptions/Other Options
+
+
+
+*% ================================================================
+
+*% CMM - Smoothing Ð UDIs for Factor and Resolution
+
+*% ================================================================
+
+
+
+*OpenUI *LHSmoothing/Smoothing             :  PickOne
+
+*OrderDependency: 24 DocumentSetup *LHSmoothing
+
+*DefaultLHSmoothing: DeltaDefault
+
+
+
+*LHSmoothing DeltaDefault/Printer's Default: ""
+
+
+
+*LHSmoothing 0/Off: "
+
+%LHCBeginUserItem: *Smoothing
+
+% 0
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *Resolution
+
+% 400
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHSmoothing 2/Antialiasing 2x2: "
+
+%LHCBeginUserItem: *Smoothing
+
+% 2
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *Resolution
+
+% 800
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHSmoothing 3/Antialiasing 3x3: "
+
+%LHCBeginUserItem: *Smoothing
+
+% 3
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *Resolution
+
+% 1200
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHSmoothing max/Antialiasing max: "
+
+%LHCBeginUserItem: *Smoothing
+
+% 99
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *Resolution
+
+% 1200
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *LHSmoothing
+
+
+
+*% ================================================================
+
+*% InRIP Separation Mode
+
+*% ================================================================
+
+
+
+*OpenUI *LHInRipSeparation/Source Data           : PickOne
+
+*OrderDependency: 30 DocumentSetup *LHInRipSeparation
+
+*DefaultLHInRipSeparation: DeltaDefault
+
+
+
+*LHInRipSeparation DeltaDefault/Printer's Default: ""
+
+
+
+*LHInRipSeparation True/Composite PS: "
+
+  << /Separations          true
+
+     /ProcessColorModel    /DeviceCMYK
+
+     /SeparationColorNames [/Cyan /Magenta /Yellow /Black]
+
+     /SeparationOrder      [/Cyan /Magenta /Yellow /Black]
+
+  >> setpagedevice
+
+"
+
+*End
+
+
+
+*LHInRipSeparation False/Separated PS: "
+
+  << /Separations          false
+
+     /ProcessColorModel    /DeviceGray
+
+  >> setpagedevice
+
+"
+
+*End
+
+
+
+*?LHInRipSeparation: "
+
+  save
+
+  currentpagedevice /Separations get 
+
+  currentpagedevice /ProcessColorModel get /DeviceGray ne and
+
+  {(True)}{(False)} ifelse = flush
+
+  restore
+
+"
+
+*End
+
+
+
+*CloseUI: *LHInRipSeparation
+
+
+
+*% ================================================================
+
+*% Mirror Print Mode
+
+*% ================================================================
+
+
+
+*OpenUI *LHMirror/Mirror Mode          : PickOne
+
+*OrderDependency: 34 DocumentSetup *LHMirror
+
+*DefaultLHMirror: DeltaDefault
+
+
+
+*LHMirror DeltaDefault/Printer's Default: ""
+
+
+
+*LHMirror True/On: "
+
+%LHCBeginUserItem: *MirrorPrint
+
+% True
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHMirror False/Off: "
+
+%LHCBeginUserItem: *MirrorPrint
+
+% False
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *LHMirror
+
+
+
+*% ================================================================
+
+*% Policies for PageSize, if job doesn't fit
+
+*% ================================================================
+
+
+
+*OpenUI *LHPolicies/If job doesn't fit   :  PickOne
+
+*OrderDependency: 35 AnySetup *LHPolicies
+
+*DefaultLHPolicies: DeltaDefault
+
+
+
+*LHPolicies DeltaDefault/Printer's Default: ""
+
+
+
+*LHPolicies 0/Error message: "
+
+%LHCBeginUserItem: *Policies
+
+% 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHPolicies 1/Crop centered: "
+
+%LHCBeginUserItem: *Policies
+
+% 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*LHPolicies 2/Shrink to fit: "
+
+%LHCBeginUserItem: *Policies
+
+% 2
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *LHPolicies
+
+
+
+*%----*CloseGroup: OtherOptions
+
+
+
+*% ================================================================
+
+*% ================================================================
+
+*% Group  -  Media Selection
+
+*% ================================================================
+
+*% ================================================================
+
+
+
+*OpenGroup: MediaSelection/Media Selection
+
+
+
+*% ================================================================
+
+*% Paper Handling  -  PageSize
+
+*% Use these entries to set paper size most of the time, unless 
+
+*% there is specific reason to use PageRegion.
+
+*% ================================================================
+
+
+
+*OpenUI *PageSize/PageSize : PickOne
+
+*OrderDependency: 10 AnySetup *PageSize
+
+*DefaultPageSize: Unknown
+
+
+
+*PageSize A4/A4: "
+
+<< /PageSize [595 842] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% A4 595 842 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize A4R/A4 R: "
+
+<< /PageSize [595 842] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% A4R 595 842 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize A3/A3: "
+
+<< /PageSize [842 1191] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% A3 842 1191 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize B5/B5-JIS: "
+
+<< /PageSize [516 729] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% B5 516 729 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize B5R/B5-JIS R: "
+
+<< /PageSize [516 729] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% B5R 516 729 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize B4/B4-JIS: "
+
+<< /PageSize [729 1032] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% B4 729 1032 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize Letter/Letter: "
+
+<< /PageSize [612 792] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% Letter 612 792 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize LetterR/Letter R: "
+
+<< /PageSize [612 792] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% LetterR 612 792 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize Legal/Legal: "
+
+<< /PageSize [612 1008] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% Legal 612 1008 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize Tabloid/Tabloid: "
+
+<< /PageSize [792 1224] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% 11x17 792 1224 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize 8x10/8x10 inch: "
+
+<< /PageSize [576 720] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% 8x10 576 720 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageSize 8x10R/8x10 inch R: "
+
+<< /PageSize [576 720] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% 8x10R 576 720 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *PageSize
+
+
+
+*% ================================================================
+
+*% Paper Handling  -  PageRegion
+
+*% These entries will set up the frame buffer. 
+
+*% Usually used with manual feed.
+
+*% ================================================================
+
+
+
+*OpenUI *PageRegion: PickOne
+
+*OrderDependency: 11 AnySetup *PageRegion
+
+*DefaultPageRegion: Unknown
+
+
+
+*PageRegion A4/A4: "
+
+<< /PageSize [595 842] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% A4 595 842 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion A4R/A4 R: "
+
+<< /PageSize [595 842] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% A4R 595 842 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion A3/A3: "
+
+<< /PageSize [842 1191] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% A3 842 1191 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion B5/B5-JIS: "
+
+<< /PageSize [516 729] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% B5 516 729 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion B5R/B5-JIS R: "
+
+<< /PageSize [516 729] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% B5R 516 729 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion B4/B4-JIS: "
+
+<< /PageSize [729 1032] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% B4 729 1032 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion Letter/Letter: "
+
+<< /PageSize [612 792] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% Letter 612 792 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion LetterR/Letter R: "
+
+<< /PageSize [612 792] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% LetterR 612 792 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion Legal/Legal: "
+
+<< /PageSize [612 1008] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% Legal 612 1008 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion Tabloid/Tabloid: "
+
+<< /PageSize [792 1224] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% 11x17 792 1224 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion 8x10/8x10 inch: "
+
+<< /PageSize [576 720] /Orientation 0 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% 8x10 576 720 0
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*PageRegion 8x10R/8x10 inch R: "
+
+<< /PageSize [576 720] /Orientation 1 >> setpagedevice
+
+%LHCBeginUserItem: *PageSize
+
+% 8x10R 576 720 1
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *PageRegion
+
+
+
+*% ================================================================
+
+*% Paper Handling  -  ImageableArea / PaperDimension
+
+*% These entries provide information about specific paper keywords.
+
+*% In this PPD ImagealeArea is set for Canon CLC 700/800.
+
+*% ================================================================
+
+
+
+*DefaultImageableArea: A4
+
+*ImageableArea A4/A4:             "18  2 580  834"
+
+*ImageableArea A4R/A4 R:          " 2 18 587  827"
+
+*ImageableArea A3/A3:             " 2 18 834 1176"
+
+*ImageableArea B5/B5-JIS:         "18  2 501  721"
+
+*ImageableArea B5R/B5-JIS R:      " 2 18 508  714"
+
+*ImageableArea B4/B4-JIS:         " 2 18 721 1017"
+
+*ImageableArea Letter/Letter:     "18  2 597  784"
+
+*ImageableArea LetterR/Letter R:  " 2 18 604  777"
+
+*ImageableArea Legal/Legal:       " 2 18 604  993"
+
+*ImageableArea Tabloid/Tabloid:   " 2 18 784 1209"
+
+*ImageableArea 8x10/8x10 inch:    "18  2 561  712"
+
+*ImageableArea 8x10R/8x10 inch R: " 2 18 568  705"
+
+
+
+*DefaultPaperDimension: A4
+
+*PaperDimension A4/A4:                  "595  842"
+
+*PaperDimension A4R/A4 R:               "595  841"
+
+*PaperDimension A3/A3:                  "842 1191"
+
+*PaperDimension B5/B5-JIS:              "516  729"
+
+*PaperDimension B5R/B5-JIS R:           "516  728"
+
+*PaperDimension B4/B4-JIS:              "729 1032"         
+
+*PaperDimension Letter/Letter:          "612  792"
+
+*PaperDimension LetterR/Letter R:       "612  791"
+
+*PaperDimension Legal/Legal:            "612 1008"
+
+*PaperDimension Tabloid/Tabloid:        "792 1224"
+
+*PaperDimension 8x10/8x10 inch:         "576  720"
+
+*PaperDimension 8x10R/8x10 inch R:      "576  719"
+
+
+
+*% ================================================================
+
+*% Tray Selection
+
+*% ================================================================
+
+
+
+*RequiresPageRegion All: True
+
+
+
+*OpenUI *InputSlot/Input Slot : PickOne
+
+*OrderDependency: 12 AnySetup *InputSlot
+
+*DefaultInputSlot: Auto
+
+
+
+*InputSlot Auto/AutoSelect: ""
+
+
+
+*InputSlot Tray1/Tray 1: "
+
+%LHCBeginUserItem: *InputSlot
+
+% Tray1
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *ManualFeed
+
+% False
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*InputSlot Tray2/Tray 2: "
+
+%LHCBeginUserItem: *InputSlot
+
+% Tray2
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *ManualFeed
+
+% False
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*InputSlot Tray3/Tray 3: "
+
+%LHCBeginUserItem: *InputSlot
+
+% Tray3
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *ManualFeed
+
+% False
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*InputSlot BypassTray/Bypass Tray: "
+
+%LHCBeginUserItem: *InputSlot
+
+% Tray0
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *ManualFeed
+
+% True
+
+%LHCEndUserItem
+
+"
+
+*End
+
+
+
+*CloseUI: *InputSlot
+
+
+
+*CloseGroup: MediaSelection
+
+
+
+*% ================================================================
+
+*% Font Information 
+
+*% ================================================================
+
+
+
+*DefaultFont: Courier
+
+*Font AvantGarde-Book: Standard "(001.001)" Standard Disk
+
+*Font AvantGarde-BookOblique: Standard "(001.001)" Standard Disk
+
+*Font AvantGarde-Demi: Standard "(001.001)" Standard Disk
+
+*Font AvantGarde-DemiOblique: Standard "(001.001)" Standard Disk
+
+*Font Bookman-Demi: Standard "(001.001)" Standard Disk
+
+*Font Bookman-DemiItalic: Standard "(001.001)" Standard Disk
+
+*Font Bookman-Light: Standard "(001.001)" Standard Disk
+
+*Font Bookman-LightItalic: Standard "(001.001)" Standard Disk
+
+*Font Courier: Standard "(002.002)" Standard ROM
+
+*Font Courier-Bold: Standard "(002.002)" Standard ROM
+
+*Font Courier-BoldOblique: Standard "(002.002)" Standard ROM
+
+*Font Courier-Oblique: Standard "(002.002)" Standard ROM
+
+*Font Helvetica: Standard "(001.006)" Standard ROM
+
+*Font Helvetica-Bold: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-BoldOblique: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-Narrow: Standard "(001.006)" Standard ROM
+
+*Font Helvetica-Narrow-Bold: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-Narrow-Oblique: Standard "(001.006)" Standard ROM
+
+*Font Helvetica-Oblique: Standard "(001.006)" Standard ROM
+
+*Font NewCenturySchlbk-Bold: Standard "(001.002)" Standard Disk
+
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.001)" Standard Disk
+
+*Font NewCenturySchlbk-Italic: Standard "(001.001)" Standard Disk
+
+*Font NewCenturySchlbk-Roman: Standard "(001.002)" Standard Disk
+
+*Font Palatino-Bold: Standard "(001.000)" Standard Disk
+
+*Font Palatino-BoldItalic: Standard "(001.000)" Standard Disk
+
+*Font Palatino-Italic: Standard "(001.000)" Standard Disk
+
+*Font Palatino-Roman: Standard "(001.000)" Standard Disk
+
+*Font Symbol: Special "(001.003)" Special ROM
+
+*Font Times-Bold: Standard "(001.007)" Standard ROM
+
+*Font Times-BoldItalic: Standard "(001.009)" Standard ROM
+
+*Font Times-Italic: Standard "(001.007)" Standard ROM
+
+*Font Times-Roman: Standard "(001.007)" Standard ROM
+
+*Font ZapfChancery-MediumItalic: Standard "(001.002)" Standard Disk
+
+*Font ZapfDingbats: Special "(001.000)" Special Disk
+
+
+
+*?FontQuery: "
+
+save
+
+ /str 100 string dup 0 (fonts/) putinterval def
+
+ {
+
+ count 1 gt
+
+ {
+
+ exch dup str 6 94 getinterval cvs
+
+ (/) print dup print (:) print exch
+
+ FontDirectory exch known
+
+ { pop (Yes) }
+
+ {
+
+ length 6 add str 0 3 -1 roll getinterval
+
+ mark exch status
+
+ {cleartomark (Yes)}{cleartomark (No)} ifelse
+
+ } ifelse =
+
+ }
+
+ {exit} ifelse
+
+ }bind loop
+
+ (*) = flush
+
+restore
+
+"
+
+*End
+
+
+
+*?FontList: "
+
+save
+
+ FontDirectory { pop == } bind forall flush
+
+ /filenameforall where
+
+ {
+
+ pop (fonts/*)
+
+ { dup length 6 sub 6 exch getinterval cvn == } bind
+
+ 128 string filenameforall flush
+
+ } if
+
+ (*) = flush
+
+restore
+
+"
+
+*End
+
+
+
+*% ================================================================
+
+*% JobPatchFile Ð PS Header Sequence for CLC 700/800 Color Copier
+
+*% ================================================================
+
+
+
+*JobPatchFile 1: "
+
+% Begin of JobPatchFile 1
+
+% This PPD invocation contains a PostScript / comment sequence
+
+% and it is used to provide initial state for every job.
+
+
+
+%LHCBeginUserItem: *ImageableArea
+
+% A4      9 18 833  568  842  595
+
+% A4R     9 18 586  815  595  842
+
+% A3      9 18 833 1164  842 1191
+
+% B5      9 18 720  489  729  516
+
+% B5R     9 18 507  702  516  729
+
+% B4      9 18 720 1005  729 1032
+
+% Letter  9 18 783  585  792  612
+
+% LetterR 9 18 603  765  612  792
+
+% Legal   9 18 603  981  612 1008
+
+% 11x17   9 18 783 1197  792 1224
+
+% 8x10    9 18 711  549  720  576
+
+% 8x10R   9 18 567  693  576  720
+
+%LHCEndUserItem
+
+
+
+%LHCBeginUserItem: *OutputOrder
+
+% Reverse
+
+%LHCEndUserItem
+
+%LHCBeginUserItem: *Resolution
+
+% 400
+
+%LHCEndUserItem
+
+% End of JobPatchFile 1
+
+"
+
+*End
+
+
+
+*% The byte count of this file should be exactly 022549 or 024363
+*% depending on the filesystem it resides in.
+*% end of PPD file for Linotype
+

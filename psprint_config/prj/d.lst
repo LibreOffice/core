@@ -1,0 +1,4 @@
+mkdir: %_DEST%\pck%_EXT%
+
+..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\common\bin\*.zip %_DEST%\pck%_EXT%\*.zip

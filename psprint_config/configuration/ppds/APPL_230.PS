@@ -1,0 +1,350 @@
+*PPD-Adobe: "4.0"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1993 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.0"
+*FileVersion: "3.3"
+*PCFileName: "APPLE230.PPD"
+*LanguageVersion: English
+*Product: "(LaserWriter)"
+*PSVersion: "(23.0) 0"
+*ModelName: "Apple LaserWriter"
+*NickName: "Apple LaserWriter v23.0"
+
+*% General Information and Defaults ===============
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FreeVM: "173936"
+*LanguageLevel: "1"
+*VariablePaperSize: False
+*FileSystem: False
+*Throughput: "8"
+*Password: "0"
+*ExitServer: "
+  count 0 eq {  % is the password on the stack?
+    true
+  }{
+    dup    % potential password
+    statusdict /checkpassword get exec not
+  } ifelse
+  {  %  if no password or not valid
+    (WARNING : Cannot perform the exitserver command.) =
+    (Password supplied is not valid.) =
+    (Please contact the author of this software.) = flush
+    quit
+  } if
+  serverdict /exitserver get exec
+"
+*End
+
+*Reset: "
+  count 0 eq {  % is the password on the stack?
+    true
+  }{
+    dup    % potential password
+    statusdict /checkpassword get exec not
+  } ifelse
+  {  %  if no password or not valid
+    (WARNING : Cannot reset printer.) =
+    (Password supplied is not valid.) =
+    (Please contact the author of this software.) = flush
+    quit
+  } if
+  serverdict /exitserver get exec
+  systemdict /quit get exec
+  (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 300dpi
+*?Resolution: "
+save
+  initgraphics
+  0 0 moveto currentpoint matrix defaultmatrix transform
+  0 72 lineto currentpoint matrix defaultmatrix transform
+  3 -1 roll sub dup mul
+  3 1 roll exch sub dup mul
+  add sqrt round cvi
+  (          ) cvs print (dpi) = flush
+restore
+"
+*End
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{dup mul exch dup mul add 1.0 exch sub }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*% Paper Handling ===================
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/US Letter: "letter"
+*PageSize Legal/US Legal: "legal"
+*PageSize LetterSmall/US Letter Small: "lettersmall"
+*PageSize LegalSmall/US Legal Small: "legal"
+*PageSize A4: "a4"
+*PageSize Monarch/Monarch Envelope Edge Fed: "letter"
+*PageSize Com10/Com10 Envelope Edge Fed: "letter"
+*?PageSize: "
+save
+  [(Letter)(Legal)] statusdict /pagetype get exec
+  {get} stopped { pop pop (Unknown)} if = flush
+restore
+"
+*End
+*CloseUI: *PageSize
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/US Letter: "letter"
+*PageRegion Legal/US Legal: "legal"
+*PageRegion LetterSmall/US Letter Small: "lettersmall"
+*PageRegion LegalSmall/US Legal Small: "legal"
+*PageRegion A4: "a4"
+*PageRegion Monarch/Monarch Envelope Edge Fed: "letter"
+*PageRegion Com10/Com10 Envelope Edge Fed: "letter"
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter: "18 8 593 784 "
+*ImageableArea Legal/US Legal: "65 37 547 972 "
+*ImageableArea LetterSmall/US Letter Small: "31 31 583 761 "
+*ImageableArea LegalSmall/US Legal Small: "64 54 548 954 "
+*ImageableArea A4:"17 22 578 820 "
+*ImageableArea Monarch/Monarch Envelope Edge Fed: "19 269 274 773 "
+*ImageableArea Com10/Com10 Envelope Edge Fed: "19 125 292 773 "
+*?ImageableArea: "
+save
+  /cvp {(                ) cvs print ( ) print } bind def
+  /upperright {10000 mul floor 10000 div} bind def
+  /lowerleft {10000 mul ceiling 10000 div} bind def
+  newpath clippath pathbbox
+  4 -2 roll exch 2 {lowerleft cvp} repeat
+  exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter: "612 792"
+*PaperDimension Legal/US Legal: "612 1008"
+*PaperDimension LetterSmall/US Letter Small: "612 792"
+*PaperDimension LegalSmall/US Legal Small: "612 1008"
+*PaperDimension A4: "595 842"
+*PaperDimension Monarch/Monarch Envelope Edge Fed: "611 792"
+*PaperDimension Com10/Com10 Envelope Edge Fed: "610 792"
+
+*RequiresPageRegion All: True
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Cassette
+*InputSlot Cassette: ""
+*CloseUI: *InputSlot
+
+*OpenUI *ManualFeed/Manual Feed: Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "statusdict /manualfeed true put"
+*ManualFeed False: "statusdict /manualfeed false put"
+*?ManualFeed: "
+save
+ statusdict /manualfeed get {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*DefaultOutputOrder: Reverse
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font Courier-Bold: Standard "(001.000)" Standard ROM
+*Font Courier-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Courier-Oblique: Standard "(001.000)" Standard ROM
+*Font Helvetica: Standard "(001.001)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.001)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.000)" Standard ROM
+*Font Symbol: Special "(001.001)" Special ROM
+*Font Times-Bold: Standard "(001.001)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.001)" Standard ROM
+*Font Times-Italic: Standard "(001.001)" Standard ROM
+*Font Times-Roman: Standard "(001.000)" Standard ROM
+*?FontQuery: "
+save
+ /str 100 string dup 0 (fonts/) putinterval def
+ {
+   count 1 gt
+   {
+     exch dup str 6 94 getinterval cvs
+     (/) print print (:) print
+     FontDirectory exch known
+     {(Yes)}{(No)} ifelse =
+   }
+   {exit} ifelse
+ }bind loop
+ (*) = flush
+restore
+"
+*End
+
+*?FontList: "
+save
+  FontDirectory { pop == } bind flush forall (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ]%% )
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "PrinterError: timeout, clearing printer"
+*Status: "PrinterError: timeout"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: no toner cartridge"
+*Status: "PrinterError: service call"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: no paper tray"
+*Status: "PrinterError: out of paper"
+*Status: "PrinterError: cover open"
+*Status: "PrinterError: resetting printer"
+*Status: "PrinterError: manual feed timeout"
+*Status: "PrinterError: warming up"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "serial9"
+*Source: "serial25"
+*Source: "AppleTalk"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "timeout, clearing printer"
+*PrinterError: "timeout"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "no toner cartridge"
+*PrinterError: "service call"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "no paper tray"
+*PrinterError: "out of paper"
+*PrinterError: "cover open"
+*PrinterError: "resetting printer"
+*PrinterError: "manual feed timeout"
+*PrinterError: "warming up"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*% For 60 lpi / 300 dpi =====================================================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*% For 53 lpi / 300 dpi =====================================================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+*% This patch file inserts a delay before manualfeed to fix a bug
+*% in the version 23 LaserWriter.
+*JobPatchFile 1/ManualFeedDelay: "
+save 
+/version23-manualfeedpatch where { pop false } { true }ifelse
+ % we don't do an explicit 'get' since product and version MAY
+ % be in systemdict or statusdict - this technique gets the lookup
+ % without failure
+statusdict begin
+  product (LaserWriter) eq        % true if LaserWriter
+  version cvr 23.0 eq             % true if version 23
+end
+
+and  % only install this patch if both are true
+and  % true only if patch is not installed and is for this printer
+     % save object and boolean on stack
+dup { exch restore }if
+% either true OR saveobject false
+dup
+{
+  /version23-manualfeedpatch true def
+  /oldversion23-showpage /showpage load def
+  /showpage       % this showpage will wait extra time if manualfeed is true
+  {%
+     statusdict /manualfeed known
+     {% manualfeed known in statusdict
+        statusdict /manualfeed get
+        {% if true then we loop for 5 seconds
+           usertime 5000 add       % target usertime
+           { % loop
+             dup usertime sub 0 lt
+             { exit }if
+           }loop
+           pop             % pop the usertime off the stac
+        }if
+     }if
+     oldversion23-showpage
+  }bind def
+}if
+not{ restore }if
+"
+*End
+
+*% For "LaserWriter" version 23.0
+*% Produced by "GETapd.ps" version 2.0 edit 45
+*% Converted to meet 4.0 specification
+*% Last Edit Date: Aug 11 1993
+*% The byte count of this file should be exactly 011416 or 011766
+*% depending on the filesystem it resides in.
+*% end of PPD file for LaserWriter

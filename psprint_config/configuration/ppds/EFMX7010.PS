@@ -1,0 +1,1669 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*% *********
+*% EFI Information Block
+*%
+*FileVersion: "0.1"
+*%
+*% *********
+
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*PCFileName: "EFMX7010.PPD"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*Product: "(Fiery X2 5799)"
+*PSVersion: "(3010.104) 1"
+*ModelName: "Fiery X2 5799 Color Server v3010.104"
+*ShortNickName: "Fiery X2 5799 v3010.104"
+*NickName: "Fiery X2 5799 Color Server v3010.104"
+*Manufacturer: "Xerox"
+
+*% PPD body begins
+
+*%EFIGroupName Job/Job :True
+*%EFIGroupName Media/Media :True
+*%EFIGroupName Color/Color :True
+*%EFIGroupName Finishing/Finishing :True
+*%EFIGroupName Notes/Notes :True
+
+*%EFIFlags *Notes1  Column
+*%EFIGroup *Notes1  Notes/Notes 
+*%EFIJobNote *Notes1/Notes 1 :32
+
+*%EFIFlags *Notes2  Column
+*%EFIGroup *Notes2  Notes/Notes 
+*%EFIJobNote *Notes2/Notes 2 :32
+
+*% === Options and Constraints ==============================
+
+*% Transparencies, Thick paper, and Transparent Interleave 
+*% should only be printed from Manual Feed. 
+*UIConstraints: *MediaType Thick *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *MediaType Thick
+*UIConstraints: *MediaType Transparent *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *MediaType Transparent
+*UIConstraints: *MediaType Interleaved *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *MediaType Interleaved
+
+*UIConstraints: *MediaType Thick *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *MediaType Thick
+*UIConstraints: *MediaType Transparent *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *MediaType Transparent
+*UIConstraints: *MediaType Interleaved *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *MediaType Interleaved
+
+*UIConstraints: *MediaType Thick *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *MediaType Thick
+*UIConstraints: *MediaType Transparent *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *MediaType Transparent
+*UIConstraints: *MediaType Interleaved *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *MediaType Interleaved
+
+*UIConstraints: *PageSize Docupac *InputSlot Tray1
+*UIConstraints: *PageRegion Docupac *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *PageSize Docupac
+*UIConstraints: *InputSlot Tray1 *PageRegion Docupac
+*UIConstraints: *PageSize Docupac *InputSlot Tray2
+*UIConstraints: *PageRegion Docupac *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *PageSize Docupac
+*UIConstraints: *InputSlot Tray2 *PageRegion Docupac
+*UIConstraints: *PageSize Docupac *InputSlot Tray3
+*UIConstraints: *PageRegion Docupac *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *PageSize Docupac
+*UIConstraints: *InputSlot Tray3 *PageRegion Docupac
+
+*UIConstraints: *PageSize B5 *InputSlot Tray1
+*UIConstraints: *PageRegion B5 *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *PageSize B5
+*UIConstraints: *InputSlot Tray1 *PageRegion B5
+*UIConstraints: *PageSize B5 *InputSlot Tray2
+*UIConstraints: *PageRegion B5 *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *PageSize B5
+*UIConstraints: *InputSlot Tray2 *PageRegion B5
+*UIConstraints: *PageSize B5 *InputSlot Tray3
+*UIConstraints: *PageRegion B5 *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *PageSize B5
+*UIConstraints: *InputSlot Tray3 *PageRegion B5
+
+*UIConstraints: *PageSize B4 *InputSlot Tray1
+*UIConstraints: *PageRegion B4 *InputSlot Tray1
+*UIConstraints: *InputSlot Tray1 *PageSize B4
+*UIConstraints: *InputSlot Tray1 *PageRegion B4
+*UIConstraints: *PageSize B4 *InputSlot Tray2
+*UIConstraints: *PageRegion B4 *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *PageSize B4
+*UIConstraints: *InputSlot Tray2 *PageRegion B4
+*UIConstraints: *PageSize B4 *InputSlot Tray3
+*UIConstraints: *PageRegion B4 *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *PageSize B4
+*UIConstraints: *InputSlot Tray3 *PageRegion B4
+
+*UIConstraints: *EFColorMode GRAY *EFOverprint On
+*UIConstraints: *EFOverprint On *EFColorMode GRAY
+
+*% Full frame does not support reverse print, collate
+*UIConstraints: *EFCompression False *EFOutputOrder Reverse
+*UIConstraints: *EFCompression False *EFSorter Collate
+*UIConstraints: *EFOutputOrder Reverse *EFCompression False
+*UIConstraints: *EFSorter Collate *EFCompression False
+*UIConstraints: *FRAME_MODE ADOBE *EFOutputOrder Reverse
+*UIConstraints: *EFOutputOrder Reverse *FRAME_MODE ADOBE
+
+*% ColorWise UIConstraints begin here
+*% TV@UIC1.0@CMYK@980402
+
+*UIConstraints: *EFSimulation None *EFSimSpeed Quick
+*UIConstraints: *EFSimSpeed Quick *EFSimulation None
+*UIConstraints: *EFSimulation None *EFSimSpeed Full
+*UIConstraints: *EFSimSpeed Full *EFSimulation None
+*UIConstraints: *EFSimulation MatchCopy *EFSimSpeed Quick
+*UIConstraints: *EFSimSpeed Quick *EFSimulation MatchCopy
+*UIConstraints: *EFSimulation MatchCopy *EFSimSpeed Full
+*UIConstraints: *EFSimSpeed Full *EFSimulation MatchCopy
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 1.0
+*UIConstraints: *EFRGBOtherGamma 1.0 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 1.2
+*UIConstraints: *EFRGBOtherGamma 1.2 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 1.4
+*UIConstraints: *EFRGBOtherGamma 1.4 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 1.6
+*UIConstraints: *EFRGBOtherGamma 1.6 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 1.8
+*UIConstraints: *EFRGBOtherGamma 1.8 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 2.0
+*UIConstraints: *EFRGBOtherGamma 2.0 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 2.2
+*UIConstraints: *EFRGBOtherGamma 2.2 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 2.4
+*UIConstraints: *EFRGBOtherGamma 2.4 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 2.6
+*UIConstraints: *EFRGBOtherGamma 2.6 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 2.8
+*UIConstraints: *EFRGBOtherGamma 2.8 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherGamma 3.0
+*UIConstraints: *EFRGBOtherGamma 3.0 *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherWtPt 5000K
+*UIConstraints: *EFRGBOtherWtPt 5000K *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherWtPt 5500K
+*UIConstraints: *EFRGBOtherWtPt 5500K *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherWtPt 6500K
+*UIConstraints: *EFRGBOtherWtPt 6500K *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherWtPt 7500K
+*UIConstraints: *EFRGBOtherWtPt 7500K *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherWtPt 9300K
+*UIConstraints: *EFRGBOtherWtPt 9300K *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherPhos HitachiEBU
+*UIConstraints: *EFRGBOtherPhos HitachiEBU *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherPhos HitachiIkegami
+*UIConstraints: *EFRGBOtherPhos HitachiIkegami *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherPhos NTSC
+*UIConstraints: *EFRGBOtherPhos NTSC *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherPhos RadiusPivot
+*UIConstraints: *EFRGBOtherPhos RadiusPivot *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherPhos SMPTE
+*UIConstraints: *EFRGBOtherPhos SMPTE *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFRGBOverrideDEF *EFRGBOtherPhos Trinitron
+*UIConstraints: *EFRGBOtherPhos Trinitron *EFRGBOverride EFRGBOverrideDEF
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 1.0
+*UIConstraints: *EFRGBOtherGamma 1.0 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 1.2
+*UIConstraints: *EFRGBOtherGamma 1.2 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 1.4
+*UIConstraints: *EFRGBOtherGamma 1.4 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 1.6
+*UIConstraints: *EFRGBOtherGamma 1.6 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 1.8
+*UIConstraints: *EFRGBOtherGamma 1.8 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 2.0
+*UIConstraints: *EFRGBOtherGamma 2.0 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 2.2
+*UIConstraints: *EFRGBOtherGamma 2.2 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 2.4
+*UIConstraints: *EFRGBOtherGamma 2.4 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 2.6
+*UIConstraints: *EFRGBOtherGamma 2.6 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 2.8
+*UIConstraints: *EFRGBOtherGamma 2.8 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherGamma 3.0
+*UIConstraints: *EFRGBOtherGamma 3.0 *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherWtPt 5000K
+*UIConstraints: *EFRGBOtherWtPt 5000K *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherWtPt 5500K
+*UIConstraints: *EFRGBOtherWtPt 5500K *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherWtPt 6500K
+*UIConstraints: *EFRGBOtherWtPt 6500K *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherWtPt 7500K
+*UIConstraints: *EFRGBOtherWtPt 7500K *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherWtPt 9300K
+*UIConstraints: *EFRGBOtherWtPt 9300K *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherPhos HitachiEBU
+*UIConstraints: *EFRGBOtherPhos HitachiEBU *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherPhos HitachiIkegami
+*UIConstraints: *EFRGBOtherPhos HitachiIkegami *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherPhos NTSC
+*UIConstraints: *EFRGBOtherPhos NTSC *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherPhos RadiusPivot
+*UIConstraints: *EFRGBOtherPhos RadiusPivot *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherPhos SMPTE
+*UIConstraints: *EFRGBOtherPhos SMPTE *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride EFIRGB *EFRGBOtherPhos Trinitron
+*UIConstraints: *EFRGBOtherPhos Trinitron *EFRGBOverride EFIRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 1.0
+*UIConstraints: *EFRGBOtherGamma 1.0 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 1.2
+*UIConstraints: *EFRGBOtherGamma 1.2 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 1.4
+*UIConstraints: *EFRGBOtherGamma 1.4 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 1.6
+*UIConstraints: *EFRGBOtherGamma 1.6 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 1.8
+*UIConstraints: *EFRGBOtherGamma 1.8 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 2.0
+*UIConstraints: *EFRGBOtherGamma 2.0 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 2.2
+*UIConstraints: *EFRGBOtherGamma 2.2 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 2.4
+*UIConstraints: *EFRGBOtherGamma 2.4 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 2.6
+*UIConstraints: *EFRGBOtherGamma 2.6 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 2.8
+*UIConstraints: *EFRGBOtherGamma 2.8 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherGamma 3.0
+*UIConstraints: *EFRGBOtherGamma 3.0 *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherWtPt 5000K
+*UIConstraints: *EFRGBOtherWtPt 5000K *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherWtPt 5500K
+*UIConstraints: *EFRGBOtherWtPt 5500K *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherWtPt 6500K
+*UIConstraints: *EFRGBOtherWtPt 6500K *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherWtPt 7500K
+*UIConstraints: *EFRGBOtherWtPt 7500K *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherWtPt 9300K
+*UIConstraints: *EFRGBOtherWtPt 9300K *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherPhos HitachiEBU
+*UIConstraints: *EFRGBOtherPhos HitachiEBU *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherPhos HitachiIkegami
+*UIConstraints: *EFRGBOtherPhos HitachiIkegami *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherPhos NTSC
+*UIConstraints: *EFRGBOtherPhos NTSC *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherPhos RadiusPivot
+*UIConstraints: *EFRGBOtherPhos RadiusPivot *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherPhos SMPTE
+*UIConstraints: *EFRGBOtherPhos SMPTE *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride sRGB *EFRGBOtherPhos Trinitron
+*UIConstraints: *EFRGBOtherPhos Trinitron *EFRGBOverride sRGB
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 1.0
+*UIConstraints: *EFRGBOtherGamma 1.0 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 1.2
+*UIConstraints: *EFRGBOtherGamma 1.2 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 1.4
+*UIConstraints: *EFRGBOtherGamma 1.4 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 1.6
+*UIConstraints: *EFRGBOtherGamma 1.6 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 1.8
+*UIConstraints: *EFRGBOtherGamma 1.8 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 2.0
+*UIConstraints: *EFRGBOtherGamma 2.0 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 2.2
+*UIConstraints: *EFRGBOtherGamma 2.2 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 2.4
+*UIConstraints: *EFRGBOtherGamma 2.4 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 2.6
+*UIConstraints: *EFRGBOtherGamma 2.6 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 2.8
+*UIConstraints: *EFRGBOtherGamma 3.0 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherGamma 3.0
+*UIConstraints: *EFRGBOtherGamma 2.8 *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherWtPt 5000K
+*UIConstraints: *EFRGBOtherWtPt 5000K *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherWtPt 5500K
+*UIConstraints: *EFRGBOtherWtPt 5500K *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherWtPt 6500K
+*UIConstraints: *EFRGBOtherWtPt 6500K *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherWtPt 7500K
+*UIConstraints: *EFRGBOtherWtPt 7500K *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherWtPt 9300K
+*UIConstraints: *EFRGBOtherWtPt 9300K *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherPhos HitachiEBU
+*UIConstraints: *EFRGBOtherPhos HitachiEBU *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherPhos HitachiIkegami
+*UIConstraints: *EFRGBOtherPhos HitachiIkegami *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherPhos NTSC
+*UIConstraints: *EFRGBOtherPhos NTSC *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherPhos RadiusPivot
+*UIConstraints: *EFRGBOtherPhos RadiusPivot *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherPhos SMPTE
+*UIConstraints: *EFRGBOtherPhos SMPTE *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Apple13 *EFRGBOtherPhos Trinitron
+*UIConstraints: *EFRGBOtherPhos Trinitron *EFRGBOverride Apple13
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 1.0
+*UIConstraints: *EFRGBOtherGamma 1.0 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 1.2
+*UIConstraints: *EFRGBOtherGamma 1.2 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 1.4
+*UIConstraints: *EFRGBOtherGamma 1.4 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 1.6
+*UIConstraints: *EFRGBOtherGamma 1.6 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 1.8
+*UIConstraints: *EFRGBOtherGamma 1.8 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 2.0
+*UIConstraints: *EFRGBOtherGamma 2.0 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 2.2
+*UIConstraints: *EFRGBOtherGamma 2.2 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 2.4
+*UIConstraints: *EFRGBOtherGamma 2.4 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 2.6
+*UIConstraints: *EFRGBOtherGamma 2.6 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 2.8
+*UIConstraints: *EFRGBOtherGamma 2.8 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherGamma 3.0
+*UIConstraints: *EFRGBOtherGamma 3.0 *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherWtPt 5000K
+*UIConstraints: *EFRGBOtherWtPt 5000K *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherWtPt 5500K
+*UIConstraints: *EFRGBOtherWtPt 5500K *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherWtPt 6500K
+*UIConstraints: *EFRGBOtherWtPt 6500K *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherWtPt 7500K
+*UIConstraints: *EFRGBOtherWtPt 7500K *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherWtPt 9300K
+*UIConstraints: *EFRGBOtherWtPt 9300K *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherPhos HitachiEBU
+*UIConstraints: *EFRGBOtherPhos HitachiEBU *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherPhos HitachiIkegami
+*UIConstraints: *EFRGBOtherPhos HitachiIkegami *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherPhos NTSC
+*UIConstraints: *EFRGBOtherPhos NTSC *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherPhos RadiusPivot
+*UIConstraints: *EFRGBOtherPhos RadiusPivot *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherPhos SMPTE
+*UIConstraints: *EFRGBOtherPhos SMPTE *EFRGBOverride Off
+*UIConstraints: *EFRGBOverride Off *EFRGBOtherPhos Trinitron
+*UIConstraints: *EFRGBOtherPhos Trinitron *EFRGBOverride Off
+*UIConstraints: *EFBlkOverprint True *EFPureBlack False
+*UIConstraints: *EFPureBlack False *EFBlkOverprint True
+
+*% ColorWise UIConstraints end here
+
+*% General Information and Defaults ===============
+*FCacheSize None: 524288
+*TTRasterizer: Type42
+*ContoneOnly: False
+*FreeVM: "5767168"
+*LanguageLevel: "3"
+*ColorDevice: True
+*DefaultColorSpace: CMYK
+*PrintPSErrors: True
+*FileSystem: True
+*?FileSystem: "
+	save
+	  statusdict /diskstatus known{(True)} {(False)} ifelse = flush
+	restore
+	"
+*End
+*Throughput: "10"
+*Password: "0"
+*ExitServer: "
+   count 0 eq
+   { false } { true exch startjob } ifelse
+   not { (WARNING: Cannot modify initial VM.) =
+            (Missing or invalid password.) =
+            (Please contact the author of this software.) = flush quit
+          } if
+"
+*End
+
+*Reset: "
+   count 0 eq
+   { false } { true exch startjob } ifelse
+   not { (WARNING: Cannot reset printer.) =
+            (Missing or invalid password.) =
+            (Please contact the author of this software.) = flush quit
+          } if
+   systemdict /quit get exec
+   (WARNING: Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 400dpi
+*?Resolution: "
+save
+  initgraphics
+  0 0 moveto currentpoint matrix defaultmatrix transform
+  0 72 lineto currentpoint matrix defaultmatrix transform
+  3 -1 roll sub dup mul
+  3 1 roll exch sub dup mul
+  add sqrt round cvi
+  (          ) cvs print (dpi) = flush
+restore
+"
+*End
+
+*AccurateScreensSupport: True
+
+*%EFIFlags *FRAME_MODE Setup
+*OpenUIEFI *FRAME_MODE/Compression :PickOne
+*OrderDependency: 05.0 AnySetup *FRAME_MODE
+*DefaultFRAME_MODE: AREND
+*FRAME_MODE AREND/On: ""
+*FRAME_MODE ADOBE/Off: ""
+*CloseUIEFI: *FRAME_MODE
+
+*%EFIFlags *EFCompression Spooler|Command|Column|Rerip
+*%EFIGroup *EFCompression Job/Job
+*OpenUI *EFCompression/Compression :PickOne
+*OrderDependency: 05.0 AnySetup *EFCompression
+*DefaultEFCompression: SCDefault
+*EFCompression SCDefault/Printer's default: ""
+*%DefaultEFCompression: True
+*EFCompression False/Off: " userdict /XJXsetRenderType known
+        { (ADOBE) XJXsetRenderType }
+	if "
+*End
+*EFCompression True/On: " userdict /XJXsetRenderType known
+        { (AREND) XJXsetRenderType }
+	if "
+*End
+*?EFCompression: "(True) = flush"
+*CloseUI: *EFCompression
+
+*%EFIFlags *EFOutputOrder Spooler|Command|Column|Setup
+*%EFIGroup *EFOutputOrder Finishing/Finishing
+*OpenUI *EFOutputOrder/Page Order :PickOne
+*OrderDependency: 12.0 AnySetup *EFOutputOrder
+*DefaultEFOutputOrder: EFOutputOrderDEF
+*EFOutputOrder EFOutputOrderDEF/Printer's default: ""
+*EFOutputOrder Forward/Forward:" userdict /XJXsetprintorder known
+    { 0 XJXsetprintorder }
+    { (printerinfo PrintOrder 0) =string
+        FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse  "
+*End
+*EFOutputOrder Reverse/Reverse:" userdict /XJXsetprintorder known
+    { 1 XJXsetprintorder }
+    { (printerinfo PrintOrder 1) =string
+        FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse  "
+*End
+*CloseUI: *EFOutputOrder
+
+*%EFIFlags *EFCopierMode Command|Spooler
+*%EFIGroup *EFCopierMode Job/Job
+*OpenUI *EFCopierMode/Copier Mode :PickOne
+*OrderDependency: 40 AnySetup *EFCopierMode
+*DefaultEFCopierMode: EFCopierModeDEF
+*EFCopierMode EFCopierModeDEF/Printer's default: ""
+*EFCopierMode Photo/Photo: " userdict /XJXsetmapmode known 
+	{ 0 XJXsetmapmode } 
+	{ (printerinfo setmapmode 0) =string 
+		FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*EFCopierMode Map/Map: " userdict /XJXsetmapmode known 
+	{ 1 XJXsetmapmode } 
+	{ (printerinfo setmapmode 1) =string 
+		FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*CloseUI: *EFCopierMode
+
+*%EFIFlags *EFOverprint
+*%EFIGroup *EFOverprint Color/Color
+*OpenUI *EFOverprint/Combine Separations :PickOne
+*OrderDependency: 40 AnySetup *EFOverprint
+*DefaultEFOverprint: EFOverprintDEF
+*EFOverprint EFOverprintDEF/Printer's default: ""
+*EFOverprint On/On: " userdict /XJXsetoverprint known 
+	{ 1 XJXsetoverprint } 
+	{ (printerinfo overprint 1) =string 
+        /CPSI /ProcSet findresource /externalcommand get exec { pop } if } ifelse 
+    userdict /XJXsetcolormode known
+	{ (Grayscale) XJXsetcolormode } if "
+*End
+*EFOverprint Off/Off: " userdict /XJXsetoverprint known 
+	{ 0 XJXsetoverprint } 
+	{ (printerinfo overprint 0) =string 
+        /CPSI /ProcSet findresource /externalcommand get exec { pop } if } ifelse 
+    userdict /XJXsetcolormode known
+	{ (Grayscale) XJXsetcolormode } if "
+*End
+*CloseUI: *EFOverprint
+
+*%EFIFlags *EFColorMode Spooler|Command|Rerip|Setup
+*%EFIGroup *EFColorMode Color/Color
+*OpenUI *EFColorMode/Color Mode :PickOne
+*OrderDependency: 15 AnySetup *EFColorMode 
+*DefaultEFColorMode: EFColorModeDEF
+*EFColorMode EFColorModeDEF/Printer's default: ""
+*EFColorMode CMYK/CMYK: "userdict /XJXsetcolormode known
+  { (CMYK) XJXsetcolormode } if "
+*End
+*EFColorMode GRAY/Grayscale: "userdict /XJXsetcolormode known
+  { (Grayscale) XJXsetcolormode} if "
+*End
+*?EFColorMode: " currentpagedevice /ProcessColorModel get == } if "
+*CloseUI: *EFColorMode
+
+*%EFIFlags *EFDefPaperSize Setup
+*OpenUIEFI *EFDefPaperSize/Default Paper Sizes :PickOne
+*OrderDependency: 20 AnySetup *EFDefPaperSize
+*DefaultEFDefPaperSize: US
+*EFDefPaperSize US/US: ""
+*EFDefPaperSize Metric/Metric: ""
+*CloseUIEFI: *EFDefPaperSize 
+
+*%EFIFlags *EFConvPaperSize Setup
+*OpenUIEFI *EFConvPaperSize/Convert Paper Sizes : PickOne
+*OrderDependency: 25 AnySetup *EFConvPaperSize
+*DefaultEFConvPaperSize: False
+*EFConvPaperSize False/No: ""
+*EFConvPaperSize LetterToA4/Letter/11x17->A4/A3: ""
+*EFConvPaperSize A4ToLetter/A4/A3->Letter/11x17: ""
+*CloseUIEFI: *EFConvPaperSize
+
+*%EFIFlags *EFCovPgAtEnd Setup
+*OpenUIEFI *EFCovPgAtEnd/Print Cover Page : PickOne
+*OrderDependency: 30 AnySetup *EFCovPgAtEnd
+*DefaultEFCovPgAtEnd: NO
+*EFCovPgAtEnd YES/Yes: ""
+*EFCovPgAtEnd NO/No: ""
+*CloseUIEFI: *EFCovPgAtEnd
+
+*%EFIFlags *EFCourierSubst Setup
+*OpenUIEFI *EFCourierSubst/Allow Courier       Substitution :PickOne
+*OrderDependency: 35 AnySetup *EFCourierSubst
+*DefaultEFCourierSubst: YES
+*EFCourierSubst YES/Yes: ""
+*EFCourierSubst NO/No: ""
+*CloseUIEFI: *EFCourierSubst 
+
+*%EFIFlags *EFPSError Setup
+*OpenUIEFI *EFPSError/Print to PS Error : PickOne
+*OrderDependency: 40 AnySetup *EFPSError
+*DefaultEFPSError: NO
+*EFPSError YES/Yes: ""
+*EFPSError NO/No: ""
+*CloseUIEFI: *EFPSError
+
+*%EFIFlags *EFUseBypassTray Setup
+*OpenUIEFI *EFUseBypassTray/Enable Bypass Tray  as default : PickOne
+*OrderDependency: 20 AnySetup *EFUseBypassTray
+*DefaultEFUseBypassTray: NO
+*EFUseBypassTray YES/Yes: ""
+*EFUseBypassTray NO/No: ""
+*CloseUIEFI: *EFUseBypassTray
+
+*%EFIFlags *EFUseSorter Setup
+*OpenUIEFI *EFUseSorter/Enable Sorter       as default : PickOne
+*OrderDependency: 20 AnySetup *EFUseSorter
+*DefaultEFUseSorter: NO
+*EFUseSorter YES/Yes: ""
+*EFUseSorter NO/No: ""
+*CloseUIEFI: *EFUseSorter
+
+*%EFIFlags *EFSorter Spooler|Command|Column
+*%EFIGroup *EFSorter Finishing/Finishing
+*OpenUI *EFSorter/Sorter Mode :PickOne
+*OrderDependency: 50 AnySetup *EFSorter
+*DefaultEFSorter: EFSorterDEF
+*EFSorter EFSorterDEF/Printer's default: ""
+*EFSorter False/Off: " << /Collate false>> setpagedevice
+	userdict /XJXsetsorter known
+              { 0 XJXsetsorter }
+              { (printerinfo sortmode 0) =string
+        FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*EFSorter Collate/Collate: "<< /Collate true>> setpagedevice
+        userdict /XJXsetsorter known
+              { 0 XJXsetsorter }
+              { (printerinfo sortmode 0) =string
+        FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*EFSorter Sort/Sort: " << /Collate true>> setpagedevice
+	userdict /XJXsetsorter known
+              { 1 XJXsetsorter }
+              { (printerinfo sortmode 1) =string
+        FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*CloseUI: *EFSorter
+
+*%EFIFlags *MediaType Spooler|Command|Column|Rerip
+*%EFIGroup *MediaType Media/Media
+*OpenUI *MediaType/Media Type :PickOne
+*OrderDependency: 50 AnySetup *MediaType
+*DefaultMediaType: MediaTypeDEF
+*MediaType MediaTypeDEF/Printer's default: ""
+*MediaType Plain/Plain Paper: " userdict /XJXsetmediatype known
+    { 1 XJXsetmediatype } if"
+*End
+*MediaType Thick/Thick Paper: " userdict /XJXsetmediatype known
+    { 2 XJXsetmediatype } if"
+*End
+*MediaType Transparent/Transparency: " userdict /XJXsetmediatype known
+    { 3 XJXsetmediatype } if"
+*End
+*MediaType Interleaved/Interleaved: " userdict /XJXsetmediatype known
+    { 4 XJXsetmediatype } if"
+*End
+*?MediaType: " FieryXJdict /CB_GetMediaType known { 
+    FieryXJdict /CB_GetMediaType get exec == } if"
+*End
+*CloseUI: *MediaType
+
+*%EFIFlags *EFColorRendDict Spooler|Command|Rerip
+*%EFIGroup *EFColorRendDict Color/Color
+*OpenUI *EFColorRendDict/Rendering Style :PickOne
+*OrderDependency: 60 AnySetup *EFColorRendDict
+*DefaultEFColorRendDict: EFColorRendDictDEF
+*EFColorRendDict EFColorRendDictDEF/Printer's default: ""
+*EFColorRendDict Preferred/Photographic: " userdict /XJXsetrenderingintent known
+    { (Photographic) XJXsetrenderingintent
+    } if "
+*End
+*EFColorRendDict Business/Presentation: " userdict /XJXsetrenderingintent known
+    { (Presentation) XJXsetrenderingintent
+    } if "
+*End
+*EFColorRendDict Colorimetric/Solid Color: " userdict /XJXsetrenderingintent known
+    { (Solid) XJXsetrenderingintent
+    } if "
+*End
+*?EFColorRendDict: " FieryXJdict /CB_GetRenderingIntent known { 
+    FieryXJdict /CB_GetRenderingIntent get exec == } if"
+*End
+*CloseUI: *EFColorRendDict
+
+*%EFIFlags *EFSharpness Spooler|Command
+*%EFIGroup *EFSharpness Job/Job
+*OpenUI *EFSharpness/Sharpness :PickOne
+*OrderDependency: 40 AnySetup *EFSharpness
+*DefaultEFSharpness: EFSharpnessDEF
+*EFSharpness EFSharpnessDEF/Printer's default: ""
+*EFSharpness Softer/Softer: " userdict /XJXsharpness known 
+	{ 10 XJXsharpness } 
+	{ (printerinfo sharpness 10) =string 
+		FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*EFSharpness Normal/Normal: " userdict /XJXsharpness known 
+	{ 3 XJXsharpness } 
+	{ (printerinfo sharpness 3) =string 
+		FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*EFSharpness Sharper/Sharper: " userdict /XJXsharpness known 
+	{ 4 XJXsharpness } 
+	{ (printerinfo sharpness 4) =string 
+		FieryXJdict /ExtCmdGetExec get exec { pop } if } ifelse "
+*End
+*CloseUI: *EFSharpness
+
+*%EFIFlags *EFPrange
+*%EFIGroup *EFPrange Job/Job
+*OpenUIEFI *EFPrange/Page Range : PickOne
+*OrderDependency: 70 AnySetup *EFPrange
+*DefaultEFPrange: EFPrangeDEF
+*EFPrange EFPrangeDEF/Printer's default: ""
+*EFPrange All/All: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	currentglobal true setglobal
+	DriverOps /pagerange [ ] put
+	setglobal "
+*End
+*EFPrange Even/Even: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	currentglobal true setglobal
+	DriverOps /pagerange [ 1 1000 { dup 2 add } repeat ] put
+	setglobal "
+*End
+*EFPrange Odd/Odd: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	currentglobal true setglobal
+	DriverOps /pagerange [ 0 1000 { dup 2 add } repeat ] put
+	setglobal "
+*End
+*EFPrange range1/1-3, 5, 7: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	currentglobal true setglobal
+	DriverOps /pagerange [ 0 1 2 4 6 ] put
+	setglobal "
+*End
+*CloseUIEFI: *EFPrange
+
+*%EFIFlags *EFFlip
+*%EFIGroup *EFFlip Job/Job
+*OpenUIEFI *EFFlip/Flip : PickOne
+*OrderDependency: 75 AnySetup *EFFlip
+*DefaultEFFlip: EFFlipDEF
+*EFFlip EFFlipDEF/Printer's default: ""
+*EFFlip None/None: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /fliph? false put DriverOps /flipv? false put << >> setpagedevice "
+*End
+*EFFlip V/Vertical: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /fliph? false put DriverOps /flipv? true put << >> setpagedevice "
+*End
+*EFFlip H/Horizontal: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /fliph? true put DriverOps /flipv? false put << >> setpagedevice "
+*End
+*EFFlip VH/Vertical & Horizontal: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /fliph? true put DriverOps /flipv? true put << >> setpagedevice "
+*End
+*CloseUIEFI: *EFFlip
+
+*%EFIFlags *EFScale
+*%EFIGroup *EFScale Job/Job
+*OpenUIEFI *EFScale/Scale : PickOne
+*OrderDependency: 80 AnySetup *EFScale
+*DefaultEFScale: EFScaleDEF
+*EFScale EFScaleDEF/Printer's default: ""
+*EFScale 200/200%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /scale# 2 put << >> setpagedevice "
+*End
+*EFScale 150/150%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /scale# 1.5 put << >> setpagedevice "
+*End
+*EFScale 100/100%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /scale# 1 put << >> setpagedevice "
+*End
+*EFScale 75/75%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /scale# .75 put << >> setpagedevice "
+*End
+*EFScale 50/50%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /scale# .5 put << >> setpagedevice "
+*End
+*CloseUIEFI: *EFScale
+
+*%EFIFlags *EFRotate
+*%EFIGroup *EFRotate Job/Job
+*OpenUIEFI *EFRotate/Rotate: PickOne
+*OrderDependency: 85 AnySetup *EFRotate
+*DefaultEFRotate: EFRotateDEF
+*EFRotate EFRotateDEF/Printer's default: ""
+*EFRotate 0/0°: "  << >> setpagedevice "
+*EFRotate 90/90° CCW: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /rotate# 90 put << >> setpagedevice "
+*End
+*EFRotate 270/90° CW: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /rotate# 270 put << >> setpagedevice "
+*End
+*EFRotate 180/180°: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+	DriverOps /rotate# 180 put << >> setpagedevice "
+*End
+*CloseUIEFI: *EFRotate
+
+*% ColorWise body begins here
+*% TV@B1.0@CMYK@980402
+
+*%EFIFlags *EFBrightness Spooler|Command|Rerip
+*%EFIGroup *EFBrightness  Color/Color
+*OpenUI *EFBrightness/Brightness :PickOne
+*OrderDependency: 55.0 AnySetup *EFBrightness
+*DefaultEFBrightness: 00.00
+*EFBrightness +0.24/85%  Lightest: " /XJXsetBrightness where
+        { pop (LIGHTEST) XJXsetBrightness } if "
+*End
+*EFBrightness +0.16/90%  Lighter: " /XJXsetBrightness where
+        { pop (LIGHTER) XJXsetBrightness } if "
+*End
+*EFBrightness +0.08/95%  Light: " /XJXsetBrightness where
+        { pop (LIGHT) XJXsetBrightness } if "
+*End
+*EFBrightness 00.00/100% Normal: " /XJXsetBrightness where
+        { pop (NORMAL) XJXsetBrightness } if "
+*End
+*EFBrightness -0.08/105% Dark: " /XJXsetBrightness where
+        { pop (DARK) XJXsetBrightness } if "
+*End
+*EFBrightness -0.16/110% Darker: " /XJXsetBrightness where
+        { pop (DARKER) XJXsetBrightness } if "
+*End
+*EFBrightness -0.24/115% Darkest: " /XJXsetBrightness where
+        { pop (DARKEST) XJXsetBrightness } if "
+*End
+*CloseUI: *EFBrightness
+
+
+*%EFIFlags *EFRGBOverride Spooler|Command|Rerip|ColorSetup
+*%EFIGroup *EFRGBOverride  Color/Color
+*OpenUI *EFRGBOverride/RGB Source :PickOne
+*OrderDependency: 56.0 AnySetup *EFRGBOverride
+*DefaultEFRGBOverride: EFRGBOverrideDEF
+*EFRGBOverride EFRGBOverrideDEF/Printer's default: ""
+*EFRGBOverride EFIRGB/EFIRGB: " /XJXsetRGBOverride where
+        { pop (EFIRGB) XJXsetRGBOverride } if "
+*End
+*EFRGBOverride sRGB/sRGB (PC): " /XJXsetRGBOverride where
+        { pop (SRGB) XJXsetRGBOverride } if "
+*End
+*EFRGBOverride Apple13/Apple Standard: "  /XJXsetRGBOverride where
+        { pop (APPLE13) XJXsetRGBOverride } if "
+*End
+*EFRGBOverride Other/Other: " /XJXsetRGBOverride where
+        { pop (OTHER) XJXsetRGBOverride } if "
+*End
+*EFRGBOverride Off/Off: " /XJXsetRGBOverride where
+        { pop (Off) XJXsetRGBOverride } if  "
+*End
+*CloseUI: *EFRGBOverride
+
+
+*%EFIFlags *EFRGBOtherGamma Spooler|Command|Rerip
+*%EFIGroup *EFRGBOtherGamma  Color/Color
+*OpenUI *EFRGBOtherGamma/(Other) Gamma :PickOne
+*OrderDependency: 56.1 AnySetup *EFRGBOtherGamma
+*DefaultEFRGBOtherGamma: EFRGBOtherGammaDEF
+*EFRGBOtherGamma EFRGBOtherGammaDEF/Printer's default: ""
+*EFRGBOtherGamma 1.0/1.0: " /XJXsetRGBOtherGamma where
+        { pop (1.0) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 1.2/1.2: " /XJXsetRGBOtherGamma where
+        { pop (1.2) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 1.4/1.4: " /XJXsetRGBOtherGamma where
+        { pop (1.4) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 1.6/1.6: " /XJXsetRGBOtherGamma where
+        { pop (1.6) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 1.8/1.8: " /XJXsetRGBOtherGamma where
+        { pop (1.8) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 2.0/2.0: " /XJXsetRGBOtherGamma where
+        { pop (2.0) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 2.2/2.2: " /XJXsetRGBOtherGamma where
+        { pop (2.2) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 2.4/2.4: " /XJXsetRGBOtherGamma where
+        { pop (2.4) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 2.6/2.6: " /XJXsetRGBOtherGamma where
+        { pop (2.6) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 2.8/2.8: " /XJXsetRGBOtherGamma where
+        { pop (2.8) XJXsetRGBOtherGamma } if "
+*End
+*EFRGBOtherGamma 3.0/3.0: " /XJXsetRGBOtherGamma where
+        { pop (3.0) XJXsetRGBOtherGamma } if "
+*End
+*CloseUI: *EFRGBOtherGamma
+
+
+*%EFIFlags *EFRGBOtherWtPt Spooler|Command|Rerip
+*%EFIGroup *EFRGBOtherWtPt  Color/Color
+*OpenUI *EFRGBOtherWtPt/(Other) White Point :PickOne
+*OrderDependency: 56.2 AnySetup *EFRGBOtherWtPt
+*DefaultEFRGBOtherWtPt: EFRGBOtherWtPtDEF
+*EFRGBOtherWtPt EFRGBOtherWtPtDEF/Printer's default: ""
+*EFRGBOtherWtPt 5000K/5000 K (D50): " /XJXsetRGBOtherWtPt where
+        { pop (5000K) XJXsetRGBOtherWtPt } if "
+*End
+*EFRGBOtherWtPt 5500K/5500 K: " /XJXsetRGBOtherWtPt where
+        { pop (5500K) XJXsetRGBOtherWtPt } if "
+*End
+*EFRGBOtherWtPt 6500K/6500 K (D65): " /XJXsetRGBOtherWtPt where
+        { pop (6500K) XJXsetRGBOtherWtPt } if "
+*End
+*EFRGBOtherWtPt 7500K/7500 K: " /XJXsetRGBOtherWtPt where
+        { pop (7500K) XJXsetRGBOtherWtPt } if "
+*End
+*EFRGBOtherWtPt 9300K/9300 K: " /XJXsetRGBOtherWtPt where
+        { pop (9300K) XJXsetRGBOtherWtPt } if "
+*End
+*CloseUI: *EFRGBOtherWtPt
+
+
+*%EFIFlags *EFRGBOtherPhos Spooler|Command|Rerip
+*%EFIGroup *EFRGBOtherPhos  Color/Color
+*OpenUI *EFRGBOtherPhos/(Other) Phosphors :PickOne
+*OrderDependency: 56.3 AnySetup *EFRGBOtherPhos
+*DefaultEFRGBOtherPhos: EFRGBOtherPhosDEF
+*EFRGBOtherPhos EFRGBOtherPhosDEF/Printer's default: ""
+*EFRGBOtherPhos HitachiEBU/Hitachi EBU: " /XJXsetRGBOtherPhos where
+        { pop (Hitachi EBU) XJXsetRGBOtherPhos } if "
+*End
+*EFRGBOtherPhos HitachiIkegami/Hitachi/Ikegami: " /XJXsetRGBOtherPhos where
+        { pop (Hitachi/Ikegami) XJXsetRGBOtherPhos } if "
+*End
+*EFRGBOtherPhos NTSC/NTSC: " /XJXsetRGBOtherPhos where
+        { pop (NTSC) XJXsetRGBOtherPhos } if "
+*End
+*EFRGBOtherPhos RadiusPivot/Radius Pivot: " /XJXsetRGBOtherPhos where
+        { pop (Radius Pivot) XJXsetRGBOtherPhos } if "
+*End
+*EFRGBOtherPhos SMPTE/SMPTE: " /XJXsetRGBOtherPhos where
+        { pop (SMPTE) XJXsetRGBOtherPhos } if "
+*End
+*EFRGBOtherPhos Trinitron/Trinitron: " /XJXsetRGBOtherPhos where
+        { pop (Trinitron) XJXsetRGBOtherPhos } if "
+*End
+*CloseUI: *EFRGBOtherPhos
+
+
+*%EFIFlags *EFSimulation Spooler|Command|Rerip
+*%EFIGroup *EFSimulation Color/Color
+*OpenUI *EFSimulation/CMYK Simulation :PickOne
+*OrderDependency: 57.0 AnySetup *EFSimulation
+*DefaultEFSimulation: EFSimulationDEF
+*EFSimulation EFSimulationDEF/Printer's default: ""
+*EFSimulation SWOP/SWOP-Coated: " /XJXsetSimulation where
+        { pop (SWOP-Coated) XJXsetSimulation } if "
+*End
+*EFSimulation DIC/DIC: " /XJXsetSimulation where
+        { pop (DIC) XJXsetSimulation } if "
+*End
+*EFSimulation Euroscale/Euroscale: " /XJXsetSimulation where
+        { pop (Euroscale) XJXsetSimulation } if "
+*End
+*EFSimulation Custom1/Custom-1: " /XJXsetSimulation where
+        { pop (Custom-1) XJXsetSimulation } if "
+*End
+*EFSimulation Custom2/Custom-2: " /XJXsetSimulation where
+        { pop (Custom-2) XJXsetSimulation } if "
+*End
+*EFSimulation Custom3/Custom-3: " /XJXsetSimulation where
+        { pop (Custom-3) XJXsetSimulation } if "
+*End
+*EFSimulation Custom4/Custom-4: " /XJXsetSimulation where
+        { pop (Custom-4) XJXsetSimulation } if "
+*End
+*EFSimulation Custom5/Custom-5: " /XJXsetSimulation where
+        { pop (Custom-5) XJXsetSimulation } if "
+*End
+*EFSimulation None/None: "  /XJXsetSimulation where
+        { pop (.None) XJXsetSimulation } if "
+*End
+*EFSimulation MatchCopy/Match Copy: " /XJXsetSimulation where
+        { pop (.MatchCopy) XJXsetSimulation } if "
+*End
+*CloseUI: *EFSimulation
+
+
+*%EFIFlags *EFSimSpeed Spooler|Command|Rerip
+*%EFIGroup *EFSimSpeed  Color/Color
+*OpenUI *EFSimSpeed/CMYK Simulation Method :PickOne
+*OrderDependency: 58.0 AnySetup *EFSimSpeed
+*DefaultEFSimSpeed: EFSimSpeedDEF
+*EFSimSpeed EFSimSpeedDEF/Printer's default: ""
+*EFSimSpeed Quick/Quick: " /XJXsetSimSpeed where
+        { pop (Quick) XJXsetSimSpeed } if  "
+*End
+*EFSimSpeed Full/Full: " /XJXsetSimSpeed where
+        { pop (Full) XJXsetSimSpeed } if  "
+*End
+*CloseUI: *EFSimSpeed
+
+
+*%EFIFlags *EFPureBlack Spooler|Command|Rerip|ColorSetup
+*%EFIGroup *EFPureBlack  Color/Color
+*OpenUI *EFPureBlack/Pure Black Text/Graphics :PickOne
+*OrderDependency: 59.0 AnySetup *EFPureBlack
+*DefaultEFPureBlack: EFPureBlackDEF
+*EFPureBlack EFPureBlackDEF/Printer's default: ""
+*EFPureBlack False/Off: " /XJXsetPureBlack where
+        { pop (False) XJXsetPureBlack } if "
+*End
+*EFPureBlack True/On: " /XJXsetPureBlack where
+        { pop (True) XJXsetPureBlack } if "
+*End
+*CloseUI: *EFPureBlack
+
+
+*%EFIFlags *EFBlkOverprint Spooler|Command|Rerip|ColorSetup
+*%EFIGroup *EFBlkOverprint  Color/Color
+*OpenUI *EFBlkOverprint/Black Overprint :PickOne
+*OrderDependency: 60.0 AnySetup *EFBlkOverprint
+*DefaultEFBlkOverprint: EFBlkOverprintDEF
+*EFBlkOverprint EFBlkOverprintDEF/Printer's default: ""
+*EFBlkOverprint False/Off: " /XJXsetBlkOverprint where
+        { pop (False) XJXsetBlkOverprint } if "
+*End
+*EFBlkOverprint True/On: " /XJXsetBlkOverprint where
+        { pop (True) XJXsetBlkOverprint } if "
+*End
+*CloseUI: *EFBlkOverprint
+
+
+*%EFIFlags *EFSpotColors Spooler|Command|Rerip|ColorSetup
+*%EFIGroup *EFSpotColors  Color/Color
+*OpenUI *EFSpotColors/Spot Color Matching :PickOne
+*OrderDependency: 61.0 AnySetup *EFSpotColors
+*DefaultEFSpotColors: EFSpotColorsDEF
+*EFSpotColors EFSpotColorsDEF/Printer's default: ""
+*EFSpotColors False/Off: " /XJXsetSpotColors where
+        { pop (False) XJXsetSpotColors } if "
+*End
+*EFSpotColors True/On: " /XJXsetSpotColors where
+        { pop (True) XJXsetSpotColors } if "
+*End
+*CloseUI: *EFSpotColors
+
+*% ColorWise body ends here
+
+
+*%EFIFlags *EFRaster Command|Column|Rerip
+*%EFIGroup *EFRaster  Job/Job
+*OpenUI *EFRaster/Save Fast Reprint : Boolean
+*OrderDependency: 65.0 AnySetup *EFRaster
+*DefaultEFRaster: False
+*EFRaster True/On: " userdict /XJXsetraster known
+    { 1 XJXsetraster }
+    if "
+*End
+*EFRaster False/Off: " userdict /XJXsetraster known
+    { 0 XJXsetraster }
+    if "
+*End
+*CloseUI: *EFRaster
+
+*% Halftone Information =============================
+*ScreenFreq: "50.0"
+*ScreenAngle: "0"
+*DefaultScreenProc: Line
+*ScreenProc Line: "
+	{2 4 
+	{ 3 1 roll 4 -1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}
+	exec 8 mul 3 1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}			
+	exec add
+	{
+	48 18  8 16   46 16  6 14
+	56 60 32 24   54 58 30 22
+	 4 12 44 40    2 10 42 38
+	28 20 52 64   26 18 50 62
+	
+	45 15  5 13   47 17  7 15
+	53 57 29 21   55 59 31 23
+	 1  9 41 37    3 11 43 39
+	25 17 49 61   27 19 51 63
+	} 
+	exch get 8 dup mul div} exec}"
+*End
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*% PPD pages begins
+
+*% Paper Handling ===================
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+*%EFIFlags *PageSize  Column
+*OpenUI *PageSize/Page Size :PickOne
+*OrderDependency: 90 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter:" userdict /XJXsetpagesize known
+    { (Letter) XJXsetpagesize }
+    { << /PageSize [612 792] /MediaType null 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse " 
+*End
+*PageSize A4/A4: " userdict /XJXsetpagesize known
+    { (A4)XJXsetpagesize }
+    { << /PageSize [595 842] /MediaType null 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageSize Legal/Legal: " userdict /XJXsetpagesize known
+    { (Legal)XJXsetpagesize } { legal } ifelse "
+*End
+*PageSize Tabloid/11x17: " userdict /XJXsetpagesize known
+    { (Tabloid) XJXsetpagesize } { 11x17 } ifelse "
+*End
+*PageSize A3/A3: " userdict /XJXsetpagesize known
+    { (A3) XJXsetpagesize } { a3 } ifelse "
+*End
+*PageSize 8x10/8x10: " userdict /XJXsetpagesize known
+    { (EightByTen) XJXsetpagesize } { 8x10 } ifelse "
+*End
+*PageSize Legal13/Legal 13: " userdict /XJXsetpagesize known
+    { (Legal13) XJXsetpagesize } { legal13 } ifelse "
+*End
+*PageSize 9x12/9x12: " userdict /XJXsetpagesize known
+    { (NineByTwelve) XJXsetpagesize } { 9x12 } ifelse "
+*End
+*PageSize SEFLet/SEF Letter: " userdict /XJXsetpagesize known
+    { (LetterSEF) XJXsetpagesize }
+    { << /PageSize [612 792] /MediaType (ShortEdgeFeed) 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageSize SEFA4/SEF A4: " userdict /XJXsetpagesize known 
+    { (A4SEF) XJXsetpagesize }
+    { << /PageSize [595 842] /MediaType (ShortEdgeFeed) 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageSize B4/B4: " userdict /XJXsetpagesize known
+    { (B4) XJXsetpagesize } { b4 } ifelse "
+*End
+*PageSize B5/B5: " userdict /XJXsetpagesize known
+    { (B5) XJXsetpagesize } { b5 } ifelse "
+*End
+*PageSize Docupac/Docupac: " userdict /XJXsetpagesize known
+    { (Docupac) XJXsetpagesize } { Docupac } ifelse "
+*End
+*?PageSize: "  
+	save currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if (Unknown) 
+   13 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [792 1224] (Tabloid) put
+   dup [842 1191] (A3) put
+   dup [595 842] (A4) put
+   dup [576 720] (8x10) put
+   dup [612 936] (Legal13) put
+   dup [648 864] (9x12) put
+   dup [612 792] (SEFLet) put
+   dup [595 843] (SEFA4) put
+   dup [729 1032] (B4) put
+   dup [516 729] (B5) put
+   dup [684 842] (Docupac) put
+   { exch aload pop 4 index sub abs 5 le exch 5 index sub abs 5 le and
+      { exch pop exit } { pop } ifelse
+   } bind forall = flush pop pop
+   restore"
+*End
+*CloseUI: *PageSize
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*%EFIFlags *PageRegion
+*OpenUI *PageRegion :PickOne
+*OrderDependency: 95 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter: " userdict /XJXsetpagesize known
+    { (Letter) XJXsetpagesize }
+    { << /PageSize [612 792] /MediaType null 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageRegion A4/A4: " userdict /XJXsetpagesize known
+    { (A4)XJXsetpagesize }
+    { << /PageSize [595 842] /MediaType null 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageRegion Legal/Legal: " userdict /XJXsetpagesize known
+    { (Legal)XJXsetpagesize } { legal } ifelse "
+*End
+*PageRegion Tabloid/11x17: " userdict /XJXsetpagesize known
+    { (Tabloid) XJXsetpagesize } { 11x17 } ifelse "
+*End
+*PageRegion A3/A3: " userdict /XJXsetpagesize known
+    { (A3) XJXsetpagesize } { a3 } ifelse "
+*End
+*PageRegion 8x10/8x10: " userdict /XJXsetpagesize known
+    { (EightByTen) XJXsetpagesize } { 8x10 } ifelse "
+*End
+*PageRegion Legal13/Legal 13: " userdict /XJXsetpagesize known
+    { (Legal13) XJXsetpagesize } { legal13 } ifelse "
+*End
+*PageRegion 9x12/9x12: " userdict /XJXsetpagesize known
+    { (NineByTwelve) XJXsetpagesize } { 9x12 } ifelse "
+*End
+*PageRegion SEFLet/SEF Letter: " userdict /XJXsetpagesize known
+    { (LetterSEF) XJXsetpagesize }
+    { << /PageSize [612 792] /MediaType (ShortEdgeFeed) 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageRegion SEFA4/SEF A4: " userdict /XJXsetpagesize known 
+    { (A4SEF) XJXsetpagesize }
+    { << /PageSize [595 842] /MediaType (ShortEdgeFeed) 
+            /Policies << /PageSize 7 >> >> setpagedevice
+    } ifelse "
+*End
+*PageRegion B4/B4: " userdict /XJXsetpagesize known
+    { (B4) XJXsetpagesize } { b4 } ifelse "
+*End
+*PageRegion B5/B5: " userdict /XJXsetpagesize known
+    { (B5) XJXsetpagesize } { b5 } ifelse "
+*End
+*PageRegion Docupac/Docupac: " userdict /XJXsetpagesize known
+    { (Docupac) XJXsetpagesize } { Docupac } ifelse "
+*End
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: Letter
+*ImageableArea Letter/Letter: "9 12 589 783"
+*ImageableArea A4/A4: "9 12 572 833"
+*ImageableArea Legal/Legal: "9 9 600 985"
+*ImageableArea Tabloid/11x17: "9 9 780 1201"
+*ImageableArea A3/A3: "10 10 830 1168"
+*ImageableArea 8x10/8x10: "9 12 553 711"
+*ImageableArea Legal13/Legal 13:  "9 9 600 913"
+*ImageableArea 9x12/9x12: "9 9 636 841"
+*ImageableArea SEFLet/SEF Letter: "9 10 600 770"
+*ImageableArea SEFA4/SEF A4: "9 10 583 820"
+*ImageableArea B4/B4: "9 9 717 1006"
+*ImageableArea B5/B5: "9 9 490 717"
+*ImageableArea Docupac/Docupac: "9 9 672 819"
+*?ImageableArea: "
+ save /cvp { cvi (            ) cvs print ( ) print } bind def
+  newpath clippath pathbbox
+  4 -2 roll exch 2 {ceiling cvp} repeat
+  exch 2 {floor cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/Letter: "612 792"
+*PaperDimension A4/A4: "595 842"
+*PaperDimension Legal/Legal: "612 1008"
+*PaperDimension Tabloid/11x17: "792 1224"
+*PaperDimension A3/A3: "842 1191"
+*PaperDimension 8x10/8x10:  "576 720"
+*PaperDimension Legal13/Legal 13:  "612 936"
+*PaperDimension 9x12/9x12:  "648 864"
+*PaperDimension SEFLet/SEF Letter: "612 793"
+*PaperDimension SEFA4/SEF A4: "595 843"
+*PaperDimension B4/B4: "729 1032"
+*PaperDimension B5/B5: "516 729"
+*PaperDimension Docupac/Docupac: "684 842"
+
+*% PPD pages ends
+
+*%EFIFlags *EFTrayOvrWrt Spooler|Command
+*OpenUIEFI *EFTrayOvrWrt/Bypass Tray :Boolean
+*OrderDependency: 65 AnySetup *EFTrayOvrWrt
+*DefaultEFTrayOvrWrt: False
+*EFTrayOvrWrt True/On: "1 dict dup /ManualFeed true put setpagedevice"
+*EFTrayOvrWrt False/Off: "1 dict dup /ManualFeed false put setpagedevice"
+*?EFTrayOvrWrt: "
+   save currentpagedevice /ManualFeed get
+   {(True)} {(False)} ifelse = flush restore"
+*End
+*CloseUIEFI: *EFTrayOvrWrt
+
+*RequiresPageRegion All: True
+*%EFIFlags *InputSlot Command|Column
+*%EFIGroup *InputSlot Finishing/Finishing
+*OpenUI *InputSlot/Paper Source : PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: AutoSelect
+*InputSlot AutoSelect/AutoSelect: ""
+*InputSlot Tray1/Tray 1: "(printerinfo trayselect 1) =string 
+	FieryXJdict /ExtCmdGetExec get exec {pop} if"
+*End
+*InputSlot Tray2/Tray 2: "(printerinfo trayselect 2) =string 
+	FieryXJdict /ExtCmdGetExec get exec {pop} if"
+*End
+*InputSlot Tray3/Tray 3: "(printerinfo trayselect 3) =string 
+	FieryXJdict /ExtCmdGetExec get exec {pop} if"
+*End
+*InputSlot ManualFeed/Bypass Tray: "
+	1 dict dup /ManualFeed true put setpagedevice"
+*End
+*CloseUI: *InputSlot
+
+*% Font Information =========================
+*DefaultFont: Courier
+*Font AlbertusMT: Standard "(001.000)" Standard Disk
+*Font AlbertusMT-Italic: Standard "(001.000)" Standard Disk
+*Font AlbertusMT-Light: Standard "(001.000)" Standard Disk
+*Font AntiqueOlive-Bold: Standard "(001.001)" Standard Disk
+*Font AntiqueOlive-Compact: Standard "(001.001)" Standard Disk
+*Font AntiqueOlive-Italic: Standard "(001.001)" Standard Disk
+*Font AntiqueOlive-Roman: Standard "(001.001)" Standard Disk
+*Font Apple-Chancery: Standard "(002.000)" Standard Disk
+*Font Arial-BoldItalicMT: Standard "(002.000)" Standard Disk 
+*Font Arial-BoldMT: Standard "(002.000)" Standard Disk
+*Font Arial-ItalicMT: Standard "(002.000)" Standard Disk
+*Font ArialMT: Standard "(002.000)" Standard Disk
+*Font AvantGarde-Book: Standard "(002.000)" Standard Disk
+*Font AvantGarde-BookOblique: Standard "(002.000)" Standard Disk
+*Font AvantGarde-Demi: Standard "(002.000)" Standard Disk
+*Font AvantGarde-DemiOblique: Standard "(002.000)" Standard Disk
+*Font Bodoni: Standard "(001.002)" Standard Disk
+*Font Bodoni-Bold: Standard "(001.002)" Standard Disk
+*Font Bodoni-BoldItalic: Standard "(001.002)" Standard Disk
+*Font Bodoni-Italic: Standard "(001.002)" Standard Disk
+*Font Bodoni-Poster: Standard "(001.002)" Standard Disk
+*Font Bodoni-PosterCompressed: Standard "(001.001)" Standard Disk
+*Font Bookman-Demi: Standard "(002.000)" Standard Disk
+*Font Bookman-DemiItalic: Standard "(002.000)" Standard Disk
+*Font Bookman-Light: Standard "(002.000)" Standard Disk
+*Font Bookman-LightItalic: Standard "(002.000)" Standard Disk
+*Font Carta: Standard "(001.001)" Standard Disk
+*Font Chicago: Standard "(002.000)" Standard Disk
+*Font Clarendon: Standard "(001.001)" Standard Disk
+*Font Clarendon-Bold: Standard "(001.001)" Standard Disk
+*Font Clarendon-Light: Standard "(001.001)" Standard Disk
+*Font CooperBlack: Standard "(001.003)" Standard Disk
+*Font CooperBlack-Italic: Standard "(001.003)" Standard Disk
+*Font Copperplate-ThirtyThreeBC: Standard "(001.002)" Standard Disk
+*Font Copperplate-ThirtyTwoBC: Standard "(001.002)" Standard Disk
+*Font Coronet-Regular: Standard "(001.000)" Standard Disk
+*Font Courier: Standard "(003.000)" Standard Disk
+*Font Courier-Bold: Standard "(003.000)" Standard Disk
+*Font Courier-BoldOblique: Standard "(003.000)" Standard Disk
+*Font Courier-Oblique: Standard "(003.000)" Standard Disk
+*Font Eurostile: Standard "(001.002)" Standard Disk
+*Font Eurostile-Bold: Standard "(001.001)" Standard Disk
+*Font Eurostile-BoldExtendedTwo: Standard "(001.002)" Standard Disk
+*Font Eurostile-ExtendedTwo: Standard "(001.002)" Standard Disk
+*Font Geneva: Standard "(002.000)" Standard Disk
+*Font GillSans: Standard "(001.002)" Standard Disk
+*Font GillSans-Bold: Standard "(001.001)" Standard Disk
+*Font GillSans-BoldCondensed: Standard "(001.001)" Standard Disk
+*Font GillSans-BoldItalic: Standard "(001.002)" Standard Disk
+*Font GillSans-Condensed: Standard "(001.001)" Standard Disk
+*Font GillSans-ExtraBold: Standard "(001.001)" Standard Disk
+*Font GillSans-Italic: Standard "(001.002)" Standard Disk
+*Font GillSans-Light: Standard "(001.001)" Standard Disk
+*Font GillSans-LightItalic: Standard "(001.002)" Standard Disk
+*Font Goudy: Standard "(001.003)" Standard Disk
+*Font Goudy-Bold: Standard "(001.002)" Standard Disk
+*Font Goudy-BoldItalic: Standard "(001.002)" Standard Disk
+*Font Goudy-ExtraBold: Standard "(001.001)" Standard Disk
+*Font Goudy-Italic: Standard "(001.002)" Standard Disk
+*Font Helvetica: Standard "(002.000)" Standard Disk
+*Font Helvetica-Bold: Standard "(002.000)" Standard Disk
+*Font Helvetica-BoldOblique: Standard "(002.000)" Standard Disk
+*Font Helvetica-Condensed: Standard "(002.000)" Standard Disk
+*Font Helvetica-Condensed-Bold: Standard "(002.000)" Standard Disk
+*Font Helvetica-Condensed-BoldObl: Standard "(002.000)" Standard Disk
+*Font Helvetica-Condensed-Oblique: Standard "(002.000)" Standard Disk
+*Font Helvetica-Narrow: Standard "(002.000)" Standard Disk
+*Font Helvetica-Narrow-Bold: Standard "(002.000)" Standard Disk
+*Font Helvetica-Narrow-BoldOblique: Standard "(002.000)" Standard Disk
+*Font Helvetica-Narrow-Oblique: Standard "(002.000)" Standard Disk
+*Font Helvetica-Oblique: Standard "(002.000)" Standard Disk
+*Font HoeflerText-Black: Standard "(002.000)" Standard Disk
+*Font HoeflerText-BlackItalic: Standard "(002.000)" Standard Disk
+*Font HoeflerText-Italic: Standard "(002.000)" Standard Disk
+*Font HoeflerText-Ornaments: Standard "(002.000)" Standard Disk
+*Font HoeflerText-Regular: Standard "(002.000)" Standard Disk
+*Font JoannaMT: Standard "(001.000)" Standard Disk
+*Font JoannaMT-Bold: Standard "(001.000)" Standard Disk
+*Font JoannaMT-BoldItalic: Standard "(001.000)" Standard Disk
+*Font JoannaMT-Italic: Standard "(001.000)" Standard Disk
+*Font LetterGothic: Standard "(001.004)" Standard Disk
+*Font LetterGothic-Bold: Standard "(001.006)" Standard Disk
+*Font LetterGothic-BoldSlanted: Standard "(001.005)" Standard Disk
+*Font LetterGothic-Slanted: Standard "(001.004)" Standard Disk
+*Font LubalinGraph-Book: Standard "(001.002)" Standard Disk
+*Font LubalinGraph-BookOblique: Standard "(001.002)" Standard Disk
+*Font LubalinGraph-Demi: Standard "(001.002)" Standard Disk
+*Font LubalinGraph-DemiOblique: Standard "(001.002)" Standard Disk
+*Font Marigold: Standard "(001.000)" Standard Disk
+*Font Monaco: Standard "(002.000)" Standard Disk
+*Font MonaLisa-Recut: Standard "(001.000)" Standard Disk
+*Font NewCenturySchlbk-Bold: Standard "(002.000)" Standard Disk
+*Font NewCenturySchlbk-BoldItalic: Standard "(002.000)" Standard Disk
+*Font NewCenturySchlbk-Italic: Standard "(002.000)" Standard Disk
+*Font NewCenturySchlbk-Roman: Standard "(002.000)" Standard Disk
+*Font NewYork: Standard "(002.000)" Standard Disk
+*Font Optima: Standard "(001.005)" Standard Disk
+*Font Optima-Bold: Standard "(001.005)" Standard Disk
+*Font Optima-BoldItalic: Standard "(001.000)" Standard Disk
+*Font Optima-Italic: Standard "(001.000)" Standard Disk
+*Font Oxford: Standard "(001.000)" Standard Disk
+*Font Palatino-Bold: Standard "(002.000)" Standard Disk
+*Font Palatino-BoldItalic: Standard "(002.000)" Standard Disk
+*Font Palatino-Italic: Standard "(002.000)" Standard Disk
+*Font Palatino-Roman: Standard "(002.000)" Standard Disk
+*Font StempelGaramond-Bold: Standard "(001.002)" Standard Disk
+*Font StempelGaramond-BoldItalic: Standard "(001.002)" Standard Disk
+*Font StempelGaramond-Italic: Standard "(001.002)" Standard Disk
+*Font StempelGaramond-Roman: Standard "(001.002)" Standard Disk
+*Font Symbol: Standard "(001.008)" Standard Disk
+*Font Tekton: Standard "(001.001)" Standard Disk
+*Font Times-Bold: Standard "(002.000)" Standard Disk
+*Font Times-BoldItalic: Standard "(002.000)" Standard Disk
+*Font Times-Italic: Standard "(002.000)" Standard Disk
+*Font Times-Roman: Standard "(002.000)" Standard Disk
+*Font TimesNewRomanPS-BoldItalicMT: Standard "(002.000)" Standard Disk
+*Font TimesNewRomanPS-BoldMT: Standard "(002.000)" Standard Disk
+*Font TimesNewRomanPS-ItalicMT: Standard "(002.000)" Standard Disk
+*Font TimesNewRomanPSMT: Standard "(002.000)" Standard Disk
+*Font Univers: Standard "(001.003)" Standard Disk
+*Font Univers-Bold: Standard "(001.003)" Standard Disk
+*Font Univers-BoldExt: Standard "(001.000)" Standard Disk
+*Font Univers-BoldExtObl: Standard "(001.000)" Standard Disk
+*Font Univers-BoldOblique: Standard "(001.003)" Standard Disk
+*Font Univers-Condensed: Standard "(001.002)" Standard Disk
+*Font Univers-CondensedBold: Standard "(001.001)" Standard Disk
+*Font Univers-CondensedBoldOblique: Standard "(001.001)" Standard Disk
+*Font Univers-CondensedOblique: Standard "(001.002)" Standard Disk
+*Font Univers-Extended: Standard "(001.000)" Standard Disk
+*Font Univers-ExtendedObl: Standard "(001.000)" Standard Disk
+*Font Univers-Light: Standard "(001.003)" Standard Disk
+*Font Univers-LightOblique: Standard "(001.003)" Standard Disk
+*Font Univers-Oblique: Standard "(001.003)" Standard Disk
+*Font Wingdings-Regular: Standard "(002.000)" Standard Disk
+*Font ZapfChancery-MediumItalic: Standard "(002.000)" Standard Disk
+*Font ZapfDingbats: Standard "(002.000)" Standard Disk
+*?FontQuery: "
+   save  
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+       /Font resourcestatus {pop pop (Yes)} {(No)} ifelse = 
+      } { exit } ifelse
+   } bind loop
+   (*) = flush
+   restore"
+*End
+
+*?FontList: "
+   save (*) {cvn ==} 128 string /Font resourceforall
+   (*) = flush restore"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ]%% )
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "scanning"
+
+*Status: "PrinterError: Ok"
+*Status: "PrinterError: Reset the copier and fiery"
+*Status: "PrinterError: Copier is busy (Copier mode)"
+*Status: "PrinterError: Copier is busy (AGOC)"
+*Status: "PrinterError: Copier is busy (FUSER)"
+*Status: "PrinterError: Copier is busy (ROS)"
+*Status: "PrinterError: Copier is busy (DRUM HEATER)"
+*Status: "PrinterError: Copier is busy (MC)"
+*Status: "PrinterError: Paper jam"
+*Status: "PrinterError: Copier's interlock is open"
+*Status: "PrinterError: Out of toner"
+*Status: "PrinterError: Fuser web empty"
+*Status: "PrinterError: Waste toner container is full"
+*Status: "PrinterError: Copier's accessary is disabled"
+
+*Status: "PrinterError: Load A3 paper in tray"
+*Status: "PrinterError: Load A4 paper in tray"
+*Status: "PrinterError: Load A4 SEF paper in tray"
+*Status: "PrinterError: Load 11x17 paper in tray"
+*Status: "PrinterError: Load Letter paper in tray"
+*Status: "PrinterError: Load Letter SEF paper in tray"
+*Status: "PrinterError: Load Legal paper in tray"
+*Status: "PrinterError: Load 8x10 paper in tray"
+*Status: "PrinterError: Load Legal 13 paper in tray"
+*Status: "PrinterError: Load 9x12 paper in tray"
+
+*Status: "PrinterError: An unknown copier error occurred"
+*Status: "PrinterError: Copier is offline"
+
+*Status: "PrinterError: Load A3 paper in bypass tray"
+*Status: "PrinterError: Load A4 paper bypass tray"
+*Status: "PrinterError: Load A4 SEF paper bypass tray"
+*Status: "PrinterError: Load 11x17 paper bypass tray"
+*Status: "PrinterError: Load Letter paper bypass tray"
+*Status: "PrinterError: Load Letter SEF paper bypass tray"
+*Status: "PrinterError: Load Legal paper bypass tray"
+*Status: "PrinterError: Load 8x10 paper bypass tray"
+*Status: "PrinterError: Load Legal 13 paper bypass tray"
+*Status: "PrinterError: Load 9x12 paper bypass tray"
+
+*Status: "PrinterError: Sorter problem (See copier console)"
+*Status: "PrinterError: Copier is busy (UI)"
+
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "EtherTalk"
+*Source: "Parallel"
+*Source: "TCP/IP"
+*Source: "Novell IPX"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+
+*PrinterError: "Ok"
+*PrinterError: "Reset the copier and fiery"
+*PrinterError: "Copier is busy (Copier mode)"
+*PrinterError: "Copier is busy (AGOC)"
+*PrinterError: "Copier is busy (FUSER)"
+*PrinterError: "Copier is busy (ROS)"
+*PrinterError: "Copier is busy (DRUM HEATER)"
+*PrinterError: "Copier is busy (MC)"
+*PrinterError: "Paper jam"
+*PrinterError: "Copier's interlock is open"
+*PrinterError: "Out of toner"
+*PrinterError: "Fuser web empty"
+*PrinterError: "Waste toner container is full"
+*PrinterError: "Copier's accessary is disabled"
+
+*PrinterError: "Load A3 paper in tray"
+*PrinterError: "Load A4 paper in tray"
+*PrinterError: "Load A4 SEF paper in tray"
+*PrinterError: "Load 11x17 paper in tray"
+*PrinterError: "Load Letter paper in tray"
+*PrinterError: "Load Letter SEF paper in tray"
+*PrinterError: "Load Legal paper in tray"
+*PrinterError: "Load 8x10 paper in tray"
+*PrinterError: "Load Legal 13 paper in tray"
+*PrinterError: "Load 9x12 paper in tray"
+
+*PrinterError: "An unknown copier error occurred"
+*PrinterError: "Copier is offline"
+
+*PrinterError: "Load A3 paper in bypass tray"
+*PrinterError: "Load A4 paper bypass tray"
+*PrinterError: "Load A4 SEF paper bypass tray"
+*PrinterError: "Load 11x17 paper bypass tray"
+*PrinterError: "Load Letter paper bypass tray"
+*PrinterError: "Load Letter SEF paper bypass tray"
+*PrinterError: "Load Legal paper bypass tray"
+*PrinterError: "Load 8x10 paper bypass tray"
+*PrinterError: "Load Legal 13 paper bypass tray"
+*PrinterError: "Load 9x12 paper bypass tray"
+
+*PrinterError: "Sorter problem (See copier console)"
+*PrinterError: "Copier is busy (UI)"
+
+
+*% Color Separation Information ====================
+
+
+*% Custom Inks for Fiery Logo
+*InkName: P300FieryBlue/Fiery Blue
+*InkName: P199FieryRed/Fiery Red
+*InkName: PblackFieryBlack/Fiery Black
+*CustomCMYK P300FieryBlue: ".9 .9 .0 .0"
+*CustomCMYK P199FieryRed: ".0 .9 .9 .0"
+*CustomCMYK PblackFieryBlack: ".2 .1 .1 .9"
+
+*DefaultColorSep: Black.50lpi.400dpi
+
+*% -------Halftone Graphics Mode (Hi-Res mode)
+*ColorSepScreenAngle Cyan.50lpi.400dpi: "0"
+*ColorSepScreenAngle Magenta.50lpi.400dpi: "0"
+*ColorSepScreenAngle Yellow.50lpi.400dpi: "0"
+*ColorSepScreenAngle Black.50lpi.400dpi: "0"
+*ColorSepScreenFreq Cyan.50lpi.400dpi: "50.0"
+*ColorSepScreenFreq Magenta.50lpi.400dpi: "50.0"
+*ColorSepScreenFreq Yellow.50lpi.400dpi: "50.0"
+*ColorSepScreenFreq Black.50lpi.400dpi: "50.0"
+*ColorSepScreenProc Cyan.50lpi.400dpi: "{6 5 
+	{ 3 1 roll 4 -1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}
+	exec 8 mul 3 1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}			
+	exec add
+	[
+	48 18  8 16   46 16  6 14
+	56 60 32 24   54 58 30 22
+	 4 12 44 40    2 10 42 38
+	28 20 52 64   26 18 50 62
+	
+	45 15  5 13   47 17  7 15
+	53 57 29 21   55 59 31 23
+	 1  9 41 37    3 11 43 39
+	25 17 49 61   27 19 51 63
+	] 
+	exch get 8 dup mul div} exec}" 
+*End
+
+*ColorSepScreenProc Magenta.50lpi.400dpi: "{4 7 
+	{ 3 1 roll 4 -1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}
+	exec 8 mul 3 1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}			
+	exec add
+	[
+	48 18  8 16   46 16  6 14
+	56 60 32 24   54 58 30 22
+	 4 12 44 40    2 10 42 38
+	28 20 52 64   26 18 50 62
+	
+	45 15  5 13   47 17  7 15
+	53 57 29 21   55 59 31 23
+	 1  9 41 37    3 11 43 39
+	25 17 49 61   27 19 51 63
+	] 
+	exch get 8 dup mul div} exec}"
+*End
+
+*ColorSepScreenProc Yellow.50lpi.400dpi: "{5 2
+	{ 3 1 roll 4 -1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}
+	exec 8 mul 3 1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}			
+	exec add
+	[
+	48 18  8 16   46 16  6 14
+	56 60 32 24   54 58 30 22
+	 4 12 44 40    2 10 42 38
+	28 20 52 64   26 18 50 62
+	
+	45 15  5 13   47 17  7 15
+	53 57 29 21   55 59 31 23
+	 1  9 41 37    3 11 43 39
+	25 17 49 61   27 19 51 63
+	] 
+	exch get 8 dup mul div} exec}"
+*End
+
+*ColorSepScreenProc Black.50lpi.400dpi: "{2 4 
+	{ 3 1 roll 4 -1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}
+	exec 8 mul 3 1 roll exch 
+	{dup 8  ge { 8 sub} if exch 
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+	dup 0 lt {0 exch sub} if  cvi
+	}			
+	exec add
+	[
+	48 18  8 16   46 16  6 14
+	56 60 32 24   54 58 30 22
+	 4 12 44 40    2 10 42 38
+	28 20 52 64   26 18 50 62
+	
+	45 15  5 13   47 17  7 15
+	53 57 29 21   55 59 31 23
+	 1  9 41 37    3 11 43 39
+	25 17 49 61   27 19 51 63
+	] 
+	exch get 8 dup mul div} exec}"
+*End
+
+*% PPD Last Modified 6/2/98
+*% End of PPD file
+*% The byte count of this file should be exactly 066432 or 068101
+*% depending on the filesystem it resides in.
+*% end of PPD file for Fiery X2 5799 

@@ -1,0 +1,588 @@
+*PPD-Adobe: "4.1"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1994 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.1"
+*FileVersion: "1.2"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "HP3SIL21.PPD"
+*Product: "(HP LaserJet IIISi)"
+*PSVersion: "(2012.021) 2"
+*ModelName: "HP LaserJet IIISi Postscript 2"
+*ShortNickName: "HP LaserJet IIISi Postscript 2"
+*NickName: "HP LaserJet IIISi Postscript 2 v2012.021"
+
+*% === Options and Constraints =========
+
+*OpenGroup: InstallableOptions/Options Installed
+*OpenUI *Option1/Optional Envelope Feeder: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*CloseUI: *Option1
+
+*OpenUI *Option2/Memory Configuration: PickOne
+*DefaultOption2: None
+*Option2 None/Standard 2 MB RAM: ""
+*Option2 3Meg/3 MB Total RAM: ""
+*Option2 4Meg/4 MB Total RAM: ""
+*Option2 5Meg/5 MB Total RAM: ""
+*Option2 6Meg/6 MB Total RAM: ""
+*Option2 7Meg/7 MB Total RAM: ""
+*Option2 9Meg/9 MB Total RAM: ""
+*Option2 10Meg/10 MB Total RAM: ""
+*Option2 11Meg/11 MB Total RAM: ""
+*Option2 13Meg/13 MB Total RAM: ""
+*Option2 14Meg/14 MB Total RAM: ""
+*Option2 17Meg/17 MB Total RAM: ""
+*CloseUI: *Option2
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *Option1 False *InputSlot Envelope
+*UIConstraints: *Option2 None *Duplex
+*UIConstraints: *Option2 3Meg *Duplex
+
+*UIConstraints: *PageSize Letter *InputSlot Envelope
+*UIConstraints: *PageSize Legal *InputSlot Envelope
+*UIConstraints: *PageSize Executive *InputSlot Envelope
+*UIConstraints: *PageSize A4 *InputSlot Envelope
+*UIConstraints: *InputSlot Envelope *PageSize Letter
+*UIConstraints: *InputSlot Envelope *PageSize Legal
+*UIConstraints: *InputSlot Envelope *PageSize Executive
+*UIConstraints: *InputSlot Envelope *PageSize A4
+*UIConstraints: *PageRegion Letter *InputSlot Envelope
+*UIConstraints: *PageRegion Legal *InputSlot Envelope
+*UIConstraints: *PageRegion Executive *InputSlot Envelope
+*UIConstraints: *PageRegion A4 *InputSlot Envelope
+*UIConstraints: *InputSlot Envelope *PageRegion Letter
+*UIConstraints: *InputSlot Envelope *PageRegion Legal
+*UIConstraints: *InputSlot Envelope *PageRegion Executive
+*UIConstraints: *InputSlot Envelope *PageRegion A4
+
+*UIConstraints: *PageSize Comm10 *Duplex
+*UIConstraints: *PageSize Monarch *Duplex
+*UIConstraints: *PageSize DL *Duplex
+*UIConstraints: *Duplex *PageSize Comm10
+*UIConstraints: *Duplex *PageSize Monarch
+*UIConstraints: *Duplex *PageSize DL
+*UIConstraints: *PageRegion Comm10 *Duplex
+*UIConstraints: *PageRegion Monarch *Duplex
+*UIConstraints: *PageRegion DL *Duplex
+*UIConstraints: *Duplex *PageRegion Comm10
+*UIConstraints: *Duplex *PageRegion Monarch
+*UIConstraints: *Duplex *PageRegion DL
+
+
+*% ==== Device Capabilities ===============
+*LanguageLevel: "2"
+
+*FreeVM: "272283"
+*VMOption None/Standard: "272283"
+*VMOption 3Meg/3 MB Total RAM: "1320834"
+*VMOption 4Meg/4 MB Total RAM: "2378002"
+*VMOption 5Meg/5 MB Total RAM: "2214162"
+*VMOption 6Meg/6 MB Total RAM: "3262738"
+*VMOption 7Meg/7 MB Total RAM: "4303122"
+*VMOption 9Meg/9 MB Total RAM: "6391690"
+*VMOption 10Meg/10 MB Total RAM: "7435532"
+*VMOption 11Meg/11 MB Total RAM: "848108"
+*VMOption 13Meg/13 MB Total RAM: "10594578"
+*VMOption 14Meg/14 MB Total RAM: "11643154"
+*VMOption 17Meg/17 MB Total RAM: "14780298"
+
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*VariablePaperSize: False
+*Throughput: "17"
+
+*Password: "()" 
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 300dpi
+*?Resolution: "
+  save
+    currentpagedevice /HWResolution get
+    0 get
+    (          ) cvs print
+    (dpi)
+    = flush
+  restore
+"
+*End
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs   exch   abs   2 copy   add   1 gt   {1 sub   dup   mul   exch  
+1 sub   dup   mul   add   1 sub  } {dup   mul   exch   dup   mul  
+add   1 exch   sub  } ifelse  }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*OpenUI *Smoothing/Resolution Enhancement:  PickOne
+*OrderDependency: 50 AnySetup *Smoothing
+*DefaultSmoothing: Medium
+*Smoothing None/Off: " 
+    1 dict
+    dup /Policies 2 dict dup /PageSize 2 put dup /MediaType 0 put put
+	setpagedevice
+    2 dict 
+    dup /PostRenderingEnhance true put
+    dup /PostRenderingEnhanceDetails
+      2 dict dup /REValue 0 put dup /Type 8 put put
+    setpagedevice"
+*End
+*Smoothing Light: "
+     1 dict
+    dup /Policies 2 dict dup /PageSize 2 put dup /MediaType 0 put put
+	setpagedevice
+    2 dict 
+    dup /PostRenderingEnhance true put
+    dup /PostRenderingEnhanceDetails
+      2 dict dup /REValue 1 put dup /Type 8 put put
+    setpagedevice"
+*End
+*Smoothing Medium: "
+    1 dict
+    dup /Policies 2 dict dup /PageSize 2 put dup /MediaType 0 put put
+	setpagedevice
+    2 dict 
+    dup /PostRenderingEnhance true put
+    dup /PostRenderingEnhanceDetails
+      2 dict dup /REValue 2 put dup /Type 8 put put
+    setpagedevice"
+*End
+*Smoothing Dark: "
+    1 dict
+    dup /Policies 2 dict dup /PageSize 2 put dup /MediaType 0 put put
+	setpagedevice
+    2 dict 
+    dup /PostRenderingEnhance true put
+    dup /PostRenderingEnhanceDetails 
+      2 dict dup /REValue 3 put dup /Type 8 put put
+    setpagedevice"
+*End
+*?Smoothing: "
+  save
+    currentpagedevice /PostRenderingEnhanceDetails get /REValue get
+    [(None) (Light) (Medium) (Dark)]  exch get print
+  restore
+"
+*End
+*CloseUI: *Smoothing
+
+*% Paper Handling ===================
+
+*% Code in this section both selects a tray and sets up a frame buffer.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter 8 1/2 x 11 in: "
+    2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal/Legal 8 1/2 x 14 in: "
+    2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4/A4 210 x 297 mm: "
+    2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Executive/Executive 7 1/4 x 10 1/2 in: "
+    2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Comm10/Env Comm10 4 1/8 x 9 1/2 in: "
+    2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Monarch/Env Monarch 3 7/8 x 7 1/2 in : "
+    2 dict dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize DL/Env DL 110 x 220 mm: "
+    2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if 
+   (Unknown) 
+  7 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [595 842] (A4) put
+   dup [522 756] (Executive) put
+   dup [297 684] (Comm10) put
+   dup [279 540] (Monarch) put
+   dup [312 624] (DL) put
+ { exch aload pop 4 index sub abs 5 le exch 
+   5 index sub abs 5 le and 
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore 
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter 8 1/2 x 11 in: "
+    2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Legal/Legal 8 1/2 x 14 in: "
+    2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A4/A4 210 x 297 mm: "
+    2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Executive/Executive 7 1/4 x 10 1/2 in: "
+    2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Comm10/Env Comm10 4 1/8 x 9 1/2 in: "
+    2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Monarch/Env Monarch 3 7/8 x 7 1/2 in: "
+    2 dict dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion DL/Env DL 110 x 220 mm: "
+    2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/Letter 8 1/2 x 11 in: "18.0 18.1201 594.0 774.12 "
+*ImageableArea Legal/Legal 8 1/2 x 14 in: "18.0 18.12 594.0 990.12 "
+*ImageableArea A4/A4 210 x 297 mm: "18.0 18.12 578.64 824.52 "
+*ImageableArea Executive/Executive 7 1/4 x 10 1/2 in: "18.0 18.1201 501.84 738.12 "
+*ImageableArea Comm10/Env Comm10 4 1/8 x 9 1/2 in: "18.0001 18.1201 279.12 666.12 "
+*ImageableArea Monarch/Env Monarch 3 7/8 x 7 1/2 in: "18.0 18.1201 263.76 522.12 "
+*ImageableArea DL/Env DL 110 x 220 mm: "18.0 18.12 294.48 605.64 "
+*?ImageableArea: "
+ save
+   /cvp { (                ) cvs print ( ) print } bind def
+   /upperright {10000 mul floor 10000 div} bind def
+   /lowerleft {10000 mul ceiling 10000 div} bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {lowerleft cvp} repeat
+   exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/Letter 8 1/2 x 11 in: "612 792"
+*PaperDimension Legal/Legal 8 1/2 x 14 in: "612 1008"
+*PaperDimension A4/A4 210 x 297 mm: "595 842"
+*PaperDimension Executive/Executive 7 1/4 x 10 1/2 in: "522 756"
+*PaperDimension Comm10/Env Comm10 4 1/8 x 9 1/2 in: "297 684"
+*PaperDimension Monarch/Env Monarch 3 7/8 x 7 1/2 in: "279 540"
+*PaperDimension DL/Env DL 110 x 220 mm: "312 624"
+
+*RequiresPageRegion Envelope: True
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Upper
+*InputSlot Upper/Upper Tray: "
+1 dict dup /TraySwitch false put setpagedevice
+ currentpagedevice /InputAttributes get
+ 0 get dup
+ null eq {pop}
+ { dup
+   /InputAttributes
+   1 dict dup /Priority [0] put
+   put  setpagedevice
+  } ifelse
+  "
+*End
+*InputSlot Lower/Lower Tray: "
+  1 dict dup /TraySwitch false put setpagedevice
+  currentpagedevice /InputAttributes get
+  1 get dup
+  null eq {pop}
+  { dup
+    /InputAttributes
+    1 dict dup /Priority [1] put
+    put  setpagedevice
+  } ifelse 
+  "
+*End
+*InputSlot Envelope/Envelope Feeder: "
+ 1 dict dup /TraySwitch false put setpagedevice
+  currentpagedevice /InputAttributes get
+  2 get dup
+  null eq {pop}
+  { dup
+    /InputAttributes
+    1 dict dup /Priority [2] put
+    put  setpagedevice
+  } ifelse 
+  "
+*End
+*?InputSlot: "
+save
+  3 dict
+  dup /0 (Upper) put
+  dup /1 (Lower) put
+  dup /2 (Envelope) put
+  currentpagedevice /InputAttributes get
+  dup /Priority known
+  { /Priority get 0 get (      ) cvs cvn get }
+  {
+    dup length 1 eq
+    { {pop} forall (       ) cvs cvn get }
+    { pop pop (Unknown) } ifelse
+  } ifelse
+  = flush
+restore
+"
+*End
+*CloseUI: *InputSlot
+
+*Landscape Orientation: Plus90
+
+*OpenUI *OutputBin: PickOne
+*OrderDependency: 50 AnySetup *OutputBin
+*DefaultOutputBin: Upper
+*OutputBin Upper: "1 dict dup /OutputFaceUp false put setpagedevice"
+*OutputBin Rear:  "1 dict dup /OutputFaceUp true put setpagedevice"
+*?OutputBin:"
+save
+ currentpagedevice /OutputFaceUp get
+{(Rear)}{(Upper)}ifelse = flush
+restore
+"
+*End
+*CloseUI *OutputBin
+
+*OpenUI *OutputOrder: PickOne
+*OrderDependency: 50 AnySetup *OutputOrder
+*DefaultOutputOrder: Normal
+*OutputOrder Normal: "1 dict dup /OutputFaceUp false put setpagedevice"
+*OutputOrder Reverse: "1 dict dup /OutputFaceUp true put setpagedevice"
+*?OutputOrder: "
+save
+ currentpagedevice /OutputFaceUp get
+{(Reverse)}{(Normal)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *OutputOrder
+
+*OpenUI *ManualFeed:  Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "1 dict dup /ManualFeed true put setpagedevice"
+*ManualFeed False: "1 dict dup /ManualFeed false put setpagedevice"
+*?ManualFeed: "
+  save
+    currentpagedevice /ManualFeed get
+    {(True)}{(False)}ifelse = flush
+  restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*OpenUI *Duplex:  PickOne
+*OrderDependency: 50 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex None: "1 dict dup /Duplex false put setpagedevice
+       1 dict dup /Tumble false put setpagedevice"
+*End
+*Duplex DuplexNoTumble/Long Edge Binding: "1 dict dup /Duplex true put setpagedevice
+       1 dict dup /Tumble false put setpagedevice"
+*End
+*Duplex DuplexTumble/Short Edge Binding: "1 dict dup /Duplex true put setpagedevice
+       1 dict dup /Tumble true put setpagedevice"
+*End
+*?Duplex: "save
+   currentpagedevice /Duplex get
+   { currentpagedevice /Tumble get
+       {(DuplexTumble)}{(DuplexNoTumble)}ifelse
+   }
+   { (None)} 
+   ifelse = flush
+restore
+"
+*End
+*CloseUI: *Duplex
+
+*OpenUI *TraySwitch:  Boolean
+*OrderDependency: 50 AnySetup *TraySwitch
+*DefaultTraySwitch: True
+*TraySwitch True: "1 dict dup /TraySwitch true put setpagedevice"
+*TraySwitch False: "1 dict dup /TraySwitch false put setpagedevice"
+*?TraySwitch: "
+save
+  currentpagedevice /TraySwitch get
+  {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *TraySwitch
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.003S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.003S)" Standard ROM
+*Font Bookman-Light: Standard "(001.003S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.003S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse 
+   } bind loop
+   (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "warming up"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% ) 
+*Source: "Serial"
+*Source: "LocalTalk"
+*Source: "Parallel"
+*Source: "EtherTalk"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*Printer Error: "Cover Open"
+*Printer Error: "Paper Jam"
+*Printer Error: "Out Of Paper"
+*Printer Error: "Printing Test Page"
+*Printer Error: "Service Call"
+*Printer Error: "Printing Suspended"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/ 60 lpi / 300 dpi
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%  For 53 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+
+*% Produced by "bldppd42.ps" version 4.0 edit 11
+*% Last Edit Date: May 9 1994
+*% The byte count of this file should be exactly 019171 or 019759
+*% depending on the filesystem it resides in.
+*% end of PPD file for HP LaserJet IIISi
+

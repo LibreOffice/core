@@ -1,0 +1,428 @@
+*PPD-Adobe: "4.1"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1994 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*% ===================================
+*% PPD Version for Windows 3.1 only
+*% ===================================
+
+*FormatVersion: "4.1"
+*FileVersion: "1.3"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*Protocols: TBCP PJL
+*PCFileName: "HP4MP3_1.PPD"
+*Product: "(HP LaserJet 4MP)"
+*PSVersion: "(2013.103) 33"
+*ModelName: "HP LaserJet 4MP"
+*NickName: "HP LaserJet 4P/4MP PS 300 dpi"
+*LanguageLevel: "2"
+*FreeVM: "4198216"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*VariablePaperSize: True
+*TTRasterizer: Type42
+*DefaultResolution: 300dpi
+
+*Throughput: "4"
+
+*Password: "()"
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*UIConstraints: *PageSize Comm10 *InputSlot Cassette
+*UIConstraints: *PageSize Monarch *InputSlot Cassette
+*UIConstraints: *PageSize DL *InputSlot Cassette
+*UIConstraints: *PageSize C5 *InputSlot Cassette
+*UIConstraints: *PageSize B5 *InputSlot Cassette
+*UIConstraints: *PageRegion Comm10 *InputSlot Cassette
+*UIConstraints: *PageRegion Monarch *InputSlot Cassette
+*UIConstraints: *PageRegion DL *InputSlot Cassette
+*UIConstraints: *PageRegion C5 *InputSlot Cassette
+*UIConstraints: *PageRegion B5 *InputSlot Cassette
+
+*UIConstraints: *InputSlot Cassette*PageSize Comm10
+*UIConstraints: *InputSlot Cassette*PageSize Monarch
+*UIConstraints: *InputSlot Cassette*PageSize DL
+*UIConstraints: *InputSlot Cassette*PageSize C5
+*UIConstraints: *InputSlot Cassette*PageSize B5
+*UIConstraints: *InputSlot Cassette*PageRegion Comm10
+*UIConstraints: *InputSlot Cassette*PageRegion Monarch
+*UIConstraints: *InputSlot Cassette*PageRegion DL
+*UIConstraints: *InputSlot Cassette*PageRegion C5
+*UIConstraints: *InputSlot Cassette*PageRegion B5
+
+*JCLBegin: "<1B>%-12345X@PJL JOB<0A>@PJL SET RESOLUTION=300<0A>"
+*JCLToPSInterpreter: "@PJL ENTER LANGUAGE = POSTSCRIPT<0A>"
+*JCLEnd: "<1B>%-12345X@PJL EOJ<0A><1B>%-12345X"
+
+*JCLOpenUI *JCLEconomode/EconoMode: Boolean
+*DefaultJCLEconomode: PrinterDefault
+*JCLEconomode PrinterDefault/Printer Default: ""
+*OrderDependency: 10 JCLSetup  *JCLEconomode
+*JCLEconomode on/ON: "@PJL SET ECONOMODE = ON<0A>"
+*JCLEconomode off/OFF: "@PJL SET ECONOMODE = OFF<0A>"
+*JCLCloseUI: *JCLEconomode
+
+*JCLOpenUI *JCLRET/Resolution Enhancement: PickOne
+*DefaultJCLRET: PrinterDefault
+*OrderDependency: 10 JCLSetup  *JCLRET
+*JCLRET PrinterDefault/Printer Default: ""
+*JCLRET OFF/Off: "@PJL SET RET = OFF<0A>"
+*JCLRET LIGHT/Light: "@PJL SET RET = LIGHT<0A>"
+*JCLRET MEDIUM/Medium: "@PJL SET RET = MEDIUM<0A>"
+*JCLRET DARK/Dark: "@PJL SET RET = DARK<0A>"
+*JCLCloseUI: *JCLRET
+
+*JCLOpenUI *JCLPageProtect/Legal Frame Size: PickOne
+*DefaultJCLPageProtect: PrinterDefault
+*OrderDependency: 10 JCLSetup  *JCLPageProtect
+*JCLPageProtect PrinterDefault/Printer Default: ""
+*JCLPageProtect Legal/Full Legal: "@PJL SET PAGEPROTECT = LEGAL<0A>"
+*JCLPageProtect Auto/Reduced Legal: "@PJL SET PAGEPROTECT = AUTO<0A>"
+*JCLCloseUI: *JCLPageProtect
+
+*% Paper Handling ===================
+
+*%Custom Paper Support ==============
+
+*MaxMediaWidth: "612"
+*CenterRegistered: False
+*HWMargins: 16 16 16 16
+*CustomPageSize True: "
+      pop
+      pop
+      pop
+     3 dict begin
+     /DeferredMediaSelection true def
+     2 array astore /PageSize exch def
+     /ImagingBBox null def
+     currentdict end setpagedevice
+"
+*End
+
+*ParamCustomPageSize Width: 1 points 216 612
+*ParamCustomPageSize Height: 2 points 360 1008
+*ParamCustomPageSize WidthOffset: 3 points 0 612
+*ParamCustomPageSize HeightOffset: 4 points 0 1008
+*ParamCustomPageSize Orientation: 5 int 0 3
+
+*LandscapeOrientation: Plus90
+
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/US Letter : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal/US Legal: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4/A4: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Executive/Executive: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Comm10/Env Comm10 : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Monarch/Env Monarch : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize DL/Env DL : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize C5/Env C5: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize B5//Env ISO B5 : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [499 708] put dup /ImagingBBox null put setpagedevice"
+*End
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if
+   (Unknown)
+  9 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [595 842] (A4) put
+   dup [522 756] (Executive) put
+   dup [297 684] (Comm10) put
+   dup [279 540] (Monarch) put
+   dup [312 624] (DL) put
+   dup [459 649] (C5) put
+   dup [499 708] (B5) put
+ { exch aload pop 4 index sub abs 5 le exch
+   5 index sub abs 5 le and
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore
+"
+*End
+*CloseUI: *PageSize
+
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/US Letter: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Legal/US Legal: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A4/A4: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Executive/Executive: "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Comm10/Env Comm10 : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Monarch/Env Monarch : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion DL/Env DL : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion C5//Env C5 : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion B5//Env ISO B5 : "
+    2 dict 
+    dup /Policies 1 dict dup /PageSize 1 put put 
+    dup /DeferredMediaSelection true put setpagedevice
+    2 dict dup /PageSize [499 708] put dup /ImagingBBox null put setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter : "14.16 12.12 597.84 780.12"
+*ImageableArea Legal/US Legal : "14.16 12.12 597.84 996.12"
+*ImageableArea A4/A4 : "13.44 12.0 581.76 829.68"
+*ImageableArea Executive/Executive : "15.12 12.12 506.64 744.12"
+*ImageableArea Comm10/Env Comm10 : "13.92 12.12 282.72 672.12"
+*ImageableArea Monarch/Env Monarch : "12.72 12.12 266.16 528.12"
+*ImageableArea DL/Env DL : "13.68 12.12 297.84 611.64"
+*ImageableArea C5/Env C5 : "14.4 12.12 444.48 637.08"
+*ImageableArea B5/Env ISO B5 : "15.12 12.12 483.6 696.6 "
+*?ImageableArea: "
+ save
+   /cvp { (                ) cvs print ( ) print } bind def
+   /upperright {10000 mul floor 10000 div} bind def
+   /lowerleft {10000 mul ceiling 10000 div} bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {lowerleft cvp} repeat
+   exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter : "612 792"
+*PaperDimension Legal/US Legal : "612 1008"
+*PaperDimension A4/A4 : "595 842"
+*PaperDimension Executive/Executive : "522 756"
+*PaperDimension Comm10/Env Comm10 : "297 684"
+*PaperDimension Monarch/Env Monarch: "279 540"
+*PaperDimension DL/Env DL : "312 624"
+*PaperDimension C5/Env C5 : "459 649"
+*PaperDimension B5/Env ISO B5 : "499 708"
+
+*RequiresPageRegion All: True
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Cassette
+*InputSlot Cassette/Paper Cassette: ""
+*CloseUI: *InputSlot
+
+*OpenUI *ManualFeed/Manual Feed:  Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "1 dict dup /ManualFeed true put setpagedevice"
+*ManualFeed False: "1 dict dup /ManualFeed false put setpagedevice"
+*?ManualFeed: "
+  save
+    currentpagedevice /ManualFeed get
+    {(True)}{(False)}ifelse = flush
+  restore
+"
+*End
+*CloseUI: *ManualFeed
+
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+sub }{dup mul exch dup mul add 1 exch sub }ifelse }
+"
+*End
+
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.003S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.003S)" Standard ROM
+*Font Bookman-Light: Standard "(001.003S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.003S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse
+   } bind loop
+   (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+
+
+*% ===================================
+*% For "HP LaserJet 4MP" version 2013.103 (300 dpi)
+*% ===================================
+*% The byte count of this file should be exactly 015083 or 015511
+*% depending on the filesystem it resides in.
+*% end of PPD file for HP LaserJet 4MP 

@@ -1,0 +1,313 @@
+*PPD-Adobe: "4.1"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1994 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+
+*% ===================================
+*% Copyright 1992-93 Hewlett-Packard Company. 
+*% PPD Version for Windows 3.1 only
+*% ===================================
+
+*FormatVersion: "4.1"
+*FileVersion: "1.9"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "HP4PLUS6.PPD"
+*Product: "(HP LaserJet 4 Plus)"
+*PSVersion: "(2013.111)1"
+*ModelName: "HP LaserJet 4 Plus"
+*NickName: "HP LaserJet 4/4M Plus PS 600"
+*LanguageLevel: "2"
+*Protocols: PJL TBCP
+*TTRasterizer: Type42
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "12"
+*FreeVM: "679680"
+
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *Option1/Optional Lower Cassette: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*CloseUI: *Option1
+
+*OpenUI *Option2/Optional Envelope Feeder: Boolean
+*DefaultOption2: False
+*Option2 True/Installed: ""
+*Option2 False/Not Installed: ""
+*CloseUI: *Option2
+
+*OpenUI *Option3/Optional Duplex Unit: Boolean
+*DefaultOption3: False
+*Option3 True/Installed: ""
+*Option3 False/Not Installed: ""
+*CloseUI: *Option3
+
+*OpenUI *Option4/Memory Configuration: PickOne
+*DefaultOption4: 6Meg
+*Option4 6Meg/ 6 - 9 MB Total RAM: ""
+*Option4 10Meg/10 MB or more Total RAM: ""
+*CloseUI: *Option4
+
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *Option1 False *InputSlot LargeCapacity
+*UIConstraints: *Option2 False *InputSlot Envelope
+*UIConstraints: *Option3 False *Duplex
+*UIConstraints: *Option4 6Meg *Duplex
+
+*UIConstraints: *PageSize Letter *InputSlot Envelope
+*UIConstraints: *PageSize Legal *InputSlot Envelope
+*UIConstraints: *PageSize A4 *InputSlot Envelope
+*UIConstraints: *PageSize Executive *InputSlot Envelope
+*UIConstraints: *PageSize Comm10 *InputSlot Lower
+*UIConstraints: *PageSize Comm10 *InputSlot LargeCapacity
+*UIConstraints: *PageSize Monarch *InputSlot Lower
+*UIConstraints: *PageSize Monarch *InputSlot LargeCapacity
+*UIConstraints: *PageSize DL *InputSlot Lower
+*UIConstraints: *PageSize DL *InputSlot LargeCapacity
+*UIConstraints: *PageSize C5 *InputSlot Lower
+*UIConstraints: *PageSize C5 *InputSlot LargeCapacity
+*UIConstraints: *PageSize B5 *InputSlot Lower
+*UIConstraints: *PageSize B5 *InputSlot LargeCapacity
+*UIConstraints: *PageSize Comm10 *Duplex
+*UIConstraints: *PageSize Monarch *Duplex
+*UIConstraints: *PageSize DL *Duplex
+*UIConstraints: *PageSize C5 *Duplex
+*UIConstraints: *PageSize B5 *Duplex
+
+*LandscapeOrientation: Plus90
+
+*JCLBegin: "<1B>%-12345X@PJL JOB<0A>@PJL SET RESOLUTION = 600<0A>"
+*JCLToPSInterpreter: "@PJL ENTER LANGUAGE = POSTSCRIPT <0A>"
+*JCLEnd: "<1B>%-12345X@PJL EOJ<0A><1B>%-12345X"
+
+*JCLOpenUI *JCLEconomode/EconoMode: PickOne
+*DefaultJCLEconomode: PrinterDefault
+*OrderDependency: 10 JCLSetup  *JCLEconomode
+*JCLEconomode PrinterDefault/Printer Default: ""
+*JCLEconomode on/On: "@PJL SET ECONOMODE = ON<0A>"
+*JCLEconomode off/Off: "@PJL SET ECONOMODE = OFF<0A>"
+*JCLCloseUI: *JCLEconomode
+
+*JCLOpenUI *JCLRET/Resolution Enhancement: PickOne
+*DefaultJCLRET: PrinterDefault
+*OrderDependency: 10 JCLSetup  *JCLRET
+*JCLRET PrinterDefault/Printer Default: ""
+*JCLRET OFF/Off: "@PJL SET RET = OFF<0A>"
+*JCLRET LIGHT/Light: "@PJL SET RET = LIGHT<0A>"
+*JCLRET MEDIUM/Medium: "@PJL SET RET = MEDIUM<0A>"
+*JCLRET DARK/Dark: "@PJL SET RET = DARK<0A>"
+*JCLCloseUI: *JCLRET
+
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter 8 1/2 x 11 in: "
+	<</DeferredMediaSelection true /PageSize [612 792] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize Legal/Legal 8 1/2 x 14 in: "
+	<</DeferredMediaSelection true /PageSize [612 1008] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize A4/A4 210 x 297 mm: "
+	<</DeferredMediaSelection true /PageSize [595 842] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize Executive/Executive 7 1/4 x 10 1/2 in: "
+	<</DeferredMediaSelection true /PageSize [522 756] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize Comm10/Com-10 Env 4 1/8 x 9 1/2 in: "
+    <</DeferredMediaSelection true /PageSize [297 684] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize Monarch/Monarch Env 3 7/8 x 7 1/2 in: "
+    <</DeferredMediaSelection true /PageSize [279 540] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize DL/DL Env 110 x 220 mm: "
+    <</DeferredMediaSelection true /PageSize [312 624] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize C5/C5 Env 162 x 229 mm: "
+    <</DeferredMediaSelection true /PageSize [459 649] /ImagingBBox null>> setpagedevice"
+*End
+*PageSize B5/B5 Env 176 x 250 mm: "
+    <</DeferredMediaSelection true /PageSize [499 708] /ImagingBBox null>> setpagedevice"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter 8 1/2 x 11 in: "
+	<</DeferredMediaSelection true /PageSize [612 792] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion Legal/Legal 8 1/2 x 14 in: "
+	<</DeferredMediaSelection true /PageSize [612 1008] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion A4/A4 210 x 297 mm: "
+	<</DeferredMediaSelection true /PageSize [595 842] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion Executive/Executive 7 1/4 x 10 1/2 in: "
+	<</DeferredMediaSelection true /PageSize [522 756] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion Comm10/Com-10 Env 4 1/8 x 9 1/2 in: "
+    <</DeferredMediaSelection true /PageSize [297 684] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion Monarch/Monarch Env 3 7/8 x 7 1/2 in: "
+    <</DeferredMediaSelection true /PageSize [279 540] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion DL/DL Env 110 x 220 mm: "
+    <</DeferredMediaSelection true /PageSize [312 624] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion C5/C5 Env 162 x 229 mm: "
+    <</DeferredMediaSelection true /PageSize [459 649] /ImagingBBox null>> setpagedevice"
+*End
+*PageRegion B5/B5 Env 176 x 250 mm: "
+    <</DeferredMediaSelection true /PageSize [499 708] /ImagingBBox null>> setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter: "12.24 12.06 599.76 780.06"
+*ImageableArea Legal/US Legal: "12.24 12.06 599.76 996.06"
+*ImageableArea A4/A4: "13.44 12.06 581.76 829.74"
+*ImageableArea Executive/Executive: "13.32 12.06 508.68 744.06"
+*ImageableArea Comm10/Env Com-10: "12.12 12.06 284.76 672.06 "
+*ImageableArea Monarch/Env Monarch: "12.72 12.06 266.16 528.06 "
+*ImageableArea DL/Env DL: "13.8 12.06 297.96 611.58 "
+*ImageableArea C5/Env C5: "12.6 12.06 446.52 637.02 "
+*ImageableArea B5/Env ISO B5: "13.2 12.06 485.52 696.54 "
+
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter: "612 792"
+*PaperDimension Legal/US Legal: "612 1008"
+*PaperDimension A4/A4: "595 842"
+*PaperDimension Executive/Executive: "522 756"
+*PaperDimension Comm10/Env Com-10: "297 684"
+*PaperDimension Monarch/Env Monarch: "279 540"
+*PaperDimension DL/Env DL: "312 624"
+*PaperDimension C5/Env C5: "459 649"
+*PaperDimension B5/Env ISO B5: "499 708"
+
+*RequiresPageRegion All: True
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Lower
+*InputSlot Upper/Multipurpose Tray: "
+    <</DeferredMediaSelection true /MediaPosition 3>> setpagedevice"
+*End
+*InputSlot Lower/Paper Cassette: "
+    <</DeferredMediaSelection true /MediaPosition 0>> setpagedevice"
+*End
+*InputSlot LargeCapacity/Lower Cassette: "
+	<</DeferredMediaSelection true /MediaPosition 1>> setpagedevice"
+*End
+*InputSlot Envelope/Envelope Feeder: "
+	<</DeferredMediaSelection true /MediaPosition 2>> setpagedevice"
+*End
+*CloseUI: *InputSlot
+
+*OpenUI *ManualFeed/Manual Feed:  Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "
+	<</ManualFeed true>> setpagedevice"
+*End
+*ManualFeed False: "
+	<</ManualFeed false>> setpagedevice"
+*End
+*CloseUI: *ManualFeed
+
+*OpenUI *Duplex/Duplex:  PickOne
+*OrderDependency: 50 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex None/Off: "
+    <</Duplex false>> setpagedevice"
+*End
+*Duplex DuplexNoTumble/Long-edge Binding: "
+    <</Duplex true /Tumble false>> setpagedevice"
+*End
+*Duplex DuplexTumble/Short-edge Binding: "
+    <</Duplex true /Tumble true>> setpagedevice"
+*End
+*CloseUI: *Duplex
+
+*DefaultResolution: 600dpi
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007)" Standard ROM
+*Font Bookman-Demi: Standard "(001.003)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.003)" Standard ROM
+*Font Bookman-Light: Standard "(001.003)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.003)" Standard ROM
+*Font Courier: Standard "(002.004)" Standard ROM
+*Font Courier-Bold: Standard "(002.004)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004)" Standard ROM
+*Font Helvetica: Standard "(001.006)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005)" Standard ROM
+*Font Symbol: Special "(001.007)" Special ROM
+*Font Times-Bold: Standard "(001.007)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009)" Standard ROM
+*Font Times-Italic: Standard "(001.007)" Standard ROM
+*Font Times-Roman: Standard "(001.007)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007)" Standard ROM
+*Font ZapfDingbats: Special "(001.004)" Special ROM
+
+*Password: "()"
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*% ===================================
+*% For "HP LaserJet 4 Plus" version 2013.111 (600 dpi)
+*% ===================================
+
+*% The byte count of this file should be exactly 011553 or 011866
+*% depending on the filesystem it resides in.
+*% end of PPD file for HP LaserJet 4 Plus 

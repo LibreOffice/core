@@ -1,0 +1,345 @@
+*PPD-Adobe: "4.0"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1993 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*%
+*FormatVersion: "4.0"
+*FileVersion: "2.5"
+*PCFileName: "LWNTX518.PPD"
+*LanguageVersion: English
+*Product: "(LaserWriter II NTX)"
+*PSVersion: "(51.8) 3"
+*ModelName: "Apple LaserWriter II NTX v51.8"
+*NickName: "Apple LaserWriter II NTX v51.8"
+
+*% General Information and Defaults ===============
+*FreeVM: "459676"
+*LanguageLevel: "1"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*VariablePaperSize: False
+*FileSystem: True
+*?FileSystem: "
+save
+  statusdict /diskonline get exec {(True)}{(False)} ifelse = flush
+restore
+"
+*End
+*Throughput: "8"
+*Password: "0"
+*ExitServer: "
+  count 0 eq {  % is the password on the stack?
+    true
+  }{
+    dup    % potential password
+    statusdict /checkpassword get exec not
+  } ifelse
+  {  %  if no password or not valid
+    (WARNING : Cannot perform the exitserver command.) =
+    (Password supplied is not valid.) =
+    (Please contact the author of this software.) = flush
+    quit
+  } if
+  serverdict /exitserver get exec
+"
+*End
+
+*Reset: "
+  count 0 eq {  % is the password on the stack?
+    true
+  }{
+    dup    % potential password
+    statusdict /checkpassword get exec not
+  } ifelse
+  {  %  if no password or not valid
+    (WARNING : Cannot reset printer.) =
+    (Password supplied is not valid.) =
+    (Please contact the author of this software.) = flush
+    quit
+  } if
+  serverdict /exitserver get exec
+  systemdict /quit get exec
+  (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 300dpi
+*?Resolution: "
+save
+  initgraphics
+  0 0 moveto currentpoint matrix defaultmatrix transform
+  0 72 lineto currentpoint matrix defaultmatrix transform
+  3 -1 roll sub dup mul
+  3 1 roll exch sub dup mul
+  add sqrt round cvi
+  (          ) cvs print (dpi) = flush
+restore
+"
+*End
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+sub }{dup mul exch dup mul add 1 exch sub }ifelse }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*% Paper Handling ===================
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/US Letter: "statusdict /lettertray get exec"
+*PageSize Legal/US Legal: "statusdict /legaltray get exec"
+*PageSize A4: "statusdict /a4tray get exec"
+*PageSize B5: "statusdict /b5tray get exec"
+*PageSize LetterSmall/US Letter Small: "statusdict /lettertray get exec lettersmall"
+*PageSize A4Small/A4 Small: "statusdict /a4tray get exec a4small"
+*PageSize LegalSmall/US Legal Small: "legal"
+*PageSize Monarch/Monarch Envelope Center Fed: "statusdict /lettertray get exec"
+*PageSize Com10/Com10 Envelope Center Fed: "statusdict /lettertray get exec"
+*?PageSize: "
+save
+  [(Letter)(Legal)] statusdict /pagetype get exec
+  {get} stopped { pop pop (Unknown)} if = flush
+restore
+"
+*End
+*CloseUI: *PageSize
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/US Letter: "letter"
+*PageRegion Legal/US Legal: "legal"
+*PageRegion A4: "a4"
+*PageRegion B5: "b5"
+*PageRegion LetterSmall/US Letter Small: "lettersmall"
+*PageRegion A4Small/A4 Small: "a4small"
+*PageRegion LegalSmall/US Legal Small: "legal"
+*PageRegion Monarch/Monarch Envelope Center Fed: "letter"
+*PageRegion Com10/Com10 Envelope Center Fed: "letter"
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter: "15 8 597 784 "
+*ImageableArea Legal/US Legal: "15 8 597 1000 "
+*ImageableArea A4: "13 10 577 832 "
+*ImageableArea B5: "21 10 500 715 "
+*ImageableArea LetterSmall/US Letter Small: "31 31 583 761 "
+*ImageableArea A4Small/A4 Small: "29 31 567 812 "
+*ImageableArea LegalSmall/US Legal Small: "64 54 548 954 "
+*ImageableArea Monarch/Monarch Envelope Center Fed: "178.5 269 433.5 773 "
+*ImageableArea Com10/Com10 Envelope Center Fed: "169.5 125 442.5 773 "
+*?ImageableArea: "
+save
+  /cvp {(                ) cvs print ( ) print } bind def
+  /upperright {10000 mul floor 10000 div} bind def
+  /lowerleft {10000 mul ceiling 10000 div} bind def
+  newpath clippath pathbbox
+  4 -2 roll exch 2 {lowerleft cvp} repeat
+  exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter: "612 792"
+*PaperDimension Legal/US Legal: "612 1008"
+*PaperDimension A4: "595 842"
+*PaperDimension B5: "516 729"
+*PaperDimension LetterSmall/US Letter Small: "612 792"
+*PaperDimension A4Small/A4 Small: "595 842"
+*PaperDimension LegalSmall/US Legal Small: "612 1008"
+*PaperDimension Monarch/Monarch Envelope Center Fed: "611 792"
+*PaperDimension Com10/Com10 Envelope Center Fed: "610 792"
+
+*OpenUI *ManualFeed/Manual Feed: Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "statusdict /manualfeed true put"
+*ManualFeed False: "statusdict /manualfeed false put"
+*?ManualFeed: "
+save
+  statusdict /manualfeed get {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*DefaultOutputOrder: Normal
+
+*RequiresPageRegion All: True
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Cassette
+*InputSlot Cassette: ""
+*CloseUI: *InputSlot
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.002)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.002)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.003)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.003)" Standard ROM
+*Font Bookman-Demi: Standard "(001.001)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.001)" Standard ROM
+*Font Bookman-Light: Standard "(001.001)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.001)" Standard ROM
+*Font Courier: Standard "(001.005)" Standard ROM
+*Font Courier-Bold: Standard "(001.005)" Standard ROM
+*Font Courier-BoldOblique: Standard "(001.005)" Standard ROM
+*Font Courier-Oblique: Standard "(001.005)" Standard ROM
+*Font Helvetica: Standard "(001.002)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.002)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.002)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.002)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.006)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.004)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.003)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.004)" Standard ROM
+*Font Palatino-Bold: Standard "(001.002)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.002)" Standard ROM
+*Font Palatino-Italic: Standard "(001.002)" Standard ROM
+*Font Palatino-Roman: Standard "(001.001)" Standard ROM
+*Font Symbol: Special "(001.003)" Special ROM
+*Font Times-Bold: Standard "(001.002)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.004)" Standard ROM
+*Font Times-Italic: Standard "(001.002)" Standard ROM
+*Font Times-Roman: Standard "(001.002)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.003)" Standard ROM
+*Font ZapfDingbats: Special "(001.002)" Special ROM
+*?FontQuery: "
+save
+ /str 100 string dup 0 (fonts/) putinterval def
+ {
+   count 1 gt
+   {
+     exch dup str 6 94 getinterval cvs
+     (/) print dup print (:) print exch
+     FontDirectory exch known
+     { pop (Yes) }
+      {
+        length 6 add str 0 3 -1 roll getinterval
+        mark exch status
+       {cleartomark (Yes)}{cleartomark (No)} ifelse
+     } ifelse =
+   }
+   {exit} ifelse
+ }bind loop
+ (*) = flush
+restore
+"
+*End
+
+*?FontList: "
+save
+  FontDirectory { pop == } bind forall flush
+  /filenameforall where
+  {
+    pop (fonts/*)
+    { dup length 6 sub 6 exch getinterval cvn == } bind
+    128 string filenameforall flush
+  } if
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier."
+
+*% Status (format: %%[ status: <one of these> ]%% )
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "warming up"
+*Status: "PrinterError: timeout, clearing printer"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: service call"
+*Status: "PrinterError: warming up"
+*Status: "PrinterError: no toner cartridge"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "serial9"
+*Source: "serial25"
+*Source: "AppleTalk"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "timeout, clearing printer"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "service call"
+*PrinterError: "warming up"
+*PrinterError: "no toner cartridge"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%  For 53 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+*% For "LaserWriter II NTX" version 51.8
+*% Produced by "BuildPPD.ps" version 3.0 edit 58
+*% Converted to meet 4.0 specification
+*% Last Edit Date: May 21 1993
+*% The byte count of this file should be exactly 012007 or 012352
+*% depending on the filesystem it resides in.
+*% end of PPD file for LaserWriter II NTX

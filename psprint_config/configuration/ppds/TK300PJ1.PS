@@ -1,0 +1,1284 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright (c) Tektronix, Incorporated.  All rights reserved.
+*% Tektronix (R) is a registered trademark of Tektronix, Inc.
+*% TekColor TM is a trademark of Tektronix, Inc.
+*% Phaser (R) is a registered trademark of Tektronix, Inc., for color
+*%  printers and related products.
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*Product: "(Phaser 300XJ)"
+*PSVersion: "(2013.113) 17"
+*Manufacturer: "Tektronix"
+*ModelName: "Tektronix Phaser 300XJ"
+*ShortNickName: "Tektronix Phaser 300XJ Extended"
+*NickName: "Tektronix Phaser 300XJ Extended"
+*PCFileName: "TK300PJ1.PPD"
+
+*% === Installable Options ===========
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *Option1/Optional Hard Drive: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*?Option1: "
+ save false
+ (%disk?%)
+ { currentdevparams dup /Writeable known
+   { /Writeable get {pop true} if }  {pop} ifelse
+ } 10 string /IODevice resourceforall
+ {(True)}{(False)} ifelse = flush
+ restore"  
+*End
+*CloseUI: *Option1
+
+*CloseGroup: InstallableOptions
+
+*% === Constraints ===================
+
+*% === Basic Device Capabilities ============
+
+*LanguageLevel: "2"
+*Protocols: BCP
+
+*FreeVM: "4169344"
+
+*ColorDevice: True
+*DefaultColorSpace: CMYK
+*VariablePaperSize: True
+*AccurateScreensSupport: True
+*SuggestedJobTimeout: "0"
+*SuggestedWaitTimeout: "300"
+*SuggestedManualFeedTimeout: "60"
+*1284Modes Parallel: Compat
+*TTRasterizer: Type42
+*?TTRasterizer: "
+ save
+ 42 /FontType resourcestatus
+ { pop pop (Type42)} {pop pop (None)} ifelse = flush
+ restore"
+*End
+
+*Emulators:  hpgl
+*StartEmulator_hpgl: "currentfile /hpgl statusdict /emulate get exec "
+*StopEmulator_hpgl: "<1B7F>0"
+
+*FileSystem: True
+*?FileSystem: "
+  save false
+  (%disk?%)
+  { currentdevparams dup /Writeable known
+    { /Writeable get {pop true} if }  {pop} ifelse
+  } 10 string /IODevice resourceforall
+  {(True)}{(False)} ifelse = flush
+  restore"
+*End
+*Throughput: "1"
+*Password: "(0)"
+*ExitServer: "
+  count 0 eq
+  { false } { true exch startjob } ifelse
+  not
+  { (WARNING: Cannot modify initial VM.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+  } if"
+*End
+*Reset: "
+  count 0 eq
+  { false } { true exch startjob } ifelse
+  not
+  { (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+  } if
+  systemdict /quit get exec
+  (WARNING : Printer Reset Failed.) = flush"
+*End
+
+*DefaultResolution: 300dpi
+*?Resolution: "
+  save currentpagedevice
+  /HWResolution get 0 get (   ) cvs print (dpi) = flush restore" 
+*End
+
+*% ==================================================
+*% Define TekCcolor Logo for use in ColorControlStrip
+
+*JobPatchFile 1: "
+userdict /TekColorStripDict known not {
+userdict begin
+/TekColorStripDict 20 dict def
+end
+} if
+TekColorStripDict begin
+/DrawTekLogo{/xxxxit save store
+LogoInsetX LogoInsetY translate
+BorderHeight LogoInsetY sub LogoInsetY sub
+47.76 div
+dup scale
+<< /m/moveto load/l/lineto load/c/curveto load/x
+/closepath load/s/stroke load/e/eofill load/f/fill load/i/clip load/ei
+/eoclip load/r/setrgbcolor load/k/setcmykcolor load/g/setgray load/w
+/setlinewidth load/t/setlinecap load/j/setlinejoin load/p/newpath load/gs
+/gsave load/gr/grestore load >> begin
+1.0 w
+0 j
+0 t
+0.44 w
+0 0 0 0 k
+gs
+0.0 47.52 m
+38.16 47.52 l
+38.16 0.0 l
+0.0 0.0 l
+0.0 47.52 l
+x
+f
+gr
+0 0 0 1 k
+0.0 47.52 m
+38.16 47.52 l
+38.16 0.0 l
+0.0 0.0 l
+0.0 47.52 l
+x
+s
+0.1375 w
+0 0 0 1 k
+gs
+1.2 46.08 m
+36.72 46.08 l
+36.72 10.56 l
+1.2 10.56 l
+1.2 46.08 l
+x
+f
+gr
+0 0 0 0 k
+1.2 46.08 m
+36.72 46.08 l
+36.72 10.56 l
+1.2 10.56 l
+1.2 46.08 l
+x
+s
+0.4399 w
+0 0 0 0 k
+gs
+1.44 9.12 m
+36.48 9.12 l
+36.48 1.68 l
+1.44 1.68 l
+1.44 9.12 l
+x
+f
+gr
+0 0 0 1 k
+1.44 9.12 m
+36.48 9.12 l
+36.48 1.68 l
+1.44 1.68 l
+1.44 9.12 l
+x
+s
+0 0 0 1 k
+gs
+3.36 6.72 m
+4.08 6.72 l
+4.08 3.12 l
+5.04 3.12 l
+5.04 6.72 l
+6.0 6.72 l
+6.0 7.68 l
+3.36 7.68 l
+3.36 6.72 l
+x
+8.4 5.28 m
+8.4 5.52 l
+8.48 5.788 8.547 6.006 8.88 6.0 c
+9.069 6.006 9.148 5.782 9.12 5.76 c
+9.12 5.28 l
+8.4 5.28 l
+x
+10.08 4.8 m
+10.08 5.76 l
+10.114 6.395 9.488 6.65 8.88 6.72 c
+8.067 6.638 7.514 6.353 7.44 5.52 c
+7.44 4.08 l
+7.514 3.315 8.122 3.03 8.88 3.12 c
+9.652 3.048 10.126 3.449 10.08 4.32 c
+9.12 4.32 l
+9.1 4.038 9.136 3.716 8.88 3.84 c
+8.565 3.746 8.48 3.904 8.4 4.08 c
+8.4 4.8 l
+10.08 4.8 l
+x
+13.2 3.12 m
+13.2 4.32 l
+13.2 4.56 l
+13.92 3.12 l
+14.88 3.12 l
+13.92 5.28 l
+14.88 6.48 l
+13.68 6.48 l
+13.2 5.52 l
+13.2 5.52 l
+13.2 7.68 l
+12.24 7.68 l
+12.24 3.12 l
+13.2 3.12 l
+x
+19.68 6.0 m
+19.68 6.48 l
+19.717 7.422 19.17 7.811 18.24 7.92 c
+17.28 7.811 16.825 7.349 16.8 6.24 c
+16.8 4.56 l
+16.825 3.558 17.207 3.035 18.24 3.12 c
+19.285 3.035 19.735 3.582 19.68 4.32 c
+19.68 5.04 l
+18.72 5.04 l
+18.72 4.56 l
+18.666 4.232 18.635 3.856 18.24 3.84 c
+17.991 3.856 17.888 4.008 18.0 4.32 c
+18.0 6.48 l
+17.894 6.814 17.973 6.997 18.24 6.96 c
+18.508 6.991 18.647 6.79 18.72 6.48 c
+18.72 6.0 l
+19.68 6.0 l
+x
+21.6 4.08 m
+21.561 3.315 22.132 3.035 22.8 3.12 c
+23.56 3.035 24.04 3.321 24.0 4.08 c
+24.0 5.52 l
+24.089 6.243 23.675 6.644 22.8 6.72 c
+22.078 6.644 21.561 6.353 21.6 5.52 c
+21.6 4.08 l
+x
+22.56 5.52 m
+22.527 5.77 22.6 5.946 22.8 6.0 c
+23.05 5.946 23.123 5.77 23.04 5.52 c
+23.04 4.08 l
+23.104 3.837 23.025 3.734 22.8 3.84 c
+22.624 3.734 22.546 3.837 22.56 4.08 c
+22.56 5.52 l
+x
+26.88 3.12 m
+26.88 7.68 l
+25.92 7.68 l
+25.92 3.12 l
+26.88 3.12 l
+x
+28.8 4.08 m
+28.726 3.315 29.297 3.035 30.0 3.12 c
+30.725 3.035 31.205 3.321 31.2 4.08 c
+31.2 5.52 l
+31.253 6.243 30.84 6.644 30.0 6.72 c
+29.242 6.644 28.726 6.353 28.8 5.52 c
+28.8 4.08 l
+x
+29.76 5.52 m
+29.692 5.77 29.765 5.946 30.0 6.0 c
+30.214 5.946 30.287 5.77 30.24 5.52 c
+30.24 4.08 l
+30.269 3.837 30.19 3.734 30.0 3.84 c
+29.789 3.734 29.71 3.837 29.76 4.08 c
+29.76 5.52 l
+x
+33.12 6.48 m
+33.12 3.12 l
+34.08 3.12 l
+34.08 5.28 l
+34.15 5.52 34.259 5.575 34.56 5.52 c
+34.63 5.575 34.727 5.569 34.8 5.52 c
+34.8 6.72 l
+34.423 6.644 34.186 6.395 34.08 6.0 c
+34.08 6.0 l
+34.08 6.48 l
+33.12 6.48 l
+x
+e
+gr
+p
+0 0 0 1 k
+gs
+e
+gr
+p
+0 0 0 1 k
+gs
+41.52 47.76 m
+41.28 47.76 l
+40.8 46.8 l
+40.8 46.8 l
+40.56 47.76 l
+40.08 47.76 l
+40.08 46.32 l
+40.32 46.32 l
+40.32 47.52 l
+40.32 47.52 l
+40.8 46.32 l
+41.04 46.32 l
+41.28 47.52 l
+41.28 47.52 l
+41.28 46.32 l
+41.52 46.32 l
+41.52 47.76 l
+x
+40.08 47.76 m
+38.88 47.76 l
+38.88 47.52 l
+39.36 47.52 l
+39.36 46.32 l
+39.6 46.32 l
+39.6 47.52 l
+40.08 47.52 l
+40.08 47.76 l
+x
+e
+gr
+p
+0 0 0 0 k
+gs
+34.56 35.76 m
+34.844 35.85 34.824 36.065 35.04 36.24 c
+35.272 36.635 35.421 37.479 35.28 37.44 c
+34.894 37.399 34.321 37.389 33.36 37.2 c
+33.294 37.401 33.184 37.482 33.12 37.44 c
+31.4 40.035 28.121 41.54 23.28 42.0 c
+20.773 42.179 17.714 41.632 17.28 41.52 c
+17.1 41.486 17.008 41.727 17.04 41.76 c
+16.629 42.328 16.543 42.586 16.32 43.2 c
+16.113 43.419 15.621 44.206 15.36 44.4 c
+14.998 45.382 15.105 45.104 14.88 45.6 c
+14.47 46.464 14.464 46.708 14.16 46.8 c
+13.629 46.662 11.252 42.814 11.52 42.48 c
+12.153 41.578 12.814 40.558 13.2 40.08 c
+13.24 39.863 13.24 39.766 13.2 39.84 c
+10.314 38.243 1.195 32.238 3.6 22.8 c
+3.628 22.642 2.488 21.322 2.4 20.88 c
+2.312 20.5 2.381 20.156 2.64 19.68 c
+2.702 19.45 3.015 19.194 3.12 18.72 c
+3.422 18.21 3.618 17.629 3.84 17.76 c
+4.294 17.714 4.618 18.224 5.04 18.48 c
+4.959 18.54 5.201 18.623 5.28 18.48 c
+5.648 18.077 6.764 16.588 7.92 15.84 c
+12.104 13.1 16.673 13.467 19.2 13.92 c
+19.755 13.944 21.661 14.576 21.84 14.64 c
+22.156 14.54 21.938 11.64 21.84 10.8 c
+21.855 10.593 22.639 10.973 23.04 11.28 c
+23.176 11.46 23.393 11.454 23.52 11.76 c
+23.477 12.169 23.648 14.245 23.52 14.64 c
+23.619 15.45 23.777 15.446 24.0 15.6 c
+24.208 15.644 25.262 16.271 25.44 16.32 c
+26.396 16.999 28.041 17.957 29.04 18.72 c
+32.851 21.605 34.73 25.643 34.8 29.52 c
+34.98 30.906 34.969 33.321 34.08 35.52 c
+34.164 35.571 34.164 35.655 34.32 35.76 c
+34.298 35.762 34.384 35.763 34.56 35.76 c
+x
+f
+gr
+p
+0.9 0 0.47 0 k
+gs
+7.92 31.44 m
+7.67 30.65 7.125 28.477 7.44 26.64 c
+7.503 26.241 7.75 26.097 7.92 26.16 c
+9.411 27.358 15.203 30.915 17.04 31.68 c
+17.169 31.755 17.461 31.937 17.52 32.16 c
+17.152 32.809 16.189 34.708 15.84 35.52 c
+15.533 36.205 14.645 37.99 14.16 38.4 c
+14.097 38.555 13.721 38.564 13.68 38.64 c
+10.734 37.344 8.65 33.624 7.92 31.44 c
+x
+f
+gr
+p
+0.56 0.56 0 0 k
+gs
+18.48 29.28 m
+18.44 29.28 18.261 29.345 18.24 29.28 c
+16.612 28.612 13.484 26.481 12.48 25.68 c
+10.803 24.384 8.965 22.771 8.88 22.32 c
+8.71 21.686 8.894 21.069 9.12 20.64 c
+9.769 18.603 11.498 17.46 12.24 17.04 c
+13.605 16.235 16.31 15.657 17.52 15.6 c
+19.309 15.435 20.87 15.497 21.36 15.84 c
+22.095 16.306 19.294 27.822 18.48 29.28 c
+x
+f
+gr
+p
+0 0.25 1 0 k
+gs
+18.0 39.6 m
+18.395 38.69 18.293 39.007 18.72 37.92 c
+19.587 36.128 20.436 33.722 20.4 33.6 c
+20.503 33.621 20.56 33.384 20.88 33.6 c
+22.576 34.284 23.59 34.525 25.2 35.04 c
+27.217 35.728 28.884 36.158 30.24 36.48 c
+30.379 36.49 30.498 36.633 30.24 36.96 c
+29.749 37.664 27.576 39.584 24.0 40.32 c
+22.239 40.54 18.943 40.431 18.0 40.08 c
+17.712 39.956 17.92 39.718 18.0 39.6 c
+x
+f
+gr
+p
+0 0.94 0.65 0 k
+gs
+26.4 18.48 m
+25.804 18.087 24.795 17.432 24.0 17.04 c
+23.772 16.977 23.59 17.023 23.52 17.28 c
+23.212 22.391 22.679 25.45 21.36 30.48 c
+21.391 30.674 21.579 31.019 21.84 31.2 c
+22.32 31.474 23.335 31.987 24.0 32.4 c
+25.928 33.133 30.019 34.662 31.2 34.8 c
+31.31 34.946 31.356 34.736 31.44 34.56 c
+33.469 30.893 32.246 24.199 29.04 20.88 c
+28.388 20.096 27.414 19.204 26.4 18.48 c
+x
+f
+gr
+p
+end
+xxxxit restore}bind def
+end"
+*End
+
+*% ===========================
+
+*% Halftone Information =================
+
+*DefaultHalftoneType: 9
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+ {180 mul cos exch 180 mul cos add 2 div} bind"
+*End
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub } bind"
+
+*% Print Quality Selection  ===================
+
+*OpenUI *OutputMode/Print Quality: PickOne
+*OrderDependency: 10 AnySetup *OutputMode
+*DefaultOutputMode: Standard
+*OutputMode Standard: "
+  <<
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /OutputMode (Standard)
+    >>
+  >> setpagedevice"
+*End
+*OutputMode Enhanced: "
+  <<
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /OutputMode (Enhanced)
+    >>
+  >> setpagedevice"
+*End
+*OutputMode Premium: "
+  <<
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /OutputMode (Premium)
+    >>
+  >> setpagedevice"
+*End
+*?OutputMode: "save
+  currentpagedevice /PostRenderingEnhanceDetails get
+  /OutputMode get = flush restore"
+*End
+*CloseUI: *OutputMode
+
+*% Printer Specific Features ============
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Cassette
+*InputSlot Cassette: "
+  << /ManualFeed false >> setpagedevice"
+*End
+*InputSlot ManualFeed: "
+  << /ManualFeed true >> setpagedevice"
+*End
+*?InputSlot: "
+  currentpagedevice /ManualFeed get
+  {(ManualFeed)}{(Cassette)}ifelse = flush"
+*End
+*CloseUI: *InputSlot
+
+*% Paper Handling ===================
+
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: A4
+*PageSize Letter: "<<
+  /PageSize [612 792] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize LetterExtra: "<<
+  /PageSize [684 864] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize Legal: "<<
+  /PageSize [612 1008] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize Tabloid: "<<
+  /PageSize [792 1224] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize TabloidExtra: "<<
+  /PageSize [864 1296] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize 4x6/4x6 Card: "<<
+  /PageSize [288 432] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize 5x7/5x7 Card: "<<
+  /PageSize [360 504] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize Env10/#10 Envelope: "<<
+  /PageSize [297 684] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A3: "<<
+  /PageSize [842 1191] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A4: "<<
+  /PageSize [595 842] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A5: "<<
+  /PageSize [420 595] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A6: "<<
+  /PageSize [297 420] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize ISOB4/ISO B4: "<<
+  /PageSize [709 1001] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize ISOB5/ISO B5: "<<
+  /PageSize [499 709] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize ISOB6/ISO B6: "<<
+  /PageSize [354 499] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize Compliment/Compliment Slip: "<<
+  /PageSize [283 595] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize EnvC6/C6 Envelope: "<<
+  /PageSize [323 459] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize EnvDL/DL Envelope: "<<
+  /PageSize [312 624] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A4Envelope/A4 Envelope: "<<
+  /PageSize [624 918] /ImagingBBox null >> setpagedevice"
+*End
+*PageSize A4.2Envelope/.5 A4 Envelope: "<<
+  /PageSize [459 624] /ImagingBBox null >> setpagedevice"
+*End
+*?PageSize: "
+  save currentpagedevice /PageSize get aload pop 
+  2 copy gt {exch} if (Unknown)
+  <<
+  [612 792] (Letter)
+  [684 864] (LetterExtra)
+  [612 1008] (Legal)
+  [792 1224] (Tabloid)
+  [864 1296] (TabloidExtra)
+  [288 432] (4x6)
+  [360 504] (5x7)
+  [297 684] (Env10)
+  [842 1191] (A3)
+  [595 842] (A4)
+  [420 595] (A5)
+  [297 420] (A6)
+  [709 1001] (ISOB4)
+  [499 709] (ISOB5)
+  [354 499] (ISOB6)
+  [283 595] (Compliment)
+  [323 459] (EnvC6)
+  [312 624] (EnvDL)
+  [624 918] (A4Envelope)
+  [459 624] (A4.2Envelope) >>
+  { exch aload pop 4 index sub abs 5 le exch 5 index sub abs 5 le and 
+    { exch pop exit } { pop } ifelse
+  } bind forall = flush pop pop
+restore"
+*End
+*CloseUI: *PageSize
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: A4
+*PageRegion Letter: "<<
+  /PageSize [612 792] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion LetterExtra: "<<
+  /PageSize [684 864] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion Legal: "<<
+  /PageSize [612 1008] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion Tabloid: "<<
+  /PageSize [792 1224] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion TabloidExtra: "<<
+  /PageSize [864 1296] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion 4x6/4x6 Card: "<<
+  /PageSize [288 432] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion 5x7/5x7 Card: "<<
+  /PageSize [360 504] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion Env10/#10 Envelope: "<<
+  /PageSize [297 684] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion A3: "<<
+  /PageSize [842 1191] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion A4: "<<
+  /PageSize [595 842] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion A5: "<<
+  /PageSize [420 595] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion A6: "<<
+  /PageSize [297 420] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion ISOB4/ISO B4: "<<
+  /PageSize [709 1001] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion ISOB5/ISO B5: "<<
+  /PageSize [499 709] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion ISOB6/ISO B6: "<<
+  /PageSize [354 499] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion Compliment/Compliment Slip: "<<
+  /PageSize [283 595] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion EnvC6/C6 Envelope: "<<
+  /PageSize [323 459] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion EnvDL/DL Envelope: "<<
+  /PageSize [312 624] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion A4Envelope/A4 Envelope: "<<
+  /Pagesize [624 918] /ImagingBBox null >> setpagedevice"
+*End
+*PageRegion A4.2Envelope/.5 A4 Envelope: "<<
+  /PageSize [459 624] /ImagingBBox null >> setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: A4
+*ImageableArea Letter: "20.5201 14.64 597.96 776.88"
+*ImageableArea LetterExtra: "14.64 20.52 669.36 849.96"
+*ImageableArea Legal: "14.6401 20.52 596.4 993.96"
+*ImageableArea Tabloid: "14.64 20.5201 776.88 1209.96"
+*ImageableArea TabloidExtra: "9.3601 20.5201 852.24 1281.96"
+*ImageableArea 4x6/4x6 Card: "14.64 20.5201 271.92 417.96"
+*ImageableArea 5x7/5x7 Card: "14.64 20.52 344.88 489.96"
+*ImageableArea Env10/#10 Envelope: "14.64 20.5201 281.52 669.96"
+*ImageableArea A3: "14.6401 20.5201 826.8 1176.84"
+*ImageableArea A4: "20.5201 14.6401 581.16 826.8"
+*ImageableArea A5: "14.64 20.5201 404.4 581.16"
+*ImageableArea A6: "14.64 20.5201 281.52 405.96"
+*ImageableArea ISOB4/ISO B4: "14.64 20.52 694.32 986.76"
+*ImageableArea ISOB5/ISO B5: "14.64 20.52 483.12 694.92"
+*ImageableArea ISOB6/ISO B6: "14.64 20.5201 339.12 485.16"
+*ImageableArea Compliment/Compliment Slip: "14.64 20.5201 268.08 581.16"
+*ImageableArea EnvC6/C6 Envelope: "14.64 20.5201 306.48 444.84"
+*ImageableArea EnvDL/DL Envelope: "14.64 20.5201 296.88 609.96"
+*ImageableArea A4Envelope/A4 Envelope: "14.64 20.52 607.92 904.2"
+*ImageableArea A4.2Envelope/.5 A4 Envelope: "14.6401 20.5201 442.8 609.96"
+*?ImageableArea: "
+  save
+  /cvp { (                ) cvs print ( ) print } bind def
+  /upperright {10000 mul floor 10000 div} bind def
+  /lowerleft {10000 mul ceiling 10000 div} bind def
+  newpath clippath pathbbox
+  4 -2 roll exch 2 {lowerleft cvp} repeat
+  exch 2 {upperright cvp} repeat
+  flush restore"
+*End
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: A4
+*PaperDimension Letter: "612 792"
+*PaperDimension LetterExtra: "684 864"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Tabloid: "792 1224"
+*PaperDimension TabloidExtra: "864 1296"
+*PaperDimension 4x6/4x6 Card: "288 432"
+*PaperDimension 5x7/5x7 Card: "360 504"
+*PaperDimension Env10/#10 Envelope: "297 684"
+*PaperDimension A3: "842 1191"
+*PaperDimension A4: "595 842"
+*PaperDimension A5: "420 595"
+*PaperDimension A6: "297 420"
+*PaperDimension ISOB4/ISO B4: "709 1001"
+*PaperDimension ISOB5/ISO B5: "499 709"
+*PaperDimension ISOB6/ISO B6: "354 499"
+*PaperDimension Compliment/Compliment Slip: "283 595"
+*PaperDimension EnvC6/C6 Envelope: "323 459"
+*PaperDimension EnvDL/DL Envelope: "312 624"
+*PaperDimension A4Envelope/A4 Envelope: "624 918"
+*PaperDimension A4.2Envelope/.5 A4 Envelope: "459 624"
+
+*CustomPageSize True: "
+  pop pop pop
+  <<
+    /PageSize [ 5 -2 roll ]
+    /ImagingBBox null
+  >>
+  setpagedevice
+"
+*End
+
+*DefaultLeadingEdge: Unknown
+*LeadingEdge Unknown: ""
+
+*ParamCustomPageSize Width:  1 points 288 864
+*ParamCustomPageSize Height:  2 points 432 1296
+*ParamCustomPageSize WidthOffset/Left Margin:  3 points 0 0
+*ParamCustomPageSize HeightOffset/Top Margin:  4 points 0 0
+*ParamCustomPageSize Orientation:  5 int 0 0
+*MaxMediaWidth:  "864"
+*MaxMediaHeight:  "1296"
+*?CurrentMediaWidth: "currentpagedevice/PageSize get 0 get = flush"
+*?CurrentMediaHeight: "currentpagedevice/PageSize get 1 get = flush"
+
+*HWMargins: 15 21 15 15
+*DefaultOutputOrder: Reverse
+*RequiresPageRegion All: True
+
+*% TKColor Selections  ===================
+
+*OpenUI *TKColor/Color Correction: PickOne
+*OrderDependency: 50 AnySetup *TKColor
+*DefaultTKColor: VividColor/Vivid Color 
+*TKColor NoAdjust/None: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (None)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice null
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor VividColor/Vivid Color: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (Vivid Color)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 3
+        /ColorTransform /TekBlue
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor SimulateDisplay/Simulate Display: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (Simulate Display)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 3
+        /ColorTransform /TekDisplay
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor SWOPPress/SWOP Press: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (SWOP Press)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 3
+        /ColorTransform /SWOP-Coated
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor EuroscalePress/Euroscale Press: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (Euroscale Press)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 3
+        /ColorTransform /Euroscale-Coated
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor CommercialPress/Commercial Press: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (Commercial Press)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 3
+        /ColorTransform /Commercial-Coated
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor SNAPPress/SNAP Press: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (SNAP Press)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 3
+        /ColorTransform /SNAP-Newsprint
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor Monochrome: "
+  <<
+    /DeviceRenderingInfo <<
+      /Type 2
+      /ID (Monochrome)
+      /RenderingMethod currentpagedevice /DeviceRenderingInfo get
+        /RenderingMethod get
+      /ToneFunction [ {} {} {} {} ]
+      /VirtualColorDevice <<
+        /Type 1
+        /ColorTransform /Gray
+      >>
+    >>
+    /PostRenderingEnhance true
+    /PostRenderingEnhanceDetails <<
+      /BlackSubstitution true
+    >>
+  >> setpagedevice"
+*End
+*TKColor UsePrinterSetting/Use Printer Setting: "
+ % ColorCorrection: Use Printer Settings"
+*End
+*TKColor CustomProfile/Custom Profile: "
+ % Color Correction: Custom Profile"
+*End
+*?TKColor: "
+  mark
+  { currentpagedevice /DeviceRenderingInfo get
+    /VirtualColorDevice get
+    dup null eq
+    { pop (NoAdjust) }
+    { /ColorTransform get
+      <<
+        /TekBlue           (VividColor)
+        /TekDisplay        (SimulateDisplay)
+        /SWOP-Coated       (SWOPPress)
+        /Euroscale-Coated  (EuroscalePress)
+        /Commercial-Coated (CommercialPress)
+        /SNAP-Newsprint    (SNAPPress)
+        /Gray              (Monochrome)
+      >>
+      exch get
+    } ifelse
+  } stopped
+  { % error in PostScript code execution
+    (Unknown)
+  } if
+  = flush
+  cleartomark"
+*End
+*CloseUI: *TKColor
+
+*OpenUI *TKFinepoint/Finepoint Sharpening: Boolean
+*OrderDependency: 60 AnySetup *TKFinepoint
+*DefaultTKFinepoint: False
+*TKFinepoint True: "
+  1 dict begin
+    currentpagedevice
+    /DeviceRenderingInfo get
+    dup length 2 add dict
+    copy begin
+      /Type 2 def
+      /RenderingMethod 2 def
+      currentdict
+    end
+    /DeviceRenderingInfo exch def
+    currentdict
+  end
+  setpagedevice"
+*End
+*TKFinepoint False: "
+  1 dict begin
+    currentpagedevice
+    /DeviceRenderingInfo get
+    dup length 2 add dict
+    copy begin
+      /Type 2 def
+      /RenderingMethod 1 def
+      currentdict
+    end
+    /DeviceRenderingInfo exch def
+    currentdict
+  end
+  setpagedevice"
+*End
+*?TKFinepoint: "
+  save
+  currentpagedevice /DeviceRenderingInfo get
+  /RenderingMethod get 2 eq {(True)}{(False)}ifelse = flush restore"
+*End
+*CloseUI: *TKFinepoint
+
+
+*OpenUI *TKColorControlStrip/Color Control Strip: Boolean
+*OrderDependency: 70 AnySetup *TKColorControlStrip
+*DefaultTKColorControlStrip: False
+*TKColorControlStrip True/On: "
+userdict /TekColorStripDict known not {
+userdict begin
+/TekColorStripDict 20 dict def
+end
+} if
+TekColorStripDict
+begin/OldEndPage
+currentpagedevice/EndPage get
+def/DefineName{/ProfileName(Unknown)def
+currentpagedevice/DeviceRenderingInfo get
+dup/ID known{/ID get/ProfileName exch
+def}{/VirtualColorDevice get
+dup
+null eq{pop/ProfileName(None)def}{dup/Type get
+dup
+1 eq exch
+3 eq
+or{/ColorTransform get << /TekBlue(Vivid Color)/TekDisplay
+(Simulate Display)/SWOP-Coated(SWOP Press)/Euroscale-Coated
+(Euroscale Press)/Commercial-Coated(Commercial Press) /TekCMYK (None)
+/SNAP-Newsprint(SNAP Press)/Gray(Monochrome)/RGB(Raw RGB)/CMYK(Raw CMYK)
+>>
+exch
+2 copy
+known{get/ProfileName exch def}{pop
+pop}ifelse}{pop}ifelse}ifelse}ifelse}bind def/ClearAndDrawBorder{gsave
+newpath clippath pathbbox
+grestore/URy exch def/URx exch def/LLy exch def/LLx exch def
+URx LLx sub
+BorderWidth
+sub
+2 div
+LLx add
+LLy 1 add
+translate
+1 setgray
+0 setlinewidth
+0 0 BorderWidth BorderHeight rectfill
+0 setgray
+0 0 BorderWidth BorderHeight rectstroke
+0 0 BorderWidth BorderHeight rectclip}bind def/StringDimensions{gsave
+newpath
+0 0 moveto
+false
+charpath
+pathbbox
+exch
+4 -1 roll
+sub
+3 -2 roll
+exch
+sub
+grestore}bind def/BCenterLine{gsave
+currentpoint translate
+0 0 moveto
+dup stringwidth pop
+2 div neg
+0
+rmoveto
+0 setgray
+show
+grestore}bind def/TCenterLine{gsave
+currentpoint translate
+0 0 moveto
+dup StringDimensions
+neg
+exch 2 div neg exch
+rmoveto
+0 setgray
+show
+grestore}bind def/DrawBox{setcmykcolor
+currentpoint BoxSide BoxSide rectfill
+gsave/Helvetica BoxFontSize selectfont
+BoxSide 2 div
+BoxStartY BoxFontSize sub 2 div neg
+rmoveto
+TCenterLine
+grestore
+gsave/Helvetica BoxFontSize selectfont
+BoxSide 2 div
+BoxSide
+BoxStartY BoxFontSize sub 2 div
+add
+rmoveto
+BCenterLine
+grestore
+BoxSide BoxGap add
+0 rmoveto}bind def/DrawBar{gsave
+0 setgray
+0 setlinewidth
+currentpoint
+newpath
+pop 0
+moveto
+0 BorderHeight rlineto
+stroke
+grestore}bind def/DrawLegend{gsave
+0 setgray
+currentpoint
+exch dup
+BorderWidth exch sub/LegendWidth exch def
+exch pop 0
+translate/Helvetica-Bold TekFontSize selectfont(Tektronix)
+StringDimensions/TekHeight exch def/TekWidth exch def
+LegendWidth TekWidth sub 2 div
+BorderHeight TekInsetY sub TekHeight sub
+moveto(Tektronix)show/Symbol TekFontSize selectfont/registerserif 
+glyphshow/Helvetica-Bold LegendFontSize selectfont
+LegendGap ProfileY moveto(Color Profile: )show
+currentpoint
+pop/ValueX exch def
+FileKnown JobNameKnown or{LegendGap FileNameY moveto(File:)show}if
+DateKnown{LegendGap DateY moveto(Date/Time:)show}if/Helvetica 
+LegendFontSize selectfont
+ValueX ProfileY moveto
+ProfileName show
+DateKnown{ValueX DateY moveto
+userdict/TekLabelDict get/Date get
+show}if
+FileKnown{ValueX FileNameY moveto
+userdict/TekLabelDict get/File get
+show}{JobNameKnown{ValueX FileNameY moveto
+JobName
+show}if}ifelse
+grestore}bind def/DrawColorStrip{TekColorStripDict/OldEndPage get
+exec
+dup{TekColorStripDict
+begin/BorderWidth 487 def/BorderHeight 36 def/BoxStartX 31 def/BoxSide 
+14 def/BoxGap 3 def/BoxFontSize 6 def/LogoInsetX 2 def/LogoInsetY 2 def
+/TekFontSize 9 def/TekInsetY 4 def/LegendFontSize 7 def/LegendGap 3 def
+/LegendLineGap 0 def/DateY LegendGap def/ProfileY DateY LegendFontSize 
+add LegendLineGap add def/FileNameY ProfileY LegendFontSize add 
+LegendLineGap add def
+currentuserparams
+dup/JobName known{/JobName get(: )search{pop pop/JobName exch def
+/JobNameKnown true def}{pop/JobNameKnown false def}ifelse}{pop/JobNameKnown 
+false def}ifelse
+userdict/TekLabelDict known{userdict/TekLabelDict get
+dup/Date known{/DateKnown true def}{/DateKnown false def}ifelse/File known
+{/FileKnown true def}{/FileKnown false def}ifelse}{/DateKnown false def
+/FileKnown false def}ifelse
+initgraphics
+ClearAndDrawBorder
+TekColorStripDict /DrawTekLogo known { DrawTekLogo } if
+/BoxStartY BorderHeight BoxSide sub 2 div def
+BoxStartX BoxStartY moveto(C)(100%)1 0 0 0 DrawBox(M)(100%)0 1 0 0 DrawBox
+(Y)(100%)0 0 1 0 DrawBox(K)(100%)0 0 0 1 DrawBox(MY)(100%)0 1 1 0 DrawBox
+(CY)(100%)1 0 1 0 DrawBox(CM)(100%)1 1 0 0 DrawBox(CMY)(100%)1 1 1 0 DrawBox
+(C)(50%)0.5 0 0 0 DrawBox(M)(50%)0 0.5 0 0 DrawBox(Y)(50%)0 0 0.5 0 DrawBox
+(K)(50%)0 0 0 0.5 DrawBox(MY)(50%)0 0.5 0.5 0 DrawBox(CY)(50%)0.5 0 0.5 0 
+DrawBox(CM)(50%)0.5 0.5 0 0 DrawBox(CMY)(50%)0.5 0.5 0.5 0 DrawBox
+DrawBar
+DefineName
+DrawLegend
+end}if}bind def << /EndPage{TekColorStripDict/DrawColorStrip get
+exec} >>
+setpagedevice
+end"
+*End
+*TKColorControlStrip False/Off: "
+ % Color Control Strip: Off "
+*End
+*?TKColorControlStrip: "
+  userdict /TekColorStripDict known {(True)}{(False)} ifelse = flush"
+*End
+*CloseUI: *TKColorControlStrip
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.002)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.002)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.003)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.003)" Standard ROM
+*Font Bookman-Demi: Standard "(001.003)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.003)" Standard ROM
+*Font Bookman-Light: Standard "(001.003)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.003)" Standard ROM
+*Font Courier: Standard "(002.003)" Standard ROM
+*Font Courier-Bold: Standard "(002.003)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.003)" Standard ROM
+*Font Courier-Oblique: Standard "(002.003)" Standard ROM
+*Font GothicBBB-Medium-83pv-RKSJ-H: RKSJ "(003.001)" 83pv Disk
+*Font GothicBBB-Medium-Add-H: JIS "(003.001)" Add Disk
+*Font GothicBBB-Medium-Add-RKSJ-H: RKSJ "(003.001)" Add Disk
+*Font GothicBBB-Medium-Add-RKSJ-V: RKSJ "(003.001)" Add Disk
+*Font GothicBBB-Medium-Add-V: JIS "(003.001)" Add Disk
+*Font GothicBBB-Medium-EUC-H: EUC "(003.001)" JIS-83 Disk
+*Font GothicBBB-Medium-EUC-V: EUC "(003.001)" JIS-83 Disk
+*Font GothicBBB-Medium-Ext-H: JIS "(003.001)" Ext Disk
+*Font GothicBBB-Medium-Ext-RKSJ-H: RKSJ "(003.001)" Ext Disk
+*Font GothicBBB-Medium-Ext-RKSJ-V: RKSJ "(003.001)" Ext Disk
+*Font GothicBBB-Medium-Ext-V: JIS "(003.001)" Ext Disk
+*Font GothicBBB-Medium-H: JIS "(003.001)" JIS-83 Disk
+*Font GothicBBB-Medium-NWP-H: JIS "(003.001)" NWP Disk
+*Font GothicBBB-Medium-NWP-V: JIS "(003.001)" NWP Disk
+*Font GothicBBB-Medium-RKSJ-H: RKSJ "(003.001)" JIS-83 Disk
+*Font GothicBBB-Medium-RKSJ-UserGaiji: Special "(003.001)" Special Disk
+*Font GothicBBB-Medium-RKSJ-V: RKSJ "(003.001)" JIS-83 Disk
+*Font GothicBBB-Medium-V: JIS "(003.001)" JIS-83 Disk
+*Font GothicBBB-Medium.Oubun: Special "(003.001)" Special Disk
+*Font GothicBBB-Medium.Roman: Special "(003.001)" Special Disk
+*Font GothicBBB-Medium.Roman83pv: Special "(003.001)" Special Disk
+*Font GothicBBB-Medium.WP-Symbol: Special "(003.001)" Special Disk
+*Font Helvetica: Standard "(001.006)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007)" Standard ROM
+*Font Helvetica-Condensed: Standard "(001.001)" Standard ROM
+*Font Helvetica-Condensed-Bold: Standard "(001.002)" Standard ROM
+*Font Helvetica-Condensed-BoldObl: Standard "(001.002)" Standard ROM
+*Font Helvetica-Condensed-Oblique: Standard "(001.001)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.008)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.006)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.005)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.006)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005)" Standard ROM
+*Font Ryumin-Light-83pv-RKSJ-H: RKSJ "(003.000)" 83pv Disk
+*Font Ryumin-Light-Add-H: JIS "(003.000)" Add Disk
+*Font Ryumin-Light-Add-RKSJ-H: RKSJ "(003.000)" Add Disk
+*Font Ryumin-Light-Add-RKSJ-V: RKSJ "(003.000)" Add Disk
+*Font Ryumin-Light-Add-V: JIS "(003.000)" Add Disk
+*Font Ryumin-Light-EUC-H: EUC "(003.000)" JIS-83 Disk
+*Font Ryumin-Light-EUC-V: EUC "(003.000)" JIS-83 Disk
+*Font Ryumin-Light-Ext-H: JIS "(003.000)" Ext Disk
+*Font Ryumin-Light-Ext-RKSJ-H: RKSJ "(003.000)" Ext Disk
+*Font Ryumin-Light-Ext-RKSJ-V: RKSJ "(003.000)" Ext Disk
+*Font Ryumin-Light-Ext-V: JIS "(003.000)" Ext Disk
+*Font Ryumin-Light-H: JIS "(003.000)" JIS-83 Disk
+*Font Ryumin-Light-NWP-H: JIS "(003.000)" NWP Disk
+*Font Ryumin-Light-NWP-V: JIS "(003.000)" NWP Disk
+*Font Ryumin-Light-RKSJ-H: RKSJ "(003.000)" JIS-83 Disk
+*Font Ryumin-Light-RKSJ-UserGaiji: Special "(003.000)" Special Disk
+*Font Ryumin-Light-RKSJ-V: RKSJ "(003.000)" JIS-83 Disk
+*Font Ryumin-Light-V: JIS "(003.000)" JIS-83 Disk
+*Font Ryumin-Light.Oubun: Special "(003.000)" Special Disk
+*Font Ryumin-Light.Roman: Special "(003.000)" Special Disk
+*Font Ryumin-Light.Roman83pv: Special "(003.000)" Special Disk
+*Font Ryumin-Light.WP-Symbol: Special "(003.000)" Special Disk
+*Font Symbol: Special "(001.007)" Special ROM
+*Font Times-Bold: Standard "(001.007)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009)" Standard ROM
+*Font Times-Italic: Standard "(001.007)" Standard ROM
+*Font Times-Roman: Standard "(001.007)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.006)" Standard ROM
+*Font ZapfDingbats: Special "(001.004)" Special ROM
+*?FontQuery: "
+save  
+  { count 1 gt
+    { exch dup 127 string cvs (/) print print (:) print
+     /Font resourcestatus {pop pop (Yes)} {(No)} ifelse = 
+    } { exit } ifelse
+  } bind loop
+  (*) = flush
+restore"
+*End
+
+*?FontList: "
+   save (*) {cvn ==} 128 string /Font resourceforall
+   (*) = flush restore"
+*End
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "45.0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*% The byte count of this file should be exactly 035535 or 036820
+*% depending on the filesystem it resides in.
+*% end of PPD file for Tektronix Phaser 300XJ Extended (Last Edit Jul 03 1996)

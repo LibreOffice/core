@@ -1,0 +1,1267 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*% Internal version 2.0  6/15/98
+
+*% === REQUIRED ENTRIES ===
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "XRN17000.PPD"
+*PSVersion: "(3010.106) 1"
+*Product:   "(Xerox DocuPrint N17)"
+*ShortNickName: "Xerox DocuPrint N17"
+*NickName:  "Xerox DocuPrint N17, v. 3010.106"
+*ModelName: "Xerox DocuPrint N17"
+*Manufacturer:  "Xerox"
+
+
+*% === INSTALLABLE OPTIONS ===
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *Option1/Duplex Module: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*?Option1: "
+	save
+	currentpagedevice /Duplex known
+	{(True)}{(False)} ifelse
+	= flush
+	restore
+	"
+*End
+*CloseUI: *Option1
+
+*OpenUI *Option2/Tray 2: Boolean
+*DefaultOption2: False
+*Option2 True/Installed: ""
+*Option2 False/Not Installed: ""
+*?Option2: "
+	save
+	currentpagedevice /InputAttributes known
+		{
+		currentpagedevice /InputAttributes get
+		2 known 
+		{(True)}{(False)} ifelse 
+		}
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option2
+
+*OpenUI *Option3/Tray 3: Boolean
+*DefaultOption3: False
+*Option3 True/Installed: ""
+*Option3 False/Not Installed: ""
+*?Option3: "
+	save
+	currentpagedevice /InputAttributes known
+		{
+		currentpagedevice /InputAttributes get
+		2 known 
+		{(True)}{(False)} ifelse 
+		}
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option3
+
+*OpenUI *Option4/Hard Disk: Boolean
+*DefaultOption4: False
+*Option4 True/Installed: ""
+*Option4 False/Not Installed: ""
+*?Option4: "
+ save false
+ (%disk?%)
+ { currentdevparams dup /Writeable known
+ { /Writeable get {pop true} if } { pop } ifelse
+ } 10 string /IODevice resourceforall
+ {(True)}{(False)} ifelse = flush
+ restore
+ "
+*End
+*CloseUI: *Option4
+
+*OpenUI *Option5/Envelope Feeder: Boolean
+*DefaultOption5: False
+*Option5 True/Installed: ""
+*Option5 False/Not Installed: ""
+*?Option5: "
+	save
+	currentpagedevice /InputAttributes known
+		{
+		currentpagedevice /InputAttributes get
+		6 known 
+		{(True)}{(False)} ifelse 
+		}
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option5
+
+*OpenUI *Option6/Offset Catch Tray (OCT): Boolean
+*DefaultOption6: False
+*Option6 True/Installed: ""
+*Option6 False/Not Installed: ""
+*?Option6: "
+	save
+	currentpagedevice /OutputAttributes known
+		{
+		currentpagedevice /OutputAttributes get
+		2 known {(True)}{(False) } ifelse
+		} 
+		{ (Unknown) } ifelse
+	= flush
+	restore"
+*End
+*CloseUI: *Option6
+
+*OpenUI *InstalledMemory/Total Printer Memory: PickOne
+*DefaultInstalledMemory: 16Meg
+*InstalledMemory 16Meg/16 MB RAM: ""
+*InstalledMemory 24Meg/24 MB RAM: ""
+*InstalledMemory 32Meg/32 MB RAM: ""
+*InstalledMemory 40Meg/40 MB RAM: ""
+*InstalledMemory 48Meg/48 MB RAM: ""
+*InstalledMemory 56Meg/56 MB RAM: ""
+*InstalledMemory 64Meg/64 MB RAM: ""
+*InstalledMemory 72Meg/72 MB RAM: ""
+*InstalledMemory 80Meg/80 MB RAM: ""
+*InstalledMemory 88Meg/88 MB RAM: ""
+*InstalledMemory 104Meg/104 MB RAM: ""
+
+*?InstalledMemory: "
+ save
+ 11 dict
+ dup  0 (16Meg) put
+ dup  1 (24Meg) put
+ dup  2 (32Meg) put
+ dup  3 (40Meg) put
+ dup  4 (48Meg) put
+ dup  5 (56Meg) put
+ dup  6 (64Meg) put
+ dup  7 (72Meg) put
+ dup  8 (80Meg) put
+ dup  9 (88Meg) put
+ dup 10 (104Meg) put
+ currentsystemparams dup /RamSize known
+ {/RamSize get 1048576 div floor cvi
+ 8 idiv 1 sub get}
+ {pop (Unknown) } ifelse
+ = flush
+ restore
+ "
+*End
+*CloseUI: *InstalledMemory
+
+*CloseGroup: InstallableOptions
+
+*% === UI CONSTRAINTS ===
+
+*UIConstraints: *Option1 False *Duplex
+*UIConstraints: *Duplex  *Option1 False
+
+*UIConstraints: *Option2 False *InputSlot Tray2
+*UIConstraints: *InputSlot Tray2 *Option2 False
+
+*UIConstraints: *Option3 False *InputSlot Tray3
+*UIConstraints: *InputSlot Tray3 *Option3 False
+
+*UIConstraints: *Option6 False *Jog
+*UIConstraints: *Jog *Option6 False
+
+*UIConstraints: *Option5 False *InputSlot Envelope
+*UIConstraints: *InputSlot Envelope *Option5 False
+
+*UIConstraints: *Option6 False *OutputBin OCT
+*UIConstraints: *OutputBin OCT *Option6 False
+
+*% -- envelopes can only come from MBF or Envelope Feeder
+
+*UIConstraints: *PageSize Env10 *InputSlot Tray1
+*UIConstraints: *PageSize Env10 *InputSlot Tray2
+*UIConstraints: *PageSize Env10 *InputSlot Tray3
+
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray1
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray2
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray3
+
+*UIConstraints: *PageSize EnvDL *InputSlot Tray1
+*UIConstraints: *PageSize EnvDL *InputSlot Tray2
+*UIConstraints: *PageSize EnvDL *InputSlot Tray3
+
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray1
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray2
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray3
+
+*UIConstraints: *PageRegion Env10 *InputSlot Tray1
+*UIConstraints: *PageRegion Env10 *InputSlot Tray2
+*UIConstraints: *PageRegion Env10 *InputSlot Tray3
+
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray1
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray2
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray3
+
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray1
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray2
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray3
+
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray1
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray2
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray1 *PageSize Env10
+*UIConstraints: *InputSlot Tray2 *PageSize Env10
+*UIConstraints: *InputSlot Tray3 *PageSize Env10
+
+*UIConstraints: *InputSlot Tray1 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray2 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray3 *PageSize EnvC5
+
+*UIConstraints: *InputSlot Tray1 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray2 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray3 *PageSize EnvDL
+
+*UIConstraints: *InputSlot Tray1 *PageSize EnvMonarch
+*UIConstraints: *InputSlot Tray2 *PageSize EnvMonarch
+*UIConstraints: *InputSlot Tray3 *PageSize EnvMonarch
+
+*UIConstraints: *InputSlot Tray1 *PageRegion Env10
+*UIConstraints: *InputSlot Tray2 *PageRegion Env10
+*UIConstraints: *InputSlot Tray3 *PageRegion Env10
+
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvC5
+
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvDL
+
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvMonarch
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvMonarch
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvMonarch
+
+*% -- limits Envelope Feeder
+
+*UIConstraints: *PageSize Letter *InputSlot Envelope
+*UIConstraints: *PageSize Legal *InputSlot Envelope
+*UIConstraints: *PageSize A4 *InputSlot Envelope
+*UIConstraints: *PageSize A5 *InputSlot Envelope
+*UIConstraints: *PageSize A6 *InputSlot Envelope
+*UIConstraints: *PageSize Executive *InputSlot Envelope
+*UIConstraints: *PageSize Statement *InputSlot Envelope
+*UIConstraints: *PageSize ISOB5 *InputSlot Envelope
+*UIConstraints: *PageSize FanFoldGermanLegal *InputSlot Envelope
+
+*UIConstraints: *InputSlot Envelope *PageSize Letter
+*UIConstraints: *InputSlot Envelope *PageSize Legal
+*UIConstraints: *InputSlot Envelope *PageSize A4
+*UIConstraints: *InputSlot Envelope *PageSize A5
+*UIConstraints: *InputSlot Envelope *PageSize A6
+*UIConstraints: *InputSlot Envelope *PageSize Executive
+*UIConstraints: *InputSlot Envelope *PageSize Statement
+*UIConstraints: *InputSlot Envelope *PageSize ISOB5
+*UIConstraints: *InputSlot Envelope *PageSize FanFoldGermanLegal
+
+*UIConstraints: *PageRegion Letter *InputSlot Envelope
+*UIConstraints: *PageRegion Legal *InputSlot Envelope
+*UIConstraints: *PageRegion A4 *InputSlot Envelope
+*UIConstraints: *PageRegion A5 *InputSlot Envelope
+*UIConstraints: *PageRegion A6 *InputSlot Envelope
+*UIConstraints: *PageRegion Executive *InputSlot Envelope
+*UIConstraints: *PageRegion Statement *InputSlot Envelope
+*UIConstraints: *PageRegion ISOB5 *InputSlot Envelope
+*UIConstraints: *PageRegion FanFoldGermanLegal *InputSlot Envelope
+
+*UIConstraints: *InputSlot Envelope *PageRegion Letter
+*UIConstraints: *InputSlot Envelope *PageRegion Legal
+*UIConstraints: *InputSlot Envelope *PageRegion A4
+*UIConstraints: *InputSlot Envelope *PageRegion A5
+*UIConstraints: *InputSlot Envelope *PageRegion A6
+*UIConstraints: *InputSlot Envelope *PageRegion Executive
+*UIConstraints: *InputSlot Envelope *PageRegion Statement
+*UIConstraints: *InputSlot Envelope *PageRegion ISOB5
+*UIConstraints: *InputSlot Envelope *PageRegion FanFoldGermanLegal
+
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Plain
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Transparency
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Labels
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Preprinted
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Letterhead
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Prepunched
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Bond
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Recycled
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Color
+*UIConstraints: *InputSlot Envelope *XRXAMediaType Cardstock
+
+*UIConstraints: *XRXAMediaType Plain *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Transparency *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Labels *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Preprinted *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Letterhead *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Prepunched *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Bond *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Recycled *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Color *InputSlot Envelope
+*UIConstraints: *XRXAMediaType Cardstock *InputSlot Envelope
+
+*% -- A6 can only come from MBF (Multi Bypass Feeder)
+*UIConstraints: *PageSize A5 *InputSlot Tray1
+*UIConstraints: *PageSize A5 *InputSlot Tray2
+*UIConstraints: *PageSize A5 *InputSlot Tray3
+*UIConstraints: *PageRegion A5 *InputSlot Tray1
+*UIConstraints: *PageRegion A5 *InputSlot Tray2
+*UIConstraints: *PageRegion A5 *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray1 *PageSize A5
+*UIConstraints: *InputSlot Tray2 *PageSize A5
+*UIConstraints: *InputSlot Tray3 *PageSize A5
+*UIConstraints: *InputSlot Tray1 *PageRegion A5
+*UIConstraints: *InputSlot Tray2 *PageRegion A5
+*UIConstraints: *InputSlot Tray3 *PageRegion A5
+
+*% -- A6 can only come from MBF (Multi Bypass Feeder)
+*UIConstraints: *PageSize A6 *InputSlot Tray1
+*UIConstraints: *PageSize A6 *InputSlot Tray2
+*UIConstraints: *PageSize A6 *InputSlot Tray3
+*UIConstraints: *PageRegion A6 *InputSlot Tray1
+*UIConstraints: *PageRegion A6 *InputSlot Tray2
+*UIConstraints: *PageRegion A6 *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray1 *PageSize A6
+*UIConstraints: *InputSlot Tray2 *PageSize A6
+*UIConstraints: *InputSlot Tray3 *PageSize A6
+*UIConstraints: *InputSlot Tray1 *PageRegion A6
+*UIConstraints: *InputSlot Tray2 *PageRegion A6
+*UIConstraints: *InputSlot Tray3 *PageRegion A6
+
+*% -- ISOB5 can only come from MBF (Multi Bypass Feeder)
+*UIConstraints: *PageSize ISOB5 *InputSlot Tray1
+*UIConstraints: *PageSize ISOB5 *InputSlot Tray2
+*UIConstraints: *PageSize ISOB5 *InputSlot Tray3
+
+*UIConstraints: *PageRegion ISOB5 *InputSlot Tray1
+*UIConstraints: *PageRegion ISOB5 *InputSlot Tray2
+*UIConstraints: *PageRegion ISOB5 *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray1 *PageSize ISOB5
+*UIConstraints: *InputSlot Tray2 *PageSize ISOB5
+*UIConstraints: *InputSlot Tray3 *PageSize ISOB5
+
+*UIConstraints: *InputSlot Tray1 *PageRegion ISOB5
+*UIConstraints: *InputSlot Tray2 *PageRegion ISOB5
+*UIConstraints: *InputSlot Tray3 *PageRegion ISOB5
+
+*% -- Statement can only come from MBF (Multi Bypass Feeder)
+*UIConstraints: *PageSize Statement *InputSlot Tray1
+*UIConstraints: *PageSize Statement *InputSlot Tray2
+*UIConstraints: *PageSize Statement *InputSlot Tray3
+
+*UIConstraints: *PageRegion Statement *InputSlot Tray1
+*UIConstraints: *PageRegion Statement *InputSlot Tray2
+*UIConstraints: *PageRegion Statement *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray1 *PageSize Statement
+*UIConstraints: *InputSlot Tray2 *PageSize Statement
+*UIConstraints: *InputSlot Tray3 *PageSize Statement
+
+*UIConstraints: *InputSlot Tray1 *PageRegion Statement
+*UIConstraints: *InputSlot Tray2 *PageRegion Statement
+*UIConstraints: *InputSlot Tray3 *PageRegion Statement
+
+*% -- only limited sized from lower trays
+*UIConstraints: *PageSize Executive *InputSlot Tray2
+*UIConstraints: *PageSize Executive *InputSlot Tray3
+
+*UIConstraints: *PageRegion Executive *InputSlot Tray2
+*UIConstraints: *PageRegion Executive *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray2 *PageSize Executive
+*UIConstraints: *InputSlot Tray3 *PageSize Executive
+
+*UIConstraints: *InputSlot Tray2 *PageRegion Executive
+*UIConstraints: *InputSlot Tray3 *PageRegion Executive
+
+*% -- limits for Tray1
+
+*UIConstraints: *PageSize Statement *InputSlot Tray1
+*UIConstraints: *PageSize ISOB5 *InputSlot Tray1
+*UIConstraints: *PageSize A5 *InputSlot Tray1
+*UIConstraints: *PageSize A6 *InputSlot Tray1
+*UIConstraints: *PageSize Env10 *InputSlot Tray1
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray1
+*UIConstraints: *PageSize EnvDL *InputSlot Tray1
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray1
+
+*UIConstraints: *InputSlot Tray1 *PageSize Statement
+*UIConstraints: *InputSlot Tray1 *PageSize ISOB5
+*UIConstraints: *InputSlot Tray1 *PageSize A5
+*UIConstraints: *InputSlot Tray1 *PageSize A6
+*UIConstraints: *InputSlot Tray1 *PageSize Env10
+*UIConstraints: *InputSlot Tray1 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray1 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray1 *PageSize EnvMonarch
+
+*UIConstraints: *PageRegion Statement *InputSlot Tray1
+*UIConstraints: *PageRegion ISOB5 *InputSlot Tray1
+*UIConstraints: *PageRegion A5 *InputSlot Tray1
+*UIConstraints: *PageRegion A6 *InputSlot Tray1
+*UIConstraints: *PageRegion Env10 *InputSlot Tray1
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray1
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray1
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray1
+
+*UIConstraints: *InputSlot Tray1 *PageRegion Statement
+*UIConstraints: *InputSlot Tray1 *PageRegion ISOB5
+*UIConstraints: *InputSlot Tray1 *PageRegion A5
+*UIConstraints: *InputSlot Tray1 *PageRegion A6
+*UIConstraints: *InputSlot Tray1 *PageRegion Env10
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray1 *PageRegion EnvMonarch
+
+*% -- limits for Tray2
+
+*UIConstraints: *PageSize ISOB5 *InputSlot Tray2
+*UIConstraints: *PageSize Executive *InputSlot Tray2
+*UIConstraints: *PageSize A6 *InputSlot Tray2
+*UIConstraints: *PageSize Env10 *InputSlot Tray2
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray2
+*UIConstraints: *PageSize EnvDL *InputSlot Tray2
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray2
+*UIConstraints: *PageSize A5 *InputSlot Tray2
+*UIConstraints: *PageSize Statement *InputSlot Tray2
+
+*UIConstraints: *InputSlot Tray2 *PageSize ISOB5
+*UIConstraints: *InputSlot Tray2 *PageSize Executive
+*UIConstraints: *InputSlot Tray2 *PageSize A6
+*UIConstraints: *InputSlot Tray2 *PageSize A5
+*UIConstraints: *InputSlot Tray2 *PageSize Env10
+*UIConstraints: *InputSlot Tray2 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray2 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray2 *PageSize EnvMonarch
+*UIConstraints: *InputSlot Tray2 *PageSize Statement
+
+*UIConstraints: *PageRegion ISOB5 *InputSlot Tray2
+*UIConstraints: *PageRegion Executive *InputSlot Tray2
+*UIConstraints: *PageRegion A6 *InputSlot Tray2
+*UIConstraints: *PageRegion Env10 *InputSlot Tray2
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray2
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray2
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray2
+*UIConstraints: *PageRegion A5 *InputSlot Tray2
+*UIConstraints: *PageRegion Statement *InputSlot Tray2
+
+*UIConstraints: *InputSlot Tray2 *PageRegion ISOB5
+*UIConstraints: *InputSlot Tray2 *PageRegion Executive
+*UIConstraints: *InputSlot Tray2 *PageRegion A6
+*UIConstraints: *InputSlot Tray2 *PageRegion A5
+*UIConstraints: *InputSlot Tray2 *PageRegion Env10
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray2 *PageRegion EnvMonarch
+*UIConstraints: *InputSlot Tray2 *PageRegion Statement
+
+*% -- limits for Tray3
+
+*UIConstraints: *PageSize ISOB5 *InputSlot Tray3
+*UIConstraints: *PageSize Executive *InputSlot Tray3
+*UIConstraints: *PageSize A6 *InputSlot Tray3
+*UIConstraints: *PageSize Env10 *InputSlot Tray3
+*UIConstraints: *PageSize EnvC5 *InputSlot Tray3
+*UIConstraints: *PageSize EnvDL *InputSlot Tray3
+*UIConstraints: *PageSize EnvMonarch *InputSlot Tray3
+*UIConstraints: *PageSize A5 *InputSlot Tray3
+*UIConstraints: *PageSize Statement *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray3 *PageSize ISOB5
+*UIConstraints: *InputSlot Tray3 *PageSize Executive
+*UIConstraints: *InputSlot Tray3 *PageSize A6
+*UIConstraints: *InputSlot Tray3 *PageSize A5
+*UIConstraints: *InputSlot Tray3 *PageSize Env10
+*UIConstraints: *InputSlot Tray3 *PageSize EnvC5
+*UIConstraints: *InputSlot Tray3 *PageSize EnvDL
+*UIConstraints: *InputSlot Tray3 *PageSize EnvMonarch
+*UIConstraints: *InputSlot Tray3 *PageSize Statement
+
+*UIConstraints: *PageRegion ISOB5 *InputSlot Tray3
+*UIConstraints: *PageRegion Executive *InputSlot Tray3
+*UIConstraints: *PageRegion A6 *InputSlot Tray3
+*UIConstraints: *PageRegion Env10 *InputSlot Tray3
+*UIConstraints: *PageRegion EnvC5 *InputSlot Tray3
+*UIConstraints: *PageRegion EnvDL *InputSlot Tray3
+*UIConstraints: *PageRegion EnvMonarch *InputSlot Tray3
+*UIConstraints: *PageRegion A5 *InputSlot Tray3
+*UIConstraints: *PageRegion Statement *InputSlot Tray3
+
+*UIConstraints: *InputSlot Tray3 *PageRegion ISOB5
+*UIConstraints: *InputSlot Tray3 *PageRegion Executive
+*UIConstraints: *InputSlot Tray3 *PageRegion A6
+*UIConstraints: *InputSlot Tray3 *PageRegion A5
+*UIConstraints: *InputSlot Tray3 *PageRegion Env10
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvC5
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvDL
+*UIConstraints: *InputSlot Tray3 *PageRegion EnvMonarch
+*UIConstraints: *InputSlot Tray3 *PageRegion Statement
+
+*% Duplex only allowed with Letter, Legal, A4, or Folio
+*UIConstraints: *Duplex *PageSize A5
+*UIConstraints: *Duplex *PageSize A6
+*UIConstraints: *Duplex *PageSize ISOB5
+*UIConstraints: *Duplex *PageSize Executive
+*UIConstraints: *Duplex *PageSize Statement
+*UIConstraints: *Duplex *PageSize Env10
+*UIConstraints: *Duplex *PageSize EnvC5
+*UIConstraints: *Duplex *PageSize EnvDL
+*UIConstraints: *Duplex *PageSize EnvMonarch
+
+*UIConstraints: *PageSize A5 *Duplex
+*UIConstraints: *PageSize A6 *Duplex
+*UIConstraints: *PageSize ISOB5 *Duplex
+*UIConstraints: *PageSize Executive *Duplex
+*UIConstraints: *PageSize Statement *Duplex
+*UIConstraints: *PageSize Env10 *Duplex
+*UIConstraints: *PageSize EnvC5 *Duplex
+*UIConstraints: *PageSize EnvDL *Duplex
+*UIConstraints: *PageSize EnvMonarch *Duplex
+
+*UIConstraints: *Duplex *PageRegion A5
+*UIConstraints: *Duplex *PageRegion A6
+*UIConstraints: *Duplex *PageRegion ISOB5
+*UIConstraints: *Duplex *PageRegion Executive
+*UIConstraints: *Duplex *PageRegion Statement
+*UIConstraints: *Duplex *PageRegion Env10
+*UIConstraints: *Duplex *PageRegion EnvC5
+*UIConstraints: *Duplex *PageRegion EnvDL
+*UIConstraints: *Duplex *PageRegion EnvMonarch
+
+*UIConstraints: *PageRegion A5 *Duplex
+*UIConstraints: *PageRegion A6 *Duplex
+*UIConstraints: *PageRegion ISOB5 *Duplex
+*UIConstraints: *PageRegion Executive *Duplex
+*UIConstraints: *PageRegion Statement *Duplex
+*UIConstraints: *PageRegion Env10 *Duplex
+*UIConstraints: *PageRegion EnvC5 *Duplex
+*UIConstraints: *PageRegion EnvDL *Duplex
+*UIConstraints: *PageRegion EnvMonarch *Duplex
+
+*% Limits jog to only offset catch tray
+
+*UIConstraints: *OutputBin STD *Jog EndOfSet
+*UIConstraints: *Jog EndOfSet *OutputBin STD
+*UIConstraints: *OutputBin STD *Jog EndOfJob
+*UIConstraints: *Jog EndOfJob *OutputBin STD
+
+*% - Must have *Collate: True for *Jog: EndOfSet
+
+*UIConstraints: *Jog EndOfSet *Collate False
+*UIConstraints: *Collate False *Jog EndOfSet
+
+*% -- Smoothing and Draft only available in 600x600dpi
+*UIConstraints: *XRXQuality Smoothing *Resolution 1200x600dpi
+*UIConstraints: *Resolution 1200x600dpi *XRXQuality Smoothing
+*UIConstraints: *XRXQuality Draft *Resolution 1200x600dpi
+*UIConstraints: *Resolution 1200x600dpi *XRXQuality Draft
+
+*% === BASIC CAPABILITIES & SYSTEM MANAGEMENT ===
+
+*FreeVM: "3551452"
+*VMOption 16Meg/16 MB RAM: "3551452"
+*VMOption 24Meg/24 MB RAM: "5584664"
+*VMOption 32Meg/32 MB RAM: "7647896"
+*VMOption 40Meg/40 MB RAM: "9704088"
+*VMOption 48Meg/48 MB RAM: "11752088"
+*VMOption 56Meg/56 MB RAM: "13752088"
+*VMOption 64Meg/64 MB RAM: "15767320"
+*VMOption 72Meg/72 MB RAM: "17855128"
+*VMOption 80Meg/80 MB RAM: "19919512"
+*VMOption 88Meg/88 MB RAM: "21951128"
+*VMOption 104Meg/104 MB RAM: "26014360"
+
+*FCacheSize 16Meg/16 MB RAM: 760000
+*FCacheSize 24Meg/24 MB RAM: 1160000
+*FCacheSize 32Meg/32 MB RAM: 1560000
+*FCacheSize 40Meg/40 MB RAM: 1960000
+*FCacheSize 48Meg/48 MB RAM: 2360000
+*FCacheSize 56Meg/56 MB RAM: 2760000
+*FCacheSize 64Meg/64 MB RAM: 3160000
+*FCacheSize 72Meg/72 MB RAM: 3560000
+*FCacheSize 80Meg/80 MB RAM: 3960000
+*FCacheSize 88Meg/88 MB RAM: 4360000
+*FCacheSize 104Meg/104 MB RAM: 5160000
+
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*TTRasterizer: Type42
+*?TTRasterizer:"
+  save
+ 42/FontType resourcestatus
+ {pop pop (Type42)}{(No Type42)} ifelse = flush
+ restore
+ "
+*End
+
+*FileSystem: True
+*?FileSystem: " 
+false
+(*) {
+	/DevDict exch currentdevparams def
+	DevDict /Writeable known {DevDict /Writeable get} {false} ifelse
+	DevDict /Mounted   known {DevDict /Mounted   get} {false} ifelse
+	DevDict /HasNames  known {DevDict /HasNames  get} {false} ifelse
+	and and {pop true} if
+} 128 string /IODevice resourceforall
+{(True)} {(False)} ifelse =
+"
+*End
+*LanguageLevel: "3"
+*Throughput: "32"
+
+*Password: "0"
+*ExitServer: "
+  count 1 ge { true exch startjob } {false} ifelse
+  not {
+    (ERROR: *ExitServer cannot start unencapsulated job.) =
+    (       Password is probably invalid.) =
+ } if
+"
+*End
+
+*Reset: "
+  count 1 ge { true exch startjob } {false} ifelse
+  not {
+    (ERROR: *ExitServer cannot start unencapsulated job.) =
+    (       Password is probably invalid.) =
+ } if
+  systemdict /quit get exec
+"
+*End
+
+
+*% === PROTOCOLS AND EMULATIONS ===
+
+*Protocols: TBCP
+
+*% === MEDIA SELECTION ===
+*% PageSize sets the input Tray and the imageable area
+*OpenUI *PageSize/Paper Size: PickOne
+*OrderDependency: 20.0 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter[8.5 x 11]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal/Legal[8.5 x 14]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize FanFoldGermanLegal/Folio[8.5 x 13]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 936] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Statement/Statement[5.5 x 8.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [396 612] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Executive/Executive[7.25 x 10.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4/A4[210mm x 297mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A5/A5[148mm x 210mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [420 595] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A6/A6[105mm x 148mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 420] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize ISOB5/ISO B5[176mm x 250mm]: "
+     3 dict dup /DeferredMediaSelection true put dup /PageSize [499 709] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Env10/Com10 Envelope[4.125 x 9.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvC5/EnvC5 Envelope[162mm x 229mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvDL/DL Envelope[110mm x 220mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvMonarch/Monarch Envelope[3.87 x 7.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if
+   (Unknown)
+  14 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [612 936] (FanFoldGermanLegal) put
+   dup [396 612] (Statement) put
+   dup [522 756] (Executive) put
+   dup [595 842] (A4) put
+   dup [420 595] (A5) put
+   dup [297 420] (A6) put
+   dup [499 709] (ISOB5) put
+   dup [297 684] (Env10) put
+   dup [312 624] (EnvDL) put
+   dup [459 649] (EnvC5) put
+   dup [279 540] (EnvMonarch) put
+ { exch aload pop 4 index sub abs 5 le exch
+   5 index sub abs 5 le and
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion/Paper Size: PickOne
+*OrderDependency: 20.0 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter[8.5 x 11]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Legal/Legal[8.5 x 14]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion FanFoldGermanLegal/Folio[8.5 x 13]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [612 936] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Statement/Statement[5.5 x 8.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [396 612] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Executive/Executive[7.25 x 10.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A4/A4[210mm x 297mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A5/A5[148mm x 210mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [420 595] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A6/A6[105mm x 148mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 420] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion ISOB5/ISO B5[176mm x 250mm]: "
+     3 dict dup /DeferredMediaSelection true put dup /PageSize [499 709] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Env10/Com10 Envelope[4.125 x 9.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvC5/EnvC5 Envelope[162mm x 229mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvDL/DL Envelope[110mm x 220mm]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvMonarch/Monarch Envelope[3.87 x 7.5]: "
+    3 dict dup /DeferredMediaSelection true put dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% ImageableArea gives the bounding box (llx, lly, urx, ury) in points for each media.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/Letter[8.5 x 11]: "0.0 0.0 612 792"
+*ImageableArea Legal/Legal[8.5 x 14]: "0.0 0.0 612 1008"
+*ImageableArea FanFoldGermanLegal/Folio[8.5 x 13]: "0.0 0.0 612 936"
+*ImageableArea Statement/Statement[5.5 x 8.5]: "0.0 0.0 396 612"
+*ImageableArea Executive/Executive[7.25 x 10.5]: "0.0 0.0 522 756"
+*ImageableArea A4/A4[210mm x 297mm]: "0.0 0.0 595 842"
+*ImageableArea A5/A5[148mm x 210mm]: "0.0 0.0 420 595"
+*ImageableArea A6/A6[105mm x 148mm]: "0.0 0.0 297 420"
+*ImageableArea ISOB5/ISO B5[176mm x 250mm]: "0.0 0.0 499 709"
+*ImageableArea Env10/Com10 Envelope[4.125 x 9.5]: "0.0 0.0 297 684"
+*ImageableArea EnvC5/EnvC5 Envelope[162mm x 229mm]: "0.0 0.0 459 649"
+*ImageableArea EnvDL/DL Envelope[110mm x 220mm]: "0.0 0.0 312 624"
+*ImageableArea EnvMonarch/Monarch Envelope[3.87 x 7.5]: "0.0 0.0 279 540"
+*?ImageableArea: "
+  newpath clippath pathbbox 4 -2 roll
+  exch 2 {10000 mul ceiling 10000 div dup 0 lt {pop 0.0} if 128 string cvs print ( ) print} repeat
+  exch 2 {10000 mul floor   10000 div dup 0 lt {pop 0.0} if 128 string cvs print ( ) print} repeat
+  (\n) print"
+*End
+
+*% PaperDimension gives physical dimensions in points for each media (x-width, y-height)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/Letter[8.5 x 11]: "612 792"
+*PaperDimension Legal/Legal[8.5 x 14]: "612 1008"
+*PaperDimension FanFoldGermanLegal/Folio[8.5 x 13]: "612 936"
+*PaperDimension Statement/Statement[5.5 x 8.5]: "396 612"
+*PaperDimension Executive/Executive[7.25 x 10.5]: "522 756"
+*PaperDimension A4/A4[210mm x 297mm]: "595 842"
+*PaperDimension A5/A5[148mm x 210mm]: "420 595"
+*PaperDimension A6/A6[105mm x 148mm]: "297 420"
+*PaperDimension ISOB5/ISO B5[176mm x 250mm]: "499 709"
+*PaperDimension Env10/Com10 Envelope[4.125 x 9.5]: "297 684"
+*PaperDimension EnvC5/EnvC5 Envelope[162mm x 229mm]: "459 649"
+*PaperDimension EnvDL/DL Envelope[110mm x 220mm]: "312 624"
+*PaperDimension EnvMonarch/Monarch Envelope[3.87 x 7.5]: "279 540"
+
+*LandscapeOrientation: Any
+
+
+*% === MEDIA HANDLING OPTIONS ===
+*OpenUI *ManualFeed/Manual Feed: Boolean
+*OrderDependency: 15.0 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: " << /ManualFeed true >> setpagedevice "
+*ManualFeed False: " << /ManualFeed false >> setpagedevice "
+*?ManualFeed:"
+save
+currentpagedevice /ManualFeed get
+{(True)} {(False)} ifelse = flush
+restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*OpenUI *InputSlot/Paper Source: PickOne
+*OrderDependency: 15.0 AnySetup *InputSlot
+*DefaultInputSlot: Tray1
+*InputSlot Tray1/Tray 1: "
+<</DeferredMediaSelection true /MediaPosition 0 >> setpagedevice"
+*End
+*InputSlot MBF/MBF: "
+<</DeferredMediaSelection true /MediaPosition 1 >> setpagedevice " 
+*End
+*InputSlot Tray2/Tray 2: "
+<</DeferredMediaSelection true /MediaPosition 2 >> setpagedevice" 
+*End
+*InputSlot Tray3/Tray 3: "
+<</DeferredMediaSelection true /MediaPosition 3 >> setpagedevice " 
+*End
+*InputSlot Envelope/Envelope Feeder: "
+ <</DeferredMediaSelection true /MediaPosition 4 >> setpagedevice " 
+*End
+*?InputSlot: "
+save
+  currentpagedevice /DeferredMediaSelection known dup 
+  { currentpagedevice /DeferredMediaSelection get and } if
+  {5 dict 
+  dup 0 (Tray1) put
+  dup 1 (MBF) put
+  dup 2 (Tray2) put
+  dup 3 (Tray3) put
+  dup 4 (Envelope) put
+  currentpagedevice /MediaPosition get get 
+   }
+   { 
+     5 dict
+     dup /0 (Tray1) put
+     dup /1 (MBF) put
+     dup /2 (Tray2) put
+     dup /3 (Tray3) put
+     dup /4 (Envelope) put
+     currentpagedevice /InputAttributes get
+     dup /Priority known
+      { /Priority get 0 get (      ) cvs cvn get }
+      {
+       dup length 1 eq
+       { {pop} forall (       ) cvs cvn get }
+       { pop pop (Unknown) } ifelse
+      } ifelse
+    } ifelse 
+  = flush
+restore
+"
+*End
+
+*CloseUI: *InputSlot
+
+*RequiresPageRegion All: True
+
+*OpenUI *TraySwitch/Auto Tray Switch: Boolean
+*OrderDependency: 30.0 AnySetup *TraySwitch
+*TraySwitch True: "<</TraySwitch true>> setpagedevice"
+*TraySwitch False: "<</TraySwitch false>> setpagedevice"
+*DefaultTraySwitch: True
+*?TraySwitch: "save
+  currentpagedevice /TraySwitch get
+  {(True)} {(False)} ifelse = flush
+  restore"
+*End
+*CloseUI: *TraySwitch
+
+*OpenGroup: Output
+
+*OpenUI *Duplex/Duplex: PickOne
+*OrderDependency: 30.0 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex None/Off: "<</Duplex false /Tumble false>> setpagedevice"
+*Duplex DuplexNoTumble/Normal: "<</Duplex true /Tumble false>> setpagedevice"
+*Duplex DuplexTumble/Tumble: "<</Duplex true /Tumble true>> setpagedevice"
+*?Duplex: "save
+  currentpagedevice /Duplex get
+  {currentpagedevice /Tumble get
+     {(DuplexTumble)} {(DuplexNoTumble)} ifelse}
+  {(None)} ifelse = flush restore"
+*End
+*CloseUI: *Duplex
+
+*OpenUI *Jog/Jog: PickOne
+*OrderDependency: 30.0 AnySetup *Jog
+*DefaultJog: None
+*Jog None/None: "<</Jog 0>> setpagedevice"
+*Jog EndOfJob/End of job: "<</Jog 2>> setpagedevice"
+*Jog EndOfSet/End of set: "<</Jog 3>> setpagedevice"
+*?Jog: "save
+ currentpagedevice /Jog get dup 2 eq 
+ {pop (EndOfJob)} {3 eq {(EndOfSet)} {(None)} ifelse}
+ ifelse = flush
+restore "
+*End
+*CloseUI: *Jog
+
+*OpenUI *Collate: Boolean
+*OrderDependency: 10.0 AnySetup *Collate
+*DefaultCollate: False
+*Collate False: "<</Collate false>> setpagedevice"
+*Collate True: "<</Collate true>> setpagedevice"
+*?Collate: "save
+  currentpagedevice /Collate known
+    {currentpagedevice /Collate get
+      {(True)}{(False)} ifelse}
+    {(Unknown)}
+  ifelse = flush
+restore "
+*End    
+*CloseUI: *Collate
+
+*OpenUI *XRXQuality/Quality:  PickOne
+*OrderDependency: 50.0 AnySetup *XRXQuality
+*DefaultXRXQuality: Smoothing
+
+*XRXQuality Draft/Draft Mode: "
+  2 dict
+    dup /PostRenderingEnhance true put
+    dup /PostRenderingEnhanceDetails
+      2 dict
+        dup /REValue 0 put
+        dup /TonerSaver 1 put
+        dup /Type 18 put
+  put setpagedevice 
+"
+*End
+
+*XRXQuality None/Normal: "
+  2 dict
+    dup /PostRenderingEnhance false put
+    dup /PostRenderingEnhanceDetails
+      2 dict
+        dup /REValue 0 put
+        dup /TonerSaver 0 put
+        dup /Type 18 put
+  put setpagedevice 
+"
+*End
+
+*XRXQuality Smoothing/Xerox Image Enhancement: "
+  2 dict
+    dup /PostRenderingEnhance true put
+    dup /PostRenderingEnhanceDetails
+      2 dict
+        dup /REValue 1 put
+        dup /TonerSaver 0 put
+        dup /Type 18 put
+  put setpagedevice 
+"
+*End
+
+*?XRXQuality: "save
+ currentpagedevice dup /PostRenderingEnhance known
+ {dup /PostRenderingEnhance get
+  {
+   /PostRenderingEnhanceDetails get
+   dup /Type get 18 eq
+   {
+    dup /REValue get 8 mul exch
+    /TonerSaver get add dup 8 eq
+    {pop (Smoothing)}
+    {1 eq {(Draft)} {(None)}ifelse}
+    ifelse
+   }
+   {pop (None)} ifelse
+  }
+  {pop (None)}
+  ifelse}
+ {pop (None)}
+ ifelse = flush
+restore"
+*End
+*CloseUI: *XRXQuality
+
+*OpenUI *XRXAMediaType/Media Type:  PickOne
+*OrderDependency: 30.0 AnySetup *XRXAMediaType
+*DefaultXRXAMediaType: AutoSelect
+*XRXAMediaType AutoSelect/AutoSelect: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType null
+put setpagedevice"
+*End
+*XRXAMediaType Plain/Plain: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Plain) put setpagedevice"
+*End
+*XRXAMediaType Transparency/Transparency: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Transparency) put setpagedevice"
+*End 
+*XRXAMediaType Labels/Labels: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Labels) put setpagedevice"
+*End
+*XRXAMediaType Preprinted/Preprinted: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Preprinted) put setpagedevice"
+*End
+*XRXAMediaType Letterhead/Letterhead: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Letterhead) put setpagedevice"
+*End
+*XRXAMediaType Prepunched/Prepunched: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Prepunched) put setpagedevice"
+*End
+*XRXAMediaType Bond/Bond: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Bond) put setpagedevice"
+*End
+*XRXAMediaType Recycled/Recycled: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Recycled) put setpagedevice"
+*End
+*XRXAMediaType Color/Color: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Color) put setpagedevice"
+*End
+*XRXAMediaType Cardstock/Cardstock: "
+ 2 dict dup /DeferredMediaSelection true put dup /MediaType (Cardstock) put setpagedevice"
+*End
+
+*?XRXAMediaType: "
+currentpagedevice dup /MediaType known
+{
+/MediaType get dup null eq  { pop (Unknown) } if
+}
+{ pop (Unknown)}
+ifelse = flush
+"
+*End
+*CloseUI: *XRXAMediaType
+
+
+*OpenUI *OutputBin/Output Tray: PickOne
+*OrderDependency: 30.0 AnySetup *OutputBin
+*DefaultOutputBin: STD
+*OutputBin STD/Standard: "
+<</OutputType (STD)>> setpagedevice"
+*End
+*OutputBin OCT/Offset Bin: "
+<</OutputType (OCT)>> setpagedevice"
+*End
+*?OutputBin: "
+currentpagedevice /OutputType known
+{
+<<
+ (STD) (STD) 
+ (OCT) (OCT)
+>>
+  currentpagedevice /OutputType get 
+  dup null eq  {pop (Unknown)} { get } ifelse
+ } { (Unkown)} ifelse = flush      
+"
+*End
+*CloseUI: *OutputBin
+*CloseGroup: Output
+
+
+
+*% === RESOLUTION AND APPEARANCE CONTROL ===
+
+*OpenUI *Resolution/Resolution: PickOne
+*OrderDependency: 55 AnySetup *Resolution
+*DefaultResolution: 600x600dpi
+
+*Resolution 600x600dpi/600 x 600 dpi: "
+  currentpagedevice /PostRenderingEnhanceDetails get
+  currentpagedevice /PostRenderingEnhance get
+  2 dict
+    dup /PostRenderingEnhance false put
+    dup /PostRenderingEnhanceDetails
+      2 dict
+        dup /REValue 0 put
+        dup /TonerSaver 0 put
+        dup /Type 18 put
+  put setpagedevice 
+  2 dict
+    dup /HWResolution [600 600] put 
+    dup /Policies
+      1 dict dup /HWResolution 2 put 
+  put setpagedevice
+  2 dict
+  dup /PostRenderingEnhance 4 -1 roll put
+  dup /PostRenderingEnhanceDetails 4 -1 roll put
+  setpagedevice
+"
+*End
+
+*Resolution 1200x600dpi/1200 x 600 dpi: "
+  2 dict
+    dup /PostRenderingEnhance false put
+    dup /PostRenderingEnhanceDetails
+      2 dict
+        dup /REValue 0 put
+        dup /TonerSaver 0 put
+        dup /Type 18 put
+  put setpagedevice 
+  2 dict
+    dup /HWResolution [1200 600] put 
+    dup /Policies
+      1 dict dup /HWResolution 2 put 
+  put setpagedevice
+"
+*End
+
+*?Resolution: "
+  save
+    currentpagedevice /HWResolution get
+    aload pop exch
+    (          ) cvs print
+    (x) print (          ) cvs print (dpi)
+    = flush
+  restore
+"
+*End
+*CloseUI: *Resolution
+
+*% Halftone Information ===============
+
+*DefaultHalftoneType: 3
+*AccurateScreensSupport: False
+*ScreenFreq: "65"
+*ScreenAngle: "45"
+*DefaultScreenProc: Dot
+*ScreenProc Dot:  "{180 mul cos exch 180 mul cos add 2 div}"
+
+*DefaultTransfer: Null
+*Transfer Null: "{}"
+*Transfer Null.Inverse: "{1 exch sub}"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.85lpi.600x600dpi/85 lpi /600 x 600 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+
+
+*% For 85 lpi /600 x 600 dpi =======================================
+
+*ColorSepScreenAngle ProcessBlack.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "45"
+*ColorSepScreenAngle CustomColor.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq CustomColor.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.85lpi.600x600dpi/85 lpi /600 x 600 dpi: "60"
+
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse 
+   } bind loop
+   (*) = flush
+ restore"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% === PRINTER MESSAGES ===
+
+*% possible unsolicited messages
+*PrinterError: "Cover Open"
+*PrinterError: "Warming up"
+
+*% status field of controller-requested status message
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "warming up"
+*Status: "initializing"
+*Status: "holding"
+*Status: "PrinterError: Cover Open"
+*Status: "PrinterError: Warming up"
+
+*% source field of controller-requested status message
+*Source: "Parallel"
+*Source: "LocalTalk"
+*Source: "Ethernet"
+*Source: "TokenRing"
+
+*% other possible printer messages
+*Message: "%%Flushing: rest of job (to end-of-file) will be ignored]%%"
+*Message: "%%[exitserver: permanent state may be changed]%%"
+*Message: "%%[StatusChange: initializing]%%"
+
+
+*% The byte count of this file should be exactly 043251 or 044518
+*% depending on the filesystem it resides in.
+*% end of PPD file for the Xerox Gazelle
+*% last modification date 6/15/98
+

@@ -1,0 +1,430 @@
+*PPD-Adobe: "4.1"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1994 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.1"
+*FileVersion: "2.4"
+*PCFileName: "HP_3D522.PPD"
+*LanguageVersion: English
+*Product: "(HP LaserJet IIID)"
+*PSVersion: "(52.2) 0"
+*ModelName: "HP LaserJet IIID PostScript Cartridge"
+*ShortNickName: "HP LaserJetIIID Cartridge v52.2"
+*NickName: "HP LaserJet IIID PostScript Cartridge v52.2"
+
+*% ==== Options and Constraints =====
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *Option1/Optional Envelope Feeder: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*CloseUI: *Option1
+
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *Option1 False *InputSlot Envelope
+*UIConstraints: *PageSize Comm10 *Duplex
+*UIConstraints: *PageSize Monarch *Duplex
+*UIConstraints: *PageSize DL *Duplex
+*UIConstraints: *PageSize C5 *Duplex
+*UIConstraints: *Duplex *PageSize Comm10
+*UIConstraints: *Duplex *PageSize Monarch
+*UIConstraints: *Duplex *PageSize DL
+*UIConstraints: *Duplex *PageSize C5
+*UIConstraints: *PageRegion Comm10 *Duplex
+*UIConstraints: *PageRegion Monarch *Duplex
+*UIConstraints: *PageRegion DL *Duplex
+*UIConstraints: *PageRegion C5 *Duplex
+*UIConstraints: *Duplex *PageRegion Comm10
+*UIConstraints: *Duplex *PageRegion Monarch
+*UIConstraints: *Duplex *PageRegion DL
+*UIConstraints: *Duplex *PageRegion C5
+*UIConstraints: *ManualFeed False *PageSize B5
+*UIConstraints: *PageSize B5 *ManualFeed False
+*UIConstraints: *ManualFeed False *PageRegion B5
+*UIConstraints: *PageRegion B5 *ManualFeed False
+
+*% General Information and Defaults ===============
+*FreeVM: "264000"
+*LanguageLevel: "1"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "8"
+*Password: "0"
+*ExitServer: "
+  count 0 eq {  % is the password on the stack?
+    true
+  }{
+    dup    % potential password
+    statusdict /checkpassword get exec not
+  } ifelse
+  {  %  if no password or not valid
+    (WARNING : Cannot perform the exitserver command.) =
+    (Password supplied is not valid.) =
+    (Please contact the author of this software.) = flush
+    quit
+  } if
+  serverdict /exitserver get exec
+"
+*End
+*Reset: "
+  count 0 eq {  % is the password on the stack?
+    true
+  }{
+    dup    % potential password
+    statusdict /checkpassword get exec not
+  } ifelse
+  {  %  if no password or not valid
+    (WARNING : Cannot reset printer.) =
+    (Password supplied is not valid.) =
+    (Please contact the author of this software.) = flush
+    quit
+  } if
+  serverdict /exitserver get exec
+  systemdict /quit get exec
+  (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 300dpi
+*?Resolution: "
+save
+  initgraphics
+  0 0 moveto currentpoint matrix defaultmatrix transform
+  0 72 lineto currentpoint matrix defaultmatrix transform
+  3 -1 roll sub dup mul
+  3 1 roll exch sub dup mul
+  add sqrt round cvi
+  (          ) cvs print (dpi) = flush
+restore
+"
+*End
+
+*OpenUI *Smoothing/RET: PickOne
+*OrderDependency: 50 AnySetup *Smoothing
+*DefaultSmoothing: Medium
+*Smoothing None/Off: "0 statusdict /setdoret get exec"
+*Smoothing Light: "1 statusdict /setdoret get exec"
+*Smoothing Medium: "2 statusdict /setdoret get exec"
+*Smoothing Dark: "3 statusdict /setdoret get exec"
+*?Smoothing: "
+save
+  [(None)(Light)(Medium)(Dark)(Unknown)] statusdict /doret get exec
+  dup 3 gt{pop 4}if get = flush restore
+"
+*End
+*CloseUI: *Smoothing
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+sub }{dup mul exch dup mul add 1 exch sub }ifelse }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt
+1 exch sub }"
+*End
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*% Paper Handling ===================
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter: "statusdict /lettertray get exec"
+*PageSize Legal: "statusdict /legaltray get exec"
+*PageSize Executive: "statusdict /executivetray get exec"
+*PageSize A4: "statusdict /a4tray get exec"
+*PageSize B5: "statusdict /b5tray get exec"
+*PageSize Comm10/Comm #10 Envelope: "statusdict /com10envelopetray get exec"
+*PageSize Monarch/Monarch Envelope: "statusdict /monarcenvelopetray get exec"
+*PageSize DL/DL Envelope: "statusdict /dlenvelopetray get exec"
+*PageSize C5/C5 Envelope: "statusdict /c5envelopetray get exec"
+*?PageSize: "
+save
+9 dict
+  dup /lettertray (Letter) put
+  dup /legaltray (Legal) put
+  dup /executivetray (Executive) put
+  dup /a4tray (A4) put
+  dup /b5tray (B5) put
+  dup /com10envelopetray (Comm10) put
+  dup /monarcenvelopetray (Monarch) put
+  dup /dlenvelopetray (DL) put
+  dup /c5envelopetray (C5) put
+  statusdict /papersize get exec
+  3 1 roll  {get} stopped {(Unknown)}if
+  exch  not { print (.Transverse) }if
+  = flush
+restore
+"
+*End
+*CloseUI: *PageSize
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter: "letter"
+*PageRegion Legal: "legal"
+*PageRegion Executive: "executivepage"
+*PageRegion A4: "a4"
+*PageRegion B5: "b5"
+*PageRegion Comm10/Comm #10 Envelope: "com10envelope"
+*PageRegion Monarch/Monarch Envelope: "monarcenvelope"
+*PageRegion DL/DL Envelope: "dlenvelope"
+*PageRegion C5/C5 Envelope: "c5envelope"
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter: "18 19 593 774 "
+*ImageableArea Legal: "18 19 593 990 "
+*ImageableArea Executive: "18 19 501 738 "
+*ImageableArea A4: "18 19 578 824 "
+*ImageableArea B5: "18 19 505 713 "
+*ImageableArea Comm10/Comm #10 Envelope: "18 19 278 666 "
+*ImageableArea Monarch/Monarch Envelope: "18 19 259 522 "
+*ImageableArea DL/DL Envelope: "18 19 294 605 "
+*ImageableArea C5/C5 Envelope: "18 19 440 630 "
+*?ImageableArea: "
+save
+  /cvp {(                ) cvs print ( ) print } bind def
+  /upperright {10000 mul floor 10000 div} bind def
+  /lowerleft {10000 mul ceiling 10000 div} bind def
+  newpath clippath pathbbox
+  4 -2 roll exch 2 {lowerleft cvp} repeat
+  exch 2 {upperright cvp} repeat flush
+restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter: "612 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Executive: "522 756"
+*PaperDimension A4: "595 842"
+*PaperDimension B5: "516 729"
+*PaperDimension Comm10/Comm #10 Envelope: "297 684"
+*PaperDimension Monarch/Monarch Envelope: "279 540"
+*PaperDimension DL/DL Envelope: "312 624"
+*PaperDimension C5/C5 Envelope: "459 649"
+
+*DefaultOutputOrder: Normal
+*LandscapeOrientation: Plus90
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Upper
+*InputSlot Upper/Upper Tray: "0 statusdict /setpapertray get exec"
+*InputSlot Lower/Lower Tray: "1 statusdict /setpapertray get exec"
+*InputSlot Envelope/Envelope Feeder: "2 statusdict /setpapertray get exec"
+*?InputSlot: "
+save
+   [ (Upper) (Lower) (Envelope) ] statusdict /papertray get exec
+   {get exec} stopped { pop pop (Unknown)} if = flush
+restore
+"
+*End
+*CloseUI: *InputSlot
+
+*OpenUI *ManualFeed: Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "statusdict /manualfeed true put"
+*ManualFeed False: "statusdict /manualfeed false put"
+*?ManualFeed: "
+save  statusdict /manualfeed get {(True)}{(False)}ifelse = flush
+restore"
+*End
+*CloseUI: *ManualFeed
+
+*OpenUI *Duplex: PickOne
+*OrderDependency: 50 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex DuplexTumble: "
+  true statusdict /setduplexmode get exec true statusdict /settumble get exec"
+*End
+*Duplex DuplexNoTumble: "
+  true statusdict /setduplexmode get exec false statusdict /settumble get exec"
+*End
+*Duplex None: "
+ false statusdict /setduplexmode get exec false statusdict /settumble get exec"
+*End
+*?Duplex: "
+save
+  statusdict /duplexmode get exec
+  {statusdict /tumble get exec{(DuplexTumble)}{(DuplexNoTumble)}ifelse}
+  {(None)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *Duplex
+
+*OpenUI *TraySwitch: Boolean
+*OrderDependency: 50 AnySetup *TraySwitch
+*DefaultTraySwitch: False
+*TraySwitch True: "true statusdict /settrayswitch get exec"
+*TraySwitch False: "false statusdict /settrayswitch get exec"
+*?TraySwitch: "
+save
+  statusdict /trayswitch get exec {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *TraySwitch
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.002)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.002)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.003)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.003)" Standard ROM
+*Font Bookman-Demi: Standard "(001.001)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.001)" Standard ROM
+*Font Bookman-Light: Standard "(001.001)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.001)" Standard ROM
+*Font Courier: Standard "(002.002)" Standard ROM
+*Font Courier-Bold: Standard "(002.002)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.002)" Standard ROM
+*Font Courier-Oblique: Standard "(002.002)" Standard ROM
+*Font Helvetica: Standard "(001.002)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.002)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.002)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.002)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.002)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.006)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.004)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.003)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.004)" Standard ROM
+*Font Palatino-Bold: Standard "(001.002)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.002)" Standard ROM
+*Font Palatino-Italic: Standard "(001.002)" Standard ROM
+*Font Palatino-Roman: Standard "(001.001)" Standard ROM
+*Font Symbol: Special "(001.003)" Special ROM
+*Font Times-Bold: Standard "(001.002)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.004)" Standard ROM
+*Font Times-Italic: Standard "(001.002)" Standard ROM
+*Font Times-Roman: Standard "(001.002)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.003)" Standard ROM
+*Font ZapfDingbats: Special "(001.002)" Special ROM
+*?FontQuery: "
+save
+ /str 100 string dup 0 (fonts/) putinterval def
+ {
+   count 1 gt
+   {
+     exch dup str 6 94 getinterval cvs
+     (/) print print (:) print
+     FontDirectory exch known
+     {(Yes)}{(No)} ifelse =
+   }
+   {exit} ifelse
+ }bind loop
+ (*) = flush
+restore
+"
+*End
+
+*?FontList: "
+save
+  FontDirectory { pop == } bind forall flush
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ]%% )
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "PrinterError: Out Of Paper"
+*Status: "PrinterError: Cover Open"
+*Status: "PrinterError: Feed Manual"
+*Status: "PrinterError: Paper Jam"
+*Status: "PrinterError: Miscellaneous Error"
+*Status: "PrinterError: Fatal Error"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "serial9"
+*Source: "serial25"
+*Source: "AppleTalk"
+*Source: "Centronics"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "Out Of Paper"
+*PrinterError: "Cover Open"
+*PrinterError: "Feed Manual"
+*PrinterError: "Paper Jam"
+*PrinterError: "Miscellaneous Error"
+*PrinterError: "Fatal Error"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%  For 53 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+*% For "HP LaserJet IIID" version 52.2
+*% Produced by "BuildPPD.ps" version 3.0 edit 58
+*% Converted to meet 4.0 specification
+*% Last Edit Date: Jun 16 1994
+*% The byte count of this file should be exactly 014585 or 015015
+*% depending on the filesystem it resides in.
+*% end of PPD file for HP LaserJet IIID

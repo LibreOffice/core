@@ -1,0 +1,1945 @@
+*PPD-Adobe: "4.2"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+
+
+*% All Rights Reserved. 
+
+*% Permission is granted for redistribution of this file as
+
+*% long as this copyright notice is intact and the contents
+
+*% of the file is not altered in any way from its original form.
+
+*% End of Copyright statement
+
+
+
+*% *********
+
+*% EFI Information Block
+
+*%
+
+*FileVersion: "0.1"
+
+*% EF4File
+
+*% EFConversionKey: "Kodak"
+
+*%
+
+*% *********
+
+
+
+*FormatVersion: "4.2"
+
+*FileVersion: "1.1"
+
+*PCFileName: "EFXJK1F3.PPD"
+
+*LanguageVersion: English
+
+*LanguageEncoding: ISOLatin1
+
+*Product: "(Fiery XJK 1000 1525-1550)"
+
+*PSVersion: "(2015.802) 0"
+
+*ModelName: "Fiery XJK 1525-1550 Color Server v2015.802"
+
+*ShortNickName: "Fiery XJK1000 1525-50 v2015.802"
+
+*NickName: "Fiery XJK 1000 1525-1550 Color Server v2015.802"
+
+*Manufacturer: "Kodak"
+
+
+
+*% PPD body begins
+
+
+
+*% === Options and Constraints =========
+
+
+
+*UIConstraints: *COLORMODE GRAY *EFColorRendDict Preferred
+
+*UIConstraints: *EFColorRendDict Preferred *COLORMODE GRAY
+
+*UIConstraints: *COLORMODE GRAY *EFColorRendDict Business
+
+*UIConstraints: *EFColorRendDict Business *COLORMODE GRAY
+
+*UIConstraints: *COLORMODE GRAY *EFColorRendDict Colorimetric
+
+*UIConstraints: *EFColorRendDict Colorimetric *COLORMODE GRAY
+
+*UIConstraints: *COLORMODE GRAY *EFColorRendDict Monitor
+
+*UIConstraints: *EFColorRendDict Monitor *COLORMODE GRAY
+
+
+
+*UIConstraints: *ManualFeed False *MediaType Transparent
+
+*UIConstraints: *MediaType Transparent *ManualFeed False 
+
+
+
+*UIConstraints: *MediaType Transparent *InputSlot AutoSelect
+
+*%UIConstraints: *InputSlot AutoSelect *MediaType Transparent
+
+
+
+*UIConstraints: *MediaType Transparent *EFColorRendDict Preferred
+
+*UIConstraints: *MediaType Transparent *EFColorRendDict Colorimetric
+
+*UIConstraints: *EFColorRendDict Preferred *MediaType Transparent
+
+*UIConstraints: *EFColorRendDict Colorimetric *MediaType Transparent 
+
+*UIConstraints: *MediaType Transparent *EFColorRendDict Monitor
+
+*UIConstraints: *EFColorRendDict Monitor *MediaType Transparent
+
+
+
+*UIConstraints: *PRINTERMODE Halftone *COLORMODE GRAY
+
+*UIConstraints: *COLORMODE GRAY *PRINTERMODE Halftone
+
+
+
+*% Overprinting Constraints ================
+
+*UIConstraints: *EFOverprint On *PRINTERMODE Halftone
+
+*UIConstraints: *PRINTERMODE Halftone *EFOverprint On
+
+
+
+*UIConstraints: *EFOverprint On *EFColorRendDict Preferred
+
+*UIConstraints: *EFOverprint On *EFColorRendDict Colorimetric
+
+*UIConstraints: *EFOverprint On *EFColorRendDict Business 
+
+*UIConstraints: *EFOverprint On *EFColorRendDict Monitor 
+
+*UIConstraints: *EFColorRendDict Preferred *EFOverprint On
+
+*UIConstraints: *EFColorRendDict Colorimetric *EFOverprint On
+
+*UIConstraints: *EFColorRendDict Business *EFOverprint On
+
+*UIConstraints: *EFColorRendDict Monitor *EFOverprint On
+
+
+
+*UIConstraints: *COLORMODE GRAY *EFOverprint On
+
+*UIConstraints: *EFOverprint On *COLORMODE GRAY
+
+
+
+*UIConstraintsEFI: *ENABLECOMP NO *PHYSMEMSIZE 48
+
+
+
+*% General Information and Defaults ===============
+
+*FreeVM: "4413108"
+
+*LanguageLevel: "2"
+
+*ColorDevice: True
+
+*DefaultColorSpace: CMYK
+
+*PrintPSErrors: True
+
+*FileSystem: True
+
+*?FileSystem: "
+
+	save
+
+	  statusdict /diskstatus known{(True)} {(False)} ifelse = flush
+
+	restore
+
+	"
+
+*End
+
+*Throughput: "10"
+
+*Password: "0"
+
+*ExitServer: "
+
+   count 0 eq
+
+   { false } { true exch startjob } ifelse
+
+   not { (WARNING: Cannot modify initial VM.) =
+
+            (Missing or invalid password.) =
+
+            (Please contact the author of this software.) = flush quit
+
+          } if
+
+"
+
+*End
+
+
+
+*Reset: "
+
+   count 0 eq
+
+   { false } { true exch startjob } ifelse
+
+   not { (WARNING: Cannot reset printer.) =
+
+            (Missing or invalid password.) =
+
+            (Please contact the author of this software.) = flush quit
+
+          } if
+
+   systemdict /quit get exec
+
+   (WARNING: Printer Reset Failed.) = flush
+
+"
+
+*End
+
+
+
+*DefaultResolution: 400dpi
+
+*?Resolution: "
+
+save
+
+  initgraphics
+
+  0 0 moveto currentpoint matrix defaultmatrix transform
+
+  0 72 lineto currentpoint matrix defaultmatrix transform
+
+  3 -1 roll sub dup mul
+
+  3 1 roll exch sub dup mul
+
+  add sqrt round cvi
+
+  (          ) cvs print (dpi) = flush
+
+restore
+
+"
+
+*End
+
+
+
+*AccurateScreensSupport: True
+
+
+
+*%EFIFlags *ENABLECOMP Setup
+
+*OpenUIEFI *ENABLECOMP/Memory Multiplier    : PickOne
+
+*OrderDependency: 05 AnySetup *ENABLECOMP
+
+*DefaultENABLECOMP: YES
+
+*ENABLECOMP YES/On: ""
+
+*ENABLECOMP NO/Off: ""
+
+*CloseUIEFI: *ENABLECOMP 
+
+
+
+*%EFIFlags *PRINTERMODE Command|Setup
+
+*OpenUI *PRINTERMODE/Printer Mode    :PickOne
+
+*OrderDependency: 15 AnySetup *PRINTERMODE
+
+*DefaultPRINTERMODE: PrintDEF
+
+*PRINTERMODE PrintDEF/Printer's default: ""
+
+*PRINTERMODE Contone/Contone: " userdict /setcolorbundle known
+
+	{ << /Compression /Disabled /HalftoneMode /Contone >> setcolorbundle }
+
+	{ << /DeviceRenderingInfo << /Type 4 
+
+	/ValuesPerColorComponent 256 >> >> setpagedevice } ifelse "
+
+*End
+
+*PRINTERMODE Halftone/Halftone: " userdict /setcompression known 
+
+	{ << /HalftoneMode /Halftone >> setcolorbundle } 
+
+ 	{ << /DeviceRenderingInfo << /Type 4 
+
+ 	/ValuesPerColorComponent 2 >> >> setpagedevice } ifelse "
+
+*End
+
+*?PRINTERMODE: "currentpagedevice /DeviceRenderingInfo get 
+
+	/ValuesPerColorComponent get ln 2 ln div cvi = flush"
+
+*End
+
+*CloseUI: *PRINTERMODE
+
+
+
+*%EFIFlags *EFOverprint
+
+*OpenUI *EFOverprint/Combine Separations    :PickOne
+
+*OrderDependency: 40 AnySetup *EFOverprint
+
+*DefaultEFOverprint: OverPrintDEF
+
+*EFOverprint OverPrintDEF/Printer's default: ""
+
+*EFOverprint On/On: " userdict /XJXsetoverprint known 
+
+	{ 1 XJXsetoverprint } 
+
+	{ (printerinfo overprint 1) =string 
+
+		/CPSI /ProcSet findresource /externalcommand get exec { pop } if } ifelse 
+
+		 userdict /setcolorbundle known
+
+	{ << /ColorMode /Grayscale /Compression /Disabled >> setcolorbundle }
+
+	{ << /ProcessColorModel /DeviceGray >> setpagedevice } ifelse "
+
+*End
+
+*EFOverprint Off/Off: " userdict /XJXsetoverprint known 
+
+	{ 0 XJXsetoverprint } 
+
+	{ (printerinfo overprint 0) =string 
+
+		/CPSI /ProcSet findresource /externalcommand get exec { pop } if } ifelse "
+
+*End
+
+*?EFOverprint: ""
+
+*CloseUI: *EFOverprint
+
+
+
+*%EFIFlags *COLORMODE Command|Setup
+
+*OpenUI *COLORMODE/Color Mode    :PickOne
+
+*OrderDependency: 12 AnySetup *COLORMODE 
+
+*DefaultCOLORMODE: ColorDEF
+
+*COLORMODE ColorDEF/Printer's default: ""
+
+*COLORMODE CMYK/CMYK: " userdict /setcolorbundle known 
+
+	{ << /ColorMode /CMYK >> setcolorbundle }
+
+	{ << /ProcessColorModel /DeviceCMYK >> setpagedevice } ifelse "
+
+*End
+
+*COLORMODE GRAY/Grayscale: " userdict /setcolorbundle known
+
+	{ << /ColorMode /Grayscale /Compression /Disabled >> setcolorbundle }
+
+	{ << /ProcessColorModel /DeviceGray >> setpagedevice } ifelse "
+
+*End
+
+*?COLORMODE: " currentpagedevice /ProcessColorModel get == } if "
+
+*CloseUI: *COLORMODE
+
+
+
+*%EFIFlags *DEFPAPERSIZE Setup
+
+*OpenUIEFI *DEFPAPERSIZE/Default Paper Sizes    :PickOne
+
+*OrderDependency: 20 AnySetup *DEFPAPERSIZE
+
+*DefaultDEFPAPERSIZE: US
+
+*DEFPAPERSIZE US/US: ""
+
+*DEFPAPERSIZE Metric/Metric: ""
+
+*?DEFPAPERSIZE: ""
+
+*CloseUIEFI: *DEFPAPERSIZE 
+
+
+
+*%EFIFlags *CONVPAPERSIZE Setup
+
+*OpenUIEFI *CONVPAPERSIZE/Convert Paper Sizes    : PickOne
+
+*OrderDependency: 25 AnySetup *CONVPAPERSIZE
+
+*DefaultCONVPAPERSIZE: False
+
+*CONVPAPERSIZE False/No: ""
+
+*CONVPAPERSIZE LetterToA4/Letter/11x17->A4/A3: ""
+
+*CONVPAPERSIZE A4ToLetter/A4/A3->Letter/11x17: ""
+
+*?CONVPAPERSIZE: ""
+
+*CloseUIEFI: *CONVPAPERSIZE
+
+
+
+*%EFIFlags *COVPGATEND Setup
+
+*OpenUIEFI *COVPGATEND/Print Cover Page    : PickOne
+
+*OrderDependency: 30 AnySetup *COVPGATEND
+
+*DefaultCOVPGATEND: NO
+
+*COVPGATEND YES/Yes: ""
+
+*COVPGATEND NO/No: ""
+
+*CloseUIEFI: *COVPGATEND
+
+
+
+*%EFIFlags *COURIERSUBST Setup
+
+*OpenUIEFI *COURIERSUBST/Allow Courier       Substitution    :PickOne
+
+*OrderDependency: 35 AnySetup *COURIERSUBST
+
+*DefaultCOURIERSUBST: YES
+
+*COURIERSUBST YES/Yes: ""
+
+*COURIERSUBST NO/No: ""
+
+*CloseUIEFI: *COURIERSUBST 
+
+
+
+*%EFIFlags *PSERROR Setup
+
+*OpenUIEFI *PSERROR/Print to PS Error    : PickOne
+
+*OrderDependency: 40 AnySetup *PSERROR
+
+*DefaultPSERROR: NO
+
+*PSERROR YES/Yes: ""
+
+*PSERROR NO/No: ""
+
+*CloseUIEFI: *PSERROR
+
+
+
+*%EFIFlags *EFHPBlack Spooler|Command
+
+*OpenUI *EFHPBlack/High Productivity Black    : PickOne
+
+*OrderDependency: 40 AnySetup *EFHPBlack
+
+*DefaultEFHPBlack: EFHPBlackDEF
+
+*EFHPBlack EFHPBlackDEF/Printer's default: ""
+
+*EFHPBlack False/Off: " userdict /XJXsethpblack known
+
+              { 0 XJXsethpblack }
+
+              { (printerinfo CheckHPBlack 0) =string
+
+                /CPSI /ProcSet findresource /externalcommand get exec { pop } if } ifelse "
+
+*End
+
+*EFHPBlack True/On: " userdict /XJXsethpblack known
+
+              { 1 XJXsethpblack }
+
+              { (printerinfo CheckHPBlack 1) =string
+
+                /CPSI /ProcSet findresource /externalcommand get exec { pop } if } ifelse "
+
+*End
+
+*CloseUI: *EFHPBlack
+
+
+
+*%EFIFlags *MediaType Spooler|Command
+
+*OpenUI *MediaType/Media Type    :PickOne
+
+*OrderDependency: 50 AnySetup *MediaType
+
+*DefaultMediaType: MediaTypeDEF
+
+*MediaType MediaTypeDEF/Printer's default: ""
+
+*MediaType Plain/Plain Paper: " userdict /setcolorbundle known
+
+	{ << /MediaType /Plain >> setcolorbundle 1 XJXsetmediatype } if"
+
+*End
+
+*MediaType Transparent/Transparency: " userdict /setcolorbundle known
+
+	{ << /MediaType /Transparent >> setcolorbundle 2 XJXsetmediatype } if"
+
+*End
+
+*?MediaType: " userdict /setcolorbundle known { 
+
+	currentcolorbundle /MediaType get == } if"
+
+*End
+
+*CloseUI: *MediaType
+
+
+
+*%EFIFlags *EFColorRendDict Spooler|Command
+
+*OpenUI *EFColorRendDict/Rendering Style    :PickOne
+
+*OrderDependency: 60 AnySetup *EFColorRendDict
+
+*DefaultEFColorRendDict: RenderingDEF
+
+*EFColorRendDict RenderingDEF/Printer's default: ""
+
+*EFColorRendDict Preferred/Photographic: " userdict /setcolorbundle known
+
+	{ << /ColorRendering /Photographic >> setcolorbundle }
+
+  	{ /DefaultColorRendering 
+
+	   currentpagedevice /DeviceRenderingInfo 
+
+	   		get /ValuesPerColorComponent get 2 eq 
+
+   	   { /HTPreferredColorRendering } { /PreferredColorRendering } ifelse
+
+   		/ColorRendering findresource
+
+    	 /ColorRendering defineresource setcolorrendering
+
+	} ifelse "
+
+*End
+
+*EFColorRendDict Business/Presentation: " userdict /setcolorbundle known
+
+	{ << /ColorRendering /Presentation >> setcolorbundle }
+
+	{ /DefaultColorRendering 
+
+	   currentpagedevice /DeviceRenderingInfo 
+
+	   		get /ValuesPerColorComponent get 2 eq 
+
+   	   { /HTBusinessColorRendering } { /BusinessColorRendering } ifelse
+
+   	    /ColorRendering findresource
+
+    	 /ColorRendering defineresource setcolorrendering
+
+    } ifelse "
+
+*End
+
+*EFColorRendDict Monitor/Monitor: " userdict /setcolorbundle known
+
+	{ << /ColorRendering /Monitor >> setcolorbundle }
+
+	{ /DefaultColorRendering 
+
+	   currentpagedevice /DeviceRenderingInfo 
+
+	   		get /ValuesPerColorComponent get 2 eq 
+
+   	   { /HTMonitorColorRendering } { /MonitorColorRendering } ifelse
+
+   	    /ColorRendering findresource
+
+    	 /ColorRendering defineresource setcolorrendering
+
+    } ifelse "
+
+*End
+
+*EFColorRendDict Colorimetric/Solid Color: " userdict /setcolorbundle known
+
+	{ << /ColorRendering /Solid >> setcolorbundle }
+
+	{ /DefaultColorRendering 
+
+	   currentpagedevice /DeviceRenderingInfo 
+
+	   		get /ValuesPerColorComponent get 2 eq 
+
+   	   { /HTColorimetricColorRendering } { /ColorimetricColorRendering } ifelse
+
+   	    /ColorRendering findresource
+
+    	 /ColorRendering defineresource setcolorrendering
+
+    } ifelse "
+
+*End
+
+*?EFColorRendDict: " userdict /setcolorbundle known
+
+	{ currentcolorbundle /ColorRendering get == } if "
+
+*End
+
+*CloseUI: *EFColorRendDict
+
+
+
+*%EFIFlags *Brightness Spooler|Command
+
+*OpenUI *Brightness/Brightness    :PickOne
+
+*OrderDependency: 55 AnySetup *Brightness
+
+*DefaultBrightness: BrightnessDEF
+
+*Brightness BrightnessDEF/Printer's default: ""
+
+*Brightness +0.24/85%  Lightest: " {dup 180 mul sin 0.15 mul add } bind
+
+	userdict /ColorAdjust known 
+
+	{  dup dup dup ColorAdjust /coloradjust get exec }
+
+	{  { /Dummy1 exec /Dummy2 exec } bind dup 2 currenttransfer put
+
+	   dup 0 4 -1 roll put settransfer } ifelse "
+
+*End
+
+*Brightness +0.16/90%  Lighter: 	" {dup 180  mul sin 0.10 mul add } bind
+
+	userdict /ColorAdjust known 
+
+	{  dup dup dup ColorAdjust /coloradjust get exec }
+
+	{  { /Dummy1 exec /Dummy2 exec } bind dup 2 currenttransfer put
+
+	   dup 0 4 -1 roll put settransfer } ifelse "
+
+*End
+
+*Brightness +0.08/95%  Light: 	" {dup 180  mul sin 0.05 mul add } bind
+
+	userdict /ColorAdjust known 
+
+	{  dup dup dup ColorAdjust /coloradjust get exec }
+
+	{  { /Dummy1 exec /Dummy2 exec } bind dup 2 currenttransfer put
+
+	   dup 0 4 -1 roll put settransfer } ifelse "
+
+*End
+
+*Brightness 00.00/100% Normal: 	" {} settransfer "
+
+*Brightness -0.08/105% Dark: 	" {dup 180  mul sin -0.05 mul add } bind
+
+	userdict /ColorAdjust known 
+
+	{  dup dup dup ColorAdjust /coloradjust get exec }
+
+	{  { /Dummy1 exec /Dummy2 exec } bind dup 2 currenttransfer put
+
+	   dup 0 4 -1 roll put settransfer } ifelse "
+
+*End
+
+*Brightness -0.16/110% Darker: 	" {dup 180  mul sin -0.10 mul add } bind
+
+	userdict /ColorAdjust known 
+
+	{  dup dup dup ColorAdjust /coloradjust get exec }
+
+	{  { /Dummy1 exec /Dummy2 exec } bind dup 2 currenttransfer put
+
+	   dup 0 4 -1 roll put settransfer } ifelse "
+
+*End
+
+*Brightness -0.24/115% Darkest:	" {dup 180  mul sin -0.15 mul add } bind
+
+	userdict /ColorAdjust known 
+
+	{  dup dup dup ColorAdjust /coloradjust get exec }
+
+	{  { /Dummy1 exec /Dummy2 exec } bind dup 2 currenttransfer put
+
+	   dup 0 4 -1 roll put settransfer } ifelse "
+
+*End
+
+*CloseUI: *Brightness
+
+
+
+*%EFIFlags *TonerReduction Spooler|Command
+
+*OpenUI *TonerReduction/Toner Reduction    :PickOne
+
+*OrderDependency: 70 AnySetup *TonerReduction
+
+*DefaultTonerReduction: TonerReductionDEF
+
+*TonerReduction TonerReductionDEF/Printer's default: ""
+
+*TonerReduction False/Off: " userdict /XJXsettonerreduction known
+
+              { 0 XJXsettonerreduction }
+
+              { (printerinfo checkucr 0) =string
+
+                /CPSI /ProcSet findresource /externalcommand get exec {pop} if } ifelse "
+
+*End
+
+*TonerReduction True/On: " userdict /XJXsettonerreduction known
+
+              { 1 XJXsettonerreduction }
+
+              { (printerinfo checkucr 1) =string
+
+                /CPSI /ProcSet findresource /externalcommand get exec {pop} if } ifelse "
+
+*End
+
+*CloseUI: *TonerReduction
+
+
+
+*%EFIFlags *ManualFeed Spooler|Command
+
+*OpenUI *ManualFeed/Manual Feed    :Boolean
+
+*OrderDependency: 65 AnySetup *ManualFeed
+
+*DefaultManualFeed: False
+
+*ManualFeed True/On: "1 dict dup /ManualFeed true put setpagedevice"
+
+*ManualFeed False/Off: "1 dict dup /ManualFeed false put setpagedevice"
+
+*?ManualFeed: " 
+
+   save currentpagedevice /ManualFeed get
+
+   {(True)} {(False)} ifelse = flush restore"
+
+*End
+
+*CloseUI: *ManualFeed
+
+
+
+*%EFIFlags *Prange Command
+
+*OpenUIEFI *Prange/Page Range    : PickOne
+
+*OrderDependency: 70 AnySetup *Prange
+
+*DefaultPrange: All
+
+*Prange All/All: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	currentglobal true setglobal
+
+	DriverOps /pagerange [ ] put
+
+	setglobal "
+
+*End
+
+*Prange Even/Even: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	currentglobal true setglobal
+
+	DriverOps /pagerange [ 1 1000 { dup 2 add } repeat ] put
+
+	setglobal "
+
+*End
+
+*Prange Odd/Odd: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	currentglobal true setglobal
+
+	DriverOps /pagerange [ 0 1000 { dup 2 add } repeat ] put
+
+	setglobal "
+
+*End
+
+*Prange range1/1-3, 5, 7: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	currentglobal true setglobal
+
+	DriverOps /pagerange [ 0 1 2 4 6 ] put
+
+	setglobal "
+
+*End
+
+*?Prange: ""
+
+*CloseUIEFI: *Prange
+
+
+
+*%EFIFlags *Flip Command
+
+*OpenUIEFI *Flip/Flip    : PickOne
+
+*OrderDependency: 75 AnySetup *Flip
+
+*DefaultFlip: None
+
+*Flip None/None: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /fliph? false put DriverOps /flipv? false put << >> setpagedevice "
+
+*End
+
+*Flip V/Vertical: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /fliph? false put DriverOps /flipv? true put << >> setpagedevice "
+
+*End
+
+*Flip H/Horizonal: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /fliph? true put DriverOps /flipv? false put << >> setpagedevice "
+
+*End
+
+*Flip VH/Vertical & Horizontal: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /fliph? true put DriverOps /flipv? true put << >> setpagedevice "
+
+*End
+
+*?Flip: ""
+
+*CloseUIEFI: *Flip
+
+
+
+*%EFIFlags *Scale Command
+
+*OpenUIEFI *Scale/Scale    : PickOne
+
+*OrderDependency: 80 AnySetup *Scale
+
+*DefaultScale: 100
+
+*Scale 200/200%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /scale# 2 put << >> setpagedevice "
+
+*End
+
+*Scale 150/150%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /scale# 1.5 put << >> setpagedevice "
+
+*End
+
+*Scale 100/100%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /scale# 1 put << >> setpagedevice "
+
+*End
+
+*Scale 75/75%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /scale# .75 put << >> setpagedevice "
+
+*End
+
+*Scale 50/50%: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /scale# .5 put << >> setpagedevice "
+
+*End
+
+*?Scale: ""
+
+*CloseUIEFI: *Scale
+
+
+
+*%EFIFlags *Rotate Command
+
+*OpenUIEFI *Rotate/Rotate: PickOne
+
+*OrderDependency: 85 AnySetup *Rotate
+
+*DefaultRotate: 0
+
+*Rotate 0/0¡: "  << >> setpagedevice "
+
+*Rotate 90/90¡ CCW: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /rotate# 90 put << >> setpagedevice "
+
+*End
+
+*Rotate 270/90¡ CW: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /rotate# 270 put << >> setpagedevice "
+
+*End
+
+*Rotate 180/180¡: " userdict /DriverOps known not { /DriverOps /ProcSet findresource pop } if
+
+	DriverOps /rotate# 180 put << >> setpagedevice "
+
+*End
+
+*?Rotate: ""
+
+*CloseUIEFI: *Rotate
+
+
+
+*%================= Halftone Information ===============
+
+*ScreenFreq: "66.0"
+
+*ScreenAngle: "0"
+
+*DefaultScreenProc: Text
+
+*ScreenProc Text: "
+
+	{2 4 
+
+	{ 3 1 roll 4 -1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}
+
+	exec 8 mul 3 1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}			
+
+	exec add
+
+	[
+
+	48 18  8 16   46 16  6 14
+
+	56 60 32 24   54 58 30 22
+
+	 4 12 44 40    2 10 42 38
+
+	28 20 52 64   26 18 50 62
+
+	
+
+	45 15  5 13   47 17  7 15
+
+	53 57 29 21   55 59 31 23
+
+	 1  9 41 37    3 11 43 39
+
+	25 17 49 61   27 19 51 63
+
+	] 
+
+	exch get 8 dup mul div} exec}"
+
+*End
+
+
+
+*DefaultTransfer: Null
+
+*Transfer Null: "{ }"
+
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+
+
+*% Black substitution is always on.
+
+*DefaultBlackSubstitution: True
+
+*BlackSubstitution True: ""
+
+*?BlackSubstitution: "(True) == flush"
+
+
+
+*% PPD pages begins
+
+
+
+*% Paper Handling ===================
+
+*% Use these entries to set paper size most of the time, unless there is
+
+*% specific reason to use PageRegion.
+
+*%EFIFlags *PageSize Command
+
+*OpenUI *PageSize/Page Size    :PickOne
+
+*OrderDependency: 45 AnySetup *PageSize
+
+*DefaultPageSize: Letter
+
+*PageSize Letter/Letter: " userdict /setcolorbundle known
+
+	{ << /PageSize /Letter >> setcolorbundle }
+
+	{ << /PageSize [612 792] /MediaType null 
+
+			/InputAttributes << 0 << /PageSize [612 792] /MediaType null >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*PageSize Legal/Legal: " userdict /setcolorbundle known
+
+	{ << /PageSize /Legal >> setcolorbundle } { legal } ifelse "
+
+*End
+
+*PageSize Tabloid/11x17: " userdict /setcolorbundle known
+
+	{ << /PageSize /11x17 >> setcolorbundle } { 11x17 } ifelse "
+
+*End
+
+*PageSize A3/A3: " userdict /setcolorbundle known
+
+	{ << /PageSize /A3 >> setcolorbundle } { a3 } ifelse "
+
+*End
+
+*PageSize A4/A4: " userdict /setcolorbundle known
+
+	{ << /PageSize /A4 >> setcolorbundle }
+
+	{ << /PageSize [595 842] /MediaType null 
+
+			/InputAttributes << 0 << /PageSize [595 842] /MediaType null >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*PageSize LetR/Letter-R:" userdict /setcolorbundle known
+
+	{ << /PageSize /Letter-R >> setcolorbundle }
+
+	{ << /PageSize [612 792] /MediaType (ShortEdgeFeed) 
+
+			/InputAttributes << 0 << /PageSize [612 792] /MediaType (ShortEdgeFeed) >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*PageSize A4R/A4-R:" userdict /setcolorbundle known 
+
+	{ << /PageSize /A4-R >> setcolorbundle }
+
+	{ << /PageSize [595 842] /MediaType (ShortEdgeFeed) 
+
+			/InputAttributes << 0 << /PageSize [595 842] /MediaType (ShortEdgeFeed) >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*?PageSize: "
+
+	save currentpagedevice /PageSize get aload pop
+
+	2 copy gt {exch} if (Unknown) 
+
+    7 dict
+
+	dup [612 792] (Letter) put
+
+	dup [612 1008] (Legal) put
+
+	dup [792 1224] (Tabloid) put
+
+	dup [842 1191] (A3) put
+
+	dup [595 842] (A4) put
+
+	dup [612 792] (LetR) put
+
+	dup [595 842] (A4R) put
+
+   { exch aload pop 6 index sub abs 7 le exch 7 index sub abs 7 le and
+
+      { exch pop exit } { pop } ifelse
+
+	} bind forall = flush pop pop
+
+   restore"
+
+*End
+
+*CloseUI: *PageSize
+
+
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+
+*%EFIFlags *PageRegion
+
+*OpenUI *PageRegion    :PickOne
+
+*OrderDependency: 47 AnySetup *PageRegion
+
+*DefaultPageRegion: Letter
+
+*PageRegion Letter/Letter: " userdict /setcolorbundle known
+
+	{ << /PageSize /Letter >> setcolorbundle }
+
+	{ << /PageSize [612 792] /MediaType null 
+
+			/InputAttributes << 0 << /PageSize [612 792] /MediaType null >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*PageRegion Legal/Legal: " userdict /setcolorbundle known
+
+	{ << /PageSize /Legal >> setcolorbundle } { legal } ifelse "
+
+*End
+
+*PageRegion Tabloid/11x17: " userdict /setcolorbundle known
+
+	{ << /PageSize /11x17 >> setcolorbundle } { 11x17 } ifelse "
+
+*End
+
+*PageRegion A3/A3: " userdict /setcolorbundle known
+
+	{ << /PageSize /A3 >> setcolorbundle } { a3 } ifelse "
+
+*End
+
+*PageRegion A4/A4: " userdict /setcolorbundle known
+
+	{ << /PageSize /A4 >> setcolorbundle }
+
+	{ << /PageSize [595 842] /MediaType null 
+
+			/InputAttributes << 0 << /PageSize [595 842] /MediaType null >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*PageRegion LetR/Letter-R:" userdict /setcolorbundle known
+
+	{ << /PageSize /Letter-R >> setcolorbundle }
+
+	{ << /PageSize [612 792] /MediaType (ShortEdgeFeed) 
+
+			/InputAttributes << 0 << /PageSize [612 792] /MediaType (ShortEdgeFeed) >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*PageRegion A4R/A4-R: " userdict /setcolorbundle known 
+
+	{ << /PageSize /A4-R >> setcolorbundle }
+
+	{ << /PageSize [595 842] /MediaType (ShortEdgeFeed) 
+
+			/InputAttributes << 0 << /PageSize [595 842] /MediaType (ShortEdgeFeed) >> >> >> setpagedevice
+
+	} ifelse "
+
+*End
+
+*CloseUI: *PageRegion
+
+
+
+*DefaultImageableArea: Letter
+
+*ImageableArea Letter/Letter: "10 9 589 780"
+
+*ImageableArea Legal/Legal: "12 10 603 985"
+
+*ImageableArea Tabloid/11x17: "12 10 783 1201"
+
+*ImageableArea A3/A3: "12 10 833 1167"
+
+*ImageableArea A4/A4: "10 9 573 830"
+
+*ImageableArea LetR/Letter-R: "12 10 603 770"
+
+*ImageableArea A4R/A4-R: "12 10 587 820"
+
+*?ImageableArea: "
+
+ save /cvp { cvi (            ) cvs print ( ) print } bind def
+
+  newpath clippath pathbbox
+
+  4 -2 roll exch 2 {ceiling cvp} repeat
+
+  exch 2 {floor cvp} repeat flush
+
+ restore
+
+"
+
+*End
+
+
+
+*% These provide the physical dimensions of the paper (by keyword)
+
+*DefaultPaperDimension: Letter
+
+*PaperDimension Letter/Letter:	"612 792"
+
+*PaperDimension Legal/Legal: 	"612 1008"
+
+*PaperDimension Tabloid/11x17: 	"792 1224"
+
+*PaperDimension A3/A3: 	"842 1191"
+
+*PaperDimension A4/A4: 	"595 842"
+
+*PaperDimension LetR/Letter-R: "612 793"
+
+*PaperDimension A4R/A4-R: "595 843"
+
+
+
+*% PPD pages ends
+
+
+
+*RequiresPageRegion All: True
+
+*%EFIFlags *InputSlot
+
+*OpenUI *InputSlot/Paper Source    : PickOne
+
+*OrderDependency: 100 AnySetup *InputSlot
+
+*DefaultInputSlot: AutoSelect 
+
+*InputSlot AutoSelect/AutoSelect: ""
+
+*CloseUI: *InputSlot
+
+
+
+*DefaultOutputOrder: OutputOrderDEF
+
+*OutputOrder OutputOrderDEF/Printer's default: ""
+
+
+
+*% Font Information =========================
+
+*DefaultFont: Courier
+
+*Font ACaslon-Italic: Standard "(001.002)" Standard Disk
+
+*Font ACaslon-Regular: Standard "(001.002)" Standard Disk
+
+*Font ACaslon-Semibold: Standard "(001.002)" Standard Disk
+
+*Font ACaslon-SemiboldItalic: Standard "(001.002)" Standard Disk
+
+*Font AGaramond-Bold: Standard "(001.002)" Standard Disk
+
+*Font AGaramond-BoldItalic: Standard "(001.002)" Standard Disk
+
+*Font AGaramond-Italic: Standard "(001.002)" Standard Disk
+
+*Font AGaramond-Regular: Standard "(001.002)" Standard Disk
+
+*Font Americana: Standard "(001.002)" Standard Disk
+
+*Font Americana-ExtraBold: Standard "(001.002)" Standard Disk
+
+*Font AvantGarde-Book: Standard "(001.002)" Standard Disk
+
+*Font AvantGarde-BookOblique: Standard "(001.002)" Standard Disk
+
+*Font AvantGarde-Demi: Standard "(001.002)" Standard Disk
+
+*Font AvantGarde-DemiOblique: Standard "(001.002)" Standard Disk
+
+*Font Barmeno-Bold: Standard "(001.002)" Standard Disk
+
+*Font Barmeno-ExtraBold: Standard "(001.002)" Standard Disk
+
+*Font Barmeno-Medium: Standard "(001.002)" Standard Disk
+
+*Font Barmeno-Regular: Standard "(001.002)" Standard Disk
+
+*Font Blackoak: Standard "(001.002)" Standard Disk
+
+*Font Bookman-Demi: Standard "(001.002)" Standard Disk
+
+*Font Bookman-DemiItalic: Standard "(001.002)" Standard Disk
+
+*Font Bookman-Light: Standard "(001.002)" Standard Disk
+
+*Font Bookman-LightItalic: Standard "(001.002)" Standard Disk
+
+*Font Carta: Standard "(001.002)" Standard Disk
+
+*Font Courier: Standard "(001.002)" Standard Disk
+
+*Font Courier-Bold: Standard "(001.002)" Standard Disk
+
+*Font Courier-BoldOblique: Standard "(001.002)" Standard Disk
+
+*Font Courier-Oblique: Standard "(001.002)" Standard Disk
+
+*Font Formata-Italic: Standard "(001.002)" Standard Disk
+
+*Font Formata-Medium: Standard "(001.002)" Standard Disk
+
+*Font Formata-MediumItalic: Standard "(001.002)" Standard Disk
+
+*Font Formata-Regular: Standard "(001.002)" Standard Disk
+
+*Font Helvetica: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Bold: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-BoldOblique: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Condensed: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Condensed-Bold: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Condensed-BoldObl: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Condensed-Oblique: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Narrow: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Narrow-Bold: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Narrow-Oblique: Standard "(001.002)" Standard Disk
+
+*Font Helvetica-Oblique: Standard "(001.002)" Standard Disk
+
+*Font Kaufmann: Standard "(001.002)" Standard Disk
+
+*Font Lithos-Black: Standard "(001.002)" Standard Disk
+
+*Font Lithos-Regular: Standard "(001.002)" Standard Disk
+
+*Font NewCenturySchlbk-Bold: Standard "(001.002)" Standard Disk
+
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.002)" Standard Disk
+
+*Font NewCenturySchlbk-Italic: Standard "(001.002)" Standard Disk
+
+*Font NewCenturySchlbk-Roman: Standard "(001.002)" Standard Disk
+
+*Font Palatino-Bold: Standard "(001.002)" Standard Disk
+
+*Font Palatino-BoldItalic: Standard "(001.002)" Standard Disk
+
+*Font Palatino-Italic: Standard "(001.002)" Standard Disk
+
+*Font Palatino-Roman: Standard "(001.002)" Standard Disk
+
+*Font Parisian: Standard "(001.002)" Standard Disk
+
+*Font ParkAvenue: Standard "(001.002)" Standard Disk
+
+*Font Poetica-SuppOrnaments: Standard "(001.002)" Standard Disk
+
+*Font Symbol: Standard "(001.002)" Standard Disk
+
+*Font Tekton: Standard "(001.002)" Standard Disk
+
+*Font Tekton-Bold: Standard "(001.002)" Standard Disk
+
+*Font Times-Bold: Standard "(001.002)" Standard Disk
+
+*Font Times-BoldItalic: Standard "(001.002)" Standard Disk
+
+*Font Times-Italic: Standard "(001.002)" Standard Disk
+
+*Font Times-Roman: Standard "(001.002)" Standard Disk
+
+*Font Trajan-Bold: Standard "(001.002)" Standard Disk
+
+*Font WoodtypeOrnaments-Two: Standard "(001.002)" Standard Disk
+
+*Font ZapfChancery-MediumItalic: Standard "(001.002)" Standard Disk
+
+*Font ZapfDingbats: Standard "(001.002)" Standard Disk
+
+*?FontQuery: "
+
+   save  
+
+   { count 1 gt
+
+      { exch dup 127 string cvs (/) print print (:) print
+
+       /Font resourcestatus {pop pop (Yes)} {(No)} ifelse = 
+
+      } { exit } ifelse
+
+   } bind loop
+
+   (*) = flush
+
+   restore"
+
+*End
+
+
+
+*?FontList: "
+
+   save (*) {cvn ==} 128 string /Font resourceforall
+
+   (*) = flush restore"
+
+*End
+
+
+
+*% Printer Messages (verbatim from printer):
+
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+
+*Message: "\FontName\ not found, using Courier"
+
+
+
+*% Status (format: %%[ status: <one of these> ]%% )
+
+*Status: "idle"
+
+*Status: "busy"
+
+*Status: "waiting"
+
+*Status: "printing"
+
+*Status: "scanning"
+
+*Status: "PrinterError: Copier is busy"
+
+*Status: "PrinterError: Copier is in standby mode"
+
+*Status: "PrinterError: Service cable is disconnected"
+
+*Status: "PrinterError: Out of fuser oil"
+
+*Status: "PrinterError: Copier door is open"
+
+*Status: "PrinterError: Paper jam"
+
+*Status: "PrinterError: Out of paper"
+
+*Status: "PrinterError: Waste toner container is full"
+
+*Status: "PrinterError: Out of toner"
+
+*Status: "PrinterError: There is no key"
+
+*Status: "PrinterError: There is no control card"
+
+*Status: "PrinterError: ID mode"
+
+*Status: "PrinterError: Copier needs attention; see copier control panel"
+
+*Status: "PrinterError: Load A3 paper"
+
+*Status: "PrinterError: Load A4 paper"
+
+*Status: "PrinterError: Load 11x17 paper"
+
+*Status: "PrinterError: Load Letter paper"
+
+*Status: "PrinterError: Load Letter-R paper"
+
+*Status: "PrinterError: Load A4-R paper"
+
+*Status: "PrinterError: Load B4 paper"
+
+*Status: "PrinterError: Load B5-R paper"
+
+*Status: "PrinterError: Load Legal paper"
+
+*Status: "PrinterError: Check copier power and cable connection"
+
+*Status: "PrinterError: Check film scanner connection"
+
+*Status: "PrinterError: Copier is warming up"
+
+*Status: "PrinterError: Copier communication error; call copier technician"
+
+*Status: "PrinterError: Set paper size, then load manual feed paper"
+
+*Status: "PrinterError: An unknown copier error occurred"
+
+*Status: "PrinterError: Load manual feed paper"
+
+*Status: "PrinterError: Remove manual feed paper, then set size"
+
+*Status: "PrinterError: Copier is disconnected"
+
+*Status: "PrinterError: Film Scanner has copy control"
+
+
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+
+*Source: "EtherTalk"
+
+*Source: "Parallel"
+
+*Source: "TCP/IP"
+
+*Source: "Novell IPX"
+
+
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+
+*PrinterError: "Copier is busy"
+
+*PrinterError: "Copier is in standby mode"
+
+*PrinterError: "Service cable is disconnected"
+
+*PrinterError: "Out of fuser oil"
+
+*PrinterError: "Copier door is open"
+
+*PrinterError: "Paper jam"
+
+*PrinterError: "Out of paper"
+
+*PrinterError: "Waste toner container is full"
+
+*PrinterError: "Out of toner"
+
+*PrinterError: "There is no key"
+
+*PrinterError: "There is no control card"
+
+*PrinterError: "ID mode"
+
+*PrinterError: "Copier needs attention; see copier control panel"
+
+*PrinterError: "Load A3 paper"
+
+*PrinterError: "Load A4 paper"
+
+*PrinterError: "Load 11x17 paper"
+
+*PrinterError: "Load Letter paper"
+
+*PrinterError: "Load Legal paper"
+
+*PrinterError: "Load Letter-R paper"
+
+*PrinterError: "Load A4-R paper"
+
+*PrinterError: "Load B4 paper"
+
+*PrinterError: "Load B5-R paper"
+
+*PrinterError: "Check copier power and cable connection"
+
+*PrinterError: "Check film scanner connection"
+
+*PrinterError: "Copier is warming up"
+
+*PrinterError: "Copier communication error; call copier technician"
+
+*PrinterError: "Set paper size, then load manual feed paper"
+
+*PrinterError: "An unknown copier error occurred"
+
+*PrinterError: "Load manual feed paper"
+
+*PrinterError: "Remove manual feed paper, then set size"
+
+*PrinterError: "Copier is disconnected"
+
+*PrinterError: "Film Scanner has copy control"
+
+
+
+
+
+*% Color Separation Information ====================
+
+
+
+
+
+*% Custom Inks for Fiery Logo
+
+*InkName: P300FieryBlue/Fiery Blue
+
+*InkName: P199FieryRed/Fiery Red
+
+*InkName: PblackFieryBlack/Fiery Black
+
+*CustomCMYK P300FieryBlue: ".9 .9 .0 .0"
+
+*CustomCMYK P199FieryRed: ".0 .9 .9 .0"
+
+*CustomCMYK PblackFieryBlack: ".2 .1 .1 .9"
+
+
+
+*DefaultColorSep: Black.100lpi.400dpi
+
+*DefaultSeparations: False
+
+
+
+*% ------Halftone Text Mode (Default)
+
+*ColorSepScreenAngle Cyan.100lpi.400dpi: "0"
+
+*ColorSepScreenAngle Magenta.100lpi.400dpi: "0"
+
+*ColorSepScreenAngle Yellow.100lpi.400dpi: "0"
+
+*ColorSepScreenAngle Black.100lpi.400dpi: "0"
+
+*ColorSepScreenFreq Cyan.100lpi.400dpi: "50.0"
+
+*ColorSepScreenFreq Magenta.100lpi.400dpi: "50.0"
+
+*ColorSepScreenFreq Yellow.100lpi.400dpi: "50.0"
+
+*ColorSepScreenFreq Black.100lpi.400dpi: "50.0"
+
+*ColorSepScreenProc Cyan.100lpi.400dpi: "{6 5 
+
+	{ 3 1 roll 4 -1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}
+
+	exec 8 mul 3 1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}			
+
+	exec add
+
+	[
+
+	48 18  8 16   46 16  6 14
+
+	56 60 32 24   54 58 30 22
+
+	 4 12 44 40    2 10 42 38
+
+	28 20 52 64   26 18 50 62
+
+	
+
+	45 15  5 13   47 17  7 15
+
+	53 57 29 21   55 59 31 23
+
+	 1  9 41 37    3 11 43 39
+
+	25 17 49 61   27 19 51 63
+
+	] 
+
+	exch get 8 dup mul div} exec}" 
+
+*End
+
+
+
+*ColorSepScreenProc Magenta.100lpi.400dpi: "{4 7 
+
+	{ 3 1 roll 4 -1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}
+
+	exec 8 mul 3 1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}			
+
+	exec add
+
+	[
+
+	48 18  8 16   46 16  6 14
+
+	56 60 32 24   54 58 30 22
+
+	 4 12 44 40    2 10 42 38
+
+	28 20 52 64   26 18 50 62
+
+	
+
+	45 15  5 13   47 17  7 15
+
+	53 57 29 21   55 59 31 23
+
+	 1  9 41 37    3 11 43 39
+
+	25 17 49 61   27 19 51 63
+
+	] 
+
+	exch get 8 dup mul div} exec}"
+
+*End
+
+
+
+*ColorSepScreenProc Yellow.100lpi.400dpi: "{5 2
+
+	{ 3 1 roll 4 -1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}
+
+	exec 8 mul 3 1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}			
+
+	exec add
+
+	[
+
+	48 18  8 16   46 16  6 14
+
+	56 60 32 24   54 58 30 22
+
+	 4 12 44 40    2 10 42 38
+
+	28 20 52 64   26 18 50 62
+
+	
+
+	45 15  5 13   47 17  7 15
+
+	53 57 29 21   55 59 31 23
+
+	 1  9 41 37    3 11 43 39
+
+	25 17 49 61   27 19 51 63
+
+	] 
+
+	exch get 8 dup mul div} exec}"
+
+*End
+
+
+
+*ColorSepScreenProc Black.100lpi.400dpi: "{2 4 
+
+	{ 3 1 roll 4 -1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}
+
+	exec 8 mul 3 1 roll exch 
+
+	{dup 8  ge { 8 sub} if exch 
+
+	dup -1.0 le {pop -1.0} if dup 0.97 gt {pop 0.97} if 	 
+
+	1.0 add 8 2 div  mul add dup 8 ge {8 sub} if
+
+	dup 0 lt {0 exch sub} if  cvi
+
+	}			
+
+	exec add
+
+	[
+
+	48 18  8 16   46 16  6 14
+
+	56 60 32 24   54 58 30 22
+
+	 4 12 44 40    2 10 42 38
+
+	28 20 52 64   26 18 50 62
+
+	
+
+	45 15  5 13   47 17  7 15
+
+	53 57 29 21   55 59 31 23
+
+	 1  9 41 37    3 11 43 39
+
+	25 17 49 61   27 19 51 63
+
+	] 
+
+	exch get 8 dup mul div} exec}"
+
+*End
+
+
+
+*% End of PPD file for ColorPASS 350-550
+
+*% The byte count of this file should be exactly 036732 or 038677
+*% depending on the filesystem it resides in.
+*% end of PPD file for Fiery XJK 1000 1525-1550 

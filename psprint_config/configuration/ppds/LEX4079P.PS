@@ -1,0 +1,641 @@
+*PPD-Adobe: "4.1"
+*% Adobe PostScript(R) Printer Description File
+*% For Lexmark Color Jetprinter 4079 plus
+*% Produced by Lexmark International, Inc.
+*%
+*% Copyright (c) 1993-1998 Lexmark International Inc.  All Rights Reserved.
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the content
+*% of the file is not altered in any way from its original form.
+*%
+*%
+*% WARNING:  If you want to edit this PPD file and use it with Aldus
+*%           PageMaker, be sure to use an editor (such as DOS Edit)
+*%           that does NOT add an end-of-file marker (hex 1A) when
+*%           it stores the file.
+*%
+*%
+
+*FormatVersion: "4.1"
+*FileVersion: "1.3"
+*LanguageVersion: English
+*PCFileName: "LEX4079P.PPD"
+*LanguageEncoding: WindowsANSI
+*Product: "(Lexmark Color Jetprinter 4079 plus)"
+*PSVersion: "(2014)"
+*ModelName: "Lexmark Color Jetprinter 4079 plus"
+*ShortNickName: "Lexmark Color 4079 plus PS"
+*NickName: "Lexmark Color 4079 plus PS"
+
+*% === Options and Constraints ============
+
+*OpenGroup: InstallableOptions/Options Installed
+*OpenUI *Option1/Printer Memory - Option: PickOne
+*DefaultOption1: 4Meg
+*Option1 4Meg/4 MB Printer Memory:  ""
+*Option1 8Meg/8 MB Printer Memory:  ""
+*Option1 12Meg/12 MB Printer Memory:  ""
+*Option1 20Meg/20 MB Printer Memory:  ""
+*Option1 32Meg/32 or more MB Printer Memory:  ""
+*CloseUI: *Option1
+
+*OpenUI *Option2/Printer Hard Disk - Option: Boolean
+*DefaultOption2: False
+*Option2 False/Not Installed: ""
+*Option2 True/Installed: ""
+*CloseUI: *Option2
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *Option1 4Meg  *VMOption
+*UIConstraints: *Option1 8Meg  *VMOption 4Meg
+*UIConstraints: *Option1 8Meg  *VMOption 12Meg
+*UIConstraints: *Option1 8Meg  *VMOption 20Meg
+*UIConstraints: *Option1 8Meg  *VMOption 36Meg
+*UIConstraints: *Option1 12Meg *VMOption 4Meg
+*UIConstraints: *Option1 12Meg *VMOption 8Meg
+*UIConstraints: *Option1 12Meg *VMOption 20Meg
+*UIConstraints: *Option1 12Meg *VMOption 36Meg
+*UIConstraints: *Option1 20Meg *VMOption 4Meg
+*UIConstraints: *Option1 20Meg *VMOption 8Meg
+*UIConstraints: *Option1 20Meg *VMOption 12Meg
+*UIConstraints: *Option1 20Meg *VMOption 36Meg
+*UIConstraints: *Option1 36Meg *VMOption 4Meg
+*UIConstraints: *Option1 36Meg *VMOption 8Meg
+*UIConstraints: *Option1 36Meg *VMOption 12Meg
+*UIConstraints: *Option1 36Meg *VMOption 20Meg
+*UIConstraints: *Option2 False *HardDisk
+*UIConstraints: *MediaType Standard *MediaWeight
+
+*% === Basic Capabilities ============
+*% System Management==Base=4Meg, (8,12,20,36Meg with optional ram) ======
+
+*LanguageLevel: "2"
+*Protocols: PJL
+*TTRasterizer: Type42
+*FreeVM: "2940928"
+*VMOption 4Meg:    "2940928"
+*VMOption 8Meg:    "2940928"
+*VMOption 12Meg:   "2940928"
+*VMOption 20Meg:   "2940928"
+*VMOption 32Meg:   "2940928"
+*ColorDevice: True
+*DefaultColorSpace: CMYK
+*Extensions: CMYK
+*VariablePaperSize: False
+*Throughput: "1"
+*Password: "0"
+
+*ExitServer: "
+ count 0 eq   % is the password on the stack?
+ { true }
+ { dup        % potential password
+   statusdict /checkpassword get exec not
+ } ifelse
+ {  %  if no password or not valid
+   (WARNING : Cannot perform the exitserver command.) =
+   (Password supplied is not valid.) =
+   (Please contact the author of this software.) = flush
+   quit
+ } if
+ serverdict /exitserver get exec
+ "
+*End
+*Reset: "
+ count 0 eq  % is the password on the stack?
+ { true }
+ { dup      % potential password
+   statusdict /checkpassword get exec not
+ } ifelse
+ {  %  if no password or not valid
+   (WARNING : Cannot reset printer.) =
+   (Password supplied is not valid.) =
+   (Please contact the author of this software.) = flush
+   quit
+ } if
+ serverdict /exitserver get exec
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+ "
+*End
+
+*% === Resolution ============
+
+*OpenUI *Resolution/Resolution:  PickOne
+*DefaultResolution: 360dpi
+*Resolution 360dpi/360 dpi: ""
+*?Resolution: "
+ save
+  currentpagedevice /HWResolution get 0 get
+  (     ) cvs print (dpi) = flush
+  restore
+ "
+*End
+*CloseUI: *Resolution
+
+*% == Job Control Language ==
+
+*JCLBegin: "<1B>%-12345X@PJL JOB<0A>"
+*JCLToPSInterpreter: "@PJL ENTER LANGUAGE = Postscript <0A>"
+*JCLEnd: "<1B>%-12345X@PJL EOJ <0A><1B>%-12345X"
+
+
+*% === Halftone Information === (For Standard Screening) ===
+
+*ScreenFreq: "60.0"
+*ScreenAngle: "24.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+ {abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+ sub }{dup mul exch dup mul add 1 exch sub }ifelse }
+ "
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+*Transfer Normalized: "{ }"
+*Transfer Normalized.Inverse: "{ 1 exch sub }"
+*Transfer Red: "{ }"
+*Transfer Red.Inverse: "{ 1 exch sub }"
+*Transfer Green: "{ }"
+*Transfer Green.Inverse: "{ 1 exch sub }"
+*Transfer Blue: "{ }"
+*Transfer Blue.Inverse: "{ 1 exch sub }"
+
+*OpenUI *MediaColor/Print Quality: PickOne
+*OrderDependency: 10 AnySetup *MediaColor
+*DefaultMediaColor: Quality
+*MediaColor Draft/Draft: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /PrintMethod 3 put put setpagedevice"
+*MediaColor Transparency/Transparency: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /PrintMethod 5 put put setpagedevice"
+*MediaColor Quality/Quality: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /PrintMethod 1 put put setpagedevice"
+*MediaColor PauseMode/Pause Mode: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /PrintMethod 4 put put setpagedevice"
+*MediaColor BoldBlack/Bold Black: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /PrintMethod 2 put put setpagedevice"
+*?MediaColor: "
+ save statusdict begin
+ [(Quality) (BoldBlack) (Draft) (PauseMode) (Transparency)]
+ printmethod 1 sub get = flush
+ end
+ restore"
+*End
+*CloseUI: *MediaColor
+
+*OpenUI *MediaType/Screening: PickOne
+*OrderDependency: 10 AnySetup *MediaType
+*DefaultMediaType: Enhanced
+*MediaType Standard/Standard: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /Screening 1 put put setpagedevice"
+*MediaType Enhanced/Enhanced: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /Screening 2 put put setpagedevice"
+*MediaType ColorGrade/ColorGrade: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /Screening 3 put put setpagedevice"
+*?MediaType: "
+ save statusdict begin
+ [(Standard) (Enhanced)(ColorGrade)] screening 1 sub get = flush
+ end
+ restore"
+*End
+*CloseUI: *MediaType
+
+*OpenUI *MediaWeight/Color Balance: PickOne
+*OrderDependency: 10 AnySetup *MediaWeight
+*DefaultMediaWeight: Off
+*MediaWeight Off/Off: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ColorBalance 0 put put setpagedevice"
+*MediaWeight CoatedPaper/Coated Paper: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ColorBalance 1 put put setpagedevice"
+*MediaWeight PlainPaper/Plain Paper: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ColorBalance 2 put put setpagedevice"
+*MediaWeight Transparency/Transparency: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ColorBalance 3 put put setpagedevice"
+*?MediaWeight: "
+ save statusdict begin
+ [(None) (CoatedPaper) (PlainPaper) (Transparency)]
+ colorbalance get = flush
+ end
+ restore"
+*End
+*CloseUI: *MediaWeight
+
+*OpenUI *OutputMode/Blue Adjust: PickOne
+*OrderDependency: 10 AnySetup *OutputMode
+*DefaultOutputMode: Off
+*OutputMode False/Off: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /BlueAdjust 0 put put setpagedevice"
+*End
+*OutputMode Painted/Line Art && Text: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /BlueAdjust 1 put put setpagedevice"
+*End
+*OutputMode Images/Images: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /BlueAdjust 2 put put setpagedevice"
+*End
+*OutputMode All/All: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /BlueAdjust 3 put put setpagedevice"
+*End
+*CloseUI: *OutputMode
+
+*OpenUI *ImageDiffusion/Image Diffusion: PickOne
+*OrderDependency: 10 AnySetup *ImageDiffusion
+*DefaultImageDiffusion: True
+*ImageDiffusion True/On: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageDiffusion true put put setpagedevice"
+*ImageDiffusion False/Off: "1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageDiffusion false put put setpagedevice"
+*?ImageDiffusion: "
+ save statusdict begin
+ [(Off) (On)] imagediffusion 1 sub get = flush
+ end
+ restore"
+*End
+*CloseUI: *ImageDiffusion
+
+*OpenUI *PBrightness/Image Brightness: PickOne
+*OrderDependency: 10 AnySetup *PBrightness
+*DefaultPBrightness: 0
+*PBrightness 0: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 0 put put setpagedevice"
+*End
+*PBrightness +5: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 5 put put setpagedevice"
+*End
+*PBrightness +10: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 10 put put setpagedevice"
+*End
+*PBrightness +15: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 15 put put setpagedevice"
+*End
+*PBrightness +20: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 20 put put setpagedevice"
+*End
+*PBrightness +25: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 25 put put setpagedevice"
+*End
+*PBrightness +30: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 30 put put setpagedevice"
+*End
+*PBrightness +35: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 35 put put setpagedevice"
+*End
+*PBrightness +40: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 40 put put setpagedevice"
+*End
+*PBrightness +45: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 45 put put setpagedevice"
+*End
+*PBrightness +50: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageBrightness 50 put put setpagedevice"
+*End
+*CloseUI: *PBrightness
+
+*OpenUI *PContrast/Image Contrast: PickOne
+*OrderDependency: 10 AnySetup *PContrast
+*DefaultPContrast: 0
+*PContrast 0: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 0 put put setpagedevice"
+*End
+*PContrast +5: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 5 put put setpagedevice"
+*End
+*PContrast +10: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 10 put put setpagedevice"
+*End
+*PContrast +15: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 15 put put setpagedevice"
+*End
+*PContrast +20: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 20 put put setpagedevice"
+*End
+*PContrast +25: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 25 put put setpagedevice"
+*End
+*PContrast +30: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 30 put put setpagedevice"
+*End
+*PContrast +35: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 35 put put setpagedevice"
+*End
+*PContrast +40: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 40 put put setpagedevice"
+*End
+*PContrast +45: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 45 put put setpagedevice"
+*End
+*PContrast +50: "
+ 1 dict dup /DeviceRenderingInfo 2 dict dup /Type 93 put dup /ImageContrast 50 put put setpagedevice"
+*End
+*CloseUI: *PContrast
+
+
+*% === Paper Handling ===================
+
+*% These entries will setup up the frame buffer.
+*OpenUI *PageSize:  PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/Letter: "
+ 2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal/Legal: "
+ 2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize B5/B5: "
+ 2 dict dup /PageSize [516 729] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4/A4: "
+ 2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Executive/Executive: "
+ 2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A3/A3: "
+ 2 dict dup /PageSize [842 1188] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Tabloid/Tabloid: "
+ 2 dict dup /PageSize [792 1224] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Universal/Oversize 11.7 x 22 in: "
+ 2 dict dup /PageSize [842 1584] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Comm10/C10 Envelope: "
+ 2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize DL/DL Envelope: "
+ 2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*?PageSize: "
+ save statusdict begin
+   9 dict begin
+   /letter (Letter) def
+   /legal (Legal) def
+   /b5 (B5) def
+   /a4 (A4) def
+   /executivepage (Executive) def
+   /a3 (A3) def
+   /11x17 (Tabloid) def
+   /11.7x22 (Oversize) def
+   /4.125x9.5envelope (Envelope.297.684/C10 Envelope) def
+   /110x220envelope (Envelope.312.624/DL Envelope) def
+   defaultpagesize pop
+   { load exec } stopped not
+           {= flush}
+           {(Unknown) = flush}
+   ifelse
+   end             %temp
+ end             %statusdict
+ restore
+ "
+*End
+*CloseUI: *PageSize
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/Letter: "
+ 2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Legal/Legal: "
+ 2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion B5/B5: "
+ 2 dict dup /PageSize [516 729] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A4/A4: "
+ 2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Executive/Executive: "
+ 2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A3/A3: "
+ 2 dict dup /PageSize [842 1188] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Tabloid/Tabloid: "
+ 2 dict dup /PageSize [792 1224] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Universal/Oversize 11.7 x 22 in: "
+ 2 dict dup /PageSize [842 1584] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Comm10/C10 Envelope: "
+ 2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion DL/DL Envelope: "
+ 2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: Letter
+*ImageableArea Letter/Letter:                      "12 27 603 781"
+*ImageableArea Legal/Legal:                        "12 26 603 997"
+*ImageableArea B5/B5:                              "12 28 507 716"
+*ImageableArea A4/A4:                              "11 26 587 831"
+*ImageableArea Executive/Executive:                "12 30 512 745"
+*ImageableArea A3/A3:                              "12 29 832 1177"
+*ImageableArea Tabloid/Tabloid:                    "12 24 782 1213"
+*ImageableArea Universal/Oversize 11.7 x 22 in:    "12 24 832 1574"
+*% TM, LM, Physical Page Height-BM, Physical Page Width-RM
+*ImageableArea Comm10/C10 Envelope:                "11 12 265 675"
+*ImageableArea DL/DL Envelope:                     "10 12 291 613"
+*?ImageableArea: "
+ save
+   /cvp { cvi (            ) cvs print ( ) print } bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {ceiling cvp} repeat
+    exch 2 {floor cvp} repeat flush
+ restore
+ "
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/Letter:                      "612 792"
+*PaperDimension Legal/Legal:                        "612 1008"
+*PaperDimension B5/B5:                              "516 729"
+*PaperDimension A4/A4:                              "595 842"
+*PaperDimension Executive/Executive:                "522 756"
+*PaperDimension A3/A3:                              "842 1188"
+*PaperDimension Tabloid/Tabloid:                    "792 1224"
+*PaperDimension Universal/Oversize 11.7 x 22 in:    "842 1584"
+*PaperDimension Comm10/C10 Envelope:                "297 684"
+*PaperDimension DL/DL Envelope:                     "312 624"
+
+*OpenUI *InputSlot:  PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: AutoSelect
+*InputSlot AutoSelect/Auto Select: "
+ 1 dict dup /Policies 1 dict dup /PageSize 2 put put setpagedevice"
+*End
+*InputSlot Upper/Upper Tray: "
+ 1 dict dup /ManualFeed false put setpagedevice
+ currentpagedevice /InputAttributes get 0 get setpagedevice
+ 1 dict dup /InputAttributes 1 dict dup /Priority [0] put put setpagedevice
+ 1 dict dup /Policies 1 dict dup /PageSize 7 put put setpagedevice"
+*End
+*CloseUI: *InputSlot
+
+*DefaultOutputBin: OnlyOne
+*OutputBin OnlyOne: ""
+*DefaultOutputOrder: Reverse
+*OutputOrder Reverse: ""
+
+*% === Font Information =======================
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.000)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.000)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.000)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.000)" Standard ROM
+*Font Bookman-Demi: Standard "(001.000)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.000)" Standard ROM
+*Font Bookman-Light: Standard "(001.000)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.000)" Standard ROM
+*Font Courier: Standard "(001.000)" Standard ROM
+*Font Courier-Bold: Standard "(001.000)" Standard ROM
+*Font Courier-Oblique: Standard "(001.000)" Standard ROM
+*Font Courier-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica: Standard "(001.000)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.000)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Light: Standard "(001.000)" Standard ROM
+*Font Helvetica-LightOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Black: Standard "(001.000)" Standard ROM
+*Font Helvetica-BlackOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.000)" Standard ROM
+*Font Palatino-Roman: Standard "(001.000)" Standard ROM
+*Font Palatino-Bold: Standard "(001.000)" Standard ROM
+*Font Palatino-Italic: Standard "(001.000)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.000)" Standard ROM
+*Font Symbol: Special "(001.000)" Special ROM
+*Font Times-Roman: Standard "(001.000)" Standard ROM
+*Font Times-Bold: Standard "(001.000)" Standard ROM
+*Font Times-Italic: Standard "(001.000)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.000)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.000)" Standard ROM
+*Font ZapfDingbats: Special "(001.000)" Special ROM
+*End
+*?FontQuery: "
+ save
+ 4 dict begin
+ /sv exch def /str (fonts/                              ) def /st2 30 string def
+   { count 0 gt
+     { dup FontDirectory exch known {pop 1}
+       { str exch st2 cvs dup length /len exch def
+         6 exch putinterval str 0 len 6 add getinterval mark exch
+         { } st2 filenameforall counttomark 0 gt
+         { cleartomark 1}{cleartomark 0}ifelse
+       }ifelse
+       print flush
+     }
+     { exit } ifelse
+   } bind loop
+ sv end restore
+ "
+*End
+
+*?FontList: "
+ FontDirectory { pop == } forall
+ /filenameforall where {
+  pop save (fonts/*) {
+   dup length 6 sub 6 exch getinterval ==
+  } 128 string filenameforall restore
+ } if
+ (*) print flush
+ "
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to EOF) is ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ]%% )
+*Status: "Idle"
+*Status: "Busy"
+*Status: "Waiting"
+*Status: "Printing"
+*Status: "Initializing"
+*Status: "Printing start page"
+*Status: "PrinterError: Printer Busy"
+*Status: "PrinterError: Paper Jam"
+*Status: "PrinterError: Wrong Paper Length"
+*Status: "PrinterError: Cover Open"
+*Status: "PrinterError: Wrong Paper Size"
+*Status: "PrinterError: Paper Out or Feed Failure"
+*Status: "PrinterError: Memory Full Error"
+*Status: "PrinterError: Default Storage Error"
+*Status: "PrinterError: Ioerror"
+*Status: "PrinterError: Black Ink Cartridge Empty"
+*Status: "PrinterError: Yellow Ink Cartridge Empty"
+*Status: "PrinterError: Magenta Ink Cartridge Empty"
+*Status: "PrinterError: Cyan Ink Cartridge Empty"
+*Status: "PrinterError: Black Ink Cart. Missing"
+*Status: "PrinterError: Yellow Ink Cart. Missing"
+*Status: "PrinterError: Magenta Ink Cart. Missing"
+*Status: "PrinterError: Cyan Ink Cart. Missing"
+*Status: "PrinterError: Service Error"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "Serial"
+*Source: "Parallel"
+*Source: "AppleTalk"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "Paper Jam"
+*PrinterError: "Wrong Paper Length"
+*PrinterError: "Cover Open"
+*PrinterError: "Wrong Paper Size"
+*PrinterError: "Paper Out or Feed Failure"
+*PrinterError: "Memory Full Error"
+*PrinterError: "Default Storage Error"
+*PrinterError: "Ioerror"
+*PrinterError: "Black Ink Cartridge Empty"
+*PrinterError: "Yellow Ink Cartridge Empty"
+*PrinterError: "Magenta Ink Cartridge Empty"
+*PrinterError: "Cyan Ink Cartridge Empty"
+*PrinterError: "Black Ink Cart. Missing"
+*PrinterError: "Yellow Ink Cart. Missing"
+*PrinterError: "Magenta Ink Cart. Missing"
+*PrinterError: "Cyan Ink Cart. Missing"
+*PrinterError: "Service Error"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi/60 lpi
+
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+*InkName: ProcessBlack/Process Black
+
+*ColorSepScreenAngle ProcessCyan.60lpi/60 lpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi/60 lpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi/60 lpi: "0"
+*ColorSepScreenAngle ProcessBlack.60lpi/60 lpi: "45"
+
+*ColorSepScreenFreq ProcessCyan.60lpi/60 lpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi/60 lpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi/60 lpi: "60"
+*ColorSepScreenFreq ProcessBlack.60lpi/60 lpi: "60"
+
+*ColorSepScreenProc ProcessCyan.60lpi/60 lpi: "
+ {abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+ sub }{dup mul exch dup mul add 1 exch sub }ifelse }"
+*End
+*ColorSepScreenProc ProcessMagenta.60lpi/60 lpi: "
+ {abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+ sub }{dup mul exch dup mul add 1 exch sub }ifelse }"
+*End
+*ColorSepScreenProc ProcessYellow.60lpi/60 lpi: "
+ {abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+ sub }{dup mul exch dup mul add 1 exch sub }ifelse }"
+*End
+*ColorSepScreenProc ProcessBlack.60lpi/60 lpi: "
+ {abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1
+ sub }{dup mul exch dup mul add 1 exch sub }ifelse }"
+*End
+
+*ColorSepTransfer ProcessCyan.60lpi/60 lpi: "{ }"
+*ColorSepTransfer ProcessMagenta.60lpi/60 lpi: "{ }"
+*ColorSepTransfer ProcessYellow.60lpi/60 lpi: "{ }"
+*ColorSepTransfer ProcessBlack.60lpi/60 lpi: "{ }"
+
+*% End of PPD file for Lexmark Color Jetprinter 4079 plus
