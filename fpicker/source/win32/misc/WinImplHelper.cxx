@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:41:31 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-
-#include <systools/win32/user9x.h>
 
 //------------------------------------------------------------
 // namespace directives

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-06-28 11:07:32 $
+#   last change: $Author: hro $ $Date: 2002-08-14 15:35:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,11 +84,13 @@ SHL1STDLIBS=$(CPPULIB)\
             $(SALLIB)\
             $(VCLLIB)\
             $(TOOLSLIB)\
+            uwinapi.lib \
+            unicows.lib \
+            advapi32.lib \
             shell32.lib\
             ole32.lib\
             gdi32.lib\
             oleaut32.lib\
-            tools32.lib\
             comdlg32.lib\
             kernel32.lib\
             comsupp.lib\
@@ -98,11 +100,7 @@ SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
 
 SHL1LIBS=$(SLB)$/fps.lib\
-         $(SLB)$/utils.lib\
-         $(SOLARLIBDIR)$/shell9x.lib\
-         $(SOLARLIBDIR)$/user9x.lib\
-         $(SOLARLIBDIR)$/kernel9x.lib\
-         $(SOLARLIBDIR)$/comdlg9x.lib
+         $(SLB)$/utils.lib
 
 SHL1OBJS=$(SLOFILES)
             
@@ -121,6 +119,9 @@ SHL2STDLIBS=$(CPPULIB)\
             $(SALLIB)\
             $(TOOLSLIB)\
             $(VCLLIB)\
+            uwinapi.lib \
+            unicows.lib \
+            advapi32.lib \
             ole32.lib\
             gdi32.lib\
             shell32.lib\
@@ -132,9 +133,7 @@ SHL2IMPLIB=i$(SHL2TARGET)
 
 SHL2LIBS=\
     $(SLB)$/fop.lib\
-    $(SLB)$/utils.lib\
-    $(SOLARLIBDIR)$/shell9x.lib\
-    $(SOLARLIBDIR)$/user9x.lib
+    $(SLB)$/utils.lib
 
 SHL2OBJS=$(SLOFILES) 
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
