@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:17:22 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 17:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ turkish ] = "Çeviri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Traducción";
-        Text[ finnish ] = "Käännös";
+        Text[ finnish ] = "K??nn?";
     };
     Edit TT_E_NEW {
             Disable = TRUE;
@@ -380,7 +380,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ turkish ] = "Asýl metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Texto original";
-        Text[ finnish ] = "Alkuperäinen teksti";
+        Text[ finnish ] = "Alkuper?inen teksti";
     };
     GroupBox TT_GB_COMMENT {
             Pos = MAP_APPFONT( 2, 52 );
@@ -406,7 +406,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
-        Text[ finnish ] = "Kommentti";
+        Text[ finnish ] = "Huomautus";
     };
     Edit TT_E_COMMENT {
             Disable = TRUE;
@@ -435,7 +435,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ turkish ] = "~Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comentario";
-        Text[ finnish ] = "~Kommentti";
+        Text[ finnish ] = "~Huomautus";
     };
     PushButton TT_PB_SELECT {
             Pos = MAP_APPFONT( Control_Border, 89 );
@@ -520,7 +520,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ turkish ] = "~Kabul";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aceptar";
-        Text[ finnish ] = "~Hyväksy";
+        Text[ finnish ] = "~Hyv?ksy";
     };
     PushButton TT_PB_NEXT {
             Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
@@ -584,7 +584,7 @@ MessBox TT_DISCARD_CHANGED_DATA {
     Message[ turkish ] = "Çevriri kaybolacak. Devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Se perderá la traducción. ¿Continuar?";
-    Message[ finnish ] = "Käännös menetetään. Jatketaanko kuitenkin?";
+    Message[ finnish ] = "K??nn? menetet??n. Jatketaanko kuitenkin?";
 };
 
 ErrorBox TT_NO_CONTROL {
@@ -611,7 +611,7 @@ ErrorBox TT_NO_CONTROL {
     Message[ turkish ] = "Denetim artýk geçerli deðil. Çeviri kaydedilemiyor.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La validez del control no durará mucho. No se puede guardar la traducción.";
-    Message[ finnish ] = "Tämä ohjain ei enää ole kelvollinen. Käännöstä ei voida tallentaa.";
+    Message[ finnish ] = "T?m? ohjain ei en?? ole kelvollinen. K??nn?t? ei voida tallentaa.";
 };
 
 String TT_GPF
@@ -663,6 +663,7 @@ String TT_ALTERNATE_CAPTION
     Text[ catalan ] = "HelpID difiere de UniqueID:";
     Text[ finnish ] = "Ohjetunnus ei täsmää seuraavan yksilöllisen tunnuksen kanssa: ";
 };
+
 
 
 
