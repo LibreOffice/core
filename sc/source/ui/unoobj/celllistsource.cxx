@@ -2,9 +2,9 @@
  *
  *  $RCSfile: celllistsource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:06:56 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace calc
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
 
     //=====================================================================
     //= OCellListSource
@@ -256,8 +256,8 @@ namespace calc
     Sequence< ::rtl::OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices( 2 );
-        aServices[ 0 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.table.CellRangeListSource" ) );
-        aServices[ 1 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.form.ListEntrySource" ) );
+        aServices[ 0 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.CellRangeListSource" ) );
+        aServices[ 1 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.binding.ListEntrySource" ) );
         return aServices;
     }
 
