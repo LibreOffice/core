@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:14:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,15 @@ public:
         completed its construction.
     */
     virtual void Init (void);
+
+    /** Return a slide sorter that is currently displayed in one of the
+        panes that belong to the given ViewShellBase object.
+        When there is only one slide sorter visible then that one is
+        returned.  When two (or more) are visible then the one in the center
+        pane is returned.  When no slidesorter is visible then NULL is
+        returned.
+    */
+    static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
 
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
