@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:48:18 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 12:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,10 +715,10 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
     SetFontDecls( pFSContext );
     return pFSContext;
 }
-void SwXMLImport::SetViewSettings(Sequence<beans::PropertyValue> aViewProps)
+void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewProps)
 {
     sal_Int32 nCount = aViewProps.getLength();
-    beans::PropertyValue *pValue = aViewProps.getArray();
+    const beans::PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTop = 0, nLeft = 0, nWidth = 0, nHeight = 0;
     sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
@@ -793,7 +793,7 @@ void SwXMLImport::SetViewSettings(Sequence<beans::PropertyValue> aViewProps)
     else if ( bShowDeletes )
         pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_DELETE );
 }
-void SwXMLImport::SetConfigurationSettings(uno::Sequence<beans::PropertyValue> aConfigProps)
+void SwXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
 {
 }
 
