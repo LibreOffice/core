@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:36:44 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ chinese_simplified ] = "°üº¬µÄÕÂ½Ú´ó¸Ù¼¶";
         Text[ russian ] = "Âêëş÷åííûå óğîâíè ğàçäåëîâ";
         Text[ polish ] = "W³¹cznie z poziomami rozdzia³u";
-        Text[ japanese ] = "‘ÎÛ‚É‚·‚éÍÚÍŞÙ”";
+        Text[ japanese ] = "’Šo‚·‚éÍÚÍŞÙ”";
         Text[ chinese_traditional ] = "¥]§tªº³¹¸`¤jºõ";
         Text[ arabic ] = "ãÓÊæíÇÊ ÇáİÕá ÇáãÖãäÉ";
         Text[ dutch ] = "Aantal overzichtsniveau's";
