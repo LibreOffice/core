@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">Option Explicit
 
 &apos;  *****  BASIC  *****
 &apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden koennen.
@@ -13,13 +13,14 @@ Public bSetFonts as Boolean
 &apos; set to False
 Public bConversionIsRunnig as Boolean
 Public oFactoriesAccess as Object
+Public RetValue as Integer
 
 Sub Main()
-Dim RetValue as Integer
 	If Not bDebugWizard Then
 		On Local Error Goto RTError
 	End If
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	RetValue = 10
 	bSetFonts = False
 	bConversionIsRunnig = False
 	If bSetFonts Then
@@ -130,6 +131,7 @@ End Sub
 Sub CallCancelTask()
 	CancelTask(True)
 End Sub
+
 
 Sub CancelTask(bCloseDialog as Boolean)
 	If bConversionIsRunnig Then

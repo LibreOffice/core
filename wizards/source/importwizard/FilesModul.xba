@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FilesModul" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FilesModul" script:language="StarBasic">Option Explicit
 
 Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
@@ -93,10 +93,7 @@ Dim bIsDocument as Boolean
 Dim iOverWrite as Integer
 Dim bDoSave as Boolean
 Dim sCurFileExists as String
-Dim oTaskEnum as Object
-Dim oTask as Object
 Dim oModel as Object
-Dim oTaskController as Object
 Dim MaxFileIndex as Integer
 Dim sOldExtension as String
 	bConversionIsRunnig = True
@@ -123,7 +120,7 @@ Dim sOldExtension as String
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
 		MaxFileIndex = Ubound(FilesList(),1)
 		For i = 0 To MaxFileIndex
-			If bCancelTask Then
+			If bCancelTask Or RetValue = 0 Then
 				bConversionIsRunnig = False
 				Exit Sub
 			End if
@@ -136,8 +133,6 @@ Dim sOldExtension as String
 			
 			sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
 			Select Case sOldExtension
-&apos; Todo: This code should be simplified as soon as it is clear how &apos;LoadComponentfromUrl&apos; exactly works with 
-&apos; templates and documents
 				Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
 					OpenProperties(1).Value = False
 				Case Else
@@ -192,20 +187,6 @@ Dim sOldExtension as String
 					oDocument.Dispose()
 					On Local Error Goto 0
 				End If
-&apos;				oTaskenum = StarDesktop.Tasks.CreateEnumeration
-&apos;				While oTaskEnum.HasmoreElements
-&apos;					oTask = oTaskenum.NextElement
-&apos;					If oTask.Name &lt;&gt; &quot;&quot; Then
-&apos;						oTaskController = oTask.Controller
-&apos;						PrintdbgInfo oTaskController
-&apos;						If hasUnoInterfaces(oTaskController,&quot;com.sun.star.frame.XModel&quot;) then
-&apos;							oModel = oTaskController.Model
-&apos;							If Ucase(oModel.Url) = Ucase(sFullName) Then
-&apos;								oTask.Close
-&apos;							End If
-&apos;						End If
-&apos;					End If
-&apos;				Wend
 			End If
 		Next i
 	End If
