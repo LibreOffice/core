@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:23:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,10 @@ void SvxRTFParser::ReadFontTable()
                     CharSet nCharSet = rtl_getTextEncodingFromWindowsCharset(
                         (BYTE)nTokenValue);
                     pFont->SetCharSet(nCharSet);
+                    //When we're in a font, the fontname is in the font
+                    //charset, except for symbol fonts I believe
+                    if (nCharSet == RTL_TEXTENCODING_SYMBOL)
+                        nCharSet = RTL_TEXTENCODING_DONTKNOW;
                     SetEncoding(nCharSet);
                 }
                 break;
