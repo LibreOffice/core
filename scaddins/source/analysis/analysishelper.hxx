@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:17:39 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,8 @@ double              Gamma( double f );
 double              GammaN( double f, sal_uInt32 nIter );
 double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
 STRING              ConvertFromDec(
-                        sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt16 nBase,
-                        sal_Int32 nPlaces, sal_Int32 nMaxPlaces ) THROWDEF_RTE_IAE;
+                        double fNum, double fMin, double fMax, sal_uInt16 nBase,
+                        sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE;
 double              Erf( double fX );
 sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
 STRING              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
