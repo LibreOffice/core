@@ -28,7 +28,7 @@ SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -454,7 +454,7 @@ SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -880,7 +880,7 @@ SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -1306,7 +1306,7 @@ SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -1732,7 +1732,7 @@ SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -2158,7 +2158,7 @@ SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -2584,7 +2584,7 @@ SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -3010,7 +3010,7 @@ SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -3436,7 +3436,7 @@ SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
@@ -3862,7 +3862,7 @@ SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
 #fallback
 LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml)
 .IF "$(LOCALDESC)"==""
-$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ENDIF
 
