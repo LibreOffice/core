@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 22:05:10 $
+ *  last change: $Author: mtg $ $Date: 2001-07-26 16:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 , mpDocSh ( NULL )
 , mpDoc ( NULL )
 {
-    registerSlave ( new SwXPrintSettings ( sal_False ) );
+    registerSlave ( new SwXPrintSettings ( sal_False, mpModel->GetDocShell()->GetDoc() ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
