@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:19:15 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2911,7 +2911,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_traditional ] = "ε—δΏθ­·η„η©Ίζ Όε­—ε…ƒ(~P)";
         Text[ arabic ] = "ΓΝΡέ γΣΗέΙ γΝγνΙ";
         Text[ greek ] = "Προ~στατευόμενοι χαρακτήρες κενών";
-        Text[ korean ] = "κ³µλ°± λ³΄νΈ(~P)";
+        Text[ korean ] = "κ³µλ°± λ³΄νΈ";
         Text[ turkish ] = "Bφlόnemez boώluklar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espacios proteg~idos";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
