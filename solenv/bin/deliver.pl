@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2002-03-08 11:45:14 $
+#   last change: $Author: er $ $Date: 2002-03-28 02:25:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.22 $ ';
+$id_str = ' $Revision: 1.23 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -215,7 +215,7 @@ sub do_linklib {
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
-        if ( $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/ ) {
+        if ( $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)(\.(\d+))?$/ ) {
            push(@{$globbed_hash{$1}}, $lib);
         }
         else {
@@ -226,7 +226,7 @@ sub do_linklib {
     foreach $lib_base ( sort keys %globbed_hash ) {
         $lib = get_latest_patchlevel(@{$globbed_hash{$lib_base}});
 
-        $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
+        $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)(\.(\d+))?$/;
         $lib_major = "$lib_base.$2";
 
         if ( $opt_check ) {
