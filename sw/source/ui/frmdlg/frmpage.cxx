@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,12 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     aAtHorzPosED.SaveValue();
 
     bNoModifyHdl = FALSE;
+    //lock PercentFields
+    aWidthED.LockAutoCalculation(sal_True);
+    aHeightED.LockAutoCalculation(sal_True);
     RangeModifyHdl(&aWidthED);  // Alle Maximalwerte initial setzen
+    aHeightED.LockAutoCalculation(sal_False);
+    aWidthED.LockAutoCalculation(sal_False);
 
     aAutoHeightCB.SaveValue();
 
@@ -1518,7 +1523,12 @@ void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
     bNoModifyHdl = TRUE;
     Init(rSet);
     bNoModifyHdl = FALSE;
+    //lock PercentFields
+    aWidthED.LockAutoCalculation(sal_True);
+    aHeightED.LockAutoCalculation(sal_True);
     RangeModifyHdl(&aWidthED);  // Alle Maximalwerte initial setzen
+    aHeightED.LockAutoCalculation(sal_False);
+    aWidthED.LockAutoCalculation(sal_False);
 }
 
 int SwFrmPage::DeactivatePage(SfxItemSet * pSet)
@@ -1984,7 +1994,7 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
             nHeight = SwTwips((double)nWidth / fWidthHeightRatio);
             aHeightED.SetPrcntValue(aHeightED.Normalize(nHeight), FUNIT_TWIP);
         }
-        else
+        else if(pEdit == &aHeightED)
         {
             nWidth = SwTwips((double)nHeight * fWidthHeightRatio);
             aWidthED.SetPrcntValue(aWidthED.Normalize(nWidth), FUNIT_TWIP);
