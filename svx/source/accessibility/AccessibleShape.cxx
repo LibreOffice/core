@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:25:00 $
+ *  last change: $Author: af $ $Date: 2002-04-30 14:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,37 +222,30 @@ sal_Int32 SAL_CALL
     an exception for a wrong index.
 */
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleShape::getAccessibleChild (long nIndex)
+    AccessibleShape::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    if (nIndex >= 0)
-    {
-        if (mpChildrenManager != NULL)
-            if (nIndex < mpChildrenManager->GetChildCount())
-                return mpChildrenManager->GetChild (nIndex);
-            else
-            {
-                // Adapt index to children (paragraphs) of the edit engine.
-                nIndex -= mpChildrenManager->GetChildCount();
-            }
-        if (mpText != NULL)
-        {
-            try
-            {
-                if (nIndex < mpText->GetChildCount())
-                    return mpText->GetChild (nIndex);
-            }
-            catch (::com::sun::star::lang::IndexOutOfBoundsException e)
-            {
-                return NULL;
-            }
-        }
-    }
 
-    throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("shape has no child with index ")+nIndex,
-        static_cast<uno::XWeak*>(this));
+    uno::Reference<XAccessible> xChild;
+
+    if ((mpChildrenManager != NULL) && (nIndex < mpChildrenManager->GetChildCount()))
+    {
+        xChild = mpChildrenManager->GetChild (nIndex);
+    }
+    else if (mpText != NULL)
+    {
+        sal_Int32 nI = nIndex;
+        if (mpChildrenManager != NULL)
+            nI -= mpChildrenManager->GetChildCount();
+        xChild = mpText->GetChild (nI);
+    }
+    else
+        throw lang::IndexOutOfBoundsException (
+            ::rtl::OUString::createFromAscii ("shape has no child with index ")+nIndex,
+            static_cast<uno::XWeak*>(this));
+
+    return xChild;
 }
 
 
@@ -324,7 +317,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         catch (beans::UnknownPropertyException e)
         {
             // Fallback when there is no BoundRect Property.
-            OSL_TRACE ("unknown property BoundingBox");
+            OSL_TRACE ("unknown property BoundRect");
             awt::Point aPosition (mxShape->getPosition());
             awt::Size aSize (mxShape->getSize());
             aBoundingBox = awt::Rectangle (
@@ -469,7 +462,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    sal_Int32 nColor (0x0ffffffL);
+    sal_Int32 nColor (0L);
 
     try
     {
@@ -603,35 +596,24 @@ void SAL_CALL
             uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
             SetState (AccessibleStateType::DEFUNC);
             mxShape = NULL;
+
+            // Release the child containers.
+            if (mpChildrenManager != NULL)
+            {
+                delete mpChildrenManager;
+                mpChildrenManager = NULL;
+            }
+            if (mpText != NULL)
+            {
+                delete mpText;
+                mpText = NULL;
+            }
         }
     }
     catch (uno::RuntimeException e)
     {
         OSL_TRACE ("caught exception while disposing");
     }
-}
-
-
-
-
-//=====  XComponent  ==========================================================
-
-void AccessibleShape::dispose (void)
-    throw (uno::RuntimeException)
-{
-    CheckDisposedState ();
-    OSL_TRACE ("AccessibleShape::dispose");
-
-    // Unregister listeners.
-    Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener (this);
-
-    // Cleanup.
-    mxShape = NULL;
-
-        // Call base classes.
-    AccessibleContextBase::dispose ();
 }
 
 
@@ -685,6 +667,9 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
         case DRAWING_3D_SPHERE:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSphereShape"));
+            break;
+        case DRAWING_CAPTION:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CaptionShape"));
             break;
 
         case DRAWING_CLOSED_BEZIER:
@@ -913,6 +898,42 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
     return aDG();
 }
+
+
+
+// protected
+void AccessibleShape::disposing (void)
+    throw (uno::RuntimeException)
+{
+    CheckDisposedState ();
+    OSL_TRACE ("AccessibleShape::disposing()");
+
+    // Unregister at broadcasters.
+    Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener (this);
+
+    // Release the child containers.
+    if (mpChildrenManager != NULL)
+    {
+        delete mpChildrenManager;
+        mpChildrenManager = NULL;
+    }
+    if (mpText != NULL)
+    {
+        delete mpText;
+        mpText = NULL;
+    }
+
+    // Cleanup.
+    mxShape = NULL;
+
+    // Call base classes.
+    AccessibleContextBase::dispose ();
+}
+
+
+
 
 
 } // end of namespace accessibility
