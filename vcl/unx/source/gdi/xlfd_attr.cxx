@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ Attribute::Release()
 {
     if ( mpAnnotation != NULL )
         delete mpAnnotation;
+    if ( mpKeyName != NULL )
+        free( (void*)mpKeyName );
     if ( mpName != NULL )
         free( (void*)mpName );
 }
@@ -112,6 +114,34 @@ int
 Attribute::Compare( const char *p, int nLen )
 {
     return strncmp( mpName, p, nLen );
+}
+
+// Get a all lowercase name with all blanks removed
+const rtl::OString&
+Attribute::GetKey ()
+{
+    if (mpKeyName != NULL)
+        return *mpKeyName;
+    if (mnLength == NULL)
+        return rtl::OString();
+
+    sal_Char* pBuffer = (sal_Char*)alloca (mnLength);
+
+    sal_Int32 i, j;
+    for (i = 0, j = 0; i < mnLength; i++)
+    {
+        if ( mpName[i] != ' ' )
+            pBuffer[j++] = mpName[i];
+    }
+    mpKeyName = new rtl::OString(pBuffer, j);
+
+    return *mpKeyName;
+}
+
+void
+Attribute::InitKey ()
+{
+    mpKeyName = NULL;
 }
 
 // Compare two strings, they have to be equal for nLen bytes, after nLen
@@ -167,17 +197,17 @@ Attribute::TagFeature( unsigned short nFeature )
     if (nFeature & XLFD_FEATURE_INTERFACE_FONT)
     {
         // european
-        if (   (strcmp(mpName, "arial")        == 0)
-            || (strcmp(mpName, "helvetica")    == 0))
-        {
-            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_INTERFACE_FONT_HIGQ);
-        }
+        if (strcmp(mpName, "arial") == 0)
+            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_HQ | XLFD_FEATURE_MQ);
         else
-        if (   (strcmp(mpName, "charter")      == 0)    /* last exit on linux */
-            || (strcmp(mpName, "lucidux sans") == 0))
-        {
-            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_INTERFACE_FONT_MEDQ);
-        }
+        if (strcmp(mpName, "helvetica") == 0)
+            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_HQ);
+        else
+        if (strcmp(mpName, "lucidux sans") == 0)
+            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_MQ | XLFD_FEATURE_LQ);
+        else
+        if (strcmp(mpName, "charter") == 0)
+            mnFeature |= (XLFD_FEATURE_INTERFACE_FONT | XLFD_FEATURE_MQ);
         else
         // japanese
         if (   (strcmp(mpName, "hg mincho l")  == 0)    /* Solaris: jisx0208 jisx0201 */
@@ -239,7 +269,7 @@ Attribute::TagFeature( unsigned short nFeature )
 // given Attribute classifications, strings have to be in alphabetical
 // order, since they are treated by binary search algorithm
 
-#define InitializeAttributeWith( p, a ) p, sizeof(p) - 1, a, 0, NULL
+#define InitializeAttributeWith( p, a ) p, sizeof(p) - 1, a, 0, NULL, NULL
 #define MembersOf( p ) (sizeof(p) / sizeof(p[0]) )
 
 const Attribute pFamilyAttribute[] = {
@@ -581,6 +611,7 @@ AttributeStorage::Insert( const char *pString, int nLength )
     mpList[mnCount].SetValue( mnDefaultValue );
     mpList[mnCount].SetAnnotation( NULL );
     mpList[mnCount].SetFeature( XLFD_FEATURE_NONE );
+    mpList[mnCount].InitKey( );
     mnLastmatch = mnCount;
     mnCount = mnCount < 65535 ? mnCount + 1 : mnCount;
 
@@ -596,8 +627,7 @@ AttributeStorage::Insert( const char *pString, int nLength )
 //
 // ---------------------------------------------------------------------------
 
-AttributeProvider::AttributeProvider( eDeviceT eOutputDevice ) :
-    meOutputDevice( eOutputDevice )
+AttributeProvider::AttributeProvider ()
 {
     mpField[eXLFDFoundry     ] = new AttributeStorage(0);
     mpField[eXLFDFamilyName  ] = new AttributeStorage(FAMILY_DONTKNOW);
@@ -657,19 +687,6 @@ AttributeProvider::AddClassification()
                                     GetTextEncodingFromAddStylename );
     mpField[ eXLFDCharset      ]->AddClassification(
                                     rtl_getTextEncodingFromUnixCharset );
-
-    // Postscript Fonts usually have usefull glyphs in the area 128 - 160 these
-    // are not accessible through the latin1 encoding but through the
-    // ansi1252 encoding
-    if ( meOutputDevice == eDevicePrinter )
-    {
-        mpField[ eXLFDAddstyleName ]->AddClassification(
-                                        (Attribute*)pEnhancedCharsetAttribute,
-                                        MembersOf(pEnhancedCharsetAttribute) );
-        mpField[ eXLFDCharset      ]->AddClassification(
-                                        (Attribute*)pEnhancedCharsetAttribute,
-                                        MembersOf(pEnhancedCharsetAttribute) );
-    }
 }
 
 // add some pretty print description

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,14 +341,6 @@ SalConverterCache::ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
                 nCvtFlags, &nCvtInfo, &nCvtChars );
 
     rtl_destroyUnicodeToTextContext( aConverter, aContext );
-
-    // XXX FIXME
-    if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
-        || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
-    {
-        for (int n_char = 0; n_char < nSize; n_char++ )
-            pBuffer[ n_char ] &= 0x7F;
-    }
 
     return nSize;
 }

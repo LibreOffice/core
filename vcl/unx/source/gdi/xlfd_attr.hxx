@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ struct Attribute {
     unsigned short  mnValue;
     unsigned short  mnFeature;
     String*         mpAnnotation;
+    rtl::OString*   mpKeyName;
 
     const char*     GetName() const
                             { return mpName;   }
@@ -87,6 +88,9 @@ struct Attribute {
                              { return ((mnFeature & nFeature) != 0); }
     const String   &GetAnnotation() const
                             { return *mpAnnotation; }
+    const rtl::OString&
+                    GetKey();
+    void            InitKey();
 
     void            SetName( const char *p, int nLen );
     void            SetValue( unsigned short nIn )
@@ -120,8 +124,9 @@ typedef rtl_TextEncoding(*AttributeClassifierT)(const char* pStr);
 #define XLFD_FEATURE_APPLICATION_FONT    0x0010
 
 #define XLFD_FEATURE_INTERFACE_FONT      0x0020
-#define XLFD_FEATURE_INTERFACE_FONT_MEDQ 0x0040
-#define XLFD_FEATURE_INTERFACE_FONT_HIGQ 0x0080
+#define XLFD_FEATURE_LQ 0x0040
+#define XLFD_FEATURE_MQ 0x0080
+#define XLFD_FEATURE_HQ 0x0100
 
 // ---------------------------------------------------------------------------
 //
@@ -189,12 +194,6 @@ typedef enum eXLFDAttributeT {
     eXLFDMaxEntry
 };
 
-typedef enum eDeviceT {
-    eDeviceDontKnow = 0,
-    eDevicePrinter,
-    eDeviceDisplay
-};
-
 class AttributeProvider {
 
     private:
@@ -203,11 +202,10 @@ class AttributeProvider {
 
         AttributeStorage*   GetField( eXLFDAttributeT eXLFDField )
                                     { return mpField[ eXLFDField]; }
-        eDeviceT            meOutputDevice;
     public:
 
-                            AttributeProvider( eDeviceT eOutputDevice );
-                            ~AttributeProvider();
+                            AttributeProvider ();
+                            ~AttributeProvider ();
 
         void                AddClassification();
         void                AddAnnotation();
@@ -215,9 +213,6 @@ class AttributeProvider {
         #ifdef DEBUG
         void                Dump();
         #endif
-
-        eDeviceT            GetDevice() const
-                                    { return meOutputDevice; }
 
         // these are just shortcuts or proxies for the most common used
         // AttributeStorage functionality

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,13 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
             sal_Unicode nUniIdx = (sal_Unicode)nIdx;
             nSize = pCvt->ConvertStringUTF16( &nUniIdx, 1, pBuffer, sizeof(pBuffer),
                             nEncoding );
+            // XXX FIXME
+            if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
+                || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
+            {
+                for (int n_char = 0; n_char < nSize; n_char++ )
+                    pBuffer[ n_char ] &= 0x7F;
+            }
         }
 
         // query font metrics

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,16 +159,11 @@ Xlfd::Fonttype() const
 {
     if ( (mnAverageWidth == 0) && (mnPixelSize == 0) && (mnPointSize == 0) )
     {
-        if ( (mnResolutionX == 0) && (mnResolutionY == 0) )
-            return mpFactory->GetDevice() == eDevicePrinter ?
-                            eTypePrinterDownload : eTypeScalable;
-        else
-            return mpFactory->GetDevice() == eDevicePrinter ?
-                            eTypePrinterBuiltIn : eTypeScalableBitmap;
+        return     (mnResolutionX == 0)
+                && (mnResolutionY == 0) ? eTypeScalable : eTypeScalableBitmap;
     }
 
-    return mpFactory->GetDevice() == eDevicePrinter ?
-                    eTypeUnknown : eTypeBitmap;
+    return eTypeBitmap;
 }
 
 void

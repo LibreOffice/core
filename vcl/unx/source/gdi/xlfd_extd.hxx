@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,18 +234,6 @@ class ScalableXlfd : public ExtendedXlfd {
                                     { return TYPE_SCALABLE; }
 };
 
-// class to handle printer resident and printer downloadable fonts
-// printer font xlfd look like scalable bitmap fonts but behave a
-// little bit different
-
-class PrinterFontXlfd : public ScalableBitmapXlfd {
-
-    public:
-                            PrinterFontXlfd();
-        virtual             ~PrinterFontXlfd();
-        virtual Bool        AddEncoding( const Xlfd *pXlfd );
-};
-
 // class to maintain a list of fonts ( bitmap and scalable )
 
 class XlfdStorage {
@@ -262,9 +250,6 @@ class XlfdStorage {
         unsigned short      GetCount() const
                                     { return mnCount; }
         const ExtendedXlfd* Get(int nIdx) const;
-        void                InterfaceFont( AttributeProvider* pFactory);
-        const ExtendedXlfd* GetInterfaceFont () const
-                                    { return mpInterfaceFont; }
         #ifdef DEBUG
         void                Dump() const ;
         #endif
@@ -277,7 +262,6 @@ class XlfdStorage {
         unsigned short      mnSize;
         const ExtendedXlfd**
                             mpList;
-        const ExtendedXlfd* mpInterfaceFont;
 };
 
 // list of fonts specific for bitmap fonts
@@ -287,7 +271,6 @@ class BitmapXlfdStorage : public XlfdStorage {
     public:
 
         void                AddBitmapFont( const Xlfd *pXlfd );
-        void                AddScalableFont( const ScalableXlfd *pScaleFnt );
 };
 
 
@@ -303,7 +286,7 @@ class VirtualXlfd : public ExtendedXlfd
                              VirtualXlfd();
         virtual             ~VirtualXlfd();
         virtual Bool        AddEncoding( const Xlfd *pXlfd );
-        Bool                AddEncoding( const ExtendedXlfd *pXlfd);
+        void                FilterInterfaceFont (const Xlfd *pXlfd);
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                        rtl_TextEncoding nEncoding ) const ;
@@ -325,7 +308,7 @@ class VirtualXlfd : public ExtendedXlfd
             unsigned short      mnSlant;
             unsigned short      mnSetwidth;
 
-            ExtEncodingInfo&    operator= ( const ExtendedXlfd *pXlfd );
+            ExtEncodingInfo&    operator= ( const Xlfd *pXlfd );
             ExtEncodingInfo&    operator= ( const ExtEncodingInfo& rInfo );
         } *mpExtEncodingInfo;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 12:35:53 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,165 @@ void SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen ) co
 
 // ----------------------------------------------------------------------------
 //
+// manage X11 fonts and self rastered fonts
+//
+// ----------------------------------------------------------------------------
+
+#if defined(USE_PSPRINT)
+
+static FontItalic ToFontItalic (psp::italic::type eItalic);
+static FontWeight ToFontWeight (psp::weight::type eWeight);
+
+class FontLookup
+{
+    public:
+
+        struct hash;
+        struct equal;
+        typedef ::std::hash_set< FontLookup,
+                                 FontLookup::hash,
+                                 FontLookup::equal > fl_hashset;
+
+    private:
+
+        FontWeight          mnWeight;
+        FontItalic          mnItalic;
+        rtl::OString        maName;
+
+    public:
+
+                            FontLookup ( ::std::list< psp::fontID >::iterator& it,
+                                          const psp::PrintFontManager& rMgr );
+                            FontLookup (const Xlfd& rFont);
+                            FontLookup (const FontLookup &rRef) :
+                                    mnWeight (rRef.mnWeight),
+                                    mnItalic (rRef.mnItalic),
+                                    maName   (rRef.maName)
+                            {}
+                            ~FontLookup ()
+                            {}
+
+        static void         BuildSet (fl_hashset& rSet);
+        static bool         InSet (const fl_hashset& rSet, const Xlfd& rXfld);
+        bool                InSet (const fl_hashset& rSet) const;
+
+        bool                operator== (const FontLookup &rRef) const
+                            {
+                                return     (abs(mnWeight - rRef.mnWeight) < 2)
+                                        && (mnItalic == rRef.mnItalic)
+                                        && (maName   == rRef.maName);
+                            }
+        FontLookup&         operator= (const FontLookup &rRef)
+                            {
+                                mnWeight = rRef.mnWeight;
+                                mnItalic = rRef.mnItalic;
+                                maName   = rRef.maName;
+
+                                return *this;
+                            }
+        size_t              Hash() const
+                            {
+                                return maName.hashCode ();
+                            }
+
+        struct equal
+        {
+            bool operator()(const FontLookup &r1, const FontLookup &r2) const
+            {
+                return r1 == r2;
+            }
+        };
+        struct hash
+        {
+            size_t operator()(const FontLookup &rArg) const
+            {
+                return rArg.Hash();
+            }
+        };
+};
+
+FontLookup::FontLookup ( ::std::list< psp::fontID >::iterator& it,
+                         const psp::PrintFontManager& rMgr )
+{
+    psp::FastPrintFontInfo aInfo;
+    if (rMgr.getFontFastInfo (*it, aInfo))
+    {
+        mnItalic = ToFontItalic (aInfo.m_eItalic);
+        mnWeight = ToFontWeight (aInfo.m_eWeight);
+        maName   = rtl::OUStringToOString (aInfo.m_aFamilyName,
+                                        RTL_TEXTENCODING_ISO_8859_1).toLowerCase();
+
+        sal_Int32       n_length = maName.getLength();
+        const sal_Char* p_from   = maName.getStr();
+        sal_Char*       p_to     = (sal_Char*)alloca (n_length + 1);
+
+        sal_Int32 i, j;
+        for (i = 0, j = 0; i < n_length; i++)
+        {
+            if ( p_from[i] != ' ' )
+                p_to[j++] = p_from[i];
+        }
+        maName = rtl::OString (p_to, j);
+        if (mnItalic == ITALIC_OBLIQUE)
+            mnItalic = ITALIC_NORMAL;
+    }
+    else
+    {
+        mnItalic = ITALIC_DONTKNOW;
+        mnWeight = WEIGHT_DONTKNOW;
+    }
+}
+
+FontLookup::FontLookup (const Xlfd& rFont)
+{
+    AttributeProvider* pFactory = rFont.mpFactory;
+    Attribute*         pAttr;
+
+    pAttr    = pFactory->RetrieveSlant  (rFont.mnSlant);
+    mnItalic = (FontItalic)pAttr->GetValue();
+    pAttr    = pFactory->RetrieveWeight (rFont.mnWeight);
+    mnWeight = (FontWeight)pAttr->GetValue();
+    pAttr    = pFactory->RetrieveFamily (rFont.mnFamily);
+    maName   = pAttr->GetKey();
+
+    if (mnItalic == ITALIC_OBLIQUE)
+        mnItalic = ITALIC_NORMAL;
+}
+
+void
+FontLookup::BuildSet (FontLookup::fl_hashset &rSet)
+{
+    ::std::list< psp::fontID > aIdList;
+
+    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    rMgr.getFontList( aIdList, NULL );
+
+    ::std::list< psp::fontID >::iterator it;
+    for (it = aIdList.begin(); it != aIdList.end(); ++it)
+    {
+        FontLookup aItem (it, rMgr);
+        rSet.insert (aItem);
+    }
+}
+
+bool
+FontLookup::InSet (const FontLookup::fl_hashset& rSet) const
+{
+      fl_hashset::const_iterator it = rSet.find(*this);
+      return it == rSet.end() ? false : true;
+}
+
+bool
+FontLookup::InSet (const FontLookup::fl_hashset& rSet, const Xlfd& rXlfd)
+{
+    FontLookup aNeedle (rXlfd);
+    return aNeedle.InSet (rSet);
+}
+
+#endif /* USE_PSPRINT */
+
+// ----------------------------------------------------------------------------
+//
 // SalDisplay
 //
 // ----------------------------------------------------------------------------
@@ -221,14 +380,9 @@ SalDisplay::GetXlfdList()
     }
     else
     {
-        // on a display an xlfd of *-0-0-75-75-* means this is a scalable
-        // bitmap font, thus it is ugly and thus to avoid. On a printer
-        // *-0-0-300-300-* means this is a printer resident font thus nice
-        // thus to prefer :-(
-        eDeviceT eDevice = this->IsDisplay() ? eDeviceDisplay : eDevicePrinter;
-
-        mpFactory  = new AttributeProvider( eDevice );
-        mpFontList = new XlfdStorage();
+        mpFactory  = new AttributeProvider;
+        mpFontList = new XlfdStorage;
+        mpFallbackFactory = new VirtualXlfd;
 
         int i, nFontCount;
         const int nMaxCount  = 64 * 1024 - 1;
@@ -250,10 +404,6 @@ SalDisplay::GetXlfdList()
 
         XFreeFontNames( ppFontList );
 
-        // classification information is needed for sorting, classification
-        // of charset (i.e. iso8859-1 <-> ansi-1252) depends on wether the
-        // display points to a printer or to a real display. On a printer all
-        // iso8859-1 fonts are really capable of ansi-1252
         mpFactory->AddClassification();
         // add some pretty print description
         mpFactory->AddAnnotation();
@@ -263,13 +413,18 @@ SalDisplay::GetXlfdList()
         // sort according to font style
         qsort( pXlfdList, nXlfdCount, sizeof(Xlfd), XlfdCompare );
 
+        #if defined(USE_PSPRINT)
+        // create a list of fonts already managed by the fontmanager
+        FontLookup::fl_hashset aSet;
+        FontLookup::BuildSet (aSet);
+        #endif
+
         //
         // create a font list with merged encoding information
         //
 
         BitmapXlfdStorage   aBitmapList;
         ScalableXlfd       *pScalableFont = NULL;
-        PrinterFontXlfd    *pPrinterFont  = NULL;
 
         int nFrom = 0;
         for ( i = 0; i < nXlfdCount; i++ )
@@ -286,11 +441,18 @@ SalDisplay::GetXlfdList()
             {
                 continue;
             }
-            // exclude "interface system" and "interface user" in bold
+            // exclude "interface system" and "interface user"
             if (pAttr->HasFeature( XLFD_FEATURE_APPLICATION_FONT ) )
             {
                 continue;
             }
+            // exclude fonts already managed by fontmanager, anyway keep
+            // gui fonts: they are candidates for GetInterfaceFont ()
+            ((VirtualXlfd*)mpFallbackFactory)->FilterInterfaceFont (pXlfdList + i);
+            #if defined(USE_PSPRINT) && defined(USE_BUILTIN_RASTERIZER)
+            if (FontLookup::InSet (aSet, pXlfdList[i]))
+                continue;
+            #endif
 
             Bool bSameOutline = pXlfdList[i].SameFontoutline(pXlfdList + nFrom);
             XlfdFonttype eType = pXlfdList[i].Fonttype();
@@ -299,15 +461,9 @@ SalDisplay::GetXlfdList()
             if ( !bSameOutline )
             {
                 mpFontList->Add( pScalableFont );
-                mpFontList->Add( pPrinterFont );
-
-                if (pAttr->HasFeature( XLFD_FEATURE_APPLICATION_FONT ) )
-                    aBitmapList.AddScalableFont( pScalableFont );
-
                 mpFontList->Add( &aBitmapList );
 
                 pScalableFont = NULL;
-                 pPrinterFont  = NULL;
                 aBitmapList.Reset();
             }
 
@@ -328,15 +484,6 @@ SalDisplay::GetXlfdList()
 
                     break;
 
-                case eTypePrinterBuiltIn:
-                case eTypePrinterDownload:
-
-                    if ( pPrinterFont == NULL )
-                        pPrinterFont = new PrinterFontXlfd;
-                    pPrinterFont->AddEncoding( pXlfdList + i );
-
-                    break;
-
                 case eTypeScalableBitmap:
                 default:
 
@@ -348,12 +495,7 @@ SalDisplay::GetXlfdList()
 
         // flush the merged list into the global list
         mpFontList->Add( pScalableFont );
-        mpFontList->Add( pPrinterFont );
         mpFontList->Add( &aBitmapList );
-
-        // create a font set for user interface
-        mpFontList->InterfaceFont( mpFactory );
-        mpFallbackFactory = mpFontList->GetInterfaceFont ();
 
         // cleanup the list of simple font information
         if ( pXlfdList != NULL )
@@ -540,11 +682,13 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
 #ifdef USE_BUILTIN_RASTERIZER
         // requesting a font provided by builtin rasterizer
         mpServerSideFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+
         if( mpServerSideFont )
             return;
 #endif //USE_BUILTIN_RASTERIZER
 
         ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
+
         static int nMaxFontHeight = GetMaxFontHeight();
 
         USHORT         nH, nW;
@@ -646,6 +790,14 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
             pTextChars[ m++ ] = pBuffer[ n++ ];
         }
         pTextItem->nchars = nSize / 2;
+    }
+
+    // XXX FIXME
+    if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
+        || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
+    {
+        for (int n_char = 0; n_char < m; n_char++ )
+            pTextChars[ n_char ] &= 0x7F;
     }
 }
 
@@ -926,21 +1078,25 @@ SalGraphicsData::DrawStringMB ( int nX, int nY, const sal_Unicode* pStr, int nLe
             }
         }
     }
-    ConvertTextItem16( &pTextItem[ nItem ], nEncoding );
-    ++nItem;
 
-    Display* pDisplay   = GetXDisplay();
-    GC       nGC        = SelectFont();
+    if (nItem != -1)
+    {
+        ConvertTextItem16( &pTextItem[ nItem ], nEncoding );
+        ++nItem;
 
-    if ( bFontVertical_ )
-    {
-        pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
-        DrawVerticalTextItem( pDisplay, hDrawable_, nGC, nX, nY,
-                pTextItem, nItem, pVTextItemExt, xFont_ );
-    }
-    else
-    {
-        XDrawText16( pDisplay, hDrawable_, nGC, nX, nY, pTextItem, nItem );
+        Display* pDisplay   = GetXDisplay();
+        GC       nGC        = SelectFont();
+
+        if ( bFontVertical_ )
+        {
+            pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
+            DrawVerticalTextItem( pDisplay, hDrawable_, nGC, nX, nY,
+                    pTextItem, nItem, pVTextItemExt, xFont_ );
+        }
+        else
+        {
+            XDrawText16( pDisplay, hDrawable_, nGC, nX, nY, pTextItem, nItem );
+        }
     }
 }
 

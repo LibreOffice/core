@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,7 @@ enum XlfdFonttype {
     eTypeUnknown        = TYPE_DONTKNOW,
     eTypeBitmap         = TYPE_RASTER,
     eTypeScalableBitmap = TYPE_VECTOR,
-    eTypeScalable       = TYPE_SCALABLE,
-    eTypePrinterBuiltIn,
-    eTypePrinterDownload
+    eTypeScalable       = TYPE_SCALABLE
 };
 
 class Xlfd {
