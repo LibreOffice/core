@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:21:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         }
 
         SwDoc* pDoc = rDocSh.GetDoc();
+        USHORT nAppScriptType = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
         {
             BOOL bDelPrinter = FALSE;
             SfxPrinter* pPrt = pDoc ? pDoc->GetPrt() : 0;
@@ -261,12 +262,23 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             {
                 if(pDoc)
                 {
+                    USHORT nFontRes = RES_CHRATR_FONT;
+                    if(SCRIPTTYPE_ASIAN == nAppScriptType)
+                        nFontRes = RES_CHRATR_CJK_FONT;
+                    else if(SCRIPTTYPE_COMPLEX == nAppScriptType)
+                        nFontRes = RES_CHRATR_CTL_FONT;
+
                     aOpt.SetFontName( ((SvxFontItem&)pDoc->GetDefault(
-                                    RES_CHRATR_FONT )).GetFamilyName() );
+                                    nFontRes )).GetFamilyName() );
                 }
                 else
                 {
-                    aOpt.SetFontName(SW_MOD()->GetStdFontConfig()->GetFontFor(FONT_STANDARD));
+                    USHORT nFontType = FONT_STANDARD;
+                    if(SCRIPTTYPE_ASIAN == nAppScriptType)
+                        nFontType = FONT_STANDARD_CJK;
+                    else if(SCRIPTTYPE_COMPLEX == nAppScriptType)
+                        nFontType = FONT_STANDARD_CTL;
+                    aOpt.SetFontName(SW_MOD()->GetStdFontConfig()->GetFontFor(nFontType));
                 }
             }
             aFontLB.SelectEntry( aOpt.GetFontName() );
@@ -281,8 +293,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             {
                 if(pDoc)
                 {
-                    USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                    GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ));
+                    USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
                     aOpt.SetLanguage( ((SvxLanguageItem&)pDoc->
                                 GetDefault( nWhich )).GetLanguage());
                 }
@@ -292,8 +303,18 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
                     // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
                     SwLinguConfig().GetOptions( aLinguOpt );
-
-                    aOpt.SetLanguage(aLinguOpt.nDefaultLanguage);
+                    switch(nAppScriptType)
+                    {
+                        case SCRIPTTYPE_ASIAN:
+                            aOpt.SetLanguage(aLinguOpt.nDefaultLanguage_CJK);
+                        break;
+                        case SCRIPTTYPE_COMPLEX:
+                            aOpt.SetLanguage(aLinguOpt.nDefaultLanguage_CTL);
+                        break;
+                        //SCRIPTTYPE_LATIN:
+                        default:
+                            aOpt.SetLanguage(aLinguOpt.nDefaultLanguage);
+                    }
                 }
             }
 
