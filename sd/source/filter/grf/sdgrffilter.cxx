@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:46:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,12 +423,12 @@ sal_Bool SdGRFFilter::Export()
 
                   > SdrPageView:
                   > // rReg bezieht sich auf's OutDev, nicht auf die Page
-                  > void InitRedraw( ... );
+                  > void CompleteRedraw( ... );
 
                   and setting the origin to -aNewOrg we have to use aNewOrg
-                  instead of (0,0) for the Clip-Region to InitRedraw
+                  instead of (0,0) for the Clip-Region to CompleteRedraw
                 */
-                pView->InitRedraw( &aVDev, Region( Rectangle( aNewOrg, aNewSize ) ) );
+                pView->CompleteRedraw( &aVDev, Region( Rectangle( aNewOrg, aNewSize ) ) );
                 aVDev.Pop();
 
                 aMtf.Stop();
@@ -453,7 +453,7 @@ sal_Bool SdGRFFilter::Export()
             {
                 if( !bVectorType )
                 {
-                    const SdrMarkList&  rMarkList = pView->GetMarkList();
+                    const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
                     BOOL                bGraf = FALSE;
 
                     if( rMarkList.GetMarkCount() == 1 )
