@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.19 2001-09-19 09:42:25 dbo Exp $
+        $Id: dialog.dtd,v 1.20 2001-10-16 13:59:35 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -250,6 +250,7 @@
 <!ELEMENT dlg:img ((%event;)*)>
 <!ATTLIST dlg:img %default-attributes;
                   dlg:src CDATA #IMPLIED
+                  dlg:scale-image %boolean; #IMPLIED
                   >
 
 <!ELEMENT dlg:filecontrol ((%event;)*)>
