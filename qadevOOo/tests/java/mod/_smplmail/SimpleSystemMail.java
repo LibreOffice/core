@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSystemMail.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:47 $
+ *  last change:$Date: 2003-05-27 13:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ public class SimpleSystemMail extends TestCase {
         isSystemMailExist = "true".equalsIgnoreCase
             ((String) Param.get("test.system.mail.isExist")) ;
 
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         try {
             if (isWinOS) {
                 log.println("The OS is Win : trying to create service");
