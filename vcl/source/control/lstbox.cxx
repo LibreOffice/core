@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:42:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
     Control::ImplLoadRes( rResId );
 
     USHORT nSelPos = ReadShortRes();
-    USHORT nNumber = ReadShortRes();
+    USHORT nNumber = ReadLongRes();
 
     for( USHORT i = 0; i < nNumber; i++ )
     {
@@ -1256,8 +1256,8 @@ void ListBox::EnableMultiSelection( BOOL bMulti, BOOL bStackSelection )
     mpImplLB->EnableMultiSelection( bMulti, bStackSelection );
 
     // WB_SIMPLEMODE:
-    // Die MultiListBox verhält sich wie eine normale ListBox.
-    // Die Mehrfachselektion kann nur über entsprechende Zusatztasten erfolgen.
+    // Die MultiListBox verhï¿½lt sich wie eine normale ListBox.
+    // Die Mehrfachselektion kann nur ï¿½ber entsprechende Zusatztasten erfolgen.
 
     BOOL bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? TRUE : FALSE;
     mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
