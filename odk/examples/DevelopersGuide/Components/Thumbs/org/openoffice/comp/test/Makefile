@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:22:01 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:17:28 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -50,14 +50,7 @@ include $(SETTINGS)/dk.mk
 include ../../../../thumbs.mk
 
 # Define non-platform/compiler specific settings
-
 PACKAGE = org/openoffice/comp/test
-
-JAVAFILES  = \
-	   ImageShrink.java \
-	   Thumbs.java
-
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
@@ -65,8 +58,8 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLA
 
 # Targets
 .PHONY: ALL
-ALL : \
-	$(REGISTERFLAG)
+ALL : $(REGISTERFLAG) \
+	$(APP1_JAR)
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -74,24 +67,54 @@ $(OUT_COMP_CLASS)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(basename $(basename $(@F)))> $@
 
-$(CLASSFILES) : $(JAVAFILES)
+$(OUT_COMP_CLASS)/$(PACKAGE)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
 
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+$(OUT_COMP_CLASS)/%.mf :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $(subst /,.,$(PACKAGE)).$*>> $@
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR)
+# rule for component jar file
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(OUT_COMP_CLASS)/$(PACKAGE)/$(COMPONENT_NAME).class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
-	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(<F)))
+	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) $(PACKAGE)/$(basename $(basename $(@F))).class $(patsubst %.class,-C $(OUT_COMP_CLASS) %.class,$(GENCLASSNAMES))
+
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component package file
+$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(COPY) $(subst /,$(PS),$(COMPONENT_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(COMPONENT_RDB_NAME) $(COMPONENT_JAR_NAME)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(COMPONENT_RDB_NAME)))
+
+$(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(PACKAGE)/$(APP1_NAME).class
+	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) $(PACKAGE)/$(basename $(@F)).class $(patsubst %.class,-C $(OUT_COMP_CLASS) %.class,$(GENCLASSNAMES))
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -107,3 +130,4 @@ clean :
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(APP1_JAR)))
