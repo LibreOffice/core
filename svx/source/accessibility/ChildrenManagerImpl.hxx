@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 11:50:08 $
+ *  last change: $Author: af $ $Date: 2002-04-29 12:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ public:
         @param pShape
             The new shape that is added to the list of accessible shapes.
     */
-    void AddAccessibleShape (AccessibleShape* pShape);
+    void AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape);
 
     /** Clear the list of accessible shapes.  It can be rebuild with calls
         to the <member>AddAccessibleShape</member> method.  Other lists are

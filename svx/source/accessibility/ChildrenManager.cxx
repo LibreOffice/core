@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:35:36 $
+ *  last change: $Author: af $ $Date: 2002-04-29 12:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void ChildrenManager::SetShapeList (const ::com::sun::star::uno::Reference<
 
 
 
-void ChildrenManager::AddAccessibleShape (AccessibleShape* pShape)
+void ChildrenManager::AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape)
 {
     OSL_ASSERT (mpImpl != NULL);
     mpImpl->AddAccessibleShape (pShape);
