@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-17 20:42:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,14 +765,14 @@ String STR_EXPORT_GRAFIK_TITLE
     Text [ danish ] = "Grafik-eksport" ;
     Text [ portuguese ] = "Exportar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik-Export" ;
-    Text[ chinese_simplified ] = "Í¼ĞÎ-Êä³ö";
+    Text[ chinese_simplified ] = "Êä³öÍ¼ĞÎ";
     Text[ russian ] = "İêñïîğò ğèñóíêà";
     Text[ polish ] = "Eksport grafiki";
     Text[ japanese ] = "}‚Ì´¸½Îß°Ä";
     Text[ chinese_traditional ] = "¶×¥X¹Ï§Î";
     Text[ arabic ] = "ÊÕÏíÑ ÕæÑ";
     Text[ dutch ] = "Afbeelding exporteren";
-    Text[ chinese_simplified ] = "Í¼ĞÎ-Êä³ö";
+    Text[ chinese_simplified ] = "Êä³öÍ¼ĞÎ";
     Text[ greek ] = "ÅîáãùãŞ ãñáöéêşí";
     Text[ korean ] = "±×·¡ÇÈ ³»º¸³»±â";
     Text[ turkish ] = "Grafik ver";
@@ -1201,6 +1201,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ catalan ] = "La marca o selección se encuentra en una posición protegida.\nPor ello no se puede aceptar una modificación.";
     MESSAGE[ finnish ] = "Vain luku -sisältöä ei voi muuttaa.\nMuokkauksia ei hyväksytä";
 };
+
 
 
 
