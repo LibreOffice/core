@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-05-31 08:13:29 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,12 +478,23 @@ void SotObject::OwnerLock
         nOwnerLockCount++;
         AddRef();
     }
-    else
+    else if ( nOwnerLockCount )
     {
         if( 0 == --nOwnerLockCount )
             DoClose();
         ReleaseRef();
     }
+}
+
+void SotObject::RemoveOwnerLock()
+{
+    if ( nOwnerLockCount )
+    {
+        --nOwnerLockCount;
+        ReleaseRef();
+    }
+    else
+        DBG_ERROR("OwnerLockCount underflow!");
 }
 
 //=========================================================================
