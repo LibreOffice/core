@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-01-05 17:10:44 $
+#   last change: $Date: 2004-11-16 10:34:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,3 +67,8 @@ TARGET=qa_unoapi
 
 ALLTAR:
     +$(SOLARENV)$/bin$/checkapi -sce forms.sce -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
+    +@echo =======================================================================
+    +@echo Problems with controls might me focus problems during the run of XView
+    +@echo these seems to appear by chance ... just re-run those testcases with
+    +@echo $(SOLARENV)$/bin$/checkapi -o componentName -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
+    +@echo =======================================================================			
