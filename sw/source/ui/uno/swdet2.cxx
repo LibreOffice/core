@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-22 09:08:09 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,17 +274,21 @@ ULONG SwFilterDetect::GlobDetectFilter( SfxMedium& rMedium, const SfxFilter **pp
             if( SFX_FILTER_TEMPLATE & nMust )
                 break;
 
-            const SfxFilter* pFltr;
-            const SfxFilterContainer aFltContainer( String::CreateFromAscii("swriter/global") );
-            USHORT nFltrCount = aFltContainer.GetFilterCount();
-            for( USHORT nCnt = 0; nCnt < nFltrCount; ++nCnt )
-                if( (sal_Unicode)'C' == ( pFltr = aFltContainer.GetFilter( nCnt ))->GetUserData().GetChar(0) &&
+            const SfxFilterMatcher aMatcher( String::CreateFromAscii("swriter/GlobalDocument") );
+            SfxFilterMatcherIter aIter( &aMatcher );
+            const SfxFilter* pFltr = aIter.First();
+            while ( pFltr )
+            {
+                if( (sal_Unicode)'C' == pFltr->GetUserData().GetChar(0) &&
                     aStg.Is() && SwIoSystem::IsValidStgFilter( *aStg, *pFltr ) )
                 {
                     *ppFilter = pFltr;
                     nRet = ERRCODE_NONE;
                     break;
                 }
+
+                pFltr = aIter.Next();
+            }
         }
 
     } while( FALSE );
