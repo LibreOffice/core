@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,15 +195,17 @@
 #define HINDI_ISO               "hi-IN"
 #define HINDI_INDEX                 30
 
-#define ESTONIAN                    77
-#define ESTONIAN_ISO                "et"
-#define ESTONIAN_INDEX                  31
+#define ESTONIAN                77
+#define ESTONIAN_ISO            "et"
+#define ESTONIAN_INDEX              31
 
 // special language for l10n framework
 #define EXTERN                  99
 #define EXTERN_INDEX                32
 
 #define LANGUAGES                   33
+
+#define NO_TRANSLATE_ISO        "x-no-translate"
 
 #define LANGUAGE_ALLOWED( n )  (( n != 0xFFFF ) && ( Export::LanguageAllowed( Export::LangId[ n ] )) &&                                         \
                                (( Export::LangId[ n ] == 01 ) || ( Export::LangId[ n ] == 03 ) || ( Export::LangId[ n ] == 07 ) ||  \
