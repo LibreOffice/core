@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:25 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 17:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,12 +201,12 @@ void OStatement_BASE2::disposing()
     OStatement_Base::disposing();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStatement_Base::acquire() throw()
 {
     OStatement_BASE::acquire();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OStatement_BASE2::release() throw(RuntimeException)
+void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
@@ -368,12 +368,12 @@ OResultSet* OStatement::createResultSet()
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStatement::release() throw()
 {
     OStatement_BASE2::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 11:03:04 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 17:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1922,12 +1922,12 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::acquire() throw(RuntimeException)
+void SAL_CALL OResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::release() throw(RuntimeException)
+void SAL_CALL OResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }
