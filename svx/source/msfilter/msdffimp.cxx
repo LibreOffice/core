@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-15 12:38:06 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 16:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3755,11 +3755,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         }
 
         pTextImpRec->nDxWrapDistLeft = GetPropertyValue(
-                                    DFF_Prop_dxWrapDistLeft, 0 ) / 635L;
+                                    DFF_Prop_dxWrapDistLeft, 114935L ) / 635L;
         pTextImpRec->nDyWrapDistTop = GetPropertyValue(
                                     DFF_Prop_dyWrapDistTop, 0 ) / 635L;
         pTextImpRec->nDxWrapDistRight = GetPropertyValue(
-                                    DFF_Prop_dxWrapDistRight, 0 ) / 635L;
+                                    DFF_Prop_dxWrapDistRight, 114935L ) / 635L;
         pTextImpRec->nDyWrapDistBottom = GetPropertyValue(
                                     DFF_Prop_dyWrapDistBottom, 0 ) / 635L;
             // 16.16 fraction times total image width or height, as appropriate.
