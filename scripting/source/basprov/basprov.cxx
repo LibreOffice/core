@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 08:35:32 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 15:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ namespace basprov
 
         // parse scriptURI
         // TODO: use URI parsing class
-        ::rtl::OUString aSchema( ::rtl::OUString::createFromAscii( "script://" ) );
+        ::rtl::OUString aSchema( ::rtl::OUString::createFromAscii( "vnd.sun.star.script://" ) );
         sal_Int32 nSchemaLen = aSchema.getLength();
         sal_Int32 nLen = scriptURI.indexOf( '?' );
         ::rtl::OUString aDescription;

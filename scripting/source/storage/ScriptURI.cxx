@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 08:39:02 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 15:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ using namespace ::com::sun::star::lang;
 
 namespace scripting_impl {
 
-static const OUString schema = OUString::createFromAscii( "script://" );
+static const OUString schema = OUString::createFromAscii( "vnd.sun.star.script://" );
 
 /**
  *  Constructor
@@ -168,7 +168,7 @@ void ScriptURI::set_values( scripting_impl::Uri values )
     m_valid = values.valid;
     m_location = values.location;
     m_language = values.language;
-// format is script:://[function_name]?language=[languge]&location=[location]
+// format is vnd.sun.star.script://[function_name]?language=[languge]&location=[location]
 // LogicalName is now not used anymore, further more the ScriptURI class
 // will be retired also and a new UNO service will be used. Additionally the
 // parcel-description will also need to be modified to remove logical name
@@ -193,7 +193,7 @@ Uri ScriptURI::parseIt()
     scripting_impl::Uri results;
     results.valid = sal_True;
     //attempt to parse
-    // check that it starts script://
+    // check that it starts vnd.sun.star.script
     // better check for OBO errors here
     if( m_uri.indexOf( schema ) != 0 )
     {
