@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:18:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,17 @@
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
 #endif
+#ifndef _DBU_MISC_HRC_
+#include "dbu_misc.hrc"
+#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
+#ifndef _SFX_FCONTNR_HXX
+#include <sfx2/fcontnr.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -320,17 +329,20 @@ namespace dbaui
             break;
             case DST_CALC:
             {
-                static const String s_sCalcType = String::CreateFromAscii("StarOffice XML (Calc)");
-                const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sCalcType);
-                OSL_ENSURE(pFilter,"Filter: StarOffice XML (Calc) could not be found!");
-                askForFileName(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+                ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN
+                                                ,SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
+                                                ,SFX_FILTER_IMPORT);
+                askForFileName(aFileDlg);
             }
             break;
             case DST_MSACCESS:
             {
                 ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
                 String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
-                askForFileName(sFilterName,sExt);
+                ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
+                aFileDlg.AddFilter(sFilterName,sExt);
+                aFileDlg.SetCurrentFilter(sFilterName);
+                askForFileName(aFileDlg);
             }
             break;
             case DST_ADABAS:
@@ -901,7 +913,7 @@ namespace dbaui
                 { // #106016# --------------------------
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
-                        String sFile = String(ModuleRes(STR_CALCDOC_DOESNOTEXIST));
+                        String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
                         sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
                         OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),sFile).Execute();
                         setURLNoPrefix(sOldPath);
@@ -942,25 +954,17 @@ namespace dbaui
         m_aET_Connection.SaveValueNoPrefix();
         return sal_True;
     }
-
-
-
     //-------------------------------------------------------------------------
-    void OConnectionHelper::askForFileName(const ::rtl::OUString& _sFilterName, const ::rtl::OUString& _sExtension)
+    void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
     {
-        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
-
-        aFileDlg.AddFilter(_sFilterName,_sExtension);
-        aFileDlg.SetCurrentFilter(_sFilterName);
-
         String sOldPath = getURLNoPrefix();
         if ( sOldPath.Len() )
-            aFileDlg.SetDisplayDirectory(sOldPath);
+            _aFileOpen.SetDisplayDirectory(sOldPath);
         else
-            aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
-        if (0 == aFileDlg.Execute())
+            _aFileOpen.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+        if (0 == _aFileOpen.Execute())
         {
-            setURLNoPrefix(aFileDlg.GetPath());
+            setURLNoPrefix(_aFileOpen.GetPath());
             SetRoadmapStateValue(checkTestConnection());
             callModifiedHdl();
         }
