@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-25 11:05:19 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:03:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,8 @@ SLOFILES =\
             $(SLO)$/ConnectionLine.obj			\
             $(SLO)$/ConnectionLineData.obj
 
-SRCFILES =  query.src		\
+SRS1NAME=$(TARGET)
+SRC1FILES =  query.src		\
             querydlg.src	\
 
 # --- Targets -------------------------------------------------------
