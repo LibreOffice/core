@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-21 12:04:56 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,24 +147,92 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
                 Text = "Schrift" ;
                 Text [ english_us ] = "Font" ;
+                Text[ portuguese ] = "Font";
+                Text[ russian ] = "Font";
+                Text[ greek ] = "Font";
+                Text[ dutch ] = "Font";
+                Text[ french ] = "Font";
+                Text[ spanish ] = "Font";
+                Text[ italian ] = "Font";
+                Text[ danish ] = "Font";
+                Text[ swedish ] = "Teckensnitt";
+                Text[ polish ] = "Font";
+                Text[ portuguese_brazilian ] = "Font";
+                Text[ japanese ] = "Font";
+                Text[ korean ] = "Font";
+                Text[ chinese_simplified ] = "◊÷ÃÂ";
+                Text[ chinese_traditional ] = "Font";
+                Text[ turkish ] = "Font";
+                Text[ arabic ] = "««·Œÿ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text = "Schrifteffekt" ;
                 Text [ english_us ] = "Font Effects" ;
+                Text[ portuguese ] = "Font Effects";
+                Text[ russian ] = "Font Effects";
+                Text[ greek ] = "Font Effects";
+                Text[ dutch ] = "Font Effects";
+                Text[ french ] = "Font Effects";
+                Text[ spanish ] = "Font Effects";
+                Text[ italian ] = "Font Effects";
+                Text[ danish ] = "Font Effects";
+                Text[ swedish ] = "Teckensnittseffekt";
+                Text[ polish ] = "Font Effects";
+                Text[ portuguese_brazilian ] = "Font Effects";
+                Text[ japanese ] = "Font Effects";
+                Text[ korean ] = "Font Effects";
+                Text[ chinese_simplified ] = "◊÷ÃÂ–ßπ˚";
+                Text[ chinese_traditional ] = "Font Effects";
+                Text[ turkish ] = "Font Effects";
+                Text[ arabic ] = " √ÀÌ—«  «·ŒÿÊÿ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_POSITION ;
                 Text = "Position" ;
                 Text [ english_us ] = "Position" ;
+                Text[ portuguese ] = "Position";
+                Text[ russian ] = "Position";
+                Text[ greek ] = "Position";
+                Text[ dutch ] = "Position";
+                Text[ french ] = "Position";
+                Text[ spanish ] = "Position";
+                Text[ italian ] = "Position";
+                Text[ danish ] = "Position";
+                Text[ swedish ] = "Position";
+                Text[ polish ] = "Position";
+                Text[ portuguese_brazilian ] = "Position";
+                Text[ japanese ] = "Position";
+                Text[ korean ] = "Position";
+                Text[ chinese_simplified ] = "Œª÷√";
+                Text[ chinese_traditional ] = "Position";
+                Text[ turkish ] = "Position";
+                Text[ arabic ] = "«·„Ê÷⁄";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_ASIAN ;
                 Text = "Asiatisches Layout" ;
                 Text [ english_us ] = "Asian Layout" ;
+                Text[ portuguese ] = "Asian Layout";
+                Text[ russian ] = "Asian Layout";
+                Text[ greek ] = "Asian Layout";
+                Text[ dutch ] = "Asian Layout";
+                Text[ french ] = "Asian Layout";
+                Text[ spanish ] = "Asian Layout";
+                Text[ italian ] = "Asian Layout";
+                Text[ danish ] = "Asian Layout";
+                Text[ swedish ] = "Asiatisk layout";
+                Text[ polish ] = "Asian Layout";
+                Text[ portuguese_brazilian ] = "Asian Layout";
+                Text[ japanese ] = "Asian Layout";
+                Text[ korean ] = "Asian Layout";
+                Text[ chinese_simplified ] = "—«÷ﬁ∑Á∏Ò";
+                Text[ chinese_traditional ] = "Asian Layout";
+                Text[ turkish ] = "Asian Layout";
+                Text[ arabic ] = " ŒÿÌÿ ¬”ÌÊÌ";
             };
             PageItem
             {
