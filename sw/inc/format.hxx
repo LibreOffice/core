@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:09:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ public:
                                    nWhichId == RES_DRAWFRMFMT||
                                    nWhichId == RES_FRMFMT; }
 
-#ifdef MACOSX
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 #define INLINE /* GrP revisit with gcc3 */
 #else
 #define INLINE inline
