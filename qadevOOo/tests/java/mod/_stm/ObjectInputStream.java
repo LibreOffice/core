@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ObjectInputStream.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:29:56 $
+ *  last change:$Date: 2003-09-08 12:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 
 package mod._stm;
 
+import java.io.PrintWriter;
+import java.util.Vector;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XActiveDataSource;
 import com.sun.star.io.XInputStream;
@@ -74,12 +82,6 @@ import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import java.util.Vector;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
 
 /**
 * Test for object which is represented by service
