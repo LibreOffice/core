@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:16:04 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 08:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ namespace xmloff
     OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
         :m_aTextAlignHandler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), -1)
         ,m_aControlBorderHandler(OEnumMapper::getEnumMap(OEnumMapper::epBorderType))
-        ,m_aFontWidthHandler(OEnumMapper::getEnumMap(OEnumMapper::epFontWidth), FontWidth::DONTKNOW)
     {
     }
 
@@ -115,8 +114,6 @@ namespace xmloff
                 return &m_aTextAlignHandler;
             case XML_TYPE_BORDER:
                 return &m_aControlBorderHandler;
-            case XML_TYPE_FONT_WIDTH:
-                return &m_aFontWidthHandler;
             case XML_TYPE_ROTATION_ANGLE:
                 return &m_aRotationAngleHandler;
             default:
@@ -211,6 +208,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/18 15:16:04  fs
+ *  initial checkin - property handlers / property handler factory
+ *
  *
  *  Revision 1.0 14.12.00 10:53:10  fs
  ************************************************************************/
