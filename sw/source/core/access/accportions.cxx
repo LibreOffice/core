@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 09:21:18 $
+ *  last change: $Author: dvo $ $Date: 2002-07-24 14:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,4 +825,14 @@ sal_Bool SwAccessiblePortionData::IsValidCorePosition( USHORT nPos )
     // a position is valid its within the model positions that we know
     return ( aModelPositions[0] <= nPos ) &&
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
+}
+
+USHORT SwAccessiblePortionData::GetFirstValidCorePosition()
+{
+    return static_cast<USHORT>( aModelPositions[0] );
+}
+
+USHORT SwAccessiblePortionData::GetLastValidCorePosition()
+{
+    return static_cast<USHORT>( aModelPositions[ aModelPositions.size()-1 ] );
 }
