@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-10 15:23:19 $
+ *  last change: $Author: kso $ $Date: 2001-03-08 12:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 #include "NeonInputStream.hxx"
+
+#ifndef _RTL_MEMORY_H_
+#include <rtl/memory.h>
+#endif
 
 using namespace cppu;
 using namespace rtl;
@@ -132,11 +136,9 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
     // Realloc buffer.
     aData.realloc( theBytes2Read );
 
-    sal_Int8 * theBuffer = aData.getArray();
-
     // Write the data
-    for ( sal_Int32 theIndex = 0; theIndex < theBytes2Read; theIndex ++ )
-        theBuffer[ theIndex ] = mInputBuffer[ mPos + theIndex ];
+    rtl_copyMemory(
+        aData.getArray(), mInputBuffer.getConstArray() + mPos, theBytes2Read );
 
     // Update our stream position for next time
     mPos += theBytes2Read;
