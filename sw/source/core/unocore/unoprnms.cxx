@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0638 UNO_NAME_IS_FIXED_LANGUAGE */ {MAP_CHAR_LEN("IsFixedLanguage")},
 /* 0639 UNO_NAME_SELECTION */  {MAP_CHAR_LEN("Selection")},
 /* 0640 UNO_NAME_RESULT_SET */  {MAP_CHAR_LEN("ResultSet")},
-/* 0641 UNO_NAME_CONNECTION */  {MAP_CHAR_LEN("Connection")},
+/* 0641 UNO_NAME_CONNECTION */  {MAP_CHAR_LEN("ActiveConnection")},
 /* 0642 UNO_NAME_MODEL */  {MAP_CHAR_LEN("Model")},
 /* 0643 UNO_NAME_DATA_SOURCE_NAME */  {MAP_CHAR_LEN("DataSourceName")},
 /* 0644 UNO_NAME_DATA_COMMAND */  {MAP_CHAR_LEN("DataCommand")},
@@ -732,7 +732,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0650 UNO_NAME_SINGLE_PRINT_JOBS */  {MAP_CHAR_LEN("SinglePrintJobs")},
 /* 0651 UNO_NAME_FILE_NAME_FROM_COLUMN */  {MAP_CHAR_LEN("FileNameFromColumn")},
 /* 0652 UNO_NAME_FILE_NAME_PREFIX */  {MAP_CHAR_LEN("FileNamePrefix")},
-/* 0653 UNO_NAME_CHAR_STYLE_NAMES */  {MAP_CHAR_LEN("CharStyleNames")}
+/* 0653 UNO_NAME_CHAR_STYLE_NAMES */  {MAP_CHAR_LEN("CharStyleNames")},
+/* 0654 UNO_NAME_DAD_COMMAND */  {MAP_CHAR_LEN("Command")},
+/* 0655 UNO_NAME_DAD_COMMAND_TYPE */  {MAP_CHAR_LEN("CommandType")}
 };
 
 #ifndef PRODUCT
