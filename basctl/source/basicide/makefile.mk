@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-24 09:16:49 $
+#   last change: $Author: hjs $ $Date: 2002-08-16 10:25:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,7 @@ ALL:	\
 $(INCCOM)$/dllname.hxx: makefile.mk
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     $(RM) $@
-        echo #define DLL_NAME \"libbasctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+        echo \#define DLL_NAME \"libbasctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
         echo #define DLL_NAME "basctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
 .ENDIF
