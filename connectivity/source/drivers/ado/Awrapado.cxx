@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 12:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1527,6 +1527,8 @@ WpBase::WpBase() : pIUnknown(NULL)
 WpBase::WpBase(IDispatch* pInt)
     :pIUnknown(pInt)
 {
+    if (pIUnknown)
+        pIUnknown->AddRef();
 }
 
 //inline
