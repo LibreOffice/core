@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refltype.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-09 14:48:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/09 14:48:24  hr
+    #65293#: syntax
+
     Revision 1.2  2000/10/09 11:53:09  jsc
     change the binary typelibrary format, make it extendable
 
@@ -130,8 +133,8 @@
 
 *************************************************************************/
 
-#ifndef __REGISTRY_REFLTYPE_HXX__
-#define __REGISTRY_REFLTYPE_HXX__
+#ifndef _REGISTRY_REFLTYPE_HXX_
+#define _REGISTRY_REFLTYPE_HXX_
 
 #ifdef SOLARIS
 #include <wchar.h>
@@ -161,7 +164,8 @@ enum RTTypeClass
     RT_TYPE_TYPEDEF,
     RT_TYPE_SERVICE,
     RT_TYPE_OBJECT,
-    RT_TYPE_CONSTANTS
+    RT_TYPE_CONSTANTS,
+    RT_TYPE_UNION
 };
 
 typedef sal_uInt16 RTFieldAccess;
@@ -180,19 +184,9 @@ typedef sal_uInt16 RTFieldAccess;
 #define RT_ACCESS_PROPERTY          0x0400
 #define RT_ACCESS_CONST             0x0800
 #define RT_ACCESS_READWRITE         0x1000
-/*
-enum RTFieldAccess
-{
-    RT_ACCESS_INVALID,
-    RT_ACCESS_CONST,
-    RT_ACCESS_READONLY,
-    RT_ACCESS_WRITEONLY,
-    RT_ACCESS_READWRITE,
-    RT_ACCESS_READONLY_OPTIONAL,
-    RT_ACCESS_WRITEONLY_OPTIONAL,
-    RT_ACCESS_READWRITE_OPTIONAL
-};
-*/
+// only to describe a union default label
+#define RT_ACCESS_DEFAULT           0x2000
+
 enum RTReferenceType
 {
     RT_REF_INVALID,
@@ -243,8 +237,8 @@ union RTConstValueUnion
     sal_uInt16      aUShort;
     sal_Int32       aLong;
     sal_uInt32      aULong;
-//  sal_Int64       aHyper;
-//  sal_UInt64      aUHyper;
+    sal_Int64       aHyper;
+    sal_uInt64      aUHyper;
     float           aFloat;
     double          aDouble;
     const sal_Unicode*  aString;

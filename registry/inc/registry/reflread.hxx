@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __REGISTRY_REFLREAD_HXX__
-#define __REGISTRY_REFLREAD_HXX__
+#ifndef _REGISTRY_REFLREAD_HXX_
+#define _REGISTRY_REFLREAD_HXX_
 
 #ifndef _REGISTRY_REFLTYPE_HXX_
 #include <registry/refltype.hxx>
@@ -68,8 +68,8 @@
 #ifndef _REGISTRY_REGTYPE_H_
 #include <registry/regtype.h>
 #endif
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
+#ifndef _SALHELPER_DYNLOAD_HXX_
+#include <salhelper/dynload.hxx>
 #endif
 
 // Implememetation handle
@@ -138,11 +138,11 @@ typedef RegistryTypeReader_Api* (TYPEREG_CALLTYPE *InitRegistryTypeReader_Api)(v
     loader provides a valid Api for the RegistryTypeReader.
 */
 class RegistryTypeReaderLoader
-    : public ::vos::ODynamicLoader<RegistryTypeReader_Api>
+    : public ::salhelper::ODynamicLoader<RegistryTypeReader_Api>
 {
 public:
     RegistryTypeReaderLoader()
-        : ::vos::ODynamicLoader<RegistryTypeReader_Api>
+        : ::salhelper::ODynamicLoader<RegistryTypeReader_Api>
             (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_READER_INIT_FUNCTION_NAME) ))
         {}
@@ -209,9 +209,9 @@ public:
 
 protected:
 
-    const RegistryTypeReader_Api*                                m_pApi;
-    const NAMESPACE_VOS(ODynamicLoader)<RegistryTypeReader_Api>  m_Api;
-    TypeReaderImpl                                               m_hImpl;
+    const RegistryTypeReader_Api*                               m_pApi;
+    const ::salhelper::ODynamicLoader< RegistryTypeReader_Api > m_Api;
+    TypeReaderImpl                                              m_hImpl;
 };
 
 

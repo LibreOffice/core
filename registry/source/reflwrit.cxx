@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-02 13:41:34 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,26 @@
  *
  *
  ************************************************************************/
-#include <osl/types.h>
-
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+#ifndef _SAL_MACROS_H_
+#include <sal/macros.h>
+#endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
+#ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
+#endif
+#ifndef _REGISTRY_REFLWRIT_HXX_
 #include <registry/reflwrit.hxx>
+#endif
 
 #include "reflcnst.hxx"
 
 using namespace rtl;
-using namespace vos;
+using namespace salhelper;
 
 #ifdef MAC
 #define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str)
@@ -87,11 +98,9 @@ ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
 #define BLOP_OFFSET_TYPE_SOURCE (BLOP_OFFSET_N_ENTRIES + sizeof(sal_uInt16))
 #define BLOP_OFFSET_TYPE_CLASS  (BLOP_OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
 #define BLOP_OFFSET_THIS        (BLOP_OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
-//#define BLOP_OFFSET_SUPER       (BLOP_OFFSET_THIS + sizeof(sal_uInt16))
 #define BLOP_OFFSET_UIK         (BLOP_OFFSET_THIS + sizeof(sal_uInt16))
 #define BLOP_OFFSET_DOKU        (BLOP_OFFSET_UIK + sizeof(sal_uInt16))
 #define BLOP_OFFSET_FILENAME    (BLOP_OFFSET_DOKU + sizeof(sal_uInt16))
-//#define BLOP_HEADER_SIZE        (BLOP_OFFSET_FILENAME + sizeof(sal_uInt16))
 #define BLOP_HEADER_N_ENTRIES   6
 
 #define BLOP_OFFSET_N_SUPERTYPES    0
@@ -103,7 +112,6 @@ ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
 #define BLOP_FIELD_ENTRY_VALUE      (BLOP_FIELD_ENTRY_TYPE + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_DOKU       (BLOP_FIELD_ENTRY_VALUE + sizeof(sal_uInt16))
 #define BLOP_FIELD_ENTRY_FILENAME   (BLOP_FIELD_ENTRY_DOKU + sizeof(sal_uInt16))
-//#define BLOP_FIELD_ENTRY_SIZE       (BLOP_FIELD_ENTRY_FILENAME + sizeof(sal_uInt16))
 #define BLOP_FIELD_N_ENTRIES        6
 
 #define BLOP_METHOD_SIZE        0
@@ -111,20 +119,17 @@ ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
 #define BLOP_METHOD_NAME        (BLOP_METHOD_MODE + sizeof(sal_uInt16))
 #define BLOP_METHOD_RETURN      (BLOP_METHOD_NAME + sizeof(sal_uInt16))
 #define BLOP_METHOD_DOKU        (BLOP_METHOD_RETURN + sizeof(sal_uInt16))
-//#define BLOP_METHOD_HEADER_SIZE (BLOP_METHOD_DOKU + sizeof(sal_uInt16))
 #define BLOP_METHOD_N_ENTRIES   5
 
 #define BLOP_PARAM_TYPE         0
 #define BLOP_PARAM_MODE         (BLOP_PARAM_TYPE + sizeof(sal_uInt16))
 #define BLOP_PARAM_NAME         (BLOP_PARAM_MODE + sizeof(sal_uInt16))
-//#define BLOP_PARAM_ENTRY_SIZE   (BLOP_PARAM_NAME + sizeof(sal_uInt16))
 #define BLOP_PARAM_N_ENTRIES    3
 
 #define BLOP_REFERENCE_TYPE         0
 #define BLOP_REFERENCE_NAME         (BLOP_REFERENCE_TYPE + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_DOKU         (BLOP_REFERENCE_NAME + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_ACCESS       (BLOP_REFERENCE_DOKU + sizeof(sal_uInt16))
-//#define BLOP_REFERENCE_ENTRY_SIZE   (BLOP_REFERENCE_ACCESS + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_N_ENTRIES    4
 
 sal_uInt32 UINT16StringLen(const sal_uInt8* wstring)
@@ -154,7 +159,7 @@ sal_uInt32 writeString(sal_uInt8* buffer, const sal_Unicode* v)
 
 sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSize)
 {
-    sal_uInt32 len = VOS_MIN(UINT16StringLen(buffer) + 1, maxSize / 2);
+    sal_uInt32 len = SAL_MIN(UINT16StringLen(buffer) + 1, maxSize / 2);
     sal_uInt32 i;
     sal_uInt8* buff = (sal_uInt8*)buffer;
 
@@ -338,10 +343,10 @@ sal_uInt32 CPInfo::getBlopSize()
             size += sizeof(sal_uInt32);
             break;
         case CP_TAG_CONST_INT64:
-//          size += sizeof(sal_Int64);
+              size += sizeof(sal_Int64);
             break;
         case CP_TAG_CONST_UINT64:
-//          size += sizeof(sal_uInt64);
+            size += sizeof(sal_uInt64);
             break;
         case CP_TAG_CONST_FLOAT:
             size += sizeof(sal_uInt32);
@@ -394,10 +399,10 @@ sal_uInt32 CPInfo::toBlop(sal_uInt8* buffer, sal_uInt32 maxLen)
             buff += writeUINT32(buff, m_value.aConst.aULong);
             break;
         case CP_TAG_CONST_INT64:
-//          buff += writeUINT64(buff, m_value.aConst.aHyper);
+            buff += writeUINT64(buff, m_value.aConst.aHyper);
             break;
         case CP_TAG_CONST_UINT64:
-//          buff += writeUINT64(buff, m_value.aConst.aUHyper);
+            buff += writeUINT64(buff, m_value.aConst.aUHyper);
             break;
         case CP_TAG_CONST_FLOAT:
             buff += writeFloat(buff, m_value.aConst.aFloat);
@@ -696,7 +701,7 @@ void MethodEntry::reallocParams(sal_uInt16 size)
     {
         sal_uInt16 i;
 
-        for (i = 0; i < VOS_MIN(size, m_paramCount); i++)
+        for (i = 0; i < SAL_MIN(size, m_paramCount); i++)
         {
             newParams[i].setData(m_params[i].m_typeName, m_params[i].m_name, m_params[i].m_mode);
         }
@@ -719,7 +724,7 @@ void MethodEntry::reallocExcs(sal_uInt16 size)
 
     sal_uInt16 i;
 
-    for (i = 0; i < VOS_MIN(size, m_excCount); i++)
+    for (i = 0; i < SAL_MIN(size, m_excCount); i++)
     {
         newExcNames[i] = m_excNames[i];
     }

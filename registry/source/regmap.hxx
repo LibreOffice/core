@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:54 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,21 +63,17 @@
 #define _REGMAP_HXX_
 
 #if STLPORT_VERSION<321
-#include    <hash_map.h>
-#include    <list.h>
-#include    <set.h>
+#include <hash_map.h>
+#include <list.h>
+#include <set.h>
 #else
-#include    <hash_map>
-#include    <list>
-#include    <set>
-#endif
-
-#ifndef _VOS_MACROS_HXX_
-#include    <vos/macros.hxx>
+#include <hash_map>
+#include <list>
+#include <set>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #endif
 
 using namespace rtl;
@@ -108,10 +104,10 @@ struct LessString
     }
 };
 
-typedef NAMESPACE_STD(hash_map) <OUString, ORegKey*, HashString, EqualString> KeyMap;
+typedef ::std::hash_map< OUString, ORegKey*, HashString, EqualString > KeyMap;
 
-typedef NAMESPACE_STD(list) <ORegKey*> LinkList;
+typedef ::std::list< ORegKey* > LinkList;
 
-typedef NAMESPACE_STD(set) <OUString, LessString>   StringSet;
+typedef ::std::set< OUString, LessString >  StringSet;
 
 #endif

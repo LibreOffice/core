@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __REGISTRY_REFLWRIT_HXX__
-#define __REGISTRY_REFLWRIT_HXX__
+#ifndef _REGISTRY_REFLWRIT_HXX_
+#define _REGISTRY_REFLWRIT_HXX_
 
 #ifndef _REGISTRY_REFLTYPE_HXX_
 #include <registry/refltype.hxx>
@@ -68,8 +68,8 @@
 #ifndef _REGISTRY_REGTYPE_H_
 #include <registry/regtype.h>
 #endif
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
+#ifndef _SALHELPER_DYNLOAD_HXX_
+#include <salhelper/dynload.hxx>
 #endif
 
 // Implememetation handle
@@ -117,11 +117,11 @@ typedef RegistryTypeWriter_Api* (TYPEREG_CALLTYPE *InitRegistryTypeWriter_Api)(v
     loader provides a valid Api for the RegistryTypeWriter.
 */
 class RegistryTypeWriterLoader
-    : public ::vos::ODynamicLoader<RegistryTypeWriter_Api>
+    : public ::salhelper::ODynamicLoader<RegistryTypeWriter_Api>
 {
 public:
     RegistryTypeWriterLoader()
-        : ::vos::ODynamicLoader<RegistryTypeWriter_Api>
+        : ::salhelper::ODynamicLoader<RegistryTypeWriter_Api>
             (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION  ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_WRITER_INIT_FUNCTION_NAME) ))
         {}
@@ -203,7 +203,7 @@ public:
 protected:
 
     const RegistryTypeWriter_Api*                                m_pApi;
-    const NAMESPACE_VOS(ODynamicLoader)<RegistryTypeWriter_Api>  m_Api;
+    const ::salhelper::ODynamicLoader< RegistryTypeWriter_Api >  m_Api;
     TypeWriterImpl                                               m_hImpl;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-02 13:56:38 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,13 +162,22 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
             case RT_TYPE_CONSTANTS:
                 fprintf(stdout, "type: 'constants'\n");
                 break;
+            case RT_TYPE_UNION:
+                fprintf(stdout, "type: 'union'\n");
+                break;
             default:
                 fprintf(stdout, "type: <unknown>\n");
                 break;
         }
 
         fprintf(stdout, "%sname: '%s'\n", indent, OUStringToOString(reader.getTypeName(), RTL_TEXTENCODING_UTF8).getStr());
-        fprintf(stdout, "%ssuper name: '%s'\n", indent, OUStringToOString(reader.getSuperTypeName(), RTL_TEXTENCODING_UTF8).getStr());
+        if (reader.getTypeClass() == RT_TYPE_UNION )
+        {
+            fprintf(stdout, "%sdiscriminant type: '%s'\n", indent, OUStringToOString(reader.getSuperTypeName(), RTL_TEXTENCODING_UTF8).getStr());
+        } else
+        {
+            fprintf(stdout, "%ssuper name: '%s'\n", indent, OUStringToOString(reader.getSuperTypeName(), RTL_TEXTENCODING_UTF8).getStr());
+        }
         fprintf(stdout, "%sDoku: \"%s\"\n", indent, OUStringToOString(reader.getDoku(), RTL_TEXTENCODING_UTF8).getStr());
         fprintf(stdout, "%sIDL source file: \"%s\"\n", indent, OUStringToOString(reader.getFileName(), RTL_TEXTENCODING_UTF8).getStr());
         fprintf(stdout, "%snumber of fields: %d\n", indent, reader.getFieldCount());
@@ -183,49 +192,6 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
             if ( fieldAccess == RT_ACCESS_INVALID )
             {
                 fprintf(stdout, "%s  access=INVALID\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_CONST) == RT_ACCESS_CONST )
-            {
-                fprintf(stdout, "%s  access=CONST\n", indent);
-                RTConstValue constVal = reader.getFieldConstValue(i);
-
-                fprintf(stdout, "%s  value = ", indent);
-
-                switch (constVal.m_type)
-                {
-                    case RT_TYPE_BOOL:
-                        if (constVal.m_value.aBool)
-                            fprintf(stdout, "TRUE");
-                        else
-                            fprintf(stdout, "FALSE");
-                        break;
-                    case RT_TYPE_BYTE:
-                        fprintf(stdout, "%d", (int)constVal.m_value.aByte);
-                        break;
-                    case RT_TYPE_INT16:
-                        fprintf(stdout, "%d", constVal.m_value.aShort);
-                        break;
-                    case RT_TYPE_UINT16:
-                        fprintf(stdout, "%u", constVal.m_value.aUShort);
-                        break;
-                    case RT_TYPE_INT32:
-                        fprintf(stdout, "%d", constVal.m_value.aLong);
-                        break;
-                    case RT_TYPE_UINT32:
-                        fprintf(stdout, "%u", constVal.m_value.aULong);
-                        break;
-                    case RT_TYPE_FLOAT:
-                        fprintf(stdout, "%f", constVal.m_value.aFloat);
-                        break;
-                    case RT_TYPE_DOUBLE:
-                        fprintf(stdout, "%f", constVal.m_value.aDouble);
-                        break;
-                    case RT_TYPE_STRING:
-                        fprintf(stdout, "%s", OUStringToOString(constVal.m_value.aString, RTL_TEXTENCODING_UTF8).getStr());
-                        break;
-                    default:
-                        break;
-                }
             }
             if ( (fieldAccess  & RT_ACCESS_READONLY) == RT_ACCESS_READONLY )
             {
@@ -267,80 +233,64 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
             {
                 fprintf(stdout, "%s  access=REMOVEABLE\n", indent);
             }
-
-/*
-            switch (reader.getFieldAccess(i))
+            if ( (fieldAccess & RT_ACCESS_DEFAULT) == RT_ACCESS_DEFAULT )
             {
-                case RT_ACCESS_INVALID:
-                    fprintf(stdout, "%s  access=INVALID\n", indent);
-                    break;
-                case RT_ACCESS_CONST:
-                    {
-                        fprintf(stdout, "%s  access=CONST\n", indent);
-                        RTConstValue constVal = reader.getFieldConstValue(i);
-
-                        fprintf(stdout, "%s  value = ", indent);
-
-                        switch (constVal.m_type)
-                        {
-                            case RT_TYPE_BOOL:
-                                if (constVal.m_value.aBool)
-                                    fprintf(stdout, "TRUE");
-                                else
-                                    fprintf(stdout, "FALSE");
-                                break;
-                            case RT_TYPE_BYTE:
-                                fprintf(stdout, "%d", (int)constVal.m_value.aByte);
-                                break;
-                            case RT_TYPE_INT16:
-                                fprintf(stdout, "%d", constVal.m_value.aShort);
-                                break;
-                            case RT_TYPE_UINT16:
-                                fprintf(stdout, "%u", constVal.m_value.aUShort);
-                                break;
-                            case RT_TYPE_INT32:
-                                fprintf(stdout, "%d", constVal.m_value.aLong);
-                                break;
-                            case RT_TYPE_UINT32:
-                                fprintf(stdout, "%u", constVal.m_value.aULong);
-                                break;
-                            case RT_TYPE_FLOAT:
-                                fprintf(stdout, "%f", constVal.m_value.aFloat);
-                                break;
-                            case RT_TYPE_DOUBLE:
-                                fprintf(stdout, "%f", constVal.m_value.aDouble);
-                                break;
-                            case RT_TYPE_STRING:
-                                fprintf(stdout, "%s", OUStringToOString(constVal.m_value.aString, RTL_TEXTENCODING_UTF8).getStr());
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    break;
-                case RT_ACCESS_READONLY:
-                    fprintf(stdout, "%s  access=READONLY ", indent);
-                    break;
-                case RT_ACCESS_WRITEONLY:
-                    fprintf(stdout, "%s  access=WRITEONLY ", indent);
-                    break;
-                case RT_ACCESS_READWRITE:
-                    fprintf(stdout, "%s  access=READWRITE ", indent);
-                    break;
-                case RT_ACCESS_READONLY_OPTIONAL:
-                    fprintf(stdout, "%s  access=READONLY, OPTIONAL ", indent);
-                    break;
-                case RT_ACCESS_WRITEONLY_OPTIONAL:
-                    fprintf(stdout, "%s  access=WRITEONLY, OPTIONAL ", indent);
-                    break;
-                case RT_ACCESS_READWRITE_OPTIONAL:
-                    fprintf(stdout, "%s  access=READWRITE, OPTIONAL ", indent);
-                    break;
-                default:
-                    fprintf(stdout, "%s  access=<unknown> ", indent);
-                    break;
+                fprintf(stdout, "%s  access=DEFAULT\n", indent);
             }
-*/
+            if ( (fieldAccess & RT_ACCESS_CONST) == RT_ACCESS_CONST )
+            {
+                   fprintf(stdout, "%s  access=CONST\n", indent);
+            }
+
+            RTConstValue constVal = reader.getFieldConstValue(i);
+
+            if ( constVal.m_type != RT_TYPE_NONE )
+            {
+                fprintf(stdout, "%s  value = ", indent);
+
+                switch (constVal.m_type)
+                {
+                    case RT_TYPE_BOOL:
+                        if (constVal.m_value.aBool)
+                            fprintf(stdout, "TRUE");
+                        else
+                            fprintf(stdout, "FALSE");
+                        break;
+                    case RT_TYPE_BYTE:
+                        fprintf(stdout, "%d", (int)constVal.m_value.aByte);
+                        break;
+                    case RT_TYPE_INT16:
+                        fprintf(stdout, "%d", constVal.m_value.aShort);
+                        break;
+                    case RT_TYPE_UINT16:
+                        fprintf(stdout, "%u", constVal.m_value.aUShort);
+                        break;
+                    case RT_TYPE_INT32:
+                        fprintf(stdout, "%d", constVal.m_value.aLong);
+                        break;
+                    case RT_TYPE_UINT32:
+                        fprintf(stdout, "%u", constVal.m_value.aULong);
+                        break;
+                    case RT_TYPE_INT64:
+                        fprintf(stdout, "%d", constVal.m_value.aHyper);
+                        break;
+                    case RT_TYPE_UINT64:
+                        fprintf(stdout, "%u", constVal.m_value.aUHyper);
+                        break;
+                    case RT_TYPE_FLOAT:
+                        fprintf(stdout, "%f", constVal.m_value.aFloat);
+                        break;
+                    case RT_TYPE_DOUBLE:
+                        fprintf(stdout, "%f", constVal.m_value.aDouble);
+                        break;
+                    case RT_TYPE_STRING:
+                        fprintf(stdout, "%s", OUStringToOString(constVal.m_value.aString, RTL_TEXTENCODING_UTF8).getStr());
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             fprintf(stdout, "\n%s  Doku: \"%s\"", indent, OUStringToOString(reader.getFieldDoku(i), RTL_TEXTENCODING_UTF8).getStr());
             fprintf(stdout, "\n%s  IDL source file: \"%s\"\n", indent, OUStringToOString(reader.getFieldFileName(i), RTL_TEXTENCODING_UTF8).getStr());
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflcnst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-12 08:11:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,17 @@
  *
  ************************************************************************/
 
-#ifndef __REFLCNST_HXX__
-#define __REFLCNST_HXX__
+#ifndef _REFLCNST_HXX_
+#define _REFLCNST_HXX_
 
-#ifndef __REGISTRY_REFLTYPE_HXX__
-#include    <registry/refltype.hxx>
+#ifndef _REGISTRY_REFLTYPE_HXX_
+#include <registry/refltype.hxx>
+#endif
+#ifndef _SAL_MACROS_H_
+#include <sal/macros.h>
 #endif
 
 #include <string.h>
-#include <vos/macros.hxx>
 
 #define REGTYPE_IEEE_NATIVE 1
 
@@ -235,6 +237,66 @@ inline sal_uInt32 readUINT32(const sal_uInt8* buffer, sal_uInt32& v)
     return sizeof(sal_uInt32);
 }
 
+inline sal_uInt32 writeINT64(sal_uInt8* buffer, sal_Int64 v)
+{
+    buffer[0] = (sal_uInt8)((v >> 56) & 0xFF);
+    buffer[1] = (sal_uInt8)((v >> 48) & 0xFF);
+    buffer[2] = (sal_uInt8)((v >> 40) & 0xFF);
+    buffer[3] = (sal_uInt8)((v >> 32) & 0xFF);
+    buffer[4] = (sal_uInt8)((v >> 24) & 0xFF);
+    buffer[5] = (sal_uInt8)((v >> 16) & 0xFF);
+    buffer[6] = (sal_uInt8)((v >> 8) & 0xFF);
+    buffer[7] = (sal_uInt8)((v >> 0) & 0xFF);
+
+    return sizeof(sal_Int64);
+}
+
+inline sal_uInt32 readINT64(const sal_uInt8* buffer, sal_Int64& v)
+{
+    v = (
+            ((sal_Int64)buffer[0] << 56) |
+            ((sal_Int64)buffer[1] << 48) |
+            ((sal_Int64)buffer[2] << 40) |
+            ((sal_Int64)buffer[3] << 32) |
+            ((sal_Int64)buffer[4] << 24) |
+            ((sal_Int64)buffer[5] << 16) |
+            ((sal_Int64)buffer[6] << 8)  |
+            ((sal_Int64)buffer[7] << 0)
+        );
+
+    return sizeof(sal_Int64);
+}
+
+inline sal_uInt32 writeUINT64(sal_uInt8* buffer, sal_uInt64 v)
+{
+    buffer[0] = (sal_uInt8)((v >> 56) & 0xFF);
+    buffer[1] = (sal_uInt8)((v >> 48) & 0xFF);
+    buffer[2] = (sal_uInt8)((v >> 40) & 0xFF);
+    buffer[3] = (sal_uInt8)((v >> 32) & 0xFF);
+    buffer[4] = (sal_uInt8)((v >> 24) & 0xFF);
+    buffer[5] = (sal_uInt8)((v >> 16) & 0xFF);
+    buffer[6] = (sal_uInt8)((v >> 8) & 0xFF);
+    buffer[7] = (sal_uInt8)((v >> 0) & 0xFF);
+
+    return sizeof(sal_uInt64);
+}
+
+inline sal_uInt32 readUINT64(const sal_uInt8* buffer, sal_uInt64& v)
+{
+    v = (
+            ((sal_uInt64)buffer[0] << 56) |
+            ((sal_uInt64)buffer[1] << 48) |
+            ((sal_uInt64)buffer[2] << 40) |
+            ((sal_uInt64)buffer[3] << 32) |
+            ((sal_uInt64)buffer[4] << 24) |
+            ((sal_uInt64)buffer[5] << 16) |
+            ((sal_uInt64)buffer[6] << 8)  |
+            ((sal_uInt64)buffer[7] << 0)
+        );
+
+    return sizeof(sal_uInt64);
+}
+
 inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const sal_Char* v)
 {
     sal_uInt32 size = strlen(v) + 1;
@@ -246,7 +308,7 @@ inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const sal_Char* v)
 
 inline sal_uInt32 readUtf8(const sal_uInt8* buffer, sal_Char* v, sal_uInt32 maxSize)
 {
-    sal_uInt32 size = VOS_MIN(strlen((const sal_Char*) buffer) + 1, maxSize);
+    sal_uInt32 size = SAL_MIN(strlen((const sal_Char*) buffer) + 1, maxSize);
 
     memcpy(v, buffer, size);
 

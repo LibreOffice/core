@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-03 13:44:33 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,8 @@
 #ifndef _REGISTRY_REGTYPE_H_
 #include <registry/regtype.h>
 #endif
-
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
-#endif
-
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
+#ifndef _SALHELPER_DYNLOAD_HXX_
+#include <salhelper/dynload.hxx>
 #endif
 
 #ifdef __cplusplus
@@ -139,12 +134,12 @@ class RegistryKey;
     The loader can be checked if the DLL is loaded. If the DLL is loaded the
     loader provides a valid Api for the registry.
 */
-class RegistryLoader : public ::vos::ODynamicLoader<Registry_Api>
+class RegistryLoader : public ::salhelper::ODynamicLoader<Registry_Api>
 {
 public:
     /// Default constructor, try to load the registry DLL and initialize the needed api.
     RegistryLoader()
-        : ::vos::ODynamicLoader<Registry_Api>
+        : ::salhelper::ODynamicLoader<Registry_Api>
             (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_INIT_FUNCTION_NAME) ))
         {}
@@ -285,9 +280,9 @@ public:
     const Registry_Api* getApi() { return m_pApi; }
 protected:
 
-    const Registry_Api*                         m_pApi;
-    NAMESPACE_VOS(ODynamicLoader)<Registry_Api> m_Api;
-    RegHandle                                   m_hImpl;
+    const Registry_Api*                          m_pApi;
+    ::salhelper::ODynamicLoader< Registry_Api >  m_Api;
+    RegHandle                                    m_hImpl;
 };
 
 

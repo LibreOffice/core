@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-02 13:43:58 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,19 @@
 #ifndef MAC
 #include <memory.h>
 #endif
-#include <osl/types.h>
-
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
+#ifndef _REGISTRY_REFLREAD_HXX_
 #include <registry/reflread.hxx>
+#endif
+
 #include "reflcnst.hxx"
 
-using namespace vos;
+using namespace salhelper;
 
 static CPInfoTag aTag;
 
@@ -132,6 +139,34 @@ public:
             (m_pBuffer[index+1] << 16) |
             (m_pBuffer[index+2] << 8)  |
             (m_pBuffer[index+3] << 0)
+        );
+    }
+
+    inline sal_Int64 readINT64(sal_uInt32 index) const
+    {
+        return (
+            ((sal_Int64)m_pBuffer[index]   << 56) |
+            ((sal_Int64)m_pBuffer[index+1] << 48) |
+            ((sal_Int64)m_pBuffer[index+2] << 40) |
+            ((sal_Int64)m_pBuffer[index+3] << 32) |
+            ((sal_Int64)m_pBuffer[index+4] << 24) |
+            ((sal_Int64)m_pBuffer[index+5] << 16) |
+            ((sal_Int64)m_pBuffer[index+6] << 8)  |
+            ((sal_Int64)m_pBuffer[index+7] << 0)
+        );
+    }
+
+    inline sal_uInt64 readUINT64(sal_uInt32 index) const
+    {
+        return (
+            ((sal_uInt64)m_pBuffer[index]   << 56) |
+            ((sal_uInt64)m_pBuffer[index+1] << 48) |
+            ((sal_uInt64)m_pBuffer[index+2] << 40) |
+            ((sal_uInt64)m_pBuffer[index+3] << 32) |
+            ((sal_uInt64)m_pBuffer[index+4] << 24) |
+            ((sal_uInt64)m_pBuffer[index+5] << 16) |
+            ((sal_uInt64)m_pBuffer[index+6] << 8)  |
+            ((sal_uInt64)m_pBuffer[index+7] << 0)
         );
     }
 };
@@ -270,6 +305,8 @@ public:
     sal_uInt16          readUINT16Constant(sal_uInt16 index);
     sal_Int32           readINT32Constant(sal_uInt16 index);
     sal_uInt32          readUINT32Constant(sal_uInt16 index);
+    sal_Int64           readINT64Constant(sal_uInt16 index);
+    sal_uInt64          readUINT64Constant(sal_uInt16 index);
     float               readFloatConstant(sal_uInt16 index);
     double              readDoubleConstant(sal_uInt16 index);
     const sal_Unicode*  readStringConstant(sal_uInt16 index);
@@ -447,6 +484,36 @@ sal_uInt32 ConstantPool::readUINT32Constant(sal_uInt16 index)
     }
 
     return aUINT32;
+}
+
+sal_Int64 ConstantPool::readINT64Constant(sal_uInt16 index)
+{
+    sal_Int64 aINT64 = sal_False;
+
+    if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
+    {
+        if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_INT64)
+        {
+            aINT64 = readINT64(m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA);
+        }
+    }
+
+    return aINT64;
+}
+
+sal_uInt64 ConstantPool::readUINT64Constant(sal_uInt16 index)
+{
+    sal_uInt64 aUINT64 = sal_False;
+
+    if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
+    {
+        if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_UINT64)
+        {
+            aUINT64 = readUINT64(m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA);
+        }
+    }
+
+    return aUINT64;
 }
 
 float ConstantPool::readFloatConstant(sal_uInt16 index)
@@ -668,11 +735,11 @@ RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* v
                 ret = RT_TYPE_UINT32;
                 break;
             case CP_TAG_CONST_INT64:
-//              value->aHyper = m_pCP->readINT64Constant(cpIndex);
+              value->aHyper = m_pCP->readINT64Constant(cpIndex);
                 ret = RT_TYPE_INT64;
                 break;
             case CP_TAG_CONST_UINT64:
-//              value->aUHyper = m_pCP->readUINT64Constant(cpIndex);
+              value->aUHyper = m_pCP->readUINT64Constant(cpIndex);
                 ret = RT_TYPE_UINT64;
                 break;
             case CP_TAG_CONST_FLOAT:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-02 13:59:38 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,21 +59,22 @@
  *
  ************************************************************************/
 
-#include    <registry/registry.h>
-
+#ifndef _REGISTRY_REGISTRY_H_
+#include <registry/registry.h>
+#endif
 #ifndef _REGISTRY_REGISTRY_HXX_
-#include    <registry/registry.hxx>
+#include <registry/registry.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 
 #ifndef _REGIMPL_HXX_
-#include    "regimpl.hxx"
+#include "regimpl.hxx"
 #endif
-
 #ifndef _REGKEY_HXX_
-#include    "keyimpl.hxx"
+#include "keyimpl.hxx"
 #endif
-
-#include <vos/process.hxx>
 
 #if defined(WIN32) || defined(WNT) || defined(__OS2__)
 #include <io.h>
@@ -84,7 +85,7 @@
 #include <unistd.h>
 #endif
 
-using namespace vos;
+using namespace salhelper;
 
 #if defined ( GCC ) && ( defined ( SCO ) )
 ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
@@ -92,19 +93,18 @@ ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
 
 OString getTempName()
 {
+    static OUString TMP(RTL_CONSTASCII_USTRINGPARAM("TMP"));
+    static OUString TEMP(RTL_CONSTASCII_USTRINGPARAM("TEMP"));
+
     OUString    uTmpPattern;
     sal_Char    tmpPattern[512] = "";
     sal_Char    *pTmpName = NULL;
 
-    OStartupInfo StartupInfo;
-
-    if (StartupInfo.getEnvironment(OUString( RTL_CONSTASCII_USTRINGPARAM("TMP") ),
-            uTmpPattern) != OStartupInfo::E_None)
+    if ( osl_getEnvironment(TMP.pData, &uTmpPattern.pData) != osl_Process_E_None )
     {
-        if (StartupInfo.getEnvironment( OUString( RTL_CONSTASCII_USTRINGPARAM("TEMP") ),
-                uTmpPattern) != NAMESPACE_VOS(OStartupInfo)::E_None)
+        if ( osl_getEnvironment(TEMP.pData, &uTmpPattern.pData) != osl_Process_E_None )
         {
-#if defined(WIN32) || defined(WNT) || defined(OS2)
+#if defined(SAL_W32) || defined(SAL_OS2)
             strcpy(tmpPattern, ".");
 #else
             strcpy(tmpPattern, "/tmp");
