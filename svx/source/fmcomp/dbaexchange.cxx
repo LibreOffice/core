@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:05:04 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 14:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,11 @@ namespace svx
     //--------------------------------------------------------------------
     void OColumnTransferable::AddSupportedFormats()
     {
-        if (CTF_FIELD_DESCRIPTOR & m_nFormatFlags)
-            AddFormat(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
-
         if (CTF_CONTROL_EXCHANGE & m_nFormatFlags)
             AddFormat(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE);
+
+        if (CTF_FIELD_DESCRIPTOR & m_nFormatFlags)
+            AddFormat(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
     }
 
     //--------------------------------------------------------------------
@@ -292,6 +292,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/26 15:05:04  fs
+ *  initial checkin - helper classes for data access related DnD
+ *
  *
  *  Revision 1.0 23.03.01 12:59:54  fs
  ************************************************************************/
