@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 14:42:26 $
+ *  last change: $Author: jbu $ $Date: 2000-12-04 12:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,16 +202,25 @@ void Pump::run()
 
         try
         {
+            if( ! m_xInput.is() )
+            {
+                NotConnectedException exception(
+                    OUString::createFromAscii( "no input stream set" ) , Reference<XInterface>((OWeakObject*)this) );
+                throw exception;
+            }
             Sequence< sal_Int8 > aData;
             long nBytes;
-            while( nBytes = m_xInput->readBytes( aData, 65536 ) )
+            while( nBytes = m_xInput->readSomeBytes( aData, 65536 ) )
             {
+                if( ! m_xOutput.is() )
+                {
+                    NotConnectedException exception(
+                        OUString::createFromAscii( "no output stream set" ) , Reference<XInterface>( (OWeakObject*)this) );
+                    throw exception;
+                }
                 m_xOutput->writeBytes( aData );
-                if( nBytes < 65536 ) // marks EOF or error
-                    break;
                 osl_yieldThread();
             }
-
         }
         catch ( IOException & e )
         {
@@ -257,6 +266,8 @@ void Pump::run()
         OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         OSL_ENSHURE( !"com.sun.star.comp.stoc.Pump: unexpected exception", sMessage.getStr() );
     }
+
+    release();
 }
 
 // ------------------------------------------------------------
@@ -327,6 +338,7 @@ void Pump::start() throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
 
+    acquire();
     m_aThread = osl_createThread(
         (oslWorkerFunction)Pump::static_run,
         (void*)this
