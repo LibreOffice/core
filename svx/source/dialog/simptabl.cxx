@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simptabl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #include "simptabl.hxx"
 #include <vcl/svapp.hxx>
 
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
 
 // SvxSimpTblContainer  ------------------------------------------------------
 
@@ -578,9 +584,10 @@ StringCompare SvxSimpleTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )
         {
-            const International& rInter = GetpApp()->GetAppInternational();
+            IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+            const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
 
-            eCompare=rInter.Compare( ((SvLBoxString*)pLeftItem)->GetText(),
+            eCompare=(StringCompare)pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),
                                     ((SvLBoxString*)pRightItem)->GetText());
 
             if(eCompare==COMPARE_EQUAL) eCompare=COMPARE_LESS;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 11:10:20 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,13 @@
 #endif
 #include <sfx2/viewfrm.hxx>
 #pragma hdrstop
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH
@@ -906,7 +913,8 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetModuleFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
-    const sal_Unicode cSep = International().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( String::CreateFromAscii( " / " ) );

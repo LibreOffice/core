@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 15:03:27 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,13 @@
 #include <svtools/useroptions.hxx>
 #endif
 #pragma hdrstop
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 #define _SVX_POSTDLG_CXX
 
@@ -180,8 +187,8 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     }
     else
     {
-        International aInter( GetpApp()->GetAppInternational() );
-        aDateStr = aInter.GetDate( Date() );
+        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+        aDateStr = aLocaleWrapper.getDate( Date() );
     }
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
@@ -263,7 +270,7 @@ IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
     Date aDate;
     Time aTime;
     String aTmp( SvtUserOptions().GetID() );
-    International aInter( GetpApp()->GetAppInternational() );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     String aStr( aEditED.GetText() );
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n---- " ) );
 
@@ -272,9 +279,9 @@ IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
         aStr += aTmp;
         aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
     }
-    aStr += aInter.GetDate(aDate);
+    aStr += aLocaleWrapper.getDate(aDate);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
-    aStr += aInter.GetTime(aTime, FALSE, FALSE);
+    aStr += aLocaleWrapper.getTime(aTime, FALSE, FALSE);
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ----\n" ) );
 
 
@@ -289,11 +296,11 @@ IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
 
 IMPL_LINK( SvxPostItDialog, OKHdl, Button *, EMPTYARG )
 {
-    International aInter( GetpApp()->GetAppInternational() );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     pOutSet = new SfxItemSet( rSet );
     pOutSet->Put( SvxPostItAuthorItem( SvtUserOptions().GetID(),
                                          rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );
-    pOutSet->Put( SvxPostItDateItem( aInter.GetDate( Date() ),
+    pOutSet->Put( SvxPostItDateItem( aLocaleWrapper.getDate( Date() ),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE ) ) );
     pOutSet->Put( SvxPostItTextItem( aEditED.GetText(),
                                      rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT ) ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 14:58:07 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,13 @@
 #include <svtools/urihelper.hxx>
 #endif
 #include <sfx2/viewfrm.hxx>
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 #define _IMAPDLG_PRIVATE
 #include "imapdlg.hxx"
@@ -845,7 +852,8 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
     String aStr;
     const FieldUnit eFieldUnit = GetModuleFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
-    const sal_Unicode cSep = International().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( DEFINE_CONST_UNICODE( " / " ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:20:35 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,13 @@
 
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
+#endif
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
 #endif
 
 // class TabWin_Impl -----------------------------------------------------
@@ -221,8 +228,8 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     aTabBox.SetModifyHdl( LINK( this, SvxTabulatorTabPage, ModifyHdl_Impl ) );
 
     // das Default-Dezimalzeichen vom System holen
-    aAktTab.GetDecimal() =
-        GetpApp()->GetAppInternational().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    aAktTab.GetDecimal() = aLocaleWrapper.getNumDecimalSep().GetChar(0);
     FreeResource();
 }
 

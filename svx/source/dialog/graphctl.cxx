@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 11:10:20 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign);
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include "graphctl.hxx"
@@ -656,7 +663,8 @@ String GraphCtrl::GetStringFromDouble( const double& rDouble )
     int             nSign;
     String          aString( String::CreateFromAscii( fcvt( rDouble, 2, &nDec, &nSign ) ) );
     String          aStr;
-    sal_Unicode     cSep = International().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    sal_Unicode     cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
 
     if ( nDec > -1 )
     {
