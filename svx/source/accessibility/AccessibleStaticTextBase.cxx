@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-07 12:12:51 $
+ *  last change: $Author: thb $ $Date: 2002-06-10 17:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,8 @@ namespace accessibility
         maMutex(),
         maOffset(0,0)
     {
+        // prevent automatic release of member variable
+        maTextParagraph.acquire();
     }
 
     AccessibleStaticTextBase_Impl::~AccessibleStaticTextBase_Impl()
@@ -271,6 +273,11 @@ namespace accessibility
 
     EPosition AccessibleStaticTextBase_Impl::Index2Internal( sal_Int32 nFlatIndex ) const
     {
+        if( nFlatIndex < 0 )
+            throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds")),
+                                                  mxThis);
+        // gratuitously accepting larger indices here, AccessibleEditableTextPara will throw eventually
+
         sal_Int32 nCurrPara, nCurrIndex, nParas, nCurrCount;
         for( nCurrPara=0, nParas=GetParagraphCount(), nCurrIndex=0; nCurrPara<nParas; ++nCurrPara )
         {
@@ -281,13 +288,14 @@ namespace accessibility
             {
                 // check overflow
                 DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX &&
-                           nCurrIndex - nCurrCount >= 0 && nCurrIndex - nCurrCount <= USHRT_MAX ,
+                           nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-                return EPosition( static_cast< USHORT >(nCurrPara), static_cast< USHORT >(nCurrIndex - nCurrCount) );
+                return EPosition( static_cast< USHORT >(nCurrPara), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
             }
         }
 
+        // not found? Out of bounds
         throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds")),
                                               mxThis);
     }
@@ -567,7 +575,8 @@ namespace accessibility
         for( ; i<aEndIndex.nPara; ++i )
             aRes += mpImpl->GetParagraph(i).getText();
 
-        aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
+        if( i<=aEndIndex.nPara )
+            aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
 
         return aRes;
     }
