@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdDrawPagesAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:25:47 $
+ *  last change:$Date: 2004-01-05 19:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public class SdDrawPagesAccess extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xDrawDoc");
-        xDrawDoc.dispose();
+        util.DesktopTools.closeDoc(xDrawDoc);;
     }
 
     /**
