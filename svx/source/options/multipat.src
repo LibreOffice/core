@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-12 10:17:41 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
     Text[ russian ] = "Âûáğàòü ïóòè";
     Text[ polish ] = "Wybierz œcie¿ki";
-    Text[ japanese ] = "ï¾Šï¾Ÿï½½ã®é¸æŠ";
+    Text[ japanese ] = "ãƒ‘ã‚¹ã®é¸æŠ";
     Text[ chinese_traditional ] = "é¸æ“‡è·¯å¾‘";
     Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
     Text[ dutch ] = "Paden selecteren";
@@ -132,7 +132,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir...";
-        Text[ finnish ] = "~Lis??...";
+        Text[ finnish ] = "~Lisää...";
     };
     PushButton BTN_DEL_MULTIPATH
     {
@@ -182,7 +182,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ russian ] = "Ïóòè";
         Text[ polish ] = "Œcie¿ki";
-        Text[ japanese ] = "ï¾Šï¾Ÿï½½";
+        Text[ japanese ] = "ãƒ‘ã‚¹";
         Text[ chinese_traditional ] = "è·¯å¾‘";
         Text[ arabic ] = "ÇáãÓÇÑÇÊ";
         Text[ dutch ] = "Paden";
@@ -227,13 +227,13 @@ String RID_MULTIPATH_DBL_ERR
     Text[ chinese_simplified ] = "è¿™ä¸ªè·¯å¾„ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ russian ] = "Ïóòü %1 óæå èìååòñÿ.";
     Text[ polish ] = "Œcie¿ka %1 ju¿ istnieje.";
-    Text[ japanese ] = "%1ã®ï¾Šï¾Ÿï½½ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
+    Text[ japanese ] = "%1ã®ãƒ‘ã‚¹ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
     Text[ chinese_traditional ] = "é€™å€‹è·¯å¾‘ %1 å·²ç¶“å­˜åœ¨ã€‚";
     Text[ arabic ] = "ÇáãÓÇÑ %1 ãæÌæÏ ãÓÈŞÇğ.";
     Text[ dutch ] = "Pad %1 bestaat reeds.";
     Text[ chinese_simplified ] = "è¿™ä¸ªè·¯å¾„ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "Ç äéáäñïìŞ %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "ê²½ë¡œ%1ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ê²½ë¡œ%1ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.";
     Text[ turkish ] = "Veri yolu %1 mevcut durumda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La ruta %1 ya existe.";
@@ -255,7 +255,7 @@ String RID_SVXSTR_FILE_TITLE
     Text[ chinese_simplified ] = "é€‰æ‹©æ–‡ä»¶";
     Text[ russian ] = "Âûáîğ ôàéëîâ";
     Text[ polish ] = "Wybierz pliki";
-    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã®é¸æŠ";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®é¸æŠ";
     Text[ chinese_traditional ] = "é¸æ“‡æª”æ¡ˆ";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáãáİÇÊ";
     Text[ dutch ] = "Bestanden selecteren";
@@ -283,7 +283,7 @@ String RID_SVXSTR_FILE_HEADLINE
     Text[ chinese_simplified ] = "æ–‡ä»¶";
     Text[ russian ] = "Ôàéëû";
     Text[ polish ] = "Pliki";
-    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«";
     Text[ chinese_traditional ] = "æª”æ¡ˆ";
     Text[ arabic ] = "ÇáãáİÇÊ";
     Text[ dutch ] = "Bestanden";
@@ -299,7 +299,7 @@ String RID_SVXSTR_ARCHIVE_TITLE
 {
     Text = "Archive auswählen" ;
     Text [ English ] = "Select archives" ;
-    Text [ english_us ] = "Select archives" ;
+    Text [ english_us ] = "Select Archives" ;
     Text[ portuguese ] = "Select archives";
     Text[ russian ] = "Select archives";
     Text[ greek ] = "Select archives";
@@ -307,12 +307,12 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text[ french ] = "Sélection des archives";
     Text[ spanish ] = "Seleccionar archivos";
     Text[ finnish ] = "Select archives";
-    Text[ italian ] = "Select archives";
+    Text[ italian ] = "Seleziona archivio";
     Text[ danish ] = "Select archives";
     Text[ swedish ] = "Välj arkiv";
     Text[ polish ] = "Select archives";
     Text[ portuguese_brazilian ] = "Select archives";
-    Text[ japanese ] = "ï½±ï½°ï½¶ï½²ï¾Œï¾ã®é¸æŠ";
+    Text[ japanese ] = "ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®é¸æŠ";
     Text[ korean ] = "Select archives";
     Text[ chinese_simplified ] = "é€‰æ‹©å¤‡ä»¶";
     Text[ chinese_traditional ] = "é¸æ“‡å‚™ä»¶";
@@ -332,12 +332,12 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ french ] = "Archives";
     Text[ spanish ] = "Archivos";
     Text[ finnish ] = "Archives";
-    Text[ italian ] = "Archives";
+    Text[ italian ] = "Archivi";
     Text[ danish ] = "Archives";
     Text[ swedish ] = "Arkiv";
     Text[ polish ] = "Archives";
     Text[ portuguese_brazilian ] = "Archives";
-    Text[ japanese ] = "ï½±ï½°ï½¶ï½²ï¾Œï¾";
+    Text[ japanese ] = "ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–";
     Text[ korean ] = "Archives";
     Text[ chinese_simplified ] = "å¤‡ä»¶";
     Text[ chinese_traditional ] = "å‚™ä»¶";
@@ -361,16 +361,17 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ russian ] = "Ôàéë %1 óæå èìååòñÿ.";
     Text[ polish ] = "Plik %1 ju¿ istnieje.";
-    Text[ japanese ] = "%1ã®ï¾Œï½§ï½²ï¾™ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
+    Text[ japanese ] = "%1ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
     Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆ %1 å·²ç¶“å­˜åœ¨ã€‚";
     Text[ arabic ] = "Çáãáİ %1 ãæÌæÏ ãÓÈŞÇğ.";
     Text[ dutch ] = "Bestand %1 bestaat reeds";
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
     Text[ greek ] = "Ôï áñ÷åßï %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "íŒŒì¼%1ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "íŒŒì¼%1ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.";
     Text[ turkish ] = "Dosya %1 mevcut durumda.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El archivo %1 ya existe.";
     Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
 };
+
 
