@@ -2,9 +2,9 @@
  *
  *  $RCSfile: countermain.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:07:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -53,7 +53,6 @@
 #include <osl/diagnose.h>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/servicefactory.hxx>
 
 // generated c++ interfaces
 #include <com/sun/star/lang/XComponent.hpp>
