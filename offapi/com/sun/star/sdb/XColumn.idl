@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumn.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,18 +82,18 @@
 #endif
 
  module com {  module sun {  module star {  module io {
-interface XInputStream;
+ published interface XInputStream;
 };};};};
 
  module com {  module sun {  module star {  module container {
-interface XNameAccess;
+ published interface XNameAccess;
 };};};};
 
  module com {  module sun {  module star {  module sdbc {
-interface XRef;
-interface XArray;
-interface XBlob;
-interface XClob;
+ published interface XRef;
+ published interface XArray;
+ published interface XBlob;
+ published interface XClob;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
@@ -102,7 +102,7 @@ interface XClob;
 // DocMerge from xml: interface com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn
 /** is used to access data which is collected in a row.
  */
-interface XColumn: com::sun::star::uno::XInterface
+published interface XColumn: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
