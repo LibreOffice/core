@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-21 16:33:20 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 14:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,33 +641,26 @@ void SvxXMLNumRuleExport::Export( const OUString& rName,
 
     OUString sElem = GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT,
                                    GetXMLToken(XML_LIST_STYLE) );
-    GetExport().GetDocHandler()->ignorableWhitespace( sWS );
-    GetExport().GetDocHandler()->startElement( sElem, GetExport().GetXAttrList() );
-    GetExport().ClearAttrList();
+    GetExport().IgnorableWhitespace();
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_LIST_STYLE, sal_False );
 
     uno::Reference< ::com::sun::star::container::XIndexReplace >  xNumRule = GetUNONumRule();
     if( xNumRule.is() )
         exportLevelStyles( xNumRule );
 
-    GetExport().GetDocHandler()->ignorableWhitespace( sWS );
-    GetExport().GetDocHandler()->endElement( sElem );
+    GetExport().EndElement( XML_NAMESPACE_TEXT, XML_LIST_STYLE, sal_True );
 }
 
 void SvxXMLNumRuleExport::ExportOutline()
 {
-    GetExport().CheckAttrList();
-
-    OUString sElem = GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT,
-                                   GetXMLToken(XML_OUTLINE_STYLE) );
-    GetExport().GetDocHandler()->ignorableWhitespace( sWS );
-    GetExport().GetDocHandler()->startElement( sElem, GetExport().GetXAttrList() );
+    GetExport().IgnorableWhitespace( );
+    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_OUTLINE_STYLE, sal_False );
 
     uno::Reference< ::com::sun::star::container::XIndexReplace >  xNumRule = GetUNONumRule();
     if( xNumRule.is() )
         exportLevelStyles( xNumRule, sal_True );
 
-    GetExport().GetDocHandler()->ignorableWhitespace( sWS );
-    GetExport().GetDocHandler()->endElement( sElem );
+    GetExport().EndElement( XML_NAMESPACE_TEXT, XML_OUTLINE_STYLE, sal_True );
 }
 
 void SvxXMLNumRuleExport::exportNumberingRule(

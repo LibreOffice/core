@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:33 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 14:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,6 @@ using ::xmloff::token::XML_EVENTS;
 XMLEventExport::XMLEventExport(SvXMLExport& rExp,
                          const XMLEventNameTranslation* pTranslationTable) :
     rExport(rExp),
-    sScriptEvents(rExp.GetNamespaceMap().GetQNameByKey(
-        XML_NAMESPACE_OFFICE, GetXMLToken(XML_EVENTS))),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType"))
 {
     AddTranslationTable(pTranslationTable);
@@ -307,27 +305,17 @@ void XMLEventExport::StartElement(sal_Bool bWhitespace)
 {
     if (bWhitespace)
     {
-        rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-        rExport.GetDocHandler()->startElement(sScriptEvents, NULL);
-        rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
+        rExport.IgnorableWhitespace();
     }
-    else
-    {
-        rExport.GetDocHandler()->startElement(sScriptEvents, NULL);
-    }
+    rExport.StartElement( XML_NAMESPACE_OFFICE, XML_EVENTS, bWhitespace);
 }
 
 void XMLEventExport::EndElement(sal_Bool bWhitespace)
 {
+    rExport.EndElement(XML_NAMESPACE_OFFICE, XML_EVENTS, bWhitespace);
     if (bWhitespace)
     {
-        rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-        rExport.GetDocHandler()->endElement(sScriptEvents);
-        rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    }
-    else
-    {
-        rExport.GetDocHandler()->endElement(sScriptEvents);
+        rExport.IgnorableWhitespace();
     }
 }
 
