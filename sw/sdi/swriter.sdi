@@ -5019,7 +5019,7 @@ SfxVoidItem InsertSymbol FN_INSERT_SYMBOL
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertTable FN_INSERT_TABLE
-()
+(SfxStringItem TableName FN_INSERT_TABLE, SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN, SfxUInt16Item Rows SID_ATTR_TABLE_ROW, SfxInt32Item Flags FN_PARAM_1, SfxStringItem AutoFormat FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
