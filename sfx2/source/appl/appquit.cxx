@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ void SfxApplication::Deinitialize()
     if ( pAppData_Impl->pCancelMgr )
         pAppData_Impl->EndListening( *pAppData_Impl->pCancelMgr );
 
+/*
     // Falls noch mal zwischendurch eine Task ( BasicIDE! ) angelegt wurde ...
     do
     {
@@ -242,7 +243,7 @@ void SfxApplication::Deinitialize()
             break;
     }
     while ( sal_True );
-
+*/
     //!Wait();
     StarBASIC::Stop();
 
