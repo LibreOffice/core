@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-18 12:04:07 $
+ *  last change: $Author: tl $ $Date: 2002-05-15 13:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,10 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
         pPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
 
-        pPopupMenu->Execute( this, rCEvt.GetMousePosPixel() );
+        Point aPos(5, 5);
+        if (rCEvt.IsMouseEvent())
+            aPos = rCEvt.GetMousePosPixel();
+        pPopupMenu->Execute( this, aPos );
         delete pPopupMenu;
     }
     else if (pEditView)

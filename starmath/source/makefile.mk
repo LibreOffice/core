@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-16 15:29:06 $
+#   last change: $Author: tl $ $Date: 2002-05-15 13:47:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ SLOFILES =  \
         $(SLO)$/symbol.obj \
         $(SLO)$/toolbox.obj \
         $(SLO)$/action.obj \
+                $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/config.obj \
         $(SLO)$/dialog.obj \

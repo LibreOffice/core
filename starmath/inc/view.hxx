@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-21 11:16:10 $
+ *  last change: $Author: tl $ $Date: 2002-05-15 13:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,11 @@
 #ifndef EDIT_HXX
 #include "edit.hxx"
 #endif
-
 #ifndef NODE_HXX
 #include "node.hxx"
+#endif
+#ifndef _ACCESSIBILITY_HXX_
+#include "accessibility.hxx"
 #endif
 
 class Menu;
@@ -98,10 +100,15 @@ class SmViewShell;
 
 /**************************************************************************/
 
-class SmGraphicWindow: public ScrollableWindow
+class SmGraphicWindow : public ScrollableWindow
 {
     Point           aFormulaDrawPos;
     Rectangle       aCursorRect;
+
+    ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible >  xAccessible;
+    SmAccessibility *                                           pAccessible;
+
     SmViewShell    *pViewShell;
     USHORT          nZoom;
     short           nModifyCount;
@@ -123,8 +130,14 @@ protected:
 
 public:
     SmGraphicWindow(SmViewShell* pShell);
+    ~SmGraphicWindow();
 
-    virtual void MouseButtonDown(const MouseEvent &rMEvt);
+    // Window
+    virtual void    MouseButtonDown(const MouseEvent &rMEvt);
+    virtual void    GetFocus();
+    virtual void    LoseFocus();
+
+    SmViewShell *   GetView()   { return pViewShell; }
 
     void   SetZoom(USHORT Factor);
     USHORT GetZoom() const { return nZoom; }
@@ -135,6 +148,9 @@ public:
     BOOL IsCursorVisible() const { return bIsCursorVisible; }
     void ShowCursor(BOOL bShow);
     const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
+
+    // for Accessibility
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 /**************************************************************************/
@@ -184,6 +200,9 @@ class SmCmdBoxWindow : public SfxDockingWindow
 
 protected :
     DECL_LINK(UpdateTimeoutHdl, Timer *);
+
+    // Window
+    virtual void    GetFocus();
 
 public:
     SmCmdBoxWindow(SfxBindings    *pBindings,

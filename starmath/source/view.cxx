@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-13 13:55:39 $
+ *  last change: $Author: tl $ $Date: 2002-05-15 13:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
+#include <drafts/com/sun/star/accessibility/XAccessible.hdl>
+#endif
 
 
 #ifndef _SV_MENU_HXX //autogen
@@ -161,9 +165,15 @@
 #define SmViewShell
 #include "smslots.hxx"
 
+using namespace drafts::com::sun::star::accessibility;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+
+//////////////////////////////////////////////////////////////////////
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0),
+    pAccessible(0),
     pViewShell(pShell),
     nZoom(100),
     bIsCursorVisible(FALSE)
@@ -176,6 +186,14 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
 
     SetHelpId(HID_SMA_WIN_DOCUMENT);
     SetUniqueId(HID_SMA_WIN_DOCUMENT);
+}
+
+SmGraphicWindow::~SmGraphicWindow()
+{
+    if (pAccessible)
+        pAccessible->ClearWin();    // make Accessible defunctional
+    // Note: memory for pAccessible will be freed when the reference
+    // xAccessible is released.
 }
 
 
@@ -259,6 +277,19 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     }
 }
 
+void SmGraphicWindow::GetFocus()
+{
+    ScrollableWindow::GetFocus();
+    if (pAccessible)
+        pAccessible->LaunchFocusEvent( GetGetFocusFlags(), TRUE, xAccessible );
+}
+
+void SmGraphicWindow::LoseFocus()
+{
+    ScrollableWindow::LoseFocus();
+    if (pAccessible)
+        pAccessible->LaunchFocusEvent( GetGetFocusFlags(), FALSE, xAccessible );
+}
 
 void SmGraphicWindow::ShowCursor(BOOL bShow)
     // shows or hides the formula-cursor depending on 'bShow' is TRUE or not
@@ -381,7 +412,10 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 GetParent()->ToTop();
                 PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_VIEWMENU));
                 pPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
-                pPopupMenu->Execute( this, rCEvt.GetMousePosPixel() );
+                Point aPos(5, 5);
+                if (rCEvt.IsMouseEvent())
+                    aPos = rCEvt.GetMousePosPixel();
+                pPopupMenu->Execute( this, aPos );
                 delete pPopupMenu;
                 bCallBase = FALSE;
             }
@@ -447,6 +481,15 @@ void SmGraphicWindow::ZoomToFitInWindow()
                       (85 * aWindowSize.Height()) / aSize.Height()));
 }
 
+uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
+{
+    if (!pAccessible)
+    {
+        pAccessible = new SmAccessibility( this );
+        xAccessible = pAccessible;
+    }
+    return xAccessible;
+}
 
 /**************************************************************************/
 
@@ -668,6 +711,11 @@ void SmCmdBoxWindow::ToggleFloatingMode()
         GetFloatingWindow()->SetMinOutputSizePixel(Size (200, 50));
 }
 
+
+void SmCmdBoxWindow::GetFocus()
+{
+    aEdit.GrabFocus();
+}
 
 /**************************************************************************/
 
@@ -1453,7 +1501,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     switch( rZoom.GetType() )
                     {
                         case SVX_ZOOM_PERCENT:
-                            aGraphic.SetZoom((long)rZoom.GetValue ());
+                            aGraphic.SetZoom((USHORT)rZoom.GetValue ());
                             break;
 
                         case SVX_ZOOM_OPTIMAL:
