@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 07:25:47 $
+ *  last change: $Author: cl $ $Date: 2002-09-12 15:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // only change paragraph text direction,
     // if this is a new document and
     // text direction is set explicitly to RTL
+/*
     if( pDocSh &&
         pDocSh->IsNewDocument() &&
         SD_MOD()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB )
@@ -396,6 +397,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     }
     else
         rISet.Put( SvxAdjustItem() );
+*/
 
     rISet.Put(SvxLineSpacingItem());
 
@@ -1472,4 +1474,33 @@ void SdDrawDocument::SetTextDefaults() const
     }
 
     return eRet;
+}
+
+void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode eMode )
+{
+    if( pItemPool )
+    {
+        SvxFrameDirection nVal;
+        switch( eMode )
+        {
+        case ::com::sun::star::text::WritingMode_LR_TB: nVal = FRMDIR_HORI_LEFT_TOP; break;
+        case ::com::sun::star::text::WritingMode_RL_TB: nVal = FRMDIR_HORI_RIGHT_TOP; break;
+        case ::com::sun::star::text::WritingMode_TB_RL: nVal = FRMDIR_VERT_TOP_RIGHT; break;
+        default:
+            DBG_ERROR( "Frame direction not supported yet" );
+            return;
+        }
+
+        SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
+        pItemPool->SetPoolDefaultItem( aModeItem );
+
+        SvxAdjustItem aAdjust;
+
+        if( eMode == ::com::sun::star::text::WritingMode_RL_TB )
+            aAdjust.SetEnumValue( SVX_ADJUST_RIGHT );
+
+        pItemPool->SetPoolDefaultItem( aAdjust );
+
+
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:45 $
+ *  last change: $Author: cl $ $Date: 2002-09-12 15:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,8 +334,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             if (nLevel == 1)
             {
                 SfxItemSet&     rSet = pSheet->GetItemSet();
-                const SvxAdjust eAdjust = ( ( pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ) ?
-                                            SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT );
 
                 rSet.Put(aSvxFontItem);
                 rSet.Put(aSvxFontItemCJK);
@@ -353,7 +351,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
                 rSet.Put( SvxCharReliefItem(RELIEF_NONE) );
                 rSet.Put( SvxColorItem( Color(COL_AUTO)) );
-                rSet.Put( SvxAdjustItem( eAdjust ) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
 

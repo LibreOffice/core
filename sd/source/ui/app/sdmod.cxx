@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-08-21 14:59:08 $
+ *  last change: $Author: cl $ $Date: 2002-09-12 15:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,9 +416,12 @@ sal_Bool SdModule::IsPrinterRefDevice() const
 
 ::com::sun::star::text::WritingMode SdModule::GetDefaultWritingMode() const
 {
+/*
     const SvtLanguageOptions aLanguageOptions;
 
     return( aLanguageOptions.IsCTLFontEnabled() ?
             ::com::sun::star::text::WritingMode_RL_TB :
             ::com::sun::star::text::WritingMode_LR_TB );
+*/
+    return ::com::sun::star::text::WritingMode_LR_TB;
 }

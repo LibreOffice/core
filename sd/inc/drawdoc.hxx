@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:33 $
+ *  last change: $Author: cl $ $Date: 2002-09-12 15:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,7 @@ public:
                                 FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
 
     ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
+    void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
 
 public:
 

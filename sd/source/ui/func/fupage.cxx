@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 08:28:12 $
+ *  last change: $Author: cl $ $Date: 2002-09-12 15:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,13 @@
 #ifndef _SVX_SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+#define ITEMID_FRAMEDIR             EE_PARA_WRITINGDIR
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #include "glob.hrc"
 #include <svx/shaditem.hxx>
 #include <svx/boxitem.hxx>
@@ -182,7 +189,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             SID_ATTR_PAGE, SID_ATTR_PAGE_BSP,
                             SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER,
                             SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW,
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST, 0);
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                            EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                            0);
 
         SfxItemSet *pDialogItems = 0;
 
@@ -194,6 +203,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         aNewAttr.Put( aShadowItem );
         SvxBoxItem aBoxItem;
         aNewAttr.Put( aBoxItem );
+
+
+        aNewAttr.Put( SvxFrameDirectionItem( pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP ) );
 
         ///////////////////////////////////////////////////////////////////////
         //
@@ -431,6 +443,13 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         pStyleSheet->GetItemSet().Put( aTempSet );
                         SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
                         pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                    }
+
+                    const SfxPoolItem *pItem;
+                    if( SFX_ITEM_SET == aTempSet.GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) )
+                    {
+                        sal_uInt32 nVal = ((SvxFrameDirectionItem*)pItem)->GetValue();
+                        pDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
                     }
 
                     pDoc->SetChanged(TRUE);
