@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:50:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1933,6 +1933,8 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
 
     nSize = 0;
     nTwips = (long) (rVisAreaStart.X() / HMM_PER_TWIPS);
+    if ( pDoc->IsLayoutRTL( nTabNo ) )
+        nTwips = -nTwips;
     USHORT nX1 = 0;
     bEnd = FALSE;
     while (!bEnd)
