@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:45:30 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ String STR_SVT_PRNDLG_OFFLINE
     Text[ russian ] = "Offline";
     Text[ polish ] = "Offline";
     Text[ japanese ] = "µÃ◊≤›";
-    Text[ chinese_traditional ] = "≥sΩu";
+    Text[ chinese_traditional ] = "¬˜Ωu";
     Text[ arabic ] = "€Ì— „ ’·";
     Text[ greek ] = "◊˘ÒﬂÚ Û˝Ì‰ÂÛÁ";
     Text[ korean ] = "ø¿«¡∂Û¿Œ";
@@ -831,7 +831,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ chinese_traditional ] = "¶W∫Ÿ(~N)";
         Text[ arabic ] = "«·«”„";
         Text[ greek ] = "ºÌÔÏ·";
-        Text[ korean ] = "¿Ã∏ß";
+        Text[ korean ] = "¿Ã∏ß(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -867,7 +867,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ chinese_traditional ] = "ƒ›© (~I)...";
         Text[ arabic ] = "Œ’«∆’...";
         Text[ greek ] = "…‰È¸ÙÁÙÂÚ...";
-        Text[ korean ] = "µÓ∑œ¡§∫∏...";
+        Text[ korean ] = "µÓ∑œ¡§∫∏(~I)...";
         Text[ turkish ] = "~÷zellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propiedades...";
@@ -1039,6 +1039,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ catalan ] = "Configurar impresora";
     Text[ finnish ] = "Tulostimen asetukset";
 };
+
 
 
 
