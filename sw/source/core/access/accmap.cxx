@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 07:21:20 $
+ *  last change: $Author: mib $ $Date: 2002-07-04 09:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1933,6 +1933,8 @@ Rectangle SwAccessibleMap::GetVisibleArea() const
     return OutputDevice::LogicToLogic( GetVisArea().SVRect(), aSrc, aDest );
 }
 
+// Convert a MM100 value realtive to the document root into a pixel value
+// realtive to the screen!
 Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 {
     MapMode aSrc( MAP_100TH_MM );
@@ -1941,9 +1943,11 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     Point aPoint = rPoint;
 
     aPoint = OutputDevice::LogicToLogic( aPoint, aSrc, aDest );
-    if( GetShell()->GetWin() )
+    Window *pWin = GetShell()->GetWin();
+    if( pWin )
     {
-        aPoint = GetShell()->GetWin()->LogicToPixel( aPoint );
+        aPoint = pWin->LogicToPixel( aPoint );
+        aPoint = pWin->OutputToAbsoluteScreenPixel( aPoint );
     }
 
     return aPoint;
@@ -1965,9 +1969,11 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
 Point SwAccessibleMap::PixelToLogic( const Point& rPoint ) const
 {
     Point aPoint;
-    if( GetShell()->GetWin() )
+    Window *pWin = GetShell()->GetWin();
+    if( Win )
     {
-        aPoint = GetShell()->GetWin()->PixelToLogic( rPoint );
+        aPoint = pWin->ScreenToOutputPixel( rPoint );
+        aPoint = pWin->PixelToLogic( aPoint );
         MapMode aSrc( MAP_TWIP );
         MapMode aDest( MAP_100TH_MM );
         aPoint = OutputDevice::LogicToLogic( aPoint, aSrc, aDest );
