@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:48:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@ public:
 
     const SwViewImp &Imp() const { return rImp; }
           SwViewImp &Imp()       { return rImp; }
-
-    // Innerhalb eines des sichtbaren Ankers?
-    Rectangle *IsAnchorAtPos( const Point &rPt ) const;
 
     //Anker und Xor fuer das Draggen.
     void ShowDragAnchor();
