@@ -115,15 +115,25 @@ namespace Stringtest
 
         void test_FromUTF8_001()
             {
-                rtl::OString sStr("h%C3%A4llo");
-                rtl::OUString suStr = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ASCII_US);
+                // string --> ustring
+                rtl::OString sStrUTF8("h%C3%A4llo");
+                rtl::OUString suStrUTF8 = rtl::OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
 
-                rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStr, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+                // UTF8 --> real ustring
+                rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
                 showContent(suStr_UriDecodeToIuri);
 
+                // string --> ustring
+                rtl::OString sStr("hällo");
+                rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
+
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri) == sal_True);
+
+                // ustring --> ustring (UTF8)
                 rtl::OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                 showContent(suStr2);
 
+                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suStr2.equals(suStrUTF8) == sal_True);
                 // suStr should be equal to suStr2
             }
 
@@ -280,8 +290,8 @@ namespace Stringtest
 */
 
         CPPUNIT_TEST_SUITE( Convert );
-//      CPPUNIT_TEST( test_FromUTF8_001 );
-        CPPUNIT_TEST( test_UTF8_files );
+        CPPUNIT_TEST( test_FromUTF8_001 );
+//        CPPUNIT_TEST( test_UTF8_files );
 //      CPPUNIT_TEST( test_FromUTF8 );
         CPPUNIT_TEST_SUITE_END( );
     };
