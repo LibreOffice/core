@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 09:02:25 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 09:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
     sal_Bool bRet = TranslateCharsetInfo(
         (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET );
 
+    // if one of the above functions fails
+    // we will return the current ANSI codepage
+    // of this thread
     sal_uInt32 winCP = GetACP( );
     if ( bRet )
         winCP = chrsInf.ciACP;
@@ -144,7 +147,8 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 
     OSL_ASSERT( nResult );
 
-    OUString winCP;
+    // we set an default value
+    OUString winCP = OUString::createFromAscii( "1252" );
 
     if ( nResult )
     {
