@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 12:39:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,11 @@ protected:
     Image           m_aViewImage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-    sal_Bool        m_bShowFirstEntry; // should the first entry be visible
+    sal_Bool        m_bVirtualRoot; // should the first entry be visible
 
 public:
-    OTableTreeListBox( Window* pParent, WinBits nWinStyle = NULL,sal_Bool _bShowFirstEntry=sal_True );
-    OTableTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bShowFirstEntry=sal_True );
+    OTableTreeListBox( Window* pParent, WinBits nWinStyle = NULL,sal_Bool _bVirtualRoot=sal_True );
+    OTableTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bVirtualRoot=sal_True );
 
     void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         { m_xORB = _rxORB; }
@@ -114,11 +114,12 @@ public:
         @return     the connection which was created for the given URL and the given params.
         @throws     <type scope="com::sun::star::sdbc">SQLException</type> if no connection could be created
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                    UpdateTableList(
-                        const ::rtl::OUString& _rConnectionURL,
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties)
-                    throw(::com::sun::star::sdbc::SQLException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+            UpdateTableList(
+                const   ::rtl::OUString& _rConnectionURL,
+                const   ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* [out] */ _rxTables
+            )   throw(::com::sun::star::sdbc::SQLException);
 
     /** fill the table list with the tables and views determined by the two given containers
         @param      _rxConnMetaData meta data describing the connection where you got the object names from. Must not be NULL.
@@ -126,10 +127,26 @@ public:
         @param      _rxTables       table container. May be NULL.
         @param      _rxView         view container. May be NULL.
     */
-    virtual void    UpdateTableList(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
-                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables,
-                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rViews);
+    void    UpdateTableList(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables,
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rViews
+            );
+
+    /** to be used if a foreign instance added a table
+    */
+    void    addedTable(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+                const ::rtl::OUString& _rName,
+                const ::com::sun::star::uno::Any& _rObject
+            );
+
+    /** to be used if a foreign instance removed a table
+    */
+    void    removedTable(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+                const ::rtl::OUString& _rName
+            );
 
     SvLBoxEntry*    getAllObjectsEntry() const;
 
@@ -153,6 +170,15 @@ protected:
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
 
     void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
+
+    void implAddEntry(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+            const ::rtl::OUString& _rTableName,
+            const Image& _rImage,
+            SvLBoxEntry* _pParentEntry
+        );
+
+    sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
 };
 
 //.........................................................................
@@ -164,6 +190,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/06/05 12:39:02  fs
+ *  #87680# implEmphasize signature changed
+ *
  *  Revision 1.4  2001/02/05 14:45:04  oj
  *  new member for hiding first entry
  *
