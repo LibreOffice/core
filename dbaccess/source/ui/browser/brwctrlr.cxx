@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 14:09:13 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,24 @@ SbaXDataBrowserController::~SbaXDataBrowserController()
 {
     m_pContent = NULL;
 }
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::initFormatter()
+{
+    // ---------------------------------------------------------------
+    // create a formatter working with the connections format supplier
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
 
+    if(xSupplier.is())
+    {
+        // create a new formatter
+        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
+            m_xMultiServiceFacatory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+        if (m_xFormatter.is())
+            m_xFormatter->attachNumberFormatsSupplier(xSupplier);
+    }
+    else // clear the formatter
+        m_xFormatter = NULL;
+}
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 {
@@ -437,24 +454,14 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (!m_xGridModel.is())
         return sal_False;
 
-    // ---------------------------------------------------------------
-    // create a formatter working with the connections format supplier
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
-
-    // create a new formatter
-    m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
-    if (m_xFormatter.is())
-        m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-    // formatter is used by InitializeGridModel
+    // set the formatter if available
+    initFormatter();
     // ---------------------------------------------------------------
 
     // we want to have a grid with a "flat" border
     Reference< XPropertySet >  xGridSet(m_xGridModel, UNO_QUERY);
     if (xGridSet.is())
         xGridSet->setPropertyValue(PROPERTY_BORDER, makeAny((sal_Int16)2));
-    //  if (!InitializeGridModel(m_xGridModel))
-        //  return sal_False;
 
     // ----------
     // marry them
@@ -623,13 +630,13 @@ void SAL_CALL SbaXDataBrowserController::initialize( const Sequence< Any >& aArg
 //------------------------------------------------------------------------------
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
-    return Reference< XRowSet > (::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
+    return Reference< XRowSet > (m_xMultiServiceFacatory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
 }
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
-    return Reference< ::com::sun::star::form::XFormComponent > (::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
+    return Reference< ::com::sun::star::form::XFormComponent > (m_xMultiServiceFacatory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
 }
 
 // -------------------------------------------------------------------------

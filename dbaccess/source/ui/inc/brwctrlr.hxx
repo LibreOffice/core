@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:45:43 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,8 @@ namespace dbaui
             // As many form actions don't throw an exception but call their error handler instead we don't have
             // a chance to recognize errors by exception catching.
             // So for error recognition the above methods may be used.
+        // init the formatter if form changes
+        void initFormatter();
 
     private:
         // invalidate features - implementation
