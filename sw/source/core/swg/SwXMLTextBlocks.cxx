@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:46:57 $
+ *  last change: $Author: mib $ $Date: 2001-04-12 12:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,21 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     ::GetXMLWriter ( aEmptyStr, xWrt);
     SwWriter aWriter (*xRoot, *pDoc );
 
-    aWriter.Write ( xWrt );
+    nRes = aWriter.Write ( xWrt );
+
+    // Save OLE objects if there are some
+    SwDocShell *pDocSh = pDoc->GetDocShell();
+
+    sal_Bool bHasChilds = pDocSh && pDocSh->GetObjectList() &&
+                          pDocSh->GetObjectList()->Count() > 0;
+    if( !nRes && bHasChilds )
+    {
+        sal_Bool bOK = pDocSh->SaveAsChilds( xRoot );
+        if( bOK )
+            bOK = pDocSh->SaveCompletedChilds( xRoot );
+        if( !bOK )
+            nRes = ERR_SWG_WRITE_ERROR;
+    }
 
     xRoot->Commit();
     xRoot.Clear();

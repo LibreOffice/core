@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-15 11:13:28 $
+ *  last change: $Author: mib $ $Date: 2001-04-12 12:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,7 @@ ULONG SwTextBlocks::ConvertToNew()
                         SwDocShell * pDocShell = pNew->pDoc->GetDocShell();
                         pDocShell->InvalidateModel();
                         pDocShell->ReactivateModel();
+                        ((SfxObjectShell *)pDocShell)->Clear();
                     }
                 }
                 if (SWBLK_SW2 == nType )
