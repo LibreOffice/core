@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 18:02:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,12 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #endif
-#include <drafts/com/sun/star/configuration/backend/BackendSetupException.hpp>
-#include <drafts/com/sun/star/configuration/backend/BackendAccessException.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDSETUPEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/BackendSetupException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/BackendAccessException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
@@ -1478,14 +1482,14 @@ sal_Bool Desktop::InitializeConfiguration()
 
         HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
     }
-    catch ( drafts::com::sun::star::configuration::backend::BackendAccessException& exception)
+    catch ( com::sun::star::configuration::backend::BackendAccessException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
         FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
-    catch ( drafts::com::sun::star::configuration::backend::BackendSetupException& exception)
+    catch ( com::sun::star::configuration::backend::BackendSetupException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
