@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: as $ $Date: 2002-05-02 11:42:31 $
+#   last change: $Author: cd $ $Date: 2002-10-11 14:32:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,9 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
+.INCLUDE :  		sv.mk
 
 # --- Generate -----------------------------------------------------
 
@@ -101,7 +103,18 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/actiontriggercontainer.obj				\
                     $(SLO)$/imagewrapper.obj						\
                     $(SLO)$/rootactiontriggercontainer.obj          \
-                    $(SLO)$/protocolhandlercache.obj
+                    $(SLO)$/protocolhandlercache.obj				\
+                    $(SLO)$/addonmenu.obj							\
+                    $(SLO)$/addonsoptions.obj						\
+                    $(SLO)$/fwkresid.obj
+
+SRCFILES =\
+    resource.src
+    
+RESLIB1NAME=		fwe
+RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
+RESLIB1DEPN=		resource.src	\
+                    resource.hrc	\
 
 # --- Targets ------------------------------------------------------
 
