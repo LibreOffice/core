@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:49:35 $
+ *  last change: $Author: thb $ $Date: 2001-10-18 14:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,7 @@ void SdPageObjsTLB::DoDrag()
         sal_Int8        nDNDActions = DND_ACTION_COPY;
 
         if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
-            nDNDActions |= DND_ACTION_LINK;
+            nDNDActions = DND_ACTION_LINK;  // #93240# Either COPY *or* LINK, never both!
 
         SvTreeListBox::ReleaseMouse();
 
