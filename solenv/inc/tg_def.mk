@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-30 13:14:55 $
+#   last change: $Author: hjs $ $Date: 2000-10-30 15:05:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,8 +127,8 @@ $(DEF$(TNR)TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL$(TNR)TARGET).flt $(SLB)\$(DEFLIB$(TNR)NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL$(TNR)TARGET).flt $(SLB)\$(DEFLIB$(TNR)NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR) ' >$@
@@ -319,9 +319,9 @@ $(DEF$(TNR)TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -538,7 +538,7 @@ $(DEF$(TNR)TARGETN): \
         $(DEF$(TNR)EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"

@@ -24,8 +24,8 @@ $(DEF1TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB1NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL1TARGET).flt $(SLB)\$(DEFLIB1NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL1TARGET).flt $(SLB)\$(DEFLIB1NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF1DES) $(UPD) $(UPDMINOR) ' >$@
@@ -216,9 +216,9 @@ $(DEF1TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -435,7 +435,7 @@ $(DEF1TARGETN): \
         $(DEF1EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -478,8 +478,8 @@ $(DEF2TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB2NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL2TARGET).flt $(SLB)\$(DEFLIB2NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL2TARGET).flt $(SLB)\$(DEFLIB2NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF2DES) $(UPD) $(UPDMINOR) ' >$@
@@ -670,9 +670,9 @@ $(DEF2TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -889,7 +889,7 @@ $(DEF2TARGETN): \
         $(DEF2EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -932,8 +932,8 @@ $(DEF3TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB3NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL3TARGET).flt $(SLB)\$(DEFLIB3NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL3TARGET).flt $(SLB)\$(DEFLIB3NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF3DES) $(UPD) $(UPDMINOR) ' >$@
@@ -1124,9 +1124,9 @@ $(DEF3TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -1343,7 +1343,7 @@ $(DEF3TARGETN): \
         $(DEF3EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -1386,8 +1386,8 @@ $(DEF4TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB4NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL4TARGET).flt $(SLB)\$(DEFLIB4NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL4TARGET).flt $(SLB)\$(DEFLIB4NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF4DES) $(UPD) $(UPDMINOR) ' >$@
@@ -1578,9 +1578,9 @@ $(DEF4TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -1797,7 +1797,7 @@ $(DEF4TARGETN): \
         $(DEF4EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -1840,8 +1840,8 @@ $(DEF5TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB5NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL5TARGET).flt $(SLB)\$(DEFLIB5NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL5TARGET).flt $(SLB)\$(DEFLIB5NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF5DES) $(UPD) $(UPDMINOR) ' >$@
@@ -2032,9 +2032,9 @@ $(DEF5TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -2251,7 +2251,7 @@ $(DEF5TARGETN): \
         $(DEF5EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -2294,8 +2294,8 @@ $(DEF6TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB6NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL6TARGET).flt $(SLB)\$(DEFLIB6NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL6TARGET).flt $(SLB)\$(DEFLIB6NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF6DES) $(UPD) $(UPDMINOR) ' >$@
@@ -2486,9 +2486,9 @@ $(DEF6TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -2705,7 +2705,7 @@ $(DEF6TARGETN): \
         $(DEF6EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -2748,8 +2748,8 @@ $(DEF7TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB7NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL7TARGET).flt $(SLB)\$(DEFLIB7NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL7TARGET).flt $(SLB)\$(DEFLIB7NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF7DES) $(UPD) $(UPDMINOR) ' >$@
@@ -2940,9 +2940,9 @@ $(DEF7TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -3159,7 +3159,7 @@ $(DEF7TARGETN): \
         $(DEF7EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -3202,8 +3202,8 @@ $(DEF8TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB8NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL8TARGET).flt $(SLB)\$(DEFLIB8NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL8TARGET).flt $(SLB)\$(DEFLIB8NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF8DES) $(UPD) $(UPDMINOR) ' >$@
@@ -3394,9 +3394,9 @@ $(DEF8TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -3613,7 +3613,7 @@ $(DEF8TARGETN): \
         $(DEF8EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -3656,8 +3656,8 @@ $(DEF9TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB9NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL9TARGET).flt $(SLB)\$(DEFLIB9NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL9TARGET).flt $(SLB)\$(DEFLIB9NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF9DES) $(UPD) $(UPDMINOR) ' >$@
@@ -3848,9 +3848,9 @@ $(DEF9TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -4067,7 +4067,7 @@ $(DEF9TARGETN): \
         $(DEF9EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -4110,8 +4110,8 @@ $(DEF10TARGETN): \
     @echo HEAPSIZE		0										>>$@
     @echo EXPORTS												>>$@
 .IF "$(DEFLIB10NAME)"!=""
-        +ldump -E2 -A -F$(MISC)\$(SHL10TARGET).flt $(SLB)\$(DEFLIB10NAME).lib         >>$@
-        @echo 	WEP	>>$@
+    +ldump -E2 -A -F$(MISC)\$(SHL10TARGET).flt $(SLB)\$(DEFLIB10NAME).lib         >>$@
+    @echo 	WEP	>>$@
 .ENDIF
 .ELSE			# "$(COM)" == "BLC"
     @echo option DESCRIPTION 'StarView 3.00 $(DEF10DES) $(UPD) $(UPDMINOR) ' >$@
@@ -4302,9 +4302,9 @@ $(DEF10TARGETN): \
     @echo CODE			LOADONCALL								>>$@
     @echo DATA			PRELOAD MULTIPLE NONSHARED				>>$@
     @echo EXPORTS												>>$@
-#	getversioninfo fuer alle!!
+#	getversioninfo for all!!
     @echo GetVersionInfo		>>$@
-#	getDescriptionFunc fuer alle!?
+#	getDescriptionFunc for all!?
 .IF "$(DESCRIPTION)"!=""
     @echo getDescriptionFunc	>>$@
 .ENDIF			# "$(DESCRIPTION)"!=""
@@ -4521,7 +4521,7 @@ $(DEF10TARGETN): \
         $(DEF10EXPORTFILE)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo fuer UNIX nur dummy
+    @echo just a dummy for UNIX
     @echo > $@
 .ENDIF
 .IF "$(GUI)"=="MAC"
