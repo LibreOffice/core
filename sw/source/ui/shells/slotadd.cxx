@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:57:26 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
 #endif
+#define ITEMID_DOUBLE           0
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -311,6 +312,7 @@
 #include <svx/charscaleitem.hxx>
 #include <svx/postattr.hxx>
 #include <sfx2/frame.hxx>
+#include <svx/chrtitem.hxx>
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
