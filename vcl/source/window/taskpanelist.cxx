@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-19 10:51:43 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 13:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,15 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
 
 BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
-    BOOL bFloatsOnly = FALSE;
+    // F6 cycles through everything and works always
+    // Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
+    // only active if one of those items has the focus
+    BOOL bF6 = FALSE;
     BOOL bFocusInList = FALSE;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     BOOL bForward = !aKeyCode.IsShift();
     if( ( aKeyCode.IsMod1() && aKeyCode.GetCode() == KEY_TAB )  // Ctrl-TAB
-        || ( bFloatsOnly = ( aKeyCode.GetCode()) == KEY_F6 )    // F6
+        || ( bF6 = ( aKeyCode.GetCode()) == KEY_F6 )    // F6
         )
     {
         // is the focus in the list ?
@@ -188,13 +191,14 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             Window *pWin = *p;
             if( (*p)->HasChildPathFocus( TRUE ) )
             {
-                // F6 works only in floaters
-                if( bFloatsOnly && (*p)->GetType() != RSC_DOCKINGWINDOW && !(*p)->IsDialog() )
+                bFocusInList = TRUE;
+
+                // Ctrl-TAB works not in Dialogs
+                if( !bF6 && (*p)->IsDialog() )
                     return FALSE;
 
-                bFocusInList = TRUE;
                 // activate next task pane
-                Window *pNextWin = bFloatsOnly ? FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
+                Window *pNextWin = bF6 ?  FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
                 if( pNextWin != pWin )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
@@ -223,7 +227,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         }
 
         // the focus is not in the list: activate first float if F6 was pressed
-        if( !bFocusInList && bFloatsOnly )
+        if( !bFocusInList && bF6 )
         {
             Window *pWin = FindNextFloat( NULL, bForward );
             if( pWin )
@@ -257,7 +261,7 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
             {
                 if( ++p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
-                if( (*p)->IsVisible() )
+                if( (*p)->IsVisible() && !(*p)->IsDialog() )
                     return *p;
             }
             break;
@@ -271,7 +275,7 @@ Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
 
 // --------------------------------------------------
 
-// returns first valid float if pWindow==0, otherwise returns next valid float
+// returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float
 Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
 {
     if( bForward )
@@ -290,7 +294,7 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
                     ++p;
                 if( p == mTaskPanes.end() )
                     return pWindow; // do not wrap, send focus back to document at end of list
-                if( (*p)->IsVisible() && ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() ) )
+                if( (*p)->IsVisible() /*&& ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() )*/ )
                     return *p;
                 if( !pWindow )  // increment after test, otherwise first element is skipped
                     ++p;
