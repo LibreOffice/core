@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-22 13:55:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
 #include <com/sun/star/ui/XUIConfiguration.hpp>
@@ -1727,6 +1730,13 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             uno::UNO_QUERY );
 
         m_xFrame = xFramesSupplier->getActiveFrame();
+        if ( !m_xFrame.is() )
+        {
+            uno::Reference< frame::XDesktop > xDesktop( xFramesSupplier, uno::UNO_QUERY );
+            m_xFrame = xDesktop->getCurrentFrame();
+            if ( !m_xFrame.is() )
+                m_xFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
+        }
 
         uno::Reference< css::frame::XModuleManager > xModuleManager(
             xServiceManager->createInstance(
@@ -1735,16 +1745,19 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             uno::UNO_QUERY );
 
         OUString aModuleId;
-        try{
+        try
+        {
             aModuleId = xModuleManager->identify( m_xFrame );
-        } catch(const uno::Exception&)
-            { aModuleId = ::rtl::OUString(); }
+        }
+        catch ( const uno::Exception& )
+        {
+            aModuleId = ::rtl::OUString();
+        }
 
         // replace %MODULENAME in the label with the correct module name
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
-
         OUString aSearchString = OUString::createFromAscii( "%MODULENAME" );
         sal_Int32 index = title.indexOf( aSearchString );
 
@@ -1753,6 +1766,12 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             title = title.replaceAt(
                 index, aSearchString.getLength(), aModuleName );
             aTopLevelSeparator.SetText( title );
+        }
+
+        if ( !m_xFrame.is() )
+        {
+            DBG_ERRORFILE( "SvxConfigPage::Reset(): no active frame" );
+            return;
         }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
