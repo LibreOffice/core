@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:21:39 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.30 $ $ $Date: 2003-07-09 09:21:39 $
+ * @version     $Revision: 1.31 $ $ $Date: 2003-08-07 14:38:15 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -149,8 +149,6 @@ public class java_remote_bridge
 
 
     public class MessageDispatcher extends Thread implements IInvokable {
-        boolean _quit = false;
-
         private ThreadId _threadId;
 
         MessageDispatcher() {
@@ -177,7 +175,13 @@ public class java_remote_bridge
             Throwable throwable = null;
 
             try {
-                do {
+                for (;;) {
+                    synchronized (this) {
+                        if (terminate) {
+                            break;
+                        }
+                    }
+
                     // Use the protocol to read a job.
                     IMessage iMessage = _iProtocol.readMessage(_inputStream);
 
@@ -258,10 +262,9 @@ public class java_remote_bridge
                     iMessage = null;
                     // this is important to get rid of the job (especially while testing lifecycles)
                 }
-                while(!_quit);
             }
             catch(EOFException eofException) {
-                if(!_quit && DEBUG) {
+                if(DEBUG) {
                     System.err.println(getClass() + " - reading message - exception occurred: \"" + eofException + "\"");
                     System.err.println(getClass() + " - giving up");
                 }
@@ -280,13 +283,18 @@ public class java_remote_bridge
                 throwable = new DisposedException( exception.getMessage() );
             }
 
-            // dispose this bridge only within an error
-            if (!_quit) {
-                java_remote_bridge.this.dispose(throwable);
-            }
+            java_remote_bridge.this.dispose(throwable);
 
             return null;
         }
+
+        public synchronized void terminate() {
+            terminate = true;
+        }
+
+        // Variable terminate must only be used while synchronized on this
+        // object:
+        private boolean terminate = false;
     }
 
 
@@ -678,98 +686,97 @@ public class java_remote_bridge
      * <p>
      * @see com.sun.star.uno.IBridge#release
      */
-    public synchronized void release() {
-        -- _life_count;
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".release:" + _life_count);
-
-        if(_life_count <= 0)
+    public void release() {
+        boolean dispose;
+        synchronized (this) {
+            --_life_count;
+            dispose = _life_count <= 0;
+        }
+        if (dispose) {
             dispose(new com.sun.star.uno.RuntimeException("end of life"));
+        }
     }
 
     public void dispose() {
         dispose(new com.sun.star.uno.RuntimeException("user dispose"));
     }
 
-    private synchronized void dispose(Throwable throwable) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - life count:" + _life_count);
-
-        if (state == STATE_ALIVE) {
+    private void dispose(Throwable throwable) {
+        synchronized (this) {
+            if (state != STATE_ALIVE) {
+                return;
+            }
             state = STATE_DISPOSING;
+        }
 
-            notifyListeners();
-            notifyStableListeners();
+        notifyListeners();
+        notifyStableListeners();
 
-            try {
-                // stop the dispatcher thread
-                _messageDispatcher._quit = true;
+        try {
+            _messageDispatcher.terminate();
 
-                // close the connection
-                _xConnection.close();
+            _xConnection.close();
 
-                // interrupt the dispatcher thread, if this thread is not the dispatcher
-                if(Thread.currentThread() != _messageDispatcher &&  _messageDispatcher.isAlive()) {
-
-                    // THIS IS A ***WORKAROUND*** FOR LINUX SUN JDK1.3 PROBLEM:
-                    // THE MESSAGEDISPATCHER STAYS IN THE SOCKET READ METHOD,
-                    // EVEN IF THE SOCKET HAS BEEN CLOSED.
-                    // SUSPENDING AND RESUMING THE MESSAGEDISPATCHER LETS IT
-                    // NOTICE THE CLOSED SOCKET
-
-                    // NOTE!NOTE!NOTE! ONLY USE THIS WORKAROUND FOR LINUX JDK1.3.0
-                    // NOTE!NOTE!NOTE! FROM SUN OR BLACKDOWN
-                    // NOTE!NOTE!NOTE! THIS WORKAROUND IS DANGEROUSE AND MAY HARDLOCK
-                    // NOTE!NOTE!NOTE! THE VM
-                    if(System.getProperty("os.name", "notlinux").toLowerCase().equals("linux")
-                    && System.getProperty("java.version", "not1.3").startsWith("1.3.0")
-                    && (System.getProperty("java.vendor", "notsun").toLowerCase().indexOf("sun") != -1
-                     || System.getProperty("java.vendor", "notblackdown").toLowerCase().indexOf("blackdown") != -1))
-                    {
-                        if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - using linux workaround for SUN or BLACKDOWN jdk1.3.0");
-                        _messageDispatcher.suspend();
-                        _messageDispatcher.resume();
-                    }
-                      else
-                        if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - not using linux workaround");
-
-                    _messageDispatcher.join(1000); // wait for thread to die
-
-                    if(_messageDispatcher.isAlive()) { // has not died yet, interrupt it
-                        _messageDispatcher.interrupt();
-                        _messageDispatcher.join();
-                    }
+            if (Thread.currentThread() != _messageDispatcher
+                && _messageDispatcher.isAlive())
+            {
+                // This is a workaround for a Linux Sun JDK1.3 problem:  The
+                // message dispatcher stays in the socket read method, even if
+                // the socket has been closed.  Suspending and resuming the
+                // message dispatcher lets it notice the closed socket.  Only
+                // use this workaround for Linux JDK1.3.0 from Sun or Blackdown.
+                // This workaround is dangerouse and may hardlock the VM.
+                if (System.getProperty("os.name", "").toLowerCase().equals(
+                        "linux")
+                    && System.getProperty("java.version", "").startsWith(
+                        "1.3.0")
+                    && (System.getProperty("java.vendor", "").toLowerCase().
+                            indexOf("sun") != -1
+                        || System.getProperty("java.vendor", "").toLowerCase().
+                            indexOf("blackdown") != -1))
+                {
+                    _messageDispatcher.suspend();
+                    _messageDispatcher.resume();
                 }
 
-                // interrupt all jobs queued by this bridge
-                _iThreadPool.dispose(throwable);
+                _messageDispatcher.join(1000);
+                if (_messageDispatcher.isAlive()) {
+                    _messageDispatcher.interrupt();
+                    _messageDispatcher.join();
+                }
+            }
 
-                // release all outmapped objects
-                freeHolders();
+            // interrupt all jobs queued by this bridge
+            _iThreadPool.dispose(throwable);
 
-                // see if life count is zero, if not give a warning
-                if(_life_count != 0 && DEBUG)
-                    System.err.println(getClass().getName() + ".dispose - life count (proxies left):" + _life_count);
+            // release all outmapped objects
+            freeHolders();
 
+            if (DEBUG) {
+                if (_life_count != 0) {
+                    System.err.println(getClass().getName()
+                                       + ".dispose - life count (proxies left):"
+                                       + _life_count);
+                }
+                _java_environment.list();
+            }
 
-                if(DEBUG)
-                    _java_environment.list();
+            // clear members
+            _xConnection        = null;
+            _java_environment   = null;
+            _messageDispatcher  = null;
 
-
-                // clear members
-                _xConnection        = null;
-                _java_environment   = null;
-                _messageDispatcher  = null;
-
-                // TODO!  Is it intended that state is left as STATE_DISPOSING
-                // when an exception is thrown?
+            // TODO!  Is it intended that state is left as STATE_DISPOSING when
+            // an exception is thrown?
+            synchronized (this) {
                 state = STATE_DISPOSED;
             }
-            catch(InterruptedException interruptedException) {
-                System.err.println(getClass().getName() + ".dispose - InterruptedException:" + interruptedException);
-            }
-            catch(com.sun.star.io.IOException ioException) {
-                System.err.println(getClass().getName() + ".dispose - IOException:" + ioException);
-            }
+        } catch (InterruptedException e) {
+            System.err.println(getClass().getName()
+                               + ".dispose - InterruptedException:" + e);
+        } catch (com.sun.star.io.IOException e) {
+            System.err.println(getClass().getName() + ".dispose - IOException:"
+                               + e);
         }
     }
 
@@ -836,7 +843,6 @@ public class java_remote_bridge
                                + exception + " " + result);
         }
 
-        // FIXME  checkDisposed called outside of synchronized block
         checkDisposed();
 
         try {
@@ -954,7 +960,7 @@ public class java_remote_bridge
     }
 
     // This function must only be called while synchronized on this object:
-    private void checkDisposed() {
+    private synchronized void checkDisposed() {
         if (state == STATE_DISPOSED) {
             throw new DisposedException("java_remote_bridge " + this
                                         + " is disposed");
