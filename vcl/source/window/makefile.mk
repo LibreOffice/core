@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.7 $
+#	$Revision: 1.8 $
 #
-#	last change: $Author: ssa $ $Date: 2002-02-19 14:55:43 $
+#	last change: $Author: rt $ $Date: 2002-03-01 13:52:05 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/dlgctrl.obj 	\
             $(SLO)$/floatwin.obj	\
             $(SLO)$/keycod.obj		\
+            $(SLO)$/keyevent.obj	\
             $(SLO)$/menu.obj		\
             $(SLO)$/mnemonic.obj	\
             $(SLO)$/msgbox.obj		\
