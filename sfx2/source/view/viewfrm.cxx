@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-21 07:46:50 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 10:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,31 +351,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     SfxFrame *pParent = GetFrame()->GetParentFrame();
     if ( rReq.GetSlot() == SID_RELOAD )
     {
-        if ( pParent )
-        {
-            SfxViewShell *pShell = pParent->GetCurrentViewFrame()->GetViewShell();
-            if( pShell->IsImplementedAsFrameset_Impl() &&
-                pShell->GetInterface()->GetSlot( rReq.GetSlot() ) )
-            {
-                // Hack f"ur Explorer: Reload wird an der ViewShell ausgef"uhrt
-                pShell->ExecuteSlot( rReq );
-                return;
-            }
-        }
-
-        SFX_REQUEST_ARG(rReq, pBoolItem, SfxBoolItem, SID_RELOAD, sal_False);
-        if ( pBoolItem && pBoolItem->GetValue() &&
-            pParent && !(rReq.GetModifier() & KEY_MOD1) )
-        {
-            // Reload "uber UI geht immer "uber TopFrame
-            GetTopViewFrame()->ExecReload_Impl( rReq );
-            return;
-        }
-
-        // Components m"ussen das Reload selbst implementieren
-        if ( GetFrame()->HasComponent() )
-            return;
-
         // Bei CTRL-Reload den aktiven Frame reloaden
         SfxViewFrame* pActFrame = this;
         while ( pActFrame )
@@ -669,11 +644,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                 pMedium->GetName();
 
                 sal_uInt16 nModifier = rReq.GetModifier();
-                SfxFrameDescriptor* pDesc = NULL;
-                if ( !( nModifier & KEY_SHIFT ) && !pURLItem &&
-                    GetFrame()->GetDescriptor()->GetFrameSet() )
-                        pDesc = GetFrame()->GetDescriptor()->Clone();
-
                 sal_Bool bHandsOff = pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE;
 
                 // bestehende SfxMDIFrames f"ur dieses Doc leeren
@@ -769,19 +739,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     DBG_ERROR( "Not implemented!" );
 
                 xOldObj->CancelTransfers();
-                pNewSet->Put( SfxUInt32Item( SID_FLAGS,
-                                   xOldObj->GetFlags() & (
-                                       SFXOBJECTSHELL_DONTREPLACE |
-                                       SFXOBJECTSHELL_DONTCLOSE ) ) );
                 pNewMedium->SetUsesCache(
                     xOldObj->Get_Impl()->bReloadAvailable ||
                     pNoCacheItem && !pNoCacheItem->GetValue() );
 
                 // eigentliches Reload
-                if ( pDesc )
-                    pNewSet->Put( SfxFrameDescriptorItem( pDesc, SID_FRAMEDESCRIPTOR ) );
-                pNewSet->Put( SfxUInt16Item( SID_BROWSEMODE, NO_BROWSE ) );
-                pNewSet->Put( SfxBoolItem( SID_RELOAD, sal_True ) );
                 pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
                 pNewSet->Put( SfxBoolItem( SID_SILENT, sal_True ) );
 
@@ -2875,7 +2837,6 @@ void SfxViewFrame::ExecView_Impl
                     pRefererItem = &aReferer;
 
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                aSet.Put( SfxFrameDescriptorItem( pFrame->GetDescriptor(), SID_FRAMEDESCRIPTOR ) );
                 aSet.Put( SfxStringItem( SID_USER_DATA, aUserData ) );
                 aSet.Put( SfxUInt16Item( SID_VIEW_ID, GetCurViewId() ) );
                 aSet.Put( *pRefererItem );
@@ -2890,7 +2851,6 @@ void SfxViewFrame::ExecView_Impl
             else
             {
                 pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
-                pMed->GetItemSet()->Put( SfxFrameDescriptorItem( GetFrame()->GetDescriptor(), SID_FRAMEDESCRIPTOR ) );
 
                 SFX_REQUEST_ARG( rReq, pFrameItem, SfxUsrAnyItem, SID_FILLFRAME, sal_False );
                 if ( pFrameItem )

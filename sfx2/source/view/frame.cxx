@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:16:16 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 10:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,60 +150,6 @@ void SfxFrame::SetLoadCancelable_Impl( SfxCancellable* pCbl )
 {
     delete pImp->pLoadCancellable;
     pImp->pLoadCancellable = pCbl;
-}
-
-void SfxFrame::CopyHistory_Impl( SfxFrame *pFrame ) const
-{
-    if ( pParentFrame )
-    {
-        pParentFrame->CopyHistory_Impl( pFrame );
-        return;
-    }
-
-    pFrame->ClearHistory();
-    pFrame->pImp->pHistory = new SfxFrameHistory_Impl;
-    SfxFrameHistory_Impl* pSource = pImp->pHistory;
-    SfxFrameHistory_Impl* pTarget = pFrame->pImp->pHistory;
-
-    // Zuerst die History bis jetzt kopieren
-    sal_uInt32 nCurHisEntry = 0;
-    if ( pSource )
-    {
-        // Die aktuelle Position in der UndoHistory
-        nCurHisEntry = pSource->GetCurPos();
-        sal_uInt32 nCount = pSource->Count();
-        SfxFramePickEntry_Impl* pActEntry = pSource->GetCurObject();
-        if( pActEntry )
-        {
-            GetTopFrame()->GetDescriptor()->GetArgs()->ClearItem( SID_VIEW_DATA );
-            pActEntry->Update( GetTopFrame() );
-        }
-
-        for ( sal_uInt32 n=0; n<=nCurHisEntry; n++ )
-        {
-            SfxFramePickEntry_Impl *pEntry = pSource->GetObject(n);
-            if ( pEntry->aName.Len() )
-                pTarget->Insert( pEntry->Clone(), pTarget->Count() );
-        }
-    }
-
-    pTarget->Seek( pTarget->Count() - 1 );
-}
-
-
-void SfxFrame::ClearHistory()
-{
-    SfxFrameHistory_Impl* pHistory = pImp->pHistory;
-    if ( pHistory )
-    {
-        for ( sal_uInt32 n= pHistory->Count(); n--; )
-        {
-            SfxFramePickEntry_Impl *pEntry = pHistory->GetObject(n);
-            delete pEntry;
-        }
-        delete pImp->pHistory;
-        pImp->pHistory = NULL;
-    }
 }
 
 SfxFrame::SfxFrame(SfxFrame* pParent):
@@ -585,8 +531,7 @@ sal_Bool SfxFrame::CloseChildFrames()
     return bRet;
 }
 
-SfxFrame* SfxFrame::SearchChildrenForName_Impl(
-    const String& rName, sal_Bool bDeep ) const
+SfxFrame* SfxFrame::SearchChildrenForName_Impl( const String& rName, sal_Bool bDeep ) const
 {
     if ( pChildArr )
     {
@@ -768,14 +713,6 @@ void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
     if( !pImp->bInCancelTransfers )
     {
         pImp->bInCancelTransfers = sal_True;
-#if SUPD<582
-        SfxJS* pJS = GetJavaScript( sal_False );
-        if( pJS )
-        {
-            JScriptDocumentManager * pDM = pJS->GetDocumentManager( sal_False );
-            if( pDM ) pDM->StopNoneRecursiveCalls();
-        }
-#endif
         SfxObjectShell* pObj = GetCurrentDocument();
         if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SFX_LOADED_ALL ))
         {
@@ -844,329 +781,47 @@ void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
     pImp->nType = n;
 }
 
-sal_Bool SfxFrame::ExecuteHistoryMenu_Impl( sal_uInt16 nWhich, const Rectangle& rRect,
-    sal_uInt16 nFlags )
+void SfxFrame::CopyHistory_Impl( SfxFrame *pFrame ) const
 {
-    SfxFrameHistory_Impl* pHistory = pImp->pHistory;
-    if ( !pHistory || !pHistory->Count() )
-        return sal_False;
+}
 
-    PopupMenu *pMenu = new PopupMenu;
-    long nPos = (long) pHistory->GetCurPos();
-    if ( nWhich == SID_BROWSE_FORWARD )
-    {
-        for ( long n=nPos+1; n<(long)pHistory->Count(); n++ )
-        {
-            SfxFramePickEntry_Impl *pEntry = pHistory->GetObject( n );
-            String aEntry( n-nPos-1 );
-            aEntry += ' ';
-            aEntry += pEntry->aName;
-            pMenu->InsertItem( n+1, aEntry );
-        }
-    }
-    else
-    {
-        for ( long n=nPos-1; n>=0; n-- )
-        {
-            SfxFramePickEntry_Impl *pEntry = pHistory->GetObject( n );
-            String aEntry( nPos-n-1 );
-            aEntry += ' ';
-            aEntry += pEntry->aName;
-            pMenu->InsertItem( n+1, aEntry );
-        }
-    }
 
-    sal_uInt16 nRet = pMenu->Execute( &GetWindow(), rRect, nFlags ) - 1;
-    if ( nRet != MENU_ITEM_NOTFOUND )
-        Browse( nWhich == SID_BROWSE_FORWARD,
-            (sal_uInt16) ( nRet > nPos ? nRet-nPos : nPos - nRet ) );
+void SfxFrame::ClearHistory()
+{
+}
+
+sal_Bool SfxFrame::ExecuteHistoryMenu_Impl( sal_uInt16 nWhich, const Rectangle& rRect, sal_uInt16 nFlags )
+{
     return sal_True;
 }
 
 sal_Bool SfxFrame::Browse( sal_Bool bForward, sal_uInt16 nSteps, sal_Bool bNewFrame )
 {
-    SfxFrameHistory_Impl* pHistory = pImp->pHistory;
-    if ( !pHistory || !pHistory->Count() )
-    {
-        // Die Undo-History wird immer am TopLevel-Frame gef"uhrt; hier mu\s
-        // noch definiert werden, was "BackInFrame" bedeuten soll (eigene Methode)
-        return sal_False;
-    }
-
-    if ( bNewFrame )
-        return sal_False;
-
-    long nPos = (long) pHistory->GetCurPos();
-    long nCount = (long) pHistory->Count();
-    long nNextPos = nPos + ( bForward ? (long) nSteps : - (long) nSteps );
-    sal_uInt16 nMode = bForward ? BROWSE_FORWARD : BROWSE_BACKWARD;
-    nMode += ( nSteps << 4 );
-    if ( nSteps && nNextPos >= 0L && nNextPos < nCount )
-    {
-        SfxFrame *pFrame = this;
-        if ( bNewFrame )
-        {
-            SfxFrame* pNew = SfxTopFrame::Create();
-
-            // Die History komplett kopieren
-            pNew->pImp->pHistory = new SfxFrameHistory_Impl;
-            SfxFrameHistory_Impl& rTarget = *pNew->pImp->pHistory;
-            sal_uInt32 nCount = pHistory->Count();
-            SfxFramePickEntry_Impl* pActEntry = pHistory->GetCurObject();
-            if( pActEntry )
-            {
-                pFrame->GetDescriptor()->GetArgs()->ClearItem( SID_VIEW_DATA );
-                pActEntry->Update( pFrame );
-            }
-
-            for ( sal_uInt32 n=0; n<nCount; n++ )
-            {
-                SfxFramePickEntry_Impl *pEntry = pHistory->GetObject(n);
-                if ( pEntry->aName.Len() )
-                    rTarget.Insert( pEntry->Clone(), n );
-            }
-
-            rTarget.Seek( pHistory->GetCurPos() );
-            pFrame = pNew;
-        }
-
-        SfxFramePickEntry_Impl *pEntry = pFrame->pImp->pHistory->GetObject( nNextPos );
-        pFrame->ActivatePickEntry_Impl( pEntry, nMode );
-        return sal_True;
-    }
-
-    return sal_False;
+    return FALSE;
 }
 
 void SfxFrame::UpdatePickEntries()
 {
-
-    SfxFrame *pParent = this;
-    while ( pParent->pParentFrame )
-        pParent = pParent->pParentFrame;
-
-    // ViewData clearen, damit sie neu geholt wird
-    GetDescriptor()->GetArgs()->ClearItem( SID_VIEW_DATA );
-    SfxFrameHistory_Impl* pParentHistory = pParent->pImp->pHistory;
-    if( pParentHistory )
-    {
-        SfxFramePickEntry_Impl* pActEntry = pParentHistory->GetCurObject();
-        if( pActEntry )
-        {
-            Deactivate_Impl();
-            pActEntry->Update( GetTopFrame() );
-        }
-    }
-
-    SfxObjectShell *pDoc = GetCurrentDocument();
-    if ( !pDoc )
-        return;
-
-    SfxFrameHistory_Impl& rHistory = pImp->aHistory;
-    SfxFramePickEntry_Impl* pActEntry = pImp->aHistory.GetCurObject();
-    if( pActEntry )
-        pActEntry->Update( this );
 }
 
 void SfxFrame::UpdatePickEntries( const ::com::sun::star::uno::Any& rValue )
 {
-    SfxFrame *pParent = this;
-    while ( pParent->pParentFrame )
-        pParent = pParent->pParentFrame;
-
-    // ViewData setzen, nicht mehr holen
-    SfxPoolItem *pItem = new SfxUsrAnyItem( SID_VIEW_DATA, rValue );
-    SfxFrameHistory_Impl* pParentHistory = pParent->pImp->pHistory;
-    if( pParentHistory )
-    {
-        SfxFramePickEntry_Impl* pActEntry = pParentHistory->GetCurObject();
-        if( pActEntry )
-        {
-            Deactivate_Impl();
-            pActEntry->Update( GetTopFrame(), pItem );
-        }
-    }
-
-    SfxObjectShell *pDoc = GetCurrentDocument();
-    if ( !pDoc )
-        return;
-
-    SfxFrameHistory_Impl& rHistory = pImp->aHistory;
-    SfxFramePickEntry_Impl* pActEntry = pImp->aHistory.GetCurObject();
-    if( pActEntry )
-        pActEntry->Update( this, pItem );
-
-    delete pItem;
 }
 
 void SfxFrame::UpdateUndoHistory_Impl( SfxObjectShell *pDocSh, const String* pNew, const String* pTitle )
 {
-    if (  pDocSh->GetCreateMode() != SFX_CREATE_MODE_STANDARD )
-        // Keine OLE-Objekte etc.
-        return;
-
-    SfxItemSet* pSet = pDocSh->GetMedium()->GetItemSet();
-    String aNew;
-    if( pNew )
-        aNew = *pNew;
-    else
-        aNew = pDocSh->GetMedium()->GetOrigURL();
-
-    // Die Undo-History wird immer am TopLevel-Frame gef"uhrt
-    // Zusaetzlich wird pro Frame eine History gefuehrt
-    SfxFrame *pParent = this;
-    while ( pParent->pParentFrame )
-        pParent = pParent->pParentFrame;
-
-    sal_uInt16 nBrowseMode = BROWSE_NORMAL;
-    if( pSet )
-    {
-        SFX_ITEMSET_ARG( pSet, pBrowseMode, SfxUInt16Item, SID_BROWSEMODE, sal_False );
-        if( pBrowseMode )
-            nBrowseMode = pBrowseMode->GetValue();
-    }
-
-    if( nBrowseMode != NO_BROWSE )
-    {
-        SfxObjectShell *pDoc = GetCurrentDocument();
-        SfxFrameHistory_Impl*& pParentHistory = pParent->pImp->pHistory;
-        if( !pParentHistory )
-        {
-            pParentHistory = new SfxFrameHistory_Impl;
-            nBrowseMode = BROWSE_NORMAL;
-        }
-
-        sal_uInt16 nSteps = nBrowseMode >> 4;
-        nBrowseMode &= 0x000F;
-
-        if ( nBrowseMode != BROWSE_BACKWARD && nBrowseMode != BROWSE_FORWARD )
-        {
-            // Nur Entry anlegen, wenn bisher leer, oder kein NoName-Dokument
-            // und entweder neue DocShell oder neuer lokaler Sprung
-            if ( !pDoc || pDoc->HasName() &&
-                ( pDoc != pDocSh || pDoc->GetMedium()->GetOrigURL() != aNew ) )
-            {
-                SfxFramePickEntry_Impl* pNewEntry =
-                    new SfxFramePickEntry_Impl;
-                pNewEntry->Initialize( GetTopFrame(), sal_False, pDocSh, pNew, pTitle );
-                pParent->pImp->AppendPickEntry( pNewEntry );
-                pParentHistory->Seek( pParentHistory->Count() - 1 );
-
-                pImp->nHasBrowser = SFX_BEAMER_OFF;
-                SFX_ITEMSET_ARG( pSet, pBrowserItem, SfxUInt16Item,
-                                        SID_BROWSER, sal_False);
-                if ( pBrowserItem )
-                    pImp->nHasBrowser = pBrowserItem->GetValue();
-            }
-        }
-        else
-        {
-            pParentHistory->Seek(
-                pParentHistory->GetCurPos() +
-                ( nBrowseMode == BROWSE_FORWARD ? (long) nSteps : - (long) nSteps ));
-
-            SfxFramePickEntry_Impl* pEntry = pParentHistory->GetCurObject();
-
-            DBG_ASSERT( pEntry, "Kein History-Entry!?" );
-        }
-
-        SfxViewFrame* pViewFrame = pParent->GetCurrentViewFrame();
-        if( pViewFrame )
-        {
-            SfxBindings& rBindings = pViewFrame->GetBindings();
-            rBindings.Invalidate( SID_BROWSE_FORWARD );
-            rBindings.Invalidate( SID_BROWSE_BACKWARD );
-        }
-    }
 }
 
 void SfxFrame::UpdateCurrentHistory_Impl( SfxObjectShell *pDocSh, const String* pNew  )
 {
-    if (  pDocSh->GetCreateMode() != SFX_CREATE_MODE_STANDARD )
-        // Keine OLE-Objekte etc.
-        return;
-
-    String aNew;
-    if( pNew )
-        aNew = *pNew;
-    else
-        aNew = pDocSh->GetMedium()->GetOrigURL();
-
-    // Die Undo-History wird immer am TopLevel-Frame gef"uhrt
-    // Zusaetzlich wird pro Frame eine History gefuehrt
-    SfxFrame *pParent = this;
-    while ( pParent->pParentFrame )
-        pParent = pParent->pParentFrame;
-
-    SfxObjectShell *pDoc = GetCurrentDocument();
-    sal_uInt16 nBrowseMode = BROWSE_NORMAL;
-    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pBrowseMode,
-                     SfxUInt16Item, SID_BROWSEMODE, sal_False );
-    if( pBrowseMode )
-        nBrowseMode = pBrowseMode->GetValue();
-
-    if( nBrowseMode != BROWSE_FRAME )
-    {
-        // Nur Entry anlegen, wenn bisher leer, oder kein NoName-Dokument
-        // und entweder neue DocShell oder neuer lokaler Sprung
-        if ( !pDoc || pDoc->HasName() &&
-            ( pDoc != pDocSh || pDoc->GetMedium()->GetOrigURL() != aNew ) )
-        {
-            SfxFrameHistory_Impl& rHistory = pImp->aHistory;
-            sal_uInt32 nCurHisEntry = rHistory.GetCurPos();
-            SfxFramePickEntry_Impl* pNewPickEntry =
-                new SfxFramePickEntry_Impl;
-            pNewPickEntry->Initialize( this, sal_False, pDocSh, pNew );
-
-            // Anzahl beschr"anken
-            if ( rHistory.Count() == PICKLIST_MAXSIZE )
-                delete rHistory.Remove( rHistory.Count() - 1 );
-
-            // Eintraege ueber dem aktuellen Eintrag werden geloescht
-            if ( LIST_ENTRY_NOTFOUND != nCurHisEntry )
-            {
-                for ( sal_uInt32 nEntry = 0; nEntry < nCurHisEntry; ++nEntry )
-                    delete rHistory.Remove( 0UL );
-            }
-
-            // den neuen einf"ugen
-            rHistory.Insert( pNewPickEntry, 0UL );
-            rHistory.Seek( 0UL );
-            nCurHisEntry = 0;
-        }
-    }
-
-    if ( nBrowseMode != BROWSE_BACKWARD &&
-         nBrowseMode != BROWSE_FORWARD &&
-         nBrowseMode != NO_BROWSE)
-    {
-        if ( pParent == this )
-            SfxPickList_Impl::Get()->InsertToHistory( pDocSh );
-    }
 }
 
 void SfxFrame::UpdateHistory( SfxObjectShell *pDocSh, const String* pNew  )
 {
-    String aNew;
-    if( pNew )
-        aNew = *pNew;
-    else
-        aNew = pDocSh->GetMedium()->GetOrigURL();
-
-    UpdateUndoHistory_Impl( pDocSh, &aNew );
-    UpdateCurrentHistory_Impl( pDocSh, &aNew );
 }
 
 void SfxFrame::UpdateHistory( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const ::rtl::OUString& rTitle  )
 {
-    String aStr( aURL );
-    String aTitle( rTitle );
-    SfxObjectShell *pDoc = GetCurrentDocument();
-    if ( pDoc )
-    {
-        pDoc->GetMedium()->GetItemSet()->ClearItem( SID_BROWSEMODE );
-        UpdateUndoHistory_Impl( pDoc, &aStr, &aTitle );
-    }
 }
 
 void SfxFrame::GetViewData_Impl()
@@ -1272,17 +927,14 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
 sal_Bool SfxFrame::CanBrowseBackward() const
 {
-    SfxFrameHistory_Impl* pHistory = pImp->pHistory;
-    return  pHistory && pHistory->Count() && pHistory->GetCurPos() > 0;
+    return FALSE;
 }
 
 //-------------------------------------------------------------------------
 
 sal_Bool SfxFrame::CanBrowseForward() const
 {
-    SfxFrameHistory_Impl* pHistory = pImp->pHistory;
-    return  pHistory && pHistory->Count() && pHistory->GetCurPos() <
-        pHistory->Count() - 1l;
+    return FALSE;
 }
 
 //-------------------------------------------------------------------------
@@ -1329,8 +981,7 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 
 sal_Bool SfxFrame::TransferForReplaceInProgress() const
 {
-    return pImp->pLoadEnv && pImp->pLoadEnv->GetObjectShell() !=
-        GetCurrentDocument();
+    return pImp->pLoadEnv && pImp->pLoadEnv->GetObjectShell() != GetCurrentDocument();
 }
 
 //-------------------------------------------------------------------------
@@ -1557,25 +1208,8 @@ SfxFramePickEntry_Impl::SfxFramePickEntry_Impl()
 }
 
 //-------------------------------------------------------------------------
-void SfxFrame::ActivatePickEntry_Impl( SfxFramePickEntry_Impl* pEntry,
-        sal_uInt16 nMode, SfxFrameDescriptor *pDesc )
+void SfxFrame::ActivatePickEntry_Impl( SfxFramePickEntry_Impl* pEntry, sal_uInt16 nMode, SfxFrameDescriptor *pDesc )
 {
-    SfxAllItemSet aSet( SFX_APP()->GetPool() );
-
-    // Die vollst"andige FrameSet-Beschreibung zur Verf"ugung stellen
-    if ( !pDesc )
-        pDesc = pEntry->pDescriptor->Clone();
-
-    // Parameter zusammenstellen; Achtung: ActivatePickEntry mu\s an dem Frame
-    // aufgerufen werden, in den geladen werden soll!
-    aSet.Put( *pEntry->pDescriptor->GetArgs() );
-    aSet.Put( SfxStringItem( SID_FILE_NAME, pDesc->GetActualURL().GetMainURL() ) );
-    aSet.Put( SfxFrameItem( SID_DOCFRAME, this ) );
-    aSet.Put( SfxUInt16Item( SID_BROWSEMODE, nMode ));
-    aSet.Put( SfxFrameDescriptorItem( pDesc, SID_FRAMEDESCRIPTOR ) );
-
-    pImp->pCurrentViewFrame->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_RECORD, aSet );
-    delete pDesc;
 }
 
 void SfxFramePickEntry_Impl::Initialize( SfxFrame* pFrameP, sal_Bool bBrowserCfg,
@@ -1656,8 +1290,6 @@ String SfxFrameItem::GetValueText() const
     return String();
 }
 
-
-
 SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
 {
     SfxFrameItem* pNew = new SfxFrameItem( wFrame);
@@ -1689,16 +1321,6 @@ SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
 
 sal_Bool SfxFrame::BrowseInFrame( int nDelta )
 {
-    SfxFrameHistory_Impl& rHistory = pImp->aHistory;
-    int nPos = (int) rHistory.GetCurPos() - nDelta;
-    if( nPos >= 0 && nPos < (int) rHistory.Count() )
-    {
-        rHistory.Seek( nPos );
-        SfxFramePickEntry_Impl *pEntry = rHistory.GetCurObject();
-
-        ActivatePickEntry_Impl( pEntry, BROWSE_FRAME );
-        return sal_True;
-    }
     return sal_False;
 }
 
@@ -2081,31 +1703,6 @@ sal_Bool SfxFrame::IsFocusLocked_Impl() const
 {
     return pImp->bFocusLocked;
 }
-/*
-sal_Bool SfxFrame::IsPlugin_Impl() const
-{
-//  Reference < XPluginInstance > xPlugin ( pImp->xFrame, UNO_QUERY );
-//  return xPlugin.is();
-
-    // Set default return value if method failed.
-    sal_Bool bReturn = sal_False;
-    // Get Desktop to get a list of all current tasks on it.
-    Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
-    DBG_ASSERT( !(xDesktop.is()==sal_False), "SfxFrame::IsPlugin_Impl()Can't get reference to desktop service!\n" );
-    Reference< XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
-    while( xList->hasMoreElements() == sal_True )
-    {
-        Reference< XTask > xTask;
-        xList->nextElement() >>= xTask;
-        Reference< XPluginInstance > xPlugIn( xTask, UNO_QUERY );
-        if( xPlugIn.is() == sal_True )
-        {
-            bReturn = sal_True;
-            break;
-        }
-    }
-    return bReturn;
-}*/
 
 void SfxFrame::Resize()
 {
