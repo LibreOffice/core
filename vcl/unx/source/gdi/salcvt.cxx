@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 22:09:57 $
+ *  last change: $Author: cp $ $Date: 2000-12-19 11:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,9 +262,12 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
         case RTL_TEXTENCODING_GBK:
         case RTL_TEXTENCODING_GB_2312:
         case RTL_TEXTENCODING_MS_1361:
+        /* case RTL_TEXTENCODING_JIS_X_0201: */
+        case RTL_TEXTENCODING_JIS_X_0208:
 
             // XXX Big5 and Korean EUC contain Ascii chars, but Solaris
-            // *-big5-1 and *-ksc5601.1992-3 fonts dont
+            // *-big5-1 and *-ksc5601.1992-3 fonts dont, in general CJK fonts
+            // are monospaced, so dont trust them for latin chars
             if (nChar <= 0xFF)
             {
                 bMatch = False;
