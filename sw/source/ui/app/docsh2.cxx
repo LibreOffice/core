@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:23:34 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1801,9 +1801,17 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
     if( pTempView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
+
         if( !GetDoc()->GetPrt( FALSE ) )
+        {
             pTempView->SetPrinter( GetDoc()->GetPrt( TRUE ),
-                    SFX_PRINTER_PRINTER|SFX_PRINTER_JOBSETUP );
+                                   SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+        }
+
+        // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
+        // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+        GetDoc()->CheckDefaultPageFmt();
+        // <--
 
         //Wenn wir die BrowseView einschalten, darf es nur diese eine
         //Sicht auf das Dokument geben, alle anderen werden geschlossen.
@@ -1819,6 +1827,7 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
         } while ( pTmpFrm );
 
+        // Triggeres a formatting:
         pTempView->GetWrtShell().CheckBrowseView( TRUE );
         pTempView->CheckVisArea();
 
