@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desktop.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 13:33:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
     interfaces, it's  just because these frames use task windows.
     </p>
  */
-service Desktop
+published service Desktop
 {
     //-------------------------------------------------------------------------
     /** make it possible to be the global root of different seperated frame trees
