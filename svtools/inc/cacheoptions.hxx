@@ -1,0 +1,208 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cacheoptions.hxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2001-04-12 14:58:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
+#define INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
+
+//_________________________________________________________________________________________________________________
+//  includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _RTL_USTRING_
+#include <rtl/ustring>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  forward declarations
+//_________________________________________________________________________________________________________________
+
+/*-************************************************************************************************************//**
+    @short          forward declaration to our private date container implementation
+    @descr          We use these class as internal member to support small memory requirements.
+                    You can create the container if it is neccessary. The class which use these mechanism
+                    is faster and smaller then a complete implementation!
+*//*-*************************************************************************************************************/
+
+class SvtCacheOptions_Impl;
+
+//_________________________________________________________________________________________________________________
+//  declarations
+//_________________________________________________________________________________________________________________
+
+/*-************************************************************************************************************//**
+    @short          collect informations about startup features
+    @descr          -
+
+    @implements     -
+    @base           -
+
+    @devstatus      ready to use
+*//*-*************************************************************************************************************/
+
+class SvtCacheOptions
+{
+    //-------------------------------------------------------------------------------------------------------------
+    //  public methods
+    //-------------------------------------------------------------------------------------------------------------
+
+    public:
+
+        //---------------------------------------------------------------------------------------------------------
+        //  constructor / destructor
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      standard constructor and destructor
+            @descr      This will initialize an instance with default values.
+                        We implement these class with a refcount mechanism! Every instance of this class increase it
+                        at create and decrease it at delete time - but all instances use the same data container!
+                        He is implemented as a static member ...
+
+            @seealso    member m_nRefCount
+            @seealso    member m_pDataContainer
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+         SvtCacheOptions();
+        ~SvtCacheOptions();
+
+        //---------------------------------------------------------------------------------------------------------
+        //  interface
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/_3D-Engine/..."
+            @descr      These options describe internal states to enable/disable features of installed office.
+
+                        GetWriterOLE_Objects()
+                        SetWriterOLE_Objects()              =>  set the number of Writer OLE objects to be cached
+
+                        GetDrawingEngineOLE_Objects()
+                        SetDrawingEngineOLE_Objects()       =>  set the number of DrawingEngine OLE objects to be cached
+
+                        GetGraphicManagerTotalCacheSize()
+                        SetGraphicManagerTotalCacheSize()   =>  set the maximum cache size used by GraphicManager to cache graphic objects
+
+                        GetGraphicManagerObjectCacheSize()
+                        SetGraphicManagerObjectCacheSize()  =>  set the maximum cache size for one GraphicObject to be cached by GraphicManager
+
+            @seealso    configuration package "org.openoffice.Office.Common/_3D-Engine"
+        *//*-*****************************************************************************************************/
+
+        sal_Int32   GetWriterOLE_Objects() const;
+        sal_Int32   GetDrawingEngineOLE_Objects() const;
+        sal_Int32   GetGraphicManagerTotalCacheSize() const;
+        sal_Int32   GetGraphicManagerObjectCacheSize() const;
+
+        void        SetWriterOLE_Objects( sal_Int32 nObjects );
+        void        SetDrawingEngineOLE_Objects( sal_Int32 nObjects );
+        void        SetGraphicManagerTotalCacheSize( sal_Int32 nTotalCacheSize );
+        void        SetGraphicManagerObjectCacheSize( sal_Int32 nObjectCacheSize );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  private methods
+    //-------------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      return a reference to a static mutex
+            @descr      These class use his own static mutex to be threadsafe.
+                        We create a static mutex only for one ime and use at different times.
+
+            @seealso    -
+
+            @param      -
+            @return     A reference to a static mutex member.
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        static ::osl::Mutex& GetOwnStaticMutex();
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  private member
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
+
+        /*Attention
+
+            Don't initialize these static member in these header!
+            a) Double dfined symbols will be detected ...
+            b) and unresolved externals exist at linking time.
+            Do it in your source only.
+         */
+
+        static SvtCacheOptions_Impl*    m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
+
+};      // class SvtOptions3D
+
+#endif // #ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
