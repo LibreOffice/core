@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 14:34:08 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,13 @@ const char* pRegName = "BasicIDETabBar";
 TYPEINIT0( IDEBaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-IDEBaseWindow::IDEBaseWindow( Window* pParent, StarBASIC* pBas, SfxObjectShell* pShell, String aLibName, String aName )
+IDEBaseWindow::IDEBaseWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_pShell( pShell )
     ,m_aLibName( aLibName )
     ,m_aName( aName )
 {
     DBG_CTOR( IDEBaseWindow, 0 );
-    xBasic = pBas;
     pShellHScrollBar = 0;
     pShellVScrollBar = 0;
     nStatus = 0;
@@ -257,26 +256,18 @@ String __EXPORT IDEBaseWindow::GetTitle()
 
 String IDEBaseWindow::CreateQualifiedName()
 {
-    BasicManager* pBasMgr = BasicIDE::FindBasicManager( xBasic );
-    DBG_ASSERT( pBasMgr, "BasicManager nicht gefunden!" );
-    DBG_ASSERT( xBasic.Is(), "Basic nicht initialisiert!" );
-    String aName( BasicIDE::FindTitle( pBasMgr, 3 /*SFX_TITLE_APINAME*/ ) );
-    aName += '.';
-    aName += xBasic->GetName();
-    aName += '.';
-    aName += GetTitle();
-    return aName;
-}
+    String aName;
+    if ( m_aLibName.Len() )
+    {
+        LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pShell, m_aLibName );
+        aName = BasicIDE::GetTitle( m_pShell, eLocation, SFX_TITLE_APINAME );
+        aName += '.';
+        aName += m_aLibName;
+        aName += '.';
+        aName += GetTitle();
+    }
 
-String IDEBaseWindow::CreateSbxDescription()
-{
-    BasicManager* pBasMgr = BasicIDE::FindBasicManager( xBasic );
-    DBG_ASSERT( pBasMgr, "BasicManager nicht gefunden!" );
-    DBG_ASSERT( xBasic.Is(), "Basic nicht initialisiert!" );
-    String aDescription( BasicIDE::FindTitle( pBasMgr, 3 /*SFX_TITLE_APINAME*/ ) );
-    aDescription += ';';
-    aDescription += xBasic->GetName();
-    return aDescription;
+    return aName;
 }
 
 void IDEBaseWindow::SetReadOnly( BOOL )
@@ -617,7 +608,6 @@ struct TabBarDDInfo
 BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
     TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
-    pCurrentLib = NULL;
     EnableEditMode( TRUE );
 
     SetHelpId( HID_BASICIDE_TABBAR );
@@ -652,6 +642,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             MouseEvent aMouseEvent( aP, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT );
             TabBar::MouseButtonDown( aMouseEvent );
         }
+
         PopupMenu aPopup( IDEResId( RID_POPUP_TABBAR ) );
         if ( GetPageCount() == 0 )
         {
@@ -660,163 +651,36 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, FALSE );
         }
 
-        if (StarBASIC::IsRunning())
+        if ( StarBASIC::IsRunning() )
         {
             aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);
             aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, false);
             aPopup.EnableItem(SID_BASICIDE_MODULEDLG, false);
         }
 
-        if ( pCurrentLib )
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        if ( pIDEShell )
         {
-            BasicManager* pBasMgr = BasicIDE::FindBasicManager( pCurrentLib );
-            if ( pBasMgr )
+            SfxObjectShell* pShell = pIDEShell->GetCurShell();
+            ::rtl::OUString aOULibName( pIDEShell->GetCurLibName() );
+            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
             {
-                SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                ::rtl::OUString aOULibName( pCurrentLib->GetName() );
-                Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-                Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-                if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-                     ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
-                {
-                    aPopup.EnableItem( aPopup.GetItemId( 0 ), FALSE );
-                    aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
-                    aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
-                    aPopup.RemoveDisabledEntries();
-                }
+                aPopup.EnableItem( aPopup.GetItemId( 0 ), FALSE );
+                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
+                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
+                aPopup.RemoveDisabledEntries();
             }
         }
 
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
+        if ( pDispatcher )
             pDispatcher->Execute( aPopup.Execute( this, aPos ) );
-        }
-
     }
-
-    /*
-    else if ( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) && pCurrentLib && !IsInEditMode() )
-    {
-        Region aRegion;
-        if ( StartDrag( rCEvt, aRegion ) )
-        {
-            ULONG nReg = DragServer::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( pRegName ) ) );
-            TabBarDDInfo aInf( (ULONG)this, GetPagePos( GetCurPageId() ) );
-            DragServer::CopyData( &aInf, sizeof( TabBarDDInfo ), nReg );
-
-            ExecuteDrag( Pointer( POINTER_MOVEFILE ), Pointer( POINTER_COPYFILE ),
-                         DRAG_MOVEABLE, &aRegion );
-
-            HideDropPos();
-
-        }
-    }
-    */
 }
-
-
-/*
-BOOL __EXPORT BasicIDETabBar::QueryDrop( DropEvent& rDEvt )
-{
-    // ... pruefen, ob moeglich und ob gleiches Fenster..
-
-    if ( rDEvt.IsLeaveWindow() )
-    {
-        HideDropPos();
-        EndSwitchPage();
-        return FALSE;
-    }
-
-    ULONG nReg = Clipboard::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( pRegName ) ) );
-    if ( DragServer::HasFormat( 0, nReg ) )
-    {
-        ULONG nThis = (ULONG)this;
-        TabBarDDInfo aInf;
-        DragServer::PasteData( 0, &aInf, sizeof( TabBarDDInfo ), nReg );
-        if ( nThis == aInf.npTabBar )
-        {
-            if ( rDEvt.GetAction() == DROP_MOVE )
-            {
-                USHORT nDestPos = ShowDropPos( rDEvt.GetPosPixel() );
-                if ( aInf.nPage < nDestPos )
-                    nDestPos--;
-                USHORT nMods = (USHORT) pCurrentLib->GetModules()->Count();
-                return ( ( nDestPos != aInf.nPage ) &&
-                         ( ( ( aInf.nPage < nMods ) && ( nDestPos < nMods ) ) ||
-                           ( ( aInf.nPage >= nMods ) && ( nDestPos >= nMods ) ) ) );
-            }
-        }
-    }
-    else if ( DragServer::HasFormat( 0, FORMAT_STRING ) )
-    {
-        SwitchPage( rDEvt.GetPosPixel() );
-    }
-
-    return FALSE;
-}
-*/
-
-
-/*
-BOOL __EXPORT BasicIDETabBar::Drop( const DropEvent& rDEvt )
-{
-    USHORT nId = GetCurPageId();
-    if ( nId )
-    {
-        ULONG nReg = Clipboard::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( pRegName ) ) );
-        TabBarDDInfo aInf;
-        DragServer::PasteData( 0, &aInf, sizeof( TabBarDDInfo ), nReg );
-
-        ULONG nMods = pCurrentLib->GetModules()->Count();
-        USHORT nPos = ShowDropPos( rDEvt.GetPosPixel() );
-        USHORT nDestPos = nPos;
-        if ( aInf.nPage < nDestPos )
-            nDestPos--;
-
-        if ( aInf.nPage < nMods )
-        {
-            // Module umsortieren
-            SbModuleRef xMod = (SbModule*) pCurrentLib->GetModules()->Get( aInf.nPage );
-            pCurrentLib->GetModules()->Remove( xMod );
-            pCurrentLib->GetModules()->Insert( xMod, nDestPos );
-        }
-        else
-        {
-            // Objekte umsortieren, leider stehen in diesem Array nicht nur Dialoge...
-            USHORT nDlg = aInf.nPage - nMods;
-            nDestPos -= nMods;
-            USHORT nD = 0, nRealPos = 0, nRealDest = 0;
-            for ( USHORT nObject = 0; nObject < pCurrentLib->GetObjects()->Count(); nObject++ )
-            {
-                SbxVariable* pVar = pCurrentLib->GetObjects()->Get( nObject );
-                if ( pVar->GetSbxId() == GetDialogSbxId() )
-                {
-                    if ( nD == nDlg )
-                        nRealPos = nObject;
-                    if ( nD == nDestPos )
-                        nRealDest = nObject;
-                    nD++;
-                }
-            }
-
-            SbxObjectRef xObj = (SbxObject*) pCurrentLib->GetObjects()->Get( nRealPos );
-            pCurrentLib->GetObjects()->Remove( xObj );
-            pCurrentLib->GetObjects()->Insert( xObj, nRealDest );
-        }
-
-        pCurrentLib->SetModified( TRUE );
-
-        MovePage( nId, nPos );
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-*/
-
 
 long BasicIDETabBar::AllowRenaming()
 {
@@ -899,26 +763,6 @@ void BasicIDETabBar::Sort()
     }
 }
 
-
-BasicEntry::~BasicEntry()
-{
-}
-
-
-
-BasicManagerEntry::BasicManagerEntry( BasicManager* pMgr )  :
-    BasicEntry( OBJTYPE_BASICMANAGER )
-{
-    pBasMgr = pMgr;
-}
-
-
-
-BasicManagerEntry::~BasicManagerEntry()
-{
-}
-
-
 void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
@@ -992,39 +836,121 @@ ULONG CalcLineCount( SvStream& rStream )
     return nCRs;
 }
 
+LibInfoKey::LibInfoKey()
+    :m_pShell( 0 )
+{
+}
 
+LibInfoKey::LibInfoKey( SfxObjectShell* pShell, const String& rLibName )
+    :m_pShell( pShell )
+    ,m_aLibName( rLibName )
+{
+}
+
+LibInfoKey::~LibInfoKey()
+{
+}
+
+LibInfoKey::LibInfoKey( const LibInfoKey& rKey )
+    :m_pShell( rKey.m_pShell )
+    ,m_aLibName( rKey.m_aLibName )
+{
+}
+
+LibInfoKey& LibInfoKey::operator=( const LibInfoKey& rKey )
+{
+    m_pShell = rKey.m_pShell;
+    m_aLibName = rKey.m_aLibName;
+    return *this;
+}
+
+bool LibInfoKey::operator==( const LibInfoKey& rKey ) const
+{
+    bool bRet = false;
+    if ( m_pShell == rKey.m_pShell && m_aLibName == rKey.m_aLibName )
+        bRet = true;
+    return bRet;
+}
+
+LibInfoItem::LibInfoItem()
+    :m_pShell( 0 )
+    ,m_nCurrentType( 0 )
+{
+}
+
+LibInfoItem::LibInfoItem( SfxObjectShell* pShell, const String& rLibName, const String& rCurrentName, USHORT nCurrentType )
+    :m_pShell( pShell )
+    ,m_aLibName( rLibName )
+    ,m_aCurrentName( rCurrentName )
+    ,m_nCurrentType( nCurrentType )
+{
+}
+
+LibInfoItem::~LibInfoItem()
+{
+}
+
+LibInfoItem::LibInfoItem( const LibInfoItem& rItem )
+    :m_pShell( rItem.m_pShell )
+    ,m_aLibName( rItem.m_aLibName )
+    ,m_aCurrentName( rItem.m_aCurrentName )
+    ,m_nCurrentType( rItem.m_nCurrentType )
+{
+}
+
+LibInfoItem& LibInfoItem::operator=( const LibInfoItem& rItem )
+{
+    m_pShell = rItem.m_pShell;
+    m_aLibName = rItem.m_aLibName;
+    m_aCurrentName = rItem.m_aCurrentName;
+    m_nCurrentType = rItem.m_nCurrentType;
+
+    return *this;
+}
+
+LibInfos::LibInfos()
+{
+}
 
 LibInfos::~LibInfos()
 {
-    for ( ULONG n = Count(); n; )
-        delete (LibInfo*)GetObject( --n );
+    LibInfoMap::iterator end = m_aLibInfoMap.end();
+    for ( LibInfoMap::iterator it = m_aLibInfoMap.begin(); it != end; ++it )
+        delete it->second;
+    m_aLibInfoMap.clear();
 }
 
-void LibInfos::InsertInfo( const LibInfo& rInf )
+void LibInfos::InsertInfo( LibInfoItem* pItem )
 {
-    Insert( (ULONG)rInf.pLib, new LibInfo( rInf ) );
-}
-
-void LibInfos::DestroyInfo( LibInfo* pInfo )
-{
-    delete Remove( (ULONG)pInfo->pLib );
-}
-
-void LibInfos::DestroyInfo( StarBASIC* pLib )
-{
-    delete Remove( (ULONG)pLib );
-}
-
-LibInfo* LibInfos::GetInfo( StarBASIC* pLib, BOOL bCreateIfNotExist )
-{
-    LibInfo* pInf = (LibInfo*)Get( (ULONG)pLib );
-    if ( !pInf && bCreateIfNotExist )
+    LibInfoKey aKey( pItem->GetShell(), pItem->GetLibName() );
+    LibInfoMap::iterator it = m_aLibInfoMap.find( aKey );
+    if ( it != m_aLibInfoMap.end() )
     {
-        pInf = new LibInfo;
-        pInf->pLib = pLib;
-        Insert( (ULONG)pLib, pInf );
+        LibInfoItem* pI = it->second;
+        m_aLibInfoMap.erase( it );
+        delete pI;
     }
-    return pInf;
+    m_aLibInfoMap.insert( LibInfoMap::value_type( aKey, pItem ) );
+}
+
+void LibInfos::RemoveInfo( const LibInfoKey& rKey )
+{
+    LibInfoMap::iterator it = m_aLibInfoMap.find( rKey );
+    if ( it != m_aLibInfoMap.end() )
+    {
+        LibInfoItem* pItem = it->second;
+        m_aLibInfoMap.erase( it );
+        delete pItem;
+    }
+}
+
+LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
+{
+    LibInfoItem* pItem = 0;
+    LibInfoMap::iterator it = m_aLibInfoMap.find( rKey );
+    if ( it != m_aLibInfoMap.end() )
+        pItem = it->second;
+    return pItem;
 }
 
 SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, const String& aName, USHORT nType )
@@ -1068,42 +994,6 @@ int SbxItem::operator==( const SfxPoolItem& rCmp) const
 SfxPoolItem *SbxItem::Clone( SfxItemPool* ) const
 {
     return new SbxItem(*this);
-}
-
-String CreateEntryDescription( const SvTreeListBox& rBox, SvLBoxEntry* pEntry )
-{
-    String aDescription;
-    while ( pEntry )
-    {
-        aDescription.Insert( rBox.GetEntryText( pEntry ), 0 );
-        pEntry = rBox.GetParent( pEntry );
-        if ( pEntry )
-            aDescription.Insert( ';', 0 );
-    }
-    return aDescription;
-}
-
-SvLBoxEntry* FindMostMatchingEntry( const SvTreeListBox& rBox, const String& rDesrc )
-{
-    SvLBoxEntry* pEntry = 0;
-    USHORT nIndex = 0;
-    while ( nIndex != STRING_NOTFOUND )
-    {
-        String aTmp( rDesrc.GetToken( 0, ';', nIndex ) );
-        SvLBoxEntry* pTmpEntry = rBox.FirstChild( pEntry );
-        while ( pTmpEntry )
-        {
-            if ( rBox.GetEntryText( pTmpEntry ) == aTmp )
-            {
-                pEntry = pTmpEntry;
-                break;
-            }
-            pTmpEntry = rBox.NextSibling( pTmpEntry );
-        }
-        if ( !pTmpEntry )
-            return pEntry;
-    }
-    return pEntry;
 }
 
 BOOL QueryDel( const String& rName, const ResId& rId, Window* pParent )
