@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 10:09:33 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,22 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
     catch ( Exception& e )
     {
         DBG_ERRORFILE( "getAllFormatCode: Exception caught!" );
+    }
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
+}
+
+
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >
+NumberFormatCodeWrapper::getAllFormatCodes() const
+{
+    try
+    {
+        if ( xNFC.is() )
+            return xNFC->getAllFormatCodes( aLocale );
+    }
+    catch ( Exception& e )
+    {
+        DBG_ERRORFILE( "getAllFormatCodes: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
 }
