@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:57:10 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,12 +522,14 @@ public:
 /** superclass for database fields: handle database and table names */
 class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyDatabaseName;
+    const ::rtl::OUString sPropertyDataBaseName;
+    const ::rtl::OUString sPropertyDataBaseURL;
     const ::rtl::OUString sPropertyTableName;
     const ::rtl::OUString sPropertyDataCommandType;
     const ::rtl::OUString sPropertyIsVisible;
 
     ::rtl::OUString sDatabaseName;
+    ::rtl::OUString sDatabaseURL;
     ::rtl::OUString sTableName;
 
     sal_Int32 nCommandType;
@@ -539,6 +541,8 @@ class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 
 protected:
     sal_Bool bDatabaseOK;
+    sal_Bool bDatabaseNameOK;
+    sal_Bool bDatabaseURLOK;
     sal_Bool bTableOK;
 
     /// protected constructor: only for subclasses
@@ -561,6 +565,13 @@ TYPEINFO();
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
+
+    /// handle database-location children
+    virtual SvXMLImportContext *CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 
 /** import database name fields (<text:database-name>) */
