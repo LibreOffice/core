@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:00:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class SdUnoOutlineView
 public:
     enum properties
     {
-        PROPERTY__BEGIN = DrawController::PROPERTY__BEGIN,
+        PROPERTY__BEGIN = DrawController::PROPERTY__END,
         PROPERTY_CURRENTPAGE = PROPERTY__BEGIN,
         PROPERTY__END
     };
@@ -94,22 +94,8 @@ public:
     virtual ~SdUnoOutlineView() throw();
 
     virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
-    /*
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-
-    // XComponent
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<
-    ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-    throw(::com::sun::star::uno::RuntimeException);
-    */
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
