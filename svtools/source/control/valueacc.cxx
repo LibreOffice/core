@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:47:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,11 +313,15 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
     String              aRet;
 
-    if( mpParent )
-        aRet = mpParent->GetText();
+    if ( mpParent )
+        aRet = mpParent->GetAccessibleName();
 
-    if( !aRet.Len() )
-        aRet = getAccessibleDescription();
+    if ( !aRet.Len() )
+    {
+        Window* pLabel = mpParent->GetLabeledBy();
+        if ( pLabel && pLabel != mpParent )
+            aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
+    }
 
     return aRet;
 }
