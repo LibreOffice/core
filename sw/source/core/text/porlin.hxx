@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class SwTxtFormatInfo;
 #define POR_BRK         0x0082
 #define POR_KERN        0x0083
 #define POR_ARROW       0x0084
+#define POR_MULTI       0x0085
 
 #define POR_TXT         0x8000
 #define POR_LAY         0x8001
@@ -246,6 +247,7 @@ public:
     inline const sal_Bool IsURLPortion( ) const{ return nWhichPor == POR_URL; }
     inline const sal_Bool IsKernPortion( ) const{ return nWhichPor == POR_KERN; }
     inline const sal_Bool IsArrowPortion( ) const{ return nWhichPor == POR_ARROW; }
+    inline const sal_Bool IsMultiPortion( ) const{ return nWhichPor == POR_MULTI; }
 
     // Positionierung
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
