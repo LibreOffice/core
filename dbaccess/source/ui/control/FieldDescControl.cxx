@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:56:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ DBG_NAME(OFieldDescControl);
 //==================================================================
 OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar)
     :TabPage( pParent, rResId )
-    ,m_pPreviousType(static_cast<dbaui::OTypeInfo*>(0))
+    ,m_pPreviousType()
     ,pHelp( pHelpBar )
     ,nCurChildId(1)
     ,pDefault(NULL)
@@ -288,7 +288,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
 //------------------------------------------------------------------------------
 OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar )
     :TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
-    ,m_pPreviousType(static_cast<dbaui::OTypeInfo*>(0))
+    ,m_pPreviousType()
     ,pHelp( pHelpBar )
     ,nCurChildId(1)
     ,pDefault(NULL)
