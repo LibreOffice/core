@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:42:49 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #  endif
 #endif
 #include <assert.h>
-
 #include <bridges/remote/remote.hxx>
 #include <bridges/remote/counter.hxx>
 
@@ -78,10 +77,10 @@ Remote2RemoteStub::Remote2RemoteStub( rtl_uString *pOid,
                                       typelib_InterfaceTypeDescription *pType,
                                       uno_Environment *pEnvRemote,
                                       requestClientSideDispatcher dispatch ) :
-    m_pType( (typelib_InterfaceTypeDescription * ) pType ),
-    m_pEnvRemote( pEnvRemote ),
     m_sOid( pOid ),
+    m_pType( (typelib_InterfaceTypeDescription * ) pType ),
     m_nRef( 1 ),
+    m_pEnvRemote( pEnvRemote ),
     m_dispatch( dispatch ),
     m_nReleaseRemote( 1 )
 {
