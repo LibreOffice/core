@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:57:28 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,15 @@
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
 #endif
+
+// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
+// <--
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>        // Fehlermeldungen
@@ -1138,6 +1147,33 @@ ULONG SwDocShell::GetMiscStatus() const
     return SfxInPlaceObject::GetMiscStatus() |
            SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
 }
+
+// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
+{
+    // get global state like HIDDENINFORMATION_DOCUMENTVERSIONS
+    sal_uInt16 nState = SfxObjectShell::GetHiddenInformationState( nStates );
+
+    if ( nStates & HIDDENINFORMATION_RECORDEDCHANGES )
+    {
+        if ( GetDoc()->GetRedlineTbl().Count() )
+            nState |= HIDDENINFORMATION_RECORDEDCHANGES;
+    }
+    if ( nStates & HIDDENINFORMATION_NOTES )
+    {
+        ASSERT( GetWrtShell(), "No SwWrtShell, no information" )
+        if ( GetWrtShell() )
+        {
+            SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
+            SwClientIter aIter( *pType );
+            if ( aIter.GoStart() )
+                nState |= HIDDENINFORMATION_NOTES;
+        }
+    }
+
+    return nState;
+}
+// <--
 
 
 /*--------------------------------------------------------------------
