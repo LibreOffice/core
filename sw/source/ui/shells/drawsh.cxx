@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:49:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
     BOOL        bChanged = pDrView->GetModel()->IsChanged();
     pDrView->GetModel()->SetChanged(FALSE);
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
@@ -440,7 +440,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
