@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-26 10:05:43 $
+ *  last change: $Author: sj $ $Date: 2002-02-08 09:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,12 +549,12 @@ sal_uInt32 CGM::ImplGetBitmapColor( sal_Bool bDirect )
         if ( !nDiff )
             nDiff++;
         nColor = ( ( nColor - pElement->nColorValueExtent[ 2 ] ) << 8 ) / nDiff;
-        nTmp |= (sal_Int8)nColor;
+        nTmp |= (sal_uInt8)nColor;
     }
     else
     {
         sal_uInt32 nIndex = ImplGetUI( pElement->nColorIndexPrecision );
-        nTmp = pElement->aColorTable[ (sal_Int8)( nIndex ) ] ;
+        nTmp = pElement->aColorTable[ (sal_uInt8)( nIndex ) ] ;
     }
     return nTmp;
 }
