@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:55:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include "postit.hxx"
 #endif
 
-class EditEngine;
+class ScEditEngineDefaulter;
 class SfxUndoAction;
 class ScAddress;
 class ScDocShell;
@@ -123,7 +123,7 @@ public:
 
     BOOL            SetNormalString( const ScAddress& rPos, const String& rText, BOOL bApi );
     BOOL            PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi );
-    BOOL            PutData( const ScAddress& rPos, EditEngine& rEngine,
+    BOOL            PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 BOOL bInterpret, BOOL bApi );
     BOOL            SetCellText( const ScAddress& rPos, const String& rText,
                                     BOOL bInterpret, BOOL bEnglish, BOOL bApi );
