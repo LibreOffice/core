@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:16:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,13 @@ SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObj
                                          ERRCODE_AREA_SD_END,
                                          GetResMgr() );
 
-    mpVirtualRefDevice = new VirtualDevice;
-    mpVirtualRefDevice->SetMapMode( MAP_100TH_MM );
+    // Create a new ref device and (by calling SetReferenceDevice())
+    // set its resolution to 600 DPI.  This leads to a visually better
+    // formatting of text in small sizes (6 point and below.)
+    VirtualDevice* pDevice = new VirtualDevice;
+    mpVirtualRefDevice = pDevice;
+    pDevice->SetMapMode( MAP_100TH_MM );
+    pDevice->SetReferenceDevice ();
 }
 
 
