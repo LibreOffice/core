@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-16 11:12:20 $
+#   last change: $Author: hjs $ $Date: 2001-05-22 13:50:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,21 +65,12 @@ PRJ=..
 PRJNAME=toolkit
 TARGET=tk
 VERSION=$(UPD)
-USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
-
-LDUMP=ldump4.exe
 
 # --- Allgemein ----------------------------------------------------------
-
-.IF "$(depend)" == ""
-
-.IF "$(HEADER)" == ""
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/awt.lib \
@@ -101,104 +92,16 @@ SHL1STDLIBS=\
 
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1DEPN=$(LIB1TARGET)
+
+DEF1NAME	=$(SHL1TARGET)
+DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
+        $(LIB1TARGET)
+DEF1DEPN+=$(DEF1EXPORTFILE)
+DEF1DES		=TK
+DEFLIB1NAME	=tk
+
 DEF1EXPORTFILE=	tk.dxp 
-
-.IF "$(COM)"=="ICC"
-SHL1OBJS=	$(SLO)$/unowrap.obj
-.ENDIF
-
-.IF "$(COM)"=="WTC"
-ALL:		$(LIB1TARGET)						\
-            $(MISC)$/$(SHL1TARGET).flt			\
-            $(MISC)$/$(SHL1TARGET).def			\
-            $(BIN)$/$(SHL1TARGET).dll			\
-            ALLTAR
-.ELSE
-ALL: \
-    $(LIB1TARGET)	\
-    ALLTAR
-.ENDIF
-
-
-# --- W32 ----------------------------------------------------------------
-
-.IF "$(GUI)" == "WNT"
-
-# --- Def-File ---
-
-$(MISC)$/$(SHL1TARGET).def: $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @+-attrib -r defs
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY	  $(SHL1TARGET) 								 >$@
-    @echo DESCRIPTION 'TK'                                        >>$@
-.IF "$(COM)"!="ICC"
-    @echo DATA		  READWRITE NONSHARED							>>$@
-.ENDIF
-    @echo EXPORTS													>>$@
-.IF "$(COM)"!="BLC"
-.IF "$(COM)"!="ICC"
-    $(LIBMGR) -EXTRACT:/ /OUT:$(TARGET).exp $(LIB1TARGET)
-    @$(LDUMP) -E20 -F$(MISC)$/$(SHL1TARGET).flt $(TARGET).exp		>>$@
-    +-del $(TARGET).exp
-.ELSE
-    @$(LDUMP) -E3 -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET)		>>$@
-.ENDIF
-.ELSE
-    @$(LDUMP) -E3 -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET)		>>$@
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'StarView DLL'                          >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll							>>$@
-    @$(LDUMP) -A -E1 -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET) 	>>tmp.def
-    @gawk -f s:\util\exp.awk tmp.def								>>$@
-    @+-del tmp.def
-.ENDIF
-
-.ENDIF
-
-# --- OS2 ----------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-.IF "$(debug)" != ""
-.IF "$(COM)"=="BLC"
-LIBFLAGS=$(LIBFLAGS) /P512
-.ENDIF
-.ENDIF
-
-# --- Def-File ---
-
-$(MISC)$/$(SHL1TARGET).def: $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY	  $(SHL1TARGET) INITINSTANCE TERMINSTANCE		 >$@
-    @echo DESCRIPTION 'VCL'                                        >>$@
-    @echo PROTMODE													>>$@
-    @echo CODE		  LOADONCALL									>>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					>>$@
-    @echo EXPORTS													>>$@
-.IF "$(COM)"!="ICC"
-    @$(LDUMP) -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET) 	>>$@
-.ELSE
-    @cppfilt  /b /p /p /n /o $(LIB1TARGET)							>>tmp.cpf
-    @$(LDUMP) -A -E1 -F$(MISC)$/$(SHL1TARGET).flt tmp.cpf			>>$@
-    @+-del tmp.cpf
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'StarView DLL'                          >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll							>>$@
-.IF "$(E2P)" != ""
-    @echo export e2_dll_begin_tag_.1								>>$@
-.ENDIF
-    @$(LDUMP) -A -E1 -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET) 	>>tmp.def
-    @gawk -f s:\util\exp.awk tmp.def								>>$@
-    @+-del tmp.def
-.ENDIF
-
-.ENDIF
 
 .IF "$(OS)"=="MACOSX" 
 SHL1STDLIBS +=          
@@ -207,15 +110,14 @@ SHL1STDLIBS +=\
     -lX11 -lXt -lXmu
 .ENDIF
 
-# --- Allgemein ----------------------------------------------------------
+.INCLUDE :	target.mk
 
-# --- VCL-Filter-Datei ---
+# --- Targets ------------------------------------------------------------
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo > $@
-#	@echo Impl > $@
     @echo Provider>> $@
     @echo UnoEditControl>> $@
     @echo UnoControlEditModel>> $@
@@ -242,9 +144,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo __CT>> $@
 
 
-# --- Targets ------------------------------------------------------------
 
-.ENDIF
-
-.ENDIF
-.INCLUDE :	target.mk
