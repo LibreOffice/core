@@ -13,12 +13,12 @@
 </LC_INFO>
 <LC_CTYPE ref="no_NO"/>
 <LC_FORMAT ref="no_NO" replaceTo="[$kr-414]"/>
-<LC_COLLATION ref="en_US"/>
-<LC_SEARCH ref="en_US"/>
+<LC_COLLATION ref="no_NO"/>
+<LC_SEARCH ref="no_NO"/>
 <LC_CALENDAR ref="no_NO"/>
 <LC_CURRENCY ref="no_NO"/>
-<LC_TRANSLITERATION ref="en_US"/>
+<LC_TRANSLITERATION ref="no_NO"/>
 <LC_MISC ref="no_NO"/>
-<LC_NumberingLevel ref="en_US"/>
-<LC_OutLineNumberingLevel ref="en_US"/>
+<LC_NumberingLevel ref="no_NO"/>
+<LC_OutLineNumberingLevel ref="no_NO"/>
 </Locale>
