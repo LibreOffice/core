@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
+ *  last change: $Author: lla $ $Date: 2000-12-12 17:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,17 +317,19 @@ SubtreeChangeReferrer::~SubtreeChangeReferrer()
 {
     for (   Children::iterator aChildren = m_aChanges.begin();
             aChildren != m_aChanges.end();
-            ++aChildren
+
         )
     {
         const Change* pChange = aChildren->second;
+        Children::iterator aCurrent = aChildren++;
+
         if  (   pChange->isA(ValueChange::getStaticType())
             ||  pChange->isA(RemoveNode::getStaticType())
             ||  pChange->isA(AddNode::getStaticType())
             )
         {
             // we just hold references to the non-SubtreeChange-objects, so don't delete them
-            m_aChanges.erase(aChildren);
+            m_aChanges.erase(aCurrent);
         }
         else if (   pChange->isA(SubtreeChange::getStaticType())
                 ||  pChange->isA(SubtreeChangeReferrer::getStaticType())
