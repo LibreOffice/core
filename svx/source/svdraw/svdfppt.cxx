@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-13 16:38:26 $
+ *  last change: $Author: sj $ $Date: 2001-08-16 16:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5156,46 +5156,37 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     rIn >> nDummy16;
                 if ( nMask & 0x200000 )                     // #88602#
                     rIn >> nDummy16;
-                if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
-                {
-                    if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
-                    {
-                        UINT32 nOldPos = rIn.Tell();
-                        rIn.Seek( nExtParaPos );
-                        rIn >> aSet.nBuFlags;
-                        if ( aSet.nBuFlags & 0x800000 )
-                            rIn >> aSet.nBuInstance;
-                        if ( aSet.nBuFlags & 0x01000000 )
-                            rIn >> aSet.nNumberingType;
-                        if ( aSet.nBuFlags & 0x02000000 )
-                            rIn >> aSet.nBuStart;
-                        nExtParaPos = rIn.Tell() + 8;
-                        rIn.Seek( nOldPos );
-                    }
-                }
             }
             else
-            {
                 nCharCount = nStringLen;
-                if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
+
+            if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
+            {
+                if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
                 {
-                    if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
+                    sal_uInt32 nBuFlags, nOldPos = rIn.Tell();
+                    rIn.Seek( nExtParaPos );
+                    rIn >> nBuFlags;
+
+                    if ( nBuFlags & 0x800000 )
+                        rIn >> aSet.nBuInstance;
+                    if ( nBuFlags & 0x01000000 )
+                        rIn >> aSet.nNumberingType;
+                    if ( nBuFlags & 0x02000000 )
                     {
-                        UINT32 nOldPos = rIn.Tell();
-                        rIn.Seek( nExtParaPos );
-                        rIn >> aSet.nBuFlags;
-                        if ( aSet.nBuFlags & 0x800000 )
-                            rIn >> aSet.nBuInstance;
-                        if ( aSet.nBuFlags & 0x01000000 )
-                            rIn >> aSet.nNumberingType;
-                        if ( aSet.nBuFlags & 0x02000000 )
-                            rIn >> aSet.nBuStart;
-                        nExtParaPos = rIn.Tell() + 8;
-                        rIn.Seek( nOldPos );
+                        rIn >> aSet.nBuStart;
+                        aSet.bNumberingActive = sal_True;
                     }
+                    aSet.nBuFlags = nBuFlags;
+                    nExtParaPos = rIn.Tell() + 8;
+                    rIn.Seek( nOldPos );
+                }
+                if ( aParaPropList.Count() )            // has previous bullet settings
+                {
+                    PPTParaPropSet* pPrevious = (PPTParaPropSet*)aParaPropList.Last();
+                    aSet.bNumberingActive = pPrevious->pParaSet->bNumberingActive;
                 }
             }
-
             if ( rRuler.GetTextOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_TextOfs ] ) )
                 aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
             if ( rRuler.GetBulletOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
@@ -5798,7 +5789,24 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, const PPT
         {
             if ( pCharPropSet )
             {
-                mpPortionList[ i ] = new PPTPortionObj( *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth );
+                PPTPortionObj* pPPTPortion = new PPTPortionObj( *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth );
+                if ( ( pPPTPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_ResetNumbering ) )
+                        && ( pPPTPortion->pCharSet->mnFlags & ( 1 << PPT_CharAttr_ResetNumbering ) ) )
+                {
+                    if ( pParaSet->nBuFlags & 0x02000000 )
+                        pParaSet->nBuStart = 1;
+                }
+                else if ( pParaSet->bNumberingActive )
+                {
+                    pParaSet->nBuFlags |= 0x02000000;
+                }
+                if ( ( pPPTPortion->pCharSet->mnAttrSet & ( 3 << PPT_CharAttr_EnableNumbering1 ) )
+                        && ( pPPTPortion->pCharSet->mnFlags & ( 3 << PPT_CharAttr_EnableNumbering1 ) ) )
+                {
+                    if ( pParaSet->bNumberingActive )
+                        pParaSet->nBuFlags |= 0x02000000;
+                }
+                mpPortionList[ i ] = pPPTPortion;
                 if ( !mbTab )
                     mbTab = mpPortionList[ i ]->HasTabulator();
             }
