@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-09-04 17:02:15 $
+#   last change: $Author: toconnor $ $Date: 2003-09-10 10:49:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,8 +69,7 @@
   <property name="prj" value=".."/>
   <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="on"/>
-  <property name="debug"   value="on"/>
-  <property name="scriptingclasses" value="${out}/class/scriptingtemp"/>
+  <property name="debug"   value="off"/>
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
   <property name="idesupport.dir" value="org/openoffice/idesupport"/>
@@ -92,39 +91,41 @@
   </path>
 
   <path id="idesupport.class.path">
+    <pathelement path="${jardir}"/>
     <!-- <pathelement path="${solar.jar}/jaxp.jar"/>
-    <pathelement path="${solar.jar}/parser.jar"/> -->
-    <!-- <pathelement path="${install.dir}/xerces.jar"/> -->
+    <pathelement path="${solar.jar}/parser.jar"/>
+    <pathelement path="${install.dir}/xerces.jar"/> -->
   </path>
 
   <path id="openide.class.path">
+    <pathelement path="${jardir}"/>
     <pathelement path="${netbeans.home}/lib/openide.jar"/>
     <!-- <pathelement path="${install.dir}/xerces.jar"/> -->
   </path>
 
   <!-- ===================== Prepare Directories ========================= -->
   <target name="prepare">
-    <mkdir dir="${scriptingclasses}"/>
     <mkdir dir="${jardir}"/>
   </target>
 
   <!-- ======================== Compile Classes ========================== -->
-  <target name="compile" depends="idesupport.compile, prepare">
-    <javac srcdir="JRuntime/" destdir="${scriptingclasses}"
+  <target name="compile" depends="prepare">
+    <javac srcdir="com" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath"
          debug="${debug}" optimize="${optimize}" deprecation="off"/>
-    <javac srcdir="Framework/" destdir="${scriptingclasses}"
+    <javac srcdir="Framework/" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath" debug="${debug}"
          optimize="${optimize}" deprecation="off">
     </javac>
   </target>
 
-  <target name="idesupport.compile" depends="prepare">
+  <target name="idesupport.compile" depends="compile, prepare">
     <javac srcdir="." destdir="${jardir}"
            debug="${debug}" deprecation="on">
       <classpath refid="idesupport.class.path"/>
       <exclude name="${idesupport.dir}/**/.*/*"/>
       <exclude name="${idesupport.dir}/localoffice/**/*"/>
+      <exclude name="${idesupport.dir}/LocalOffice.java"/>
       <include name="${idesupport.dir}/*.java"/>
       <include name="${idesupport.dir}/*/*.java"/>
     </javac>
@@ -151,54 +152,46 @@
   <!-- ===================== jar ========================= -->
   <target name="jar" depends="compile">
     <jar jarfile="${jardir}/ScriptProviderForJava.jar"
-         basedir="${scriptingclasses}">
-        <exclude name="${netbeans.dir}/**/.*/*"/>
-        <exclude name="**/beanshell/*"/>
-        <exclude name="**/javascript/*"/>
-        <exclude name="**/security/*"/>
-        <exclude name="BeanShellRuntimeComponentRegistration.class"/>
-        <exclude name="JavaScriptRuntimeComponentRegistration.class"/>
-        <fileset dir="${jardir}">
-          <include name="${idesupport.dir}/**/*.class"/>
-        </fileset>
+         basedir="${jardir}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
-            <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
+            <attribute name="RegistrationClassName"
+                       value="com.sun.star.script.framework.provider.java.ScriptProviderForJava"/>
         </manifest>
+        <include name="**/provider/java/*.class"/>
     </jar>
 
     <jar jarfile="${jardir}/ScriptProviderForBeanShell.jar"
-         basedir="${scriptingclasses}">
+         basedir="${jardir}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
-                       value="BeanShellRuntimeComponentRegistration"/>
+                       value="com.sun.star.script.framework.provider.beanshell.ScriptProviderForBeanShell"/>
         </manifest>
-        <include name="BeanShellRuntimeComponentRegistration.class"/>
-        <include name="**/ScriptProviderForBeanShell**.class"/>
-        <include name="**/ScriptContext.class"/>
+        <include name="**/provider/beanshell/*.class"/>
     </jar>
 
     <jar jarfile="${jardir}/ScriptProviderForJavaScript.jar"
-         basedir="${scriptingclasses}">
+         basedir="${jardir}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
-                       value="JavaScriptRuntimeComponentRegistration"/>
+                       value="com.sun.star.script.framework.provider.javascript.ScriptProviderForJavaScript"/>
         </manifest>
-        <include name="JavaScriptRuntimeComponentRegistration.class"/>
-        <include name="**/ScriptProviderForJavaScript**.class"/>
-        <include name="**/ScriptContext.class"/>
+        <include name="**/provider/javascript/*.class"/>
     </jar>
 
     <jar jarfile="${jardir}/ScriptFramework.jar"
-         basedir="${scriptingclasses}">
+         basedir="${jardir}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
                        value="com.sun.star.script.framework.security.SecurityDialog"/>
         </manifest>
         <include name="**/security/*"/>
+        <include name="**/log/*.class"/>
+        <include name="**/provider/*.class"/>
+        <include name="**/browse/*.class"/>
     </jar>
 
   </target>
@@ -236,7 +229,6 @@
         <exclude name="${netbeans.dir}/**/ScriptNode.class"/>
         <include name="${idesupport.dir}/**/*.class"/>
         <include name="CommandLineTools*"/>
-        <exclude name="${idesupport.dir}/localoffice/*.class"/>
       </fileset>
       <fileset dir=".">
         <include name="${idesupport.dir}/ui/add.gif"/>
@@ -258,14 +250,12 @@
 
   <!-- ====================== Clean Generated Files ===================== -->
   <target name="clean">
-    <delete dir="${scriptingclasses}"/>
     <delete file="${jardir}/ScriptProviderForJava.jar"/>
     <delete file="${jardir}/ScriptProviderForJavaScript.jar"/>
     <delete file="${jardir}/ScriptProviderForBeanShell.jar"/>
     <delete file="${jardir}/ScriptFramework.jar"/>
     <delete file="${jardir}/office.jar"/>
     <delete file="${jardir}/localoffice.jar"/>
-    <delete file="${jardir}/OfficeScripting.jar"/>
     <delete file="${jardir}/idesupport.jar"/>
   </target>
 
