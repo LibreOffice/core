@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,12 +247,12 @@ FltError ImportLotus::Read()
     }
 
     // duemmliche Namen eliminieren
-    UINT16      nTabs = pD->GetTableCount();
-    UINT16      nCnt;
+    SCTAB       nTabs = pD->GetTableCount();
+    SCTAB       nCnt;
     String      aTabName;
     String      aBaseName;
     String      aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
-    if( nTabs )
+    if( nTabs != 0 )
     {
         if( nTabs > 1 )
         {
@@ -338,7 +338,7 @@ FltError ImportLotus::Read( SvStream& rIn )
 
                 case 195:
                     if( nExtTab >= 0 )
-                        pLotusRoot->pAttrTable->Apply( ( UINT16 ) nExtTab );
+                        pLotusRoot->pAttrTable->Apply( ( SCTAB ) nExtTab );
                     nExtTab++;
                     break;
                 case 197:
@@ -353,7 +353,7 @@ FltError ImportLotus::Read( SvStream& rIn )
         }
     }
 
-    pLotusRoot->pAttrTable->Apply( ( UINT16 ) nExtTab );
+    pLotusRoot->pAttrTable->Apply( ( SCTAB ) nExtTab );
 
     return eRet;
 }
