@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:17:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,10 @@
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #endif
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include "xmlprcon.hxx"
@@ -996,9 +997,15 @@ SdXMLStylesContext::SdXMLStylesContext(
 :   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
-    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    // #110680#
+    // Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    Reference< lang::XMultiServiceFactory > xMSF = rImport.getServiceFactory();
+
     mpNumFormatter = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
-    mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter );
+
+    // #110680#
+    // mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter );
+    mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, xMSF );
 }
 
 //////////////////////////////////////////////////////////////////////////////
