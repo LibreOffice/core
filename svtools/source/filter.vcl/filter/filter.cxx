@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-25 15:42:39 $
+ *  last change: $Author: hr $ $Date: 2001-01-26 13:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,9 +249,9 @@ BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::ucb::CommandCreationException& )
+    catch( ::com::sun::star::ucb::ContentCreationException& )
     {
-        DBG_ERRORFILE( "CommandCreationException" );
+        DBG_ERRORFILE( "ContentCreationException" );
     }
     catch( ... )
     {
