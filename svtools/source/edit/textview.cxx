@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-25 12:37:54 $
+ *  last change: $Author: mt $ $Date: 2001-07-31 13:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1972,7 +1972,7 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
             ImpHideDDCursor();
             ImpShowDDCursor();
         }
-        rDTDE.Context->acceptDrag(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
+        rDTDE.Context->acceptDrag( rDTDE.DropAction );
     }
 }
 
