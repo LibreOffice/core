@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:59:18 $
+ *  last change: $Author: fs $ $Date: 2001-03-22 10:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,9 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
+#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
+#endif
 
 
 using namespace ::com::sun::star::uno;
@@ -302,6 +304,18 @@ using namespace ::dbtools;
 namespace dbaui
 {
 // .........................................................................
+
+//==================================================================
+//= SbaTableQueryBrowser
+//==================================================================
+String implGetItemText( SvLBoxEntry* _pEntry )
+{
+    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
+    if (pTextItem)
+        return static_cast<SvLBoxString*>(pTextItem)->GetText();
+    return String();
+}
+
 //==================================================================
 //= SbaTableQueryBrowser
 //==================================================================
@@ -469,9 +483,9 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView = new DBTreeView(getBrowserView(),m_xMultiServiceFacatory, WB_TABSTOP);
         m_pTreeView->Show();
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
+        m_pTreeView->getListBox()->setControlActionListener(this);
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
 
-        m_pTreeView->SetContextMenuHandler(LINK(this, SbaTableQueryBrowser, OnListContextMenu));
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
         m_pSplitter->SetSplitPosPixel( getBrowserView()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
 
@@ -1438,668 +1452,6 @@ sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xName
     return sal_True;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
-{
-    PopupMenu aContextMenu(ModuleRes(MENU_BROWSERTREE_CONTEXT));
-    Point aPosition;
-    SvLBoxEntry* pEntry = NULL;
-    SvLBoxEntry* pOldSelection = NULL;
-    if (_pEvent->IsMouseEvent())
-    {
-        aPosition = _pEvent->GetMousePosPixel();
-        // ensure that the entry which the user clicked at is selected
-        pEntry = m_pTreeView->getListBox()->GetEntry(aPosition);
-        if (!pEntry)
-            // no context menu of no entry was hit ....
-            return 0L;
-
-        OSL_ENSURE(pEntry,"No current entry!");
-        if (pEntry && !m_pTreeView->getListBox()->IsSelected(pEntry))
-        {
-            pOldSelection = m_pTreeView->getListBox()->FirstSelected();
-            m_pTreeView->getListBox()->lockAutoSelect();
-            m_pTreeView->getListBox()->Select(pEntry);
-            m_pTreeView->getListBox()->unlockAutoSelect();
-        }
-    }
-    else
-    {
-        // use the center of the current entry
-        pEntry = m_pTreeView->getListBox()->GetCurEntry();
-        OSL_ENSURE(pEntry,"No current entry!");
-        aPosition = m_pTreeView->getListBox()->GetEntryPos(pEntry);
-        aPosition.X() += m_pTreeView->getListBox()->GetOutputSizePixel().Width() / 2;
-        aPosition.Y() += m_pTreeView->getListBox()->GetEntryHeight() / 2;
-    }
-
-    // disable entries according to the currently selected entry
-
-    // does the datasource which the selected entry belongs to has an open connection ?
-    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
-    DBTreeListModel::DBTreeListUserData* pDSData =
-                pDSEntry
-            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
-            :   NULL;
-    if (!pDSData || !pDSData->xObject.is())
-    {   // no -> disable the connection-related menu entries
-        aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
-        aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
-    }
-    // enable menu entries
-    if(pEntry)
-    {
-        SvLBoxEntry* pTemp      = m_pTreeView->getListBox()->GetParent(pEntry);
-
-        // 1. for tables
-        SvLBoxEntry* pTables    = m_pTreeView->getListBox()->GetEntry(pDSEntry,1);
-
-        aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, (pTables == pEntry || pTables == pTemp));
-        aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     (pTables == pEntry || pTables == pTemp));
-
-        sal_Bool bPasteAble = (pTables == pEntry || pTables == pTemp);
-        if(bPasteAble)
-        {
-            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-            bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE) ||
-                         aTransferData.HasFormat(SOT_FORMAT_RTF) ||
-                         aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML);
-        }
-        aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bPasteAble);
-
-        aContextMenu.EnableItem(ID_TREE_TABLE_EDIT,     (pTables != pEntry && pTables == pTemp));
-        aContextMenu.EnableItem(ID_TREE_TABLE_DELETE,   (pTables != pEntry && pTables == pTemp));
-        aContextMenu.EnableItem(ID_TREE_TABLE_COPY,     (pTables != pEntry && pTables == pTemp));
-
-        // 2. for queries
-        SvLBoxEntry* pQueries   = m_pTreeView->getListBox()->GetEntry(pDSEntry,0);
-        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_DESIGN, (pQueries == pEntry || pQueries == pTemp));
-        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_TEXT, (pQueries == pEntry || pQueries == pTemp));
-        aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,     (pQueries != pEntry && pQueries == pTemp));
-        aContextMenu.EnableItem(ID_TREE_QUERY_DELETE,   (pQueries != pEntry && pQueries == pTemp));
-        aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     (pQueries != pEntry && pQueries == pTemp));
-    }
-
-    // rebuild conn not implemented yet
-    aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
-
-    if (!m_xMultiServiceFacatory.is())
-        // no ORB -> no administration dialog
-        aContextMenu.EnableItem(ID_TREE_ADMINISTRATE, sal_False);
-
-    // no disabled entries
-    aContextMenu.RemoveDisabledEntries();
-
-    sal_Bool bReopenConn = sal_False;
-    USHORT nPos = aContextMenu.Execute(m_pTreeView->getListBox(), aPosition);
-
-    // restore the old selection
-    if (pOldSelection)
-    {
-        m_pTreeView->getListBox()->lockAutoSelect();
-        m_pTreeView->getListBox()->Select(pOldSelection);
-        m_pTreeView->getListBox()->unlockAutoSelect();
-    }
-
-    switch (nPos)
-    {
-        case ID_TREE_ADMINISTRATE:
-            try
-            {
-                // the parameters:
-                Sequence< Any > aArgs(2);
-                // the parent window
-                aArgs[0] <<= PropertyValue(
-                    ::rtl::OUString::createFromAscii("ParentWindow"), 0,
-                    makeAny(VCLUnoHelper::GetInterface(m_pTreeView->getListBox()->Window::GetParent())), PropertyState_DIRECT_VALUE);
-                // the initial selection
-                SvLBoxEntry* pTopLevelSelected = pEntry;
-                while (pTopLevelSelected && m_pTreeView->getListBox()->GetParent(pTopLevelSelected))
-                    pTopLevelSelected = m_pTreeView->getListBox()->GetParent(pTopLevelSelected);
-                ::rtl::OUString sInitialSelection;
-                if (pTopLevelSelected)
-                    sInitialSelection = m_pTreeView->getListBox()->GetEntryText(pTopLevelSelected);
-                aArgs[1] <<= PropertyValue(
-                    ::rtl::OUString::createFromAscii("InitialSelection"), 0,
-                    makeAny(sInitialSelection), PropertyState_DIRECT_VALUE);
-
-                // create the dialog
-                Reference< XExecutableDialog > xAdminDialog;
-                xAdminDialog = Reference< XExecutableDialog >(
-                    m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog"),
-                        aArgs), UNO_QUERY);
-
-                // execute it
-                if (xAdminDialog.is())
-                    xAdminDialog->execute();
-            }
-            catch(::com::sun::star::uno::Exception&)
-            {
-            }
-            break;
-        case ID_TREE_REBUILD_CONN:
-            bReopenConn = sal_True;
-        case ID_TREE_CLOSE_CONN:
-        {
-            closeConnection(pDSEntry);
-        }
-            break;
-        case ID_TREE_RELATION_DESIGN:
-        case ID_TREE_TABLE_CREATE_DESIGN:
-        case ID_TREE_QUERY_CREATE_DESIGN:
-        case ID_TREE_QUERY_CREATE_TEXT:
-        case ID_TREE_QUERY_EDIT:
-        case ID_TREE_TABLE_EDIT:
-            try
-            {
-                ::osl::MutexGuard aGuard(m_aEntryMutex);
-
-                // get all needed properties for design
-                Reference<XConnection> xConnection;  // supports the service sdb::connection
-                if(!secureConnection(pDSEntry,pDSData,xConnection))
-                    break;
-
-                ::rtl::OUString sCurrentObject;
-                if ((ID_TREE_QUERY_EDIT == nPos || ID_TREE_TABLE_EDIT == nPos) && pEntry)
-                {
-                    // get the name of the query
-                    SvLBoxItem* pQueryTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                    if (pQueryTextItem)
-                        sCurrentObject = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
-
-                    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
-                    if(!pData)
-                    {
-                        // the query has not been accessed before -> create it's user data
-                        pData = new DBTreeListModel::DBTreeListUserData;
-                        pData->bTable = sal_False;
-
-                        Reference<XNameAccess> xNameAccess;
-                        if(ID_TREE_TABLE_EDIT == nPos)
-                        {
-                            Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
-                            if(xSup.is())
-                                xNameAccess = xSup->getTables();
-                        }
-                        else
-                        {
-                            Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
-                            if(xSup.is())
-                                xNameAccess = xSup->getQueries();
-                        }
-
-                        SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                        if (pTextItem)
-                            sCurrentObject = static_cast<SvLBoxString*>(pTextItem)->GetText();
-
-                        if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject) &&
-                            ::cppu::extractInterface(pData->xObject,xNameAccess->getByName(sCurrentObject))) // remember the table or query object
-                            pEntry->SetUserData(pData);
-                        else
-                        {
-                            delete pData;
-                            pData = NULL;
-                        }
-                    }
-                }
-
-                ODesignAccess* pDispatcher = NULL;
-                sal_Bool bEdit = sal_False;
-                switch(nPos)
-                {
-                    case ID_TREE_RELATION_DESIGN:
-                        pDispatcher = new ORelationDesignAccess(m_xMultiServiceFacatory) ;
-                        break;
-                    case ID_TREE_TABLE_EDIT:
-                        bEdit = sal_True; // run through
-                    case ID_TREE_TABLE_CREATE_DESIGN:
-                        pDispatcher = new OTableDesignAccess(m_xMultiServiceFacatory) ;
-                        break;
-                    case ID_TREE_QUERY_EDIT:
-                        bEdit = sal_True; // run through
-                    case ID_TREE_QUERY_CREATE_DESIGN:
-                    case ID_TREE_QUERY_CREATE_TEXT:
-                        pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory) ;
-                        break;
-                }
-                ::rtl::OUString aDSName;
-                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-
-                if (bEdit)
-                    pDispatcher->edit(aDSName, sCurrentObject, xConnection);
-                else
-                    pDispatcher->create(aDSName, xConnection,nPos == ID_TREE_QUERY_CREATE_DESIGN);
-            }
-            catch(SQLException& e)
-            {
-                showError(SQLExceptionInfo(e));
-            }
-            catch(Exception&)
-            {
-                OSL_ASSERT(0);
-            }
-            break;
-        case ID_TREE_QUERY_DELETE:
-            if(pDSEntry)
-            {
-                String sDsName;
-                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    sDsName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-                if(!sDsName.Len()) // we have no name
-                    break;
-
-                String sName;
-                pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    sName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-                if(!sName.Len())
-                    break;
-
-                String aMsg(ModuleRes(STR_QUERY_DELETE_QUERY));
-                aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(sName));
-                OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
-                if(aDlg.Execute() == RET_YES)
-                {
-                    Reference<XQueryDefinitionsSupplier> xSet;
-                    try
-                    {
-                        if(m_xDatabaseContext->hasByName(sDsName))
-                            m_xDatabaseContext->getByName(sDsName) >>= xSet;
-                    }
-                    catch(Exception&)
-                    { }
-                    if(xSet.is())
-                    {
-                        Reference<XNameContainer> xNames(xSet->getQueryDefinitions(),UNO_QUERY);
-                        if(xNames.is())
-                        {
-                            try
-                            {
-                                xNames->removeByName(sName);
-                            }
-                            catch(SQLException& e)
-                            {
-                                showError(SQLExceptionInfo(e));
-                            }
-                            catch(Exception&)
-                            {
-                            }
-                        }
-                    }
-                }
-            }
-            break;
-        case ID_TREE_TABLE_DELETE:
-            {
-                ::osl::MutexGuard aGuard(m_aEntryMutex);
-                Reference<XConnection> xConnection;  // supports the service sdb::connection
-                if(!secureConnection(pDSEntry,pDSData,xConnection))
-                    break;
-                // get all needed properties for design
-
-                Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
-                OSL_ENSURE(xSup.is(),"NO XTablesSuppier!");
-                if(!xSup.is())
-                    break;
-                ::rtl::OUString aName;
-                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-                Reference<XNameAccess> xTables = xSup->getTables();
-
-                Reference<XDrop> xDrop(xTables,UNO_QUERY);
-                if(xDrop.is())
-                {
-                    String aMsg(ModuleRes(STR_QUERY_DELETE_TABLE));
-                    aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(aName));
-                    OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
-                    if(aDlg.Execute() == RET_YES)
-                    {
-                        try
-                        {
-                            if(aName.getLength())
-                                xDrop->dropByName(aName);
-                        }
-                        catch(SQLException& e)
-                        {
-                            showError(SQLExceptionInfo(e));
-                        }
-                        catch(Exception&)
-                        {
-                        }
-                    }
-                }
-            }
-            break;
-        case ID_TREE_QUERY_COPY:
-        case ID_TREE_TABLE_COPY:
-            try
-            {
-                ::osl::MutexGuard aGuard(m_aEntryMutex);
-                Reference<XConnection> xConnection;  // supports the service sdb::connection
-                if(!secureConnection(pDSEntry,pDSData,xConnection))
-                    break;
-                Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
-                OSL_ENSURE(xSup.is(),"NO XQueriesSupplier!");
-                ::rtl::OUString aName;
-                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-
-                ::rtl::OUString sDs;
-                pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    sDs = static_cast<SvLBoxString*>(pTextItem)->GetText();
-
-                Sequence<PropertyValue> aSeq(4);
-                aSeq[0].Name    = PROPERTY_DATASOURCENAME;
-                aSeq[0].Value <<= sDs;
-                aSeq[1].Name    = PROPERTY_ACTIVECONNECTION;;
-                aSeq[1].Value <<= xConnection;
-                aSeq[2].Name    = PROPERTY_COMMANDTYPE;
-                aSeq[2].Value <<= (ID_TREE_QUERY_COPY == nPos ) ? CommandType::QUERY : CommandType::TABLE;
-                aSeq[3].Name    = PROPERTY_NAME;
-                aSeq[3].Value <<= aName;
-
-                // the rtf format
-                ORTFImportExport* pRtf = new ORTFImportExport(aSeq,getORB(),getNumberFormatter());
-                // the html format
-                OHTMLImportExport* pHtml = new OHTMLImportExport(aSeq,getORB(),getNumberFormatter());
-                // the sdbc format
-                // the owner ship goes to ODataClipboard
-                ODataClipboard* pData = new ODataClipboard(aSeq,pHtml,pRtf);
-                Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
-                pData->CopyToClipboard();
-            }
-            catch(SQLException& e)
-            {
-                showError(SQLExceptionInfo(e));
-            }
-            catch(Exception&)
-            {
-            }
-            break;
-        case ID_TREE_TABLE_PASTE:
-            try
-            {
-                // paste into the tables
-                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-                if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE))
-                {
-                    ::com::sun::star::datatransfer::DataFlavor aFlavor;
-                    SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE,aFlavor);
-                    Sequence<PropertyValue> aSeq;
-                    aTransferData.GetAny(aFlavor) >>= aSeq;
-                    if(aSeq.getLength())
-                    {
-                        ::rtl::OUString sDs;
-                        SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                        if (pTextItem)
-                            sDs = static_cast<SvLBoxString*>(pTextItem)->GetText();
-                        const PropertyValue* pBegin = aSeq.getConstArray();
-                        const PropertyValue* pEnd   = pBegin + aSeq.getLength();
-
-                        // first get the dest connection
-                        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-                        if(!secureConnection(pDSEntry,pDSData,xDestConnection))
-                            break;
-
-                        Reference<XConnection> xSrcConnection;
-                        ::rtl::OUString sName,sSrcDataSourceName;
-                        sal_Int32 nCommandType = CommandType::TABLE;
-                        for(;pBegin != pEnd;++pBegin)
-                        {
-                            if(pBegin->Name == PROPERTY_DATASOURCENAME)
-                                pBegin->Value >>= sSrcDataSourceName;
-                            else if(pBegin->Name == PROPERTY_COMMANDTYPE)
-                                pBegin->Value >>= nCommandType;
-                            else if(pBegin->Name == PROPERTY_NAME)
-                                pBegin->Value >>= sName;
-                            else if(pBegin->Name == PROPERTY_ACTIVECONNECTION)
-                                pBegin->Value >>= xSrcConnection;
-                        }
-
-                        // get the source connection
-
-                        sal_Bool bDispose = sal_False;
-                        if(sSrcDataSourceName == sDs)
-                            xSrcConnection = xDestConnection;
-                        else if(!xSrcConnection.is())
-                        {
-                            Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
-                            showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
-                            bDispose = sal_True;
-                        }
-                        Reference<XNameAccess> xNameAccess;
-                        switch(nCommandType)
-                        {
-                            case CommandType::TABLE:
-                                {
-                                    // only for tables
-                                    Reference<XTablesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                                    if(xSup.is())
-                                        xNameAccess = xSup->getTables();
-                                }
-                                break;
-                            case CommandType::QUERY:
-                                {
-                                    Reference<XQueriesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                                    if(xSup.is())
-                                        xNameAccess = xSup->getQueries();
-                                }
-                                break;
-                        }
-
-                        // check if this name really exists in the name access
-                        if(xNameAccess.is() && xNameAccess->hasByName(sName))
-                        {
-                            Reference<XPropertySet> xSourceObject;
-                            xNameAccess->getByName(sName) >>= xSourceObject;
-                            OCopyTableWizard aWizard(getView(),
-                                                     xSourceObject,
-                                                     xDestConnection,
-                                                     getNumberFormatter(),
-                                                     getORB());
-                            OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
-                            OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
-                            OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
-                            OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
-
-                            aWizard.AddWizardPage(pPage1);
-                            aWizard.AddWizardPage(pPage2);
-                            aWizard.AddWizardPage(pPage3);
-                            aWizard.AddWizardPage(pPage4);
-                            aWizard.ActivatePage();
-
-                            if (aWizard.Execute())
-                            {
-                                Reference<XPropertySet> xTable;
-                                switch(aWizard.GetCreateStyle())
-                                {
-                                    case OCopyTableWizard::WIZARD_DEF:
-                                    case OCopyTableWizard::WIZARD_DEF_DATA:
-                                        {
-                                            xTable = aWizard.createTable();
-                                            if(!xTable.is())
-                                                break;
-                                            if(OCopyTableWizard::WIZARD_DEF == aWizard.GetCreateStyle())
-                                                break;
-                                        }
-                                    case OCopyTableWizard::WIZARD_APPEND_DATA:
-                                        {
-                                            Reference<XStatement> xStmt = xSrcConnection->createStatement();
-                                            if(!xStmt.is())
-                                                break;
-                                            ::rtl::OUString sSql,sDestName;
-                                            ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
-                                            // create the sql stmt
-                                            if(nCommandType == CommandType::TABLE)
-                                            {
-                                                sSql = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                                                ::rtl::OUString sComposedName;
-                                                ::dbaui::composeTableName(xSrcConnection->getMetaData(),xSourceObject,sComposedName,sal_True);
-                                                sSql += sComposedName;
-                                            }
-                                            else
-                                                xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
-
-                                            Reference<XResultSet> xSrcRs = xStmt->executeQuery(sSql);
-                                            Reference<XRow> xRow(xSrcRs,UNO_QUERY);
-                                            if(!xSrcRs.is() || !xRow.is())
-                                                break;
-
-                                            Reference<XResultSet> xDestSet = Reference< XResultSet >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-                                            Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
-                                            if(xProp.is())
-                                            {
-                                                xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xDestConnection));
-                                                xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
-                                                xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
-                                                xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
-                                                Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-                                                xRowSet->execute();
-                                            }
-                                            Reference< XResultSetUpdate> xDestRsUpd(xDestSet,UNO_QUERY);
-                                            Reference< XRowUpdate>       xDestRowUpd(xDestSet,UNO_QUERY);
-
-                                            Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
-                                            Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
-                                            sal_Int32 nCount = xMeta->getColumnCount();
-
-                                            sal_Bool bIsAutoIncrement           = aWizard.SetAutoincrement();
-                                            ::std::vector<sal_Int32> vColumns   = aWizard.GetColumnPositions();
-                                            OSL_ENSURE(sal_Int32(vColumns.size()) == nCount,"Column count isn't correct!");
-
-                                            sal_Int32 nRowCount = 0;
-                                            while(xSrcRs->next())
-                                            {
-                                                ++nRowCount;
-                                                xDestRsUpd->moveToInsertRow();
-                                                for(sal_Int32 i=1;i<=nCount;++i)
-                                                {
-                                                    sal_Int32 nPos = vColumns[i-1];
-                                                    if(nPos == CONTAINER_ENTRY_NOTFOUND)
-                                                        continue;
-                                                    if(i == 1 && bIsAutoIncrement)
-                                                    {
-                                                        xDestRowUpd->updateInt(1,nRowCount);
-                                                        continue;
-                                                    }
-
-                                                    switch(xMeta->getColumnType(i))
-                                                    {
-                                                        case DataType::CHAR:
-                                                        case DataType::VARCHAR:
-                                                            xDestRowUpd->updateString(vColumns[i-1],xRow->getString(i));
-                                                            break;
-                                                        case DataType::DECIMAL:
-                                                        case DataType::NUMERIC:
-                                                        case DataType::BIGINT:
-                                                            xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
-                                                            break;
-                                                        case DataType::FLOAT:
-                                                            xDestRowUpd->updateFloat(vColumns[i-1],xRow->getFloat(i));
-                                                            break;
-                                                        case DataType::DOUBLE:
-                                                            xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
-                                                            break;
-                                                        case DataType::LONGVARCHAR:
-                                                            xDestRowUpd->updateString(vColumns[i-1],xRow->getString(i));
-                                                            break;
-                                                        case DataType::LONGVARBINARY:
-                                                            xDestRowUpd->updateBytes(vColumns[i-1],xRow->getBytes(i));
-                                                            break;
-                                                        case DataType::DATE:
-                                                            xDestRowUpd->updateDate(vColumns[i-1],xRow->getDate(i));
-                                                            break;
-                                                        case DataType::TIME:
-                                                            xDestRowUpd->updateTime(vColumns[i-1],xRow->getTime(i));
-                                                            break;
-                                                        case DataType::TIMESTAMP:
-                                                            xDestRowUpd->updateTimestamp(vColumns[i-1],xRow->getTimestamp(i));
-                                                            break;
-                                                        case DataType::BIT:
-                                                            xDestRowUpd->updateBoolean(vColumns[i-1],xRow->getBoolean(i));
-                                                            break;
-                                                        case DataType::TINYINT:
-                                                            xDestRowUpd->updateByte(vColumns[i-1],xRow->getByte(i));
-                                                            break;
-                                                        case DataType::SMALLINT:
-                                                            xDestRowUpd->updateShort(vColumns[i-1],xRow->getShort(i));
-                                                            break;
-                                                        case DataType::INTEGER:
-                                                            xDestRowUpd->updateInt(vColumns[i-1],xRow->getInt(i));
-                                                            break;
-                                                        case DataType::REAL:
-                                                            xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
-                                                            break;
-                                                        case DataType::BINARY:
-                                                        case DataType::VARBINARY:
-                                                            xDestRowUpd->updateBytes(vColumns[i-1],xRow->getBytes(i));
-                                                            break;
-                                                        default:
-                                                            OSL_ENSURE(0,"Unknown type");
-                                                    }
-                                                    if(xRow->wasNull())
-                                                        xDestRowUpd->updateNull(vColumns[i-1]);
-                                                }
-                                                xDestRsUpd->insertRow();
-                                            }
-                                            ::comphelper::disposeComponent(xDestRsUpd);
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                        if(bDispose)
-                            ::comphelper::disposeComponent(xSrcConnection);
-                    }
-                }
-                else if(aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML) || aTransferData.HasFormat(SOT_FORMAT_RTF))
-                {
-                    // first get the dest connection
-                    Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-                    if(!secureConnection(pDSEntry,pDSData,xDestConnection))
-                        break;
-
-                    SotStorageStreamRef aStream;
-                    Reference<XEventListener> xEvt;
-                    ODatabaseImportExport* pImport = NULL;
-                    if(aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML))
-                    {
-                        aTransferData.GetSotStorageStream(SOT_FORMATSTR_ID_HTML,aStream);
-
-                        pImport = new OHTMLImportExport(xDestConnection,getNumberFormatter(),getORB());
-                    }
-                    else
-                    {
-                        aTransferData.GetSotStorageStream(SOT_FORMAT_RTF,aStream);
-                        pImport = new ORTFImportExport(xDestConnection,getNumberFormatter(),getORB());
-                    }
-                    xEvt = pImport;
-                    SvStream* pStream = (SvStream*)(SotStorageStream*)aStream;
-                    pImport->setStream(pStream);
-                    pImport->Read();
-                }
-            }
-            catch(SQLException& e)
-            {
-                showError(SQLExceptionInfo(e));
-            }
-            catch(Exception& )
-            {
-                OSL_ASSERT(0);
-            }
-            break;
-    }
-
-    return 1L;  // handled
-}
-//------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 {
     if (_pParent->HasChilds())
@@ -2936,15 +2288,24 @@ void SbaTableQueryBrowser::showExplorer()
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::secureConnection(SvLBoxEntry* _pDSEntry,void* pDSData,Reference<XConnection>& _xConnection)
+sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pAnyEntry, Reference< XConnection>& _xConnection)
+{
+    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pAnyEntry);
+    DBTreeListModel::DBTreeListUserData* pDSData =
+                pDSEntry
+            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+            :   NULL;
+
+    return ensureConnection( pDSEntry, pDSData, _xConnection);
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pDSData, Reference<XConnection>& _xConnection)
 {
     if(_pDSEntry)
     {
         DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pDSData);
-        ::rtl::OUString aDSName;
-        SvLBoxItem* pTextItem = _pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-        if (pTextItem)
-            aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
+        ::rtl::OUString aDSName = implGetItemText(_pDSEntry);
 
         if (pData)
             _xConnection = Reference<XConnection>(pData->xObject,UNO_QUERY);
@@ -2989,6 +2350,697 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
         nCompareResult = sLeftText.CompareTo(sRightText);
 
     return nCompareResult;
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
+{
+    try
+    {
+        // the parameters:
+        Sequence< Any > aArgs(2);
+        // the parent window
+        aArgs[0] <<= PropertyValue(
+            ::rtl::OUString::createFromAscii("ParentWindow"), 0,
+            makeAny(VCLUnoHelper::GetInterface(m_pTreeView->getListBox()->Window::GetParent())), PropertyState_DIRECT_VALUE);
+        // the initial selection
+        SvLBoxEntry* pTopLevelSelected = _pApplyTo;
+        while (pTopLevelSelected && m_pTreeView->getListBox()->GetParent(pTopLevelSelected))
+            pTopLevelSelected = m_pTreeView->getListBox()->GetParent(pTopLevelSelected);
+        ::rtl::OUString sInitialSelection;
+        if (pTopLevelSelected)
+            sInitialSelection = m_pTreeView->getListBox()->GetEntryText(pTopLevelSelected);
+        aArgs[1] <<= PropertyValue(
+            ::rtl::OUString::createFromAscii("InitialSelection"), 0,
+            makeAny(sInitialSelection), PropertyState_DIRECT_VALUE);
+
+        // create the dialog
+        Reference< XExecutableDialog > xAdminDialog;
+        xAdminDialog = Reference< XExecutableDialog >(
+            m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog"),
+                aArgs), UNO_QUERY);
+
+        // execute it
+        if (xAdminDialog.is())
+            xAdminDialog->execute();
+    }
+    catch(::com::sun::star::uno::Exception&)
+    {
+        DBG_ERROR("SbaTableQueryBrowser::implAdministrate: caught an exception while creating/executing the dialog!");
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction )
+{
+    try
+    {
+        ::osl::MutexGuard aGuard(m_aEntryMutex);
+
+        // get all needed properties for design
+        Reference<XConnection> xConnection;  // supports the service sdb::connection
+        if(!ensureConnection(_pApplyTo, xConnection))
+            return;
+
+        ::rtl::OUString sCurrentObject;
+        if ((ID_TREE_QUERY_EDIT == _nAction || ID_TREE_TABLE_EDIT == _nAction) && _pApplyTo)
+        {
+            // get the name of the query
+            SvLBoxItem* pQueryTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+            if (pQueryTextItem)
+                sCurrentObject = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
+
+            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pApplyTo->GetUserData());
+            if(!pData)
+            {
+                // the query has not been accessed before -> create it's user data
+                pData = new DBTreeListModel::DBTreeListUserData;
+                pData->bTable = sal_False;
+
+                Reference<XNameAccess> xNameAccess;
+                if(ID_TREE_TABLE_EDIT == _nAction)
+                {
+                    Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
+                    if(xSup.is())
+                        xNameAccess = xSup->getTables();
+                }
+                else
+                {
+                    Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
+                    if(xSup.is())
+                        xNameAccess = xSup->getQueries();
+                }
+
+                SvLBoxItem* pTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                if (pTextItem)
+                    sCurrentObject = static_cast<SvLBoxString*>(pTextItem)->GetText();
+
+                if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject) &&
+                    ::cppu::extractInterface(pData->xObject,xNameAccess->getByName(sCurrentObject))) // remember the table or query object
+                    _pApplyTo->SetUserData(pData);
+                else
+                {
+                    delete pData;
+                    pData = NULL;
+                }
+            }
+        }
+
+        ODesignAccess* pDispatcher = NULL;
+        sal_Bool bEdit = sal_False;
+        switch(_nAction)
+        {
+            case ID_TREE_RELATION_DESIGN:
+                pDispatcher = new ORelationDesignAccess(m_xMultiServiceFacatory) ;
+                break;
+            case ID_TREE_TABLE_EDIT:
+                bEdit = sal_True; // run through
+            case ID_TREE_TABLE_CREATE_DESIGN:
+                pDispatcher = new OTableDesignAccess(m_xMultiServiceFacatory) ;
+                break;
+            case ID_TREE_QUERY_EDIT:
+                bEdit = sal_True; // run through
+            case ID_TREE_QUERY_CREATE_DESIGN:
+            case ID_TREE_QUERY_CREATE_TEXT:
+                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory) ;
+                break;
+        }
+        ::rtl::OUString aDSName = implGetItemText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+
+        if (bEdit)
+            pDispatcher->edit(aDSName, sCurrentObject, xConnection);
+        else
+            pDispatcher->create(aDSName, xConnection, ID_TREE_QUERY_CREATE_DESIGN == _nAction);
+    }
+    catch(SQLException& e)
+    {
+        showError(SQLExceptionInfo(e));
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("SbaTableQueryBrowser::implCreateObject: caught an exception!");
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implRemoveQuery( const String& _rDSName, const String& _rQueryName )
+{
+    String aMsg(ModuleRes(STR_QUERY_DELETE_QUERY));
+    aMsg.SearchAndReplace(String::CreateFromAscii("%1"), _rQueryName);
+    OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+    if(aDlg.Execute() == RET_YES)
+    {
+        Reference<XQueryDefinitionsSupplier> xSet;
+        try
+        {
+            if(m_xDatabaseContext->hasByName(_rDSName))
+                m_xDatabaseContext->getByName(_rDSName) >>= xSet;
+        }
+        catch(Exception&)
+        {
+        }
+        if(xSet.is())
+        {
+            Reference<XNameContainer> xNames(xSet->getQueryDefinitions(),UNO_QUERY);
+            if(xNames.is())
+            {
+                try
+                {
+                    xNames->removeByName(_rQueryName);
+                }
+                catch(SQLException& e)
+                {
+                    showError(SQLExceptionInfo(e));
+                }
+                catch(Exception&)
+                {
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
+{
+    ::osl::MutexGuard aGuard(m_aEntryMutex);
+    Reference<XConnection> xConnection;  // supports the service sdb::connection
+    if(!ensureConnection(_pApplyTo, xConnection))
+        return;
+
+    // get all needed properties for design
+    Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
+    OSL_ENSURE(xSup.is(),"SbaTableQueryBrowser::implDropTable: no XTablesSuppier!");
+    if(!xSup.is())
+        return;
+
+    ::rtl::OUString sTableName = implGetItemText( _pApplyTo );
+
+    Reference<XNameAccess> xTables = xSup->getTables();
+    Reference<XDrop> xDrop(xTables,UNO_QUERY);
+    if(xDrop.is())
+    {
+        String aMsg(ModuleRes(STR_QUERY_DELETE_TABLE));
+        aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(sTableName));
+        OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+        if(aDlg.Execute() == RET_YES)
+        {
+            SQLExceptionInfo aErrorInfo;
+            try
+            {
+                xDrop->dropByName(sTableName);
+            }
+            catch(SQLContext& e) { aErrorInfo = e; }
+            catch(SQLWarning& e) { aErrorInfo = e; }
+            catch(SQLException& e) { aErrorInfo = e; }
+            catch(Exception&)
+            {
+                DBG_ERROR("SbaTableQueryBrowser::implDropTable: suspicious exception caught!");
+            }
+
+            if (aErrorInfo.isValid())
+                showError(aErrorInfo);
+        }
+    }
+    else
+        // TODO
+        ;
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implPasteTable( SvLBoxEntry* _pApplyTo )
+{
+    try
+    {
+        // paste into the tables
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+        if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE))
+        {
+            ::com::sun::star::datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE,aFlavor);
+            Sequence<PropertyValue> aSeq;
+            aTransferData.GetAny(aFlavor) >>= aSeq;
+            if(aSeq.getLength())
+            {
+                ::rtl::OUString aDSName = implGetItemText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+
+                const PropertyValue* pBegin = aSeq.getConstArray();
+                const PropertyValue* pEnd   = pBegin + aSeq.getLength();
+
+                // first get the dest connection
+                Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+                if(!ensureConnection(_pApplyTo, xDestConnection))
+                    return;
+
+                Reference<XConnection> xSrcConnection;
+                ::rtl::OUString sName,sSrcDataSourceName;
+                sal_Int32 nCommandType = CommandType::TABLE;
+                for(;pBegin != pEnd;++pBegin)
+                {
+                    if(pBegin->Name == PROPERTY_DATASOURCENAME)
+                        pBegin->Value >>= sSrcDataSourceName;
+                    else if(pBegin->Name == PROPERTY_COMMANDTYPE)
+                        pBegin->Value >>= nCommandType;
+                    else if(pBegin->Name == PROPERTY_NAME)
+                        pBegin->Value >>= sName;
+                    else if(pBegin->Name == PROPERTY_ACTIVECONNECTION)
+                        pBegin->Value >>= xSrcConnection;
+                }
+
+                // get the source connection
+
+                sal_Bool bDispose = sal_False;
+                if(sSrcDataSourceName == aDSName)
+                    xSrcConnection = xDestConnection;
+                else if(!xSrcConnection.is())
+                {
+                    Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+                    showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
+                    bDispose = sal_True;
+                }
+                Reference<XNameAccess> xNameAccess;
+                switch(nCommandType)
+                {
+                    case CommandType::TABLE:
+                        {
+                            // only for tables
+                            Reference<XTablesSupplier> xSup(xSrcConnection,UNO_QUERY);
+                            if(xSup.is())
+                                xNameAccess = xSup->getTables();
+                        }
+                        break;
+                    case CommandType::QUERY:
+                        {
+                            Reference<XQueriesSupplier> xSup(xSrcConnection,UNO_QUERY);
+                            if(xSup.is())
+                                xNameAccess = xSup->getQueries();
+                        }
+                        break;
+                }
+
+                // check if this name really exists in the name access
+                if(xNameAccess.is() && xNameAccess->hasByName(sName))
+                {
+                    Reference<XPropertySet> xSourceObject;
+                    xNameAccess->getByName(sName) >>= xSourceObject;
+                    OCopyTableWizard aWizard(getView(),
+                                             xSourceObject,
+                                             xDestConnection,
+                                             getNumberFormatter(),
+                                             getORB());
+                    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+                    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
+                    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
+                    OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
+
+                    aWizard.AddWizardPage(pPage1);
+                    aWizard.AddWizardPage(pPage2);
+                    aWizard.AddWizardPage(pPage3);
+                    aWizard.AddWizardPage(pPage4);
+                    aWizard.ActivatePage();
+
+                    if (aWizard.Execute())
+                    {
+                        Reference<XPropertySet> xTable;
+                        switch(aWizard.GetCreateStyle())
+                        {
+                            case OCopyTableWizard::WIZARD_DEF:
+                            case OCopyTableWizard::WIZARD_DEF_DATA:
+                                {
+                                    xTable = aWizard.createTable();
+                                    if(!xTable.is())
+                                        break;
+                                    if(OCopyTableWizard::WIZARD_DEF == aWizard.GetCreateStyle())
+                                        break;
+                                }
+                            case OCopyTableWizard::WIZARD_APPEND_DATA:
+                                {
+                                    Reference<XStatement> xStmt = xSrcConnection->createStatement();
+                                    if(!xStmt.is())
+                                        break;
+                                    ::rtl::OUString sSql,sDestName;
+                                    ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
+                                    // create the sql stmt
+                                    if(nCommandType == CommandType::TABLE)
+                                    {
+                                        sSql = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                                        ::rtl::OUString sComposedName;
+                                        ::dbaui::composeTableName(xSrcConnection->getMetaData(),xSourceObject,sComposedName,sal_True);
+                                        sSql += sComposedName;
+                                    }
+                                    else
+                                        xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
+
+                                    Reference<XResultSet> xSrcRs = xStmt->executeQuery(sSql);
+                                    Reference<XRow> xRow(xSrcRs,UNO_QUERY);
+                                    if(!xSrcRs.is() || !xRow.is())
+                                        break;
+
+                                    Reference<XResultSet> xDestSet = Reference< XResultSet >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+                                    Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
+                                    if(xProp.is())
+                                    {
+                                        xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xDestConnection));
+                                        xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
+                                        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
+                                        xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
+                                        Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
+                                        xRowSet->execute();
+                                    }
+                                    Reference< XResultSetUpdate> xDestRsUpd(xDestSet,UNO_QUERY);
+                                    Reference< XRowUpdate>       xDestRowUpd(xDestSet,UNO_QUERY);
+
+                                    Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
+                                    Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
+                                    sal_Int32 nCount = xMeta->getColumnCount();
+
+                                    sal_Bool bIsAutoIncrement           = aWizard.SetAutoincrement();
+                                    ::std::vector<sal_Int32> vColumns   = aWizard.GetColumnPositions();
+                                    OSL_ENSURE(sal_Int32(vColumns.size()) == nCount,"Column count isn't correct!");
+
+                                    sal_Int32 nRowCount = 0;
+                                    while(xSrcRs->next())
+                                    {
+                                        ++nRowCount;
+                                        xDestRsUpd->moveToInsertRow();
+                                        for(sal_Int32 i=1;i<=nCount;++i)
+                                        {
+                                            sal_Int32 nPos = vColumns[i-1];
+                                            if(nPos == CONTAINER_ENTRY_NOTFOUND)
+                                                continue;
+                                            if(i == 1 && bIsAutoIncrement)
+                                            {
+                                                xDestRowUpd->updateInt(1,nRowCount);
+                                                continue;
+                                            }
+
+                                            switch(xMeta->getColumnType(i))
+                                            {
+                                                case DataType::CHAR:
+                                                case DataType::VARCHAR:
+                                                    xDestRowUpd->updateString(vColumns[i-1],xRow->getString(i));
+                                                    break;
+                                                case DataType::DECIMAL:
+                                                case DataType::NUMERIC:
+                                                case DataType::BIGINT:
+                                                    xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
+                                                    break;
+                                                case DataType::FLOAT:
+                                                    xDestRowUpd->updateFloat(vColumns[i-1],xRow->getFloat(i));
+                                                    break;
+                                                case DataType::DOUBLE:
+                                                    xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
+                                                    break;
+                                                case DataType::LONGVARCHAR:
+                                                    xDestRowUpd->updateString(vColumns[i-1],xRow->getString(i));
+                                                    break;
+                                                case DataType::LONGVARBINARY:
+                                                    xDestRowUpd->updateBytes(vColumns[i-1],xRow->getBytes(i));
+                                                    break;
+                                                case DataType::DATE:
+                                                    xDestRowUpd->updateDate(vColumns[i-1],xRow->getDate(i));
+                                                    break;
+                                                case DataType::TIME:
+                                                    xDestRowUpd->updateTime(vColumns[i-1],xRow->getTime(i));
+                                                    break;
+                                                case DataType::TIMESTAMP:
+                                                    xDestRowUpd->updateTimestamp(vColumns[i-1],xRow->getTimestamp(i));
+                                                    break;
+                                                case DataType::BIT:
+                                                    xDestRowUpd->updateBoolean(vColumns[i-1],xRow->getBoolean(i));
+                                                    break;
+                                                case DataType::TINYINT:
+                                                    xDestRowUpd->updateByte(vColumns[i-1],xRow->getByte(i));
+                                                    break;
+                                                case DataType::SMALLINT:
+                                                    xDestRowUpd->updateShort(vColumns[i-1],xRow->getShort(i));
+                                                    break;
+                                                case DataType::INTEGER:
+                                                    xDestRowUpd->updateInt(vColumns[i-1],xRow->getInt(i));
+                                                    break;
+                                                case DataType::REAL:
+                                                    xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
+                                                    break;
+                                                case DataType::BINARY:
+                                                case DataType::VARBINARY:
+                                                    xDestRowUpd->updateBytes(vColumns[i-1],xRow->getBytes(i));
+                                                    break;
+                                                default:
+                                                    OSL_ENSURE(0,"Unknown type");
+                                            }
+                                            if(xRow->wasNull())
+                                                xDestRowUpd->updateNull(vColumns[i-1]);
+                                        }
+                                        xDestRsUpd->insertRow();
+                                    }
+                                    ::comphelper::disposeComponent(xDestRsUpd);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if(bDispose)
+                    ::comphelper::disposeComponent(xSrcConnection);
+            }
+        }
+        else if(aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML) || aTransferData.HasFormat(SOT_FORMAT_RTF))
+        {
+            // first get the dest connection
+            Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+            if(!ensureConnection(_pApplyTo, xDestConnection))
+                return;
+
+            SotStorageStreamRef aStream;
+            Reference<XEventListener> xEvt;
+            ODatabaseImportExport* pImport = NULL;
+            if(aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML))
+            {
+                aTransferData.GetSotStorageStream(SOT_FORMATSTR_ID_HTML,aStream);
+
+                pImport = new OHTMLImportExport(xDestConnection,getNumberFormatter(),getORB());
+            }
+            else
+            {
+                aTransferData.GetSotStorageStream(SOT_FORMAT_RTF,aStream);
+                pImport = new ORTFImportExport(xDestConnection,getNumberFormatter(),getORB());
+            }
+            xEvt = pImport;
+            SvStream* pStream = (SvStream*)(SotStorageStream*)aStream;
+            pImport->setStream(pStream);
+            pImport->Read();
+        }
+    }
+    catch(SQLException& e)
+    {
+        showError(SQLExceptionInfo(e));
+    }
+    catch(Exception& )
+    {
+        OSL_ASSERT(0);
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType )
+{
+    try
+    {
+        ::osl::MutexGuard aGuard(m_aEntryMutex);
+        Reference<XConnection> xConnection;  // supports the service sdb::connection
+        if(!ensureConnection(_pApplyTo, xConnection))
+            return;
+
+        ::rtl::OUString aName = implGetItemText( _pApplyTo );
+        ::rtl::OUString aDSName = implGetItemText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+
+        Sequence<PropertyValue> aSeq(4);
+        aSeq[0].Name    = PROPERTY_DATASOURCENAME;
+        aSeq[0].Value <<= aDSName;
+        aSeq[1].Name    = PROPERTY_ACTIVECONNECTION;;
+        aSeq[1].Value <<= xConnection;
+        aSeq[2].Name    = PROPERTY_COMMANDTYPE;
+        aSeq[2].Value <<= _nCommandType;
+        aSeq[3].Name    = PROPERTY_NAME;
+        aSeq[3].Value <<= aName;
+
+        // the rtf format
+        ORTFImportExport* pRtf = new ORTFImportExport(aSeq,getORB(),getNumberFormatter());
+        // the html format
+        OHTMLImportExport* pHtml = new OHTMLImportExport(aSeq,getORB(),getNumberFormatter());
+        // the sdbc format
+        // the owner ship goes to ODataClipboard
+        ODataClipboard* pData = new ODataClipboard(aSeq,pHtml,pRtf);
+        Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+        pData->CopyToClipboard();
+    }
+    catch(SQLException& e)
+    {
+        showError(SQLExceptionInfo(e));
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("SbaTableQueryBrowser::implCopyObject: caught a generic exception!");
+    }
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
+{
+    PopupMenu aContextMenu(ModuleRes(MENU_BROWSERTREE_CONTEXT));
+    Point aPosition;
+    SvLBoxEntry* pEntry = NULL;
+    SvLBoxEntry* pOldSelection = NULL;
+    if (_rEvent.IsMouseEvent())
+    {
+        aPosition = _rEvent.GetMousePosPixel();
+        // ensure that the entry which the user clicked at is selected
+        pEntry = m_pTreeView->getListBox()->GetEntry(aPosition);
+        if (!pEntry)
+            // no context menu of no entry was hit ....
+            return sal_False;
+
+        OSL_ENSURE(pEntry,"No current entry!");
+        if (pEntry && !m_pTreeView->getListBox()->IsSelected(pEntry))
+        {
+            pOldSelection = m_pTreeView->getListBox()->FirstSelected();
+            m_pTreeView->getListBox()->lockAutoSelect();
+            m_pTreeView->getListBox()->Select(pEntry);
+            m_pTreeView->getListBox()->unlockAutoSelect();
+        }
+    }
+    else
+    {
+        // use the center of the current entry
+        pEntry = m_pTreeView->getListBox()->GetCurEntry();
+        OSL_ENSURE(pEntry,"No current entry!");
+        aPosition = m_pTreeView->getListBox()->GetEntryPos(pEntry);
+        aPosition.X() += m_pTreeView->getListBox()->GetOutputSizePixel().Width() / 2;
+        aPosition.Y() += m_pTreeView->getListBox()->GetEntryHeight() / 2;
+    }
+
+    // disable entries according to the currently selected entry
+
+    // does the datasource which the selected entry belongs to has an open connection ?
+    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
+    DBTreeListModel::DBTreeListUserData* pDSData =
+                pDSEntry
+            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+            :   NULL;
+    if (!pDSData || !pDSData->xObject.is())
+    {   // no -> disable the connection-related menu entries
+        aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
+        aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
+    }
+    // enable menu entries
+    if(pEntry)
+    {
+        SvLBoxEntry* pTemp      = m_pTreeView->getListBox()->GetParent(pEntry);
+
+        // 1. for tables
+        SvLBoxEntry* pTables    = m_pTreeView->getListBox()->GetEntry(pDSEntry,1);
+
+        aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, (pTables == pEntry || pTables == pTemp));
+        aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     (pTables == pEntry || pTables == pTemp));
+
+        sal_Bool bPasteAble = (pTables == pEntry || pTables == pTemp);
+        if(bPasteAble)
+        {
+            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+            bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE) ||
+                         aTransferData.HasFormat(SOT_FORMAT_RTF) ||
+                         aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML);
+        }
+        aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bPasteAble);
+
+        aContextMenu.EnableItem(ID_TREE_TABLE_EDIT,     (pTables != pEntry && pTables == pTemp));
+        aContextMenu.EnableItem(ID_TREE_TABLE_DELETE,   (pTables != pEntry && pTables == pTemp));
+        aContextMenu.EnableItem(ID_TREE_TABLE_COPY,     (pTables != pEntry && pTables == pTemp));
+
+        // 2. for queries
+        SvLBoxEntry* pQueries   = m_pTreeView->getListBox()->GetEntry(pDSEntry,0);
+        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_DESIGN, (pQueries == pEntry || pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_TEXT, (pQueries == pEntry || pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,     (pQueries != pEntry && pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_DELETE,   (pQueries != pEntry && pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     (pQueries != pEntry && pQueries == pTemp));
+    }
+
+    // rebuild conn not implemented yet
+    aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
+
+    if (!m_xMultiServiceFacatory.is())
+        // no ORB -> no administration dialog
+        aContextMenu.EnableItem(ID_TREE_ADMINISTRATE, sal_False);
+
+    // no disabled entries
+    aContextMenu.RemoveDisabledEntries();
+
+    sal_Bool bReopenConn = sal_False;
+    USHORT nPos = aContextMenu.Execute(m_pTreeView->getListBox(), aPosition);
+
+    // restore the old selection
+    if (pOldSelection)
+    {
+        m_pTreeView->getListBox()->lockAutoSelect();
+        m_pTreeView->getListBox()->Select(pOldSelection);
+        m_pTreeView->getListBox()->unlockAutoSelect();
+    }
+
+    switch (nPos)
+    {
+        case ID_TREE_ADMINISTRATE:
+            implAdministrate(pEntry);
+            break;
+        case ID_TREE_REBUILD_CONN:
+            bReopenConn = sal_True;
+        case ID_TREE_CLOSE_CONN:
+            closeConnection(pDSEntry);
+            break;
+        case ID_TREE_RELATION_DESIGN:
+        case ID_TREE_TABLE_CREATE_DESIGN:
+        case ID_TREE_QUERY_CREATE_DESIGN:
+        case ID_TREE_QUERY_CREATE_TEXT:
+        case ID_TREE_QUERY_EDIT:
+        case ID_TREE_TABLE_EDIT:
+            implCreateObject( pEntry, nPos );
+            break;
+        case ID_TREE_QUERY_DELETE:
+            if(pDSEntry)
+            {
+                String sDsName = implGetItemText(pDSEntry);
+                String sName = implGetItemText(pEntry);
+
+                if (!sDsName.Len() || sName.Len())
+                {
+                    DBG_ERROR("SbaTableQueryBrowser::requestContextMenu: how this?");
+                    break;
+                }
+
+                implRemoveQuery(sDsName, sName);
+            }
+            break;
+        case ID_TREE_TABLE_DELETE:
+                implDropTable( pEntry );
+                break;
+        case ID_TREE_QUERY_COPY:
+            implCopyObject( pEntry, CommandType::QUERY );
+            break;
+        case ID_TREE_TABLE_COPY:
+            implCopyObject( pEntry, CommandType::TABLE );
+            break;
+        case ID_TREE_TABLE_PASTE:
+            implPasteTable( pEntry );
+            break;
+    }
+
+    return sal_True;    // handled
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::requestDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
 }
 
 // .........................................................................

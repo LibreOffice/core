@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:19:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-22 10:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _DBACCESS_UI_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
 
 // =========================================================================
 class SvLBoxEntry;
@@ -100,6 +103,7 @@ namespace dbaui
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
                 ,public SbaTableQueryBrowser_Base
+                ,public IControlActionListener
     {
     protected:
         ::osl::Mutex            m_aEntryMutex;
@@ -182,6 +186,10 @@ namespace dbaui
         virtual FeatureState    GetState(sal_uInt16 nId);
         virtual void            Execute(sal_uInt16 nId);
 
+        // IControlActionListener overridables
+        virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent );
+        virtual void        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+
         String getURL() const;
 
         // methods for showing/hiding the explorer part
@@ -231,12 +239,19 @@ namespace dbaui
         */
         SvLBoxEntry* getNameAccessFromEntry(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
         // return true when there is connection available
-        sal_Bool secureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+        void implAdministrate( SvLBoxEntry* _pApplyTo );
+        void implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
+        void implRemoveQuery( const String& _rDSName, const String& _rQueryName );
+        void implDropTable( SvLBoxEntry* _pApplyTo );
+        void implPasteTable( SvLBoxEntry* _pApplyTo );
+        void implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType );
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
-        DECL_LINK( OnListContextMenu, const CommandEvent* );
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
 
         void implRemoveStatusListeners();
