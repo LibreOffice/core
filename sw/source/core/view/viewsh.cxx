@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:40:01 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2151,6 +2151,18 @@ void ViewShell::SetReadonlyOption(BOOL bSet)
             GetWin()->Invalidate();
         if( Imp()->IsAccessible() )
             Imp()->InvalidateAccessibleEditableState( sal_False );
+    }
+}
+/* -----------------28.08.2003 15:45-----------------
+
+ --------------------------------------------------*/
+void  ViewShell::SetPDFExportOption(sal_Bool bSet)
+{
+    if( bSet != pOpt->IsPDFExport() )
+    {
+        if(bSet && IsBrowseMode() )
+            pOpt->SetPrtFormat( TRUE );
+        pOpt->SetPDFExport(bSet);
     }
 }
 /* -----------------------------2002/07/31 17:06------------------------------
