@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:55:22 $
+ *  last change: $Author: os $ $Date: 2001-05-29 08:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,8 +1176,18 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case WID_CHARACTER_STYLE :
-                    aRet <<= OUString(SwXStyleFamilies::GetProgrammaticName( rInfo.GetCharFmt(*pDoc)->GetName(),
-                                                      SFX_STYLE_FAMILY_CHAR ));
+                {
+                    OUString sStyle;
+                    // return empty string if no char format is set
+                    // otherwise it would be created here
+                    if(rInfo.GetRegisteredIn())
+                    {
+                        sStyle = SwXStyleFamilies::GetProgrammaticName(
+                                    rInfo.GetCharFmt(*pDoc)->GetName(),
+                                                      SFX_STYLE_FAMILY_CHAR );
+                    }
+                    aRet <<= sStyle;
+                }
                 break;
                 case WID_NUMBERING_TYPE  :
                     aRet <<= rInfo.GetNumType().GetNumberingType();
