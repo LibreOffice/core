@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-14 10:52:18 $
+ *  last change: $Author: bc $ $Date: 2002-06-14 14:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ public class ReportWizard {
     static String[] WizardHeaderText = new String[5];
     static String[] WizardTitle = new String[5];
     static String sWriterFilterName;
+    static boolean bCloseDocument;
 
 
     public ReportWizard() {
@@ -621,6 +622,7 @@ public class ReportWizard {
             DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
         }
         bSetTitle = false;
+        bCloseDocument = false;
         xDialog.endExecute();
 
         default:
@@ -1131,6 +1133,7 @@ public class ReportWizard {
     CurReportDocument.ProgressBar.setValue(80);
     fillFifthStep();
     CurReportDocument.ProgressBar.setValue(100);
+    bCloseDocument = true;
     executeDialog(xMSF, CurReportDocument);
     }
     catch(java.lang.Exception jexception ){
@@ -1181,9 +1184,11 @@ public class ReportWizard {
         XNameContainer xNamedForms = ReportDocument.getDocumentForms(CurReportDocument.ReportTextDocument);
         XNameAccess xName = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNamedForms);
         if (xName.hasByName("ReportSource") == false){
+            if (bCloseDocument == true){
             XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(XComponent.class, objectDialog);
             xComponent.dispose();
             CurReportDocument.Component.dispose();
+            }
             System.exit(0);
         }
         break;
