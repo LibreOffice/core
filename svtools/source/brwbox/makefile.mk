@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mh $ $Date: 2001-07-31 14:35:23 $
+#   last change: $Author: armin $ $Date: 2001-07-31 15:46:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=browse
 
 # --- Files --------------------------------------------------------
 
-BMP=$(OUT)$/bin/bmp
+BMP=$(OUT)$/bin$/bmp
 
 IMGLST_SRS=$(SRS)$/browse.srs
 BMP_IN=$(PRJ)$/res
