@@ -2168,3 +2168,4 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?checkIndex@OResultSet@file@connectivity@@IAEXJ@Z
 ?_Construct@_STL@@YAXPAPAVOSQLParseNode@connectivity@@ABQAV23@@Z
 ?deallocate@?$_STL_alloc_proxy@PAPAVOSQLParseNode@connectivity@@PAV12@V?$allocator@PAVOSQLParseNode@connectivity@@@_STL@@@_STL@@QAEXPAPAVOSQLParseNode@connectivity@@I@Z
+?dropColumn@OFileTable@file@connectivity@@UAEXJ@Z
