@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-27 15:32:59 $
+ *  last change: $Author: dr $ $Date: 2002-10-29 09:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,53 +399,58 @@ void EscherPropertyContainer::CreateGradientProperties(
     ::com::sun::star::uno::Any          aAny;
     ::com::sun::star::awt::Gradient*    pGradient = NULL;
 
-    sal_Int32   nAngle = 0;
-    sal_uInt32  nFillFocus = 0x64;
+    sal_uInt32  nFillType = ESCHER_FillShadeScale;
+    sal_uInt32  nAngle = 0;
+    sal_uInt32  nFillFocus = 0;
+    sal_uInt32  nFillLR = 0;
+    sal_uInt32  nFillTB = 0;
     sal_uInt32  nFirstColor = 0;
+    bool        bWriteFillTo = false;
 
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ), sal_False ) )
     {
         pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
-        nAngle = pGradient->Angle;
+
+        switch ( pGradient->Style )
+        {
+            case ::com::sun::star::awt::GradientStyle_LINEAR :
+            case ::com::sun::star::awt::GradientStyle_AXIAL :
+            {
+                nFillType = ESCHER_FillShadeScale;
+                nAngle = (pGradient->Angle * 0x10000) / 10;
+                nFillFocus = (pGradient->Style == GradientStyle_LINEAR) ? 0 : 50;
+            }
+            break;
+            case ::com::sun::star::awt::GradientStyle_RADIAL :
+            case ::com::sun::star::awt::GradientStyle_ELLIPTICAL :
+            case ::com::sun::star::awt::GradientStyle_SQUARE :
+            case ::com::sun::star::awt::GradientStyle_RECT :
+            {
+                nFillLR = (pGradient->XOffset * 0x10000) / 100;
+                nFillTB = (pGradient->YOffset * 0x10000) / 100;
+                if ( ((nFillLR > 0) && (nFillLR < 0x10000)) || ((nFillTB > 0) && (nFillTB < 0x10000)) )
+                    nFillType = ESCHER_FillShadeShape;
+                else
+                    nFillType = ESCHER_FillShadeCenter;
+                nFirstColor = 1;
+                bWriteFillTo = true;
+            }
+            break;
+        }
     }
-    switch ( pGradient->Style )
-    {
-        default:
-        case ::com::sun::star::awt::GradientStyle_LINEAR :
-        {
-        }
-        break;
-        case ::com::sun::star::awt::GradientStyle_AXIAL :
-        {
-            nFillFocus = 0x32;
-            nFirstColor = 1;
-        }
-        break;
-        case ::com::sun::star::awt::GradientStyle_RADIAL :
-        {
-        }
-        break;
-        case ::com::sun::star::awt::GradientStyle_ELLIPTICAL :
-        {
-        }
-        break;
-        case ::com::sun::star::awt::GradientStyle_SQUARE :
-        {
-        }
-        break;
-        case ::com::sun::star::awt::GradientStyle_RECT :
-        {
-        }
-        break;
-    }
-    if ( !nAngle )
-        nFirstColor ^= 1;
-    AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
-    AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + nAngle ) << 16 ) / 10 );
+    AddOpt( ESCHER_Prop_fillType, nFillType );
+    AddOpt( ESCHER_Prop_fillAngle, nAngle );
     AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
     AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pGradient, nFirstColor ^ 1 ) );
     AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
+    if ( bWriteFillTo )
+    {
+        AddOpt( ESCHER_Prop_fillToLeft, nFillLR );
+        AddOpt( ESCHER_Prop_fillToTop, nFillTB );
+        AddOpt( ESCHER_Prop_fillToRight, nFillLR );
+        AddOpt( ESCHER_Prop_fillToBottom, nFillTB );
+    }
 };
 
 void EscherPropertyContainer::CreateFillProperties(
