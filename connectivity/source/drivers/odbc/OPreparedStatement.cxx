@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:27:55 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 10:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,9 @@ int OBoundParam::BINARY  = 3;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql)
-    : OStatement_BASE2( _pConnection ),m_aTypeInfo(_TypeInfo)
+    :OStatement_BASE2(_pConnection)
+    ,m_aTypeInfo(_TypeInfo)
+    ,boundParams(NULL)
 {
     ::rtl::OString aSql(::rtl::OUStringToOString(sql,osl_getThreadTextEncoding()));
     N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
