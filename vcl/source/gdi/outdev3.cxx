@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:51:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5895,13 +5895,12 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
 
 // -----------------------------------------------------------------------
 
-ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
+ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
                                        xub_StrLen nMinIndex, xub_StrLen nLen,
                                        long nPixelWidth, const sal_Int32* pDXArray ) const
 {
-    String aStr( rStr );
     // get string length for calculating extents
-    xub_StrLen nEndIndex = aStr.Len();
+    xub_StrLen nEndIndex = rStr.Len();
     if( (ULONG)nMinIndex + nLen < nEndIndex )
         nEndIndex = nMinIndex + nLen;
 
@@ -5917,8 +5916,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
     else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
-        const xub_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
-        const xub_Unicode* pEnd = aStr.GetBuffer() + nEndIndex;
+        const xub_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
+        const xub_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
             ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
@@ -5942,8 +5941,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
     else
     {
         // disable CTL for non-CTL text
-        const sal_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
-        const sal_Unicode* pEnd = aStr.GetBuffer() + nEndIndex;
+        const sal_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
+        const sal_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0300) && (*pStr < 0x0370))   // diacritical marks
             ||  ((*pStr >= 0x0590) && (*pStr < 0x10A0))   // many CTL scripts
@@ -5959,7 +5958,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS)
     {
         // disable character localization when no digits used
-        const sal_Unicode* pBase = aStr.GetBuffer();
+        const sal_Unicode* pBase = rStr.GetBuffer();
         const sal_Unicode* pStr = pBase + nMinIndex;
         const sal_Unicode* pEnd = pBase + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
@@ -5970,7 +5969,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
                 // translate characters to local preference
                 sal_Unicode cChar = GetLocalizedChar( *pStr, meTextLanguage );
                 if( cChar != *pStr )
-                    aStr.SetChar( (pStr - pBase), cChar );
+                    rStr.SetChar( (pStr - pBase), cChar );
             }
         }
     }
@@ -5990,7 +5989,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( const String& rStr,
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
 
     // set layout options
-    ImplLayoutArgs aLayoutArgs( aStr.GetBuffer(), aStr.Len(), nMinIndex, nEndIndex, nLayoutFlags );
+    ImplLayoutArgs aLayoutArgs( rStr.GetBuffer(), rStr.Len(), nMinIndex, nEndIndex, nLayoutFlags );
 
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
@@ -6016,7 +6015,15 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         if( !ImplGetGraphics() )
             return NULL;
 
+    // check string index and length
     String aStr = rOrigStr;
+    if( (ULONG)nMinIndex + nLen >= aStr.Len() )
+        if( nMinIndex < aStr.Len() )
+            nLen = aStr.Len() - nMinIndex;
+        else
+            return NULL;
+
+    // filter out special markers
     if( bFilter )
     {
         xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
@@ -6217,10 +6224,11 @@ BOOL OutputDevice::GetTextIsRTL(
             const String& rString,
             xub_StrLen nIndex, xub_StrLen nLen ) const
 {
-    ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( rString, nIndex, nLen, 0, NULL );
+    String aStr( rString );
+    ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
     bool bRTL = false;
     int nCharPos = -1;
-    aArgs.GetNextPos( &nCharPos, &bRTL);
+    aArgs.GetNextPos( &nCharPos, &bRTL );
     return (nCharPos != nIndex) ? TRUE : FALSE;
 }
 
