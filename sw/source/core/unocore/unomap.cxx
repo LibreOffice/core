@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-25 12:50:09 $
+ *  last change: $Author: os $ $Date: 2001-06-28 07:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,7 +1881,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aParagraphExtensionsMap_Impl[] =
                 {
-                    COMPLETE_TEXT_CURSOR_MAP
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0}
                 };
