@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 12:05:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 14:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,7 @@ namespace dbaui
         if (m_pPreviousSelection)
         {
             // try to commit the previously selected index
-            if (!m_pFields->SaveModified())
+            if (m_pFields->IsModified() && !m_pFields->SaveModified())
                 return sal_False;
 
             OIndexCollection::iterator aPreviouslySelected = static_cast<OIndexCollection::iterator>(m_pPreviousSelection->GetUserData());
@@ -830,6 +830,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/04/02 12:05:06  fs
+ *  #85275# added a help button
+ *
  *  Revision 1.5  2001/03/30 14:10:22  oj
  *  #85298##85297# correct index impl
  *
