@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCalendar.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:26:40 $
+ *  last change:$Date: 2003-09-08 10:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 
 package ifc.i18n;
 
-import com.sun.star.i18n.Calendar;
+import lib.MultiMethodTest;
+
 import com.sun.star.i18n.CalendarDisplayIndex;
 import com.sun.star.i18n.CalendarFieldIndex;
 import com.sun.star.i18n.CalendarItem;
 import com.sun.star.i18n.XCalendar;
 import com.sun.star.i18n.XLocaleData;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.Locale;
-import lib.MultiMethodTest;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Testing <code>com.sun.star.i18n.XCalendar</code>
