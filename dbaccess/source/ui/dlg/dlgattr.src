@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:33:20 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ TabDialog DLG_ATTR
     Text [ norwegian ] = "Column Format" ;
     Text [ italian ] = "Formattazione di campo" ;
     Text [ portuguese_brazilian ] = "Formato da Coluna" ;
-    Text [ portuguese ] = "Formato do campo" ;
+    Text [ portuguese ] = "Formatar campo" ;
     Text [ finnish ] = "Sarakkeen muoto" ;
     Text [ danish ] = "Feltformatering" ;
     Text [ french ] = "Formatage de champ" ;
@@ -123,15 +123,15 @@ TabDialog DLG_ATTR
         Text [ portuguese ] = "~Anterior" ;
         Text [ finnish ] = "Kumoa" ;
         Text [ danish ] = "Tilbage" ;
-        Text [ french ] = "Précédent" ;
-        Text [ swedish ] = "Tillbaka" ;
+        Text [ french ] = "~Précédent" ;
+        Text [ swedish ] = "~Tillbaka" ;
         Text [ dutch ] = "~Ongedaan" ;
         Text [ spanish ] = "~Regresar" ;
-        Text [ english_us ] = "Back" ;
+        Text [ english_us ] = "Bac~k" ;
         Text[ chinese_simplified ] = "·µ»Ø";
         Text[ russian ] = "Íàçàä";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "–ß‚é";
+        Text[ japanese ] = "–ß‚é(~K)";
         Text[ chinese_traditional ] = "ªð¦^";
         Text[ arabic ] = "ÇáÓÇÈÞ";
         Text[ greek ] = "Ðßóù";
@@ -196,7 +196,7 @@ TabDialog DLG_ATTR
         Text [ norwegian ] = "Align" ;
         Text [ italian ] = "Allineamento" ;
         Text [ portuguese_brazilian ] = "Alinhar" ;
-        Text [ portuguese ] = "Alinhar" ;
+        Text [ portuguese ] = "Alinhamento" ;
         Text [ finnish ] = "Tasaa" ;
         Text [ danish ] = "Justering" ;
         Text [ french ] = "Alignement" ;
@@ -226,7 +226,7 @@ TabDialog DLG_ATTR
         Text [ swedish ] = "Tabellformatering" ;
         Text [ danish ] = "Tabelformatering" ;
         Text [ portuguese_brazilian ] = "Tabellenformatierung" ;
-        Text [ portuguese ] = "Formato da tabela" ;
+        Text [ portuguese ] = "Formatar tabela" ;
         Text[ chinese_simplified ] = "±íµ¥¸ñÊ½";
         Text[ russian ] = "Ôîðìàò òàáëèöû";
         Text[ polish ] = "Formatowanie tabeli";
