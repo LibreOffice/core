@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:13:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,15 @@
 #endif
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
 #endif
 
 #include "swabstdlg.hxx" //CHINA001
@@ -2824,10 +2833,19 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
             else if(nMode == EDIT_MODE_DELETE)
             {
                 pActiveShell->StartAction();
-                pActiveShell->StartUndo();
+                String sTable = SW_RES(STR_TABLE_NAME);
+                SwRewriter aRewriterTableName;
+                aRewriterTableName.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
+                aRewriterTableName.AddRule(UNDO_ARG2, pCnt->GetName());
+                aRewriterTableName.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+                sTable = aRewriterTableName.Apply(sTable);
+
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UNDO_ARG1, sTable);
+                pActiveShell->StartUndo(UNDO_DELETE, &aRewriter);
                 pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
                 pActiveShell->DeleteRow();
-                pActiveShell->EndUndo();
+                pActiveShell->EndUndo(UNDO_DELETE);
                 pActiveShell->EndAction();
             }
             else if(nMode == EDIT_MODE_RENAME)
