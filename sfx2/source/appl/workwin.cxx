@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-20 08:45:44 $
+ *  last change: $Author: mba $ $Date: 2001-02-26 13:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2168,9 +2168,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId)
             {
                 SfxDockingWindow *pDock =
                     (SfxDockingWindow*) pCW->pWin->GetWindow();
-                if ( nId == SID_BROWSER )
-                    SfxFrame::BeamerSet_Impl();
-                else if ( pDock->IsAutoHide_Impl() )
+                if ( pDock->IsAutoHide_Impl() )
                     pDock->AutoShow_Impl();
             }
         }
