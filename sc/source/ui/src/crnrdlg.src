@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 10:48:29 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 105 ) ;
-        Size = MAP_APPFONT ( 163 , 12 ) ;
+        Size = MAP_APPFONT ( 165 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_AREA
@@ -235,7 +235,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 162 ) ;
-        Size = MAP_APPFONT ( 163 , 12 ) ;
+        Size = MAP_APPFONT ( 165 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_DATA
@@ -312,7 +312,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 200 , 121 ) ;
+        Pos = MAP_APPFONT ( 200 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "~Remove" ;

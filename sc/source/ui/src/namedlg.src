@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:14:44 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: dr $
- //     $Date: 2001-05-17 15:14:44 $
- // $Revision: 1.11 $
+ //     $Date: 2001-05-23 16:56:55 $
+ // $Revision: 1.12 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 166 , 76 ) ;
+        Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text = "Hinzu~fügen" ;
@@ -145,7 +145,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 166 , 93 ) ;
+        Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
@@ -206,14 +206,14 @@ ModelessDialog RID_SCDLG_NAMES
     ComboBox ED_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 145 , 93 ) ;
+        Size = MAP_APPFONT ( 145 , 92 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         Sort = TRUE ;
     };
     FixedLine FL_ASSIGN
     {
-        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Pos = MAP_APPFONT ( 6 , 112 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
         Text = "Zugeordnet zu" ;
         Text [ ENGLISH ] = "Refers to" ;
@@ -243,15 +243,15 @@ ModelessDialog RID_SCDLG_NAMES
     Edit ED_ASSIGN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
-        Size = MAP_APPFONT ( 129 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_ASSIGN
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 145 , 124 ) ;
+        Pos = MAP_APPFONT ( 145 , 123 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -280,21 +280,6 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Pos = MAP_APPFONT ( 166 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /*
-            Text = "~Zusätze";
-            Text[ ENGLISH ] = "~More";
-            Text[norwegian] = "~Mer";
-            Text[italian] = "~Altro";
-            Text[portuguese_brazilian] = "~Mais";
-            Text[portuguese] = "~Mais";
-            Text[finnish] = "~Enemmän";
-            Text[danish] = "~Flere";
-            Text[french] = " S~uite";
-            Text[swedish] = "~Fler";
-            Text[dutch] = "~Overige";
-            Text[spanish] = "~Más";
-            Text[english_us] = "~More";
-            */
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
         Delta = 41 ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 17:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ public:
     virtual BOOL    Close();
 
 private:
+    FixedLine       aFlVariables;
     FixedText       aFtFormulaCell;
     ScRefEdit       aEdFormulaCell;
     ScRefButton     aRBFormulaCell;
@@ -117,7 +118,6 @@ private:
     ScRefEdit       aEdVariableCell;
     ScRefButton     aRBVariableCell;
 
-    GroupBox        aGbVariables;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

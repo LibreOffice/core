@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:42:21 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 17:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aFtColCell          ( this, ScResId( FT_COLCELL ) ),
         aEdColCell          ( this, ScResId( ED_COLCELL ) ),
         aRBColCell          ( this, ScResId( RB_COLCELL ), &aEdColCell ),
-        aGbVariables        ( this, ScResId( GB_VARIABLES ) ),
+        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),

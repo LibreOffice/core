@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:14:44 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,13 +114,13 @@ ModelessDialog RID_SCDLG_DBNAMES
     ComboBox ED_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 145 , 93 ) ;
+        Size = MAP_APPFONT ( 145 , 92 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
     };
     FixedLine FL_ASSIGN
     {
-        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Pos = MAP_APPFONT ( 6 , 112 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "Ran~ge" ;
@@ -150,16 +150,15 @@ ModelessDialog RID_SCDLG_DBNAMES
     Edit ED_DBAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
-        Size = MAP_APPFONT ( 129 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
         TabStop = TRUE ;
-         //     Text = "<Tabellenbereich>" ;
     };
     ImageButton RB_DBAREA
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 145 , 124 ) ;
+        Pos = MAP_APPFONT ( 145 , 123 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -408,7 +407,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 166 , 76 ) ;
+        Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
         Text = "Hin~zufügen" ;
@@ -440,7 +439,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 166 , 93 ) ;
+        Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;

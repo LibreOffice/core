@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 17:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #define FT_VARCELL              3
 #define RB_FORMULACELL          1
 #define RB_VARCELL              2
-#define GB_VARIABLES            1
+#define FL_VARIABLES            1
 #define BTN_OK                  1
 #define BTN_CANCEL              2
 #define BTN_HELP                1

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:35:29 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: kz $
- //     $Date: 2001-05-17 08:35:29 $
- // $Revision: 1.10 $
+ //   $Author: dr $
+ //     $Date: 2001-05-23 16:56:55 $
+ // $Revision: 1.11 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ ModelessDialog RID_SCDLG_SOLVER
     HelpId = SID_OPENDLG_SOLVE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 222 , 68 ) ;
+    Size = MAP_APPFONT ( 222 , 64 ) ;
     Text = "Zielwertsuche" ;
     Text [ ENGLISH ] = "Solver" ;
     Text [ norwegian ] = "+++ Probleml¯ser Solver" ;
@@ -96,9 +96,9 @@ ModelessDialog RID_SCDLG_SOLVER
     FixedText FT_FORMULACELL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Formelzelle" ;
-        Text [ ENGLISH ] = "~formula cell" ;
+        Text [ ENGLISH ] = "~Formula cell" ;
         Text [ norwegian ] = "~formelcelle" ;
         Text [ italian ] = "~Cella formula" ;
         Text [ portuguese_brazilian ] = "~c?lula de f?mula" ;
@@ -126,14 +126,14 @@ ModelessDialog RID_SCDLG_SOLVER
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 14 ) ;
-        Size = MAP_APPFONT ( 76 , 12 ) ;
+        Size = MAP_APPFONT ( 79 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_FORMULACELL
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 142 , 14 ) ;
+        Pos = MAP_APPFONT ( 145 , 14 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -145,7 +145,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -161,10 +161,10 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     FixedText FT_TARGETVAL
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Zielwert" ;
-        Text [ ENGLISH ] = "~target value" ;
+        Text [ ENGLISH ] = "Target ~value" ;
         Text [ norwegian ] = "~mÂlverdi " ;
         Text [ italian ] = "Valore di destin." ;
         Text [ portuguese_brazilian ] = "~target value" ;
@@ -191,16 +191,16 @@ ModelessDialog RID_SCDLG_SOLVER
     Edit ED_TARGETVAL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 29 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Pos = MAP_APPFONT ( 64 , 30 ) ;
+        Size = MAP_APPFONT ( 93 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_VARCELL
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~variable Zelle" ;
-        Text [ ENGLISH ] = "~variable cell" ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Variable Zelle" ;
+        Text [ ENGLISH ] = "~Variable cell" ;
         Text [ norwegian ] = "~cellevariabel l" ;
         Text [ italian ] = "Cella ~variabile" ;
         Text [ portuguese_brazilian ] = "~c?lula vari?vel" ;
@@ -227,15 +227,15 @@ ModelessDialog RID_SCDLG_SOLVER
     Edit ED_VARCELL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 44 ) ;
-        Size = MAP_APPFONT ( 76 , 12 ) ;
+        Pos = MAP_APPFONT ( 64 , 46 ) ;
+        Size = MAP_APPFONT ( 79 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_VARCELL
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 142 , 44 ) ;
+        Pos = MAP_APPFONT ( 145 , 46 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -247,7 +247,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -261,10 +261,10 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ catalan ] = "Reducir";
         QuickHelpText[ finnish ] = "Kutista!";
     };
-    GroupBox GB_VARIABLES
+    FixedLine FL_VARIABLES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 154 , 59 ) ;
+        Size = MAP_APPFONT ( 154 , 8 ) ;
         Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Variables" ;
         Text [ norwegian ] = "Variabler" ;
@@ -305,7 +305,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 166 , 48 ) ;
+        Pos = MAP_APPFONT ( 166 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 08:51:31 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,8 +1635,8 @@ ModelessDialog RID_SCDLG_FILTER
     {
         Border = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 116 , 126 ) ;
-        Size = MAP_APPFONT ( 101 , 12 ) ;
+        Pos = MAP_APPFONT ( 114 , 126 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_COPY_AREA
@@ -1862,8 +1862,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Edit ED_CRITERIA_AREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 102 , 14 ) ;
-        Size = MAP_APPFONT ( 95 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 14 ) ;
+        Size = MAP_APPFONT ( 99 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_CRITERIA_AREA
@@ -2097,8 +2097,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     {
         Border = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 102 , 83 ) ;
-        Size = MAP_APPFONT ( 95 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 83 ) ;
+        Size = MAP_APPFONT ( 99 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_COPY_AREA
@@ -3588,7 +3588,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 243 , 63 ) ;
+        Pos = MAP_APPFONT ( 242 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
