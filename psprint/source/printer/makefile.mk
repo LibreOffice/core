@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-20 15:09:10 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:55:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,10 +72,18 @@ TARGET=printer
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUIBASE)"=="aqua"
+
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+
+.ELSE		# "$(GUIBASE)"=="aqua"
+
 SLOFILES=\
     $(SLO)$/printerinfomanager.obj	\
     $(SLO)$/jobdata.obj
 
+.ENDIF # GUIBASE = aqua
 
 # --- Targets ------------------------------------------------------
 
