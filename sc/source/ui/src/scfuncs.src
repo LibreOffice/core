@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-28 23:05:57 $
+ *  last change: $Author: obo $ $Date: 2001-12-04 18:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -21723,7 +21723,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Z‰hlung eingehen." ;
             Text [ english ] = "are 1 to 30 arguments that can contain or refer to a variety of data types, but only numbers are counted." ;
             Text [ norwegian ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Z‰hlung eingehen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti che possono contenere o riferirsi a pi˘ dati, di cui vengono contati soltanto i numeri." ;
+            Text [ italian ] = "Argomenti (da 1 a 30) che possono contenere o riferirsi a pi˘ dati, di cui vengono contati soltanto i numeri." ;
             Text [ portuguese_brazilian ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Z?hlung eingehen." ;
             Text [ portuguese ] = "Valor1; valor2,...s„o argumentos entre 1 e 30 que podem conter ou referir-se a uma variedade de tipos de dados, mas sÛ s„o contados os n˙meros." ;
             Text [ finnish ] = "Arvo 1, arvo 2 ja niin edelleen ovat 1 - 30 eri tietotyyppej‰ sis‰lt‰v‰‰ argumenttia, joista lasketaan vain luvut." ;
@@ -21822,7 +21822,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu z‰hlenden Werten entsprechen." ;
             Text [ english ] = " are 1 to 30 arguments representing the values you want to count." ;
             Text [ norwegian ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu z‰hlenden Werten entsprechen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti che rappresentano i valori che si desidera contare." ;
+            Text [ italian ] = "Argomenti (da 1 a 30) che rappresentano i valori che si desidera contare." ;
             Text [ portuguese_brazilian ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu z?hlenden Werten entsprechen." ;
             Text [ portuguese ] = "Valor1; valor2,...s„o argumentos entre 1 e 30 e que representam os valores a contar." ;
             Text [ finnish ] = "Arvo 1, arvo 2 ja niin edelleen ovat 1 - 30 laskettavia arvoja kuvaavaa argumenttia." ;
@@ -21921,7 +21921,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren grˆﬂte Zahl bestimmt werden soll." ;
             Text [ english ] = "are 1 to 30 numbers for which you want to find the maximum value." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren grˆﬂte Zahl bestimmt werden soll." ;
-            Text [ italian ] = "sono da 1 a 30 numeri di cui si desidera trovare il valore massimo." ;
+            Text [ italian ] = "Numeri (da 1 a 30) di cui si desidera trovare il valore massimo." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren gr?te Zahl bestimmt werden soll." ;
             Text [ portuguese ] = "s„o n˙meros de 1 a 30 cujo valor m·ximo deseja localizar." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen muodostavat 1 - 30 argumentin joukon, jonka suurin luku m‰‰ritet‰‰n." ;
@@ -22015,7 +22015,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, deren grˆﬂter Wert bestimmt werden soll." ;
             Text [ english ] = "are 1 to 30 arguments of which to determine the maximum value." ;
-            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti per i quali si determina il valore massimo.";
+            Text[ italian ] = "Argomenti (da 1 a 30) per i quali si determina il valore massimo.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments of which to determine the maximum value.";
             Text[ portuguese ] = "n˙m1; n˙m2; ... s„o argumentos entre 1 e 30 para os quais dever· ser encontrado o valor m·ximo.";
             Text[ danish ] = "VÊrdi 1; vÊrdi 2; ... er 1 til 30 argumenter, for hvilke den st¯rste vÊrdi skal findes.";
@@ -22112,7 +22112,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren kleinste Zahl bestimmt werden soll." ;
             Text [ english ] = "are 1 to 30 numbers for which you want to find the minimum value." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren kleinste Zahl bestimmt werden soll." ;
-            Text [ italian ] = "sono da 1 a 30 numeri di cui si desidera trovare il valore minimo." ;
+            Text [ italian ] = "Numeri (da 1 a 30) di cui si desidera trovare il valore minimo." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren kleinste Zahl bestimmt werden soll." ;
             Text [ portuguese ] = "s„o n˙meros de 1 a 30 dos quais deseja calcular o mÌnimo valor." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen muodostavat 1 - 30 argumentin joukon, jonka pienin luku m‰‰ritet‰‰n." ;
@@ -22206,7 +22206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, deren kleinste Zahl bestimmt werden soll." ;
             Text [ english ] = "are 1 to 30 arguments of which to determine the minimum value." ;
-            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti per i quali si determina il valore minimo.";
+            Text[ italian ] = "Argomenti (da 1 a 30) per i quali si determina il valore minimo.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments of which to determine the minimum value.";
             Text[ portuguese ] = "n˙m1; n˙m2;...s„o argumentos entre 1 e 30 para os quais se dever· encontrar o valor mÌnimo.";
             Text[ danish ] = "VÊrdi 1; vÊrdi 2; ... er 1 til 30 argumenter, for hvilke den mindste vÊrdi skal findes.";
@@ -22303,7 +22303,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 number arguments corresponding to a sample of a population." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti numerici corrispondenti ad un campione della popolazione." ;
+            Text [ italian ] = "Argomenti numerici (da 1 a 30) corrispondenti ad un campione della popolazione." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ portuguese ] = "s„o argumentos numÈricos de 1 a 30 correspondentes a uma amostra de populaÁ„o." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 otoksen populaatiota kuvaavaa lukuargumenttia." ;
@@ -22397,7 +22397,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments corresponding to a sample population." ;
-            Text[ italian ] = "Valore 1; Valore 2; ... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
+            Text[ italian ] = "Argomenti (da 1 a 30) che rappresentano un campione di popolazione.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments corresponding to a sample population.";
             Text[ portuguese ] = "n˙m1; n˙m2;... s„o argumentos entre 1 e 30 correspondentes a uma amostra de populaÁ„o.";
             Text[ danish ] = "VÊrdi 1; vÊrdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en stikpr¯ve fra en population.";
@@ -22496,7 +22496,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen." ;
             Text [ english ] = "are 1 to 30 number arguments corresponding to a population." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti numerici corrispondenti ad una popolazione." ;
+            Text [ italian ] = "Argomenti numerici (da 1 a 30) corrispondenti ad una popolazione." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen." ;
             Text [ portuguese ] = "s„o argumentos numÈricos de 1 a 30, representando a totalidade de uma populaÁ„o." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 populaatiota kuvaavaa lukuargumenttia." ;
@@ -22590,7 +22590,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die einer Grundgesamtheit entsprechen." ;
             Text [ english ] = "are 1 to 30 arguments representing a population." ;
-            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti che rappresentano una popolazione.";
+            Text[ italian ] = "Argomenti (da 1 a 30) che rappresentano una popolazione.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments representing a population.";
             Text[ portuguese ] = "valor1; valor2;... s„o argumentos entre 1 e 30 e que representam uma populaÁ„o.";
             Text[ danish ] = "VÊrdi 1; vÊrdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en hel population.";
@@ -23071,7 +23071,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 numeric arguments for which you want the average." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti numerici di cui si desidera calcolare la media." ;
+            Text [ italian ] = "Argomenti numerici (da 1 a 30) che rappresentano un campione della popolazione." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ portuguese ] = "N˙m1; n˙m2;... s„o de 1 a 30 argumentos numÈricos para os quais deseja calcular a mÈdia." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 populaation otosta kuvaavaa lukuargumenttia." ;
@@ -23165,7 +23165,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "Value 1, value 2;... are 1 to 30 arguments representing a population sample, for which to find the average." ;
-            Text[ italian ] = "Valore 1, Valore 2;... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
+            Text[ italian ] = "Argomenti (da 1 a 30) che rappresentano un campione di popolazione.";
             Text[ portuguese_brazilian ] = "Value 1, value 2;... are 1 to 30 arguments representing a population sample, for which to find the average.";
             Text[ portuguese ] = "valor1; valor2;... s„o argumentos entre 1 e 30 que representam uma amostra de populaÁ„o para a qual se dever· calcular a mÈdia aritmÈtica.";
             Text[ danish ] = "VÊrdi 1; vÊrdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en stikpr¯ve fra en population.";
@@ -23359,7 +23359,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments for which you want the average of the absolute deviations." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti di cui si desidera calcolare la media delle deviazioni assolute." ;
+            Text [ italian ] = "Argomenti (da 1 a 30) di cui si desidera calcolare la media delle deviazioni assolute." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ portuguese ] = "N˙m1; n˙m2; ... s„o de 1 a 30 argumentos para os quais deseja calcular a mÈdia aritmÈtica dos desvios absolutos." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 otosta kuvaavaa lukuargumenttia." ;
@@ -23650,7 +23650,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments for which you want to calculate the mean." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti di cui si desidera calcolare la media." ;
+            Text [ italian ] = "Argomenti (da 1 a 30) di cui si desidera calcolare la media." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ portuguese ] = "s„o argumentos de 1 a 30 cujas mÈdias deseja calcular." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 otosta kuvaavaa lukuargumenttia." ;
@@ -23747,7 +23747,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments for which you want to calculate the mean." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti di cui si desidera calcolare la media." ;
+            Text [ italian ] = "Argomenti numerici (da 1 a 30) che rappresentano un campione." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ portuguese ] = "s„o argumentos de 1 a 30 cujas mÈdias deseja calcular." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 otosta kuvaavaa lukuargumenttia." ;
@@ -23845,7 +23845,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments for which you want to calculate the mode." ;
             Text [ norwegian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
-            Text [ italian ] = "sono da 1 a 30 argomenti di cui si desidera calcolare la moda." ;
+            Text [ italian ] = "Argomenti numerici (da 1 a 30) che rappresentano un campione." ;
             Text [ portuguese_brazilian ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine Stichprobe darstellen." ;
             Text [ portuguese ] = "s„o n˙meros de 1 a 30 para os quais deseja calcular o modo." ;
             Text [ finnish ] = "Luku 1, luku 2 ja niin edelleen ovat 1 - 30 otosta kuvaavaa lukuargumenttia." ;
@@ -24321,7 +24321,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten" ;
             Text [ english ] = "array" ;
             Text [ norwegian ] = "Daten" ;
-            Text [ italian ] = "Dati" ;
+            Text [ italian ] = "Matrice" ;
             Text [ portuguese_brazilian ] = "Daten" ;
             Text [ portuguese ] = "Dados" ;
             Text [ finnish ] = "tiedot" ;
@@ -24350,7 +24350,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Daten in der Stichprobe." ;
             Text [ english ] = "is the array or range of data for which you want to determine the k-th largest value." ;
             Text [ norwegian ] = "Die Matrix der Daten in der Stichprobe." ;
-            Text [ italian ] = "Ë la matrice o l'intervallo di dati di cui si desidera determinare il k-esimo valore pi˘ grande." ;
+            Text [ italian ] = "La matrice dei dati del campione." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Daten in der Stichprobe." ;
             Text [ portuguese ] = "È a matriz ou intervalo de dados para os quais deseja calcular o maior valor k-Èsimo." ;
             Text [ finnish ] = "Otoksen tietomatriisi." ;
@@ -24408,7 +24408,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Rang des Werts." ;
             Text [ english ] = "is the position (from the largest) in the array or cell range of data to return." ;
             Text [ norwegian ] = "Der Rang des Werts." ;
-            Text [ italian ] = "Ë la posizione nella matrice o nell'intervallo di celle dei dati da restituire (partendo dal pi˘ grande)." ;
+            Text [ italian ] = "La posizione del valore." ;
             Text [ portuguese_brazilian ] = "Der Rang des Werts." ;
             Text [ portuguese ] = "representa a posiÁ„o dos dados a devolver, determinada a partir do maior valor." ;
             Text [ finnish ] = "Arvon sijoitus." ;
@@ -24505,7 +24505,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Daten in der Stichprobe." ;
             Text [ english ] = "is an array or range of numerical data for which you want to determine the k-th smallest value." ;
             Text [ norwegian ] = "Die Matrix der Daten in der Stichprobe." ;
-            Text [ italian ] = "Ë una matrice o un intervallo di dati numerici di cui si desidera determinare il k-esimo valore pi˘ piccolo." ;
+            Text [ italian ] = "La matrice dei dati di un campione." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Daten in der Stichprobe." ;
             Text [ portuguese ] = "È uma matriz ou intervalo de dados numÈricos para os quais deseja calcular o menor valor k-Èsimo." ;
             Text [ finnish ] = "Otoksen tietomatriisi." ;
@@ -24563,7 +24563,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Rang des Werts." ;
             Text [ english ] = "is the position (from the smallest) in the array or range of data to return." ;
             Text [ norwegian ] = "Der Rang des Werts." ;
-            Text [ italian ] = "Ë la posizione nella matrice o nell'intervallo di celle dei dati da restituire (partendo dal pi˘ piccolo)." ;
+            Text [ italian ] = "La posizione del valore." ;
             Text [ portuguese_brazilian ] = "Der Rang des Werts." ;
             Text [ portuguese ] = "representa dentro da matriz ou intervalo de dados, a posiÁ„o do dado a devolver, calculada a partir do menor dos valores." ;
             Text [ finnish ] = "Arvon sijoitus." ;
@@ -25031,7 +25031,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Daten in der Stichprobe." ;
             Text [ english ] = "is the array or range of values to trim and average." ;
             Text [ norwegian ] = "Die Matrix der Daten in der Stichprobe." ;
-            Text [ italian ] = "Ë la matrice o l'intervallo di valori da troncare e di cui calcolare la media." ;
+            Text [ italian ] = "Matrice dei dati del campione." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Daten in der Stichprobe." ;
             Text [ portuguese ] = "È a matriz ou intervalo de valores cuja mÈdia deseja calcular." ;
             Text [ finnish ] = "Otoksen tietomatriisi." ;
@@ -25090,7 +25090,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Prozentsatz der Randdaten, die nicht ber¸cksichtigt werden." ;
             Text [ english ] = "is the fractional number of data points to exclude from the calculation." ;
             Text [ norwegian ] = "Der Prozentsatz der Randdaten, die nicht ber¸cksichtigt werden." ;
-            Text [ italian ] = "Ë il numero di dati frazionario da escludere dal calcolo." ;
+            Text [ italian ] = "La percentuale dei dati marginali da non includere nel calcolo." ;
             Text [ portuguese_brazilian ] = "Der Prozentsatz der Randdaten, die nicht ber?ksichtigt werden." ;
             Text [ portuguese ] = "È o n˙mero fraccion·rio de observaÁıes a ser excluÌdas do c·lculo." ;
             Text [ finnish ] = "Poisj‰tett‰vien marginaalitietojen prosenttiosuus." ;
@@ -25546,7 +25546,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "S_1" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "S 1" ;
-            Text [ italian ] = "T_1" ;
+            Text [ italian ] = "Tentativo 1" ;
             Text [ portuguese_brazilian ] = "S 1" ;
             Text [ portuguese ] = "Limite_inf" ;
             Text [ finnish ] = "T_1" ;
@@ -25604,7 +25604,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "S_2" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "S 2" ;
-            Text [ italian ] = "T_2" ;
+            Text [ italian ] = "Tentativo 2" ;
             Text [ portuguese_brazilian ] = "S 2" ;
             Text [ portuguese ] = "Limite_sup" ;
             Text [ finnish ] = "T_2" ;
@@ -26022,7 +26022,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, der r¸cktransformiert wird." ;
             Text [ english ] = "is the value for which you want to perform the inverse of the transformation." ;
             Text [ norwegian ] = "Der Wert, der r¸cktransformiert wird." ;
-            Text [ italian ] = "Ë il valore per il quale si desidera eseguire l'inversa della trasformazione." ;
+            Text [ italian ] = "Valore per il quale si desidera eseguire l'inversa della trasformazione." ;
             Text [ portuguese_brazilian ] = "Der Wert, der r?ktransformiert wird." ;
             Text [ portuguese ] = "È o valor para o qual se deseja o inverso da transformaÁ„o." ;
             Text [ finnish ] = "Takaisin muunnettava arvo." ;
@@ -26090,7 +26090,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "X" ;
             Text [ english ] = "number_s" ;
             Text [ norwegian ] = "X" ;
-            Text [ italian ] = "num_successi" ;
+            Text [ italian ] = "Numero successi" ;
             Text [ portuguese_brazilian ] = "X" ;
             Text [ portuguese ] = "N˙m_s" ;
             Text [ finnish ] = "X" ;
@@ -26119,7 +26119,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Erfolge in der Versuchsreihe." ;
             Text [ english ] = "is the number of successes in trials." ;
             Text [ norwegian ] = "Die Anzahl der Erfolge in der Versuchsreihe." ;
-            Text [ italian ] = "Ë il numero dei successi in prove." ;
+            Text [ italian ] = "Numero dei successi in prove." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Erfolge in der Versuchsreihe." ;
             Text [ portuguese ] = "È o n˙mero de tentativas bem sucedidas." ;
             Text [ finnish ] = "Onnistumisten m‰‰r‰ koeyrityksiss‰." ;
@@ -26177,7 +26177,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Gesamtanzahl der Versuche." ;
             Text [ english ] = "is the number of independent trials." ;
             Text [ norwegian ] = "Die Gesamtanzahl der Versuche." ;
-            Text [ italian ] = "Ë il numero di prove indipendenti." ;
+            Text [ italian ] = "Numero di prove indipendenti." ;
             Text [ portuguese_brazilian ] = "Die Gesamtanzahl der Versuche." ;
             Text [ portuguese ] = "È o n˙mero de tentativas independentes." ;
             Text [ finnish ] = "Koeyritysten kokonaism‰‰r‰." ;
@@ -26206,7 +26206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "W" ;
             Text [ english ] = "probability_s" ;
             Text [ norwegian ] = "W" ;
-            Text [ italian ] = "probabilit‡_s" ;
+            Text [ italian ] = "Probabilit‡ successo" ;
             Text [ portuguese_brazilian ] = "W" ;
             Text [ portuguese ] = "Probabilidades_s" ;
             Text [ finnish ] = "SP" ;
@@ -26235,7 +26235,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
             Text [ english ] = "is the probability of success on each trial." ;
             Text [ norwegian ] = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
-            Text [ italian ] = "Ë la probabilit‡ di successo per ciascuna prova." ;
+            Text [ italian ] = "Probabilit‡ di successo per ciascuna prova." ;
             Text [ portuguese_brazilian ] = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
             Text [ portuguese ] = "È a probabilidade de sucesso em cada tentativa." ;
             Text [ finnish ] = "Koeyrityksen onnistumistodenn‰kˆisyys." ;
@@ -26293,7 +26293,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Kumuliert. K = 0 berechnet die Einzel-, K = 1 die kumulierte Wahrscheinlichkeit." ;
             Text [ english ] = "is a logical value that determines the form of the function." ;
             Text [ norwegian ] = "Kumuliert. K = 0 berechnet die Einzel-, K = 1 die kumulierte Wahrscheinlichkeit." ;
-            Text [ italian ] = "Ë un valore logico che determina la forma assunta dalla funzione." ;
+            Text [ italian ] = "Se il valore = 0 calcola la probabilit‡ individuale, se = 1 calcola la probabilit‡ cumulativa." ;
             Text [ portuguese_brazilian ] = "Kumuliert. K = 0 berechnet die Einzel-, K = 1 die kumulierte Wahrscheinlichkeit." ;
             Text [ portuguese ] = "È um valor lÛgico que determina a forma da funÁ„o. 1 devolve a densidade de probabilidade, 0 devolve a funÁ„o cumulativa." ;
             Text [ finnish ] = "Kumuloitu. C = 0 laskee yksitt‰isen todenn‰kˆisyyden, C = 1 kumulatiivisen todenn‰kˆisyyden." ;
@@ -26361,7 +26361,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "X" ;
             Text [ english ] = "number_f" ;
             Text [ norwegian ] = "X" ;
-            Text [ italian ] = "num_insuccessi" ;
+            Text [ italian ] = "Numero insuccessi" ;
             Text [ portuguese_brazilian ] = "X" ;
             Text [ portuguese ] = "N˙m_insucessos" ;
             Text [ finnish ] = "X" ;
@@ -26391,7 +26391,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Misserfolge in der Versuchsreihe." ;
             Text [ english ] = "is the number of failures." ;
             Text [ norwegian ] = "Die Anzahl der Miﬂerfolge in der Versuchsreihe." ;
-            Text [ italian ] = "Ë il numero degli insuccessi." ;
+            Text [ italian ] = "Il numero degli insuccessi." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Mi?erfolge in der Versuchsreihe." ;
             Text [ portuguese ] = "È o n˙mero de insucessos na sÈrie de tentativas." ;
             Text [ finnish ] = "Koealueen virhem‰‰r‰." ;
@@ -26420,7 +26420,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "R" ;
             Text [ english ] = "number_s" ;
             Text [ norwegian ] = "R" ;
-            Text [ italian ] = "num_successi" ;
+            Text [ italian ] = "Numero successi" ;
             Text [ portuguese_brazilian ] = "R" ;
             Text [ portuguese ] = "N˙m_sucessos" ;
             Text [ finnish ] = "R" ;
@@ -26449,7 +26449,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Erfolge in der Versuchsreihe." ;
             Text [ english ] = "is the threshold number of successes." ;
             Text [ norwegian ] = "Die Anzahl der Erfolge in der Versuchsreihe." ;
-            Text [ italian ] = "Ë il numero dei successi nella serie." ;
+            Text [ italian ] = "Il numero dei successi nella serie." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Erfolge in der Versuchsreihe." ;
             Text [ portuguese ] = "È o n˙mero de sucessos na sÈrie de tentativas." ;
             Text [ finnish ] = "Koeyritysten onnistumisten m‰‰r‰." ;
@@ -26478,7 +26478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "W" ;
             Text [ english ] = "probability_s" ;
             Text [ norwegian ] = "W" ;
-            Text [ italian ] = "probabilit‡_s" ;
+            Text [ italian ] = "Probabilit‡ successo" ;
             Text [ portuguese_brazilian ] = "W" ;
             Text [ portuguese ] = "Probabilidade_s" ;
             Text [ finnish ] = "SP" ;
@@ -26507,7 +26507,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
             Text [ english ] = "is the probability of a success." ;
             Text [ norwegian ] = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
-            Text [ italian ] = "Ë la probabilit‡ di successo per ogni singola prova." ;
+            Text [ italian ] = "La probabilit‡ di successo per ogni singola prova." ;
             Text [ portuguese_brazilian ] = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
             Text [ portuguese ] = "È a probabilidade de obter um sucesso." ;
             Text [ finnish ] = "Koeyrityksen onnistumistodenn‰kˆisyys." ;
@@ -26604,7 +26604,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Gesamtanzahl der Versuche." ;
             Text [ english ] = "is the number of Bernoulli trials." ;
             Text [ norwegian ] = "Die Gesamtanzahl der Versuche." ;
-            Text [ italian ] = "Ë il numero delle prove di Bernoulli." ;
+            Text [ italian ] = "Numero complessivo delle prove." ;
             Text [ portuguese_brazilian ] = "Die Gesamtanzahl der Versuche." ;
             Text [ portuguese ] = "È o n˙mero total de tentativas." ;
             Text [ finnish ] = "Koeyritysten kokonaism‰‰r‰." ;
@@ -26633,7 +26633,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "W" ;
             Text [ english ] = "probability_s" ;
             Text [ norwegian ] = "W" ;
-            Text [ italian ] = "probabilit‡_s" ;
+            Text [ italian ] = "Probabilit‡ successo" ;
             Text [ portuguese_brazilian ] = "W" ;
             Text [ portuguese ] = "Probabilidade_s" ;
             Text [ finnish ] = "SP" ;
@@ -26662,7 +26662,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
             Text [ english ] = "is the probability of a success on each trial." ;
             Text [ norwegian ] = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
-            Text [ italian ] = "Ë la probabilit‡ di un successo per ogni singola prova." ;
+            Text [ italian ] = "Probabilit‡ di un successo per ogni singola prova." ;
             Text [ portuguese_brazilian ] = "Die Erfolgswahrscheinlichkeit eines Versuchs." ;
             Text [ portuguese ] = "È a probabilidade de sucesso de uma tentativa." ;
             Text [ finnish ] = "Koeyrityksen onnistumistodenn‰kˆisyys." ;
@@ -26721,7 +26721,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Grenzwahrscheinlichkeit, die erreicht oder ¸berschritten wird." ;
             Text [ english ] = "is the criterion value." ;
             Text [ norwegian ] = "Die Grenzwahrscheinlichkeit, die erreicht oder ¸berschritten wird." ;
-            Text [ italian ] = "Ë il valore di criterio." ;
+            Text [ italian ] = "La probabilit‡ limite che puÚ essere raggiunta oppure superata." ;
             Text [ portuguese_brazilian ] = "Die Grenzwahrscheinlichkeit, die erreicht oder ?erschritten wird." ;
             Text [ portuguese ] = "È o critÈrio de valor." ;
             Text [ finnish ] = "Saavutettu tai ylitetty todenn‰kˆisyyden raja-arvo." ;
@@ -26789,7 +26789,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -26818,7 +26818,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die Poisson-Verteilung berechnet werden soll." ;
             Text [ english ] = "is the number of events." ;
             Text [ norwegian ] = "Der Wert, zu dem die Poisson-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë il numero degli eventi." ;
+            Text [ italian ] = "Il valore in base al quale calcolare la distribuzione Poisson." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die Poisson-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor para o qual se deseja calcular a distribuiÁ„o Poisson." ;
             Text [ finnish ] = "Arvo, jonka Poisson-jakauma lasketaan." ;
@@ -26876,7 +26876,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Mittelwert. Der Mittelwert der Poisson-Verteilung." ;
             Text [ english ] = "is the expected numeric value." ;
             Text [ norwegian ] = "Mittelwert. Der Mittelwert der Poisson-Verteilung." ;
-            Text [ italian ] = "Ë il valore numerico previsto." ;
+            Text [ italian ] = "Media della distribuzione di Poisson." ;
             Text [ portuguese_brazilian ] = "Mittelwert. Der Mittelwert der Poisson-Verteilung." ;
             Text [ portuguese ] = "È o valor numÈrico esperado." ;
             Text [ finnish ] = "Keskiarvo. Poisson-jakauman keskiarvo." ;
@@ -26934,7 +26934,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
             Text [ english ] = "is a logical value that determines the form of the probability distribution returned." ;
             Text [ norwegian ] = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
-            Text [ italian ] = "Ë un valore logico che determina la forma per la distribuzione di probabilit‡." ;
+            Text [ italian ] = "Se il valore = 0 calcola la densit‡ di probabilit‡, se = 1 calcola la distribuzione." ;
             Text [ portuguese_brazilian ] = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
             Text [ portuguese ] = "È um valor lÛgico que determina a forma da distribuiÁ„o de probabilidades. 0 calcula a funÁ„o cumulativa; 1 a distribuiÁ„o." ;
             Text [ finnish ] = "Kumuloitu. C = 0 laskee tiheysfunktion ja C = 1 jakauman." ;
@@ -27302,7 +27302,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse Normalverteilung berechnet werden soll." ;
             Text [ english ] = "is a probability corresponding to the normal distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Normalverteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ corrispondente alla distribuzione normale." ;
+            Text [ italian ] = "La probabilit‡ corrispondente alla distribuzione normale." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Normalverteilung berechnet werden soll." ;
             Text [ portuguese ] = "È a probabilidade para a qual se deseja a distribuiÁ„o normal." ;
             Text [ finnish ] = "Todenn‰kˆisyysarvo, jonka k‰‰nteinen normaalijakauma lasketaan." ;
@@ -27360,7 +27360,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Mittelwert. Der Mittelwert der Normalverteilung." ;
             Text [ english ] = "is the arithmetic mean of the distribution." ;
             Text [ norwegian ] = "Mittelwert. Der Mittelwert der Normalverteilung." ;
-            Text [ italian ] = "Ë la media aritmetica della distribuzione." ;
+            Text [ italian ] = "La media aritmetica della distribuzione." ;
             Text [ portuguese_brazilian ] = "Mittelwert. Der Mittelwert der Normalverteilung." ;
             Text [ portuguese ] = "È a mÈdia aritmÈtica da distribuiÁ„o." ;
             Text [ finnish ] = "Keskiarvo. Normaalijakauman keskiarvo." ;
@@ -27389,7 +27389,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "STD" ;
             Text [ english ] = "standard_dev" ;
             Text [ norwegian ] = "STD" ;
-            Text [ italian ] = "dev_standard" ;
+            Text [ italian ] = "Deviazione standard" ;
             Text [ portuguese_brazilian ] = "STD" ;
             Text [ portuguese ] = "Desvio_padr„o" ;
             Text [ finnish ] = "STDEV" ;
@@ -27418,7 +27418,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Standardabweichung. Die Standardabweichung der Normalverteilung." ;
             Text [ english ] = "is the standard deviation of the distribution." ;
             Text [ norwegian ] = "Standardabweichung. Die Standardabweichung der Normalverteilung." ;
-            Text [ italian ] = "Ë la deviazione standard della distribuzione." ;
+            Text [ italian ] = "La deviazione standard della distribuzione." ;
             Text [ portuguese_brazilian ] = "Standardabweichung. Die Standardabweichung der Normalverteilung." ;
             Text [ portuguese ] = "È o desvio padr„o da distribuiÁ„o." ;
             Text [ finnish ] = "Vakiopoikkeama. Normaalijakauman vakiopoikkeama." ;
@@ -27612,7 +27612,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse Standardnormalverteilung berechnet werden soll." ;
             Text [ english ] = "is a probability corresponding to the normal distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Standardnormalverteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ corrispondente alla distribuzione normale." ;
+            Text [ italian ] = "Il valore di probabilit‡ sul quale deve essere calcolata l'inversa della distribuzione normale standard." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Standardnormalverteilung berechnet werden soll." ;
             Text [ portuguese ] = "È a probabilidade para q qual deseja calcular a distribuiÁ„o padr„o normal." ;
             Text [ finnish ] = "Todenn‰kˆisyysarvo, jonka k‰‰nteinen normaalijakauma (keskiarvo 0, vakiopoikkeama 1) lasketaan." ;
@@ -27620,7 +27620,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "La valeur de probabilitÈ pour laquelle la distribution normale standard inverse doÓt Ítre calculÈe." ;
             Text [ swedish ] = "Sannolikhetsv‰rdet fˆr vilket den inversa standardnormalfˆrdelningen skall ber‰knas." ;
             Text [ dutch ] = "De kans die overeenkomt met de inverse standaardnormale verdeling." ;
-            Text [ spanish ] = "es una probabilidad que corresponde a la distribuciÛn normal." ;
+            Text [ spanish ] = "El valor de probabilidad sobre el que se debe calcular la inversa de la distribuciÛn normal est·ndar." ;
             Text [ english_us ] = "The probability value for which the inverse standard normal distribution is to be calculated." ;
             Text[ chinese_simplified ] = "Ê†áÂáÜÊ≠£ÊÄÅÂàÜÂ∏ÉÁöÑÊ¶ÇÁéáÂÄº„ÄÇ";
             Text[ russian ] = "«Ì‡˜ÂÌËÂ ‚ÂÓˇÚÌÓÒÚË, ‰Îˇ ÍÓÚÓÓ„Ó ÌÂÓ·ıÓ‰ËÏÓ ‚˚˜ËÒÎËÚ¸ Ó·‡ÚÌÓÂ ÁÌ‡˜ÂÌËÂ ÒÚ‡Ì‰‡ÚÌÓ„Ó ÌÓÏ‡Î¸ÌÓ„Ó ‡ÒÔÂ‰ÂÎÂÌËˇ.";
@@ -27680,7 +27680,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -27709,7 +27709,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die Lognormalverteilung berechnet werden soll." ;
             Text [ english ] = "is the value at which to evaluate the function." ;
             Text [ norwegian ] = "Der Wert, zu dem die Lognormalverteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë il valore in cui calcolare la funzione." ;
+            Text [ italian ] = "Il valore in base al quale calcolare la distribuzione lognormale." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die Lognormalverteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor para o qual se deseja calcular a distribuiÁ„o log-normal." ;
             Text [ finnish ] = "Arvo, jonka lognormal-jakauma lasketaan." ;
@@ -27767,7 +27767,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Mittelwert. Der Mittelwert der Lognormalverteilung." ;
             Text [ english ] = "is the mean of ln(x)." ;
             Text [ norwegian ] = "Mittelwert. Der Mittelwert der Lognormalverteilung." ;
-            Text [ italian ] = "Ë la media di ln(x)." ;
+            Text [ italian ] = "La media della distrubuzione lognormale." ;
             Text [ portuguese_brazilian ] = "Mittelwert. Der Mittelwert der Lognormalverteilung." ;
             Text [ portuguese ] = "È o valor mÈdio da distribuiÁ„o log-normal [ln(x)]." ;
             Text [ finnish ] = "Keskiarvo! Lognormal-jakauman keskiarvo." ;
@@ -27796,7 +27796,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "STD" ;
             Text [ english ] = "standard_dev" ;
             Text [ norwegian ] = "STD" ;
-            Text [ italian ] = "dev_standard" ;
+            Text [ italian ] = "Deviazione standard" ;
             Text [ portuguese_brazilian ] = "STD" ;
             Text [ portuguese ] = "Desvio_padr„o" ;
             Text [ finnish ] = "STDEV" ;
@@ -27825,7 +27825,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Standardabweichung. Die Standardabweichung der Lognormalverteilung." ;
             Text [ english ] = "is the standard deviation of ln(x)." ;
             Text [ norwegian ] = "Standardabweichung. Die Standardabweichung der Lognormalverteilung." ;
-            Text [ italian ] = "Ë la deviazione standard di ln(x)." ;
+            Text [ italian ] = "La deviazione standard della distribuzione lognormale." ;
             Text [ portuguese_brazilian ] = "Standardabweichung. Die Standardabweichung der Lognormalverteilung." ;
             Text [ portuguese ] = "È o desvio padr„o da distribuiÁ„o log-normal [ln(x)]." ;
             Text [ finnish ] = "Vakiopoikkeama. Lognormal-jakauman vakiopoikkeama." ;
@@ -27922,7 +27922,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse Lognormalverteilung berechnet werden soll." ;
             Text [ english ] = "is a probability associated with the lognormal distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Lognormalverteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ associata alla distribuzione lognormale." ;
+            Text [ italian ] = "Probabilit‡ associata alla distribuzione lognormale." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Lognormalverteilung berechnet werden soll." ;
             Text [ portuguese ] = "È a probabilidade associada ‡ distribuiÁ„o log-normal." ;
             Text [ finnish ] = "Todenn‰kˆisyysarvo, jonka k‰‰nteinen lognormal-jakauma lasketaan." ;
@@ -27980,7 +27980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Mittelwert. Der Mittelwert der Lognormalverteilung." ;
             Text [ english ] = "is the mean of ln(x)." ;
             Text [ norwegian ] = "Mittelwert. Der Mittelwert der Lognormalverteilung." ;
-            Text [ italian ] = "Ë la media di ln(x)." ;
+            Text [ italian ] = "La media della distribuzione lognormale." ;
             Text [ portuguese_brazilian ] = "Mittelwert. Der Mittelwert der Lognormalverteilung." ;
             Text [ portuguese ] = "È o valor mÈdio da distribuiÁ„o log-normal [ln(x)]." ;
             Text [ finnish ] = "Keskiarvo! Lognormal-jakauman keskiarvo." ;
@@ -28009,7 +28009,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "STD" ;
             Text [ english ] = "standard_dev" ;
             Text [ norwegian ] = "STD" ;
-            Text [ italian ] = "dev_standard" ;
+            Text [ italian ] = "Deviazione standard" ;
             Text [ portuguese_brazilian ] = "STD" ;
             Text [ portuguese ] = "Desvio_padr„o" ;
             Text [ finnish ] = "STDEV" ;
@@ -28038,7 +28038,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Standardabweichung. Die Standardabweichung der Lognormalverteilung." ;
             Text [ english ] = "is the standard deviation of ln(x)." ;
             Text [ norwegian ] = "Standardabweichung. Die Standardabweichung der Lognormalverteilung." ;
-            Text [ italian ] = "Ë la deviazione standard di ln(x)." ;
+            Text [ italian ] = "Deviazione standard della distribuzione lognormale." ;
             Text [ portuguese_brazilian ] = "Standardabweichung. Die Standardabweichung der Lognormalverteilung." ;
             Text [ portuguese ] = "È o desvio padr„o da distribuiÁ„o log-normal [ln(x)]." ;
             Text [ finnish ] = "Vakiopoikkeama. Lognormal-jakauman vakiopoikkeama." ;
@@ -28106,7 +28106,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -28135,7 +28135,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die Exponentialverteilung berechnet werden soll." ;
             Text [ english ] = "is the value of the function." ;
             Text [ norwegian ] = "Der Wert, zu dem die Exponentialverteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë il valore della funzione." ;
+            Text [ italian ] = "Valore per il quale si vuole calcolare la distribuzione esponenziale." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die Exponentialverteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor para o qual se deseja calcular a distribuiÁ„o exponencial." ;
             Text [ finnish ] = "Arvo, jonka eksponentiaalinen jakauma lasketaan." ;
@@ -28193,7 +28193,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter der Exponentialverteilung." ;
             Text [ english ] = "is the parameter value." ;
             Text [ norwegian ] = "Der Parameter der Exponentialverteilung." ;
-            Text [ italian ] = "Ë il valore del parametro." ;
+            Text [ italian ] = "Parametro della distribuzione esponenziale." ;
             Text [ portuguese_brazilian ] = "Der Parameter der Exponentialverteilung." ;
             Text [ portuguese ] = "È o valor do par‚metro." ;
             Text [ finnish ] = "Eksponentiaalisen jakauman parametrit." ;
@@ -28251,7 +28251,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
             Text [ english ] = "is a logical value that indicates which form of the exponential function to provide." ;
             Text [ norwegian ] = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
-            Text [ italian ] = "Ë un valore logico che determina la forma assunta dalla funzione esponenziale." ;
+            Text [ italian ] = "Se il valore = 0 calcola la densit‡ di probabilit‡, = 1 calcola la distribuzione." ;
             Text [ portuguese_brazilian ] = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
             Text [ portuguese ] = "È um valor lÛgico que indica a forma da funÁ„o. 0 devolve a funÁ„o de distribuiÁ„o cumulativa e 1 a distribuiÁ„o." ;
             Text [ finnish ] = "Kumuloitu. C = 0 laskee tiheysfunktion ja C = 1 jakauman." ;
@@ -28259,7 +28259,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "Cumulative. C = 0 calcule la fonction de densitÈ, C = 1 la distribution." ;
             Text [ swedish ] = "Kumulerat. K = 0 ber‰knar t‰thetsfunktionen, K = 1 fˆrdelningen." ;
             Text [ dutch ] = "Cumulatief. C = 0 berekent de dichtheid, C = 1 de verdeling." ;
-            Text [ spanish ] = "es un valor lÛgico que indica la forma de la funciÛn. 0 devuelve la funciÛn de distribuciÛn acumulativa, 1 la distribuciÛn." ;
+            Text [ spanish ] = "Cumulativo. C = 0 calcula la funciÛn de densidad, C = 1 la distribuciÛn." ;
             Text [ english_us ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
             Text[ chinese_simplified ] = "ÊåáÂÆöÂáΩÊï∞Á±ªÂûãÁöÑÈÄªËæëÂÄº„ÄÇ K = 0 ‰∏∫ÂØÜÂ∫¶ÂáΩÊï∞Ôºå \nK = 1 ‰∏∫Á¥ØÁßØÂàÜÂ∏ÉÂáΩÊï∞„ÄÇ";
             Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ ÁÌ‡˜ÂÌËÂ, ÍÓÚÓÓÂ ÛÍ‡Á˚‚‡ÂÚ, ÙÛÌÍˆË˛ Í‡ÍÓ„Ó ‚Ë‰‡ ËÒÔÓÎ¸ÁÓ‚‡Ú¸: ÙÛÌÍˆË˛ ÔÎÓÚÌÓÒÚË (0) ËÎË ÙÛÌÍˆË˛ ‡ÒÔÂ‰ÂÎÂÌËˇ (1).";
@@ -28319,7 +28319,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -28348,7 +28348,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die Gamma-Verteilung berechnet werden soll." ;
             Text [ english ] = "is the value at which you want to evaluate the distribution." ;
             Text [ norwegian ] = "Der Wert, zu dem die Gamma-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Il valore per il quale si vuole calcolare la distribuzione gamma" ;
+            Text [ italian ] = "Il valore per il quale si vuole calcolare la distribuzione gamma." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die Gamma-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor para o qual deseja calcular a distribuiÁ„o gama." ;
             Text [ finnish ] = "Arvo, jonka gamma-jakauma lasketaan." ;
@@ -28406,7 +28406,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Alpha der Gamma-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Alpha der Gamma-Verteilung." ;
-            Text [ italian ] = "Il parametro della distribuzione gamma" ;
+            Text [ italian ] = "Il parametro alfa della distribuzione gamma." ;
             Text [ portuguese_brazilian ] = "Der Parameter Alpha der Gamma-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro alfa da distribuiÁ„o gama." ;
             Text [ finnish ] = "Gamma-jakauman alfa-parametri." ;
@@ -28464,7 +28464,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Beta der Gamma-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Beta der Gamma-Verteilung." ;
-            Text [ italian ] = "Il parametro beta della distribuzione gamma" ;
+            Text [ italian ] = "Il parametro beta della distribuzione gamma." ;
             Text [ portuguese_brazilian ] = "Der Parameter Beta der Gamma-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro beta da distribuiÁ„o gama." ;
             Text [ finnish ] = "Gamma-jakauman beeta-parametri." ;
@@ -28522,7 +28522,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
             Text [ english ] = "is a logical value that determines the form of the function." ;
             Text [ norwegian ] = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
-            Text [ italian ] = "Cumulativo. Se K=0 viene calcolata la funzione massa di probabilit‡, se K=1 viene calcolata la distribuzione cumulativa." ;
+            Text [ italian ] = "Se il valore = 0 viene calcolata la densit‡ di probabilit‡, se = 1 viene calcolata la distribuzione cumulativa." ;
             Text [ portuguese_brazilian ] = "Kumuliert. K = 0 berechnet die Dichtefunktion, K = 1 die Verteilung." ;
             Text [ portuguese ] = "È um valor lÛgico que determina o modo da funÁ„o. 0 devolve a funÁ„o cumulativa; 1 devolve a distribuiÁ„o." ;
             Text [ finnish ] = "Kumuloitu. C = 0 laskee tiheysfunktion ja C = 1 jakauman." ;
@@ -28619,7 +28619,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse Gamma-Verteilung berechnet werden soll." ;
             Text [ english ] = "is the probability associated with the gamma distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Gamma-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ associata alla distribuzione gamma." ;
+            Text [ italian ] = "Probabilit‡ associata alla distribuzione gamma." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Gamma-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È a probabilidade associada ‡ distribuiÁ„o gama." ;
             Text [ finnish ] = "Todenn‰kˆisyys, jolle k‰‰nteinen gamma-jakauma lasketaan." ;
@@ -28677,7 +28677,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Alpha der Gamma-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Alpha der Gamma-Verteilung." ;
-            Text [ italian ] = "Ë un parametro per la distribuzione." ;
+            Text [ italian ] = "Parametro alfa per la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Parameter Alpha der Gamma-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro alfa da distribuiÁ„o gama." ;
             Text [ finnish ] = "Gamma-jakauman alfa-parametri." ;
@@ -28735,7 +28735,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Beta der Gamma-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Beta der Gamma-Verteilung." ;
-            Text [ italian ] = "Ë un parametro per la distribuzione." ;
+            Text [ italian ] = "Parametro beta per la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Parameter Beta der Gamma-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro beta da distribuiÁ„o gama." ;
             Text [ finnish ] = "Gamma-jakauman beeta-parametri." ;
@@ -28803,7 +28803,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -28833,7 +28833,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem der nat¸rliche Logarithmus der Gamma-Funktion berechnet werden soll." ;
             Text [ english ] = "is the value for which you want to calculate GAMMALN." ;
             Text [ norwegian ] = "Der Wert, zu dem der nat¸rliche Logarithmus der Gamma-Funktion berechnet werden soll." ;
-            Text [ italian ] = "Ë il valore per il quale si desidera calcolare LN.GAMMA." ;
+            Text [ italian ] = "Valore per il quale si desidera calcolare il logaritmo naturale della funzione gamma." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem der nat?liche Logarithmus der Gamma-Funktion berechnet werden soll." ;
             Text [ portuguese ] = "È o valor para o qual  deseja calcular o logaritmo natural gama (LNGAMA)." ;
             Text [ finnish ] = "Arvo, jolle gamma-toiminnon luonnollinen logaritmi lasketaan." ;
@@ -28901,7 +28901,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "probability" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "luku" ;
@@ -28930,7 +28930,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die Beta-Verteilung berechnet werden soll." ;
             Text [ english ] = "is the value between A and B at which to evaluate the function." ;
             Text [ norwegian ] = "Der Wert, zu dem die Beta-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë il valore compreso tra A e B in cui calcolare la funzione." ;
+            Text [ italian ] = "Valore per cui si vuole calcolare la distribuzione beta." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die Beta-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor entre A e B com o qual se avalia a funÁ„o." ;
             Text [ finnish ] = "Arvo, jonka beeta-jakauma lasketaan." ;
@@ -28988,7 +28988,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Alpha der Beta-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Alpha der Beta-Verteilung." ;
-            Text [ italian ] = "Ë un parametro per la distribuzione." ;
+            Text [ italian ] = "Parametro alfa per la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Parameter Alpha der Beta-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro alfa da distribuiÁ„o-beta." ;
             Text [ finnish ] = "Beeta-jakauman alfa-parametri." ;
@@ -29046,7 +29046,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Beta der Beta-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Beta der Beta-Verteilung." ;
-            Text [ italian ] = "Ë un parametro per la distribuzione." ;
+            Text [ italian ] = "Parametro beta per la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Parameter Beta der Beta-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro da distribuiÁ„o-beta." ;
             Text [ finnish ] = "Beeta-jakauman beeta-parametri." ;
@@ -29105,7 +29105,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Anfangswert f¸r das Werteintervall der Verteilung." ;
             Text [ english ] = "is an optional lower bound to the interval of x." ;
             Text [ norwegian ] = "Der Anfangswert f¸r das Werteintervall der Verteilung." ;
-            Text [ italian ] = "Ë un valore facoltativo per l'estremo inferiore dell'intervallo di x." ;
+            Text [ italian ] = "Valore d'inizio per l'intervallo di valori della distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Anfangswert f? das Werteintervall der Verteilung." ;
             Text [ portuguese ] = "È um limite inferior opcional para o intervalo de x." ;
             Text [ finnish ] = "Jakauman arvov‰lin aloitusarvo." ;
@@ -29134,7 +29134,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ende" ;
             Text [ english ] = "B" ;
             Text [ norwegian ] = "Ende" ;
-            Text [ italian ] = "B" ;
+            Text [ italian ] = "Fine" ;
             Text [ portuguese_brazilian ] = "Ende" ;
             Text [ portuguese ] = "B" ;
             Text [ finnish ] = "Loppu" ;
@@ -29164,7 +29164,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Endwert f¸r das Werteintervall der Verteilung." ;
             Text [ english ] = "is an optional upper bound to the interval of x." ;
             Text [ norwegian ] = "Der Endwert f¸r das Werteintervall der Verteilung." ;
-            Text [ italian ] = "Ë un valore facoltativo per l'estremo superiore dell'intervallo di x." ;
+            Text [ italian ] = "Valore finale per l'intervallo di valori della distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Endwert f? das Werteintervall der Verteilung." ;
             Text [ portuguese ] = "È um limite superior opcional para o intervalo de x." ;
             Text [ finnish ] = "Jakauman arvov‰lin viimeinen arvo." ;
@@ -29261,7 +29261,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse Beta-Verteilung berechnet werden soll." ;
             Text [ english ] = "is a probability associated with the beta distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Beta-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ associata alla distribuzione beta." ;
+            Text [ italian ] = "Probabilit‡ associata alla distribuzione beta." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Beta-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È uma probabilidade associada ‡ distribuiÁ„o beta." ;
             Text [ finnish ] = "Todenn‰kˆisyysarvo, jonka k‰‰nteinen beeta-jakauma lasketaan." ;
@@ -29319,7 +29319,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Alpha der Beta-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Alpha der Beta-Verteilung." ;
-            Text [ italian ] = "Ë un parametro per la distribuzione." ;
+            Text [ italian ] = "Parametro alfa per la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Parameter Alpha der Beta-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro alfa da distribuiÁ„o-beta." ;
             Text [ finnish ] = "Beeta-jakauman alfa-parametri." ;
@@ -29377,7 +29377,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Parameter Beta der Beta-Verteilung." ;
             Text [ english ] = "is a parameter to the distribution." ;
             Text [ norwegian ] = "Der Parameter Beta der Beta-Verteilung." ;
-            Text [ italian ] = "Ë un parametro per la distribuzione." ;
+            Text [ italian ] = "Parametro beta per la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Parameter Beta der Beta-Verteilung." ;
             Text [ portuguese ] = "È o par‚metro da distribuiÁ„o-beta." ;
             Text [ finnish ] = "Beeta-jakauman beeta-parametri." ;
@@ -29436,7 +29436,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Anfangswert f¸r das Werteintervall der Verteilung." ;
             Text [ english ] = "is an optional lower bound to the interval of x." ;
             Text [ norwegian ] = "Der Anfangswert f¸r das Werteintervall der Verteilung." ;
-            Text [ italian ] = "Ë un valore facoltativo per l'estremo inferiore dell'intervallo di x." ;
+            Text [ italian ] = "Valore facoltativo per l'intervallo dei valori della distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Anfangswert f? das Werteintervall der Verteilung." ;
             Text [ portuguese ] = "È um limite inferior opcional para o intervalo de x." ;
             Text [ finnish ] = "Jakauman arvov‰lin aloitusarvo." ;
@@ -29495,7 +29495,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Endwert f¸r das Werteintervall der Verteilung." ;
             Text [ english ] = "is an optional upper bound to the interval of x." ;
             Text [ norwegian ] = "Der Endwert f¸r das Werteintervall der Verteilung." ;
-            Text [ italian ] = "Ë un valore facoltativo per l'estremo superiore dell'intervallo di x." ;
+            Text [ italian ] = "Il valore finale per l'intervallo dei valori della distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Endwert f? das Werteintervall der Verteilung." ;
             Text [ portuguese ] = "È um limite superior opcional para o intervalo de x." ;
             Text [ finnish ] = "Jakauman arvov‰lin viimeinen arvo." ;
@@ -29834,7 +29834,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "X" ;
             Text [ english ] = "sample_s" ;
             Text [ norwegian ] = "X" ;
-            Text [ italian ] = "successi_camp" ;
+            Text [ italian ] = "Successi campione" ;
             Text [ portuguese_brazilian ] = "X" ;
             Text [ portuguese ] = "Exemplo_s" ;
             Text [ finnish ] = "X" ;
@@ -29863,7 +29863,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Erfolge in der Stichprobe." ;
             Text [ english ] = "is the number of successes in the sample." ;
             Text [ norwegian ] = "Die Anzahl der Erfolge in der Stichprobe." ;
-            Text [ italian ] = "Ë il numero di successi nel campione." ;
+            Text [ italian ] = "Numero di successi nel campione." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Erfolge in der Stichprobe." ;
             Text [ portuguese ] = "È o n˙mero de sucessos num exemplo." ;
             Text [ finnish ] = "Onnistumisten m‰‰r‰ otoksessa." ;
@@ -29892,7 +29892,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "N_Stich" ;
             Text [ english ] = "number_sample" ;
             Text [ norwegian ] = "N Stich" ;
-            Text [ italian ] = "num_campione" ;
+            Text [ italian ] = "Numero campione" ;
             Text [ portuguese_brazilian ] = "N Stich" ;
             Text [ portuguese ] = "n_amostra" ;
             Text [ finnish ] = "n_otos" ;
@@ -29922,7 +29922,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Grˆﬂe der Stichprobe." ;
             Text [ english ] = "is the size of the sample." ;
             Text [ norwegian ] = "Die Grˆﬂe der Stichprobe." ;
-            Text [ italian ] = "Ë la dimensione del campione." ;
+            Text [ italian ] = "Dimensione del campione." ;
             Text [ portuguese_brazilian ] = "Die Gr?e der Stichprobe." ;
             Text [ portuguese ] = "È o tamanho do exemplo." ;
             Text [ finnish ] = "Otoksen koko." ;
@@ -29951,7 +29951,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "M" ;
             Text [ english ] = "population_s" ;
             Text [ norwegian ] = "M" ;
-            Text [ italian ] = "successi_pop" ;
+            Text [ italian ] = "Successi popolazione" ;
             Text [ portuguese_brazilian ] = "M" ;
             Text [ portuguese ] = "Sucesso_popul." ;
             Text [ finnish ] = "onnistumiset" ;
@@ -29980,7 +29980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Erfolge in der Grundgesamtheit." ;
             Text [ english ] = "is the number of successes in the population." ;
             Text [ norwegian ] = "Die Anzahl der Erfolge in der Grundgesamtheit." ;
-            Text [ italian ] = "Ë il numero di successi nella popolazione." ;
+            Text [ italian ] = "Numero di successi nella popolazione." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Erfolge in der Grundgesamtheit." ;
             Text [ portuguese ] = "È o n˙mero de sucessos na populaÁ„o." ;
             Text [ finnish ] = "Populaation onnistumisten m‰‰r‰." ;
@@ -30009,7 +30009,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "N_Gesamt" ;
             Text [ english ] = "number_population" ;
             Text [ norwegian ] = "N Gesamt" ;
-            Text [ italian ] = "num_popolazione" ;
+            Text [ italian ] = "Numero popolazione" ;
             Text [ portuguese_brazilian ] = "N Gesamt" ;
             Text [ portuguese ] = "n_total" ;
             Text [ finnish ] = "n_populaatio" ;
@@ -30039,7 +30039,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Grˆﬂe der Grundgesamtheit." ;
             Text [ english ] = "is the population size." ;
             Text [ norwegian ] = "Die Grˆﬂe der Grundgesamtheit." ;
-            Text [ italian ] = "Ë la dimensione della popolazione." ;
+            Text [ italian ] = "Dimensione della popolazione." ;
             Text [ portuguese_brazilian ] = "Die Gr?e der Grundgesamtheit." ;
             Text [ portuguese ] = "È o tamanho da populaÁ„o." ;
             Text [ finnish ] = "Populaation koko." ;
@@ -30477,7 +30477,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -30506,7 +30506,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die F-Verteilung berechnet werden soll." ;
             Text [ english ] = "is the value at which to evaluate the function." ;
             Text [ norwegian ] = "Der Wert, zu dem die F-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë il valore in cui calcolare la funzione." ;
+            Text [ italian ] = "Valore in cui calcolare la funzione." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die F-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor de avaliaÁ„o da funÁ„o." ;
             Text [ finnish ] = "Arvo, jolle k‰‰nteinen gamma-jakauma lasketaan." ;
@@ -30535,7 +30535,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Freiheitsgrade_1" ;
             Text [ english ] = "degrees_freedom 1" ;
             Text [ norwegian ] = "Freiheitsgrade 1" ;
-            Text [ italian ] = "gradi_libert‡_1" ;
+            Text [ italian ] = "Gradi libert‡ 1" ;
             Text [ portuguese_brazilian ] = "Freiheitsgrade 1" ;
             Text [ portuguese ] = "Graus_liberdade_1" ;
             Text [ finnish ] = "astevapaus_1" ;
@@ -30594,7 +30594,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Freiheitsgrade_2" ;
             Text [ english ] = "degrees_freedom 1" ;
             Text [ norwegian ] = "Freiheitsgrade 2" ;
-            Text [ italian ] = "gradi_libert‡_2" ;
+            Text [ italian ] = "Gradi libert‡ 2" ;
             Text [ portuguese_brazilian ] = "Freiheitsgrade 2" ;
             Text [ portuguese ] = "Graus_liberdade_2" ;
             Text [ finnish ] = "astevapaus_2" ;
@@ -30623,7 +30623,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Freiheitsgrade im Nenner der F-Verteilung." ;
             Text [ english ] = "is the denominator degrees of freedom." ;
             Text [ norwegian ] = "Die Freiheitsgrade im Nenner der F-Verteilung." ;
-            Text [ italian ] = "sono i gradi di libert‡ al denominatore." ;
+            Text [ italian ] = "Gradi di libert‡ al denominatore." ;
             Text [ portuguese_brazilian ] = "Die Freiheitsgrade im Nenner der F-Verteilung." ;
             Text [ portuguese ] = "s„o os graus de liberdade no denominador da distribuiÁ„o F." ;
             Text [ finnish ] = "F-jakauman nimitt‰j‰n vapausaste." ;
@@ -30720,7 +30720,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse F-Verteilung berechnet werden soll." ;
             Text [ english ] = "is a probability associated with the F cumulative distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse F-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ associata alla distribuzione cumulativa F." ;
+            Text [ italian ] = "Probabilit‡ associata alla distribuzione cumulativa F." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse F-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È uma probabilidade associada ‡ distribuiÁ„o cumulativa F." ;
             Text [ finnish ] = "Todenn‰kˆisyysarvo, jonka k‰‰nteinen F-jakauma lasketaan." ;
@@ -30749,7 +30749,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Freiheitsgrade_1" ;
             Text [ english ] = "degrees_freedom 1" ;
             Text [ norwegian ] = "Freiheitsgrade 1" ;
-            Text [ italian ] = "gradi_libert‡_1" ;
+            Text [ italian ] = "Gradi libert‡ 1" ;
             Text [ portuguese_brazilian ] = "Freiheitsgrade 1" ;
             Text [ portuguese ] = "Graus_liberdade_1" ;
             Text [ finnish ] = "astevapaus_1" ;
@@ -30779,7 +30779,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Freiheitsgrade im Z‰hler der F-Verteilung." ;
             Text [ english ] = "is the numerator degrees of freedom." ;
             Text [ norwegian ] = "Die Freiheitsgrade im Z‰hler der F-Verteilung." ;
-            Text [ italian ] = "sono i gradi di libert‡ al numeratore." ;
+            Text [ italian ] = "Gradi di libert‡ al numeratore della distribuzione F." ;
             Text [ portuguese_brazilian ] = "Die Freiheitsgrade im Z?hler der F-Verteilung." ;
             Text [ portuguese ] = "s„o os graus de liberdade no numerador da distribuiÁ„o F." ;
             Text [ finnish ] = "F-jakauman osoittajan vapausaste." ;
@@ -30808,7 +30808,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Freiheitsgrade_2" ;
             Text [ english ] = "degrees_freedom 2" ;
             Text [ norwegian ] = "Freiheitsgrade 2" ;
-            Text [ italian ] = "gradi_libert‡_2" ;
+            Text [ italian ] = "Gradi libert‡ 2" ;
             Text [ portuguese_brazilian ] = "Freiheitsgrade 2" ;
             Text [ portuguese ] = "Graus_liberdade_2" ;
             Text [ finnish ] = "astevapaus_2" ;
@@ -30837,7 +30837,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Freiheitsgrade im Nenner der F-Verteilung." ;
             Text [ english ] = "is the denominator degrees of freedom." ;
             Text [ norwegian ] = "Die Freiheitsgrade im Nenner der F-Verteilung." ;
-            Text [ italian ] = "sono i gradi libert‡ al denominatore." ;
+            Text [ italian ] = "Gradi libert‡ al denominatore della distribuzione F." ;
             Text [ portuguese_brazilian ] = "Die Freiheitsgrade im Nenner der F-Verteilung." ;
             Text [ portuguese ] = "s„o os graus de liberdade no denominador da distribuiÁ„o F." ;
             Text [ finnish ] = "F-jakauman nimitt‰j‰n vapausaste." ;
@@ -30905,7 +30905,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "x" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -30934,7 +30934,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, zu dem die Chi-Quadrat-Verteilung berechnet werden soll." ;
             Text [ english ] = "is the value at which you want to evaluate the distribution." ;
             Text [ norwegian ] = "Der Wert, zu dem die Chi-Quadrat-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë il valore in cui si desidera calcolare la distribuzione." ;
+            Text [ italian ] = "Valore in cui si desidera calcolare la distribuzione." ;
             Text [ portuguese_brazilian ] = "Der Wert, zu dem die Chi-Quadrat-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "È o valor de avaliaÁ„o da distribuiÁ„o do Qui-quadrado." ;
             Text [ finnish ] = "Arvo, jonka khii-neliˆjakauma lasketaan." ;
@@ -30963,7 +30963,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Freiheitsgrade" ;
             Text [ english ] = "degrees_freedom" ;
             Text [ norwegian ] = "Freiheitsgrade" ;
-            Text [ italian ] = "gradi_libert‡" ;
+            Text [ italian ] = "Gradi libert‡" ;
             Text [ portuguese_brazilian ] = "Freiheitsgrade" ;
             Text [ portuguese ] = "Graus_liberdade" ;
             Text [ finnish ] = "aste_vapaudet" ;
@@ -30992,7 +30992,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Freiheitsgrade der Chi-Quadrat-Verteilung." ;
             Text [ english ] = "is the number of degrees of freedom." ;
             Text [ norwegian ] = "Die Freiheitsgrade der Chi-Quadrat-Verteilung." ;
-            Text [ italian ] = "Ë il numero di gradi di libert‡." ;
+            Text [ italian ] = "Numero di gradi di libert‡." ;
             Text [ portuguese_brazilian ] = "Die Freiheitsgrade der Chi-Quadrat-Verteilung." ;
             Text [ portuguese ] = "È o n˙mero de graus de liberdade do Qui-quadrado." ;
             Text [ finnish ] = "Khii-neliˆjakauman vapausasteet." ;
@@ -31089,7 +31089,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wahrscheinlichkeitswert, zu dem die inverse Chi-Quadrat-Verteilung berechnet werden soll." ;
             Text [ english ] = "is a probability associated with the chi-squared distribution." ;
             Text [ norwegian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Chi-Quadrat-Verteilung berechnet werden soll." ;
-            Text [ italian ] = "Ë la probabilit‡ associata alla distribuzione del chi quadrato." ;
+            Text [ italian ] = "Probabilit‡ associata alla distribuzione del chi quadrato." ;
             Text [ portuguese_brazilian ] = "Der Wahrscheinlichkeitswert, zu dem die inverse Chi-Quadrat-Verteilung berechnet werden soll." ;
             Text [ portuguese ] = "representa uma probabilidade associada ‡ lei do Qui-quadrado." ;
             Text [ finnish ] = "Todenn‰kˆisyysarvo, jonka k‰‰nteinen khii-neliˆjakauma lasketaan." ;
@@ -31118,7 +31118,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Freiheitsgrade" ;
             Text [ english ] = "degrees_freedom" ;
             Text [ norwegian ] = "Freiheitsgrade" ;
-            Text [ italian ] = "gradi_libert‡" ;
+            Text [ italian ] = "Gradi libert‡" ;
             Text [ portuguese_brazilian ] = "Freiheitsgrade" ;
             Text [ portuguese ] = "Graus_liberdade" ;
             Text [ finnish ] = "aste_vapaudet" ;
@@ -31147,7 +31147,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Freiheitsgrade der Chi-Quadrat-Verteilung." ;
             Text [ english ] = "is the number of degrees of freedom." ;
             Text [ norwegian ] = "Die Freiheitsgrade der Chi-Quadrat-Verteilung." ;
-            Text [ italian ] = "Ë il numero di gradi di libert‡." ;
+            Text [ italian ] = "Numero di gradi di libert‡." ;
             Text [ portuguese_brazilian ] = "Die Freiheitsgrade der Chi-Quadrat-Verteilung." ;
             Text [ portuguese ] = "È o n˙mero de graus de liberdade do Qui-quadrado." ;
             Text [ finnish ] = "Khii-neliˆjakauman vapausasteet." ;
@@ -31302,7 +31302,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Mittelwert, um den verschoben wird." ;
             Text [ english ] = "is the arithmetic mean of the distribution." ;
             Text [ norwegian ] = "Der Mittelwert, um den verschoben wird." ;
-            Text [ italian ] = "Ë la media aritmetica della distribuzione." ;
+            Text [ italian ] = "La media utilizzata per lo spostamento." ;
             Text [ portuguese_brazilian ] = "Der Mittelwert, um den verschoben wird." ;
             Text [ portuguese ] = "È a mÈdia aritmÈtica da distribuiÁ„o." ;
             Text [ finnish ] = "Siirrossa k‰ytetty keskiarvo." ;
@@ -31310,7 +31310,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "La moyenne ‡ utiliser pour le dÈcalage." ;
             Text [ swedish ] = "Medelv‰rdet fˆr fˆrflyttningen." ;
             Text [ dutch ] = "Berekent het gemiddelde van de verschuiving" ;
-            Text [ spanish ] = "es la media aritmÈtica de la distribuciÛn." ;
+            Text [ spanish ] = "es el promedio utilizado para el desplazamiento" ;
             Text [ english_us ] = "The mean value used for moving." ;
             Text[ chinese_simplified ] = "ÂàÜÂ∏ÉÁöÑÁÆóÊúØÂπ≥ÂùáÂÄº„ÄÇ";
             Text[ russian ] = "—Â‰ÌÂÂ ‡ËÙÏÂÚË˜ÂÒÍÓÂ ‡ÒÔÂ‰ÂÎÂÌËˇ.";
@@ -31703,7 +31703,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Berechnet ein (1-alpha)-Konfidenzintervall zur Normalverteilung." ;
             Text [ english ] = "Returns the confidence interval for a population mean." ;
             Text [ norwegian ] = "Berechnet ein (1-alpha)-Konfidenzintervall zur Normalverteilung." ;
-            Text [ italian ] = "Restituisce un (1 alpha) intervallo di confidenza per la distribuzione normale." ;
+            Text [ italian ] = "Restituisce un (1 alfa) intervallo di confidenza per la distribuzione normale." ;
             Text [ portuguese_brazilian ] = "Berechnet ein (1-alpha)-Konfidenzintervall zur Normalverteilung." ;
             Text [ portuguese ] = "Devolve o intervalo de confianÁa para estabelecer uma mÈdia populacional." ;
             Text [ finnish ] = "Palauttaa normaalijakauman (1 alfa) luottamusv‰lin." ;
@@ -31767,7 +31767,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Das Niveau des Konfidenzintervalls." ;
             Text [ english ] = "is the significance level used to compute the confidence level." ;
             Text [ norwegian ] = "Das Niveau des Konfidenzintervalls." ;
-            Text [ italian ] = "Ë il livello di significativit‡ utilizzato per calcolare il livello di confidenza." ;
+            Text [ italian ] = "Livello dell'intervallo di confidenza." ;
             Text [ portuguese_brazilian ] = "Das Niveau des Konfidenzintervalls." ;
             Text [ portuguese ] = "È o nÌvel de signific‚ncia utilizado para calcular o nÌvel de confianÁa." ;
             Text [ finnish ] = "Luottamusv‰lin taso." ;
@@ -31796,7 +31796,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "STD" ;
             Text [ english ] = "standard_dev" ;
             Text [ norwegian ] = "STD" ;
-            Text [ italian ] = "dev_standard" ;
+            Text [ italian ] = "Deviazione standard" ;
             Text [ portuguese_brazilian ] = "STD" ;
             Text [ portuguese ] = "Desv_padr„o" ;
             Text [ finnish ] = "STDEV" ;
@@ -31825,7 +31825,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Standardabweichung der Grundgesamtheit." ;
             Text [ english ] = "is the population standard deviation for the data range and is assumed to be known." ;
             Text [ norwegian ] = "Die Standardabweichung der Grundgesamtheit." ;
-            Text [ italian ] = "Ë la deviazione standard della popolazione per l'intervallo di dati." ;
+            Text [ italian ] = "Deviazione standard della popolazione per l'intervallo di dati." ;
             Text [ portuguese_brazilian ] = "Die Standardabweichung der Grundgesamtheit." ;
             Text [ portuguese ] = "È o desvio padr„o da populaÁ„o para o intervalo de dados." ;
             Text [ finnish ] = "Populaation vakiopoikkeama." ;
@@ -31854,7 +31854,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "N" ;
             Text [ english ] = "size" ;
             Text [ norwegian ] = "N" ;
-            Text [ italian ] = "Dimensioni " ;
+            Text [ italian ] = "Dimensioni" ;
             Text [ portuguese_brazilian ] = "N" ;
             Text [ portuguese ] = "Tamanho" ;
             Text [ finnish ] = "koko" ;
@@ -32011,7 +32011,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "X" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "X" ;
-            Text [ italian ] = "X" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "X" ;
             Text [ portuguese ] = "X" ;
             Text [ finnish ] = "Luku" ;
@@ -33736,7 +33736,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "Dati_2" ;
+            Text [ italian ] = "Dati 2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Tiedot_2" ;
@@ -39704,7 +39704,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Tuhaterotin. M‰‰ritt‰‰ tuhaterotinasetuksen." ;
             Text [ danish ] = "Tusindtalsseparator. Angiver, om en tusindtalsseparator skal sÊttes." ;
             Text [ french ] = "Sans sÈparateur de milliers si valeur logique = VRAI (diffÈrente de 0)." ;
-            Text [ swedish ] = "Inga tusentalsavgr‰nsare. Sannolikhetsv‰rde om det finns och ‰r SANT (ej lika med 0) s‰tts inga tusentalsavgr‰nsare." ;
+            Text [ swedish ] = "Inga tusentalsavgr‰nsare. Sannolikhetsv‰rde, om det finns och ‰r SANT (ej lika med 0) s‰tts inga tusentalsavgr‰nsare." ;
             Text [ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien voorhanden, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet." ;
             Text [ spanish ] = "Sin separadores de millares. Si el valor lÛgico existe y es VERDADERO (no igual a 0) no se mostrar·n separadores de millares." ;
             Text [ english_us ] = "No thousands separator. True value, if existing and TRUE (unequal to 0), no thousands separators are set." ;
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
