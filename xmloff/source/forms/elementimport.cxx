@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:38:38 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,10 +908,49 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OButtonImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
-        OControlImport::StartElement(_rxAttrList);
+        OURLReferenceImport::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
         simulateDefaultedAttribute(getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+    }
+
+    //=====================================================================
+    //= OValueRangeImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OValueRangeImport::OValueRangeImport( IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType )
+        :OControlImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
+        ,m_nStepSizeValue( 1 )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
+    {
+        if ( _rLocalName.equalsAscii( getSpecialAttributeName( SCA_STEP_SIZE ) ) )
+        {
+            GetImport().GetMM100UnitConverter().convertNumber( m_nStepSizeValue, _rValue );
+        }
+        else
+            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+    }
+
+    //---------------------------------------------------------------------
+    void OValueRangeImport::StartElement( const Reference< sax::XAttributeList >& _rxAttrList )
+    {
+        OControlImport::StartElement( _rxAttrList );
+
+        Reference< XPropertySetInfo > xPropInfo;
+        if ( m_xElement.is() )
+            xPropInfo = m_xElement->getPropertySetInfo();
+        if ( xPropInfo.is() )
+        {
+            if ( xPropInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
+                m_xElement->setPropertyValue( PROPERTY_SPIN_INCREMENT, makeAny( m_nStepSizeValue ) );
+            else if ( xPropInfo->hasPropertyByName( PROPERTY_LINE_INCREMENT ) )
+                m_xElement->setPropertyValue( PROPERTY_LINE_INCREMENT, makeAny( m_nStepSizeValue ) );
+        }
     }
 
     //=====================================================================
@@ -1331,6 +1370,9 @@ namespace xmloff
 
             case OControlElement::GRID:
                 return new OGridImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+
+            case OControlElement::VALUERANGE:
+                return new OValueRangeImport( m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
 
             default:
                 return new OControlImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
