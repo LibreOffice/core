@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interceptionhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:24:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,446 +59,274 @@
  *
  ************************************************************************/
 
-//_________________________________________________________________________________________________________________
+//_______________________________________________
 //  my own includes
-//_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
 #endif
 
-#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
-#include <classes/wildcard.hxx>
-#endif
-
-//_________________________________________________________________________________________________________________
+//_______________________________________________
 //  interface includes
-//_________________________________________________________________________________________________________________
 
 #ifndef _COM_SUN_STAR_FRAME_XINTERCEPTORINFO_HPP_
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #endif
 
-//_________________________________________________________________________________________________________________
+//_______________________________________________
 //  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 
-//_________________________________________________________________________________________________________________
+//_______________________________________________
 //  namespace
-//_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::util          ;
-using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
-using namespace ::std                           ;
-
-//_________________________________________________________________________________________________________________
+//_______________________________________________
 //  non exported const
-//_________________________________________________________________________________________________________________
 
-//_________________________________________________________________________________________________________________
+sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
+
+//_______________________________________________
 //  non exported definitions
-//_________________________________________________________________________________________________________________
 
-//_________________________________________________________________________________________________________________
+//_______________________________________________
 //  declarations
-//_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-InterceptionHelper::InterceptionHelper( const Reference< XFrame >&            rFrame           ,
-                                          const Reference< XDispatchProvider >& xSlaveDispatcher )
-        //  Init baseclasses first
-        :   ThreadHelpBase      ( &Application::GetSolarMutex() )
-        ,   OWeakObject         (                               )
-        // Init member
-        ,   m_xSlaveDispatcher  ( xSlaveDispatcher              )
-        ,   m_xOwnerWeak        ( rFrame                        )
+/*-----------------------------------------------------------------------------
+    31.03.2003 09:02
+-----------------------------------------------------------------------------*/
+DEFINE_XINTERFACE_3(InterceptionHelper                                         ,
+                    OWeakObject                                                ,
+                    DIRECT_INTERFACE(css::frame::XDispatchProvider            ),
+                    DIRECT_INTERFACE(css::frame::XDispatchProviderInterception),
+                    DIRECT_INTERFACE(css::lang::XEventListener                ))
+
+/*-----------------------------------------------------------------------------
+    31.03.2003 09:02
+-----------------------------------------------------------------------------*/
+InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
+                                       const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
+    //  Init baseclasses first
+    : ThreadHelpBase(&Application::GetSolarMutex())
+    , OWeakObject   (                             )
+    // Init member
+    , m_xOwnerWeak  (xOwner                       )
+    , m_xSlave      (xSlave                       )
 {
-    // Safe impossible cases
-    // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_InterceptionHelper( xSlaveDispatcher ), "InterceptionHelper::InterceptionHelper()\nInvalid parameter detected!\n" )
 }
 
-//*****************************************************************************************************************
-//  (proteced!) destructor
-//*****************************************************************************************************************
+/*-----------------------------------------------------------------------------
+    31.03.2003 09:02
+-----------------------------------------------------------------------------*/
 InterceptionHelper::~InterceptionHelper()
 {
 }
 
-//*****************************************************************************************************************
-//  XInterface
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_3     (   InterceptionHelper                             ,
-                            OWeakObject                                     ,
-                            DIRECT_INTERFACE(XDispatchProvider              ),
-                            DIRECT_INTERFACE(XDispatchProviderInterception  ),
-                            DIRECT_INTERFACE(XEventListener                 )
-                        )
-
-//*****************************************************************************************************************
-//   XDispatchProvider
-//*****************************************************************************************************************
-Reference< XDispatch > SAL_CALL InterceptionHelper::queryDispatch( const   URL&        aURL            ,
-                                                                    const   OUString&   sTargetFrameName,
-                                                                            sal_Int32   nSearchFlags    ) throw( RuntimeException )
+/*-----------------------------------------------------------------------------
+    31.03.2003 09:09
+-----------------------------------------------------------------------------*/
+css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
+                                                                                        const ::rtl::OUString& sTargetFrameName,
+                                                                                              sal_Int32        nSearchFlags    )
+    throw(css::uno::RuntimeException)
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_queryDispatch( aURL, sTargetFrameName, nSearchFlags ), "InterceptionHelper::queryDispatch()\nInvalid parameter detected.\n" )
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
 
-    // Set default return value.
-    Reference< XDispatch > xReturn;
+    // a) first search an interceptor, which match to this URL by it's URL pattern registration
+    //    Note: if it return NULL - it does not mean an empty interceptor list automaticly!
+    css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
+    InterceptorList::const_iterator pIt = m_lInterceptionRegs.findByPattern(aURL.Complete);
+    if (pIt != m_lInterceptionRegs.end())
+        xInterceptor = pIt->xInterceptor;
 
-    // For better performance:
-    // Search interceptor which has registered himself with a pattern which match given URL!
-    Reference< XDispatchProvider > xInterceptor( impl_searchMatchingInterceptor( aURL.Complete ), UNO_QUERY );
-    if( xInterceptor.is() == sal_True )
+    // b) No match by registration - but a valid interceptor list.
+    //    Use first interceptor everytimes.
+    //    Note: it doesn't matter, which direction this helper implementation use to ask interceptor objects.
+    //    Using of member m_aInterceptorList will starts at the beginning everytimes.
+    //    It depends from the filling operation, in which direction it works realy!
+    if (!xInterceptor.is() && m_lInterceptionRegs.size()>0)
     {
-        // If so an interceptor exist forward dispatch to it.
-        xReturn = xInterceptor->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
-    }
-    else
-    {
-        // Otherwise; use ouer own dispatch helper to do this and set results for return.
-        xReturn = m_xSlaveDispatcher->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+        pIt          = m_lInterceptionRegs.begin();
+        xInterceptor = pIt->xInterceptor;
     }
 
-    // Return results of this operation.
+    // c) No registered interceptor => use our direct slave.
+    //    This helper exist by design and must be valid everytimes ...
+    //    But to be more feature proof - we should check that .-)
+    if (!xInterceptor.is() && m_xSlave.is())
+        xInterceptor = m_xSlave;
+
+    aReadLock.unlock();
+    // } SAFE
+
+    css::uno::Reference< css::frame::XDispatch > xReturn;
+    if (xInterceptor.is())
+        xReturn = xInterceptor->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
     return xReturn;
 }
 
-//*****************************************************************************************************************
-//   XDispatchProvider
-//*****************************************************************************************************************
-Sequence< Reference< XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const Sequence< DispatchDescriptor >& seqDescriptor ) throw( RuntimeException )
+/*-----------------------------------------------------------------------------
+    31.03.2003 07:58
+-----------------------------------------------------------------------------*/
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+    throw(css::uno::RuntimeException)
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_queryDispatches( seqDescriptor ), "InterceptionHelper::queryDispatches()\nInvalid parameter detected.\n" )
+          sal_Int32                                                          c           = lDescriptor.getLength();
+          css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches (c);
+          css::uno::Reference< css::frame::XDispatch >*                      pDispatches = lDispatches.getArray();
+    const css::frame::DispatchDescriptor*                                    pDescriptor = lDescriptor.getConstArray();
 
-    // Set default return value.
-    Sequence< Reference< XDispatch > > seqReturn;
+    for (sal_Int32 i=0; i<c; ++i)
+        pDispatches[i] = queryDispatch(pDescriptor[i].FeatureURL, pDescriptor[i].FrameName, pDescriptor[i].SearchFlags);
 
-    /*ATTENTION
-
-        Don't use our performance mechanism to search registered interceptors for given URLs!
-        What will you do - call different interceptor objects for different URLs ...
-        ... we implement these mechanism to save (remote) calls to an interceptor ...
-    */
-
-    // If any interceptor exist ...
-    if( m_aInterceptorList.empty() == sal_False )
-    {
-        // ... forward query to these instance and set results for return.
-        Reference< XDispatchProvider> xInterceptor( m_aInterceptorList.begin()->xInterceptor, UNO_QUERY );
-        seqReturn = xInterceptor->queryDispatches( seqDescriptor );
-    }
-    else
-    {
-        // No; Then use ouer own dispatchhelper to do this and set results for return.
-        seqReturn = m_xSlaveDispatcher->queryDispatches( seqDescriptor );
-    }
-
-    // Return results of this operation.
-    return seqReturn;
+    return lDispatches;
 }
 
-//*****************************************************************************************************************
-//   XDispatchProviderInterception
-//*****************************************************************************************************************
-void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor ) throw( RuntimeException )
+/*-----------------------------------------------------------------------------
+    31.03.2003 10:20
+-----------------------------------------------------------------------------*/
+void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+    throw(css::uno::RuntimeException)
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_registerDispatchProviderInterceptor( xInterceptor ), "InterceptionHelper::registerDispatchProviderInterceptor()\nInvalid parameter detected.\n" )
+    // reject wrong calling of this interface method
+    css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    if (!xInterceptor.is())
+        throw css::uno::RuntimeException(DECLARE_ASCII("NULL references not allowed as in parameter"), xThis);
 
     // Fill a new info structure for new interceptor.
     // Save his reference and try to get an additional URL/pattern list from him.
     // If no list exist register these interceptor for all dispatch events with "*"!
-    IMPL_TInterceptorInfo aInfo;
-    aInfo.xInterceptor = xInterceptor;
-    Reference< XInterceptorInfo > xInfoInterface( xInterceptor, UNO_QUERY );
-    if( xInfoInterface.is() == sal_True )
-    {
-        aInfo.seqPatternList = xInfoInterface->getInterceptedURLs();
-    }
+    InterceptorInfo aInfo;
+
+    aInfo.xInterceptor = css::uno::Reference< css::frame::XDispatchProvider >(xInterceptor, css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XInterceptorInfo > xInfo(xInterceptor, css::uno::UNO_QUERY);
+    if (xInfo.is())
+        aInfo.lURLPattern = xInfo->getInterceptedURLs();
     else
     {
-        aInfo.seqPatternList.realloc(1);
-        aInfo.seqPatternList[0] = DECLARE_ASCII("*");
+        aInfo.lURLPattern.realloc(1);
+        aInfo.lURLPattern[0] = ::rtl::OUString::createFromAscii("*");
     }
 
-    // Add new interceptor to front of list and initialize master/slave relations with old top one.
-    // If anyone already exist!
-    if( m_aInterceptorList.size() < 1 )
+    // SAFE {
+    WriteGuard aWriteLock(m_aLock);
+
+    // a) no interceptor at all - set this instance as master for given interceptor
+    //    and set our slave as it's slave - and put this interceptor to the list.
+    //    It's place there doesn matter. Because this list is currently empty.
+    if (m_lInterceptionRegs.size()<1)
     {
-        // a)   No interceptor exist before.
-        //      Take it as the first one and pass our own dispatch helper as his slave.
-        //      (For economical code writing - we add info structure at later time! Otherwise we must duplicate these code for every IF/ELSE branch!)
-        aInfo.xInterceptor->setSlaveDispatchProvider( m_xSlaveDispatcher );
+        xInterceptor->setMasterDispatchProvider(xThis   );
+        xInterceptor->setSlaveDispatchProvider (m_xSlave);
+        m_lInterceptionRegs.push_back(aInfo);
     }
+
+    // b) OK - there is at least one interceptor already registered.
+    //    It's slave and it's master must be valid references ...
+    //    because we created it. But we have to look for the static bool which
+    //    regulate direction of using of interceptor objects!
+
+    // b1) If "m_bPreferrFirstInterceptor" is set to true, we have to
+    //     insert it behind any other existing interceptor - means at the end of our list.
+    else if (m_bPreferrFirstInterceptor)
+    {
+        css::uno::Reference< css::frame::XDispatchProvider >            xMasterD = m_lInterceptionRegs.rbegin()->xInterceptor;
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD, css::uno::UNO_QUERY);
+
+        xInterceptor->setMasterDispatchProvider(xMasterD          );
+        xInterceptor->setSlaveDispatchProvider (m_xSlave          );
+        xMasterI->setSlaveDispatchProvider     (aInfo.xInterceptor);
+
+        m_lInterceptionRegs.push_back(aInfo);
+    }
+
+    // b2) If "m_bPreferrFirstInterceptor" is set to false, we have to
+    //     insert it before any other existing interceptor - means at the beginning of our list.
     else
     {
-        // b)   There is already an interceptor; current will be the slave of the new one.
-        //      Insert it on the top of list.
-        //      (For economical code writing - we add info structure at later time! Otherwise we must duplicate these code for every IF/ELSE branch!)
-        Reference< XDispatchProviderInterceptor > xOldTopInterceptor = m_aInterceptorList.begin()->xInterceptor;
-        aInfo.xInterceptor->setSlaveDispatchProvider    ( Reference< XDispatchProvider >( xOldTopInterceptor, UNO_QUERY ) );
-        xOldTopInterceptor->setMasterDispatchProvider   ( Reference< XDispatchProvider >( aInfo.xInterceptor, UNO_QUERY ) );
+        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI (xSlaveD , css::uno::UNO_QUERY);
+
+        xInterceptor->setMasterDispatchProvider(xThis             );
+        xInterceptor->setSlaveDispatchProvider (xSlaveD           );
+        xSlaveI->setMasterDispatchProvider     (aInfo.xInterceptor);
+
+        m_lInterceptionRegs.push_front(aInfo);
     }
 
-    // The new interceptor must be a slave of us too!
-    aInfo.xInterceptor->setMasterDispatchProvider( this );
-    // Now we can add our info structure to the list.
-    m_aInterceptorList.push_front( aInfo );
+    css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
 
-    Reference < XFrame > xOwner( m_xOwnerWeak.get(), UNO_QUERY );
-    if ( xOwner.is() )
+    aWriteLock.unlock();
+    // } SAFE
+
+    // Don't forget to send a frame action event "context changed".
+    // Any cached dispatch objects must be validated now!
+    if (xOwner.is())
         xOwner->contextChanged();
 }
 
-//*****************************************************************************************************************
-//   XDispatchProviderInterception
-//*****************************************************************************************************************
-void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor ) throw( RuntimeException )
+/*-----------------------------------------------------------------------------
+    31.03.2003 10:27
+-----------------------------------------------------------------------------*/
+void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+    throw(css::uno::RuntimeException)
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_releaseDispatchProviderInterceptor( xInterceptor ), "InterceptionHelper::releaseDispatchProviderInterceptor()\nInvalid parameter detected.\n" )
+    // reject wrong calling of this interface method
+    css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    if (!xInterceptor.is())
+        throw css::uno::RuntimeException(DECLARE_ASCII("NULL references not allowed as in parameter"), xThis);
 
-    // Search for existing interceptor in list.
-    IMPL_CInterceptorList::iterator aItem = m_aInterceptorList.find( xInterceptor );
-    // Safe impossible cases
-    // We can't remove an interceptor, which we don't know ...
-    LOG_ASSERT( !(aItem==m_aInterceptorList.end()), "InterceptionHelper::releaseDispatchProviderInterceptor()\nCan't remove interceptor which I don't know!\n")
-    if( aItem != m_aInterceptorList.end() )
+    // SAFE {
+    WriteGuard aWriteLock(m_aLock);
+
+    // search this interceptor ...
+    // If it could be located inside cache -
+    // use it's slave/master relations to update the interception list;
+    // set empty references for it as new master and slave;
+    // and relase it from out cache.
+    InterceptorList::iterator pIt = m_lInterceptionRegs.findByReference(xInterceptor);
+    if (pIt != m_lInterceptionRegs.end())
     {
-        // Rebuild master/slave relations of interceptor list.
-        // Get slave and master of given interceptor.
-        Reference< XDispatchProvider >              xSlave              ( xInterceptor->getSlaveDispatchProvider()  , UNO_QUERY );
-        Reference< XDispatchProviderInterceptor >   xSlaveInterceptor   ( xSlave                                    , UNO_QUERY );
-        Reference< XDispatchProvider >              xMaster             ( xInterceptor->getMasterDispatchProvider() , UNO_QUERY );
-        Reference< XDispatchProviderInterceptor >   xMasterInterceptor  ( xMaster                                   , UNO_QUERY );
-        // Safe impossible cases.
-        // A master must exist - but it must not an interceptor!
-        // => We set us as a master of highest registered interecptor; but we don't implement the interceptor interface!
-        // The same must valid for slaves.
-        // => We set our dispatch helper as slave of lowest registered interceptor - but they don't implement the interceptor interface!
-        // ( see register function for further informations! )
-        LOG_ASSERT( !(xMaster.is()==sal_False || xSlave.is()==sal_False), "InterceptionHelper::releaseDispatchProviderInterceptor()\nCan't find a master or slave of registered interceptor. Taht could'nt be!\n" )
-        // Reconnect slave relation.
-        if( xMasterInterceptor.is() == sal_True )
-        {
-            xMasterInterceptor->setSlaveDispatchProvider( xSlave );
-        }
-        // Reconnect master relation.
-        if( xSlaveInterceptor.is() == sal_True )
-        {
-            xSlaveInterceptor->setMasterDispatchProvider( xMaster );
-        }
-        // Unchain the interceptor that has to be removed.
-        xInterceptor->setSlaveDispatchProvider  ( Reference< XDispatchProvider >() );
-        xInterceptor->setMasterDispatchProvider ( Reference< XDispatchProvider >() );
-        // Remove interceptor from our list.
-        m_aInterceptorList.erase( aItem );
+        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD  (xInterceptor->getSlaveDispatchProvider() , css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XDispatchProvider >            xMasterD (xInterceptor->getMasterDispatchProvider(), css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI  (xSlaveD                                  , css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD                                 , css::uno::UNO_QUERY);
+
+        if (xMasterI.is())
+            xMasterI->setSlaveDispatchProvider(xSlaveD);
+
+        if (xSlaveI.is())
+            xSlaveI->setMasterDispatchProvider(xMasterD);
+
+        xInterceptor->setSlaveDispatchProvider (css::uno::Reference< css::frame::XDispatchProvider >());
+        xInterceptor->setMasterDispatchProvider(css::uno::Reference< css::frame::XDispatchProvider >());
+
+        m_lInterceptionRegs.erase(pIt);
     }
 
-    Reference < XFrame > xOwner( m_xOwnerWeak.get(), UNO_QUERY );
-    if ( xOwner.is() )
+    css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
+
+    aWriteLock.unlock();
+    // } SAFE
+
+    // Don't forget to send a frame action event "context changed".
+    // Any cached dispatch objects must be validated now!
+    if (xOwner.is())
         xOwner->contextChanged();
 }
 
-//*****************************************************************************************************************
-//   XDispatchProviderInterception
-//*****************************************************************************************************************
-Reference< XDispatchProviderInterceptor > InterceptionHelper::impl_searchMatchingInterceptor( const OUString& sURL )
+/*-----------------------------------------------------------------------------
+    31.03.2003 10:31
+-----------------------------------------------------------------------------*/
+void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
 {
-    // Step over all items and return interceptor, which URL list match given one at first.
-    sal_Int32 nInterceptorCount = (sal_Int32)(m_aInterceptorList.size());
-    for( sal_Int32 nInterceptor=0; nInterceptor<nInterceptorCount; ++nInterceptor )
-    {
-        // Use reference to list for faster access! (Don't use index operator for every element.)
-        // Don't check index - we know what we do ...
-        const Sequence< OUString >& seqPatternList = m_aInterceptorList[nInterceptor].seqPatternList;
-        sal_Int32 nPatternCount = seqPatternList.getLength();
-        for( sal_Int32 nPattern=0; nPattern<nPatternCount; ++nPattern )
-        {
-            // Try to match given URL with current pattern.
-            // If it match true we have found an interceptor and can return it.
-            // ( For better performance we return immediately! )
-            if( Wildcard::match( sURL, seqPatternList[nPattern] ) == sal_True )
-            {
-                return m_aInterceptorList[nInterceptor].xInterceptor;
-            }
-        }
-    }
-    // Return with an empty result of operation!
-    // No pattern and no interceptor was found.
-    return Reference< XDispatchProviderInterceptor >();
+    LOG_WARNING("InterceptionHelper::disposing()", "unexpected situation")
 }
 
-//*****************************************************************************************************************
-//   XEventListener
-//*****************************************************************************************************************
-void SAL_CALL InterceptionHelper::disposing( const EventObject& Source ) throw ( RuntimeException )
-{
-    Reference< XEventListener >( m_xSlaveDispatcher, UNO_QUERY )->disposing( Source );
-    m_xSlaveDispatcher = 0;
-}
-
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
-//*****************************************************************************************************************
-// An instance of this class can only work with valid initialization.
-sal_Bool InterceptionHelper::impldbg_checkParameter_InterceptionHelper( const Reference< XDispatchProvider >& xSlaveDispatcher )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xSlaveDispatcher     ==  NULL        )   ||
-            ( xSlaveDispatcher.is() ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We accept non zero URLs only. Target name can be empty!
-// And we can't test search flags in all combinations ...
-sal_Bool InterceptionHelper::impldbg_checkParameter_queryDispatch( const   URL&        aURL            ,
-                                                                    const   OUString&   sTargetFrameName,
-                                                                            sal_Int32   nSearchFlags    )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL                         ==  NULL    )   ||
-            ( &sTargetFrameName             ==  NULL    )   ||
-            ( aURL.Complete.getLength()     <   1       )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We check the same like queryDispatch() before but for a list of description items.
-sal_Bool InterceptionHelper::impldbg_checkParameter_queryDispatches( const Sequence< DispatchDescriptor >& seqDescriptor )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if( &seqDescriptor == NULL )
-    {
-        bOK = sal_False;
-    }
-    else
-    {
-        sal_Int32 nCount = seqDescriptor.getLength();
-        if( nCount < 1 )
-        {
-            bOK = sal_False;
-        }
-        else
-        {
-            for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
-            {
-                if  ( impldbg_checkParameter_queryDispatch  (   seqDescriptor[nPosition].FeatureURL ,
-                                                                seqDescriptor[nPosition].FrameName  ,
-                                                                seqDescriptor[nPosition].SearchFlags
-                                                            ) == sal_False
-                    )
-                {
-                    bOK = sal_False;
-                    break;
-                }
-            }
-        }
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// A valid interceptor must given and he must support the XDispatchProvider interface too!
-sal_Bool InterceptionHelper::impldbg_checkParameter_registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xInterceptor                                                     ==  NULL        )   ||
-            ( xInterceptor.is()                                                 ==  sal_False   )   ||
-            ( Reference< XDispatchProvider >( xInterceptor, UNO_QUERY ).is()    ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// A valid interceptor must given and he must support the XDispatchProvider interface too!
-sal_Bool InterceptionHelper::impldbg_checkParameter_releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xInterceptor                                                     ==  NULL        )   ||
-            ( xInterceptor.is()                                                 ==  sal_False   )   ||
-            ( Reference< XDispatchProvider >( xInterceptor, UNO_QUERY ).is()    ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
-
-}       //  namespace framework
+} // namespace framework
