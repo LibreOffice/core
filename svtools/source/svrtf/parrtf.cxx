@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-08 16:01:59 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 20:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,21 @@ void SvRTFParser::Continue( int nToken )
         case RTF_MACTYPE:       SetSrcEncoding( RTL_TEXTENCODING_APPLE_ROMAN );     break;
         case RTF_PCTYPE:        SetSrcEncoding( RTL_TEXTENCODING_IBM_437 ); break;
         case RTF_PCATYPE:       SetSrcEncoding( RTL_TEXTENCODING_IBM_850 ); break;
+
+        case RTF_ANSICPG:
+                switch ( nTokenValue )
+                {
+                case 1250:  SetSrcEncoding( RTL_TEXTENCODING_MS_1250 ); break;
+                case 1251:  SetSrcEncoding( RTL_TEXTENCODING_MS_1251 ); break;
+                case 1253:  SetSrcEncoding( RTL_TEXTENCODING_MS_1253 ); break;
+                case 1254:  SetSrcEncoding( RTL_TEXTENCODING_MS_1254 ); break;
+                case 1255:  SetSrcEncoding( RTL_TEXTENCODING_MS_1255 ); break;
+                case 1256:  SetSrcEncoding( RTL_TEXTENCODING_MS_1256 ); break;
+                case 1257:  SetSrcEncoding( RTL_TEXTENCODING_MS_1257 ); break;
+                case 1258:  SetSrcEncoding( RTL_TEXTENCODING_MS_1258 ); break;
+                }
+                break;
+
 
         default:
 NEXTTOKEN:
