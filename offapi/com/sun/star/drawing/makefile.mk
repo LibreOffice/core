@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-24 09:55:17 $
+#   last change: $Author: cl $ $Date: 2000-12-01 17:56:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -163,6 +163,7 @@ IDLFILES=\
     ShadowDescriptor.idl\
     Shape.idl\
     ShapeDescriptor.idl\
+    ShapeGroup.idl\
     Shapes.idl\
     SnapObjectType.idl\
     Text.idl\
