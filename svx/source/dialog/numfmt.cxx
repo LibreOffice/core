@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,11 @@
 #include "numfmt.hxx"
 #include "numfmtsh.hxx"
 #include "dialmgr.hxx"
-
+#ifndef _SFXREQUEST_HXX //CHINA001
+#include <sfx2/request.hxx> //CHINA001
+#endif //CHINA001
+#include <sfx2/app.hxx> //CHINA001
+#include "flagsdef.hxx" //CHINA001
 #define NUMKEY_UNDEFINED ULONG_MAX
 
 // static ----------------------------------------------------------------
@@ -1071,7 +1075,7 @@ void SvxNumberFormatTabPage::DeleteEntryList_Impl( SvxDelStrgs& rEntries )
 #*
 #*  Output:     ---
 #*
-#***ß*********************************************************************/
+#***?********************************************************************/
 
 void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*/ )
 {
@@ -1976,3 +1980,12 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, B
         aLbLanguage.SelectEntryPos(nPos);
 }
 
+void SvxNumberFormatTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pNumberInfoItem,SvxNumberInfoItem,SID_ATTR_NUMBERFORMAT_INFO,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pLinkItem,SfxLinkItem,SID_LINK_TYPE,sal_False);
+    if (pNumberInfoItem)
+        SetNumberFormatList(*pNumberInfoItem);
+    if (pLinkItem)
+        SetOkHdl(pLinkItem->GetValue());
+}
