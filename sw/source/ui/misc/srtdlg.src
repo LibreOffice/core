@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-24 18:11:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,24 @@ ModalDialog DLG_SORTING
     {
         Text = "Numerisch";
         Text[ ENGLISH ] = "Numeric";
+        Text[ english_us ] = "Numeric";
+        Text[ portuguese ] = "numeric";
+        Text[ russian ] = "öèôðîâîé";
+        Text[ greek ] = "numeric";
+        Text[ dutch ] = "numeric";
+        Text[ french ] = "numeric";
+        Text[ spanish ] = "numérica";
+        Text[ italian ] = "numeric";
+        Text[ danish ] = "numeric";
+        Text[ swedish ] = "numerisk";
+        Text[ polish ] = "numeryczny";
+        Text[ portuguese_brazilian ] = "numeric";
+        Text[ japanese ] = "numeric";
+        Text[ korean ] = "numeric";
+        Text[ chinese_simplified ] = "numeric";
+        Text[ chinese_traditional ] = "numeric";
+        Text[ turkish ] = "numeric";
+        Text[ arabic ] = "numeric";
     };
     ListBox DLB_KEY1
     {
@@ -811,6 +829,24 @@ ModalDialog DLG_SORTING
         Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Sprache" ;
         Text [ ENGLISH ] = "Language" ;
+        Text[ english_us ] = "Language";
+        Text[ portuguese ] = "Language";
+        Text[ russian ] = "ßçûê";
+        Text[ greek ] = "Language";
+        Text[ dutch ] = "Language";
+        Text[ french ] = "Language";
+        Text[ spanish ] = "Idioma";
+        Text[ italian ] = "Language";
+        Text[ danish ] = "Language";
+        Text[ swedish ] = "Språk";
+        Text[ polish ] = "Jêzyk";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "Language";
+        Text[ korean ] = "Language";
+        Text[ chinese_simplified ] = "Language";
+        Text[ chinese_traditional ] = "Language";
+        Text[ turkish ] = "Language";
+        Text[ arabic ] = "Language";
     };
     ListBox LB_LANG
     {
@@ -826,6 +862,24 @@ ModalDialog DLG_SORTING
         Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Einstellung" ;
         Text [ ENGLISH ] = "Options" ;
+        Text[ english_us ] = "Options";
+        Text[ portuguese ] = "Options";
+        Text[ russian ] = "Íàñòðîéêà";
+        Text[ greek ] = "Options";
+        Text[ dutch ] = "Options";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Configuración";
+        Text[ italian ] = "Options";
+        Text[ danish ] = "Options";
+        Text[ swedish ] = "Inställning";
+        Text[ polish ] = "Ustawienie";
+        Text[ portuguese_brazilian ] = "Options";
+        Text[ japanese ] = "Options";
+        Text[ korean ] = "Options";
+        Text[ chinese_simplified ] = "Options";
+        Text[ chinese_traditional ] = "Options";
+        Text[ turkish ] = "Options";
+        Text[ arabic ] = "Options";
     };
     CheckBox CB_CASE
     {
@@ -834,6 +888,24 @@ ModalDialog DLG_SORTING
         TabStop = TRUE ;
         Text = "Exacter Vergleich" ;
         Text [ ENGLISH ] = "Case sensitive" ;
+        Text[ english_us ] = "Case sensitive";
+        Text[ portuguese ] = "Case sensitive";
+        Text[ russian ] = "Òî÷íîå ñðàâíåíèå";
+        Text[ greek ] = "Case sensitive";
+        Text[ dutch ] = "Case sensitive";
+        Text[ french ] = "Case sensitive";
+        Text[ spanish ] = "Comparación exacta";
+        Text[ italian ] = "Case sensitive";
+        Text[ danish ] = "Case sensitive";
+        Text[ swedish ] = "Exakt jämförelse";
+        Text[ polish ] = "Dok³adne porównanie";
+        Text[ portuguese_brazilian ] = "Case sensitive";
+        Text[ japanese ] = "Case sensitive";
+        Text[ korean ] = "Case sensitive";
+        Text[ chinese_simplified ] = "Case sensitive";
+        Text[ chinese_traditional ] = "Case sensitive";
+        Text[ turkish ] = "Case sensitive";
+        Text[ arabic ] = "Case sensitive";
     };
 
     Text[ chinese_simplified ] = "ÅÅÐò";
