@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:31:25 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,7 +1410,7 @@ void SdDrawViewShell::ResetActualLayer()
 IMPL_LINK( SdDrawViewShell, CloseHdl, Timer*, pTimer )
 {
     pTimer->Stop();
-    GetViewFrame()->GetDispatcher()->Execute( SID_CLOSEWIN, SFX_CALLMODE_ASYNCHRON );
+    GetViewFrame()->GetBindings().Execute( SID_CLOSEWIN );
     return 0L;
 }
 
