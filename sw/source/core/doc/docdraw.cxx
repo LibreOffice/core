@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:23 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,8 +624,8 @@ void SwDoc::InitDrawModel()
     //zerstoert.
     // 17.2.99: for Bug 73110 - for loading the drawing items. This must
     //                          be loaded without RefCounts!
-    SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START,
-                                            SDRATTR_END, FALSE );
+    SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool );
+//BFS01 SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START, SDRATTR_END, FALSE );
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
     if(pSdrPool)
