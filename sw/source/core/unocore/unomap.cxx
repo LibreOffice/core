@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 14:39:32 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },  \
     { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },     \
     { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((text::WrapTextMode*)0),             PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },        \
-    { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType(((text::WrapTextMode*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },        \
+    { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((text::WrapTextMode*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },        \
     { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },                 \
     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},          \
     { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},          \
