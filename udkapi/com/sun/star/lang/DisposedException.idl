@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DisposedException.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     <type scope="com::sun::star::lang">XComponent</type> interface
     to indicate this possibility. </p>
  */
-exception DisposedException: com::sun::star::uno::RuntimeException
+published exception DisposedException: com::sun::star::uno::RuntimeException
 {
 };
 
