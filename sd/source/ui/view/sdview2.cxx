@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:56:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,9 +232,9 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
         pNewPage->SetLayoutName( pOldPage->GetLayoutName() );
     }
 
-    if( aMark.GetMarkCount() == 1 )
+    if( GetMarkedObjectCount() == 1 )
     {
-        SdrObject* pObj = aMark.GetMark(0)->GetObj();
+        SdrObject* pObj = GetMarkedObjectByIndex(0);
 
         if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().Is() )
             pSdrOleObj = (SdrOle2Obj*) pObj;
@@ -270,9 +270,9 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     String                          aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;
 
-    if( aMark.GetMarkCount() == 1 )
+    if( GetMarkedObjectCount() == 1 )
     {
-        SdrObject* pObj = aMark.GetMark( 0 )->GetObj();
+        SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
         if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().Is() )
             pSdrOleObj = (SdrOle2Obj*) pObj;
@@ -331,7 +331,7 @@ void View::UpdateSelectionClipboard( BOOL bForceDeselect )
 {
     if( pViewSh && pViewSh->GetActiveWindow() )
     {
-        if( !bForceDeselect && GetMarkList().GetMarkCount() )
+        if( !bForceDeselect && GetMarkedObjectList().GetMarkCount() )
             CreateSelectionDataObject( this, *pViewSh->GetActiveWindow() );
         else if( SD_MOD()->pTransferSelection && ( SD_MOD()->pTransferSelection->GetView() == this ) )
         {
@@ -349,12 +349,12 @@ void View::DoCut (::Window* pWindow)
 
     if( pOLV )
         ( (OutlinerView*) pOLV)->Cut();
-    else if( HasMarkedObj() )
+    else if( AreObjectsMarked() )
     {
         String aStr( SdResId(STR_UNDO_CUT) );
 
         DoCopy();
-        BegUndo( ( aStr += sal_Unicode(' ') ) += aMark.GetMarkDescription() );
+        BegUndo( ( aStr += sal_Unicode(' ') ) += GetDescriptionOfMarkedObjects() );
         DeleteMarked();
         EndUndo();
     }
@@ -368,7 +368,7 @@ void View::DoCopy (::Window* pWindow)
 
     if( pOLV )
         ( (OutlinerView*) pOLV)->Copy();
-    else if( HasMarkedObj() )
+    else if( AreObjectsMarked() )
     {
         BrkAction();
         CreateClipboardDataObject( this, *pWindow );
@@ -462,7 +462,7 @@ void View::DoPaste (::Window* pWindow)
 
 void View::StartDrag( const Point& rStartPos, Window* pWindow )
 {
-    if( HasMarkedObj() && IsAction() && pViewSh && pWindow && !pDragSrcMarkList )
+    if( AreObjectsMarked() && IsAction() && pViewSh && pWindow && !pDragSrcMarkList )
     {
         BrkAction();
 
@@ -479,7 +479,7 @@ void View::StartDrag( const Point& rStartPos, Window* pWindow )
                 ( (FuDraw*) pFunc)->ForcePointer( NULL );
         }
 
-        pDragSrcMarkList = new SdrMarkList( aMark );
+        pDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
         nDragSrcPgNum = GetPageViewPvNum(0)->GetPage()->GetPageNum();
 
         String aStr( SdResId(STR_UNDO_DRAGDROP) );
@@ -528,7 +528,7 @@ void View::DragFinished( sal_Int8 nDropAction )
             if( pObj && pObj->GetPage() )
             {
                 SdrObject* pChkObj = pObj->GetPage()->RemoveObject(nOrdNum);
-                DBG_ASSERT(pChkObj==pObj,"DeleteMarked(MarkList): pChkObj!=pObj beim RemoveObject()");
+                DBG_ASSERT(pChkObj==pObj,"pChkObj!=pObj beim RemoveObject()");
             }
         }
 
@@ -568,9 +568,9 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
         {
             Rectangle aRect( pOLV->GetOutputArea() );
 
-            if (aMark.GetMarkCount() == 1)
+            if (GetMarkedObjectCount() == 1)
             {
-                SdrMark* pMark = aMark.GetMark(0);
+                SdrMark* pMark = GetSdrMarkByIndex(0);
                 SdrObject* pObj = pMark->GetObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
@@ -739,9 +739,9 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
         {
             Rectangle aRect( pOLV->GetOutputArea() );
 
-            if( aMark.GetMarkCount() == 1 )
+            if( GetMarkedObjectCount() == 1 )
             {
-                SdrMark* pMark = aMark.GetMark(0);
+                SdrMark* pMark = GetSdrMarkByIndex(0);
                 SdrObject* pObj = pMark->GetObj();
                 aRect.Union( pObj->GetLogicRect() );
             }
@@ -1086,11 +1086,11 @@ SdrModel* View::GetMarkedObjModel() const
     {
         // get a flat vector of all shapes inside the mark list first, including deep within groups
         SdrObjectVector aSdrVector;
-        const sal_uInt32 nMarkCount = aMark.GetMarkCount();
+        const sal_uInt32 nMarkCount = GetMarkedObjectCount();
         sal_uInt32 nMark;
         for(nMark = 0; nMark < nMarkCount; nMark++ )
         {
-            ImplProcessObjectList( aMark.GetMark( nMark )->GetObj(), aSdrVector );
+            ImplProcessObjectList( GetMarkedObjectByIndex( nMark ), aSdrVector );
         }
 
         // now see if we find any shape with an animation along a path
