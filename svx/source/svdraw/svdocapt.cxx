@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,9 +777,49 @@ const Rectangle& SdrCaptionObj::GetSnapRect() const
 
 void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    // !!!!! fehlende Impl.
+    // #109587#
+    //
+    // The new SnapRect contains the tail BoundRect, see
+    // RecalcSnapRect() above. Thus, the new to-be-setted
+    // SnapRect needs to be 'cleared' from that tail offsets
+    // before setting it as new SnapRect at the SdrRectObj.
+    //
+    // As base for 'clearing' the old text rect is taken from aRect
+    // using GetLogicRect(), see below. Second the outer tail point
+    // wich expanded that rect. Since the other end of the
+    // connection polygon always resides at one edge of the text rect
+    // this is sufficient information.
+    Rectangle aNewSnapRect(rRect);
+    const Rectangle aOriginalTextRect(GetLogicRect());
+    const Point aTailPoint = GetTailPos();
+
+    if(aTailPoint.X() < aOriginalTextRect.Left())
+    {
+        const sal_Int32 nDist = aOriginalTextRect.Left() - aTailPoint.X();
+        aNewSnapRect.Left() = aNewSnapRect.Left() + nDist;
+    }
+    else if(aTailPoint.X() > aOriginalTextRect.Right())
+    {
+        const sal_Int32 nDist = aTailPoint.X() - aOriginalTextRect.Right();
+        aNewSnapRect.Right() = aNewSnapRect.Right() - nDist;
+    }
+
+    if(aTailPoint.Y() < aOriginalTextRect.Top())
+    {
+        const sal_Int32 nDist = aOriginalTextRect.Top() - aTailPoint.Y();
+        aNewSnapRect.Top() = aNewSnapRect.Top() + nDist;
+    }
+    else if(aTailPoint.Y() > aOriginalTextRect.Bottom())
+    {
+        const sal_Int32 nDist = aTailPoint.Y() - aOriginalTextRect.Bottom();
+        aNewSnapRect.Bottom() = aNewSnapRect.Bottom() - nDist;
+    }
+
+    // make sure rectangle is correctly defined
+    ImpJustifyRect(aNewSnapRect);
+
     // #86616#
-    SdrRectObj::NbcSetSnapRect(rRect);
+    SdrRectObj::NbcSetSnapRect(aNewSnapRect);
 }
 
 const Rectangle& SdrCaptionObj::GetLogicRect() const
