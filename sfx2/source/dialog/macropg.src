@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "ÀÌº¥Æ®";
         Text[ turkish ] = "Olay";
         Text[ catalan ] = "Acontecimiento";
+        Text[ finnish ] = "Event";
     };
     Control LB_EVENT
     {
@@ -168,6 +169,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "ÁöÁ¤(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Asignar";
+        Text[ finnish ] = "~Määritä";
     };
     PushButton PB_DELETE
     {
@@ -196,6 +198,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "ÇØÁ¦(~R)";
         Text[ turkish ] = "~Kaldır";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -229,6 +232,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "¸ÅÅ©·Î";
         Text[ turkish ] = "Makro";
         Text[ catalan ] = "Macros";
+        Text[ finnish ] = "Makrot";
     };
     Text[ russian ] = "Íàçíà÷èòü ìàêğîñ";
     Text[ greek ] = "Áíôéóôïß÷éóç ìáêñïåíôïëŞò";
@@ -240,6 +244,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ turkish ] = "Makro ata";
     Text[ arabic ] = "ÊÚííä æÍÏÉ ãÇßÑæ";
     Text[ catalan ] = "Asignar macro";
+    Text[ finnish ] = "Määritä makro";
 #if SUPD<582
     String STR_JAVASCRIPT
     {
@@ -264,6 +269,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "JavaScript";
         Text[ turkish ] = "JavaScript";
         Text[ catalan ] = "JavaScript";
+        Text[ finnish ] = "JavaScript";
     };
     MultiLineEdit ED_JAVASCRIPT
     {
@@ -330,6 +336,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "ÀÌº¥Æ®";
         Text[ turkish ] = "Olay";
         Text[ catalan ] = "Acontecimiento";
+        Text[ finnish ] = "Event";
     };
     Control LB_EVENT
     {
@@ -369,6 +376,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "ÁöÁ¤(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Asignar";
+        Text[ finnish ] = "~Määritä";
     };
     PushButton PB_DELETE
     {
@@ -397,6 +405,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "ÇØÁ¦(~R)";
         Text[ turkish ] = "~Kaldır";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -454,6 +463,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "¸ÅÅ©·Î";
         Text[ turkish ] = "Makro";
         Text[ catalan ] = "Macros";
+        Text[ finnish ] = "Makrot";
     };
     Text[ russian ] = "Íàçíà÷èòü ìàêğîñ";
     Text[ greek ] = "Áíôéóôïß÷éóç ìáêñïåíôïëŞò";
@@ -465,6 +475,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text[ turkish ] = "Makro ata";
     Text[ arabic ] = "ÊÚííä æÍÏÉ ãÇßÑæ";
     Text[ catalan ] = "Asignar macro";
+    Text[ finnish ] = "Määritä makro";
 #if SUPD<582
     String STR_JAVASCRIPT
     {
@@ -489,6 +500,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "JavaScript";
         Text[ turkish ] = "JavaScript";
         Text[ catalan ] = "JavaScript";
+        Text[ finnish ] = "JavaScript";
     };
     MultiLineEdit ED_JAVASCRIPT
     {
