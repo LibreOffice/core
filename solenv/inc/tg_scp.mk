@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_scp.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-09-28 13:25:00 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-04-06 11:40:46 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_scp.mkv  $
 #*
@@ -30,6 +30,12 @@ $(SCP7TARGETN) .NULL : SCP7
 $(SCP8TARGETN) .NULL : SCP8
 
 $(SCP9TARGETN) .NULL : SCP9
+.ENDIF
+
+.IF "$(GUI)"=="UNX"
+SCP_CHECK_TOOL = check_ins
+.ELSE
+SCP_CHECK_TOOL = check_inf.exe
 .ENDIF
 
 .IF "$(MULTI_SCP_FLAG)"==""
@@ -61,6 +67,7 @@ $(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken

@@ -12,6 +12,7 @@ $(SCP1TARGETN): $(LOCALSCP1FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP1FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -30,6 +31,7 @@ $(SCP2TARGETN): $(LOCALSCP2FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP2FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -48,6 +50,7 @@ $(SCP3TARGETN): $(LOCALSCP3FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP3FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -66,6 +69,7 @@ $(SCP4TARGETN): $(LOCALSCP4FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP4FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -84,6 +88,7 @@ $(SCP5TARGETN): $(LOCALSCP5FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP5FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -102,6 +107,7 @@ $(SCP6TARGETN): $(LOCALSCP6FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP6FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -120,6 +126,7 @@ $(SCP7TARGETN): $(LOCALSCP7FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP7FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -138,6 +145,7 @@ $(SCP8TARGETN): $(LOCALSCP8FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP8FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -156,6 +164,7 @@ $(SCP9TARGETN): $(LOCALSCP9FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP9FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -174,6 +183,7 @@ $(SCP10TARGETN): $(LOCALSCP10FILES)
     @echo ------------------------------
     @echo Making: $@
     scplink $(SCPLINKFLAGS) @$(mktmp $(foreach,i,$(SCP10FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    $(SCP_CHECK_TOOL) $@
 .ENDIF
 
 # Anweisungen fuer das Linken
