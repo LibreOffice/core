@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:45:21 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
                 pImageStream->SetBufferSize(8192);
             pImageStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-            xImageStream = new ::utl::OInputStreamHelper( new SvLockBytes( pImageStream.get(), sal_True ), nSize );
+            xImageStream = new ::utl::OInputStreamHelper( new SvLockBytes( pImageStream.get(), sal_False ), nSize );
         }
     }
 
