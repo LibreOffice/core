@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 13:18:23 $
+ *  last change: $Author: pb $ $Date: 2000-11-23 07:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,17 +1038,19 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
 Config* SfxApplication::GetFilterIni()
 {
-    if( !pAppData_Impl->pFilterIni )
+    if ( !pAppData_Impl->pFilterIni )
     {
+        // load modules path from configuration
         String aIniFile( SvtPathOptions().GetModulePath() );
         ::rtl::OUString aTemp;
-        if ( ::osl::FileBase::normalizePath( aIniFile, aTemp ) == osl::FileBase::E_None )
+        // it's an URL -> convert to normalized path
+        if ( ::osl::FileBase::getNormalizedPathFromFileURL( aIniFile, aTemp ) == osl::FileBase::E_None )
         {
+            // append the name of the filter ini
             aIniFile = aTemp;
-            aIniFile += DEFINE_CONST_UNICODE("/");
-            aIniFile += DEFINE_CONST_UNICODE( "install.ini" );
-            ::osl::FileBase::getSystemPathFromNormalizedPath( aIniFile, aTemp );
-            pAppData_Impl->pFilterIni = new Config( aTemp );
+            aIniFile += DEFINE_CONST_UNICODE( "/install.ini" );
+            // and create the Config instance
+            pAppData_Impl->pFilterIni = new Config( aIniFile );
         }
     }
 
