@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
+ *  last change: $Author: jbu $ $Date: 2001-05-29 07:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::bridge;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 #include "testcomp.h"
 #ifdef SAL_W32

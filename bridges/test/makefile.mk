@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2001-03-20 13:15:51 $
+#   last change: $Author: jbu $ $Date: 2001-05-29 07:09:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,7 +116,9 @@ UNOTYPES = \
         com.sun.star.lang.XServiceInfo\
         test.XTestFactory \
         com.sun.star.test.performance.XPerformanceTest \
-        com.sun.star.lang.XMain
+        com.sun.star.lang.XMain \
+        com.sun.star.lang.XMultiComponentFactory \
+        com.sun.star.lang.XSingleComponentFactory
 
 #UNOTYPES= com.sun.star.corba.giop.MsgType_1_1
 #UNOTYPES=	com.sun.star.uno.XInterface \
