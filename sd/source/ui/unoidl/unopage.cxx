@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-29 13:40:04 $
+ *  last change: $Author: cl $ $Date: 2000-09-29 15:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,7 +1046,7 @@ void SAL_CALL SdDrawPage::release() throw(uno::RuntimeException)
     SvxDrawPage::release();
 }
 
-UNO3_GETIMPLEMENTATION_IMPL( SdDrawPage );
+UNO3_GETIMPLEMENTATION2_IMPL( SdDrawPage, SdGenericDrawPage );
 
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeException)
@@ -1420,7 +1420,7 @@ void SAL_CALL SdMasterPage::release() throw(uno::RuntimeException)
     SvxDrawPage::release();
 }
 
-UNO3_GETIMPLEMENTATION_IMPL(SdMasterPage);
+UNO3_GETIMPLEMENTATION2_IMPL( SdMasterPage, SdGenericDrawPage );
 
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeException)
