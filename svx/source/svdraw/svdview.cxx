@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:50:13 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "svdobj.hxx"
 #include "svdopath.hxx" // fuer GetContext
 #include "svdograf.hxx" // fuer GetContext
+#include "svdomedia.hxx" // fuer GetContext
 #include "svdetc.hxx"   // Fuer SdrEngineDefaults
 #include "svdibrow.hxx"
 #include "svdoutl.hxx"
@@ -1169,17 +1170,23 @@ SdrViewContext SdrView::GetContext() const
 
     if( GetMarkedObjectCount() )
     {
-        BOOL bGraf = TRUE;
-        for( ULONG nMarkNum = 0; nMarkNum < nMarkAnz && bGraf; nMarkNum++ )
+        BOOL bGraf = TRUE, bMedia = TRUE;
+
+        for( ULONG nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); nMarkNum++ )
         {
             const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
 
             if( !pMarkObj->ISA( SdrGrafObj ) )
                 bGraf = FALSE;
+
+            if( !pMarkObj->ISA( SdrMediaObj ) )
+                bMedia = FALSE;
         }
 
         if( bGraf )
             return SDRCONTEXT_GRAPHIC;
+        else if( bMedia )
+            return SDRCONTEXT_MEDIA;
     }
 
     return SDRCONTEXT_STANDARD;
