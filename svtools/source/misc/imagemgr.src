@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:25:12 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ String STR_DESCRIPTION_CFGFILE
     Text[ dutch ] = "Configuratiebestand";
     Text[ chinese_simplified ] = "配置文件";
     Text[ greek ] = "������ ����������";
-    Text[ korean ] = "컨피규레이션 파일";
+    Text[ korean ] = "구성 파일";
     Text[ turkish ] = "Konfig�rasyon dosyas�";
     Text[ finnish ] = "Configuration file";
     Text[ catalan ] = "Configuration file";
@@ -295,7 +295,7 @@ String STR_DESCRIPTION_APPLICATION
     Text[ dutch ] = "Applicatie";
     Text[ chinese_simplified ] = "应用程序";
     Text[ greek ] = "��������";
-    Text[ korean ] = "응용프로그램";
+    Text[ korean ] = "응용 프로그램";
     Text[ turkish ] = "Uygulama";
     Text[ finnish ] = "Application";
     Text[ catalan ] = "Application";
@@ -781,7 +781,7 @@ String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
     Text[ dutch ] = "%PRODUCTNAME sjabloon";
     Text[ chinese_simplified ] = "%PRODUCTNAME 样式";
     Text[ greek ] = "%PRODUCTNAME - �������";
-    Text[ korean ] = "%PRODUCTNAME 서식파일";
+    Text[ korean ] = "%PRODUCTNAME 템플릿";
     Text[ turkish ] = "%PRODUCTNAME �ablonu";
     Text[ finnish ] = "%PRODUCTNAME Template";
     Text[ catalan ] = "%PRODUCTNAME Template";
@@ -835,7 +835,7 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text[ dutch ] = "MS Excel sjabloon";
     Text[ chinese_simplified ] = "MS Excel 模板";
     Text[ greek ] = "MS Excel - �������";
-    Text[ korean ] = "MS Excel 서식파일";
+    Text[ korean ] = "MS Excel 서식 파일";
     Text[ turkish ] = "MS Excel �ablonu";
     Text[ finnish ] = "MS Excel Template";
     Text[ catalan ] = "MS Excel Template";
@@ -1112,7 +1112,7 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon arkusza kalkulacyjnego";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Tabledocument Template";
     Text[ japanese ] = "%productname% 6.0 表計算ﾄﾞｷｭﾒﾝﾄ ﾃﾝﾌﾟﾚｰﾄ";
-    Text[ korean ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 스프레드시트 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 工作表文档样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 工作表文件樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
@@ -1136,7 +1136,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon rysunku";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Drawing Template";
     Text[ japanese ] = "%PRODUCTNAME 6.0 図形描画ﾃﾝﾌﾟﾚｰﾄ";
-    Text[ korean ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 그리기 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 绘图样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 繪圖樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Drawing Template";
@@ -1160,7 +1160,7 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ﾌﾟﾚｾﾞﾝﾃｰｼｮﾝ ﾃﾝﾌﾟﾚｰﾄ";
-    Text[ korean ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 프리젠테이션 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 演示文稿样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 簡報樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Presentation Template";
@@ -1184,13 +1184,14 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon dokumentu tekstowego";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ japanese ] = "%productname% 6.0 文書ﾄﾞｷｭﾒﾝﾄ ﾃﾝﾌﾟﾚｰﾄ";
-    Text[ korean ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 텍스트 문서 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 文本文档样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 文字文件樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Textdocument Template";
 };
+
 
 
 
