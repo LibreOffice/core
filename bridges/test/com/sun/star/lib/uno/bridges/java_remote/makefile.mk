@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 08:39:36 $
+#   last change: $Author: hr $ $Date: 2003-08-07 14:31:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,11 +65,12 @@ TARGET := test_com_sun_star_lib_uno_bridges_javaremote
 
 PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/java_remote
 JAVATESTFILES := \
+    Bug92174_Test.java \
     Bug97697_Test.java \
     Bug98508_Test.java \
     Bug107753_Test.java \
     Bug108825_Test.java
-JAVAFILES := Bug92174_Test.java # fails as long as bug 92174 is not fixed
+#JAVAFILES := Bug92174_Test.java # fails as long as bug 92174 is not fixed
 JARFILES := juh.jar jurt.jar ridl.jar sandbox.jar
 
 .INCLUDE: javaunittest.mk
