@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:25:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,9 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     XMLTypedPropertiesOOoTContext_Impl * pIntervalMinorDivisorContext = 0;
     double fIntervalMajor = 0.0;
     double fIntervalMinor = 0.0;
+    bool bMoveProtect = false;
+    bool bSizeProtect = false;
+    XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -889,10 +892,77 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             }
             break;
 
+        case XML_ATACTION_CAPTION_ESCAPE_OOO:
+            {
+                OUString aAttrValue( rAttrValue );
+                if( aAttrValue.indexOf( sal_Unicode('%') ) != -1 )
+                {
+                    sal_Int32 nValue = 0;
+                    SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                    if( nValue )
+                    {
+                        nValue /= 100;
+                        rtl::OUStringBuffer aOut;
+                         SvXMLUnitConverter::convertPercent( aOut, nValue );
+                        aAttrValue = aOut.makeStringAndClear();
+                    }
+                }
+                else
+                {
+                    XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
+                }
+
+                pContext->AddAttribute( rAttrName, aAttrValue );
+            }
+            break;
+        case XML_ATACTION_MOVE_PROTECT:
+            bMoveProtect = IsXMLToken( rAttrValue, XML_TRUE );
+            pProtectContext = pContext;
+            break;
+        case XML_ATACTION_SIZE_PROTECT:
+            bSizeProtect = IsXMLToken( rAttrValue, XML_TRUE );
+            pProtectContext = pContext;
+            break;
+        case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
+            {
+                const OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_TRUE ) ? XML_HORIZONTAL : XML_NONE ) );
+                pContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                            XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR )),
+                                            aAttrValue);
+
+            }
+            break;
+        case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
+            {
+                double fValue = rAttrValue.toDouble();
+                sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
+
+                rtl::OUStringBuffer aOut;
+                SvXMLUnitConverter::convertPercent( aOut, nValue );
+                OUString aAttrValue( aOut.makeStringAndClear() );
+                pContext->AddAttribute( rAttrName, aAttrValue );
+            }
+            break;
         default:
             OSL_ENSURE( !this, "unknown action" );
             break;
         }
+    }
+
+    if( bMoveProtect || bSizeProtect )
+    {
+        OUString aAttrValue;
+        if( bMoveProtect )
+        {
+            aAttrValue = GetXMLToken( XML_POSITION );
+            if( bSizeProtect )
+                aAttrValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+        }
+
+        if( bSizeProtect )
+            aAttrValue += GetXMLToken( XML_SIZE );
+
+        pProtectContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken( XML_PROTECT ) ), aAttrValue );
     }
 
     if( pIntervalMinorDivisorContext )
