@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:25:54 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,9 +213,9 @@ ModelessDialog RID_SCDLG_AREAS
     };
     StringList [ russian ] =
     {
-            < "- без -" ; Default ; > ;
-        < "-задано пользователем -" ; Default ; > ;
-        < "- Выделение -" ; Default ; > ;
+            < "- нет -" ; Default ; > ;
+        < "- определяемый пользователем -" ; Default ; > ;
+        < "- выделение -" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -420,8 +420,8 @@ ModelessDialog RID_SCDLG_AREAS
     };
     StringList [ russian ] =
     {
-            < "- без -" ; Default ; > ;
-        < "- задано пользователем -" ; Default ; > ;
+            < "- нет -" ; Default ; > ;
+        < "- определяемый пользователем -" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -616,8 +616,8 @@ ModelessDialog RID_SCDLG_AREAS
     };
     StringList [ russian ] =
     {
-            < "- без -" ; Default ; > ;
-        < "- задано пользователем -" ; Default ; > ;
+            < "- нет -" ; Default ; > ;
+        < "- определяемый пользователем -" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -710,7 +710,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text [ portuguese ] = "Editar бreas de impressгo" ;
     Text [ portuguese_brazilian ] = "Druckbereiche bearbeiten" ;
     Text[ chinese_simplified ] = "зј–иѕ‘ж‰“еЌ°еЊєеџџ";
-    Text[ russian ] = "Правка областей печати";
+    Text[ russian ] = "Изменение областей печати";
     Text[ polish ] = "Edytuj obszar wydruku";
     Text[ japanese ] = "еЌ°е€·зЇ„е›ІгЃ®з·Ёй›†";
     Text[ chinese_traditional ] = "з·ЁијЇе€—еЌ°зЇ„ењЌ";
@@ -719,7 +719,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ korean ] = "мќём‡„ мЃм—­ нЋём§‘";
     Text[ turkish ] = "Yazdэrma aralэklarэnэ dьzenle";
     Text[ catalan ] = "Edita les аrees d'impressiу";
-    Text[ finnish ] = "Muokkaa tulostusalueita";
+    Text[ finnish ] = "Muuta tulostusalueita";
     Text[ thai ] = "а№ЃаёЃа№‰а№„аё‚аёЉа№€аё§аё‡аёЃаёІаёЈаёћаёґаёЎаёћа№Њ";
 };
 TabPage RID_SCPAGE_TABLE
@@ -740,7 +740,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Intesta~zioni colonna/riga" ;
         Text [ portuguese_brazilian ] = "T?~tulos de Coluna- & fileira" ;
         Text [ portuguese ] = "Tн~tulos de colunas & linhas" ;
-        Text [ finnish ] = "~Sarake- ja riviotsikot" ;
+        Text [ finnish ] = "~Sarake- ja rivitunnukset" ;
         Text [ danish ] = "Rжkke-/kolonneoverskrifter" ;
         Text [ french ] = "~En-tкtes de colonnes/lignes" ;
         Text [ swedish ] = "Rad- och kolumnhu~vuden" ;
@@ -771,7 +771,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Grade" ;
         Text [ portuguese ] = "~Grelha" ;
         Text [ finnish ] = "~Ruudukko" ;
-        Text [ danish ] = "Tabelgitter" ;
+        Text [ danish ] = "T~abelgitter" ;
         Text [ french ] = "~Grille" ;
         Text [ swedish ] = "Tabell~gitter" ;
         Text [ dutch ] = "Tabellen~raster" ;
@@ -800,7 +800,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "~Note" ;
         Text [ portuguese_brazilian ] = "~Observa??s" ;
         Text [ portuguese ] = "~Anotaзхes" ;
-        Text [ finnish ] = "~Huomautukset" ;
+        Text [ finnish ] = "H~uomautukset" ;
         Text [ danish ] = "Noter" ;
         Text [ french ] = "Notes" ;
         Text [ swedish ] = "A~nteckningar" ;
@@ -830,16 +830,16 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "~Oggetti/immagini" ;
         Text [ portuguese_brazilian ] = "~Objects/Images" ;
         Text [ portuguese ] = "~Objectos/Imagens" ;
-        Text [ finnish ] = "~Objektit/grafiikka" ;
+        Text [ finnish ] = "O~bjektit/grafiikka" ;
         Text [ danish ] = "Objekter/grafik" ;
         Text [ french ] = "Objets/Images" ;
         Text [ swedish ] = "O~bjekt/grafik" ;
-        Text [ dutch ] = "~Objecten/afbeeld." ;
+        Text [ dutch ] = "~Objecten/afbeeldingen" ;
         Text [ spanish ] = "~Objetos/Imбgenes" ;
         Text [ ENGLISH_US ] = "~Objects/graphics" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "еЇ№и±Ў/е›ѕеЅў(~O)";
-        Text[ russian ] = "Объекты и рисунки";
+        Text[ russian ] = "Внедренные/графические объекты";
         Text[ polish ] = "Obiekty/~Grafiki";
         Text[ japanese ] = "г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гЃЁе›і(~O)";
         Text[ chinese_traditional ] = "з‰©д»¶/ењ–еЅў(~O)";
@@ -860,7 +860,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Diagrammi" ;
         Text [ portuguese_brazilian ] = "~Gr?ficos" ;
         Text [ portuguese ] = "~Grбficos" ;
-        Text [ finnish ] = "~Kaaviot" ;
+        Text [ finnish ] = "Kaav~iot" ;
         Text [ danish ] = "Diagrammer" ;
         Text [ french ] = "~Diagrammes" ;
         Text [ swedish ] = "~Diagram" ;
@@ -891,15 +891,15 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "Drawob~jects" ;
         Text [ portuguese ] = "Objectos de ~desenho" ;
         Text [ finnish ] = "~Piirrosobjektit" ;
-        Text [ danish ] = "Tegneobjekter" ;
+        Text [ danish ] = "T~egneobjekter" ;
         Text [ french ] = "~Objets de dessin" ;
         Text [ swedish ] = "Ritob~jekt" ;
-        Text [ dutch ] = "Teken~objecten" ;
+        Text [ dutch ] = "~Tekenobjecten" ;
         Text [ spanish ] = "O~bjetos de dibujo" ;
         Text [ ENGLISH_US ] = "~Drawing objects" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "з»е›ѕеЇ№и±Ў(~D)";
-        Text[ russian ] = "Графические объекты";
+        Text[ russian ] = "Рисунки";
         Text[ polish ] = "Obiekty g~raficzne";
         Text[ japanese ] = "е›іеЅўжЏЏз”»г‚Єгѓ–г‚ёг‚§г‚Їгѓ€(~D)";
         Text[ chinese_traditional ] = "з№Єењ–з‰©д»¶(~D)";
@@ -954,7 +954,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ danish ] = "Nulvжrdier" ;
         Text [ french ] = "Valeurs ~zйro" ;
         Text [ swedish ] = "N~ollvдrden" ;
-        Text [ dutch ] = "~Nulwaarden" ;
+        Text [ dutch ] = "N~ulwaarden" ;
         Text [ spanish ] = "~Valores cero" ;
         Text [ english_us ] = "Zero val~ues" ;
         TabStop = TRUE ;
@@ -1095,7 +1095,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ italian ] = "Primo numero di ~pagina" ;
         Text [ portuguese_brazilian ] = "Primeira p?gina" ;
         Text [ portuguese ] = "~Nъmero da primeira pбgina" ;
-        Text [ finnish ] = "Ensimmдisen sivun numero" ;
+        Text [ finnish ] = "~1. sivun numero" ;
         Text [ danish ] = "Fшrste sidetal" ;
         Text [ french ] = "~Premier numйro de page" ;
         Text [ swedish ] = "Fцrsta ~sidnummer" ;
@@ -1104,7 +1104,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ english_us ] = "First ~page number" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "з¬¬дёЂдёЄйЎµз Ѓ(~P)";
-        Text[ russian ] = "Первая страница №";
+        Text[ russian ] = "Номер первой страницы";
         Text[ polish ] = "Pierwszy nu~mer strony";
         Text[ japanese ] = "жњЂе€ќгЃ®гѓљгѓјг‚ёз•ЄеЏ·(~P)";
         Text[ chinese_traditional ] = "з¬¬дёЂеЂ‹й Ѓзўј(~P)";
@@ -1167,7 +1167,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ portuguese ] = "~Ampliar/diminuir impressгo";
         Text[ russian ] = "Уменьшить/увеличить распечатку";
         Text[ greek ] = "УмЯксхнуз/МегЭихнуз екфэрщузт";
-        Text[ dutch ] = "~Afdruk verk~leinen/vergroten";
+        Text[ dutch ] = "Afdruk v~erkleinen/vergroten";
         Text[ french ] = "~Reduire/agrandir l'impression";
         Text[ spanish ] = "Aumentar/disminuir impresiуn [%]";
         Text[ finnish ] = "Pienennд/suurenna tulostetta";
@@ -1196,10 +1196,10 @@ TabPage RID_SCPAGE_TABLE
         Text[ portuguese ] = "A~justar impressгo ao nъmero de pбginas";
         Text[ russian ] = "Согласовать распечатку с числом страниц";
         Text[ greek ] = "РспубсмпгЮ екфэрщузт щт рспт фпн бсйимь уелЯдщ~н";
-        Text[ dutch ] = "Afdruk~paginanr. aanpassen";
+        Text[ dutch ] = "Afdruk~paginanummer aanpassen";
         Text[ french ] = "Ada~pter l'impression au nombre de pages";
-        Text[ spanish ] = "Ajustar impresiуn a nъmero de pбginas";
-        Text[ finnish ] = "~Sддdд tuloste sivumддrдn mukaan";
+        Text[ spanish ] = "Adaptar la impresiуn al nъmero de pбginas";
+        Text[ finnish ] = "Sдд~dд tuloste sivumддrдn mukaan";
         Text[ italian ] = "~Adatta la stampa al numero di pagine";
         Text[ danish ] = "Til~pas udskrift til sidetal";
         Text[ swedish ] = "An~passa utskrift till antal sidor";
