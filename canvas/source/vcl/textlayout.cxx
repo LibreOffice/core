@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textlayout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:16:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <boost/scoped_array.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
-#include <drafts/com/sun/star/rendering/TextDirection.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
+#include <com/sun/star/rendering/TextDirection.hpp>
 #endif
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -82,7 +82,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace vclcanvas
 {
@@ -237,11 +236,16 @@ namespace vclcanvas
                 break;
         }
 
-        rOutDev.SetLayoutMode( nLayoutMode );
+        // set calculated layout mode. Origin is always the left edge,
+        // as required at the API spec
+        rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
 
         // TODO(P2): cache that
         ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
         setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
+
+        // TODO(F3): ensure correct length and termination for DX
+        // array (last entry _must_ contain the overall width)
 
         rOutDev.DrawTextArray( rOutpos,
                                maText.Text,
@@ -306,7 +310,7 @@ namespace vclcanvas
     }
 
 
-#define SERVICE_NAME "drafts.com.sun.star.rendering.TextLayout"
+#define SERVICE_NAME "com.sun.star.rendering.TextLayout"
 
     ::rtl::OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
     {
