@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-15 13:38:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,24 @@
 //========================================================================
 // string ids (relative to other resources, that's why not unique)
 
-#define STR_CONNTYPES               1
-#define STR_CONNUINAMES             2
+#define STR_MYSQL_ODBC          1
+#define STR_MYSQL_JDBC          2
+#define STR_ADABAS              3
+#define STR_ORACLE_JDBC         4
+#define STR_JDBC                5
+#define STR_ODBC                6
+#define STR_DBASE               7
+#define STR_MSACCESS            8
+#define STR_ADO                 9
+#define STR_FLAT                10
+#define STR_CALC                11
+#define STR_MOZILLA             12
+#define STR_LDAP                13
+#define STR_OUTLOOK             14
+#define STR_OUTLOOKEXP          15
+#define STR_EVOLUTION           16
+
+#define STR_END                 STR_EVOLUTION + 1
 
 #endif // _DBU_MISCRES_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/02/13 09:48:40  fs
- *  STR_CHARSETKEYS is obsolete
- *
- *  Revision 1.1  2000/10/05 10:08:49  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 26.09.00 08:24:38  fs
- ************************************************************************/
 
