@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:39:38 $
+ *  last change: $Author: rt $ $Date: 2001-08-06 08:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ARBEITSTAG";
         Text [ english ] = "WORKDAY";
         Text[ english_us ] = "WORKDAY";
-        Text[ portuguese ] = "WORKDAY";
+        Text[ portuguese ] = "DIA.TRABALHO";
         Text[ russian ] = "–¿¡ƒ≈Õ‹";
         Text[ greek ] = "WORKDAY";
         Text[ dutch ] = "WERKDAG";
@@ -97,7 +97,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "BRTEILJAHRE";
         Text [ english ] = "YEARFRAC";
         Text[ english_us ] = "YEARFRAC";
-        Text[ portuguese ] = "YEARFRAC";
+        Text[ portuguese ] = "FRAC«√OANO";
         Text[ russian ] = "ƒŒÀﬂ√Œƒ¿";
         Text[ greek ] = "YEARFRAC";
         Text[ dutch ] = "JAAR.DEEL";
@@ -123,7 +123,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "EDATUM";
         Text [ english ] = "EDATE";
         Text[ english_us ] = "EDATE";
-        Text[ portuguese ] = "EDATE";
+        Text[ portuguese ] = "DATAM";
         Text[ russian ] = "ƒ¿“¿Ã≈—";
         Text[ greek ] = "EDATE";
         Text[ dutch ] = "ZELFDE.DAG";
@@ -149,7 +149,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KALENDERWOCHE";
         Text [ english ] = "WEEKNUM";
         Text[ english_us ] = "WEEKNUM";
-        Text[ portuguese ] = "WEEKNUM";
+        Text[ portuguese ] = "N⁄MSEMANA";
         Text[ russian ] = "ÕŒÃÕ≈ƒ≈À»";
         Text[ greek ] = "WEEKNUM";
         Text[ dutch ] = "WEEKNUMMER";
@@ -175,7 +175,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "MONATSENDE";
         Text [ english ] = "EOMONTH";
         Text[ english_us ] = "EOMONTH";
-        Text[ portuguese ] = "EOMONTH";
+        Text[ portuguese ] = "FIMM S";
         Text[ russian ] = " ŒÕÃ≈—ﬂ÷¿";
         Text[ greek ] = "EOMONTH";
         Text[ dutch ] = "LAATSTE.DAG";
@@ -201,7 +201,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "NETTOARBEITSTAGE";
         Text [ english ] = "NETWORKDAYS";
         Text[ english_us ] = "NETWORKDAYS";
-        Text[ portuguese ] = "NETWORKDAYS";
+        Text[ portuguese ] = "DIATRABALHOTOTAL";
         Text[ russian ] = "◊»—“–¿¡ƒÕ»";
         Text[ greek ] = "NETWORKDAYS";
         Text[ dutch ] = "NETTO.WERKDAGEN";
@@ -279,7 +279,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "AUFGELZINS";
         Text [ english ] = "ACCRINT";
         Text[ english_us ] = "ACCRINT";
-        Text[ portuguese ] = "ACCRINT";
+        Text[ portuguese ] = "JUROSACUM";
         Text[ russian ] = "Õ¿ ŒœƒŒ’Œƒ";
         Text[ greek ] = "ACCRINT";
         Text[ dutch ] = "SAMENG.RENTE";
@@ -305,7 +305,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "AUFGELZINSF";
         Text [ english ] = "ACCRINTM";
         Text[ english_us ] = "ACCRINTM";
-        Text[ portuguese ] = "ACCRINTM";
+        Text[ portuguese ] = "JUROSACUMV";
         Text[ russian ] = "Õ¿ ŒœƒŒ’ŒƒœŒ√¿ÿ";
         Text[ greek ] = "ACCRINTM";
         Text[ dutch ] = "SAMENG.RENTE.V";
@@ -331,7 +331,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "AUSZAHLUNG";
         Text [ english ] = "RECEIVED";
         Text[ english_us ] = "RECEIVED";
-        Text[ portuguese ] = "RECEIVED";
+        Text[ portuguese ] = "RECEBER";
         Text[ russian ] = "œŒÀ”◊≈ÕŒ";
         Text[ greek ] = "RECEIVED";
         Text[ dutch ] = "OPBRENGST";
@@ -357,7 +357,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "DISAGIO";
         Text [ english ] = "DISC";
         Text[ english_us ] = "DISC";
-        Text[ portuguese ] = "DISC";
+        Text[ portuguese ] = "DESC";
         Text[ russian ] = "— »ƒ ¿";
         Text[ greek ] = "DISC";
         Text[ dutch ] = "DISCONTO";
@@ -383,7 +383,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "DURATION";
         Text [ english ] = "DURATION";
         Text[ english_us ] = "DURATION";
-        Text[ portuguese ] = "DURATION";
+        Text[ portuguese ] = "DURA«√O";
         Text[ russian ] = "ƒÀ»“";
         Text[ greek ] = "DURATION";
         Text[ dutch ] = "DUUR";
@@ -409,7 +409,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "EFFEKTIV";
         Text [ english ] = "EFFECT";
         Text[ english_us ] = "EFFECT";
-        Text[ portuguese ] = "EFFECT";
+        Text[ portuguese ] = "EFECTIVA";
         Text[ russian ] = "›‘‘≈ “";
         Text[ greek ] = "EFFECT";
         Text[ dutch ] = "EFFECT.RENTE";
@@ -435,7 +435,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KUMKAPITAL";
         Text [ english ] = "CUMPRINC";
         Text[ english_us ] = "CUMPRINC";
-        Text[ portuguese ] = "CUMPRINC";
+        Text[ portuguese ] = "PGTOCAPACUM";
         Text[ russian ] = "Œ¡ŸƒŒ’Œƒ";
         Text[ greek ] = "CUMPRINC";
         Text[ dutch ] = "CUM.HOOFDSOM";
@@ -461,7 +461,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KUMZINSZ";
         Text [ english ] = "CUMIPMT";
         Text[ english_us ] = "CUMIPMT";
-        Text[ portuguese ] = "CUMIPMT";
+        Text[ portuguese ] = "PGTOJURACUM";
         Text[ russian ] = "Œ¡ŸœÀ¿“";
         Text[ greek ] = "CUMIPMT";
         Text[ dutch ] = "CUM.RENTE";
@@ -487,7 +487,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KURS";
         Text [ english ] = "PRICE";
         Text[ english_us ] = "PRICE";
-        Text[ portuguese ] = "PRICE";
+        Text[ portuguese ] = "PRE«O";
         Text[ russian ] = "÷≈Õ¿";
         Text[ greek ] = "PRICE";
         Text[ dutch ] = "PRIJS.NOM";
@@ -513,7 +513,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KURSDISAGIO";
         Text [ english ] = "PRICEDISC";
         Text[ english_us ] = "PRICEDISC";
-        Text[ portuguese ] = "PRICEDISC";
+        Text[ portuguese ] = "PRE«ODESC";
         Text[ russian ] = "÷≈Õ¿— »ƒ ¿";
         Text[ greek ] = "PRICEDISC";
         Text[ dutch ] = "PRIJS.DISCONTO";
@@ -539,7 +539,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KURSFƒLLIG";
         Text [ english ] = "PRICEMAT";
         Text[ english_us ] = "PRICEMAT";
-        Text[ portuguese ] = "PRICEMAT";
+        Text[ portuguese ] = "PRE«OVENC";
         Text[ russian ] = "÷≈Õ¿œŒ√¿ÿ";
         Text[ greek ] = "PRICEMAT";
         Text[ dutch ] = "PRIJS.VERVALDAG";
@@ -565,7 +565,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "MDURATION";
         Text [ english ] = "MDURATION";
         Text[ english_us ] = "MDURATION";
-        Text[ portuguese ] = "MDURATION";
+        Text[ portuguese ] = "MDURA«√O";
         Text[ russian ] = "ÃƒÀ»“";
         Text[ greek ] = "MDURATION";
         Text[ dutch ] = "AANG.DUUR";
@@ -617,7 +617,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "NOTIERUNGBRU";
         Text [ english ] = "DOLLARFR";
         Text[ english_us ] = "DOLLARFR";
-        Text[ portuguese ] = "DOLLARFR";
+        Text[ portuguese ] = "MOEDAFRAC";
         Text[ russian ] = "–”¡À‹.ƒ–Œ¡‹";
         Text[ greek ] = "DOLLARFR";
         Text[ dutch ] = "GULDEN.BR";
@@ -643,7 +643,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "NOTIERUNGDEZ";
         Text [ english ] = "DOLLARDE";
         Text[ english_us ] = "DOLLARDE";
-        Text[ portuguese ] = "DOLLARDE";
+        Text[ portuguese ] = "MOEDADEC";
         Text[ russian ] = "–”¡À‹.ƒ≈—";
         Text[ greek ] = "DOLLARDE";
         Text[ dutch ] = "GULDEN.DE";
@@ -669,7 +669,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "RENDITE";
         Text [ english ] = "YIELD";
         Text[ english_us ] = "YIELD";
-        Text[ portuguese ] = "YIELD";
+        Text[ portuguese ] = "LUCRO";
         Text[ russian ] = "ƒŒ’Œƒ";
         Text[ greek ] = "YIELD";
         Text[ dutch ] = "RENDEMENT";
@@ -695,7 +695,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "RENDITEDIS";
         Text [ english ] = "YIELDDISC";
         Text[ english_us ] = "YIELDDISC";
-        Text[ portuguese ] = "YIELDDISC";
+        Text[ portuguese ] = "LUCRODESC";
         Text[ russian ] = "ƒŒ’Œƒ— »ƒ ¿";
         Text[ greek ] = "YIELDDISC";
         Text[ dutch ] = "REND.DISCONTO";
@@ -721,7 +721,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "RENDITEFƒLL";
         Text [ english ] = "YIELDMAT";
         Text[ english_us ] = "YIELDMAT";
-        Text[ portuguese ] = "YIELDMAT";
+        Text[ portuguese ] = "LUCROVENC";
         Text[ russian ] = "ƒŒ’ŒƒœŒ√¿ÿ";
         Text[ greek ] = "YIELDMAT";
         Text[ dutch ] = "REND.VERVAL";
@@ -747,7 +747,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "TBILLƒQUIV";
         Text [ english ] = "TBILLEQ";
         Text[ english_us ] = "TBILLEQ";
-        Text[ portuguese ] = "TBILLEQ";
+        Text[ portuguese ] = "OTN";
         Text[ russian ] = "–¿¬ÕŒ ◊≈ ";
         Text[ greek ] = "TBILLEQ";
         Text[ dutch ] = "SCHATKIST.OBL";
@@ -799,7 +799,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "TBILLRENDITE";
         Text [ english ] = "TBILLYIELD";
         Text[ english_us ] = "TBILLYIELD";
-        Text[ portuguese ] = "TBILLYIELD";
+        Text[ portuguese ] = "OTNLUCRO";
         Text[ russian ] = "ƒŒ’Œƒ ◊≈ ";
         Text[ greek ] = "TBILLYIELD";
         Text[ dutch ] = "SCHATK.REND";
@@ -851,7 +851,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "UNREGER.REND";
         Text [ english ] = "ODDFYIELD";
         Text[ english_us ] = "ODDFYIELD";
-        Text[ portuguese ] = "ODDFYIELD";
+        Text[ portuguese ] = "LUCROPRIMINC";
         Text[ russian ] = "ƒŒ’Œƒœ≈–¬Õ≈–≈√";
         Text[ greek ] = "ODDFYIELD";
         Text[ dutch ] = "AFW.ET.REND";
@@ -903,7 +903,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "UNREGLE.REND";
         Text [ english ] = "ODDLYIELD";
         Text[ english_us ] = "ODDLYIELD";
-        Text[ portuguese ] = "ODDLYIELD";
+        Text[ portuguese ] = "LUCRO⁄LTINC";
         Text[ russian ] = "ƒŒ’ŒƒœŒ—ÀÕ≈–≈√";
         Text[ greek ] = "ODDLYIELD";
         Text[ dutch ] = "AFW.LT.REND";
@@ -929,7 +929,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "XINTZINSFUSS";
         Text [ english ] = "XIRR";
         Text[ english_us ] = "XIRR";
-        Text[ portuguese ] = "XIRR";
+        Text[ portuguese ] = "XTIR";
         Text[ russian ] = "◊»—“¬ÕƒŒ’";
         Text[ greek ] = "XIRR";
         Text[ dutch ] = "IR.SCHEMA";
@@ -955,7 +955,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "XKAPITALWERT";
         Text [ english ] = "XNPV";
         Text[ english_us ] = "XNPV";
-        Text[ portuguese ] = "XNPV";
+        Text[ portuguese ] = "XVAL";
         Text[ russian ] = "◊»—“Õ«";
         Text[ greek ] = "XNPV";
         Text[ dutch ] = "NHW2";
@@ -981,7 +981,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSSATZ";
         Text [ english ] = "INTRATE";
         Text[ english_us ] = "INTRATE";
-        Text[ portuguese ] = "INTRATE";
+        Text[ portuguese ] = "TIR";
         Text[ russian ] = "»ÕŒ–Ã¿";
         Text[ greek ] = "INTRATE";
         Text[ dutch ] = "RENTEPERCENTAGE";
@@ -1007,7 +1007,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSTERMNZ";
         Text [ english ] = "COUPNCD";
         Text[ english_us ] = "COUPNCD";
-        Text[ portuguese ] = "COUPNCD";
+        Text[ portuguese ] = "CUPDATAPR”X";
         Text[ russian ] = "ƒ¿“¿ ”œŒÕœŒ—À≈";
         Text[ greek ] = "COUPNCD";
         Text[ dutch ] = "COUP.DATUM.NB";
@@ -1033,7 +1033,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSTERMTAGE";
         Text [ english ] = "COUPDAYS";
         Text[ english_us ] = "COUPDAYS";
-        Text[ portuguese ] = "COUPDAYS";
+        Text[ portuguese ] = "CUPDIAS";
         Text[ russian ] = "ƒÕ≈… ”œŒÕ";
         Text[ greek ] = "COUPDAYS";
         Text[ dutch ] = "COUP.DAGEN";
@@ -1059,7 +1059,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSTERMTAGNZ";
         Text [ english ] = "COUPDAYSNC";
         Text[ english_us ] = "COUPDAYSNC";
-        Text[ portuguese ] = "COUPDAYSNC";
+        Text[ portuguese ] = "CUPDIASPR”X";
         Text[ russian ] = "ƒÕ≈… ”œŒÕœŒ—À≈";
         Text[ greek ] = "COUPDAYSNC";
         Text[ dutch ] = "COUP.DAGEN.VV";
@@ -1085,7 +1085,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSTERMTAGVA";
         Text [ english ] = "COUPDAYBS";
         Text[ english_us ] = "COUPDAYBS";
-        Text[ portuguese ] = "COUPDAYBS";
+        Text[ portuguese ] = "CUPDIASINLIQ";
         Text[ russian ] = "ƒÕ≈… ”œŒÕƒŒ";
         Text[ greek ] = "COUPDAYBS";
         Text[ dutch ] = "COUP.DAGEN.BB";
@@ -1111,7 +1111,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSTERMVZ";
         Text [ english ] = "COUPPCD";
         Text[ english_us ] = "COUPPCD";
-        Text[ portuguese ] = "COUPPCD";
+        Text[ portuguese ] = "CUPDATAANT";
         Text[ russian ] = "ƒ¿“¿ ”œŒÕƒŒ";
         Text[ greek ] = "COUPPCD";
         Text[ dutch ] = "COUP.DATUM.VB";
@@ -1137,7 +1137,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZINSTERMZAHL";
         Text [ english ] = "COUPNUM";
         Text[ english_us ] = "COUPNUM";
-        Text[ portuguese ] = "COUPNUM";
+        Text[ portuguese ] = "CUPN⁄M";
         Text[ russian ] = "◊»—À ”œŒÕ";
         Text[ greek ] = "COUPNUM";
         Text[ dutch ] = "COUP.AANTAL";
@@ -1163,7 +1163,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZW2";
         Text [ english ] = "FVSCHEDULE";
         Text[ english_us ] = "FVSCHEDULE";
-        Text[ portuguese ] = "FVSCHEDULE";
+        Text[ portuguese ] = "VFPLANO";
         Text[ russian ] = "¡«–¿—œ»—";
         Text[ greek ] = "FVSCHEDULE";
         Text[ dutch ] = "TOEK.WAARDE2";
@@ -1189,7 +1189,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ISTGERADE";
         Text [ english ] = "ISEVEN";
         Text[ english_us ] = "ISEVEN";
-        Text[ portuguese ] = "ISEVEN";
+        Text[ portuguese ] = "…PAR";
         Text[ russian ] = "≈◊≈“Õ";
         Text[ greek ] = "ISEVEN";
         Text[ dutch ] = "IS.EVEN";
@@ -1215,7 +1215,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ISTUNGERADE";
         Text [ english ] = "ISODD";
         Text[ english_us ] = "ISODD";
-        Text[ portuguese ] = "ISODD";
+        Text[ portuguese ] = "…ÕMPAR";
         Text[ russian ] = "≈Õ≈◊≈“Õ";
         Text[ greek ] = "ISODD";
         Text[ dutch ] = "IS.ONEVEN";
@@ -1241,7 +1241,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "GGT";
         Text [ english ] = "GCD";
         Text[ english_us ] = "GCD";
-        Text[ portuguese ] = "GCD";
+        Text[ portuguese ] = "MDC";
         Text[ russian ] = "ÕŒƒ";
         Text[ greek ] = "GCD";
         Text[ dutch ] = "GGD";
@@ -1267,7 +1267,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KGV";
         Text [ english ] = "LCM";
         Text[ english_us ] = "LCM";
-        Text[ portuguese ] = "LCM";
+        Text[ portuguese ] = "MMC";
         Text[ russian ] = "ÕŒ ";
         Text[ greek ] = "LCM";
         Text[ dutch ] = "KGV";
@@ -1293,7 +1293,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "POLYNOMIAL";
         Text [ english ] = "MULTINOMIAL";
         Text[ english_us ] = "MULTINOMIAL";
-        Text[ portuguese ] = "MULTINOMIAL";
+        Text[ portuguese ] = "POLINOMIAL";
         Text[ russian ] = "Ã”À‹“»ÕŒÃ";
         Text[ greek ] = "MULTINOMIAL";
         Text[ dutch ] = "MULTINOMIAAL";
@@ -1319,7 +1319,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "POTENZREIHE";
         Text [ english ] = "SERIESSUM";
         Text[ english_us ] = "SERIESSUM";
-        Text[ portuguese ] = "SERIESSUM";
+        Text[ portuguese ] = "SOMAS…RIE";
         Text[ russian ] = "–ﬂƒ.—”ÃÃ";
         Text[ greek ] = "SERIESSUM";
         Text[ dutch ] = "SOM.MACHTREEKS";
@@ -1345,7 +1345,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "QUOTIENT";
         Text [ english ] = "QUOTIENT";
         Text[ english_us ] = "QUOTIENT";
-        Text[ portuguese ] = "QUOTIENT";
+        Text[ portuguese ] = "QUOCIENTE";
         Text[ russian ] = "◊¿—“ÕŒ≈";
         Text[ greek ] = "QUOTIENT";
         Text[ dutch ] = "QUOTIENT";
@@ -1371,7 +1371,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "VRUNDEN";
         Text [ english ] = "MROUND";
         Text[ english_us ] = "MROUND";
-        Text[ portuguese ] = "MROUND";
+        Text[ portuguese ] = "MARRED";
         Text[ russian ] = "Œ –”√À“";
         Text[ greek ] = "MROUND";
         Text[ dutch ] = "AFRONDEN.N.VEELVOUD";
@@ -1397,7 +1397,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "WURZELPI";
         Text [ english ] = "SQRTPI";
         Text[ english_us ] = "SQRTPI";
-        Text[ portuguese ] = "SQRTPI";
+        Text[ portuguese ] = "RAIZPI";
         Text[ russian ] = " Œ–≈Õ‹œ»";
         Text[ greek ] = "SQRTPI";
         Text[ dutch ] = "WORTEL.PI";
@@ -1423,7 +1423,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "ZUFALLSBEREICH";
         Text [ english ] = "RANDBETWEEN";
         Text[ english_us ] = "RANDBETWEEN";
-        Text[ portuguese ] = "RANDBETWEEN";
+        Text[ portuguese ] = "ALEAT”RIOENTRE";
         Text[ russian ] = "—À”◊Ã≈∆ƒ”";
         Text[ greek ] = "RANDBETWEEN";
         Text[ dutch ] = "ASELECTTUSSEN";
@@ -1553,7 +1553,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "BININDEZ";
         Text [ english ] = "BIN2DEC";
         Text[ english_us ] = "BIN2DEC";
-        Text[ portuguese ] = "BIN2DEC";
+        Text[ portuguese ] = "BINADEC";
         Text[ russian ] = "ƒ¬.¬.ƒ≈—";
         Text[ greek ] = "BIN2DEC";
         Text[ dutch ] = "BIN.N.DEC";
@@ -1579,7 +1579,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "BININHEX";
         Text [ english ] = "BIN2HEX";
         Text[ english_us ] = "BIN2HEX";
-        Text[ portuguese ] = "BIN2HEX";
+        Text[ portuguese ] = "BINAHEX";
         Text[ russian ] = "ƒ¬.¬.ÿ≈—“Õ";
         Text[ greek ] = "BIN2HEX";
         Text[ dutch ] = "BIN.N.HEX";
@@ -1605,7 +1605,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "BININOKT";
         Text [ english ] = "BIN2OCT";
         Text[ english_us ] = "BIN2OCT";
-        Text[ portuguese ] = "BIN2OCT";
+        Text[ portuguese ] = "BINAOCT";
         Text[ russian ] = "ƒ¬.¬.¬Œ—‹Ã";
         Text[ greek ] = "BIN2OCT";
         Text[ dutch ] = "BIN.N.OCT";
@@ -1657,7 +1657,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "DEZINBIN";
         Text [ english ] = "DEC2BIN";
         Text[ english_us ] = "DEC2BIN";
-        Text[ portuguese ] = "DEC2BIN";
+        Text[ portuguese ] = "DECABIN";
         Text[ russian ] = "ƒ≈—.¬.ƒ¬";
         Text[ greek ] = "DEC2BIN";
         Text[ dutch ] = "DEC.N.BIN";
@@ -1683,7 +1683,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "DEZINHEX";
         Text [ english ] = "DEC2HEX";
         Text[ english_us ] = "DEC2HEX";
-        Text[ portuguese ] = "DEC2HEX";
+        Text[ portuguese ] = "DECAHEX";
         Text[ russian ] = "ƒ≈—.¬.ÿ≈—“Õ";
         Text[ greek ] = "DEC2HEX";
         Text[ dutch ] = "DEC.N.HEX";
@@ -1709,7 +1709,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "DEZINOKT";
         Text [ english ] = "DEC2OCT";
         Text[ english_us ] = "DEC2OCT";
-        Text[ portuguese ] = "DEC2OCT";
+        Text[ portuguese ] = "DECAOCT";
         Text[ russian ] = "ƒ≈—.¬.¬Œ—‹Ã";
         Text[ greek ] = "DEC2OCT";
         Text[ dutch ] = "DEC.N.OCT";
@@ -1735,7 +1735,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "GAUSSFEHLER";
         Text [ english ] = "ERF";
         Text[ english_us ] = "ERF";
-        Text[ portuguese ] = "ERF";
+        Text[ portuguese ] = "FUNCERRO";
         Text[ russian ] = "‘Œÿ";
         Text[ greek ] = "ERF";
         Text[ dutch ] = "FOUTFUNCTIE";
@@ -1761,7 +1761,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "GAUSSFKOMPL";
         Text [ english ] = "ERFC";
         Text[ english_us ] = "ERFC";
-        Text[ portuguese ] = "ERFC";
+        Text[ portuguese ] = "FUNCERROCOMPL";
         Text[ russian ] = "ƒ‘Œÿ";
         Text[ greek ] = "ERFC";
         Text[ dutch ] = "FOUT.COMPLEMENT";
@@ -1813,7 +1813,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "HEXINBIN";
         Text [ english ] = "HEX2BIN";
         Text[ english_us ] = "HEX2BIN";
-        Text[ portuguese ] = "HEX2BIN";
+        Text[ portuguese ] = "HEXABIN";
         Text[ russian ] = "ÿ≈—“Õ.¬.ƒ¬";
         Text[ greek ] = "HEX2BIN";
         Text[ dutch ] = "HEX.N.BIN";
@@ -1839,7 +1839,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "HEXINDEZ";
         Text [ english ] = "HEX2DEC";
         Text[ english_us ] = "HEX2DEC";
-        Text[ portuguese ] = "HEX2DEC";
+        Text[ portuguese ] = "HEXADEC";
         Text[ russian ] = "ÿ≈—“Õ.¬.ƒ≈—";
         Text[ greek ] = "HEX2DEC";
         Text[ dutch ] = "HEX.N.DEC";
@@ -1865,7 +1865,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "HEXINOKT";
         Text [ english ] = "HEX2OCT";
         Text[ english_us ] = "HEX2OCT";
-        Text[ portuguese ] = "HEX2OCT";
+        Text[ portuguese ] = "HEXAOCT";
         Text[ russian ] = "ÿ≈—“Õ.¬.¬Œ—‹Ã";
         Text[ greek ] = "HEX2OCT";
         Text[ dutch ] = "HEX.N.OCT";
@@ -1917,7 +1917,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMAGINƒRTEIL";
         Text [ english ] = "IMAGINARY";
         Text[ english_us ] = "IMAGINARY";
-        Text[ portuguese ] = "IMAGINARY";
+        Text[ portuguese ] = "IMAGIN¡RIO";
         Text[ russian ] = "ÃÕ»Ã.◊¿—“‹";
         Text[ greek ] = "IMAGINARY";
         Text[ dutch ] = "C.IM.DEEL";
@@ -1943,7 +1943,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMAPOTENZ";
         Text [ english ] = "IMPOWER";
         Text[ english_us ] = "IMPOWER";
-        Text[ portuguese ] = "IMPOWER";
+        Text[ portuguese ] = "IMPOT";
         Text[ russian ] = "ÃÕ»Ã.—“≈œ≈Õ‹";
         Text[ greek ] = "IMPOWER";
         Text[ dutch ] = "C.MACHT";
@@ -1969,7 +1969,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMARGUMENT";
         Text [ english ] = "IMARGUMENT";
         Text[ english_us ] = "IMARGUMENT";
-        Text[ portuguese ] = "IMARGUMENT";
+        Text[ portuguese ] = "IMARG";
         Text[ russian ] = "ÃÕ»Ã.¿–√”Ã≈Õ“";
         Text[ greek ] = "IMARGUMENT";
         Text[ dutch ] = "C.ARGUMENT";
@@ -2073,7 +2073,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMKONJUGIERTE";
         Text [ english ] = "IMCONJUGATE";
         Text[ english_us ] = "IMCONJUGATE";
-        Text[ portuguese ] = "IMCONJUGATE";
+        Text[ portuguese ] = "IMCONJ";
         Text[ russian ] = "ÃÕ»Ã.—Œœ–ﬂ∆";
         Text[ greek ] = "IMCONJUGATE";
         Text[ dutch ] = "C.TOEGEVOEGD";
@@ -2177,7 +2177,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMPRODUKT";
         Text [ english ] = "IMPRODUCT";
         Text[ english_us ] = "IMPRODUCT";
-        Text[ portuguese ] = "IMPRODUCT";
+        Text[ portuguese ] = "IMPROD";
         Text[ russian ] = "ÃÕ»Ã.œ–Œ»«¬≈ƒ";
         Text[ greek ] = "IMPRODUCT";
         Text[ dutch ] = "C.PRODUCT";
@@ -2229,7 +2229,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMSIN";
         Text [ english ] = "IMSIN";
         Text[ english_us ] = "IMSIN";
-        Text[ portuguese ] = "IMSIN";
+        Text[ portuguese ] = "IMSENO";
         Text[ russian ] = "ÃÕ»Ã.SIN";
         Text[ greek ] = "IMSIN";
         Text[ dutch ] = "C.SIN";
@@ -2255,7 +2255,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMSUB";
         Text [ english ] = "IMSUB";
         Text[ english_us ] = "IMSUB";
-        Text[ portuguese ] = "IMSUB";
+        Text[ portuguese ] = "IMSUBTR";
         Text[ russian ] = "ÃÕ»Ã.–¿«Õ";
         Text[ greek ] = "IMSUB";
         Text[ dutch ] = "C.VERSCHIL";
@@ -2281,7 +2281,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMSUMME";
         Text [ english ] = "IMSUM";
         Text[ english_us ] = "IMSUM";
-        Text[ portuguese ] = "IMSUM";
+        Text[ portuguese ] = "IMSOMA";
         Text[ russian ] = "ÃÕ»Ã.—”ÃÃ";
         Text[ greek ] = "IMSUM";
         Text[ dutch ] = "C.SOM";
@@ -2307,7 +2307,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "IMWURZEL";
         Text [ english ] = "IMSQRT";
         Text[ english_us ] = "IMSQRT";
-        Text[ portuguese ] = "IMSQRT";
+        Text[ portuguese ] = "IMRAIZ";
         Text[ russian ] = "ÃÕ»Ã. Œ–≈Õ‹";
         Text[ greek ] = "IMSQRT";
         Text[ dutch ] = "C.WORTEL";
@@ -2333,7 +2333,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "KOMPLEXE";
         Text [ english ] = "COMPLEX";
         Text[ english_us ] = "COMPLEX";
-        Text[ portuguese ] = "COMPLEX";
+        Text[ portuguese ] = "COMPLEXO";
         Text[ russian ] = " ŒÃœÀ≈ —Õ";
         Text[ greek ] = "COMPLEX";
         Text[ dutch ] = "COMPLEX";
@@ -2359,7 +2359,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "OKTINBIN";
         Text [ english ] = "OCT2BIN";
         Text[ english_us ] = "OCT2BIN";
-        Text[ portuguese ] = "OCT2BIN";
+        Text[ portuguese ] = "OCTABIN";
         Text[ russian ] = "¬Œ—‹Ã.¬.ƒ¬";
         Text[ greek ] = "OCT2BIN";
         Text[ dutch ] = "OCT.N.BIN";
@@ -2385,7 +2385,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "OKTINDEZ";
         Text [ english ] = "OCT2DEZ";
         Text[ english_us ] = "OCT2DEC";
-        Text[ portuguese ] = "OCT2DEZ";
+        Text[ portuguese ] = "OCTADEC";
         Text[ russian ] = "¬Œ—‹Ã.¬.ƒ≈—";
         Text[ greek ] = "OCT2DEZ";
         Text[ dutch ] = "OCT.N.DEC";
@@ -2411,7 +2411,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "OKTINHEX";
         Text [ english ] = "OCT2HEX";
         Text[ english_us ] = "OCT2HEX";
-        Text[ portuguese ] = "OCT2HEX";
+        Text[ portuguese ] = "OCTAHEX";
         Text[ russian ] = "¬Œ—‹Ã.¬.ÿ≈—“Õ";
         Text[ greek ] = "OCT2HEX";
         Text[ dutch ] = "OCT.N.HEX";
@@ -2437,7 +2437,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text = "UMWANDELN";
         Text [ english ] = "CONVERT";
         Text[ english_us ] = "CONVERT";
-        Text[ portuguese ] = "CONVERT";
+        Text[ portuguese ] = "CONVERTER";
         Text[ russian ] = "œ–≈Œ¡–";
         Text[ greek ] = "CONVERT";
         Text[ dutch ] = "CONVERTEREN";
@@ -2485,6 +2485,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     };
 
 };
+
 
 
 
