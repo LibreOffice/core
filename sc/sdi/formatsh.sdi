@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2002-05-02 11:38:41 $ $Revision: 1.3 $
+ // $Author: mba $ $Date: 2002-07-03 17:01:01 $ $Revision: 1.4 $
  // $Logfile:   T:/sc/sdi/formatsh.sdv  $ $Workfile:   formatsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -52,6 +52,11 @@ interface FormatForSelection : Selection
     // } Slot's die in der DrawShell disabled werden.
 
     SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_BRUSH      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_STRIKEOUT [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_CONTOUR [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_SHADOWED [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_RELIEF [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ALIGNLEFT       [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNRIGHT      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNTOP        [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
@@ -66,6 +71,7 @@ interface FormatForSelection : Selection
         SID_TEXTDIRECTION_LEFT_TO_RIGHT [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
         SID_TEXTDIRECTION_TOP_TO_BOTTOM [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
 
+    SID_ATTR_NUMBERFORMAT_VALUE       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
     SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
     SID_NUMBER_TWODEC       [ ExecMethod = ExecuteNumFormat;]
     SID_NUMBER_SCIENTIFIC   [ ExecMethod = ExecuteNumFormat;]
@@ -79,7 +85,8 @@ interface FormatForSelection : Selection
 
     SID_ATTR_BORDER             [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]   //XXX
     SID_ATTR_BORDER_INNER       [                           StateMethod = GetBorderState; ] // status()
-//  SID_ATTR_BORDER_OUTER       [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ] // status()
+    SID_ATTR_BORDER_OUTER       [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ]
+    SID_ATTR_BORDER_SHADOW      [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ]
     SID_ATTR_ALIGN_LINEBREAK    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_FRAME_LINESTYLE         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_FRAME_LINECOLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
@@ -96,6 +103,9 @@ shell ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/05/02 11:38:41  nn
+    #99070# removed special names and flags from common slots
+
     Revision 1.2  2002/04/03 15:11:42  dr
     #98410# Asian vertical writing
 

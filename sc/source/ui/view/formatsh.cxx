@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:58:47 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 17:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,8 +1285,12 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
         switch ( nSlot )
         {
+            case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_ALIGN_LINEBREAK:
             case SID_ATTR_CHAR_COLOR:
+            case SID_ATTR_CHAR_CONTOUR:
+            case SID_ATTR_CHAR_SHADOWED:
+            case SID_ATTR_CHAR_RELIEF:
                 pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot ) ) );
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );

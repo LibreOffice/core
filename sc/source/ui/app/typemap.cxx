@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 11:43:01 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 17:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #pragma hdrstop
 
 #include <svx/svxids.hrc>
-//#include <svx/hlnkitem.hxx>
 #include "scitems.hxx"
 
 #define ITEMID_ADJUST           0
@@ -138,41 +137,18 @@
 #include <svx/xftsfit.hxx>
 #include <svx/langitem.hxx>
 #include <svx/grafctrl.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/shaditem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/charreliefitem.hxx>
 
 #include "attrib.hxx"
 
-#define CharSetItem                 SfxUInt16Item
-#define FontFamilyItem              SfxUInt16Item
-#define FontPitchItem               SfxUInt16Item
-#define FontAlignItem               SfxUInt16Item
-#define FontWeightItem              SfxUInt16Item
-#define FontUnderlineItem           SfxUInt16Item
-#define FontStrikeoutItem           SfxUInt16Item
-#define FontItalicItem              SfxUInt16Item
-#define SvxShadowedItem             SfxUInt16Item
-#define SvxContourItem              SfxUInt16Item
-#define SvxCrossedOutItem           SfxUInt16Item
-#define SvxDbTypeItem               SfxUInt16Item
-#define SvxLineSpaceItem            SfxUInt16Item
-#define SvxInterLineSpaceItem       SfxUInt16Item
-#define SvxBreakItem                SfxUInt16Item
-#define BrushStyleItem              SfxUInt16Item
-#define SvxNumTypeItem              SfxUInt16Item
-#define SvxShadowLocationItem       SfxUInt16Item
-#define SvxDbTypeItem               SfxUInt16Item
-#define SvxChooseControlEnumItem    SfxUInt16Item
-#define SvxDrawToolEnumItem         SfxUInt16Item
-
-//#define SvxChooseControlItem      SfxUInt16Item
-//#define SvxDrawToolItem               SfxUInt16Item
-#define SvxDrawToolItem             SfxEnumItem
+#define SvxDrawToolItem             SfxUInt16Item
 #define SvxDrawAlignItem            SfxEnumItem
 #define SvxChooseControlItem        SfxEnumItem
-
-#define SvxCellHorJustifyEnumItem   SfxUInt16Item
-#define SvxCellVerJustifyEnumItem   SfxUInt16Item
-#define SvxCellOrientationEnumItem  SfxUInt16Item
-#define SvxLanguage                 SfxUInt16Item
 
 #define SFX_TYPEMAP
 #include "scslots.hxx"
