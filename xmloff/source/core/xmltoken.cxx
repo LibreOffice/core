@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-28 09:49:44 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 06:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ namespace xmloff { namespace token {
         TOKEN( "custom4" ),                    // XML_CUSTOM4
         TOKEN( "custom5" ),                    // XML_CUSTOM5
         TOKEN( "cut" ),                        // XML_CUT
-        TOKEN( "cut_offs" ),                   // XML_CUT_OFFS
+        TOKEN( "cut-offs" ),                   // XML_CUT_OFFS
         TOKEN( "cx" ),                         // XML_CX
         TOKEN( "cy" ),                         // XML_CY
         TOKEN( "cylinder" ),                   // XML_CYLINDER
