@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-25 11:19:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXSTBMGR_HXX //autogen
-#include <sfx2/stbmgr.hxx>
 #endif
 #ifndef _SFXISETHINT_HXX //autogen
 #include <svtools/isethint.hxx>
@@ -328,6 +325,8 @@
 #ifndef _SWLINGUCONFIG_HXX
 #include <swlinguconfig.hxx>
 #endif
+
+#include <vcl/status.hxx>>
 
 using namespace ::com::sun::star;
 
