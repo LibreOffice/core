@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_xkb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: svesik $ $Date: 2000-12-19 00:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 #include <stdio.h>
 
-#if defined(LINUX) // should really check for xfree86 or for X11R6.1 and higher
+#if defined(LINUX) || defined(FREEBSD) // should really check for xfree86 or for X11R6.1 and higher
 #define __XKeyboardExtension__ 1
 #else
 #define __XKeyboardExtension__ 0
