@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 10:06:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,6 @@ void IntroWindow_Impl::Init()
 
     Size aSize = m_aIntroBmp.GetSizePixel();
     SetOutputSizePixel( aSize );
-    Size  aScreenSize( GetDesktopRectPixel().GetSize() );
-    Size  aWinSize( GetSizePixel() );
-    Point aWinPos( ( aScreenSize.Width()  - aWinSize.Width() )  / 2,
-                   ( aScreenSize.Height() - aWinSize.Height() ) / 2  );
-    SetPosPixel( aWinPos );
 
     if ( GetColorCount() >= 16 )
     {
@@ -119,7 +114,7 @@ IMPL_LINK( IntroWindow_Impl, AppEventListenerHdl, VclWindowEvent *, inEvent )
 // -----------------------------------------------------------------------
 
 IntroWindow_Impl::IntroWindow_Impl( const Bitmap& aIntroBitmap ) :
-    WorkWindow( NULL, (WinBits)0 ),
+    IntroWindow(),
     m_aIntroBmp( aIntroBitmap )
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::IntroWindow_Impl::IntroWindowImpl" );

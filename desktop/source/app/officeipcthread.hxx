@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,8 @@
 #ifndef _VOS_PIPE_HXX_
 #include <vos/pipe.hxx>
 #endif
-#ifndef SOLARIS
 #ifndef _VOS_SECURITY_HXX_
 #include <vos/security.hxx>
-#endif
 #endif
 #ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
@@ -106,14 +104,13 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 struct ProcessDocumentsRequest
 {
     ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
-    ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
+    ::rtl::OUString aViewList;              // Documents that should be opened in viewmode
     ::rtl::OUString aPrintList;     // Documents that should be printed on default printer
     ::rtl::OUString aForceOpenList; // Documents that should be forced to open for editing (even templates)
     ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
     ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
     ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
     ::osl::Condition cProcessed;    // condition to be set when the request has been processed
-
 };
 
 class DispatchWatcher;
@@ -125,9 +122,7 @@ class OfficeIPCThread : public vos::OThread
 
     vos::OPipe                  maPipe;
     vos::OStreamPipe            maStreamPipe;
-#ifndef SOLARIS
     static vos::OSecurity       maSecurity;
-#endif
     rtl::OUString               maPipeIdent;
     sal_Bool                    mbBlockRequests;
     int                         mnPendingRequests;
@@ -135,7 +130,6 @@ class OfficeIPCThread : public vos::OThread
     sal_Bool                    mbShutdownInProgress;
 
     static ::osl::Mutex&        GetMutex();
-
     static const char *sc_aTerminationSequence;
     static const int sc_nTSeqLength;
     static const char *sc_aShowSequence;
@@ -167,12 +161,7 @@ class OfficeIPCThread : public vos::OThread
     static void                 ExecuteCmdLineRequests( ProcessDocumentsRequest& );
 
     // return FALSE if second office
-#ifdef SOLARIS
-    static Status               EnableOfficeIPCThread(
-                                    sal_Bool useParent = sal_True );
-#else
     static Status               EnableOfficeIPCThread();
-#endif
     static void                 DisableOfficeIPCThread();
 };
 

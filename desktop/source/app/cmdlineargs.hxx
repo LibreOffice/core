@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 15:39:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ class CommandLineArgs
             CMD_BOOLPARAM_TERMINATEAFTERINIT,
             CMD_BOOLPARAM_NOLOGO,
             CMD_BOOLPARAM_NOLOCKCHECK,
-            CMD_BOOLPARAM_MASTER,
+            CMD_BOOLPARAM_NODEFAULT,
+            CMD_BOOLPARAM_HELP,
             CMD_BOOLPARAM_WRITER,
             CMD_BOOLPARAM_CALC,
             CMD_BOOLPARAM_DRAW,
@@ -107,11 +108,12 @@ class CommandLineArgs
         {
             CMD_STRINGPARAM_PORTAL,
             CMD_STRINGPARAM_ACCEPT,
+            CMD_STRINGPARAM_UNACCEPT,
             CMD_STRINGPARAM_USERDIR,
             CMD_STRINGPARAM_CLIENTDISPLAY,
             CMD_STRINGPARAM_OPENLIST,
-            CMD_STRINGPARAM_FORCEOPENLIST,
             CMD_STRINGPARAM_VIEWLIST,
+            CMD_STRINGPARAM_FORCEOPENLIST,
             CMD_STRINGPARAM_FORCENEWLIST,
             CMD_STRINGPARAM_PRINTLIST,
             CMD_STRINGPARAM_VERSION,
@@ -138,10 +140,10 @@ class CommandLineArgs
         void                    SetStringParam( BoolParam eParam, const rtl::OUString& bNewValue );
 
         // Access to bool parameters
-        sal_Bool                IsMaster() const;
         sal_Bool                IsMinimized() const;
         sal_Bool                IsInvisible() const;
         sal_Bool                IsNoRestore() const;
+        sal_Bool                IsNoDefault() const;
         sal_Bool                IsBean() const;
         sal_Bool                IsPlugin() const;
         sal_Bool                IsServer() const;
@@ -150,6 +152,7 @@ class CommandLineArgs
         sal_Bool                IsTerminateAfterInit() const;
         sal_Bool                IsNoLogo() const;
         sal_Bool                IsNoLockcheck() const;
+        sal_Bool                IsHelp() const;
         sal_Bool                IsWriter() const;
         sal_Bool                IsCalc() const;
         sal_Bool                IsDraw() const;
@@ -162,13 +165,14 @@ class CommandLineArgs
         // Access to string parameters
         sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
         sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetUnAcceptString( ::rtl::OUString& rPara) const;
         sal_Bool                GetUserDir( ::rtl::OUString& rPara) const;
         sal_Bool                GetClientDisplay( ::rtl::OUString& rPara) const;
         sal_Bool                GetOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetForceOpenList( ::rtl::OUString& rPara) const;
         sal_Bool                GetForceNewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetVersionString( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;

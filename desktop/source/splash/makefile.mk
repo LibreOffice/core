@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 13:51:16 $
+#   last change: $Author: hr $ $Date: 2003-03-25 13:52:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,8 +62,8 @@
 
 PRJ=..$/..
 
-PRJNAME=desktop
-TARGET=dkt
+PRJNAME=splashscreen
+TARGET=spl
 LIBTARGET=NO
 AUTOSEG=true
 ENABLE_EXCEPTIONS=TRUE
@@ -74,42 +74,48 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(UPD)minor.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
-
 # --- Files --------------------------------------------------------
 
-OBJFILES = \
-        $(OBJ)$/app.obj						\
-        $(OBJ)$/copyright_ascii_sun.obj		\
-        $(OBJ)$/copyright_ascii_ooo.obj		\
-        $(OBJ)$/lockfile.obj				\
-        $(OBJ)$/intro.obj					\
-        $(OBJ)$/officeipcthread.obj			\
-        $(OBJ)$/appinit.obj					\
-        $(OBJ)$/cmdlineargs.obj				\
-        $(OBJ)$/oinstanceprovider.obj		\
-        $(OBJ)$/opluginframefactory.obj		\
-        $(OBJ)$/appsys.obj					\
-        $(OBJ)$/desktopresid.obj			\
-        $(OBJ)$/dispatchwatcher.obj			\
-        $(OBJ)$/ssodlg.obj					\
-        $(OBJ)$/ssoinit.obj					\
-        $(OBJ)$/configinit.obj				\
-        $(OBJ)$/javainteractionhandler.obj	\
-        $(OBJ)$/oempreload.obj				\
-        $(OBJ)$/testtool.obj				\
-        $(OBJ)$/checkinstall.obj			\
-        $(OBJ)$/cmdlinehelp.obj
+SLOFILES =	$(SLO)$/splash.obj
 
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
-OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
-    $(OBJ)$/icon_resource_sun.obj
-.ENDIF
-.ENDIF
+SHL1OBJS=   $(SLOFILES)
+SHL1TARGET=     $(TARGET)$(UPD)$(DLLPOSTFIX)
 
-SRC1FILES=	desktop.src	\
-            ssodlg.src
-SRS1NAME=	desktop
+SHL1IMPLIB= ispl
+SHL1STDLIBS=    \
+                $(SFX2LIB) 			\
+                $(FWELIB)			\
+                $(BASICLIB) 		\
+                $(SO2LIB) 			\
+                $(SJLIB) 			\
+                $(TKLIB) 			\
+                $(SVTOOLLIB) 		\
+                $(SVLLIB) 			\
+                $(SVMEMLIB) 		\
+                $(OFALIB)			\
+                $(ONELIB) 			\
+                $(VCLLIB) 			\
+                $(SOTLIB) 			\
+                $(SALLIB)			\
+                $(VOSLIB)			\
+                $(TOOLSLIB)			\
+                $(UNOLIB)			\
+                $(CPPULIB)			\
+                $(CPPUHELPERLIB)	\
+                $(SCHLIB)               \
+                $(SMLIB)                \
+                $(SWLIB)                \
+                $(SDLIB)                \
+                $(SCLIB)                \
+                $(SVXLIB)               \
+                $(UNOTOOLSLIB)						\
+                $(COMPHELPERLIB)
+
+SHL1DEPN=       makefile.mk
+SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=       $(SHL1TARGET)
+DEF1EXPORTFILE= exports.dxp
 
 # --- Targets ------------------------------------------------------
 

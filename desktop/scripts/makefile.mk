@@ -2,10 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
-#
-#   last change: $Author: hr $ $Date: 2003-03-25 13:51:16 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
@@ -60,62 +56,34 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
 
 PRJNAME=desktop
-TARGET=dkt
-LIBTARGET=NO
-AUTOSEG=true
-ENABLE_EXCEPTIONS=TRUE
+TARGET=scripts
 
-# --- Settings -----------------------------------------------------
+# --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(UPD)minor.mk
-RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
+# --- Targets -------------------------------------------------------------
 
-# --- Files --------------------------------------------------------
-
-OBJFILES = \
-        $(OBJ)$/app.obj						\
-        $(OBJ)$/copyright_ascii_sun.obj		\
-        $(OBJ)$/copyright_ascii_ooo.obj		\
-        $(OBJ)$/lockfile.obj				\
-        $(OBJ)$/intro.obj					\
-        $(OBJ)$/officeipcthread.obj			\
-        $(OBJ)$/appinit.obj					\
-        $(OBJ)$/cmdlineargs.obj				\
-        $(OBJ)$/oinstanceprovider.obj		\
-        $(OBJ)$/opluginframefactory.obj		\
-        $(OBJ)$/appsys.obj					\
-        $(OBJ)$/desktopresid.obj			\
-        $(OBJ)$/dispatchwatcher.obj			\
-        $(OBJ)$/ssodlg.obj					\
-        $(OBJ)$/ssoinit.obj					\
-        $(OBJ)$/configinit.obj				\
-        $(OBJ)$/javainteractionhandler.obj	\
-        $(OBJ)$/oempreload.obj				\
-        $(OBJ)$/testtool.obj				\
-        $(OBJ)$/checkinstall.obj			\
-        $(OBJ)$/cmdlinehelp.obj
-
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
-OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
-    $(OBJ)$/icon_resource_sun.obj
-.ENDIF
-.ENDIF
-
-SRC1FILES=	desktop.src	\
-            ssodlg.src
-SRS1NAME=	desktop
-
-# --- Targets ------------------------------------------------------
-
-.IF "$(depend)" != ""
-SRCFILES=$(SRC1FILES)
-.ENDIF
+UNIXTEXT= \
+    $(MISC)$/nswrapper.sh \
+    $(MISC)$/fromTemplate.sh \
+    $(MISC)$/sagenda.sh \
+    $(MISC)$/soffice.sh \
+    $(MISC)$/scalc.sh \
+    $(MISC)$/sdraw.sh \
+    $(MISC)$/sfax.sh \
+    $(MISC)$/simpress.sh \
+    $(MISC)$/slabel.sh \
+    $(MISC)$/sletter.sh \
+    $(MISC)$/smaster.sh \
+    $(MISC)$/smath.sh \
+    $(MISC)$/smemo.sh \
+    $(MISC)$/svcard.sh \
+    $(MISC)$/sweb.sh \
+    $(MISC)$/swriter.sh
 
 .INCLUDE :  target.mk
 

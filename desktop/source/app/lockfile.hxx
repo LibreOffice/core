@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2002-11-06 14:44:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ namespace desktop {
         // access to data in file
         void syncToFile(void) const;
         short execWarning(void) const;
+        sal_Bool isStale(void) const;
 
     };
 }

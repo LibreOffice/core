@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 14:48:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,8 @@
 #include "desktop.hrc"
 #include "appinit.hxx"
 #include "intro.hxx"
-#include "officeipcmanager.hxx"
+#include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
-#include "officeacceptthread.hxx"
-#include "pluginacceptthread.hxx"
 #include "desktopresid.hxx"
 #include "dispatchwatcher.hxx"
 #include "ssoinit.hxx"
@@ -77,13 +75,8 @@
 #include "oempreload.hxx"
 #include "testtool.hxx"
 #include "checkinstall.hxx"
+#include "cmdlinehelp.hxx"
 
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -101,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -122,9 +118,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -168,7 +161,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/java/XJavaVM.hpp>
 
 #ifndef _SOLAR_H
@@ -179,9 +171,6 @@
 #endif
 #ifndef _VOS_SECURITY_HXX_
 #include <vos/security.hxx>
-#endif
-#ifndef _VOS_TIMER_HXX_
-#include <vos/timer.hxx>
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
@@ -221,12 +210,6 @@
 #endif
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef AUTOMATION_HXX
-#include <automation/automation.hxx>
-#endif
-#ifndef _Installer_hxx
-#include <setup2/installer.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -281,9 +264,6 @@
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
 #endif
-#ifndef _VOS_PROFILE_HXX_
-#include <vos/profile.hxx>
-#endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
 #define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -294,14 +274,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::bridge;
+//using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::task;
 
 ResMgr*                 desktop::Desktop::pResMgr = 0;
 
@@ -310,18 +289,10 @@ namespace desktop
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 
-PluginAcceptThread*     Desktop::pPluginAcceptThread = 0;
-OOfficeAcceptorThread*  Desktop::pOfficeAcceptThread = 0;
-static CommandLineArgs* pArgs = 0;
-
 // ----------------------------------------------------------------------------
 
 char const INSTALLMODE_STANDALONE[] = "STANDALONE";
 char const INSTALLMODE_NETWORK[]    = "NETWORK";
-char const INSTALLMODE_ALLUSERS[]   = "ALL_USERS";
-
-// include strings for copyright notice
-#include "copyright_ascii.txt"
 
 // ----------------------------------------------------------------------------
 
@@ -331,6 +302,7 @@ ResMgr* Desktop::GetDesktopResManager()
     {
         String aMgrName = String::CreateFromAscii( "dkt" );
         aMgrName += String::CreateFromInt32(SUPD); // current version number
+
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
         if ( Application::IsInExecute() )
@@ -344,6 +316,9 @@ ResMgr* Desktop::GetDesktopResManager()
             LanguageType aLanguageType = LANGUAGE_DONTKNOW;
 
             Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+            AllSettings as = GetSettings();
+            as.SetUILanguage(aLanguageType);
+            SetSettings(as);
         }
     }
 
@@ -351,7 +326,7 @@ ResMgr* Desktop::GetDesktopResManager()
 }
 
 // ----------------------------------------------------------------------------
-// Get a message string securely. There is a fault back string if the resource
+// Get a message string securely. There is a fallback string if the resource
 // is not available.
 
 OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
@@ -376,6 +351,29 @@ OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
     aDiagnosticMessage.appendAscii( "\n" );
 
     aDiagnosticMessage.append( aErrorMessage );
+
+    return aDiagnosticMessage.makeStringAndClear();
+}
+
+OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
+{
+    OUStringBuffer aDiagnosticMessage( 200 );
+
+    ResMgr* pResMgr = Desktop::GetDesktopResManager();
+    if ( pResMgr )
+        aDiagnosticMessage.append( OUString(ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, pResMgr )) );
+    else
+        aDiagnosticMessage.appendAscii( "The program cannot be started." );
+
+    if ( aInternalErrMsg.getLength() > 0 )
+    {
+        aDiagnosticMessage.appendAscii( "\n\n" );
+        if ( pResMgr )
+            aDiagnosticMessage.append( OUString(ResId(STR_INTERNAL_ERRMSG, pResMgr )) );
+        else
+            aDiagnosticMessage.appendAscii( "The following internal error has occured:\n\n" );
+        aDiagnosticMessage.append( aInternalErrMsg );
+    }
 
     return aDiagnosticMessage.makeStringAndClear();
 }
@@ -409,8 +407,36 @@ void FatalErrorExit(OUString const & aMessage)
     _exit( 333 );
 }
 
+void FatalError(OUString const & aMessage)
+{
+    if ( Application::IsRemoteServer() )
+    {
+        OString aTmpStr = OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US );
+        fprintf( stderr, aTmpStr.getStr() );
+    }
+    else
+    {
+        OUString aProductKey = ::utl::Bootstrap::getProductKey();
+
+        if (!aProductKey.getLength())
+        {
+            ::vos::OStartupInfo aInfo;
+            aInfo.getExecutableFile( aProductKey );
+
+            sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+            if ( lastIndex > 0 )
+                aProductKey = aProductKey.copy( lastIndex+1 );
+        }
+
+        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+        aBootstrapFailedBox.SetText( aProductKey );
+        aBootstrapFailedBox.Execute();
+    }
+}
+
 CommandLineArgs* Desktop::GetCommandLineArgs()
 {
+    static CommandLineArgs* pArgs = 0;
     if ( !pArgs )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -419,16 +445,6 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
     }
 
     return pArgs;
-}
-
-void SetCommandLineArgs( const OUString & inIPCThreadCommandLine )
-{
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if ( pArgs != 0 )
-    {
-        delete pArgs;
-    }
-    pArgs = new CommandLineArgs( inIPCThreadCommandLine );
 }
 
 Desktop aDesktop;
@@ -470,6 +486,7 @@ sal_Bool InitConfiguration()
 static String aBrandName;
 static String aVersion;
 static String aExtension;
+static String aXMLFileFormatVersion;
 
 void ReplaceStringHookProc( UniString& rStr )
 {
@@ -481,6 +498,10 @@ void ReplaceStringHookProc( UniString& rStr )
         rtl::OUString aTmp;
         aRet >>= aTmp;
         aBrandName = aTmp;
+
+        aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTXMLFILEFORMATVERSION );
+        aRet >>= aTmp;
+        aXMLFileFormatVersion = aTmp;
 
         aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
         aRet >>= aTmp;
@@ -501,25 +522,14 @@ void ReplaceStringHookProc( UniString& rStr )
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aBrandName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", aVersion );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", aExtension );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", aXMLFileFormatVersion );
     }
 }
 
-BOOL SVMain()
-{
-    BOOL bInit = sal_False;
-    ProcessInfo theProcessInfo =
-                    OfficeIPCManager().InitIPC( (Desktop *)GetpApp() );
-    if( theProcessInfo.GetProcessType() != ProcessInfo::PARENT )
-    {
-        SetCommandLineArgs( theProcessInfo.GetArguments() );
-        bInit = InitVCL( Reference < XMultiServiceFactory >() );
-        GetpApp()->Main();
-        DeInitVCL();
-    }
-    return bInit;
-}
-
-Desktop::Desktop() : m_pIntro( 0 ), m_aBootstrapError( BE_OK )
+Desktop::Desktop()
+: m_pIntro( 0 )
+, m_aBootstrapError( BE_OK )
+, m_pLockfile( NULL )
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
@@ -532,6 +542,7 @@ void Desktop::Init()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
 
+    // create service factory...
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( ! rSMgr.is() )
     {
@@ -542,6 +553,28 @@ void Desktop::Init()
 
     if ( !Application::IsRemoteServer() )
     {
+#ifdef UNX
+        //  check whether we need to print cmdline help
+        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+        if ( pCmdLineArgs->IsHelp() ) {
+            displayCmdlineHelp();
+            exit(0);
+        }
+#endif
+        // start ipc thread only for non-remote offices
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
+
+        OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
+        if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
+        {
+            SetBootstrapError( BE_PATHINFO_MISSING );
+        }
+        else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
+        {
+            // 2nd office startup should terminate after sending cmdlineargs through pipe
+            _exit( 0 );
+        }
+
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
     }
 }
@@ -550,8 +583,11 @@ void Desktop::DeInit()
 {
     Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     DestroyApplicationServiceManager( xXMultiServiceFactory );
-    // nobody should get a reference to the destroyed factory
-    ::comphelper::setProcessServiceFactory(NULL);
+    // nobody should get a destroyd service factory...
+    ::comphelper::setProcessServiceFactory( NULL );
+
+    // clear lockfile
+    m_pLockfile->clean();
 
     if( !Application::IsRemoteServer() )
     {
@@ -584,6 +620,8 @@ BOOL Desktop::QueryExit()
         Any a;
         a <<= (sal_Bool)sal_False;
         xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
+    } else {
+        m_pLockfile->clean();
     }
 
     return bExit;
@@ -685,8 +723,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
                 OUString aInstallMode( RTL_CONSTASCII_USTRINGPARAM( INSTALLMODE_STANDALONE ));
 
                 aInstallMode = utl::Bootstrap::getInstallMode( aInstallMode );
-                if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ) ||
-                     aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_ALLUSERS ) )
+                if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ))
                 {
                     // network installation => start setup without error message
                     OUString aParameters;
@@ -734,7 +771,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             }
         }
 
-        _exit( 333 );
+        // _exit( 333 );
     }
 }
 
@@ -933,11 +970,13 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
             aDiagnosticMessage.append( aStartSetupManually );
             aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
 
-            FatalErrorExit( aMessage);
+            FatalError( aMessage);
         }
     }
 
-    _exit( 333 );
+    return;
+    // leave scope at catch...
+    //_exit( 333 );
 }
 
 USHORT Desktop::Exception(USHORT nError)
@@ -976,12 +1015,11 @@ USHORT Desktop::Exception(USHORT nError)
         for( sal_Int32 i=0; i<nCount; ++i )
         {
             ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
-            if ( !(aVal>>=xTask) || ! xTask.is() )
+            if ( !(aVal>>=xTask) || !xTask.is() )
                 continue;
 
             try
             {
-
                 // ask for controller
                 Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
                 if ( xCtrl.is() )
@@ -1047,7 +1085,6 @@ USHORT Desktop::Exception(USHORT nError)
                         }
                     }
                 }
-
             }
             // ignore tasks, which are realy dead.
             // They can't be recovered ... but may some follow ones.
@@ -1094,10 +1131,14 @@ USHORT Desktop::Exception(USHORT nError)
 
         default:
         {
-            if ( pArgs->IsNoRestore() )
+            if ( pArgs->IsNoRestore() ) {
+                if (m_pLockfile != NULL) {
+                    m_pLockfile->clean();
+                }
                 _exit( 333 );
+            }
 
-            if( bRecovery && !pPluginAcceptThread && !Application::IsRemoteServer() )
+            if( bRecovery && !Application::IsRemoteServer() )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
@@ -1116,7 +1157,9 @@ USHORT Desktop::Exception(USHORT nError)
                     if ( nError == ::osl::FileBase::E_None )
                          xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
                 }
-
+                if (m_pLockfile != NULL) {
+                    m_pLockfile->clean();
+                }
                 _exit( 333 );
             }
             else
@@ -1152,6 +1195,14 @@ void Desktop::Main()
     }
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+
+#ifndef UNX
+    if ( pCmdLineArgs->IsHelp() ) {
+        displayCmdlineHelp();
+        return;
+    }
+#endif
+
     Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
@@ -1159,12 +1210,13 @@ void Desktop::Main()
 
     // check user installation directory for lockfile so we can be sure
     // there is no other instance using our data files from a remote host
-    Lockfile aLock;
-    if (!pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !aLock.check() ) {
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
+    m_pLockfile = new Lockfile;
+    if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check()) {
         // Lockfile exists, and user clicked 'no'
         return;
     }
-    // lockfile will be removed in Lockfile d'tor
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
 
     com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
 
@@ -1175,171 +1227,213 @@ void Desktop::Main()
     }
 
     // ----  Startup screen ----
-    OpenStartupScreen();
+    Reference<XStatusIndicator> rSplashScreen = getSplashScreen();
+    if (! rSplashScreen.is()) {
+        FatalError( MakeStartupErrorMessage(
+        OUString::createFromAscii("Unable to create instance of com.sun.star.office.SplashScreen")));
+        return;
+    }
+    rSplashScreen->start(OUString::createFromAscii("SplashScreen"), 100);
 
     //  Initialise Single Signon
-    sal_Bool bCanceled = ! InitSSO();
-
-    sal_Bool bTerminate = bCanceled || pCmdLineArgs->IsTerminateAfterInit();
-    if( !bTerminate )
-    {
-        //  Read the common configuration items for optimization purpose
-        //  do not do it if terminate flag was specified, to avoid exception
-        if ( !InitializeConfiguration() )
-            return;
-    }
+    if ( !InitSSO() ) return;
 
     //  The only step that should be done if terminate flag was specified
     //  Typically called by the plugin only
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
-        InitializeInstallation( Application::GetAppFileName() );
-    }
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
+    InitializeInstallation( Application::GetAppFileName() );
+    if( pCmdLineArgs->IsTerminateAfterInit() ) return;
 
-    if( !bTerminate )
-    {
-        sal_Bool    bCheckOk = sal_False;
-        LanguageType aLanguageType;
-        String aMgrName = String::CreateFromAscii( "iso" );
-        aMgrName += String::CreateFromInt32(SUPD); // current build version
-        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
-        String aTitle = String( ResId( RID_APPTITLE, pLabelResMgr ) );
-        delete pLabelResMgr;
 
-        // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
-        OUString aTitleString( aTitle );
-        bCheckOk = CheckInstallation( aTitleString );
-        if ( !bCheckOk )
-            return;
-        else
-            aTitle = aTitleString;
+    //  Read the common configuration items for optimization purpose
+    if ( !InitializeConfiguration() ) return;
+
+    rSplashScreen->setValue(15);
+
+    // create title string
+    sal_Bool    bCheckOk = sal_False;
+    LanguageType aLanguageType;
+    String aMgrName = String::CreateFromAscii( "iso" );
+    aMgrName += String::CreateFromInt32(SUPD); // current build version
+    ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+    String aTitle = String( ResId( RID_APPTITLE, pLabelResMgr ) );
+    delete pLabelResMgr;
+
+    // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
+    OUString aTitleString( aTitle );
+    bCheckOk = CheckInstallation( aTitleString );
+    if ( !bCheckOk )
+        return;
+    else
+        aTitle = aTitleString;
 
 #ifndef PRODUCT
-        ::rtl::OUString aDefault;
-        aTitle += DEFINE_CONST_UNICODE(" [");
-        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-        aTitle += aVerId;
-        aTitle += 0x005D ; // 5Dh ^= ']'
+    //include version ID in non product builds
+    ::rtl::OUString aDefault;
+    aTitle += DEFINE_CONST_UNICODE(" [");
+    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+    aTitle += aVerId;
+    aTitle += 0x005D ; // 5Dh ^= ']'
 #endif
+    rSplashScreen->setValue(20);
+    SetDisplayName( aTitle );
+    Reference < XComponent > xWrapper;
+    SvtPathOptions* pPathOptions = NULL;
+    SvtLanguageOptions* pLanguageOptions = NULL;
 
-        SetDisplayName( aTitle );
-
-        // register sevices before we do anything else
+    try
+    {
+        // register services first
         RegisterServices( xSMgr );
+        rSplashScreen->setValue(30);
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
-        SvtPathOptions* pPathOptions = new SvtPathOptions;
-        SvtLanguageOptions* pLanguageOptions = new SvtLanguageOptions(sal_True);
+        pPathOptions = new SvtPathOptions;
+        rSplashScreen->setValue(40);
+        pLanguageOptions = new SvtLanguageOptions(sal_True);
+        rSplashScreen->setValue(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
-        OUString        aDescription;
-        Sequence< Any > aSeq( 1 );
-
-        if ( pOfficeAcceptThread )
-            aDescription = pOfficeAcceptThread->GetDescriptionString();
-        else
-            pCmdLineArgs->GetPortalConnectString( aDescription );
-        aSeq[0] <<= aDescription;
-
+        Sequence< Any > aSeq(1);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.office.OfficeWrapper" );
-        Reference < XComponent > xWrapper( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE(
-                                                "com.sun.star.office.OfficeWrapper" ), aSeq ),
-                                        UNO_QUERY );
+        xWrapper = Reference < XComponent >( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE( "com.sun.star.office.OfficeWrapper" ), aSeq ), UNO_QUERY );
+        rSplashScreen->setValue(65);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.office.OfficeWrapper" );
 
-        sal_Bool bTerminateRequested = sal_False;
+    }
+    catch ( com::sun::star::lang::WrappedTargetException& wte )
+    {
+        com::sun::star::uno::Exception te;
+        wte.TargetException >>= te;
+        FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
+        return;
+    }
+    catch ( com::sun::star::uno::Exception& e )
+    {
+        FatalError( MakeStartupErrorMessage(e.Message) );
+        return;
+    }
+    /*
+    catch ( ... )
+    {
+        FatalError( MakeStartupErrorMessage(
+            OUString::createFromAscii(
+            "Unknown error during startup (Office wrapper service).\nInstallation could be damaged.")));
+        return;
+    }
+    */
 
-        // Preload function depends on an initialized sfx application!
-        bTerminateRequested = OEMPreloadProcess();
+    sal_Bool bTerminateRequested = sal_False;
 
-        {
-            sal_Bool bUseSystemFileDialog;
-            if ( pCmdLineArgs->IsHeadless() )
-            {
-                // Ensure that we use not the system file dialogs as
-                // headless mode relies on Application::EnableHeadlessMode()
-                // which does only work for VCL dialogs!!
-                SvtMiscOptions aMiscOptions;
+    // Preload function depends on an initialized sfx application!
+    bTerminateRequested = OEMPreloadProcess();
+    rSplashScreen->setValue(75);
 
-                bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
-                aMiscOptions.SetUseSystemFileDialog( sal_False );
-            }
-
-            Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
-
-            InitTestToolLib();
-
-            if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
-                InitializeQuickstartMode( xSMgr );
-
-            if ( pCmdLineArgs->IsPlugin() )
-                InitializePluginMode( xSMgr );
-
-            if ( !Application::IsRemoteServer() )
-            {
-                // Create TypeDetection service to have filter informations for quickstart feature
-                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
-                Reference< XTypeDetection > xTypeDetection( xSMgr->createInstance(
-                                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),
-                                                            UNO_QUERY );
-                Reference< XDesktop > xDesktop( xSMgr->createInstance(
-                                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))),
-                                                            UNO_QUERY );
-                if ( xDesktop.is() )
-                    xDesktop->addTerminateListener( new OfficeIPCThreadController );
-            }
-
-            // Release solar mutex just before we wait for our client to connect
-            int nAcquireCount = 0;
-            ::vos::IMutex& rMutex = Application::GetSolarMutex();
-            if ( rMutex.tryToAcquire() )
-                nAcquireCount = Application::ReleaseSolarMutex() - 1;
-
-            Application::WaitForClientConnect();
-
-            // Post user event to startup first application component window
-            // We have to send this OpenClients message short before execute() to
-            // minimize the risk that this message overtakes type detection contruction!!
-            Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
-
-            // Acquire solar mutex just before we enter our message loop
-            if ( nAcquireCount )
-                Application::AcquireSolarMutex( nAcquireCount );
-
-            // call Application::Execute to process messages in vcl message loop
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
-            Execute();
-
-            // Restore old value
-            if ( pCmdLineArgs->IsHeadless() )
-                SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
-
-            // remove temp directory
-            RemoveTemporaryDirectory();
-
-            DeregisterServices();
-
-            if ( pPluginAcceptThread )
-            {
-                pPluginAcceptThread->terminate();
-                pPluginAcceptThread->release();
-                pPluginAcceptThread = 0;
-            }
-
-            DeInitTestToolLib();
-        }
-
-        xWrapper->dispose();
-        xWrapper = 0;
-
-        delete pLanguageOptions;
-        delete pPathOptions;
+    sal_Bool bUseSystemFileDialog;
+    if ( pCmdLineArgs->IsHeadless() )
+    {
+        // Ensure that we use not the system file dialogs as
+        // headless mode relies on Application::EnableHeadlessMode()
+        // which does only work for VCL dialogs!!
+        SvtMiscOptions aMiscOptions;
+        bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
+        aMiscOptions.SetUseSystemFileDialog( sal_False );
     }
 
+    // use system window dialogs
+    Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
+
+    // initialize test-tool library (if available)
+    InitTestToolLib();
+    rSplashScreen->setValue(80);
+
+    if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
+        InitializeQuickstartMode( xSMgr );
+
+    if ( !Application::IsRemoteServer() )
+    {
+        // Create TypeDetection service to have filter informations for quickstart feature
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
+        try
+        {
+            Reference< XTypeDetection >
+                xTypeDetection( xSMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))), UNO_QUERY );
+            rSplashScreen->setValue(85);
+            Reference< XDesktop > xDesktop( xSMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+            if ( xDesktop.is() )
+                xDesktop->addTerminateListener( new OfficeIPCThreadController );
+            rSplashScreen->setValue(100);
+        }
+        catch ( com::sun::star::uno::Exception& e )
+        {
+            FatalError( MakeStartupErrorMessage(e.Message) );
+            return;
+        }
+        /*
+        catch ( ... )
+        {
+            FatalError( MakeStartupErrorMessage(
+                OUString::createFromAscii(
+                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
+            return;
+        }
+        */
+    }
+
+    // Release solar mutex just before we wait for our client to connect
+    int nAcquireCount = 0;
+    ::vos::IMutex& rMutex = Application::GetSolarMutex();
+    if ( rMutex.tryToAcquire() )
+        nAcquireCount = Application::ReleaseSolarMutex() - 1;
+
+    Application::WaitForClientConnect();
+
+    // Post user event to startup first application component window
+    // We have to send this OpenClients message short before execute() to
+    // minimize the risk that this message overtakes type detection contruction!!
+    Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
+
+    // Post event to enable acceptors
+    Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
+
+    // Acquire solar mutex just before we enter our message loop
+    if ( nAcquireCount )
+        Application::AcquireSolarMutex( nAcquireCount );
+
+    // call Application::Execute to process messages in vcl message loop
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
+    Execute();
+
+    // Restore old value
+    if ( pCmdLineArgs->IsHeadless() )
+        SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
+
+    // remove temp directory
+    RemoveTemporaryDirectory();
+
+    DeregisterServices();
+
+    DeInitTestToolLib();
+
+    xWrapper->dispose();
+    xWrapper = 0;
+
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
+    delete pLanguageOptions;
+    delete pPathOptions;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
+
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
     ::ucb::ContentBroker::deinitialize();
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
     // instead of removing of the configManager just let it commit all the changes
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
 }
 
 sal_Bool Desktop::InitializeConfiguration()
@@ -1370,7 +1464,6 @@ sal_Bool Desktop::InitializeConfiguration()
     {
         OUString aVersionFileURL;
         OUString aMsg;
-
         utl::Bootstrap::PathStatus aPathStatus = utl::Bootstrap::locateVersionFile( aVersionFileURL );
         if ( aPathStatus == utl::Bootstrap::PATH_EXISTS )
             aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE_ENTRY, aVersionFileURL );
@@ -1384,14 +1477,14 @@ sal_Bool Desktop::InitializeConfiguration()
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
-        FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
+        FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
     catch ( drafts::com::sun::star::configuration::backend::BackendSetupException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
-        FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
+        FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
     catch ( ::com::sun::star::configuration::CannotLoadConfigurationException& )
     {
@@ -1435,74 +1528,9 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
     }
 }
 
-sal_Bool Desktop::InitializePluginMode( Reference< XMultiServiceFactory >& rSMgr )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) create PluginAcceptThread" );
-
-    OSecurity   aSecurity;
-    OUString    aUserIdent;
-    OUString    aVersionStr;
-
-    aSecurity.getUserIdent( aUserIdent );
-
-    OSL_ENSURE( GetCommandLineArgs()->GetVersionString( aVersionStr ), "No plugin version is specified!\n" );
-
-    OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
-    aAcceptString += aVersionStr;
-    aAcceptString += aUserIdent;
-
-    if ( !pPluginAcceptThread )
-    {
-        pPluginAcceptThread = new PluginAcceptThread(   rSMgr,
-                                                        new OInstanceProvider( rSMgr ),
-                                                        aAcceptString );
-
-        // We have to acquire the plugin accept thread object to be sure
-        // that the instance is still alive after an exception was thrown
-        pPluginAcceptThread->acquire();
-        pPluginAcceptThread->create();
-    }
-
-    return sal_True;
-}
-
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
 //  OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
-}
-
-// ========================================================================
-typedef ::vos::OTimer OFirstOfficeRunInitTimer_Base;
-class OFirstOfficeRunInitTimer : public OFirstOfficeRunInitTimer_Base
-{
-private:
-    Link    m_aAsyncExpireHandler;
-
-public:
-    OFirstOfficeRunInitTimer( const Link& _rExpireHdl );
-
-private:
-    virtual void SAL_CALL onShot();
-};
-
-// ========================================================================
-OFirstOfficeRunInitTimer::OFirstOfficeRunInitTimer( const Link& _rExpireHdl )
-    :OFirstOfficeRunInitTimer_Base( TTimeValue( 3, 0 ) )
-    ,m_aAsyncExpireHandler( _rExpireHdl )
-{
-    acquire();
-}
-
-// ========================================================================
-void SAL_CALL OFirstOfficeRunInitTimer::onShot()
-{
-    {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        Application::PostUserEvent( m_aAsyncExpireHandler );
-    }
-
-    // delete ourself - we're not needed anymore
-    release();
 }
 
 // ========================================================================
@@ -1518,13 +1546,26 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenClients_Impl" );
 
     OpenClients();
-    CloseStartupScreen();
+    // CloseStartupScreen();
+    Reference<XStatusIndicator>
+        rSplashScreen(::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE( "com.sun.star.office.SplashScreen")), UNO_QUERY);
+    rSplashScreen->end();
 
     CheckFirstRun( );
 
     EnableOleAutomation();
     return 0;
 }
+
+// enable acceptos
+IMPL_LINK( Desktop, EnableAcceptors_Impl, void*, pvoid )
+{
+    enableAcceptors();
+    return 0;
+}
+
+
 // Registers a COM class factory of the service manager with the windows operating system.
 void Desktop::EnableOleAutomation()
 {
@@ -1558,18 +1599,10 @@ void Desktop::OpenClients()
                 ::com::sun::star::uno::UNO_QUERY );
 
         // create the parameter array
-        Sequence < PropertyValue > aArgs( 5 );
+        Sequence < PropertyValue > aArgs( 3 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
         aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-        aArgs[2].Name = ::rtl::OUString::createFromAscii("FilterName");
-        aArgs[3].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
-
-        Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-            ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
-            com::sun::star::uno::UNO_QUERY );
-
-        aArgs[4].Name = OUString::createFromAscii( "InteractionHandler" );
-        aArgs[4].Value <<= xInteraction;
+        aArgs[2].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
 
         // mark it as a user request
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
@@ -1595,18 +1628,17 @@ void Desktop::OpenClients()
                 case RET_YES:
                 {
                     // recover a file
-                    aArgs[2].Value <<= ::rtl::OUString( sFilter );
                     if ( bIsURL )
                     {
                         // get the original URL for the recovered document
                         aArgs[1].Value <<= sal_False;
-                        aArgs[3].Value <<= ::rtl::OUString( sRealFileName );
+                        aArgs[2].Value <<= ::rtl::OUString( sRealFileName );
                     }
                     else
                     {
                         // this was an untitled document ( open as template )
                         aArgs[1].Value <<= sal_True;
-                        aArgs[3].Value <<= ::rtl::OUString();
+                        aArgs[2].Value <<= ::rtl::OUString();
                     }
 
                     // load the document
@@ -1614,6 +1646,34 @@ void Desktop::OpenClients()
                     if ( !xFirst.is() )
                         // remember the first successfully recovered file
                         xFirst = xDoc;
+
+                    if ( xDoc.is() && sFilter.getLength() && bIsURL )
+                    {
+                        // put the real filter name into the documents media descriptor
+                        Reference < XModel > xModel( xDoc, UNO_QUERY );
+                        Sequence < PropertyValue > sArgs = xModel->getArgs();
+                        sal_Int32 nArgs = sArgs.getLength();
+                        sal_Int32 nFilterProp = nArgs;
+                        for ( sal_Int32 n=0; n<nArgs; n++ )
+                        {
+                            PropertyValue& rProp = sArgs[n];
+                            if ( rProp.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
+                            {
+                                nFilterProp = n;
+                                break;
+                            }
+                        }
+
+                        if ( nFilterProp == nArgs )
+                        {
+                            // currently no filter set
+                            sArgs.realloc( nArgs+1 );
+                            sArgs[nFilterProp].Name = ::rtl::OUString::createFromAscii("FilterName");
+                        }
+
+                        sArgs[nFilterProp].Value <<= sFilter;
+                        xModel->attachResource( ::rtl::OUString( sRealFileName ), sArgs );
+                    }
 
                     // backup copy will be removed when document is closed
                     break;
@@ -1675,14 +1735,9 @@ void Desktop::OpenClients()
     if ( bLoaded || xFirst.is() || pArgs->IsServer() )
         return;
 
-    if( pArgs->IsQuickstart()   ||
-        pArgs->IsInvisible()    ||
-        pArgs->IsPlugin()       ||
-        pArgs->IsBean()             )
-
+    if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean())
         // soffice was started as tray icon
         return;
-
     {
         OpenDefault();
     }
@@ -1696,6 +1751,7 @@ void Desktop::OpenDefault()
     SvtModuleOptions    aOpt;
 
     CommandLineArgs* pArgs = GetCommandLineArgs();
+    if ( pArgs->IsNoDefault() ) return;
     if ( pArgs->HasModuleParam() )
     {
         // Support new command line parameters to start a module
@@ -1730,18 +1786,11 @@ void Desktop::OpenDefault()
             return;
     }
 
-    Sequence < PropertyValue > aArgs(1);
-    Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-        ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
-        com::sun::star::uno::UNO_QUERY );
-
-    aArgs[0].Name = OUString::createFromAscii( "InteractionHandler" );
-    aArgs[0].Value <<= xInteraction;
-
+    Sequence < PropertyValue > aNoArgs;
     Reference< XComponentLoader > xDesktop(
             ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY );
-    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs );
+    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aNoArgs );
 }
 
 
@@ -1788,7 +1837,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 ::com::sun::star::uno::UNO_QUERY );
 
         // create parameter array
-        sal_Int32 nCount = rAppEvent.IsPrintEvent() ? 5 : 2;
+        sal_Int32 nCount = rAppEvent.IsPrintEvent() ? 5 : 1;
         Sequence < PropertyValue > aArgs( nCount );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
 
@@ -1798,15 +1847,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
             aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
             aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
-        }
-        else
-        {
-            Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
-                com::sun::star::uno::UNO_QUERY );
-
-            aArgs[1].Name = OUString::createFromAscii( "InteractionHandler" );
-            aArgs[1].Value <<= xInteraction;
         }
 
         // mark request as user interaction from outside
@@ -1846,8 +1886,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
             }
 
-            try
-            {
             Reference < XPrintable > xDoc;
             if(
                 ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
@@ -1932,10 +1970,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 if ( xComp.is() )
                     xComp->dispose();
             }
-            }
-            catch ( com::sun::star::uno::Exception& )
-            {
-            }
         }
 
         // remove this pending request
@@ -1965,7 +1999,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             // no visible task that could be activated found
             OpenDefault();
     }
-    else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs()->IsInvisible() )
+    else if ( rAppEvent.GetEvent() == "QUICKSTART" && !GetCommandLineArgs()->IsInvisible()  )
     {
         // If the office has been started the second time its command line arguments are sent through a pipe
         // connection to the first office. We want to reuse the quickstart option for the first office.
@@ -1977,20 +2011,38 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         aSeq[0] <<= bQuickstart;
 
         Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
-                                              UNO_QUERY );
+                                            DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
+                                            UNO_QUERY );
         if ( xQuickstart.is() )
             xQuickstart->initialize( aSeq );
     }
+    else if ( rAppEvent.GetEvent() == "ACCEPT" )
+    {
+        // every time an accept parameter is used we create an acceptor
+        // with the corresponding accept-string
+        OUString aAcceptString(rAppEvent.GetData().GetBuffer());
+        createAcceptor(aAcceptString);
+    }
+    else if ( rAppEvent.GetEvent() == "UNACCEPT" )
+    {
+        // try to remove corresponding acceptor
+        OUString aUnAcceptString(rAppEvent.GetData().GetBuffer());
+        destroyAcceptor(aUnAcceptString);
+    }
+#ifndef UNX
+    else if ( rAppEvent.GetEvent() == "HELP" )
+    {
+        // in non unix version allow showing of cmdline help window
+        displayCmdlineHelp();
+    }
+#endif
 }
 
-void Desktop::OpenStartupScreen()
+Reference<XStatusIndicator> Desktop::getSplashScreen()
 {
-     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenStartupScreen" );
-
     ::rtl::OUString     aTmpString;
     CommandLineArgs*    pCmdLine = GetCommandLineArgs();
-
+    sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !Application::IsRemoteServer() &&
          !pCmdLine->IsInvisible() &&
@@ -2001,65 +2053,15 @@ void Desktop::OpenStartupScreen()
          !pCmdLine->GetPrintList( aTmpString ) &&
          !pCmdLine->GetPrintToList( aTmpString ) )
     {
-        String          aBmpFileName;
-        ::rtl::OUString aIniPath;
-        ::rtl::OUString aLogo( RTL_CONSTASCII_USTRINGPARAM( "1" ) );
-        Bitmap          aIntroBmp;
-
-        aLogo = ::utl::Bootstrap::getLogoData( aLogo );
-        sal_Bool bLogo = (sal_Bool)aLogo.toInt32();
-        if ( bLogo )
-        {
-            xub_StrLen nIndex = 0;
-            aBmpFileName += String( DEFINE_CONST_UNICODE("_intro.bmp") );
-
-            // retrieve our current installation path
-            ::rtl::OUString aExecutePath;
-            ::vos::OStartupInfo().getExecutableFile( aExecutePath );
-            sal_uInt32  lastIndex = aExecutePath.lastIndexOf('/');
-            if ( lastIndex > 0 )
-                aExecutePath = aExecutePath.copy( 0, lastIndex+1 );
-
-            INetURLObject aObj( aExecutePath, INET_PROT_FILE );
-            aObj.insertName( aBmpFileName );
-            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-            if ( !aStrm.GetError() )
-            {
-                // Default case, we load the intro bitmap from a seperate file
-                // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-                aStrm >> aIntroBmp;
-            }
-            else
-            {
-                // Save case:
-                // Create resource manager for intro bitmap. Due to our problem that we don't have
-                // any language specific information, we have to search for the correct resource
-                // file. The bitmap resource is language independent.
-                const USHORT nResId = RID_DEFAULTINTRO;
-                LanguageType aLanguageType;
-                String       aMgrName = String::CreateFromAscii( "iso" );
-
-                aMgrName += String::CreateFromInt32(SUPD); // current build version
-                ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
-
-                ResId aIntroBmpRes( nResId, pLabelResMgr );
-                aIntroBmp = Bitmap( aIntroBmpRes );
-                delete pLabelResMgr;
-            }
-
-            m_pIntro = new IntroWindow_Impl( aIntroBmp );
-        }
+        bVisible = sal_True;
     }
+    Sequence< Any > aSeq( 1 );
+    aSeq[0] <<= bVisible;
+    Reference<XStatusIndicator> rSplashScreen(
+        ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+        DEFINE_CONST_UNICODE( "com.sun.star.office.SplashScreen"), aSeq), UNO_QUERY);
+    return rSplashScreen;
 }
-
-void Desktop::CloseStartupScreen()
-{
-    // close splash screen and delete window
-    delete m_pIntro;
-    m_pIntro = 0;
-    RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::CloseStartupScreen" );
-}
-
 
 // ========================================================================
 void Desktop::DoFirstRunInitializations()
@@ -2104,12 +2106,13 @@ void Desktop::CheckFirstRun( )
 
     // --------------------------------------------------------------------
     // it is the first run
-
-    // do the initialization asynchronously
-    ::vos::ORef< ::vos::OTimer > xInitTimer = new OFirstOfficeRunInitTimer( LINK( this, Desktop, AsyncInitFirstRun ) );
-    xInitTimer->start();
-    OSL_ENSURE( xInitTimer->isTicking() && !xInitTimer->isExpired(),
-        "Desktop::CheckFirstRun: strange timer behaviour!" );
+    // this has once been done using a vos timer. this could lead to problems when
+    // the timer would trigger when the app is already going down again, since VCL would
+    // no longer be available. Since the old handler would do a postUserEvent to the main
+    // thread anyway, we can use a vcl timer here to prevent the race contition (#107197#)
+    m_firstRunTimer.SetTimeout(3000); // 3 sec.
+    m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
+    m_firstRunTimer.Start();
 
     // --------------------------------------------------------------------
     // reset the config flag
@@ -2120,4 +2123,4 @@ void Desktop::CheckFirstRun( )
     aCommonMisc.commit();
 }
 
-} // namespace desktop
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 10:06:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _SV_WRKWIN_HXX
-#include <vcl/wrkwin.hxx>
+#include <vcl/introwin.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -74,7 +74,7 @@
 namespace desktop
 {
 
-class IntroWindow_Impl : public WorkWindow
+class IntroWindow_Impl : public IntroWindow
 {
 private:
     Bitmap          m_aIntroBmp;

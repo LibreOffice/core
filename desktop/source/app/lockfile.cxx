@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2002-11-06 14:44:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ namespace desktop {
         int tmpByte = 0;
         for (int i = 0; i<nIdBytes; i++) {
             tmpByte = rand( ) % 0xFF;
-            sprintf( tmpId+i*2, "%02X", tmpByte );
+            sprintf( tmpId+i*2, "%02X", tmpByte ); // #100211# - checked
         }
         tmpId[nIdBytes*2]=0x00;
         m_aId = OUString::createFromAscii( tmpId );
@@ -134,7 +134,7 @@ namespace desktop {
 
         if (m_bIsLocked) {
             // lock existed, ask user what to do
-            if (execWarning( ) == RET_YES) {
+            if (isStale() || execWarning( ) == RET_YES) {
                 // remove file and create new
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);
@@ -152,6 +152,32 @@ namespace desktop {
             // lock was created by us
             return sal_True;
         }
+    }
+
+    sal_Bool Lockfile::isStale( void ) const
+    {
+        // this checks whether the lockfile was created on the same
+        // host by the same user. Should this be the case it is safe
+        // to assume that it is a stale lookfile which can be overwritten
+        String aLockname = m_aLockname;
+        Config aConfig(aLockname);
+        aConfig.SetGroup(m_aGroup);
+        ByteString aHost  = aConfig.ReadKey( m_aHostkey );
+        ByteString aUser  = aConfig.ReadKey( m_aUserkey );
+        // lockfile from same host?
+        oslSocketResult sRes;
+        ByteString myHost  = OUStringToOString(
+            SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
+        if (aHost == myHost) {
+            // lockfile by same UID
+            OUString myUserName;
+            Security aSecurity;
+            aSecurity.getUserName( myUserName );
+            ByteString myUser  = OUStringToOString( myUserName, RTL_TEXTENCODING_ASCII_US );
+            if (aUser == myUser)
+                return sal_True;
+        }
+        return sal_False;
     }
 
     void Lockfile::syncToFile( void ) const

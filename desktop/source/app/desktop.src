@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-22 13:17:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
     Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION a d�tect� une configuration java.ini d�fectueuse. %PRODUCTNAME requiert le fichier java.ini. Cliquez sur 'OK' pour lancer le Setup de Java et installer un JRE ou choisir parmi les JREs d�j� install�s.\nSi vous ne souhaitez pas installer de JRE, cliquez sur 'Annuler', ce qui annulera �galement l'op�ration en cours.";
-    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION ha detectado una configuraci�n de java.ini defectuosa. %PRODUCTNAME requiere el archivo java.ini. Pulse en 'Aceptar' para iniciar el programa de instalaci�n de Java e instalar un entorno de ejecuci�n Java JRE (Java Runtime Environment) o para seleccionar uno ya instalado.\nSi no desea instalar un entorno de ejecuci�n Java pulse en 'Cancelar'. Esta acci�n tambi�n cancelar� la operaci�n actual. ";
+    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION ha detectado una configuraci�n de java.ini defectuosa. %PRODUCTNAME requiere el archivo java.ini. Pulse en 'Aceptar' para iniciar el programa de instalaci�n de Java e instalar un entorno de ejecuci�n de Java JRE (Java Runtime Environment) o para seleccionar uno ya instalado.\nSi no desea instalar un entorno de ejecuci�n Java pulse en 'Cancelar'. Esta acci�n tambi�n cancelar� la operaci�n actual. ";
     Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION ha rilevato una configurazione difettosa di java.ini, che � un file necessario al funzionamento di %PRODUCTNAME. Fate click su 'OK' per avviare il setup di Java e installare un JRE (Java Runtime Environment) oppure per sceglierne uno gi� installato.\nSe preferite non installare JRE fate click su 'Annulla'. Quest'azione eliminer� la presente operazione.";
     Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
@@ -81,7 +81,7 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
     Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
     Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION が検出した java.ini の設定は正しくありません。%PRODUCTNAME には、java.ini が必要です。OK ボタンを押すと、Java セットアップが開始します。Java セットアップでは、JRE をインストールするか、すでにインストールされている JRE の中から１つ選択することができます。\nJRE のインストールが必要でなければ、[キャンセル]ボタンを押します。この場合、現在の操作も終了します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 이 색출한 java.ini의 설정은 올바르지 않습니다. %PRODUCTNAME 에는 java.ini 가 필요합니다. Java 설정을 시작하려면 OK 버튼을 클릭해주십시오. Java 설정으로는 JRE 를 설치하거나 기존의 설치된 JRE 중 하나를 선택할 수 있습니다.\nJRE 설치를 원하지 않을 경우 취소 버튼을 클릭하십시오. ";
+    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION에서 잘못된 java.ini설정이 발견되었습니다. %PRODUCTNAME 에는 java.ini 설정이 필요합니다. Java 설정을 시작하려면 [OK] 버튼을 클릭해주십시오. Java 설치에서 JRE를 설치하거나 기존 설치된 JRE 중 하나를 선택할 수 있습니다.\nJRE를 설치하고 싶지 않으면 [취소] 버튼을 클릭하십시오. ";
     Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 发现了一个错误的 java.ini 配置文档。%PRODUCTNAME 需要有效的 java.ini 。按一下“确定”，启动 Java 安装程式来安装 Java 运行时间环境或选择一个已经安装的 Java 运行时间环境。\n如果您不想安装 Java 运行时间环境，就点击“取消”。";
     Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 發現一個錯誤的 java.ini 配置文件。%PRODUCTNAME 需要有效的 java.ini 。按一下「確定」，啓動 Java 安裝程式來安裝 Java 運行時間環境或選擇一個已經安裝的 Java 運行時間環境。\n如果您不想安裝 Java 運行時間環境，就按一下「取消」。如此，就會取消目前的動作。";
     Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation.";
@@ -102,7 +102,7 @@ WarningBox WARNINGBOX_JAVADISABLED
     Message[ greek ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ dutch ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ french ] = "L'op�ration en cours requiert Java, mais le support Java a �t� d�sactiv�. Cliquez sur 'OK' pour activer le support Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
-    Message[ spanish ] = "Esta operaci�n requiere Java, sin embargo el apoyo de Java est� desactivado. Para volver a activarlo pulse en 'Aceptar'. Para finalizar la operaci�n actual pulse en 'Cancelar'. ";
+    Message[ spanish ] = "Esta operaci�n requiere Java, sin embargo la admisi�n de Java est� desactivada. Para volver a activarla pulse en 'Aceptar'. Para finalizar la operaci�n actual pulse en 'Cancelar'. ";
     Message[ finnish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ italian ] = "Questa operazione richiede Java ma il supporto corrispondente � stato disattivato. Per riattivare il supporto Java fate click su 'OK'. Per terminare l'operazione cliccate 'Annulla'.";
     Message[ danish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
@@ -110,7 +110,7 @@ WarningBox WARNINGBOX_JAVADISABLED
     Message[ polish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ portuguese_brazilian ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ japanese ] = "この操作には Java が必要ですが、Java 支援がオフになっています。Java 支援をオンにするには、OK ボタンを押します。[キャンセル]を押すと、現在の操作が終了します。";
-    Message[ korean ] = "이 작동을 위해서는 Java 가 필요한데 Java 지원이 비활성화되어있습니다. Java 지원을 활성화하려면 OK 버튼을 클릭해주십시오. 현재 작동을 종료하려면 취소 버튼을 클릭해주십시오.";
+    Message[ korean ] = "이 작동을 위해서는 Java가 필요한데 Java 지원이 비활성화되어 있습니다. Java 지원을 활성화하려면 [OK] 버튼을 클릭해주십시오. 현재 작동을 중단하려면 [취소] 버튼을 클릭해주십시오.";
     Message[ chinese_simplified ] = "这个操作需要 Java ，但是 Java 的支持没有启动。要使用 Java ，点击“确定”。如果要终止当前的操作，就点击“取消”。";
     Message[ chinese_traditional ] = "這個動作需要 Java ，但是 Java 支援沒有啓動。要使用 Java 支援，按一下「確定」。要終止目前的動作，就按一下「取消」。";
     Message[ turkish ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'.";
@@ -130,8 +130,8 @@ WarningBox WARNINGBOX_MISSINGJAVARUNTIME
     Message[ russian ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ greek ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ dutch ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ french ] = "L'op�ration en cours requiert un Environnement Runtime Java (JRE). %PRODUCTNAME %PRODUCTVERSION a �t� configur� pour utiliser le JRE plac� dans le dossier %s. Il est cependant impossible de d�tecter ce JRE.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
-    Message[ spanish ] = "Esta operaci�n requiere un entorno de ejecuci�n Java (JRE). %PRODUCTNAME %PRODUCTVERSION se configur� para utilizar el entorno de ejecuci�n Java (JRE) ubicado en la carpeta %s. Este JRE no se ha encontrado. Para iniciar el programa de instalaci�n de Java pulse en 'Aceptar'. Para finalizar la operaci�n actual pulse en 'Cancelar'.";
+    Message[ french ] = "L'op�ration en cours requiert un environnement d'ex�cution Java (JRE). %PRODUCTNAME %PRODUCTVERSION a �t� configur� pour utiliser le JRE plac� dans le dossier %s. Il est cependant impossible de d�tecter ce JRE.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
+    Message[ spanish ] = "Esta operaci�n requiere un entorno de ejecuci�n de Java (JRE). %PRODUCTNAME %PRODUCTVERSION se configur� para utilizar el entorno de ejecuci�n Java (JRE) ubicado en la carpeta %s. Este JRE no se ha encontrado. Para iniciar el programa de instalaci�n de Java pulse en 'Aceptar'. Para finalizar la operaci�n actual pulse en 'Cancelar'.";
     Message[ finnish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). La configurazione di %PRODUCTNAME %PRODUCTVERSION utilizza JRE nella cartella %s. JRE non � stato trovato.\nCliccate 'OK' per avviare l'installazione di Java. Per terminare l'operazione fate click su 'Annulla'.";
     Message[ danish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
@@ -139,7 +139,7 @@ WarningBox WARNINGBOX_MISSINGJAVARUNTIME
     Message[ polish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ portuguese_brazilian ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ japanese ] = "この操作には、Java Runtime Environment (JRE)が必要です。%PRODUCTNAME %PRODUCTVERSION は、%s にある JRE を使用するように設定されています。この JRE は見つかりませんでした。\nOK ボタンを押すと、Java セットアップが開始します。[キャンセル]ボタンを押すと、現在の操作は終了します。";
-    Message[ korean ] = "이 작동을 위해서는 Java Runtime Environment (JRE)가 필요합니다. %PRODUCTNAME %PRODUCTVERSION 은 %s 에 있는 JRE 를 사용할 수 있도록 설정되어 있습니다. 이 JRE 를 찾을 수 없습니다. Java 설치를 시작하기 위해 OK 버튼을 클릭해주십시오. 현재 작동을 종료하려면 취소 버튼을 클릭하십시오.";
+    Message[ korean ] = "이 작동을 위해서는 Java Runtime Environment (JRE)가 필요합니다. %PRODUCTNAME %PRODUCTVERSION은(는) %s 에 있는 JRE를 사용할 수 있도록 설정되어 있습니다. 이 JRE를 찾을 수 없습니다. Java 설치를 시작하기 위해 [OK] 버튼을 클릭해주십시오. 현재 작동을 중단하려면 [취소] 버튼을 클릭하십시오.";
     Message[ chinese_simplified ] = "这个操作需要 Java 运行时间环境。%PRODUCTNAME %PRODUCTVERSION 的设定是用于安装在 %s 的 Java 运行时间环境。但是没有找到这个指定的  Java 运行时间环境。要安装 Java ，就点击“确定”。要终止当前的操作，则点击“取消”。";
     Message[ chinese_traditional ] = "這個動作需要 Java 運行環境(JRE)。%PRODUCTNAME %PRODUCTVERSION的設定是使用位于 %s 的 JRE 。但是沒有找到這個 JRE 。要安裝 Java ，就按一下「確定」。要終止目前的動作，就按一下「取消」。";
     Message[ turkish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
@@ -159,8 +159,8 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
     Message[ russian ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ greek ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ dutch ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ french ] = "L'op�ration en cours requiert un Environnement Runtime Java (JRE). Le JRE d�tect� par %PRODUCTNAME %PRODUCTVERSION est cependant d�fectueux.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
-    Message[ spanish ] = "Esta operaci�n requiere un entorno de ejecuci�n Java (Java Runtime Environment -JRE). Sin embargo el JRE que %PRODUCTNAME %PRODUCTVERSION ha detectado es defectuoso.\nPara iniciar el programa de instalaci�n de Java pulse en 'Aceptar'. Para cancelar la operaci�n pulse en 'Cancelar'.";
+    Message[ french ] = "L'op�ration en cours requiert un environnement d'ex�cution Java (JRE). Le JRE d�tect� par %PRODUCTNAME %PRODUCTVERSION est cependant d�fectueux.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'op�ration en cours, cliquez sur 'Annuler'.";
+    Message[ spanish ] = "Esta operaci�n requiere un entorno de ejecuci�n de Java (Java Runtime Environment -JRE). Sin embargo el JRE que %PRODUCTNAME %PRODUCTVERSION ha detectado es defectuoso.\nPara iniciar el programa de instalaci�n de Java pulse en 'Aceptar'. Para cancelar la operaci�n pulse en 'Cancelar'.";
     Message[ finnish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). %PRODUCTNAME %PRODUCTVERSION ne ha rilevato una configurazione difettosa.\nFate click su 'OK' per avviare il setup di Java. Per terminare l'operazione cliccate 'Annulla'.";
     Message[ danish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
@@ -168,7 +168,7 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
     Message[ polish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ portuguese_brazilian ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ japanese ] = "現在の操作には、Java Runtime Environment (JRE)が必要ですが、%PRODUCTNAME %PRODUCTVERSION が検出した JRE は正しくありません。\nOK ボタンを押すと、Java セットアップが開始します。[キャンセル]を押すと、現在の操作は終了します。";
-    Message[ korean ] = "이 작동을 위해서는 Java Runtime Environment (JRE)가 필요한데 %PRODUCTNAME %PRODUCTVERSION 이 JRE 에 오류가 있음을 발견했습니다.\n Java 설치를 시작하기 위해 OK 버튼을 클릭해주십시오. 현재 작동을 종료하려면 취소 버튼을 클릭해주십시오.";
+    Message[ korean ] = "이 작동을 위해서는 Java Runtime Environment (JRE)가 필요한데 %PRODUCTNAME %PRODUCTVERSION 이 JRE에서 오류를 발견했습니다.\n Java 설치를 시작하기 위해 [OK] 버튼을 클릭해주십시오. 현재 작동을 중단하려면 [취소] 버튼을 클릭해주십시오.";
     Message[ chinese_simplified ] = "这个操作需要 Java 运行时间环境。%PRODUCTNAME %PRODUCTVERSION 找到了一个损坏的 Java 运行时间环境。如果您要启动 Java 安装程序，就点击“确定”。如果要终止当前的操作，则点击“取消”。";
     Message[ chinese_traditional ] = "這個動作需要 Java 運行時間環境。%PRODUCTNAME %PRODUCTVERSION 找到了一個損壞的 Java 運行時間環境。如果您要啟動 Java 安裝程式，就按一下「確定」。若要終止目前的動作，則按一下「取消」。";
     Message[ turkish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
@@ -197,7 +197,7 @@ WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
     Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は Java セットアップを開始できませんでした。%PRODUCTNAME を終了して、%PRODUCTNAME %PRODUCTVERSION セットアップを開始してください。[修復]を選択します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 은 Java 설치를 시작할 수 없습니다. %PRODUCTNAME 를 종료하고 %PRODUCTNAME %PRODUCTVERSION 의 설치 프로그램을 시작하십시오. '복구'를 선택하십시오.";
+    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 은(는) Java 설치를 시작할 수 없습니다. %PRODUCTNAME을(를) 종료하고 %PRODUCTNAME %PRODUCTVERSION 의 설치 프로그램을 시작하십시오. [복구]를 선택하십시오.";
     Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 无法启动 Java 安装程序。请关闭 %PRODUCTNAME 之后启动 %PRODUCTNAME %PRODUCTVERSION 安装程序，选择修复的安装选项。";
     Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 無法啓動 Java 安裝程式。請關閉 %PRODUCTNAME ，然後啓動 %PRODUCTNAME %PRODUCTVERSION 安裝程式，選擇修復的選項。";
     Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
@@ -218,7 +218,7 @@ WarningBox WARNINGBOX_JAVALDXNOTSTARTED
     Message[ greek ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ french ] = "%PRODUCTNAME %PRODUCTVERSION n'a pas pu lancer Java LDX. Quittez %PRODUCTNAME et d�marrez le Setup de %PRODUCTNAME %PRODUCTVERSION. Choisissez 'R�paration'.";
-    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no pudo iniciar Java LDX. Cierre %PRODUCTNAME e inicie el programa de instalaci�n de %PRODUCTNAME %PRODUCTVERSION. Seleccione 'Repair'.";
+    Message[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION no pudo iniciar Java LDX. Cierre %PRODUCTNAME e inicie el programa de instalaci�n de %PRODUCTNAME %PRODUCTVERSION. Seleccione 'Reparar'.";
     Message[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ italian ] = "%PRODUCTNAME %PRODUCTVERSION non � riuscito ad avviare Java LDX. Uscite da %PRODUCTNAME e avviate il programma di installazione di %PRODUCTNAME %PRODUCTVERSION. Scegliete l'opzione 'Riparazione'.";
     Message[ danish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
@@ -226,7 +226,7 @@ WarningBox WARNINGBOX_JAVALDXNOTSTARTED
     Message[ polish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
     Message[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION は Java LDX を開始できませんでした。%PRODUCTNAME を終了して %PRODUCTNAME %PRODUCTVERSION セットアップを開始してください。[修復]を選択します。";
-    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 는 Java LDX 를 시작하지 못했습니다. %PRODUCTNAME 를 종료하고 %PRODUCTNAME %PRODUCTVERSION 설치 프로그램을 시작하십시오. '복구'를 선택하십시오.";
+    Message[ korean ] = "%PRODUCTNAME %PRODUCTVERSION은(는) Java LDX 를 시작하지 못했습니다. %PRODUCTNAME를 종료하고 %PRODUCTNAME %PRODUCTVERSION 설치 프로그램을 시작하십시오. [복구]를 선택하십시오.";
     Message[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 无法启动 Java LDX 。请关闭 %PRODUCTNAME 之后启动 %PRODUCTNAME %PRODUCTVERSION 安装程序，选择修复安装的选项。";
     Message[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 無法啓動 Java LDX 。請關閉 %PRODUCTNAME ，然後啓動 %PRODUCTNAME %PRODUCTVERSION 安裝程式，選擇修復的選項。";
     Message[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'.";
@@ -242,6 +242,25 @@ InfoBox INFOBOX_PLEASERESTARTOFFICE
     Message = "Damit die neuen Java Einstellungen wirksam werden, ist ein Neustart von %PRODUCTNAME %PRODUCTVERSION erforderlich." ;
     Message[ ENGLISH ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect." ;
     Message[ english_us ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect." ;
+    Message[ portuguese ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ russian ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ greek ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ dutch ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ french ] = "Vous devez red�marrer %PRODUCTNAME %PRODUCTVERSION afin que les nouveaux param�tres Java puissent �tre appliqu�s.";
+    Message[ spanish ] = "Debe reiniciar %PRODUCTNAME %PRODUCTVERSION para que la configuraci�n de Java tenga efecto.";
+    Message[ finnish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ italian ] = "Perch� le impostazioni di Java abbiano effetto dovete riavviare %PRODUCTNAME %PRODUCTVERSION.";
+    Message[ danish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ swedish ] = "Du m�sta starta om %PRODUCTNAME %PRODUCTVERSION f�r att Java-inst�llningarna ska tr�da i kraft.";
+    Message[ polish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ japanese ] = "Java の設定を有効にするには %PRODUCTNAME %PRODUCTVERSION を再起動する必要があります。";
+    Message[ korean ] = "Java의 새 설정 내용을 적용하려면 %PRODUCTNAME %PRODUCTVERSION을(를) 다시 시작해야 합니다.";
+    Message[ chinese_simplified ] = "为了让 Java 设定生效，您必须重新启动 %PRODUCTNAME %PRODUCTVERSION 。";
+    Message[ chinese_traditional ] = "您需要重新啟動 %PRODUCTNAME %PRODUCTVERSION，Java 設定才會生效。";
+    Message[ turkish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ arabic ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ catalan ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
+    Message[ thai ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
 };
 
 String STR_RECOVER_QUERY
@@ -256,17 +275,17 @@ String STR_RECOVER_QUERY
     Text [ italian ] = "Volete recuperare il file \"$1\"?" ;
     Text [ spanish ] = "�Desea restaurar el archivo \"$1\"?" ;
     Text [ french ] = "Restaurer le fichier \"$1\" ?" ;
-    Text [ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?" ;
+    Text [ dutch ] = "Wilt u het bestand \"$1\" herstellen?" ;
     Text[ chinese_simplified ] = "要修复这个文件 \"$1\" ？";
-    Text[ russian ] = "������������ ���� \"$1\"?";
+    Text[ russian ] = "������������ �������� \"$1\"?";
     Text[ polish ] = "Odtworzy� plik \"$1\"?";
     Text[ japanese ] = "ファイル \"$1\" を復元しますか。";
     Text[ chinese_traditional ] = "要修復檔案<$1>？";
     Text[ arabic ] = "�� ���� ������� ����� \"$1\"�";
-    Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
+    Text[ dutch ] = "Wilt u het bestand \"$1\" herstellen?";
     Text[ chinese_simplified ] = "要修复这个文件 \"$1\" ？";
     Text[ greek ] = "�� ����� ��������� ��� ������� \"$1\";";
-    Text[ korean ] = "파일 \"$1\"을(를） 복구하겠습니까?";
+    Text[ korean ] = "파일 \"$1\"을(를） 복구하시겠습니까?";
     Text[ turkish ] = "\"$1\" dosyas� geri getirilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu restaurar el fitxer \"$1\"?";
@@ -285,15 +304,15 @@ String STR_RECOVER_TITLE
     Text [ italian ] = "Recupero file" ;
     Text [ spanish ] = "Recuperar archivo" ;
     Text [ french ] = "Restauration de fichier" ;
-    Text [ dutch ] = "Herstel bestand" ;
+    Text [ dutch ] = "Bestandsherstel" ;
     Text [ portuguese ] = "Restaurar ficheiro" ;
     Text[ chinese_simplified ] = "修复文件";
-    Text[ russian ] = "�������������� �����";
+    Text[ russian ] = "�������������� ���������";
     Text[ polish ] = "Odtwarzanie plik�w";
     Text[ japanese ] = "ファイルの復元";
     Text[ chinese_traditional ] = "修復檔案";
     Text[ arabic ] = "������� ���";
-    Text[ dutch ] = "Herstel bestand";
+    Text[ dutch ] = "Bestandsherstel";
     Text[ chinese_simplified ] = "修复文件";
     Text[ greek ] = "��������� �������";
     Text[ korean ] = "파일 복구";
@@ -316,21 +335,21 @@ WarningBox STR_RECOVER_PREPARED
     Message [ italian ] = "Si � verificato un errore irrimediabile.\n\nTutti i file modificati sono stati salvati e probabilmente verranno recuperati\nal prossimo avvio del programma." ;
     Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los archivos modificados\ny quiz�s podr�n recuperarse\nal iniciar de nuevo el programa." ;
     Message [ french ] = "Une erreur irr�cup�rable s'est produite.\n\nTous les fichiers modifi�s ont �t� sauvegard�s\net devraient �tre restaur�s au\nred�marrage du programme." ;
-    Message [ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden." ;
+    Message [ dutch ] = "Er is een onherstelbare fout opgetreden.\n\nAlle gemodificeerde bestanden zijn echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart worden hersteld." ;
     Message[ chinese_simplified ] = "真是非常抱歉。刚才的操作引发了一个无法排除的错误。\n修改过的文件已经保存。\n在下一次启动程序时很可能重新恢复这些文件。";
-    Message[ russian ] = "��������� ������������ ������.\n\n��� ���������� ����� ����� ���������\n� �� ����� ����� ������������ ��� ���������\n������� ���������.";
+    Message[ russian ] = "������������ ������.\n\n��� ���������� ��������� ����� ���������,\n� �� ����� ����� ������������ ��� ���������\n������� ���������.";
     Message[ polish ] = "Wyst�pi� nieodwracalny b��d.\n\nWszystkie zmodyfikowane pliki zosta�y jednak\nzabezpieczone i zostan� prawdopodobnie przywr�cone przy nast�pnym uruchomieniu programu.\n.";
     Message[ japanese ] = "予期しないエラーが発生しました。\n\n変更したファイルはすべて保存されているので\n次のプログラム起動で復元されるはずです。";
     Message[ chinese_traditional ] = "真是非常抱歉。剛才的動作引發了一個無法排除的錯誤。\n先前修改過的檔案已經儲存。\n在下一次啟動程式時很可能重新恢復這些檔案。";
     Message[ arabic ] = "��� ��� ��� ���� �������.\n\n�� ��� ���� ������� ���� �� ������ǡ \n���� ���� ��������� ��� �����\n ����� ��������.";
-    Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
+    Message[ dutch ] = "Er is een onherstelbare fout opgetreden.\n\nAlle gemodificeerde bestanden zijn echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart worden hersteld.";
     Message[ chinese_simplified ] = "真是非常抱歉。刚才的操作引发了一个无法排除的错误。\n修改过的文件已经保存。\n在下一次启动程序时很可能重新恢复这些文件。";
     Message[ greek ] = "������������� ������ ������������ ������.\n\n��� �� ������������� ������ �������������\n���� �� ����� ������ (����������) � ��������� ����\n";
-    Message[ korean ] = "치명적인 오류가 발생했습니다.\n\n그러나 변경된 모든 파일이\n저장되었으므로, 다음\n프로그램 시작시에는 복구될 수 있을 것입니다.";
+    Message[ korean ] = "치명적인 오류가 발생했습니다.\n\n그러나 변경된 모든 파일이\n저장되었으므로 다음 프로그램\n시작시에 복구될 수 있습니다.";
     Message[ turkish ] = "D�zeltilemeyen bir hata olu�tu.\n\nDe�i�tirilen t�m dosyalar\nkaydedildi ve muhtemelen uygulama yeniden ba�lat�ld���nda\nkurtar�labilecek.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "S'ha produ�t un error irreparable.\n\nTot i aix� es desaran els canvis realitzats\nen els fitxers i potser es podran recuperar\nen iniciar de nou el programa.";
-    Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehk� palauttaa, kun k�ynnist�t ohjelman uudelleen.";
+    Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehk� palauttaa, kun k�ynnist�t\nohjelman uudelleen.";
     Message[ thai ] = "เกิดข้อผิดพลาดที่ไม่สามารถกู้คืนได้\n\nแฟ้มที่ดัดแปลงแก้ไขได้ถูกบันทึกและน่าจะสามารถ\nถูกกู้คืนที่โปรแกรมเริ่มต้นได้";
 };
 
@@ -340,12 +359,12 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
     Text [ ENGLISH ] = "The program cannot be started. " ;
     Text[ english_us ] = "The application cannot be started. ";
     Text[ portuguese ] = "Imposs�vel iniciar a aplica��o. ";
-    Text[ russian ] = "������ ���������� ����������. ";
+    Text[ russian ] = "���������� ��������� ����������.";
     Text[ greek ] = "The program cannot be started. ";
-    Text[ dutch ] = "De applicatie kan niet worden gestart.";
+    Text[ dutch ] = "De toepassing kan niet worden gestart.";
     Text[ french ] = "Impossible de lancer l'application ! ";
     Text[ spanish ] = "No se puede iniciar la aplicaci�n. ";
-    Text[ finnish ] = "The program cannot be started. ";
+    Text[ finnish ] = "Sovelluksen k�ynnistys ei onnistu. ";
     Text[ italian ] = "Impossibile avviare l'applicazione. ";
     Text[ danish ] = "Programmet kan ikke startes. ";
     Text[ swedish ] = "Det g�r inte att starta programmet. ";
@@ -366,19 +385,19 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
     Text [ ENGLISH ] = "The configuration directory \"$1\" is missing." ;
     Text[ english_us ] = "The configuration directory \"$1\" could not be found.";
     Text[ portuguese ] = "Imposs�vel encontrar o caminho de configura��o \"$1\".";
-    Text[ russian ] = "���������������� ���� \"$1\" ��������.";
+    Text[ russian ] = "���������� ����� ������� ������������ \"$1\".";
     Text[ greek ] = "The configuration directory \"$1\" is missing.";
-    Text[ dutch ] = "Configuratie-directory \"$1\" ontbreekt.";
+    Text[ dutch ] = "Configuratiepad \"$1\" is niet gevonden.";
     Text[ french ] = "Impossible de d�tecter le chemin de configuration \"$1\" !";
     Text[ spanish ] = "No se encontr� el directorio de configuraci�n \"$1\".";
-    Text[ finnish ] = "The configuration directory \"$1\" is missing.";
+    Text[ finnish ] = "M��rityshakemistoa \"$1\" ei l�ydy.";
     Text[ italian ] = "Impossibile trovare il percorso di configurazione \"$1\".";
     Text[ danish ] = "\"Kunne ikke finde konfigurationsstien \"\"$1\"\".\"";
     Text[ swedish ] = "Konfigurationss�kv�gen \"$1\" hittades inte.";
     Text[ polish ] = "Nie znaleziono �cie�ki konfiguracyjnej \"$1\".";
     Text[ portuguese_brazilian ] = "The configuration directory \"$1\" is missing.";
     Text[ japanese ] = "設定パス \"$1\" はありません。";
-    Text[ korean ] = "구성 디렉토리 \"$1\"을(를)이 없습니다.";
+    Text[ korean ] = "구성 디렉토리 \"$1\" 이(가) 없습니다.";
     Text[ chinese_simplified ] = "无法找到配置路径 \"$1\"。";
     Text[ chinese_traditional ] = "沒有找到配置路徑 \"$1\" 。";
     Text[ turkish ] = "The configuration directory \"$1\" is missing.";
@@ -392,12 +411,12 @@ String STR_BOOTSTRAP_ERR_PATH_INVALID
     Text [ ENGLISH ] = "The installation path is invalid." ;
     Text[ english_us ] = "The installation path is invalid.";
     Text[ portuguese ] = "O caminho de instala��o n�o � v�lido.";
-    Text[ russian ] = "��������������� ���� ����������.";
+    Text[ russian ] = "�������� ���� ���������.";
     Text[ greek ] = "The installation path is invalid.";
-    Text[ dutch ] = "Het installatiepad is ongeldig.";
+    Text[ dutch ] = "Het installatiepad kan niet worden vastgesteld.";
     Text[ french ] = "Le chemin d'installation n'est pas valide.";
     Text[ spanish ] = "La ruta de instalaci�n no es v�lida.";
-    Text[ finnish ] = "The installation path is invalid.";
+    Text[ finnish ] = "Asennuspolku on virheellinen.";
     Text[ italian ] = "Il percorso d'installazione non � valido.";
     Text[ danish ] = "Installationsstien er ugyldig.";
     Text[ swedish ] = "Installationss�kv�gen �r ogiltig.";
@@ -418,12 +437,12 @@ String STR_BOOTSTRAP_ERR_NO_PATH
     Text [ ENGLISH ] = "The installation path is not available." ;
     Text[ english_us ] = "The installation path is not available.";
     Text[ portuguese ] = "Foi imposs�vel determinar o caminho de instala��o.";
-    Text[ russian ] = "��������������� ���� ����������.";
+    Text[ russian ] = "���������� ���� ���������.";
     Text[ greek ] = "The installation path is not available.";
     Text[ dutch ] = "Geen installatiepad beschikbaar.";
     Text[ french ] = "Impossible de d�terminer le chemin d'installation !";
     Text[ spanish ] = "No se pudo determinar la ruta de instalaci�n.";
-    Text[ finnish ] = "The installation path is not available.";
+    Text[ finnish ] = "Asennuspolku ei ole k�ytett�viss�.";
     Text[ italian ] = "Impossibile definire il percorso di installazione.";
     Text[ danish ] = "Installationsstien kunne ikke findes.";
     Text[ swedish ] = "Det gick inte att best�mma installationss�kv�gen.";
@@ -444,12 +463,12 @@ String STR_BOOTSTRAP_ERR_INTERNAL
     Text [ ENGLISH ] = "An internal failure occurred." ;
     Text[ english_us ] = "An internal error occurred.";
     Text[ portuguese ] = "Ocorreu um erro interno.";
-    Text[ russian ] = "�������� ���������� ������.";
+    Text[ russian ] = "���������� ������.";
     Text[ greek ] = "An internal failure occurred.";
-    Text[ dutch ] = "Interne fout.";
+    Text[ dutch ] = "Er is een interne fout opgetreden.";
     Text[ french ] = "Une erreur interne est survenue.";
     Text[ spanish ] = "Ha occurrido un error interno.";
-    Text[ finnish ] = "An internal failure occurred.";
+    Text[ finnish ] = "On tapahtunut sis�inen virhe.";
     Text[ italian ] = "Si � verificato un errore interno.";
     Text[ danish ] = "Der er opst�et en intern fejl.";
     Text[ swedish ] = "Det har uppst�tt ett internt fel.";
@@ -470,12 +489,12 @@ String STR_BOOTSTRAP_ERR_FILE_CORRUPT
     Text [ ENGLISH ] = "The configuration file \"$1\" is corrupt." ;
     Text[ english_us ] = "The configuration file \"$1\" is corrupt.";
     Text[ portuguese ] = "O ficheiro de configura��o \"$1\" est� danificado.";
-    Text[ russian ] = "���������������� ���� \"$1\" ���������.";
+    Text[ russian ] = "���� ������������ \"$1\" ���������.";
     Text[ greek ] = "The configuration file \"$1\" is corrupt.";
-    Text[ dutch ] = "Configuratie-bestand \"$1\" is niet in orde.";
+    Text[ dutch ] = "Configuratiebestand \"$1\" is beschadigd.";
     Text[ french ] = "Le fichier de configuration \"$1\" est d�fectueux.";
     Text[ spanish ] = "El archivo de configuraci�n \"$1\" est� da�ado.";
-    Text[ finnish ] = "The configuration file \"$1\" is corrupt.";
+    Text[ finnish ] = "M��ritystiedosto \"$1\" on vioittunut.";
     Text[ italian ] = "Il file di configurazione \"$1\" � danneggiato.";
     Text[ danish ] = "\"Konfigurationsfilen \"\"$1\"\" er beskadiget.\"";
     Text[ swedish ] = "Konfigurationsfilen \"$1\" �r skadad.";
@@ -496,12 +515,12 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
     Text [ ENGLISH ] = "The configuration file \"$1\" is missing." ;
     Text[ english_us ] = "The configuration file \"$1\" was not found.";
     Text[ portuguese ] = "Imposs�vel encontrar o ficheiro de configura��o \"$1\".";
-    Text[ russian ] = "���������������� ���� \"$1\" ��������.";
+    Text[ russian ] = "���� ������������ \"$1\" �� ������.";
     Text[ greek ] = "The configuration file \"$1\" is missing.";
-    Text[ dutch ] = "Configuratiebestand \"$1\" ontbreekt.";
+    Text[ dutch ] = "Configuratiebestand \"$1\" is niet gevonden.";
     Text[ french ] = "Impossible de d�tecter le fichier de configuration \"$1\" !";
     Text[ spanish ] = "No se encontr� el archivo de configuraci�n \"$1\".";
-    Text[ finnish ] = "The configuration file \"$1\" is missing.";
+    Text[ finnish ] = "M��ritystiedostoa \"$1\" ei l�ytynyt.";
     Text[ italian ] = "Impossibile trovare il file di configurazione \"$1\".";
     Text[ danish ] = "\"Kunne ikke finde konfigurationsfilen \"\"$1\"\".\"";
     Text[ swedish ] = "Konfigurationsfilen \"$1\" hittades inte.";
@@ -522,19 +541,19 @@ String STR_BOOTSTRAP_ERR_NO_SUPPORT
     Text [ ENGLISH ] = "The main configuration file \"$1\" does not support the current version." ;
     Text[ english_us ] = "The configuration file \"$1\" does not support the current version.";
     Text[ portuguese ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ russian ] = "���������������� ���� \"$1\" �� ������������ ������ ������.";
+    Text[ russian ] = "���� ������������ \"$1\" �� ������������ ������� ������.";
     Text[ greek ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ dutch ] = "Configuratie-bestand \"$1\" ondersteunt deze versie niet.";
+    Text[ dutch ] = "Configuratiebestand \"$1\" ondersteunt deze versie niet.";
     Text[ french ] = "Le fichier de configuration \"$1\" ne supporte pas cette version.";
-    Text[ spanish ] = "El archivo de configuraci�n \"$1\" no apoya esta versi�n.";
-    Text[ finnish ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ spanish ] = "El archivo de configuraci�n \"$1\" no admite esta versi�n.";
+    Text[ finnish ] = "M��ritystiedosto \"$1\" ei tue nykyist� versiota.";
     Text[ italian ] = "Il file di configurazione principale \"$1\" non supporta questa versione.";
     Text[ danish ] = "\"Konfigurationsfilen \"\"$1\"\" underst�tter ikke denne version.\"";
     Text[ swedish ] = "Konfigurationsfilen \"$1\" underst�der inte den h�r versionen.";
     Text[ polish ] = "Plik konfiguracyjny \"$1\" nie obs�uguje danej wersji.";
     Text[ portuguese_brazilian ] = "The main configuration file \"$1\" does not support the current version.";
     Text[ japanese ] = "設定ファイル \"$1\" はこのバージョンを支援しません。";
-    Text[ korean ] = "주 구성 파일 \"$1\"에서 현재 버전을 지원하지 않습니다.";
+    Text[ korean ] = "구성 파일 \"$1\"은(는) 현재 버전을 지원하지 않습니다.";
     Text[ chinese_simplified ] = "配置文件 \"$1\" 不支持这个版本。";
     Text[ chinese_traditional ] = "配置檔案 \"$1\" 不支援這個版本。";
     Text[ turkish ] = "The main configuration file \"$1\" does not support the current version.";
@@ -550,10 +569,10 @@ String STR_BOOTSTRAP_ERR_NO_SERVICE
     Text[ portuguese ] = "O gestor de componentes n�o est� dispon�vel.";
     Text[ russian ] = "��������� ����������� ����������.";
     Text[ greek ] = "The service manager is not available.";
-    Text[ dutch ] = "De componenten-manager is niet beschikbaar.";
+    Text[ dutch ] = "Het componentenbeheer is niet beschikbaar.";
     Text[ french ] = "Le gestionnaire de composants n'est pas disponible.";
     Text[ spanish ] = "El gestor de componentes no est� disponible.";
-    Text[ finnish ] = "The service manager is not available.";
+    Text[ finnish ] = "Komponenttien hallinta ei ole k�ytett�viss�.";
     Text[ italian ] = "Il gestore dei componenti non � disponibile.";
     Text[ danish ] = "Komponentmanageren er ikke til r�dighed.";
     Text[ swedish ] = "Komponenthanteraren �r inte tillg�nglig.";
@@ -574,12 +593,12 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text [ ENGLISH ] = "The configuration service is not available." ;
     Text[ english_us ] = "The configuration service is not available.";
     Text[ portuguese ] = "The configuration service is not available.";
-    Text[ russian ] = "������� ���������� ������ ����������.";
+    Text[ russian ] = "������ ������������ ����������.";
     Text[ greek ] = "The configuration service is not available.";
-    Text[ dutch ] = "De configuratie-manager is niet beschibaar.";
+    Text[ dutch ] = "Het configuratiebeheer is niet beschikbaar.";
     Text[ french ] = "Impossible de cr�er le gestionnaire de configuration !";
     Text[ spanish ] = "No se puede crear el gestor de configuraci�n.";
-    Text[ finnish ] = "The configuration service is not available.";
+    Text[ finnish ] = "M��rityspalvelua ei ole k�ytett�viss�.";
     Text[ italian ] = "Impossibile creare il gestore di configurazione.";
     Text[ danish ] = "Konfigurationsmanageren kan ikke oprettes.";
     Text[ swedish ] = "Det g�r inte att skapa konfigurationshanteraren.";
@@ -600,19 +619,19 @@ String STR_ASK_START_SETUP_REPAIR
     Text [ ENGLISH ] = "Start setup application to repair installation?" ;
     Text[ english_us ] = "Do you want to start the setup application to repair your installation?";
     Text[ portuguese ] = "Iniciar a aplica��o Setup para reparar a instala��o?";
-    Text[ russian ] = "��������� ��������������� ���������� ��� �������������� ���������������� ������?";
+    Text[ russian ] = "��������� ��������� ��������� � ������ ��������������?";
     Text[ greek ] = "Start setup application to repair installation?";
-    Text[ dutch ] = "Wilt u de Setup-applicatie starten om uw installatie te repareren?";
+    Text[ dutch ] = "Wilt u de Setup-toepassing starten om uw installatie te repareren?";
     Text[ french ] = "Voulez-vous lancer l'application Setup afin de r�parer l'installation ?";
-    Text[ spanish ] = "�Desea iniciar el programa de instalaci�n setup para reparar la instalaci�n?";
-    Text[ finnish ] = "Start setup application to repair installation?";
+    Text[ spanish ] = "�Desea iniciar el programa de instalaci�n para reparar la instalaci�n?";
+    Text[ finnish ] = "Haluatko k�ynnist�� asennusohjelman asennuksen korjaamista varten?";
     Text[ italian ] = "Volete avviare il programma di setup per riparare l'installazione?";
     Text[ danish ] = "Skal setup-programmet startes for at reparere installationen?";
     Text[ swedish ] = "Ska setupprogrammet startas s� att din installation kan repareras?";
     Text[ polish ] = "Uruchomi� aplikacj� instalacyjn� w celu naprawy zainstalowanego programu?";
     Text[ portuguese_brazilian ] = "Start setup application to repair installation?";
     Text[ japanese ] = "インストールの修復をするのにセットアップアプリケーションを開始しますか。";
-    Text[ korean ] = "설치 응용 프로그램을 시작하여 설치를 복구하겠습니까?";
+    Text[ korean ] = "설치 응용 프로그램을 시작하여 설치를 복구하시겠습니까?";
     Text[ chinese_simplified ] = "要启动安装程序来修补您原先的安装？";
     Text[ chinese_traditional ] = "要啓動安裝程式，修復已經安裝的應用程式？";
     Text[ turkish ] = "Start setup application to repair installation?";
@@ -626,19 +645,19 @@ String STR_ASK_START_SETUP
     Text [ ENGLISH ] = "Start setup application to check installation?" ;
     Text[ english_us ] = "Do you want to start the setup application to check your installation?";
     Text[ portuguese ] = "Start setup application to check installation?";
-    Text[ russian ] = "��������� ��������������� ���������� ��� �������� ���������������� ������?";
+    Text[ russian ] = "��������� ��������� ��������� ��� �������� ������������� ������?";
     Text[ greek ] = "Start setup application to check installation?";
-    Text[ dutch ] = "Wilt u de Setup-applicatie starten om uw installatie te controleren?";
+    Text[ dutch ] = "Wilt u de Setup-toepassing starten om uw installatie te controleren?";
     Text[ french ] = "Voulez-vous lancer l'application Setup afin de v�rifier l'installation ?";
-    Text[ spanish ] = "�Desea iniciar el programa de instalaci�n setup para comprobar la instalaci�n?";
-    Text[ finnish ] = "Start setup application to check installation?";
+    Text[ spanish ] = "�Desea iniciar el programa de instalaci�n para comprobar la instalaci�n?";
+    Text[ finnish ] = "Haluatko k�ynnist�� asennusohjelman asennuksen tarkistamista varten?";
     Text[ italian ] = "Volete avviare il programma di setup per verificare l'installazione?";
     Text[ danish ] = "Skal setup-programmet startes for at kontrollere installationen?";
     Text[ swedish ] = "Ska setupprogrammet startas s� att din installation kan kontrolleras?";
     Text[ polish ] = "Uruchomi� aplikacj� instalacyjn� w celu sprawdzenia zainstalowanego programu?";
     Text[ portuguese_brazilian ] = "Start setup application to check installation?";
     Text[ japanese ] = "インストールを確認するのにセットアップアプリケーションを開始しますか。";
-    Text[ korean ] = "설치 응용 프로그램을 시작하여 설치를 검사하겠습니까?";
+    Text[ korean ] = "설치 응용 프로그램을 시작하여 설치를 검사하시겠습니까?";
     Text[ chinese_simplified ] = "要启动安装程序来检查您原先的安装？";
     Text[ chinese_traditional ] = "要啓動安裝程式，檢查已安裝的應用程式？";
     Text[ turkish ] = "Start setup application to check installation?";
@@ -652,19 +671,19 @@ String STR_SETUP_ERR_CANNOT_START
     Text [ ENGLISH ] = "Couldn't start setup application! Please start it manually." ;
     Text[ english_us ] = "The Setup could not be started automatically. Please start it manually.";
     Text[ portuguese ] = "Foi imposs�vel iniciar a aplica��o Setup automaticamente! Queira inici�-la manualmente.";
-    Text[ russian ] = "�������������� ������ ���������������� ���������� ����������. ��������� ��� �������.";
+    Text[ russian ] = "���������� ��������� ��������� �������������. ��������� �� �������.";
     Text[ greek ] = "Couldn't start setup application! Please start it manually.";
-    Text[ dutch ] = "De Setup-applicatie kon niet automatisch worden gestart. Start deze handmatig.";
+    Text[ dutch ] = "De Setup-toepassing kan niet automatisch worden gestart. Start deze handmatig.";
     Text[ french ] = "Impossible de lancer automatiquement l'application Setup ! Veuillez la d�marrer manuellement.";
-    Text[ spanish ] = "No se pudo iniciar autom�ticamente el programa de instalaci�n setup. In�cielo manualmente.";
-    Text[ finnish ] = "Couldn't start setup application! Please start it manually.";
+    Text[ spanish ] = "No se pudo iniciar autom�ticamente el programa de instalaci�n. In�cielo manualmente.";
+    Text[ finnish ] = "Asennusohjelmaa ei voitu k�ynnist�� automaattisesti. K�ynnist� se manuaalisesti.";
     Text[ italian ] = "Impossibile avviare il programma di setup in modo automatico. Avviatelo manualmente.";
     Text[ danish ] = "Setup-programmet kunne ikke startes automatisk! Start programmet manuelt.";
     Text[ swedish ] = "Det gick inte att starta setupprogrammet automatiskt! Starta det manuellt.";
     Text[ polish ] = "Automatyczne uruchomienie aplikacji instalacyjnej nie powiod�o si�! Nale�y uruchomi� j� r�cznie.";
     Text[ portuguese_brazilian ] = "Couldn't start setup application! Please start it manually.";
     Text[ japanese ] = "セットアップアプリケーションは自動開始できませんでした。手動で開始してください。";
-    Text[ korean ] = "설치 응용 프로그램을 시작하지 못했습니다! 설치 응용 프로그램을 수동으로 시작하십시오.";
+    Text[ korean ] = "설치 응용 프로그램을 시작하지 못했습니다. 설치 응용 프로그램을 수동으로 시작해주십시오.";
     Text[ chinese_simplified ] = "无法自动启动安装程序！请手动启动。";
     Text[ chinese_traditional ] = "無法自動啓動安裝程式！請手動啓動安裝程式。";
     Text[ turkish ] = "Couldn't start setup application! Please start it manually.";
@@ -678,12 +697,12 @@ String STR_ASK_START_SETUP_MANUALLY
     Text [ ENGLISH ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. " ;
     Text[ english_us ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
     Text[ portuguese ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
-    Text[ russian ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ russian ] = "��������� ��������� ���������, ����� ���������� ��������� � ����� ��� �� �����, ���������� ����� �������� ���������. ";
     Text[ greek ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
-    Text[ dutch ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ dutch ] = "Als u de installatie wilt repareren, start u de Setup-toepassing vanaf de cd of vanuit de directory waarin de installatieprogramma's zich bevinden.";
     Text[ french ] = "Pour r�parer l'installation, lancez l'application Setup � partir du CD-ROM ou depuis le r�pertoire contenant le paquetage d'installation.";
     Text[ spanish ] = "Para reparar la instalaci�n inicie la aplicaci�n de Setup, o programa de instalaci�n, desde el CD o desde la carpeta que contenga los archivos de instalaci�n. ";
-    Text[ finnish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
+    Text[ finnish ] = "Korjaa asennus CD-levylt� tai asennuspakkaukset sis�lt�v�st� hakemistosta k�ynnist�m�ll� asennussovellus.";
     Text[ italian ] = "Per riparare l'installazione avviate il programma di setup dal CD-ROM oppure dalla cartella in cui avete installato il programma.";
     Text[ danish ] = "Du skal starte setup-programmet fra cd'en eller fra det bibliotek, hvor installationspakkerne findes, for at reparere installationen.";
     Text[ swedish ] = "Starta setupprogrammet fr�n cd:n eller fr�n katalogen d�r installationspaketen finns f�r att reparera installationen.";
@@ -702,60 +721,318 @@ String STR_SSO_RELOGIN
 {
     Text = "Bitte wiederholen Sie Ihre Anmeldung. " ;
     Text[ ENGLISH ] = "Please log in again. " ;
+    Text[ english_us ] = "Please log in again. ";
+    Text[ portuguese ] = "Please log in again. ";
+    Text[ russian ] = "Please log in again. ";
+    Text[ greek ] = "Please log in again. ";
+    Text[ dutch ] = "Please log in again. ";
+    Text[ french ] = "R�p�tez le login. ";
+    Text[ spanish ] = "Vuelva a registrarse. ";
+    Text[ finnish ] = "Please log in again. ";
+    Text[ italian ] = "Ripetete il login. ";
+    Text[ danish ] = "Please log in again. ";
+    Text[ swedish ] = "Logga in igen. ";
+    Text[ polish ] = "Please log in again. ";
+    Text[ japanese ] = "ログインしなおしてください。";
+    Text[ korean ] = "로그인을 다시 해주십시오. ";
+    Text[ chinese_simplified ] = "请重新登录。";
+    Text[ chinese_traditional ] = "請重新登入。 ";
+    Text[ turkish ] = "Please log in again. ";
+    Text[ arabic ] = "Please log in again. ";
+    Text[ catalan ] = "Please log in again. ";
+    Text[ thai ] = "Please log in again. ";
 };
 
 String STR_CONFIG_WARN_LOCAL_FALLBACK
 {
     Text = "StarOffice wird Ihre lokal-gespeicherten pers�nlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren. " ;
     Text[ ENGLISH ] = "StarOffice will continue the startup using your locally stored personal settings. " ;
+    Text[ english_us ] = "StarOffice will continue the startup using your locally stored personal settings.";
+    Text[ portuguese ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ russian ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ greek ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ dutch ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ french ] = "StarOffice va poursuivre le processus de d�marrage en utilisant les param�tres personnels stock�s en local. ";
+    Text[ spanish ] = "StarOffice continuar� el proceso de inicializaci�n utilizando la configuraci�n personal guardada localmente.";
+    Text[ finnish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ italian ] = "StarOffice proseguir� l'avvio dell'applicazione utilizzando le impostazioni personalizzate salvate localmente. ";
+    Text[ danish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ swedish ] = "StarOffice kommmer att anv�nda dina personliga inst�llningar som �r sparade lokalt f�r att forts�tta med programstarten. ";
+    Text[ polish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ japanese ] = "StarSuite は、ローカルに保存されているユーザー設定を使用してスタートアップを続行します。";
+    Text[ korean ] = "StarSuite은 프로그램의 시작을 계속하기 위해 로컬 저장된 사용자 설정 내용을 사용합니다.";
+    Text[ chinese_simplified ] = "StarSuite 将会使用您的本机个人设定，以继续启动过程。";
+    Text[ chinese_traditional ] = "StarOffice 將使用本機儲存的個人設定繼續啟動。";
+    Text[ turkish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ arabic ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ catalan ] = "StarOffice will continue the startup using your locally stored personal settings. ";
+    Text[ thai ] = "StarOffice will continue the startup using your locally stored personal settings. ";
 };
 
 String STR_CONFIG_WARN_OFFLINE
 {
     Text = "Ihre ge�nderten pers�nlichen Einstellungen werden von StarOffice zun�chst lokal gespeichert und beim n�chsten Programmstart synchronisiert. " ;
     Text[ ENGLISH ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. " ;
+    Text[ english_us ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
+    Text[ portuguese ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ russian ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ greek ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ dutch ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ french ] = "Les modifications apport�es aux param�tres personnels vont �tre stock�es en local ; une synchronisation aura lieu au prochain d�marrage de StarOffice. ";
+    Text[ spanish ] = "Las modificaciones realizadas en la configuraci�n personal se guardar�n a nivel local y se sincronizar�n la pr�xima vez que inicie StarOffice. ";
+    Text[ finnish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ italian ] = "I cambiamenti apportati alle impostazioni personalizzate verranno memorizzati localmente e sincronizzati al prossimo avvio di StarOffice. ";
+    Text[ danish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ swedish ] = "Dina �ndrade personliga inst�llningar sparas lokalt och synkroniseras n�sta g�ng du startar StarOffice. ";
+    Text[ polish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ japanese ] = "変更したユーザー設定はローカルに保存され、StarSuiteを次回起動したときに反映されます。";
+    Text[ korean ] = "사용자 임의로 변경한 설정 내용은 우선 로컬 저장되며 다음에 StarSuite을 다시 시작할 때 동기화됩니다. ";
+    Text[ chinese_simplified ] = "您个人设定的更改将被储存在本机上并在下次启动 StarSuite 时被同步化处理。";
+    Text[ chinese_traditional ] = "您對個人設定所做的變更會儲存在本機，並在下次啟動 StarOffice 時同步化。";
+    Text[ turkish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ arabic ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ catalan ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
+    Text[ thai ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
 };
 
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
 {
     Text = "Die Starteinstellungen f�r den Zugriff auf die zentrale Konfiguration sind unvollst�ndig. " ;
     Text[ ENGLISH ] = "The startup settings for accessing the central configuration are incomplete. " ;
+    Text[ english_us ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ portuguese ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ russian ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ greek ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ dutch ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ french ] = "Les param�tres de d�marrage pour l'acc�s � la configuration centrale ne sont pas complets. ";
+    Text[ spanish ] = "La configuraci�n de inicio para acceder a la configuraci�n central no est� completa. ";
+    Text[ finnish ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ italian ] = "Le impostazioni di avvio per l'accesso alla configurazione centrale sono incomplete.";
+    Text[ danish ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ swedish ] = "Startinst�llningarna f�r att komma �t den centrala konfiguration �r ofullst�ndiga. ";
+    Text[ polish ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ japanese ] = "共通設定にアクセスするスタートアップ設定が十分ではありません。";
+    Text[ korean ] = "중앙 집중 설정으로 액세스할 때 필요한 시작 설정이 불완전합니다.";
+    Text[ chinese_simplified ] = "用于存取中心配置的启动设定不完整。";
+    Text[ chinese_traditional ] = "存取集中配置的啟動設定不完整。 ";
+    Text[ turkish ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ arabic ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ catalan ] = "The startup settings for accessing the central configuration are incomplete. ";
+    Text[ thai ] = "The startup settings for accessing the central configuration are incomplete. ";
 };
 
 String STR_CONFIG_ERR_CANNOT_CONNECT
 {
     Text = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden. " ;
     Text[ ENGLISH ] = "A connection to the central configuration could not be established. " ;
+    Text[ english_us ] = "A connection to the central configuration could not be established. ";
+    Text[ portuguese ] = "A connection to the central configuration could not be established. ";
+    Text[ russian ] = "A connection to the central configuration could not be established. ";
+    Text[ greek ] = "A connection to the central configuration could not be established. ";
+    Text[ dutch ] = "A connection to the central configuration could not be established. ";
+    Text[ french ] = "Impossible d'�tablir une connexion � la configuration centrale ! ";
+    Text[ spanish ] = "No se ha podido establecer ninguna conexi�n con la configuraci�n central. ";
+    Text[ finnish ] = "A connection to the central configuration could not be established. ";
+    Text[ italian ] = "impossibile realizzare un colleamento con la configurazione centrale. ";
+    Text[ danish ] = "A connection to the central configuration could not be established. ";
+    Text[ swedish ] = "Det gick inte att koppla till den centrala konfigurationen. ";
+    Text[ polish ] = "A connection to the central configuration could not be established. ";
+    Text[ japanese ] = "共通設定への接続が確立できません。";
+    Text[ korean ] = "중앙 집중 설정으로 연결할 수 없습니다. ";
+    Text[ chinese_simplified ] = "无法和中心配置建立连接。";
+    Text[ chinese_traditional ] = "無法建立到集中配置的連線！ ";
+    Text[ turkish ] = "A connection to the central configuration could not be established. ";
+    Text[ arabic ] = "A connection to the central configuration could not be established. ";
+    Text[ catalan ] = "A connection to the central configuration could not be established. ";
+    Text[ thai ] = "A connection to the central configuration could not be established. ";
 };
 
 String STR_CONFIG_ERR_RIGHTS_MISSING
 {
     Text = "Aufgrund fehlender Zugriffsrechte k�nnen Sie nicht auf die zentrale Konfiguration zugreifen. " ;
     Text[ ENGLISH ] = "You cannot access the central configuration because of missing access rights. " ;
+    Text[ english_us ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ portuguese ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ russian ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ greek ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ dutch ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ french ] = "Acc�s � la configuration centrale refus� : droits d'acc�s insuffisants. ";
+    Text[ spanish ] = "No puede acceder a la configuraci�n central por falta de derechos de acceso. ";
+    Text[ finnish ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ italian ] = "Impossibile accedere alla configurazione centrale in quanto mancano i diritti necessari. ";
+    Text[ danish ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ swedish ] = "Du kan inte komma �t den centrala konfigurationen d�rf�r att du saknar �tkomstr�ttigheter. ";
+    Text[ polish ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ japanese ] = "アクセス権がないため、共通設定にアクセスできません。";
+    Text[ korean ] = "액세스 권한이 없는 이유로 중앙 집중 설정으로 액세스할 수 없습니다.";
+    Text[ chinese_simplified ] = "因为您缺少存取权利而无法存取中心配置数据。";
+    Text[ chinese_traditional ] = "因為缺少存取權限，您無法存取集中配置。 ";
+    Text[ turkish ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ arabic ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ catalan ] = "You cannot access the central configuration because of missing access rights. ";
+    Text[ thai ] = "You cannot access the central configuration because of missing access rights. ";
 };
 
 String STR_CONFIG_ERR_LOGIN_FAILED
 {
     Text = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch. " ;
     Text[ ENGLISH ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. " ;
+    Text[ english_us ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ portuguese ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ russian ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ greek ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ dutch ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ french ] = "�chec de connexion � la configuration centrale : le nom d'utilisateur ou le mot de passe n'est pas correct. ";
+    Text[ spanish ] = "Fallo de conexi�n con la configuraci�n central. El nombre de usuario o la contrase�a no son correctos. ";
+    Text[ finnish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ italian ] = "Il login alla configurazione centrale non � riuscito. Probabile causa: nome utente o password non corretto. ";
+    Text[ danish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ swedish ] = "Det gick inte att logga in till den centrala konfigurationen. Anv�ndarnamnet eller l�senordet �r felaktigt. ";
+    Text[ polish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ japanese ] = "共通設定へのログインに失敗しました。ユーザー名またはパスワードのいずれかが不正です。";
+    Text[ korean ] = "로그인하는데 실패했습니다. 사용자 이름 또는 암호가 잘못되었습니다.";
+    Text[ chinese_simplified ] = "您登录中心配置没有成功。您输入的使用名和密码无效。";
+    Text[ chinese_traditional ] = "登入到集中配置不成功。使用者名稱或密碼無效。 ";
+    Text[ turkish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ arabic ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ catalan ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
+    Text[ thai ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
 };
 
 String STR_CONFIG_ERR_MECHANISM_INVALID
 {
     Text = "Die gew�hlte Authentifizierungsmethode f�r den Zugriff auf die zentrale Konfiguration wird nicht unterst�tzt. " ;
     Text[ ENGLISH ] = "The specified authentication method to access the central configuration is not supported. " ;
+    Text[ english_us ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ portuguese ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ russian ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ greek ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ dutch ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ french ] = "La m�thode d'authentification sp�cifi�e pour l'acc�s � la configuration centrale n'est pas support�e. ";
+    Text[ spanish ] = "El m�todo de autentificaci�n especificado para acceder a la configuraci�n central no est� admitido. ";
+    Text[ finnish ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ italian ] = "Il metodo di autenticazione indicato per l'accesso alla configurazione centrale non � supportato. ";
+    Text[ danish ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ swedish ] = "Den valda autentiseringsmetoden f�r �tkomst till den centrala konfigurationen st�ds inte. ";
+    Text[ polish ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ japanese ] = "共通設定へアクセスするために指定した認証方法はサポートされていません。";
+    Text[ korean ] = "중앙 집중 설정으로 액세스하기 위해 지정된 인증 방식은 지원되지 않습니다.";
+    Text[ chinese_simplified ] = "不支持用于存取中心配置选取的认证方式。";
+    Text[ chinese_traditional ] = "存取集中配置的指定驗證方法不受支援。 ";
+    Text[ turkish ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ arabic ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ catalan ] = "The specified authentication method to access the central configuration is not supported. ";
+    Text[ thai ] = "The specified authentication method to access the central configuration is not supported. ";
 };
 
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
     Text = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
     Text[ ENGLISH ] = "A general access error occurred while accessing your central configuration. " ;
+    Text[ english_us ] = "A general error occurred while accessing your central configuration. ";
+    Text[ portuguese ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ russian ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ greek ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ dutch ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ french ] = "Une erreur g�n�rale s'est produite lors de l'acc�s � la configuration centrale. ";
+    Text[ spanish ] = "Se produjo un error general mientras se acced�a a la configuraci�n central.";
+    Text[ finnish ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ italian ] = "Si � verificato un errore generale di accesso alla configurazione centrale. ";
+    Text[ danish ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ swedish ] = "Det har uppst�tt ett generellt fel vid f�rs�ket att komma �t din centrala konfiguration. ";
+    Text[ polish ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ japanese ] = "共通設定へのアクセス時に一般的なエラーが発生しました。";
+    Text[ korean ] = "중앙 집중 설정으로 액세스하던 중 일반적 오류가 발생했습니다.";
+    Text[ chinese_simplified ] = "在存取您的中心配置时发生了一般的存取错误。";
+    Text[ chinese_traditional ] = "存取集中配置時發生一般存取錯誤。 ";
+    Text[ turkish ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ arabic ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ catalan ] = "A general access error occurred while accessing your central configuration. ";
+    Text[ thai ] = "A general access error occurred while accessing your central configuration. ";
 };
 
 String STR_CONFIG_ERR_NO_WRITE_ACCESS
 {
     Text = "Ihre ge�nderten pers�nlichen Einstellungen k�nnen aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
     Text[ ENGLISH ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. " ;
+    Text[ english_us ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ portuguese ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ russian ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ greek ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ dutch ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ french ] = "Stockage central des param�tres personnels modifi�s impossible : droits d'acc�s insuffisants. ";
+    Text[ spanish ] = "Las modificaciones realizadas en la configuraci�n personal no se pueden guardar de manera central por falta de derechos de acceso.";
+    Text[ finnish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ italian ] = "Impossibile memorizzare i cambiamenti alle impostazioni personalizzate in quanto mancano i diritti di accesso. ";
+    Text[ danish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ swedish ] = "Det g�r inte att spara dina �ndrade personliga inst�llningar centralt eftersom �tkomstr�ttigheter saknas. ";
+    Text[ polish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ japanese ] = "アクセス権がないため、ユーザー設定の変更内容は共通設定に保存されません。";
+    Text[ korean ] = "액세스 권한이 없는 이유로 변경된 사용자 설정 내용을 중앙에 저장할 수 없습니다.";
+    Text[ chinese_simplified ] = "因为您缺少存取权利而无法将更改的个人数据存入中心配置。";
+    Text[ chinese_traditional ] = "由於缺少存取權限，個人設定的變更無法集中儲存。 ";
+    Text[ turkish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ arabic ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ catalan ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+    Text[ thai ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
+};
+
+QueryBox QBX_CONFIG_IMPORTSETTINGS
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message = "Auf Ihrem Rechner wurden pers�nliche %PRODUCTNAME-Einstellungen gefunden. \n"
+              "M�chten Sie diese in die zentrale Konfiguration �bertragen, um weiter damit arbeiten zu k�nnen?" ;
+    Message[ ENGLISH ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n"
+                         "Would you like to transfer those settings to the central configuration in order to continue working with them?" ;
+    Message[ portuguese ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ russian ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ spanish ] = "Se ha detectado una configuraci�n personal de %PRODUCTNAME en el ordenador. \n�Desea transferir esta configuraci�n a la configuraci�n central para seguir trabajando con ella?";
+    Message[ italian ] = "Sono state rilevate impostazioni personalizzate di %PRODUCTNAME sul vostro computer.\nVolete trasferite le impostazioni alla configurazione centrale per continuare ad utilizzarle?";
+    Message[ swedish ] = "Personliga %PRODUCTNAME-inst�llningar har hittats p� din dator. \nVill du �verf�ra de h�r inst�llningarna till den centrala konfigurationen f�r att forts�tta att arbeta med dem?";
+    Message[ polish ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ portuguese_brazilian ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ japanese ] = "%PRODUCTNAME のユーザー設定がコンピュータで検出されました。\nこのユーザー設定を共通設定に転送して、その設定を使用しますか。";
+    Message[ korean ] = "사용자 고유 %PRODUCTNAME 설정 내용이 발견되었습니다.\n 이 설정 내용을 중앙 집중 설정으로 전송하면 이 설정으로 계속 작업하실 수 있습니다. 전송하시겠습니까?";
+    Message[ turkish ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ thai ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ english_us ] = "Personal %PRODUCTNAME settings have been detected on your computer. \nWould you like to transfer those settings to the central configuration in order to continue working with them?";
+    Message[ greek ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ dutch ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ french ] = "Des param�tres personnels %PRODUCTNAME ont �t� d�tect�s sur votre ordinateur.\nSouhaitez-vous les transf�rer dans la configuration centrale afin de pouvoir continuer � les appliquer ?";
+    Message[ finnish ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ danish ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ chinese_simplified ] = "发现电脑上已有一个个人的 %PRODUCTNAME 设定。\n您要将这些设定转移到中心配置，以继续使用它？";
+    Message[ chinese_traditional ] = "在您的電腦上偵測到個人的 %PRODUCTNAME 設定。 \n要傳送這些設定至集中配置以繼續使用嗎？";
+    Message[ arabic ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+    Message[ catalan ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
+};
+
+String STR_TITLE_CONFIG_MSGBOX
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ russian ] = "%PRODUCTNAME 6.0";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION ";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ catalan ] = "Hint";
 };
 
 
@@ -796,7 +1073,7 @@ String STR_WARNING_JAVADISABLED
     Text[ greek ] = "Java Support Disabled";
     Text[ dutch ] = "Java Support Disabled";
     Text[ french ] = "Support Java d�sactiv�";
-    Text[ spanish ] = "Soporte Java desactivado";
+    Text[ spanish ] = "Admisi�n de Java desactivada";
     Text[ finnish ] = "Java Support Disabled";
     Text[ italian ] = "Supporto Java disattivato";
     Text[ danish ] = "Java Support Disabled";
@@ -823,7 +1100,7 @@ String STR_WARNING_MISSINGJAVARUNTIME
     Text[ greek ] = "Unable to Locate JRE";
     Text[ dutch ] = "Unable to Locate JRE";
     Text[ french ] = "Impossible de d�tecter le JRE";
-    Text[ spanish ] = "Imposible localizar JRE (Java Runtime Environment)";
+    Text[ spanish ] = "Imposible localizar el JRE (Java Runtime Environment)";
     Text[ finnish ] = "Unable to Locate JRE";
     Text[ italian ] = "Impossibile trovare JRE (Java Runtime Environment)";
     Text[ danish ] = "Unable to Locate JRE";
@@ -921,37 +1198,136 @@ String STR_WARNING_CANNOTSTARTJAVALDX
     Text[ thai ] = "Could Not Start Java LDX";
 };
 
+String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
+{
+    Text = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator." ;
+    Text[ ENGLISH ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." ;
+    Text[ english_us ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." ;
+    Text[ portuguese ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ russian ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ spanish ] = "%PRODUCTNAME no se puede iniciar debido a un error producido al acceder a los datos de la configuraci�n de %PRODUCTNAME.\n\nContacte su administrador de sistema.";
+    Text[ italian ] = "Impossibile avviare %PRODUCTNAME a causa di un errore di accesso ai dati di configurazione.\n\nContattate il vostro amministratore di sistema.";
+    Text[ swedish ] = "%PRODUCTNAME kunde inte startas d�rf�r att det inte g�r att komma �t %PRODUCTNAME-konfigurationsdata.\n\nV�nd dig till din systemadministrat�r.";
+    Text[ polish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ japanese ] = "%PRODUCTNAME 設定データへのアクセスにエラーが生じたため、%PRODUCTNAME を起動することができません。\n\nシステム管理者に連絡してください。";
+    Text[ korean ] = "%PRODUCTNAME의 설정 데이터에 액세스 하는 중 오류가 발생했습니다. %PRODUCTNAME을(를) 시작할 수 없습니다.\n\n시스템 관리자에게 문의하십시오.";
+    Text[ turkish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ thai ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ greek ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ dutch ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ french ] = "Impossible de d�marrer %PRODUCTNAME : une erreur s'est produite lors de l'acc�s aux donn�es de configuration %PRODUCTNAME.\n\nVeuillez contacter votre administrateur syst�me.";
+    Text[ finnish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ danish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 无法启动，原因是存取 %PRODUCTNAME 配置数据时发生错误。\n\n请您与系统管理员联系。";
+    Text[ chinese_traditional ] = "由於存取 %PRODUCTNAME 配置資料的錯誤，無法啟動 %PRODUCTNAME。\n\n請和系統管理員聯絡。";
+    Text[ arabic ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+    Text[ catalan ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
+};
+
+String STR_INTERNAL_ERRMSG
+{
+    Text = "Folgender interner Fehler ist aufgetreten: " ;
+    Text[ ENGLISH ] = "The following internal error has occured: " ;
+    Text[ english_us ] = "The following internal error has occurred: " ;
+    Text[ portuguese ] = "The following internal error has occured: ";
+    Text[ russian ] = "The following internal error has occured: ";
+    Text[ spanish ] = "Se ha producido el error interno siguiente: ";
+    Text[ italian ] = "Si � verficato il seguente errore interno: ";
+    Text[ swedish ] = "F�ljande interna fel har uppst�tt: ";
+    Text[ polish ] = "The following internal error has occured: ";
+    Text[ portuguese_brazilian ] = "The following internal error has occured: ";
+    Text[ japanese ] = "次の内部エラーが発生しました: ";
+    Text[ korean ] = "다음과 같은 내부적 오류가 발생했습니다:";
+    Text[ turkish ] = "The following internal error has occured: ";
+    Text[ thai ] = "The following internal error has occured: ";
+    Text[ greek ] = "The following internal error has occured: ";
+    Text[ dutch ] = "The following internal error has occured: ";
+    Text[ french ] = "Erreur interne : ";
+    Text[ finnish ] = "The following internal error has occured: ";
+    Text[ danish ] = "The following internal error has occured: ";
+    Text[ chinese_simplified ] = "发生了以下的内部错误：";
+    Text[ chinese_traditional ] = "發生以下內部錯誤： ";
+    Text[ arabic ] = "The following internal error has occured: ";
+    Text[ catalan ] = "The following internal error has occured: ";
+};
+
 QueryBox QBX_USERDATALOCKED
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message =
-        "Eine andere Instanz von %PRODUCTNAME greift auf Ihre pers�nlichen Einstellungen zu\n"\
-        "oder hat diese nicht wieder freigegeben.\n"\
-        "Der gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren pers�nlichen Einstellungen f�hren.\n"\
-        "Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom\n"\
-        "Benutzer '$u' beendet wird.\n"\
-        "\n"\
-        "M�chten Sie wirklich fortfahren?";
-    Message[ ENGLISH ] =
-        "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal\n"\
-        "settings are locked.\n"\
-        "Simultaneous access can lead to inconsistencies in your personal settings. Before continuing,\n"\
-        "you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n"\
-        "\n"\
-        "Do you really want to continue?";
+    Message = "Eine andere Instanz von %PRODUCTNAME greift auf Ihre pers�nlichen Einstellungen zu "
+    "oder hat diese nicht wieder freigegeben.\n"
+    "Der gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren pers�nlichen Einstellungen f�hren. "
+    "Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom "
+    "Benutzer '$u' beendet wird.\n"
+    "\n"
+    "M�chten Sie wirklich fortfahren?";
+    Message[ ENGLISH ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal "
+    "settings are locked.\n"
+    "Simultaneous access can lead to inconsistencies in your personal settings. "
+    "Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n"
+    "\n"
+    "Do you really want to continue?";
+    Message[ english_us ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ portuguese ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ russian ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ greek ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ dutch ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ french ] = "Une autre instance de %PRODUCTNAME a acc�s � vos param�tres personnels ou les bloque.\nUn acc�s simultan� peut provoquer des incoh�rences dans vos param�tres personnels. Avant de continuer, assurez-vous que l'utilisateur '$u' quitte bien %PRODUCTNAME sur l'h�te '$h'.\n\n�tes-vous s�r de vouloir continuer ?";
+    Message[ spanish ] = "Otra instancia de %PRODUCTNAME est� accediendo a su configuraci�n personal o la configuraci�n personal est� bloqueada.\nUn acceso simult�neo puede provocar incoherencias en la configuraci�n personal. Antes de continuar aseg�rese de que el usuario '$u' cierre %PRODUCTNAME en el ordenador '$h'.\n\n�Est� seguro de desear continuar?";
+    Message[ finnish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ italian ] = "Un'altra istanza di %PRODUCTNAME ha accesso alle impostazioni personalizzate oppure le impostazioni personalizzate sono bloccate.\\L'accesso simultaneo pu� causare incongruenze alle impostazioni. Prima di procedere assicuratevi che l'utente '$u' chiuda %PRODUCTNAME sul computer host '$h'.\n\nVolete procedere comunque?";
+    Message[ danish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ swedish ] = "Antingen har en annan instans av %PRODUCTNAME tillg�ng till dina personliga inst�llningar eller s� har den inte frigjort dem igen.\nSamtidig �tkomst kan leda till att dina personliga inst�llningar blir inkonsekventa. Innan du forts�tter b�r du se till att anv�ndaren '$u' st�nger %PRODUCTNAME p� v�rden '$h'.\n\nVill du verkligen forts�tta?";
+    Message[ polish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ portuguese_brazilian ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ japanese ] = "%PRODUCTNAME の別のインスタンスがユーザー設定にアクセスしているか、ユーザー設定がロックされています。\nアクセスが同時に行われていると、ユーザー設定に不一致が生じることがあります。続行する前に、ユーザー「$u」がホスト「$h」の %PRODUCTNAME を閉じていることを確認してください。\n\n処理を続行しますか。";
+    Message[ korean ] = "%PRODUCTNAME의 다른 인스턴스가 사용자 임의 설정에 액세스 중이거나 설정이 잠겨있습니다.\n동시 다발적인 액세스로 인하여 사용자 임의 설정 내용의 일관성에 문제가 생길 수 있습니다. 계속 실행하기 전에 사용자 '$u'가(이) %PRODUCTNAME을(를) '$h' 호스트로 닫는 지를 확인하셔야 합니다.\n\n계속 진행하시겠습니까?";
+    Message[ chinese_simplified ] = "%PRODUCTNAME 的另外一个实例正在存取您的个人设定或没有释放您的设定。\n同时存取个人设定会造成数据的不统一。请您确定使用者 '$u' 关闭主机 '$h' 上运行的 %PRODUCTNAME 。\n\n您真的继续？";
+    Message[ chinese_traditional ] = "可能有另一個 %PRODUCTNAME 正在存取您的個人設定，或個人設定被鎖定。\n同時存取可能會導致個人設定的不一致。在繼續前，應該確認使用者 '$u' 關閉了主機 '$h' 上的 %PRODUCTNAME。\n\n真的要繼續？";
+    Message[ turkish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ arabic ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ catalan ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Message[ thai ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
 };
 
 String STR_TITLE_USERDATALOCKED
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION ";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ catalan ] = "Hint";
+    Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
+};
+
+InfoBox INFOBOX_CMDLINEHELP
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message = "";
 };
 
 ModalDialog DLG_CMDLINEHELP
 {
     Text = "Help Message...";
-    Size = MAP_APPFONT(250, 320);
+    Size = MAP_APPFONT(250, 335);
     Border = True;
     SVLook = True;
     Moveable = True;
@@ -964,27 +1340,63 @@ ModalDialog DLG_CMDLINEHELP
     };
     FixedText TXT_DLG_CMDLINEHELP_LEFT
     {
-        Size = MAP_APPFONT(50, 145);
-        Pos = MAP_APPFONT(5, 55);
+        Size = MAP_APPFONT(50, 150);
+        Pos = MAP_APPFONT(5, 50);
         Text = "LEFT";
     };
     FixedText TXT_DLG_CMDLINEHELP_RIGHT
     {
-        Size = MAP_APPFONT(190, 145);
-        Pos = MAP_APPFONT(60, 55);
+        Size = MAP_APPFONT(190, 150);
+        Pos = MAP_APPFONT(60, 50);
         Text = "RIGHT";
     };
     FixedText TXT_DLG_CMDLINEHELP_BOTTOM
     {
-        Size = MAP_APPFONT(240, 100);
-        Pos = MAP_APPFONT(5, 195);
+        Size = MAP_APPFONT(240, 105);
+        Pos = MAP_APPFONT(5, 200);
         Text = "BOTTOM";
     };
     OKButton BTN_DLG_CMDLINEHELP_OK
     {
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Pos = MAP_APPFONT(95, 300);
+        Pos = MAP_APPFONT(95, 315);
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
 };
+
+InfoBox INFOBOX_EXPIRED
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message = "Diese Evaluationsversion ist abgelaufen. Informationen rund um %PRODUCTNAME\nerhalten Sie unter www.sun.com/%PRODUCTNAME.";
+       Message[ ENGLISH ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ english_us ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ french ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ spanish ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ italian ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ swedish ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ japanese ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ korean ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ chinese_simplified ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+    Message[ chinese_traditional ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
+};
+
+String STR_TITLE_EXPIRED
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
+};
+
+
+
+

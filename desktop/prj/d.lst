@@ -2,6 +2,8 @@ mkdir: %_DEST%\bin%_EXT%\local
 mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.bin
+..\%__SRC%\bin\so\soffice.exe %_DEST%\bin%_EXT%\so\soffice.exe
+..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\soremote.exe %_DEST%\bin%_EXT%\remote\soffice.exe
 ..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\soffice.exe
 
@@ -14,14 +16,20 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\jvmsetup.exe
 
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
+..\%__SRC%\bin\*.exe.manifest %_DEST%\bin%_EXT%\*.exe.manifest
 ..\%__SRC%\bin\wrp?????.dll %_DEST%\bin%_EXT%\wrp?????.dll
+..\%__SRC%\bin\spl?????.dll %_DEST%\bin%_EXT%\spl?????.dll
 ..\%__SRC%\bin\eval.dll %_DEST%\bin%_EXT%\eval.dll
 ..\%__SRC%\lib\libwrp?????.so %_DEST%\lib%_EXT%\libwrp?????.so
-..\%__SRC%\lib\libdsk?????.so %_DEST%\lib%_EXT%\libdsk?????.so
 ..\%__SRC%\lib\libwrp*.dylib %_DEST%\lib%_EXT%\libwrp*.dylib
+..\%__SRC%\lib\libspl?????.so %_DEST%\lib%_EXT%\libspl?????.so
+..\%__SRC%\lib\libspl*.dylib %_DEST%\lib%_EXT%\libspl*.dylib
 ..\%__SRC%\lib\libeval.so %_DEST%\lib%_EXT%\libeval.so
+..\%__SRC%\bin\offacc?????.dll %_DEST%\bin%_EXT%\offacc?????.dll
+..\%__SRC%\lib\liboffacc?????.so %_DEST%\lib%_EXT%\liboffacc?????.so
 
 ..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
+..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 
@@ -37,6 +45,23 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
+
+..\%__SRC%\misc\soffice.sh %_DEST%\bin%_EXT%\soffice
+..\%__SRC%\misc\sagenda.sh %_DEST%\bin%_EXT%\sagenda
+..\%__SRC%\misc\scalc.sh %_DEST%\bin%_EXT%\scalc
+..\%__SRC%\misc\sdraw.sh %_DEST%\bin%_EXT%\sdraw
+..\%__SRC%\misc\sfax.sh %_DEST%\bin%_EXT%\sfax
+..\%__SRC%\misc\simpress.sh %_DEST%\bin%_EXT%\simpress
+..\%__SRC%\misc\slabel.sh %_DEST%\bin%_EXT%\slabel
+..\%__SRC%\misc\sletter.sh %_DEST%\bin%_EXT%\sletter
+..\%__SRC%\misc\smaster.sh %_DEST%\bin%_EXT%\smaster
+..\%__SRC%\misc\smath.sh %_DEST%\bin%_EXT%\smath
+..\%__SRC%\misc\smemo.sh %_DEST%\bin%_EXT%\smemo
+..\%__SRC%\misc\svcard.sh %_DEST%\bin%_EXT%\svcard
+..\%__SRC%\misc\sweb.sh %_DEST%\bin%_EXT%\sweb
+..\%__SRC%\misc\swriter.sh %_DEST%\bin%_EXT%\swriter
+..\%__SRC%\misc\fromTemplate.sh %_DEST%\bin%_EXT%\fromtemplate
+..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"

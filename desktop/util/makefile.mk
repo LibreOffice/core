@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hro $ $Date: 2002-11-22 14:26:36 $
+#   last change: $Author: hr $ $Date: 2003-03-25 13:52:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,27 @@ GEN_HID=TRUE
 
 VERINFONAME=verinfo
 
+TARGETOBJS=   $(OBJ)$/app.obj					\
+            $(OBJ)$/lockfile.obj			\
+            $(OBJ)$/intro.obj				\
+            $(OBJ)$/officeipcthread.obj		\
+            $(OBJ)$/appinit.obj				\
+            $(OBJ)$/cmdlineargs.obj			\
+            $(OBJ)$/oinstanceprovider.obj	\
+            $(OBJ)$/opluginframefactory.obj	\
+            $(OBJ)$/appsys.obj				\
+            $(OBJ)$/desktopresid.obj		\
+            $(OBJ)$/dispatchwatcher.obj		\
+            $(OBJ)$/ssodlg.obj				\
+            $(OBJ)$/ssoinit.obj				\
+            $(OBJ)$/configinit.obj				\
+            $(OBJ)$/javainteractionhandler.obj	\
+            $(OBJ)$/oempreload.obj			\
+            $(OBJ)$/testtool.obj			\
+            $(OBJ)$/checkinstall.obj		\
+            $(OBJ)$/cmdlinehelp.obj
+
+
 # --- Resourcen ----------------------------------------------------
 
 .IF "$(GUI)" == "WNT"
@@ -96,13 +117,11 @@ APP1_STDPOST=
 RESLIB1NAME=		dkt
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 
-APP1TARGET=$(TARGET)
-
+APP1TARGET=so$/$(TARGET)
 APP1STDLIBS=			\
     $(APP1_STDPRE)		\
     $(SVLLIB)			\
     $(SVMEMLIB)			\
-    $(ONELIB)			\
     $(VCLLIB)			\
     $(APP1_STDPOST)		\
     $(UNOTOOLSLIB)		\
@@ -110,111 +129,69 @@ APP1STDLIBS=			\
     $(COMPHELPERLIB)	\
     $(SALHELPERLIB)		\
     $(SVTOOLLIB)
+APP1OBJS=$(TARGETOBJS)
+APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
 
-.IF "$(OS)" == "SOLARIS"
-APP1STDLIBS+= -ldoor
+.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "MACOSX"
+APP1OBJS +=	$(OBJ)$/icon_resource_sun.obj
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX"
-
 APP1STDLIBS+= -lXext -lSM -lICE
-
 .ENDIF
 .ENDIF
 
-APP1DEPN= \
-        $(APP1RES) \
-        verinfo.rc
-
-APP1OBJS= \
-            $(OBJ)$/app.obj					\
-            $(OBJ)$/lockfile.obj					\
-            $(OBJ)$/intro.obj				\
-            $(OBJ)$/officeipcthread.obj		\
-            $(OBJ)$/appinit.obj				\
-            $(OBJ)$/cmdlineargs.obj			\
-            $(OBJ)$/pluginacceptthread.obj	\
-            $(OBJ)$/officeacceptthread.obj	\
-            $(OBJ)$/oinstanceprovider.obj	\
-            $(OBJ)$/opluginframefactory.obj	\
-            $(OBJ)$/appsys.obj				\
-            $(OBJ)$/desktopresid.obj	\
-            $(OBJ)$/dispatchwatcher.obj		\
-            $(OBJ)$/ssodlg.obj				\
-            $(OBJ)$/ssoinit.obj				\
-            $(OBJ)$/configinit.obj			\
-            $(OBJ)$/officeipcmanager.obj	\
-            $(OBJ)$/javainteractionhandler.obj	\
-            $(OBJ)$/oempreload.obj			\
-            $(OBJ)$/testtool.obj			\
-            $(OBJ)$/checkinstall.obj
-
+APP1DEPN= $(APP1RES) verinfo.rc
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
 APP1RES=    $(RES)$/desktop.res
-
 APP1ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
 APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET).res
+
+# create a manifest file with the same name as the
+#office executable file soffice.exe.manifest
+#$(BIN)$/$(TARGET).exe.manifest: template.manifest
+#+$(COPY) $< $@ 
+   
 .ENDIF
-
-
-
 
 .IF "$(GUI)" == "WNT"
 
-APP2DEPN= \
-        $(APP2RES) \
-        verinfo.rc
-
+APP2DEPN= $(APP2RES) verinfo.rc
 APP2NOSAL=TRUE
 APP2TARGET=sowrapper
-
 APP2STDLIBS+=shell32.lib
-
-APP2OBJS= \
-                $(OBJ)$/sowrapper.obj \
+APP2OBJS=       $(OBJ)$/sowrapper.obj \
                 $(OBJ)$/wrapperw.obj \
                 $(OBJ)$/wrappera.obj
-
 APP2RES=    $(RES)$/$(APP2TARGET).res
 APP2ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
 APP2VERINFO=verinfo.rc
 APP2LINKRES=$(MISC)$/$(APP2TARGET).res
 
 
-APP3DEPN= \
-        $(APP3RES) \
-        verinfo.rc
-
+APP3DEPN= $(APP3RES) verinfo.rc
 APP3NOSAL=TRUE
 APP3TARGET=solocal
-
 APP3STDLIBS+=shell32.lib
-
 APP3OBJS= \
                 $(OBJ)$/sowrapper.obj \
                 $(OBJ)$/lwrapw.obj \
                 $(OBJ)$/lwrapa.obj
-
 APP3RES=    $(RES)$/$(APP3TARGET).res
 APP3ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
 APP3VERINFO=verinfo.rc
 APP3LINKRES=$(MISC)$/$(APP3TARGET).res
 
-
-
-APP4DEPN= \
-        $(APP4RES) \
-        verinfo.rc
-
+APP4DEPN= $(APP4RES) verinfo.rc
 APP4NOSAL=TRUE
 APP4TARGET=soremote
-
 APP4STDLIBS+=shell32.lib
-
 APP4OBJS= \
                 $(OBJ)$/sowrapper.obj \
                 $(OBJ)$/rwrapw.obj \
@@ -224,57 +201,52 @@ APP4RES=    $(RES)$/$(APP4TARGET).res
 APP4ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
 APP4VERINFO=verinfo.rc
 APP4LINKRES=$(MISC)$/$(APP4TARGET).res
+.ENDIF # "$(GUI)" == "WNT"
 
-.ENDIF
 
-.IF "$(OS)" == "SOLARIS"
-
-SLOFILES =	\
-    $(SLO)$/app.obj			\
-    $(SLO)$/lockfile.obj		\
-    $(SLO)$/intro.obj		\
-    $(SLO)$/officeipcthread.obj	\
-    $(SLO)$/appinit.obj		\
-    $(SLO)$/cmdlineargs.obj		\
-    $(SLO)$/pluginacceptthread.obj	\
-    $(SLO)$/officeacceptthread.obj	\
-    $(SLO)$/oinstanceprovider.obj	\
-    $(SLO)$/opluginframefactory.obj	\
-    $(SLO)$/appsys.obj		\
-    $(SLO)$/desktopresid.obj	\
-    $(SLO)$/dispatchwatcher.obj	\
-    $(SLO)$/ssodlg.obj				\
-    $(SLO)$/ssoinit.obj			\
-    $(SLO)$/configinit.obj			\
-    $(SLO)$/officeipcmanager.obj	\
-    $(SLO)$/javainteractionhandler.obj	\
-    $(SLO)$/oempreload.obj			\
-    $(SLO)$/testtool.obj			\
-    $(SLO)$/checkinstall.obj
-
-SHL1OBJS=	$(SLOFILES)
-SHL1TARGET=	dsk$(UPD)$(DLLPOSTFIX)
-
-SHL1IMPLIB= idsk
-SHL1STDLIBS=    \
-    $(SALLIB)		\
-    $(VOSLIB)		\
-    $(TOOLSLIB)		\
-    $(CPPULIB)		\
-    $(CPPUHELPERLIB) 	\
-    $(SVLLIB) 		\
-    $(VCLLIB)		\
+APP5TARGET=soffice
+APP5STDLIBS=			\
+    $(APP1_STDPRE)		\
+    $(SVLLIB)			\
+    $(SVMEMLIB)			\
+    $(VCLLIB)			\
+    $(APP1_STDPOST)		\
     $(UNOTOOLSLIB)		\
     $(UCBHELPERLIB)		\
     $(COMPHELPERLIB)	\
     $(SALHELPERLIB)		\
     $(SVTOOLLIB)
+APP5OBJS=$(TARGETOBJS)
+APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
 
-SHL1STDLIBS+=	-ldoor
-SHL1DEPN=       makefile.mk
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+.IF "$(GUI)" == "UNX"
+.IF "$(OS)" != "MACOSX"
+APP5OBJS +=	$(OBJ)$/icon_resource_ooo.obj
+.ENDIF
+.ENDIF
 
-DEF1NAME=       $(SHL1TARGET)
+.IF "$(OS)" == "LINUX"
+APP5STDLIBS+= -lXext -lSM -lICE
+.ENDIF
+
+APP5DEPN= $(APP1RES) verinfo.rc
+APP5DEF=    $(MISCX)$/$(TARGET).def
+
+.IF "$(GUI)" == "WNT"
+APP5RES=    $(RES)$/desktop.res
+APP5ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
+APP5VERINFO=verinfo.rc
+APP5LINKRES=$(MISC)$/ooffice.res
+.ENDIF
+
+
+
+all: $(BIN)$/so ALLTAR
+
+.IF "$(GUI)" == "WNT"
+
+ALLTAR: $(BIN)$/$(TARGET).exe.manifest
+
 .ENDIF
 
 # --- Targets -------------------------------------------------------------
@@ -283,9 +255,17 @@ DEF1NAME=       $(SHL1TARGET)
 
 .IF "$(GUI)" == "WNT"
 
+# create a manifest file with the same name as the
+#office executable file soffice.exe.manifest
+$(BIN)$/$(TARGET).exe.manifest: template.manifest
+   +$(COPY) $< $@ 
+   
 $(MISCX)$/$(APP1TARGET).def : makefile.mk
     echo  NAME			soffice								>$@
     echo  DESCRIPTION   'StarDesktop Version 5'           >>$@
     echo  DATA			READ WRITE NONSHARED		   >>$@
 .ENDIF
 
+$(BIN)$/so: makefile.mk
+    @echo APP5 : $(APP5TARGET)
+    @+-mkdir $(BIN)$/so

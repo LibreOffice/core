@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: lo $ $Date: 2002-11-06 14:31:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,10 @@
  *
  ************************************************************************/
 
+#include <algorithm>
+
 #include "app.hxx"
 #include "cmdlineargs.hxx"
-#include "officeacceptthread.hxx"
 
 #ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -75,6 +76,10 @@
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -103,6 +108,9 @@
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _RTL_BOOTSTRAP_HXX_
+#include <rtl/bootstrap.hxx>
 #endif
 #ifndef _COMPHELPER_REGPATHHELPER_HXX_
 #include <comphelper/regpathhelper.hxx>
@@ -244,6 +252,27 @@ Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
+    OUString aUserDir;
+    if ( GetCommandLineArgs()->GetUserDir( aUserDir ))
+    {
+        OUString aUserDirURL;
+
+        if ( osl::FileBase::getFileURLFromSystemPath( aUserDir, aUserDirURL ) == 0 )
+        {
+            // now must be a valid file URL. For best results make absolute using
+            OUString aProcessWorkDirURL;
+
+            oslProcessError nProcessError = osl_getProcessWorkingDir( &aProcessWorkDirURL.pData );
+            if ( nProcessError == osl_Process_E_None )
+            {
+                osl::FileBase::getAbsoluteFileURL( aProcessWorkDirURL, aUserDirURL, aUserDirURL );
+
+                // now override the bootstrap setting:
+                rtl::Bootstrap::set( OUString::createFromAscii( "UserInstallation" ), aUserDirURL );
+            }
+        }
+    }
+
     try
     {
         Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
@@ -312,9 +341,8 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
     if ( conDcp.getLength() > 0 )
     {
         // accept incoming connections (scripting and one rvp)
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OOfficeAcceptorThread::OOfficeAcceptorThread" );
-        pOfficeAcceptThread = new OOfficeAcceptorThread( xSMgr, conDcp, bHeadlessMode, aClientDisplay, aUserDir );
-        pOfficeAcceptThread->create();
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) desktop::Desktop::createAcceptor()" );
+        createAcceptor(conDcp);
     }
 
     // improves parallel processing on Sun ONE Webtop
@@ -358,17 +386,95 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
     CreateTemporaryDirectory();
 }
 
+AcceptorMap     Desktop::m_acceptorMap;
+osl::Mutex          Desktop::m_mtxAccMap;
+static sal_Bool bAccept = sal_False;
+
+void Desktop::createAcceptor(const OUString& aAcceptString)
+{
+    // make sure nobody adds an acceptor whle we create one...
+    osl::MutexGuard aGuard(m_mtxAccMap);
+    // check whether the requested acceptor already exists
+    AcceptorMap::const_iterator pIter = m_acceptorMap.find(aAcceptString);
+    if (pIter == m_acceptorMap.end() ) {
+
+        Sequence< Any > aSeq( 2 );
+        aSeq[0] <<= aAcceptString;
+        aSeq[1] <<= bAccept;
+        Reference<XInitialization> rAcceptor(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+            OUString::createFromAscii( "com.sun.star.office.Acceptor" )), UNO_QUERY );
+        if ( rAcceptor.is() ) {
+            try{
+                rAcceptor->initialize( aSeq );
+                m_acceptorMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
+            } catch (com::sun::star::uno::Exception&) {
+            // no error handling needed...
+            // acceptor just won't come up
+            OSL_ENSURE(sal_False, "Acceptor could not be created.");
+        }
+    } else {
+        // there is already an acceptor with this description
+        OSL_ENSURE(sal_False, "Acceptor already exists.");
+    }
+
+    }
+}
+
+class enable
+{
+    private:
+    Sequence<Any> m_aSeq;
+    public:
+    enable() : m_aSeq(1) {
+        m_aSeq[0] <<= sal_True;
+    }
+    void operator() (const AcceptorMap::value_type& val) {
+        if (val.second.is()) {
+            val.second->initialize(m_aSeq);
+        }
+    }
+};
+
+void Desktop::enableAcceptors()
+{
+    RTL_LOGFILE_CONTEXT(aLog, "desktop (lo119109) Desktop::enableAcceptors");
+    osl::MutexGuard aGuard(m_mtxAccMap);
+    if (!bAccept)
+    {
+        // from now on, all new acceptors are enabled
+        bAccept = sal_True;
+        // enable existing acceptors by calling initialize(true)
+        // on all existing acceptors
+        std::for_each(m_acceptorMap.begin(), m_acceptorMap.end(), enable());
+    }
+}
+
+void Desktop::destroyAcceptor(const OUString& aAcceptString)
+{
+    osl::MutexGuard aGuard(m_mtxAccMap);
+    // special case stop all acceptors
+    if (aAcceptString.compareToAscii("all") == 0) {
+        m_acceptorMap.clear();
+
+    } else {
+        // try to remove acceptor from map
+        AcceptorMap::const_iterator pIter = m_acceptorMap.find(aAcceptString);
+        if (pIter != m_acceptorMap.end() ) {
+            // remove reference from map
+            // this is the last reference and the acceptor will be destructed
+            m_acceptorMap.erase(aAcceptString);
+        } else {
+            OSL_ENSURE(sal_False, "Found no acceptor to remove");
+        }
+    }
+}
+
+
 void Desktop::DeregisterServices()
 {
-    if( pOfficeAcceptThread )
-    {
-        pOfficeAcceptThread->stopAccepting();
-#ifndef LINUX
-        Desktop::pOfficeAcceptThread->join();
-        delete pOfficeAcceptThread;
-#endif
-        pOfficeAcceptThread = 0;
-    }
+    // stop all acceptors by clearing the map
+    m_acceptorMap.clear();
 }
 
 void Desktop::CreateTemporaryDirectory()

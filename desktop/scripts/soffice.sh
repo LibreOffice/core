@@ -1,0 +1,238 @@
+#!/bin/sh
+#*************************************************************************
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
+#
+# STAR_PROFILE_LOCKING_DISABLED=1
+# export STAR_PROFILE_LOCKING_DISABLED
+#
+
+#
+# SAL_ENABLE_FILE_LOCKING=1
+# export SAL_ENABLE_FILE_LOCKING
+#
+
+# uncomment this to remote start soffice on hostname
+# SO_REMOTE_START=rsh
+# SO_REMOTE_APPLICATION=hostname:/fully_quallified_path/soffice
+
+# set -x
+
+# resolve installation directory
+sd_cwd="`pwd`"
+if [ -h "$0" ] ; then
+    sd_basename=`basename "$0"`
+     sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
+     sd_sub=`echo $sd_script | cut -f1 -d/`
+    if [ "$sd_sub" = ".." -a "$SO_MODE" = "" ]; then
+        SO_MODE="remote"
+    fi
+    cd "`dirname "$0"`"
+    cd "`dirname "$sd_script"`"
+else
+    cd "`dirname "$0"`"
+fi
+
+sd_prog="`pwd`"
+if [ "$SO_MODE" = "" ]; then
+    SO_MODE="local";
+fi
+export SO_MODE
+
+sd_progsub=$sd_prog/$SO_MODE
+
+cd ..
+sd_binary=`basename "$0"`".bin"
+sd_inst="`pwd`"
+
+# change back directory
+cd "$sd_cwd"
+
+# check if all required patches are installed
+if [ -x "$sd_prog/sopatchlevel.sh" ]; then
+    "$sd_prog/sopatchlevel.sh"
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+fi
+
+# set search path for shared libraries
+sd_platform=`uname -s`
+case $sd_platform in
+  SunOS)
+    LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:/usr/dt/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH
+    ;;
+
+  AIX)
+    LIBPATH="$sd_progsub":"$sd_prog":$LIBPATH
+    export LIBPATH
+    ;;
+
+  HP-UX)
+    SHLIB_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:$SHLIB_PATH
+    export SHLIB_PATH
+    ;;
+
+  IRIX*)
+    LD_LIBRARYN32_PATH=:"$sd_progsub":"$sd_prog":$LD_LIBRARYN32_PATH
+    export LD_LIBRARYN32_PATH
+    ;;
+
+  *)
+    LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH
+    ;;
+esac
+
+# extend the ld_library_path for java: javaldx checks the sofficerc for us
+java_ld_library_path=`"$sd_prog/javaldx" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"`
+if [ "$java_ld_library_path" != "" ] ; then
+    case $sd_platform in
+        AIX)
+            LIBPATH=${java_ld_library_path}:${LIBPATH}
+            ;;
+        HP-UX)
+            SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
+            ;;
+        IRIX*)
+            LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
+            ;;
+        *)
+            LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
+            ;;
+    esac
+fi
+
+# set java environment variables
+THREADS_TYPE=native_threads
+
+# misc. environment variables
+OPENOFFICE_MOZILLA_FIVE_HOME="$sd_inst/program"
+
+unset XENVIRONMENT
+
+export OPENOFFICE_MOZILLA_FIVE_HOME
+
+# uncomment line below to disable anti aliasing of fonts
+#SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
+
+# error message function
+err () {
+    echo "`basename $0`: $@" 1>&2
+    exit 1
+}
+
+#
+# parse command line arguments
+#
+
+plugin_mode=false
+for DUMMY in ${1+"$@"}
+do
+    case $1 in
+
+    ?display)
+        if [ $# -lt 2 ]; then
+            err "$1 option requires a display name"
+        fi
+        DISPLAY=$2
+        export DISPLAY
+        shift; shift
+        ;;
+    ?plugin)
+
+        plugin_mode=true
+        shift
+        ;;
+    *)
+        break;
+        ;;
+    esac
+done
+
+# start soffice by remote shell
+if [ "X${SO_REMOTE_START}" = "Xrsh" ]; then
+    remote_server=`echo ${SO_REMOTE_APPLICATION} | sed 's/:.*//g'`
+    remote_path=`echo ${SO_REMOTE_APPLICATION} | sed 's/.*://g'`
+    echo remote_server=\"${remote_server}\" remote_path=\"${remote_path}\"
+    if [ "X${DISPLAY}" = "X" ]; then
+        local_display=`uname -n`:0
+    else
+        local_display=${DISPLAY}
+    fi
+
+    if [ "X${remote_server}" != "X" -a "X${remote_path}" != "X" ]; then
+        rsh ${remote_server} ${remote_path} -norsh -display ${local_display}
+        exit 0
+    else
+        err "invalid rsh arguments host=\"$remote_server\", command=\"${remote_path}\""
+    fi
+fi
+
+# set path so that other apps can be started from soffice just by name
+PATH="$sd_prog":$PATH
+export PATH
+
+# execute soffice binary
+if [ "X${plugin_mode}" = "Xtrue" ]; then
+    SAL_IGNOREXERRORS=true
+    export SAL_IGNOREXERRORS
+    exec "$sd_prog/$sd_binary" -plugin "$@"
+else
+    exec "$sd_prog/$sd_binary" "$@"
+fi
+

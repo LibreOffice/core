@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 15:39:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bForceNewEvent  = sal_False;
 
     sal_Int32 nIndex = 0;
-
     do
     {
         ::rtl::OUString aArg    = aCmdLineString.getToken( 0, '|', nIndex );
@@ -208,7 +207,7 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
                     {
-                        // Print to default printer
+                        // open in viewmode
                         bOpenEvent      = sal_False;
                         bViewEvent      = sal_True;
                         bPrintEvent     = sal_False;
@@ -216,7 +215,6 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
                     }
-
                 }
                 else
                 {
@@ -231,6 +229,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         // handle this argument as a filename
                         if ( bOpenEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArgStr );
+                        else if ( bViewEvent )
+                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
                         else if ( bPrintEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArgStr );
                         else if ( bPrintToEvent )
@@ -239,8 +239,6 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArgStr );
                         else if ( bForceOpenEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArgStr );
-                        else if ( bViewEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
                     }
                 }
             }
@@ -266,6 +264,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-norestore" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NORESTORE, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nodefault" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_NODEFAULT, sal_True );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-bean" )) == sal_True )
@@ -310,9 +313,21 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOCKCHECK, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-help" ))
+        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
+        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELP, sal_True );
+        return sal_True;
+    }
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
+        return sal_True;
+    }
+    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-unaccept=" ))
+    {
+        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, aArgStr.Copy( 10 ) );
         return sal_True;
     }
     else if ( aArgStr.CompareIgnoreCaseToAscii( "-portal," ,
@@ -323,15 +338,12 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArgStr.Copy( 0, 7 ).EqualsIgnoreCaseAscii( "-userid" ))
     {
-        ::rtl::OUString aUserId = aArgStr;
-
-        sal_Int32 nPos = aUserId.indexOf( '[' );
-        sal_Int32 nEndpos = aUserId.lastIndexOf( ']' );
-        if( nPos != -1 && nEndpos != -1 )
+        if ( aArgStr.Len() > 8 )
         {
+            rtl::OUString aUserDir = aArgStr;
             AddStringListParam_Impl(
                 CMD_STRINGPARAM_USERDIR,
-                ::rtl::Uri::decode( aUserId.copy( nPos + 1, nEndpos - nPos - 1 ),
+                ::rtl::Uri::decode( aUserDir.copy( 8 ),
                                     rtl_UriDecodeWithCharset,
                                     RTL_TEXTENCODING_UTF8 ) );
         }
@@ -345,11 +357,6 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     else if ( aArgStr.Copy(0, 9).EqualsIgnoreCaseAscii( "-version=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArgStr.Copy( 15 ) );
-        return sal_True;
-    }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-master" )) == sal_True )
-    {
-        SetBoolParam_Impl( CMD_BOOLPARAM_MASTER, sal_True );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-writer" )) == sal_True )
@@ -420,8 +427,7 @@ sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nE
 
 void CommandLineArgs::ResetParamValues()
 {
-    int i;
-    for ( i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
+    for ( int i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
         m_aBoolParams[i] = sal_False;
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
@@ -459,12 +465,6 @@ void CommandLineArgs::SetStringParam( BoolParam eParam, const rtl::OUString& aNe
     m_aStrParams[eParam] = aNewValue;
 }
 
-sal_Bool CommandLineArgs::IsMaster() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_aBoolParams[ CMD_BOOLPARAM_MASTER ];
-}
-
 sal_Bool CommandLineArgs::IsMinimized() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -481,6 +481,12 @@ sal_Bool CommandLineArgs::IsNoRestore() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NORESTORE ];
+}
+
+sal_Bool CommandLineArgs::IsNoDefault() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_NODEFAULT ];
 }
 
 sal_Bool CommandLineArgs::IsBean() const
@@ -529,6 +535,12 @@ sal_Bool CommandLineArgs::IsNoLockcheck() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NOLOCKCHECK ];
+}
+
+sal_Bool CommandLineArgs::IsHelp() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELP ];
 }
 
 sal_Bool CommandLineArgs::IsWriter() const
@@ -593,6 +605,13 @@ sal_Bool CommandLineArgs::GetAcceptString( ::rtl::OUString& rPara ) const
     return m_aStrSetParams[ CMD_STRINGPARAM_ACCEPT ];
 }
 
+sal_Bool CommandLineArgs::GetUnAcceptString( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_UNACCEPT ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_UNACCEPT ];
+}
+
 sal_Bool CommandLineArgs::GetUserDir( ::rtl::OUString& rPara) const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -614,18 +633,18 @@ sal_Bool CommandLineArgs::GetOpenList( ::rtl::OUString& rPara) const
     return m_aStrSetParams[ CMD_STRINGPARAM_OPENLIST ];
 }
 
-sal_Bool CommandLineArgs::GetForceOpenList( ::rtl::OUString& rPara) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
-}
-
 sal_Bool CommandLineArgs::GetViewList( ::rtl::OUString& rPara) const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_VIEWLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_VIEWLIST ];
+}
+
+sal_Bool CommandLineArgs::GetForceOpenList( ::rtl::OUString& rPara) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_FORCEOPENLIST ];
 }
 
 sal_Bool CommandLineArgs::GetForceNewList( ::rtl::OUString& rPara) const

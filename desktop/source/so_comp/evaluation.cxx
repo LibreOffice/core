@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluation.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 09:43:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,14 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _TOOLS_RESMGR_HXX
+#include <tools/resmgr.hxx>
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
+#endif
+#include "../app/desktop.hrc"
+
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -266,8 +274,23 @@ rtl::OUString SAL_CALL SOEvaluation::getExactName( const rtl::OUString& rApproxi
 
     if ( bExpired )
     {
-        InfoBox aBox( NULL, aTitle );
-        aBox.Execute();
+        // get destop resource manager
+        ResMgr* pResMgr = ResMgr::CreateResMgr(
+                OString("dkt")+OString::valueOf((long int)SUPD));
+        InfoBox* pBox;
+        if(pResMgr != NULL){
+            pBox = new InfoBox( NULL, ResId(INFOBOX_EXPIRED, pResMgr));
+            String aText(ResId(STR_TITLE_EXPIRED, pResMgr));
+            pBox->SetText(aText);
+        } else {
+            pBox = new InfoBox( NULL, aTitle);
+        }
+
+        pBox->Execute();
+
+        delete pBox;
+        delete pResMgr;
+
         throw RuntimeException();
     }
 
@@ -280,11 +303,15 @@ Any SAL_CALL SOEvaluation::getMaterial() throw( RuntimeException )
     // Time bomb implementation. Return empty Any to do nothing or
     // provide a com::sun::star::util::Date with the time bomb date.
     Any a;
-/*
-    // Code for providing time bomb date!
-    com::sun::star::util::Date  aDate( 31, 03, 2003 );
+
+#ifdef TIMEBOMB
+    // Code for extracting/providing time bomb date!
+    int nDay   = TIMEBOMB % 100;
+    int nMonth = ( TIMEBOMB % 10000 ) / 100;
+    int nYear  = TIMEBOMB / 10000;
+    com::sun::star::util::Date  aDate( nDay, nMonth, nYear );
     a <<= aDate;
-*/
+#endif
     return a;
 }
 

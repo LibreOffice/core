@@ -2,12 +2,15 @@ dt	desktop	:	sc sd sw NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								get		-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL
-dt	desktop\jobs								get		-	all	dt_jobs NULL
+dt	desktop\jobs							get		-	all	dt_jobs NULL
 dt	desktop\res								get		-	all	dt_res NULL
-dt	desktop\source\app							nmake	-	all	dt_app NULL
-dt	desktop\source\offwrp							nmake	-	all	dt_offwrp NULL
-dt	desktop\source\so_comp							nmake	-	all	dt_so_comp NULL
-dt	desktop\win32\source							nmake	-	w	dt_wrapper NULL
-dt	desktop\source\javaldx							nmake	-	u	dt_javaldx NULL
-dt	desktop\source\pkgchk							nmake	-	all	dt_pkgchk NULL
-dt	desktop\util								nmake	-	all	dt_util dt_app dt_offwrp dt_so_comp dt_wrapper.w NULL
+dt	desktop\source\app						nmake	-	all	dt_app NULL
+dt	desktop\source\offwrp					nmake	-	all	dt_offwrp NULL
+dt	desktop\source\so_comp					nmake	-	all	dt_so_comp NULL
+dt	desktop\source\offacc					nmake	-	all	dt_offac NULL
+dt	desktop\source\splash                   nmake	-	all	dt_spl NULL
+dt	desktop\win32\source					nmake	-	w	dt_wrapper NULL
+dt	desktop\source\javaldx					nmake	-	u	dt_javaldx NULL
+dt	desktop\source\pkgchk					nmake	-	all	dt_pkgchk NULL
+dt	desktop\scripts 							nmake	-	u	dt_scripts NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app dt_offwrp dt_so_comp dt_spl dt_wrapper.w NULL

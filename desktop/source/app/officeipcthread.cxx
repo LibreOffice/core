@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 14:58:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,6 @@
 #include "dispatchwatcher.hxx"
 #include <stdio.h>
 
-#ifdef SOLARIS
-#include "officeipcmanager.hxx"
-#ifndef _VOS_SECURITY_HXX_
-#include <vos/security.hxx>
-#endif
-#endif
-
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -93,41 +86,16 @@
 #ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
 #endif
-#ifdef DEBUG
-#include <assert.h>
-#endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
 
 using namespace vos;
 using namespace rtl;
+using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-
-/* SHAME!!!
-#define TERMINATION_SEQUENCE "InternalIPC::TerminateThread"
-#define TERMINATION_LENGTH 28
-#define SHOW_SEQUENCE   "-show"
-#define SHOW_LENGTH     5
-*/
-
-namespace desktop
-{
-
-// Type of pipe we use
-enum PipeMode
-{
-    PIPEMODE_DONTKNOW,
-    PIPEMODE_CREATED,
-#ifdef SOLARIS
-     PIPEMODE_CONNECTED_TO_PARENT,
-#endif
-    PIPEMODE_CONNECTED
-};
-
-String GetURL_Impl( const String& rName );
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
@@ -136,11 +104,21 @@ const int OfficeIPCThread::sc_nShSeqLength = 5;
 const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
 const int OfficeIPCThread::sc_nCSeqLength = 27;
 
+// Type of pipe we use
+enum PipeMode
+{
+    PIPEMODE_DONTKNOW,
+    PIPEMODE_CREATED,
+    PIPEMODE_CONNECTED
+};
+
+namespace desktop
+{
+
+String GetURL_Impl( const String& rName );
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
-#ifndef SOLARIS
 OSecurity           OfficeIPCThread::maSecurity;
-#endif
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 
@@ -329,174 +307,6 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
     }
 }
 
-#ifdef SOLARIS
-OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
-                                            sal_Bool useParent )
-{
-    ::osl::MutexGuard   aGuard( GetMutex() );
-
-    if( pGlobalOfficeIPCThread )
-        return IPC_STATUS_OK;
-
-    ::rtl::OUString aOfficeInstallPath;
-    ::rtl::OUString aUserInstallPath;
-    ::rtl::OUString aLastIniFile;
-    ::rtl::OUString aDummy;
-
-    ::vos::OStartupInfo aInfo;
-    OfficeIPCThread* pThread = new OfficeIPCThread;
-
-    pThread->maPipeIdent = OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "SingleOfficeIPC_" ) );
-
-    // The name of the named pipe is created with the hashcode of the user
-    // installation directory (without /user). We have to retrieve
-    // this information from a unotools implementation.
-    ::utl::Bootstrap::PathStatus aLocateResult =
-        ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
-    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS )
-        aDummy = aUserInstallPath;
-    else
-    {
-        delete pThread;
-        return IPC_STATUS_BOOTSTRAP_ERROR;
-    }
-
-    // Try to determine if we are the first office or not! This should prevent
-    // multiple access to the user directory !
-    // First we try to create our pipe if this fails we try to connect. We have
-    // to do this in a loop because the the other office can crash or shutdown
-    // between createPipe and connectPipe!!
-    pThread->maPipeIdent = pThread->maPipeIdent +
-                           OUString::valueOf( (sal_Int32)aDummy.hashCode() );
-
-    PipeMode nPipeMode = PIPEMODE_DONTKNOW;
-    // Warning: Temporarily removed loop below until I have a better mechanism
-    // Try to create pipe
-    if ( pThread->maPipe.create(
-            pThread->maPipeIdent.getStr(),
-            OPipe::TOption_Open,
-            OSecurity() ) )
-    {
-        nPipeMode = PIPEMODE_CONNECTED;
-    }
-    else if ( useParent && OfficeIPCManager::ParentExists() )
-    {
-        nPipeMode = PIPEMODE_CONNECTED_TO_PARENT;
-    }
-    else if( pThread->maPipe.create(
-                pThread->maPipeIdent.getStr(),
-                OPipe::TOption_Create,
-                OSecurity() ) )
-    {
-        nPipeMode = PIPEMODE_CREATED;
-    }
-
-    if ( nPipeMode == PIPEMODE_CREATED )
-    {
-        // Seems we are the one and only, so start listening thread
-        pGlobalOfficeIPCThread = pThread;
-        pThread->create(); // starts thread
-    }
-    else
-    {
-        // Seems another office is running. Pipe arguments to it and self
-        // terminate
-        pThread->maStreamPipe = pThread->maPipe;
-
-        sal_Bool bWaitBeforeClose = sal_False;
-        ByteString aArguments;
-        ULONG nCount = aInfo.getCommandArgCount();
-
-        if ( nCount > 0 )
-        {
-            sal_Bool    bPrintTo = sal_False;
-            OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
-            for( ULONG i=0; i < nCount; i++ )
-            {
-                aInfo.getCommandArg( i, aDummy );
-                // Make absolute pathes from relative ones!
-                // It's neccessary to use current working directory of THESE
-                // office instance and not of
-                // currently running once, which get these information by using
-                // pipe.
-                // Otherwhise relativ pathes are not right for his environment ...
-                if( aDummy.indexOf('-',0) != 0 )
-                {
-                    bWaitBeforeClose = sal_True;
-                    if ( !bPrintTo )
-                        aDummy = GetURL_Impl( aDummy );
-                    bPrintTo = sal_False;
-                }
-                else if ( aDummy == OfficeIPCManager::GetDisplayArgument() )
-                {
-                    i ++;
-                    nCount -= 2;
-                    continue;
-                }
-                else if ( aDummy == OfficeIPCManager::GetMasterArgument() )
-                {
-                    continue;
-                }
-                else
-                {
-                    if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
-                        bPrintTo = sal_True;
-                    else
-                        bPrintTo = sal_False;
-                }
-
-                aArguments += ByteString( String( aDummy ),
-                                          osl_getThreadTextEncoding() );
-                aArguments += '|';
-            }
-        }
-
-        if ( nCount == 0 )
-        {
-            // Use default argument so the first office can distinguish between
-            // a real second
-            // office and another program that check the existence of the the
-            // pipe!!
-
-            aArguments += ByteString( "-show" );
-        }
-
-        if ( nPipeMode == PIPEMODE_CONNECTED_TO_PARENT )
-        {
-            OfficeIPCManager::SendParentRequest( aArguments.GetBuffer(),
-                                                 aArguments.Len() );
-        }
-        else
-        {
-            pThread->maStreamPipe.write( aArguments.GetBuffer(),
-                                         aArguments.Len() );
-
-            // write a NULL byte onto the pipe to mark end of transfer
-            pThread->maStreamPipe.write( "\0", 1 );
-
-            // wait for confirmation #95361# #95425#
-            ByteString aToken(sc_aConfirmationSequence);
-            char *aReceiveBuffer = new char[aToken.Len()+1];
-            int n = pThread->maStreamPipe.read( aReceiveBuffer, aToken.Len() );
-            aReceiveBuffer[n]='\0';
-            delete pThread;
-            if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
-                // something went wrong
-                return IPC_STATUS_BOOTSTRAP_ERROR;
-            } else {
-                delete aReceiveBuffer;
-                return IPC_STATUS_2ND_OFFICE;
-            }
-
-        }
-        delete pThread;
-        return IPC_STATUS_2ND_OFFICE;
-    }
-    return IPC_STATUS_OK;
-}
-#else // SOLARIS
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
     ::osl::MutexGuard   aGuard( GetMutex() );
@@ -615,8 +425,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         }
         // finaly, write the string onto the pipe
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
-
-        // write a NULL byte onto the pipe to mark end of transfer
         pThread->maStreamPipe.write( "\0", 1 );
 
         // wait for confirmation #95361# #95425#
@@ -624,8 +432,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         char *aReceiveBuffer = new char[aToken.Len()+1];
         int n = pThread->maStreamPipe.read( aReceiveBuffer, aToken.Len() );
         aReceiveBuffer[n]='\0';
-        delete pThread;
 
+        delete pThread;
         if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
             // something went wrong
             delete aReceiveBuffer;
@@ -638,8 +446,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     return IPC_STATUS_OK;
 }
-#endif // SOLARIS
-
 
 void OfficeIPCThread::DisableOfficeIPCThread()
 {
@@ -652,12 +458,8 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
-#ifdef SOLARIS
-        OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, OSecurity() );
-#else
         OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
-#endif
-        // Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
+        //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
         Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
 
         // close the pipe so that the streampipe on the other
@@ -712,10 +514,10 @@ void SAL_CALL OfficeIPCThread::run()
         OPipe::TPipeError
             nError = maPipe.accept( maStreamPipe );
 
+
         if( nError == OStreamPipe::E_None )
         {
             osl::ClearableMutexGuard aGuard( GetMutex() );
-
             ByteString aArguments;
             // test byte by byte
             const int nBufSz = 2048;
@@ -730,20 +532,19 @@ void SAL_CALL OfficeIPCThread::run()
                     break;
                 }
             }
+            // don't close pipe ...
 
             // #90717# Is this a lookup message from another application? if so, ignore
             if ( aArguments.Len() == 0 )
                 continue;
 
             // is this a termination message ? if so, terminate
-            if(( aArguments.CompareTo( sc_aTerminationSequence,
-                                        sc_nTSeqLength ) == COMPARE_EQUAL ) ||
-                mbBlockRequests )
-                return;
-
-            String              aEmpty;
-            CommandLineArgs     aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
-            CommandLineArgs*    pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
+            if(( aArguments.CompareTo( sc_aTerminationSequence, sc_nTSeqLength ) == COMPARE_EQUAL ) ||
+                    mbBlockRequests ) return;
+            String           aEmpty;
+            CommandLineArgs  aCmdLineArgs( OUString( aArguments.GetBuffer(),
+                aArguments.Len(), gsl_getSystemTextEncoding() ));
+            CommandLineArgs *pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
             if ( aCmdLineArgs.IsQuickstart() )
             {
@@ -754,12 +555,39 @@ void SAL_CALL OfficeIPCThread::run()
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
+            // handle request for acceptor
+            sal_Bool bAcceptorRequest = sal_False;
+            OUString aAcceptString;
+            if ( aCmdLineArgs.GetAcceptString(aAcceptString) ) {
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent( aEmpty, aEmpty,
+                                          "ACCEPT", aAcceptString );
+                ImplPostForeignAppEvent( pAppEvent );
+                bAcceptorRequest = sal_True;
+            }
+            // handle acceptor removal
+            OUString aUnAcceptString;
+            if ( aCmdLineArgs.GetUnAcceptString(aUnAcceptString) ) {
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent( aEmpty, aEmpty,
+                                         "UNACCEPT", aUnAcceptString );
+                ImplPostForeignAppEvent( pAppEvent );
+                bAcceptorRequest = sal_True;
+            }
+
+#ifndef UNX
+            // only in non-unix version, we need to handle a -help request
+            // in a running instance in order to display  the command line help
+            if ( aCmdLineArgs.IsHelp() ) {
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent( aEmpty, aEmpty, "HELP", aEmpty );
+                ImplPostForeignAppEvent( pAppEvent );
+            }
+#endif
+
             sal_Bool bDocRequestSent = sal_False;
             ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
-            /*
-            ::osl::Condition cProcessed;
-            pRequest->pcProcessed = & cProcessed;
-            */
+
             // Print requests are not dependent on the -invisible cmdline argument as they are
             // loaded with the "hidden" flag! So they are always checked.
             bDocRequestSent |= aCmdLineArgs.GetPrintList( pRequest->aPrintList );
@@ -799,7 +627,6 @@ void SAL_CALL OfficeIPCThread::run()
                 }
             }
 
-
             if ( bDocRequestSent )
              {
                 // Send requests to dispatch watcher if we have at least one. The receiver
@@ -812,14 +639,12 @@ void SAL_CALL OfficeIPCThread::run()
                 delete pRequest;
                 pRequest = NULL;
             }
-
-            if (( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
-                    !bDocRequestSent )
+            if ((( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
+                !bDocRequestSent ) && !bAcceptorRequest )
             {
                 // no document was sent, just bring Office to front
                 ApplicationEvent* pAppEvent =
-                    new ApplicationEvent( aEmpty, aEmpty,
-                                            "APPEAR", aEmpty );
+                        new ApplicationEvent( aEmpty, aEmpty, "APPEAR", aEmpty );
                 ImplPostForeignAppEvent( pAppEvent );
                 if (pRequest != NULL) pRequest->cProcessed.set();
             }
@@ -836,9 +661,9 @@ void SAL_CALL OfficeIPCThread::run()
             // now we can close, don't we?
             // maStreamPipe.close();
 
-        }
-        else
-        {
+    }
+    else
+    {
 #if defined DEBUG || defined DBG_UTIL
             fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
@@ -898,8 +723,10 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
 
         // Execute dispatch requests
         pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
-        // after execution, set condition in request
+
+        // set processed flag
         aRequest.cProcessed.set();
+
     }
 }
 

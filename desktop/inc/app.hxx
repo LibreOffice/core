@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: lo $ $Date: 2002-11-06 14:32:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _DESKTOP_APP_HXX_
 #define _DESKTOP_APP_HXX_
 
+// stl includes first
+#include <map>
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -69,12 +72,32 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _VCL_TIMER_HXX_
+#include <vcl/timer.hxx>
+#endif
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
 #endif
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+using namespace com::sun::star::task;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace rtl;
 
 namespace desktop
 {
@@ -83,10 +106,10 @@ namespace desktop
     Description:    Application-class
  --------------------------------------------------------------------*/
 class IntroWindow_Impl;
-class OOfficeAcceptorThread;
-class PluginAcceptThread;
 class CommandLineArgs;
 class Lockfile;
+class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
+
 class Desktop : public Application
 {
     public:
@@ -112,6 +135,9 @@ class Desktop : public Application
 
         static void             OpenClients();
         static void             OpenDefault();
+
+        DECL_LINK( EnableAcceptors_Impl, void*);
+
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*          GetDesktopResManager();
         static CommandLineArgs* GetCommandLineArgs();
@@ -138,7 +164,6 @@ class Desktop : public Application
         sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
         sal_Bool                InitializeConfiguration();
         sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
-        sal_Bool                InitializePluginMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                    StartSetup( const ::rtl::OUString& aParameters );
@@ -151,6 +176,7 @@ class Desktop : public Application
                                                       const ::rtl::OUString& aFileURL );
 
         void                    OpenStartupScreen();
+        Reference<XStatusIndicator> getSplashScreen();
         void                    CloseStartupScreen();
         void                    EnableOleAutomation();
         DECL_LINK(          AsyncInitFirstRun, void* );
@@ -164,6 +190,13 @@ class Desktop : public Application
         /// does initializations which are necessary for the first run of the office
         void                    DoFirstRunInitializations();
 
+        // on-demand acceptors
+        static AcceptorMap                  m_acceptorMap;
+        static osl::Mutex                   m_mtxAccMap;
+        static void                         createAcceptor(const OUString& aDescription);
+        static void                         enableAcceptors();
+        static void                         destroyAcceptor(const OUString& aDescription);
+
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
         USHORT                          m_nAppEvents;
@@ -171,10 +204,9 @@ class Desktop : public Application
         BootstrapError                  m_aBootstrapError;
 
         Lockfile *m_pLockfile;
+        Timer    m_firstRunTimer;
 
         static ResMgr*                  pResMgr;
-        static PluginAcceptThread*      pPluginAcceptThread;
-        static OOfficeAcceptorThread*   pOfficeAcceptThread;
 };
 
 }

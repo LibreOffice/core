@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-01 10:04:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
+#include <com/sun/star/util/CloseVetoException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
@@ -304,7 +310,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         {
             INetURLObject aObj( aName );
             if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
-                aTarget = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") );
+                aTarget = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
             // Set "AsTemplate" argument according to request type
             if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
@@ -364,9 +370,21 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 }
 
                 // remove the document
-                Reference < XComponent > xComp( xDoc, UNO_QUERY );
-                if ( xComp.is() )
-                    xComp->dispose();
+                try
+                {
+                    Reference < XCloseable > xClose( xDoc, UNO_QUERY );
+                    if ( xClose.is() )
+                        xClose->close( sal_True );
+                    else
+                    {
+                        Reference < XComponent > xComp( xDoc, UNO_QUERY );
+                        if ( xComp.is() )
+                            xComp->dispose();
+                    }
+                }
+                catch ( com::sun::star::util::CloseVetoException& )
+                {
+                }
 
                 // request is completed
                 OfficeIPCThread::RequestsCompleted( 1 );
