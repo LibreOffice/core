@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sigstruct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:08 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #include <rtl/ustring.hxx>
 
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
@@ -109,8 +113,11 @@ struct SignatureInformation
     rtl::OUString                   ouX509SerialNumber;
     rtl::OUString                   ouX509Certificate;
     rtl::OUString                   ouSignatureValue;
-    rtl::OUString                   ouDate;
-    rtl::OUString                   ouTime;
+
+    //rtl::OUString                   ouDate;
+    //rtl::OUString                   ouTime;
+    ::com::sun::star::util::DateTime stDateTime;
+
     rtl::OUString                   ouSignatureId;
     rtl::OUString                   ouPropertyId;
 

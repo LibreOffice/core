@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,56 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <xmlsecurity/biginteger.hxx>
 
+#include <rtl/ustrbuf.hxx>
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
+
+/** convert util::DateTime to ISO Date String */
+void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+    const com::sun::star::util::DateTime& rDateTime )
+{
+    String aString( String::CreateFromInt32( rDateTime.Year ) );
+    aString += '-';
+    if( rDateTime.Month < 10 )
+        aString += '0';
+    aString += String::CreateFromInt32( rDateTime.Month );
+    aString += '-';
+    if( rDateTime.Day < 10 )
+        aString += '0';
+    aString += String::CreateFromInt32( rDateTime.Day );
+
+    if( rDateTime.Seconds != 0 ||
+        rDateTime.Minutes != 0 ||
+        rDateTime.Hours   != 0 )
+    {
+        aString += 'T';
+        if( rDateTime.Hours < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Hours );
+        aString += ':';
+        if( rDateTime.Minutes < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Minutes );
+        aString += ':';
+        if( rDateTime.Seconds < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Seconds );
+        if ( rDateTime.HundredthSeconds > 0)
+        {
+            aString += ',';
+            if (rDateTime.HundredthSeconds < 10)
+                aString += '0';
+            aString += String::CreateFromInt32( rDateTime.HundredthSeconds );
+        }
+    }
+
+    rBuffer.append( aString );
+}
 
 ::rtl::OUString printHexString(cssu::Sequence< sal_Int8 > data)
 {
@@ -175,6 +223,14 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
             result += rtl::OUString::createFromAscii( "\n" );
         }
 
+           result += rtl::OUString::createFromAscii( "--Date :\n" );
+
+    ::rtl::OUStringBuffer buffer;
+    convertDateTime( buffer, infor.stDateTime );
+    result += buffer.makeStringAndClear();
+           result += rtl::OUString::createFromAscii( "\n" );
+
+        /*
         if (infor.ouDate.getLength()>0)
         {
             result += rtl::OUString::createFromAscii( "--Date :\n" );
@@ -188,6 +244,7 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
             result += infor.ouTime;
             result += rtl::OUString::createFromAscii( "\n" );
         }
+        */
 
         if (infor.ouX509IssuerName.getLength()>0 && infor.ouX509SerialNumber.getLength()>0 && xSecurityEnvironment.is())
         {
