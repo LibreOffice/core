@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-09-18 14:48:39 $
+ *  last change: $Author: oj $ $Date: 2002-10-11 11:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,6 +608,10 @@ IMPL_LINK( SwMailMergeDlg, ModifyHdl, NumericField *, pFld )
 
 void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
 {
+    if(pImpl->xSelSupp.is())
+    {
+        pImpl->xSelSupp->removeSelectionChangeListener(  pImpl->xChgLstnr );
+    }
     SwNewDBMgr* pMgr = rSh.GetNewDBMgr();
 
     if (aPrinterRB.IsChecked())
@@ -678,7 +682,7 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
         if(pImpl->xSelSupp.is())
         {
             //update selection
-            Reference< XRowLocate > xRowLocate(pImpl->xFController->getModel(),UNO_QUERY);
+            Reference< XRowLocate > xRowLocate(GetResultSet(),UNO_QUERY);
             Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
             pImpl->xSelSupp->getSelection() >>= m_aSelection;
             if ( xRowLocate.is() )
