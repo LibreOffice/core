@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomedia.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:00:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #ifndef _SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #endif
-
+#ifndef _AVMEDIA_MEDIAWINDOW_HXX
+#include <avmedia/mediawindow.hxx>
+#endif
 
 // ---------------
 // - SdrMediaObj -
@@ -178,7 +180,12 @@ void SdrMediaObj::operator=(const SdrObject& rObj)
     SdrRectObj::operator=( rObj );
 
     if( rObj.ISA( SdrMediaObj ) )
-        setMediaProperties( static_cast< const SdrMediaObj& >( rObj ).getMediaProperties() );
+    {
+        const SdrMediaObj& rMediaObj = static_cast< const SdrMediaObj& >( rObj );
+
+        setMediaProperties( rMediaObj.getMediaProperties() );
+        setGraphic( rMediaObj.mapGraphic.get() );
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -229,13 +236,34 @@ Size SdrMediaObj::getPreferredSize() const
 
 // ------------------------------------------------------------------------------
 
+const Graphic& SdrMediaObj::getGraphic() const
+{
+    if( !mapGraphic.get() )
+        const_cast< SdrMediaObj* >( this )->mapGraphic.reset( new Graphic( ::avmedia::MediaWindow::grabFrame( getURL(), true ) ) );
+
+    return *mapGraphic;
+}
+
+// ------------------------------------------------------------------------------
+
+void SdrMediaObj::setGraphic( const Graphic* pGraphic )
+{
+    mapGraphic.reset( pGraphic ? new Graphic( *pGraphic ) : NULL );
+}
+
+// ------------------------------------------------------------------------------
+
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
 {
     const sal_uInt32 nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own own properties
-    if( AVMEDIA_SETMASK_URL & nMaskSet )
+    if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
+        ( rNewProperties.getURL() != getURL() ) )
+    {
+        setGraphic();
         maMediaProperties.setURL( rNewProperties.getURL() );
+    }
 
     if( AVMEDIA_SETMASK_LOOP & nMaskSet )
         maMediaProperties.setLoop( rNewProperties.isLoop() );
