@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:59 $
+ *  last change: $Author: cl $ $Date: 2001-03-22 13:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,13 +118,20 @@ class SdGenericDrawPage : public SvxFmDrawPage,
 protected:
     friend class SdXImpressDocument;
 
-    SdPage* mpPage;
     SvxItemPropertySet  maPropSet;
     SdXImpressDocument* mpModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxModel;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw();
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
+
+    void SetLftBorder( sal_Int32 nValue );
+    void SetRgtBorder( sal_Int32 nValue );
+    void SetUppBorder( sal_Int32 nValue );
+    void SetLwrBorder( sal_Int32 nValue );
+
+    void SetWidth( sal_Int32 nWidth );
+    void SetHeight( sal_Int32 nHeight );
 
     sal_Bool mbHasBackgroundObject;
 
@@ -133,10 +140,10 @@ public:
     virtual ~SdGenericDrawPage() throw();
 
     // intern
-    void Invalidate() { mpPage = NULL; mpModel = NULL; mxModel = NULL; }
-    sal_Bool isValid() { return (mpPage != NULL) && (mpModel != NULL); }
+    void Invalidate() { pPage = NULL; mpModel = NULL; mxModel = NULL; }
+    sal_Bool isValid() { return (pPage != NULL) && (mpModel != NULL); }
 
-    SdPage* GetPage() const { return mpPage; }
+    SdPage* GetPage() const { return (SdPage*)pPage; }
     SdXImpressDocument* GetModel() const { return mpModel; }
 
     // this is called whenever a SdrObject must be created for a empty api shape wrapper
