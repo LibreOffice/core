@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:30 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,16 @@ interface XFrame: com::sun::star::lang::XComponent
         It's designed for initializing - not for setting.
         </p>
 
-        @param Window
+        <p>This frame will take over ownership of the window refered from
+        <var>xWindow</var>.  Thus, the previous owner is not allowed to
+        dispose this window anymore. </p>
+
+        @param xWindow
             the new container window
 
         @see XFrame::getContainerWindow()
      */
-    void initialize( [in] com::sun::star::awt::XWindow Window );
+    void initialize( [in] com::sun::star::awt::XWindow xWindow );
 
     //-------------------------------------------------------------------------
     /** provides access to the container window of the frame.
@@ -177,7 +181,7 @@ interface XFrame: com::sun::star::lang::XComponent
         That's why frame names shouldn't start with a sign "_".
         </p>
 
-        @param Name
+        @param aName
             the new programmatic name of this frame
 
         @see XFrame::findFrame()
@@ -185,7 +189,7 @@ interface XFrame: com::sun::star::lang::XComponent
         @see XDispatchProvider
         @see XComponentLoader
      */
-    [oneway] void setName( [in] string Name );
+    [oneway] void setName( [in] string aName );
 
     //-------------------------------------------------------------------------
     /** searches for a frame with the specified name.
@@ -219,20 +223,20 @@ interface XFrame: com::sun::star::lang::XComponent
         The new frame also gets the desired name.
         </p>
 
-        @param TargetFrameName
+        @param aTargetFrameName
             identify
             <ul><li>(a) a special target ("_blank","_self" ...) or</li>
                 <li>(b) any well known frame</li><ul>
             to search it inside the current hierarchy
 
-        @param SearchFlags
+        @param nSearchFlags
             optional parameter to regulate search if no special target was used for <var>TargetFrameName</var>
 
          @see FrameSearchFlag
          */
     XFrame findFrame(
-        [in] string TargetFrameName,
-        [in] long SearchFlags);
+        [in] string aTargetFrameName,
+        [in] long nSearchFlags);
 
     //-------------------------------------------------------------------------
     /** determines if the frame is a top frame.
@@ -303,14 +307,14 @@ interface XFrame: com::sun::star::lang::XComponent
     //-------------------------------------------------------------------------
     /** sets a new component into the frame or release an existing one from a frame.
 
-        @param ComponentWindow
+        @param xComponentWindow
             the window of the new component or <NULL/> for release
 
             <p>
             A valid component window should be a child of the frame container window.
             </p>
 
-        @param Controller
+        @param xController
             the controller of the new component or <NULL/> for release
 
             <p>
@@ -329,8 +333,8 @@ interface XFrame: com::sun::star::lang::XComponent
         @see XFrame::getController()
      */
     boolean setComponent(
-        [in] com::sun::star::awt::XWindow ComponentWindow,
-        [in] XController Controller);
+        [in] com::sun::star::awt::XWindow xComponentWindow,
+        [in] XController xController);
 
     //-------------------------------------------------------------------------
     /** provides access to the component window
@@ -393,22 +397,22 @@ interface XFrame: com::sun::star::lang::XComponent
         activation/deactivation of components.
         </p>
 
-        @param Listener
+        @param xListener
             specifies the listener which will be informed
 
         @see XFrame::removeFrameActionListener()
      */
-    [oneway] void addFrameActionListener( [in]XFrameActionListener Listener );
+    [oneway] void addFrameActionListener( [in]XFrameActionListener xListener );
 
     //-------------------------------------------------------------------------
     /** unregisters an event listener
 
-        @param Listener
+        @param xListener
             specifies the listener which willn't be informed any longer
 
         @see XFrame::addFrameActionListener()
      */
-    [oneway] void removeFrameActionListener( [in] XFrameActionListener Listener );
+    [oneway] void removeFrameActionListener( [in] XFrameActionListener xListener );
 };
 
 //=============================================================================
