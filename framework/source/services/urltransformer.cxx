@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:34:18 $
+ *  last change: $Author: as $ $Date: 2001-07-31 06:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,15 +195,15 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
     aURL.Password   = aParser.GetPass   ( INetURLObject::DECODE_WITH_CHARSET );
     aURL.Server     = aParser.GetHost   ( INetURLObject::DECODE_WITH_CHARSET );
     aURL.Port       = (sal_Int16)aParser.GetPort();
-    aURL.Path       = aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Path       = aParser.GetURLPath( INetURLObject::NO_DECODE           );
 //  aURL.Name       = aParser.GetName   (                                    );
-    aURL.Arguments  = aParser.GetParam  ( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Arguments  = aParser.GetParam  ( INetURLObject::NO_DECODE           );
     aURL.Mark       = aParser.GetMark   ( INetURLObject::DECODE_WITH_CHARSET );
 
     aParser.SetMark ( OUString() );
     aParser.SetParam( OUString() );
 
-    aURL.Main       = aParser.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
     // Return "URL is parsed".
     return sal_True;
@@ -233,15 +233,15 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
     aURL.Password   = aParser.GetPass   ( INetURLObject::DECODE_WITH_CHARSET );
     aURL.Server     = aParser.GetHost   ( INetURLObject::DECODE_WITH_CHARSET );
     aURL.Port       = (sal_Int16)aParser.GetPort();
-    aURL.Path       = aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Path       = aParser.GetURLPath( INetURLObject::NO_DECODE           );
 //  aURL.Name       = aParser.GetName   ();
-    aURL.Arguments  = aParser.GetParam  ( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Arguments  = aParser.GetParam  ( INetURLObject::NO_DECODE           );
     aURL.Mark       = aParser.GetMark   ( INetURLObject::DECODE_WITH_CHARSET );
 
     aParser.SetMark ( OUString() );
     aParser.SetParam( OUString() );
 
-    aURL.Main       = aParser.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
     // Return "URL is parsed".
     return sal_True;
@@ -269,11 +269,11 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
                         aURL.Path                                               );
 
     // First parse URL WITHOUT ...
-    aURL.Main = aParser.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+    aURL.Main = aParser.GetMainURL( INetURLObject::NO_DECODE );
     // ...and then WITH parameter and mark.
     aParser.SetParam( aURL.Arguments);
-    aParser.SetMark ( aURL.Mark     );
-    aURL.Complete = aParser.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+    aParser.SetMark ( aURL.Mark, INetURLObject::ENCODE_ALL );
+    aURL.Complete = aParser.GetMainURL( INetURLObject::NO_DECODE );
 
     // Return "URL is assembled".
     return sal_True;
