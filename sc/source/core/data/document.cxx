@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:21:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,9 +1553,14 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                     ++nFollow;
 
                 if ( pCBFCP->pClipDoc->bCutMode )
+                {
+                    BOOL bOldInserting = IsInsertingFromOtherDoc();
+                    SetInsertingFromOtherDoc( TRUE);
                     UpdateReference( URM_MOVE,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
                         nDx, nDy, nDz, pCBFCP->pRefUndoDoc );
+                    SetInsertingFromOtherDoc( bOldInserting);
+                }
                 else
                     UpdateReference( URM_COPY,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
