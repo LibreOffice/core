@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:31:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,8 +572,9 @@
 #define STR_HF_CONFIDENTIAL         407
 #define STR_HF_CUSTOMIZED           408
 #define STR_HF_CUSTOM_FOOTER        409
+#define STR_ERR_DATAPILOT_INPUT     410
 
-#define STR_COUNT                   410
+#define STR_COUNT                   411
 
 
 #endif
