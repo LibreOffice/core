@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:44:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,12 +194,12 @@ __EXPORT ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 
 void ScColRowNameRangesDlg::Init()
 {
-    USHORT  nStartCol   = 0;
-    USHORT  nStartRow   = 0;
-    USHORT  nStartTab   = 0;
-    USHORT  nEndCol     = 0;
-    USHORT  nEndRow     = 0;
-    USHORT  nEndTab     = 0;
+    SCCOL   nStartCol   = 0;
+    SCROW   nStartRow   = 0;
+    SCTAB   nStartTab   = 0;
+    SCCOL   nEndCol     = 0;
+    SCROW   nEndRow     = 0;
+    SCTAB   nEndTab     = 0;
 
     aBtnOk.SetClickHdl      ( LINK( this, ScColRowNameRangesDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
@@ -275,11 +275,11 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
 {
     theCurData = theCurArea = rLabelRange;
     BOOL bValid = TRUE;
-    USHORT nCol1 = theCurArea.aStart.Col();
-    USHORT nCol2 = theCurArea.aEnd.Col();
-    USHORT nRow1 = theCurArea.aStart.Row();
-    USHORT nRow2 = theCurArea.aEnd.Row();
-    if ( (nCol2 - nCol1 >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
+    SCCOL nCol1 = theCurArea.aStart.Col();
+    SCCOL nCol2 = theCurArea.aEnd.Col();
+    SCROW nRow1 = theCurArea.aStart.Row();
+    SCROW nRow2 = theCurArea.aEnd.Row();
+    if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
     {   // Spaltenkoepfe und Grenzfall gesamte Tabelle
         aBtnColHead.Check( TRUE );
         aBtnRowHead.Check( FALSE );
@@ -379,8 +379,8 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRe
         theCurData.aEnd.SetCol( theCurArea.aEnd.Col() );
         if ( theCurData.Intersects( theCurArea ) )
         {
-            USHORT nRow1 = theCurArea.aStart.Row();
-            USHORT nRow2 = theCurArea.aEnd.Row();
+            SCROW nRow1 = theCurArea.aStart.Row();
+            SCROW nRow2 = theCurArea.aEnd.Row();
             if ( nRow1 > 0
               && (theCurData.aEnd.Row() < nRow2 || nRow2 == MAXROW) )
             {   // Data oben
@@ -402,8 +402,8 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRe
         theCurData.aEnd.SetRow( theCurArea.aEnd.Row() );
         if ( theCurData.Intersects( theCurArea ) )
         {
-            USHORT nCol1 = theCurArea.aStart.Col();
-            USHORT nCol2 = theCurArea.aEnd.Col();
+            SCCOL nCol1 = theCurArea.aStart.Col();
+            SCCOL nCol2 = theCurArea.aEnd.Col();
             if ( nCol1 > 0
               && (theCurData.aEnd.Col() < nCol2 || nCol2 == MAXCOL) )
             {   // Data links
@@ -544,14 +544,14 @@ void ScColRowNameRangesDlg::UpdateNames()
     aEdAssign.SetText( EMPTY_STRING );
 
     ULONG nCount, j;
-    USHORT nPos, i, q; //@008 Hilfsvariable q eingefuegt
+    USHORT nPos; //@008 Hilfsvariable q eingefuegt
 
-    USHORT nCol1;   //@008 04.09.97
-    USHORT nRow1;   //Erweiterung fuer Bereichsnamen
-    USHORT nTab1;
-    USHORT nCol2;
-    USHORT nRow2;
-    USHORT nTab2;
+    SCCOL nCol1;    //@008 04.09.97
+    SCROW nRow1;    //Erweiterung fuer Bereichsnamen
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
     String rString;
     String strShow;
 
@@ -573,7 +573,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             //@008 Hole Bereichsparameter aus Dok
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
                                             nCol2, nRow2, nTab2 );
-            q=nCol1+3;
+            SCCOL q=nCol1+3;
             if(q>nCol2) q=nCol2;
             //@008 Baue String zusammen
             strShow.AssignAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
@@ -581,7 +581,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             {
                 pDoc->GetString(nCol1, nRow1, nTab1,rString);
                 strShow +=rString;
-                for(i=nCol1+1;i<=q;i++)
+                for(SCCOL i=nCol1+1;i<=q;i++)
                 {
                     strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
                     pDoc->GetString(i, nRow1, nTab1,rString);
@@ -618,14 +618,14 @@ void ScColRowNameRangesDlg::UpdateNames()
             //@008 Ab hier baue String fuer Zeilen
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
                                             nCol2, nRow2, nTab2 );
-            q=nRow1+3;
+            SCROW q=nRow1+3;
             if(q>nRow2) q=nRow2;
             strShow.AssignAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
             if(pDoc!=NULL)
             {
                 pDoc->GetString(nCol1, nRow1, nTab1,rString);
                 strShow += rString;
-                for(i=nRow1+1;i<=q;i++)
+                for(SCROW i=nRow1+1;i<=q;i++)
                 {
                     strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
                     pDoc->GetString(nCol1, i, nTab1,rString);
@@ -1156,7 +1156,7 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
             aEdAssign.SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetRow((USHORT) Min( (long)(theCurArea.aEnd.Row() + 1), (long)MAXROW ) );
+        aRange.aStart.SetRow( Min( (long)(theCurArea.aEnd.Row() + 1), (long)MAXROW ) );
         aRange.aEnd.SetRow( MAXROW );
         AdjustColRowData( aRange );
     }
@@ -1194,7 +1194,7 @@ IMPL_LINK( ScColRowNameRangesDlg, RowClickHdl, void *, EMPTYARG )
             aEdAssign.SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetCol( (USHORT) Min( (long)(theCurArea.aEnd.Col() + 1), (long)MAXCOL ) );
+        aRange.aStart.SetCol( static_cast<SCCOL>(Min( (long)(theCurArea.aEnd.Col() + 1), (long)MAXCOL )) );
         aRange.aEnd.SetCol( MAXCOL );
         AdjustColRowData( aRange );
     }
