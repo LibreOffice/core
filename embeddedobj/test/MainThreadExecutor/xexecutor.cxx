@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexecutor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-20 09:16:28 $
+ *  last change: $Author: mav $ $Date: 2003-11-20 15:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "xexecutor.hxx"
 #include <vcl/svapp.hxx>
+#include <osl/thread.hxx>
 
 using namespace ::com::sun::star;
 
@@ -79,6 +80,8 @@ IMPL_LINK( MainThreadExecutor_Impl, executor, void*, pDummyParam )
     }
 
     m_bExecuted = sal_True;
+    delete this;
+
     return 0;
 }
 
@@ -111,11 +114,11 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
     MainThreadExecutor_Impl* pExecutor = new MainThreadExecutor_Impl( xJob, aArgsForJob );
     pExecutor->execute();
 
-    while( !pExecutor->isExecuted() )
-        Application::Yield();
+    // it is not a main thread, so it can be blocked
+    // while( !pExecutor->isExecuted() )
+    //  ::osl::Thread::yield();
 
     // TODO: implement transfering of the return values and exceptions
-    delete pExecutor;
 
     return uno::Any();
 }

@@ -3,9 +3,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Date: 2003-10-29 13:05:55 $
+#   last change: $Date: 2003-11-20 15:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ JavaStorageTestExample : $(CLASSFILES)
     @echo --------------------------------------------------------------------------------
 
 run: $(CLASSFILES)
-    java -classpath "$(CLASSPATH)" EmbedContFrame
+    jdb -classpath "$(CLASSPATH)" EmbedContFrame
 
 clean :
     -$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))

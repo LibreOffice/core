@@ -14,10 +14,14 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.Any;
 
 import com.sun.star.lang.XComponent;
 
+import com.sun.star.util.XCloseable;
+
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.NamedValue;
 
 import com.sun.star.datatransfer.DataFlavor;
 import com.sun.star.datatransfer.XTransferable;
@@ -29,11 +33,16 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
 
+import com.sun.star.task.XJob;
+
 import com.sun.star.embed.*;
 
-public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClient, ActionListener
+public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClient, ActionListener, XJob
 {
     private XMultiServiceFactory m_xServiceFactory;
+
+    private XJob m_xMainThreadExecutor;
+    private NamedValue[] m_pValuesForExecutor;
 
     private XEmbeddedObject m_xEmbedObj;
     private XStorage m_xStorage;
@@ -42,17 +51,24 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     private Menu m_aFileMenu;
     private Menu m_aObjectMenu;
     private Toolkit m_aToolkit;
+
     private Image m_aImage;
+    private Object m_oImageLock;
 
     private boolean m_bOwnFile = false;
 
     private boolean m_bLinkObj = false;
     private String m_aLinkURI;
 
-    private byte[] m_pActionsList;
+    private Object m_oActionsNumberLock;
     private int m_nActionsNumber;
+    private byte[] m_pActionsList;
+
     private Timer m_aTimer;
     private boolean m_bDestroyed = false;
+
+    private Object m_oInHandlerLock;
+    private boolean m_bInHandler = false;
 
 // Constants
     private final byte DESTROY                  =  1;
@@ -82,6 +98,24 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         m_pActionsList = new byte[200];
         m_nActionsNumber = 0;
+        m_oActionsNumberLock = new Object();
+
+        m_oInHandlerLock = new Object();
+        m_oImageLock = new Object();
+
+        try {
+            Object oJob = m_xServiceFactory.createInstance( "com.sun.star.comp.thread.MainThreadExecutor" );
+            m_xMainThreadExecutor = (XJob)UnoRuntime.queryInterface( XJob.class, oJob );
+        } catch( Exception e ) {}
+
+        if ( m_xMainThreadExecutor == null )
+        {
+            System.out.println( "Can't create MainThreadExecutor! The application is unusable!" );
+            System.exit( 0 );
+        }
+
+        m_pValuesForExecutor = new NamedValue[1];
+        m_pValuesForExecutor[0] = new NamedValue( "JobToExecute", (Object)this );
 
         m_aTimer = new Timer( 100, this );
         m_aTimer.start();
@@ -135,7 +169,37 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
     public void actionPerformed( ActionEvent evt )
     {
-        synchronized( this )
+        synchronized( m_oInHandlerLock )
+        {
+            if ( m_bInHandler )
+                return;
+            m_bInHandler = true;
+        }
+
+        synchronized( m_oActionsNumberLock )
+        {
+            if ( m_nActionsNumber > 0 )
+            {
+                try {
+                    m_xMainThreadExecutor.execute( m_pValuesForExecutor );
+                }
+                catch( Exception e )
+                {
+                    System.out.println( "Exception in actionPerformed() : " + e );
+                }
+            }
+            else
+            {
+                synchronized( m_oInHandlerLock )
+                {
+                    m_bInHandler = false;
+                }
+            }
+        }
+    }
+
+    public Object execute( NamedValue[] pValues )
+    {
         {
             for( int nInd = 0; nInd < m_nActionsNumber; nInd++ )
             {
@@ -227,7 +291,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                             if ( m_xEmbedObj != null )
                             {
                                 try {
-                                    m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                    m_xEmbedObj.setClientSite( this );
                                 }
                                 catch( Exception ex )
                                 {
@@ -257,7 +321,13 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                                                 "No storage for oned file!",
                                                                 "Error:",
                                                                 JOptionPane.ERROR_MESSAGE );
-                                return;
+
+                                synchronized( m_oInHandlerLock )
+                                {
+                                    m_bInHandler = false;
+                                }
+
+                                return Any.VOID;
                             }
 
                             try {
@@ -347,7 +417,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         if ( m_xEmbedObj != null )
                         {
                             try {
-                                m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                m_xEmbedObj.setClientSite( this );
                             }
                             catch( Exception ex )
                             {
@@ -386,7 +456,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                             if ( m_xEmbedObj != null )
                             {
                                 try {
-                                    m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                    m_xEmbedObj.setClientSite( this );
                                 }
                                 catch( Exception ex )
                                 {
@@ -429,7 +499,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                 m_bLinkObj = true;
 
                                 try {
-                                    m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                    m_xEmbedObj.setClientSite( this );
                                 }
                                 catch( Exception ex )
                                 {
@@ -450,7 +520,12 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                     if ( !m_bLinkObj )
                     {
                         JOptionPane.showMessageDialog( m_aFrame, "The object is not a link!", "Error:", JOptionPane.ERROR_MESSAGE );
-                        return;
+                        synchronized( m_oInHandlerLock )
+                        {
+                            m_bInHandler = false;
+                        }
+
+                        return Any.VOID;
                     }
 
                     if ( m_xEmbedObj != null )
@@ -495,15 +570,24 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
             m_nActionsNumber = 0;
         }
+
+        synchronized( m_oInHandlerLock )
+        {
+            m_bInHandler = false;
+        }
+
+        return Any.VOID;
     }
 
     public void actionRegister( byte nActionID )
     {
-        synchronized( this )
+        synchronized( m_oActionsNumberLock )
         {
             if ( m_nActionsNumber < 199
               && ( m_nActionsNumber == 0 || m_pActionsList[ m_nActionsNumber - 1 ] != DESTROY ) )
+            {
                 m_pActionsList[ m_nActionsNumber++ ] = nActionID;
+            }
         }
     }
 
@@ -539,10 +623,10 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         if ( m_xEmbedObj != null )
         {
-            synchronized( this )
+            synchronized( m_oImageLock )
             {
                 if ( m_aImage != null )
-                    g.drawImage( m_aImage, 0, 0, EmbedContApp.this );
+                    g.drawImage( m_aImage, 0, 0, this );
             }
         }
     }
@@ -567,10 +651,10 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                                                                                     m_xEmbedObj );
                     if ( xCompProv != null )
                     {
-                        XComponent xComp = xCompProv.getComponent();
+                        XCloseable xCloseable = xCompProv.getComponent();
                         XTransferable xTransfer = (XTransferable)UnoRuntime.queryInterface(
                                                                                     XTransferable.class,
-                                                                                    xComp );
+                                                                                    xCloseable );
                         if ( xTransfer != null )
                         {
                             DataFlavor aFlavor = new DataFlavor();
@@ -578,12 +662,16 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                             aFlavor.HumanPresentableName = "Portable Network Graphics";
                             aFlavor.DataType = new Type( byte[].class );
 
-                            byte[] aPNGData = (byte[])AnyConverter.toArray( xTransfer.getTransferData( aFlavor ) );
-                            if ( aPNGData != null && aPNGData.length != 0 )
+                            Object aAny = xTransfer.getTransferData( aFlavor );
+                            if ( aAny != null && AnyConverter.isArray( aAny ) )
                             {
-                                synchronized( this )
+                                byte[] aPNGData = (byte[])AnyConverter.toArray( aAny );
+                                if ( aPNGData != null && aPNGData.length != 0 )
                                 {
-                                    m_aImage = m_aToolkit.createImage( aPNGData );
+                                    synchronized( m_oImageLock )
+                                    {
+                                        m_aImage = m_aToolkit.createImage( aPNGData );
+                                    }
                                 }
                             }
                         }
@@ -921,7 +1009,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
     public void clearObjectAndStorage()
     {
-        synchronized( this )
+        synchronized( m_oImageLock )
         {
             m_aImage = null;
         }
