@@ -1,4 +1,4 @@
-ul	unoil	::	offapi jurt NULL
+ul  unoil :: codemaker offapi ridljar solenv NULL
 ul	unoil						usr1	-	all	ul_mkout NULL
 ul	unoil						nmake	-	all	ul_genall NULL
 ul	unoil\com\sun\star\accessibility    nmake	-	all	ul_accessibility ul_awt NULL
