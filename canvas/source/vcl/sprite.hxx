@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,10 @@
 #include <drafts/com/sun/star/rendering/XCanvas.hpp>
 #endif
 
-#ifndef _BGFX_POINT_B2DSIZE_HXX
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/vector/b2dpoint.hxx>
+#endif
+#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
 #endif
 
@@ -94,7 +97,10 @@ namespace vclcanvas
         virtual void redraw( OutputDevice& rTargetSurface ) const = 0;
         virtual void redraw( OutputDevice& rTargetSurface, const Point& rOutputPosition ) const = 0;
 
-        virtual ::basegfx::B2DSize getSize() const = 0;
+        virtual ::basegfx::B2DPoint getPos() const = 0;
+
+        // TODO(Q3): Rename method, it hides XBitmap::getSize()
+        virtual ::basegfx::B2DSize  getSize() const = 0;
     };
 }
 
