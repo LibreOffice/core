@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-21 15:54:31 $
+ *  last change: $Author: pl $ $Date: 2002-10-25 15:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3124,70 +3124,6 @@ bool PrintFontManager::createFontSubset(
                                         bool bVertical
                                         )
 {
-    int i;
-    // glyph 0 is needed in position 0
-    // look if 0 is already there
-    int nDefault = -1;
-    for( i = 0; i < nGlyphs; i++ )
-    {
-        if( ! pGlyphIDs[i] )
-        {
-            nDefault = i;
-            break;
-        }
-    }
-    if( nDefault != 0) // reordering has to take place
-    {
-        if( nDefault == -1 )
-            nGlyphs++;
-
-        long* pIDs = (long*)rtl_allocateMemory( sizeof(long)*nGlyphs );
-        sal_uInt8* pEnc = (sal_uInt8*)rtl_allocateMemory( sizeof(sal_uInt8)*nGlyphs );
-        sal_Int32* pW = (sal_Int32*)rtl_allocateMemory( sizeof(sal_Int32)*nGlyphs );
-        if( nDefault == -1 )
-        {
-            for( i = 0; i < nGlyphs-1; i++ )
-            {
-                pIDs[i+1] = pGlyphIDs[i];
-                pEnc[i+1] = pNewEncoding[i];
-            }
-        }
-        else
-        {
-            for( i = 0; i < nGlyphs; i++ )
-            {
-                pIDs[i] = pGlyphIDs[i];
-                pEnc[i] = pNewEncoding[i];
-            }
-            pIDs[ nDefault ] = pIDs[0];
-            pEnc[ nDefault ] = pIDs[0];
-        }
-        pIDs[0] = 0;
-        pEnc[0] = 0;
-
-        bool bSuccess = createFontSubset( nFont, rOutFile, pIDs, pEnc, pW, nGlyphs, bVertical );
-        if( bSuccess && pWidths )
-        {
-            if( nDefault == -1 )
-            {
-                for( i = 0; i < nGlyphs-1; i++ )
-                    pWidths[i] = pW[i+1];
-            }
-            else
-            {
-                for( i = 0; i < nGlyphs; i++ )
-                    pWidths[i] = pW[i];
-                pWidths[ nDefault ] = pW[0];
-                pWidths[ 0 ] = pW[ nDefault ];
-            }
-        }
-        rtl_freeMemory( pIDs );
-        rtl_freeMemory( pW );
-        rtl_freeMemory( pEnc );
-
-        return bSuccess;
-    }
-
     PrintFont* pFont = getFont( nFont );
     if( pFont->m_eType != fonttype::TrueType )
         return false;
@@ -3200,39 +3136,63 @@ bool PrintFontManager::createFontSubset(
     ByteString aFromFile = getFontFile( pFont );
     ByteString aToFile( OUStringToOString( aSysPath, aEncoding ) );
 
+    sal_uInt8  pEnc[256];
+    sal_uInt16 pGID[256];
+    sal_uInt8  pOldIndex[256];
+
+    pEnc[ 0 ] = 0;
+    pGID[ 0 ] = 0;
+    int nChar = 1;
+    for( int i = 0; i < nGlyphs; i++ )
+    {
+        if( pNewEncoding[i] == 0 )
+        {
+            pOldIndex[ 0 ] = i;
+        }
+        else
+        {
+            pEnc[ nChar ] = nChar;
+            pGID[ nChar ] = (sal_uInt16)pGlyphIDs[ i ];
+            pOldIndex[ nChar ] = i;
+            nChar++;
+        }
+    }
+    nGlyphs = nChar; // either input value or increased by one
+
+    if( nGlyphs > 256 )
+        return false;
+
     TrueTypeFont* pTTFont = NULL;
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
     if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
 
-    sal_uInt16* pTempIDs = (sal_uInt16*)rtl_allocateMemory( sizeof(sal_uInt16)*nGlyphs );
-    for( i = 0; i < nGlyphs; i++ )
-        pTempIDs[i] = (sal_uInt16)pGlyphIDs[i];
+
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
-                                                              pTempIDs,
+                                                              pGID,
                                                               nGlyphs,
                                                               bVertical ? 1 : 0 );
     if( pMetrics )
     {
         for( i = 0; i < nGlyphs; i++ )
-            pWidths[i] = pMetrics[i].adv;
+            pWidths[pOldIndex[i]] = pMetrics[i].adv;
         free( pMetrics );
     }
     else
     {
-        rtl_freeMemory( pTempIDs );
+        CloseTTFont( pTTFont );
         return false;
     }
 
     bool bSuccess = ( SF_OK == CreateTTFromTTGlyphs( pTTFont,
                                                      aToFile.GetBuffer(),
-                                                     pTempIDs,
-                                                     pNewEncoding,
+                                                     pGID,
+                                                     pEnc,
                                                      nGlyphs,
                                                      0,
                                                      NULL,
-                                                     TTCF_IncludeOS2 ) );
+                                                     0 ) );
+    CloseTTFont( pTTFont );
 
-    rtl_freeMemory( pTempIDs );
     return bSuccess;
 }
