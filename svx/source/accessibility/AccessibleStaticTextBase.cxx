@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:54:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,12 @@ namespace accessibility
 
             return ImpCalcInternal( nFlatIndex, true );
         }
+
+        sal_Int32                   Internal2Index( EPosition nEEIndex ) const;
+
+        void                        CorrectTextSegment( TextSegment&    aTextSegment,
+                                                        int             nPara   ) const;
+
         sal_Bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
         sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
@@ -356,6 +362,34 @@ namespace accessibility
             return 0;
         else
             return mpTextParagraph->GetTextForwarder().GetParagraphCount();
+    }
+
+    sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
+    {
+        sal_Int32 aRes(0);
+        int i;
+        for(i=0; i<nEEIndex.nPara; ++i)
+            aRes += GetParagraph(i).getCharacterCount();
+
+        return aRes + nEEIndex.nIndex;
+    }
+
+    void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&    aTextSegment,
+                                                            int             nPara   ) const
+    {
+        // Keep 'invalid' values at the TextSegment
+        if( aTextSegment.SegmentStart != -1 &&
+            aTextSegment.SegmentStart != -1 )
+        {
+            // #112814# Correct TextSegment by paragraph offset
+            sal_Int32 nOffset(0);
+            int i;
+            for(i=0; i<nPara; ++i)
+                nOffset += GetParagraph(i).getCharacterCount();
+
+            aTextSegment.SegmentStart += nOffset;
+            aTextSegment.SegmentEnd += nOffset;
+        }
     }
 
     EPosition AccessibleStaticTextBase_Impl::ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const
@@ -669,16 +703,20 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        sal_Int32 i, nIndex, nParas;
-        for( i=0, nIndex=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
+        const sal_Int32 nParas( mpImpl->GetParagraphCount() );
+        sal_Int32 nIndex;
+        int i;
+        for( i=0; i<nParas; ++i )
         {
             // TODO: maybe exploit the fact that paragraphs are
             // ordered vertically for early exit
+
+            // #112814# Use correct index offset
             if( (nIndex=mpImpl->GetParagraph(i).getIndexAtPoint( rPoint )) != -1 )
-                return nIndex;
+                return mpImpl->Internal2Index( EPosition(i, nIndex) );
         }
 
-        return nIndex;
+        return -1;
     }
 
     ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getSelectedText() throw (uno::RuntimeException)
@@ -786,23 +824,29 @@ namespace accessibility
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         ::com::sun::star::accessibility::TextSegment aResult;
-        aResult.SegmentStart = -1;
-        aResult.SegmentEnd = -1;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
-            // #106393# Special casing one behind last paragraph
+            // #106393# Special casing one behind last paragraph is
+            // not necessary, since then, we return the content and
+            // boundary of that last paragraph. Range2Internal is
+            // tolerant against that, and returns the last paragraph
+            // in aPos.nPara.
 
-            if( aPos.nIndex < mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
-            {
-                aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
-                aResult.SegmentStart = 0;
-                aResult.SegmentEnd = aResult.SegmentText.getLength();
-            }
+            // retrieve full text of the paragraph
+            aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
+
+            // #112814# Adapt the start index with the paragraph offset
+            aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara, 0 ) );
+            aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
         }
         else
         {
+            // No special handling required, forward to wrapped class
             aResult = mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
+
+            // #112814# Adapt the start index with the paragraph offset
+            mpImpl->CorrectTextSegment( aResult, aPos.nPara );
         }
 
         return aResult;
@@ -815,8 +859,6 @@ namespace accessibility
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         ::com::sun::star::accessibility::TextSegment aResult;
-        aResult.SegmentStart = -1;
-        aResult.SegmentEnd = -1;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
@@ -824,19 +866,27 @@ namespace accessibility
             {
                 // #103589# Special casing one behind the last paragraph
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
-                aResult.SegmentStart = 0;
-                aResult.SegmentEnd = aResult.SegmentText.getLength();
+
+                // #112814# Adapt the start index with the paragraph offset
+                aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara, 0 ) );
             }
             else if( aPos.nPara > 0 )
             {
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
-                aResult.SegmentStart = 0;
-                aResult.SegmentEnd = aResult.SegmentText.getLength();
+
+                // #112814# Adapt the start index with the paragraph offset
+                aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara - 1, 0 ) );
             }
+
+            aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
         }
         else
         {
+            // No special handling required, forward to wrapped class
             aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
+
+            // #112814# Adapt the start index with the paragraph offset
+            mpImpl->CorrectTextSegment( aResult, aPos.nPara );
         }
 
         return aResult;
@@ -849,22 +899,29 @@ namespace accessibility
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         ::com::sun::star::accessibility::TextSegment aResult;
-        aResult.SegmentStart = -1;
-        aResult.SegmentEnd = -1;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
+            // Special casing one behind the last paragraph is not
+            // necessary, this case is invalid here for
+            // getTextBehindIndex
             if( aPos.nPara + 1 < mpImpl->GetParagraphCount() )
             {
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
-                aResult.SegmentStart = 0;
-                aResult.SegmentEnd = aResult.SegmentText.getLength();
+
+                // #112814# Adapt the start index with the paragraph offset
+                aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara + 1, 0 ) );
+                aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
             }
         }
         else
         {
+            // No special handling required, forward to wrapped class
             aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
-        }
+
+            // #112814# Adapt the start index with the paragraph offset
+            mpImpl->CorrectTextSegment( aResult, aPos.nPara );
+       }
 
         return aResult;
     }
