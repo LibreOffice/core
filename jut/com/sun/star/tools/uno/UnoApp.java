@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-09 17:38:43 $
+ *  last change: $Author: kr $ $Date: 2000-11-10 10:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ public class UnoApp {
      * @see        com.sun.star.bridge.XBridgeFactory
      * @see        com.sun.star.bridge.XInstanceProvider
      */
-    static public void export(XMultiServiceFactory xMultiServiceFactory, String dcp, Object object) throws Exception {
+    static public void export(XMultiServiceFactory xMultiServiceFactory, String dcp, Object object, boolean singleAccept) throws Exception {
         String conDcp = null;
         String protDcp = null;
         String rootOid = null;
@@ -268,17 +268,19 @@ public class UnoApp {
 
         class AcceptThread extends Thread {
             XMultiServiceFactory _xMultiServiceFactory;
-            String _conDcp;
-            String _protDcp;
-            String _rootOid;
-            Object _object;
+            String  _conDcp;
+            String  _protDcp;
+            String  _rootOid;
+            Object  _object;
+            boolean _singleAccept;
 
-            AcceptThread(XMultiServiceFactory xMultiServiceFactory, String conDcp, String protDcp, String rootOid, Object object) {
+            AcceptThread(XMultiServiceFactory xMultiServiceFactory, String conDcp, String protDcp, String rootOid, Object object, boolean singleAccept) {
                 _xMultiServiceFactory = xMultiServiceFactory;
-                _conDcp = conDcp;
-                _protDcp = protDcp;
-                _rootOid = rootOid;
-                _object = object;
+                _conDcp       = conDcp;
+                _protDcp      = protDcp;
+                _rootOid      = rootOid;
+                _object       = object;
+                _singleAccept = singleAccept;
             }
 
             public void run() {
@@ -300,7 +302,7 @@ public class UnoApp {
                         // create the bridge
                         XBridge xBridge = xBridgeFactory.createBridge(_conDcp + ";" + _protDcp, _protDcp, xConnection, new InstanceProvider(_rootOid, _object));
                     }
-                    while(false);
+                    while(!_singleAccept);
                 }
                 catch(com.sun.star.uno.Exception exception) {
                     System.err.println(getClass().getName() + " exeception occurred - " + exception);
@@ -308,7 +310,7 @@ public class UnoApp {
             }
         }
 
-        new AcceptThread(xMultiServiceFactory, conDcp, protDcp, rootOid, object).start();
+        new AcceptThread(xMultiServiceFactory, conDcp, protDcp, rootOid, object, singleAccept).start();
     }
 
 
@@ -634,6 +636,22 @@ public class UnoApp {
     }
 
     /**
+     * If the object is to be exported, only export it once
+     */
+    static class SingleAccept_Option extends Option {
+        static final String __key  = "--singleaccept";
+        static final String __help = "if the object is to be exported, only export it once";
+
+        SingleAccept_Option() {
+            super(__key, __help);
+        }
+
+        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+            unoApp._singleAccept = true;
+        }
+    }
+
+    /**
      * The help option prints a help message.
      */
     static class Help_Option extends Option {
@@ -665,6 +683,7 @@ public class UnoApp {
         __options.put(ServiceManager_Option.__key, new ServiceManager_Option());
           __options.put(Args_Option.__key,           new Args_Option());
         __options.put(Component_Option.__key,      new Component_Option());
+        __options.put(SingleAccept_Option.__key,   new SingleAccept_Option());
         __options.put(Help_Option.__key,           new Help_Option());
     };
 
@@ -685,7 +704,7 @@ public class UnoApp {
         Object object = unoApp.getObject();
 
         if(unoApp._uno_url != null) // see, if we have to export the object
-            export(unoApp._xMultiServiceFactory, unoApp._uno_url, object);
+            export(unoApp._xMultiServiceFactory, unoApp._uno_url, object, unoApp._singleAccept);
         else {
             XMain xMain = (XMain)UnoRuntime.queryInterface(XMain.class, object);
 
@@ -703,6 +722,7 @@ public class UnoApp {
     Object _args[]  = null; // the args for object creation
     String _uno_url = null; // the url for object export
     XMultiServiceFactory _xMultiServiceFactory; // the service manager for object creation
+    boolean _singleAccept = false;  // if export object, only export once
 
     /**
      * Initializes <code>UnoApp</code>.
