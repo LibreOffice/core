@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:10:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,16 @@ public:
 
     // count words in given range
     void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
+
+    // #111840#
+    /**
+       Returns position of certain text attribute.
+
+       @param pAttr     text attribute to search
+
+       @return position of given attribute or NULL in case of failure
+     */
+    SwPosition * GetPosition(const SwTxtAttr * pAttr);
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
