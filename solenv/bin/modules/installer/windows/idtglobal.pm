@@ -546,7 +546,7 @@ sub translate_idtfile
 
 sub prepare_language_idt_directory
 {
-    my ($destinationdir, $newidtdir, $onelanguage, $filesref, $iconfilecollector) = @_;
+    my ($destinationdir, $newidtdir, $onelanguage, $filesref, $iconfilecollector, $binarytablefiles) = @_;
 
     # Copying all idt-files from the source $installer::globals::idttemplatepath to the destination $destinationdir
     # Copying all files in the subdirectory "Binary"
@@ -576,12 +576,11 @@ sub prepare_language_idt_directory
         installer::systemactions::copy_one_file(${$iconfilecollector}[$i], $destinationdir . $installer::globals::separator . "Icon" . $installer::globals::separator . $iconfilename);
     }
 
-    # Copying all files in @installer::globals::binarytablefiles in the binary directory
+    # Copying all files in $binarytablefiles in the binary directory
 
-    for ( my $i = 0; $i <= $#installer::globals::binarytablefiles; $i++ )
+    for ( my $i = 0; $i <= $#{$binarytablefiles}; $i++ )
     {
-        my $binaryfilegid = $installer::globals::binarytablefiles[$i];
-        my $binaryfile = installer::existence::get_specified_file($filesref, $binaryfilegid);
+        my $binaryfile = ${$binarytablefiles}[$i];
         my $binaryfilepath = $binaryfile->{'sourcepath'};
         my $binaryfilename = $binaryfilepath;
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$binaryfilename);
@@ -1238,9 +1237,11 @@ sub add_childprojects
     # InstallAdabas 98 SystemFolder msiexec.exe /i "[SourceDir]adabas\adabasd1201.msi" /qr
     # InstallJava 98 SystemFolder msiexec.exe /i "[SourceDir]java\Java 2 Runtime Environment, SE v1.4.2.msi" /qr REBOOT=R
 
-    if ( $installer::globals::msichildpath eq "" ) { installer::exiter::exit_program("ERROR: Path for child products not set!", "add_childprojects"); }
+    my $sopackpath = "";
+    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "add_childprojects"); }
 
-    my $adabasinstallsetdir = $installer::globals::msichildpath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
+    my $adabasinstallsetdir = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
     my $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $adabasinstallsetdir);
     if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $adabasinstallsetdir !", "add_childprojects"); }
 
