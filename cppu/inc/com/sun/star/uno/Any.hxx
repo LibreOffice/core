@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:51:25 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int16 & value ) SA
     default:
         return sal_False;
     }
-    return sal_False;
 }
 //__________________________________________________________________________________________________
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) SAL_THROW( () )
@@ -311,7 +310,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt16 & value ) S
     default:
         return sal_False;
     }
-    return sal_False;
 }
 // long
 //__________________________________________________________________________________________________
@@ -335,7 +333,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int32 & value ) SA
     default:
         return sal_False;
     }
-    return sal_False;
 }
 //__________________________________________________________________________________________________
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) SAL_THROW( () )
@@ -358,7 +355,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt32 & value ) S
     default:
         return sal_False;
     }
-    return sal_False;
 }
 // hyper
 //__________________________________________________________________________________________________
@@ -390,7 +386,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int64 & value ) SA
     default:
         return sal_False;
     }
-    return sal_False;
 }
 //__________________________________________________________________________________________________
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) SAL_THROW( () )
@@ -421,7 +416,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_uInt64 & value ) S
     default:
         return sal_False;
     }
-    return sal_False;
 }
 // float
 //__________________________________________________________________________________________________
@@ -446,7 +440,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, float & value ) SAL_TH
     default:
         return sal_False;
     }
-    return sal_False;
 }
 // double
 //__________________________________________________________________________________________________
@@ -481,7 +474,6 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, double & value ) SAL_T
     default:
         return sal_False;
     }
-    return sal_False;
 }
 // string
 //__________________________________________________________________________________________________
