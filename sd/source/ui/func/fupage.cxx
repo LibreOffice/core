@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:26:21 $
+ *  last change: $Author: dl $ $Date: 2001-03-07 08:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
 
         // Applikation
-        aNewAttr.Put(SfxBoolItem( SID_ATTR_PAGE_EXT1, FALSE ));
+        aNewAttr.Put(SfxBoolItem( SID_ATTR_PAGE_EXT1, TRUE ));
 
         BOOL bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->GetBackgroundFullSize();
         aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
