@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     @return current timer value in milli seconds
  */
 
-sal_uInt32 SAL_CALL osl_getGlobalTimer();
+sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
 
 #ifdef __cplusplus
 }
