@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 12:00:27 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ Text[ english_us ] = "Temporarily unprotect sheet without query";
     Text[ polish ] = "Znieœ tymczasowo ochronê arkusza bez uprzedniego potwierdzenia";
     Text[ portuguese_brazilian ] = "Always raise Sheet Protection";
     Text[ japanese ] = "ˆê“I‚ÉŠm”F‚È‚µ‚Å•\\‚Ì•ÛŒì‚ğ‰ğœ";
-    Text[ korean ] = "½¬Æ® º¸È£¸¦ ÀÏ½ÃÀûÀ¸·Î Á¶È¸¾øÀÌ ÇØÁ¦";
+    Text[ korean ] = "½ÃÆ® º¸È£¸¦ ÀÏ½ÃÀûÀ¸·Î Á¶È¸¾øÀÌ Á¦°Å";
     Text[ chinese_simplified ] = "²»ĞèÈ·ÈÏÖ±½ÓÔİÊ±È¡Ïû±í¸ñ±£»¤";
     Text[ chinese_traditional ] = "¼È®É¨ú®ø¤u§@ªí«OÅ@";
     Text[ turkish ] = "Tablo korumasını, sormadan geçici olarak kaldır";
@@ -1037,7 +1037,7 @@ Text[ english_us ] = "Enter the password to unprotect the table %1TableName%1";
     Text[ polish ] = "Has³o w celu zniesienia ochrony arkusza %1NazwaArkusza%1";
     Text[ portuguese_brazilian ] = "Surveying the relevant Ranges of the Table %1TableName%1:";
     Text[ japanese ] = "•\\ %1TableName%1 ‚Ì•ÛŒì‚ğ‰ğœ‚·‚é‚½‚ß‚ÌÊß½Ü°ÄŞ:";
-    Text[ korean ] = "Å×ÀÌºí%1TableName%1ÀÇ º¸È£¸¦ ÇØÁ¦ÇÏ±â À§ÇØ ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ korean ] = "µµÇ¥ %1TableName%1ÀÇ º¸È£¸¦ Á¦°ÅÇÏ±â À§ÇÑ ÆĞ½º¿öµå:";
     Text[ chinese_simplified ] = "ÇëÊäÈëÃÜÂë£¬È¡Ïû±í¸ñ%1TableName%1±£»¤Ëø¶¨";
     Text[ chinese_traditional ] = "¨ú®ø%1TableName%1°Ï°ì«OÅ@»İ­nÁä¤J±K½X¡G";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ßáãÉ ÇáÓÑ ÇáÎÇÕÉ ÈÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá %1TableName%1";
@@ -1137,7 +1137,7 @@ Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
     Text[ portuguese_brazilian ] = "Sheets are not protected!";
     Text[ japanese ] = "•\\‚Ì•ÛŒì‚Í‰ğœ‚Å‚«‚Ü‚¹‚ñ!";
-    Text[ korean ] = "½ÃÆ® º¸È£°¡ ÇØÁ¦µÇÁö ¾Ê½À´Ï´Ù!";
+    Text[ korean ] = "½ÃÆ® º¸È£´Â Á¦°ÅµÇÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÎŞ·¨È¡Ïû±í¸ñ±£»¤£¡";
     Text[ chinese_traditional ] = "¤u§@ªíªº«OÅ@¨S¦³³Q¨ú®ø¡I";
     Text[ arabic ] = "áä íÊã ÅáÛÇÁ ÍãÇíÉ ÇáÌÏÇæá!";
@@ -1162,7 +1162,7 @@ Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
     Text[ portuguese_brazilian ] = "Sheet is not protected!";
     Text[ japanese ] = "•\\‚Ì•ÛŒì‚Í‰ğœ‚Å‚«‚Ü‚¹‚ñ!";
-    Text[ korean ] = "½ÃÆ® º¸È£°¡ ÇØÁ¦µÇÁö ¾Ê½À´Ï´Ù!";
+    Text[ korean ] = "½ÃÆ® º¸È£´Â Á¦°ÅµÇÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÎŞ·¨È¡Ïû±í¸ñ±£»¤£¡";
     Text[ chinese_traditional ] = "¤u§@ªíªº«OÅ@¨S¦³³Q¨ú®ø¡I";
     Text[ arabic ] = "áä íÊã ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá!";
@@ -1325,22 +1325,22 @@ Text = "Bitte wählen Sie ein %PRODUCTNAME Calc-Dokument zur Bearbeitung aus!";
 Text[English] = "Please choose a StarOffice Calc-document to work on!";
 Text[ english_us ] = "Please select a %PRODUCTNAME Calc document for editing!";
     Text[ portuguese ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ russian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ greek ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ russian ] = "Âûáåğèòå äëÿ ïğàâêè äîêóìåíò %PRODUCTNAME Calc!";
+    Text[ greek ] = "Ğáñáêáëş åğéëİîôå ãéá ôçí åğåîåñãáóßá İíá İããñáöï ôïõ %PRODUCTNAME Calc!";
     Text[ dutch ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ french ] = "Sélectionnez un document %PRODUCTNAME Calc pour l'édition !";
     Text[ spanish ] = "Elija un documento %PRODUCTNAME Calc para trabajar";
-    Text[ italian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ italian ] = "Scegliete un documento %PRODUCTNAME Calc per modificarlo.";
     Text[ danish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ swedish ] = "Välj ett %PRODUCTNAME Calc-dokument som du vill redigera!";
     Text[ polish ] = "Nale¿y wybraæ dokument %PRODUCTNAME Calc, który ma zostaæ opracowany.";
     Text[ portuguese_brazilian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ japanese ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ japanese ] = "•ÒW‚·‚é %PRODUCTNAME ‚Ì Calc ÄŞ·­ÒİÄ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "ÆíÁıÇÏ±â À§ÇØ %PRODUCTNAME Calc-¹®¼­¸¦  ¼±ÅÃÇÏ½Ê½Ã¿À!";
     Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÒª±à¼­µÄ %PRODUCTNAME Calc ÎÄµµ£¡";
-    Text[ chinese_traditional ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó­n½s¿èªº %PRODUCTNAME Calc ¤å¥ó¡I";
     Text[ turkish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ arabic ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ãÓÊäÏ %PRODUCTNAME Calc áÊÍÑíÑå!";
 };
 
 
@@ -1349,23 +1349,23 @@ String MESSAGES + 20
 Text = "'<1>' ist kein Verzeichnis!";
 Text[English] = "<1> is not a directory!";
 Text[ english_us ] = "'<1>' is not a directory!";
-    Text[ portuguese ] = "<1> is not a directory!";
-    Text[ russian ] = "<1> is not a directory!";
+    Text[ portuguese ] = "'<1>' não é um directório!";
+    Text[ russian ] = "'<1>' íå ÿâëÿåòñÿ êàòàëîãîì!";
     Text[ greek ] = "Ôï '<1>' äåí åßíáé êáôÜëïãïò!";
-    Text[ dutch ] = "<1> is not a directory!";
-    Text[ french ] = "<1> n'est pas un répertoire !";
-    Text[ spanish ] = "¡'<1>' no es un directorio!";
-    Text[ italian ] = "<1> is not a directory!";
+    Text[ dutch ] = "'<1>' is geen directory!";
+    Text[ french ] = "'<1>' n'est pas un répertoire !";
+    Text[ spanish ] = "'<1>' no es un directorio!";
+    Text[ italian ] = "'<1>' non è una cartella";
     Text[ danish ] = "<1> is not a directory!";
-    Text[ swedish ] = "<1> är inte en katalog!";
-    Text[ polish ] = "<1> nie jest katalogiem!";
+    Text[ swedish ] = "'<1>' är inte en katalog!";
+    Text[ polish ] = "'<1>' nie jest katalogiem!";
     Text[ portuguese_brazilian ] = "<1> is not a directory!";
-    Text[ japanese ] = "<1> is not a directory!";
+    Text[ japanese ] = "u<1>v‚ÍÃŞ¨Ú¸ÄØ‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
     Text[ korean ] = "'<1>'Àº(´Â) µğ·ºÅä¸®°¡ ¾Æ´Õ´Ï´Ù!";
     Text[ chinese_simplified ] = "'<1>' ²»ÊÇÒ»¸öÄ¿Â¼£¡";
-    Text[ chinese_traditional ] = "<1> is not a directory!";
+    Text[ chinese_traditional ] = "'<1>' ¤£¬O¤@­Ó¥Ø¿ı¡I";
     Text[ turkish ] = "<1> is not a directory!";
-    Text[ arabic ] = "<1> is not a directory!";
+    Text[ arabic ] = "'<1>' áíÓ ÏáíáÇğ!";
 };
 
 
@@ -1730,7 +1730,7 @@ Text[ english_us ] = "Retrieving the relevant documents...";
     Text[ chinese_simplified ] = "¼ìË÷Ïà¹ØÎÄµµ...";
     Text[ chinese_traditional ] = "ÀË¯Á½s¿è¬ÛÃö¤å¥ó...";
     Text[ turkish ] = "İlgili belgeleri alıyor...";
-    Text[ arabic ] = "ÊÖãíä ÇáãÓÊäÏÇÊ æËíŞÉ ÇáÕáÉ...";
+    Text[ arabic ] = "ÊÓÌíá ÇáãÓÊäÏÇÊ æËíŞÉ ÇáÕáÉ...";
 };
 
 String STEP_LASTPAGE + 2
@@ -1798,7 +1798,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ polish ] = "Zniesienie ochrony arkusza za ka¿dym razem";
     Text[ portuguese_brazilian ] = "Sheet Protection is always raised";
     Text[ japanese ] = "í‚É•\\‚Ì•ÛŒì‚ğ‰ğœ";
-    Text[ korean ] = "½ÃÆ® º¸È£  Ç×»ó ÇØÁ¦";
+    Text[ korean ] = "½ÃÆ® º¸È£  Ç×»ó Á¦°Å";
     Text[ chinese_simplified ] = "×ÜÊÇÈ¡Ïû±í¸ñ±£»¤";
     Text[ chinese_traditional ] = "Á`¬O¨ú®ø¤u§@ªí«OÅ@";
     Text[ turkish ] = "Tablo koruması her zaman kaldırılıyor";
