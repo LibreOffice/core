@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocutl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:43:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace ::com::sun::star;
 // -----------------------------------------------------------------------
 
 // static
-void ScDatabaseDocUtil::PutData( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
+void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
                                 long nType, BOOL bCurrency, BOOL* pSimpleFlag )
 {
