@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-28 16:08:25 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 15:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ public:
     void        SetOrientation(const Orientation eOrient) { eOrientation = eOrient; }
     Orientation GetOrientation() const { return eOrientation; }
 
+    virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 };
 
 #endif     // _SDPAGE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:42:28 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 15:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,6 +769,23 @@ SdrPage* SdPage::Clone() const
     return(pPage);
 }
 
+/*************************************************************************
+|*
+|* GetTextStyleSheetForObject
+|*
+\************************************************************************/
 
 
+SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
+{
+    const PresObjKind eKind = ((SdPage*)this)->GetPresObjKind(pObj);
+    if( eKind != PRESOBJ_NONE )
+    {
+        return ((SdPage*)this)->GetStyleSheetForPresObj(eKind);
+    }
+    else
+    {
+        return FmFormPage::GetTextStyleSheetForObject( pObj );
+    }
+}
 
