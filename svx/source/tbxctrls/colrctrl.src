@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:34:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,8 @@ DockingWindow RID_SVXCTRL_COLOR
     Dockable = TRUE ;
     EnableResizing = TRUE ;
     Size = MAP_APPFONT ( 150 , 22 ) ;
-    Text = "Farben" ;
-    Text [ ENGLISH ] = "Colors" ;
-    Text [ english_us ] = "Colors" ;
-    Text [ italian ] = "Colori" ;
-    Text [ spanish ] = "Colores" ;
-    Text [ french ] = "Couleurs" ;
-    Text [ dutch ] = "Kleuren" ;
+    Text [ de ] = "Farben" ;
+    Text [ en-US ] = "Colors" ;
     Control 1
     {
         HelpId = HID_COLOR_CTL_COLORS ;
@@ -92,31 +87,7 @@ DockingWindow RID_SVXCTRL_COLOR
         Size = MAP_APPFONT ( 146 , 18 ) ;
         Border = FALSE ;
     };
-    Text [ swedish ] = "F‰rger" ;
-    Text [ danish ] = "Farver" ;
-    Text [ portuguese_brazilian ] = "Cores" ;
-    Text [ portuguese ] = "Cores" ;
-    Text[ chinese_simplified ] = "È¢úËâ≤";
-    Text[ russian ] = "÷‚ÂÚ‡";
-    Text[ polish ] = "Kolory";
-    Text[ japanese ] = "Ëâ≤";
-    Text[ chinese_traditional ] = "È°èËâ≤";
-    Text[ arabic ] = "«·√·Ê«‰";
-    Text[ dutch ] = "Kleuren";
-    Text[ chinese_simplified ] = "È¢úËâ≤";
-    Text[ greek ] = "◊Ò˛Ï·Ù·";
-    Text[ korean ] = "ÏÉâÏÉÅ";
-    Text[ turkish ] = "Renkler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Colors";
-    Text[ finnish ] = "V‰rit";
-    Text[ thai ] = "‡∏™‡∏µ";
-    Text[ czech ] = "Barvy";
-    Text[ hebrew ] = "‚ÄÆ◊¶◊ë◊¢◊ô◊ù‚Ä¨";
-    Text[ hindi ] = "‡§∞‡§Ç‡§ó";
-    Text[ slovak ] = "Farby";
-    Text[ hungarian ] = "Sz√≠nek";
-    Text[ slovenian ] = "Barve";
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
