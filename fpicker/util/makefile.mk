@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 14:03:30 $
+#   last change: $Author: hr $ $Date: 2004-09-08 17:11:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,15 +75,17 @@ USE_LDUMP2=TRUE
 
 # --- fps dynlib ----------------------------------------------
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUIBASE)" == "unx"
 
-SHL1TARGET=$(TARGET1)
-
-SHL1STDLIBS=$(CPPULIB)\
+COMMON_LIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
             $(VCLLIB)\
-            $(TOOLSLIB)\
+            $(TOOLSLIB)
+
+.IF "$(GUI)"=="WNT"
+SHL1TARGET=$(TARGET1)
+SHL1STDLIBS=		$(COMMON_LIBS) \
             uwinapi.lib \
             advapi32.lib \
             shell32.lib\
@@ -94,30 +96,7 @@ SHL1STDLIBS=$(CPPULIB)\
             kernel32.lib\
             comsupp.lib\
             oleaut32.lib
-
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET)
-
-SHL1LIBS=$(SLB)$/fps.lib\
-         $(SLB)$/utils.lib
-
-SHL1OBJS=$(SLOFILES)
-            
-SHL1RES=$(RES)$/$(TARGET1).res
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-# --- fop dynlib --------------------------------------------------
-
-SHL2TARGET=$(TARGET2)
-
-SHL2STDLIBS=$(CPPULIB)\
-            $(CPPUHELPERLIB)\
-            $(SALLIB)\
-            $(TOOLSLIB)\
-            $(VCLLIB)\
+SHL2STDLIBS=		$(COMMON_LIBS) \
             uwinapi.lib \
             advapi32.lib \
             ole32.lib\
@@ -126,21 +105,44 @@ SHL2STDLIBS=$(CPPULIB)\
             comsupp.lib\
             oleaut32.lib
 
+SHL1IMPLIB=i$(SHL1TARGET)
+SHL1LIBS=$(SLB)$/fps.lib\
+         $(SLB)$/utils.lib
+SHL1RES=$(RES)$/$(TARGET1).res
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+.ELSE
+.IF "$(ENABLE_GTK)" == "TRUE"
+SHL1TARGET=fps_gnome
+SHL1LIBS=$(SLB)$/fps_gnome.lib
+SHL1STDLIBS= $(COMMON_LIBS) `pkg-config --libs gtk+-2.0`
+SHL2STDLIBS= $(SHL1STDLIBS)
+DEF1NAME=$(SHL1TARGET)
+.ENDIF
+.ENDIF
+
+SHL1DEPN=
+SHL1OBJS=$(SLOFILES)
+
+DEF1EXPORTFILE=	exports.dxp
+
+# --- fop dynlib --------------------------------------------------
+
+SHL2TARGET=$(TARGET2)
+
 SHL2DEPN=
-SHL2IMPLIB=i$(SHL2TARGET)
-
-SHL2LIBS=\
-    $(SLB)$/fop.lib\
-    $(SLB)$/utils.lib
-
+SHL2IMPLIB=$(SHL1IMPLIB)
+SHL2LIBS=$(SHL1LIBS)
 SHL2OBJS=$(SLOFILES) 
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=	exports.dxp
 
-
-# "$(GUI)"=="WNT"
+# "$(GUI)"=="WNT" || "$(GUIBASE)"=="unx"
+.ELSE
+dummy:
+    @echo "Nothing to build for OS $(OS)"
 .ENDIF			
 
 
