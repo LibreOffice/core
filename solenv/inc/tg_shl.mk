@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-02 11:37:13 $
+#   last change: $Author: svesik $ $Date: 2002-01-02 11:23:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -252,7 +252,11 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="IRIX"
+SHL$(TNR)SONAME=$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)
+.ELSE
 SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)\"
+.ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
