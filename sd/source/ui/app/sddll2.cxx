@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:58:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,6 @@
 #ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
 #include "NavigatorChildWindow.hxx"
 #endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_LAZER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
 #endif
@@ -247,7 +244,6 @@ void SdDLL::RegisterControllers()
     ::sd::AnimationChildWindow::RegisterChildWindow(0, pMod);
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::DrawViewShell::_GetInterfaceIdImpl(), pMod );
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::GraphicViewShell::_GetInterfaceIdImpl(), pMod );
-    ::sd::PreviewChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
     //Sd3DChildWindow::RegisterChildWindow(0, pMod);
 /*
