@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:48:44 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@ EditWindow *StatementList::m_pDbgWin;
 #endif
 
 
-ULONG StatementList::nWindowWaitUId = 0;
+SmartId StatementList::aWindowWaitUId = SmartId();
 Window *StatementList::pWindowWaitPointer = NULL;
-ULONG StatementList::nWindowWaitOldHelpId = 0;
-ULONG StatementList::nWindowWaitOldUniqueId = 0;
+SmartId StatementList::aWindowWaitOldHelpId = SmartId();
+SmartId StatementList::aWindowWaitOldUniqueId = SmartId();
 USHORT StatementList::nUseBindings = 0;
 
 SmartId StatementList::aSubMenuId1 = SmartId(); // Untermenüs bei PopupMenus
@@ -142,7 +142,7 @@ Window* StatementList::pFirstDocFrame = NULL;
 
 BOOL StatementList::bCatchGPF = TRUE;
 
-#define IS_WINP_CLOSING(pWin) (pWin->GetHelpId() == 4321 && pWin->GetUniqueId() == 1234)
+#define IS_WINP_CLOSING(pWin) (pWin->GetSmartHelpId().Matches( 4321 ) && pWin->GetSmartUniqueId().Matches( 1234 ))
 
 /*
 UniString GEN_RES_STR0( ULONG nResId ) { return ResString( nResId ); }
@@ -401,10 +401,7 @@ Window* StatementList::SearchClientWin( Window *pBase, Search &aSearch, BOOL May
 
 BOOL SearchUID::IsWinOK( Window *pWin )
 {
-//  #97961# tabpages on non tabdialogs don't set the ID of the dialog and thus have to be acessible by themselves.
-//  it is unclear why these were excluded in the first place
-//  if ( pWin->GetUniqueOrHelpId() == aUId && ( pWin->GetType() != WINDOW_TABPAGE || pWin->GetWindow( WINDOW_REALPARENT )->GetType() != WINDOW_TABCONTROL ) )
-    if ( aUId.Equals( pWin->GetUniqueOrHelpId() ) )
+    if ( aUId.Matches( pWin->GetSmartUniqueOrHelpId() ) )
     {
         if ( ( pWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pWin->IsVisible() )
             return TRUE;
@@ -418,21 +415,10 @@ BOOL SearchUID::IsWinOK( Window *pWin )
     else if ( pWin->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
     {
         ToolBox *pTB = ((ToolBox*)pWin);
-        if ( aUId.Equals( pTB->GetHelpIdAsString() ) )
-        {
-            if ( ( pWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pWin->IsVisible() )
-                return TRUE;
-            else
-            {
-                if ( !pMaybeResult )
-                    pMaybeResult = pWin;
-                return FALSE;
-            }
-        }
         int i;
         for ( i = 0; i < pTB->GetItemCount() ; i++ )
         {
-            if ( aUId.Equals( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Equals( pTB->GetHelpId(pTB->GetItemId( i )) ) )
+            if ( aUId.Matches( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Matches( pTB->GetHelpId(pTB->GetItemId( i )) ) )
             {       // Die ID stimmt.
                 Window *pItemWin;
                 pItemWin = pTB->GetItemWindow( pTB->GetItemId( i ) );
@@ -997,7 +983,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
 
     WRITE(sIndent);
     WRITEc("UId : ");
-    WRITE(MakeStringNumber(UIdKenn,pBase->GetUniqueOrHelpId()));
+    WRITE(UIdString(pBase->GetSmartUniqueOrHelpId()));
     WRITEc(":");
     WRITE(pBase->GetQuickHelpText());
     WRITEc(":");
@@ -1033,7 +1019,7 @@ BOOL StatementList::CheckWindowWait()
         if ( WinPtrValid(pWindowWaitPointer) && IS_WINP_CLOSING(pWindowWaitPointer) )
         {
 #if OSL_DEBUG_LEVEL > 1
-            m_pDbgWin->AddText( String::CreateFromInt64( nWindowWaitUId ).AppendAscii(" Still Open. RType=") );
+            m_pDbgWin->AddText( aWindowWaitUId.GetText().AppendAscii(" Still Open. RType=") );
             m_pDbgWin->AddText( String::CreateFromInt32( pWindowWaitPointer->GetType() ).AppendAscii("\n") );
 #endif
 
@@ -1043,10 +1029,10 @@ BOOL StatementList::CheckWindowWait()
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );
 #endif
-                pWindowWaitPointer->SetHelpId(nWindowWaitOldHelpId);
-                pWindowWaitPointer->SetUniqueId(nWindowWaitOldUniqueId);
+                pWindowWaitPointer->SetSmartHelpId(aWindowWaitOldHelpId, SMART_SET_ALL);
+                pWindowWaitPointer->SetSmartUniqueId(aWindowWaitOldUniqueId, SMART_SET_ALL);
 
-                nWindowWaitUId = 0;
+                aWindowWaitUId = SmartId();
                 pWindowWaitPointer = NULL;
                 StartTime = Time(0L);
                 return TRUE;
@@ -1055,7 +1041,7 @@ BOOL StatementList::CheckWindowWait()
             return FALSE;
         }
         pWindowWaitPointer = NULL;
-        nWindowWaitUId = 0;
+        aWindowWaitUId = SmartId();
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Closed, Going on.\n" );
 #endif
