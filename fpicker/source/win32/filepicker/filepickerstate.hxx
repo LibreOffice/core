@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 08:41:52 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
