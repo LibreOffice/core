@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,28 +184,13 @@ static CharSet ImplCharSetToSal( BYTE nCharSet )
         UINT nCP = (USHORT)GetOEMCP();
         switch ( nCP )
         {
-            case 437:   eTextEncoding = RTL_TEXTENCODING_IBM_437; break;
-            case 850:   eTextEncoding = RTL_TEXTENCODING_IBM_850; break;
-            case 860:   eTextEncoding = RTL_TEXTENCODING_IBM_860; break;
-            case 861:   eTextEncoding = RTL_TEXTENCODING_IBM_861; break;
-            case 863:   eTextEncoding = RTL_TEXTENCODING_IBM_863; break;
-            case 865:   eTextEncoding = RTL_TEXTENCODING_IBM_865; break;
-            case 737:   eTextEncoding = RTL_TEXTENCODING_IBM_737; break;
-            case 775:   eTextEncoding = RTL_TEXTENCODING_IBM_775; break;
-            case 852:   eTextEncoding = RTL_TEXTENCODING_IBM_852; break;
-            case 855:   eTextEncoding = RTL_TEXTENCODING_IBM_855; break;
-            case 857:   eTextEncoding = RTL_TEXTENCODING_IBM_857; break;
-            case 862:   eTextEncoding = RTL_TEXTENCODING_IBM_862; break;
-            case 864:   eTextEncoding = RTL_TEXTENCODING_IBM_864; break;
-            case 866:   eTextEncoding = RTL_TEXTENCODING_IBM_866; break;
-            case 869:   eTextEncoding = RTL_TEXTENCODING_IBM_869; break;
-            case 874:   eTextEncoding = RTL_TEXTENCODING_MS_874; break;
-            case 932:   eTextEncoding = RTL_TEXTENCODING_MS_932; break;
-            case 949:   eTextEncoding = RTL_TEXTENCODING_MS_949; break;
-            case 950:   eTextEncoding = RTL_TEXTENCODING_MS_950; break;
+            // It is unclear why these two (undefined?) code page numbers are
+            // handled specially here:
             case 1004:  eTextEncoding = RTL_TEXTENCODING_MS_1252; break;
             case 65400: eTextEncoding = RTL_TEXTENCODING_SYMBOL; break;
-            default:    eTextEncoding = RTL_TEXTENCODING_DONTKNOW; break;
+            default:
+                eTextEncoding = rtl_getTextEncodingFromWindowsCodePage(nCP);
+                break;
         };
     }
     else
