@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-09-28 17:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,15 @@
 #ifndef _COM_SUN_STAR_SHEET_XSUBTOTALDESCRIPTOR_HPP_
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONTYPE_HPP_
+#include <com/sun/star/sheet/ValidationType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
@@ -136,6 +145,7 @@ struct ScQueryParam;
 
 struct ScMyRowFormatRange
 {
+    com::sun::star::table::CellRangeAddress aRangeAddress;
     sal_Int32   nStartColumn;
     sal_Int32   nRepeatColumns;
     sal_Int32   nRepeatRows;
@@ -277,22 +287,61 @@ public:
     void Sort();
 };
 
+struct ScMyValidationRange
+{
+    com::sun::star::table::CellRangeAddress aRange;
+    rtl::OUString sName;
+    sal_Int32 nIndex;
+    sal_Bool bUsed;
+
+    ScMyValidationRange();
+    ~ScMyValidationRange();
+};
+
+struct ScMyValidation
+{
+    rtl::OUString sName;
+    rtl::OUString sErrorMessage;
+    rtl::OUString sErrorTitle;
+    rtl::OUString sImputMessage;
+    rtl::OUString sImputTitle;
+    rtl::OUString sFormula1;
+    rtl::OUString sFormula2;
+    com::sun::star::table::CellAddress aBaseCell;
+    com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
+    com::sun::star::sheet::ValidationType aValidationType;
+    com::sun::star::sheet::ConditionOperator aOperator;
+    sal_Bool bShowErrorMessage;
+    sal_Bool bShowImputMessage;
+    sal_Bool bIgnoreBlanks;
+
+    ScMyValidation();
+    ~ScMyValidation();
+
+    sal_Bool IsEqual(const ScMyValidation& aVal) const;
+};
+
 struct ScMyCell
 {
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
     com::sun::star::table::CellAddress  aCellAddress;
     com::sun::star::table::CellRangeAddress aMatrixRange;
     com::sun::star::table::CellRangeAddress aMergeRange;
-    ScMyShape                           aShape;
+    std::vector<ScMyShape>              aShapes;
+    sal_Int32                           nValidationIndex;
     sal_Bool                            bHasShape;
     sal_Bool                            bIsMergedBase;
     sal_Bool                            bIsCovered;
     sal_Bool                            bHasAnnotation;
     sal_Bool                            bIsMatrixBase;
     sal_Bool                            bIsMatrixCovered;
+
+    ScMyCell();
+    ~ScMyCell();
 };
 
 class ScMyNotEmptyCellsIterator;
+class ScMyValidations;
 
 class ScXMLExport : public SvXMLExport
 {
@@ -331,6 +380,7 @@ class ScXMLExport : public SvXMLExport
     std::vector<sal_Int32>      nLastRows;
 
     ScMyNotEmptyCellsIterator*  pCellsItr;
+    ScMyValidations*            pValidations;
 
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
@@ -366,8 +416,8 @@ class ScXMLExport : public SvXMLExport
     sal_Bool GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle);
 
     void WriteCell (const ScMyCell& aCell);
-    void WriteShapes(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell, const ScMyCell& aCell);
     void WriteAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
+    void WriteShapes(const ScMyCell& aCell);
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
     sal_Bool IsCellTypeEqual (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell1,
@@ -415,9 +465,32 @@ public:
 
     XMLCellStylesPropertySetMapper* GetCellStylesPropertySetMapper() { return pCellStylesPropertySetMapper; }
 
+    ScMyValidations* GetValidations() { return pValidations; }
+
 //  SvXMLExportItemMapper& GetParaItemMapper() { return *pParaItemMapper; }
 //  SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
 //  SwXMLAutoStylePool& GetAutoStylePool() { return *pAutoStylePool; }
+};
+
+class ScMyValidations
+{
+    std::vector<ScMyValidation>     aValidations;
+    std::vector<ScMyValidationRange> aValidationRanges;
+    rtl::OUString                   sEmptyString;
+public:
+    ScMyValidations();
+    ~ScMyValidations();
+    sal_Bool AddValidation(const com::sun::star::uno::Any& aAny,
+        const com::sun::star::table::CellRangeAddress& aCellRange);
+    rtl::OUString GetCondition(const ScMyValidation& aValidation);
+    rtl::OUString GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
+    void WriteMessage(ScXMLExport& rExport,
+        const rtl::OUString& sTitle, const rtl::OUString& sMessage,
+        const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage);
+    void WriteValidations(ScXMLExport& rExport);
+    const rtl::OUString& GetValidationName(const sal_Int32 nIndex);
+    const sal_Int32 GetValidationIndex(const com::sun::star::table::CellAddress& aCell);
+    void Sort();
 };
 
 class ScMyNotEmptyCellsIterator
@@ -438,7 +511,6 @@ class ScMyNotEmptyCellsIterator
 
     sal_Bool                                bHasShapes; // Current Table has shapes
     sal_Bool                                bHasShape; // Current Cell has shapes
-    sal_Bool                                bShapeWasWritten;
     sal_Bool                                bHasEmptyDatabaseRanges; // Current Table has empty DatabaseRanges
     sal_Bool                                bIsEmptyDatabaseRange; // Current Cell is in a empty Database Range
     sal_Bool                                bHasMergedCells; // Current Table has merged Cells
@@ -454,12 +526,9 @@ public:
     ~ScMyNotEmptyCellsIterator();
 
     void SetShapes(ScShapesContainer* pTempShapes);
-//  void GetNextShape();
     void SetEmptyDatabaseRanges(ScMyEmptyDatabaseRanges* pTempEmptyDatabaseRanges);
     void SetMergedCells(ScMyMergedCells* pTempMergedCells);
     void SetCurrentTable(const sal_Int32 nTable);
-    void SetCurrentShape(const ScMyShape& aShape) { aCurrentShape = aShape; bHasShape = sal_True; bHasShapes = sal_True; bShapeWasWritten = sal_True; }
-    void SetHasShape(const sal_Bool bValue) { bHasShape = bValue; bHasShapes = bValue; bShapeWasWritten = sal_True; }
 
     sal_Bool GetNext(ScMyCell& aCell);
 };
