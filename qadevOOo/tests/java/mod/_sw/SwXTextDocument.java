@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDocument.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-12-11 12:20:22 $
+ *  last change:$Date: 2004-03-19 14:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextSection;
 import com.sun.star.text.XTextSectionsSupplier;
 import com.sun.star.text.XTextTable;
@@ -237,13 +238,31 @@ public class SwXTextDocument extends TestCase {
                                                            aEndNote);
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
+            log.println("    adding Bookmark");
+            SOfficeFactory.insertTextContent(xTextDoc,
+                                             (XTextContent) SOfficeFactory.createBookmark(
+                                                     xTextDoc));
+
+            log.println("    adding DocumentIndex");
+            oTC = SOfficeFactory.createIndex(xTextDoc,
+                                             "com.sun.star.text.DocumentIndex");
+            SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
+
+            log.println("    adding TextFrame");
+
+            XTextFrame frame = SOfficeFactory.createTextFrame(xTextDoc, 500,
+                                                              500);
+            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+                                                           frame);
+            SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
+
             log.println("creating a second textdocument");
             xSecondTextDoc = WriterTools.createTextDoc(
                                      (XMultiServiceFactory) Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
-            throw new StatusException("Couldn³t create document", e);
+            throw new StatusException("Couldn't create document", e);
         }
 
         if (xTextDoc != null) {
