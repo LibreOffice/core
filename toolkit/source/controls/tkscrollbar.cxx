@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkscrollbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:49:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BLOCKINCREMENT );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
+        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
         ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
         ImplRegisterProperty( BASEPROPERTY_ENABLED );
         ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
