@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:09:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #endif
 
 #include <osl/mutex.hxx>
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 using namespace utl;
 using namespace rtl;
@@ -734,11 +736,15 @@ SvtSaveOptions::SvtSaveOptions()
     ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
     if ( !pOptions )
     {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSaveOptions_Impl::ctor()");
         pOptions = new SvtLoadSaveOptions_Impl;
         pOptions->pSaveOpt = new SvtSaveOptions_Impl;
         pOptions->pLoadOpt = new SvtLoadOptions_Impl;
-    }
-    ++nRefCount;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_SAVEOPTIONS);
+   }
+   ++nRefCount;
     pImp = pOptions;
 }
 
