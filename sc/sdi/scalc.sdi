@@ -7332,3 +7332,28 @@ SfxVoidItem ClosePreview SID_PREVIEW_CLOSE
     GroupId = GID_VIEW;
 ]
 
+//--------------------------------------------------------------------------
+SfxVoidItem SelectTables SID_SELECT_TABLES
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+        HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+        GroupId = GID_EDIT;
+]
+
