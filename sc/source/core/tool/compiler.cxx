@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: er $ $Date: 2001-04-06 16:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2287,7 +2287,11 @@ void ScCompiler::Factor()
                 SetError(errPairExpected);
             else
                 eOp = NextToken();
-            pFacToken->SetByte( SepCount );
+            // Jumps are just normal functions for the FunctionAutoPilot tree view
+            if ( bCompileForFAP && pFacToken->GetType() == svJump )
+                pFacToken = new ScByteToken( pFacToken->GetOpCode(), SepCount );
+            else
+                pFacToken->SetByte( SepCount );
             PutCode( pFacToken );
             // Diese Funktionen muessen immer neu berechnet werden
             switch( eFuncOp )
