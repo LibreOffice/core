@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:35:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,13 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 
 #ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
@@ -137,7 +144,11 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
 
+using namespace ::com::sun::star;
 
 extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
 {
@@ -220,6 +231,10 @@ sal_Int32 ReadThroughComponent(
     {
         return 1;
     }
+    catch( packages::zip::ZipIOException& )
+    {
+        return ERRCODE_IO_BROKENPACKAGE;
+    }
     catch( IOException& )
     {
         return 1;
@@ -235,53 +250,68 @@ sal_Int32 ReadThroughComponent(
 
 /// read a component (storage version)
 sal_Int32 ReadThroughComponent(
-    SvStorage* pStorage,
+    uno::Reference< embed::XStorage > xStorage,
     const Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
     const Reference<XMultiServiceFactory> & rFactory,
     const Reference< XDocumentHandler >& _xFilter)
 {
-    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT( xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
 
-    // open stream (and set parser input)
-    OUString sStreamName = OUString::createFromAscii(pStreamName);
-    if (! pStorage->IsStream(sStreamName))
+    if ( xStorage.is() )
     {
-        // stream name not found! Then try the compatibility name.
-        // if no stream can be opened, return immediatly with OK signal
+        uno::Reference< io::XStream > xDocStream;
+        sal_Bool bEncrypted = sal_False;
 
-        // do we even have an alternative name?
-        if ( NULL == pCompatibilityStreamName )
-            return 0;
+        try
+        {
+            // open stream (and set parser input)
+            OUString sStreamName = OUString::createFromAscii(pStreamName);
+            if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
+            {
+                // stream name not found! Then try the compatibility name.
+                // if no stream can be opened, return immediatly with OK signal
 
-        // if so, does the stream exist?
-        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-        if (! pStorage->IsStream(sStreamName) )
-            return 0;
+                // do we even have an alternative name?
+                if ( NULL == pCompatibilityStreamName )
+                    return 0;
+
+                // if so, does the stream exist?
+                sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
+                if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
+                    return 0;
+            }
+
+            // get input stream
+            xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+
+            uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
+            uno::Any aAny = xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+            aAny >>= bEncrypted;
+        }
+        catch( packages::WrongPasswordException& )
+        {
+            return ERRCODE_SFX_WRONGPASSWORD;
+        }
+        catch ( uno::Exception& )
+        {
+            return 1; // TODO/LATER: error handling
+        }
+
+        Reference< XInputStream > xInputStream = xDocStream->getInputStream();
+        // read from the stream
+        return ReadThroughComponent( xInputStream
+                                    ,xModelComponent
+                                    ,pStreamName
+                                    ,rFactory
+                                    ,_xFilter
+                                    ,bEncrypted );
     }
 
-    // get input stream
-    SvStorageStreamRef xEventsStream;
-    xEventsStream = pStorage->OpenStream( sStreamName,
-                                          STREAM_READ | STREAM_NOCREATE );
-
-    Any aAny;
-    sal_Bool bEncrypted =
-        xEventsStream->GetProperty(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
-        aAny.getValueType() == ::getBooleanCppuType() &&
-        *(sal_Bool *)aAny.getValue();
-
-    Reference< XInputStream > xStream = xEventsStream->GetXInputStream();
-    // read from the stream
-    return ReadThroughComponent( xStream
-                                ,xModelComponent
-                                ,pStreamName
-                                ,rFactory
-                                ,_xFilter
-                                ,bEncrypted );
+    // TODO/LATER: better error handling
+    return 1;
 }
 
 // -------------
@@ -348,13 +378,12 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         SfxMediumRef pMedium = new SfxMedium(
                 sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
-        SvStorage *pStorage = 0;
+        uno::Reference< embed::XStorage > xStorage;
         if( pMedium )
         {
             try
             {
-            pStorage = pMedium->GetStorage();
-
+                xStorage = pMedium->GetStorage();
                 //  nError = pMedium->GetError();
             }
             catch(const Exception&)
@@ -362,8 +391,8 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             }
         }
 
-        OSL_ENSURE(pStorage,"No Storage for read!");
-        if ( pStorage )
+        OSL_ENSURE(xStorage.is(),"No Storage for read!");
+        if ( xStorage.is() )
         {
             Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
             Reference< XNumberFormatsSupplier > xNum(xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
@@ -371,7 +400,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
 
             Reference<XComponent> xModel(GetModel(),UNO_QUERY);
-            bRet = ReadThroughComponent( pStorage
+            sal_Int32 nRet = ReadThroughComponent( xStorage
                                         ,xModel
                                         ,"settings.xml"
                                         ,"Settings.xml"
@@ -379,13 +408,17 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                         ,this
                                         ) == 0;
 
-            bRet = bRet && ReadThroughComponent( pStorage
+            if ( nRet == 0 )
+                nRet = ReadThroughComponent( xStorage
                                         ,xModel
                                         ,"content.xml"
                                         ,"Content.xml"
                                         ,getServiceFactory()
                                         ,this
                                         ) == 0;
+
+            bRet = nRet == 0;
+
             if ( bRet )
             {
                 GetModel()->attachResource(sFileName,Sequence< PropertyValue >());
@@ -394,8 +427,29 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                 if ( xModi.is() )
                     xModi->setModified(sal_False);
             }
+            else
+            {
+                switch( nRet )
+                {
+                    case ERRCODE_IO_BROKENPACKAGE:
+                        if( xStorage.is() )
+                        {
+                            // TODO/LATER: no way to transport the error outside from the filter!
+                            break;
+                        }
+                        // fall through intented
+                    default:
+                        {
+                            // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
+                            ErrorHandler::HandleError( nRet );
+                            if( nRet & ERRCODE_WARNING_MASK )
+                                bRet = sal_True;
+                        }
+                }
+            }
         }
     }
+
     return bRet;
 }
 // -----------------------------------------------------------------------------
