@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:41:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -161,8 +164,7 @@ using namespace cppu;
 static char sWW8_form[] = "WW-Standard";
 
 
-sal_uInt8 __READONLY_DATA OCX_Control::aObjInfo[4] = {
-0x00, 0x12, 0x03, 0x00, };
+sal_uInt8 __READONLY_DATA OCX_Control::aObjInfo[4] = { 0x00, 0x12, 0x03, 0x00 };
 
 
 void Align(SvStorageStream *pS,int nAmount,BOOL bFill=FALSE)
@@ -569,6 +571,10 @@ sal_uInt8 OCX_Control::ExportBorder(sal_uInt16 nBorder,sal_uInt8 &rBorderStyle)
     return nRet;
 }
 
+sal_Bool OCX_Control::ReadFontData(SvStorageStream *pS)
+{
+    return aFontData.Read(pS);
+}
 
 
 const uno::Reference< drawing::XDrawPage >&
@@ -2664,7 +2670,7 @@ struct OCX_map
     const char *sName;
 };
 
-static const int NO_OCX=16;
+static const int NO_OCX=18;
 
 OCX_map aOCXTab[NO_OCX] =
 {
@@ -2702,6 +2708,10 @@ OCX_map aOCXTab[NO_OCX] =
 #endif
     {&OCX_ImageButton::Create,"D7053240-CE69-11CD-a777-00dd01143c57",
         form::FormComponentType::IMAGEBUTTON,"CommandButton"},
+    {&OCX_SpinButton::Create,"79176FB0-B7F2-11CE-97ef-00aa006d2776",
+        form::FormComponentType::SPINBUTTON,"SpinButton"},
+    {&OCX_ScrollBar::Create,"DFD181E0-5E2F-11CE-a449-00aa004a803d",
+        form::FormComponentType::SCROLLBAR,"ScrollBar"},
     {&OCX_GroupBox::Create,"",
         form::FormComponentType::GROUPBOX,""}
 };
@@ -2721,7 +2731,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(const String &sName)
 {
     for (int i=0;i<NO_OCX;i++)
     {
-        if ( sName.EqualsAscii( aOCXTab[i].sId ))
+        if ( sName.EqualsIgnoreCaseAscii( aOCXTab[i].sId ))
             return(aOCXTab[i].pCreate());
     }
     return(NULL);
@@ -3406,8 +3416,6 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     const uno::Reference< beans::XPropertySet > &rPropSet,
     const awt::Size &rSize)
 {
-    sal_Bool bRet=sal_True;
-
     static sal_uInt8 __READONLY_DATA aCompObj[] = {
         0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
         0xFF, 0xFF, 0xFF, 0xFF, 0x41, 0x92, 0x59, 0x4C,
@@ -3451,5 +3459,483 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
     SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
+
+// ============================================================================
+
+OCX_SpinButton::OCX_SpinButton() :
+    OCX_Control( OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinButton" ) ) ),
+    mnBlockFlags( 0 ),
+    mnValue( 0 ),
+    mnMin( 0 ),
+    mnMax( 100 ),
+    mnSmallStep( 1 ),
+    mnPageStep( 1 ),
+    mnOrient( -1 ),
+    mnWidth( 0 ),
+    mnHeight( 0 ),
+    mnBackColor( 0x8000000F ),
+    mnForeColor( 0x80000012 ),
+    mnDelay( 50 ),
+    mbEnabled( true ),
+    mbLocked( false ),
+    mbPropThumb( true )
+{
+}
+
+OCX_Control* OCX_SpinButton::Create()
+{
+    return new OCX_SpinButton;
+}
+
+sal_Bool OCX_SpinButton::Read( SvStorageStream *pS )
+{
+    if( !pS ) return sal_False;
+
+    SvStream& rStrm = *pS;
+    sal_uInt16 nId, nSize;
+    sal_Int32 nIcon = 0;
+
+    rStrm >> nId >> nSize >> mnBlockFlags;
+
+    DBG_ASSERT( nStandardId == nId, "OCX_SpinButton::Read - unknown identifier" );
+
+    if( mnBlockFlags & 0x00000001 )     rStrm >> mnForeColor;
+    if( mnBlockFlags & 0x00000002 )     rStrm >> mnBackColor;
+    if( mnBlockFlags & 0x00000004 )
+    {
+        sal_Int32 nFlags;
+        rStrm >> nFlags;
+        mbEnabled = (nFlags & 0x00000002) != 0;
+        mbLocked = (nFlags & 0x00000004) != 0;
+    }
+    if( mnBlockFlags & 0x00000010 )     rStrm.SeekRel( 4 );     // mouse pointer
+    if( mnBlockFlags & 0x00000020 )     rStrm >> mnMin;
+    if( mnBlockFlags & 0x00000040 )     rStrm >> mnMax;
+    if( mnBlockFlags & 0x00000080 )     rStrm >> mnValue;
+    if( mnBlockFlags & 0x00000100 )     rStrm.SeekRel( 4 );     // unknown
+    if( mnBlockFlags & 0x00000200 )     rStrm.SeekRel( 4 );     // unknown
+    if( mnBlockFlags & 0x00000400 )     rStrm.SeekRel( 4 );     // unknown
+    if( mnBlockFlags & 0x00000800 )     rStrm >> mnSmallStep;
+    if( mnBlockFlags & 0x00001000 )     rStrm >> mnPageStep;
+    if( mnBlockFlags & 0x00002000 )     rStrm >> mnOrient;
+    if( mnBlockFlags & 0x00004000 )
+    {
+        sal_Int32 nThumb;
+        *pS >> nThumb;
+        mbPropThumb = nThumb != 0;
+    }
+    if( mnBlockFlags & 0x00008000 )     rStrm >> mnDelay;
+    if( mnBlockFlags & 0x00010000 )     rStrm >> nIcon;
+    if( mnBlockFlags & 0x00000008 )     rStrm >> mnWidth >> mnHeight;
+
+    if( nIcon )
+    {
+        sal_Int32 nIconSize;
+        pS->SeekRel( 20 );
+        *pS >> nIconSize;
+        pS->SeekRel( nIconSize );
+    }
+
+    return sal_True;
+}
+
+sal_Bool OCX_SpinButton::ReadFontData( SvStorageStream *pS )
+{
+    // spin buttons and scroll bars do not support font data
+    return sal_True;
+}
+
+sal_Bool OCX_SpinButton::Import(
+        const uno::Reference< lang::XMultiServiceFactory >& rServiceFactory,
+        uno::Reference< form::XFormComponent >& rFComp,
+        awt::Size &rSz )
+{
+    if( (mnWidth < 1) || (mnHeight < 1) )
+        return sal_False;
+
+    OUString sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.SpinButton" );
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance( sServiceName );
+    if( !xCreate.is() )
+        return sal_False;
+
+    rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
+    if( !rFComp.is() )
+        return sal_False;
+
+    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
+
+    rSz.Width = mnWidth;
+    rSz.Height = mnHeight;
+
+    uno::Any aTmp( &sName, getCppuType((OUString *)0) );
+    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+
+    aTmp <<= ImportColor( mnForeColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("SymbolColor"), aTmp);
+
+    aTmp <<= ImportColor( mnBackColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    aTmp = bool2any( mbEnabled && !mbLocked );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+
+    aTmp <<= mnValue;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultSpinValue"), aTmp );
+
+    aTmp <<= mnMin;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMin"), aTmp );
+
+    aTmp <<= mnMax;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMax"), aTmp );
+
+    aTmp <<= mnSmallStep;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("SpinIncrement"), aTmp );
+
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    switch( mnOrient )
+    {
+        case 0:     aTmp <<= AwtScrollOrient::VERTICAL;     break;
+        case 1:     aTmp <<= AwtScrollOrient::HORIZONTAL;   break;
+        default:    aTmp <<= (mnWidth < mnHeight) ? AwtScrollOrient::VERTICAL : AwtScrollOrient::HORIZONTAL;
+    }
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Orientation"), aTmp );
+
+    aTmp = bool2any( true );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Repeat"), aTmp );
+
+    aTmp <<= mnDelay;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("RepeatDelay"), aTmp );
+
+    aTmp <<= sal_Int16( 0 );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+
+    return sal_True;
+}
+
+sal_Bool OCX_SpinButton::Export(
+        SvStorageRef &rObj,
+        const uno::Reference< beans::XPropertySet>& rPropSet,
+        const awt::Size& rSize )
+{
+    static sal_uInt8 __READONLY_DATA aCompObj[] =
+    {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xB0, 0x6F, 0x17, 0x79,
+        0xF2, 0xB7, 0xCE, 0x11, 0x97, 0xEF, 0x00, 0xAA,
+        0x00, 0x6D, 0x27, 0x76, 0x1F, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x53, 0x70, 0x69, 0x6E,
+        0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x00, 0x10,
+        0x00, 0x00, 0x00, 0x45, 0x6D, 0x62, 0x65, 0x64,
+        0x64, 0x65, 0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65,
+        0x63, 0x74, 0x00, 0x13, 0x00, 0x00, 0x00, 0x46,
+        0x6E, 0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x2E,
+        0x31, 0x00, 0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00
+    };
+
+    {
+        SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+        xStor->Write(aCompObj,sizeof(aCompObj));
+        DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
+    }
+
+    {
+        SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+        xStor3->Write(aObjInfo,sizeof(aObjInfo));
+        DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
+    }
+
+    static sal_uInt8 __READONLY_DATA aOCXNAME[] =
+    {
+        0x53, 0x00, 0x70, 0x00, 0x69, 0x00, 0x6E, 0x00,
+        0x42, 0x00, 0x75, 0x00, 0x74, 0x00, 0x74, 0x00,
+        0x6F, 0x00, 0x6E, 0x00, 0x31, 0x00, 0x00, 0x00,
+        0x00, 0x00
+    };
+
+    {
+        SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+        xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
+        DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
+    }
+
+    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    return WriteContents(xContents, rPropSet, rSize);
+}
+
+sal_Bool OCX_SpinButton::WriteContents(
+        SvStorageStreamRef &rObj,
+        const uno::Reference< beans::XPropertySet> &rPropSet,
+        const awt::Size& rSize )
+{
+    if( !rObj.Is() )
+        return sal_False;
+
+    mnBlockFlags = 0x00000008;
+    mnWidth = rSize.Width;
+    mnHeight = rSize.Height;
+
+    GetInt32Property( mnForeColor, rPropSet, WW8_ASCII2STR( "SymbolColor" ),     0x00000001 );
+    GetInt32Property( mnBackColor, rPropSet, WW8_ASCII2STR( "BackgroundColor" ), 0x00000002 );
+    GetBoolProperty(  mbEnabled,   rPropSet, WW8_ASCII2STR( "Enabled" ),         0x00000304 );
+    GetInt32Property( mnMin,       rPropSet, WW8_ASCII2STR( "SpinValueMin" ),    0x00000020 );
+    GetInt32Property( mnMax,       rPropSet, WW8_ASCII2STR( "SpinValueMax" ),    0x00000040 );
+    GetInt32Property( mnValue,     rPropSet, WW8_ASCII2STR( "SpinValue" ),       0x00000080 );
+    GetInt32Property( mnSmallStep, rPropSet, WW8_ASCII2STR( "SpinIncrement" ),   0x00000800 );
+    GetInt32Property( mnDelay,     rPropSet, WW8_ASCII2STR( "RepeatDelay" ),     0x00008000 );
+
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    sal_Int16 nApiOrient;
+    if( rPropSet->getPropertyValue( WW8_ASCII2STR( "Orientation" ) ) >>= nApiOrient )
+        UpdateInt32Property( mnOrient, (nApiOrient == AwtScrollOrient::VERTICAL) ? 0 : 1, 0x00002000 );
+
+    return WriteData( *rObj );
+}
+
+void OCX_SpinButton::UpdateInt32Property(
+        sal_Int32& rnCoreValue, sal_Int32 nNewValue, sal_Int32 nBlockFlag )
+{
+    if( nNewValue != rnCoreValue )
+    {
+        rnCoreValue = nNewValue;
+        mnBlockFlags |= nBlockFlag;
+    }
+}
+
+void OCX_SpinButton::GetInt32Property(
+        sal_Int32& rnCoreValue, const uno::Reference< beans::XPropertySet>& rxPropSet,
+        const OUString& rPropName, sal_Int32 nBlockFlag )
+{
+    sal_Int32 nNewValue;
+    if( rxPropSet->getPropertyValue( rPropName ) >>= nNewValue )
+        UpdateInt32Property( rnCoreValue, nNewValue, nBlockFlag );
+}
+
+void OCX_SpinButton::UpdateBoolProperty(
+        bool& rbCoreValue, bool bNewValue, sal_Int32 nBlockFlag )
+{
+    if( bNewValue != rbCoreValue )
+    {
+        rbCoreValue = bNewValue;
+        mnBlockFlags |= nBlockFlag;
+    }
+}
+
+void OCX_SpinButton::GetBoolProperty(
+        bool& rbCoreValue, const uno::Reference< beans::XPropertySet>& rxPropSet,
+        const OUString& rPropName, sal_Int32 nBlockFlag )
+{
+    UpdateBoolProperty( rbCoreValue,
+        any2bool( rxPropSet->getPropertyValue( rPropName ) ), nBlockFlag );
+}
+
+sal_Bool OCX_SpinButton::WriteData( SvStream& rStrm ) const
+{
+    sal_Bool bRet = sal_True;
+    ULONG nStartPos = rStrm.Tell();
+
+    rStrm << sal_Int32( 0 ) << mnBlockFlags;
+
+    if( mnBlockFlags & 0x00000001 )     rStrm << ExportColor( mnForeColor );
+    if( mnBlockFlags & 0x00000002 )     rStrm << ExportColor( mnBackColor );
+    if( mnBlockFlags & 0x00000004 )
+    {
+        sal_Int32 nFlags = 0x00000019;  // always set
+        if( mbEnabled ) nFlags |= 0x00000002;
+        if( mbLocked )  nFlags |= 0x00000004;
+        rStrm << nFlags;
+    }
+    if( mnBlockFlags & 0x00000020 )     rStrm << mnMin;
+    if( mnBlockFlags & 0x00000040 )     rStrm << mnMax;
+    if( mnBlockFlags & 0x00000080 )     rStrm << mnValue;
+    if( mnBlockFlags & 0x00000100 )     rStrm << sal_Int32( 0 );    // unknown
+    if( mnBlockFlags & 0x00000200 )     rStrm << sal_Int32( 0 );    // unknown
+    if( mnBlockFlags & 0x00000400 )     rStrm << sal_Int32( 0 );    // unknown
+    if( mnBlockFlags & 0x00000800 )     rStrm << mnSmallStep;
+    if( mnBlockFlags & 0x00001000 )     rStrm << mnPageStep;
+    if( mnBlockFlags & 0x00002000 )     rStrm << mnOrient;
+    if( mnBlockFlags & 0x00004000 )     rStrm << sal_Int32( mbPropThumb ? 1 : 0 );
+    if( mnBlockFlags & 0x00008000 )     rStrm << mnDelay;
+    if( mnBlockFlags & 0x00000008 )     rStrm << mnWidth << mnHeight;
+
+    sal_uInt16 nSize = static_cast< sal_uInt16 >( rStrm.Tell() - nStartPos - 4 );
+    rStrm.Seek( nStartPos );
+    rStrm << nStandardId << nSize;
+
+    DBG_ASSERT( rStrm.GetError() == SVSTREAM_OK, "OCX_SpinButton::WriteData - error in stream" );
+    return bRet;
+}
+
+// ============================================================================
+
+OCX_ScrollBar::OCX_ScrollBar()
+{
+    sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollBar" ) );
+    mnMax = 32767;
+}
+
+OCX_Control* OCX_ScrollBar::Create()
+{
+    return new OCX_ScrollBar;
+}
+
+sal_Bool OCX_ScrollBar::Import(
+        const uno::Reference< lang::XMultiServiceFactory >& rServiceFactory,
+        uno::Reference< form::XFormComponent >& rFComp,
+        awt::Size &rSz )
+{
+    if( (mnWidth < 1) || (mnHeight < 1) )
+        return sal_False;
+
+    OUString sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.ScrollBar" );
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance( sServiceName );
+    if( !xCreate.is() )
+        return sal_False;
+
+    rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
+    if( !rFComp.is() )
+        return sal_False;
+
+    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
+
+    rSz.Width = mnWidth;
+    rSz.Height = mnHeight;
+
+    uno::Any aTmp( &sName, getCppuType((OUString *)0) );
+    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+
+    aTmp <<= ImportColor( mnForeColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("SymbolColor"), aTmp);
+
+    aTmp <<= ImportColor( mnBackColor );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    aTmp = bool2any( mbEnabled && !mbLocked );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+
+    aTmp <<= mnValue;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultScrollValue"), aTmp );
+
+    aTmp <<= mnMin;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMin"), aTmp );
+
+    aTmp <<= mnMax;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMax"), aTmp );
+
+    aTmp <<= mnSmallStep;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("LineIncrement"), aTmp );
+
+    aTmp <<= mnPageStep;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("BlockIncrement"), aTmp );
+    if( mbPropThumb && (mnPageStep > 0) )
+        xPropSet->setPropertyValue( WW8_ASCII2STR("VisibleSize"), aTmp );
+
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    switch( mnOrient )
+    {
+        case 0:     aTmp <<= AwtScrollOrient::VERTICAL;     break;
+        case 1:     aTmp <<= AwtScrollOrient::HORIZONTAL;   break;
+        default:    aTmp <<= (mnWidth < mnHeight) ? AwtScrollOrient::VERTICAL : AwtScrollOrient::HORIZONTAL;
+    }
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Orientation"), aTmp );
+
+    aTmp <<= mnDelay;
+    xPropSet->setPropertyValue( WW8_ASCII2STR("RepeatDelay"), aTmp );
+
+    aTmp <<= sal_Int16( 0 );
+    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+
+    return sal_True;
+}
+
+sal_Bool OCX_ScrollBar::Export(
+        SvStorageRef &rObj,
+        const uno::Reference< beans::XPropertySet>& rPropSet,
+        const awt::Size& rSize )
+{
+    static sal_uInt8 __READONLY_DATA aCompObj[] =
+    {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xE0, 0x81, 0xD1, 0xDF,
+        0x2F, 0x5E, 0xCE, 0x11, 0xA4, 0x49, 0x00, 0xAA,
+        0x00, 0x4A, 0x80, 0x3D, 0x1E, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x53, 0x63, 0x72, 0x6F,
+        0x6C, 0x6C, 0x42, 0x61, 0x72, 0x00, 0x10, 0x00,
+        0x00, 0x00, 0x45, 0x6D, 0x62, 0x65, 0x64, 0x64,
+        0x65, 0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63,
+        0x74, 0x00, 0x12, 0x00, 0x00, 0x00, 0x46, 0x6F,
+        0x72, 0x6D, 0x73, 0x2E, 0x53, 0x63, 0x72, 0x6F,
+        0x6C, 0x6C, 0x42, 0x61, 0x72, 0x2E, 0x31, 0x00,
+        0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    {
+        SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+        xStor->Write(aCompObj,sizeof(aCompObj));
+        DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
+    }
+
+    {
+        SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+        xStor3->Write(aObjInfo,sizeof(aObjInfo));
+        DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
+    }
+
+    static sal_uInt8 __READONLY_DATA aOCXNAME[] =
+    {
+        0x53, 0x00, 0x63, 0x00, 0x72, 0x00, 0x6F, 0x00,
+        0x6C, 0x00, 0x6C, 0x00, 0x42, 0x00, 0x61, 0x00,
+        0x72, 0x00, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    {
+        SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+        xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
+        DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
+    }
+
+    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    return WriteContents(xContents, rPropSet, rSize);
+}
+
+sal_Bool OCX_ScrollBar::WriteContents(
+        SvStorageStreamRef &rObj,
+        const uno::Reference< beans::XPropertySet> &rPropSet,
+        const awt::Size& rSize )
+{
+    if( !rObj.Is() )
+        return sal_False;
+
+    mnBlockFlags = 0x00000008;
+    mnWidth = rSize.Width;
+    mnHeight = rSize.Height;
+
+    GetInt32Property( mnForeColor, rPropSet, WW8_ASCII2STR( "SymbolColor" ),     0x00000001 );
+    GetInt32Property( mnBackColor, rPropSet, WW8_ASCII2STR( "BackgroundColor" ), 0x00000002 );
+    GetBoolProperty(  mbEnabled,   rPropSet, WW8_ASCII2STR( "Enabled" ),         0x00000304 );
+    GetInt32Property( mnMin,       rPropSet, WW8_ASCII2STR( "ScrollValueMin" ),  0x00000020 );
+    GetInt32Property( mnMax,       rPropSet, WW8_ASCII2STR( "ScrollValueMax" ),  0x00000040 );
+    GetInt32Property( mnValue,     rPropSet, WW8_ASCII2STR( "ScrollValue" ),     0x00000080 );
+    GetInt32Property( mnSmallStep, rPropSet, WW8_ASCII2STR( "LineIncrement" ),   0x00000800 );
+    GetInt32Property( mnPageStep,  rPropSet, WW8_ASCII2STR( "BlockIncrement" ),  0x00001000 );
+    GetInt32Property( mnDelay,     rPropSet, WW8_ASCII2STR( "RepeatDelay" ),     0x00008000 );
+
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    sal_Int16 nApiOrient;
+    if( rPropSet->getPropertyValue( WW8_ASCII2STR( "Orientation" ) ) >>= nApiOrient )
+        UpdateInt32Property( mnOrient, (nApiOrient == AwtScrollOrient::VERTICAL) ? 0 : 1, 0x00002000 );
+
+    UpdateBoolProperty( mbPropThumb, true, 0x00004000 );
+
+    return WriteData( *rObj );
+}
+
+// ============================================================================
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
