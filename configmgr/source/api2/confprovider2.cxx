@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,25 @@ namespace configmgr
         }
 
         return aNames;
+    }
+
+    // XLocalizable
+    //-----------------------------------------------------------------------------
+    void SAL_CALL OConfigurationProvider::setLocale( const lang::Locale& eLocale )
+        throw (uno::RuntimeException)
+    {
+        OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
+
+        m_pImpl->setDefaultLocale( eLocale );
+    }
+
+    //-----------------------------------------------------------------------------
+    lang::Locale SAL_CALL OConfigurationProvider::getLocale(  )
+        throw (uno::RuntimeException)
+    {
+        OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
+
+        return m_pImpl->getDefaultOptions().getUnoLocale();
     }
 
     // XInterface
