@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:22:49 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ TabDialog DLG_ATTR
         Text[ chinese_traditional ] = "ªð¦^(~K)";
         Text[ arabic ] = "ÇáÓÇÈÞ";
         Text[ greek ] = "Ðßóù";
-        Text[ korean ] = "µÚ·Î(~K)";
+        Text[ korean ] = "ÀÌÀü";
         Text[ turkish ] = "Geri";
         Text[ catalan ] = "~Regresar";
     };
@@ -254,4 +254,5 @@ TabDialog DLG_ATTR
     Text[ turkish ] = "Alan formatý";
     Text[ catalan ] = "Formato de campo";
 };
+
 
