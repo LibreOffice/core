@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:48:42 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ hindi ] = "$(ARG1) कार्यों को फिर से करो";
     Text[ slovak ] = "Znova akcia $(ARG1)";
 };
+
+
 
 
 
