@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2003-05-05 16:27:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2461,12 +2461,12 @@ void SfxBaseModel::impl_change()
 
 SfxObjectShell* SfxBaseModel::GetObjectShell() const
 {
-    return m_pData ? m_pData->m_pObjectShell : 0;
+    return m_pData ? (SfxObjectShell*) m_pData->m_pObjectShell : 0;
 }
 
 SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 {
-    return m_pData ? m_pData->m_pObjectShell : 0;
+    return m_pData ? (SfxObjectShell*) m_pData->m_pObjectShell : 0;
 }
 
 //________________________________________________________________________________________________________
