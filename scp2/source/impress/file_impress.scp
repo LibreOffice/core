@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:14:13 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,14 @@ File gid_File_Exe_Simpress
 End
 
 // new user interface configuration files
+/*
 File gid_File_Share_Config_Sofficecfg_Impress_Menubar_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Simpress_Menubar;
     Name = "/uiconfig/simpress/menubar/menubar.xml";
 End
+*/
 
 File gid_File_Oo_Office_Ui_Drawimpresscommands_Xcs
     TXT_FILE_BODY;
@@ -105,7 +107,7 @@ File gid_File_Oo_Office_Ui_Drawimpresscommands_Xcs
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/DrawImpressCommands.xcs";
 End
-       
+
 File gid_File_Oo_Office_Ui_Drawimpresscommands_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -127,3 +129,16 @@ File gid_File_Registry_Spool_Oo_Setup_Impress_Xcu
     Name = "/registry/spool/org.openoffice.Setup-impress.xcu";
 End
 
+File gid_File_Oo_Office_Ui_Impresswindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/ImpressWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Impresswindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu";
+End
