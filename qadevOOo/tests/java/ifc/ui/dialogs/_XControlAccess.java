@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XControlAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:46 $
+ *  last change:$Date: 2003-09-08 11:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 
 package ifc.ui.dialogs;
 
-import com.sun.star.ui.dialogs.*;
-import lib.*;
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
+import com.sun.star.ui.dialogs.XControlAccess;
+import com.sun.star.ui.dialogs.XControlInformation;
 import com.sun.star.uno.UnoRuntime;
 
 /**
