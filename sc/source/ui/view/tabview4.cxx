@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-25 18:50:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,36 @@ void ScTabView::EndSelection()
         pScMod->EndReference();
 }
 
+// static
+void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL )
+{
+    //  RTL layout uses a negative range to simulate a mirrored scroll bar.
+    //  SetScrollBar/GetScrollBarPos hide this so outside of these functions normal cell
+    //  addresses can be used.
+
+    if ( bLayoutRTL )
+    {
+        rScroll.SetRange( Range( -nRangeMax, 0 ) );
+        rScroll.SetVisibleSize( nVisible );
+        rScroll.SetThumbPos( -nPos - nVisible );
+    }
+    else
+    {
+        rScroll.SetRange( Range( 0, nRangeMax ) );
+        rScroll.SetVisibleSize( nVisible );
+        rScroll.SetThumbPos( nPos );
+    }
+}
+
+// static
+long ScTabView::GetScrollBarPos( ScrollBar& rScroll, BOOL bLayoutRTL )
+{
+    if ( bLayoutRTL )
+        return -rScroll.GetThumbPos() - rScroll.GetVisibleSize();
+    else
+        return rScroll.GetThumbPos();
+}
+
 //  UpdateScrollBars - sichtbaren Bereich und Scrollweite der Scrollbars einstellen
 
 long lcl_UpdateBar( ScrollBar& rScroll, USHORT nSize )      // Size = (komplette) Zellen
@@ -415,16 +445,17 @@ long lcl_UpdateBar( ScrollBar& rScroll, USHORT nSize )      // Size = (komplette
     return nNewPos - nOldPos;
 }
 
-void lcl_SetScrollRange( ScrollBar& rBar, USHORT nDocEnd, USHORT nPos, USHORT nVis,
-                            USHORT nMax, USHORT nStart )
+long lcl_GetScrollRange( USHORT nDocEnd, USHORT nPos, USHORT nVis, USHORT nMax, USHORT nStart )
 {
+    // get the end (positive) of a scroll bar range that always starts at 0
+
     ++nVis;
-    ++nMax;     // fuer teilweise sichtbare Zellen
+    ++nMax;     // for partially visible cells
     USHORT nEnd = Max(nDocEnd, (USHORT)(nPos+nVis)) + nVis;
     if (nEnd > nMax)
         nEnd = nMax;
 
-    rBar.SetRangeMax( nEnd - nStart );      // RangeMin muss selber verwaltet werden
+    return ( nEnd - nStart );       // for range starting at 0
 }
 
 void ScTabView::UpdateScrollBars()
@@ -434,6 +465,7 @@ void ScTabView::UpdateScrollBars()
     BOOL        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument* pDoc = aViewData.GetDocument();
     USHORT      nTab = aViewData.GetTabNo();
+    BOOL        bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     USHORT      nUsedX;
     USHORT      nUsedY;
     pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cachen !!!!!!!!!!!!!!!
@@ -451,33 +483,25 @@ void ScTabView::UpdateScrollBars()
         nStartY = aViewData.GetFixPosY();
 
     nVisXL = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
-    lcl_SetScrollRange( aHScrollLeft, nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL,
-                            MAXCOL, 0 );
-    aHScrollLeft.SetVisibleSize( nVisXL );
-    aHScrollLeft.SetThumbPos( aViewData.GetPosX( SC_SPLIT_LEFT ) );
+    long nMaxXL = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL, MAXCOL, 0 );
+    SetScrollBar( aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
-    lcl_SetScrollRange( aVScrollBottom, nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB,
-                            MAXROW, nStartY );
-    aVScrollBottom.SetVisibleSize( nVisYB );
-    aVScrollBottom.SetThumbPos( aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY );
+    long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, MAXROW, nStartY );
+    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, FALSE );
 
     if (bRight)
     {
         nVisXR = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
-        lcl_SetScrollRange( aHScrollRight, nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR,
-                            MAXCOL, nStartX );
-        aHScrollRight.SetVisibleSize( nVisXR );
-        aHScrollRight.SetThumbPos( aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX );
+        long nMaxXR = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR, MAXCOL, nStartX );
+        SetScrollBar( aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bLayoutRTL );
     }
 
     if (bTop)
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
-        lcl_SetScrollRange( aVScrollTop, nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT,
-                            MAXROW, 0 );
-        aVScrollTop.SetVisibleSize( nVisYT );
-        aVScrollTop.SetThumbPos( aViewData.GetPosY( SC_SPLIT_TOP ) );
+        long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, MAXROW, 0 );
+        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), FALSE );
     }
 
     //      Bereich testen
