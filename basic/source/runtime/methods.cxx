@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-05 11:05:45 $
+ *  last change: $Author: ab $ $Date: 2001-09-06 14:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2119,6 +2119,12 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
     {
         pRTLData->bDoCheck = sal_True;
         pRTLData->sFullNameToBeChecked = aPureFileName;
+
+        xub_StrLen nLastDelim = aPathStr.SearchBackward( cDelim1 );
+        if( nLastDelim == STRING_NOTFOUND )
+            aPathStr = String();
+        else
+            aPathStr = aPathStr.Copy( 0, nLastDelim );
     }
     return aPathStr;
 }
