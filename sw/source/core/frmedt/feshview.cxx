@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-16 14:35:23 $
+ *  last change: $Author: fme $ $Date: 2002-09-17 08:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,7 +1652,7 @@ BOOL SwFEShell::ImpEndCreate()
     SwPaM* pCrsr = GetCrsr();
 
     const Rectangle &rBound = rSdrObj.GetSnapRect();
-    const Point aPt( rBound.TopLeft() );
+    Point aPt( rBound.TopRight() );
 
     //Fremde Identifier sollen in den Default laufen.
     //Ueberschneidungen sind moeglich!!

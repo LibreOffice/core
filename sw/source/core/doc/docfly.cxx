@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:44:54 $
+ *  last change: $Author: fme $ $Date: 2002-09-17 08:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,16 +723,19 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
             {
             case FLY_AT_CNTNT:
             case FLY_AUTO_CNTNT:
-                pNewAnch = ::FindAnchor( pOldAnch, aPt, TRUE );
-                if( pNewAnch->IsTxtFrm() && ((SwTxtFrm*)pNewAnch)->IsFollow() )
-                    pNewAnch = ((SwTxtFrm*)pNewAnch)->FindMaster();
-                if( pNewAnch->IsProtected() )
-                    pNewAnch = 0;
-                else
                 {
-                    SwPosition aPos( *((SwCntntFrm*)pNewAnch)->GetNode() );
-                    aNewAnch.SetType( (RndStdIds)eAnchorId );
-                    aNewAnch.SetAnchor( &aPos );
+                    const Point aTopRight( pObj->GetBoundRect().TopRight() );
+                    pNewAnch = ::FindAnchor( pOldAnch, aTopRight, TRUE );
+                    if( pNewAnch->IsTxtFrm() && ((SwTxtFrm*)pNewAnch)->IsFollow() )
+                        pNewAnch = ((SwTxtFrm*)pNewAnch)->FindMaster();
+                    if( pNewAnch->IsProtected() )
+                        pNewAnch = 0;
+                    else
+                    {
+                        SwPosition aPos( *((SwCntntFrm*)pNewAnch)->GetNode() );
+                        aNewAnch.SetType( (RndStdIds)eAnchorId );
+                        aNewAnch.SetAnchor( &aPos );
+                    }
                 }
                 break;
 
