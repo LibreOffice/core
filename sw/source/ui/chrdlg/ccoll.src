@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:52:51 $
+ *  last change: $Author: nf $ $Date: 2001-08-01 12:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,4 +775,285 @@ TabPage TP_CONDCOLL
     };
     ItemList [ chinese_traditional ] =
     {
-            < "ªí®
+            < "ªí®æ­¶­º" ; > ;
+        < "ªí®æ" ; > ;
+        < "¤å¦r¤è¶ô" ; > ;
+        < "°Ï°ì" ; > ;
+        < "µù¸}" ; > ;
+        < "§Àµù" ; > ;
+        < "­¶­º" ; > ;
+        < "­¶§À" ; > ;
+        < "²Ä¤@­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤G­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤T­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¥|­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤­­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤»­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤C­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤K­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤E­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤Q­Ó¤jºõ¯Å" ; > ;
+        < "²Ä¤@¯Å½s¸¹" ; > ;
+        < "²Ä¤G¯Å½s¸¹" ; > ;
+        < "²Ä¤T¯Å½s¸¹" ; > ;
+        < "²Ä¥|¯Å½s¸¹" ; > ;
+        < "²Ä¤­¯Å½s¸¹" ; > ;
+        < "²Ä¤»¯Å½s¸¹" ; > ;
+        < "²Ä¤C¯Å½s¸¹" ; > ;
+        < "²Ä¤K¯Å½s¸¹" ; > ;
+        < "²Ä¤E¯Å½s¸¹" ; > ;
+        < "²Ä¤Q¯Å½s¸¹" ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+            < "ÑÃÓ ÇáÌÏæá" ; > ;
+        < "ÌÏæá" ; > ;
+        < "ßÇÏÑ" ; > ;
+        < "äØÇÞ" ; > ;
+        < "ÍÇÔíÉ ÓÝáíÉ" ; > ;
+        < "ÊÚáíÞ ÎÊÇãí" ; > ;
+        < "ÑÃÓ ÇáÕÝÍÉ" ; > ;
+        < "ÊÐííá ÇáÕÝÍÉ" ; > ;
+        < "Ãæá ãÓÊæì ÊÞÓíã" ; > ;
+        < "ËÇäí ãÓÊæì ÊÞÓíã" ; > ;
+        < "ËÇáË ãÓÊæì ÊÞÓíã" ; > ;
+        < "ÑÇÈÚ ãÓÊæì ÊÞÓíã" ; > ;
+        < "ÎÇãÓ ãÓÊæì ÊÞÓíã" ; > ;
+        < "ÓÇÏÓ ãÓÊæì ÊÞÓíã" ; > ;
+        < "ÓÇÈÚ ãÓÊæì ÊÞÓíã" ; > ;
+        < "ËÇãä ãÓÊæì ÊÞÓíã" ; > ;
+        < "ÊÇÓÚ ãÓÊæì ÊÞÓíã" ; > ;
+        < "ÚÇÔÑ ãÓÊæì ÊÞÓíã" ; > ;
+        < "Ãæá ãÓÊæì ÊÑÞíã" ; > ;
+        < "ËÇäí ãÓÊæì ÊÑÞíã" ; > ;
+        < "ËÇáË ãÓÊæì ÊÑÞíã" ; > ;
+        < "ÑÇÈÚ ãÓÊæì ÊÑÞíã" ; > ;
+        < "ÎÇãÓ ãÓÊæì ÊÑÞíã" ; > ;
+        < "ÓÇÏÓ ãÓÊæì ÊÑÞíã" ; > ;
+        < "ÓÇÈÚ ãÓÊæì ÊÑÞíã" ; > ;
+        < "ËÇãä ãÓÊæì ÊÑÞíã" ; > ;
+        < "ÊÇÓÚ ãÓÊæì ÊÑÞíã" ; > ;
+        < "ÚÇÔÑ ãÓÊæì ÊÑÞíã" ; > ;
+    };
+    ItemList [ greek ] =
+    {
+            < "Êåöáëßäá ðßíáêá" ; > ;
+        < "Ðßíáêáò" ; > ;
+        < "Ðåñßãñáììá" ; > ;
+        < "Åíüôçôá" ; > ;
+        < "Õðïóçìåßùóç" ; > ;
+        < "Óçìåßùóç ôÝëïõò" ; > ;
+        < "Êåöáëßäá" ; > ;
+        < "ÕðïóÝëéäï" ; > ;
+        < "1ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "2ï. Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "3ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "4ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "5ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "6ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "7ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "8ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "9ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "10ï Åðßðåäï õðïäéáßñåóçò" ; > ;
+        < "1ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "2ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "3ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "4ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "5ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "6ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "7ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "8ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "9ï. Åðßðåäï áñßèìçóçò" ; > ;
+        < "10ï. Åðßðåäï áñßèìçóçò" ; > ;
+    };
+    ItemList [ korean ] =
+    {
+            < "½ÃÆ® ¸Ó¸®¸»" ; > ;
+        < "Ç¥" ; > ;
+        < "Å×µÎ¸®" ; > ;
+        < "±¸¿ª" ; > ;
+        < "¹Ù´Ú±Û" ; > ;
+        < "¹ÌÁÖ" ; > ;
+        < "¸Ó¸®±Û" ; > ;
+        < "¹Ù´Ú±Û" ; > ;
+        < " 1¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 2¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 3¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 4¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 5¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 6¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 7¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 8¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 9¹øÂ° ´Ù´Ü°è" ; > ;
+        < "10¹øÂ° ´Ù´Ü°è" ; > ;
+        < " 1¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 2¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 3¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 4¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 5¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 6¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 7¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 8¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < " 9¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+        < "10¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+            < "Tablo baþlýðý" ; > ;
+        < "Tablo" ; > ;
+        < "Çerçeve" ; > ;
+        < "Bölüm" ; > ;
+        < "Dipnot" ; > ;
+        < "Sonnot" ; > ;
+        < "Üst bilgi" ; > ;
+        < "Alt bilgi" ; > ;
+        < "1. Anahat düzeyi" ; > ;
+        < "2. Anahat düzeyi" ; > ;
+        < "3. Anahat düzeyi" ; > ;
+        < "4. Anahat düzeyi" ; > ;
+        < "5. Anahat düzeyi" ; > ;
+        < "6. Anahat düzeyi" ; > ;
+        < "7. Anahat düzeyi" ; > ;
+        < "8. Anahat düzeyi" ; > ;
+        < "9. Anahat düzeyi" ; > ;
+        < "10. Anahat düzeyi" ; > ;
+        < "1. Numaralama düzeyi" ; > ;
+        < "2. Numaralama düzeyi" ; > ;
+        < "3. Numaralama düzeyi" ; > ;
+        < "4. Numaralama düzeyi" ; > ;
+        < "5. Numaralama düzeyi" ; > ;
+        < "6. Numaralama düzeyi" ; > ;
+        < "7. Numaralama düzeyi" ; > ;
+        < "8. Numaralama düzeyi" ; > ;
+        < "9. Numaralama düzeyi" ; > ;
+        < "10. Numaralama düzeyi" ; > ;
+    };
+    ItemList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+    };
+    ItemList [ catalan ] =
+    {
+            < "Encabezamiento de la hoja" ; > ;
+        < "Tabla" ; > ;
+        < "Marco" ; > ;
+        < "Area" ; > ;
+        < "Nota al pie" ; > ;
+        < "Nota al final" ; > ;
+        < "Encabezamiento" ; > ;
+        < "Pie de página" ; > ;
+        < "1° nivel del esquema" ; > ;
+        < "2° nivel del esquema" ; > ;
+        < "3° nivel del esquema" ; > ;
+        < "4° nivel del esquema" ; > ;
+        < "5° nivel del esquema" ; > ;
+        < "6° nivel del esquema" ; > ;
+        < "7° nivel del esquema" ; > ;
+        < "8° nivel del esquema" ; > ;
+        < "9° nivel del esquema" ; > ;
+        < "10° nivel del esquema" ; > ;
+        < "1° nivel de la numeración" ; > ;
+        < "2° nivel de la numeración" ; > ;
+        < "3° nivel de la numeración" ; > ;
+        < "4° nivel de la numeración" ; > ;
+        < "5° nivel de la numeración" ; > ;
+        < "6° nivel de la numeración" ; > ;
+        < "7° nivel de la numeración" ; > ;
+        < "8° nivel de la numeración" ; > ;
+        < "9° nivel de la numeración" ; > ;
+        < "10° nivel de numeración" ; > ;
+    };
+    ItemList [ finnish ] =
+    {
+            < "Lomakkeen yläotsikko" ; > ;
+        < "Taulukko" ; > ;
+        < "Kehys" ; > ;
+        < "Osio" ; > ;
+        < "Alaviite" ; > ;
+        < "Loppuhuomautus" ; > ;
+        < "Yläotsikko" ; > ;
+        < "Alaselite" ; > ;
+        < " 1. jäsennystaso" ; > ;
+        < " 2. jäsennystaso" ; > ;
+        < " 3. jäsennystaso" ; > ;
+        < " 4. jäsennystaso" ; > ;
+        < " 5. jäsennystaso" ; > ;
+        < " 6. jäsennystaso" ; > ;
+        < " 7. jäsennystaso" ; > ;
+        < " 8. jäsennystaso" ; > ;
+        < " 9. jäsennystaso" ; > ;
+        < "10. jäsennystaso" ; > ;
+        < " 1. numerointitaso" ; > ;
+        < " 2. numerointitaso" ; > ;
+        < " 3. numerointitaso" ; > ;
+        < " 4. numerointitaso" ; > ;
+        < " 5. numerointitaso" ; > ;
+        < " 6. numerointitaso" ; > ;
+        < " 7. jäsennystaso" ; > ;
+        < " 8. jäsennystaso" ; > ;
+        < " 9. jäsennystaso" ; > ;
+        < "10. numerointitaso" ; > ;
+    };
+    };
+    String STR_NOTEMPL
+    {
+        Text = "<keine>" ;
+        Text [ English ] = "<none>" ;
+        Text [ dutch ] = "<geen>" ;
+        Text [ english_us ] = "<none>" ;
+        Text [ italian ] = "<nessuno>" ;
+        Text [ spanish ] = "<ninguno>" ;
+        Text [ french ] = "<aucun(e)>" ;
+        Text [ swedish ] = "<ingen>" ;
+        Text [ danish ] = "<ingen>" ;
+        Text [ portuguese ] = "<nenhum>" ;
+        Text [ portuguese_brazilian ] = "<keine>" ;
+        Text[ chinese_simplified ] = "<ÎÞ>";
+        Text[ russian ] = "<íåò>";
+        Text[ polish ] = "<brak>";
+        Text[ japanese ] = "<‚È‚µ>";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "<µL>";
+        Text[ arabic ] = "<ÈÏæä>";
+        Text[ greek ] = "<êáíÝíá>";
+        Text[ korean ] = "<¾øÀ½>";
+        Text[ turkish ] = "<yok>";
+        Text[ catalan ] = "<ninguno>";
+        Text[ finnish ] = "<Ei mitään>";
+    };
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
