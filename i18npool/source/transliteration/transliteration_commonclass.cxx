@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_commonclass.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:07:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ transliteration_commonclass::transliterateString2String( const OUString& inStr, 
 {
     static Sequence < sal_Int32 > dummy_offset;
     useOffset = sal_False;
-    OUString &tmpStr = transliterate(inStr, startPos, nCount, dummy_offset);
+    OUString tmpStr = transliterate(inStr, startPos, nCount, dummy_offset);
     useOffset = sal_True;
     return tmpStr;
 }
