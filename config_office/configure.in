@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-03-17 09:33:26 $
+dnl * Date: $Date: 2004-06-16 10:48:18 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.63 $ )
+AC_REVISION( $Revision: 1.64 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -42,16 +42,27 @@ AC_ARG_WITH(fonts,
                           for specific distributions where the fonts are known 
                           to be already available
 ],,)
+
 AC_ARG_ENABLE(mozilla,
-[  --enable-mozilla        OO.o may include a strangely hacked up mozilla
-			  binary for your platform, to build with this
-			  enabled, use this option.
+[  --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
+                          binary for your platform, to build without this
+                          version, use this option.
  
-                          Usage: --enable-mozilla
+                          Usage: --disable-mozilla
+],,enable_mozilla="yes")
+
+AC_ARG_ENABLE(cups,
+[  --enable-cups           enable cups support in the psprint project
 ],,)
-AC_ARG_ENABLE(gcc3,
-[  --enable-gcc3           Deprecated: Now has no effect, checks compiler version
+AC_ARG_ENABLE(fontconfig,
+[  --enable-fontconfig     enable support for the fontconfig library
 ],,)
+AC_ARG_ENABLE(directx,
+[  --disable-directx       Remove DirectX implementation for the new XCanvas
+                          interface. This requires more installed on Windows to
+                          compile.  (DirectX SDK, GDI+ libs)
+],,)
+
 AC_ARG_ENABLE(symbols,
 [  --enable-symbols        Include debugging symbols in output.  Warning -  
                           a complete build needs 8 Gb of space and takes 
@@ -137,7 +148,7 @@ AC_ARG_WITH(cl-home,
 ],,)
 AC_ARG_WITH(mspdb-path,
 [  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the path
-                          pointing to the mspdb60.dll (MSVC 6) or mspdb60.dll (.NET). 
+                          pointing to the mspdb60.dll (MSVC 6) or mspdb7x.dll (.NET). 
  
                           Usage: --with-mspdb-path=<absolute path to mspdb60.dll/mspdb7x.dll>
 ],,)
@@ -327,23 +338,29 @@ case "$_os" in
 	"SunOS")
 		test_x=yes
 		test_gtk=yes
+      test_cups=yes
 		;;
 	"Linux")
 		test_x=yes
 		test_gtk=yes
+      test_cups=yes
 		;;
 	"GNU")
 		test_x=yes
+      test_cups=no
 		;;
 	"WINNT")
 		test_x=no
+      test_cups=no
 		;;
 	"Darwin")
 		test_x=no
+      test_cups=no
 		;;
 	"FreeBSD")
 		test_x=yes
 		test_gtk=yes
+      test_cups=no
 		AC_MSG_CHECKING([the FreeBSD operating system release])
 		if test -n "$with_os_version"; then
 			OSVERSION="$with_os_version"
@@ -362,22 +379,27 @@ case "$_os" in
 		;;
 	"OSF1")
 		test_x=dontknow
+      test_cups=no
 		;;
 	"NetBSD")
 		test_x=yes
 		test_gtk=yes
+      test_cups=no
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		;;
 	"IRIX")
 		test_x=yes
+      test_cups=no
 		;;
 	"IRIX64")
 		test_x=yes
+      test_cups=no
 		;;
 	"AIX")
 		test_x=yes
-	   	PTHREAD_LIBS=-pthread
+      test_cups=no
+	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
 		;;
    *)
@@ -448,13 +470,46 @@ if test -n "$enable_symbols" ; then
 		if test "$enable_symbols" = "SMALL" -o "$enable_symbols" = "small"; then
 			ENABLE_SYMBOLS="SMALL"
 		else if test "$enable_symbols" != "no" ; then
-			echo enable symbols is: $enable_symbols
-			AC_MSG_ERROR([--enable-symbols only accepts yes, TRUE or SMALL as parameter.])
-		  fi
+			     echo enable symbols is: $enable_symbols
+			     AC_MSG_ERROR([--enable-symbols only accepts yes, TRUE or SMALL as parameter.])
+           else
+              ENABLE_SYMBOLS=
+		     fi
 		fi
 	fi
+else
+   ENABLE_SYMBOLS=
 fi
 AC_SUBST(ENABLE_SYMBOLS)
+
+
+dnl ===================================================================
+dnl Build options
+dnl ===================================================================
+if test "$enable_cups" = "yes" -o "$enable_cups" = "TRUE"; then
+   if test "$test_cups" = "no" ; then
+      AC_MSG_ERROR([cups is not activated for your platform, raise bug report"])
+   else
+      ENABLE_CUPS="TRUE"
+   fi
+else
+   ENABLE_CUPS=""
+fi
+AC_SUBST(ENABLE_CUPS)
+
+if test "$enable_fontconfig" = "yes" -o "$enable_fontconfig" = "TRUE"; then
+   ENABLE_FONTCONFIG="TRUE"
+else
+   ENABLE_FONTCONFIG=""
+fi
+AC_SUBST(ENABLE_FONTCONFIG)
+
+if test "$enable_directx" = "yes" -o "$enable_directx" = "TRUE" -o "$enable_directx" = ""; then
+   ENABLE_DIRECTX="TRUE"
+else
+   ENABLE_DIRECTX=""
+fi
+AC_SUBST(ENABLE_DIRECTX)
 
 dnl ===================================================================
 dnl Disable rpath in shared libraries?
@@ -585,7 +640,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
    if test "$_gcc_major" = "3"; then
       USE_GCC3="TRUE"
       if test "$_gcc_longver"  -eq "030203"; then
-		 if test "$ENABLE_SYMBOLS" -eq "SMALL"; then
+		 if test "$ENABLE_SYMBOLS" = "SMALL"; then
            AC_MSG_ERROR([version "$_gcc_version" gives internal error with small.])
 		 fi
       fi
@@ -734,7 +789,7 @@ if test "$_os" = "WINNT"; then
    			if test -e "$with_mspdb_path/mspdb60.dll"; then
 				MSPDB_PATH="$with_mspdb_path"
             fi
-      if test -z "$MSPDB_PATH"; then
+        if test -z "$MSPDB_PATH"; then
 		dnl  Check for .Net 2003 Compiler
 			AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
 			if test -n "$MSPDB_PATH";then
@@ -747,6 +802,7 @@ if test "$_os" = "WINNT"; then
 				MSPDB_PATH="$with_cl_home/../Common7/IDE"
 			fi
 		fi
+
 			if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common/msdev98/mspdb60.dll"; then
 				MSPDB_PATH="$with_cl_home/../Common/msdev98"
 			fi
@@ -887,6 +943,14 @@ dnl Check if stdc headers are available excluding windows.
 dnl ===================================================================
 if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
    AC_HEADER_STDC
+fi
+
+dnl ===================================================================
+dnl Check if cups/cups.h is available on 
+dnl ===================================================================
+if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
+    AC_CHECK_HEADER(cups/cups.h, [],
+                    [AC_MSG_ERROR([cups/cups.h could not be found. libcupsys2-dev-dev or cups???-devel missing?])], [])
 fi
 
 dnl ===================================================================
@@ -1563,6 +1627,20 @@ dnl ***************************************
 AC_PATH_PROG(BISON, bison)
 if test -z "$BISON"; then
    AC_MSG_ERROR([no bison found in \$PATH, install bison])
+else
+   AC_MSG_CHECKING([the bison version])
+   _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+    _bison_longver=`echo $_bison_version | $AWK -F. '{ print \$1*1000+\$2}'`
+    if test "$_bison_longver" -ge 1875 ; then
+       if test "$_bison_version" = "1.875" ; then
+          AC_MSG_WARN([suspect ($BISON $_bison_version)])
+          echo "Suspect ($BISON $_bison_version) suggest upgrade" >> warn
+       else
+          AC_MSG_RESULT([checked ($BISON $_bison_version)])
+       fi
+    else
+       AC_MSG_ERROR([failed ($BISON $_bison_version need 1.875+)])
+    fi
 fi
 AC_PATH_PROG(FLEX, flex)
 if test -z "$FLEX"; then
@@ -1607,13 +1685,14 @@ dnl ***************************************
 dnl testing bash tools path on Windows
 dnl ***************************************
 if test "$_os" = "WINNT"; then
-	AC_PATH_PROG(CYGWIN, bash)
-	CYGWIN=`dirname "$CYGWIN"`
+    CYGWIN_PATH=""
+    AC_PATH_PROG(CYGWIN_PATH, bash)
+    CYGWIN_PATH=`dirname "$CYGWIN_PATH"`
 fi
-if test -z "$CYGWIN"; then
-   CYGWIN="NO_CYGWIN"
+if test -z "$CYGWIN_PATH"; then
+   CYGWIN_PATH="NO_CYGWIN"
 fi
-AC_SUBST(CYGWIN)
+AC_SUBST(CYGWIN_PATH)
 
 dnl ***************************************
 dnl testing ml.exe assembler path
@@ -1622,7 +1701,11 @@ if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
   if test ! -x "$with_asm_home/ml.exe"; then
     AC_PATH_PROG(ML_EXE, ml.exe)
     if test -z "$ML_EXE"; then
-       AC_MSG_ERROR([Configure did not find ml.exe assembler.])
+      if test -x "$with_cl_home/bin/ml.exe"; then
+        with_asm_home=$with_cl_home/bin
+      else
+        AC_MSG_ERROR([Configure did not find ml.exe assembler.])
+      fi
     else
        with_asm_home="ASM_IN_PATH"
     fi
@@ -1796,10 +1879,11 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to build mozilla connectivity])
 if test -n "$enable_mozilla"; then
   if test "$enable_mozilla" = "no"; then
-   AC_MSG_RESULT([yes])
-   WITH_MOZILLA=NO
-  else
    AC_MSG_RESULT([no])
+   WITH_MOZILLA=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_MOZILLA"
+  else
+   AC_MSG_RESULT([yes])
    WITH_MOZILLA=YES
   fi
 else
