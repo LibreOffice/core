@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,7 @@ void SwRTFParser::Continue( int nToken )
         {
             pDoc->SetParaSpaceMax(true, true);
             pDoc->SetTabCompat(true);
+            pDoc->_SetUseVirtualDevice(true);
         }
 
         // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
@@ -1296,7 +1297,10 @@ SETCHDATEFIELD:
         if( IsNewDoc() && nTokenValue && -1 != nTokenValue )
             ((SwDocStat&)pDoc->GetDocStat()).nChar = (USHORT)nTokenValue;
         break;
-
+    case RTF_LYTPRTMET:
+        if (IsNewDoc())
+            pDoc->_SetUseVirtualDevice(false);
+        break;
     case RTF_U:
         {
             CheckInsNewTblLine();
