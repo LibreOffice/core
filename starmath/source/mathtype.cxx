@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 12:05:19 $
+ *  last change: $Author: cmc $ $Date: 2002-09-27 11:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,19 @@ int MathType::Parse(SvStorage *pStor)
     return nRet;
 }
 
-static void lcl_InsertDummyTerm(String &rRet)
+static void lcl_PrependDummyTerm(String &rRet, xub_StrLen &rTextStart)
+{
+    if ((rRet.GetChar(rTextStart) == '=') &&
+        ((rTextStart == 0) ||
+        (rRet.GetChar(rTextStart-1) == '{'))
+       )
+    {
+        rRet.InsertAscii(" {}",rTextStart);
+        rTextStart+=3;
+    }
+}
+
+static void lcl_AppendDummyTerm(String &rRet)
 {
     sal_Bool bOk=sal_False;
     for(xub_StrLen nI=rRet.Len()-1;nI >= 0; nI--)
@@ -870,14 +882,6 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         --nI;
                     if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
                         APPEND(rRet,"{}");
-                }
-
-                if ((rRet.GetChar(nTextStart) == '=') &&
-                    ((nTextStart == 0) ||
-                    (rRet.GetChar(nTextStart-1) == '{'))
-                   )
-                {
-                    rRet.InsertAscii(" {}",nTextStart);
                 }
             }
         }
@@ -983,13 +987,13 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if ((nVariation == 0) ||
                                     ((nVariation == 2) && (nPart==1)))
                             {
-                                lcl_InsertDummyTerm(rRet);
+                                lcl_AppendDummyTerm(rRet);
                                 APPEND(rRet," rSup");
                             }
                             else if ((nVariation == 1) ||
                                     ((nVariation == 2) && (nPart==0)))
                             {
-                                lcl_InsertDummyTerm(rRet);
+                                lcl_AppendDummyTerm(rRet);
                                 APPEND(rRet," rSub");
                             }
                             APPEND(rRet," {");
@@ -3126,6 +3130,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
             }
             rTextStart = rRet.Len();
         }
+        lcl_PrependDummyTerm(rRet, rTextStart);
     }
 
     if ((xfEMBELL(nTag)) && (!bSilent))
