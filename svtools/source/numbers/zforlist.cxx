@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: er $ $Date: 2001-11-14 14:50:28 $
+ *  last change: $Author: er $ $Date: 2002-06-26 17:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     xCalendar.init( xServiceManager, aLocale );
     xTransliteration.init( xServiceManager, eLang,
         ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
+    xNatNum.init( xServiceManager );
 
     // cached locale data items
     const LocaleDataWrapper* pLoc = GetLocaleData();
