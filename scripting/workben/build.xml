@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-05-16 13:48:12 $
+#   last change: $Author: toconnor $ $Date: 2003-05-26 14:41:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,8 @@
   </path>
 
   <path id="debuggerclasspath">
+    <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/unoil.jar"/>
     <pathelement location="${out}/class/jsruntime/skip_registration/js.jar"/>
     <pathelement location="${install.dir}/bsh-1.2b7.jar"/>
@@ -123,11 +125,14 @@
       <condition property="win9.build">
             <available file="${prj}/wntmsci9${proext}"/>
       </condition>
+      <condition property="win8.build">
+            <available file="${prj}/wntmsci8${proext}"/>
+      </condition>
       <condition property="win7.build">
             <available file="${prj}/wntmsci7${proext}"/>
       </condition>
       <condition property="linx86.build">
-            <available file="${prj}/unxlngi4${proext}"/>
+            <available file="${prj}/unxlngi5${proext}"/>
       </condition>
       <condition property="solsparc.build">
             <available file="${prj}/unxsols4${proext}"/>
@@ -237,6 +242,25 @@
     <copy file="${solar.jar}/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
+  <target name="buildunopackage_win8" depends="build.conditions" if="win8.build">
+    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+    <mkdir dir="${out}/class/sframework"/>
+    <copy file="${solar.bin}/ScriptFramework.rdb"
+        todir="${out}/class/sframework/"/>
+    <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <copy file="${out}/class/ScriptFramework.jar"
+        todir="${out}/class/sframework/"/>
+    <mkdir dir="${out}/class/sframework/windows.plt"/>
+    <copy todir="${out}/class/sframework/windows.plt">
+        <fileset dir="${prj}/wntmsci8${proext}/bin/">
+            <include name="**/*.dll"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${solar.jar}/unoil.jar"
+        todir="${out}/class/sframework/skip_registration"/>
+  </target>
 <!--  <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
@@ -267,7 +291,7 @@
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
     <copy todir="${out}/class/sframework/linux_x86.plt">
-        <fileset dir="${prj}/unxlngi4${proext}/lib/">
+        <fileset dir="${prj}/unxlngi5${proext}/lib/">
             <include name="**/lib*.so"/>
         </fileset>
     </copy>
@@ -294,7 +318,7 @@
     <copy file="${solar.jar}/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
-  <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_linux,buildunopackage_solaris">
+  <target name="buildunopackage" depends="buildunopackage_win8,buildunopackage_linux,buildunopackage_solaris">
   <!-- <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_win7,buildunopackage_linux,buildunopackage_solaris"> -->
     <copy file="installer/ProtocolHandler.xcu"
         todir="${out}/class/sframework/"/>
@@ -306,24 +330,24 @@
   <!-- ================== Build JavaScript UNO package ===================== -->
   <target name="buildjsuno">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+
     <mkdir dir="${out}/class/jsruntime"/>
+    <mkdir dir="${out}/class/jsruntime/skip_registration"/>
+    <mkdir dir="${out}/class/jsruntimetmp"/>
+
     <copy file="${out}/class/ScriptRuntimeForRhino.jar"
         todir="${out}/class/jsruntime/"/>
-    <mkdir dir="${out}/class/jsruntime/skip_registration"/>
-    <copy file="${install.dir}/js.jar"
-        todir="${out}/class/jsruntime/skip_registration"/>
 
-    <mkdir dir="${out}/class/examples/java/debugger"/>
+    <unzip src="${install.dir}/js.jar"
+        dest="${out}/class/jsruntimetmp"/>
 
     <javac srcdir="${prj}/examples/java/debugger"
-           destdir="${out}/class/examples/java/debugger"
+           destdir="${out}/class/jsruntimetmp"
               includes="rhino/Main.java" classpathref="debuggerclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
-    <jar jarfile="${out}/class/jsruntime/skip_registration/js.jar" update="yes"
-        basedir="${out}/class/examples/java/debugger" includes="org/**"/>
-
-    <delete dir="${out}/class/examples/java/debugger/org"/>
+    <zip destfile="${out}/class/jsruntime/skip_registration/js.jar"
+        basedir="${out}/class/jsruntimetmp" includes="**"/>
 
     <zip zipfile="${out}/class/sframeworkinstall/sframework/jsruntime.zip"
         basedir="${out}/class/jsruntime">
