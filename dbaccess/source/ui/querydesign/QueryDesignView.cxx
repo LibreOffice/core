@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 09:46:27 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 
@@ -279,6 +282,7 @@ void OQueryDesignView::resizeControl(Rectangle& _rRect)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::setReadOnly(sal_Bool _bReadOnly)
 {
+    m_pSelectionBox->SetReadOnly(_bReadOnly);
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::clear()
@@ -984,7 +988,8 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
 
                     aWhereStr += ::rtl::OUString(' ');
                     // aCriteria could have some german numbers so I have to be sure here
-                    ::rtl::OUString aTmp(aCriteria);
+                    ::rtl::OUString aTmp(::rtl::OUString('='));
+                    aTmp += aCriteria;
                     OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntryField->GetTabWindow());
 
                     Reference<XPropertySet> xColumn;
@@ -992,18 +997,21 @@ sal_Bool OQueryDesignView::GenerateCriterias(::rtl::OUString& rRetStr,::rtl::OUS
                     {
                         Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
                         if(xColumns->hasByName(aFieldName))
-                            xColumns->getByName(aFieldName) >>= xColumn;
+                            ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
                     }
                     ::rtl::OUString aErrorMsg;
-                    ::connectivity::OSQLParser& rParser = getController()->getParser();
-                    ::connectivity::OSQLParseNode* pParseNode = rParser.predicateTree(aErrorMsg, aTmp, getController()->getNumberFormatter(), xColumn);
+                    ::connectivity::OSQLParser* pParser = getController()->getParser();
+                    ::connectivity::OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTmp, getController()->getNumberFormatter(), xColumn);
 
                     if (pParseNode)
                     {
                         if (bMulti)
                             pParseNode->replaceNodeValue(ConvertAlias(pEntryField->GetAlias()),aFieldName);
                         ::rtl::OUString aWhere = aWhereStr;
-                        pParseNode->parseNodeToStr(aWhere,getController()->getConnection()->getMetaData(),NULL,sal_False,sal_True);
+                        pParseNode->parseNodeToStr( aWhere,
+                                                    getController()->getConnection()->getMetaData(),
+                                                    &(getController()->getParser()->getContext())
+                                                    ,sal_False,sal_True);
                         aWhereStr = aWhere;
                         delete pParseNode;
                     }
@@ -1207,7 +1215,7 @@ sal_Int32 OQueryDesignView::GetColumnFormatKey(const ::connectivity::OSQLParseNo
         if(xColumns.is() && xColumns->hasByName(aColumnName))
         {
             Reference<XPropertySet> xColumn;
-            xColumns->getByName(aColumnName) >>= xColumn;
+            ::cppu::extractInterface(xColumn,xColumns->getByName(aColumnName));
             OSL_ENSURE(xColumn.is(),"Column is null!");
             if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_NUMBERFORMAT))
                 xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT) >>= nFormatKey;
@@ -1610,7 +1618,7 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
         for(sal_uInt16 i=0;i< pLhs->count();i++)
             pCondition->getChild(i)->parseNodeToStr(aName,
                                         getController()->getConnection()->getMetaData(),
-                                        NULL,
+                                        &getController()->getParser()->getContext(),
                                         sal_True);
         // Kriterium
         aCondition = pCondition->getChild(1)->getTokenValue();
@@ -2011,7 +2019,7 @@ int OQueryDesignView::InstallFields(const ::connectivity::OSQLParseNode* pNode, 
 
                     pColumnRef->parseNodeToStr( aColumns,
                                                 getController()->getConnection()->getMetaData(),
-                                                NULL,
+                                                &getController()->getParser()->getContext(),
                                                 sal_True,
                                                 sal_False);
 
@@ -2067,7 +2075,8 @@ int OQueryDesignView::InstallFields(const ::connectivity::OSQLParseNode* pNode, 
                     ::rtl::OUString aColumns;
                     pColumnRef->parseNodeToStr( aColumns,
                                                 getController()->getConnection()->getMetaData(),
-                                                NULL,sal_True,sal_False);
+                                                &getController()->getParser()->getContext(),
+                                                sal_True,sal_False);
 
                     OTableFieldDesc aInfo;
                     aInfo.SetDataType(DataType::DOUBLE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-08 16:17:33 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,12 +237,13 @@ OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
     ,m_bEsacpeProcessing(sal_True)
     ,m_bOwnConnection(sal_False)
     ,m_pAddTabDlg(NULL)
-    ,m_aSqlParser(_rM)
     ,m_pSqlIterator(NULL)
     ,m_aZoom(1,1)
     ,m_nSplitPos(-1)
     ,m_nVisibleRows(0x400)
 {
+    m_pParseContext = new OQueryParseContext();
+    m_pSqlParser    = new OSQLParser(_rM,m_pParseContext);
     InvalidateAll();
 
 }
@@ -276,6 +277,9 @@ void OQueryController::dispose()
         m_pSqlIterator->dispose();
         delete m_pSqlIterator;
     }
+
+    delete m_pSqlParser;
+    delete m_pParseContext;
 
     {
         ::std::vector< OTableConnectionData*>::iterator aIter = m_vTableConnectionData.begin();
@@ -322,8 +326,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
     if(!m_xConnection.is()) // so what should otherwise
     {
         String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+
         ODataView * aWindow=getView();
         InfoBox(aWindow, aMessage).Execute();
+
         aReturn.aState = ::cppu::bool2any(sal_False);
         return aReturn;
     }
@@ -419,7 +425,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     {
                         String aDefaultName = (ID_BROWSER_SAVEASDOC == _nId && !bNew) ? String(m_sName.getStr()) : String(ModuleRes(STR_QRY_TITLE));
                         aDefaultName.SearchAndReplace(String::CreateFromAscii(" #"),String::CreateFromInt32(xQueries->getElementNames().getLength()+1));
-                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,aDefaultName);
+                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,m_xConnection->getMetaData(),aDefaultName);
                         if(aDlg.Execute() == RET_OK)
                             m_sName = aDlg.getName();
                     }
@@ -447,7 +453,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                             }
                             else
                             {
-                                xQueries->getByName(m_sName) >>= xQuery;
+                                ::cppu::extractInterface(xQuery,xQueries->getByName(m_sName));
                             }
                             // now set the properties
                             m_sStatement = getQueryView()->getStatement();
@@ -509,22 +515,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         {
                             OSL_ENSURE(0,"Query could not be inserted!");
                         }
-                        if (aInfo.isValid())
-                        {
-                            try
-                            {
-                                Sequence< Any > aArgs(1);
-                                aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, aInfo.get(), PropertyState_DIRECT_VALUE);
-                                Reference< XExecutableDialog > xErrorDialog(
-                                    m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
-                                if (xErrorDialog.is())
-                                    xErrorDialog->execute();
-                            }
-                            catch(Exception&)
-                            {
-                                OSL_ENSURE(0,"Execute!");
-                            }
-                        }
+                        showError(aInfo);
                     }
                 }
             }
@@ -552,7 +543,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             {
                 try
                 {
-                    ::rtl::OUString aErrorMsg,sStmt;
+                    ::rtl::OUString aErrorMsg;
                     m_sStatement = getQueryView()->getStatement();
                     if(!m_sStatement.getLength())
                     {
@@ -564,7 +555,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     }
                     else
                     {
-                        ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement);
+                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
                         //  m_pParseNode = pNode;
                         if(pNode)
                         {
@@ -581,7 +572,10 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 // change the view of the data
                                 m_bDesign = !m_bDesign;
                                 m_sStatement = ::rtl::OUString();
-                                pNode->parseNodeToStr(m_sStatement,m_xConnection->getMetaData(),NULL,sal_True,sal_True);
+                                pNode->parseNodeToStr(  m_sStatement,
+                                                        m_xConnection->getMetaData(),
+                                                        &getParser()->getContext(),
+                                                        sal_True,sal_True);
                                 static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
                                 m_pWindow->switchView();
                             }
@@ -634,6 +628,16 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 {
                     try
                     {
+                        ::rtl::OUString aErrorMsg,sStmt;
+                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
+                        //  m_pParseNode = pNode;
+                        if(pNode)
+                        {
+                            m_sStatement = ::rtl::OUString();
+                            pNode->parseNodeToStr(  m_sStatement,
+                                                    m_xConnection->getMetaData(),
+                                                    &getParser()->getContext());
+                        }
                         m_xComposer->setQuery(m_sStatement);
                         m_sStatement = m_xComposer->getComposedQuery();
                     }
@@ -749,7 +753,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         {
             if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
             {
-                aValue.Value >>= m_xConnection;
+                ::cppu::extractInterface(m_xConnection,aValue.Value);
                 // be notified when connection is in disposing
                 Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
                 if (xComponent.is())
@@ -788,7 +792,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
 
                 Reference<XPropertySet> xProp;
-                if(xNameAccess->hasByName(m_sName) && (xNameAccess->getByName(m_sName) >>= xProp) && xProp.is())
+                if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
                 {
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= m_sStatement;
                     m_bEsacpeProcessing = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
@@ -813,7 +817,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                     }
                     setQueryComposer();
                     ::rtl::OUString aErrorMsg;
-                    ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement);
+                    ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
                     //  m_pParseNode = pNode;
                     if(pNode)
                     {
@@ -835,7 +839,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 if(xProp.is())
                 {
                     Reference< XNumberFormatsSupplier> xSupplier;
-                    xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER) >>= xSupplier;
+                    ::cppu::extractInterface(xSupplier,xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
                     if(xSupplier.is())
                     {
                         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
@@ -1099,6 +1103,7 @@ void OQueryController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTab
     }
 }
 // -----------------------------------------------------------------------------
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:24:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,10 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -241,7 +245,7 @@ sal_Bool OQueryTableWindow::FillListBox()
         for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
         {
             Reference<XPropertySet> xProp;
-            xKeyIndex->getByIndex(i) >>= xProp;
+            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
             sal_Int32 nKeyType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
@@ -281,7 +285,7 @@ sal_Bool OQueryTableWindow::FillListBox()
             pInfo->SetKey(TAB_NORMAL_FIELD);
         }
         Reference<XPropertySet> xColumn;
-        GetOriginalColumns()->getByName(*pBegin) >>= xColumn;
+        ::cppu::extractInterface(xColumn,GetOriginalColumns()->getByName(*pBegin));
         OSL_ENSURE(xColumn.is(),"No column!");
         pInfo->SetDataType(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)));
         pEntry->SetUserData( pInfo );

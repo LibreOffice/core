@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-08 15:33:28 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace ::dbaui;
 using namespace ::connectivity;
@@ -261,7 +265,7 @@ void OSelectionBrowseBox::Init()
     GetDataWindow().SetFont( aFont );
 
     //xxx richtige Zeilenhoehe fuer EditEng ???
-    long nLSize = GetDataWindow().GetTextHeight() + 2;
+    long nLSize = GetDataWindow().GetTextHeight() + 4;
     SetDataRowHeight(nLSize);
 
     EnableDrop();
@@ -608,17 +612,19 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
                     if (aFieldName.GetTokenCount('.') == 2 && xColumns->hasByName(aFieldName.GetToken(1,'.')))  // falls alias.Feld angegeben
-                        xColumns->getByName(aFieldName.GetToken(1,'.')) >>= xColumn;
+                        ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
                     else if(xColumns->hasByName(aFieldName))
-                        xColumns->getByName(aFieldName) >>= xColumn;
+                        ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
                 }
 
                 if(!xColumn.is()) // only when text not a column of the table
                 {
                     ::rtl::OUString aErrorMsg;
                     bIsPredicate = sal_True; // #72670#
-                    ::connectivity::OSQLParser& rParser = getDesignView()->getController()->getParser();
-                    OSQLParseNode* pParseNode = rParser.predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
+                    ::connectivity::OSQLParser* pParser = getDesignView()->getController()->getParser();
+                    OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest,
+                                                                        getDesignView()->getController()->getNumberFormatter(),
+                                                                        xColumn);
                     if (pParseNode)
                     {
                         pEntry->SetVisible(sal_False);
@@ -857,7 +863,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 ::rtl::OUString aCrit;
                 if(aText.Len())
                 {
-                    ::connectivity::OSQLParser& rParser = getDesignView()->getController()->getParser();
+                    ::connectivity::OSQLParser* pParser = getDesignView()->getController()->getParser();
                     OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
 
                     String aTest(aText);
@@ -867,11 +873,11 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     {
                         Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
                         if (xColumns->hasByName(pEntry->GetField()))
-                            xColumns->getByName(pEntry->GetField()) >>= xColumn;
+                            ::cppu::extractInterface(xColumn,xColumns->getByName(pEntry->GetField()));
                     }
 
                     ::rtl::OUString aErrorMsg;
-                    OSQLParseNode* pParseNode = rParser.predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
+                    OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
                     if (pParseNode)
                     {
                         pParseNode->parseNodeToPredicateStr(aCrit,
@@ -879,7 +885,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                             getDesignView()->getController()->getNumberFormatter(),
                                                             xColumn,
                                                             getDesignView()->getLocale(),
-                                                            getDesignView()->getDecimalSeparator().toChar());
+                                                            getDesignView()->getDecimalSeparator().toChar(),
+                                                            &(getDesignView()->getController()->getParser()->getContext()));
                         delete pParseNode;
                     }
                     else
@@ -904,7 +911,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 default:
                                     ;
                             }
-                            pParseNode = rParser.predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
+                            pParseNode = pParser->predicateTree(aErrorMsg, aTest, getDesignView()->getController()->getNumberFormatter(), xColumn);
                             if (pParseNode)
                             {
                                 pParseNode->parseNodeToPredicateStr(aCrit,
@@ -912,7 +919,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                                                     getDesignView()->getController()->getNumberFormatter(),
                                                                     xColumn,
                                                                     getDesignView()->getLocale(),
-                                                                    getDesignView()->getDecimalSeparator().toChar());
+                                                                    getDesignView()->getDecimalSeparator().toChar(),
+                                                                    &(getDesignView()->getController()->getParser()->getContext()));
                                 delete pParseNode;
                             }
                             else
@@ -1265,7 +1273,7 @@ Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 
     //////////////////////////////////////////////////////////////////////
     // Dann wird die linke Seite angepasst
-    Rectangle aFieldRect(GetFieldRectPixel( 0, nColId ));
+    Rectangle aFieldRect(GetCellRect( 0, nColId )); // used instead of GetFieldRectPixel
     aInvalidRect.Left() = aFieldRect.Left();
 
     return aInvalidRect;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:26:27 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@
 #ifndef DBAUI_QUERY_HRC
 #include "Query.hrc"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
@@ -241,7 +245,7 @@ BOOL OTableWindow::FillListBox()
         for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
         {
             Reference<XPropertySet> xProp;
-            xKeyIndex->getByIndex(i) >>= xProp;
+            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
             sal_Int32 nKeyType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
@@ -297,7 +301,7 @@ BOOL OTableWindow::Init()
     if(!xTables->hasByName(aName))
         return FALSE;
 
-    xTables->getByName(aName) >>= m_xTable;
+    ::cppu::extractInterface(m_xTable,xTables->getByName(aName));
     Reference<XColumnsSupplier> xColumnsSups(m_xTable,UNO_QUERY);
     m_xColumns = xColumnsSups->getColumns();
 

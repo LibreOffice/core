@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-05 09:32:54 $
+#   last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
+            $(SLO)$/ParseContext.obj			\
             $(SLO)$/QueryDesignView.obj			\
             $(SLO)$/TableFieldData.obj			\
             $(SLO)$/SelectionBrowseBox.obj		\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef DBAUI_JOINEXCHANGE_HXX
 #include "JoinExchange.hxx"
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 using namespace dbaui;
@@ -419,7 +422,7 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XKeysSupplier>& _rxKe
     for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
     {
         Reference<XPropertySet> xKey;
-        xKeyIndex->getByIndex(i) >>= xKey;
+        ::cppu::extractInterface(xKey,xKeyIndex->getByIndex(i));
         if(xKey.is())
         {
             sal_Int32 nKeyType = 0;
@@ -448,7 +451,7 @@ sal_Bool isColumnInKeyType(const Reference<XKeysSupplier>& _rxKeys,const ::rtl::
         for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
         {
             Reference<XPropertySet> xProp;
-            xKeyIndex->getByIndex(i) >>= xProp;
+            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
             if(xProp.is())
             {
                 sal_Int32 nKeyType = 0;
@@ -490,7 +493,7 @@ void OQueryTableView::addConnections(const OQueryTableWindow* _pSource,const OQu
     for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
     {
         Reference<XPropertySet> xColumn;
-        _rxSourceForeignKeyColumns->getByName(*pBegin) >>= xColumn;
+        ::cppu::extractInterface(xColumn,_rxSourceForeignKeyColumns->getByName(*pBegin));
 
         aNewConnData.SetFieldType(JTCS_FROM,TAB_NORMAL_FIELD);
 
@@ -570,7 +573,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         Reference<XNameAccess> xTables = xSup->getTables();
         Reference<XPropertySet> xTable;
 
-        if(xTables->hasByName(strTableName) && (xTables->getByName(strTableName) >>= xTable) && xTable.is() )
+        if(xTables->hasByName(strTableName) && ::cppu::extractInterface(xTable,xTables->getByName(strTableName)) && xTable.is())
         {
             //////////////////////////////////////////////////////////////////////
             // find relations between the table an the tables already inserted
@@ -584,7 +587,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                 for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
                 {
                     Reference<XPropertySet> xProp;
-                    xKeyIndex->getByIndex(i) >>= xProp;
+                    ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
                     sal_Int32 nKeyType = 0;
                     xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                     xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);

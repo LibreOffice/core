@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 15:54:29 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1371,6 +1371,275 @@ QueryBox QUERY_DESIGN_SAVEMODIFIED
     Message = "Die Abfrage wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ English ] = "The query has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The query has been changed.\nDo you want to save the changes?" ;
+};
+String STR_SVT_SQL_INTERNATIONAL
+{
+    Text = "WIE;NICHT;LEER;WAHR;FALSCH;IST;ZWISCHEN;ODER;UND;Durchschnitt;Anzahl;Maximum;Minimum;Summe" ;
+    Text [ ENGLISH ] = "LIKE;NOT;NULL;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
+    Text [ english_us ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
+    Text [ portuguese ] = "COMO;NÃO;VAZIO;VERDADEIRO;FALSO;É;ENTRE;OU;E;média;quantidade;máximo;mínimo;soma" ;
+    Text [ portuguese_brazilian ] = "WIE;NICHT;LEER;WAHR;FALSCH;IST;ZWISCHEN;ODER;UND" ;
+    Text [ swedish ] = "SOM;INTE;TOM;SANN;FALSK;ÄR;MELLAN;ELLER;OCH;genomsnitt;antal;maximum;minimum;summa" ;
+    Text [ danish ] = "SOM;IKKE;TOM;SAND;FALSK;ER;MELLEM;ELLER;OG;middel;antal;maksimum;minimum;sum" ;
+    Text [ italian ] = "COME;NON;VUOTO;VERO;FALSO;È;TRA;O;E;media;quantità;massimo;minimo;totale" ;
+    Text [ spanish ] = "COMO;NO;VACIO;VERDADERO;FALSO;ES;ENTRE;O;Y;Promedio;Cantidad;Máximo;Mínimo;Suma" ;
+    Text [ french ] = "COMME;PAS;VIDE;VRAI;FAUX;EST;ENTRE;OU;ET;moyenne;nombre;maximum;minimum;total" ;
+    Text [ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som" ;
+    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ russian ] = "ÊÀÊ;ÍÅ;ÏÓÑÒÎ;ÈÑÒÈÍÀ;ËÎÆÜ;ÅÑÒÜ;ÌÅÆÄÓ;ÈËÈ;È;ñğäíåå;êîëè÷åñòâî;ìàêñèìóì;ìèíèìóì;ñóììà";
+    Text[ polish ] = "JAK;NIE;PUSTY;PRAWDA;FA£SZ;JEST;POMIÊDZY;LUB;I;Œrednia;Numer;Maksimum;Minimum;Suma";
+    Text[ japanese ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ chinese_traditional ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ arabic ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
+    Text[ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som";
+    Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ greek ] = "ÏĞÙÓ;Ï×É;ÊÅÍÏ;ÁËÇÈÇÓ;ËÁÈÏÓ;ÅÉÍÁÉ;ÌÅÔÁÎÕ;¹;ÊÁÉ;Ìİóïò üñïò;ĞëŞèïò;Ìİãéóôï;ÅëÜ÷éóôï;¢èñïéóìá";
+    Text[ korean ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
+    Text[ turkish ] = "GİBİ;DEĞİL;BOŞ;DOĞRU;YANLIŞ;OLMA;ARADA;YA DA;VE;Ortalama;Adet sayısı;Azami;Asgari;Toplam";
+};
+String STR_SVT_SQL_SYNTAX_ERROR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Syntaxfehler im SQL-Ausdruck : Fehlerhafte Syntax */
+    Text = "Syntaxfehler im SQL-Ausdruck" ;
+    Text [ ENGLISH ] = "Syntax error in SQL-expression" ;
+    Text [ english_us ] = "Syntax error in SQL expression" ;
+    Text [ portuguese ] = "Erro de sintaxe na expressão SQL" ;
+    Text [ portuguese_brazilian ] = "Fehlerhafte Syntax" ;
+    Text [ swedish ] = "Syntaxfel i SQL-uttryck" ;
+    Text [ danish ] = "Syntaksfejl i SQL-udtryk" ;
+    Text [ italian ] = "Errore di sintassi nell'espressione SQL" ;
+    Text [ spanish ] = "Error de sintaxis en la expresión SQL" ;
+    Text [ french ] = "Erreur de syntaxe dans l'expression SQL" ;
+    Text [ dutch ] = "Foutieve syntaxis in SQL-uitdrukking" ;
+    Text[ chinese_simplified ] = "SGL ±í´ïÓï·¨´íÎó";
+    Text[ russian ] = "Ñèíòàêñè÷åñêàÿ îøèáêà â âûğàæåíèè SQL";
+    Text[ polish ] = "B³¹d sk³adni w wyra¿eniu SQL";
+    Text[ japanese ] = "SQL•\\Œ»‚Ì¼İÀ¯¸½´×°";
+    Text[ chinese_traditional ] = "SGL ªí¹F»yªk¿ù»~";
+    Text[ arabic ] = "ÎØÃ İí ÈäÇÁ ÇáÌãáÉ İí ÚÈÇÑÉ SQL";
+    Text[ dutch ] = "Foutieve syntaxis in SQL-uitdrukking";
+    Text[ chinese_simplified ] = "SGL ±í´ïÓï·¨´íÎó";
+    Text[ greek ] = "Óõíôáêôéêü óöÜëìá óå İêöñáóç SQL";
+    Text[ korean ] = "SQL ½Ä¿¡ ¹®Àå ¿À·ù";
+    Text[ turkish ] = "SQL terimi söz dizimi hatası";
+};
+String STR_SVT_SQL_SYNTAX_ERROR_BEFORE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Syntaxfehler im SQL-Ausdruck : Fehlerhafte Syntax */
+    Text = "bevor \"#\" Ausdruck." ;
+    Text [ ENGLISH ] = "before \"#\" expression." ;
+    Text[ italian ] = "Davanti all'espressione \"#\".";
+    Text[ portuguese_brazilian ] = "before \"#\" expression.";
+    Text[ portuguese ] = "antes da expressão \"#\".";
+    Text[ danish ] = "før \"#\" udtryk.";
+    Text[ french ] = "avant l'expression \"#\".";
+    Text[ swedish ] = "före \"#\" uttryck.";
+    Text[ dutch ] = "voor \"#\" uitdrukking";
+    Text[ spanish ] = "expresión anterior a \"#\"";
+    Text[ english_us ] = "before \"#\" expression.";
+    Text[ chinese_simplified ] = "\"#\" ±í´ïÖ®Ç°¡£";
+    Text[ russian ] = "ïåğåä \"#\" âûğàæåíèåì.";
+    Text[ polish ] = "przed wyra¿eniem \"#\".";
+    Text[ japanese ] = "\"#\"‚Ì•\\Œ»‚Ì‘O‚ÉB";
+    Text[ arabic ] = "ŞÈá ÚÈÇÑÉ \"#\".";
+    Text[ chinese_traditional ] = "¦b'#'ªí¹F¤§«e";
+    Text[ dutch ] = "voor \"#\" uitdrukking";
+    Text[ chinese_simplified ] = "\"#\" ±í´ïÖ®Ç°¡£";
+    Text[ greek ] = "ğñéí ôçí ğáñÜóôáóç \"#\".";
+    Text[ korean ] = "\"#\" ½Ä Àü¿¡";
+    Text[ turkish ] = "\"#\" teriminden önce.";
+};
+
+String STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
+{
+    Text = "Der Wert #1 kann nicht mit WIE verwendet werden!";
+    Text [ ENGLISH ] = "The value #1 can not be used with LIKE!";
+    Text[ english_us ] = "The value #1 can not be used with LIKE!";
+    Text[ portuguese ] = "O valor #1 não pode ser utilizado com COMO!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ÷ñŞóç ôçò ôéìŞò #1 ìáæß ìå ôï 'LIKE'!";
+    Text[ dutch ] = "Waarde #1 kan niet worden gebruikt bij ALS!";
+    Text[ french ] = "La valeur #1 ne peut pas être utilisée avec COMME !";
+    Text[ spanish ] = "¡El valor #1 no se puede usar con COMO!";
+    Text[ swedish ] = "Värdet #1 kan inte användas med SOM!";
+    Text[ russian ] = "Çíà÷åíèå #1 íå ìîæåò èñïîëüçîâàòüñÿ ñ ÊÀÊ!";
+    Text[ italian ] = "Il valore #1 non può essere usato con COME!";
+    Text[ danish ] = "Det er ikke muligt at bruge værdien #1sammen med SOM!";
+    Text[ polish ] = "Wartoœci #1 nie mo¿na zastosowaæ z JAK!";
+    Text[ portuguese_brazilian ] = "The value #1 can not be used with LIKE!";
+    Text[ japanese ] = "’l#1‚ÍLIKE‚Æˆê‚Ég—p‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "°ª #1Àº LIKE·Î »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "ÊıÖµ #1²»ÄÜÓëLIKEÍ¬Ê±Ê¹ÓÃ£¡";
+    Text[ chinese_traditional ] = "LIKE ©M¼Æ­È #1 ¤£¥i¥H¤@°_¨Ï¥Î¡I";
+    Text[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã ÇáŞíãÉ #1 ãÚ LIKE!";
+    Text[ turkish ] = "#1 değeri, GİBİ ile birlikte kullanılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
+{
+    Text = "WIE kann bei diesem Feld nicht benutzt werden!";
+    Text [ ENGLISH ] = "LIKE can not be used with this field!";
+    Text[ english_us ] = "LIKE can not be used with this field!";
+    Text[ portuguese ] = "COMO não pode ser utilizado com este campo!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ÷ñŞóç ôïõ 'LIKE' óå áõôü ôï ğåäßï!";
+    Text[ dutch ] = "ALS kan niet worden gebruikt bij dit veld!";
+    Text[ french ] = "COMME ne peut pas être utilisé dans ce champ !";
+    Text[ spanish ] = "¡COMO no se puede usar con este campo!";
+    Text[ swedish ] = "SOM kan inte användas med det här fältet!";
+    Text[ russian ] = "Èñïîëüçîâàòü ÊÀÊ â ıòîì ïîëå íåëüçÿ!";
+    Text[ italian ] = "COME non può essere utilizzato in questo campo!";
+    Text[ danish ] = "Det er ikke muligt at bruge SOM sammen med dette felt!";
+    Text[ polish ] = "JAK nie mo¿na u¿yæ przy tym polu!";
+    Text[ portuguese_brazilian ] = "LIKE can not be used with this field!";
+    Text[ japanese ] = "LIKE‚Í‚±‚ÌÌ¨°ÙÄŞ‚Åg—p‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "LIKE´Â ÀÌ ÇÊµå¿¡¼­ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "ÔÚÕâ¸ö×Ö¶ÎÖĞ²»ÄÜÊ¹ÓÃLIKE£¡";
+    Text[ chinese_traditional ] = "³oÄæ¤£¥i¥H¨Ï¥Î LIKE¡I";
+    Text[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã LIKE İí åĞÇ ÇáÍŞá!";
+    Text[ turkish ] = "GİBİ, bu alanda kullanılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_NO_NUM
+{
+    Text = "Das Feld kann nicht mit einer Zeichenkette verglichen werden!";
+    Text [ ENGLISH ] = "The field can not be compared with a string!";
+    Text[ english_us ] = "The field can not be compared with a string!";
+    Text[ portuguese ] = "Este campo não pode ser comparado a uma cadeia de caracteres!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá óõãêñéèåß áõôü ôï ğåäßï ìå ìéá áêïëïõèßá ÷áñáêôŞñùí!";
+    Text[ dutch ] = "Het veld kan niet worden vergeleken met een string!";
+    Text[ french ] = "Le champ ne peut pas être comparé à une chaîne de caractères !";
+    Text[ spanish ] = "¡El campo no se puede comparar con una cadena de caracteres!";
+    Text[ swedish ] = "Fältet kan inte jämföras med en teckensträng!";
+    Text[ russian ] = "Ñğàâíèòü ïîëå ñî ñòğîêîé íåëüçÿ!";
+    Text[ italian ] = "Il campo non può essere paragonato a una stringa!";
+    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med en streng!";
+    Text[ polish ] = "Pola nie mo¿na porównaæ z ci¹giem znaków!";
+    Text[ portuguese_brazilian ] = "The field can not be compared with a string!";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Í•¶š—ñ‚Æ”äŠr‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "ÇÊµå¸¦ ¹®ÀÚ¿­°ú ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "Õâ¸ö×Ö¶Î²»ÄÜÓë×Ö·û´®Ïà±È½Ï£¡";
+    Text[ chinese_traditional ] = "³oÄæªº¤º®e¤£¥i¥H©M¦r¦ê¬Û¤ñ¸û¡I";
+    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáÍŞá ÈÓáÓáÉ ÃÍÑİ!";
+    Text[ turkish ] = "Alan, bir karakter zinciri ile karşılaştırılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
+{
+    Text = "Das Feld kann nicht mit einem Datum verglichen werden!";
+    Text [ ENGLISH ] = "The field can not be compared with a date!";
+    Text[ english_us ] = "The field can not be compared with a date!";
+    Text[ portuguese ] = "Este campo não pode ser comparado com uma data!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óıãêñéóç ôïõ ğåäßïõ ìå ìéá çìåñïìçíßá!";
+    Text[ dutch ] = "Het veld kan niet worden vergeleken met een datum!";
+    Text[ french ] = "Impossible de comparer ce champ avec une date !";
+    Text[ spanish ] = "¡El campo no se puede comparar con una fecha!";
+    Text[ swedish ] = "Fältet kan inte jämföras med ett datum!";
+    Text[ russian ] = "Ñğàâíèòü ïîëå ñ äàòîé íåëüçÿ!";
+    Text[ italian ] = "Il campo non può essere paragonato a un dato!";
+    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med en dato!";
+    Text[ polish ] = "Pola nie mo¿na porównaæ z dat¹!";
+    Text[ portuguese_brazilian ] = "The field can not be compared with a ACCESS date!";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Í“ú•t‚Æ”äŠr‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "ÇÊµå¸¦ ³¯Â¥¿Í ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "Õâ¸ö×Ö¶Î²»ÄÜÓëÈÕÆÚÏà±È½Ï£¡";
+    Text[ chinese_traditional ] = "³oÄæªº¤º®e¤£¥i¥H©M¤é´Á¬Û¤ñ¸û¡I";
+    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáÍŞá ÈÊÇÑíÎı!";
+    Text[ turkish ] = "Alan, bir tarih ile karşılaştırılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_INT_NO_VALID
+{
+    Text = "Das Feld kann nicht mit einem Integer verglichen werden!";
+    Text [ ENGLISH ] = "The field can not be compared with a integer!";
+    Text[ english_us ] = "The field can not be compared with a integer!";
+    Text[ portuguese ] = "Este campo não pode ser comparado com um número inteiro!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óıãêñéóç ôïõ ğåäßïõ ìå İíáí áêİñáéï!";
+    Text[ dutch ] = "Het veld kan niet worden vergeleken met een integer!";
+    Text[ french ] = "Le champ ne peut pas être comparé à un nombre entier (Integer) !";
+    Text[ spanish ] = "¡El campo no se puede comparar con un integral!";
+    Text[ swedish ] = "Fältet kan inte jämföras med ett heltal!";
+    Text[ russian ] = "Ñğàâíèòü ïîëå ñ öåëûì ÷èñëîì íåëüçÿ!";
+    Text[ italian ] = "Il campo non può essere paragonato a un integrale!";
+    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med et heltal!";
+    Text[ polish ] = "Pola nie mo¿na porównaæ z liczb¹ ca³kowit¹.";
+    Text[ portuguese_brazilian ] = "The field can not be compared with a integer!";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Í®”‚Æ”äŠr‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "ÇÊµå¸¦ Á¤¼ö¿Í ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "Õâ¸ö×Ö¶Î²»ÄÜÓëÒ»¸öÕûÊıÏà±È½Ï£¡";
+    Text[ chinese_traditional ] = "³oÄæªº¤º®e¤£¥i¥H©M¾ã¼Æ¬Û¤ñ¸û¡I";
+    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáÍŞá ÈÚÏÏ ÕÍíÍ!";
+    Text[ turkish ] = "Alan, bir tamsayı ile karşılaştırılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_REAL_NO_VALID
+{
+    Text = "Das Feld kann nicht mit einer Fließkommazahl verglichen werden!";
+    Text [ ENGLISH ] = "The field can not be compared with a real!";
+    Text[ english_us ] = "The field can not be compared with a floating point number!";
+    Text[ portuguese ] = "Este campo não pode ser comparado com um número de vírgula flutuante!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óıãêñéóç ôïõ ğåäßïõ ìå İíáí äåêáäéêü áñéèìü!";
+    Text[ dutch ] = "Het veld kan niet worden vergeleken met een drijvende-komma getal!";
+    Text[ french ] = "Le champ ne peut pas être comparé à un nombre à virgule flottante !";
+    Text[ spanish ] = "¡El campo no se puede comparar con un número de coma flotante!";
+    Text[ swedish ] = "Fältet kan inte jämföra med ett flytande kommatal!";
+    Text[ russian ] = "Ñğàâíèòü ïîëå ñ ÷èñëîì ñ ïëàâàşùåé çàïÿòîé íåëüçÿ!";
+    Text[ italian ] = "Il campo non può essere paragonato a un numero in virgola mobile!";
+    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med et flydende kommatal!";
+    Text[ polish ] = "Pola nie mo¿na porównaæ z liczb¹ rzeczywist¹!";
+    Text[ portuguese_brazilian ] = "The field can not be compared with a real!";
+    Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Í•‚“®¬”‚Æ”äŠr‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "ÇÊµå¸¦ ºÎµ¿Á¡ÀÇ ¼ö¿Í ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "Õâ¸ö×Ö¶Î²»ÄÜÓëÒ»¸ö´ø¿É±äĞ¡ÊıµãÎ»ÊıµÄĞ¡ÊıÏà±È½Ï£¡";
+    Text[ chinese_traditional ] = "³oÄæªº¤º®e¤£¥i¥H©M¤p¼Æ¬Û¤ñ¸û¡I";
+    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáÍŞá ãÚ ÑŞã ÚÔÑí Ğí ÚÏÏ ãÊäæÚ ãä ÇáãäÇÒá ÇáÚÔÑíÉ!";
+    Text[ turkish ] = "Alan, bir kayan nokta sayısı ile karşılaştırılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_REAL_NO_INT
+{
+    Text = "Ein Integer Feld kann nicht mit einer Fließkommazahl verglichen werden!";
+    Text [ ENGLISH ] = "A integer field can not be compared with a real!";
+    Text[ english_us ] = "A integer field can not be compared with a floating point number!";
+    Text[ portuguese ] = "Um campo de números inteiros não pode ser comparado com um número de vírgula flutuante!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óıãêñéóç ìåôáîı åíüò ğåäßïõ áêİñáéïõ áñéèìïı êáé åíüò äåêáäéêïı áñéèìïı!";
+    Text[ dutch ] = "Een integer-veld kan niet worden vergeleken met een drijvende-komma getal!";
+    Text[ french ] = "Un champ de nombre entier (Integer) ne peut pas être comparé à un nombre à virgule flottante !";
+    Text[ spanish ] = "¡Un campo integral no se puede comparar con un número de coma flotante!";
+    Text[ swedish ] = "Ett heltalsfält kan inte jämföras med ett flytande kommatal!";
+    Text[ russian ] = "Ñğàâíèòü ïîëå öåëîãî ÷èñëà ñ ÷èñëîì ñ ïëàâàşùåé çàïÿòîé íåâîçìîæíî!";
+    Text[ italian ] = "Un campo integrale non può essere paragonato a un numero in virgola mobile.";
+    Text[ danish ] = "Det er ikke muligt at sammenligne et heltalsfelt med et flydende kommatal!";
+    Text[ polish ] = "Pola liczby ca³kowitej nie mo¿na porównaæ z liczb¹ rzeczywist¹!";
+    Text[ portuguese_brazilian ] = "A integer field can not be compared with a real!";
+    Text[ japanese ] = "®”Ì¨°ÙÄŞ‚Í•‚“®¬”‚Æ”äŠr‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ korean ] = "Á¤¼ö ÇÊµå¸¦ ºÎµ¿Á¡ÀÇ ¼ö¿Í ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ chinese_simplified ] = "Ò»¸öÕûÊı×Ö¶Î²»ÄÜÓëÒ»¸ö´ø¿É±äĞ¡ÊıµãÎ»ÊıµÄĞ¡ÊıÏà±È½Ï£¡";
+    Text[ chinese_traditional ] = "¤@­Ó¾ã¼Æ¤£¥i¥H©M¤@­Ó¤p¼Æ¬Û¤ñ¸û¡I";
+    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÍŞá ÕÍíÍ ÈÑŞã ÚÔÑí Ğí ÚÏÏ ãÊäæÚ ãä ÇáãäÇÒá ÇáÚÔÑíÉ!";
+    Text[ turkish ] = "Bir tamsayı alanı, kayan nokta sayısı ile karşılaştırılamaz!";
+};
+
+String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
+{
+    Text = "Das angegebene Kriterium kann nicht mit diesem Feld verglichen werden!!";
+    Text [ ENGLISH ] = "The entered critisim can not be compared with this field!";
+    Text[ english_us ] = "The entered criterion can not be compared with this field!!";
+    Text[ portuguese ] = "Impossível comparar o critério indicado com estes campo!";
+    Text[ russian ] = "Ñğàâíèòü çàäàííûé êğèòåğèé ñ ıòèì ïîëåì íåëüçÿ!!";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óıãêñéóç ôïõ åğéëåãìİíïõ êñéôçñßïõ ìå áõôü ôï ğåäßï!";
+    Text[ dutch ] = "Het aangegeven criterium kan niet worden vergeleken met dit veld!";
+    Text[ french ] = "Impossible de comparer le critère saisi avec ce champ !";
+    Text[ spanish ] = "¡El criterio indicado no se puede comparar con este comando!";
+    Text[ italian ] = "Il criterio specificato non può essere paragonato a questo campo!";
+    Text[ danish ] = "Det angivne kriterium kan ikke sammenlignes med dette felt!";
+    Text[ swedish ] = "Det angivna kriteriet kan inte jämföras med det här fältet!!";
+    Text[ polish ] = "Podanego kryterium nie mo¿na porównaæ z danym polem!!";
+    Text[ portuguese_brazilian ] = "The entered critisim can not be compared with this field!!";
+    Text[ japanese ] = "“ü—Í‚µ‚½ŒŸõğŒ‚Í‚±‚ÌÌ¨°ÙÄŞ‚Å”äŠr‚Å‚«‚Ü‚¹‚ñ!!";
+    Text[ korean ] = "ÁöÁ¤ÇÑ ±âÁØÀ» ÀÌ ÇÊµå¿Í ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!!";
+    Text[ chinese_simplified ] = "¸ø¶¨µÄ±ê×¼ÎŞ·¨ÓëÕâ¸ö×Ö¶Î±È½Ï£¡";
+    Text[ chinese_traditional ] = "«ü©wªº±ø¥óµLªk©M³o­ÓÄæ¦ì¬Û¤ñ¸û¡I";
+    Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáãÚíÇÑ¡ ÇáĞí Êã ÅÏÎÇáå¡ ÈåĞÇ ÇáÍŞá!!";
+    Text[ turkish ] = "Belirtilen ölçüt, bu alan ile karşılaştırılamaz!!";
 };
 
 
