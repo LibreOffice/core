@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif
-
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -137,10 +133,13 @@ namespace x11 {
         >
     {
     public:
-        ::osl::Mutex        m_aMutex;
-        bool                m_bActive;
-        sal_Int8            m_nDefaultActions;
-        Window              m_aTargetWindow;
+        ::osl::Mutex                m_aMutex;
+        bool                        m_bActive;
+        sal_Int8                    m_nDefaultActions;
+        Window                      m_aTargetWindow;
+        class SelectionManager*     m_pSelectionManager;
+        Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
+                                    m_xSelectionManager;
         ::std::list< Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > >
                             m_aListeners;
 
@@ -172,15 +171,52 @@ namespace x11 {
                             SAL_CALL getSupportedServiceNames();
     };
 
-    class SelectionManager :
-        public ::cppu::WeakComponentImplHelper4<
+    class SelectionManagerHolder :
+        public ::cppu::WeakComponentImplHelper3<
             ::com::sun::star::datatransfer::dnd::XDragSource,
             ::com::sun::star::lang::XInitialization,
-            ::com::sun::star::awt::XEventHandler,
             ::com::sun::star::lang::XServiceInfo
+        >
+    {
+        ::osl::Mutex m_aMutex;
+        Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
+            m_xRealDragSource;
+    public:
+        SelectionManagerHolder();
+        virtual ~SelectionManagerHolder();
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName();
+        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                            SAL_CALL getSupportedServiceNames();
+
+        // XInitialization
+        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments );
+
+        // XDragSource
+        virtual sal_Bool    SAL_CALL isDragImageSupported();
+        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction );
+        virtual void        SAL_CALL startDrag(
+            const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+            sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
+            const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+            const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+            );
+
+    };
+
+
+    class SelectionManager :
+        public ::cppu::WeakImplHelper3<
+            ::com::sun::star::datatransfer::dnd::XDragSource,
+            ::com::sun::star::lang::XInitialization,
+            ::com::sun::star::awt::XEventHandler
         >,
         public SelectionAdaptor
     {
+        static ::std::hash_map< ::rtl::OUString, SelectionManager*, ::rtl::OUStringHash >   m_aInstances;
+
         // for INCR type selection transfer
         // INCR protocol is used if the data cannot
         // be transported at once but in parts
@@ -364,10 +400,6 @@ namespace x11 {
         // since this leads to deadlocks in different Xlib implentations
         // (XFree as well as Xsun) use an own mutex instead
         ::osl::Mutex                m_aMutex;
-        // currently this service supports only one display
-        // this should be changed to a hash_map indexed by the
-        // display name in the future
-        static SelectionManager*    m_pInstance;
 
         SelectionManager();
         ~SelectionManager();
@@ -405,7 +437,7 @@ namespace x11 {
         void dragDoDispatch();
         void handleXEvent( XEvent& rEvent );
     public:
-        static SelectionManager& get();
+        static SelectionManager& get( const ::rtl::OUString& rDisplayName = ::rtl::OUString() );
 
         Display * getDisplay() { return m_pDisplay; };
         Window getWindow() { return m_aWindow; };
@@ -441,12 +473,6 @@ namespace x11 {
         void setCursor( sal_Int32 cursor, Window aDropWindow, Time aTimestamp );
         void setImage( sal_Int32 image, Window aDropWindow, Time aTimestamp );
         void transferablesFlavorsChanged();
-
-        // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName();
-        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                            SAL_CALL getSupportedServiceNames();
 
         // XInitialization
         virtual void        SAL_CALL initialize( const Sequence< Any >& arguments );

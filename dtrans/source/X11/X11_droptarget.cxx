@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 16:32:31 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 using namespace x11;
 using namespace rtl;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 
@@ -75,25 +76,39 @@ DropTarget::DropTarget() :
         >( m_aMutex ),
     m_bActive( false ),
     m_nDefaultActions( 0 ),
-    m_aTargetWindow( None )
+    m_aTargetWindow( None ),
+    m_pSelectionManager( NULL )
 {
 }
 
 DropTarget::~DropTarget()
 {
-    SelectionManager::get().deregisterDropTarget( m_aTargetWindow );
+    if( m_pSelectionManager )
+        m_pSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
 // --------------------------------------------------------------------------
 
-void DropTarget::initialize( const Sequence< Any >& args )
+void DropTarget::initialize( const Sequence< Any >& arguments )
 {
-    if( args.getLength() > 1 )
+    if( arguments.getLength() > 1 )
     {
+        OUString aDisplayName;
+        Reference< XDisplayConnection > xConn;
+        arguments.getConstArray()[0] >>= xConn;
+        if( xConn.is() )
+        {
+            Any aIdentifier;
+            aIdentifier >>= aDisplayName;
+        }
+
+        m_pSelectionManager = &SelectionManager::get( aDisplayName );
+        m_xSelectionManager = static_cast< XDragSource* >(m_pSelectionManager);
+        m_pSelectionManager->initialize( arguments );
+
         sal_Int32 aWindow = None;
-        args.getConstArray()[1] >>= aWindow;
-        SelectionManager::get().initialize( args );
-        SelectionManager::get().registerDropTarget( aWindow, this );
+        arguments.getConstArray()[1] >>= aWindow;
+        m_pSelectionManager->registerDropTarget( aWindow, this );
         m_bActive = true;
     }
 }

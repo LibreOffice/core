@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 16:32:31 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ using namespace rtl;
 using namespace x11;
 
 // static members of SelectionManager
-SelectionManager* SelectionManager::m_pInstance = NULL;
+::std::hash_map< OUString, SelectionManager*, OUStringHash > SelectionManager::m_aInstances;
 
 static const int nXdndProtocolRevision = 4;
 
@@ -230,11 +230,6 @@ SelectionManager::IncrementalTransfer::IncrementalTransfer(
 // ------------------------------------------------------------------------
 
 SelectionManager::SelectionManager() :
-        ::cppu::WeakComponentImplHelper4<
-                XDragSource,
-                XInitialization,
-                XEventHandler,
-                XServiceInfo > (m_aMutex),
     m_pDisplay( NULL ),
     m_aWindow( None ),
     m_aDropWindow( None ),
@@ -443,6 +438,18 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 
 SelectionManager::~SelectionManager()
 {
+    {
+        MutexGuard aGuard( *Mutex::getGlobalMutex() );
+
+        ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it;
+        for( it = m_aInstances.begin(); it != m_aInstances.end(); ++it )
+            if( it->second == this )
+            {
+                m_aInstances.erase( it );
+                break;
+            }
+    }
+
     if( m_aThread )
     {
         osl_terminateThread( m_aThread );
@@ -457,7 +464,7 @@ SelectionManager::~SelectionManager()
         // thread handle is freed in dragDoDispatch()
     }
 
-     MutexGuard aGuard(m_aMutex);
+    MutexGuard aGuard(m_aMutex);
 
 #ifdef DEBUG
     fprintf( stderr, "shutting down SelectionManager\n" );
@@ -472,7 +479,6 @@ SelectionManager::~SelectionManager()
 
         XCloseDisplay( m_pDisplay );
     }
-    m_pInstance = NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -547,12 +553,18 @@ bool SelectionManager::convertData(
 
 // ------------------------------------------------------------------------
 
-SelectionManager& SelectionManager::get()
+SelectionManager& SelectionManager::get( const OUString& rDisplayName )
 {
-    if( m_pInstance == NULL )
-        m_pInstance = new SelectionManager();
+    MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
-    return *m_pInstance;
+    SelectionManager* pInstance = NULL;
+
+    ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it = m_aInstances.find( rDisplayName );
+    if( it != m_aInstances.end() )
+        pInstance = it->second;
+    else pInstance = m_aInstances[ rDisplayName ] = new SelectionManager();
+
+    return *pInstance;
 }
 
 // ------------------------------------------------------------------------
@@ -2531,8 +2543,6 @@ void SelectionManager::deregisterHandler( Atom selection )
         delete it->second;
         m_aSelections.erase( it );
     }
-    if( m_aSelections.size() == 0 )
-        m_pInstance = NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -2576,40 +2586,6 @@ void SelectionManager::deregisterDropTarget( Window aWindow )
 }
 
 /*
- *  XServiceInfo
- */
-
-// ------------------------------------------------------------------------
-
-OUString SelectionManager::getImplementationName(  )
-{
-    return OUString::createFromAscii(XDND_IMPLEMENTATION_NAME);
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool SelectionManager::supportsService( const OUString& ServiceName )
-{
-    Sequence < OUString > SupportedServicesNames = Xdnd_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
-            return sal_True;
-
-    return sal_False;
-}
-
-// ------------------------------------------------------------------------
-
-Sequence< OUString > SelectionManager::getSupportedServiceNames()
-{
-    return Xdnd_getSupportedServiceNames();
-}
-
-
-// ------------------------------------------------------------------------
-
-/*
  *  SelectionAdaptor
  */
 
@@ -2624,3 +2600,111 @@ void SelectionManager::clearTransferable()
 {
     m_xDragSourceTransferable.clear();
 }
+
+// ------------------------------------------------------------------------
+
+/*
+ *  SelectionManagerHolder
+ */
+
+SelectionManagerHolder::SelectionManagerHolder() :
+        ::cppu::WeakComponentImplHelper3<
+                XDragSource,
+                XInitialization,
+                XServiceInfo > (m_aMutex)
+{
+}
+
+// ------------------------------------------------------------------------
+
+SelectionManagerHolder::~SelectionManagerHolder()
+{
+}
+
+// ------------------------------------------------------------------------
+
+void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
+{
+    OUString aDisplayName;
+
+    if( arguments.getLength() > 0 )
+    {
+        Reference< XDisplayConnection > xConn;
+        arguments.getConstArray()[0] >>= xConn;
+        if( xConn.is() )
+        {
+            Any aIdentifier;
+            aIdentifier >>= aDisplayName;
+        }
+    }
+
+    SelectionManager& rManager = SelectionManager::get( aDisplayName );
+    rManager.initialize( arguments );
+    m_xRealDragSource = static_cast< XDragSource* >(&rManager);
+}
+
+/*
+ *  XDragSource
+ */
+
+sal_Bool SelectionManagerHolder::isDragImageSupported()
+{
+    return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : sal_False;
+}
+
+// ------------------------------------------------------------------------
+
+sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction )
+{
+    return m_xRealDragSource.is() ? m_xRealDragSource->getDefaultCursor( dragAction ) : 0;
+}
+
+// ------------------------------------------------------------------------
+
+void SelectionManagerHolder::startDrag(
+    const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+    sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
+    const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+    const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+    )
+{
+    if( m_xRealDragSource.is() )
+        m_xRealDragSource->startDrag( trigger, sourceActions, cursor, image, transferable, listener );
+}
+
+// ------------------------------------------------------------------------
+
+/*
+ *  XServiceInfo
+ */
+
+// ------------------------------------------------------------------------
+
+OUString SelectionManagerHolder::getImplementationName(  )
+{
+    return OUString::createFromAscii(XDND_IMPLEMENTATION_NAME);
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )
+{
+    Sequence < OUString > SupportedServicesNames = Xdnd_getSupportedServiceNames();
+
+    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
+        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+            return sal_True;
+
+    return sal_False;
+}
+
+// ------------------------------------------------------------------------
+
+Sequence< OUString > SelectionManagerHolder::getSupportedServiceNames()
+{
+    return Xdnd_getSupportedServiceNames();
+}
+
+
+// ------------------------------------------------------------------------
+

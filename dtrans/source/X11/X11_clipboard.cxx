@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 10:37:36 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,50 +104,78 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::awt;
 using namespace cppu;
 using namespace osl;
 using namespace rtl;
-
 using namespace x11;
+
+::std::hash_map< OUString, ::std::hash_map< Atom, X11Clipboard* >, ::rtl::OUStringHash > X11Clipboard::m_aInstances;
 
 // ------------------------------------------------------------------------
 
-X11Clipboard::X11Clipboard() :
-        m_aMutex(),
-        WeakComponentImplHelper3< XClipboardEx, XServiceInfo, XInitialization > (m_aMutex)
+X11Clipboard* X11Clipboard::get( const OUString & rDisplayName, Atom aSelection )
 {
-    // XXX: currently X11Clipboard starts without arguments
-    // this will need to change
-    initialize( Sequence< Any >() );
+    MutexGuard aGuard( *Mutex::getGlobalMutex() );
+    ::std::hash_map< Atom, X11Clipboard* >& rMap( m_aInstances[ rDisplayName ] );
+    ::std::hash_map< Atom, X11Clipboard* >::iterator it = rMap.find( aSelection );
+    if( it != rMap.end() )
+        return it->second;
+
+    SelectionManager& rManager( SelectionManager::get( rDisplayName ) );
+    X11Clipboard* pClipboard = new X11Clipboard( rManager, aSelection );
+    rMap[ aSelection ] = pClipboard;
+
+    return pClipboard;
+}
+
+
+X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
+        m_rSelectionManager( rManager ),
+        m_xSelectionManager( & rManager ),
+        m_aSelection( aSelection )
+{
+    if( m_aSelection != None )
+        m_rSelectionManager.registerHandler( m_aSelection, *this );
+    else
+    {
+        m_rSelectionManager.registerHandler( XA_PRIMARY, *this );
+        m_rSelectionManager.registerHandler( m_rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ), *this );
+    }
 }
 
 // ------------------------------------------------------------------------
 
 X11Clipboard::~X11Clipboard()
 {
+    MutexGuard aGuard( *Mutex::getGlobalMutex() );
+
 #ifdef DEBUG
     fprintf( stderr, "shutting down X11Clipboard\n" );
 #endif
-    SelectionManager& rManager(SelectionManager::get());
-    rManager.deregisterHandler( XA_PRIMARY );
-    rManager.deregisterHandler( rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ) );
+    if( m_aSelection != None )
+        m_rSelectionManager.deregisterHandler( m_aSelection );
+    else
+    {
+        m_rSelectionManager.deregisterHandler( XA_PRIMARY );
+        m_rSelectionManager.deregisterHandler( m_rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ) );
+    }
+
+    ::std::hash_map< OUString, ::std::hash_map< Atom, X11Clipboard* >, OUStringHash >::iterator mapit;
+
+    for( mapit = m_aInstances.begin(); mapit != m_aInstances.end(); ++mapit )
+    {
+        ::std::hash_map< Atom, X11Clipboard* >::iterator it;
+        ::std::hash_map< Atom, X11Clipboard* >& rMap( mapit->second );
+        for( it = rMap.begin(); it != rMap.end(); ++it )
+            if( it->second == this )
+            {
+                rMap.erase( it );
+                break;
+            }
+    }
 }
 
-// ------------------------------------------------------------------------
-
-void X11Clipboard::initialize( const Sequence< Any >& arguments )
-{
-    SelectionManager& rManager = SelectionManager::get();
-    m_xSelectionManager = &rManager;
-    rManager.initialize( arguments );
-    rManager.registerHandler( XA_PRIMARY, *this );
-    rManager.registerHandler( rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ), *this );
-
-    if ( rManager.getDisplay() == NULL )
-        throw RuntimeException(
-            OUString::createFromAscii("DISPLAY not set or connect to specified X server failed"),
-            static_cast < XClipboard * > (this));
-}
 
 // ------------------------------------------------------------------------
 
@@ -187,43 +215,13 @@ void X11Clipboard::clearContents()
 
 // ------------------------------------------------------------------------
 
-OUString SAL_CALL X11Clipboard::getImplementationName(  )
-    throw(RuntimeException)
-{
-    return OUString::createFromAscii(X11_CLIPBOARD_IMPLEMENTATION_NAME);
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
-{
-    Sequence < OUString > SupportedServicesNames = X11Clipboard_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
-            return sal_True;
-
-    return sal_False;
-}
-
-// ------------------------------------------------------------------------
-
-Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
-    throw(RuntimeException)
-{
-    return X11Clipboard_getSupportedServiceNames();
-}
-
-// ------------------------------------------------------------------------
-
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
     if( ! m_aContents.is() )
-        m_aContents = new X11Transferable( SelectionManager::get(), static_cast< OWeakObject* >(this) );
+        m_aContents = new X11Transferable( SelectionManager::get(), static_cast< OWeakObject* >(this), m_aSelection );
     return m_aContents;
 }
 
@@ -246,9 +244,13 @@ void SAL_CALL X11Clipboard::setContents(
     aGuard.clear();
 
     // for now request ownership for both selections
-    SelectionManager& rSelectionManager = SelectionManager::get();
-    rSelectionManager.requestOwnership( XA_PRIMARY );
-    rSelectionManager.requestOwnership( rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ) );
+    if( m_aSelection != None )
+        m_rSelectionManager.requestOwnership( m_aSelection );
+    else
+    {
+        m_rSelectionManager.requestOwnership( XA_PRIMARY );
+        m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ) );
+    }
 
     // notify old owner on loss of ownership
     if( oldOwner.is() )
@@ -263,7 +265,7 @@ void SAL_CALL X11Clipboard::setContents(
 OUString SAL_CALL X11Clipboard::getName()
     throw(RuntimeException)
 {
-    return OUString();
+    return m_rSelectionManager.getString( m_aSelection );
 }
 
 // ------------------------------------------------------------------------
@@ -305,5 +307,107 @@ Reference< XTransferable > X11Clipboard::getTransferable()
 void X11Clipboard::clearTransferable()
 {
     clearContents();
+}
+
+/*
+ *  X11ClipboardHolder
+ */
+
+X11ClipboardHolder::X11ClipboardHolder() :
+        ::cppu::WeakComponentImplHelper3<
+    ::com::sun::star::datatransfer::clipboard::XClipboardEx,
+    ::com::sun::star::lang::XServiceInfo,
+    ::com::sun::star::lang::XInitialization
+        >( m_aMutex )
+{
+    // XXX: currently X11ClipboardHolder starts without arguments
+    // this will need to change
+    initialize( Sequence< Any >() );
+}
+
+X11ClipboardHolder::~X11ClipboardHolder()
+{
+}
+
+void X11ClipboardHolder::initialize( const Sequence< Any >& arguments )
+{
+    OUString aDisplayName;
+
+    if( arguments.getLength() > 0 )
+    {
+        Reference< XDisplayConnection > xConn;
+        arguments.getConstArray()[0] >>= xConn;
+        if( xConn.is() )
+        {
+            Any aIdentifier;
+            aIdentifier >>= aDisplayName;
+        }
+    }
+
+    SelectionManager& rManager = SelectionManager::get( aDisplayName );
+    rManager.initialize( arguments );
+    m_xRealClipboard = X11Clipboard::get( aDisplayName, None );
+}
+
+// ------------------------------------------------------------------------
+
+Reference< XTransferable > X11ClipboardHolder::getContents() throw(RuntimeException)
+{
+    return m_xRealClipboard.is() ? m_xRealClipboard->getContents() : Reference< XTransferable >();
+}
+
+// ------------------------------------------------------------------------
+
+void X11ClipboardHolder::setContents(
+    const Reference< XTransferable >& xTrans,
+    const Reference< XClipboardOwner >& xOwner
+    ) throw(RuntimeException)
+{
+    if( m_xRealClipboard.is() )
+        m_xRealClipboard->setContents( xTrans, xOwner );
+}
+
+// ------------------------------------------------------------------------
+
+OUString X11ClipboardHolder::getName() throw(RuntimeException)
+{
+    return m_xRealClipboard.is() ? m_xRealClipboard->getName() : OUString();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Int8 X11ClipboardHolder::getRenderingCapabilities() throw(RuntimeException)
+{
+    return m_xRealClipboard.is() ? m_xRealClipboard->getRenderingCapabilities() : 0;
+}
+
+// ------------------------------------------------------------------------
+
+OUString SAL_CALL X11ClipboardHolder::getImplementationName(  )
+    throw(RuntimeException)
+{
+    return OUString::createFromAscii(X11_CLIPBOARD_IMPLEMENTATION_NAME);
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool SAL_CALL X11ClipboardHolder::supportsService( const OUString& ServiceName )
+    throw(RuntimeException)
+{
+    Sequence < OUString > SupportedServicesNames = X11Clipboard_getSupportedServiceNames();
+
+    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
+        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+            return sal_True;
+
+    return sal_False;
+}
+
+// ------------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL X11ClipboardHolder::getSupportedServiceNames(  )
+    throw(RuntimeException)
+{
+    return X11Clipboard_getSupportedServiceNames();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 11:15:49 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ Sequence< OUString > SAL_CALL X11Clipboard_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
     const Reference< XMultiServiceFactory > & xMultiServiceFactory)
 {
-    return Reference < XInterface >( ( OWeakObject * ) new X11Clipboard());
+    return Reference < XInterface >( ( OWeakObject * ) new X11ClipboardHolder());
 }
 
 // ------------------------------------------------------------------------
@@ -119,7 +119,7 @@ Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL Xdnd_createInstance(
     const Reference< XMultiServiceFactory > & xMultiServiceFactory)
 {
-    return Reference < XInterface >( ( OWeakObject * )& SelectionManager::get() );
+    return Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
 
 // ------------------------------------------------------------------------
@@ -238,7 +238,7 @@ extern "C" {
             Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
             if( aImplName.equals( getClipboardImplementationName() ) )
             {
-                xFactory = ::cppu::createOneInstanceFactory(
+                xFactory = ::cppu::createSingleFactory(
                     xMgr, aImplName, X11Clipboard_createInstance,
                     X11Clipboard_getSupportedServiceNames() );
             }
