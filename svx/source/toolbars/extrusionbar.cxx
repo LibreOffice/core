@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:16:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
         case SID_EXTRUSION_LIGHTING_INTENSITY:
         case SID_EXTRUSION_LIGHTING_DIRECTION:
             {
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 ULONG nCount = rMarkList.GetMarkCount(), i;
 
                 for(i=0; i<nCount; i++)
@@ -631,7 +631,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 
 void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -785,7 +785,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
 void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -841,7 +841,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
 void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -931,7 +931,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 
 void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -1008,7 +1008,7 @@ static bool compare_direction( const Direction3D& d1, const Direction3D& d2 )
 
 void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -1090,7 +1090,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
 void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -1159,7 +1159,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 
 void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
@@ -1235,7 +1235,7 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sOn( RTL_CONSTASCII_USTRINGPARAM( "On" ) );
 
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount(), i;
     bool bFound = false;
 
