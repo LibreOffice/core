@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:43:49 $
+ *  last change: $Author: sab $ $Date: 2001-06-05 09:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -620,16 +623,22 @@ void ScXMLStyleExport::exportStyleAttributes(
     uno::Reference< beans::XPropertySet > xPropSet( rStyle, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")) ) )
+    rtl::OUString sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"));
+    if( xPropSetInfo->hasPropertyByName( sNumberFormat ) )
     {
-        uno::Any aAny = xPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")) );
-        sal_Int32 nNumberFormat;
-        if (aAny >>= nNumberFormat)
+        uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+        if( xPropState.is() && (beans::PropertyState_DIRECT_VALUE ==
+                xPropState->getPropertyState( sNumberFormat )) )
         {
-            rtl::OUString sDataStyleName = GetExport().getDataStyleName(nNumberFormat);
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
-                                                sDataStyleName );
+            uno::Any aAny = xPropSet->getPropertyValue( sNumberFormat );
+            sal_Int32 nNumberFormat;
+            if (aAny >>= nNumberFormat)
+            {
+                rtl::OUString sDataStyleName = GetExport().getDataStyleName(nNumberFormat);
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
+                                                    sDataStyleName );
 
+            }
         }
     }
 }
