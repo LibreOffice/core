@@ -24,8 +24,8 @@ mkdir: %_DEST%\inc%_EXT%\audio
 ..\atl\rtufiles\*.cpp %_DEST%\inc%_EXT%\external\atl\*.cpp
 ..\dt\rtufiles\*.h %_DEST%\inc%_EXT%\external\dt\*.h
 ..\expat\rtufiles\xmlparse\xmlparse.h %_DEST%\inc%_EXT%\external\expat\xmlparse.h
-..\glibc\rtufiles\posix\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
-..\glibc\rtufiles\posix\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
+..\glibc\rtufiles\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
+..\glibc\rtufiles\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
 ..\npsdk\rtufiles\*.h %_DEST%\inc%_EXT%\external\npsdk\*.h
 ..\odbc\rtufiles\*.h %_DEST%\inc%_EXT%\external\odbc\*.h
 ..\sane\*.h %_DEST%\inc%_EXT%\external\sane\*.h
