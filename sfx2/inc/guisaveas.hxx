@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:32:25 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 
@@ -105,13 +105,13 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xFilterCFG;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > m_xFilterQuery;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > m_xModuleManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xNamedModManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterConfiguration();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > GetFilterQuery();
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > GetModuleManager();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > GetModuleManager();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetNamedModuleManager();
 
 
