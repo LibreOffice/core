@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: jbu $ $Date: 2002-09-17 15:08:40 $
-#*    $Revision: 1.3 $
+#*    last change   $Author: dbo $ $Date: 2002-10-29 10:48:02 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile: $
 #*
@@ -301,14 +301,15 @@ static sal_Bool performQueryForUnknownType( const Reference< XBridgeTest > & xLB
             Any a = xLBT->queryInterface( Type( pTypeRef ) );
             bRet = check( a == Any( ), "got an foo.MyInterface, but didn't expect to get one" );
         }
-        catch( com::sun::star::uno::RuntimeException & e )
+        catch( com::sun::star::uno::RuntimeException & )
         {
-            bRet = check( sal_False,
-                          "tried to query for an interface reference of an unknown type "
-                          "but got a runtime exception. This should work for the C++ bridge "
-                          "but isn't implemented for Java remote bridge\n"
-                          "Note: All subsequent tests should fail now as the remote bridge is broken\n"
-                          "QueryForUnknownType" );
+            fprintf(
+                stderr,
+                "tried to query for an interface reference of an unknown type "
+                "but got a runtime exception. This should work for native bridges "
+                "but isn't implemented for Java remote bridge\n"
+                "Note: All subsequent tests may fail now as the remote bridge is broken\n"
+                "QueryForUnknownType" );
         }
         typelib_typedescriptionreference_release( pTypeRef );
     }
@@ -558,48 +559,64 @@ static inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut
 sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     throw (RuntimeException)
 {
-    if (! rArgs.getLength())
+    try
     {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "no test object specified!\n"
-            "usage : ServiceName of test object | -u unourl of test object\n" ) ),
-                                Reference< XInterface >() );
-    }
+        if (! rArgs.getLength())
+        {
+            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                  "no test object specified!\n"
+                                                  "usage : ServiceName of test object | -u unourl of test object\n" ) ),
+                                    Reference< XInterface >() );
+        }
 
-    Reference<XBridgeTest > xOriginal;
-    if( rArgs.getLength() > 1 && 0 == rArgs[0].compareToAscii( "-u" ) )
-    {
-        Reference <XInterface > r = _xMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ) );
-        Reference <XUnoUrlResolver> rResolver( r , UNO_QUERY );
-        r =  rResolver->resolve( rArgs[1] );
-        xOriginal = Reference < XBridgeTest > ( r , UNO_QUERY );
-    }
-    else
-    {
-        // local test
-        xOriginal = Reference<XBridgeTest > ( _xMgr->createInstance( rArgs[0] ), UNO_QUERY );
-    }
+        Reference< XInterface > xOriginal;
+        if( rArgs.getLength() > 1 && 0 == rArgs[0].compareToAscii( "-u" ) )
+        {
+            Reference <XInterface > r = _xMgr->createInstance(
+                OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ) );
+            Reference <XUnoUrlResolver> rResolver( r , UNO_QUERY );
+            xOriginal = rResolver->resolve( rArgs[1] );
+        }
+        else
+        {
+            // local test
+            xOriginal = _xMgr->createInstance( rArgs[0] );
+        }
 
-    if (! xOriginal.is())
-    {
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("cannot instantiate object!") ),
-                                Reference< XInterface >() );
-    }
+        if (! xOriginal.is())
+        {
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("cannot instantiate service!") ),
+                Reference< XInterface >() );
+        }
+        Reference< XBridgeTest > xTest( xOriginal, UNO_QUERY );
+        if (! xTest.is())
+        {
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("test object does not implement XBridgeTest!") ),
+                Reference< XInterface >() );
+        }
 
-    Reference<XBridgeTest > xLBT;
-    sal_Bool bRet = check( makeSurrogate( xLBT, xOriginal ), "makeSurrogate" );
-    bRet = check( performTest( xLBT ), "standard test" ) && bRet;
-    bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
-    bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
-    bRet = performQueryForUnknownType( xLBT ) && bRet;
-    if( bRet )
-    {
-        printf( "> dynamic invocation test succeeded!\n" );
+        Reference<XBridgeTest > xLBT;
+        sal_Bool bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
+        bRet = check( performTest( xLBT ), "standard test" ) && bRet;
+        bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
+        bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
+        bRet = performQueryForUnknownType( xLBT ) && bRet;
+        if( bRet )
+        {
+            printf( "> dynamic invocation test succeeded!\n" );
+        }
+        else
+        {
+            printf( "> dynamic invocation test failed!\n" );
+        }
     }
-    else
+    catch (Exception & exc)
     {
-        printf( "> dynamic invocation test failed!\n" );
+        OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        fprintf( stderr, "exception occured: %s\n", cstr.getStr() );
+        throw;
     }
 
     return 0;
@@ -700,6 +717,9 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/09/17 15:08:40  jbu
+    #98508# added bridgetest_javaserver batch, tests work now also in .pro builds
+
     Revision 1.2  2001/07/04 08:41:23  jbu
     #88717# queryInterface for an unknown type is now tested (feature was introduced in UDK302b/UDK300o
 
