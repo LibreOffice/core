@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:06:34 $
+ *  last change: $Author: sab $ $Date: 2001-07-10 04:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,9 +611,9 @@ void ScCompiler::MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRef, B
             else
             {
                 String aDoc;
-                String aRefStr( MakeTabStr( aRef.Ref1.nTab, aDoc ) );
+                String aRefStr( MakeTabStr( aRef.Ref2.nTab, aDoc ) );
                 rBuffer.append(aDoc);
-                if (!aRef.Ref1.IsTabRel()) rBuffer.append(sal_Unicode('$'));
+                if (!aRef.Ref2.IsTabRel()) rBuffer.append(sal_Unicode('$'));
                 rBuffer.append(aRefStr);
             }
         }
