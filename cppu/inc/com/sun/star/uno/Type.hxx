@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:39:40 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType1( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCppuType( *pT );
+        const ::com::sun::star::uno::Type & rElementType = getCppuType( *pT );
         sal_Int32 size = sizeof( **pT );
         sal_Int32 dim1 = sizeof( *pT ) / size;
         ::typelib_static_array_type_init(
@@ -273,7 +273,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType2( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCppuType( **pT );
+        const ::com::sun::star::uno::Type & rElementType = getCppuType( **pT );
         sal_Int32 size = sizeof( ***pT );
         sal_Int32 dim2 = sizeof( **pT ) / size;
         sal_Int32 dim1 = sizeof( *pT ) / dim2 / size;
@@ -290,7 +290,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType3( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCppuType( ***pT );
+        const ::com::sun::star::uno::Type & rElementType = getCppuType( ***pT );
         sal_Int32 size = sizeof( ****pT );
         sal_Int32 dim3 = sizeof( ***pT ) / size;
         sal_Int32 dim2 = sizeof( **pT ) / dim3 / size;
@@ -308,7 +308,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType4( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCppuType( ****pT );
+        const ::com::sun::star::uno::Type & rElementType = getCppuType( ****pT );
         sal_Int32 size = sizeof( *****pT );
         sal_Int32 dim4 = sizeof( ****pT ) / size;
         sal_Int32 dim3 = sizeof( ***pT ) / dim4 / size;
@@ -327,7 +327,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType5( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCppuType( *****pT );
+        const ::com::sun::star::uno::Type & rElementType = getCppuType( *****pT );
         sal_Int32 size = sizeof( ******pT );
         sal_Int32 dim5 = sizeof( *****pT ) / size;
         sal_Int32 dim4 = sizeof( ****pT ) / dim5 / size;
@@ -347,7 +347,7 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) 
 {
     if (! ::com::sun::star::uno::Array< T >::s_pType)
     {
-        const ::com::sun::star::uno::Type & rElementType = ::getCppuType( ******pT );
+        const ::com::sun::star::uno::Type & rElementType = getCppuType( ******pT );
         sal_Int32 size = sizeof( *******pT );
         sal_Int32 dim6 = sizeof( ******pT ) / size;
         sal_Int32 dim5 = sizeof( *****pT ) / dim6 / size;
