@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:44:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@ public:
     void            FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
     void            PageVisibilityHasChanged( USHORT nPage, BOOL bVisible );
 
+    /** On activation the preview is turned off.
+    */
+    virtual void Activate (BOOL IsMDIActivate);
 
 protected:
     virtual void    InnerResizePixel(const Point &rPos, const Size &rSize);
