@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 09:03:55 $
+ *  last change: $Author: mav $ $Date: 2003-11-20 17:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
 
-
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -118,9 +120,10 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 //------------------------------------------------------
 OleEmbeddedObject::~OleEmbeddedObject()
 {
-    OSL_ENSURE( !m_pInterfaceContainer && !m_pOleComponent, "The object is not closed! DISASTER is possible!" );
+    OSL_ENSURE( !m_pInterfaceContainer && !m_pOleComponent && !m_xObjectStream.is(),
+                    "The object is not closed! DISASTER is possible!" );
 
-    if ( m_pOleComponent || m_pInterfaceContainer )
+    if ( m_pOleComponent || m_pInterfaceContainer || m_xObjectStream.is() )
     {
         // the component must be cleaned during closing
         m_refCount++; // to avoid crash
@@ -154,6 +157,22 @@ void OleEmbeddedObject::Dispose()
         m_pOleComponent->release();
         m_pOleComponent = NULL;
     }
+
+    if ( m_xObjectStream.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( m_xObjectStream, uno::UNO_QUERY );
+        OSL_ENSURE( xComp.is(), "Storage stream doesn't support XComponent!\n" );
+
+        if ( xComp.is() )
+        {
+            try {
+                xComp->dispose();
+            } catch( uno::Exception& ) {}
+        }
+        m_xObjectStream = uno::Reference< io::XStream >();
+    }
+
+    m_xParentStorage = uno::Reference< embed::XStorage >();
 
     m_bDisposed = true;
 }

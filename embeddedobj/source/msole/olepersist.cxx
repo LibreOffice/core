@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 09:03:56 $
+ *  last change: $Author: mav $ $Date: 2003-11-20 17:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
+#endif
+
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
 
@@ -165,6 +169,25 @@ void OleEmbeddedObject::CreateOleComponent_Impl()
     }
     else
         OSL_ENSURE( sal_False, "Trying to recreate OLE component!\n" );
+}
+
+//------------------------------------------------------
+uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
+{
+    if ( !m_xObjectStream.is() )
+        throw uno::RuntimeException(); //TODO:
+
+    uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
+    if ( !xOutStream.is() )
+        throw io::IOException(); //TODO: access denied
+
+    uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY );
+    if ( !xTruncate.is() )
+        throw uno::RuntimeException(); //TODO:
+
+    xTruncate->truncate();
+
+    return xOutStream;
 }
 
 //------------------------------------------------------
@@ -367,21 +390,15 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         // in case visual repersentation must be stored also
         // the procedure should be the same as for embedded objects
 
-        uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
-        if ( !xOutStream.is() )
-            throw io::IOException(); //TODO: access denied
+        uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
 
         // should the component detect that it is a link???
         m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
-        xOutStream->closeOutput(); //TODO: allow to reopen the stream object ???
     }
     else
     {
-        uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
-        if ( !xOutStream.is() )
-            throw io::IOException(); //TODO: access denied
+        uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
         m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
-        xOutStream->closeOutput(); //TODO: allow to reopen the stream object ???
     }
 
     // TODO:
@@ -431,7 +448,6 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
         throw io::IOException(); //TODO: access denied
 
     m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
-    xOutStream->closeOutput();
 
     uno::Reference< lang::XComponent > xComp( xTargetStream, uno::UNO_QUERY );
     if ( xComp.is() )
@@ -485,7 +501,6 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
         throw io::IOException(); //TODO: access denied
 
     m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
-    xOutStream->closeOutput(); // TODO: allow to reuse the stream
 
     try {
         uno::Reference< lang::XComponent > xComp( xTargetStream, uno::UNO_QUERY );

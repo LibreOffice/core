@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 12:47:06 $
+ *  last change: $Author: mav $ $Date: 2003-11-20 17:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,23 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
 
         m_pDocHolder->release();
         m_pDocHolder = NULL;
+    }
+
+    // TODO: for now the storage will be disposed by the object, but after the document
+    // will use the storage, the storage will be disposed by the document and recreated by the object
+    if ( m_xObjectStorage.is() )
+    {
+        uno::Reference< lang::XComponent > xComp( m_xObjectStorage, uno::UNO_QUERY );
+        OSL_ENSURE( xComp.is(), "Storage does not support XComponent!\n" );
+
+        if ( xComp.is() )
+        {
+            try {
+                xComp->dispose();
+            } catch ( uno::Exception& ) {}
+        }
+
+        m_xObjectStorage = uno::Reference< embed::XStorage >();
     }
 
     m_bClosed = sal_True; // the closing succeeded

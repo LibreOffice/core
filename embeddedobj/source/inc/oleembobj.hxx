@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 09:03:54 $
+ *  last change: $Author: mav $ $Date: 2003-11-20 17:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper8
     ::rtl::OUString m_aLinkURL; // ???
 
 protected:
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > GetStreamForSaving();
+
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
