@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:23:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@
 #include "reffact.hxx"
 #include "navipi.hxx"
 #include "inputwin.hxx"
+#include "spelldialog.hxx"
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyprlink.hxx>
@@ -369,12 +370,13 @@ void ScDLL::Init()
     ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
     ScHighlightChgDlgWrapper    ::RegisterChildWindow(FALSE, pMod);
 
-    SvxSearchDialogWrapper::RegisterChildWindow(FALSE, pMod);
-    SvxHlinkDlgWrapper::RegisterChildWindow(FALSE, pMod);
+    SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
+    SvxHlinkDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
     SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
+    ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
     ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
