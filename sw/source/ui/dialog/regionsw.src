@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:11:13 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@
     Text[ french ] = "Masquer"; \
     Text[ spanish ] = "Ocultar"; \
     Text[ finnish ] = "Piilota"; \
-    Text[ italian ] = "Hide"; \
+    Text[ italian ] = "Nascondi"; \
     Text[ danish ] = "Hide"; \
     Text[ swedish ] = "Dölj"; \
     Text[ polish ] = "Ukryj"; \
@@ -323,7 +323,7 @@
     Text[ french ] = "Protection contre les modifications"; \
     Text[ spanish ] = "Protección de escritura";    \
     Text[ finnish ] = "Schreibschutz";  \
-    Text[ italian ] = "Write protection";   \
+    Text[ italian ] = "Protetto";   \
     Text[ danish ] = "Write protection";    \
     Text[ swedish ] = "Skrivskydd"; \
     Text[ polish ] = "Zabezpieczenie przed zapisem";    \
@@ -347,7 +347,7 @@
     Text[ french ] = "Avec mot de passe";   \
     Text[ spanish ] = "~Con contraseña";    \
     Text[ finnish ] = "~Mit Passwort";  \
-    Text[ italian ] = "With password";  \
+    Text[ italian ] = "Con pass~word";  \
     Text[ danish ] = "With password";   \
     Text[ swedish ] = "~Med lösenord";  \
     Text[ polish ] = "~Z has³em";   \
@@ -1023,7 +1023,7 @@ TabPage TP_INSERT_SECTION
         Text = "Neuer Bereich" ;
         Text [ English ] = "New section" ;
         Text [ english_us ] = "New section" ;
-        Text [ italian ] = "Nuova area" ;
+        Text [ italian ] = "Nuova sezione" ;
         Text [ spanish ] = "Nueva área" ;
         Text [ french ] = "Nouvelle section" ;
         Text [ dutch ] = "Nieuw bereik" ;
@@ -1823,5 +1823,6 @@ TabPage TP_SECTION_FTNENDNOTES
         MaxTextLength = 50 ;
     };
 };
+
 
 
