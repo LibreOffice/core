@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-08-05 08:40:26 $
+ *  last change: $Author: os $ $Date: 2002-08-07 13:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
 #endif
 
 #define FILE_NAME_LENGTH 17
@@ -1426,17 +1429,25 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwInsertSectionTabDialog aTabDlg(&GetView().GetViewFrame()->GetWindow(),aSet , rSh);
         aTabDlg.Execute();
+        rReq.Ignore();
     }
     else
     {
         const SfxPoolItem *pItem = 0;
-        String aTmpStr = rSh.GetUniqueSectionName();
+        String aTmpStr;
+        if ( SFX_ITEM_SET ==
+                pSet->GetItemState(FN_PARAM_REGION_NAME, TRUE, &pItem) )
+            aTmpStr = rSh.GetUniqueSectionName(
+                    &((const SfxStringItem *)pItem)->GetValue() );
+        else
+            aTmpStr = rSh.GetUniqueSectionName();
 
         SwSection   aSection(CONTENT_SECTION,aTmpStr);
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
-        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem))
+        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem)||
+            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_COLUMN_SECTION, FALSE, &pItem))
         {
             SwFmtCol aCol;
             SwRect aRect;
@@ -1454,7 +1465,46 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         {
             aSet.Put(*pItem);
         }
+
+        const BOOL bHidden = SFX_ITEM_SET ==
+            pSet->GetItemState(FN_PARAM_REGION_HIDDEN, TRUE, &pItem)?
+            (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
+        const BOOL bProtect = SFX_ITEM_SET ==
+            pSet->GetItemState(FN_PARAM_REGION_PROTECT, TRUE, &pItem)?
+            (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
+        aSection.SetProtect(bProtect);
+        aSection.SetHidden(bHidden);
+        if(SFX_ITEM_SET ==
+                pSet->GetItemState(FN_PARAM_REGION_CONDITION, TRUE, &pItem))
+            aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
+
+        String aFile, aSub;
+        if(SFX_ITEM_SET ==
+                pSet->GetItemState(FN_PARAM_1, TRUE, &pItem))
+            aFile = ((const SfxStringItem *)pItem)->GetValue();
+
+        if(SFX_ITEM_SET ==
+                pSet->GetItemState(FN_PARAM_3, TRUE, &pItem))
+            aSub = ((const SfxStringItem *)pItem)->GetValue();
+
+
+        if(aFile.Len() || aSub.Len())
+        {
+            String sLinkFileName(so3::cTokenSeperator);
+            sLinkFileName += so3::cTokenSeperator;
+            sLinkFileName.SetToken(0, so3::cTokenSeperator,aFile);
+
+            if(SFX_ITEM_SET ==
+                    pSet->GetItemState(FN_PARAM_2, TRUE, &pItem))
+                sLinkFileName.SetToken(1, so3::cTokenSeperator,
+                    ((const SfxStringItem *)pItem)->GetValue());
+
+            sLinkFileName += aSub;
+            aSection.SetType( FILE_LINK_SECTION );
+            aSection.SetLinkFileName(sLinkFileName);
+        }
         rSh.InsertSection(aSection, aSet.Count() ? &aSet : 0);
+        rReq.Done();
     }
 }
 
@@ -1635,7 +1685,32 @@ short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
     DBG_ASSERT(pToInsertSection, "keiner Section?")
-    rWrtSh.InsertSection(*pToInsertSection, GetOutputItemSet());
+    const SfxItemSet* pOutSet = GetOutputItemSet();
+    rWrtSh.InsertSection(*pToInsertSection, pOutSet);
+    SfxViewFrame* pViewFrm = rWrtSh.GetView().GetViewFrame();
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+            pViewFrm->GetBindings().GetRecorder();
+    if ( xRecorder.is() )
+    {
+        SfxRequest aRequest( pViewFrm, FN_INSERT_REGION);
+        const SfxPoolItem* pCol;
+        if(SFX_ITEM_SET == pOutSet->GetItemState(RES_COL, FALSE, &pCol))
+        {
+            aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
+                ((const SwFmtCol*)pCol)->GetColumns().Count()));
+        }
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME, pToInsertSection->GetName()));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_CONDITION, pToInsertSection->GetCondition()));
+        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_HIDDEN, pToInsertSection->IsHidden()));
+        aRequest.AppendItem(SfxBoolItem(FN_PARAM_REGION_PROTECT, pToInsertSection->IsProtect()));
+
+        String sLinkFileName( pToInsertSection->GetLinkFileName() );
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.GetToken( 0, so3::cTokenSeperator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.GetToken( 1, so3::cTokenSeperator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.GetToken( 2, so3::cTokenSeperator )));
+        aRequest.Done();
+    }
+
     return nRet;
 }
 
