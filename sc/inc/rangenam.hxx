@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-15 13:37:06 $
+ *  last change: $Author: sab $ $Date: 2001-06-20 14:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,11 @@
 class ScDocument;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
+
+namespace rtl {
+    class OUStringBuffer;
+}
+
 
 //------------------------------------------------------------------------
 
@@ -167,6 +172,8 @@ public:
     void            GetSymbol(String& rSymbol) const;
     void            GetEnglishSymbol(String& rSymbol, BOOL bCompileXML = FALSE) const;
     void            UpdateSymbol( String& rSymbol, const ScAddress&,
+                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE );
+    void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
                                     BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,

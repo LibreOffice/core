@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-15 13:39:13 $
+ *  last change: $Author: sab $ $Date: 2001-06-20 14:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,18 @@ void ScRangeData::UpdateSymbol( String& rSymbol, const ScAddress& rPos,
     aComp.SetCompileXML( bCompileXML );
     aComp.MoveRelWrap();
     aComp.CreateStringFromTokenArray( rSymbol );
+    delete pTemp;
+}
+
+void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
+                                BOOL bEnglish, BOOL bCompileXML )
+{
+    ScTokenArray* pTemp = pCode->Clone();
+    ScCompiler aComp( pDoc, rPos, *pTemp );
+    aComp.SetCompileEnglish( bEnglish );
+    aComp.SetCompileXML( bCompileXML );
+    aComp.MoveRelWrap();
+    aComp.CreateStringFromTokenArray( rBuffer );
     delete pTemp;
 }
 
