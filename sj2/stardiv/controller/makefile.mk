@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:10:25 $
+#   last change: $Author: obo $ $Date: 2005-03-18 11:12:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,15 +78,7 @@ all:
 # --- Files --------------------------------------------------------
 
 JAVAFILES=	\
-    SjSettings.java					\
-    StreamObserver.java				\
-    NativeStreamObserver.java		\
-    AppStarter.java					\
-    AppStarterStatus.java			\
-    AppStarterStatusNative.java		\
-    JavaSystemMonitor.java			\
-    Console.java					\
-    PropertyEditor.java	
+    SjSettings.java					
 
 JAVACLASSFILES=	\
                 $(CLASSDIR)$/$(PACKAGE)$/SjSettings.class				\
