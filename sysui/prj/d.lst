@@ -2,7 +2,6 @@ mkdir: %_DEST%\res%_EXT%\icons
 mkdir: %_DEST%\inc%_EXT%\icons
 
 ..\%__SRC%\misc\*.ico %_DEST%\res%_EXT%\icons\*.ico
-..\%__SRC%\misc\*.gif %_DEST%\res%_EXT%\icons\*.gif
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\%__SRC%\misc\dtint.sh %_DEST%\bin%_EXT%\dtint
 ..\%__SRC%\misc\dtappintegrate.sh %_DEST%\bin%_EXT%\dtappintegrate
