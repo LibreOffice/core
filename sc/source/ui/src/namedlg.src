@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:17:35 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: kz $
- //     $Date: 2001-08-14 15:17:35 $
- // $Revision: 1.20 $
+ //     $Date: 2001-08-24 10:49:38 $
+ // $Revision: 1.21 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -529,6 +529,7 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir nombres";
 };
+
 
 
 
