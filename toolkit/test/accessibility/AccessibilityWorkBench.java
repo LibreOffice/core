@@ -129,7 +129,7 @@ public class AccessibilityWorkBench
     */
     public void Layout  ()
     {
-        setSize (new Dimension (875,720));
+        setSize (new Dimension (1024,768));
         maMainPanel = new JPanel();
         this.getContentPane().add (maMainPanel);
         GridBagLayout aLayout = new GridBagLayout ();
