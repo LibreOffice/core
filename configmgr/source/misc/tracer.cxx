@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:28:04 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace configmgr
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
+#include <rtl/instance.hxx>
 
 namespace configmgr
 {
@@ -150,7 +151,6 @@ struct OTracerSetup
 //==========================================================================
 //= OConfigTracer
 //==========================================================================
-::osl::Mutex    OConfigTracer::s_aMutex;
 OTracerSetup*   OConfigTracer::s_pImpl = NULL;
 #ifdef WNT
 timeb           OConfigTracer::s_aStartTime;
@@ -158,6 +158,10 @@ timeb           OConfigTracer::s_aStartTime;
 timeval         OConfigTracer::s_aStartTime;
 #endif
 
+::osl::Mutex &  OConfigTracer::getMutex()
+{
+    return rtl::Static<osl::Mutex,OConfigTracer>::get();
+}
 //--------------------------------------------------------------------------
 void OConfigTracer::startGlobalTimer()
 {
@@ -238,7 +242,7 @@ void OConfigTracer::ensureData()
 //--------------------------------------------------------------------------
 void OConfigTracer::inc()
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     ensureData();
     ++s_pImpl->indentDepth();
 }
@@ -246,7 +250,7 @@ void OConfigTracer::inc()
 //--------------------------------------------------------------------------
 void OConfigTracer::dec()
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     ensureData();
     --s_pImpl->indentDepth();
 }
@@ -254,7 +258,7 @@ void OConfigTracer::dec()
 //--------------------------------------------------------------------------
 void OConfigTracer::traceInfo(const sal_Char* _pFormat, ...)
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     ensureData();
     ensureInitalized();
     if (s_pImpl->isTracing(OTracerSetup::INFO) )
@@ -271,7 +275,7 @@ void OConfigTracer::traceInfo(const sal_Char* _pFormat, ...)
 //--------------------------------------------------------------------------
 void OConfigTracer::traceWarning(const sal_Char* _pFormat, ...)
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     ensureData();
     ensureInitalized();
     if (s_pImpl->isTracing(OTracerSetup::WARNING))
@@ -286,7 +290,7 @@ void OConfigTracer::traceWarning(const sal_Char* _pFormat, ...)
 //--------------------------------------------------------------------------
 void OConfigTracer::traceError(const sal_Char* _pFormat, ...)
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     ensureData();
     ensureInitalized();
     if (s_pImpl->isTracing(OTracerSetup::ERROR))
@@ -459,7 +463,7 @@ void OConfigTracer::ensureInitalized()
 //--------------------------------------------------------------------------
 void OConfigTracer::traceToVirtualDevice(const sal_Char* _pDeviceName, const sal_Char* _pFormat, ...)
 {
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     ensureData();
     ensureInitalized();
 
