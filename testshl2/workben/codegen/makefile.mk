@@ -2,7 +2,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
 #   last change: $Author: lla $
 #
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 #------------------------------- All object files -------------------------------
+
 
 # --- Targets ------------------------------------------------------
 

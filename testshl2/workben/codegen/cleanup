@@ -1,0 +1,9 @@
+#!/bin/csh
+
+# cleanup
+rm -f *.cxx *.new *.exp
+
+if ( -e makefile.mk_orig ) then
+   # rename original makefile back
+   mv makefile.mk_orig makefile.mk
+endif
