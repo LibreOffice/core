@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 14:54:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,8 @@ void XMLPropertiesTContext_Impl::StartElement(
 
                 case XML_ATACTION_DECODE_PROTECT:
                     {
+                        pAttrList->AddAttribute( rAttrName, rAttrValue );
+
                         if( rAttrValue.indexOf( GetXMLToken( XML_SIZE ) ) != -1 )
                             pAttrList->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                     XML_NAMESPACE_DRAW,
