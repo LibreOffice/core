@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:23:04 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
+#endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
@@ -870,12 +873,16 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
             pRow = pRow->GetUpper();
 
-        const SwTwips nMin = (pRow->Frm().*fnRect->fnGetBottom)();
+        if ( !((SwRowFrm*)pRow)->IsRowSplitAllowed() )
+        {
+            const SwTwips nMin = (pRow->Frm().*fnRect->fnGetBottom)();
 
-        if( ( ! bVert && nMin > nLower ) || ( bVert && nMin < nLower ) )
-            nLower = nMin;
+            if( ( ! bVert && nMin > nLower ) || ( bVert && nMin < nLower ) )
+                nLower = nMin;
+        }
 
         nAdd = (pRow->GetUpper()->*fnRect->fnGetBottomMargin)();
+
     }
     else
         nAdd = (pFrm->*fnRect->fnGetBottomMargin)();
@@ -1308,12 +1315,12 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
                     if( nDiff < 0 )
                     {
                         nLastLeft = pQuo->GetAscent();
-                        nQuoWidth = -nDiff + nLastLeft;
+                        nQuoWidth = (USHORT)(-nDiff + nLastLeft);
                     }
                     else
                     {
                         nQuoWidth = 0;
-                        nLastLeft = ( pQuo->GetAscent() + nDiff ) / 2;
+                        nLastLeft = USHORT(( pQuo->GetAscent() + nDiff ) / 2);
                     }
                     break;
                 }
