@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:14:38 $
+ *  last change: $Author: jp $ $Date: 2001-08-28 14:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtFrm,     50,  50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt, 50, 50 )
+IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos, 20, 20 )
 
 
 #ifndef PROFILE

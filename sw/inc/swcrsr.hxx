@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:13:48 $
+ *  last change: $Author: jp $ $Date: 2001-08-28 14:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ struct _SwCursor_SavePos
         pNext( 0 )
     {}
     virtual ~_SwCursor_SavePos() {}
+
+    DECL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
 };
 
 
