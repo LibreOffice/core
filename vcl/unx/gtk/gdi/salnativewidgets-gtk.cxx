@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 10:55:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,7 @@ void GtkData::deInitNWF( void )
 void GtkSalGraphics::ResetClipRegion()
 {
     m_aClipRegion.SetNull();
+    X11SalGraphics::ResetClipRegion();
 }
 
 void GtkSalGraphics::BeginSetClipRegion( ULONG nCount )
@@ -2755,6 +2756,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 {
     // get the widgets in place
     NWEnsureGTKMenu();
+    NWEnsureGTKMenubar();
     NWEnsureGTKScrollbars();
 
     gtk_widget_ensure_style( m_pWindow );
@@ -2810,14 +2812,16 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gtk_widget_ensure_style( gMenuItemMenuWidget );
     GtkStyle* pMenuStyle = gtk_widget_get_style( gMenuWidget );
     GtkStyle* pMenuItemStyle = gtk_rc_get_style( gMenuItemMenuWidget );
+    GtkStyle* pMenubarStyle = gtk_rc_get_style( gMenubarWidget );
     GtkStyle* pMenuTextStyle = gtk_rc_get_style( gtk_bin_get_child( GTK_BIN(gMenuItemMenuWidget) ) );
 
+    aBackColor = getColor( pMenubarStyle->bg[GTK_STATE_NORMAL] );
+    aStyleSet.SetMenuBarColor( aBackColor );
     aBackColor = getColor( pMenuStyle->bg[GTK_STATE_NORMAL] );
     aTextColor = getColor( pMenuTextStyle->text[GTK_STATE_NORMAL] );
     if( aBackColor == aTextColor )
         aTextColor = (aBackColor.GetLuminance() < 128) ? Color( COL_WHITE ) : Color( COL_BLACK );
     aStyleSet.SetMenuColor( aBackColor );
-    aStyleSet.SetMenuBarColor( aBackColor );
     aStyleSet.SetMenuTextColor( aTextColor );
 
     aHighlightColor = getColor( pMenuItemStyle->bg[ GTK_STATE_SELECTED ] );
