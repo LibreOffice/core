@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,43 +65,75 @@ namespace configmgr
 {
     namespace node
     {
-        enum State          // Change State
+        enum State
         {
             isDefault,          isToDefault     = isDefault,
             isMerged,           isModification  = isMerged,
             isReplaced,         isReplacement   = isReplaced,
             isAdded,            isAddition      = isAdded
         };
+        enum Access
+        {
+            accessWritable,
+            accessFinal,
+            accessReadonly,
+            accessReadonlyAndFinal
+        };
+        inline Access makeAccess(bool readonly, bool final)
+        { return Access( (readonly ? accessReadonly : 0u) | (final ? accessFinal : 0u) ); }
+        inline bool isAccessReadonly(Access access)
+        { return (access & accessReadonly) != 0; }
+        inline bool isAccessFinal(Access access)
+        { return (access & accessFinal) != 0; }
+
         inline bool existsInDefault(State eState)   { return eState <= isReplaced;}
         inline bool isReplacedForUser(State eState) { return eState >= isReplaced;}
 
         /// holds attributes a node in the schema
         struct Attributes
         {
-            State state_        : 2;    // merged/replaced/default state
-
-            bool bWritable      : 1;    // write-protected, if false
-            bool bFinalized     : 1;    // can not be overridden - write protected when merged upwards
-
-            bool bNullable      : 1;    // values only: can be NULL
-            bool bLocalized     : 1;    // values only: value may depend on locale
-
-            int  reserved       : 2;    // can register a veto listener to constrain changes to this node
-
-
             Attributes()
-            : bWritable(true)
+            : bReadonly(false)
             , bFinalized(false)
             , state_(node::isMerged)
             , bNullable(true)
             , bLocalized(false)
+            , bMandatory(false)
+            , bRemovable(false)
             {}
-            /* ! IMPORTANT: if these defaults are changed,
-                the handling in CmXMLFormater::handleAttributes()
-                and OValueHandler::startElement() should be reviewed
-            */
+
             State state() const         { return State(0x03 & state_); }
             void setState(State _state) { this->state_ = _state; }
+
+            bool isWritable() const              { return!bReadonly; }
+            bool isReadonly() const              { return bReadonly; }
+            bool isFinalized() const             { return bFinalized; }
+
+            void markReadonly() { bReadonly = true; }
+
+            Access getAccess() const
+            { return makeAccess(bReadonly,bFinalized); }
+
+            void setAccess(bool _bReadonly, bool _bFinalized)
+            { bReadonly = _bReadonly; bFinalized = _bFinalized; }
+
+            void setAccess(Access _aAccessLevel)
+            { setAccess( isAccessReadonly(_aAccessLevel), isAccessFinal(_aAccessLevel) );  }
+
+            bool isNullable() const              { return bNullable; }
+            void setNullable (bool _bNullable)   {bNullable = _bNullable; }
+
+            bool isLocalized() const             { return bLocalized; }
+            void setLocalized (bool _bLocalized) {bLocalized = _bLocalized; }
+
+            bool isMandatory() const             { return bMandatory; }
+            bool isRemovable() const             { return bRemovable; }
+
+            void markMandatory() { bMandatory = true; }
+            void markRemovable() { bRemovable = true; }
+
+            void setRemovability(bool _bRemovable, bool _bMandatory)
+            { bRemovable = _bRemovable; bMandatory = _bMandatory; }
 
             bool isDefault()            const { return this->state() == node::isDefault;}
             bool existsInDefault()      const { return node::existsInDefault(this->state());}
@@ -115,6 +147,17 @@ namespace configmgr
                     this->state_ = node::isMerged;
             }
 
+        private:
+            State state_        : 2;    // merged/replaced/default state
+
+            bool bReadonly      : 1;    // write-protected, if true
+            bool bFinalized     : 1;    // can not be overridden - write protected when merged upwards
+
+            bool bNullable      : 1;    // values only: can be NULL
+            bool bLocalized     : 1;    // values only: value may depend on locale
+
+            bool bMandatory     : 1;    // cannot be removed/replaced in subsequent layers
+            bool bRemovable     : 1;    // can be removed
         };
 
     }
