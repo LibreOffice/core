@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:30:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2319,9 +2319,11 @@ double PSWriter::ImplGetScaling( const MapMode& rMapMode )
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
-    double nMul = ImplGetScaling( rMapMode );
-    ImplTranslate( rMapMode.GetOrigin().X() * nMul, rMapMode.GetOrigin().Y() * nMul );
-    ImplScale( nMul * (double)rMapMode.GetScaleX(), nMul * (double)rMapMode.GetScaleY() );
+    double fMul = ImplGetScaling( rMapMode );
+    double fScaleX = (double)rMapMode.GetScaleX() * fMul;
+    double fScaleY = (double)rMapMode.GetScaleY() * fMul;
+    ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
+    ImplScale( fScaleX, fScaleY );
 }
 
 //---------------------------------------------------------------------------------
