@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:42:40 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2515,7 +2515,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= sal_Int64( aFileStatus.getFileSize() );
             it1->setValue( aAny );
         }
-        else if( isVolume || isDirectory )
+        else
         {
             sal_Int64 dirSize = 0;
             aAny <<= dirSize;
