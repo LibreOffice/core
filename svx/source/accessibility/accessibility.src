@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-05 06:54:38 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
 {
     Text = "Textfarbe" ;
     Text[ ENGLISH ] = "Text color" ;
-    Text[ ENGLISH_US ] = "Text color" ;
+    Text[ ENGLISH_US ] = "Font color" ;
     Text[ portuguese ] = "text color";
     Text[ russian ] = "text color";
     Text[ greek ] = "text color";
@@ -250,7 +250,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ ENGLISH ] = "Bitmap" ;
     Text[ ENGLISH_US ] = "Bitmap" ;
     Text[ portuguese ] = "bitmap";
-    Text[ russian ] = "bitmap";
+    Text[ russian ] = "Растр";
     Text[ greek ] = "bitmap";
     Text[ dutch ] = "bitmap";
     Text[ french ] = "Bitmap";
