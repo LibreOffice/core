@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:19:14 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String STR_NOSTARTPRINTER
     TEXT [ English ] = "Could not start printer.\nPlease check your printer configuration." ;
     TEXT [ norwegian ] = "Kan ikke starte skriver.\nKontroller skriverkonfigurasjonen" ;
     TEXT [ italian ] = "Impossibile avviare la stampante.\nVerificare la configurazione della stampante." ;
-    TEXT [ portuguese_brazilian ] = "Nγo foi possνvel iniciar a impressora.\nPor favor, verifique a configuraηγo da impressora." ;
+    TEXT [ portuguese_brazilian ] = "Nγo foi possνvel iniciar a impressora.\nVerifique a configuraηγo da impressora." ;
     TEXT [ portuguese ] = "Foi impossνvel iniciar a impressora.\nPor favor, verifique a configuraηγo da impressora." ;
     TEXT [ finnish ] = "Tulostinta ei voi kδynnistδδ.\nTarkista tulostimen mδδritykset." ;
     TEXT [ danish ] = "Det var ikke muligt at starte printeren.\nKontroller venligst din printerkonfiguration." ;
@@ -135,7 +135,7 @@ String STR_PRINTER_NOTAVAIL
     TEXT [ ENGLISH ] = "This document was previously formatted for the printer $1, but that printer is not available.\nUse default printer $2?" ;
     TEXT [ norwegian ] = "Dette dokumentet ble formatert for skriveren " ;
     TEXT [ italian ] = "Questo documento era stato formattato in precedenza per la stampante $1. La stampante, perς, non esiste.\nUsare la stampante predefinita $2?" ;
-    TEXT [ portuguese_brazilian ] = "O documento foi formatado para a impressora $1. A impressora nγo estα disponνvel.\nDeseja usar a impressora padrγo $2?" ;
+    TEXT [ portuguese_brazilian ] = "O documento foi formatado para a impressora $1. Esta impressora nγo estα disponνvel.\nDeseja usar a impressora padrγo $2?" ;
     TEXT [ portuguese ] = "O documento foi formatado para a impressora $1. A impressora nγo estα disponνvel.\nUsar a impressora padrγo $2?" ;
     TEXT [ finnish ] = "Asiakirja on muotoiltu tulostinta $1 varten. Mδδritetty tulostin ei ole kδytettδvissδ. \nHaluatko kδyttδδ vakiotulostinta $2?" ;
     TEXT [ danish ] = "Dette dokument er formateret til printeren $1. Denne printer er ikke tilgζngelig.\nVil du bruge standardprinteren $2?" ;
@@ -149,7 +149,7 @@ String STR_PRINTER_NOTAVAIL
     TEXT[ polish ] = "Dokument zosta³ sformatowany dla drukarki $1. Drukarka ta nie jest dostκpna.\nCzy uΏyζ drukarki domylnej $2?";
     TEXT[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ―γƒ—γƒªγƒ³γ‚Ώ $1 η”¨γ«ζ›ΈεΌθ¨­ε®γ•γ‚γΎγ—γγ€‚γƒ—γƒªγƒ³γ‚Ώγ―γ‚γ‚γΎγ›γ‚“γ€‚\nζ¨™ζΊ–γƒ—γƒªγƒ³γ‚Ώ $2 γ‚’δ½Ώη”¨γ—γΎγ™γ‹γ€‚";
     TEXT[ chinese_traditional ] = "ι€™ε€‹ζ–‡δ»¶ζ ΌεΌζ―ε°ι–€η‚Ίε°θ΅¨ζ© $1 θ¨­ε®η„γ€‚\nδ½†ζ―ι€™ε€‹ε°θ΅¨ζ©δΈε­ε¨γ€‚ζ‚¨θ¦δ½Ώη”¨ι»θªε°θ΅¨ζ© $2 οΌ";
-    TEXT[ greek ] = "Το έγγραφο έχει διαμορφωποιηθεί για τον εκτυπωτή $1. Ο εκτυπωτής αυτός δεν είναι \nδιαθέσιμος. Να χρησιμοποιηθεί ο προεπιλεγμένος εκτυπωτής";
+    TEXT[ greek ] = "Το έγγραφο έχει διαμορφωθεί για τον εκτυπωτή $1. Ο εκτυπωτής αυτός δεν είναι \nδιαθέσιμος. Να χρησιμοποιηθεί ο προεπιλεγμένος εκτυπωτής;";
     TEXT[ korean ] = "μ΄ λ¬Έμ„μ ν•μ‹μ΄ ν”„λ¦°ν„° $1μ©μΌλ΅ μ§€μ •λμ—μµλ‹λ‹¤. μ§€μ •λ ν”„λ¦°ν„°κ°€ μ—†μµλ‹λ‹¤. \nν‘μ¤€ ν”„λ¦°ν„° $2 μ„(λ¥Ό) μ‚¬μ©ν•μ‹κ² μµλ‹κΉ?";
     TEXT[ arabic ] = "Κγ ΚδΣνή ΗαγΣΚδΟ ααΨΗΘΪΙ $1. ΕαΗ Γδ εΠε ΗαΨΗΘΪΙ ΫνΡ γζΜζΟΙ.\nεα ΚΡνΟ ΗΣΚΞΟΗγ ΗαΨΗΘΪΙ ΗαΗέΚΡΗΦνΙ $2Ώ";
     TEXT[ turkish ] = "Belge, $1 yazύcύsύ iηin formatlandύ. Belirtilen yazύcύ bulunamadύ.\nStandart yazύcύ $2 kullanύlsύn mύ?";
@@ -491,7 +491,7 @@ String STR_PRINT_NEWORI
     Text [ french ] = "Vous avez modifiι l'orientation de page.\nVoulez-vous enregistrer\n les modifications de paramθtres pour le document ?" ;
     Text [ swedish ] = "Du har δndrat instδllningen av sidorienteringen.\nSka de δndrade instδllningarna\nφvertas till dokumentet?" ;
     Text [ danish ] = "Indstillingerne for sideretningen er blevet ζndret.\nSkal ζndringerne overtages i dokumentet?" ;
-    Text [ portuguese_brazilian ] = "A orientaηγo da pαgina.foi modificada.\nDeseja salvar as novas definiηυes\nno documento ativo?" ;
+    Text [ portuguese_brazilian ] = "A orientaηγo da pαgina foi modificada.\nDeseja salvar as novas definiηυes\nno documento ativo?" ;
     Text [ portuguese ] = "Vocκ modificou a orientaηγo da pαgina.\nDeseja aplicar as novas definiηυes\nao documento activo?" ;
     Text[ chinese_simplified ] = "ζ‚¨ζ›΄ζ”ΉδΊ†ι΅µιΆθ®Ύε®γ€‚\nθΏ™δΈªζ–‡ζ΅£θ¦ζ¥ζ”¶ζ›΄ζ”Ήη„θ®Ύε®ε—οΌ";
     Text[ russian ] = "Θημενενΰ ςεκσωΰÿ ξπθενςΰφθÿ ρςπΰνθφϋ.\nΡξυπΰνθςό ύςθ θημενενθÿ\nβ ΰκςθβνξμ δξκσμενςε?";
@@ -522,7 +522,7 @@ String STR_PRINT_NEWSIZE
     Text [ dutch ] = "U heeft de paginagrootte gewijzigd.\nWilt u de nieuwe instellingen\novernemen in het document?" ;
     Text [ swedish ] = "Du har δndrat sidstorleken.\nSka de δndrade instδllningarna\nφvertas till dokumentet?" ;
     Text [ danish ] = "Sidestψrrelsen er blevet ζndret.\nSkal ζndringerne overtages i dokumentet?" ;
-    Text [ portuguese_brazilian ] = "O tamanho da pαgina.foi modificada.\nDeseja salvar as novas definiηυes\nno documento ativo?" ;
+    Text [ portuguese_brazilian ] = "O tamanho da pαgina foi modificada.\nDeseja salvar as novas definiηυes\nno documento ativo?" ;
     Text [ portuguese ] = "Vocκ modificou o tamanho da pαgina.\n Deseja aplicar as novas definiηυes \nao documento activo?" ;
     Text[ chinese_simplified ] = "ζ‚¨ε·²η»ζ›΄ζ”Ήι΅µιΆε¤§ε°γ€‚\nζ‚¨η„ζ–‡ζ΅£θ¦ι‡‡η”¨θΏ™δΈªθ®Ύε®ε—οΌ";
     Text[ russian ] = "Πΰημεπ ρςπΰνθφϋ θημενεν.\nΡξυπΰνθςό ύςθ θημενενθÿ\nβ ΰκςθβνξμ δξκσμενςε?";
@@ -553,7 +553,7 @@ String STR_PRINT_NEWORISIZE
     Text [ french ] = "Le format et l'orientation de la page\nont changι. Voulez-vous appliquer\nles  paramθtres modifiιs\ndans le document?" ;
     Text [ swedish ] = "Du har δndrat sidstorleken och\nsidorienteringen.Ska\nde δndrade instδllningarna φvertas\ntill dokumentet?" ;
     Text [ danish ] = "Sidestψrrelsen og sideretningen er blevet ζndret.\nSkal ζndringerne overtages i dokumentet?" ;
-    Text [ portuguese_brazilian ] = "A orientaηγo e tamanho da pαgina.foram modificadas.\nDeseja salvar as novas definiηυes\nno documento ativo?" ;
+    Text [ portuguese_brazilian ] = "A orientaηγo e tamanho da pαgina foram modificadas.\nDeseja salvar as novas definiηυes\nno documento ativo?" ;
     Text [ portuguese ] = "Vocκ modificou o tamanho e a orientaηγo da pαgina.\n Deseja aplicar as novas definiηυes\nao documento activo?" ;
     Text[ chinese_simplified ] = "ζ‚¨ε·²η»ζ›΄ζ”Ήι΅µιΆε¤§ε°ε’ι΅µιΆζ–Ήε‘γ€‚\nζ‚¨η„ζ–‡ζ΅£θ¦ι‡‡η”¨θΏ™δΊ›ζ›΄ζ”Ήε—οΌ";
     Text[ russian ] = "Πΰημεπ θ ξπθενςΰφθÿ ρςπΰνθφϋ θημενενϋ\n. Ρξυπΰνθςό\nύςθ θημενενθÿ β\nΰκςθβνξμ δξκσμενςε?";
@@ -864,7 +864,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ polish ] = "WystΉpi³ b³Ήd podczas przesy³ania wiadomoci: brak konta uΏytkownika lub nieprawid³owa instalacja.\nSprawd ustawienia programu %PRODUCTNAME lub programu do poczty elektronicznej.";
     MESSAGE[ japanese ] = "γƒ΅γƒƒγ‚»γƒΌγ‚Έι€δΏ΅ζ™‚γ®γ‚¨γƒ©γƒΌγ€‚γ‚¨γƒ©γƒΌγ®εε› γ¨γ—γ¦γ―γ€γƒ¦γƒΌγ‚¶γƒΌγ‚Άγ‚«γ‚¦γƒ³γƒγγªγ„γ‹γ€γ‚γ‚‹γ„γ―γ‚»γƒƒγƒγ‚Άγƒƒγƒ—γζ­£γ—γγªγ„γ‹γθ€ƒγγ‚‰γ‚γΎγ™γ€‚\n%PRODUCTNAMEγ€γΎγγ―γδ½Ώγ„γ® E-mail γƒ—γƒ­γ‚°γƒ©γƒ γ®θ¨­ε®γ‚’ηΆΊθªγ—γ¦γγ γ•γ„γ€‚";
     MESSAGE[ chinese_traditional ] = "ε¨ε‚³ι€ι€™ε€‹ζ–‡δ»¶ζ™‚η™Όη”δΈ€ε€‹ι―θª¤γ€‚ε―θƒ½ηΌΊε°‘δΈ€ε€‹δ½Ώη”¨θ€…θ³¬θ™ζ–ε®‰θ£ζ‰ε•ι΅γ€‚\nθ«‹ζ‚¨ζªΆζ¥ %PRODUCTNAME η„θ¨­ε®ε’ζ‚¨η„ι›»ε­ιƒµδ»¶η¨‹εΌη„θ¨­ε®γ€‚";
-    MESSAGE[ greek ] = "Σφάλμα κατά την αποστολή μηνύματος.";
+    MESSAGE[ greek ] = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος. Αυτό μπορεί να συμβαίνει επειδή δεν υπάρχει λογαριασμός χρήστη ή επειδή η εγκατάσταση είναι ελαττωματική.\nΕλέγξτε τις ρυθμίσεις του %PRODUCTNAME ή του προγράμματος ηλεκτρονικού ταχυδρομείου.";
     MESSAGE[ korean ] = "λ©”μ‹μ§€λ¥Ό λ³΄λ‚Ό λ• μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤. μ‚¬μ©μ κ³„μ •μ΄ μ—†κ±°λ‚\nμ„¤μΉμ— μ¤λ¥κ°€ μμµλ‹λ‹¤. %PRODUCTNAMEμ΄λ‚ ν•΄λ‹Ή μ „μ λ©”μΌ ν”„λ΅κ·Έλ¨μ μ„¤μ •μ΄ μ¬λ°”λ¥Έμ§€ ν™•μΈν•μ‹­μ‹μ¤.";
     MESSAGE[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΕΡΣΗα ΗαΡΣΗαΙ ";
     MESSAGE[ turkish ] = "Mesajύn gφnderilmesinde hata oluώtu. Eksik bir kullanύcύ hesabύ veya eksik bir kurulum hata sebebi olabilir.\n Lόtfen%PRODUCTNAME ayarlarύnύ veya eposta programύ ayarlarύnύ kontrol edin. ";
@@ -889,7 +889,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message = "Um eine Nachricht όber das Internet zu verschicken,\nwird Ihre E-Mail-Adresse und ein SMTP-Server zum Versand benφtigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\E-Mail\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen." ;
     Message [ English ] = "Before sending mail or news messages, you must\nspecify your email address and a SMTP server.\nPlease write your address down in\n\"Extras\\Options\\General...\\User Data\\Email\" and\n\"Extras\\Options\\Internet\\Mail/News\\Message dispatch\".\nThen try again sending this message." ;
     Message [ english_us ] = "Before sending mail or news messages, you must\nspecify your e-mail address and an SMTP server.\nPlease enter the required settings under \n\"Tools\\Options\\General...\\User Data\\E-Mail\" and\n\"Tools\\Options\\Internet\\Mail/News\\Outgoing Mail\".\nThen try sending this message again." ;
-    Message [ portuguese_brazilian ] = "Antes de enviar um email ou grupo de notνcias, vocκ deve\nespecificar seu endereηo de e-mail e um servidor SMTP.\nPor favor, digite as definiηυes requeridas em\n\"Ferramentas\\Opηυes\\Geral...\\Dados do Usuαrio\\Correio\" and\n\"Ferramentas\\Opηυes\\Geral...\\Dados do Usuαrio\\Correio de Saνda\".\nentγo tente  reenviar a mensagem novamente" ;
+    Message [ portuguese_brazilian ] = "Antes de enviar um e-mail ou grupo de notνcias, vocκ deve\nespecificar seu endereηo de e-mail e um servidor SMTP.\nPor favor, digite as definiηυes requeridas em\n\"Ferramentas – Opηυes – Geral... - Dados do Usuαrio - Correio\" e\n\"Ferramentas – Opηυes -Geral... - Dados do Usuαrio - Correio de Saνda\".\nTente entγo enviar a mensagem novamente." ;
     Message [ swedish ] = "Fφr att ett meddelande skall kunna skickas via Internet,\nbehφvs din e-postadress och en SMTP-server.\nVar vδnlig och fφr in dessa instδllningar under\n\"Verktyg\\Alternativ\\Allmδnt...\\Anvδndardata\\E-post\" och\n\"Verktyg\\Alternativ\\Internet\\E-post/Nyheter\\Meddelandesδndning\"\ninnan du skickar ett meddelande igen." ;
     Message [ danish ] = "For at kunne sende en meddelelse over Internet\nkrζves din e-mail-adresse og en SMTP-server.\nIndtast disse indstillinger under\n\"Funktioner\\Indstillinger\\Generelt...\\Brugerdata\\E-mail\" og\n\"Funktioner\\Indstillinger\\Internet\\E-mail/Nyheder/Nyhedsafsendelse\",\nfψr du igen sender en meddelelse." ;
     Message [ italian ] = "Per poter inviare un messaggio tramite Internet,\nθ necessario un indirizzo di eMail e un server SMTP.\nSpecificate queste impostazioni in\n\"Strumenti\\Opzioni\\Generale...\\Dati utente\\eMail\" e in\n\"Strumenti\\Opzioni\\Internet\\Mail/News\\\\Invio messaggi\",\nprima di inviare nuovamente un messaggio." ;
@@ -922,7 +922,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message = "Fόr die von Ihnen gewδhlte Aktion wird ein Ausgangskorb benφtigt.\nBitte legen Sie einen Ausgangskorb an, bevor Sie diese Aktion erneut ausfόhren." ;
     Message [ English ] = "You need an outbox for this aktion.\nPlease create an outbox, before trying again." ;
     Message [ english_us ] = "To perform this action an outbox is required.\nPlease create an outbox prior to executing this action again." ;
-    Message [ portuguese_brazilian ] = "Para executar esta aηγo, uma caixa de saνda ι requerida.\nPor favor, crie uma caixa de saida para executar esta aηγo.\nCrie primeiro uma caixa de saida e tente novamente." ;
+    Message [ portuguese_brazilian ] = "Ι necessαrio uma caixa de saνda para executar esta aηγo, .\nCrie uma caixa de saνda para executar esta aηγo.\nCrie primeiro uma caixa de saνda e tente novamente." ;
     Message [ swedish ] = "Du behφver en utkorg fφr εtgδrden som du har valt.\nVar vδnlig och skapa en utkorg innan du utfφr den hδr εtgδrden igen." ;
     Message [ danish ] = "Du har brug for en udbakke for at kunne udfψre denne handling.\nOpret venligst en udbakke, fψr du gentager denne handling." ;
     Message [ italian ] = "Per effettuare l'operazione scelta dall'utente, si necessita della posta in uscita.\nPrima di provare a rieffettuare tale operazione creare una posta in uscita." ;
@@ -935,7 +935,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message[ polish ] = "Do wykonania tej akcji jest potrzebna skrzynka nadawcza.\nUtwσrz skrzynkκ nadawczΉ, zanim ponownie zlecisz tκ akcjκ.";
     Message[ japanese ] = "ιΈζγ—γγ‚Άγ‚―γ‚·γƒ§γƒ³γ®ε®θ΅γ«γ―γ€ι€δΏ΅γƒγƒ¬γ‚¤γεΏ…θ¦γ§γ™γ€‚\nγ“γ®γ‚Άγ‚―γ‚·γƒ§γƒ³γ‚’ε®θ΅γ—γªγγ™ε‰γ«γ€ι€δΏ΅γƒγƒ¬γ‚¤γ‚’ζ Όη΄γ—γΎγ™γ€‚";
     Message[ chinese_traditional ] = "ε·θ΅ι€™ε€‹ε‹•δ½θ¦ζ±‚ε…ι…η½®δΈ€ε€‹ε―„δ»¶ε£γ€‚\nθ«‹ε»Ίη«‹δΈ€ε€‹ε―„δ»¶ε£οΌη„¶ει‡ζ–°ε·θ΅ι€™ε€‹ε‹•δ½γ€‚";
-    Message[ greek ] = "Για να εκτελεστεί αυτή η ενέργεια απαιτείται ο φάκελος 'Εξερχόμενα'\nΠαρακαλώ δημιουργήστε αυτόν τον φάκελο πριν την επόμενη εκτέλεση αυτή? ";
+    Message[ greek ] = "Για να εκτελέσετε αυτή την ενέργεια απαιτείται φάκελος εξερχομένων.\nΔημιουργήστε έναν φάκελο εξερχομένων πριν να εκτελέσετε ξανά αυτή την ενέργεια.";
     Message[ korean ] = "μ„ νƒν• μ‘λ™μ„ μ‹¤ν–‰ν•λ ¤λ©΄ λ³΄λ‚Ό νΈμ§€ν•¨μ΄ ν•„μ”ν•©λ‹λ‹¤. \nμ΄ μ‘λ™μ„ λ‹¤μ‹ μ‹¤ν–‰ν•κΈ° μ „μ— λ³΄λ‚Ό νΈμ§€ν•¨μ„ λ§λ“μ‹­μ‹μ¤.";
     Message[ arabic ] = "ΚδένΠ ΗαΕΜΡΗΑ ΗαΠν ήγΚ ΘΗΞΚνΗΡε νΝΚΗΜ Εαμ ΣαΙ ΥΗΟΡΗΚ.\nΗαΡΜΗΑ ΕδΤΗΑ ΣαΙ ΥΗΟΡΗΚ΅ ήΘα γΝΗζαΙ ΚδένΠ εΠΗ ΗαΕΜΡΗΑ γΜΟΟΗπ.";
     Message[ turkish ] = "Seηtiπiniz iώlem iηin giden kutusu gerekiyor.\nBu iώlemi yeniden yόrόtmeden φnce giden kutusunu oluώturun.";
@@ -960,7 +960,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message [ English ] = "Can't open the document for edit, possibly due to\nmissing access rights. Should be used as template\nfor a new document?" ;
     Message [ portuguese ] = "O documento nγo pode ser aberto para ediηγo (por ex. devido \nΰ falta de direitos de acesso). Deseja usα-lo como modelo\npara abrir um novo documento?" ;
     Message [ english_us ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
-    Message [ portuguese_brazilian ] = "O documento nγo pode ser aberto para ediηγo, possivelmente devido \nΓ  falta de direitos de acesso. Deseja usα-lo como modelo\npara abrir um novo documento?" ;
+    Message [ portuguese_brazilian ] = "O documento nγo pode ser aberto para ediηγo, possivelmente devido \nΰ falta de direitos de acesso. Deseja usα-lo como modelo\npara abrir um novo documento?" ;
     Message [ swedish ] = "Dokumentet kan inte redigeras (t.ex. dδrfφr att rδttigheter saknas). Vill du arbeta med en kopia av dokumentet i stδllet?" ;
     Message [ danish ] = "Det er ikke muligt at εbne dokumentet til redigering\n(muligvis har du ingen adgangsrettigheder). Skal det\nanvendes som skabelon for et nyt dokument?" ;
     Message [ italian ] = "Impossibile modificare il documento (probabilmente per la mancanza di diritti). Volete provare a modificare una copia del documento?" ;
@@ -972,7 +972,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message[ polish ] = "Nie moΏna otworzyζ dokumentu do edycji,\nprawdopodobnie z powodu braku uprawnieρ. Czy chcesz uΏyζ go\njako szablonu nowego dokumentu?";
     Message[ japanese ] = "γ‚Άγ‚―γ‚»γ‚Ήγ™γ‚‹ζ¨©ε©γγªγ„γªγ©γ®η†η”±γ§γ€γ“γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ―η·¨ι›†γ§γγΎγ›γ‚“γ€‚γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γ‚³γƒ”γƒΌγ¨γ—γ¦η·¨ι›†γ—γΎγ™γ‹γ€‚";
     Message[ chinese_traditional ] = "η„΅ζ³•ι–‹ε•η·¨θΌ―ι€™ε€‹ζ–‡δ»¶(ηΌΊε°‘θ®€ε–ζ¬ε›)γ€‚ζ‚¨θ¦ζ–°ε»Ίι€™ε€‹ζ–‡δ»¶η„θ¤‡θ£½δ»¶οΌ";
-    Message[ greek ] = "Δεν είναι δυνατόν να ανοιχτεί το έγγραφο προς\nεπεξεργασία (π.χ. λόγω έλλειψης δικαιωμάτων πρόσβασης). Θέλετε\nνα χρησιμοποιηθεί ως πρότυπο ? ";
+    Message[ greek ] = "Δεν είναι δυνατό το άνοιγμα του εγγράφου για επεξεργασία, πιθανώς λόγω \nέλλειψης δικαιωμάτων πρόσβασης. Θέλετε να το χρησιμοποιήσετε ως πρότυπο\nγια για ένα νέο έγγραφο;";
     Message[ korean ] = "μ•΅μ„Έμ¤ κ¶ν•μ΄ μ—†λ” μ΄μ λ΅ μ΄ λ¬Έμ„λ¥Ό νΈμ§‘ν•  μ μ—†μµλ‹λ‹¤. μ΄ λ¬Έμ„λ¥Ό λ³µμ‚¬ν•μ—¬ νΈμ§‘ν•μ‹κ² μµλ‹κΉ?";
     Message[ arabic ] = "αΗ νγίδ έΚΝ ΗαγΣΚδΟ ααΚΝΡνΡ (αΪΟγ ΚζέΡ ΗαΝήζή ΗααΗÒγΙ\nΪαμ ΣΘνα ΗαγΛΗα). εα ΚΡνΟ ΗΣΚΞΟΗγε\nίήΗαΘ αγΣΚδΟ ΜΟνΟΏ";
     Message[ turkish ] = "Bu belge bόyόk ihtimalle eksik eriώim haklarύndan dolayύ dόzenlenemiyor. Bu belgenin bir kopyasύnύ dόzenlemek ister misiniz?";
@@ -1237,7 +1237,9 @@ String STR_REPAIREDDOCUMENT
     Text[ chinese_simplified ] = " (ε·²δΏ®ε¤η„ζ–‡ζ΅£)";
     Text[ chinese_traditional ] = " (ε·²δΏ®εΎ©η„ζ–‡δ»¶)";
     Text[ slovak ] = " (opravenΓ½ dokument)";
+    Text[ portuguese_brazilian ] = " (documento reparado)";
 };
+
 
 
 
