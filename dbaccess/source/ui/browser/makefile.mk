@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+#   last change: $Author: obo $ $Date: 2001-10-04 13:38:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,12 +85,12 @@ EXCEPTIONSFILES=\
             $(SLO)$/sbamultiplex.obj			\
             $(SLO)$/exsrcbrw.obj                \
             $(SLO)$/dbtreelistbox.obj           \
+            $(SLO)$/dbtreemodel.obj				\
+            $(SLO)$/dsEntriesNoExp.obj			\
             $(SLO)$/dbtreeview.obj
 
 SLOFILES =\
             $(EXCEPTIONSFILES)\
-            $(SLO)$/dsEntriesNoExp.obj			\
-            $(SLO)$/dbtreemodel.obj				\
             $(SLO)$/AsyncronousLink.obj
 
 SRCFILES =  sbabrw.src	\
