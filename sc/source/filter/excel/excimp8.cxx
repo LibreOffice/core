@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:15:27 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 
 #include "excimp8.hxx"
 #include "excform.hxx"
@@ -177,8 +180,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pCurrPivTab = NULL;
     pCurrPivotCache = NULL;
 
-    pAutoFilterBuffer = NULL;
-
     pExcRoot->pRootStorage = pStorage;
 
     bHasBasic = FALSE;
@@ -187,8 +188,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
 ImportExcel8::~ImportExcel8()
 {
-    if( pAutoFilterBuffer )
-        delete pAutoFilterBuffer;
 }
 
 
@@ -234,44 +233,6 @@ void ImportExcel8:: WinProtection( void )
     }
 }
 
-void ImportExcel8::Verticalpagebreaks( void )
-{
-    UINT16      n;
-    UINT16      nCol;
-
-    aIn >> n;
-
-    while( n )
-    {
-        aIn >> nCol;
-        aIn.Ignore( 4 );        // beide Rows ueberlesen
-
-        pColRowBuff->SetVertPagebreak( nCol );
-
-        n--;
-    }
-}
-
-
-void ImportExcel8::Horizontalpagebreaks( void )
-{
-    UINT16      n;
-    UINT16      nRow;
-
-    aIn >> n;
-
-    while( n )
-    {
-        aIn >> nRow;
-        aIn.Ignore( 4 );        // beide Cols ueberlesen
-
-        pColRowBuff->SetHorizPagebreak( nRow );
-
-        n--;
-    }
-}
-
-
 void ImportExcel8::Note( void )
 {
     UINT16  nCol, nRow, nFlags, nId;
@@ -300,7 +261,10 @@ void ImportExcel8::Note( void )
         }
     }
     else
+    {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -410,7 +374,9 @@ void ImportExcel8::Cellmerging( void )
             nCol2 = Min( nCol2, static_cast< UINT16 >( MAXCOL ) );
             GetXFIndexBuffer().SetMerge( nCol1, nRow1, nCol2, nRow2 );
         }
-    }
+    else
+            GetTracer().TraceInvalidRow(GetScTab(), nRow1 > MAXROW ? nRow1 : nRow2, MAXROW);
+        }
 }
 
 
@@ -436,6 +402,7 @@ void ImportExcel8::Labelsst( void )
     UINT16                      nRow, nCol, nXF;
     UINT32                      nSst;
 
+
     aIn >> nRow >> nCol >> nXF >> nSst;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
@@ -449,7 +416,10 @@ void ImportExcel8::Labelsst( void )
         pColRowBuff->Used( nCol, nRow );
     }
     else
+    {
         bTabTruncated = TRUE;
+                GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        }
 
     pLastFormCell = NULL;
 }
@@ -476,7 +446,10 @@ void ImportExcel8::Rstring( void )
         pColRowBuff->Used( nCol, nRow );
     }
     else
+    {
         bTabTruncated = TRUE;
+        GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -500,7 +473,11 @@ void ImportExcel8::Label( void )
 
     }
     else
+    {
         bTabTruncated = TRUE;
+            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+    }
+
 
     pLastFormCell = NULL;
 }
@@ -549,118 +526,6 @@ void ImportExcel8::Dimensions( void )
 }
 
 
-void ImportExcel8::Name( void )
-{
-    const ScTokenArray* pErgebnis;
-    UINT16              nLenDef;
-    BYTE                nLenName;
-    BYTE                nLen;
-
-    UINT16              nOpt;
-    UINT16              nLenSeekRel = 0;
-    UINT16              nSheet;
-
-    aIn >> nOpt;
-    aIn.Ignore( 1 );
-    aIn >> nLenName >> nLenDef;
-    aIn.Ignore( 2 );
-    aIn >> nSheet           // sheet index (1-based)
-        >> nLen;            // length of custom menu text
-    nLenSeekRel += nLen;
-    aIn >> nLen;            // length of description text
-    nLenSeekRel += nLen;
-    aIn >> nLen;            // length of help topic text
-    nLenSeekRel += nLen;
-    aIn >> nLen;            // length of status bar text
-    nLenSeekRel += nLen;
-
-    // Namen einlesen
-    String              aName( aIn.ReadUniString( nLenName ) );
-    // jetzt steht Lesemarke an der Formel
-
-    sal_Unicode         cFirstChar = aName.GetChar( 0 );
-
-    const BOOL          bHidden = TRUEBOOL( nOpt & EXC_NAME_HIDDEN );
-    const BOOL          bBuiltIn = TRUEBOOL( nOpt & EXC_NAME_BUILTIN );
-    const BOOL          bPrintArea = bBuiltIn && ( cFirstChar == EXC_BUILTIN_PRINTAREA );
-    const BOOL          bPrintTitles = bBuiltIn && ( cFirstChar == EXC_BUILTIN_PRINTTITLES );
-    const BOOL          bAutoFilter = bBuiltIn && ( cFirstChar == EXC_BUILTIN_AUTOFILTER );
-    const BOOL          bCriteria = bBuiltIn && ( cFirstChar == EXC_BUILTIN_CRITERIA );
-    const BOOL          bExtract = bBuiltIn && ( cFirstChar == EXC_BUILTIN_EXTRACT );
-    BOOL                bAppendTabNum = FALSE;
-    BOOL                bSkip = FALSE;
-    RangeType           eNameType = RT_ABSAREA;
-
-    if( bBuiltIn )
-        aName = XclTools::GetBuiltInName( cFirstChar, nSheet );
-    else
-        ScfTools::ConvertToScDefinedName( aName );
-
-    if(bPrintArea)
-        eNameType = RT_PRINTAREA;
-    if(bCriteria)
-        eNameType = RT_CRITERIA;
-
-
-    pFormConv->Reset();
-    if( nOpt & (EXC_NAME_VB | EXC_NAME_PROC | EXC_NAME_BIG) )
-        // function or command?
-        pFormConv->GetDummy( pErgebnis );
-    else if( bBuiltIn )
-    {
-        aIn.PushPosition();
-
-        if( bPrintArea )
-            pFormConv->Convert( *pPrintRanges, nLenDef, FT_RangeName );
-        else if( bPrintTitles )
-            pFormConv->Convert( *pPrintTitles, nLenDef, FT_RangeName );
-
-        aIn.PopPosition();
-
-        pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );
-
-        // AutoFilter
-        if( pErgebnis && (bAutoFilter || bCriteria || bExtract) )
-        {
-            ScRange aRange;
-            if( pErgebnis->IsReference( aRange ) )  // test & get range
-            {
-//                aName += String::CreateFromInt32( (sal_Int32) aRange.aStart.Tab() );
-                bSkip = bAutoFilter;
-
-                if( !pAutoFilterBuffer )
-                    pAutoFilterBuffer = new XclImpAutoFilterBuffer;
-                if( bAutoFilter )
-                    pAutoFilterBuffer->Insert( pExcRoot, aRange, aName );
-                else if( bCriteria )
-                    pAutoFilterBuffer->AddAdvancedRange( aRange );
-                else if( bExtract )
-                {
-                    if( pErgebnis->IsValidReference( aRange ) )
-                        pAutoFilterBuffer->AddExtractPos( aRange );
-                    else
-                        eNameType = RT_NAME;
-                }
-            }
-        }
-    }
-    else
-        pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );     // formula
-
-    if( bHidden || bSkip )
-        pExcRoot->pRNameBuff->Store( aName, NULL, nSheet );
-    else
-        // ohne hidden
-        pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, eNameType );
-}
-
-
-void ImportExcel8::GetHFString( String& rStr )
-{
-    aIn.AppendUniString( rStr );
-}
-
-
 void ImportExcel8::EndSheet( void )
 {
     GetCondFormatManager().Apply();
@@ -670,8 +535,8 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
-    if( pAutoFilterBuffer )
-        pAutoFilterBuffer->Apply();
+    if( pExcRoot->pAutoFilterBuffer )
+        pExcRoot->pAutoFilterBuffer->Apply();
 
     GetWebQueryBuffer().Apply();    //! test if extant
 
@@ -755,8 +620,8 @@ void ImportExcel8::ApplyEscherObjects()
                                 if( const XclImpEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
                                 {
                                     bool bSkipObj = aPivotTabList.IsInPivotRange( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
-                                    if( !bSkipObj && pAutoFilterBuffer )
-                                        bSkipObj = pAutoFilterBuffer->HasDropDown( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
+                                    if( !bSkipObj && pExcRoot->pAutoFilterBuffer )
+                                        bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
                                     if( bSkipObj )
                                         pEscherObj->SetSkip();
                                 }
@@ -858,6 +723,7 @@ void ImportExcel8::SXVs( void )
     UINT16 nSrcType;
     aIn >> nSrcType;
     pCurrPivotCache->SetSourceType( nSrcType );
+    GetTracer().TracePivotDataSource(nSrcType == EXC_SXVS_EXTERN);
 }
 
 void ImportExcel8::SXRule( void )
@@ -897,20 +763,20 @@ void ImportExcel8::FilterMode( void )
     // record exists or an Advanced Filter is saved and stored
     // in the sheet. Thus if the FilterMode records only exists
     // then the latter is true..
-    if( !pAutoFilterBuffer ) return;
+    if( !pExcRoot->pAutoFilterBuffer ) return;
 
-    pAutoFilterBuffer->IncrementActiveAF();
+    pExcRoot->pAutoFilterBuffer->IncrementActiveAF();
 
-    XclImpAutoFilterData* pData = pAutoFilterBuffer->GetByTab( GetScTab() );
+    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetScTab() );
     if( pData )
         pData->SetAutoOrAdvanced();
 }
 
 void ImportExcel8::AutoFilterInfo( void )
 {
-    if( !pAutoFilterBuffer ) return;
+    if( !pExcRoot->pAutoFilterBuffer ) return;
 
-    XclImpAutoFilterData* pData = pAutoFilterBuffer->GetByTab( GetScTab() );
+    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetScTab() );
     if( pData )
     {
         pData->SetAdvancedRange( NULL );
@@ -920,9 +786,9 @@ void ImportExcel8::AutoFilterInfo( void )
 
 void ImportExcel8::AutoFilter( void )
 {
-    if( !pAutoFilterBuffer ) return;
+    if( !pExcRoot->pAutoFilterBuffer ) return;
 
-    XclImpAutoFilterData* pData = pAutoFilterBuffer->GetByTab( GetScTab() );
+    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetScTab() );
     if( pData )
         pData->ReadAutoFilter( aIn );
 }
