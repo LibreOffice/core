@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cppunit.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:07:34 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:22:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,23 +78,32 @@
 # $(TNR) is the number
 # $(SHL$(TNR)TARGETN) is the same like $(OUT)$/bin$/$(SHL1TARGET) for every number, within unix, "bin" is replaced by "lib"
 
-.IF "$(TESTOPT)"==""
-    TESTOPT="-onlyerrors"
-.ENDIF
+#.IF "$(TESTOPT)"==""
+#	TESTOPT="-onlyerrors"
+#.ENDIF
 
 ################################################################################
 # unroll begin
 # ---- create the test libraries ------------------------------------
 
 TEST$(TNR)LIB=$(SHL$(TNR)TARGETN)
+.IF "$(TESTOPT)"==""
+    TEST$(TNR)OPT="-jobexclude"
+    TEST$(TNR)OPT+=$(SHL$(TNR)TARGET).xsce
+    TEST$(TNR)OPT+="-onlyerrors"
+    TEST$(TNR)OPT+=" "
+    TEST$(TNR)OPT+=$(TESTOPTADD)
+.ELSE
+    TEST$(TNR)OPT=$(TESTOPT)
+.ENDIF
 
 .IF "$(SHL$(TNR)TARGET)"!=""
 test : test$(TNR)
 test$(TNR): ALLTAR
         @+echo ----------------------------------------------------------
-        @+echo - start cppunit test \#$(TNR) on library $(TEST$(TNR)LIB)
+        @+echo - start unit test \#$(TNR) on library $(TEST$(TNR)LIB)
         @+echo ----------------------------------------------------------
-        testshl2 $(TEST$(TNR)LIB) $(TESTOPT)
+        testshl2 $(TEST$(TNR)LIB) $(TEST$(TNR)OPT)
 .ENDIF
 
 # unroll end
