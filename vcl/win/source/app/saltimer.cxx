@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:35:28 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,11 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
+#ifndef _SV_SALTIMER_H
+#include <saltimer.h>
+#endif
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
 
 // =======================================================================
@@ -102,7 +105,26 @@ void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
 
 // -----------------------------------------------------------------------
 
-void SalTimer::Stop()
+WinSalTimer::~WinSalTimer()
+{
+}
+
+void WinSalTimer::Start( ULONG nMS )
+{
+    // switch to main thread
+    SalData* pSalData = GetSalData();
+    if ( pSalData->mpFirstInstance )
+    {
+        if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
+            ImplPostMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+        else
+            ImplSendMessage( pSalData->mpFirstInstance->mhComWnd, SAL_MSG_STARTTIMER, 0, (LPARAM)nMS );
+    }
+    else
+        ImplSalStartTimer( nMS, FALSE );
+}
+
+void WinSalTimer::Stop()
 {
     SalData* pSalData = GetSalData();
 
@@ -116,29 +138,22 @@ void SalTimer::Stop()
 
 // -----------------------------------------------------------------------
 
-void SalTimer::SetCallback( SALTIMERPROC pProc )
-{
-    SalData* pSalData = GetSalData();
-    pSalData->mpTimerProc = pProc;
-}
-
-// -----------------------------------------------------------------------
-
 void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
 {
     SalData* pSalData = GetSalData();
+    ImplSVData* pSVData = ImplGetSVData();
 
     // Test for MouseLeave
     SalTestMouseLeave();
 
-    if ( pSalData->mpTimerProc )
+    if ( pSVData->mpSalTimer )
     {
         // Try to aquire the mutex. If we don't get the mutex then we
         // try this a short time later again.
         if ( ImplSalYieldMutexTryToAcquire() )
         {
             pSalData->mbInTimerProc = TRUE;
-            pSalData->mpTimerProc();
+            pSVData->mpSalTimer->CallCallback();
             pSalData->mbInTimerProc = FALSE;
             ImplSalYieldMutexRelease();
 
