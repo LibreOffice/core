@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 11:18:04 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,27 @@
 #include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#endif
+
+#include <vos/mutex.hxx>
+
+#include <flditem.hxx>
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
+#define SCRLRANGE   20      // 1/20 der Breite/Hoehe scrollen, wenn im QueryDrop
 
 inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiffX, short nDiffY )
 {
@@ -119,33 +137,59 @@ inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiff
 // ----------------------------------------------------------------------
 //  class ImpEditView
 //  ----------------------------------------------------------------------
-ImpEditView::ImpEditView( EditEngine* pEng, Window* pWindow ) :
+ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
     aOutArea( Point(), pEng->GetPaperSize() )
 {
+    pEditView           = pView;
     pEditEngine         = pEng;
     pOutWin             = pWindow;
     pPointer            = NULL;
     pBackgroundColor    = NULL;
     nScrollDiffX        = 0;
     pCursor             = NULL;
+       pDragAndDropInfo = NULL;
     bReadOnly           = sal_False;
+    bClickedInSelection = sal_False;
     eSelectionMode      = EE_SELMODE_TXTONLY;
     eAnchorMode         = ANCHOR_TOP_LEFT;
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nControl            = EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
+
     aEditSelection.Min() = pEng->pImpEditEngine->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->pImpEditEngine->GetEditDoc().GetEndPaM();
+
+    if ( pWindow->GetDragGestureRecognizer().is() )
+    {
+        vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
+        mxDnDListener = pDnDWrapper;
+
+        uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
+        pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
+        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
+        pWindow->GetDropTarget()->addDropTargetListener( xDTL );
+        pWindow->GetDropTarget()->setActive( sal_True );
+        pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+    }
 }
 
 ImpEditView::~ImpEditView()
 {
+    if ( GetWindow()->GetDragGestureRecognizer().is() )
+    {
+        uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
+        GetWindow()->GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
+        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
+        GetWindow()->GetDropTarget()->removeDropTargetListener( xDTL );
+    }
+
     if ( pOutWin && ( pOutWin->GetCursor() == pCursor ) )
         pOutWin->SetCursor( NULL );
 
     delete pCursor;
     delete pBackgroundColor;
     delete pPointer;
+    delete pDragAndDropInfo;
 }
 
 void ImpEditView::SetBackgroundColor( const Color& rColor )
@@ -924,6 +968,49 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
+sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
+{
+    return pEditEngine->PostKeyEvent( rKeyEvent, GetEditViewPtr() );
+}
+
+sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
+{
+    if ( pEditEngine->pImpEditEngine->aStatus.NotifyCursorMovements() )
+    {
+        if ( pEditEngine->pImpEditEngine->aStatus.GetPrevParagraph() != pEditEngine->pImpEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() ) )
+        {
+            pEditEngine->pImpEditEngine->aStatus.GetStatusWord() = pEditEngine->pImpEditEngine->aStatus.GetStatusWord() | EE_STAT_CRSRLEFTPARA;
+            pEditEngine->pImpEditEngine->CallStatusHdl();
+        }
+    }
+    nTravelXPos = TRAVEL_X_DONTKNOW;
+    bClickedInSelection = sal_False;
+    return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
+}
+
+sal_Bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
+{
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();  // Falls schnelles Tippen und MouseButtonDown
+    if ( pEditEngine->pImpEditEngine->aStatus.NotifyCursorMovements() )
+        pEditEngine->pImpEditEngine->aStatus.GetPrevParagraph() = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() );
+    nTravelXPos = TRAVEL_X_DONTKNOW;
+    bClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
+    return pEditEngine->pImpEditEngine->MouseButtonDown( rMouseEvent, GetEditViewPtr() );
+}
+
+sal_Bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
+{
+    nTravelXPos = TRAVEL_X_DONTKNOW;
+    return pEditEngine->pImpEditEngine->MouseMove( rMouseEvent, GetEditViewPtr() );
+}
+
+void ImpEditView::Command( const CommandEvent& rCEvt )
+{
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();  // Falls schnelles Tippen und MouseButtonDown
+    pEditEngine->pImpEditEngine->Command( rCEvt, GetEditViewPtr() );
+}
+
+
 void ImpEditView::SetInsertMode( sal_Bool bInsert )
 {
     if ( bInsert != IsInsertMode() )
@@ -999,4 +1086,501 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
 #endif // !SVX_LIGHT
     return aWord;
 }
+
+void ImpEditView::DeleteSelected()
+{
+    DrawSelection();
+
+    pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
+
+    EditPaM aPaM = pEditEngine->pImpEditEngine->DeleteSelected( GetEditSelection() );
+
+    pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DELETE );
+
+    SetEditSelection( EditSelection( aPaM, aPaM ) );
+    pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+    ShowCursor( DoAutoScroll(), TRUE );
+}
+
+const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const
+{
+    if( !GetOutputArea().IsInside( rPos ) )
+        return 0;
+
+    Point aDocPos( GetDocPos( rPos ) );
+    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos, sal_False );
+
+    if ( aPaM.GetIndex() == aPaM.GetNode()->Len() )
+    {
+        // Sonst immer, wenn Feld ganz am Schluss und Mouse unter Text
+        return 0;
+    }
+
+    const CharAttribArray& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
+    sal_uInt16 nXPos = aPaM.GetIndex();
+    for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
+    {
+        EditCharAttrib* pAttr = rAttrs[--nAttr];
+        if ( pAttr->GetStart() == nXPos )
+            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            {
+                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
+                if ( pPara )
+                    *pPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+                if ( pPos )
+                    *pPos = pAttr->GetStart();
+                return (const SvxFieldItem*)pAttr->GetItem();
+            }
+    }
+    return NULL;
+}
+
+
+BOOL ImpEditView::IsInSelection( const EditPaM& rPaM )
+{
+    EditSelection aSel = GetEditSelection();
+    if ( !aSel.HasRange() )
+        return FALSE;
+
+    aSel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
+
+    USHORT nStartNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
+    USHORT nEndNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
+    USHORT nCurNode = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( rPaM.GetNode() );
+
+    if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
+        return TRUE;
+
+    if ( nStartNode == nEndNode )
+    {
+        if ( nCurNode == nStartNode )
+            if ( ( rPaM.GetIndex() >= aSel.Min().GetIndex() ) && ( rPaM.GetIndex() < aSel.Max().GetIndex() ) )
+                return TRUE;
+    }
+    else if ( ( nCurNode == nStartNode ) && ( rPaM.GetIndex() >= aSel.Min().GetIndex() ) )
+        return TRUE;
+    else if ( ( nCurNode == nEndNode ) && ( rPaM.GetIndex() < aSel.Max().GetIndex() ) )
+        return TRUE;
+
+    return FALSE;
+}
+
+void ImpEditView::CreateAnchor()
+{
+    pEditEngine->pImpEditEngine->bInSelection = TRUE;
+    GetEditSelection().Min() = GetEditSelection().Max();
+}
+
+void ImpEditView::DeselectAll()
+{
+    pEditEngine->pImpEditEngine->bInSelection = FALSE;
+    DrawSelection();
+    GetEditSelection().Min() = GetEditSelection().Max();
+}
+
+BOOL ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
+{
+    if ( pDragAndDropInfo && pDragAndDropInfo->pField )
+        return TRUE;
+
+    Point aMousePos( rPosPixel );
+
+    // Logische Einheiten...
+    aMousePos = GetWindow()->PixelToLogic( aMousePos );
+
+    if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
+    {
+        return FALSE;
+    }
+
+    Point aDocPos( GetDocPos( aMousePos ) );
+    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos, FALSE );
+    return IsInSelection( aPaM );
+}
+
+BOOL ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
+{
+    pEditEngine->pImpEditEngine->CheckIdleFormatter();
+
+    Point aMousePos( rPointPixel );
+
+    // Logische Einheiten...
+    aMousePos = GetWindow()->PixelToLogic( aMousePos );
+
+    if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
+    {
+        return FALSE;
+    }
+
+    Point aDocPos( GetDocPos( aMousePos ) );
+
+    // Kann optimiert werden: Erst innerhalb eines Absatzes die Zeilen
+    // fuer den PaM durchwuehlen, dann nochmal mit dem PaM fuer das Rect,
+    // obwohl die Zeile schon bekannt ist....
+    // Das muss doch nicht sein !
+
+    EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos );
+    BOOL bGotoCursor = DoAutoScroll();
+
+    // aTmpNewSel: Diff zwischen alt und neu, nicht die neue Selektion
+    EditSelection aTmpNewSel( GetEditSelection().Max(), aPaM );
+
+    GetEditSelection().Max() = aPaM;
+    if ( !pEditEngine->pImpEditEngine->aSelEngine.HasAnchor() )
+    {
+        if ( GetEditSelection().Min() != aPaM )
+            pEditEngine->pImpEditEngine->CursorMoved( GetEditSelection().Min().GetNode() );
+        GetEditSelection().Min() = aPaM;
+    }
+    else
+    {
+        DrawSelection( aTmpNewSel );
+    }
+
+    BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+    ShowCursor( bGotoCursor, bForceCursor );
+    return TRUE;
+}
+
+
+void ImpEditView::HideDDCursor()
+{
+    if ( pDragAndDropInfo && pDragAndDropInfo->bVisCursor )
+    {
+        GetWindow()->DrawOutDev( pDragAndDropInfo->aCurSavedCursor.TopLeft(), pDragAndDropInfo->aCurSavedCursor.GetSize(),
+                            Point(0,0), pDragAndDropInfo->aCurSavedCursor.GetSize(), pDragAndDropInfo->aBackground );
+        pDragAndDropInfo->bVisCursor = sal_False;
+    }
+}
+
+void ImpEditView::ShowDDCursor( const Rectangle& rRect )
+{
+    if ( !pDragAndDropInfo->bVisCursor )
+    {
+        Brush aOldBrush = GetWindow()->GetFillInBrush( );
+        GetWindow()->SetFillInBrush( Brush( Color( COL_GRAY), BRUSH_50 ) );
+
+        // Hintergrund sichern...
+        Rectangle aSaveRec( GetWindow()->LogicToPixel( rRect ) );
+        // lieber etwas mehr sichern...
+        aSaveRec.Right() += 1;
+        aSaveRec.Bottom() += 1;
+
+        Size aNewSzPx( aSaveRec.GetSize() );
+        Size aCurSzPx( pDragAndDropInfo->aBackground.GetOutputSizePixel() );
+        if ( ( aCurSzPx.Width() < aNewSzPx.Width() ) ||( aCurSzPx.Height() < aNewSzPx.Height() ) )
+        {
+            sal_Bool bDone = pDragAndDropInfo->aBackground.SetOutputSizePixel( aNewSzPx );
+            DBG_ASSERT( bDone, "Virtuelles Device kaputt?" );
+        }
+
+        aSaveRec = GetWindow()->PixelToLogic( aSaveRec );
+
+        MapMode aMapMode( GetWindow()->GetMapMode() );
+        aMapMode.SetOrigin( Point( 0, 0 ) );
+        pDragAndDropInfo->aBackground.SetMapMode( aMapMode );
+        pDragAndDropInfo->aBackground.DrawOutDev( Point(0,0), aSaveRec.GetSize(),
+                            aSaveRec.TopLeft(), aSaveRec.GetSize(), *GetWindow() );
+        pDragAndDropInfo->aCurSavedCursor = aSaveRec;
+
+        // Cursor malen...
+        GetWindow()->DrawRect( rRect );
+
+        pDragAndDropInfo->bVisCursor = sal_True;
+        pDragAndDropInfo->aCurCursor = rRect;
+
+        GetWindow()->SetFillInBrush( aOldBrush );
+    }
+}
+
+void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    DBG_ASSERT( !pDragAndDropInfo, "dragGestureRecognized - DragAndDropInfo exist!" );
+
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
+
+    EditSelection aCopySel( GetEditSelection() );
+    aCopySel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
+
+    if ( GetEditSelection().HasRange() )
+    {
+        if ( bClickedInSelection )
+            pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+    }
+    else
+    {
+        // Field?!
+        USHORT nPara, nPos;
+        Point aMousePos = GetWindow()->PixelToLogic( aMousePosPixel );
+        const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
+        if ( pField )
+        {
+            pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+            pDragAndDropInfo->pField = pField;
+            ContentNode* pNode = pEditEngine->pImpEditEngine->GetEditDoc().GetObject( nPara );
+            aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
+            GetEditSelection() = aCopySel;
+            DrawSelection();
+            BOOL bGotoCursor = DoAutoScroll();
+            BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+            ShowCursor( bGotoCursor, bForceCursor );
+        }
+    }
+
+    if ( pDragAndDropInfo )
+    {
+        // Falls Drag&Move in einer Engine, muessen Copy&Del geklammert sein!
+        GetCursor()->Hide();
+
+        pDragAndDropInfo->bStarterOfDD = sal_True;
+
+        // Sensibler Bereich, wo gescrollt werden soll.
+        Size aSz( 5, 0 );
+        aSz = GetWindow()->PixelToLogic( aSz );
+        pDragAndDropInfo->nSensibleRange = (sal_uInt16) aSz.Width();
+        pDragAndDropInfo->nCursorWidth = (sal_uInt16) aSz.Width() / 2;
+        MapMode aMapMode( GetWindow()->GetMapMode() );
+        aMapMode.SetOrigin( Point( 0, 0 ) );
+        pDragAndDropInfo->aBackground.SetMapMode( aMapMode );
+        pDragAndDropInfo->aBeginDragSel = pEditEngine->pImpEditEngine->CreateESel( aCopySel );
+
+        uno::Reference< datatransfer::XTransferable > xData = pEditEngine->pImpEditEngine->CreateTransferable( aCopySel );
+
+        sal_Int8 nActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
+
+        rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, xData, mxDnDListener );
+    }
+}
+
+void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    if ( !bReadOnly && rDSDE.DropSuccess && ( rDSDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    {
+        if ( pDragAndDropInfo->bStarterOfDD && pDragAndDropInfo->bDroppedInMe )
+        {
+            // DropPos: Wohin wurde gedroppt, unabhaengig von laenge.
+            ESelection aDropPos( pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos, pDragAndDropInfo->aDropSel.nStartPara, pDragAndDropInfo->aDropSel.nStartPos );
+            ESelection aToBeDelSel = pDragAndDropInfo->aBeginDragSel;
+            ESelection aNewSel( pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos,
+                                pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos );
+            sal_Bool bBeforeSelection = aDropPos.IsLess( pDragAndDropInfo->aBeginDragSel );
+            sal_uInt16 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
+            if ( bBeforeSelection )
+            {
+                // aToBeDelSel anpassen.
+                DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara >= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
+                aToBeDelSel.nStartPara += nParaDiff;
+                aToBeDelSel.nEndPara += nParaDiff;
+                // Zeichen korrigieren?
+                if ( aToBeDelSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
+                {
+                    sal_uInt16 nMoreChars;
+                    if ( pDragAndDropInfo->aDropSel.nStartPara == pDragAndDropInfo->aDropSel.nEndPara )
+                        nMoreChars = pDragAndDropInfo->aDropSel.nEndPos - pDragAndDropInfo->aDropSel.nStartPos;
+                    else
+                        nMoreChars = pDragAndDropInfo->aDropSel.nEndPos;
+                    aToBeDelSel.nStartPos += nMoreChars;
+                    if ( aToBeDelSel.nStartPara == aToBeDelSel.nEndPara )
+                        aToBeDelSel.nEndPos += nMoreChars;
+                }
+            }
+            else
+            {
+                // aToBeDelSel ist ok, aber Selektion der View
+                // muss angepasst werden, wenn davor geloescht wird!
+                DBG_ASSERT( pDragAndDropInfo->aBeginDragSel.nStartPara <= pDragAndDropInfo->aDropSel.nStartPara, "Doch nicht davor?" );
+                aNewSel.nStartPara -= nParaDiff;
+                aNewSel.nEndPara -= nParaDiff;
+                // Zeichen korrigieren?
+                if ( pDragAndDropInfo->aBeginDragSel.nEndPara == pDragAndDropInfo->aDropSel.nStartPara )
+                {
+                    sal_uInt16 nLessChars;
+                    if ( pDragAndDropInfo->aBeginDragSel.nStartPara == pDragAndDropInfo->aBeginDragSel.nEndPara )
+                        nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos - pDragAndDropInfo->aBeginDragSel.nStartPos;
+                    else
+                        nLessChars = pDragAndDropInfo->aBeginDragSel.nEndPos;
+                    aNewSel.nStartPos -= nLessChars;
+                    if ( aNewSel.nStartPara == aNewSel.nEndPara )
+                        aNewSel.nEndPos -= nLessChars;
+                }
+            }
+
+            DrawSelection();
+            EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
+            DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->pImpEditEngine->aEditDoc ), "ToBeDel ist buggy!" );
+            pEditEngine->pImpEditEngine->ImpDeleteSelection( aDelSel );
+            if ( !bBeforeSelection )
+            {
+                DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->pImpEditEngine->aEditDoc), "Bad" );
+                SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
+            }
+            pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+            DrawSelection();
+        }
+        else
+        {
+            // andere EditEngine...
+            DeleteSelected();
+        }
+    }
+
+    if ( pDragAndDropInfo && pDragAndDropInfo->bStarterOfDD )
+        pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DRAGANDDROP );
+
+    HideDDCursor();
+    ShowCursor( DoAutoScroll(), TRUE );
+    delete pDragAndDropInfo;
+    pDragAndDropInfo = NULL;
+}
+
+void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    BOOL bChanges = FALSE;
+
+    HideDDCursor();
+
+    // Selektion wegmalen...
+    DrawSelection();
+
+    if ( pDragAndDropInfo && pDragAndDropInfo->bStarterOfDD )
+        pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
+
+    uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+    if ( xDataObj.is() )
+    {
+        bChanges = TRUE;
+        EditPaM aPaM( pDragAndDropInfo->aDropDest );
+        EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+        SetEditSelection( aNewSel );
+        pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+        if ( pDragAndDropInfo && pDragAndDropInfo->bStarterOfDD )
+        {
+            // Nur dann setzen, wenn in gleicher Engine!
+            pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+            pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
+            pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aNewSel.Max().GetNode() );
+            pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
+            pDragAndDropInfo->bDroppedInMe = sal_True;
+        }
+        else
+        {
+            delete pDragAndDropInfo;
+            pDragAndDropInfo = NULL;
+        }
+    }
+
+    if ( bChanges )
+        rDTDE.Context->acceptDrop( rDTDE.DropAction );
+    rDTDE.Context->dropComplete( bChanges );
+}
+
+void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    if ( !pDragAndDropInfo )
+        pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+
+    pDragAndDropInfo->bHasValidData = sal_True; // !!!!!!!!
+    dragOver( rDTDEE );
+}
+
+void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    HideDDCursor();
+}
+
+void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+
+    Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
+    // Logische Einheiten...
+    aMousePos = GetWindow()->PixelToLogic( aMousePos );
+
+    if ( GetOutputArea().IsInside( aMousePos ) )
+    {
+        sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
+        if ( pDragAndDropInfo->bHasValidData && ( nSupportedActions & rDTDE.DropAction ) )
+        {
+            sal_Bool bAccept = sal_True;
+            sal_Bool bAllowScroll = DoAutoScroll();
+            if ( bAllowScroll )
+            {
+                long nScrollX = 0;
+                long nScrollY = 0;
+                // pruefen, ob im sensitiven Bereich
+                if ( ( (aMousePos.X()-pDragAndDropInfo->nSensibleRange) < GetOutputArea().Left() ) && ( ( aMousePos.X() + pDragAndDropInfo->nSensibleRange ) > GetOutputArea().Left() ) )
+                        nScrollX = GetOutputArea().GetWidth() / SCRLRANGE;
+                else if ( ( (aMousePos.X()+pDragAndDropInfo->nSensibleRange) > GetOutputArea().Right() ) && ( ( aMousePos.X() - pDragAndDropInfo->nSensibleRange ) < GetOutputArea().Right() ) )
+                        nScrollX = -( GetOutputArea().GetWidth() / SCRLRANGE );
+
+                if ( ( (aMousePos.Y()-pDragAndDropInfo->nSensibleRange) < GetOutputArea().Top() ) && ( ( aMousePos.Y() + pDragAndDropInfo->nSensibleRange ) > GetOutputArea().Top() ) )
+                        nScrollY = GetOutputArea().GetHeight() / SCRLRANGE;
+                else if ( ( (aMousePos.Y()+pDragAndDropInfo->nSensibleRange) > GetOutputArea().Bottom() ) && ( ( aMousePos.Y() - pDragAndDropInfo->nSensibleRange ) < GetOutputArea().Bottom() ) )
+                        nScrollY = -( GetOutputArea().GetHeight() / SCRLRANGE );
+
+                if ( nScrollX || nScrollY )
+                {
+                    HideDDCursor();
+                    Scroll( nScrollX, nScrollY, RGCHK_PAPERSZ1 );
+                }
+            }
+
+            Point aDocPos( GetDocPos( aMousePos ) );
+            EditPaM aPaM = pEditEngine->pImpEditEngine->GetPaM( aDocPos );
+            pDragAndDropInfo->aDropDest = aPaM;
+            // Pruefen, ob der PaM in der Selektion liegt...
+            if ( HasSelection() )
+            {
+                // es darf nicht in eine Selektion gedroppt werden
+                EPaM aP = pEditEngine->pImpEditEngine->CreateEPaM( aPaM );
+                ESelection aDestSel( aP.nPara, aP.nIndex, aP.nPara, aP.nIndex);
+                ESelection aCurSel = pEditEngine->pImpEditEngine->CreateESel( GetEditSelection() );
+                aCurSel.Adjust();
+                if ( !aDestSel.IsLess( aCurSel ) && !aDestSel.IsGreater( aCurSel ) )
+                {
+                    bAccept = FALSE;
+                }
+            }
+            if ( bAccept )
+            {
+                Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM );
+                Point aTopLeft( GetWindowPos( aEditCursor.TopLeft() ) );
+                aEditCursor.SetPos( aTopLeft );
+                aEditCursor.Right() = aEditCursor.Left() + pDragAndDropInfo->nCursorWidth;
+
+                aEditCursor = GetWindow()->LogicToPixel( aEditCursor );
+                aEditCursor = GetWindow()->PixelToLogic( aEditCursor );
+                sal_Bool bCursorChanged = !pDragAndDropInfo->bVisCursor || ( pDragAndDropInfo->aCurCursor != aEditCursor );
+                if ( bCursorChanged )
+                {
+                    HideDDCursor();
+                    ShowDDCursor(aEditCursor );
+                }
+
+                rDTDE.Context->acceptDrag( nSupportedActions );
+            }
+
+        }
+        else
+        {
+            rDTDE.Context->rejectDrag();
+        }
+    }
+    else
+    {
+        HideDDCursor();
+    }
+}
+
+
 

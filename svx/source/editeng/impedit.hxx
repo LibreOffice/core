@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-19 14:16:33 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #include <vcl/cursor.hxx>
 #endif
 
+#include <vcl/dndhelp.hxx>
+
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
@@ -147,6 +149,7 @@ struct DragAndDropInfo
     Rectangle           aCurSavedCursor;
     sal_uInt16          nSensibleRange;
     sal_uInt16          nCursorWidth;
+    ESelection          aBeginDragSel;
     EditPaM             aDropDest;
     ESelection          aDropSel;
     VirtualDevice       aBackground;
@@ -154,10 +157,11 @@ struct DragAndDropInfo
     sal_Bool            bVisCursor              : 1;
     sal_Bool            bDroppedInMe            : 1;
     sal_Bool            bStarterOfDD            : 1;
+    sal_Bool            bHasValidData           : 1;
 
     DragAndDropInfo( const OutputDevice& rOutDev4VirtDev) :
             aBackground( rOutDev4VirtDev )  {
-            bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False;
+            bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False; bHasValidData = sal_False;
             nSensibleRange = 0; nCursorWidth = 0; pField = 0;
     }
 };
@@ -217,24 +221,29 @@ public:
 // ----------------------------------------------------------------------
 //  class ImpEditView
 //  ----------------------------------------------------------------------
-class ImpEditView
+class ImpEditView : public vcl::unohelper::DragAndDropClient
 {
     friend class EditView;
     friend class EditEngine;
     friend class ImpEditEngine;
 
 private:
+    EditView*           pEditView;
     Cursor*             pCursor;
     Color*              pBackgroundColor;
     EditEngine*         pEditEngine;
     Window*             pOutWin;
     Pointer*            pPointer;
+    DragAndDropInfo*    pDragAndDropInfo;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
     sal_uInt32          nControl;
     sal_uInt32          nTravelXPos;
     long                nInvMore;
     sal_uInt16          nScrollDiffX;
     sal_Bool            bReadOnly;
+    sal_Bool            bClickedInSelection;
 
     Point               aAnchorPoint;
     Rectangle           aOutArea;
@@ -243,9 +252,24 @@ private:
     EditSelection       aEditSelection;
     EVAnchorMode        eAnchorMode;
 
+protected:
+
+    // DragAndDropClient
+    void dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException);
+    void dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException);
+    void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException);
+    void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException);
+    void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException);
+    void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException);
+
+    void ShowDDCursor( const Rectangle& rRect );
+    void HideDDCursor();
+
 public:
-                    ImpEditView( EditEngine* pEng, Window* pWindow );
+                    ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow );
                     ~ImpEditView();
+
+    EditView*       GetEditViewPtr() { return pEditView; }
 
     sal_uInt16      GetScrollDiffX() const          { return nScrollDiffX; }
     void            SetScrollDiffX( sal_uInt16 n )  { nScrollDiffX = n; }
@@ -259,6 +283,13 @@ public:
     const Rectangle&    GetOutputArea() const   { return aOutArea; }
 
     BOOL            IsVertical() const;
+
+    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent );
+
+    BOOL            MouseButtonUp( const MouseEvent& rMouseEvent );
+    BOOL            MouseButtonDown( const MouseEvent& rMouseEvent );
+    BOOL            MouseMove( const MouseEvent& rMouseEvent );
+    void            Command( const CommandEvent& rCEvt );
 
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
     const Point&    GetVisDocStartPos() const { return aVisDocStartPos; }
@@ -289,6 +320,14 @@ public:
     inline void     SetCursor( const Cursor& rCursor );
     inline Cursor*  GetCursor();
 
+//  Fuer die SelectionEngine...
+    void            CreateAnchor();
+    void            DeselectAll();
+    sal_Bool        SetCursorAtPoint( const Point& rPointPixel );
+    sal_Bool        IsSelectionAtPoint( const Point& rPosPixel );
+    sal_Bool        IsInSelection( const EditPaM& rPaM );
+
+
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const           { return eAnchorMode; }
     void            CalcAnchorPoint();
@@ -317,6 +356,9 @@ public:
 
     sal_Bool            IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong );
     String          SpellIgnoreOrAddWord( sal_Bool bAdd );
+
+    const SvxFieldItem* GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const;
+    void                DeleteSelected();
 
     // Ggf. mehr als OutputArea invalidieren, fuer den DrawingEngine-Textrahmen...
     void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
@@ -375,7 +417,6 @@ private:
     VirtualDevice*      pVirtDev;
     OutputDevice*       pRefDev;
 
-    DragAndDropInfo*    pDragAndDropInfo;
     SfxItemSet*         pEmptyItemSet;
     EditUndoManager*    pUndoManager;
     ESelection*         pUndoMarkSelection;
@@ -427,8 +468,6 @@ private:
 
     Timer               aOnlineSpellTimer;
 
-    sal_Bool*           pDestroyedMarker;
-
     // Wenn an einer Stelle erkannt wird, dass der StatusHdl gerufen werden
     // muss, dies aber nicht sofort geschehen darf (kritischer Abschnitt):
     Timer               aStatusTimer;
@@ -467,6 +506,7 @@ private:
     EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
     void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
     EditSelection       InsertBinTextObject( BinTextObject&, EditPaM aPaM );
+    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const EditPaM& rPaM, BOOL bUseSpecial );
 
     EditPaM             Clear();
     EditPaM             RemoveText();
@@ -572,9 +612,9 @@ private:
 
     inline ParaPortion* FindParaPortion( ContentNode* pNode ) const;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection ) const;
+
     sal_Bool            HasData( ExchangeType eExchange );
-    void                CopyData( EditSelection aSelection, ExchangeType eExchange ) const;
-    EditSelection       PasteData( EditPaM aPaM, ExchangeType eExchange, sal_Bool bSPeacial );
 
     void                SetValidPaperSize( const Size& rSz );
 
@@ -693,14 +733,6 @@ public:
     sal_Bool            HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich );
 
-//  Fuer die SelectionEngine...
-    sal_Bool        SetCursorAtPoint( const Point& rPointPixel, EditView* pView );
-    sal_Bool        IsSelectionAtPoint( const Point& rPointPixel, EditView* pView );
-    void            CreateAnchor( EditView* pView );
-    void            DeselectAll( EditView* pView );
-    sal_Bool        IsInSelection( EditPaM aPaM, EditView* pView );
-    void            BeginDrag( EditView* pView );
-
     Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
     Rectangle       GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex, sal_uInt16 nFlags = 0 );
     sal_Bool        IsModified() const      { return aEditDoc.IsModified(); }
@@ -725,12 +757,6 @@ public:
 
     void            FormatAndUpdate( EditView* pCurView = 0 );
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
-
-    sal_Bool        Drop( const DropEvent& rEvt, EditView* pCurView );
-    sal_Bool        QueryDrop( const DropEvent& rEvt, EditView* pCurView );
-    void            ShowDDCursor( Window* pWin, const Rectangle& rRect );
-    void            HideDDCursor( Window* pWin );
-    ESelection      GetDropPos();
 
     EditSelection           ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
     inline EPaM             CreateEPaM( const EditPaM& rPaM );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-19 14:16:33 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #include <xpoly.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
 
 #ifndef SVX_LIGHT
 #include <srchdlg.hxx>
@@ -1909,18 +1912,29 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
     }
 }
 
+sal_Bool EditEngine::CopyDragServer() const
+{
+    return FALSE;
+}
+
+sal_Bool EditEngine::CopyDragServer( const ESelection& rSel ) const
+{
+    return FALSE;
+}
+
+sal_Bool EditEngine::PasteDragServer( sal_uInt16 )
+{
+    return FALSE;
+}
+
+
 sal_Bool EditEngine::CopyClipboard() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    const EditDoc& rDoc = pImpEditEngine->GetEditDoc();
 
+    const EditDoc& rDoc = pImpEditEngine->GetEditDoc();
     EditSelection aSel( rDoc.GetStartPaM(), rDoc.GetEndPaM() );
-    if ( aSel.HasRange() )
-    {
-        pImpEditEngine->CopyData( aSel, EXCHANGE_CLIPBOARD );
-        return sal_True;
-    }
-    return sal_False;
+    return CopyClipboard( pImpEditEngine->CreateESel( aSel ) );
 }
 
 sal_Bool EditEngine::CopyClipboard( const ESelection& rSel ) const
@@ -1932,7 +1946,22 @@ sal_Bool EditEngine::CopyClipboard( const ESelection& rSel ) const
 
     if ( aSel.HasRange() )
     {
-        pImpEditEngine->CopyData( aSel, EXCHANGE_CLIPBOARD );
+        uno::Reference< datatransfer::XTransferable > xData = pImpEditEngine->CreateTransferable( aSel );
+
+        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+
+        DBG_ASSERT( GetActiveView(), "CopyClipboard: No active view!" );
+        DBG_ASSERT( GetActiveView()->GetWindow(), "CopyClipboard: Active view has no window!" );
+
+        if( GetActiveView() && GetActiveView()->GetWindow() )
+            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
+
+        if( xClipboard.is() )
+        {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            xClipboard->setContents( xData, NULL );
+            Application::AcquireSolarMutex( nRef );
+        }
         return sal_True;
     }
     return sal_False;
@@ -1941,51 +1970,27 @@ sal_Bool EditEngine::CopyClipboard( const ESelection& rSel ) const
 sal_Bool EditEngine::PasteClipboard()
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
     if ( !pImpEditEngine->HasData( EXCHANGE_CLIPBOARD ) )
         return sal_False;
+
     SetText( String() );
-    EditPaM aPaM = pImpEditEngine->GetEditDoc().GetStartPaM();
-    pImpEditEngine->PasteData( aPaM, EXCHANGE_CLIPBOARD, sal_True );
-    return sal_True;
-}
 
-sal_Bool EditEngine::CopyDragServer() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    const EditDoc& rDoc = pImpEditEngine->GetEditDoc();
+    uno::Reference< datatransfer::XTransferable > xDataObj;
+    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+    if ( GetActiveView() )
+        xClipboard = GetActiveView()->GetWindow()->GetClipboard();
 
-    EditSelection aSel( rDoc.GetStartPaM(), rDoc.GetEndPaM() );
-    if ( aSel.HasRange() )
+    if ( xClipboard.is() )
     {
-        pImpEditEngine->CopyData( aSel, EXCHANGE_DRAGSERVER );
-        return sal_True;
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        xDataObj = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
     }
-    return sal_False;
-}
 
-sal_Bool EditEngine::CopyDragServer( const ESelection& rSel ) const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
+    if ( xDataObj.is() )
+        pImpEditEngine->InsertText( xDataObj, pImpEditEngine->GetEditDoc().GetStartPaM(), TRUE );
 
-    EditSelection aSel( pImpEditEngine->
-        ConvertSelection( rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos ) );
-
-    if ( aSel.HasRange() )
-    {
-        pImpEditEngine->CopyData( aSel, EXCHANGE_DRAGSERVER );
-        return sal_True;
-    }
-    return sal_False;
-}
-
-sal_Bool EditEngine::PasteDragServer( sal_uInt16 nItem )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    if ( !pImpEditEngine->HasData( EXCHANGE_DRAGSERVER ) )
-        return sal_False;
-    SetText( String() );
-    EditPaM aPaM = pImpEditEngine->GetEditDoc().GetStartPaM();
-    pImpEditEngine->PasteData( aPaM, EXCHANGE_DRAGSERVER, sal_True );
     return sal_True;
 }
 

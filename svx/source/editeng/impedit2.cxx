@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pActiveView         = NULL;
     pSpellInfo          = NULL;
     pTextObjectPool     = NULL;
-    pDragAndDropInfo    = NULL;
-    pDestroyedMarker    = NULL;
     mpIMEInfos          = NULL;
     pStylePool          = NULL;
     pUndoManager        = NULL;
@@ -241,9 +239,6 @@ ImpEditEngine::~ImpEditEngine()
     aOnlineSpellTimer.Stop();
     aIdleFormatter.Stop();
 
-    if ( pDestroyedMarker )
-        *pDestroyedMarker = TRUE;
-
     // das Zerstoeren von Vorlagen kann sonst unnoetiges Formatieren ausloesen,
     // wenn eine Parent-Vorlage zerstoert wird.
     // Und das nach dem Zerstoeren der Daten!
@@ -252,7 +247,6 @@ ImpEditEngine::~ImpEditEngine()
 
     delete pVirtDev;
     delete pEmptyItemSet;
-    delete pDragAndDropInfo;
     delete pUndoManager;
     delete pTextRanger;
     delete mpIMEInfos;
@@ -425,36 +419,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 #ifndef SVX_LIGHT
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
-    // Sonderbehandlung: Verschieben von Feldern.
-    if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        if ( rCEvt.IsMouseEvent() && !pView->HasSelection() )
-        {
-            // Sonderbehandlung: Verschieben von Feldern.
-            USHORT nPara, nPos;
-            const SvxFieldItem* pField = pView->GetFieldUnderMousePointer( nPara, nPos );
-            if ( pField )
-            {
-                pDragAndDropInfo = new DragAndDropInfo( *pView->GetWindow() );
-                pDragAndDropInfo->pField = pField;
-                // Die SelectionEngien muss glauben, dass vorher in
-                // eine Selection geklickt wurde.
-                MouseEvent aHackyMouseEvent( rCEvt.GetMousePosPixel(), 1 );
-                GetSelEngine().SelMouseButtonUp( aHackyMouseEvent );
-                GetSelEngine().SelMouseButtonDown( aHackyMouseEvent );
-                GetSelEngine().SelMouseMove( aHackyMouseEvent );
-                ESelection aESel( nPara, nPos, nPara, nPos+1 );
-                pDragAndDropInfo->aDropSel = aESel;
-                EditSelection aSel = CreateSel( aESel );
-                pView->pImpEditView->GetEditSelection() = aSel;
-                pView->pImpEditView->DrawSelection();
-                BOOL bGotoCursor = pView->pImpEditView->DoAutoScroll();
-                BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !IsInSelectionMode();
-                pView->ShowCursor( bGotoCursor, bForceCursor );
-            }
-        }
-    }
-    else if ( rCEvt.GetCommand() == COMMAND_VOICE )
+    if ( rCEvt.GetCommand() == COMMAND_VOICE )
     {
         const CommandVoiceData* pData = rCEvt.GetVoiceData();
         if ( pData->GetType() == VOICECOMMANDTYPE_DICTATION )
@@ -697,7 +662,7 @@ EditSelection ImpEditEngine::CutCopy( EditView* pView, BOOL bCut )
     if ( !aSel.HasRange() )
         return aSel;
 
-    CopyData( aSel, EXCHANGE_CLIPBOARD );
+    GetEditEnginePtr()->CopyClipboard( CreateESel( aSel ) );
 
     if ( bCut )
     {
@@ -721,19 +686,19 @@ EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
         aSel = ImpDeleteSelection( aSel );
     }
 
-    if ( pView->pImpEditView->DoSingleLinePaste() )
+    uno::Reference< datatransfer::XTransferable > xDataObj;
+    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = pView->GetWindow()->GetClipboard();
+
+    if ( xClipboard.is() )
     {
-        uno::Reference< datatransfer::XTransferable > xDataObj;
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = pView->GetWindow()->GetClipboard();
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        xDataObj = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
+    }
 
-        if ( xClipboard.is() )
-        {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            xDataObj = xClipboard->getContents();
-            Application::AcquireSolarMutex( nRef );
-        }
-
-        if ( xDataObj.is() )
+    if ( xDataObj.is() )
+    {
+        if ( pView->pImpEditView->DoSingleLinePaste() )
         {
             datatransfer::DataFlavor aFlavor;
             SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
@@ -748,12 +713,11 @@ EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
                 aSel = ImpInsertText( aSel, aText );
             }
         }
+        else
+        {
+            aSel = InsertText( xDataObj, aSel.Min(), GetStatus().AllowPasteSpecial() );
+        }
     }
-    else
-    {
-        aSel = PasteData( aSel.Min(), EXCHANGE_CLIPBOARD, bUseSpecial );
-    }
-
     return aSel;
 }
 
@@ -2527,115 +2491,6 @@ void ImpEditEngine::UpdateSelections()
     aDeletedNodes.Remove( 0, aDeletedNodes.Count() );
 }
 
-BOOL ImpEditEngine::SetCursorAtPoint( const Point& rPointPixel, EditView* pView )
-{
-    CheckIdleFormatter();
-
-    Point aMousePos( rPointPixel );
-
-    // Logische Einheiten...
-    aMousePos = pView->GetWindow()->PixelToLogic( aMousePos );
-
-    if ( ( !pView->GetOutputArea().IsInside( aMousePos ) ) && !IsInSelectionMode() )
-    {
-        return FALSE;
-    }
-
-    Point aDocPos( pView->pImpEditView->GetDocPos( aMousePos ) );
-
-    // Kann optimiert werden: Erst innerhalb eines Absatzes die Zeilen
-    // fuer den PaM durchwuehlen, dann nochmal mit dem PaM fuer das Rect,
-    // obwohl die Zeile schon bekannt ist....
-    // Das muss doch nicht sein !
-
-    EditPaM aPaM = GetPaM( aDocPos );
-    BOOL bGotoCursor = pView->pImpEditView->DoAutoScroll();
-
-    // aTmpNewSel: Diff zwischen alt und neu, nicht die neue Selektion
-    EditSelection aTmpNewSel( pView->pImpEditView->GetEditSelection().Max(), aPaM );
-
-    pView->pImpEditView->GetEditSelection().Max() = aPaM;
-    if ( !aSelEngine.HasAnchor() )
-    {
-        if ( pView->pImpEditView->GetEditSelection().Min() != aPaM )
-            CursorMoved( pView->pImpEditView->GetEditSelection().Min().GetNode() );
-        pView->pImpEditView->GetEditSelection().Min() = aPaM;
-    }
-    else
-    {
-        pView->pImpEditView->DrawSelection( aTmpNewSel );
-    }
-
-    BOOL bForceCursor = ( pDragAndDropInfo ? FALSE : TRUE ) && !IsInSelectionMode();
-    pView->ShowCursor( bGotoCursor, bForceCursor );
-    return TRUE;
-}
-
-BOOL ImpEditEngine::IsSelectionAtPoint( const Point& rPointPixel, EditView* pView )
-{
-    if ( pDragAndDropInfo && pDragAndDropInfo->pField )
-        return TRUE;
-
-    Point aMousePos( rPointPixel );
-
-    // Logische Einheiten...
-    aMousePos = pView->GetWindow()->PixelToLogic( aMousePos );
-
-    if ( ( !pView->GetOutputArea().IsInside( aMousePos ) ) && !IsInSelectionMode() )
-    {
-        return FALSE;
-    }
-
-    Point aDocPos( pView->pImpEditView->GetDocPos( aMousePos ) );
-    EditPaM aPaM = GetPaM( aDocPos, FALSE );
-    return IsInSelection( aPaM, pView );
-}
-
-BOOL ImpEditEngine::IsInSelection( EditPaM aPaM, EditView* pView )
-{
-    EditSelection aSel = pView->pImpEditView->GetEditSelection();
-    if ( !aSel.HasRange() )
-        return FALSE;
-
-    aSel.Adjust( aEditDoc );
-
-    USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
-    USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
-    USHORT nCurNode = aEditDoc.GetPos( aPaM.GetNode() );
-
-    if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
-        return TRUE;
-
-    if ( nStartNode == nEndNode )
-    {
-        if ( nCurNode == nStartNode )
-            if ( ( aPaM.GetIndex() >= aSel.Min().GetIndex() ) && ( aPaM.GetIndex() < aSel.Max().GetIndex() ) )
-                return TRUE;
-    }
-    else if ( ( nCurNode == nStartNode ) && ( aPaM.GetIndex() >= aSel.Min().GetIndex() ) )
-        return TRUE;
-    else if ( ( nCurNode == nEndNode ) && ( aPaM.GetIndex() < aSel.Max().GetIndex() ) )
-        return TRUE;
-
-    return FALSE;
-}
-
-void ImpEditEngine::CreateAnchor( EditView* pView )
-{
-    bInSelection = TRUE;
-    // Min() setzen, da in SetCursorAtPoint nicht initialisiert:
-    pView->pImpEditView->GetEditSelection().Min() = pView->pImpEditView->GetEditSelection().Max();
-}
-
-void ImpEditEngine::DeselectAll( EditView* pView )
-{
-    bInSelection = FALSE;
-    // Min() setzen, da in SetCursorAtPoint nicht initialisiert:
-    pView->pImpEditView->DrawSelection();
-    pView->pImpEditView->GetEditSelection().Min() = pView->pImpEditView->GetEditSelection().Max();
-}
-
-
 EditSelection ImpEditEngine::ConvertSelection( USHORT nStartPara, USHORT nStartPos,
                              USHORT nEndPara, USHORT nEndPos ) const
 {
@@ -2857,8 +2712,9 @@ BOOL ImpEditEngine::HasData( ExchangeType eExchange )
     return bData;
 }
 
-void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) const
+uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable( const EditSelection& rSelection ) const
 {
+    EditSelection aSelection( rSelection );
     aSelection.Adjust( GetEditDoc() );
 
     EditDataObject* pDataObj = new EditDataObject;
@@ -2893,163 +2749,83 @@ void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) con
         }
     }
 
-    if ( nType == EXCHANGE_CLIPBOARD )
-    {
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
-
-        DBG_ASSERT( GetActiveView(), "CopyData: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow(), "CopyData: Active view has no window!" );
-
-        if( GetActiveView() && GetActiveView()->GetWindow() )
-            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
-
-        if( xClipboard.is() )
-        {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            xClipboard->setContents( pDataObj, NULL );
-            Application::AcquireSolarMutex( nRef );
-        }
-    }
-    else // DRAGSERVER
-    {
-        // OLD, remove when new D&D is finished...
-        DragServer::Clear();
-        pDataObj->GetStream().Seek( STREAM_SEEK_TO_END );
-        long nBinLen = pDataObj->GetStream().Tell();
-        pDataObj->GetStream().Seek( 0 );
-        DragServer::CopyData( pDataObj->GetStream().GetData(), nBinLen, EditEngine::RegisterClipboardFormatName() );
-        DragServer::CopyString( pDataObj->GetString() );
-    }
+    return xDataObj;
 }
 
-EditSelection ImpEditEngine::PasteData( EditPaM aPaM, ExchangeType eExchange, BOOL bSpecial )
+EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const EditPaM& rPaM, BOOL bUseSpecial )
 {
-    EditSelection aNewSelection( aPaM, aPaM );
+    EditSelection aNewSelection( rPaM );
 
-    if ( eExchange == EXCHANGE_CLIPBOARD )
+    if ( rxDataObj.is() )
     {
-        uno::Reference< datatransfer::XTransferable > xDataObj;
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+        datatransfer::DataFlavor aFlavor;
+        BOOL bDone = FALSE;
 
-        DBG_ASSERT( GetActiveView(), "PasteData: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow(), "PasteData: Active view has no window!" );
-
-        if( GetActiveView() && GetActiveView()->GetWindow() )
-            xClipboard = GetActiveView()->GetWindow()->GetClipboard();
-
-        if ( xClipboard.is() )
+        if ( bUseSpecial )
         {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            xDataObj = xClipboard->getContents();
-            Application::AcquireSolarMutex( nRef );
-        }
-
-        if ( xDataObj.is() )
-        {
-            datatransfer::DataFlavor aFlavor;
-            BOOL bDone = FALSE;
-
-            if ( bSpecial )
+            // BIN
+            SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aFlavor );
+            if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                // BIN
-                SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aFlavor );
-                if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+                uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                uno::Sequence< sal_Int8 > aSeq;
+                aData >>= aSeq;
                 {
-                    uno::Any aData = xDataObj->getTransferData( aFlavor );
-                    uno::Sequence< sal_Int8 > aSeq;
-                    aData >>= aSeq;
-                    {
-                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                        aNewSelection = ReadBin( aBinStream, aPaM );
-                    }
-                    bDone = TRUE;
+                    SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                    aNewSelection = ReadBin( aBinStream, rPaM );
                 }
+                bDone = TRUE;
+            }
 
-                if ( !bDone )
+            if ( !bDone )
+            {
+                // Bookmark
+                /*
+                String aURL = ...;
+                String aTxt = ...;
+                // Feld nur einfuegen, wenn Factory vorhanden.
+                if ( ITEMDATA() && ITEMDATA()->GetClassManager().Get( SVX_URLFIELD ) )
                 {
-                    // Bookmark
-                    /*
-                    String aURL = ...;
-                    String aTxt = ...;
-                    // Feld nur einfuegen, wenn Factory vorhanden.
-                    if ( ITEMDATA() && ITEMDATA()->GetClassManager().Get( SVX_URLFIELD ) )
-                    {
-                        SvxFieldItem aField( SvxURLField( aURL, aTxt, SVXURLFORMAT_URL ), EE_FEATURE_FIELD  );
-                        aNewSelection = InsertField( aPaM, aField );
-                        UpdateFields();
-                    }
-                    else
-                        aNewSelection = ImpInsertText( aPaM, aURL );
-                    }
-                    */
+                    SvxFieldItem aField( SvxURLField( aURL, aTxt, SVXURLFORMAT_URL ), EE_FEATURE_FIELD  );
+                    aNewSelection = InsertField( aPaM, aField );
+                    UpdateFields();
                 }
-                if ( !bDone )
-                {
-                    // RTF
-                    SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aFlavor );
-                    if ( xDataObj->isDataFlavorSupported( aFlavor ) )
-                    {
-                        uno::Any aData = xDataObj->getTransferData( aFlavor );
-                        uno::Sequence< sal_Int8 > aSeq;
-                        aData >>= aSeq;
-                        {
-                            SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                            aNewSelection = ReadRTF( aRTFStream, aPaM );
-                        }
-                        bDone = TRUE;
-                    }
+                else
+                    aNewSelection = ImpInsertText( aPaM, aURL );
                 }
+                */
             }
             if ( !bDone )
             {
-                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
-                if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+                // RTF
+                SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aFlavor );
+                if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
                 {
-                    uno::Any aData = xDataObj->getTransferData( aFlavor );
-                    ::rtl::OUString aText;
-                    aData >>= aText;
-                    aNewSelection = ImpInsertText( aPaM, aText );
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                        aNewSelection = ReadRTF( aRTFStream, rPaM );
+                    }
                     bDone = TRUE;
                 }
             }
         }
-
-    }
-    else
-    {
-        ULONG nBinReg = EditEngine::RegisterClipboardFormatName();
-
-        if ( bSpecial && DragServer::HasFormat ( 0, nBinReg ) )
+        if ( !bDone )
         {
-            ULONG nLen; BYTE* pData;
-            nLen = DragServer::GetDataLen( 0, nBinReg );
-            pData = new BYTE[ nLen ];
-            DragServer::PasteData( 0, pData, nLen, nBinReg );
-            SvMemoryStream aStream( pData, nLen, STREAM_READ );
-            aNewSelection = ReadBin( aStream, aPaM );
-            delete pData;
-        }
-        else if ( bSpecial && DragServer::HasFormat ( 0, SOT_FORMAT_RTF ) )
-        {
-            ULONG nLen; BYTE* pData;
-            nLen = DragServer::GetDataLen( 0, SOT_FORMAT_RTF );
-            pData = new BYTE[ nLen+1 ];
-            DragServer::PasteData( 0, pData, nLen, FORMAT_RTF );
-            *( pData + nLen ) = '\0';   // Falls RTF kaputt
-            SvMemoryStream aStream( pData, nLen, STREAM_READ );
-            aNewSelection = ReadRTF( aStream, aPaM );
-            delete pData;
-        }
-        else if ( DragServer::HasFormat ( 0, FORMAT_STRING ) )
-        {
-            XubString aText;
-            if( eExchange == EXCHANGE_CLIPBOARD )
-                aText = Clipboard::PasteString();
-            else
-                aText = DragServer::PasteString( 0 );
-            aNewSelection = ImpInsertText( aPaM, aText );
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aText;
+                aData >>= aText;
+                aNewSelection = ImpInsertText( rPaM, aText );
+                bDone = TRUE;
+            }
         }
     }
+
     return aNewSelection;
 }
 

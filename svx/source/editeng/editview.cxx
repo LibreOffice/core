@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-08 09:27:41 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ DBG_NAME( EditView );
 EditView::EditView( EditEngine* pEng, Window* pWindow )
 {
     DBG_CTOR( EditView, 0 );
-    pImpEditView = new ImpEditView( pEng, pWindow );
+    pImpEditView = new ImpEditView( this, pEng, pWindow );
 }
 
 EditView::~EditView()
@@ -222,17 +222,7 @@ void EditView::DeleteSelected()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    pImpEditView->DrawSelection();
-
-    PIMPEE->UndoActionStart( EDITUNDO_DELETE );
-
-    EditPaM aPaM = PIMPEE->DeleteSelected( pImpEditView->GetEditSelection() );
-
-    PIMPEE->UndoActionEnd( EDITUNDO_DELETE );
-
-    pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
-    PIMPEE->FormatAndUpdate( this );
-    ShowCursor();
+    pImpEditView->DeleteSelected();
 }
 
 USHORT EditView::GetSelectedScriptType() const
@@ -365,50 +355,35 @@ sal_Bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return pImpEditView->pEditEngine->PostKeyEvent( rKeyEvent, this );
+    return pImpEditView->PostKeyEvent( rKeyEvent );
 }
 
 sal_Bool EditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    if ( PIMPEE->aStatus.NotifyCursorMovements() )
-    {
-        if ( PIMPEE->aStatus.GetPrevParagraph() != PIMPEE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Max().GetNode() ) )
-        {
-            PIMPEE->aStatus.GetStatusWord() = PIMPEE->aStatus.GetStatusWord() | EE_STAT_CRSRLEFTPARA;
-            PIMPEE->CallStatusHdl();
-        }
-    }
-    pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
-    return PIMPEE->MouseButtonUp( rMouseEvent, this );
+    return pImpEditView->MouseButtonUp( rMouseEvent );
 }
 
 sal_Bool EditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->CheckIdleFormatter();   // Falls schnelles Tippen und MouseButtonDown
-    if ( PIMPEE->aStatus.NotifyCursorMovements() )
-        PIMPEE->aStatus.GetPrevParagraph() = PIMPEE->GetEditDoc().GetPos( pImpEditView->GetEditSelection().Max().GetNode() );
-    pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
-    return PIMPEE->MouseButtonDown( rMouseEvent, this );
+    return pImpEditView->MouseButtonDown( rMouseEvent );
 }
 
 sal_Bool EditView::MouseMove( const MouseEvent& rMouseEvent )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
-    return PIMPEE->MouseMove( rMouseEvent, this );
+    return pImpEditView->MouseMove( rMouseEvent );
 }
 
 void EditView::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->CheckIdleFormatter();   // Falls schnelles Tippen und MouseButtonDown
-    PIMPEE->Command( rCEvt, this );
+    pImpEditView->Command( rCEvt );
 }
 
 void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
@@ -722,24 +697,18 @@ void EditView::InsertText( const EditTextObject& rTextObject )
 
 sal_Bool EditView::Drop( const DropEvent& rEvt )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    // Undo-Kappselung nur intern, falls nicht noetig....
-    return PIMPEE->Drop( rEvt, this );
+    return FALSE;
 }
 
 ESelection EditView::GetDropPos()
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return PIMPEE->GetDropPos();
+    DBG_ERROR( "GetDropPos - Why?!" );
+    return ESelection();
 }
 
 sal_Bool EditView::QueryDrop( DropEvent& rEvt )
 {
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return IsReadOnly() ? sal_False : PIMPEE->QueryDrop( rEvt, this );
+    return FALSE;
 }
 
 void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
@@ -1096,35 +1065,9 @@ const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
 
 const SvxFieldItem* EditView::GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const
 {
-    if( !GetOutputArea().IsInside( rPos ) )
-        return 0;
-
-    Point aDocPos( pImpEditView->GetDocPos( rPos ) );
-    EditPaM aPaM = pImpEditView->pEditEngine->pImpEditEngine->GetPaM( aDocPos, sal_False );
-
-    if ( aPaM.GetIndex() == aPaM.GetNode()->Len() )
-    {
-        // Sonst immer, wenn Feld ganz am Schluss und Mouse unter Text
-        return 0;
-    }
-
-    const CharAttribArray& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
-    sal_uInt16 nXPos = aPaM.GetIndex();
-    for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
-    {
-        EditCharAttrib* pAttr = rAttrs[--nAttr];
-        if ( pAttr->GetStart() == nXPos )
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
-            {
-                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
-                if ( pPara )
-                    *pPara = PIMPEE->GetEditDoc().GetPos( aPaM.GetNode() );
-                if ( pPos )
-                    *pPos = pAttr->GetStart();
-                return (const SvxFieldItem*)pAttr->GetItem();
-            }
-    }
-    return 0;
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+    return pImpEditView->GetField( rPos, pPara, pPos );
 }
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_uInt16& nPara, sal_uInt16& nPos ) const
