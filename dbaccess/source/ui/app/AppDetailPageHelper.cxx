@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:44:24 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree(DBTreeListBox* _pTreeView,USHORT
     _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
     _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
     _pTreeView->SetSelectHdl(LINK(this, OAppDetailPageHelper, OnEntrySelectHdl));
-    //  _pTreeView->SetDeselectHdl(LINK(this, OAppDetailPageHelper, OnDeSelectHdl));
+    _pTreeView->SetDeselectHdl(LINK(this, OAppDetailPageHelper, OnDeSelectHdl));
 
     _pTreeView->setCutHandler(LINK(this, OAppDetailPageHelper, OnCutEntry));
     _pTreeView->setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
