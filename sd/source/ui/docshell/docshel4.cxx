@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:17:23 $
+ *  last change: $Author: pw $ $Date: 2000-10-27 14:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,13 +388,23 @@ BOOL SdDrawDocShell::Load( SvStorage * pStor )
         if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
             pProgress = NULL;
         else
-            pProgress = new SfxProgress( this, String( SdResId( STR_OPEN_DOCUMENT )), 100 );
+        {
+            if( mpSpecialProgress )
+                pProgress = mpSpecialProgress;
+            else
+                pProgress = new SfxProgress( this, String( SdResId( STR_OPEN_DOCUMENT )), 100 );
+        }
 
         if( pProgress )
         {
-            pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
+            if( mpSpecialProgress )
+                pDoc->SetIOProgressHdl( *mpSpecialProgressHdl );
+            else
+            {
+                pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
 
-            pProgress->SetState( 0, 100 );
+                pProgress->SetState( 0, 100 );
+            }
         }
 
         bRet = SfxInPlaceObject::Load(pStor);
@@ -509,7 +519,7 @@ BOOL SdDrawDocShell::Load( SvStorage * pStor )
             }
         }
 
-        if( pProgress )
+        if( pProgress && !mpSpecialProgress )
         {
             delete pProgress;
             pProgress = NULL;
@@ -729,13 +739,23 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
     if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         pProgress = NULL;
     else
-        pProgress = new SfxProgress( this, String(SdResId( STR_SAVE_DOCUMENT )), 100 );
+    {
+        if( mpSpecialProgress )
+            pProgress = mpSpecialProgress;
+        else
+            pProgress = new SfxProgress( this, String(SdResId( STR_SAVE_DOCUMENT )), 100 );
+    }
 
     if( pProgress )
     {
-        pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
+        if( mpSpecialProgress )
+            pDoc->SetIOProgressHdl( *mpSpecialProgressHdl );
+        else
+        {
+            pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
 
-        pProgress->SetState( 0, 100 );
+            pProgress->SetState( 0, 100 );
+        }
     }
 
     if (bRet)
@@ -806,7 +826,7 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
     if (bRet && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         AddXMLAsZipToTheStorage( *pStor );
 
-    if( pProgress )
+    if( pProgress && !mpSpecialProgress )
     {
         delete pProgress;
         pProgress = NULL;
