@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 14:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #define WID_SECT_VISIBLE     8005
 #define WID_SECT_PROTECTED   8006
 #define WID_SECT_REGION      8007
+#define WID_SECT_DDE_AUTOUPDATE 8008
 
 //Verzeichnisse
 #define WID_PRIMARY_KEY                         1000

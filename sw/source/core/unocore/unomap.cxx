@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 14:06:06 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 14:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,6 +1085,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE),  WID_SECT_DDE_TYPE, &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE),  WID_SECT_DDE_FILE, &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT), WID_SECT_DDE_ELEMENT, &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), WID_SECT_DDE_AUTOUPDATE, &::getBooleanCppuType(),             PROPERTY_NONE,  0},
                 #endif
                     { SW_PROP_NAME(UNO_NAME_FILE_LINK),         WID_SECT_LINK     , &::getCppuType((const text::SectionFileLink*)0),    PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_VISIBLE),        WID_SECT_VISIBLE   , &::getBooleanCppuType(),           PROPERTY_NONE,     0},

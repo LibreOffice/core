@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 14:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
 #endif
+#ifndef _LNKBASE_HXX
+#include <so3/lnkbase.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -141,13 +144,15 @@ struct SwTextSectionProperties_Impl
     sal_Bool    bDDE;
     sal_Bool    bHidden;
     sal_Bool    bProtect;
+    sal_Bool    bUpdateType;
 
     SwTextSectionProperties_Impl() :
         bDDE(0),
         bHidden(0),
         bProtect(0),
         pColItem(0),
-        pBrushItem(0){}
+        pBrushItem(0),
+        bUpdateType(sal_True){}
 
     ~SwTextSectionProperties_Impl()
     {
@@ -320,6 +325,18 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                 aSet.Put(*pProps->pColItem);
         pRet = pDoc->Insert( aPam, aSect, aSet.Count() ? &aSet : 0 );
         pRet->GetFmt()->Add(this);
+
+        // set update type if DDE link (and connect, if necessary)
+        if (pProps->bDDE)
+        {
+            if (! aSect.IsConnected())
+            {
+                aSect.CreateLink(CREATE_CONNECT);
+            }
+            aSect.SetUpdateType(pProps->bUpdateType ? LINKUPDATE_ALWAYS :
+                                LINKUPDATE_ONCALL);
+        }
+
         // Undo-Klammerung hier beenden
         pDoc->EndUndo( UNDO_INSSECTION );
         DELETEZ(pProps);
@@ -460,6 +477,25 @@ void SwXTextSection::setPropertyValue(
                         }
                         sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,cTokenSeperator, sTmp);
                         aSection.SetLinkFileName(sLinkFileName);
+                    }
+                }
+                break;
+                case WID_SECT_DDE_AUTOUPDATE:
+                {
+                    sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                    if(m_bIsDescriptor)
+                    {
+                        pProps->bUpdateType = bVal;
+                    }
+                    else
+                    {
+                        // set update type; needs an established link
+                        if (! pSect->IsConnected())
+                        {
+                            pSect->CreateLink(CREATE_CONNECT);
+                        }
+                        pSect->SetUpdateType(bVal ? LINKUPDATE_ALWAYS
+                                             : LINKUPDATE_ONCALL);
                     }
                 }
                 break;
@@ -629,6 +665,14 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= OUString(sRet);
                 }
                 break;
+                case WID_SECT_DDE_AUTOUPDATE:
+                {
+                    // GetUpdateType() returns .._ALWAYS or .._ONCALL
+                    sal_Bool bTemp =
+                        (pSect->GetUpdateType() == LINKUPDATE_ALWAYS);
+                    aRet.setValue( &bTemp, ::getCppuBooleanType());
+                }
+                break;
                 case WID_SECT_LINK     :
                 {
                      text::SectionFileLink aLink;
@@ -779,6 +823,7 @@ Sequence< PropertyState > SwXTextSection::getPropertyStates(
                 case WID_SECT_DDE_TYPE      :
                 case WID_SECT_DDE_FILE      :
                 case WID_SECT_DDE_ELEMENT   :
+                case WID_SECT_DDE_AUTOUPDATE:
                 case WID_SECT_LINK     :
                 case WID_SECT_REGION :
                 case WID_SECT_VISIBLE   :
@@ -849,6 +894,9 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
             case WID_SECT_LINK     :
             case WID_SECT_REGION :
                 aSection.SetType(CONTENT_SECTION);
+            break;
+            case WID_SECT_DDE_AUTOUPDATE:
+                aSection.SetUpdateType(LINKUPDATE_ALWAYS);
             break;
             case WID_SECT_VISIBLE   :
             {
@@ -926,6 +974,7 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
         case WID_SECT_LINK     :
             aRet <<= SectionFileLink();
         break;
+        case WID_SECT_DDE_AUTOUPDATE:
         case WID_SECT_VISIBLE   :
         {
             sal_Bool bTemp = TRUE;
