@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-11-30 14:30:41 $
+ *  last change: $Author: iha $ $Date: 2002-08-08 13:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _STDCTRL_HXX
 #include <svtools/stdctrl.hxx>
 #endif
+#ifndef  _COM_SUN_STAR_I18N_XEXTENDEDINDEXENTRYSUPPLIER_HPP_
+#include <drafts/com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#endif
 class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
@@ -121,12 +124,22 @@ class SwIndexMarkDlg : public Window //SvxStandardDialog
     FixedText       aTypeFT;
     ListBox         aTypeDCB;
     ImageButton     aNewBT;
+
     FixedText       aEntryFT;
     Edit            aEntryED;
+    FixedText       aPhoneticFT0;
+    Edit            aPhoneticED0;
+
     FixedText       aKeyFT;
     ComboBox        aKeyDCB;
+    FixedText       aPhoneticFT1;
+    Edit            aPhoneticED1;
+
     FixedText       aKey2FT;
     ComboBox        aKey2DCB;
+    FixedText       aPhoneticFT2;
+    Edit            aPhoneticED2;
+
     FixedText       aLevelFT;
     NumericField    aLevelED;
      CheckBox       aMainEntryCB;
@@ -152,6 +165,14 @@ class SwIndexMarkDlg : public Window //SvxStandardDialog
     sal_Bool            bNewMark;
     sal_Bool            bSelected;
 
+    BOOL            bPhoneticED0_ChangedByUser;
+    BOOL            bPhoneticED1_ChangedByUser;
+    BOOL            bPhoneticED2_ChangedByUser;
+    LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
+    BOOL            bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
+    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier >
+                    xExtendedIndexEntrySupplier;
+
     SwTOXMgr*       pTOXMgr;
     SwWrtShell*     pSh;
 
@@ -171,6 +192,13 @@ class SwIndexMarkDlg : public Window //SvxStandardDialog
     DECL_LINK( KeyDCBModifyHdl, ComboBox * );
     DECL_LINK( NewUserIdxHdl, Button*);
     DECL_LINK( SearchTypeHdl, CheckBox*);
+    DECL_LINK( PhoneticEDModifyHdl, Edit * );
+
+    //this method updates the values from 'nLangForPhoneticReading' and 'bIsPhoneticReadingEnabled'
+    //it needs to be called ones if this dialog is opened to create a new entry (in InitControls),
+    //or otherwise it has to be called for each changed TOXMark (in UpdateDialog)
+    void            UpdateLanguageDependenciesForPhoneticReading();
+    String          GetDefaultPhoneticReading( const String& rText );
 
     void            UpdateKeyBoxes();
 

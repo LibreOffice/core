@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:46:26 $
+ *  last change: $Author: iha $ $Date: 2002-08-08 13:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,12 +183,20 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
             if( rDesc.GetPrimKey() && rDesc.GetPrimKey()->Len() )
             {
                 pMark->SetPrimaryKey( *rDesc.GetPrimKey() );
+                if(rDesc.GetPhoneticReadingOfPrimKey())
+                    pMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
 
                 if( rDesc.GetSecKey() && rDesc.GetSecKey()->Len() )
+                {
                     pMark->SetSecondaryKey( *rDesc.GetSecKey() );
+                    if(rDesc.GetPhoneticReadingOfSecKey())
+                        pMark->SetSecondaryKeyReading( *rDesc.GetPhoneticReadingOfSecKey() );
+                }
             }
             if(rDesc.GetAltStr())
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
+            if(rDesc.GetPhoneticReadingOfAltStr())
+                pMark->SetTextReading( *rDesc.GetPhoneticReadingOfAltStr() );
             pMark->SetMainEntry(rDesc.IsMainEntry());
         }
         break;
@@ -225,14 +233,36 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
         if(rDesc.GetPrimKey() && rDesc.GetPrimKey()->Len() )
         {
             pCurTOXMark->SetPrimaryKey( *rDesc.GetPrimKey() );
+            if(rDesc.GetPhoneticReadingOfPrimKey())
+                pCurTOXMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
+            else
+                pCurTOXMark->SetPrimaryKeyReading( aEmptyStr );
 
             if( rDesc.GetSecKey() && rDesc.GetSecKey()->Len() )
+            {
                 pCurTOXMark->SetSecondaryKey( *rDesc.GetSecKey() );
+                if(rDesc.GetPhoneticReadingOfSecKey())
+                    pCurTOXMark->SetSecondaryKeyReading( *rDesc.GetPhoneticReadingOfSecKey() );
+                else
+                    pCurTOXMark->SetSecondaryKeyReading( aEmptyStr );
+            }
             else
+            {
                 pCurTOXMark->SetSecondaryKey( aEmptyStr );
+                pCurTOXMark->SetSecondaryKeyReading( aEmptyStr );
+            }
         }
         else
+        {
             pCurTOXMark->SetPrimaryKey( aEmptyStr );
+            pCurTOXMark->SetPrimaryKeyReading( aEmptyStr );
+            pCurTOXMark->SetSecondaryKey( aEmptyStr );
+            pCurTOXMark->SetSecondaryKeyReading( aEmptyStr );
+        }
+        if(rDesc.GetPhoneticReadingOfAltStr())
+            pCurTOXMark->SetTextReading( *rDesc.GetPhoneticReadingOfAltStr() );
+        else
+            pCurTOXMark->SetTextReading( aEmptyStr );
         pCurTOXMark->SetMainEntry(rDesc.IsMainEntry());
     }
     else

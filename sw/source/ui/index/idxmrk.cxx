@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-22 14:40:58 $
+ *  last change: $Author: iha $ $Date: 2002-08-08 13:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,15 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -169,6 +177,15 @@
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
 #endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -214,10 +231,16 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aTypeDCB(this,  SW_RES(DCB_INDEX    )),
     aEntryFT(this,  SW_RES(LBL_ENTRY    )),
     aEntryED(this,  SW_RES(SL_ENTRY )),
+    aPhoneticFT0(this,  SW_RES(FT_PHONETIC_1 )),
+    aPhoneticED0(this,  SW_RES(ED_PHONETIC_1 )),
     aKeyFT(this,    SW_RES(LBL_KEY  )),
     aKeyDCB(this,   SW_RES(DCB_KEY  )),
+    aPhoneticFT1(this,  SW_RES(FT_PHONETIC_2 )),
+    aPhoneticED1(this,  SW_RES(ED_PHONETIC_2 )),
     aKey2FT(this,   SW_RES(LBL_KEY2 )),
     aKey2DCB(this,  SW_RES(DCB_KEY2 )),
+    aPhoneticFT2(this,  SW_RES(FT_PHONETIC_3 )),
+    aPhoneticED2(this,  SW_RES(ED_PHONETIC_3 )),
     aLevelFT(this,  SW_RES(LBL_LEVEL    )),
     aLevelED(this,  SW_RES(SL_LEVEL )),
     aMainEntryCB(this, SW_RES(CB_MAIN_ENTRY )),
@@ -225,8 +248,24 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aSearchCaseSensitiveCB(this,    SW_RES(CB_CASESENSITIVE )),
     aSearchCaseWordOnlyCB(this,     SW_RES(CB_WORDONLY      )),
     aIndexFL(this,  SW_RES(FL_INDEX )),
-    bSelected(sal_False)
+    bSelected(sal_False),
+    bPhoneticED0_ChangedByUser(FALSE),
+    bPhoneticED1_ChangedByUser(FALSE),
+    bPhoneticED2_ChangedByUser(FALSE),
+    xExtendedIndexEntrySupplier(NULL),
+    nLangForPhoneticReading(2052),
+    bIsPhoneticReadingEnabled(FALSE)
 {
+    if( SvtCJKOptions().IsCJKFontEnabled() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+
+        xExtendedIndexEntrySupplier =
+            uno::Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > (
+                    xMSF->createInstance( C2U("com.sun.star.i18n.IndexEntrySupplier") ),
+                                                                        uno::UNO_QUERY );
+    }
+
     SetStyle(GetStyle()|WB_DIALOGCONTROL);
     FreeResource();
     aOKBT           .SetHelpId(HID_INSERT_IDX_MRK_OK        );
@@ -244,6 +283,10 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aLevelED        .SetHelpId(HID_INSERT_IDX_MRK_LEVEL     );
     aMainEntryCB    .SetHelpId(HID_INSERT_IDX_MRK_MAIN_ENTRY);
     aApplyToAllCB   .SetHelpId(HID_INSERT_IDX_MRK_APPLY_ALL );
+    aPhoneticED0    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+    aPhoneticED1    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+    aPhoneticED2    .SetHelpId(HID_INSERT_IDX_MRK_PHONETIC_READING );
+
     aSearchCaseSensitiveCB.SetHelpId(   HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE   );
     aSearchCaseWordOnlyCB.SetHelpId(    HID_INSERT_IDX_MRK_SRCH_WORDONLY        );
 
@@ -258,11 +301,15 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     //aTypeDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,   ModifyHdl));
     aTypeDCB.SetSelectHdl(LINK(this,SwIndexMarkDlg,     ModifyHdl));
     aKeyDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,      KeyDCBModifyHdl));
+    aKey2DCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,     KeyDCBModifyHdl));
     aOKBT.SetClickHdl(LINK(this,SwIndexMarkDlg,         InsertHdl));
     aCancelBT.SetClickHdl(LINK(this,SwIndexMarkDlg,     CloseHdl));
     aEntryED.SetModifyHdl(LINK(this,SwIndexMarkDlg,     ModifyHdl));
     aNewBT.SetClickHdl(LINK(this, SwIndexMarkDlg,       NewUserIdxHdl));
     aApplyToAllCB.SetClickHdl(LINK(this, SwIndexMarkDlg, SearchTypeHdl));
+    aPhoneticED0.SetModifyHdl(LINK(this,SwIndexMarkDlg, PhoneticEDModifyHdl));
+    aPhoneticED1.SetModifyHdl(LINK(this,SwIndexMarkDlg, PhoneticEDModifyHdl));
+    aPhoneticED2.SetModifyHdl(LINK(this,SwIndexMarkDlg, PhoneticEDModifyHdl));
 
     if(bNewMark)
     {
@@ -326,6 +373,8 @@ void SwIndexMarkDlg::InitControls()
     nCount = pSh->GetTOIKeys( TOI_SECONDARY, aArr );
     for(i=0; i < nCount; ++i)
         aKey2DCB.InsertEntry( *aArr[ i ] );
+
+    UpdateLanguageDependenciesForPhoneticReading();
 
     // Aktueller Eintrag
     const SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
@@ -406,6 +455,70 @@ void SwIndexMarkDlg::InitControls()
         ModifyHdl(&aTypeDCB);
     }
 }
+
+void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
+{
+    bIsPhoneticReadingEnabled = FALSE;
+
+    //no phonetic reading if no global cjk support
+    if( !xExtendedIndexEntrySupplier.is() )
+        return;
+
+    //get the current language
+    if(!bNewMark) //if dialog is opened to iterate existing marks
+    {
+        ASSERT(pTOXMgr, "need TOXMgr")
+        if(!pTOXMgr)
+            return;
+        SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
+        ASSERT(pMark, "need current SwTOXMark");
+        if(!pMark)
+            return;
+        SwTxtTOXMark* pTxtTOXMark = pMark->GetTxtTOXMark();
+        ASSERT(pTxtTOXMark, "need current SwTxtTOXMark");
+        if(!pTxtTOXMark)
+            return;
+        const SwTxtNode* pTxtNode = pTxtTOXMark->GetpTxtNd();
+        ASSERT(pTxtNode, "need current SwTxtNode");
+        if(!pTxtNode)
+            return;
+        xub_StrLen nTextIndex = *pTxtTOXMark->GetStart();
+        nLangForPhoneticReading = pTxtNode->GetLang( nTextIndex );
+    }
+    else //if dialog is opened to create a new mark
+    {
+        USHORT nScriptType = pSh->GetScriptType();
+        USHORT nWhich;
+        switch(nScriptType)
+        {
+            case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+            case SCRIPTTYPE_COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+            //case SCRIPTTYPE_LATIN:
+            default:nWhich = RES_CHRATR_LANGUAGE; break;
+        }
+        SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);
+        pSh->GetAttr(aLangSet);
+        nLangForPhoneticReading = ((const SvxLanguageItem&)aLangSet.Get(nWhich)).GetLanguage();
+    }
+
+    //enable phonetic reading dependent on the current language
+    {
+        SwBreakIt aBreakIt = SwBreakIt();
+        lang::Locale& rLocale = aBreakIt.GetLocale( LanguageType( nLangForPhoneticReading ) );
+        bIsPhoneticReadingEnabled = xExtendedIndexEntrySupplier->usePhoneticEntry( rLocale );
+    }
+}
+
+String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
+{
+    if( !bIsPhoneticReadingEnabled )
+        return aEmptyStr;
+
+    SwBreakIt aBreakIt = SwBreakIt();
+    lang::Locale& rLocale = aBreakIt.GetLocale( LanguageType( nLangForPhoneticReading ) );
+    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, rLocale);
+}
+
 /* -----------------07.09.99 10:43-------------------
     Change the content of aEntryED if text is selected
  --------------------------------------------------*/
@@ -519,6 +632,9 @@ void SwIndexMarkDlg::InsertMark()
             aDesc.SetPrimKey(aPrim);
             aDesc.SetSecKey(aSec);
             aDesc.SetMainEntry(aMainEntryCB.IsChecked());
+            aDesc.SetPhoneticReadingOfAltStr(aPhoneticED0.GetText());
+            aDesc.SetPhoneticReadingOfPrimKey(aPhoneticED1.GetText());
+            aDesc.SetPhoneticReadingOfSecKey(aPhoneticED2.GetText());
         }
         break;
         default:            // Userdefinedverz.-Marke
@@ -582,6 +698,13 @@ void SwIndexMarkDlg::UpdateMark()
     String  aSec(aKey2DCB.GetText());
     if(aSec.Len())
         aDesc.SetSecKey(aSec);
+
+    if(eType == TOX_INDEX)
+    {
+        aDesc.SetPhoneticReadingOfAltStr(aPhoneticED0.GetText());
+        aDesc.SetPhoneticReadingOfPrimKey(aPhoneticED1.GetText());
+        aDesc.SetPhoneticReadingOfSecKey(aPhoneticED2.GetText());
+    }
     aDesc.SetMainEntry(aMainEntryCB.IsVisible() && aMainEntryCB.IsChecked());
     pTOXMgr->UpdateTOXMark(aDesc);
 }
@@ -717,15 +840,26 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
         sal_Bool bLevelEnable = sal_False,
              bKeyEnable   = sal_False,
              bSetKey2     = sal_False,
-             bKey2Enable  = sal_False;
+             bKey2Enable  = sal_False,
+            bEntryHasText   = sal_False,
+            bKey1HasText    = sal_False,
+            bKey2HasText    = sal_False;
         if(nPos == POS_INDEX)
         {
+            if(aEntryED.GetText().Len())
+                bEntryHasText = sal_True;
+            aPhoneticED0.SetText(GetDefaultPhoneticReading(aEntryED.GetText()));
+
             bKeyEnable = sal_True;
             aKeyDCB.SetText(aKeyDCB.GetEntry(nKey1Pos));
+            aPhoneticED1.SetText(GetDefaultPhoneticReading(aKeyDCB.GetText()));
             if(aKeyDCB.GetText().Len() > 0)
             {
-                bSetKey2 = bKey2Enable = sal_True;
+                bKey1HasText = bSetKey2 = bKey2Enable = sal_True;
                 aKey2DCB.SetText(aKey2DCB.GetEntry(nKey2Pos));
+                aPhoneticED2.SetText(GetDefaultPhoneticReading(aKey2DCB.GetText()));
+                if(aKey2DCB.GetText().Len())
+                    bKey2HasText = sal_True;
             }
         }
         else
@@ -746,6 +880,26 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
             aKey2DCB.Enable(bKey2Enable);
             aKey2FT.Enable(bKey2Enable);
         }
+        aPhoneticFT0.Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
+        aPhoneticED0.Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
+        aPhoneticFT1.Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
+        aPhoneticED1.Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
+        aPhoneticFT2.Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
+        aPhoneticED2.Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
+    }
+    else //aEntryED  !!aEntryED is not a ListBox but a Edit
+    {
+        BOOL bHasText = (aEntryED.GetText().Len()>0);
+        if(!bHasText)
+        {
+            aPhoneticED0.SetText(aEmptyStr);
+            bPhoneticED0_ChangedByUser = FALSE;
+        }
+        else if(!bPhoneticED0_ChangedByUser)
+            aPhoneticED0.SetText(GetDefaultPhoneticReading(aEntryED.GetText()));
+
+        aPhoneticFT0.Enable(bHasText&&bIsPhoneticReadingEnabled);
+        aPhoneticED0.Enable(bHasText&&bIsPhoneticReadingEnabled);
     }
     aOKBT.Enable(aEntryED.GetText().Len() || pSh->GetCrsrCnt(sal_False));
     return 0;
@@ -834,16 +988,24 @@ void SwIndexMarkDlg::UpdateDialog()
     // Verzeichnistyp setzen
     sal_Bool bLevelEnable = sal_True,
          bKeyEnable   = sal_False,
-         bKey2Enable  = sal_False;
+         bKey2Enable  = sal_False,
+         bEntryHasText  = sal_False,
+         bKey1HasText   = sal_False,
+         bKey2HasText   = sal_False;
 
     TOXTypes eCurType = pMark->GetTOXType()->GetType();
     if(TOX_INDEX == eCurType)
     {
         bLevelEnable = sal_False;
         bKeyEnable = sal_True;
-        bKey2Enable = 0 != pMark->GetPrimaryKey().Len();
+        bKey1HasText = bKey2Enable = 0 != pMark->GetPrimaryKey().Len();
+        bKey2HasText = 0 != pMark->GetSecondaryKey().Len();
+        bEntryHasText = 0 != pMark->GetText().Len();
         aKeyDCB.SetText( pMark->GetPrimaryKey() );
         aKey2DCB.SetText( pMark->GetSecondaryKey() );
+        aPhoneticED0.SetText( pMark->GetTextReading() );
+        aPhoneticED1.SetText( pMark->GetPrimaryKeyReading() );
+        aPhoneticED2.SetText( pMark->GetSecondaryKeyReading() );
         aMainEntryCB.Check(pMark->IsMainEntry());
     }
     else if(TOX_CONTENT == eCurType || TOX_USER == eCurType)
@@ -858,6 +1020,14 @@ void SwIndexMarkDlg::UpdateDialog()
     aMainEntryCB.Show(!bLevelEnable);
     aKey2FT.Enable(bKey2Enable);
     aKey2DCB.Enable(bKey2Enable);
+
+    UpdateLanguageDependenciesForPhoneticReading();
+    aPhoneticFT0.Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
+    aPhoneticED0.Enable(bKeyEnable&&bEntryHasText&&bIsPhoneticReadingEnabled);
+    aPhoneticFT1.Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
+    aPhoneticED1.Enable(bKeyEnable&&bKey1HasText&&bIsPhoneticReadingEnabled);
+    aPhoneticFT2.Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
+    aPhoneticED2.Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
 
     // Verzeichnis-Typ setzen
     aTypeDCB.SelectEntry(pMark->GetTOXType()->GetTypeName());
@@ -904,17 +1074,82 @@ void SwIndexMarkDlg::UpdateDialog()
 }
 
 /*--------------------------------------------------------------------
+     Remind wether the edit boxes for Phonetic reading are changed manually
+ --------------------------------------------------------------------*/
+
+IMPL_LINK( SwIndexMarkDlg, PhoneticEDModifyHdl, Edit *, pEdit )
+{
+    if(&aPhoneticED0 == pEdit)
+    {
+        bPhoneticED0_ChangedByUser = pEdit->GetText().Len()>0;
+    }
+    else if(&aPhoneticED1 == pEdit)
+    {
+        bPhoneticED1_ChangedByUser = pEdit->GetText().Len()>0;
+    }
+    else if(&aPhoneticED2 == pEdit)
+    {
+        bPhoneticED2_ChangedByUser = pEdit->GetText().Len()>0;
+    }
+    return 0;
+}
+
+/*--------------------------------------------------------------------
      Beschreibung: Enable Disable des 2. Schluessels
  --------------------------------------------------------------------*/
 
-
 IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
 {
-    sal_Bool bEnable = pBox->GetText().Len() > 0;
-    if(!bEnable)
-        aKey2DCB.SetText(aEmptyStr);
-    aKey2DCB.Enable(bEnable);
-    aKey2FT.Enable(bEnable);
+    if(&aKeyDCB == pBox)
+    {
+        sal_Bool bEnable = pBox->GetText().Len() > 0;
+        if(!bEnable)
+        {
+            aKey2DCB.SetText(aEmptyStr);
+            aPhoneticED1.SetText(aEmptyStr);
+            aPhoneticED2.SetText(aEmptyStr);
+            bPhoneticED1_ChangedByUser = FALSE;
+            bPhoneticED2_ChangedByUser = FALSE;
+        }
+        else
+        {
+            if(pBox->IsInDropDown())
+            {
+                //reset bPhoneticED1_ChangedByUser if a completly new string is selected
+                bPhoneticED1_ChangedByUser = FALSE;
+            }
+            if(!bPhoneticED1_ChangedByUser)
+                aPhoneticED1.SetText(GetDefaultPhoneticReading(pBox->GetText()));
+        }
+        aKey2DCB.Enable(bEnable);
+        aKey2FT.Enable(bEnable);
+    }
+    else if(&aKey2DCB == pBox)
+    {
+        if(!(pBox->GetText().Len()>0))
+        {
+            aPhoneticED2.SetText(aEmptyStr);
+            bPhoneticED2_ChangedByUser = FALSE;
+        }
+        else
+        {
+            if(pBox->IsInDropDown())
+            {
+                //reset bPhoneticED1_ChangedByUser if a completly new string is selected
+                bPhoneticED2_ChangedByUser = FALSE;
+            }
+            if(!bPhoneticED2_ChangedByUser)
+                aPhoneticED2.SetText(GetDefaultPhoneticReading(pBox->GetText()));
+        }
+    }
+    sal_Bool    bKey1HasText    = (0 != aKeyDCB.GetText().Len());
+    sal_Bool    bKey2HasText    = (0 != aKey2DCB.GetText().Len());
+
+    aPhoneticFT1.Enable(bKey1HasText&&bIsPhoneticReadingEnabled);
+    aPhoneticED1.Enable(bKey1HasText&bIsPhoneticReadingEnabled);
+    aPhoneticFT2.Enable(bKey2HasText&bIsPhoneticReadingEnabled);
+    aPhoneticED2.Enable(bKey2HasText&bIsPhoneticReadingEnabled);
+
     return 0;
 }
 
@@ -954,7 +1189,7 @@ SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
                                    sal_Bool bNew) :
-    SfxModelessDialog(pBindings, pChild, pParent, SW_RES(DLG_INSIDXMARK)),
+SfxModelessDialog(pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_INSIDXMARK_CJK):SW_RES(DLG_INSIDXMARK)),
     aDlg(this, bNew, ResId(WIN_DLG))
 {
     FreeResource();
@@ -971,7 +1206,7 @@ void    SwIndexMarkFloatDlg::Activate()
 
  --------------------------------------------------*/
 SwIndexMarkModalDlg::SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark) :
-    SvxStandardDialog(pParent, SW_RES(DLG_EDIT_IDXMARK)),
+SvxStandardDialog(pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_EDIT_IDXMARK_CJK):SW_RES(DLG_EDIT_IDXMARK)),
     aDlg(this, sal_False, ResId(WIN_DLG))
 {
     FreeResource();

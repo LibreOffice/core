@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:25 $
+ *  last change: $Author: iha $ $Date: 2002-08-08 13:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,10 @@ class SwTOXMarkDescription
     String*     pAltStr;
     String*     pTOUName;
 
+    String*     pPhoneticReadingOfAltStr;
+    String*     pPhoneticReadingOfPrimKey;
+    String*     pPhoneticReadingOfSecKey;
+
 public:
     SwTOXMarkDescription(TOXTypes eType) :
         eTOXType(eType),
@@ -231,6 +235,9 @@ public:
         pSecKey(0),
         pAltStr(0),
         pTOUName(0),
+        pPhoneticReadingOfAltStr(0),
+        pPhoneticReadingOfPrimKey(0),
+        pPhoneticReadingOfSecKey(0),
         nLevel(0),
         bMainEntry(FALSE)
         {
@@ -241,6 +248,9 @@ public:
         delete pSecKey;
         delete pAltStr;
         delete pTOUName;
+        delete pPhoneticReadingOfAltStr;
+        delete pPhoneticReadingOfPrimKey;
+        delete pPhoneticReadingOfSecKey;
     }
 
     TOXTypes        GetTOXType()const {return eTOXType;}
@@ -266,6 +276,19 @@ public:
     void            SetTOUName(const String& rSet)
                                 {delete pTOUName; pTOUName = new String(rSet);}
     const String*   GetTOUName() const {return pTOUName;}
+
+
+    void            SetPhoneticReadingOfAltStr(const String& rSet)
+                                {delete pPhoneticReadingOfAltStr;  pPhoneticReadingOfAltStr  = new String(rSet);}
+    const String*   GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr; }
+
+    void            SetPhoneticReadingOfPrimKey(const String& rSet)
+                                {delete pPhoneticReadingOfPrimKey;  pPhoneticReadingOfPrimKey  = new String(rSet);}
+    const String*   GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey; }
+
+    void            SetPhoneticReadingOfSecKey(const String& rSet)
+                                {delete pPhoneticReadingOfSecKey;  pPhoneticReadingOfSecKey  = new String(rSet);}
+    const String*   GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey; }
 };
 
 class SwTOXMgr
