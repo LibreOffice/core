@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:52:04 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ ModalDialog DLG_SEL_GLOS
         Text[ japanese ] = "γ‚·γƒ§γƒΌγƒγ‚«γƒƒγƒε…¥ε›ζ”―ζ΄ ";
         Text[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†η„ηΈ®ε―« ";
         Text[ arabic ] = "δΥ ΚαήΗΖν ααΗΞΚΥΗΡ ";
-        Text[ greek ] = "ΑυτοΚείμενα για αρχικά";
+        Text[ greek ] = "Αυτόματα κείμενα για συντόμευση ";
         Text[ korean ] = "μλ™ ν…μ¤νΈ λ°”λ΅ κ°€κΈ° ";
         Text[ turkish ] = "Kύsayollar iηin otomatik metinler";
         Text[ language_user1 ] = " ";
@@ -154,7 +154,7 @@ ModalDialog DLG_SEL_GLOS
     Text[ japanese ] = "ε…¥ε›ζ”―ζ΄γ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥θ‡ªε‹•ε–ζ–‡ι›†";
     Text[ arabic ] = "ΕΟΡΗΜ δΥ ΚαήΗΖν";
-    Text[ greek ] = "Προσθήκη ΑυτοΚειμένου";
+    Text[ greek ] = "Εισαγωγή αυτόματου κειμένου";
     Text[ korean ] = "μλ™ ν…μ¤νΈ μ‚½μ…";
     Text[ turkish ] = "Otomatik metin ekle";
     Text[ language_user1 ] = " ";
@@ -165,6 +165,7 @@ ModalDialog DLG_SEL_GLOS
     Text[ hindi ] = "ΰ¤Έΰ¥ΰ¤µΰ¤ΰ¤Ύΰ¤²ΰ¤Ώΰ¤¤ ΰ¤Άΰ¤‚ΰ¤— ΰ¤Έΰ¥‡ ΰ¤ΰ¥‡ΰ¤•ΰ¥ΰ¤Έΰ¥ΰ¤ΰ¥ ΰ¤ΰ¥‹ΰ¤΅ΰ¤Όΰ¥‹";
     Text[ slovak ] = "VloΕΎiΕ¥ automatickΓ½ text";
 };
+
 
 
 
