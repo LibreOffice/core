@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-26 14:58:18 $
+ *  last change: $Author: cl $ $Date: 2001-02-28 11:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,8 +246,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillBitmapOffsetY",              XML_NAMESPACE_DRAW, sXML_tile_repeat_offset,    XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y },
 
     // text frame attributes
-    { "TextHorizontalAdjust",           XML_NAMESPACE_FO,   sXML_text_align,            XML_SD_TYPE_TEXT_ALIGN, 0 },
-    { "TextVerticalAdjust",             XML_NAMESPACE_FO,   sXML_vertical_align,        XML_SD_TYPE_VERTICAL_ALIGN, 0 },
+    { "TextHorizontalAdjust",           XML_NAMESPACE_DRAW, sXML_textarea_horizontal_align, XML_SD_TYPE_TEXT_ALIGN, 0 },
+    { "TextVerticalAdjust",             XML_NAMESPACE_DRAW, sXML_textarea_vertical_align,   XML_SD_TYPE_VERTICAL_ALIGN, 0 },
     { "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, sXML_auto_grow_width,       XML_TYPE_BOOL, 0 },
     { "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, sXML_auto_grow_height,      XML_TYPE_BOOL, 0 },
     { "TextFitToSize",                  XML_NAMESPACE_DRAW, sXML_fit_to_size,           XML_SD_TYPE_FITTOSIZE, 0 },
@@ -256,11 +256,11 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   sXML_max_width,             XML_TYPE_MEASURE, 0 },
     { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE, 0 },
     { "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   sXML_min_width,             XML_TYPE_MEASURE, 0 },
-    { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_MEASURE, 0 },
-    { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_margin_bottom,         XML_TYPE_MEASURE, 0 },
-    { "TextLeftDistance",               XML_NAMESPACE_FO,   sXML_margin_left,           XML_TYPE_MEASURE, 0 },
-    { "TextRightDistance",              XML_NAMESPACE_FO,   sXML_margin_right,          XML_TYPE_MEASURE, 0 },
-    { "TextWritingMode",                XML_NAMESPACE_FO,   sXML_writing_mode,          XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
+    { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_padding_top,           XML_TYPE_MEASURE, 0 },
+    { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_padding_bottom,        XML_TYPE_MEASURE, 0 },
+    { "TextLeftDistance",               XML_NAMESPACE_FO,   sXML_padding_left,          XML_TYPE_MEASURE, 0 },
+    { "TextRightDistance",              XML_NAMESPACE_FO,   sXML_padding_right,         XML_TYPE_MEASURE, 0 },
+    { "TextWritingMode",                XML_NAMESPACE_DRAW, sXML_writing_mode,          XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
     { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style,            XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
     { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style_name,       XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
 
