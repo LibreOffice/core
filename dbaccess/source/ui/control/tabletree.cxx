@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:55:04 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -95,6 +98,12 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -110,6 +119,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 using namespace ::dbtools;
+using namespace ::comphelper;
 
 //========================================================================
 //= OTableTreeListBox
@@ -188,7 +198,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
     Reference< XDatabaseMetaData > xMetaData;
     Reference< XConnection > xConnection;
 
-    Reference< XNameAccess > xTables, xViews;
+    Sequence< ::rtl::OUString > sTables, sViews;
     DBG_ASSERT(m_xORB.is(), "OTableTreeListBox::UpdateTableList : please use setServiceFactory to give me a service factory !");
 
     String sCurrentActionError;
@@ -223,14 +233,6 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
                 // will be caught and translated into an SQLContext exception
                 throw Exception();
 
-            // get the (very necessary) interface XDataDefinitionSupplier
-            sCurrentActionError = String(ModuleRes(STR_INVALIDREGISTEREDDRIVER));
-            Reference< XDataDefinitionSupplier > xDefinitionAccess;
-            xDefinitionAccess = Reference< XDataDefinitionSupplier >(xDriver, UNO_QUERY);
-            if (!xDefinitionAccess.is())
-                // will be caught and translated into an SQLContext exception
-                throw Exception();
-
             sCurrentActionError = String(ModuleRes(STR_COULDNOTCONNECT));
             sCurrentActionDetails = String(ModuleRes(STR_COULDNOTCONNECT_PLEASECHECK));
             xConnection = xDriver->connect(_rConnectionURL, _rProperties);
@@ -240,23 +242,88 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
             if (!xConnection.is())
                 throw Exception();
             sCurrentActionDetails = String();
-
-            Reference< XTablesSupplier > xTableSupp;
-            Reference< XViewsSupplier > xViewSupp;
-            sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
             xMetaData = xConnection->getMetaData();
 
-            // get the table supplier and the tables
-            xTableSupp = xDefinitionAccess->getDataDefinitionByConnection(xConnection);
-            if (!xTableSupp.is())
-                throw Exception();
+            // get the (very necessary) interface XDataDefinitionSupplier
+            Reference< XDataDefinitionSupplier > xDefinitionAccess;
+            xDefinitionAccess = Reference< XDataDefinitionSupplier >(xDriver, UNO_QUERY);
+            if (!xDefinitionAccess.is())
+            {
+                // okay, the driver's programmer was lazy :)
+                // let's do it on foot .... (ask the meta data for a result set describing the tables)
+                Reference< XResultSet > xTables;
 
-            xTables = xTableSupp->getTables();
+                static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
 
-            // get the views supplier and the views
-            xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
-            if (xViewSupp.is())
-                xViews = xViewSupp->getViews();
+                if (xMetaData.is())
+                {
+                    // we want all table types, the standard types are VIEW and TABLE
+                    Sequence< ::rtl::OUString > sTableTypes(2);
+                    sTableTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+                    sTableTypes[1] = s_sTableTypeView;
+                    // we want all catalogues, all schemas, all tables
+                    const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+                    xTables = xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
+                }
+                Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
+                if (xCurrentRow.is())
+                {
+                    StringBag aTableNames, aViewNames;
+                    ::rtl::OUString sCatalog, sSchema, sName, sType, sComposedName;
+                    while (xTables->next())
+                    {
+                        // after creation the set is positioned before the first record, per definitionem
+                        sCatalog    = xCurrentRow->getString(1);
+                        sSchema     = xCurrentRow->getString(2);
+                        sName       = xCurrentRow->getString(3);
+                        sType       = xCurrentRow->getString(4);
+                        composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
+                        if (s_sTableTypeView.equals(sType))
+                            aViewNames.insert(sComposedName);
+                        else
+                            aTableNames.insert(sComposedName);
+                    }
+
+                    // copy the names into the sequence
+                    // tables
+                    sTables.realloc(aTableNames.size());
+                    ::rtl::OUString* pTables = sTables.getArray();
+                    ConstStringBagIterator aCopy = aTableNames.begin();
+                    for (; aCopy != aTableNames.end(); ++aCopy, ++pTables)
+                        *pTables = *aCopy;
+                    // views
+                    sViews.realloc(aViewNames.size());
+                    pTables = sViews.getArray();
+                    for (aCopy = aViewNames.begin(); aCopy != aViewNames.end(); ++aCopy, ++pTables)
+                        *pTables = *aCopy;
+                }
+                disposeComponent(xTables);
+            }
+            else
+            {
+                Reference< XTablesSupplier > xTableSupp;
+                Reference< XViewsSupplier > xViewSupp;
+                sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
+
+                // get the table supplier and the tables
+                xTableSupp = xDefinitionAccess->getDataDefinitionByConnection(xConnection);
+                if (!xTableSupp.is())
+                    throw Exception();
+
+                Reference< XNameAccess > xTables, xViews;
+
+                xTables = xTableSupp->getTables();
+
+                // get the views supplier and the views
+                xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
+                if (xViewSupp.is())
+                    xViews = xViewSupp->getViews();
+
+                if (xTables.is())
+                    sTables = xTables->getElementNames();
+                if (xViews.is())
+                    sViews = xViews->getElementNames();
+            }
         }
     }
     catch(RuntimeException&)
@@ -279,45 +346,36 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
         throw aExtendedInfo;
     }
 
-    UpdateTableList(xMetaData, xTables, xViews);
+    UpdateTableList(xMetaData, sTables, sViews);
     return xConnection;
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _rxConnMetaData, const Reference< XNameAccess > _rxTables, const Reference< XNameAccess > _rxViews)
+void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _rxConnMetaData, const Sequence< ::rtl::OUString >& _rTables, const Sequence< ::rtl::OUString >& _rViews)
 {
     // throw away all the old stuff
     Clear();
 
-    if (!_rxTables.is() && !_rxViews.is())
+    if (!_rTables.getLength() && !_rViews.getLength())
         // nothing to do
         return;
 
     try
     {
         // get the table/view names
-        Sequence< ::rtl::OUString > aTables, aViews;
         const ::rtl::OUString* pTables = NULL;
         const ::rtl::OUString* pViews = NULL;
-        if (_rxTables.is())
-        {
-            aTables = _rxTables->getElementNames();
-            pTables = aTables.getConstArray();
-        }
-        if (_rxViews.is())
-        {
-            aViews = _rxViews->getElementNames();
-            pViews = aViews.getConstArray();
-        }
+        pTables = _rTables.getConstArray();
+        pViews = _rViews.getConstArray();
 
         ::rtl::OUString sCatalog, sSchema, sName;
         SvLBoxEntry* pCat = NULL;
         SvLBoxEntry* pSchema = NULL;
 
         // loop through both sequences
-        const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pTables + aTables.getLength() - 1 : NULL;
+        const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pTables + _rTables.getLength() - 1 : NULL;
 
-        sal_Int32 nOverallLen = aTables.getLength() + aViews.getLength();
+        sal_Int32 nOverallLen = _rTables.getLength() + _rViews.getLength();
         const ::rtl::OUString* pCurrentTable = pTables ? pTables : pViews;  // currently handled table or view name
         sal_Bool bIsView = pTables ? sal_True : sal_False;  // pCurrentTable points to a view name ?
         for (   sal_Int32 i = 0;
@@ -365,6 +423,9 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/26 14:55:04  oj
+ *  local strings for dll
+ *
  *  Revision 1.3  2000/10/13 16:02:21  fs
  *  typo in error message
  *
