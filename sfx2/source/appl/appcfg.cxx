@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 11:18:20 $
+ *  last change: $Author: os $ $Date: 2000-11-30 13:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_BASIC:        aValue = aPathCfg.GetBasicPath(); break;
                             case SvtPathOptions::PATH_BITMAP:       aValue = aPathCfg.GetBitmapPath(); break;
                             case SvtPathOptions::PATH_CONFIG:       aValue = aPathCfg.GetConfigPath(); break;
-                            case SvtPathOptions::PATH_DATABASE:     aValue = aPathCfg.GetDatabasePath(); break;
                             case SvtPathOptions::PATH_DICTIONARY:   aValue = aPathCfg.GetDictionaryPath(); break;
                             case SvtPathOptions::PATH_FAVORITES:    aValue = aPathCfg.GetFavoritesPath(); break;
                             case SvtPathOptions::PATH_FILTER:       aValue = aPathCfg.GetFilterPath(); break;
@@ -607,7 +606,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_STORAGE:      aValue = aPathCfg.GetStoragePath(); break;
                             case SvtPathOptions::PATH_TEMP:         aValue = aPathCfg.GetTempPath(); break;
                             case SvtPathOptions::PATH_TEMPLATE:     aValue = aPathCfg.GetTemplatePath(); break;
-                            case SvtPathOptions::PATH_TRASH:        aValue = aPathCfg.GetTrashPath(); break;
                             case SvtPathOptions::PATH_USERCONFIG:   aValue = aPathCfg.GetUserConfigPath(); break;
                             case SvtPathOptions::PATH_USERDICTIONARY: aValue = aPathCfg.GetUserDictionaryPath(); break;
                             case SvtPathOptions::PATH_WORK:         aValue = aPathCfg.GetWorkPath(); break;
@@ -1242,7 +1240,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
             case 55 :   aPathOptions.SetBasicPath( sValue );
                         break;
-            case 56 :   aPathOptions.SetDatabasePath( sValue );
+            case 56 :   //aPathOptions.SetDatabasePath( sValue );
                         break;
             case 57 :   aPathOptions.SetPalettePath( sValue );
                         break;
@@ -1268,7 +1266,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
             case 69 :   aPathOptions.SetAutoPilotPath( sValue );
                         break;
             case 70 :   break;  // EXPLORERPATH
-            case 71 :   aPathOptions.SetTrashPath( sValue );
+            case 71 :   //aPathOptions.SetTrashPath( sValue );
                         break;
             case 72 :   aPathOptions.SetStoragePath( sValue );
                         break;
