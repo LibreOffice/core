@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
     // einfuegen in das aktuelle Blatt
     if (!m_aCurLeaf.Is())
         return FALSE;
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_aRoot->PrintPage();
 #endif
 
