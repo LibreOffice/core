@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 16:50:26 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ italian ] = "Il formulario a cui appartiene il campo di controllo non è ancora (oppure del tutto) collegato a una sorgente dati.\n\nSelezionate una sorgente dati e una tabella .\n\nVi prghiamo di osservare  che le impostazioni scelte per il formulario in questa pagina verranno applicate dopo aver chiuso la pagina stessa.";
         Text[ danish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ swedish ] = "Formuläret som kontrollfältet tillhör är för närvarande ännu inte (eller inte fullständigt) knutet till en datakälla.\n\nVälj ut en datakälla och en tabell.\n\n\nObservera att inställningarna som du gör på den här sidan för formuläret får effekt direkt när du lämnar sidan.";
-        Text[ polish ] = "Formularz, który nale¿y do pola kontrolnego, nie jest na razie (lub nie jest ca³kowicie) pod³¹czony do ?ród³a danych.\n\nNale¿y wybraæ ?ród³o danych oraz tabelê.\n\n\nNale¿y uwzglêdniæ, ¿e ustawienia formularza dokonane na tej stronie, bêd¹ aktywne natychmiast od momentu opuszczenia strony.";
+        Text[ polish ] = "Formularz, który nale¿y do pola kontrolnego, nie jest na razie (lub nie jest ca³kowicie) pod³¹czony do Ÿród³a danych.\n\nNale¿y wybraæ Ÿród³o danych oraz tabelê.\n\n\nNale¿y uwzglêdniæ, ¿e ustawienia formularza dokonane na tej stronie, bêd¹ aktywne natychmiast od momentu opuszczenia strony.";
         Text[ portuguese_brazilian ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ japanese ] = "ºİÄÛ°Ù‚É‚ ‚éÌ«°Ñ‚ÍAŒ»“_‚Å‚Ü‚¾ÃŞ°À¿°½‚ÉÚ‘±‚³‚ê‚Ä‚¢‚È‚¢‚©AŠ®‘S‚ÉI‚í‚Á‚Ä‚¢‚È‚¢‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n\nÃŞ°À¿°½‚ÆÃ°ÌŞÙ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n\n‚Ü‚½A‚±‚ÌÍß°¼Ş‚ÅÌ«°Ñ‚Ìİ’è‚ğs‚¤‚ÆAÍß°¼Ş‚ğ•Â‚¶‚é‚Æ‚·‚®—LŒø‚É‚È‚è‚Ü‚·‚Ì‚ÅA‚²’ˆÓ‚­‚¾‚³‚¢B";
         Text[ korean ] = "ÄÁÆ®·Ñ ÇÊµå¿¡ ¼ÓÇØ ÀÖ´Â ¾ç½ÄÀº, ÇöÀç µ¥ÀÌÅÍ ¼Ò½º¿Í ¾ÆÁ÷ °ü·ÃµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù (¶Ç´Â ¿ÏÀüÈ÷ °ü·ÃµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù).\n\nµ¥ÀÌÅÍ ¼Ò½º¿Í Å×ÀÌºíÀ» ¼±ÅÃÇÏ½Ê½Ã¿À.\n\n\nÀÌ ÆäÀÌÁö¿¡¼­ »ı¼ºµÈ ¼¼ÆÃÀº, ÀÌ ÆäÀÌÁö¸¦ ºüÁ® ³ª°¡°Ô µÇ¸é Áï½Ã È¿·ÂÀ» ¹ß»ıÇÑ´Ù´Â Á¡¿¡ À¯ÀÇÇÏ½Ê½Ã¿À.";
@@ -148,7 +148,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ italian ] = "~Sorgente dati:";
         Text[ danish ] = "~Data source:";
         Text[ swedish ] = "~Datakälla:";
-        Text[ polish ] = "?ród³o danych:";
+        Text[ polish ] = "ród³o danych:";
         Text[ portuguese_brazilian ] = "~Data source:";
         Text[ japanese ] = "ÃŞ°À¿°½(~D):";
         Text[ korean ] = "~µ¥ÀÌÅÍ¼Ò½º:";
@@ -279,7 +279,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ italian ] = "Volete salvare il valore in un campo database ?";
         Text [ danish ] = "Vil du gemme værdien i et databasefelt?";
         Text [ swedish ] = "Vill du spara värdet i ett databasfält ?";
-        Text [ polish ] = "Czy zapisaæ warto?æ w polu bazy danych ?";
+        Text [ polish ] = "Czy zapisaæ wartoœæ w polu bazy danych ?";
         Text [ portuguese_brazilian ] = "M?hten Sie den Wert in einem Datenbankfeld speichern ?";
         Text [ japanese ] = "’l‚ğÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚µ‚Ü‚·‚©B";
         Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÅÌµ½Ò»¸öÊı¾İ¿â×Ö¶ÎÄÚ£¿";
@@ -287,7 +287,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáŞíãÉ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¿";
         Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld?";
         Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÅÌµ½Ò»¸öÊı¾İ¿â×Ö¶ÎÄÚ£¿";
-        Text [ greek ] = "Èİëåôå íá ãßíåé ç áğïèŞêåõóç ôçò ôéìŞò óå êÜğïéï ğåäßï âÜóçò äåäïìİíùí;";
+        Text [ greek ] = "Èİëåôå íá áğïèçêåõôåß ç ôéìŞ óå İíá ğåäßï âÜóçò äåäïìİíùí;";
         Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµåÀÇ °ªÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
         Text [ turkish ] = "Değeri bir veritabanı alanında kaydetmek istiyor musunuz?";
         Text[ catalan ] = "¿Desea guardar el valor en un campo de base de datos?";
@@ -350,7 +350,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ italian ] = "~No, salva il valore solo nel formulario.";
         Text [ danish ] = "Nej, jeg vil kun gemme værdien i formularen.";
         Text [ swedish ] = "~Nej, jag vill bara spara värdet i formuläret.";
-        Text [ polish ] = "Nie, zapisz warto?æ tylko w formularzu.";
+        Text [ polish ] = "Nie, zapisz wartoœæ tylko w formularzu.";
         Text [ portuguese_brazilian ] = "Nein, ich m?hte den Wert nur im Formular speichern.";
         Text [ japanese ] = "‚¢‚¢‚¦A’l‚ÍÌ«°Ñ‚É‚µ‚©•Û‘¶‚µ‚È‚¢(~N)";
         Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊıÖµ´æÈë±íµ¥(~N)¡£";
@@ -377,6 +377,25 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text = "Formular";
         Text [ english ] = "Form";
         Text [ english_us ] = "Form";
+        Text[ portuguese ] = "Formulário";
+        Text[ russian ] = "Ôîğìóëÿğ";
+        Text[ greek ] = "Form";
+        Text[ dutch ] = "Form";
+        Text[ french ] = "Formulaire";
+        Text[ spanish ] = "Formulario";
+        Text[ finnish ] = "Form";
+        Text[ italian ] = "Formulario";
+        Text[ danish ] = "Form";
+        Text[ swedish ] = "Formulär";
+        Text[ polish ] = "Formularz";
+        Text[ portuguese_brazilian ] = "Form";
+        Text[ japanese ] = "Ì«°Ñ";
+        Text[ korean ] = "Form";
+        Text[ chinese_simplified ] = "±íµ¥";
+        Text[ chinese_traditional ] = "ªí³æ";
+        Text[ turkish ] = "Form";
+        Text[ arabic ] = "Form";
+        Text[ catalan ] = "Form";
     };
     FixedText FT_FORMDATASOURCELABEL
     {
@@ -385,6 +404,25 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text = "Datenquelle" ;
         Text [ english ] = "Data Source" ;
         Text [ english_us ] = "Data source";
+        Text[ portuguese ] = "Fonte de dados";
+        Text[ russian ] = "Èñòî÷íèê äàííûõ";
+        Text[ greek ] = "Data source";
+        Text[ dutch ] = "Data source";
+        Text[ french ] = "Source de données";
+        Text[ spanish ] = "Fuente de datos";
+        Text[ finnish ] = "Data source";
+        Text[ italian ] = "Sorgente dati";
+        Text[ danish ] = "Data source";
+        Text[ swedish ] = "Datakälla";
+        Text[ polish ] = "ród³o danych";
+        Text[ portuguese_brazilian ] = "Data source";
+        Text[ japanese ] = "ÃŞ°À¿°½";
+        Text[ korean ] = "Data source";
+        Text[ chinese_simplified ] = "Êı¾İÔ´";
+        Text[ chinese_traditional ] = "¸ê®Æ·½";
+        Text[ turkish ] = "Data source";
+        Text[ arabic ] = "Data source";
+        Text[ catalan ] = "Data source";
     };
     FixedText FT_FORMDATASOURCE
     {
@@ -399,6 +437,25 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text = "Art des Inhaltes" ;
         Text [ English ] = "Content type" ;
         Text [ english_us ] = "Content type";
+        Text[ portuguese ] = "Tipo de conteúdo";
+        Text[ russian ] = "Òèï ñîäåğæèìîãî";
+        Text[ greek ] = "Content type";
+        Text[ dutch ] = "Content type";
+        Text[ french ] = "Type de contenu";
+        Text[ spanish ] = "Tipo de contenido";
+        Text[ finnish ] = "Content type";
+        Text[ italian ] = "Tipo di contenuto";
+        Text[ danish ] = "Content type";
+        Text[ swedish ] = "Typ av innehåll";
+        Text[ polish ] = "Rodzaj zawartoœci";
+        Text[ portuguese_brazilian ] = "Content type";
+        Text[ japanese ] = "“à—e‚Ìí—Ş";
+        Text[ korean ] = "Content type";
+        Text[ chinese_simplified ] = "ÄÚÈİÀàĞÍ";
+        Text[ chinese_traditional ] = "¤º®eÃş«¬";
+        Text[ turkish ] = "Content type";
+        Text[ arabic ] = "Content type";
+        Text[ catalan ] = "Content type";
     };
     FixedText FT_FORMCONTENTTYPE
     {
@@ -413,6 +470,25 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text = "Inhalt" ;
         Text [ english ] = "Content" ;
         Text [ english_us ] = "Content";
+        Text[ portuguese ] = "Conteúdo";
+        Text[ russian ] = "Ñîäåğæèìîå";
+        Text[ greek ] = "Content";
+        Text[ dutch ] = "Content";
+        Text[ french ] = "Contenu";
+        Text[ spanish ] = "Contenido";
+        Text[ finnish ] = "Content";
+        Text[ italian ] = "Contenuto";
+        Text[ danish ] = "Content";
+        Text[ swedish ] = "Innehåll";
+        Text[ polish ] = "Zawartoœæ";
+        Text[ portuguese_brazilian ] = "Content";
+        Text[ japanese ] = "“à—e";
+        Text[ korean ] = "Content";
+        Text[ chinese_simplified ] = "ÄÚÈİ";
+        Text[ chinese_traditional ] = "¤º®e";
+        Text[ turkish ] = "Content";
+        Text[ arabic ] = "Content";
+        Text[ catalan ] = "Content";
     };
     FixedText FT_FORMTABLE
     {
@@ -426,6 +502,25 @@ String RID_STR_TYPE_TABLE
     Text = "Tabelle";
     Text [ English ] = "Table";
     Text [ english_us ] = "Table";
+    Text[ portuguese ] = "Tabela";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ greek ] = "Table";
+    Text[ dutch ] = "Table";
+    Text[ french ] = "Table";
+    Text[ spanish ] = "Tabla";
+    Text[ finnish ] = "Table";
+    Text[ italian ] = "Tabella";
+    Text[ danish ] = "Table";
+    Text[ swedish ] = "Tabell";
+    Text[ polish ] = "Tabela";
+    Text[ portuguese_brazilian ] = "Table";
+    Text[ japanese ] = "Ã°ÌŞÙ";
+    Text[ korean ] = "Table";
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ turkish ] = "Table";
+    Text[ arabic ] = "Table";
+    Text[ catalan ] = "Table";
 };
 
 String RID_STR_TYPE_QUERY
@@ -433,6 +528,25 @@ String RID_STR_TYPE_QUERY
     Text = "Abfrage";
     Text [ English ] = "Query";
     Text [ english_us ] = "Query";
+    Text[ portuguese ] = "Consulta";
+    Text[ russian ] = "Çàïğîñ";
+    Text[ greek ] = "Query";
+    Text[ dutch ] = "Query";
+    Text[ french ] = "Requête";
+    Text[ spanish ] = "Consulta";
+    Text[ finnish ] = "Query";
+    Text[ italian ] = "Ricerca";
+    Text[ danish ] = "Query";
+    Text[ swedish ] = "Sökning";
+    Text[ polish ] = "Kwerenda";
+    Text[ portuguese_brazilian ] = "Query";
+    Text[ japanese ] = "¸´Ø°";
+    Text[ korean ] = "Query";
+    Text[ chinese_simplified ] = "²éÑ¯";
+    Text[ chinese_traditional ] = "¬d¸ß";
+    Text[ turkish ] = "Query";
+    Text[ arabic ] = "Query";
+    Text[ catalan ] = "Query";
 };
 
 String RID_STR_TYPE_COMMAND
@@ -440,11 +554,33 @@ String RID_STR_TYPE_COMMAND
     Text = "SQL-Befehl";
     Text [ English ] = "SQL command";
     Text [ english_us ] = "SQL command";
+    Text[ portuguese ] = "Comando SQL";
+    Text[ russian ] = "Êîìàíäà SQL";
+    Text[ greek ] = "SQL command";
+    Text[ dutch ] = "SQL command";
+    Text[ french ] = "Instruction SQL";
+    Text[ spanish ] = "Comando SQL";
+    Text[ finnish ] = "SQL command";
+    Text[ italian ] = "Comando SQL";
+    Text[ danish ] = "SQL command";
+    Text[ swedish ] = "SQL-kommando";
+    Text[ polish ] = "Polecenie SQL";
+    Text[ portuguese_brazilian ] = "SQL command";
+    Text[ japanese ] = "SQL ºÏİÄŞ";
+    Text[ korean ] = "SQL command";
+    Text[ chinese_simplified ] = "SQL ÃüÁî";
+    Text[ chinese_traditional ] = "SQL «ü¥O";
+    Text[ turkish ] = "SQL command";
+    Text[ arabic ] = "SQL command";
+    Text[ catalan ] = "SQL command";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/05/30 16:50:26  fs
+ *  #86714# new controls for displaying the form data source
+ *
  *  Revision 1.12  2001/05/17 07:42:30  kz
  *  Merge SRC632: 17.05.01 - 09:42:46 (NoBranch)
  *
@@ -484,4 +620,5 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
