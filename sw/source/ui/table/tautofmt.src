@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:53:56 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualizaciσn" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Τ¤ΚΣ";
+        Text[ chinese_simplified ] = "Τ¤ΐΐ";
         Text[ russian ] = "Οπξρμξςπ";
         Text[ polish ] = "PodglΉd";
         Text[ japanese ] = "ΜίΪΛή­°";
@@ -822,7 +822,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ japanese ] = "•s“KΨ‚Θ–Ό‘O‚ª“ό—Ν‚³‚κ‚ά‚µ‚½B\n‚±‚Μµ°ΔΜ«°Ο―Δ‚Ε‚Νμ¬‚Ε‚«‚ά‚Ή‚ρB\n•Κ‚Μ–Ό‘O‚π‘I‘π‚µ‚Δ‰Ί‚³‚ΆB";
         Text[ chinese_traditional ] = "±zΏι¤J¤F¤@­ΣµL®ΔªΊ¦WΊΩ΅C\nµLªk«Ψ¥ί¦Ϋ°Κ®ζ¦΅΅C\n½ΠΏι¤J¤@­Σ¦³®Δ¦WΊΩ΅C";
         Text[ arabic ] = "αήΟ ήγΚ ΘΕΟΞΗα ΗΣγ ΫνΡ ΥΗαΝ.\nαεΠΗ ΚΪΠΡ ΕδΤΗΑ ΗαΚδΣνή ΗαΚαήΗΖν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΓΞΡ.";
-        Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ ΑυτοΜορφή δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε ένα άλλο όνομα.";
+        Text[ greek ] = "Έχετε εισάγει ένα μη έγκυρο όνομα.\nΗ ΑυτοΜορφή δεν ήταν δυνατόν να δημιουργηθεί.\nΕπιλέξτε κάποιο άλλο όνομα.";
         Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΐΜΈ§ΐ» ΐΤ·ΒΗί½ΐ΄Ο΄Ω.\nΏδ±ΈµΘ ΐΪµΏ Ό­½ΔΐΊΈΈµιΎξ Αϊ ΌφΎψ½ΐ΄Ο΄Ω. \n΄ΩΈ¥ ΐΜΈ§ΐΈ·Ξ ΄Ω½Γ ½ΓµµΗΟ½Κ½ΓΏΐ..";
         Text[ turkish ] = "Geηersiz bir ad girdiniz.\nOtomatik format oluώturulamadύ.\nBaώka bir ad seηiniz.";
         Text[ language_user1 ] = " ";
