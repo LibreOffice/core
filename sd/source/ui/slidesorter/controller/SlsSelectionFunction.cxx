@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:17:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,8 @@ SelectionFunction::SelectionFunction (
       mbDragSelection(false),
       maInsertionMarkerBox(),
       mpSound(new Sound),
-      mpShowingEffectInfo(new ShowingEffectInfo (false))
+      mpShowingEffectInfo(new ShowingEffectInfo (false)),
+      mbProcessingMouseButtonDown(false)
 {
     //af    aDelayToScrollTimer.SetTimeout(50);
     aDragTimer.SetTimeoutHdl( LINK( this, SelectionFunction, DragSlideHdl ) );
@@ -211,6 +212,7 @@ BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
+    mbProcessingMouseButtonDown = true;
 
     pWindow->CaptureMouse();
 
@@ -257,8 +259,11 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
     {
         // Call ProcessMouseEvent() only when one of the buttons is
         // pressed. This prevents calling the method on every motion.
-        if (rEvent.GetButtons() != 0)
+        if (rEvent.GetButtons() != 0
+            && mbProcessingMouseButtonDown)
+        {
             ProcessMouseEvent (MOUSE_MOTION, rEvent);
+        }
     }
 
     return TRUE;
@@ -283,6 +288,7 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     //    mrController.GetView().EndEncirclement();
 
     mbPageHit = false;                // ab jetzt keine Seite mehr "am Haken"
+    mbProcessingMouseButtonDown = false;
     pWindow->ReleaseMouse();
 
     return TRUE;
