@@ -222,7 +222,7 @@
 <Day>
 <DayID>wed</DayID>
 <DefaultAbbrvName>me.</DefaultAbbrvName>
-<DefaultFullName>mÈrcores</DefaultFullName>
+<DefaultFullName>m√©rcores</DefaultFullName>
 </Day>
 <Day>
 <DayID>thu</DayID>
@@ -237,7 +237,7 @@
 <Day>
 <DayID>sat</DayID>
 <DefaultAbbrvName>sa.</DefaultAbbrvName>
-<DefaultFullName>s·bado</DefaultFullName>
+<DefaultFullName>s√°bado</DefaultFullName>
 </Day>
 </DaysOfWeek>
 <MonthsOfYear>
