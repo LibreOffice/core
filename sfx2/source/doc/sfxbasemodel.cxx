@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:35:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3142,18 +3142,47 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
 
         TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
         sal_Bool bRet = m_pData->m_pObjectShell->APISaveAs_Impl( sURL, aParams );
+
+        uno::Reference < task::XInteractionHandler > xHandler;
+        SFX_ITEMSET_ARG( aParams, pItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False);
+        if ( pItem )
+            pItem->GetValue() >>= xHandler;
+
         DELETEZ( aParams );
 
-        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
-                                                                    : ERRCODE_IO_CANTWRITE;
+        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetErrorCode();
+        if ( !bRet && !nErrCode )
+            nErrCode = ERRCODE_IO_CANTWRITE;
         m_pData->m_pObjectShell->ResetError();
 
         if ( bRet )
         {
-            m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+            if ( nErrCode )
+            {
+                // must be a warning - use Interactionhandler if possible or abandone
+                if ( xHandler.is() )
+                {
+                    ::com::sun::star::uno::Any aInteraction;
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
+                    ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+                    lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), UNOQUERY);
+
+                    ::com::sun::star::task::ErrorCodeRequest aErrorCode;
+                    aErrorCode.ErrCode = nErrCode;
+                    aInteraction <<= aErrorCode;
+
+                    ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), UNOQUERY);
+
+                    xHandler->handle(xRequest);
+                }
+            }
 
             if ( !bSaveTo )
+            {
+                m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
                 SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, m_pData->m_pObjectShell ) );
+            }
         }
         else
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
@@ -3207,8 +3236,8 @@ REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun
         if ( !pActFrame || pActFrame->GetObjectShell() != m_pData->m_pObjectShell )
             pActFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame));
 
-        if ( !pActFrame )
-            // currently no frame for this document at all
+        if ( !pActFrame || !pActFrame->GetViewShell() )
+            // currently no frame for this document at all or View is under construction
             return REFERENCE < XINDEXACCESS >();
 
         m_pData->m_contViewData = Reference < XINDEXACCESS >(
