@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2000-11-24 19:52:06 $
+ *  last change: $Author: er $ $Date: 2000-11-28 19:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,12 +474,13 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
         while ( i > 0 && sString.Search(sKeyword[i]) != 0 )
             i--;
         if ( i > NF_KEY_LASTOLDKEYWORD && sString != sKeyword[i] )
-        {   // maybe something else?
-            // e.g. new NNN is found in NNNN, NNNN must search on
+        {   // found something, but maybe it's something else?
+            // e.g. new NNN is found in NNNN, for NNNN we must search on
+            xub_StrLen nMatch = sKeyword[i].Len();
             short j = i - 1;
             while ( j > 0 && sString.Search(sKeyword[j]) != 0 )
                 j--;
-            if ( j )
+            if ( j && sKeyword[j].Len() > nMatch )
                 return j;
         }
     }
