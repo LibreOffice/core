@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-29 14:47:03 $
+ *  last change: $Author: tl $ $Date: 2002-04-09 08:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(
     FreeResource();
     pListBox->EnableMultiSelection( TRUE, TRUE );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
-    pListBox->GrabFocus();
 }
 
 
@@ -363,6 +362,12 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
 */
 
         pPopupWin->StartPopupMode( &rBox );
+
+        //! Focus has to be altered *after* StartPopupMode
+        //  It's probably better to overload 'GetFocus' but this would
+        //  be an incompatible fix right now.
+        pPopupWin->GetListBox().GrabFocus();    // needed for cursor-traveling
+
 //      pPopupWin->StartSelection();
     }
     return pPopupWin;
