@@ -2,9 +2,9 @@
  *
  *  $RCSfile: halfwidthToFullwidth.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:01:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,10 @@
 // prevent internal compiler error with MSVC6SP3
 #include <stl/utility>
 
+#include <i18nutil/widthfolding.hxx>
 #define TRANSLITERATION_halfwidthToFullwidth
 #include <transliteration_OneToOne.hxx>
-#include <widthfolding.hxx>
 
-using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
