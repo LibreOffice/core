@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -142,15 +148,18 @@ OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
                                  const OConfigurationTreeRoot& _rCommitLocation,
                                  ::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
-                                 const Reference< XConnection >& _xCon)
+                                 const Reference< XConnection >& _xCon,
+                                 IWarningsContainer* _pWarningsContainer)
     :OCollection(_rParent,_xCon->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,::std::vector< ::rtl::OUString>())
     ,m_bConstructed(sal_False)
     ,m_xConnection(_xCon)
     ,m_xMetaData(_xCon->getMetaData())
     ,m_aCommitLocation(_rCommitLocation)
     ,m_aTablesConfig(_rTablesConfig)
+    ,m_pWarningsContainer(_pWarningsContainer)
 {
     DBG_CTOR(OTableContainer, NULL);
+    m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
 }
 
 //------------------------------------------------------------------------------
@@ -345,32 +354,53 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
                 // dispose the tables result set, in case the connection can handle only one concurrent statement
                 // (the table object creation will need it's own statements)
                 disposeComponent(xTables);
-                for (sal_uInt16 i=0; i<aCatalogs.size(); ++i)
+
+                const ::rtl::OUString* pCatalogs = aCatalogs.begin();
+                const ::rtl::OUString* pSchemas = aSchemas.begin();
+                const ::rtl::OUString* pNames = aNames.begin();
+                const ::rtl::OUString* pTypes = aTypes.begin();
+                const ::rtl::OUString* pDescs = aDescs.begin();
+                const ::rtl::OUString* pComposedNames = aComposedNames.begin();
+
+                const ::rtl::OUString* pCatalogsEnd = aCatalogs.end();
+
+                for (; pCatalogs < pCatalogsEnd; ++pCatalogs, ++pSchemas, ++pNames, ++pTypes, ++pDescs, ++pComposedNames)
                 {
                     Reference<XNamed> xTable;
                     OConfigurationNode aTableConfig;
                     if(m_aTablesConfig.isValid())
                     {
-                        if(m_aTablesConfig.hasByName(aComposedNames[i]))
-                            aTableConfig = m_aTablesConfig.openNode(aComposedNames[i]);
+                        if(m_aTablesConfig.hasByName(*pComposedNames))
+                            aTableConfig = m_aTablesConfig.openNode(*pComposedNames);
                         else
                         {
-                            aTableConfig = m_aTablesConfig.createNode(aComposedNames[i]);
+                            aTableConfig = m_aTablesConfig.createNode(*pComposedNames);
                             m_aCommitLocation.commit();
                         }
                     }
                     try
                     {   // the ctor is allowed to throw an exception
-                        xTable = new ODBTable(aTableConfig,m_xMetaData, NULL,aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i]);
+                        xTable = new ODBTable(aTableConfig,m_xMetaData, NULL, *pCatalogs, *pSchemas, *pNames, *pTypes, *pDescs);
                     }
-                    catch(SQLException&)
+                    catch(SQLException& e)
                     {
+                        if (m_pWarningsContainer)
+                        {
+                            SQLContext aContext;
+                            String sMessage(::dba::ResourceManager::loadString(RID_STR_TRIED_OPEN_TABLE));
+                            composeTableName(m_xMetaData, *pCatalogs, *pSchemas, *pNames, sComposedName, sal_False);
+                            sMessage.SearchAndReplaceAscii("$name$", sComposedName);
+                            aContext.Message = sMessage;
+
+                            aContext.NextException <<= e;
+                            m_pWarningsContainer->appendWarning(aContext);
+                        }
                     }
                     if (xTable.is())
-                        m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(aComposedNames[i], xTable)).first);
+                        m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(*pComposedNames, xTable)).first);
                     else if(m_aTablesConfig.isValid())
                     {
-                        m_aTablesConfig.removeNode(aComposedNames[i]);
+                        m_aTablesConfig.removeNode(*pComposedNames);
                         m_aCommitLocation.commit();
                     }
 
