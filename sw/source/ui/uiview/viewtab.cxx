@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-07 11:35:34 $
+ *  last change: $Author: os $ $Date: 2002-05-22 10:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,10 +1303,19 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
                 else if( nFrmType & FRMTYPE_DRAWOBJ)
                     aRect = rSh.GetObjRect();
+
                 if( aRect.Width() )
                 {
-                    aLongLR.SetLeft ((long)(aRect.Left() - DOCUMENTBORDER));
-                    aLongLR.SetRight((long)(nPageWidth + DOCUMENTBORDER - aRect.Right()));
+                    if(bVerticalWriting)
+                    {
+                        aLongLR.SetLeft ((long)(aRect.Top() - DOCUMENTBORDER));
+                        aLongLR.SetRight((long)(nPageHeight + DOCUMENTBORDER - aRect.Bottom()));
+                    }
+                    else
+                    {
+                        aLongLR.SetLeft ((long)(aRect.Left() - DOCUMENTBORDER));
+                        aLongLR.SetRight((long)(nPageWidth + DOCUMENTBORDER - aRect.Right()));
+                    }
                 }
             }
             if( nWhich == SID_ATTR_LONG_LRSPACE )
@@ -1565,13 +1574,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         if(bVerticalWriting)
                         {
                             aColItem.SetLeft ((USHORT)(rRect.Top() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageHeight  - rRect.Bottom() -
+                            aColItem.SetRight((USHORT)(nPageHeight  - rRect.Bottom() +
                                                                         DOCUMENTBORDER ));
                         }
                         else
                         {
                             aColItem.SetLeft ((USHORT)(rRect.Left() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageWidth   - rRect.Right() -
+                            aColItem.SetRight((USHORT)(nPageWidth   - rRect.Right() +
                                                                         DOCUMENTBORDER ));
                         }
                         aColItem.SetOrtho(aColItem.CalcOrtho());
