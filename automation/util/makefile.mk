@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 12:08:42 $
+#   last change: $Author: obo $ $Date: 2004-09-09 17:24:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,8 +188,7 @@ APP1DEPN=\
 
 APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/cmdbasestream.obj \
-                $(OBJ)$/svcommstream.obj \
-                $(OBJ)$/smartid.obj
+                $(OBJ)$/svcommstream.obj
 
 # --- TESTTOOL MINIAPP ------------------------------------------------------
 # ressources are linked here
