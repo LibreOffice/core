@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:26:10 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -89,6 +90,11 @@ OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xPa
               :OComponentHelper(_rMutex)
               ,m_xParent(xParent)
 {
+}
+// -----------------------------------------------------------------------------
+OSubComponent::~OSubComponent()
+{
+    m_xParent = NULL;
 }
 
 // com::sun::star::lang::XTypeProvider
@@ -115,12 +121,12 @@ void OSubComponent::release() throw ( )
     Reference< XInterface > x( xDelegator );
     if (! x.is())
     {
-        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+        if (osl_decrementInterlockedCount( &m_refCount ) == 0 && m_refCount == 0 )
         {
+            OSL_ENSURE( m_refCount == 0, "OSubComponent::release: why the hell is this false!" );
             if (! rBHelper.bDisposed)
             {
                 Reference< XInterface > xHoldAlive( *this );
-
                 // remember the parent
                 Reference< XInterface > xParent;
                 {
@@ -128,6 +134,8 @@ void OSubComponent::release() throw ( )
                     xParent = m_xParent;
                     m_xParent = NULL;
                 }
+
+                OSL_ENSURE( m_refCount == 1, "OSubComponent::release: invalid ref count!" );
 
                 // First dispose
                 dispose();
@@ -164,11 +172,4 @@ Any OSubComponent::queryInterface( const Type & rType ) throw(RuntimeException)
     return aReturn;
 }
 
-//--------------------------------------------------------------------------
-void OSubComponent::disposing()
-{
-    OComponentHelper::disposing();
-    MutexGuard aGuard( rBHelper.rMutex );
-    m_xParent = NULL;
-}
 
