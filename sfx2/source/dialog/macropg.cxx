@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:48:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _RCID_H
-#include <vcl/rcid.h>
-#endif
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
