@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:50:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,5 +297,6 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ arabic ] = " ﬂ»Ì—/ ’€Ì—";
 };
  // ********************************************************************** EOF
+
 
 
