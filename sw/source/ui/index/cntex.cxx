@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:26:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
@@ -159,6 +163,7 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 #include <swuicnttab.hxx> //CHINA001
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -174,6 +179,12 @@ using namespace ::rtl;
 
 #define INDEX_SECTION_NAME String::CreateFromAscii( \
                             RTL_CONSTASCII_STRINGPARAM( "IndexSection_" ))
+
+#ifdef SW_PROP_NAME_STR
+#undef SW_PROP_NAME_STR
+#endif
+#define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
+
 /* -----------------04.11.99 11:28-------------------
 
  --------------------------------------------------*/
