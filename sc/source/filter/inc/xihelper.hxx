@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:41:45 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 
 #ifndef _MyEDITDATA_HXX
 #include <svx/editdata.hxx>
+#endif
+
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
 #endif
 
 #ifndef SC_XISTREAM_HXX
@@ -281,52 +285,48 @@ protected:
     StringPtr                   mpStr;      /// Cached value is a string.
     double                      mfValue;    /// Cached value is a double.
     ScTokenArrayPtr             mpTokArr;   /// Cached value is a formula or error code or Boolean.
+    sal_uInt8                   mnBoolErr;  /// Boolean value or Excel error code.
     sal_uInt8                   mnType;     /// The type of the cached value (EXC_CACHEDVAL_*).
-    sal_uInt16                  mnCol;      /// Column index of the cached cell.
-    sal_uInt16                  mnRow;      /// Row index of the cached cell.
 
 public:
     /** Creates a cached value and reads contents from stream and stores it with its array address. */
-                                XclImpCachedValue( XclImpStream& rStrm,
-                                    sal_uInt16 nCol,
-                                    sal_uInt16 nRow);
+    explicit                    XclImpCachedValue( XclImpStream& rStrm );
     virtual                     ~XclImpCachedValue();
 
     /** Returns the type of the cached value (EXC_CACHEDVAL_*). */
     inline sal_uInt8            GetType() const     { return mnType; }
-    /** Returns the cached string value, if this is a EXC_CACHEDVAL_STRING. */
-    inline const String*        GetString() const   { return mpStr.get(); }
-    /** Returns the cached double value if this is a EXC_CACHEDVAL_DOUBLE. */
+    /** Returns the cached string value, if this value is a string, else an empty string. */
+    inline const String&        GetString() const   { return mpStr.get() ? *mpStr : EMPTY_STRING; }
+    /** Returns the cached number, if this value has number type, else 0.0. */
     inline double               GetValue() const    { return mfValue; }
-    /** Returns the token array if this is a Boolean value or error value. */
-    inline const ScTokenArray*  GetTokArray() const { return mpTokArr.get(); }
-
-    inline sal_uInt16           GetCol() const    { return mnCol; }
-    inline sal_uInt16           GetRow() const    { return mnRow; }
+    /** Returns the cached Boolean value, if this value has Boolean type, else false. */
+    inline bool                 GetBool() const     { return (mnType == EXC_CACHEDVAL_BOOL) && (mnBoolErr != 0); }
+    /** Returns the cached Calc error code, if this value has Error type, else 0. */
+    USHORT                      GetError() const;
+    /** Returns the token array if this is a Boolean value or error value, else 0. */
+    inline const ScTokenArray*  GetBoolErrFmla() const { return mpTokArr.get(); }
 };
 
 
+// ----------------------------------------------------------------------------
+
+/** Contains cached values in a 2-dimensional array. */
 class XclImpCachedMatrix
 {
-protected:
-    typedef ScfDelList< XclImpCachedValue > XclImpValueList;
-
-    XclImpValueList             maValueList;     /// List of cached cell values.
-    sal_uInt16                  mnColumns;       /// Number of cached columns.
-    sal_uInt16                  mnRows;          /// Number of cached rows.
-
 public:
-    explicit                    XclImpCachedMatrix( sal_uInt16 nCols, sal_uInt16 nRows);
+    explicit                    XclImpCachedMatrix( XclImpStream& rStrm );
                                 ~XclImpCachedMatrix();
 
-    /** Copies the contents of our cached matrix into the ScMatrix. */
-    void                        FillMatrix(ScDocument &rDoc, ScMatrix *pMatrix) const ;
+    /** Creates a new ScMatrix object and fills it with the contained valöues. */
+    ScMatrixRef                 CreateScMatrix() const;
 
-    /** Stores the contents of an external referenced cell in the Value list. */
-    inline void                 AppendValue( XclImpCachedValue* pCachedValue ) { maValueList.Append( pCachedValue ); }
+private:
+    typedef ScfDelList< XclImpCachedValue > XclImpValueList;
 
-    inline sal_uInt16           GetColumns() const { return mnColumns; }
-    inline sal_uInt16           GetRows() const    { return mnRows; }
+    XclImpValueList             maValueList;    /// List of cached cell values.
+    USHORT                      mnScCols;       /// Number of cached columns.
+    USHORT                      mnScRows;       /// Number of cached rows.
+
 };
 
 // ============================================================================
