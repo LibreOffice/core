@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,8 @@ BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
     pChildWin(pCW),
-    bDataBaseMode(FALSE)
+    bDataBaseMode(FALSE),
+    pBindings(pB)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
     bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
@@ -529,3 +530,27 @@ void SwFldDlg::ActivateDatabasePage()
     RemoveTabPage(TP_FLD_REF);
     RemoveTabPage(TP_FLD_FUNC);
 }
+/*-- 07.10.2003 14:01:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwFldDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
+{
+    if( TP_FLD_DB == nId)
+    {
+        SfxDispatcher* pDispatch = pBindings->GetDispatcher();
+        SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
+        if(pViewFrame)
+        {
+            const TypeId aSwViewTypeId = TYPE(SwView);
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aSwViewTypeId );
+            while(pViewShell && pViewShell->GetViewFrame() != pViewFrame)
+            {
+                pViewShell = SfxViewShell::GetNext( *pViewShell, &aSwViewTypeId );
+            }
+            if(pViewShell)
+                static_cast<SwFldDBPage&>(rPage).SetWrtShell(static_cast<SwView*>(pViewShell)->GetWrtShell());
+        }
+    }
+}
+
+
