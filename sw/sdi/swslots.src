@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:57:33 $
+ *  last change: $Author: os $ $Date: 2002-05-03 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7176,35 +7176,6 @@ SfxSlotInfo FN_SORTING_DLG
     SlotName[ catalan ] = "Ordenar";
     SlotName[ finnish ] = "Lajittele";
     SlotName[ thai ] = "ΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡";
-};
-SfxSlotInfo FN_SOURCEVIEW
-{
-    SlotName = "HTML-Quelltext anzeigen";
-    SlotName [ english ] =  "HTML-Quelltext anzeigen";
-    SlotName[ english_us ] = "Show HTML Source";
-    SlotName[ portuguese ] = "Mostrar texto-fonte HTML";
-    SlotName[ russian ] = "Οξκΰηΰςό θρυξδνϋι ςεκρς HTML";
-    SlotName[ dutch ] = "HTML-brontekst weergeven";
-    SlotName[ french ] = "Afficher le texte source HTML";
-    SlotName[ spanish ] = "Mostrar texto fuente HTML";
-    SlotName[ italian ] = "Mostra testo sorgente HTML";
-    SlotName[ danish ] = "Vis HTML-kildetekst";
-    SlotName[ swedish ] = "Visa HTML-kδlltext";
-    SlotName[ polish ] = "PokaΏ tekst rσd³owy HTML";
-    SlotName[ portuguese_brazilian ] = "FileHtmlSourceText";
-    SlotName[ japanese ] = "HTML γ‚½γƒΌγ‚Ήγƒ†γ‚­γ‚Ήγƒγ®θ΅¨η¤Ί";
-    SlotName[ chinese_simplified ] = "ζΎη¤Ί HTML ζΊζ–‡ζ¬";
-    SlotName[ chinese_traditional ] = "ι΅―η¤Ί HTML-εε§‹ζª”";
-    SlotName[ arabic ] = "ΕΩεΗΡ γΥΟΡ HTML";
-    SlotName[ dutch ] = "HTML-brontekst weergeven";
-    SlotName[ chinese_simplified ] = "ζΎη¤Ί HTML ζΊζ–‡ζ¬";
-    SlotName[ greek ] = "Εμφάνιση κειμένου προέλευσης HTML";
-    SlotName[ korean ] = "HTML μ†μ¤ ν…μ¤νΈ ν‘μ‹";
-    SlotName[ turkish ] = "HTML kaynak kodunu gφrόntόle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Mostrar texto fuente HTML";
-    SlotName[ finnish ] = "Nδytδ HTML-lδhde";
-    SlotName[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΉΰΈ«ΰΈ¥ΰΉΰΈ‡ HTML ";
 };
 SfxSlotInfo FN_SPELLING_DLG
 {
