@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 13:39:58 $
+ *  last change: $Author: kr $ $Date: 2001-02-08 16:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,9 @@ static sal_uInt16 insertThreadId()
         pEntry->Handle = hThread;
 
         if ( LastIdent == 0 )
-            LastIdent +=1;
+            LastIdent =1;
+
+        ++ LastIdent;
 
         pEntry->Ident  = LastIdent;
 
