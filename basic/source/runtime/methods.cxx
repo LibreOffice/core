@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-13 16:30:21 $
+ *  last change: $Author: ab $ $Date: 2001-01-23 16:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <tools/isolang.hxx>
 
 #ifdef OS2
@@ -3373,14 +3374,19 @@ RTLFUNC(LoadPicture)
         return;
     }
 
-    SbxObjectRef xRef = new SbStdPicture;
+    String aFileURL = getFullPath( rPar.Get(1)->GetString() );
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_READ );
+    if( pStream != NULL )
+    {
+        Bitmap aBmp;
+        *pStream >> aBmp;
+        Graphic aGraphic( aBmp );
 
-    SvFileStream aIStream( rPar.Get(1)->GetString(), STREAM_READ );
-    Bitmap aBmp;
-    aIStream >> aBmp;
-    Graphic aGraphic( aBmp );
-    ((SbStdPicture*)(SbxObject*)xRef)->SetGraphic( aGraphic );
-    rPar.Get(0)->PutObject( xRef );
+        SbxObjectRef xRef = new SbStdPicture;
+        ((SbStdPicture*)(SbxObject*)xRef)->SetGraphic( aGraphic );
+        rPar.Get(0)->PutObject( xRef );
+    }
+    delete pStream;
 }
 
 RTLFUNC(SavePicture)
