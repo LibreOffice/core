@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include "autoform.hxx"
 #include "cellsuno.hxx"
@@ -749,6 +750,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,&getCppuType((sal_Int16*)0),           0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
@@ -7672,6 +7674,17 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
             BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             aFunc.SetTableVisible( nTab, bVis, TRUE );
         }
+        else if ( pMap->nWID == SC_WID_UNO_TABLAYOUT )
+        {
+            sal_Int16 nValue;
+            if (aValue >>= nValue)
+            {
+                if (nValue == com::sun::star::text::WritingMode2::RL_TB)
+                    aFunc.SetLayoutRTL(nTab, sal_True, sal_True);
+                else
+                    aFunc.SetLayoutRTL(nTab, sal_False, sal_True);
+            }
+        }
         else if ( pMap->nWID == SC_WID_UNO_AUTOPRINT )
         {
             BOOL bAutoPrint = ScUnoHelpFunctions::GetBoolFromAny( aValue );
@@ -7720,6 +7733,13 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
         {
             //  LinkDisplayName for hyperlink dialog
             rAny <<= getName();     // sheet name
+        }
+        else if ( pMap->nWID == SC_WID_UNO_TABLAYOUT )
+        {
+            if (pDoc->IsLayoutRTL(nTab))
+                rAny <<= sal_Int16(com::sun::star::text::WritingMode2::RL_TB);
+            else
+                rAny <<= sal_Int16(com::sun::star::text::WritingMode2::LR_TB);
         }
         else if ( pMap->nWID == SC_WID_UNO_AUTOPRINT )
         {
