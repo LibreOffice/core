@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertiesComposer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:05:52 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,7 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 // base classes
 import java.util.Vector;
 import java.util.StringTokenizer;
@@ -250,7 +249,7 @@ public class PropertiesComposer {
 
         if ( m_propValues.size() == 0 ) {
             m_propValues.add(
-                "new-" + m_contenturl.substring(
+                "renamed-" + m_contenturl.substring(
                     m_contenturl.lastIndexOf( "/" ) + 1 ) );
         }
     }
@@ -262,7 +261,7 @@ public class PropertiesComposer {
         System.out.println(
             "Usage   : PropertiesComposer -connect=socket,host=...,port=... -url=... -propNames=... -propValues=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data-<uniquepostfix> -propNames=Title -propValues=new-data-<uniquepostfix>" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/resource-<uniquepostfix> -propNames=Title -propValues=renamed-resource-<uniquepostfix>" );
         System.out.println(
             "\nExample : -propNames=Title;Foo -propValues=MyRenamedFile.txt;bar" );
     }
