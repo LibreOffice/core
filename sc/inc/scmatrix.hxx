@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:57:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 
 class SvStream;
 class ScInterpreter;
+class SvNumberFormatter;
 
 typedef BYTE ScMatValType;
 const ScMatValType SC_MATVAL_VALUE     = 0x00;
@@ -112,6 +113,10 @@ union ScMatrixValue
     it and returns and empty string if there is no string. Both GetDouble()
     methods don't check for a string, do this with IsNumeric() or IsString()
     or IsValue() first. <p>
+
+    The GetString( SvNumberFormatter&, ...) methods return the matrix element's
+    string if one is present, otherwise the numerical value is formatted as a
+    string, or in case of an error the error string is returned.
 
     PutDouble() does not reset an eventual string! Use
     PutDoubleAndResetString() if that is wanted. Also the FillDouble...()
@@ -240,6 +245,9 @@ public:
     const String& GetString( SCSIZE nC, SCSIZE nR) const;
     const String& GetString( SCSIZE nIndex) const
         { return pMat[nIndex].GetString(); }
+
+    String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
+    String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
