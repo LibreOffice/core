@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,7 +1295,7 @@ protected:
     USHORT nMax;        // Array-Groesse
 public:
     WW8Fonts( SvStream& rSt, WW8Fib& rFib );
-    ~WW8Fonts(){ if( pFontA ) __DELETE( nMax )pFontA; }
+    ~WW8Fonts(){ if( pFontA ) delete [] pFontA; }
     const WW8_FFN* GetFont( USHORT nNum ) const;
     USHORT GetMax() const { return nMax; }
 };
