@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.80 2002-10-11 09:10:23 cl Exp $
+	$Id: drawing.mod,v 1.81 2002-10-11 17:09:49 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -564,7 +564,6 @@
 <!ATTLIST draw:text-box fo:min-height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box %zindex;>
 <!ATTLIST draw:text-box %presentation-class; >
-<!ATTLIST draw:text-box %draw-transform; >
 <!ATTLIST draw:text-box draw:id %draw-shape-id;>
 <!ATTLIST draw:text-box draw:layer %layerName; #IMPLIED>
 <!ATTLIST draw:text-box draw:corner-radius %nonNegativeLength; #IMPLIED>
