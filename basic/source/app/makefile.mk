@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:51:09 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:29:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,4 +133,5 @@ LIB1OBJFILES = \
 
 .INCLUDE :  target.mk
 
+$(OBJ)$/dialogs.obj : $(INCCOM)$/_version.h
 
