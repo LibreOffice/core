@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=spreadsheet
+Type=MimeType
+Patterns=*.oos
+MimeType=application/x-vnd.oasis.openoffice.spreadsheet
+Comment=Open Office Spreadsheet
