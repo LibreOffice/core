@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-14 09:15:03 $
+ *  last change: $Author: fme $ $Date: 2001-08-17 11:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,9 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     // if the current character does not fit to the current line,
     // we check for possible hanging punctuation:
-    if ( nCutPos && nCutPos == rInf.GetIdx() )
+    const sal_Bool bAllowHanging = rInf.IsHanging() && ! rInf.IsMulti() &&
+                                   ! rPor.InFldGrp();
+    if ( nCutPos && nCutPos == rInf.GetIdx() && bAllowHanging )
     {
         ASSERT( rSI.ScriptType( nCutPos - 1 ), "Script is not between 1 and 4" );
 
@@ -304,8 +306,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                             GetForbiddenCharacters( aLang, TRUE ));
         LineBreakUserOptions aUserOpt(
                 aForbidden.beginLine, aForbidden.endLine,
-                rInf.HasForbiddenChars(), rInf.IsHanging() && !rInf.IsMulti(),
-                sal_False );
+                rInf.HasForbiddenChars(), bAllowHanging, sal_False );
         // determines first possible line break from nRightPos to
         // start index of current line
         LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
@@ -331,6 +332,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // found hyphenation position within line
             // nBreakPos is set to the hyphenation position
             xHyphWord = aResult.rHyphenatedWord;
+            nBreakPos += xHyphWord->getHyphenationPos() + 1;
 
 #ifdef DEBUG
             // e.g., Schif-fahrt, referes to our string
@@ -343,14 +345,17 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             const USHORT nHyphenPos = xHyphWord->getHyphenPos();
 #endif
 
-            nBreakPos += xHyphWord->getHyphenationPos() + 1;
+            // if not in interactive mode, we have to break behind a soft hyphen
+            if ( ! rInf.IsInterHyph() && rInf.GetIdx() )
+            {
+                const long nSoftHyphPos =
+                        xHyphWord->getWord().indexOf( CHAR_SOFTHYPHEN );
 
-            // Check, if break position is soft hyphen or if current position
-            // is behind a softhyphen. In both cases an underflow
-            // has to be triggered
-            if( nBreakPos > rInf.GetLineStart() &&
-                ( CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos ) ) )
-                nBreakPos = rInf.GetIdx() - 1;
+                if ( nSoftHyphPos >= 0 &&
+                     nBreakStart + nSoftHyphPos <= nBreakPos &&
+                     nBreakPos > rInf.GetLineStart() )
+                    nBreakPos = rInf.GetIdx() - 1;
+            }
 
             if( nBreakPos >= rInf.GetIdx() )
             {
@@ -361,12 +366,14 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
         else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
         {
+            ASSERT( nBreakPos != STRING_LEN, "we should have found a break pos" );
+
             // found break position within line
             xHyphWord = NULL;
 
             // check, if break position is soft hyphen and an underflow
             // has to be triggered
-            if( nBreakPos > rInf.GetLineStart() &&
+            if( nBreakPos > rInf.GetLineStart() && rInf.GetIdx() &&
                 CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
                 nBreakPos = rInf.GetIdx() - 1;
 

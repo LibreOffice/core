@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-29 08:07:29 $
+ *  last change: $Author: fme $ $Date: 2001-08-17 11:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
                 && ( !pPos->IsSoftHyphPortion()
                      || ((SwSoftHyphPortion*)pPos)->IsExpand() ) )
             {
+                nWrdStart += pPos->GetLen();
                 break;
             }
 
@@ -316,19 +317,22 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         {
             XubString aSelTxt( rInf.GetTxt().Copy(nWrdStart, nLen) );
             xub_StrLen nCnt = 0;
-            for( xub_StrLen i = 0; i < nLen; ++i )
-            {
-                sal_Unicode cCh = aSelTxt.GetChar(i);
-                if( (CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
-                     && rInf.HasHint( nWrdStart + i ) )
-                {
-                    aSelTxt.Erase( i , 1 );
-                    nCnt++;
-                    --nLen;
-                    if( i )
-                        --i;
-                }
-            }
+
+// these things should be handled by the dialog
+//            for( xub_StrLen i = 0; i < nLen; ++i )
+//            {
+//                sal_Unicode cCh = aSelTxt.GetChar(i);
+//                if( (CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
+//                     && rInf.HasHint( nWrdStart + i ) )
+//                {
+//                    aSelTxt.Erase( i , 1 );
+//                    nCnt++;
+//                    --nLen;
+//                    if( i )
+//                        --i;
+//                }
+//            }
+
             {
                 MSHORT nMinTrail = 0;
                 if( nWrdStart + nLen > nEnd )
