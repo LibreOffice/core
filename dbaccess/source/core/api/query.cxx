@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2001-01-04 14:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -115,6 +121,7 @@ DBG_NAME(OQuery_LINUX)
 //--------------------------------------------------------------------------
 OQuery_LINUX::OQuery_LINUX(const Reference< XPropertySet >& _rxCommandDefinition, const Reference< XConnection >& _rxConn)
     :OConfigurationFlushable(m_aMutex)
+    ,OQueryDescriptor(_rxCommandDefinition)
     ,m_bColumnsOutOfDate(sal_True)
     ,m_bCaseSensitiv(sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
@@ -168,9 +175,44 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeExce
     {
         m_aColumns.clearColumns();
 
-        // TODO
+        // fill the columns with columns from teh statement
+        try
+        {
+            Reference< XStatement > xStmt = m_xConnection->createStatement();
+            OSL_ENSURE(xStmt.is(),"No Statement created!");
+            if(xStmt.is())
+            {
+                Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
+                OSL_ENSURE(xRs.is(),"No Resultset created!");
+                if(xRs.is())
+                {
+                    Reference< XNameAccess > xColumns = xRs->getColumns();
+                    if(xColumns.is())
+                    {
+                        Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                        const ::rtl::OUString* pBegin = aNames.getConstArray();
+                        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+                        for(;pBegin != pEnd;++pBegin)
+                        {
+                            ODescriptorColumn* pColumn = new ODescriptorColumn(*pBegin);
+                            Reference<XPropertySet> xSet = pColumn;
+                            Reference<XPropertySet> xSource;
+                            xColumns->getByName(*pBegin) >>= xSource;
+                            ::comphelper::copyProperties(xSource,xSet);
+                            m_aColumns.append(*pBegin,pColumn);
+                        }
+                    }
+                    ::comphelper::disposeComponent(xRs);
+                }
+                ::comphelper::disposeComponent(xStmt);
+            }
 
-        m_bColumnsOutOfDate = sal_False;
+            m_bColumnsOutOfDate = sal_False;
+            m_aColumns.setInitialized();
+        }
+        catch(SQLException&)
+        {
+        }
     }
     return &m_aColumns;
 }
@@ -267,9 +309,10 @@ void SAL_CALL OQuery_LINUX::dispose()
 //--------------------------------------------------------------------------
 void OQuery_LINUX::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
 {
-    ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
+    OQueryDescriptor::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     ::rtl::OUString sAggPropName;
-    if (AGG_PROPERTY(_nHandle, sAggPropName))
+    sal_Int16 nAttr = 0;
+    if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle))
     {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
         m_eDoingCurrently = SETTING_PROPERTIES;
         OAutoActionReset(this);
