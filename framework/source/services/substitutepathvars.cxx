@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:18:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,11 +722,13 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
     m_aVarEnd( SIGN_ENDVARIABLE ),
     m_xServiceManager( xServiceManager )
 {
+    int i;
+
     SetPredefinedPathVariables( m_aPreDefVars );
     m_aImpl.GetSharePointsRules( m_aSubstVarMap );
 
     // Init the predefined/fixed variable to index hash map
-    for ( int i = 0; i < PREDEFVAR_COUNT; i++ )
+    for ( i = 0; i < PREDEFVAR_COUNT; i++ )
     {
         // Store variable name into struct of predefined/fixed variables
         m_aPreDefVars.m_FixedVarNames[i] = rtl::OUString::createFromAscii( aFixedVarTable[i].pVarName );
@@ -843,7 +845,7 @@ rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
 
 rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
 {
-    const PATH_EXTEND_FACTOR = 120;
+    const int PATH_EXTEND_FACTOR = 120;
 
     rtl::OUString aRetStr;
     const char*   pEnv = getenv( "PATH" );
