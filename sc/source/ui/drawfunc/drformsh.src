@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:05:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
                     Text[ czech ] = "Přenést do popředí";\
                     Text[ hebrew ] = "W~eiter nach vorn";\
                     Text[ hindi ] = "~आगे की ओर लाओ";\
+                    Text[ slovak ] = "Preniesť ~bližšie";\
                 };\
                 MenuItem\
                 {\
@@ -168,6 +169,7 @@
                     Text[ czech ] = "Přenést do pozadí";\
                     Text[ hebrew ] = "Weiter ~nach hinten";\
                     Text[ hindi ] = "~पीछे की ओर भेजो";\
+                    Text[ slovak ] = "P~reniesť ďalej";\
                 };\
                 MenuItem\
                 {\
@@ -198,6 +200,7 @@
         Text[ czech ] = "Uspořádat";\
         Text[ hebrew ] = "‮סידור‬";\
         Text[ hindi ] = "~क्रम में रखो";\
+        Text[ slovak ] = "Usporiad~ať";\
     };
 
 #define MN_ANCHORSUB \
@@ -246,6 +249,7 @@
                     Text[ czech ] = "Ke stránce";\
                     Text[ hebrew ] = "An der ~Seite";\
                     Text[ hindi ] = "पृ~ष्ठ केलिए";\
+                    Text[ slovak ] = "K stránk~e";\
                 };\
                 MenuItem\
                 {\
@@ -277,6 +281,7 @@
                     Text[ czech ] = "K buňce";\
                     Text[ hebrew ] = "An der ~Zelle";\
                     Text[ hindi ] = "~कोष्ठ केलिए";\
+                    Text[ slovak ] = "K ~bunke";\
                 };\
             };\
         };\
@@ -299,6 +304,7 @@
         Text[ czech ] = "Ukotvit";\
         Text[ hebrew ] = "~Verankerung";\
         Text[ hindi ] = "ऐ~न्कर";\
+        Text[ slovak ] = "~Ukotviť";\
     };
 
 #define MN_ALIGNSUB \
@@ -367,6 +373,7 @@
         Text[ czech ] = "Zarovnání";\
         Text[ hebrew ] = "Aus~richtung";\
         Text[ hindi ] = "पं~क्तिकरण";\
+        Text[ slovak ] = "~Zarovnanie";\
     };
 
 
@@ -406,6 +413,7 @@ String RID_OBJECTBAR_DRAWFORM
     Text[ czech ] = "Panel nástrojů Ovládací prvky";
     Text[ hebrew ] = "Kontrollfeldleiste";
     Text[ hindi ] = "औज़ार डन्डे का नियंत्रण";
+    Text[ slovak ] = "Panel ovládacích nástrojov";
 };
 
 ToolBox RID_OBJECTBAR_DRAWFORM
@@ -587,6 +595,7 @@ String RID_POPUP_DRAWFORM
     Text[ czech ] = "Rozbalovací menu pro prvky formuláře";
     Text[ hebrew ] = "Popup-Menü für Formularobjekte";
     Text[ hindi ] = "फ़ॉर्म वस्तुओं केलिए पाप्-अप् मेनु";
+    Text[ slovak ] = "Rozbaľovacie menu pre formuláre";
 };
  //
  //     Popup-Menue fuer (Uno-) Controls
@@ -611,6 +620,8 @@ Menu RID_POPUP_DRAWFORM
         ITEM_GROUP_MENU
     };
 };
+
+
 
 
 
