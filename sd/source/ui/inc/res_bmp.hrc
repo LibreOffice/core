@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:16:57 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@
 #define RID_DRAW_TEXTOBJ_POPUP              RID_APP_START+43
 #define RID_DRAW_GEOMOBJ_POPUP              RID_APP_START+44
 #define RID_DRAW_NOSEL_POPUP                RID_APP_START+45
-#define RID_SLIDETABLE_POPUP                RID_APP_START+46
+#define RID_SLIDE_SORTER_IMPRESS_SEL_POPUP  RID_APP_START+46
 #define RID_BEZIER_POPUP                    RID_APP_START+47
 #define RID_DRAW_LINEOBJ_POPUP              RID_APP_START+48
 #define RID_DRAW_MULTISELECTION_POPUP       RID_APP_START+49
@@ -483,7 +483,7 @@
 #define RID_DRAW_GRAPHIC_POPUP              RID_APP_START+52
 #define RID_DRAW_OLE2_POPUP                 RID_APP_START+53
 #define RID_DRAW_TEXTOBJ_INSIDE_POPUP       RID_APP_START+54
-#define RID_SLIDE_NOSEL_POPUP               RID_APP_START+55
+#define RID_SLIDE_SORTER_IMPRESS_NOSEL_POPUP RID_APP_START+55
 #define RID_OUTLINE_POPUP                   RID_APP_START+56
 #define RID_MASTERPAGE_POPUP                RID_APP_START+57
 #define RID_DRAW_GROUPOBJ_POPUP             RID_APP_START+58
@@ -518,6 +518,10 @@
 #define RID_GRAPHIC_CUSTOMSHAPE_POPUP       RID_APP_START+85
 #define RID_GRAPHIC_MEDIA_POPUP             RID_APP_START+86
 
+#define RID_SLIDE_SORTER_DRAW_SEL_POPUP     RID_APP_START+87
+#define RID_SLIDE_SORTER_DRAW_NOSEL_POPUP   RID_APP_START+88
+#define RID_SLIDE_SORTER_MASTER_SEL_POPUP   RID_APP_START+89
+#define RID_SLIDE_SORTER_MASTER_NOSEL_POPUP RID_APP_START+90
 /*
  * Pointer (Mauszeiger)
  */
