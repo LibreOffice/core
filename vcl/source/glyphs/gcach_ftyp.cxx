@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.65 $
- *  last change: $Author: obo $ $Date: 2001-11-28 11:11:15 $
+ *  $Revision: 1.66 $
+ *  last change: $Author: hdu $ $Date: 2001-11-29 17:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,7 +1301,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 class PolyArgs
 {
 public:
-                PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints, long nHeight );
+                PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints );
                 ~PolyArgs();
 
     void        AddPoint( long nX, long nY, PolyFlags);
@@ -1326,12 +1326,11 @@ private:
 
 // -----------------------------------------------------------------------
 
-PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints, long nHeight )
+PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints )
 :   mrPolyPoly(rPolyPoly),
     mnMaxPoints(nMaxPoints),
     mnPoints(0),
     mnPoly(0),
-    mnHeight(nHeight),
     bHasOffline(false)
 {
     mpPointAry  = new Point [ mnMaxPoints ];
@@ -1357,7 +1356,7 @@ void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
 
     maPosition.x = nX;
     maPosition.y = nY;
-    mpPointAry[ mnPoints ] = Point( (nX + 32) >> 6, mnHeight - ((nY + 32) >> 6) );
+    mpPointAry[ mnPoints ] = Point( nX, nY );
     mpFlagAry[ mnPoints++ ]= aFlag;
     bHasOffline |= (aFlag != POLY_NORMAL);
 }
@@ -1437,19 +1436,27 @@ static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vec
 
 bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
+    int nGlyphFlags;
+    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+
     FT_Int nLoadFlags = FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
-
-    FT_Glyph aGlyphFT;
-    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
-
-    if( aGlyphFT->format != ft_glyph_format_outline )
+    if( rc != FT_Err_Ok )
         return false;
 
-    FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>( aGlyphFT ) -> outline;
-    const long nMaxPoints = 1 + rOutline.n_points * 3;
-    const long nHeight = GetFontSelData().mnHeight;
-    PolyArgs aPolyArg( rPolyPoly, nMaxPoints, nHeight );
+    FT_Glyph pGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
+    if( rc != FT_Err_Ok )
+        return false;
+
+    if( pGlyphFT->format != ft_glyph_format_outline )
+        return false;
+
+    int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
+
+    FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline;
+    long nMaxPoints = 1 + rOutline.n_points * 3;
+    PolyArgs aPolyArg( rPolyPoly, nMaxPoints );
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;
@@ -1460,8 +1467,11 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     aFuncs.delta    = 0;
     rc = FT_Outline_Decompose( &rOutline, &aFuncs, (void*)&aPolyArg );
     aPolyArg.ClosePolygon();    // close last polygon
+    FT_Done_Glyph( pGlyphFT );
 
-    FT_Done_Glyph( aGlyphFT );
+    long nYOffset = maFaceFT->size->metrics.ascender;
+    rPolyPoly.Move( 0, -nYOffset );
+    rPolyPoly.Scale( +1.0/(1<<6), -1.0/(1<<6) );
 
     return true;
 }
