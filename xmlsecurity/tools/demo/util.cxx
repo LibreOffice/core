@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:30 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,21 @@
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
+
+::rtl::OUString printHexString(cssu::Sequence< sal_Int8 > data)
+{
+    int length = data.getLength();
+    ::rtl::OUString result;
+
+    char number[4];
+    for (int j=0; j<length; j++)
+    {
+        sprintf(number, "%02X ", (unsigned char)data[j]);
+        result += rtl::OUString::createFromAscii( number );
+    }
+
+    return result;
+}
 
 cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
     cssu::Reference< cssu::XComponentContext > &xContext,
@@ -189,17 +204,18 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
                     result += xCertPath[i]->getSubjectPublicKeyAlgorithm();
                     result += rtl::OUString::createFromAscii( "\n    Signature algorithm : " );
                     result += xCertPath[i]->getSignatureAlgorithm();
+
                     result += rtl::OUString::createFromAscii( "\n    Subject public key value : " );
-
                     cssu::Sequence< sal_Int8 > keyValue = xCertPath[i]->getSubjectPublicKeyValue();
-            int length = keyValue.getLength();
+                    result += printHexString(keyValue);
 
-            char number[64];
-                    for (int j=0; j<length; j++)
-                    {
-                        sprintf(number, "%02X ", (unsigned char)keyValue[j]);
-                        result += rtl::OUString::createFromAscii( number );
-                    }
+                    result += rtl::OUString::createFromAscii( "\n    Thumbprint (SHA1) : " );
+                    cssu::Sequence< sal_Int8 > SHA1Thumbprint = xCertPath[i]->getSHA1Thumbprint();
+                    result += printHexString(SHA1Thumbprint);
+
+                    result += rtl::OUString::createFromAscii( "\n    Thumbprint (MD5) : " );
+                    cssu::Sequence< sal_Int8 > MD5Thumbprint = xCertPath[i]->getMD5Thumbprint();
+                    result += printHexString(MD5Thumbprint);
 
                     result += rtl::OUString::createFromAscii( "\n  <<\n" );
         }

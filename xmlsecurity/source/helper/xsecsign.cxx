@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     {
         internalSignatureInfor.signatureInfor.ouSignatureId = createId();
         internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-        internalSignatureInfor.addReference(1, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+        internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
         size++;
     }
 
@@ -245,19 +245,19 @@ void XSecController::collectToSign( sal_Int32 securityId, const rtl::OUString& r
         if ( index == -1 )
         {
             InternalSignatureInformation isi(securityId, NULL);
-            isi.addReference(1, referenceId, nKeeperId );
+            isi.addReference(TYPE_SAMEDOCUMENT_REFERENCE, referenceId, nKeeperId );
             m_vInternalSignatureInformations.push_back( isi );
         }
         else
         {
-            m_vInternalSignatureInformations[index].addReference(1, referenceId, nKeeperId );
+            m_vInternalSignatureInformations[index].addReference(TYPE_SAMEDOCUMENT_REFERENCE, referenceId, nKeeperId );
         }
     }
 }
 
 void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool isBinary)
 {
-        sal_Int32 type = ((isBinary==sal_True)?2:3);
+        sal_Int32 type = ((isBinary==sal_True)?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
 
     int index = findSignatureInfor( securityId );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecverify.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,14 @@ void XSecController::addSignature()
 void XSecController::addReference( const rtl::OUString& ouUri)
 {
     InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
-    isi.addReference(1,ouUri, -1 );
+    isi.addReference(TYPE_SAMEDOCUMENT_REFERENCE,ouUri, -1 );
 }
 
 void XSecController::addStreamReference(
     const rtl::OUString& ouUri,
     bool isBinary )
 {
-        sal_Int32 type = (isBinary?2:3);
+        sal_Int32 type = (isBinary?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
 
     InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
 
@@ -199,7 +199,7 @@ void XSecController::setReferenceCount() const
 
         for(int i=0 ; i<refNum; ++i)
         {
-            if (refInfors[i].nType == 1 )
+            if (refInfors[i].nType == TYPE_SAMEDOCUMENT_REFERENCE )
             /*
              * same-document reference
              */

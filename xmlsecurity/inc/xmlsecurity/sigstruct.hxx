@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sigstruct.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,13 @@
 #define STATUS_CREATION_FAIL        2
 #define STATUS_VERIFY_SUCCEED       3
 #define STATUS_VERIFY_FAIL      4
+
+/*
+ * type of reference
+ */
+#define TYPE_SAMEDOCUMENT_REFERENCE 1
+#define TYPE_BINARYSTREAM_REFERENCE 2
+#define TYPE_XMLSTREAM_REFERENCE    3
 
 struct SignatureReferenceInformation
 {

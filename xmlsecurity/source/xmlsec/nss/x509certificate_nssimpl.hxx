@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:26 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,10 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
         virtual ::rtl::OUString SAL_CALL getSignatureAlgorithm()
             throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::rtl::OUString SAL_CALL getThumbprintAlgorithm()
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint()
             throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getThumbprint()
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint()
             throw ( ::com::sun::star::uno::RuntimeException) ;
         // MM : end
 

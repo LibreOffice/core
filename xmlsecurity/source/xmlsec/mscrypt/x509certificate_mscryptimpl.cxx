@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-14 10:28:28 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,27 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     return OUString() ;
 }
 
+::com::sun::star::uno::Sequence< sal_Int8 > getThumbprint(const CERT_CONTEXT* pCertContext, DWORD dwPropId)
+{
+    if( pCertContext != NULL )
+    {
+        DWORD cbData;
+        unsigned char fingerprint[20];
+        if (CertGetCertificateContextProperty(pCertContext, dwPropId, (void*)fingerprint, &cbData))
+        {
+            Sequence< sal_Int8 > thumbprint( cbData ) ;
+            for( unsigned int i = 0 ; i < cbData ; i ++ )
+            {
+                thumbprint[i] = fingerprint[i];
+            }
+
+            return thumbprint;
+        }
+    }
+
+    return NULL;
+}
+
 ::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -459,19 +480,16 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getThumbprintAlgorithm()
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSHA1Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
-    //MM : dummy
-    return OUString();
+    return getThumbprint(m_pCertContext, CERT_SHA1_HASH_PROP_ID);
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getThumbprint()
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getMD5Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
-    //MM : dummy
-    return NULL ;
+    return getThumbprint(m_pCertContext, CERT_MD5_HASH_PROP_ID);
 }
-
 // MM : end
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,7 +1018,7 @@ void XSecController::exportSignature(
                 const SignatureReferenceInformation& refInfor = vReferenceInfors[j];
 
                 pAttributeList = new SvXMLAttributeList();
-                if ( refInfor.nType != 1 )
+                if ( refInfor.nType != TYPE_SAMEDOCUMENT_REFERENCE )
                 /*
                  * stream reference
                  */
@@ -1040,7 +1040,7 @@ void XSecController::exportSignature(
                 xDocumentHandler->startElement( tag_Reference, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
                 {
                     /* Write Transforms element */
-                    if (refInfor.nType == 3)
+                    if (refInfor.nType == TYPE_XMLSTREAM_REFERENCE)
                     /*
                      * xml stream, so c14n transform is needed
                      */

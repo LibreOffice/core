@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multisigdemo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:30 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * creates signature
      */
-    bDone = aSignatureHelper.CreateAndWriteSignatue( xOutputStream );
+    bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
     if ( !bDone )
     {
         fprintf( stderr, "Error creating Signature!\n" );
@@ -216,7 +216,7 @@ int SAL_CALL main( int argc, char **argv )
     xLockBytes = new SvLockBytes( pStream, TRUE );
     xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
 
-    bDone = aSignatureHelper.ReadAndVerifySignatue( xInputStream );
+    bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
 
     if ( !bDone )
@@ -269,7 +269,7 @@ int SAL_CALL main( int argc, char **argv )
     xDocumentHandler = aSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
 
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[0]);
-    bDone = aSignatureHelper.CreateAndWriteSignatue( xDocumentHandler );
+    bDone = aSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
     aSignatureHelper.ExportSignature( xDocumentHandler, signatureInformations[1]);
     aSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
@@ -297,7 +297,7 @@ int SAL_CALL main( int argc, char **argv )
     xLockBytes = new SvLockBytes( pStream, TRUE );
     xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
 
-    bDone = aSignatureHelper.ReadAndVerifySignatue( xInputStream );
+    bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
 
     if ( !bDone )
@@ -328,7 +328,7 @@ int SAL_CALL main( int argc, char **argv )
     xLockBytes = new SvLockBytes( pStream, TRUE );
     xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
 
-    bDone = aSignatureHelper.ReadAndVerifySignatue( xInputStream );
+    bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();
 
     if ( !bDone )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:30 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ int SAL_CALL main( int argc, char **argv )
     /*
      * creates signature
      */
-    bool bDone = aSignatureHelper.CreateAndWriteSignatue( xOutputStream );
+    bool bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
 
     if ( !bDone )
     {

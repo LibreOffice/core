@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:26 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,9 @@
 #include "secder.h"
 
 //MM : added by MM
+#include "hasht.h"
 #include "secoid.h"
+#include "pk11func.h"
 //MM : end
 
 
@@ -374,6 +376,36 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     return rtl::OUString::createFromAscii( pDesc ) ;
 }
 
+::com::sun::star::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate *pCert, SECOidTag id)
+{
+    if( pCert != NULL )
+    {
+        unsigned char fingerprint[20];
+        char *fpStr = NULL;
+        SECItem fpItem;
+        int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
+
+        memset(fingerprint, 0, sizeof fingerprint);
+        PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
+        fpItem.data = fingerprint;
+        fpItem.len = length;
+        fpStr = CERT_Hexify(&fpItem, 1);
+
+        Sequence< sal_Int8 > thumbprint( length ) ;
+        for( int i = 0 ; i < length ; i ++ )
+        {
+            thumbprint[i] = fingerprint[i];
+        }
+
+        PORT_Free(fpStr);
+        return thumbprint;
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
 ::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -423,19 +455,16 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_NssImpl::getThumbprintAlgorithm()
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSHA1Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
-    //MM : dummy
-    return OUString();
+    return getThumbprint(m_pCert, SEC_OID_SHA1);
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getThumbprint()
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getMD5Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
-    //MM : dummy
-    return NULL ;
+    return getThumbprint(m_pCert, SEC_OID_MD5);
 }
-
 // MM : end
 
