@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.59 2004-02-26 15:45:56 kz Exp $
+	$Id: style.mod,v 1.60 2004-03-30 16:11:59 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -432,7 +432,7 @@
 <!ELEMENT style:handout-master (%shapes;)*>
 <!ATTLIST style:handout-master presentation:presentation-page-layout-name %styleName; #IMPLIED>
 <!ATTLIST style:handout-master style:page-master-name %styleName; #IMPLIED>
-
+<!ATTLIST style:handout-master draw:style-name %styleName; #IMPLIED>
 
 <!ENTITY % hd-ft-content "( %headerText; | (style:region-left?, style:region-center?, style:region-right?) )">
 <!ELEMENT style:header %hd-ft-content;>
