@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-22 11:53:20 $
+ *  last change: $Author: iha $ $Date: 2003-11-26 14:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,16 +426,17 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
                     uno::Sequence< uno::Reference< XDataSeriesTreeNode > > aZSlots( xYSlot->getChildren() );
                     for( sal_Int32 nZ = 0; nZ < aZSlots.getLength(); ++nZ )
                     {
-                        uno::Reference< XDataSeriesTreeParent > xZSlot( aZSlots[nZ], uno::UNO_QUERY );
-                        DBG_ASSERT( xZSlot.is(), "a node for the second dimension of a chart tree should always be a parent" );
-                        if(!xZSlot.is())
-                            continue;
-                        uno::Reference< XScaleGroup > xScaleGroup( xZSlot, uno::UNO_QUERY );
+                        uno::Reference< XScaleGroup > xScaleGroup( aZSlots[nZ], uno::UNO_QUERY );
+                        if(xScaleGroup.is())
                         {
                             double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
                             getCoordinateOrigin( fCoordinateOrigin, xScaleGroup->getCoordinateSystem() );
                             addCooSysToList(rVCooSysList,xScaleGroup->getCoordinateSystem(),fCoordinateOrigin);
                         }
+                        uno::Reference< XDataSeriesTreeParent > xZSlot( aZSlots[nZ], uno::UNO_QUERY );
+                        DBG_ASSERT( xZSlot.is(), "a node for the third dimension of a 3 dimensional chart tree should always be a parent" );
+                        if(!xZSlot.is())
+                            continue;
                         addSeriesToPlotter( xZSlot->getChildren(), apPlotter.get(), aYStackMode );
                     }
                 }
