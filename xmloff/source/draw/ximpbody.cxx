@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:08:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
@@ -119,6 +123,10 @@
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
+#endif
+
+#ifndef _XMLOFF_ANIMATIONIMPORT_HXX
+#include "animationimport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -320,6 +328,16 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
                         }
                     }
                 }
+            }
+        }
+        case XML_TOK_DRAWPAGE_PAR:
+        case XML_TOK_DRAWPAGE_SEQ:
+        {
+            if( GetSdImport().IsImpress() )
+            {
+                uno::Reference< animations::XAnimationNodeSupplier > xNodeSupplier(GetLocalShapesContext(), uno::UNO_QUERY);
+                if(xNodeSupplier.is())
+                    pContext = new xmloff::AnimationNodeContext( xNodeSupplier->getAnimationNode(), GetSdImport(), nPrefix, rLocalName, xAttrList );
             }
         }
     }
