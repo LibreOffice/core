@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-05 14:31:31 $
+ *  last change: $Author: cl $ $Date: 2001-02-09 10:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,10 +592,13 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
 /***********************************************************************
 * class SvxShapeControl                                                *
 ***********************************************************************/
+
+extern SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap();
+
 uno::Sequence< uno::Type > SvxShapeControl::maTypeSequence;
 
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
-    SvxShape( pObj )
+    SvxShape( pObj, ImplGetSvxControlShapePropertyMap() )
 {
 }
 
@@ -1181,7 +1184,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
 
         return uno::Any( &aRetval, ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
     }
-    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
     {
         if( pObj )
         {
