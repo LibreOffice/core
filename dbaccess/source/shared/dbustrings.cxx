@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 13:03:50 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 08:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,5 +62,19 @@
 
 namespace dbaui
 {
+
 #include "stringconstants.cxx"
+
+    //============================================================
+    //= URLs
+    //============================================================
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN, ".component:DB/QueryDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN, ".component:DB/TableDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN, ".component:DB/RelationDesign");
+
+    //============================================================
+    //= other
+    //============================================================
+    IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,  "QueryPreview");
+
 }
