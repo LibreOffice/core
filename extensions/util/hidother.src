@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:48:03 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,3 +287,11 @@ hidspecial HID_EVT_ROWCHANGE                    { HelpId = HID_EVT_ROWCHANGE; }
 hidspecial HID_EVT_RELOADING                    { HelpId = HID_EVT_RELOADING; }
 hidspecial HID_EVT_UNLOADING                    { HelpId = HID_EVT_UNLOADING; }
 hidspecial HID_EVT_ADJUSTMENTVALUECHANGED       { HelpId = HID_EVT_ADJUSTMENTVALUECHANGED; }
+
+hidspecial HID_PROP_TOGGLE                      { HelpId = HID_PROP_TOGGLE; }
+hidspecial HID_PROP_FOCUSONCLICK                { HelpId = HID_PROP_FOCUSONCLICK; }
+hidspecial HID_PROP_HIDEINACTIVESELECTION       { HelpId = HID_PROP_HIDEINACTIVESELECTION; }
+hidspecial HID_PROP_VISUALEFFECT                { HelpId = HID_PROP_VISUALEFFECT; }
+hidspecial HID_PROP_BORDERCOLOR                 { HelpId = HID_PROP_BORDERCOLOR; }
+hidspecial UID_PROP_DLG_BORDERCOLOR             { HelpId = UID_PROP_DLG_BORDERCOLOR; }
+hidspecial HID_PROP_IMAGEPOSITION               { HelpId = HID_PROP_IMAGEPOSITION; }
