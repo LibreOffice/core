@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RotationDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 12:44:05 $
+ *  last change: $Author: cl $ $Date: 2002-03-19 12:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ service RotationDescriptor
 
     /** This is the amount of shearing for this <type>Shape</type>.
      */
-    [property] long ShearAngle;
+    [optional, property] long ShearAngle;
 };
 
 //=============================================================================
@@ -93,6 +93,9 @@ service RotationDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/20 12:44:05  cl
+    #80337# removed the rotation points, theyre not working this way
+
     Revision 1.3  2000/11/08 12:42:42  mi
     moved from api
 
