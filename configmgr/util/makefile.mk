@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2000-11-07 14:48:09 $
+#   last change: $Author: pluby $ $Date: 2001-02-07 18:11:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
+.IF "$(OS)"=="MACOSX"
+SHL1VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
+.ELSE
 SHL1VERSIONMAP= $(TARGET).map
+.ENDIF
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
