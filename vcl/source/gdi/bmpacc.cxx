@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_BMPACC_CXX
-
-#ifdef W31
-#include <tools/svwin.h>
-#endif
-
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
@@ -86,9 +80,9 @@
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BOOL bModify ) :
             mpBuffer        ( NULL ),
             mpScanBuf       ( NULL ),
-            mbModify        ( bModify ),
             mFncGetPixel    ( NULL ),
-            mFncSetPixel    ( NULL )
+            mFncSetPixel    ( NULL ),
+            mbModify        ( bModify )
 {
     ImplCreate( rBitmap );
 }
@@ -98,9 +92,9 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BOOL bModify ) :
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
             mpBuffer        ( NULL ),
             mpScanBuf       ( NULL ),
-            mbModify        ( FALSE ),
             mFncGetPixel    ( NULL ),
-            mFncSetPixel    ( NULL )
+            mFncSetPixel    ( NULL ),
+            mbModify        ( FALSE )
 {
     ImplCreate( rBitmap );
 }
@@ -118,7 +112,7 @@ void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
 {
     ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
 
-    BMP_ASSERT( pImpBmp, "Forbidden Access to empty bitmap!" );
+    DBG_ASSERT( pImpBmp, "Forbidden Access to empty bitmap!" );
 
     if( pImpBmp )
     {
@@ -129,7 +123,7 @@ void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
         }
         else
         {
-            BMP_ASSERT( !mbModify || pImpBmp->ImplGetRefCount() == 2,
+            DBG_ASSERT( !mbModify || pImpBmp->ImplGetRefCount() == 2,
                         "Unpredictable results: bitmap is referenced more than once!" );
         }
 
@@ -312,8 +306,8 @@ void BitmapReadAccess::ReAccess( BOOL bModify )
 {
     const ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
 
-    BMP_ASSERT( !mpBuffer, "No ReAccess possible while bitmap is being accessed!" );
-    BMP_ASSERT( pImpBmp && ( pImpBmp->ImplGetRefCount() > 1UL ), "Accessed bitmap does not exist anymore!" );
+    DBG_ASSERT( !mpBuffer, "No ReAccess possible while bitmap is being accessed!" );
+    DBG_ASSERT( pImpBmp && ( pImpBmp->ImplGetRefCount() > 1UL ), "Accessed bitmap does not exist anymore!" );
 
     if( !mpBuffer && pImpBmp && ( pImpBmp->ImplGetRefCount() > 1UL ) )
     {
@@ -355,14 +349,14 @@ void BitmapWriteAccess::ImplInitDraw()
 
 void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
 {
-    BMP_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
-    BMP_ASSERT( nY < rReadAcc.Height(), "y-coordinate in source out of range!" );
-    BMP_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
+    DBG_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
+    DBG_ASSERT( nY < rReadAcc.Height(), "y-coordinate in source out of range!" );
+    DBG_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
 
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() >= rReadAcc.GetScanlineSize() ) )
     {
-        HMEMCPY( mpScanBuf[ nY ], rReadAcc.GetScanline( nY ), rReadAcc.GetScanlineSize() );
+        memcpy( mpScanBuf[ nY ], rReadAcc.GetScanline( nY ), rReadAcc.GetScanlineSize() );
     }
     else
         for( long nX = 0L, nWidth = Min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
@@ -376,8 +370,8 @@ void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
 {
     const ULONG nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
 
-    BMP_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
-    BMP_ASSERT( ( HasPalette() && nFormat <= BMP_FORMAT_8BIT_PAL ) ||
+    DBG_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
+    DBG_ASSERT( ( HasPalette() && nFormat <= BMP_FORMAT_8BIT_PAL ) ||
                 ( !HasPalette() && nFormat > BMP_FORMAT_8BIT_PAL ),
                 "No copying possible between palette and non palette scanlines!" );
 
@@ -386,10 +380,10 @@ void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
     if( nCount )
     {
         if( GetScanlineFormat() == BMP_SCANLINE_FORMAT( nSrcScanlineFormat ) )
-            HMEMCPY( mpScanBuf[ nY ], aSrcScanline, nCount );
+            memcpy( mpScanBuf[ nY ], aSrcScanline, nCount );
         else
         {
-            BMP_ASSERT( nFormat != BMP_FORMAT_8BIT_TC_MASK &&
+            DBG_ASSERT( nFormat != BMP_FORMAT_8BIT_TC_MASK &&
                         nFormat != BMP_FORMAT_16BIT_TC_MSB_MASK && nFormat != BMP_FORMAT_16BIT_TC_LSB_MASK &&
                         nFormat != BMP_FORMAT_24BIT_TC_MASK && nFormat != BMP_FORMAT_32BIT_TC_MASK,
                         "No support for pixel formats with color masks yet!" );
@@ -436,7 +430,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
 
 void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
 {
-    BMP_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
+    DBG_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
 
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
@@ -444,7 +438,7 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
         const long  nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() );
         const ULONG nCount = nHeight * mpBuffer->mnScanlineSize;
 
-        HMEMCPY( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
+        memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }
     else
         for( long nY = 0L, nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
