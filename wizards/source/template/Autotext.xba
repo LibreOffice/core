@@ -88,6 +88,10 @@ Sub	CreateUserDatafield(oCursor, sFoundContent as String)
 	Dim MaxIndex as Integer
 	Dim sTextFieldNotDefined as String
 	Dim sFoundList(3)
+	Dim oUserfield as Object
+	Dim UserInfo as String
+	Dim UserIndex as Integer
+	
 	oUserfield = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent,&quot;:&quot;,MaxIndex)
 	UserInfo = UCase(LTrim(sFoundList(1)))
@@ -108,19 +112,23 @@ End Sub
 &apos; Creates a Bullet by setting a soft Formatation on the first unsorted List-Templates with a defined
 &apos; Bullet Id
 Sub	CreateBullet(oCursor, oStyles as Object)
-Dim n, m, s as Integer
+	Dim n, m, s as Integer
+	Dim StyleSet as Boolean
+	Dim ostyle as Object
+	Dim StyleName as String
+	Dim alevel()
 	StyleSet = False
 	For s = 0 To Ubound(BulletList())
 		For n = 0 To oStyles.Count - 1
 			ostyle = oStyles.getbyindex(n)
-			oStyleName = oStyle.Name
+			StyleName = oStyle.Name
 			alevel() = ostyle.NumberingRules.getbyindex(0)
 			&apos; The properties of the style are stored in a Name-Value-Array()
 			For m = 0 to Ubound(alevel())
 				&apos; Set the first Numbering template without a bulletID
 				If (aLevel(m).Name = &quot;BulletId&quot;) Then
 					If alevel(m).Value = BulletList(s) Then
-						oCursor.NumberingStyle = oStyle.Name
+						oCursor.NumberingStyle = StyleName
 						oCursor.SetString(&quot;&quot;)
 						exit Sub
 					End if
