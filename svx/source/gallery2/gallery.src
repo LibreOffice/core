@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-17 11:13:49 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Text[ chinese_traditional ] = "µe´Y";
     Text[ turkish ] = "Gallery";
     Text[ arabic ] = "ÇáÌÇáíÑí";
+    Text[ catalan ] = "Gallery";
 };
 
 
@@ -172,6 +173,7 @@ TabDialog RID_SVXTABDLG_GALLERY
                 Text[ korean ] = "ÀÏ¹Ý";
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "General";
             };
         };
     };
@@ -187,6 +189,7 @@ TabDialog RID_SVXTABDLG_GALLERY
     Text[ korean ] = "µî·ÏÁ¤º¸ ";
     Text[ turkish ] = "Özellikler: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades de ";
 };
 
 /******************************************************************************/
@@ -238,6 +241,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ korean ] = "ÀÏ¹Ý";
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "General";
             };
             PageItem
             {
@@ -265,6 +269,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ korean ] = "ÆÄÀÏ";
                 Text[ turkish ] = "Dosyalar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Archivos";
             };
         };
     };
@@ -280,6 +285,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     Text[ korean ] = "µî·ÏÁ¤º¸ ";
     Text[ turkish ] = "Özellikler: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades de ";
 };
 
 /******************************************************************************/
@@ -333,6 +339,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "À¯Çü:";
         Text[ turkish ] = "Tip:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo:";
     };
     FixedText FT_MS_SHOW_TYPE
     {
@@ -367,6 +374,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "Àå¼Ò:";
         Text[ turkish ] = "Yer:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ubicación:";
     };
     FixedText FT_MS_SHOW_PATH
     {
@@ -401,6 +409,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "³»¿ë:";
         Text[ turkish ] = "Ýçerik:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contenido:";
     };
     FixedText FT_MS_SHOW_CONTENT
     {
@@ -440,6 +449,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "ÀÛ¼ºÀÏÀÚ:";
         Text[ turkish ] = "Oluþturma tarihi:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Creado el:";
     };
     FixedText FT_MS_SHOW_CREATEDATE
     {
@@ -476,6 +486,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ korean ] = "º¯°æÀÏÀÚ:";
         Text[ turkish ] = "Deðiþiklik tarihi:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificado el:";
     };
     FixedText FT_MS_SHOW_CHANGEDATE
     {
@@ -519,6 +530,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "ÆÄÀÏ  À¯Çü";
         Text[ turkish ] = "Dosya tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo de archivo";
     };
     ComboBox CBB_FILETYPE
     {
@@ -564,6 +576,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "ÆÄÀÏ Ã£±â(~F)...";
         Text[ turkish ] = "Dosyayý bul";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Bus~car archivos...";
     };
     PushButton BTN_TAKE
     {
@@ -595,6 +608,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     PushButton BTN_TAKEALL
     {
@@ -626,6 +640,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "¸ðµÎ Ãß°¡(~D)";
         Text[ turkish ] = "Tümünü ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Añadir ~todos";
     };
     CheckBox CBX_PREVIEW
     {
@@ -656,6 +671,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "¹Ì¸®º¸±â(~E)";
         Text[ turkish ] = "Ön izleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pr~evisualización";
     };
     Window WND_BRSPRV
     {
@@ -691,6 +707,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "Maddin1";
         Text[ turkish ] = "Maddin1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Maddin1";
     };
     PushButton BTN_MADDIN2
     {
@@ -720,6 +737,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ korean ] = "Maddin2";
         Text[ turkish ] = "Maddin2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Maddin2";
     };
 };
 
@@ -781,6 +799,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         Text[ chinese_traditional ] = "¼ÐÃD";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ turkish ] = "Baþlýk";
+        Text[ catalan ] = "Título";
     };
     Edit EDT_TITLE
     {
@@ -805,6 +824,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Text[ chinese_traditional ] = "Áä¤J¼ÐÃD";
     Text[ arabic ] = "ÅÏÎÇá ÇáÚäæÇä";
     Text[ turkish ] = "Baþlýk gir";
+    Text[ catalan ] = "Introducir título";
 };
 
 /******************************************************************************/
@@ -846,6 +866,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ korean ] = "µð·ºÅä¸®";
         Text[ turkish ] = "Dizin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Directorio";
     };
     FixedText FT_SEARCH_DIR
     {
@@ -885,6 +906,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ korean ] = "ÆÄÀÏ  À¯Çü";
         Text[ turkish ] = "Dosya tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo de archivo";
     };
     FixedText FT_SEARCH_TYPE
     {
@@ -912,6 +934,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text[ korean ] = "Ã£±â";
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Buscar";
 };
 
 /******************************************************************************/
@@ -955,6 +978,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Archivo";
     };
     FixedText FT_TAKE_FILE
     {
@@ -988,6 +1012,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text[ korean ] = "Àû¿ë";
     Text[ turkish ] = "Kullan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Aplicar";
 };
 
 /******************************************************************************/
@@ -1030,6 +1055,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Archivo";
     };
     FixedText FT_ACTUALIZE_FILE
     {
@@ -1062,6 +1088,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
     Text[ korean ] = "¾÷µ¥ÀÌÆ®";
     Text[ turkish ] = "Güncelle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Actualizar";
 };
 
 ModalDialog RID_SVXDLG_GALLERY_THEMEID
@@ -1114,6 +1141,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ korean ] = "ID";
         Text[ turkish ] = "Tanýtýcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "ID";
     };
     ListBox LB_RESNAME
     {
@@ -1145,6 +1173,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ korean ] = "ÁÖÁ¦- ID";
     Text[ turkish ] = "Konu tanýtýcýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Temas ID";
 };
 
 /******************************************************************************/
@@ -1177,6 +1206,7 @@ CheckBox RID_SVXDLG_GALLERY_CBX
     Text[ korean ] = "¼­ºêµð·ºÅä¸®(~S)";
     Text[ turkish ] = "Alt dizinler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Subdirectorios";
 };
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
@@ -1203,6 +1233,7 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
     Text[ korean ] = "¾÷µ¥ÀÌÆ®";
     Text[ turkish ] = "Güncelle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Actualizar";
 };
 String RID_SVXSTR_GALLERY_FOPENERROR
 {
@@ -1231,6 +1262,7 @@ String RID_SVXSTR_GALLERY_FOPENERROR
     Text[ korean ] = "ÀÌ ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù";
     Text[ turkish ] = "Bu dosya açýlamýyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se puede abrir este archivo";
 };
 String RID_SVXSTR_GALLERY_NOFILES
 {
@@ -1257,6 +1289,7 @@ String RID_SVXSTR_GALLERY_NOFILES
     Text[ korean ] = "<ÆÄÀÏ ¾øÀ½>";
     Text[ turkish ] = "<Dosya yok>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<Ningún archivo>";
 };
 String RID_SVXSTR_GALLERY_NOTHEME
 {
@@ -1285,6 +1318,7 @@ String RID_SVXSTR_GALLERY_NOTHEME
     Text[ korean ] = "ÁÖÁ¦ ÀÌ¸§ÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù!";
     Text[ turkish ] = "Bu konu adý geçerli deðil!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡El nombre del tema no es válido!";
 };
 String RID_SVXSTR_GALLERY_DELETEOBJ
 {
@@ -1313,6 +1347,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ korean ] = "ÀÌ °³Ã¼¸¦\n Á¤¸» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu nesneyi gerçekten\nsilmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente\neliminar este objeto?";
 };
 String RID_SVXSTR_GALLERY_DELETETHEME
 {
@@ -1336,6 +1371,7 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text[ chinese_traditional ] = "±z¯uªº­n§R°£³o­Ó¥DÃD¡H";
     Text[ turkish ] = "Do you really want to\ndelete this theme?";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáÝÚá\n ÍÐÝ åÐÇ ÇáãæÖæÚ¿";
+    Text[ catalan ] = "¿Desea realmente eliminar\neste tema?";
 };
 String RID_SVXSTR_EXTFORMAT1_SYS
 {
@@ -1366,6 +1402,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text[ korean ] = "¿þÀÌºê-»ç¿îµå ÆÄÀÏ";
     Text[ turkish ] = "Wave - Ses dosyasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Wave - archivo de sonido";
 };
 String RID_SVXSTR_EXTFORMAT2_SYS
 {
@@ -1396,6 +1433,7 @@ String RID_SVXSTR_EXTFORMAT2_UI
     Text[ korean ] = "¿Àµð¿À ±³È¯ ÆÄÀÏ ¼­½Ä";
     Text[ turkish ] = "Audio Interchange dosya formatý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato de archivo Audio Interchange";
 };
 String RID_SVXSTR_EXTFORMAT3_SYS
 {
@@ -1423,6 +1461,7 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text[ chinese_traditional ] = "AU - Án­µÀÉ®×";
     Text[ arabic ] = "ãáÝ ÕæÊí -AU ";
     Text[ turkish ] = "AU - Ses dosyasý";
+    Text[ catalan ] = "Archivo audio AU";
 };
 String RID_SVXSTR_GALLERY_FILTER
 {
@@ -1449,6 +1488,7 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ";
     Text[ turkish ] = "Grafik filtresi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtro de imagen";
 };
 String RID_SVXSTR_GALLERY_LENGTH
 {
@@ -1477,6 +1517,7 @@ String RID_SVXSTR_GALLERY_LENGTH
     Text[ korean ] = "±æÀÌ:";
     Text[ turkish ] = "Uzunluk:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Longitud:";
 };
 String RID_SVXSTR_GALLERY_SIZE
 {
@@ -1505,6 +1546,7 @@ String RID_SVXSTR_GALLERY_SIZE
     Text[ korean ] = "Å©±â:";
     Text[ turkish ] = "Büyüklük:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño:";
 };
 String RID_SVXSTR_GALLERY_DELETEDD
 {
@@ -1533,6 +1575,7 @@ String RID_SVXSTR_GALLERY_DELETEDD
     Text[ korean ] = "¸µÅ©µÈ ÆÄÀÏÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Baðlantý oluþturduðunuz dosyayý silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea eliminar el archivo enlazado?";
 };
 String RID_SVXSTR_GALLERY_SEARCH
 {
@@ -1561,6 +1604,7 @@ String RID_SVXSTR_GALLERY_SEARCH
     Text[ korean ] = "ÆÄÀÏ¸ñ·ÏÀ» ¾÷µ¥ÀÌÆ®ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Dosya listesini güncellemek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea actualizar la lista de archivos?";
 };
 String RID_SVXSTR_GALLERY_SGIERROR
 {
@@ -1589,6 +1633,7 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text[ korean ] = "ÀÌ ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù. \n´Ù¸¥ °Ë»ö°æ·Î¸¦ ÀÔ·ÂÇÏ½Ã°Ú½À´Ï±î? ";
     Text[ turkish ] = "Bu dosya açýlamýyor.\nBaþka bir veri yolu girmek istiyor musunuz? ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se puede abrir este archivo.\n¿Desea indicar otra ruta de búsqueda? ";
 };
 String RID_SVXSTR_GALLERY_NEWTHEME
 {
@@ -1615,6 +1660,7 @@ String RID_SVXSTR_GALLERY_NEWTHEME
     Text[ korean ] = "»õ ÁÖÁ¦";
     Text[ turkish ] = "Yeni konu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nuevo Tema";
 };
 String RID_SVXSTR_GALLERY_BROWSER
 {
@@ -1641,6 +1687,7 @@ String RID_SVXSTR_GALLERY_BROWSER
     Text[ korean ] = "°ü¸®(~O)...";
     Text[ turkish ] = "Yönet...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Administración...";
 };
 String RID_SVXSTR_GALLERY_THEMEERR
 {
@@ -1669,6 +1716,7 @@ String RID_SVXSTR_GALLERY_THEMEERR
     Text[ korean ] = "ÀÌ ÁÖÁ¦ ÀÌ¸§Àº ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bu konu adý mevcut durumda.\nBaþka bir ad seçin.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Este nombre de tema ya existe.\nPor favor elija otro nombre.";
 };
 String RID_SVXSTR_GALLERYPROPS_THEME
 {
@@ -1695,6 +1743,7 @@ String RID_SVXSTR_GALLERYPROPS_THEME
     Text[ korean ] = "ÁÖÁ¦;ÁÖÁ¦µé";
     Text[ turkish ] = "Konu;Konular";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tema;Temas";
 };
 String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
@@ -1721,6 +1770,7 @@ String RID_SVXSTR_GALLERYPROPS_OBJECT
     Text[ korean ] = "°³Ã¼ ; °³Ã¼µé";
     Text[ turkish ] = "Nesne;Nesneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto;Objetos";
 };
 String RID_SVXSTR_GALLERYPROPS_GALTHEME
 {
@@ -1747,6 +1797,7 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text[ korean ] = "°¶·¯¸® ÁÖÁ¦";
     Text[ turkish ] = "Galleri konusu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tema Gallery";
 };
 String RID_SVXSTR_GALLERY_IMPORTTHEME
 {
@@ -1773,6 +1824,7 @@ String RID_SVXSTR_GALLERY_IMPORTTHEME
     Text[ korean ] = "°¡Á®¿À±â(~M)...";
     Text[ turkish ] = "Ýç~e aktar...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Im~portar...";
 };
 String RID_SVXSTR_GALLERY_CREATETHEME
 {
@@ -1799,6 +1851,7 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text[ korean ] = "»õ ÁÖÁ¦...";
     Text[ turkish ] = "Yeni konu...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nuevo tema...";
 };
 
 String RID_SVXSTR_GALLERY_READONLY
@@ -1828,6 +1881,7 @@ String RID_SVXSTR_GALLERY_READONLY
     Text[ korean ] = " (ÀÐ±â Àü¿ë)";
     Text[ turkish ] = "(Salt okunur)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = " (solo lectura)";
 };
 
 String RID_SVXSTR_GALLERY_ALLFILES
@@ -1855,6 +1909,7 @@ String RID_SVXSTR_GALLERY_ALLFILES
     Text[ korean ] = "<¸ðµç ÆÄÀÏ>";
     Text[ turkish ] = "<Tüm dosyalar>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<Todos los archivos>";
 };
 
 String RID_SVXSTR_GALLERY_DIALOGID
@@ -1882,6 +1937,7 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ korean ] = "ID ÇÒ´ç";
     Text[ turkish ] = "Tanýtýcý ata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Asignar ID";
 };
 
 String RID_SVXSTR_GALLERY_ID_EXISTS
@@ -1909,6 +1965,7 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text[ korean ] = "ÀÌ ID´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù ...";
     Text[ turkish ] = "Bu tanýtýcý mevcut durumda...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Esta ID ya existe...";
 };
 
 /******************************************************************************/
@@ -2031,6 +2088,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "¾÷µ¥ÀÌÆ®";
             Text[ turkish ] = "Güncelle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Actuali~zar";
         };
         MenuItem
         {
@@ -2061,6 +2119,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ arabic ] = "ÍÐÝ";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar";
         };
         MenuItem
         {
@@ -2089,6 +2148,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
             Text[ turkish ] = "Ye~niden adlandýr";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Cambiar nombre";
         };
         MenuItem
         {
@@ -2120,6 +2180,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "~ID ÇÒ´ç";
             Text[ turkish ] = "Tanýtýcý ata";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Asignar ~ID";
         };
         MenuItem
         {
@@ -2152,6 +2213,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
             Text[ turkish ] = "~Özellikler ...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Prop~iedades...";
         };
     };
 };
@@ -2202,6 +2264,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ korean ] = "º¹»ç(~C)";
                         Text[ turkish ] = "Kopya";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Copia";
                     };
                     MenuItem
                     {
@@ -2233,6 +2296,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ korean ] = "¸µÅ©";
                         Text[ turkish ] = "Baðlantý";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Vínculo";
                     };
                     MenuItem
                     {
@@ -2266,6 +2330,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ korean ] = "¹è°æ(~K)";
                         Text[ turkish ] = "Artalan";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Fondo";
                     };
                 };
             };
@@ -2291,6 +2356,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ korean ] = "»ðÀÔ(~I)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Añadir";
         };
         MenuItem
         {
@@ -2321,6 +2387,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ arabic ] = "ãÚÇíäÉ";
             Text[ turkish ] = "Önizleme";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Previsualización";
         };
         MenuItem
         {
@@ -2350,6 +2417,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ chinese_traditional ] = "¼ÐÃD(~T)";
             Text[ arabic ] = "ÚäæÇä";
             Text[ turkish ] = "Baþlýk";
+            Text[ catalan ] = "~Título";
         };
         MenuItem
         {
@@ -2383,6 +2451,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ arabic ] = "ÍÐÝ";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar";
         };
         MenuItem
         {
@@ -2416,6 +2485,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ greek ] = "Áíôé~ãñáöÞ";
             Text[ korean ] = "º¹»ç(~C)";
             Text[ turkish ] = "K~opyala";
+            Text[ catalan ] = "~Copiar";
         };
         MenuItem
         {
@@ -2443,6 +2513,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ korean ] = "»ðÀÔ(~I)" ;
             Text[ arabic ] = "ÅÏÑÇÌ"    ;
             Text[ turkish ] = "~Ekle"   ;
+            Text[ catalan ] = "~Insertar";
         };
     };
 };
