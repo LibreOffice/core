@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
+ *  last change: $Author: ka $ $Date: 2001-09-17 14:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ public:
                 }
 
     ByteString  GetIDString() const;
+    BOOL        IsEmpty() const { return( 0 == mnID1 && 0 == mnID2 && 0 == mnID3 && 0 == mnID4 ); }
 };
 
 // -----------------------------------------------------------------------------
@@ -194,8 +195,7 @@ private:
     BitmapEx*           mpBmpEx;
     GDIMetaFile*        mpMtf;
     Animation*          mpAnimation;
-    BOOL                mbSwappedAll    : 1;
-    BOOL                mbInitialized   : 1;
+    BOOL                mbSwappedAll;
 
     BOOL                ImplInit( const GraphicObject& rObj );
     BOOL                ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
@@ -217,8 +217,6 @@ public:
     void                GraphicObjectWasSwappedOut( const GraphicObject& rObj );
     BOOL                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
-
-    BOOL                IsInitialized() const { return mbInitialized; }
 };
 
 // -----------------------------------------------------------------------------
@@ -228,9 +226,8 @@ GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     mpBmpEx         ( NULL ),
     mpMtf           ( NULL ),
     mpAnimation     ( NULL ),
-    mbInitialized   ( ImplInit( rObj ) )
+    mbSwappedAll    ( !ImplInit( rObj ) )
 {
-    mbSwappedAll = !mbInitialized;
     maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
 }
 
@@ -343,7 +340,7 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
 void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     if( mbSwappedAll )
-        mbSwappedAll = !( mbInitialized = ImplInit( rObj ) );
+        mbSwappedAll = !ImplInit( rObj );
 
     ImplFillSubstitute( rSubstitute );
     maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
@@ -428,12 +425,7 @@ BOOL GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Gra
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     if( mbSwappedAll )
-    {
         mbSwappedAll = !ImplInit( rObj );
-
-        if( !mbSwappedAll && !mbInitialized )
-            mbInitialized = TRUE;
-    }
 }
 
 // ----------------------------
@@ -715,13 +707,16 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
 
-    if( !pEntry->IsInitialized() )
+    if( pEntry )
     {
-        ReleaseGraphicObject( rObj );
-        AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), NULL );
+        if( pEntry->GetID().IsEmpty() )
+        {
+            ReleaseGraphicObject( rObj );
+            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), NULL );
+        }
+        else
+            pEntry->GraphicObjectWasSwappedIn( rObj );
     }
-    else
-        pEntry->GraphicObjectWasSwappedIn( rObj );
 }
 
 // -----------------------------------------------------------------------------
@@ -830,7 +825,7 @@ ByteString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
     GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
 
     // ensure that the entry is correctly initialized (it has to be read at least once)
-    if( pEntry && !pEntry->IsInitialized() )
+    if( pEntry && pEntry->GetID().IsEmpty() )
         pEntry->TryToSwapIn();
 
     // do another call to ImplGetCacheEntry in case of modified entry list
