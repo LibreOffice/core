@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.15 2000-11-23 11:10:04 sab Exp $
+	$Id: table.mod,v 1.16 2000-11-23 12:28:37 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -86,6 +86,7 @@
 	table:scenario-ranges %cell-range-address-list; #REQUIRED
 	table:comment CDATA #IMPLIED
 >
+<!ELEMENT table:shapes %shapes;>
 <!ELEMENT table:table-column-group ( table:table-header-columns | table:table-column | table:table-column-group)+ >
 <!ATTLIST table:table-column-group table:display %boolean; "true">
 <!ELEMENT table:table-header-columns ( table:table-column | table:table-column-group )+>
@@ -397,6 +398,6 @@
 	table:link-to-source-data %boolean; "false"
 >
 <!ELEMENT table:dde-links (table:dde-link)+ >
-<!ELEMENT table:dde-link (table:dde-source, table:table) >
+<!ELEMENT table:dde-link (office:dde-source, table:table) >
 <!ATTLIST table:dde-link table:conversion-mode (into-default-style-data-style|into-english-number|let-text) "into-default-style-data-style" >
 
