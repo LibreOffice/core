@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 14:56:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,20 @@
 #ifndef SC_PREVLOC_HXX
 #define SC_PREVLOC_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
 
 #ifndef _SV_MAPMOD_HXX
 #include <vcl/mapmod.hxx>
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 
@@ -88,11 +96,11 @@ class ScDocument;
 struct ScPreviewColRowInfo
 {
     BOOL    bIsHeader;
-    USHORT  nDocIndex;
+    SCCOLROW    nDocIndex;
     long    nPixelStart;
     long    nPixelEnd;
 
-    void Set( BOOL bHeader, USHORT nIndex, long nStart, long nEnd )
+    void Set( BOOL bHeader, SCCOLROW nIndex, long nStart, long nEnd )
     {
         bIsHeader   = bHeader;
         nDocIndex   = nIndex;
@@ -103,9 +111,9 @@ struct ScPreviewColRowInfo
 
 class ScPreviewTableInfo
 {
-    USHORT                  nTab;
-    USHORT                  nCols;
-    USHORT                  nRows;
+    SCTAB                   nTab;
+    SCCOL                   nCols;
+    SCROW                   nRows;
     ScPreviewColRowInfo*    pColInfo;
     ScPreviewColRowInfo*    pRowInfo;
 
@@ -113,15 +121,15 @@ public:
             ScPreviewTableInfo();
             ~ScPreviewTableInfo();
 
-    USHORT                      GetTab() const      { return nTab; }
-    USHORT                      GetCols() const     { return nCols; }
-    USHORT                      GetRows() const     { return nRows; }
+    SCTAB                       GetTab() const      { return nTab; }
+    SCCOL                       GetCols() const     { return nCols; }
+    SCROW                       GetRows() const     { return nRows; }
     const ScPreviewColRowInfo*  GetColInfo() const  { return pColInfo; }
     const ScPreviewColRowInfo*  GetRowInfo() const  { return pRowInfo; }
 
-    void    SetTab( USHORT nNewTab );
-    void    SetColInfo( USHORT nCount, ScPreviewColRowInfo* pNewInfo );
-    void    SetRowInfo( USHORT nCount, ScPreviewColRowInfo* pNewInfo );
+    void    SetTab( SCTAB nNewTab );
+    void    SetColInfo( SCCOL nCount, ScPreviewColRowInfo* pNewInfo );
+    void    SetRowInfo( SCROW nCount, ScPreviewColRowInfo* pNewInfo );
     void    LimitToArea( const Rectangle& rPixelArea );
 };
 
@@ -135,7 +143,7 @@ class ScPreviewLocationData
     Rectangle   aDrawRectangle[SC_PREVIEW_MAXRANGES];
         sal_uInt8       aDrawRangeId[SC_PREVIEW_MAXRANGES];
     USHORT      nDrawRanges;
-    USHORT      nPrintTab;
+    SCTAB       nPrintTab;
     List        aEntries;
 
     ScAddress   GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const;
@@ -146,17 +154,17 @@ public:
             ~ScPreviewLocationData();
 
     void    SetCellMapMode( const MapMode& rMapMode );
-    void    SetPrintTab( USHORT nNew );
+    void    SetPrintTab( SCTAB nNew );
     void    Clear();
     void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow,
                             const MapMode& rDrawMap );
-    void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol );
-    void    AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow, BOOL bRepRow );
+    void    AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, BOOL bRepCol );
+    void    AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, BOOL bRepRow );
     void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
 
-    USHORT  GetPrintTab() const     { return nPrintTab; }
+    SCTAB   GetPrintTab() const     { return nPrintTab; }
 
     //  Get info on visible columns/rows in the visible area
     void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
