@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:11:13 $
+ *  last change: $Author: mtg $ $Date: 2001-06-06 09:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,19 @@ void xmllcl_DecryptBlockName( String& rName )
     }
 }
 */
+
+void SwXMLTextBlocks::InitBlockMode ( SvStorageRef & rStorage )
+{
+    xBlkRoot = rStorage;
+    xRoot.Clear();
+}
+
+void SwXMLTextBlocks::ResetBlockMode ( )
+{
+    xBlkRoot.Clear();
+    xRoot.Clear();
+}
+
 SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
 : SwImpBlocks( rFile ), bAutocorrBlock( FALSE ), nFlags ( 0 )
 {
@@ -244,8 +257,10 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
 
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
-    xBlkRoot = new SvStorage( TRUE, rFile, STREAM_STD_READWRITE | STREAM_SHARE_DENYNONE );
+    SvStorageRef refStg  = new SvStorage( TRUE, rFile, STREAM_STD_READWRITE | STREAM_SHARE_DENYNONE );
+    InitBlockMode ( refStg );
     ReadInfo();
+    ResetBlockMode ();
     bInfoChanged = FALSE;
 }
 
@@ -264,7 +279,8 @@ SwXMLTextBlocks::SwXMLTextBlocks( SvStorage& rStg )
     pDoc->DoUndo( FALSE );
     pDoc->AddLink();
 
-    xBlkRoot = &rStg;
+    SvStorageRef refStg = &rStg;
+    InitBlockMode ( refStg );
     ReadInfo();
     bInfoChanged = FALSE;
 }
@@ -273,6 +289,7 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
 {
     if ( bInfoChanged )
         WriteInfo();
+    ResetBlockMode ();
     if( pDoc && !pDoc->RemoveLink() )
         delete pDoc;
 }
@@ -330,6 +347,15 @@ ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const Strin
     String aOldName (aNames[ nIdx ]->aPackageName);
     aShort = rNewShort;
     GeneratePackageName( aShort, aPackageName );
+    if (IsOnlyTextBlock ( nIdx ) )
+    {
+        String aOldStreamName = aOldName + String::CreateFromAscii(".xml");
+        String aNewStreamName = aPackageName + String::CreateFromAscii(".xml");
+        xRoot = xBlkRoot->OpenUCBStorage ( aOldName, STREAM_STGWRITE );
+        xRoot->Rename ( aOldStreamName, aNewStreamName );
+        xRoot->Commit();
+        xRoot.Clear();
+    }
     xBlkRoot->Rename ( aOldName, aPackageName );
     xBlkRoot->Commit();
     // No need to commit xBlkRoot here as SwTextBlocks::Rename calls
@@ -634,9 +660,10 @@ ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
     if( bAutocorrBlock )
         return 0;
 
-    xBlkRoot = new SvStorage( TRUE, aFile,
+    SvStorageRef refStg = new SvStorage( TRUE, aFile,
                             bReadOnly ? (STREAM_READ | STREAM_SHARE_DENYNONE)
                                       : STREAM_STD_READWRITE);
+    InitBlockMode ( refStg );
     return xBlkRoot->GetError();
 }
 
@@ -646,7 +673,7 @@ void SwXMLTextBlocks::CloseFile()
     {
         if (bInfoChanged)
             WriteInfo();
-        xBlkRoot.Clear();
+        ResetBlockMode();
     }
 }
 
@@ -696,15 +723,15 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
     aLong = aNames[ nIdx ]->aLong;
     aPackageName = aNames[ nIdx ]->aPackageName;
 
-    ULONG sRet = 0;
+    ULONG nRet = 0;
 
     // open stream in proper sub-storage
     if( !bFileAlreadyOpen )
     {
         CloseFile();
-        sRet == OpenFile ( TRUE );
+        nRet = OpenFile ( TRUE );
     }
-    if ( 0 == sRet )
+    if ( 0 == nRet )
     {
         xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGREAD );
 
@@ -776,39 +803,39 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
                         catch( xml::sax::SAXParseException& )
                         {
                             // workaround for #83452#: SetSize doesn't work
-                            // sRet = ERR_SWG_READ_ERROR;
+                            // nRet = ERR_SWG_READ_ERROR;
                         }
                         catch( xml::sax::SAXException& )
                         {
-                            sRet = ERR_SWG_READ_ERROR;
+                            nRet = ERR_SWG_READ_ERROR;
                         }
                         catch( io::IOException& )
                         {
-                            sRet = ERR_SWG_READ_ERROR;
+                            nRet = ERR_SWG_READ_ERROR;
                         }
 
                         // and finally, copy macro into table
-                        if (0 == sRet)
+                        if (0 == nRet)
                             pDescriptor->copyMacrosIntoTable(rMacroTbl);
                     }
                     else
-                        sRet = ERR_SWG_READ_ERROR;
+                        nRet = ERR_SWG_READ_ERROR;
                 }
                 else
-                    sRet = ERR_SWG_READ_ERROR;
+                    nRet = ERR_SWG_READ_ERROR;
 
             }
             else
-                sRet = ERR_SWG_READ_ERROR;
+                nRet = ERR_SWG_READ_ERROR;
         }
         else
-            sRet = ERR_SWG_READ_ERROR;
+            nRet = ERR_SWG_READ_ERROR;
     }
     else
-        sRet = ERR_SWG_READ_ERROR;
+        nRet = ERR_SWG_READ_ERROR;
 
     // success!
-    return sRet;
+    return nRet;
 }
 
 
@@ -1140,9 +1167,7 @@ void SwXMLTextBlocks::WriteInfo( void )
 void SwXMLTextBlocks::SetCurrentText( const String& rText )
 {
     if (!aCur.Len())
-    {
         aCur = rText;
-    }
     else
         aCur += rText;
 }
