@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-25 18:27:07 $
+ *  last change: $Author: cmc $ $Date: 2001-04-27 11:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,8 @@ friend class WW8FormulaControl;
     BOOL JoinNode( SwPaM* pPam, BOOL bStealAttr = FALSE );
 
     BOOL IsBorder( const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE );
-    BOOL SetBorder( SvxBoxItem& pBox, const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE );
+    BOOL SetBorder( SvxBoxItem& pBox, const WW8_BRC* pbrc,
+        BYTE nSetBorders=0xFF, BOOL bChkBtwn=FALSE );
     void GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist );
     BOOL SetShadow( SvxShadowItem& rShadow, const SvxBoxItem& rBox, const WW8_BRC pbrc[4] );
 
@@ -1159,11 +1160,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.24 2001-04-25 18:27:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.25 2001-04-27 11:17:03 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.24  2001/04/25 18:27:07  jp
+      Bug #83181#: don't insert in GroupObjects SW-OLE-Objects
+
       Revision 1.23  2001/04/24 10:26:11  cmc
       CJK Vertical Text Alignment {im|ex}port
 

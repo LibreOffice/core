@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-24 16:17:10 $
+ *  last change: $Author: cmc $ $Date: 2001-04-27 11:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ static ColorData __FAR_DATA eSwWW8ColA[] = {
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 #define MM_125 709              // WW-Default fuer vert. K/F-Pos: 1.25 cm
 
-BOOL lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
+BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
                             WW8PLCFx_Cp_FKP* pPap,
                             const WW8RStyle* pSty = 0,
                             const WW8PLCFx_SEPX* pSep = 0 );
@@ -1749,7 +1749,7 @@ static BOOL _SetWW8_BRC( BOOL bVer67, WW8_BRC& rVar, BYTE* pS )
     return 0 != pS;
 }
 
-BOOL lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
+BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
                             WW8PLCFx_Cp_FKP* pPap,
                             const WW8RStyle* pSty,
                             const WW8PLCFx_SEPX* pSep )
@@ -1761,19 +1761,22 @@ BOOL lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
 //      #define WW8_RIGHT 3
 //      #define WW8_BETW 4
 
-    BOOL bBorder = FALSE;
+//returns a BYTE filled with a bit for each position that had a sprm
+//setting that border
+
+    BYTE nBorder = FALSE;
     if( pSep )
     {
         if( !bVer67 )
         {
              BYTE* pSprm[4];
 
-            //  sprmSBrcTop, sprmSBrcLeft, sprmSBrcBottom, sprmSBrcRight
-             if( pSep->Find4Sprms(  0x702B,   0x702C,   0x702D,   0x702E,
+            //  sprmSBrcTop, sprmSBrcLeft, sprmSBrcRight, sprmSBrcBottom
+             if( pSep->Find4Sprms(  0x702B,   0x702C,   0x702E,   0x702D,
                                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
              {
                 for( int i = 0; i < 4; ++i )
-                    bBorder |= _SetWW8_BRC( bVer67, brc[ i ], pSprm[ i ] );
+                    nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pSprm[ i ] ))<<i;
              }
         }
     }
@@ -1781,29 +1784,29 @@ BOOL lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
     {
 
         static USHORT __READONLY_DATA aVer67Ids[5] =
-                { 38, 39, 40, 41, 42 };
+                { 38, 39, 41, 40, 42 };
 
         static USHORT __READONLY_DATA aVer8Ids[5] =
-                { 0x6424, 0x6425, 0x6426, 0x6427, 0x6428 };
+                { 0x6424, 0x6425, 0x6427, 0x6426, 0x6428 };
 
         const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
 
         if( pPap )
         {
             for( int i = 0; i < 5; ++i, ++pIds )
-                bBorder |= _SetWW8_BRC( bVer67, brc[ i ], pPap->HasSprm( *pIds ));
+                nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pPap->HasSprm( *pIds )))<<i;
         }
         else if( pSty )
         {
             for( int i = 0; i < 5; ++i, ++pIds )
-                bBorder |= _SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds ));
+                nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds )))<<i;
         }
         else
             ASSERT( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "
                                "and WW8PLCFx_SEPX is 0" );
     }
 
-    return bBorder;
+    return nBorder;
 }
 
 
@@ -2027,7 +2030,7 @@ BOOL SwWW8ImplReader::IsBorder( const WW8_BRC* pbrc, BOOL bChkBtwn )
 }
 
 BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
-                                    BOOL bChkBtwn )
+    BYTE nSetBorders, BOOL bChkBtwn )
 {
     SvxBorderLine aLine;
     BOOL bChange = FALSE;
@@ -2050,6 +2053,21 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
         {
             rBox.SetLine( &Set1Border( bVer67, aLine, rB ), aIdArr[ i+1 ] );
             bChange = TRUE;
+        }
+        else if (nSetBorders & (1<<(i/2)))
+        {
+            /*
+            ##826##, ##653##
+
+            If a style has borders set,and the para attributes attempt remove
+            the borders, then this is perfectably acceptable, so we shouldn't
+            ignore this blank entry
+
+            nSetBorders has a bit set for each location that a sprm set a
+            border, so with a sprm set, but no border, then disable the
+            appropiate border
+            */
+            rBox.SetLine( 0, aIdArr[ i+1 ] );
         }
         else if( 6 == i && bChkBtwn )   // wenn Botton nichts war,
             nEnd += 2;                  // dann ggfs. auch Between befragen
@@ -4240,25 +4258,15 @@ void SwWW8ImplReader::Read_Border( USHORT nId, BYTE* pData, short nLen )
         bHasBorder = TRUE;
 
         WW8_BRC5 aBrcs; // Top, Left, Bottom, Right, Between
-        BOOL bBorder;
+        BYTE nBorder;
 
         if( pAktColl )
-            bBorder = ::lcl_ReadBorders( bVer67, aBrcs, 0, pStyles );
+            nBorder = ::lcl_ReadBorders( bVer67, aBrcs, 0, pStyles );
         else
-            bBorder = ::lcl_ReadBorders( bVer67, aBrcs, pPlcxMan->GetPapPLCF() );
+            nBorder = ::lcl_ReadBorders( bVer67, aBrcs, pPlcxMan->GetPapPLCF() );
 
-        if( bBorder )                                   // Border
+        if( nBorder )                                   // Border
         {
-            /*
-            Note: known bug ##653##
-
-            If a style has borders set, and the para attributes attempt
-            remove the borders, then this is perfectably acceptable,
-            so we shouldn't ignore this. We should examine which sprms have
-            been set and use the entry in the brc that matches that sprm
-            if set, regardless of the fact that its "blank"
-            */
-
             BOOL bIsB = IsBorder( aBrcs, TRUE );
             if( !bApo || !bIsB || ( pWFlyPara && !pWFlyPara->bBorderLines ))
             {
@@ -4276,7 +4284,7 @@ void SwWW8ImplReader::Read_Border( USHORT nId, BYTE* pData, short nLen )
                 SvxBoxItem aBox;
                 if( pBox )
                     aBox = *pBox;
-                SetBorder( aBox, aBrcs, TRUE );
+                SetBorder( aBox, aBrcs, nBorder, TRUE );
 
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
@@ -5090,12 +5098,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.23 2001-04-24 16:17:10 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.24 2001-04-27 11:17:02 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/04/24 16:17:10  cmc
+      ##761## workaround. No automatic colour for table borders, cells or sdrtextobjs
+
       Revision 1.22  2001/04/24 10:26:11  cmc
       CJK Vertical Text Alignment {im|ex}port
 
