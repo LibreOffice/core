@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 11:55:45 $
+ *  last change: $Author: os $ $Date: 2001-03-30 14:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,16 +335,19 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    sal_Bool bNoConfigValues = sal_True;
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0, nProperty = 0; nProp < aNames.getLength(); nProp++, nProperty++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+
             if(pValues[nProp].hasValue())
             {
                 //to have a contiuous switch an offset is added
                 if(nProp == 15 && !bIsLabel)
                     nProperty += 3;
+                if(nProperty >= 18)
+                    bNoConfigValues = sal_False;
                 switch(nProperty)
                 {
                     case  0: aItem.bCont = *(sal_Bool*)pValues[nProp].getValue(); break;// "Medium/Continous",
@@ -420,6 +423,29 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
                 }
             }
         }
+    }
+    if(!bIsLabel && bNoConfigValues)
+    {
+
+        SvxAddressItem aAdr;
+        aItem.aPrivFirstName = aAdr.GetFirstName();
+        aItem.aPrivName = aAdr.GetName();
+        aItem.aPrivShortCut = aAdr.GetShortName();
+        aItem.aCompCompany = aAdr.GetToken( POS_COMPANY       );
+        aItem.aCompStreet = aItem.aPrivStreet = aAdr.GetToken( POS_STREET);
+
+        aItem.aCompCountry = aItem.aPrivCountry = aAdr.GetToken( POS_COUNTRY);
+        aItem.aCompZip = aItem.aPrivZip= aAdr.GetToken( POS_PLZ );
+        aItem.aCompCity = aItem.aPrivCity = aAdr.GetToken( POS_CITY );
+        aItem.aPrivTitle = aAdr.GetToken( POS_TITLE );
+        aItem.aCompPosition = aAdr.GetToken( POS_POSITION );
+        aItem.aPrivPhone = aAdr.GetToken( POS_TEL_PRIVATE );
+        aItem.aCompPhone = aAdr.GetToken( POS_TEL_COMPANY );
+        aItem.aCompFax = aItem.aPrivFax = aAdr.GetToken( POS_FAX    );
+        aItem.aCompMail = aItem.aPrivMail = aAdr.GetToken( POS_EMAIL    );
+        aItem.aCompState = aItem.aPrivState = aAdr.GetToken( POS_STATE  );
+        aItem.bSynchron = TRUE;
+        SetModified();
     }
 }
 /* -----------------------------25.09.00 16:26--------------------------------
