@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:41:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ protected:
 
     inline void                 Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const;
     inline void                 Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const;
-    inline void                 WriteTabId( XclExpStream& rStrm, sal_uInt16 nTabId ) const;
+    inline void                 WriteTabId( XclExpStream& rStrm, SCTAB nTabId ) const;
 
                                 // save header data, call SaveActionData()
     virtual void                SaveCont( XclExpStream& rStrm );
@@ -473,7 +473,7 @@ inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& 
             << (sal_uInt16) rRange.aEnd.Col();
 }
 
-inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, sal_uInt16 nTab ) const
+inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) const
 {
     rStrm << rIdBuffer.GetId( rTabInfo.GetXclTab( nTab ) );
 }
@@ -582,7 +582,7 @@ public:
 class XclExpChTrInsertTab : public XclExpChTrAction, private ExcRoot
 {
 private:
-    sal_uInt16                  nTab;
+    SCTAB                   nTab;
 
 protected:
     virtual void                SaveActionData( XclExpStream& rStrm ) const;
