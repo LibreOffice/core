@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ namespace configmgr
 
     namespace configuration
     {
-        struct NodeChangeInfo;
         class NodeChange;
         class NodeChanges;
         class Tree;
@@ -97,23 +96,28 @@ namespace configmgr
         using configuration::RelativePath;
         using configuration::NodeRef;
         using configuration::NodeID;
-        using configuration::NodeChangeInfo;
-        using configuration::ExtendedNodeChangeInfo;
+        using configuration::NodeChangeInformation;
+        using configuration::NodeChangeData;
+        using configuration::NodeChangeLocation;
 // ---------------------------------------------------------------------------------------------------
     //interpreting NodeChanges
 // resolve the relative path from a given base to the changed node
-bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aChange, Tree const& aBaseTree)
+bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree)
 {
     return resolveChangeLocation(aPath,aChange,aBaseTree,aBaseTree.getRootNode());
 }
-bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
+bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
 {
+    OSL_ENSURE(aChange.isValidLocation(), "Trying to resolve against change location that wasn't set up properly");
+
     typedef Path::Iterator Iter;
 
+    Tree aChangeBaseTree = aChange.getBaseTree();
+
     AbsolutePath aOuterBaseTreePath     = aBaseTree.getContextPath();
-    AbsolutePath aChangeBaseTreePath    = aChange.baseTree.getContextPath();
+    AbsolutePath aChangeBaseTreePath    = aChangeBaseTree.getContextPath();
     RelativePath aOuterBaseNodePath     = aBaseTree.getLocalPath(aBaseNode);
-    RelativePath aChangeBaseNodePath    = aChange.baseTree.getLocalPath(aChange.baseNode);
+    RelativePath aChangeBaseNodePath    = aChangeBaseTree.getLocalPath(aChange.getBaseNode());
 
     // First start resolving the context pathes
     Iter aChangeIt = aChangeBaseTreePath.begin(),   aChangeEnd = aChangeBaseTreePath.end();
@@ -150,16 +154,17 @@ bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aC
     // Next consider the stored accessor
     if (aChangeIt != aChangeEnd) // stepping outward - prepend
     {
-        aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) ).compose(aChange.accessor);
+        aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) ).compose(aChange.getAccessor());
     }
     else if (aOuterIt == aOuterEnd) // exact match outside
     {
-        aPath = aChange.accessor;
+        aPath = aChange.getAccessor();
     }
     else //(aChangeIt == aChangeEnd) but outer left // shall we support actually going inside the accessor?
     {
-        aChangeIt   = aChange.accessor.begin();
-        aChangeEnd  = aChange.accessor.end();
+        RelativePath aAccessor = aChange.getAccessor();
+        aChangeIt   = aAccessor.begin();
+        aChangeEnd  = aAccessor.end();
 
         // resolve the outer path against the change accessor
         while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
@@ -181,18 +186,19 @@ bool resolveChangeLocation(RelativePath& aPath, ExtendedNodeChangeInfo const& aC
 
 // ---------------------------------------------------------------------------------------------------
 // change path and base settings to start from the given base
-bool rebaseChange(ExtendedNodeChangeInfo& aChange, Tree const& aBaseTree)
+bool rebaseChange(NodeChangeLocation& aChange, Tree const& aBaseTree)
 {
     return rebaseChange(aChange,aBaseTree,aBaseTree.getRootNode());
 }
-bool rebaseChange(ExtendedNodeChangeInfo& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
+bool rebaseChange(NodeChangeLocation& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
 {
+    OSL_ENSURE(aChange.isValidLocation(), "Trying to rebase change location that wasn't set up properly");
+
     RelativePath aNewPath;
     if (resolveChangeLocation(aNewPath,aChange,aBaseTree, aBaseNode))
     {
-        aChange.accessor = aNewPath;
-        aChange.baseTree = aBaseTree;
-        aChange.baseNode = aBaseNode;
+        aChange.setBase( aBaseTree, aBaseNode);
+        aChange.setAccessor( aNewPath );
         return true;
     }
     else
@@ -200,12 +206,12 @@ bool rebaseChange(ExtendedNodeChangeInfo& aChange, Tree const& aBaseTree, NodeRe
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects
-bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeInfo const& aChange,  Factory& rFactory)
+bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,  Factory& rFactory)
 {
     if (aChange.isSetChange())
     {
-        uno::Reference<uno::XInterface> aOldUnoObject = rFactory.findUnoElement(aChange.getOldElementNodeID());
         uno::Reference<uno::XInterface> aNewUnoObject = rFactory.findUnoElement(aChange.getNewElementNodeID());
+        uno::Reference<uno::XInterface> aOldUnoObject = rFactory.findUnoElement(aChange.getOldElementNodeID());
 
         bool bFound = aNewUnoObject.is() || aOldUnoObject.is();
 
@@ -216,8 +222,8 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeInfo const& aChange,  Fa
     }
     else if (aChange.isValueChange())
     {
-        aUnoChange.newValue = aChange.newValue;
-        aUnoChange.oldValue = aChange.oldValue;
+        aUnoChange.newValue = aChange.unoData.newValue;
+        aUnoChange.oldValue = aChange.unoData.oldValue;
         return true;
     }
     else
@@ -227,13 +233,13 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeInfo const& aChange,  Fa
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects inplace
-bool resolveToUno(NodeChangeInfo& aChange, Factory& rFactory)
+bool resolveToUno(NodeChangeData& aChange, Factory& rFactory)
 {
     struct UnoChange aUnoChange;
     if (resolveUnoObjects(aUnoChange,aChange,rFactory))
     {
-        aChange.newValue = aUnoChange.newValue;
-        aChange.oldValue = aUnoChange.oldValue;
+        aChange.unoData.newValue = aUnoChange.newValue;
+        aChange.unoData.oldValue = aUnoChange.oldValue;
         return true;
     }
     else
@@ -250,15 +256,15 @@ void fillEventSource(lang::EventObject& rEvent, Tree const& aTree, NodeRef const
 // ---------------------------------------------------------------------------------------------------
 
 /// fill a change info from a NodeChangeInfo
-void fillChange(util::ElementChange& rChange, ExtendedNodeChangeInfo const& aInfo, Tree const& aBaseTree, Factory& rFactory)
+void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo, Tree const& aBaseTree, Factory& rFactory)
 {
     fillChange(rChange,aInfo,aBaseTree,aBaseTree.getRootNode(),rFactory);
 }
 /// fill a change info from a NodeChangeInfo
-void fillChange(util::ElementChange& rChange, ExtendedNodeChangeInfo const& aInfo, Tree const& aBaseTree, NodeRef const& aBaseNode, Factory& rFactory)
+void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo, Tree const& aBaseTree, NodeRef const& aBaseNode, Factory& rFactory)
 {
     RelativePath aRelativePath;
-    if (!resolveChangeLocation(aRelativePath, aInfo, aBaseTree, aBaseNode))
+    if (!resolveChangeLocation(aRelativePath, aInfo.location, aBaseTree, aBaseNode))
         OSL_ENSURE(false, "WARNING: Change is not part of the given Tree");
 
     UnoChange aUnoChange;
@@ -271,16 +277,16 @@ void fillChange(util::ElementChange& rChange, ExtendedNodeChangeInfo const& aInf
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a change info from a NodeChangeInfo (base,path and uno objects are assumed to be resolved already)
-void fillChangeFromResolved(util::ElementChange& rChange, ExtendedNodeChangeInfo const& aInfo)
+void fillChangeFromResolved(util::ElementChange& rChange, NodeChangeInformation const& aInfo)
 {
-    rChange.Accessor        <<= aInfo.accessor.toString();
-    rChange.Element         = aInfo.change.newValue;
-    rChange.ReplacedElement = aInfo.change.oldValue;
+    rChange.Accessor        <<= aInfo.location.getAccessor().toString();
+    rChange.Element         = aInfo.change.unoData.newValue;
+    rChange.ReplacedElement = aInfo.change.unoData.oldValue;
 }
 // ---------------------------------------------------------------------------------------------------
 
 /// fill a event from a NodeChangeInfo
-bool fillEventData(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo const& aInfo, Factory& rFactory)
+bool fillEventData(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo, Factory& rFactory)
 {
     UnoChange aUnoChange;
     if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
@@ -289,25 +295,25 @@ bool fillEventData(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo con
         return false;
     }
 
-    rEvent.Accessor     <<= aInfo.accessor.getLocalName().toString();
+    rEvent.Accessor     <<= aInfo.location.getAccessor().getLocalName().toString();
     rEvent.Element          = aUnoChange.newValue;
     rEvent.ReplacedElement  = aUnoChange.oldValue;
 
-    return !aInfo.isEmpty();
+    return !aInfo.isEmptyChange();
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
-bool fillEventDataFromResolved(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo const& aInfo)
+bool fillEventDataFromResolved(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo)
 {
-    rEvent.Accessor         <<= aInfo.accessor.getLocalName().toString();
-    rEvent.Element          = aInfo.change.newValue;
-    rEvent.ReplacedElement  = aInfo.change.oldValue;
+    rEvent.Accessor         <<= aInfo.location.getAccessor().getLocalName().toString();
+    rEvent.Element          = aInfo.change.unoData.newValue;
+    rEvent.ReplacedElement  = aInfo.change.unoData.oldValue;
 
-    return !aInfo.isEmpty();
+    return !aInfo.isEmptyChange();
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already)
-bool fillEventData(beans::PropertyChangeEvent& rEvent, ExtendedNodeChangeInfo const& aInfo, Factory& rFactory, bool bMore)
+bool fillEventData(beans::PropertyChangeEvent& rEvent, NodeChangeInformation const& aInfo, Factory& rFactory, bool bMore)
 {
     if (!aInfo.isValueChange())
         return false;
@@ -316,7 +322,7 @@ bool fillEventData(beans::PropertyChangeEvent& rEvent, ExtendedNodeChangeInfo co
     if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
 
-    rEvent.PropertyName     = aInfo.accessor.getLocalName().toString();
+    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().toString();
 
     rEvent.NewValue         = aUnoChange.newValue;
     rEvent.OldValue         = aUnoChange.oldValue;
@@ -324,24 +330,24 @@ bool fillEventData(beans::PropertyChangeEvent& rEvent, ExtendedNodeChangeInfo co
     rEvent.PropertyHandle   = -1;
      rEvent.Further         = bMore;
 
-    return !aInfo.isEmpty();
+    return !aInfo.isEmptyChange();
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already)
-bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, ExtendedNodeChangeInfo const& aInfo, bool bMore)
+bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, NodeChangeInformation const& aInfo, bool bMore)
 {
     if (!aInfo.isValueChange())
         return false;
 
-    rEvent.PropertyName     = aInfo.accessor.getLocalName().toString();
+    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().toString();
 
-    rEvent.NewValue         = aInfo.change.newValue;
-    rEvent.OldValue         = aInfo.change.oldValue;
+    rEvent.NewValue         = aInfo.change.unoData.newValue;
+    rEvent.OldValue         = aInfo.change.unoData.oldValue;
 
     rEvent.PropertyHandle   = -1;
      rEvent.Further         = bMore;
 
-    return !aInfo.isEmpty();
+    return !aInfo.isEmptyChange();
 }
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------

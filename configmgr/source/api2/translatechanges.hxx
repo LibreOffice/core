@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,12 @@ namespace configmgr
 
     namespace configuration
     {
-        struct NodeChangeInfo;
-        struct ExtendedNodeChangeInfo;
-        class NodeChange;
-        class NodeChanges;
+        class NodeChangeInformation;
+        class NodeChangeData;
+        class NodeChangeLocation;
+
+        //class NodeChange;
+        //class NodeChanges;
         class Tree;
         class NodeRef;
         class NodeID;
@@ -99,30 +101,30 @@ namespace configmgr
         class NotifierImpl;
         class Factory;
 
-        struct UnoChange { uno::Any oldValue, newValue; };
+        struct UnoChange { uno::Any newValue, oldValue; };
 
     //interpreting NodeChanges
         // resolve the relative path from a given base tree (root) to the changed node
         bool resolveChangeLocation( configuration::RelativePath& aPath,
-                                    configuration::ExtendedNodeChangeInfo const& aChange,
+                                    configuration::NodeChangeLocation const& aChange,
                                     configuration::Tree const& aBaseTree);
         // resolve the relative path from a given base node to the changed node
         bool resolveChangeLocation( configuration::RelativePath& aPath,
-                                    configuration::ExtendedNodeChangeInfo const& aChange,
+                                    configuration::NodeChangeLocation const& aChange,
                                     configuration::Tree const& aBaseTree,
                                     configuration::NodeRef const& aBaseNode);
 
         // change path and base settings to start from the given base tree (root)
-        bool rebaseChange(  configuration::ExtendedNodeChangeInfo& aChange,
+        bool rebaseChange(  configuration::NodeChangeLocation& aChange,
                             configuration::Tree const& aBaseTree);
         // change path and base settings to start from the given base node
-        bool rebaseChange(  configuration::ExtendedNodeChangeInfo& aChange,
+        bool rebaseChange(  configuration::NodeChangeLocation& aChange,
                             configuration::Tree const& aBaseTree,
                             configuration::NodeRef const& aBaseNode);
         // resolve non-uno elements to Uno Objects
-        bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeInfo const& aChange,  Factory& rFactory);
+        bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeData const& aChange,  Factory& rFactory);
         // resolve non-uno elements to Uno Objects inplace
-        bool resolveToUno(configuration::NodeChangeInfo& aChange, Factory& rFactory);
+        bool resolveToUno(configuration::NodeChangeData& aChange, Factory& rFactory);
 
     // building events
         /// find the sending api object
@@ -130,26 +132,26 @@ namespace configmgr
 
         /// fill a change info from a NodeChangeInfo
         void fillChange(util::ElementChange& rChange,
-                        configuration::ExtendedNodeChangeInfo const& aInfo,
+                        configuration::NodeChangeInformation const& aInfo,
                         configuration::Tree const& aBaseTree,
                         Factory& rFactory);
         /// fill a change info from a NodeChangeInfo
         void fillChange(util::ElementChange& rChange,
-                        configuration::ExtendedNodeChangeInfo const& aInfo,
+                        configuration::NodeChangeInformation const& aInfo,
                         configuration::Tree const& aBaseTree,
                         configuration::NodeRef const& aBaseNode,
                         Factory& rFactory);
         /// fill a change info from a NodeChangeInfo (base,path and uno objects are assumed to be resolved already)
-        void fillChangeFromResolved(util::ElementChange& rChange, configuration::ExtendedNodeChangeInfo const& aInfo);
+        void fillChangeFromResolved(util::ElementChange& rChange, configuration::NodeChangeInformation const& aInfo);
 
         /// fill a event from a NodeChangeInfo
-        bool fillEventData(container::ContainerEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo, Factory& rFactory);
+        bool fillEventData(container::ContainerEvent& rEvent, configuration::NodeChangeInformation const& aInfo, Factory& rFactory);
         /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
-        bool fillEventDataFromResolved(container::ContainerEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo);
+        bool fillEventDataFromResolved(container::ContainerEvent& rEvent, configuration::NodeChangeInformation const& aInfo);
         /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already) - returns false if this isn't a property change
-        bool fillEventData(beans::PropertyChangeEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo, Factory& rFactory, bool bMore);
+        bool fillEventData(beans::PropertyChangeEvent& rEvent, configuration::NodeChangeInformation const& aInfo, Factory& rFactory, bool bMore);
         /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already) - returns false if this isn't a property change
-        bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo, bool bMore);
+        bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, configuration::NodeChangeInformation const& aInfo, bool bMore);
     }
 // ---------------------------------------------------------------------------------------------------
 }

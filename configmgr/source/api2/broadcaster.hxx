@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,16 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------------------
         class NodeChange;
         class NodeChanges;
+        class NodeChangeInformation;
+        class NodeChangesInformation;
     }
 // ---------------------------------------------------------------------------------------------------
     namespace configapi
     {
         using configuration::NodeChange;
         using configuration::NodeChanges;
+        using configuration::NodeChangeInformation;
+        using configuration::NodeChangesInformation;
 
         class Notifier;
 
@@ -98,6 +102,8 @@ namespace configmgr
             /// construct a broadcaster
             Broadcaster(Notifier const& aNotifier, NodeChange const& aChange, bool bLocal);
             Broadcaster(Notifier const& aNotifier, NodeChanges const& aChanges, bool bLocal);
+            Broadcaster(Notifier const& aNotifier, NodeChangeInformation const& aChange, bool bLocal);
+            Broadcaster(Notifier const& aNotifier, NodeChangesInformation const& aChanges, bool bLocal);
             Broadcaster(Broadcaster const& aOther);
             ~Broadcaster();
 
@@ -105,10 +111,15 @@ namespace configmgr
             void queryConstraints(NodeChange const& aChange) throw(css::beans::PropertyVetoException);
             /// give all property veto listeners on any of the affected nodes a chance to veto
             void queryConstraints(NodeChanges const& aChanges, bool bSingleBase = true) throw(css::beans::PropertyVetoException);
+
             /// notify all listeners which are affected by this change
             void notifyListeners(NodeChange const& aChange) throw();
             /// notify all listeners which are affected by any of these changes (potentially from many different bases)
             void notifyListeners(NodeChanges const& aChanges, bool bSingleBase) throw();
+            /// notify all listeners which are affected by this change
+            void notifyListeners(NodeChangeInformation const& aChange) throw();
+            /// notify all listeners which are affected by any of these changes (potentially from many different bases)
+            void notifyListeners(NodeChangesInformation const& aChanges, bool bSingleBase = false) throw();
 
             class Impl;
         private:
