@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-21 15:21:15 $
+ *  last change: $Author: pb $ $Date: 2001-11-30 14:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -259,39 +262,17 @@ struct IndexEntry_Impl
 
 // class OpenStatusListener_Impl -----------------------------------------
 
-void SAL_CALL OpenStatusListener_Impl::statusChanged( const FeatureStateEvent& Event ) throw(RuntimeException)
+void SAL_CALL OpenStatusListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw(RuntimeException)
 {
-    if ( m_aURL.Len() > 0 )
-    {
-        m_bSuccess = Event.IsEnabled;
-        m_bFinished = sal_True;
-        m_aOpenLink.Call( this );
-        m_xDispatch->removeStatusListener( this, Event.FeatureURL );
-        m_aURL.Erase();
-    }
+       m_bSuccess = ( aEvent.State == DispatchResultState::SUCCESS );
+       m_bFinished = sal_True;
+    m_aOpenLink.Call( this );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    if ( m_aURL.Len() > 0 )
-    {
-        URL aURL;
-        aURL.Complete = m_aURL;
-        m_xDispatch->removeStatusListener( this, aURL );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void OpenStatusListener_Impl::AddListener( Reference< XDispatch >& xDispatch,
-                                           const ::com::sun::star::util::URL& aURL )
-{
-    DBG_ASSERT( aURL.Complete.getLength() > 0, "invalid URL" );
-    m_aURL = aURL.Complete;
-    m_xDispatch = xDispatch;
-    m_xDispatch->addStatusListener( this, aURL );
 }
 
 // struct ContentEntry_Impl ----------------------------------------------
@@ -719,7 +700,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         INSERT_DATA( 0 );
                     }
 
-                    for ( int j = 1; j < nRefListLen ; ++j )
+                    for ( sal_uInt32 j = 1; j < nRefListLen ; ++j )
                     {
                         aData
                             .append( aKeywordPair )
@@ -2397,7 +2378,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
         aArgs[0].Value <<= bReadOnly;
         if ( !IsWait() )
             EnterWait();
-        ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
+//      ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
         xDisp->dispatch( aURL, aArgs );
     }
 }
@@ -2451,7 +2432,8 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
         {
             if ( !IsWait() )
                 EnterWait();
-            ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
+
+//          ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
             xDisp->dispatch( aURL, Sequence < PropertyValue >() );
         }
     }
@@ -2552,7 +2534,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     OpenStatusListener_Impl* pOpenListener = new OpenStatusListener_Impl;
-    xOpenListener = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject* >(pOpenListener), UNO_QUERY );
+    xOpenListener = Reference< XDispatchResultListener >( static_cast< ::cppu::OWeakObject* >(pOpenListener), UNO_QUERY );
 
     pHelpInterceptor->InitWaiter( (OpenStatusListener_Impl*)xOpenListener.get(), this );
     pIndexWin = new SfxHelpIndexWindow_Impl( this );
@@ -2727,14 +2709,6 @@ void SfxHelpWindow_Impl::UpdateToolbox()
 {
     pTextWin->GetToolBox().EnableItem( TBI_BACKWARD, pHelpInterceptor->HasHistoryPred() );
     pTextWin->GetToolBox().EnableItem( TBI_FORWARD, pHelpInterceptor->HasHistorySucc() );
-}
-
-// -----------------------------------------------------------------------
-
-void SfxHelpWindow_Impl::AddURLListener( const URL& aURL, Reference < XDispatch > xDisp  )
-{
-    if ( xDisp.is() )
-        ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-07 09:18:35 $
+ *  last change: $Author: pb $ $Date: 2001-11-30 14:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -91,28 +91,24 @@ namespace com { namespace sun { namespace star { namespace awt { class XWindow; 
 
 // class OpenStatusListener_Impl -----------------------------------------
 
-class OpenStatusListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+class OpenStatusListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchResultListener >
 {
 private:
     sal_Bool    m_bFinished;
     sal_Bool    m_bSuccess;
-    String      m_aURL;
     Link        m_aOpenLink;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-                m_xDispatch;
+    String      m_sURL;
 
 public:
     OpenStatusListener_Impl() : m_bFinished( FALSE ), m_bSuccess( FALSE ) {}
 
-    virtual void SAL_CALL   statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   dispatchFinished( const ::com::sun::star::frame::DispatchResultEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-
-    void                    AddListener( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
-                                         const ::com::sun::star::util::URL& aURL );
 
     inline sal_Bool         IsFinished() const { return m_bFinished; }
     inline sal_Bool         IsSuccessful() const { return m_bSuccess; }
-    inline const String&    GetURL() const { return m_aURL; }
+    inline void             SetURL( const String& rURL ) { m_sURL = rURL; }
+    inline String           GetURL() const  { return m_sURL; }
     inline void             SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
 };
 
@@ -439,7 +435,7 @@ friend class SfxHelpIndexWindow_Impl;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow >
                                 xWindow;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XStatusListener >
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
                                 xOpenListener;
 
     SfxHelpIndexWindow_Impl*    pIndexWin;
@@ -483,14 +479,14 @@ public:
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                         getTextFrame() const { return pTextWin->getFrame(); }
+    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
+                        getOpenListener() const { return xOpenListener; }
 
     void                SetFactory( const String& rFactory );
     void                SetHelpURL( const String& rURL );
     void                DoAction( USHORT nActionId );
 
     void                UpdateToolbox();
-    void                AddURLListener( const ::com::sun::star::util::URL& aURL,
-                                        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp );
     inline void         OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
     inline String       GetFactory() const { return pIndexWin->GetFactory(); }
 

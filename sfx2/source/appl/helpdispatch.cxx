@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpdispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-25 07:52:58 $
+ *  last change: $Author: pb $ $Date: 2001-11-30 14:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
+#endif
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -124,15 +127,24 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
 
     // save url to history
     m_rInterceptor.addURL( aURL.Complete );
-    // add a listener
-    m_rInterceptor.GetHelpWindow()->AddURLListener( aURL, m_xRealDispatch );
     // then dispatch
+    SfxHelpWindow_Impl* pHelpWin = m_rInterceptor.GetHelpWindow();
+    DBG_ASSERT( pHelpWin, "invalid HelpWindow" );
     if ( !bHasKeyword ||
-         INetURLObject( aURL.Complete ).GetHost() != m_rInterceptor.GetHelpWindow()->GetFactory() )
-        m_xRealDispatch->dispatch( aURL, aArgs );
+         INetURLObject( aURL.Complete ).GetHost() != pHelpWin->GetFactory() )
+    {
+        Reference < XNotifyingDispatch > xNotifyingDisp( m_xRealDispatch, UNO_QUERY );
+        if ( xNotifyingDisp.is() )
+        {
+            OpenStatusListener_Impl* pListener = (OpenStatusListener_Impl*)pHelpWin->getOpenListener().get();
+            DBG_ASSERT( pListener, "invalid XDispatchResultListener" );
+            pListener->SetURL( aURL.Complete );
+            xNotifyingDisp->dispatchWithNotification( aURL, aArgs, pListener );
+        }
+    }
     // if a keyword was found, then open it
     if ( bHasKeyword )
-        m_rInterceptor.GetHelpWindow()->OpenKeyword( sKeyword );
+        pHelpWin->OpenKeyword( sKeyword );
 }
 
 // -----------------------------------------------------------------------
