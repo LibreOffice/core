@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:04:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ Hyphenator::~Hyphenator()
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
         if (numdict) {
-            delete[] aDicts;
+            if (aDicts) delete[] aDicts;
         aDicts = NULL;
             numdict = 0;
         }
@@ -285,17 +285,10 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
               aSuppLocales.realloc(numlocs);
 
             } else {
-             // no dictionary.lst files found, just default to hyph_en.dic
-                 numdict = 1;
-                 aSuppLocales.realloc(1);
-                 Locale *pLocale = aSuppLocales.getArray();
-                 Locale nLoc( A2OU("en"), A2OU("US"), OUString() );
-                 pLocale[0] = nLoc;
-                 aDicts = new HDInfo[1];
-                 aDicts[0].aPtr = NULL;
-                 aDicts[0].aLoc = nLoc;
-                 aDicts[0].aEnc = 0;
-                 aDicts[0].aName = A2OU("hyph_en");
+             // no dictionary.lst files found so register no dics
+                 numdict = 0;
+                 aSuppLocales.realloc(0);
+                 aDicts = NULL;
             }
 
             /* de-allocation of memory is handled inside the DictMgr */
@@ -442,8 +435,8 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
          }
 
             hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
-        fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
-            fflush(stderr);
+        // fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
+            // fflush(stderr);
          if (nHyphenationPos  == -1)
              xRes = NULL;
          else
@@ -587,8 +580,8 @@ Reference< XPossibleHyphens > SAL_CALL
       }
 
       hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
-      fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
-      fflush(stderr);
+      // fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
+      // fflush(stderr);
 
       xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                 hyphenatedWord, aHyphPos );
