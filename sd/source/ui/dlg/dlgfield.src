@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:58:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ czech ] = "Typ pole";
         Text[ hebrew ] = "Feldtyp";
         Text[ hindi ] = "Field type";
+        Text[ slovak ] = "Typ poľa";
     };
     RadioButton RBT_FIX
     {
@@ -133,6 +134,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ czech ] = "Neměnný";
         Text[ hebrew ] = "~fix";
         Text[ hindi ] = "~स्थिर";
+        Text[ slovak ] = "~Nemenný";
     };
     RadioButton RBT_VAR
     {
@@ -166,6 +168,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ czech ] = "Proměnný";
         Text[ hebrew ] = "~variabel";
         Text[ hindi ] = "~परिवर्ती";
+        Text[ slovak ] = "~Premenný";
     };
     FixedText FT_LANGUAGE
     {
@@ -197,6 +200,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
+        Text[ slovak ] = "~Jazyk";
     };
 
     ListBox LB_LANGUAGE
@@ -246,6 +250,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "~रचना";
+        Text[ slovak ] = "F~ormát";
     };
     OKButton BTN_OK
     {
@@ -291,7 +296,10 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ czech ] = "Upravit pole";
     Text[ hebrew ] = "Feldbefehl bearbeiten";
     Text[ hindi ] = "क्षेत्र का संपादन";
+    Text[ slovak ] = "Upraviť pole";
 };
+
+
 
 
 
