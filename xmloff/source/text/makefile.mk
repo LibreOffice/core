@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+#   last change: $Author: dvo $ $Date: 2001-01-24 16:49:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ CXXFILES = \
         XMLSectionImportContext.cxx \
         XMLSectionSourceDDEImportContext.cxx \
         XMLSectionSourceImportContext.cxx \
+        XMLStringBufferImportContext.cxx \
         XMLTextColumnsContext.cxx \
         XMLTextColumnsExport.cxx \
         XMLTextFrameContext.cxx \
@@ -201,6 +202,7 @@ SLOFILES =	\
         $(SLO)$/XMLSectionImportContext.obj \
         $(SLO)$/XMLSectionSourceDDEImportContext.obj \
         $(SLO)$/XMLSectionSourceImportContext.obj \
+        $(SLO)$/XMLStringBufferImportContext.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \

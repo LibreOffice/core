@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLChangeInfoContext.hxx,v $
+ *  $RCSfile: XMLStringBufferImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:51 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,74 +59,61 @@
  *
  ************************************************************************/
 
-
-#ifndef _XMLOFF_XMLCHANGEINFOCONTEXT_HXX
-#define _XMLOFF_XMLCHANGEINFOCONTEXT_HXX
-
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
+#include "XMLStringBufferImportContext.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include "xmlkywd.hxx"
 #endif
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
 #endif
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::xml::sax::XAttributeList;
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
-class XMLChangedRegionImportContext;
+TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
 
-
-
-/**
- * Import <office:change-info> elements as children of <text:changed-region>
- * elements. The attribute values will be passed to the enclosing
- * XMLChangedRegionImportContext (which has to be passed down in the
- * constructor).
- */
-class XMLChangeInfoContext : public SvXMLImportContext
+XMLStringBufferImportContext::XMLStringBufferImportContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& sLocalName,
+    OUStringBuffer& rBuffer) :
+    SvXMLImportContext(rImport, nPrefix, sLocalName),
+    rTextBuffer(rBuffer)
 {
-    const ::rtl::OUString& rType;
+}
 
-    ::rtl::OUString sAuthor;
-    ::rtl::OUString sDateTime;
-    ::rtl::OUStringBuffer sCommentBuffer;
+XMLStringBufferImportContext::~XMLStringBufferImportContext()
+{
+}
 
-    XMLChangedRegionImportContext& rChangedRegion;
+SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList> & xAttrList)
+{
+    return new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, rTextBuffer);
+}
 
-public:
+void XMLStringBufferImportContext::Characters(
+    const OUString& rChars )
+{
+    rTextBuffer.append(rChars);
+}
 
-    TYPEINFO();
+void XMLStringBufferImportContext::EndElement()
+{
+    // add return for paragraph elements
+    if ( (XML_NAMESPACE_TEXT == GetPrefix()) &&
+         (GetLocalName().equalsAsciiL(sXML_p, sizeof(sXML_p)-1)) )
+    {
+        rTextBuffer.append(sal_Unicode(0x0a));
+    }
+}
 
-    XMLChangeInfoContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        XMLChangedRegionImportContext& rChangedRegion,
-        const ::rtl::OUString& rChangeType);
-
-    ~XMLChangeInfoContext();
-
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
-
-    virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-
-    virtual void EndElement();
-
-};
-
-#endif

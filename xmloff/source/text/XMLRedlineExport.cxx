@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,13 +414,6 @@ void XMLRedlineExport::ExportChangeInfo(
         rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_chg_author, sTmp);
     }
 
-    aAny = rPropSet->getPropertyValue(sRedlineComment);
-    aAny >>= sTmp;
-    if (sTmp.getLength() > 0)
-    {
-        rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_chg_comment, sTmp);
-    }
-
     aAny = rPropSet->getPropertyValue(sRedlineDateTime);
     util::DateTime aDateTime;
     aAny >>= aDateTime;
@@ -431,6 +424,23 @@ void XMLRedlineExport::ExportChangeInfo(
 
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
                                    sXML_change_info, sal_True, sal_True);
+
+    // comment as <text:p> sequence
+    aAny = rPropSet->getPropertyValue(sRedlineComment);
+    aAny >>= sTmp;
+    if (sTmp.getLength() > 0)
+    {
+        // iterate over all string-pieces separated by return (0x0a) and
+        // put each inside a paragraph element.
+        SvXMLTokenEnumerator aEnumerator(sTmp, sal_Char(0x0a));
+        OUString aSubString;
+        while (aEnumerator.getNextToken(aSubString))
+        {
+            SvXMLElementExport aParagraph(
+                rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+            rExport.GetDocHandler()->characters(aSubString);
+        }
+    }
 }
 
 void XMLRedlineExport::ExportChangeInfo(

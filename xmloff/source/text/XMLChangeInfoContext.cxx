@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeInfoContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include "XMLChangedRegionImportContext.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
+#include "XMLStringBufferImportContext.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -116,11 +120,7 @@ XMLChangeInfoContext::~XMLChangeInfoContext()
 void XMLChangeInfoContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    OUString sAuthor;
-    OUString sComment;
-    OUString sDateTime;
-
-    // process attributes: chg-author, chg-comment, chg-date-time
+    // process attributes: chg-author, chg-date-time
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
@@ -136,11 +136,6 @@ void XMLChangeInfoContext::StartElement(
             {
                 sAuthor = sValue;
             }
-            else if (sLocalName.equalsAsciiL(sXML_chg_comment,
-                                             sizeof(sXML_chg_comment)-1))
-            {
-                sComment = sValue;
-            }
             else if (sLocalName.equalsAsciiL(sXML_chg_date_time,
                                              sizeof(sXML_chg_date_time)-1))
             {
@@ -151,6 +146,34 @@ void XMLChangeInfoContext::StartElement(
         // else: unknown namespace
     }
 
+}
+
+SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList >& xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    if ((XML_NAMESPACE_TEXT == nPrefix) &&
+        rLocalName.equalsAsciiL(sXML_p, sizeof(sXML_p)-1))
+    {
+        pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                                   rLocalName, sCommentBuffer);
+    }
+    else
+    {
+        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+                                                          xAttrList);
+    }
+
+    return pContext;
+}
+
+void XMLChangeInfoContext::EndElement()
+{
     // set values at changed region context
-    rChangedRegion.SetChangeInfo(rType, sAuthor, sComment, sDateTime);
+    rChangedRegion.SetChangeInfo(rType, sAuthor,
+                                 sCommentBuffer.makeStringAndClear(),
+                                 sDateTime);
 }

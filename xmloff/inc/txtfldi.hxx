@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:30 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,39 +1332,6 @@ protected:
 
     static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
 
-};
-
-
-/**
- * Import all text into a string buffer.  Paragraph elements (<text:p>)
- * are recognized and cause a return character (0x0a) to be added.
- */
-class XMLStringBufferImportContext : public SvXMLImportContext
-{
-    ::rtl::OUStringBuffer& rTextBuffer;
-
-public:
-
-    TYPEINFO();
-
-    XMLStringBufferImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& sLocalName,
-        ::rtl::OUStringBuffer& rBuffer);
-
-    virtual ~XMLStringBufferImportContext();
-
-    virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-
-    virtual void Characters(
-        const ::rtl::OUString& rChars );
-
-    virtual void EndElement();
 };
 
 

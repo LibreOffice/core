@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-23 15:43:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include "xmlement.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
+#include "XMLStringBufferImportContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
@@ -3388,53 +3392,6 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
 
     return pName;
 }
-
-//
-// XMLStringBufferImportContext
-//
-
-
-TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
-
-XMLStringBufferImportContext::XMLStringBufferImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& sLocalName,
-    OUStringBuffer& rBuffer) :
-    SvXMLImportContext(rImport, nPrefix, sLocalName),
-    rTextBuffer(rBuffer)
-{
-}
-
-XMLStringBufferImportContext::~XMLStringBufferImportContext()
-{
-}
-
-SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
-    USHORT nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
-{
-    return new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                            rLocalName, rTextBuffer);
-}
-
-void XMLStringBufferImportContext::Characters(
-    const OUString& rChars )
-{
-    rTextBuffer.append(rChars);
-}
-
-void XMLStringBufferImportContext::EndElement()
-{
-    // add return for paragraph elements
-    if ( (XML_NAMESPACE_TEXT == GetPrefix()) &&
-         (GetLocalName().equalsAsciiL(sXML_p, sizeof(sXML_p)-1)) )
-    {
-        rTextBuffer.append(sal_Unicode(0x0a));
-    }
-}
-
 
 
 //
