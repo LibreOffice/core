@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:53:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ namespace sdr
             // #i37394# Non-painted object was changed. Test for potentially
             // getting visible
             virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
+
+            // #i42815#
+            // Get info if given Rectangle is visible in this view
+            virtual sal_Bool IsAreaVisible(const Rectangle& rRectangle) const;
 
             // Get info about the need to visualize GluePoints. The default
             // is that it is not necessary.
