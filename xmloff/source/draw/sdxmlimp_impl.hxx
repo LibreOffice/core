@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 16:23:07 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ enum SdXMLDocElemTokenMap
 enum SdXMLBodyElemTokenMap
 {
     XML_TOK_BODY_PAGE,
-    XML_TOK_BODY_SHOWS
+    XML_TOK_BODY_SETTINGS
 };
 
 enum SdXMLStylesElemTokenMap

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
             }
             break;
         }
-        case XML_TOK_BODY_SHOWS:
+        case XML_TOK_BODY_SETTINGS:
         {
             pContext = new SdXMLShowsContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <tools/debug.hxx>
 
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
@@ -73,11 +76,21 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_XCUSTOMPRESENTATIONSUPPLIER_HPP_
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONSUPPLIER_HPP_
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#endif
 
 #include "xmlkywd.hxx"
+
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -94,6 +107,10 @@
 #include "ximpshow.hxx"
 #endif
 
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::cppu;
@@ -104,6 +121,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
@@ -114,6 +132,9 @@ class ShowsImpImpl
 public:
     Reference< XSingleServiceFactory > mxShowFactory;
     Reference< XNameContainer > mxShows;
+    Reference< XPropertySet > mxPresProps;
+    Reference< XNameAccess > mxPages;
+    OUString maCustomShowName;
     SdXMLImport& mrImport;
 
     ShowsImpImpl( SdXMLImport& rImport )
@@ -137,15 +158,119 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
         mpImpl->mxShowFactory = Reference< XSingleServiceFactory >::query( mpImpl->mxShows );
     }
 
-    if( !mpImpl->mxShowFactory.is() )
+    Reference< XDrawPagesSupplier > xDrawPagesSupplier( rImport.GetModel(), UNO_QUERY );
+    if( xDrawPagesSupplier.is() )
+        mpImpl->mxPages = Reference< XNameAccess >::query( xDrawPagesSupplier->getDrawPages() );
+
+    Reference< XPresentationSupplier > xPresentationSupplier( rImport.GetModel(), UNO_QUERY );
+    if( xPresentationSupplier.is() )
+        mpImpl->mxPresProps = Reference< XPropertySet >::query( xPresentationSupplier->getPresentation() );
+
+
+    if( mpImpl->mxPresProps.is() )
     {
-        delete mpImpl;
-        mpImpl = NULL;
+        sal_Bool bAll = sal_True;
+        uno::Any aAny;
+
+        // read attributes
+        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for(sal_Int16 i=0; i < nAttrCount; i++)
+        {
+            OUString sAttrName = xAttrList->getNameByIndex( i );
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            OUString sValue = xAttrList->getValueByIndex( i );
+
+            switch( nPrefix )
+            {
+            case XML_NAMESPACE_PRESENTATION:
+                if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_start_page ) ) )
+                {
+                    aAny <<= sValue;
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ), aAny );
+                    bAll = sal_False;
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show ) ) )
+                {
+                    mpImpl->maCustomShowName = sValue;
+                    bAll = sal_False;
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_pause ) ) )
+                {
+                    DateTime aTime;
+                    if( !SvXMLUnitConverter::convertTime( aTime,  sValue ) )
+                        continue;
+
+                    const sal_Int32 nMS = ( ( aTime.Hours * 60 + aTime.Minutes ) * 60 + aTime.Seconds ) * 100 + aTime.HundredthSeconds;
+                    aAny <<= nMS;
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_animations ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_enabled ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_stay_on_top ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_force_manual ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_endless ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_full_screen ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_mouse_visible ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_start_with_navigator ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_mouse_as_pen ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_transition_on_click ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_enabled ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTransitionOnClick" ) ), aAny );
+                }
+                else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_show_logo ) ) )
+                {
+                    aAny = bool2any( sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) ) );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ), aAny );
+                }
+            }
+        }
+        aAny = bool2any( bAll );
+        mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowAll" ) ), aAny );
     }
 }
 
 SdXMLShowsContext::~SdXMLShowsContext()
 {
+    if( mpImpl && mpImpl->maCustomShowName.getLength() )
+    {
+        uno::Any aAny;
+        aAny <<= mpImpl->maCustomShowName;
+        mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ), aAny );
+    }
+
     delete mpImpl;
 }
 
@@ -184,23 +309,21 @@ SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT nPrefix, cons
             Reference< XIndexContainer > xShow( mpImpl->mxShowFactory->createInstance(), UNO_QUERY );
             if( xShow.is() )
             {
-                SvXMLTokenEnumerator aPageIds( aPages, sal_Unicode(',') );
-                OUString sPageId;
-                sal_Int32 nPageId;
+                SvXMLTokenEnumerator aPageNames( aPages, sal_Unicode(',') );
+                OUString sPageName;
                 Any aAny;
-                vector< sal_Int32 > aPages;
 
-                while( aPageIds.getNextToken( sPageId ) )
+                while( aPageNames.getNextToken( sPageName ) )
                 {
-                    if( SvXMLUnitConverter::convertNumber( nPageId, sPageId ) )
-                    {
-                        Reference< XDrawPage > xPage( mpImpl->mrImport.getDrawPageForId( nPageId ) );
+                    if( !mpImpl->mxPages->hasByName( sPageName ) )
+                        continue;
 
-                        if( xPage.is() )
-                        {
-                            aAny <<= xPage;
-                            xShow->insertByIndex( xShow->getCount(), aAny );
-                        }
+                    Reference< XDrawPage > xPage;
+                    mpImpl->mxPages->getByName( sPageName ) >>= xPage;
+                    if( xPage.is() )
+                    {
+                        aAny <<= xPage;
+                        xShow->insertByIndex( xShow->getCount(), aAny );
                     }
                 }
 

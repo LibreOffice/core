@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,7 +918,6 @@ void XMLShapeImportHelper::popGroupAndSort()
         {
             list<ZOrderHint>::iterator aIter( rZList.begin() );
 
-            DBG_ASSERT( (*aIter).nShould >= nIndex, "wrong should!" )
             while( nIndex < (*aIter).nShould && !rUnsortedList.empty() )
             {
                 ZOrderHint aGapHint( *rUnsortedList.begin() );

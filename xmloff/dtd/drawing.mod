@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.36 2001-02-11 15:05:07 cl Exp $
+	$Id: drawing.mod,v 1.37 2001-02-15 17:30:12 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -441,7 +441,21 @@
 <!ELEMENT presentation:show EMPTY>
 <!ATTLIST presentation:show presentation:name %styleName; #REQUIRED>
 <!ATTLIST presentation:show presentation:pages CDATA #REQUIRED>
-<!ELEMENT presentation:shows (presentation:show)*>
+
+<!ELEMENT presentation:settings (presentation:show)*>
+<!ATTLIST presentation:settings presentation:start-page %styleName #IMPLIED>
+<!ATTLIST presentation:settings presentation:show %styleName #IMPLIED>
+<!ATTLIST presentation:settings presentation:full-screen %boolean; "true">
+<!ATTLIST presentation:settings presentation:endless %boolean; "false">
+<!ATTLIST presentation:settings presentation:pause %timeDuration; #IMPLIED>
+<!ATTLIST presentation:settings presentation:show-logo %boolean; "false">
+<!ATTLIST presentation:settings presentation:force-manual %boolean; "false">
+<!ATTLIST presentation:settings presentation:mouse-visible %boolean; "true">
+<!ATTLIST presentation:settings presentation:mouse-as-pen %boolean; "false">
+<!ATTLIST presentation:settings presentation:start-with-navigator %boolean; "false">
+<!ATTLIST presentation:settings presentation:animations (enabled|disabled) "enabled">
+<!ATTLIST presentation:settings presentation:stay-on-top %boolean; "false">
+<!ATTLIST presentation:settings presentation:transition-on-click (enabled|disabled) "enabled">
 
 <!-- Drawing page -->
 <!ELEMENT draw:page (office:forms?,(%shapes;)*,presentation:animations?,presentation:notes?)>

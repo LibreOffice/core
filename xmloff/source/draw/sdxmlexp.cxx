@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:45:42 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmlmetae.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONSUPPLIER_HPP_
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_PRESENTATION_XCUSTOMPRESENTATIONSUPPLIER_HPP_
@@ -1595,63 +1599,194 @@ void SdXMLExport::_ExportContent()
     }
 
     if( IsImpress() )
-    {
-        Reference< XCustomPresentationSupplier > xSup( GetModel(), UNO_QUERY );
-        if( xSup.is() )
-        {
-            Reference< container::XNameContainer > xShows( xSup->getCustomPresentations() );
-            if( xShows.is() )
-            {
-                const OUString sPageNumber( RTL_CONSTASCII_USTRINGPARAM("Number") );
-
-                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, sXML_shows, sal_True, sal_True);
-
-                Sequence< OUString > aShowNames = xShows->getElementNames();
-                const OUString* pShowNames = aShowNames.getArray();
-                const sal_Int32 nCount = aShowNames.getLength();
-
-                Reference< XIndexContainer > xShow;
-                Reference< XPropertySet > xPageSet;
-                sal_Int32 nPageNumber;
-                OUStringBuffer sTmp;
-
-                for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pShowNames++ )
-                {
-                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_name, *pShowNames );
-
-                    xShows->getByName( *pShowNames ) >>= xShow;
-                    DBG_ASSERT( xShow.is(), "invalid custom show!" );
-                    if( !xShow.is() )
-                        continue;
-
-                    const sal_Int32 nPageCount = xShow->getCount();
-                    for( sal_Int32 nPage = 0; nPage < nPageCount; nPage++ )
-                    {
-                        xShow->getByIndex( nPage ) >>= xPageSet;
-
-                        if( !xPageSet.is() )
-                            continue;
-
-                        if( xPageSet->getPropertyValue( sPageNumber ) >>= nPageNumber )
-                        {
-                            if( sTmp.getLength() != 0 )
-                                sTmp.append( sal_Unicode( ',' ) );
-                            sTmp.append( nPageNumber );
-                        }
-                    }
-
-                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pages, sTmp.makeStringAndClear() );
-
-                    SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, sXML_show, sal_True, sal_True);
-                }
-            }
-        }
-    }
+        exportPresentationSettings();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
+void SdXMLExport::exportPresentationSettings()
+{
+    try
+    {
+        Reference< XPresentationSupplier > xPresSupplier( GetModel(), UNO_QUERY );
+        if( !xPresSupplier.is() )
+            return;
 
+        Reference< XPropertySet > xPresProps( xPresSupplier->getPresentation(), UNO_QUERY );
+        if( !xPresProps.is() )
+            return;
+
+        sal_Bool bHasAttr = sal_False;
+
+        sal_Bool bTemp;
+
+        // export range
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowAll" ) ) ) >>= bTemp;
+        if( !bTemp )
+        {
+            OUString aFirstPage;
+            xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) >>= aFirstPage;
+            if( aFirstPage.getLength() )
+            {
+                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_start_page, aFirstPage );
+                bHasAttr = sal_True;
+            }
+            else
+            {
+                OUString aCustomShow;
+                xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) >>= aCustomShow;
+                if( aCustomShow.getLength() )
+                {
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_show, aCustomShow );
+                    bHasAttr = sal_True;
+                }
+            }
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) >>= bTemp;
+        if( bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_endless, sXML_true );
+            bHasAttr = sal_True;
+
+            sal_Int32 nPause;
+            xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ) ) >>= nPause;
+            if( nPause )
+            {
+                util::DateTime aTime( 0, (sal_uInt16)nPause, 0, 0, 0, 0, 0 );
+
+                OUStringBuffer aOut;
+                SvXMLUnitConverter::convertTime( aOut, aTime );
+                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pause, aOut.makeStringAndClear() );
+            }
+
+            xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ) ) >>= bTemp;
+            if( bTemp )
+            {
+                AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_show_logo, sXML_true );
+            }
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ) ) >>= bTemp;
+        if( !bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_animations, sXML_disabled );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ) ) >>= bTemp;
+        if( bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_stay_on_top, sXML_true );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ) ) >>= bTemp;
+        if( bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_force_manual, sXML_true );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ) ) >>= bTemp;
+        if( !bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_full_screen, sXML_false );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ) ) >>= bTemp;
+        if( !bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_mouse_visible, sXML_false );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ) ) >>= bTemp;
+        if( bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_start_with_navigator, sXML_true );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ) ) >>= bTemp;
+        if( bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_mouse_as_pen, sXML_true );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTransitionOnClick" ) ) ) >>= bTemp;
+        if( !bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_transition_on_click, sXML_disabled );
+            bHasAttr = sal_True;
+        }
+
+        Reference< container::XNameContainer > xShows;
+        Sequence< OUString > aShowNames;
+        const OUString* pShowNames = NULL;
+        sal_Int32 nShowCount = 0;
+
+        Reference< XCustomPresentationSupplier > xSup( GetModel(), UNO_QUERY );
+        if( xSup.is() )
+        {
+            xShows = xSup->getCustomPresentations();
+            if( xShows.is() )
+            {
+                aShowNames = xShows->getElementNames();
+                pShowNames = aShowNames.getArray();
+                nShowCount = aShowNames.getLength();
+            }
+        }
+
+        if( bHasAttr || nShowCount != 0 )
+        {
+            SvXMLElementExport aSettings(*this, XML_NAMESPACE_PRESENTATION, sXML_settings, sal_True, sal_True);
+
+            if( nShowCount == 0 )
+                return;
+
+            Reference< XIndexContainer > xShow;
+            Reference< XNamed > xPageName;
+
+            OUStringBuffer sTmp;
+
+            for( sal_Int32 nIndex = 0; nIndex < nShowCount; nIndex++, pShowNames++ )
+            {
+                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_name, *pShowNames );
+
+                xShows->getByName( *pShowNames ) >>= xShow;
+                DBG_ASSERT( xShow.is(), "invalid custom show!" );
+                if( !xShow.is() )
+                    continue;
+
+                const sal_Int32 nPageCount = xShow->getCount();
+                for( sal_Int32 nPage = 0; nPage < nPageCount; nPage++ )
+                {
+                    xShow->getByIndex( nPage ) >>= xPageName;
+
+                    if( !xPageName.is() )
+                        continue;
+
+                    if( sTmp.getLength() != 0 )
+                        sTmp.append( sal_Unicode( ',' ) );
+                    sTmp.append( xPageName->getName() );
+
+                }
+
+                if( sTmp.getLength() )
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pages, sTmp.makeStringAndClear() );
+
+                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, sXML_show, sal_True, sal_True);
+            }
+        }
+    }
+    catch( uno::Exception )
+    {
+        DBG_ERROR( "uno::Exception while exporting <presentation:settings>" );
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aBodyElemTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,   sXML_page,              XML_TOK_BODY_PAGE   },
-    { XML_NAMESPACE_PRESENTATION, sXML_shows,       XML_TOK_BODY_SHOWS  },
+    { XML_NAMESPACE_PRESENTATION, sXML_settings,    XML_TOK_BODY_SETTINGS   },
     XML_TOKEN_MAP_END
 };
 
