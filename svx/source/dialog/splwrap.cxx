@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:43:13 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ static LangCheckState & GetLangCheckState()
 }
 
 
-static void ShowLanguageErrors()
+void SvxSpellWrapper::ShowLanguageErrors()
 {
     // display message boxes for languages not available for
     // spellchecking or hyphenation
