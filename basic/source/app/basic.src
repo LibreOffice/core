@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 21:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ ModalDialog RID_CALLDLG {
     Text[ turkish ] = "Dinamik ba�lant� no. ";
     Text[ catalan ] = "Enlla� din�mic n�m.";
     Text[ finnish ] = "Dynaaminen linkki numero ";
+    Text[ thai ] = "เชื่อมโยงลำดับหมายเลขแบบพลวัต ";
 };
 
 ModalDialog IDD_ABOUT_DIALOG {
@@ -194,6 +195,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ turkish ] = "StarTestTool";
         TEXT[ catalan ] = "StarTestTool";
         TEXT[ finnish ] = "StarTestTool";
+        TEXT[ thai ] = "StarTestTool";
     };
     FixedText 3 {
             Pos = MAP_APPFONT( 40, 45 );
@@ -220,6 +222,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ turkish ] = "S�r�m 1.0";
         TEXT[ catalan ] = "Versi� 1.0";
         TEXT[ finnish ] = "versio 1.0";
+        TEXT[ thai ] = "เวอร์ชั่น 1.0";
     };
     FixedText RID_VERSIONSTRING {
             Pos = MAP_APPFONT( 40, 55 );
@@ -252,6 +255,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ turkish ] = "�1995-1998 Sun Microsystems, Inc.";
         TEXT[ catalan ] = "�1995-1998 Sun Microsystems, Inc.";
         TEXT[ finnish ] = "�(r)1995-1998 Sun Microsystems Inc.";
+        TEXT[ thai ] = "ฎ1995-1998 Sun Microsystems, Inc.";
     };
 //  FixedIcon RID_ICON {
 //          Pos = MAP_APPFONT( 20, 26 );
@@ -285,7 +289,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ russian ] = "~Text";
         TEXT[ greek ] = "~Text";
         TEXT[ dutch ] = "~Tekst";
-        TEXT[ french ] = "~Texte";
+        TEXT[ french ] = "Texte";
         TEXT[ spanish ] = "Te~xto";
         TEXT[ italian ] = "~Testo";
         TEXT[ danish ] = "~Text";
@@ -300,6 +304,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ turkish ] = "~Metin";
         TEXT[ catalan ] = "~Text";
         TEXT[ finnish ] = "~Teksti";
+        TEXT[ thai ] = "~ข้อความ";
     };
     Edit RID_FIND {
             BORDER = TRUE;
@@ -318,7 +323,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ russian ] = "~Find";
         TEXT[ greek ] = "~Find";
         TEXT[ dutch ] = "~Zoeken";
-        TEXT[ french ] = "~Rechercher";
+        TEXT[ french ] = "Rechercher";
         TEXT[ spanish ] = "~Buscar";
         TEXT[ italian ] = "~Find";
         TEXT[ danish ] = "~Find";
@@ -333,6 +338,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ turkish ] = "~Ara";
         TEXT[ catalan ] = "~Cerca";
         TEXT[ finnish ] = "~Etsi";
+        TEXT[ thai ] = "~หา";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 105, 30 );
@@ -344,7 +350,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ russian ] = "~Cancel";
         TEXT[ greek ] = "~Cancel";
         TEXT[ dutch ] = "~Annuleren";
-        TEXT[ french ] = "~Annuler";
+        TEXT[ french ] = "Annuler";
         TEXT[ spanish ] = "~Cancelar";
         TEXT[ italian ] = "~Annulla";
         TEXT[ danish ] = "~Cancel";
@@ -359,6 +365,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ turkish ] = "~�ptal";
         TEXT[ catalan ] = "~Cancel�la";
         TEXT[ finnish ] = "~Peruuta";
+        TEXT[ thai ] = "~ยกเลิก";
     };
     TEXT[ portuguese ] = "StarBasic: Localizar texto";
     TEXT[ russian ] = "Testtool: Find Text";
@@ -379,6 +386,7 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ turkish ] = "StarBasic: Metni ara";
     TEXT[ catalan ] = "Texttool: Cerca text";
     TEXT[ finnish ] = "Testity�kalu: Etsi teksti";
+    TEXT[ thai ] = "เครื่องมือทดสอบ: หาข้อความ";
 };
 
 ModalDialog IDD_REPLACE_DIALOG {
@@ -413,6 +421,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ turkish ] = "~Eski metin";
         TEXT[ catalan ] = "~Text anterior";
         TEXT[ finnish ] = "~Edellinen teksti";
+        TEXT[ thai ] = "ข้อความ~ก่อน";
     };
     FixedText RID_FIXEDTEXT2 {
             Pos = MAP_APPFONT( 5, 30 );
@@ -438,6 +447,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ turkish ] = "~Yeni metin";
         TEXT[ catalan ] = "~Text nou";
         TEXT[ finnish ] = "~Uusi teksti";
+        TEXT[ thai ] = "ข้อความใ~หม่";
     };
     Edit RID_FIND {
             BORDER = TRUE;
@@ -462,7 +472,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ russian ] = "~Replace";
         TEXT[ greek ] = "~Replace";
         TEXT[ dutch ] = "~Vervangen";
-        TEXT[ french ] = "~Remplacer";
+        TEXT[ french ] = "Remplacer";
         TEXT[ spanish ] = "~Sustituir";
         TEXT[ italian ] = "~Replace";
         TEXT[ danish ] = "~Replace";
@@ -477,6 +487,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ turkish ] = "~De�i�tir";
         TEXT[ catalan ] = "~Reempla�a";
         TEXT[ finnish ] = "~Korvaa";
+        TEXT[ thai ] = "แ~ทนที่";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 105, 50 );
@@ -488,7 +499,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ russian ] = "~Cancel";
         TEXT[ greek ] = "~Cancel";
         TEXT[ dutch ] = "~Annuleren";
-        TEXT[ french ] = "~Annuler";
+        TEXT[ french ] = "Annuler";
         TEXT[ spanish ] = "~Cancelar";
         TEXT[ italian ] = "~Annulla";
         TEXT[ danish ] = "~Cancel";
@@ -503,6 +514,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ turkish ] = "�ptal";
         TEXT[ catalan ] = "~Cancel�la";
         TEXT[ finnish ] = "~Peruuta";
+        TEXT[ thai ] = "~ยกเลิก";
     };
     TEXT[ portuguese ] = "StarBasic: Substituir texto";
     TEXT[ russian ] = "Testtool: Replace Text";
@@ -523,6 +535,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     TEXT[ turkish ] = "StarBasic: Metni de�i�tir";
     TEXT[ catalan ] = "Testtool: Reempla�a text";
     TEXT[ finnish ] = "Testity�kalu: Korvaa teksti";
+    TEXT[ thai ] = "เครื่องมือทดสอบ: แทนที่ข้อความ";
 };
 
 InfoBox IDS_NOPRINTERERROR {
@@ -547,6 +560,7 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ turkish ] = "Yazd�rma i�levi kullan�lamaz!";
     MESSAGE[ catalan ] = "La funci� d'imprimir no est� disponible!";
     MESSAGE[ finnish ] = "Tulostustoiminto ei ole k�ytett�viss�.";
+    MESSAGE[ thai ] = "ฟังก์ชั่นการพิมพ์ใช้ไม่ได้!";
 };
 ErrorBox IDS_CANTLOAD {
     TITLE = "Testtool-Fehler";
@@ -591,6 +605,8 @@ ErrorBox IDS_CANTLOAD {
     Title[ catalan ] = "Error de StarBasic";
     MESSAGE[ finnish ] = "Kirjaston lataaminen ei onnistu.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "ไม่สามารถโหลดไลบรารีได้!";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 ErrorBox IDS_CANTSAVE {
     TITLE = "Testtool-Fehler";
@@ -635,6 +651,8 @@ ErrorBox IDS_CANTSAVE {
     Title[ catalan ] = "Error de StarBasic";
     MESSAGE[ finnish ] = "Kirjaston tallentaminen ei onnistu.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "ไม่สามารถบันทึกไลบรารีได้!";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 ErrorBox IDS_NOMAINPGM {
     TITLE = "Testtool-Fehler";
@@ -679,6 +697,8 @@ ErrorBox IDS_NOMAINPGM {
     Title[ catalan ] = "Error de StarBasic";
     MESSAGE[ finnish ] = "T�ss� ikkunassa ei ole p��ohjelmaa.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "หน้าต่างนี้ไม่มีโปรแกรมหลักอยู่!";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 ErrorBox IDS_READERROR {
     TITLE = "Testtool-Fehler";
@@ -723,6 +743,8 @@ ErrorBox IDS_READERROR {
     Title[ catalan ] = "Error de StarBasic";
     MESSAGE[ finnish ] = "Tiedoston lukeminen ei onnistu.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "ไม่สามารถอ่านแฟ้มได้!";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 ErrorBox IDS_WRITEERROR {
     TITLE = "Testtool-Fehler";
@@ -767,6 +789,8 @@ ErrorBox IDS_WRITEERROR {
     Title[ catalan ] = "Error de StarBasic";
     MESSAGE[ finnish ] = "Tiedoston tallentaminen ei onnistu.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "ไม่สามารถบันทึกแฟ้มได้!";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 ErrorBox IDS_PATTERNNOTFOUND {
     TITLE = "Testtool-Fehler";
@@ -811,6 +835,8 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ catalan ] = "Error de StarBasic";
     MESSAGE[ finnish ] = "Hakuavainta ei l�ytynyt.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "ไม่พบแป้นค้นหา!";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 ErrorBox IDS_INVALID_VALUE {
     TITLE = "Testtool-Fehler";
@@ -855,6 +881,8 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ catalan ] = "StarBasic Error";
     MESSAGE[ finnish ] = "Arvo on virheellinen eik� sit� voi asettaa.";
     Title[ finnish ] = "Testity�kalun virhe";
+    MESSAGE[ thai ] = "ค่าไม่ถูกต้องและไม่สามารถตั้งค่าได้";
+    Title[ thai ] = "เครื่องมือทดสอบผิดพลาด!";
 };
 
 QueryBox IDS_ASKSAVEERROR {
@@ -901,6 +929,8 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "On ilmennyt virhe tallennettaessa tiedostoja! Suoritetaanko ohjelma?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "บันทึกแฟ้มผิดพลาด! เรียกใช้งานใด ๆ หรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "Testtool";
@@ -946,6 +976,8 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "Tiedostoa on muutettu. Tallennetaanko se?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "แฟ้มมีการเปลี่ยนแปลง บันทึกหรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "Testtool";
@@ -991,6 +1023,8 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "Tallennusv�lineen ja editorin tiedostoa\non muokattu. Tallennetaanko se?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "แฟ้มมีการเปลี่ยนแปลงข้อมูลระดับกลาง\nและในตัวแก้ไข บันทึกหรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "Testtool";
@@ -1036,6 +1070,8 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "Tallennusv�lineen tiedostoa on muokattu.\nKorvataanko se?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "แฟ้มมีการเปลี่ยนแปลงข้อมูลระดับกลาง\nเขียนทับหรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_ASKRELOAD {
     TITLE = "Testtool";
@@ -1081,6 +1117,8 @@ QueryBox IDS_ASKRELOAD {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "Tallennusv�lineen tiedostoa on muokattu. Ladataanko se uudelleen?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "แฟ้มมีการเปลี่ยนแปลงข้อมูลระดับกลาง โหลดอีกครั้งหรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "Testtool";
@@ -1126,6 +1164,8 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "Tallennusv�lineen ja editorin tiedostoa\non muokattu. Ladataanko se uudelleen?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "แฟ้มมีการเปลี่ยนแปลงข้อมูลระดับกลาง\nและในตัวแก้ไข โหลดอีกครั้งหรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_RUNNING {
     TITLE = "Testtool";
@@ -1171,6 +1211,8 @@ QueryBox IDS_RUNNING {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "BASIC on yh� k�ynniss�! Lopetetaanko?";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "BASIC ยังทำงานอยู่! ออกจากโปรแกรมหรือไม่?";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "Testtool";
@@ -1216,6 +1258,8 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ catalan ] = "StarBasic";
     MESSAGE[ finnish ] = "Tietoja menetet��n, jos tallennat ulkoisessa muodossa.";
     Title[ finnish ] = "Testity�kalu";
+    MESSAGE[ thai ] = "กำลังบันทึกในรูปแบบภายนอกซึ่งเป็นเหตุให้ข้อมูลหาย";
+    Title[ thai ] = "เครื่องมือทดสอบ!";
 };
 
 InfoBox IDS_NOT_YET_IMPLEMENTED
@@ -1241,6 +1285,7 @@ InfoBox IDS_NOT_YET_IMPLEMENTED
     MESSAGE[ turkish ] = "Hen�z uygulanmad�";
     MESSAGE[ catalan ] = "Encara no est� implementat";
     MESSAGE[ finnish ] = "Ei viel� k�yt�ss�";
+    MESSAGE[ thai ] = "ยังใช้ไม่ได้";
 };
 
 
@@ -1266,6 +1311,7 @@ String IDS_WARNING1 {
     TEXT[ turkish ] = "Uyar� ";
     TEXT[ catalan ] = "Advert�ncia ";
     TEXT[ finnish ] = "Varoitus";
+    TEXT[ thai ] = "คำเตือน ";
 };
 String IDS_ERROR1 {
     TEXT = "Fehler ";
@@ -1289,6 +1335,7 @@ String IDS_ERROR1 {
     TEXT[ turkish ] = "Hata ";
     TEXT[ catalan ] = "Error";
     TEXT[ finnish ] = "Virhe";
+    TEXT[ thai ] = "ผิดพลาด ";
 };
 String IDS_ERROR2 {
     TEXT = " in Zeile ";
@@ -1312,6 +1359,7 @@ String IDS_ERROR2 {
     TEXT[ turkish ] = "Sat�r: ";
     TEXT[ catalan ] = "en la fila";
     TEXT[ finnish ] = "rivill� ";
+    TEXT[ thai ] = "ในแถว ";
 };
 String IDS_NO_LONGNAME {
     TEXT = "Kein Eintrag in Hid.Lst";
@@ -1335,6 +1383,7 @@ String IDS_NO_LONGNAME {
     TEXT[ turkish ] = "Hid.Lst'te giri� yok";
     TEXT[ catalan ] = "No hi ha cap entrada a Hid.Lst";
     TEXT[ finnish ] = "Ei merkint�j� piiloluettelossa";
+    TEXT[ thai ] = "ไม่มีรายการใน Hid.Lst";
 };
 String IDS_WARNING_PREFIX
 {
@@ -1359,6 +1408,7 @@ String IDS_WARNING_PREFIX
     Text[ turkish ] = "Uyar�: ";
     Text[ catalan ] = "Advert�ncia: ";
     Text[ finnish ] = "Varoitus: ";
+    Text[ thai ] = "คำเตือน: ";
 };
 String IDS_OBJECT
 {
@@ -1384,6 +1434,7 @@ String IDS_OBJECT
     Text[ turkish ] = "Nesne";
     Text[ catalan ] = "Objecte";
     Text[ finnish ] = "Objekti";
+    Text[ thai ] = "วัตถุ";
 };
 String IDS_EDIT_VAR
 {
@@ -1409,6 +1460,7 @@ String IDS_EDIT_VAR
     Text[ turkish ] = "($Arg1) D�zenle";
     Text[ catalan ] = "Edita ($Arg1)";
     Text[ finnish ] = "Muokkaa ($Arg1)";
+    Text[ thai ] = "แก้ไข ($Arg1)";
 };
 
 String IDS_APPNAME {
@@ -1433,6 +1485,7 @@ String IDS_APPNAME {
     TEXT[ turkish ] = "%PRODUCTNAME Basic";
     TEXT[ catalan ] = "Testtool";
     TEXT[ finnish ] = "Testity�kalu";
+    TEXT[ thai ] = "เครื่องมือทดสอบ";
 };
 String IDS_APPNAME2 {
     TEXT = "StarTestTool";
@@ -1456,6 +1509,7 @@ String IDS_APPNAME2 {
     TEXT[ turkish ] = "StarTestTool";
     TEXT[ catalan ] = "StarTestTool";
     TEXT[ finnish ] = "StarTestTool";
+    TEXT[ thai ] = "StarTestTool";
 };
 String IDS_APPMODE_BREAK {
     text = "Break";
@@ -1479,6 +1533,7 @@ String IDS_APPMODE_BREAK {
     text[ turkish ] = "Break";
     text[ catalan ] = "Salt";
     text[ finnish ] = "Keskeytys";
+    text[ thai ] = "แบ่ง";
 };
 String IDS_APPMODE_RUN {
     text = "Run";
@@ -1502,6 +1557,7 @@ String IDS_APPMODE_RUN {
     text[ turkish ] = "Run";
     text[ catalan ] = "Executa";
     text[ finnish ] = "Suorita";
+    text[ thai ] = "เรียกใช้งาน";
 };
 String IDS_NONAME {
     TEXT = "Unbenannt";
@@ -1525,6 +1581,7 @@ String IDS_NONAME {
     TEXT[ turkish ] = "Ads�z";
     TEXT[ catalan ] = "Sense nom";
     TEXT[ finnish ] = "Nimet�n";
+    TEXT[ thai ] = "ไม่มีชื่อ";
 };
 
 String IDS_NONAMEFILE {
@@ -1585,6 +1642,7 @@ String IDS_LOADDLG {
     TEXT[ turkish ] = "StarBasic: Dosyay� y�kle";
     TEXT[ catalan ] = "Testool: Carrega l'arxiu";
     TEXT[ finnish ] = "Testity�kalu: Lataa tiedosto";
+    TEXT[ thai ] = "เครื่องมือทดสอบ: โหลดแฟ้ม";
 };
 String IDS_SAVEDLG {
     TEXT = "Testtool: Datei speichern";
@@ -1608,6 +1666,7 @@ String IDS_SAVEDLG {
     TEXT[ turkish ] = "StarBasic: Dosyay� kaydet";
     TEXT[ catalan ] = "Testool: Desa l'arxiu ";
     TEXT[ finnish ] = "Testity�kalu: Tallenna tiedosto";
+    TEXT[ thai ] = "เครื่องมือทดสอบ: บันทึกแฟ้ม";
 };
 String IDS_BASFILTER {
     TEXT = "Quelltexte (*.BAS)";
@@ -1631,6 +1690,7 @@ String IDS_BASFILTER {
     TEXT[ turkish ] = "Kaynak metinler (*.BAS)";
     TEXT[ catalan ] = "Text font (*.BAS)";
     TEXT[ finnish ] = "L�hdeteksti (*.BAS)";
+    TEXT[ thai ] = "แหล่งข้อความ (*.BAS)";
 };
 String IDS_INCFILTER {
     TEXT = "Include-Dateien (*.INC)";
@@ -1654,6 +1714,7 @@ String IDS_INCFILTER {
     TEXT[ turkish ] = "Include dosyalar� (*.INC)";
     TEXT[ catalan ] = "Fitxers d'inclusi� (*.INC)";
     TEXT[ finnish ] = "Include- tiedostot (*.INC)";
+    TEXT[ thai ] = "รวมแฟ้ม (*.INC)";
 };
 String IDS_LIBFILTER {
     TEXT = "Libraries (*.SB)";
@@ -1677,6 +1738,7 @@ String IDS_LIBFILTER {
     TEXT[ turkish ] = "Kitapl�klar (*.SB)";
     TEXT[ catalan ] = "Biblioteques (*.SB)";
     TEXT[ finnish ] = "Kirjastot (*.SB)";
+    TEXT[ thai ] = "ไลบรารี (*.SB)";
 };
 String IDS_RESFILTER {
     TEXT = "Results (*.RES)";
@@ -1700,6 +1762,7 @@ String IDS_RESFILTER {
     TEXT[ turkish ] = "Sonu�lar (*.RES)";
     TEXT[ catalan ] = "Resultats (*.RES)";
     TEXT[ finnish ] = "Tulokset (*.RES)";
+    TEXT[ thai ] = "ผลลัพธ์ (*.RES)";
 };
 String IDS_TXTFILTER {
     TEXT = "Results als Textdatei (*.TXT)";
@@ -1723,6 +1786,7 @@ String IDS_TXTFILTER {
     TEXT[ turkish ] = "Metin dosyas� olarak sonu�lar (*.TXT)";
     TEXT[ catalan ] = "Resultats com a fitxers de text (*.TXT)";
     TEXT[ finnish ] = "Tulokset tekstitiedostona (*.TXT)";
+    TEXT[ thai ] = "ผลลัพธ์เป็นแฟ้มข้อความ (*.TXT)";
 };
 String IDS_PAGE {
     TEXT = "Seite ";
@@ -1746,6 +1810,7 @@ String IDS_PAGE {
     TEXT[ turkish ] = "Sayfa ";
     TEXT[ catalan ] = "P�gina";
     TEXT[ finnish ] = "Sivu ";
+    TEXT[ thai ] = "หน้า ";
 };
 String IDS_PRINTMSG {
     TEXT = "Ausdruck von ";
@@ -1769,6 +1834,7 @@ String IDS_PRINTMSG {
     TEXT[ turkish ] = "��kt� kayna��: ";
     TEXT[ catalan ] = "Sortida d'impressi� des de ";
     TEXT[ finnish ] = "Tuloste kohteesta";
+    TEXT[ thai ] = "พิมพ์ออกจาก ";
 };
 String IDS_CONTINUE {
     TEXT = "Weiter";
@@ -1792,6 +1858,7 @@ String IDS_CONTINUE {
     TEXT[ turkish ] = "�leri";
     TEXT[ catalan ] = "Continua";
     TEXT[ finnish ] = "Jatka";
+    TEXT[ thai ] = "ทำต่อ";
 };
 String IDS_CANCEL {
     TEXT = "Abbruch";
@@ -1815,6 +1882,7 @@ String IDS_CANCEL {
     TEXT[ turkish ] = "�ptal";
     TEXT[ catalan ] = "Cancel�la";
     TEXT[ finnish ] = "Peruuta";
+    TEXT[ thai ] = "ยกเลิก";
 };
 String IDS_DISASWIN {
     TEXT = "Disassembly";
@@ -1838,6 +1906,7 @@ String IDS_DISASWIN {
     TEXT[ turkish ] = "Disassembly";
     TEXT[ catalan ] = "Desassemblatge";
     TEXT[ finnish ] = "Purkaminen";
+    TEXT[ thai ] = "ดิสแอสเซมบลี";
 };
 //Icon RID_APPICON {
 //  FILE = "basic.ico";
@@ -1887,6 +1956,7 @@ Menu RID_APPMENUBAR {
             TEXT[ turkish ] = "~Dosya";
             TEXT[ catalan ] = "~Fitxer";
             TEXT[ finnish ] = "~Tiedosto";
+            TEXT[ thai ] = "แ~ฟ้ม";
         };
     MenuItem  {
             Identifier = RID_APPEDIT;
@@ -1914,6 +1984,7 @@ Menu RID_APPMENUBAR {
             TEXT[ turkish ] = "D�~zenle";
             TEXT[ catalan ] = "~Edita";
             TEXT[ finnish ] = "~Muokkaa";
+            TEXT[ thai ] = "แ~ก้ไข";
         };
     MenuItem  {
             Identifier = RID_APPRUN;
@@ -1941,6 +2012,7 @@ Menu RID_APPMENUBAR {
             TEXT[ turkish ] = "P~rogram";
             TEXT[ catalan ] = "~Programa";
             TEXT[ finnish ] = "~Ohjelma";
+            TEXT[ thai ] = "โ~ปรแกรม";
         };
     MenuItem  {
             Identifier = RID_APPWINDOW;
@@ -1968,6 +2040,7 @@ Menu RID_APPMENUBAR {
             TEXT[ turkish ] = "~Pencere";
             TEXT[ catalan ] = "~Finestra";
             TEXT[ finnish ] = "~Ikkuna";
+            TEXT[ thai ] = "~หน้าต่าง";
         };
     MenuItem  {
             SEPARATOR = TRUE;
@@ -1999,6 +2072,7 @@ Menu RID_APPMENUBAR {
             TEXT[ turkish ] = "~Yard�m";
             TEXT[ catalan ] = "~Ajuda";
             TEXT[ finnish ] = "~Ohje";
+            TEXT[ thai ] = "~ช่วยเหลือ";
         };
     };
 };
@@ -2030,6 +2104,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "Y~eni";
             TEXT[ catalan ] = "~Nou";
             TEXT[ finnish ] = "~Uusi";
+            TEXT[ thai ] = "ใ~หม่";
         };
     MenuItem  {
         Identifier = RID_FILEOPEN;
@@ -2057,6 +2132,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "~A�...";
             TEXT[ catalan ] = "~Obre...";
             TEXT[ finnish ] = "~Avaa";
+            TEXT[ thai ] = "เ~ปิด...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2086,6 +2162,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "Kapa~t";
             TEXT[ catalan ] = "~Tanca...";
             TEXT[ finnish ] = "~Sulje";
+            TEXT[ thai ] = "ปิ~ด";
         };
     MenuItem  {
         Identifier = RID_FILESAVE;
@@ -2113,6 +2190,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "Kay~det";
             TEXT[ catalan ] = "~Desa";
             TEXT[ finnish ] = "~Tallenna";
+            TEXT[ thai ] = "~บันทึก";
         };
     MenuItem  {
         Identifier = RID_FILESAVEAS;
@@ -2140,6 +2218,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "~Farkl� kaydet...";
             TEXT[ catalan ] = "Anomena~ i desa...";
             TEXT[ finnish ] = "Tallenna~ nimell�";
+            TEXT[ thai ] = "บันทึกเป็~น...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2169,6 +2248,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "~Kitapl��� y�kle";
             TEXT[ catalan ] = "~Carrega la biblioteca...";
             TEXT[ finnish ] = "~Lataa kirjasto";
+            TEXT[ thai ] = "โ~หลดไลบรารี...";
         };
     MenuItem  {
         Identifier = RID_FILESAVELIB;
@@ -2195,6 +2275,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "Kitapl��� kaydet...";
             TEXT[ catalan ] = "~Desa la biblioteca...";
             TEXT[ finnish ] = "Tallenna kir~jasto";
+            TEXT[ thai ] = "บันทึกไล~บรารี...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2224,6 +2305,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "~Yazd�r";
             TEXT[ catalan ] = "~Imprimeix";
             TEXT[ finnish ] = "~Tulosta";
+            TEXT[ thai ] = "~พิมพ์";
         };
     MenuItem  {
         Identifier = RID_FILESETUP;
@@ -2250,6 +2332,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "Yaz�c� ayarlar�...";
             TEXT[ catalan ] = "Par�metres de l'imp~ressora...";
             TEXT[ finnish ] = "Tu~lostinasetukset";
+            TEXT[ thai ] = "ตั้งค่าเ~ครื่องพิมพ์...";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2280,6 +2363,7 @@ Menu RID_FILE {
             TEXT[ turkish ] = "��~k��";
             TEXT[ catalan ] = "~Surt";
             TEXT[ finnish ] = "~Lopeta";
+            TEXT[ thai ] = "~ออก";
         };
     };
 };
@@ -2311,6 +2395,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Geri ~al";
             TEXT[ catalan ] = "~Desf�s";
             TEXT[ finnish ] = "~Peruuta";
+            TEXT[ thai ] = "เ~ลิกทำ";
         };
     MenuItem  {
         Identifier = RID_EDITREDO;
@@ -2338,6 +2423,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "~Yinele";
             TEXT[ catalan ] = "~Repeteix";
             TEXT[ finnish ] = "~Toista";
+            TEXT[ thai ] = "~ทำซ้ำ";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2368,6 +2454,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Kes";
             TEXT[ catalan ] = "~Retalla";
             TEXT[ finnish ] = "~Leikkaa";
+            TEXT[ thai ] = "~ตัด";
         };
     MenuItem  {
         Identifier = RID_EDITCOPY;
@@ -2395,6 +2482,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Kopyala";
             TEXT[ catalan ] = "~Copia";
             TEXT[ finnish ] = "~Kopioi";
+            TEXT[ thai ] = "~คัดลอก";
         };
     MenuItem  {
         Identifier = RID_EDITPASTE;
@@ -2422,6 +2510,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Ekle";
             TEXT[ catalan ] = "~Enganxa";
             TEXT[ finnish ] = "L~iit�";
+            TEXT[ thai ] = "~วาง";
         };
     MenuItem  {
         Identifier = RID_EDITDEL;
@@ -2449,6 +2538,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Sil";
             TEXT[ catalan ] = "~Suprimeix";
             TEXT[ finnish ] = "~Poista";
+            TEXT[ thai ] = "~ลบ";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2479,6 +2569,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Ara...";
             TEXT[ catalan ] = "~Cerca...";
             TEXT[ finnish ] = "~Etsi";
+            TEXT[ thai ] = "~หา...";
         };
     MenuItem  {
         Identifier = RID_EDITREPLACE;
@@ -2505,6 +2596,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "De�i�tir...";
             TEXT[ catalan ] = "~Reempla�a...";
             TEXT[ finnish ] = "~Korvaa";
+            TEXT[ thai ] = "แ~ทนที่...";
         };
     MenuItem  {
         Identifier = RID_EDITREPEAT;
@@ -2533,6 +2625,7 @@ Menu RID_EDIT {
             TEXT[ turkish ] = "Yeniden ara";
             TEXT[ catalan ] = "Repeteix la c~erca";
             TEXT[ finnish ] = "Toista ~haku";
+            TEXT[ thai ] = "ค้~นหาซ้ำ";
         };
     };
 };
@@ -2564,6 +2657,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~Derle";
             TEXT[ catalan ] = "~Compila";
             TEXT[ finnish ] = "~Kokoa";
+            TEXT[ thai ] = "~คอมไพล์";
         };
     MenuItem  {
         Identifier = RID_RUNDISAS;
@@ -2590,6 +2684,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~Disassemble";
             TEXT[ catalan ] = "~Desassembla";
             TEXT[ finnish ] = "~Pura";
+            TEXT[ thai ] = "~ดิสแอสเซมเบิ้ล";
         };
     MenuItem  {
         Identifier = RID_RUNSTART;
@@ -2617,6 +2712,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~Ba�lat";
             TEXT[ catalan ] = "~Inici";
             TEXT[ finnish ] = "~Aloita";
+            TEXT[ thai ] = "เ~ริ่มต้น";
         };
     MenuItem  {
         Identifier = RID_RUNSTEPINTO;
@@ -2644,6 +2740,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~Tek ad�m";
             TEXT[ catalan ] = "~Pas simple";
             TEXT[ finnish ] = "~Askel kerrallaan";
+            TEXT[ thai ] = "~ทีละขั้น";
         };
     MenuItem  {
         Identifier = RID_RUNSTEPOVER;
@@ -2671,6 +2768,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "Si~ngle Step over Procedure";
             TEXT[ catalan ] = "Pa~s simple durant el procediment";
             TEXT[ finnish ] = "As~kel kerrallaan toiminnoissa";
+            TEXT[ thai ] = "ทีละขั้นเหนือกระบวนคำสั่ง";
         };
 //  MenuItem  {
 //      Identifier = RID_RUNTOCURSOR;
@@ -2706,6 +2804,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "Set / Delete Break Point";
             TEXT[ catalan ] = "Defineix / Suprimeix el punt de ruptura";
             TEXT[ finnish ] = "Aseta/poista keskeytyspiste";
+            TEXT[ thai ] = "ตั้งค่า / ลบจุดแบ่ง";
         };
     MenuItem  {
         Identifier = RID_RUNBREAK;
@@ -2733,6 +2832,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~Duraklat";
             TEXT[ catalan ] = "~Interromp";
             TEXT[ finnish ] = "~Keskeyt�";
+            TEXT[ thai ] = "~ขัดจังหวะ";
         };
     MenuItem  {
         Identifier = RID_RUNSTOP;
@@ -2759,6 +2859,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~�ptal";
             TEXT[ catalan ] = "~Cancel�la";
             TEXT[ finnish ] = "~Peruuta";
+            TEXT[ thai ] = "~ยกเลิก";
         };
     MenuItem  {
         Identifier = RID_RUNNEXTERR;
@@ -2786,6 +2887,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~Sonraki hata";
             TEXT[ catalan ] = "~Error seg�ent";
             TEXT[ finnish ] = "~Seuraava virhe";
+            TEXT[ thai ] = "~ข้อผิดพลาดถัดไป";
         };
     MenuItem  {
         Identifier = RID_RUNPREVERR;
@@ -2813,6 +2915,7 @@ Menu RID_RUN {
             TEXT[ turkish ] = "~�nceki hata";
             TEXT[ catalan ] = "~Error anterior";
             TEXT[ finnish ] = "~Edellinen virhe";
+            TEXT[ thai ] = "~ข้อผิดพลาดอันก่อน";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2845,6 +2948,7 @@ String RID_TT_EXTRAS_NAME
     Text[ turkish ] = "Ara�lar";
     Text[ catalan ] = "E~xtres";
     Text[ finnish ] = "Li~s�objektit";
+    Text[ thai ] = "~พิเศษ";
 };
 
 Menu RID_TT_EXTRAS {
@@ -2874,6 +2978,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ turkish ] = "~Ayarlar";
             TEXT[ catalan ] = "~Par�metres";
             TEXT[ finnish ] = "~Asetukset";
+            TEXT[ thai ] = "~ตั้งค่า";
         };
     MenuItem  {
             Identifier = RID_DECLARE_HELPER;
@@ -2900,6 +3005,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ turkish ] = "~Pencereleri ekle";
             TEXT[ catalan ] = "~Inclou di�legs";
             TEXT[ finnish ] = "~My�s valintaikkunat";
+            TEXT[ thai ] = "~รวมไดอะล็อก";
         };
     };
 };
@@ -2930,6 +3036,7 @@ Menu RID_WINDOW {
             TEXT[ turkish ] = "B~asamakla";
             TEXT[ catalan ] = "~Superposici�";
             TEXT[ finnish ] = "~P��llekk�in";
+            TEXT[ thai ] = "~วางซ้อน";
         };
     MenuItem  {
             Identifier = RID_WINTILE;
@@ -2956,6 +3063,7 @@ Menu RID_WINDOW {
             TEXT[ turkish ] = "~Yan yana";
             TEXT[ catalan ] = "~Mosaic";
             TEXT[ finnish ] = "~Vierekk�in";
+            TEXT[ thai ] = "~ซ้อนทับ";
         };
     MenuItem  {
             Identifier = RID_WINTILEHORZ;
@@ -2982,6 +3090,7 @@ Menu RID_WINDOW {
             TEXT[ turkish ] = "~Yatay yerle�tir";
             TEXT[ catalan ] = "~Organitza horitzontalment";
             TEXT[ finnish ] = "~J�rjest� vaakatasossa";
+            TEXT[ thai ] = "~จัดเรียงตามแนวนอน";
         };
     MenuItem  {
             Identifier = RID_WINTILEVERT;
@@ -3008,6 +3117,7 @@ Menu RID_WINDOW {
             TEXT[ turkish ] = "~Dikey yerle�tir";
             TEXT[ catalan ] = "~Organitza verticalment";
             TEXT[ finnish ] = "~J�rjest� pystytasossa";
+            TEXT[ thai ] = "~จัดเรียงตามแนวตั้ง";
         };
     };
 };
@@ -3076,6 +3186,7 @@ Menu RID_HELP {
             TEXT[ turkish ] = "~Bilgi...";
             TEXT[ catalan ] = "~Quant a...";
             TEXT[ finnish ] = "~Tietoja";
+            TEXT[ thai ] = "เ~กี่ยวกับ...";
         };
     };
 };
@@ -3111,6 +3222,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ turkish ] = "��kt� kayna�� ";
         TEXT[ catalan ] = "Imprimeix des de";
         TEXT[ finnish ] = "Tulosta kohteesta ";
+        TEXT[ thai ] = "พิมพ์จาก ";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 56, 46 );
@@ -3136,6 +3248,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ turkish ] = "�ptal";
         TEXT[ catalan ] = "Cancel�la";
         TEXT[ finnish ] = "Peruuta";
+        TEXT[ thai ] = "ยกเลิก";
     };
     TEXT[ portuguese ] = "StarBasic: imprimir ficheiro";
     TEXT[ russian ] = "Testtool: Print File";
@@ -3156,6 +3269,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ turkish ] = "StarBasic: Dosyay� yazd�r";
     TEXT[ catalan ] = "Testool: Imprimeix el fitxer";
     TEXT[ finnish ] = "Testity�kalu: Tulosta tiedosto";
+    TEXT[ thai ] = "เครื่องมือทดสอบ: พิมพ์แฟ้ม";
 };
 
 
@@ -3200,6 +3314,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ turkish ] = "Genel";
                 Text[ catalan ] = "Gen�ric";
                 Text[ finnish ] = "Yleinen";
+                Text[ thai ] = "ทั่วไป";
             };
             PageItem
             {
@@ -3225,12 +3340,33 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ turkish ] = "�zel";
                 Text[ catalan ] = "Especialitzat";
                 Text[ finnish ] = "Erikoinen";
+                Text[ thai ] = "พิเศษ";
             };
             PageItem
             {
                 Identifier = RID_TP_FON ;
                 Text = "Schrift" ;
                 Text [ english_us ] = "Font" ;
+                Text[ portuguese ] = "Font";
+                Text[ russian ] = "Font";
+                Text[ greek ] = "Font";
+                Text[ dutch ] = "Font";
+                Text[ french ] = "Font";
+                Text[ spanish ] = "Font";
+                Text[ finnish ] = "Font";
+                Text[ italian ] = "Font";
+                Text[ danish ] = "Font";
+                Text[ swedish ] = "Font";
+                Text[ polish ] = "Font";
+                Text[ portuguese_brazilian ] = "Font";
+                Text[ japanese ] = "Font";
+                Text[ korean ] = "Font";
+                Text[ chinese_simplified ] = "Font";
+                Text[ chinese_traditional ] = "Font";
+                Text[ turkish ] = "Font";
+                Text[ arabic ] = "Font";
+                Text[ catalan ] = "Font";
+                Text[ thai ] = "Font";
             };
         };
     OKButton RID_OK {
@@ -3264,6 +3400,7 @@ ModelessDialog IDD_OPTIONS_DLG
     Text[ turkish ] = "Ayarlar";
     Text[ catalan ] = "Par�metres";
     Text[ finnish ] = "Asetukset";
+    Text[ thai ] = "ตั้งค่า";
 };
 
 
@@ -3295,6 +3432,7 @@ TabPage RID_TP_GENERIC {
         Text[ turkish ] = "Aral�k";
         Text[ catalan ] = "�rea";
         Text[ finnish ] = "Alue";
+        Text[ thai ] = "ช่วง";
     };
     ComboBox RID_CB_AREA {
             HScroll              = TRUE;
@@ -3331,6 +3469,7 @@ TabPage RID_TP_GENERIC {
         Text[ turkish ] = "Yeni";
         Text[ catalan ] = "Nou";
         Text[ finnish ] = "Uusi";
+        Text[ thai ] = "ใหม่";
     };
     PushButton RID_PD_DEL_AREA {
             Pos = MAP_APPFONT( 188, 16 );
@@ -3357,6 +3496,7 @@ TabPage RID_TP_GENERIC {
         Text[ turkish ] = "Sil";
         Text[ catalan ] = "Suprimeix";
         Text[ finnish ] = "Poista";
+        Text[ thai ] = "ลบ";
     };
     FixedLine RID_FL_VALUE {
             Pos = MAP_APPFONT( 4, 36 );
@@ -3382,6 +3522,7 @@ TabPage RID_TP_GENERIC {
         Text[ turkish ] = "Ayarlar";
         Text[ catalan ] = "Configuraci�";
         Text[ finnish ] = "Asetus";
+        Text[ thai ] = "ตั้งค่า";
     };
     ComboBox RID_CB_VALUE {
             HScroll              = TRUE;
@@ -3417,6 +3558,7 @@ TabPage RID_TP_GENERIC {
         Text[ turkish ] = "Yeni";
         Text[ catalan ] = "Nou";
         Text[ finnish ] = "Uusi";
+        Text[ thai ] = "ใหม่";
     };
     PushButton RID_PB_DEL_VALUE {
             Pos = MAP_APPFONT( 188, 64 );
@@ -3443,6 +3585,7 @@ TabPage RID_TP_GENERIC {
         Text[ turkish ] = "Sil";
         Text[ catalan ] = "Suprimeix";
         Text[ finnish ] = "Poista";
+        Text[ thai ] = "ลบ";
     };
 };
 
@@ -3475,6 +3618,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "Dizinler";
         Text[ catalan ] = "Directoris";
         Text[ finnish ] = "Hakemistot";
+        Text[ thai ] = "ไดเร็กทอรี่";
     };
     FixedText LOG_TEXT {
             Pos = MAP_APPFONT( 7, 12 );
@@ -3500,6 +3644,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "Log ana dizin";
         Text[ catalan ] = "Directori inicial de registre";
         Text[ finnish ] = "Lokihakemisto";
+        Text[ thai ] = "ล็อกโฮมไดเร็กทอรี่";
     };
     FixedText BASIS_TEXT {
             Pos = MAP_APPFONT( 7, 28 );
@@ -3525,6 +3670,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "Ana dizin";
         Text[ catalan ] = "Directori inicial";
         Text[ finnish ] = "Kotihakemisto";
+        Text[ thai ] = "โฮมไดเร็กทอรี่";
     };
     FixedText HID_TEXT {
             Pos = MAP_APPFONT( 7, 44 );
@@ -3550,6 +3696,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "HID diziniz";
         Text[ catalan ] = "Directori HID";
         Text[ finnish ] = "HID-hakemisto";
+        Text[ thai ] = " HID ไดเร็กทอรี่";
     };
     Edit LOG_NAME {
             Border = TRUE;
@@ -3594,6 +3741,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "...";
         Text[ catalan ] = "...";
         Text[ finnish ] = "...";
+        Text[ thai ] = "...";
     };
     PushButton BASIS_SET {
             Pos = MAP_APPFONT( 217, 28 );
@@ -3620,6 +3768,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "...";
         Text[ catalan ] = "...";
         Text[ finnish ] = "...";
+        Text[ thai ] = "...";
     };
     PushButton HID_SET {
             Pos = MAP_APPFONT( 217, 44 );
@@ -3646,6 +3795,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "...";
         Text[ catalan ] = "...";
         Text[ finnish ] = "...";
+        Text[ thai ] = "...";
     };
     FixedLine FL_OTHER {
             Pos = MAP_APPFONT( 4, 60 );
@@ -3671,6 +3821,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "Di�er ayarlar";
         Text[ catalan ] = "Una altre configuraci�";
         Text[ finnish ] = "Muut asetukset";
+        Text[ thai ] = "ตั้งค่าอื่น ๆ";
     };
     FixedText TIMEOUT_TEXT {
             Pos = MAP_APPFONT( 8, 70 );
@@ -3696,6 +3847,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "Sunucu zaman a��m�";
         Text[ catalan ] = "Temps excedit al servidor";
         Text[ finnish ] = "Palvelimen aikakatkaisu";
+        Text[ thai ] = "หมดเวลาเซิร์ฟเวอร์";
     };
     TimeField SERVER_TIMEOUT {
             Border = TRUE;
@@ -3731,6 +3883,7 @@ TabPage RID_TP_SPECIAL {
         Text[ turkish ] = "Otomatik yeniden y�kleme";
         Text[ catalan ] = "Rec�rrega autom�tica";
         Text[ finnish ] = "Automaattinen uudelleenlataus";
+        Text[ thai ] = "โหลดอัตโนมัติอีกครั้ง";
     };
 /*  ComboBox LB_FONT {
             Pos = MAP_APPFONT( 127, 70 );
@@ -3745,7 +3898,27 @@ TabPage RID_TP_SPECIAL {
             Size = MAP_APPFONT( 103, 12 );
             Text = "Speichern vor Ausf�hren";
             Text [ english_us ] = "Save before execute";
-        };
+            Text[ portuguese ] = "Save before execute";
+        Text[ russian ] = "Save before execute";
+        Text[ greek ] = "Save before execute";
+        Text[ dutch ] = "Save before execute";
+        Text[ french ] = "Save before execute";
+        Text[ spanish ] = "Save before execute";
+        Text[ finnish ] = "Save before execute";
+        Text[ italian ] = "Save before execute";
+        Text[ danish ] = "Save before execute";
+        Text[ swedish ] = "Save before execute";
+        Text[ polish ] = "Save before execute";
+        Text[ portuguese_brazilian ] = "Save before execute";
+        Text[ japanese ] = "Save before execute";
+        Text[ korean ] = "Save before execute";
+        Text[ chinese_simplified ] = "Save before execute";
+        Text[ chinese_traditional ] = "Save before execute";
+        Text[ turkish ] = "Save before execute";
+        Text[ arabic ] = "Save before execute";
+        Text[ catalan ] = "Save before execute";
+        Text[ thai ] = "Save before execute";
+    };
 };
 
 
@@ -3757,7 +3930,27 @@ TabPage RID_TP_FONT {
         Pos = MAP_APPFONT( 4, 2 );
         Size = MAP_APPFONT( 123, 8 );
         Text = "Art";
-        Text [ english_us ] = "art";
+        Text [ english_us ] = "Type";
+        Text[ portuguese ] = "Tipo";
+        Text[ russian ] = "���";
+        Text[ greek ] = "�����";
+        Text[ dutch ] = "Type";
+        Text[ french ] = "Type";
+        Text[ spanish ] = "Tipo";
+        Text[ finnish ] = "Tyyppi";
+        Text[ italian ] = "Tipo";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Typ";
+        Text[ polish ] = "Typ";
+        Text[ portuguese_brazilian ] = "art";
+        Text[ japanese ] = "種類";
+        Text[ korean ] = "종류";
+        Text[ chinese_simplified ] = "类型";
+        Text[ chinese_traditional ] = "類型";
+        Text[ turkish ] = "T�r";
+        Text[ arabic ] = "�����";
+        Text[ catalan ] = "Mode";
+        Text[ thai ] = "โหมด";
     };
     ComboBox CB_FONTNAME {
         Pos = MAP_APPFONT( 4, 12 );
@@ -3770,6 +3963,26 @@ TabPage RID_TP_FONT {
         Size = MAP_APPFONT( 65, 8 );
         Text = "Schnitt";
         Text [ english_us ] = "??????";
+        Text[ portuguese ] = "??????";
+        Text[ russian ] = "??????";
+        Text[ greek ] = "??????";
+        Text[ dutch ] = "??????";
+        Text[ french ] = "??????";
+        Text[ spanish ] = "??????";
+        Text[ finnish ] = "??????";
+        Text[ italian ] = "??????";
+        Text[ danish ] = "??????";
+        Text[ swedish ] = "??????";
+        Text[ polish ] = "??????";
+        Text[ portuguese_brazilian ] = "??????";
+        Text[ japanese ] = "??????";
+        Text[ korean ] = "??????";
+        Text[ chinese_simplified ] = "??????";
+        Text[ chinese_traditional ] = "??????";
+        Text[ turkish ] = "??????";
+        Text[ arabic ] = "??????";
+        Text[ catalan ] = "??????";
+        Text[ thai ] = "??????";
     };
     ComboBox CB_FONTSTYLE {
         Pos = MAP_APPFONT( 131, 12 );
@@ -3781,6 +3994,26 @@ TabPage RID_TP_FONT {
         Size = MAP_APPFONT( 29, 8 );
         Text = "Gr��e";
         Text [ english_us ] = "Size";
+        Text[ portuguese ] = "Size";
+        Text[ russian ] = "Size";
+        Text[ greek ] = "Size";
+        Text[ dutch ] = "Size";
+        Text[ french ] = "Size";
+        Text[ spanish ] = "Size";
+        Text[ finnish ] = "Size";
+        Text[ italian ] = "Size";
+        Text[ danish ] = "Size";
+        Text[ swedish ] = "Size";
+        Text[ polish ] = "Size";
+        Text[ portuguese_brazilian ] = "Size";
+        Text[ japanese ] = "Size";
+        Text[ korean ] = "Size";
+        Text[ chinese_simplified ] = "Size";
+        Text[ chinese_traditional ] = "Size";
+        Text[ turkish ] = "Size";
+        Text[ arabic ] = "Size";
+        Text[ catalan ] = "Size";
+        Text[ thai ] = "Size";
     };
     MetricBox MB_FONTSIZE {
         Pos = MAP_APPFONT( 200, 12 );
@@ -3935,6 +4168,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ turkish ] = "Denetimler";
         Text[ catalan ] = "Controls";
         Text[ finnish ] = "Ohjaimet";
+        Text[ thai ] = "ตัวควบคุม";
     };
     MultiListBox RID_MLB_CONTROLS {
             Border = TRUE;
@@ -3967,6 +4201,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ turkish ] = "Yuvalar";
         Text[ catalan ] = "Ranures";
         Text[ finnish ] = "Paikat";
+        Text[ thai ] = "ช่องเสียบ";
     };
     MultiListBox RID_MLB_SLOTS {
             Border = TRUE;
@@ -4000,6 +4235,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ turkish ] = "Kopyala";
         Text[ catalan ] = "Copia";
         Text[ finnish ] = "Kopioi";
+        Text[ thai ] = "คัดลอก";
     };
     PushButton RID_PB_BENENNEN {
             Pos = MAP_APPFONT( 216, 44 );
@@ -4027,6 +4263,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ turkish ] = "Adland�r";
         Text[ catalan ] = "Nom";
         Text[ finnish ] = "Nimi";
+        Text[ thai ] = "ชื่อ";
     };
     PushButton RID_PB_SELECTALL {
             Pos = MAP_APPFONT( 216, 44 );
@@ -4053,6 +4290,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ turkish ] = "T�m�n� se�";
         Text[ catalan ] = "Selecciona-ho tot";
         Text[ finnish ] = "Valitse kaikki";
+        Text[ thai ] = "เลือกทั้งหมด";
     };
     OKButton RID_OK_CLOSE {
             Pos = MAP_APPFONT( 216, 144 );
@@ -4079,6 +4317,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ turkish ] = "Kapat";
         Text[ catalan ] = "Tanca";
         Text[ finnish ] = "Sulje";
+        Text[ thai ] = "ปิด";
     };
     Text[ portuguese ] = "Mostrar HId";
     Text[ russian ] = "Display HId";
@@ -4099,6 +4338,7 @@ FloatingWindow IDD_DISPLAY_HID {
     Text[ turkish ] = "G�r�nt�le: HId";
     Text[ catalan ] = "Visualitza l'HId";
     Text[ finnish ] = "N�yt� piilotunnus";
+    Text[ thai ] = "แสดงผล HId";
 };
 
 
@@ -4234,6 +4474,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "Ad";
         Text[ catalan ] = "Nom";
         Text[ finnish ] = "Nimi";
+        Text[ thai ] = "ชื่อ";
     };
     FixedText RID_FT_CONTENT {
             Pos = MAP_APPFONT( 8, 21 );
@@ -4259,6 +4500,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "��erik";
         Text[ catalan ] = "Contingut";
         Text[ finnish ] = "Sis�lt�";
+        Text[ thai ] = "เนื้อหา";
     };
     FixedText RID_FT_NEW_CONTENT {
             Pos = MAP_APPFONT( 8, 38 );
@@ -4284,6 +4526,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "Yeni i�erik";
         Text[ catalan ] = "Nou contingut";
         Text[ finnish ] = "Uusi sis�lt�";
+        Text[ thai ] = "เนื้อหาใหม่";
     };
     FixedText RID_FT_NAME_VALUE {
             Pos = MAP_APPFONT( 53, 8 );
@@ -4309,6 +4552,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "De�i�ken ad�";
         Text[ catalan ] = "Nom de variables";
         Text[ finnish ] = "Muuttujan nimi";
+        Text[ thai ] = "ชื่อตัวแปร";
     };
     FixedText RID_FT_CONTENT_VALUE {
             Pos = MAP_APPFONT( 53, 21 );
@@ -4334,6 +4578,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "Eski i�erik";
         Text[ catalan ] = "Contingut vell";
         Text[ finnish ] = "Edellinen sis�lt�";
+        Text[ thai ] = "เนื้อหาอันก่อน";
     };
     RadioButton RID_RB_NEW_BOOL_T {
             Hide = TRUE;
@@ -4361,6 +4606,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "Do�ru";
         Text[ catalan ] = "Veritable";
         Text[ finnish ] = "Tosi";
+        Text[ thai ] = "จริง";
     };
     RadioButton RID_RB_NEW_BOOL_F {
             Hide = TRUE;
@@ -4388,6 +4634,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "Yanl��";
         Text[ catalan ] = "Fals";
         Text[ finnish ] = "Ep�tosi";
+        Text[ thai ] = "เท็จ";
     };
     NumericField RID_NF_NEW_INTEGER {
             Border = TRUE;
@@ -4444,6 +4691,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ turkish ] = "D�zenle";
         Text[ catalan ] = "Edita";
         Text[ finnish ] = "Muokkaa";
+        Text[ thai ] = "แก้ไข";
     };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 33, 58 );
@@ -4474,6 +4722,7 @@ ModelessDialog IDD_EDIT_VAR {
     Text[ turkish ] = "De�i�ken d�zenle";
     Text[ catalan ] = "Editar variable";
     Text[ finnish ] = "Muokkaa muuttujaa";
+    Text[ thai ] = "แก้ไขตัวแปร";
 };
 
 FloatingWindow LOAD_CONF {
@@ -4509,6 +4758,7 @@ FloatingWindow LOAD_CONF {
         Text[ turkish ] = "Slot IDs";
         Text[ catalan ] = "Slot IDs";
         Text[ finnish ] = "Paikkatunnukset";
+        Text[ thai ] = "ช่องเสียบ IDs";
     };
     FixedText FILENAME {
             SVLook = TRUE;
@@ -4536,6 +4786,7 @@ FloatingWindow LOAD_CONF {
         Text[ turkish ] = "File.win";
         Text[ catalan ] = "Fitxer.win";
         Text[ finnish ] = "Tiedosto.win";
+        Text[ thai ] = "แฟ้ม.win";
     };
     Text[ portuguese ] = "A ler ficheiros de configura��o";
     Text[ russian ] = "Reading Configuration Files";
@@ -4556,6 +4807,7 @@ FloatingWindow LOAD_CONF {
     Text[ turkish ] = "Konfig�rasyon dosyalar� okunuyor";
     Text[ catalan ] = "S'estan llegint els fitxers de configuraci�";
     Text[ finnish ] = "Luetaan kokoonpanotiedostoja";
+    Text[ thai ] = "กำลังอ่านแฟ้มโครงแบบ";
 };
 
 
