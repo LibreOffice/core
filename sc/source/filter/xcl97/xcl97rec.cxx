@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:21:17 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@
 using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
@@ -822,6 +823,81 @@ void XclObjOle::Save( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
+XclExpCtrlLinkHelper::XclExpCtrlLinkHelper( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    mnEntryCount( 0 )
+{
+}
+
+void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
+{
+    mpCellLink = CreateTokenArray( rCellLink );
+}
+
+void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
+{
+    mpSrcRange = CreateTokenArray( rSrcRange );
+    mnEntryCount = rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1;
+}
+
+void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const
+{
+    sal_uInt16 nFmlaSize = rTokArr.GetLen();
+    rStrm << nFmlaSize << sal_uInt32( 0 );
+    rStrm.Write( rTokArr.GetData(), nFmlaSize );
+    if( nFmlaSize & 1 )
+        rStrm << sal_uInt8( 0 );
+}
+
+::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScTokenArray& rScTokArr ) const
+{
+    EC_Codetype eDummy;
+    XclExpTokArrPtr pXclTokArr( new ExcUPN( mpRD, rScTokArr, eDummy ) );
+    if( !pXclTokArr->GetLen() || !pXclTokArr->GetData() )
+        pXclTokArr.reset();
+    return pXclTokArr;
+}
+
+::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScAddress& rPos ) const
+{
+    XclExpTokArrPtr pXclTokArr;
+    XclExpTabIdBuffer& rTabIdBuffer = GetTabIdBuffer();
+    if( rTabIdBuffer.IsExportTable( rPos.Tab() ) && !rTabIdBuffer.IsExternal( rPos.Tab() ) )
+    {
+        ScTokenArray aScTokArr;
+        SingleRefData aRef;
+        aRef.InitAddress( rPos );
+        aScTokArr.AddSingleReference( aRef );
+        pXclTokArr = CreateTokenArray( aScTokArr );
+    }
+    return pXclTokArr;
+}
+
+::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScRange& rRange ) const
+{
+    XclExpTokArrPtr pXclTokArr;
+    if( rRange.aStart == rRange.aEnd )
+    {
+        pXclTokArr = CreateTokenArray( rRange.aStart );
+    }
+    else if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
+    {
+        XclExpTabIdBuffer& rTabIdBuffer = GetTabIdBuffer();
+        if( rTabIdBuffer.IsExportTable( rRange.aStart.Tab() ) && !rTabIdBuffer.IsExternal( rRange.aStart.Tab() ) )
+        {
+            ScTokenArray aScTokArr;
+            ComplRefData aRef;
+            aRef.InitRange( rRange );
+            aScTokArr.AddDoubleReference( aRef );
+            pXclTokArr = CreateTokenArray( aScTokArr );
+        }
+    }
+    return pXclTokArr;
+}
+
+
+// ----------------------------------------------------------------------------
+
 #if EXC_EXP_OCX_CTRL
 
 XclExpObjOcxCtrl::XclExpObjOcxCtrl(
@@ -830,6 +906,7 @@ XclExpObjOcxCtrl::XclExpObjOcxCtrl(
         const String& rClassName,
         sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rRoot, EXC_OBJ_CMO_PICTURE, true ),
+    XclExpCtrlLinkHelper( rRoot ),
     maClassName( rClassName ),
     mnStrmStart( nStrmStart ),
     mnStrmSize( nStrmSize )
@@ -874,7 +951,7 @@ XclExpObjOcxCtrl::XclExpObjOcxCtrl(
     aPropOpt.Commit( rEscherEx.GetStream() );
 
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
-        XclEscherClientAnchor( *rRoot.mpRD, *pSdrObj ).WriteData( rEscherEx );
+        XclEscherClientAnchor( *mpRD, *pSdrObj ).WriteData( rEscherEx );
     rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
 
@@ -912,6 +989,9 @@ void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
             << mnStrmSize                               // size in 'Ctls' stream
             << sal_uInt32( 0 ) << sal_uInt32( 0 );      // unknown
     rStrm.EndRecord();
+
+    // TODO: writing the sheet link formulas
+    DBG_ERRORFILE( "XclExpObjOcxCtrl::WriteSubRecs - export of sheet links not implemented" );
 }
 
 #else
@@ -921,12 +1001,16 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         const Reference< XShape >& rxShape,
         const Reference< XControlModel >& rxCtrlModel ) :
     XclObj( rRoot, EXC_OBJ_CMO_UNKNOWN, true ),
+    XclExpCtrlLinkHelper( rRoot ),
     mnHeight( 0 ),
-    mnEntryCount( 0 ),
     mnState( 0 ),
     mnLineCount( 0 ),
-    mb3DStyle( false )
+    mnSelEntry( 0 ),
+    mb3DStyle( false ),
+    mbMultiSel( false )
 {
+    namespace FormCompType = ::com::sun::star::form::FormComponentType;
+
     Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
     if( !rxShape.is() || !xPropSet.is() )
         return;
@@ -939,7 +1023,6 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     sal_Int16 nClassId;
     if( ::getPropValue( nClassId, xPropSet, PROPNAME( "ClassId" ) ) )
     {
-        namespace FormCompType = ::com::sun::star::form::FormComponentType;
         switch( nClassId )
         {
             case FormCompType::COMMANDBUTTON:   mnObjType = EXC_OBJ_CMO_BUTTON;         break;
@@ -975,7 +1058,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // anchor
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
-        XclEscherClientAnchor( *rRoot.mpRD, *pSdrObj ).WriteData( rEscherEx );
+        XclEscherClientAnchor( *mpRD, *pSdrObj ).WriteData( rEscherEx );
     rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
 
@@ -985,7 +1068,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     {
         /*  Be sure to construct the MSODRAWING ClientTextbox record after the
             base OBJ's MSODRAWING record Escher data is completed. */
-        pClientTextbox = new XclMsodrawing( rRoot );
+        pClientTextbox = new XclMsodrawing( GetRoot() );
         pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         pClientTextbox->UpdateStopPos();
 
@@ -1014,14 +1097,14 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         sal_uInt16 nFontIx = EXC_FONT_APP;
         if( aFontData.maName.Len() && aFontData.mnHeight )
         {
-            XclExpFont* pFont = new XclExpFont( rRoot, aFontData );
+            XclExpFont* pFont = new XclExpFont( GetRoot(), aFontData );
             sal_Int32 nApiColor;
             if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
             {
                 Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
                 pFont->SetColorId( rRoot.GetPalette().InsertColor( aColor, xlColorChartText, EXC_COLOR_FONTAUTO ) );
             }
-            nFontIx = rRoot.GetFontBuffer().Insert( pFont );
+            nFontIx = GetFontBuffer().Insert( pFont );
             // font buffer owns pFont, forget it
         }
 
@@ -1031,10 +1114,6 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     }
 
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
-
-    // link tag
-    if( ::getPropValue( aString, xPropSet, PROPNAME( "Tag" ) ) )
-        SetLinkFormulas( rRoot, aString );
 
     // other properties
     ::getPropValue( mnLineCount, xPropSet, PROPNAME( "LineCount" ) );
@@ -1053,71 +1132,58 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             case 2: mnState = EXC_OBJ_CBLS_STATE_TRI;       break;
         }
     }
+
+    // selection
+    switch( nClassId )
+    {
+        case FormCompType::LISTBOX:
+        {
+            mbMultiSel = ::getPropBool( xPropSet, CREATE_OUSTRING( "MultiSelection" ) );
+            Sequence< sal_Int16 > aSelection;
+            if( ::getPropValue( aSelection, xPropSet, PROPNAME( "SelectedItems" ) ) )
+            {
+                sal_Int32 nLen = aSelection.getLength();
+                if( nLen > 0 )
+                {
+                    mnSelEntry = aSelection[ 0 ] + 1;
+                    maMultiSel.resize( nLen );
+                    const sal_Int16* pnBegin = aSelection.getConstArray();
+                    ::std::copy( pnBegin, pnBegin + nLen, maMultiSel.begin() );
+                }
+            }
+
+            // convert listbox with dropdown button to Excel combobox
+            if( ::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
+                mnObjType = EXC_OBJ_CMO_COMBOBOX;
+        }
+        break;
+        case FormCompType::COMBOBOX:
+        {
+            Sequence< OUString > aStringList;
+            OUString aDefText;
+            if( ::getPropValue( aStringList, xPropSet, PROPNAME( "StringItemList" ) ) &&
+                ::getPropValue( aDefText, xPropSet, PROPNAME( "Text" ) ) &&
+                aStringList.getLength() && aDefText.getLength() )
+            {
+                const OUString* pBegin = aStringList.getConstArray();
+                const OUString* pEnd = pBegin + aStringList.getLength();
+                const OUString* pString = ::std::find( pBegin, pEnd, aDefText );
+                if( pString != pEnd )
+                    mnSelEntry = static_cast< sal_Int16 >( pString - pBegin + 1 );  // 1-based
+                if( mnSelEntry > 0 )
+                    maMultiSel.resize( 1, mnSelEntry - 1 );
+            }
+
+            // convert combobox without dropdown button to Excel listbox
+            if( !::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
+                mnObjType = EXC_OBJ_CMO_LISTBOX;
+        }
+        break;
+    }
 }
 
 XclExpObjTbxCtrl::~XclExpObjTbxCtrl()
 {
-}
-
-namespace {
-
-ExcUPN* lclCreateTokenArray( const XclExpRoot& rRoot, const ScTokenArray& rScTokArr )
-{
-    EC_Codetype eDummy;
-    ExcUPN* pXclTokArr = new ExcUPN( rRoot.mpRD, rScTokArr, eDummy );
-    if( !pXclTokArr->GetLen() || !pXclTokArr->GetData() )
-        DELETEZ( pXclTokArr );
-    return pXclTokArr;
-}
-
-ExcUPN* lclCreateTokenArray( const XclExpRoot& rRoot, const ScAddress& rPos )
-{
-    XclExpTabIdBuffer& rTabIdBuffer = rRoot.GetTabIdBuffer();
-    if( rTabIdBuffer.IsExportTable( rPos.Tab() ) && !rTabIdBuffer.IsExternal( rPos.Tab() ) )
-    {
-        ScTokenArray aScTokArr;
-        SingleRefData aRef;
-        aRef.InitAddress( rPos );
-        aScTokArr.AddSingleReference( aRef );
-        return lclCreateTokenArray( rRoot, aScTokArr );
-    }
-    return NULL;
-}
-
-ExcUPN* lclCreateTokenArray( const XclExpRoot& rRoot, const ScRange& rRange )
-{
-    if( rRange.aStart == rRange.aEnd )
-        return lclCreateTokenArray( rRoot, rRange.aStart );
-
-    if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
-    {
-        XclExpTabIdBuffer& rTabIdBuffer = rRoot.GetTabIdBuffer();
-        if( rTabIdBuffer.IsExportTable( rRange.aStart.Tab() ) && !rTabIdBuffer.IsExternal( rRange.aStart.Tab() ) )
-        {
-            ScTokenArray aScTokArr;
-            ComplRefData aRef;
-            aRef.InitRange( rRange );
-            aScTokArr.AddDoubleReference( aRef );
-            return lclCreateTokenArray( rRoot, aScTokArr );
-        }
-    }
-    return NULL;
-}
-
-} // namespace
-
-void XclExpObjTbxCtrl::SetLinkFormulas( const XclExpRoot& rRoot, const String& rTag )
-{
-    ScAddress aCellLink;
-    if( XclTools::GetCtrlCellLinkFromTag( aCellLink, rRoot.GetDoc(), rTag ) )
-        mpCellLink.reset( lclCreateTokenArray( rRoot, aCellLink ) );
-
-    ScRange aSrcRange;
-    if( XclTools::GetCtrlSrcRangeFromTag( aSrcRange, rRoot.GetDoc(), rTag ) )
-    {
-        mpSrcRange.reset( lclCreateTokenArray( rRoot, aSrcRange ) );
-        mnEntryCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
-    }
 }
 
 void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
@@ -1140,10 +1206,10 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             rStrm.EndRecord();
 
             // ftCblsFmla - cell link
-            if( mpCellLink.get() )
+            if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
             {
                 rStrm.StartRecord( EXC_ID_OBJ_FTCBLSFMLA, 0 );
-                WriteFormula( rStrm, *mpCellLink );
+                WriteFormula( rStrm, *pCellLink );
                 rStrm.EndRecord();
             }
         }
@@ -1154,6 +1220,8 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
         case EXC_OBJ_CMO_LISTBOX:
         case EXC_OBJ_CMO_COMBOBOX:
         {
+            sal_uInt16 nEntryCount = GetSourceEntryCount();
+
             // ftSbs subrecord - Scroll bars
             sal_Int32 nLineHeight = XclTools::GetHmmFromTwips( 200 );   // always 10pt
             sal_uInt16 nVisLines = 0;
@@ -1161,7 +1229,7 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
                 nVisLines = static_cast< sal_uInt16 >( mnHeight / nLineHeight );
             else
                 nVisLines = mnLineCount;
-            sal_uInt16 nInvisLines = (mnEntryCount >= nVisLines) ? (mnEntryCount - nVisLines) : 0;
+            sal_uInt16 nInvisLines = (nEntryCount >= nVisLines) ? (nEntryCount - nVisLines) : 0;
             rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
             rStrm   << sal_uInt32( 0 )              // reserved
                     << sal_uInt16( 0 )              // thumb position
@@ -1175,44 +1243,48 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             rStrm.EndRecord();
 
             // ftSbsFmla - cell link
-            if( mpCellLink.get() )
+            if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
             {
                 rStrm.StartRecord( EXC_ID_OBJ_FTSBSFMLA, 0 );
-                WriteFormula( rStrm, *mpCellLink );
+                WriteFormula( rStrm, *pCellLink );
                 rStrm.EndRecord();
             }
 
             // ftLbsData - source data range and box properties
-            sal_uInt16 nStyle = EXC_OBJ_LBS_SEL_SIMPLE;
+            sal_uInt16 nStyle = mbMultiSel ? EXC_OBJ_LBS_SEL_MULTI : EXC_OBJ_LBS_SEL_SIMPLE;
             ::set_flag( nStyle, EXC_OBJ_LBS_3D, mb3DStyle );
 
             rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 0 );
 
-            if( mpSrcRange.get() )
+            if( const ExcUPN* pSrcRange = GetSourceRangeTokArr() )
             {
-                rStrm << static_cast< sal_uInt16 >( (mpSrcRange->GetLen() + 7) & 0xFFFE );
-                WriteFormula( rStrm, *mpSrcRange );
+                rStrm << static_cast< sal_uInt16 >( (pSrcRange->GetLen() + 7) & 0xFFFE );
+                WriteFormula( rStrm, *pSrcRange );
             }
             else
                 rStrm << sal_uInt16( 0 );
 
-            rStrm << mnEntryCount << sal_uInt16( 0 ) << nStyle << sal_uInt16( 0 );
-            if( mnObjType == EXC_OBJ_CMO_COMBOBOX )
+            rStrm << nEntryCount << mnSelEntry << nStyle << sal_uInt16( 0 );
+            if( mnObjType == EXC_OBJ_CMO_LISTBOX )
+            {
+                if( nEntryCount )
+                {
+                    ScfUInt8Vec aSelEx( nEntryCount, 0 );
+                    for( ScfInt16Vec::const_iterator aIt = maMultiSel.begin(), aEnd = maMultiSel.end(); aIt != aEnd; ++aIt )
+                        if( *aIt < nEntryCount )
+                            aSelEx[ *aIt ] = 1;
+                    rStrm.Write( &aSelEx[ 0 ], aSelEx.size() );
+                }
+            }
+            else if( mnObjType == EXC_OBJ_CMO_COMBOBOX )
+            {
                 rStrm << sal_uInt16( 0 ) << mnLineCount;
+            }
 
             rStrm.EndRecord();
         }
         break;
     }
-}
-
-void XclExpObjTbxCtrl::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const
-{
-    sal_uInt16 nFmlaSize = rTokArr.GetLen();
-    rStrm << nFmlaSize << sal_uInt32( 0 );
-    rStrm.Write( rTokArr.GetData(), nFmlaSize );
-    if( nFmlaSize & 1 )
-        rStrm << sal_uInt8( 0 );
 }
 
 #endif
