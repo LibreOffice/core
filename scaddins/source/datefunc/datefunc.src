@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:31:00 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "Determines the number of weeks in a specific period.";
             Text[ korean ] = "Determines the number of weeks in a specific period.";
             Text[ chinese_simplified ] = "计算某一个周期内所包含的星期数目。";
-            Text[ chinese_traditional ] = "傳回某一時期内的週數目。";
+            Text[ chinese_traditional ] = "傳回某一時期內的週數目。";
             Text[ turkish ] = "Determines the number of weeks in a specific period.";
             Text[ arabic ] = "Determines the number of weeks in a specific period.";
             Text[ catalan ] = "Determines the number of weeks in a specific period.";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
