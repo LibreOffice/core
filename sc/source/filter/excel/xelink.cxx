@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:50:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,6 @@ XclExpLinkManager_Impl::XclExpLinkManager_Impl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maSBBuffer( rRoot )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= xlBiff8 );
     FindXti( 0, 0 );   // dummy to avoid empty list
 }
 
@@ -1388,6 +1387,8 @@ sal_uInt16 XclExpLinkManager_Impl::InsertXti( const XclExpXti& rXti )
 
 void XclExpLinkManager_Impl::Save( XclExpStream& rStrm )
 {
+    DBG_ASSERT_BIFF( GetBiff() >= xlBiff8 );
+
     // SUPBOOKs, XCTs, CRNs, EXTERNNAMEs
     maSBBuffer.Save( rStrm );
 
