@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-12-05 12:26:36 $
+ *  last change: $Author: os $ $Date: 2000-12-08 10:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,11 @@
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
 #endif
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
-#endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 
 #ifndef _UIPARAM_HXX
@@ -250,9 +250,9 @@
 #ifndef _DBUI_HRC
 #include <dbui.hrc>
 #endif
-#ifndef _CFGSTR_HRC
-#include <cfgstr.hrc>
-#endif
+
+
+
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -344,7 +344,7 @@ SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
 struct _DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
-    String sDBName, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
+    OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
     BOOL bIsTable : 1,
          bIsField : 1,
          bIsHeadlineOn : 1,
@@ -356,35 +356,16 @@ struct _DB_ColumnConfigData
         bIsField = bIsEmptyHeadln = FALSE;
     }
 
-    _DB_ColumnConfigData( SvStream& rStream, UINT16 nVers );
+//  _DB_ColumnConfigData( SvStream& rStream, UINT16 nVers );
 
     ~_DB_ColumnConfigData();
 
-    void Save( SvStream& rStream ) const;
+//  void Save( SvStream& rStream ) const;
 
     BOOL IsEqualDB( const _DB_ColumnConfigData& ) const;
 private:
     _DB_ColumnConfigData( const _DB_ColumnConfigData& );
     _DB_ColumnConfigData& operator =( const _DB_ColumnConfigData& );
-};
-
-class _DB_ColumnConfig : public SfxConfigItem
-{
-    _DB_ColumnConfigData* aData[ DBCOLUMN_MAXDATA ];
-
-protected:
-    virtual String GetName() const;
-    virtual int Load(SvStream& rStream);
-    virtual BOOL Store(SvStream& rStream);
-
-public:
-    _DB_ColumnConfig();
-    virtual ~_DB_ColumnConfig();
-
-    virtual void UseDefault();
-
-    const _DB_ColumnConfigData* HasData( const _DB_ColumnConfigData& rData ) const;
-    void SetData( _DB_ColumnConfigData* pData );
 };
 
 /*  */
@@ -402,6 +383,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwInsDBData& rData )
     : SfxModalDialog( rView.GetWindow(), SW_RES( DLG_AP_INSERT_DB_SEL )),
+    ConfigItem(C2U("Office.Writer/InsertData/DataSet")),
     aFtInsertData( this, SW_RES( FT_INSERT_DATA )),
     aRbAsTable( this, SW_RES( RB_AS_TABLE )),
     aRbAsField( this, SW_RES( RB_AS_FIELD )),
@@ -444,8 +426,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     pTAutoFmt( 0 ),
     pTblSet( 0 ),
     pRep( 0 ),
-    aOldNumFmtLnk( aLbDbFmtFromUsr.GetSelectHdl() ),
-    pConfig( 0 )
+    aOldNumFmtLnk( aLbDbFmtFromUsr.GetSelectHdl() )
+//  pConfig( 0 )
 {
     FreeResource();
 
@@ -624,8 +606,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     aLbTxtDbColumn.SelectEntryPos( 0 );
     aLbTblDbColumn.SelectEntryPos( 0 );
 
-    // Daten aus dem INI-File lesen:
-    ReadIniToUI();
+    // read configuration
+    Load();
 
     // Controls initialisieren:
     PageHdl( aRbAsTable.IsChecked() ? &aRbAsTable : &aRbAsField );
@@ -638,7 +620,7 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
     delete pTblSet;
     delete pRep;
 
-    delete pConfig;
+//  delete pConfig;
     delete pTAutoFmt;
 }
 /* ---------------------------------------------------------------------------
@@ -760,7 +742,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
                 nInsPos = LISTBOX_ENTRY_NOTFOUND;
                 while( ++nFndPos < aDBColumns.Count() &&
                         LISTBOX_ENTRY_NOTFOUND == (nInsPos = aLbTblDbColumn.
-                        GetEntryPos( aDBColumns[ nFndPos ]->sColumn )) )
+                        GetEntryPos( String(aDBColumns[ nFndPos ]->sColumn ))) )
                     ;
             }
 
@@ -811,13 +793,13 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
             {
                 if( nPos )                          // ein Space davor
                 {
-                    char c = aStr.GetChar( nPos-1 );
+                    sal_Unicode c = aStr.GetChar( nPos-1 );
                     if( '\n' != c && '\r' != c )
                         aFld.Insert( ' ', 0 );
                 }
                 if( nPos < aStr.Len() )             // ein Space dahinter
                 {
-                    char c = aStr.GetChar( nPos );
+                    sal_Unicode c = aStr.GetChar( nPos );
                     if( '\n' != c && '\r' != c )
                         aFld += ' ';
                 }
@@ -1014,7 +996,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
     if( pBox == &aLbDbFmtFromUsr )
     {
-        if( aSrch.sColumn.Len() )
+        if( aSrch.sColumn.getLength() )
         {
             aOldNumFmtLnk.Call( pBox );
             aDBColumns[ nFndPos ]->nUsrNumFmt = aLbDbFmtFromUsr.GetFormat();
@@ -1025,7 +1007,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
         // an der FormatGroupBox den ausgewaehlten FeldNamen setzen, damit
         // klar ist, welches Feld ueber das Format eingestellt wird!
         String sTxt( aGbDbFormat.GetText().Copy( 0, nGBFmtLen ));
-        if( !aSrch.sColumn.Len() )
+        if( !aSrch.sColumn.getLength() )
         {
             aRbDbFmtFromDb.Enable( FALSE );
             aRbDbFmtFromUsr.Enable( FALSE );
@@ -1038,7 +1020,9 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
             aRbDbFmtFromUsr.Enable( bEnableFmt );
 
             if( bEnableFmt )
-                (( sTxt += C2S(" (" )) += aSrch.sColumn ) += (sal_Unicode)')';
+            {
+                (( sTxt += C2S(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
+            }
 
             BOOL bIsDBFmt = aDBColumns[ nFndPos ]->bIsDBFmt;
             aRbDbFmtFromDb.Check( bIsDBFmt );
@@ -1130,7 +1114,7 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                     sTxt.Erase( 0, nSttPos-1 );
                 }
 
-                sTxt.Erase( 0, rFndCol.sColumn.Len() + 2 );
+                sTxt.Erase( 0, rFndCol.sColumn.getLength() + 2 );
                 nSttPos = 0;
 
                 USHORT nSubType = 0;
@@ -1257,6 +1241,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
             nCols = aColFlds.Count();
         }
 
+        if(!nRows || !nCols)
+            return;
         const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
         BOOL bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
@@ -1286,7 +1272,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
         else
             rSh.SetHeadlineRepeat( FALSE );
 
-        for( ULONG i = 0 ; ; ++i )
+        for( sal_Int32 i = 0 ; ; ++i )
         {
             BOOL bBreak = FALSE;
             try
@@ -1497,7 +1483,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
 
             BOOL bSetCrsr = TRUE;
             USHORT n, nCols = aColArr.Count();
-            for( ULONG i = 0 ; ; ++i )
+            for( sal_Int32 i = 0 ; ; ++i )
             {
                 BOOL bBreak = FALSE;
                 try
@@ -1643,8 +1629,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
         }
     }
 
-    // Daten ins INI-File schreiben
-    WriteUIToIni();
+    // write configuration
+    Commit();
 
     rSh.DoGroupUndo( bGroupUndo );
     rSh.EndUndo( 0 );
@@ -1698,43 +1684,241 @@ void SwInsertDBColAutoPilot::SetTabSet()
     rSh.MoveTable( fnTableCurr, fnTableStart );
 }
 
-    // Daten ins INI-File schreiben
-void SwInsertDBColAutoPilot::WriteUIToIni()
+/*  */
+
+
+_DB_ColumnConfigData::~_DB_ColumnConfigData() {}
+
+BOOL _DB_ColumnConfigData::IsEqualDB( const _DB_ColumnConfigData& rCmp ) const
 {
-    if( !pConfig )
+    // teste, ob die Daten von der gleiche Databanktabelle kommen und
+    // ob sie noch die gleichen Werte enthaelt.
+    BOOL bRet = FALSE;
+    if( sSource == rCmp.sSource &&
+        sTable == rCmp.sTable &&
+        aDBColumns.Count() == rCmp.aDBColumns.Count() )
     {
-        pConfig = new _DB_ColumnConfig;
-        pConfig->Initialize();
+        bRet = TRUE;
+        for( USHORT n = aDBColumns.Count(); n; )
+        {
+            --n;
+            const SwInsDBColumn& rCmp1 = *aDBColumns[ n ];
+            const SwInsDBColumn& rCmp2 = *rCmp.aDBColumns[ n ];
+            if( rCmp1.sColumn != rCmp2.sColumn ||
+                rCmp1.nCol != rCmp2.nCol ||
+                rCmp1.bHasFmt != rCmp2.bHasFmt )
+            {
+                bRet = FALSE;
+                break;
+            }
+        }
+    }
+    return bRet;
+}
+
+/* -----------------------------05.12.00 16:15--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> lcl_createSourceNames(const String& rNodeName)
+{
+    Sequence<OUString> aSourceNames(11);
+    OUString* pSourceNames = aSourceNames.getArray();
+    pSourceNames[0] = rNodeName;
+    pSourceNames[0] += C2U("/DataSource");
+    pSourceNames[1] = rNodeName;
+    pSourceNames[1] += C2U("/Command");
+    pSourceNames[2] = rNodeName;
+    pSourceNames[2] += C2U("/CommandType");
+    pSourceNames[3] = rNodeName;
+    pSourceNames[3] += C2U("/ColumnsToText");
+    pSourceNames[4] = rNodeName;
+    pSourceNames[4] += C2U("/ColumnsToTable");
+    pSourceNames[5] = rNodeName;
+    pSourceNames[5] += C2U("/ParaStyle");
+    pSourceNames[6] = rNodeName;
+    pSourceNames[6] += C2U("/TableAutoFormat");
+    pSourceNames[7] = rNodeName;
+    pSourceNames[7] += C2U("/IsTable");
+    pSourceNames[8] = rNodeName;
+    pSourceNames[8] += C2U("/IsField");
+    pSourceNames[9] = rNodeName;
+    pSourceNames[9] += C2U("/IsHeadlineOn");
+    pSourceNames[10] = rNodeName;
+    pSourceNames[10] += C2U("/IsEmptyHeadline");
+    return aSourceNames;
+}
+/* -----------------------------05.12.00 16:25--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> lcl_CreateSubNames(const OUString& rSubNodeName)
+{
+    Sequence<OUString> aSubSourceNames(6);
+    OUString* pSubSourceNames = aSubSourceNames.getArray();
+    pSubSourceNames[0] = rSubNodeName;
+    pSubSourceNames[0] += C2U("/ColumnName");
+    pSubSourceNames[1] = rSubNodeName;
+    pSubSourceNames[1] += C2U("/ColumnIndex");
+    pSubSourceNames[2] = rSubNodeName;
+    pSubSourceNames[2] += C2U("/IsNumberFormat");
+    pSubSourceNames[3] = rSubNodeName;
+    pSubSourceNames[3] += C2U("/IsNumberFormatFromDataBase");
+    pSubSourceNames[4] = rSubNodeName;
+    pSubSourceNames[4] += C2U("/NumberFormat");
+    pSubSourceNames[5] = rSubNodeName;
+    pSubSourceNames[5] += C2U("/NumberFormatLocale");
+    return aSubSourceNames;
+}
+/* -----------------------------06.12.00 13:03--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
+{
+    sal_Int32 nIdx = aNames.getLength();
+    const OUString* pNames = aNames.getConstArray();
+    OUString sTest(C2U("_"));
+    OUString sRet;
+    while(sal_True)
+    {
+        sRet = sTest; sRet += OUString::valueOf(nIdx++);
+        sal_Bool bFound = sal_False;
+        for(sal_Int32 i = 0; i < aNames.getLength(); i++)
+        {
+            if(pNames[i] == sRet)
+            {
+                bFound = sal_True;
+                break;
+            }
+        }
+        if(!bFound)
+            break;
+    }
+    return sRet;
+}
+/* -----------------------------05.12.00 15:00--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwInsertDBColAutoPilot::Commit()
+{
+    Sequence <OUString> aNames = GetNodeNames(OUString());
+    const OUString* pNames = aNames.getArray();
+    //remove entries that contain this data source + table at first
+    for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
+    {
+        Sequence<OUString> aSourceNames(2);
+        OUString* pSourceNames = aSourceNames.getArray();
+        pSourceNames[0] = pNames[nNode];
+        pSourceNames[0] += C2U("/DataSource");
+        pSourceNames[1] = pNames[nNode];
+        pSourceNames[1] += C2U("/Command");
+        Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
+        const Any* pSourceProps = aSourceProperties.getArray();
+        OUString sSource, sCommand;
+        pSourceProps[0] >>= sSource;
+        pSourceProps[1] >>= sCommand;
+        if(sSource.equals(aDBData.sDataBaseName) && sCommand.equals(aDBData.sDataTableName))
+        {
+            Sequence<OUString> aElements(1);
+            aElements.getArray()[0] = pNames[nNode];
+            ClearNodeElements(OUString(), aElements);
+        }
     }
 
-    _DB_ColumnConfigData* pNewData = new _DB_ColumnConfigData;
+    aNames = GetNodeNames(OUString());
+    OUString sNewNode = lcl_CreateUniqueName(aNames);
+    Sequence<OUString> aNodeNames = lcl_createSourceNames(sNewNode);
+    Sequence<PropertyValue> aValues(aNodeNames.getLength());
+    PropertyValue* pValues = aValues.getArray();
+    const OUString* pNodeNames = aNodeNames.getConstArray();
+    OUString sSlash(C2U("/"));
+    for(sal_Int32 i = 0; i < aNodeNames.getLength(); i++)
+    {
+        pValues[i].Name = sSlash;
+        pValues[i].Name += pNodeNames[i];
+    }
 
-    //die Column-Daten Pointer gehen in den Besitz des pNewData!
-    pNewData->aDBColumns.Insert( &aDBColumns );
-    aDBColumns.Remove( (USHORT)0, aDBColumns.Count() );
-
-    pNewData->sDBName = pView->GetWrtShell().GetDBName();
-    pNewData->sEdit = aEdDbText.GetText();
+    pValues[0].Value <<= OUString(aDBData.sDataBaseName);
+    pValues[1].Value <<= OUString(aDBData.sDataTableName);
+    pValues[2].Value <<= sal_Int16(0);
+    pValues[3].Value <<= OUString(aEdDbText.GetText());
 
     String sTmp;
     for( USHORT n = 0, nCnt = aLbTableCol.GetEntryCount(); n < nCnt; ++n )
         ( sTmp += aLbTableCol.GetEntry( n ) ) += '\x0a';
 
     if( sTmp.Len() )
-        pNewData->sTblList = sTmp;
+        pValues[4].Value <<= OUString(sTmp);
 
     if( sNoTmpl != (sTmp = aLbDbParaColl.GetSelectEntry()) )
-        pNewData->sTmplNm = sTmp;
+        pValues[5].Value <<= OUString(sTmp);
 
     if( pTAutoFmt )
-        pNewData->sTAutoFmtNm = pTAutoFmt->GetName();
+        pValues[6].Value <<= OUString(pTAutoFmt->GetName());
 
-    pNewData->bIsTable = aRbAsTable.IsChecked();
-    pNewData->bIsField = aRbAsField.IsChecked();
-    pNewData->bIsHeadlineOn = aCbTableHeadon.IsChecked();
-    pNewData->bIsEmptyHeadln = aRbHeadlEmpty.IsChecked();
+    const Type& rBoolType = ::getBooleanCppuType();
+    sal_Bool bTmp = aRbAsTable.IsChecked();
+    pValues[7].Value.setValue(&bTmp, rBoolType);
 
+    bTmp = aRbAsField.IsChecked();
+    pValues[8].Value.setValue(&bTmp, rBoolType);
 
+    bTmp = aCbTableHeadon.IsChecked();
+    pValues[9].Value.setValue(&bTmp, rBoolType);
+
+    bTmp = aRbHeadlEmpty.IsChecked();
+    pValues[10].Value.setValue(&bTmp, rBoolType);
+
+    SetSetProperties(OUString(), aValues);
+    SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
+    for(USHORT nCol = 0; nCol < aDBColumns.Count(); nCol++)
+    {
+         SwInsDBColumn* pColumn = aDBColumns[nCol];
+        OUString sSubNodeName = sNewNode;
+        sSubNodeName += C2U("/_");
+        sSubNodeName += OUString::valueOf(sal_Int32(nCol));
+        Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubNodeName);
+        Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
+        PropertyValue* pSubValues = aSubValues.getArray();
+        const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
+        for(sal_Int32 i = 0; i < aSubNodeNames.getLength(); i++)
+            pSubValues[i].Name = pSubNodeNames[i];
+        pSubValues[0].Value <<= pColumn->sColumn;
+        pSubValues[1].Value <<= i;
+
+        sal_Bool bVal = pColumn->bHasFmt;
+        pSubValues[2].Value.setValue(&bVal, rBoolType);
+        bVal = pColumn->bIsDBFmt;
+        pSubValues[3].Value.setValue(&bVal, rBoolType);
+
+        GetDocPoolNm( RES_POOLCOLL_STANDARD, sTmp );
+        const SvNumberformat* pNF = rNFmtr.GetEntry( pColumn->nUsrNumFmt );
+        LanguageType eLang;
+        if( pNF )
+        {
+            pSubValues[4].Value <<= OUString(pNF->GetFormatstring());
+            eLang = pNF->GetLanguage();
+        }
+        else
+        {
+            pSubValues[4].Value <<= OUString(sTmp);
+            eLang = ::GetSystemLanguage();
+        }
+        Locale aLocale;
+        aLocale = SvxLanguageToLocale( aLocale, eLang );
+        OUString sLang = aLocale.Country;
+        sLang += C2U("-");
+        sLang += aLocale.Language;
+        pSubValues[5].Value <<=  sLang;
+        SetSetProperties(sNewNode, aSubValues);
+    }
+#if 0
+
+    rtl::OUString sColumn, sUsrNumFmt;
+    sal_Int32 nDBNumFmt;
+    ULONG nUsrNumFmt;
+    LanguageType eUsrNumFmtLng;
+    USHORT nCol;
+    BOOL bHasFmt : 1;
+    BOOL bIsDBFmt : 1;
     // jetzt noch die benutzerdefinierten Numberformatstrings erfragen,
     // denn nur  diese lassen sich "unabhaengig" speichern!
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
@@ -1757,404 +1941,162 @@ void SwInsertDBColAutoPilot::WriteUIToIni()
             }
         }
     }
+#endif
 
-    pConfig->SetData( pNewData );
-    pConfig->StoreConfig();
 }
+/* -----------------------------05.12.00 15:00--------------------------------
 
-    // Daten aus dem INI-File lesen:
-void SwInsertDBColAutoPilot::ReadIniToUI()
+ ---------------------------------------------------------------------------*/
+void SwInsertDBColAutoPilot::Load()
 {
-    if( !pConfig )
-
+    Sequence <OUString> aNames = GetNodeNames(OUString());
+    const OUString* pNames = aNames.getArray();
+    SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
+    for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
     {
-        pConfig = new _DB_ColumnConfig;
-        pConfig->Initialize();
-    }
+        //search for entries with the appropriate data source and table
+        Sequence<OUString> aSourceNames = lcl_createSourceNames(pNames[nNode]);
 
-    _DB_ColumnConfigData aData;
-
-    //die Column-Daten Pointer werden kopiert, bleiben im Besitz vom Dialog!
-    aData.aDBColumns.Insert( &aDBColumns );
-    aData.sDBName = pView->GetWrtShell().GetDBName();
-
-    const _DB_ColumnConfigData* pFndData = pConfig->HasData( aData );
-    if( pFndData )
-    {
-        USHORT n = 0;
-        String sTmp( pFndData->sTblList );
-        if( sTmp.Len() )
+        Sequence< Any> aDataSourceProps = GetProperties(aSourceNames);
+        const Any* pDataSourceProps = aDataSourceProps.getConstArray();
+        OUString sSource, sCommand;
+        sal_Int16 nCommandType;
+        pDataSourceProps[0] >>= sSource;
+        pDataSourceProps[1] >>= sCommand;
+        pDataSourceProps[2] >>= nCommandType;
+        if(sSource.equals(aDBData.sDataBaseName) && sCommand.equals(aDBData.sDataTableName))
         {
-            do {
-                String sEntry( sTmp.GetToken( 0, '\x0a', n ) );
-                aLbTableCol.InsertEntry( sEntry );
-                aLbTblDbColumn.RemoveEntry( sEntry );
-            } while( n < sTmp.Len() );
+            _DB_ColumnConfigData* pNewData = new _DB_ColumnConfigData;
+            pNewData->sSource = sSource;
+            pNewData->sTable = sCommand;
 
-            if( !aLbTblDbColumn.GetEntryCount() )
+            pDataSourceProps[3] >>= pNewData->sEdit;
+            pDataSourceProps[4] >>= pNewData->sTblList;
+            pDataSourceProps[5] >>= pNewData->sTmplNm;
+            pDataSourceProps[6] >>= pNewData->sTAutoFmtNm;
+            if(pDataSourceProps[7].hasValue())
+                pNewData->bIsTable = *(sal_Bool*)pDataSourceProps[7].getValue();
+            if(pDataSourceProps[8].hasValue())
+                 pNewData->bIsField = *(sal_Bool*)pDataSourceProps[8].getValue();
+            if(pDataSourceProps[9].hasValue())
+                 pNewData->bIsHeadlineOn = *(sal_Bool*)pDataSourceProps[9].getValue();
+            if(pDataSourceProps[10].hasValue())
+                 pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
+
+            OUString sSubNodeName(pNames[nNode]);
+            sSubNodeName += C2U("/ColumnSet");
+            Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
+            const OUString* pSubNames = aSubNames.getConstArray();
+            for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)
             {
-                aPbDbcolAllTo.Enable( FALSE );
-                aPbDbcolOneTo.Enable( FALSE );
+                Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubNodeName);
+                Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
+                const Any* pSubProps = aSubProps.getConstArray();
+
+                OUString sColumn;
+                pSubProps[0] >>= sColumn;
+                sal_Int16 nIndex;
+                pSubProps[1] >>= nIndex;
+                SwInsDBColumnPtr pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
+                if(pSubProps[2].hasValue())
+                    pInsDBColumn->bHasFmt = *(sal_Bool*)pSubProps[2].getValue();
+                if(pSubProps[3].hasValue())
+                    pInsDBColumn->bIsDBFmt = *(sal_Bool*)pSubProps[3].getValue();
+
+                pSubProps[4] >>= pInsDBColumn->sUsrNumFmt;
+                OUString sNumberFormatLocale;
+                pSubProps[5] >>= sNumberFormatLocale;
+
+                Locale aLocale;
+                aLocale.Language = sNumberFormatLocale.copy(0, 2);
+                aLocale.Country = sNumberFormatLocale.copy(3, 2);
+                pInsDBColumn->eUsrNumFmtLng = SvxLocaleToLanguage( aLocale );
+
+                pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
+                                                        pInsDBColumn->eUsrNumFmtLng );
+
+//              pInsDBColumn->nDBNumFmt
+
+                pNewData->aDBColumns.Insert(pInsDBColumn);
             }
-            aPbDbcolOneFrom.Enable( TRUE );
-            aPbDbcolAllFrom.Enable( TRUE );
-        }
-        aEdDbText.SetText( pFndData->sEdit );
+            USHORT n = 0;
+            String sTmp( pNewData->sTblList );
+            if( sTmp.Len() )
+            {
+                do {
+                    String sEntry( sTmp.GetToken( 0, '\x0a', n ) );
+                    aLbTableCol.InsertEntry( sEntry );
+                    aLbTblDbColumn.RemoveEntry( sEntry );
+                } while( n < sTmp.Len() );
 
-        sTmp = pFndData->sTmplNm;
-        if( sTmp.Len() )
-            aLbDbParaColl.SelectEntry( sTmp );
-        else
-            aLbDbParaColl.SelectEntryPos( 0 );
-
-        if( pTAutoFmt )
-            delete pTAutoFmt, pTAutoFmt = 0;
-        sTmp = pFndData->sTAutoFmtNm;
-        if( sTmp.Len() )
-        {
-            // dann erstmal die AutoFmt-Datei laden und das Autoformat suchen
-            SwTableAutoFmtTbl aAutoFmtTbl;
-            aAutoFmtTbl.Load();
-            for( USHORT n = aAutoFmtTbl.Count(); n; )
-                if( sTmp == aAutoFmtTbl[ --n ]->GetName() )
+                if( !aLbTblDbColumn.GetEntryCount() )
                 {
-                    pTAutoFmt = new SwTableAutoFmt( *aAutoFmtTbl[ n ] );
-                    break;
+                    aPbDbcolAllTo.Enable( FALSE );
+                    aPbDbcolOneTo.Enable( FALSE );
                 }
-        }
+                aPbDbcolOneFrom.Enable( TRUE );
+                aPbDbcolAllFrom.Enable( TRUE );
+            }
+            aEdDbText.SetText( pNewData->sEdit );
 
-        aRbAsTable.Check( pFndData->bIsTable );
-        aRbAsField.Check( pFndData->bIsField );
-        aRbAsText.Check( !pFndData->bIsTable && !pFndData->bIsField );
+            sTmp = pNewData->sTmplNm;
+            if( sTmp.Len() )
+                aLbDbParaColl.SelectEntry( sTmp );
+            else
+                aLbDbParaColl.SelectEntryPos( 0 );
 
-        aCbTableHeadon.Check( pFndData->bIsHeadlineOn );
-        aRbHeadlColnms.Check( !pFndData->bIsEmptyHeadln );
-        aRbHeadlEmpty.Check( pFndData->bIsEmptyHeadln );
-
-        // jetzt noch die benutzerdefinierten Numberformat Strings in die
-        // Shell kopieren. Nur diese sind dann als ID verfuegbar
-        SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-        for( n = 0; n < aDBColumns.Count(); ++n )
-        {
-            SwInsDBColumn& rSet = *aDBColumns[ n ];
-            const SwInsDBColumn& rGet = *pFndData->aDBColumns[ n ];
-            if( rGet.bHasFmt && !rGet.bIsDBFmt )
+            if( pTAutoFmt )
+                delete pTAutoFmt, pTAutoFmt = 0;
+            sTmp = pNewData->sTAutoFmtNm;
+            if( sTmp.Len() )
             {
-                rSet.bIsDBFmt = FALSE;
-                rSet.nUsrNumFmt = rNFmtr.GetEntryKey( rGet.sUsrNumFmt,
-                                                        rGet.eUsrNumFmtLng );
-                if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFmt )
+                // dann erstmal die AutoFmt-Datei laden und das Autoformat suchen
+                SwTableAutoFmtTbl aAutoFmtTbl;
+                aAutoFmtTbl.Load();
+                for( USHORT n = aAutoFmtTbl.Count(); n; )
+                    if( sTmp == aAutoFmtTbl[ --n ]->GetName() )
+                    {
+                        pTAutoFmt = new SwTableAutoFmt( *aAutoFmtTbl[ n ] );
+                        break;
+                    }
+            }
+
+            aRbAsTable.Check( pNewData->bIsTable );
+            aRbAsField.Check( pNewData->bIsField );
+            aRbAsText.Check( !pNewData->bIsTable && !pNewData->bIsField );
+
+            aCbTableHeadon.Check( pNewData->bIsHeadlineOn );
+            aRbHeadlColnms.Check( !pNewData->bIsEmptyHeadln );
+            aRbHeadlEmpty.Check( pNewData->bIsEmptyHeadln );
+
+            // jetzt noch die benutzerdefinierten Numberformat Strings in die
+            // Shell kopieren. Nur diese sind dann als ID verfuegbar
+            SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
+            for( n = 0; n < aDBColumns.Count(); ++n )
+            {
+                SwInsDBColumn& rSet = *aDBColumns[ n ];
+                const SwInsDBColumn& rGet = *pNewData->aDBColumns[ n ];
+                if( rGet.bHasFmt && !rGet.bIsDBFmt )
                 {
-                    xub_StrLen nCheckPos;
-                    short nType;
-                    rNFmtr.PutEntry( (String&)rGet.sUsrNumFmt, nCheckPos, nType,
-                                    rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
+                    rSet.bIsDBFmt = FALSE;
+                    rSet.nUsrNumFmt = rNFmtr.GetEntryKey( rGet.sUsrNumFmt,
+                                                            rGet.eUsrNumFmtLng );
+                    if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFmt )
+                    {
+                        xub_StrLen nCheckPos;
+                        short nType;
+                        rNFmtr.PutEntry( (String&)rGet.sUsrNumFmt, nCheckPos, nType,
+                                        rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
+                    }
                 }
             }
-        }
 
-        // steht der Cursor in einer Tabelle, darf NIE Tabelle auswaehlbar sein
-        if( !aRbAsTable.IsEnabled() && aRbAsTable.IsChecked() )
-            aRbAsField.Check( TRUE );
-    }
-
-    aData.aDBColumns.Remove( (USHORT)0, aDBColumns.Count() );
-}
-
-/*  */
-
-
-_DB_ColumnConfigData::~_DB_ColumnConfigData() {}
-
-BOOL _DB_ColumnConfigData::IsEqualDB( const _DB_ColumnConfigData& rCmp ) const
-{
-    // teste, ob die Daten von der gleiche Databanktabelle kommen und
-    // ob sie noch die gleichen Werte enthaelt.
-    BOOL bRet = FALSE;
-    if( sDBName == rCmp.sDBName &&
-        aDBColumns.Count() == rCmp.aDBColumns.Count() )
-    {
-        bRet = TRUE;
-        for( USHORT n = aDBColumns.Count(); n; )
-        {
-            --n;
-            const SwInsDBColumn& rCmp1 = *aDBColumns[ n ];
-            const SwInsDBColumn& rCmp2 = *rCmp.aDBColumns[ n ];
-            if( rCmp1.sColumn != rCmp2.sColumn ||
-                rCmp1.nCol != rCmp2.nCol ||
-                rCmp1.bHasFmt != rCmp2.bHasFmt )
-            {
-                bRet = FALSE;
-                break;
-            }
-        }
-    }
-    return bRet;
-}
-
-_DB_ColumnConfigData::_DB_ColumnConfigData( SvStream& rStream, UINT16 nVers )
-{
-    rStream.ReadByteString( sDBName ).ReadByteString(sEdit )
-           .ReadByteString( sTblList ).ReadByteString( sTmplNm )
-           .ReadByteString( sTAutoFmtNm );
-
-    UINT16 n;
-    rStream >> n;
-    if( n )
-    {
-#ifdef WITH_STREAM_CORRECT
-        ULONG nSttPos = rStream.Tell();
-        UINT16 nOffset;
-#endif
-        UINT16 nCol, eLng;
-        UINT8 nFlags;
-        String sNm, sUsrFmt;
-
-        for( UINT16 i = 0; i < n; ++i )
-        {
-#ifdef WITH_STREAM_CORRECT
-            rStream >> nOffset;
-#endif
-            rStream.ReadByteString( sNm );
-            rStream >> nCol
-                    >> nFlags;
-            rStream.ReadByteString( sUsrFmt );
-            rStream >> eLng;
-
-            SwInsDBColumn* pNew = new SwInsDBColumn( sNm, nCol );
-            pNew->sUsrNumFmt = sUsrFmt;
-            pNew->eUsrNumFmtLng = (LanguageType)eLng;
-
-            pNew->bHasFmt   = 0 != (nFlags & 0x1);
-            pNew->bIsDBFmt  = 0 != (nFlags & 0x2);
-
-            aDBColumns.Insert( pNew, i );
-
-#ifdef WITH_STREAM_CORRECT
-            // muss etwas uebersprungen werden?
-            ULONG nCurPos = rStream.Tell();
-            if( nCurPos != ( nSttPos + nOffset ))
-                rStream.Seek( nCurPos = ( nSttPos + nOffset ) );
-            nSttPos = nCurPos;
-#endif
-        }
-    }
-
-    rStream >> n;
-    bIsTable        = 0 != (n & 0x01);
-    bIsField        = 0 != (n & 0x02);
-    bIsHeadlineOn   = 0 != (n & 0x04);
-    bIsEmptyHeadln  = 0 != (n & 0x08);
-
-/*
-    if( nVers > DBCOLUMN_CONFIG_VERSION1 )
-    {
-    }
-*/
-}
-
-void _DB_ColumnConfigData::Save( SvStream& rStream ) const
-{
-    rStream.WriteByteString( sDBName ).WriteByteString( sEdit )
-           .WriteByteString( sTblList ).WriteByteString( sTmplNm )
-           .WriteByteString( sTAutoFmtNm );
-
-    UINT16 n = aDBColumns.Count();
-    rStream << n;
-    if( n )
-    {
-#ifdef WITH_STREAM_CORRECT
-        ULONG nCurPos, nSttPos = rStream.Tell();
-#endif
-        for( UINT16 i = 0; i < n; ++i )
-        {
-#ifdef WITH_STREAM_CORRECT
-            rStream << (UINT16)0;
-#endif
-
-            const SwInsDBColumn& rCol = *aDBColumns[ i ];
-            UINT8 nFlags = 0;
-            if( rCol.bHasFmt )      nFlags |= 0x1;
-            if( rCol.bIsDBFmt )     nFlags |= 0x2;
-
-            rStream.WriteByteString( rCol.sColumn )
-                    << (UINT16)rCol.nCol
-                    << nFlags;
-            rStream.WriteByteString( rCol.sUsrNumFmt )
-                    << (UINT16)rCol.eUsrNumFmtLng
-                    ;
-
-#ifdef WITH_STREAM_CORRECT
-            nCurPos = rStream.Tell();
-            rStream.Seek( nSttPos );
-            rStream << (UINT16)(nCurPos - nSttPos);
-            rStream.Seek( nCurPos );
-            nSttPos = nCurPos;
-#endif
-        }
-    }
-
-    n = 0;
-    if( bIsTable )          n |= 0x01;
-    if( bIsField )          n |= 0x02;
-    if( bIsHeadlineOn )     n |= 0x04;
-    if( bIsEmptyHeadln )    n |= 0x08;
-    rStream << n;
-}
-
-
-
-
-_DB_ColumnConfig::_DB_ColumnConfig()
-    : SfxConfigItem( CFG_INSERT_DBCOLUMN_ITEM )
-{
-    memset( &aData, 0, sizeof( aData ));
-}
-
-_DB_ColumnConfig::~_DB_ColumnConfig()
-{
-    for( USHORT n = DBCOLUMN_MAXDATA; n; )
-        delete aData[ --n ];
-}
-
-void _DB_ColumnConfig::UseDefault()
-{
-    for( USHORT n = DBCOLUMN_MAXDATA; n; )
-        delete aData[ --n ];
-    SfxConfigItem::UseDefault();
-}
-
-String _DB_ColumnConfig::GetName() const
-{
-    return SW_RESSTR( STR_CFG_INSERT_DBCOLUMN );
-}
-
-int _DB_ColumnConfig::Load( SvStream& rStream )
-{
-    int nRet = SfxConfigItem::ERR_OK;
-
-    SetDefault( FALSE );
-    UINT16 nVers;
-    rStream >> nVers;
-    if( DBCOLUMN_CONFIG_VERSION1 >= nVers )
-    {
-        UINT16 n, nCnt;
-        CharSet eOldCharSet = rStream.GetStreamCharSet();
-        rStream >> n >> nCnt;
-
-        if( nCnt )
-        {
-            rStream.SetStreamCharSet( (CharSet)n );
-
-#ifdef WITH_STREAM_CORRECT
-            ULONG nSttPos = rStream.Tell();
-#endif
-            for( UINT16 i = 0; i < nCnt; ++i )
-            {
-#ifdef WITH_STREAM_CORRECT
-                rStream >> n;
-#endif
-                if( i < DBCOLUMN_MAXDATA )
-                    aData[ i ] = new _DB_ColumnConfigData( rStream, nVers );
-
-#ifdef WITH_STREAM_CORRECT
-                // muss etwas uebersprungen werden?
-                ULONG nCurPos = rStream.Tell();
-                if( nCurPos != ( nSttPos + n ))
-                    rStream.Seek( nCurPos = ( nSttPos + n ) );
-                nSttPos = nCurPos;
-#endif
-            }
-            rStream.SetStreamCharSet( eOldCharSet );
-        }
-    }
-    else
-        nRet = SfxConfigItem::WARNING_VERSION;
-
-    return nRet;
-}
-
-BOOL _DB_ColumnConfig::Store( SvStream& rStream )
-{
-    CharSet eOldCharSet = rStream.GetStreamCharSet();
-    rtl_TextEncoding eCurCharSet = ::gsl_getSystemTextEncoding();
-    rStream.SetStreamCharSet( eCurCharSet );
-
-    rStream << (UINT16)DBCOLUMN_CONFIG_VERSION
-            << (UINT16)eCurCharSet;
-
-    USHORT nCnt = DBCOLUMN_MAXDATA;
-    for( USHORT n = 0; n < nCnt; ++n )
-        if( !aData[ n ] )
-        {
-            nCnt = n;
+            // steht der Cursor in einer Tabelle, darf NIE Tabelle auswaehlbar sein
+            if( !aRbAsTable.IsEnabled() && aRbAsTable.IsChecked() )
+                aRbAsField.Check( TRUE );
+            delete pNewData;
             break;
         }
-
-    rStream << (UINT16)nCnt;
-    if( nCnt )
-    {
-#ifdef WITH_STREAM_CORRECT
-        ULONG nCurPos, nSttPos = rStream.Tell();
-#endif
-        for( USHORT n = 0; n < nCnt; ++n )
-        {
-#ifdef WITH_STREAM_CORRECT
-            rStream << (UINT16)0;
-#endif
-
-            aData[ n ]->Save( rStream );
-
-#ifdef WITH_STREAM_CORRECT
-            nCurPos = rStream.Tell();
-            rStream.Seek( nSttPos );
-            rStream << (UINT16)(nCurPos - nSttPos);
-            rStream.Seek( nCurPos );
-            nSttPos = nCurPos;
-#endif
-        }
-    }
-    rStream.SetStreamCharSet( eOldCharSet );
-
-    return SfxConfigItem::ERR_OK;
-}
-
-const _DB_ColumnConfigData* _DB_ColumnConfig::HasData(
-        const _DB_ColumnConfigData& rData ) const
-{
-    const _DB_ColumnConfigData* pRet = 0;
-    for( USHORT n = 0; n < DBCOLUMN_MAXDATA; ++n )
-        if( aData[ n ] && aData[ n ]->IsEqualDB( rData ))
-        {
-            pRet = aData[ n ];
-            break;
-        }
-    return pRet;
-}
-
-void _DB_ColumnConfig::SetData( _DB_ColumnConfigData* pData )
-{
-    ASSERT( pData, "kein pData ans SetData uebergeben" );
-    if( pData )
-    {
-        USHORT n, nDelPos = DBCOLUMN_MAXDATA-1;
-        for( n = 0; n < DBCOLUMN_MAXDATA; ++n )
-            if( !aData[ n ] ||  aData[ n ]->IsEqualDB( *pData ))
-            {
-                nDelPos = n;
-                break;
-            }
-
-        // loesche den Eintrag an der DelPos und verschiebe alle
-        // vorhergehenden eine Position runter. Der aktuelle wird
-        // dann wieder am Anfang eingefuegt.
-        delete aData[ nDelPos ];
-        if( nDelPos )
-            memmove( aData+1, aData, nDelPos * sizeof( aData[ 0 ] ));
-        aData[ 0 ] = pData;
-
-        SetDefault( FALSE );
     }
 }
-
 

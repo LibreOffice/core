@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:32:00 $
+ *  last change: $Author: os $ $Date: 2000-12-08 10:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
 #ifndef _SWNUMFMTLB_HXX //autogen
 #include <numfmtlb.hxx>
 #endif
@@ -109,15 +112,15 @@ namespace com{namespace sun{namespace star{
 
 class SwTableAutoFmt;
 class SwView;
-class _DB_ColumnConfig;
 class SfxItemSet;
 class SwTableRep;
 class _DB_Columns;
 
 struct SwInsDBColumn
 {
-    String sColumn, sUsrNumFmt;
-    ULONG nDBNumFmt, nUsrNumFmt;        // besser ist NumFormatStr  !!
+    rtl::OUString sColumn, sUsrNumFmt;
+    sal_Int32 nDBNumFmt;
+    ULONG nUsrNumFmt;
     LanguageType eUsrNumFmtLng;
     USHORT nCol;
     BOOL bHasFmt : 1;
@@ -143,7 +146,7 @@ typedef SwInsDBColumn* SwInsDBColumnPtr;
 SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32, 32 )
 
 
-class SwInsertDBColAutoPilot : public SfxModalDialog
+class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 {
     FixedText       aFtInsertData;
     RadioButton     aRbAsTable;
@@ -193,7 +196,6 @@ class SwInsertDBColAutoPilot : public SfxModalDialog
 
     SwView*         pView;
     SwTableAutoFmt* pTAutoFmt;
-    _DB_ColumnConfig* pConfig;
 
     SfxItemSet*     pTblSet;
     SwTableRep*     pRep;
@@ -210,10 +212,10 @@ class SwInsertDBColAutoPilot : public SfxModalDialog
 
     FASTBOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
 
-    // Daten ins INI-File schreiben
-    void WriteUIToIni();
-    // Daten aus dem INI-File lesen:
-    void ReadIniToUI();
+
+    virtual void            Commit();
+    void                    Load();
+
     // setze die Tabellen - Eigenschaften
     void SetTabSet();
 
