@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:10:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,6 +1429,10 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     case XML_TYPE_TEXT_RUBY_POSITION:
         pHdl = new XMLNamedBoolPropertyHdl( ::xmloff::token::XML_ABOVE,
                                             ::xmloff::token::XML_BELOW );
+        break;
+    case XML_TYPE_BORDER_MODEL:
+        pHdl = new XMLNamedBoolPropertyHdl( xmloff::token::XML_COLLAPSING,
+                                            xmloff::token::XML_SEPARATING );
         break;
     }
 
