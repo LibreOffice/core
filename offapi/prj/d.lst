@@ -40,6 +40,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xforms
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\formula
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\frame
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\frame\status
@@ -126,6 +128,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form
 ..\com\sun\star\form\component\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
 ..\com\sun\star\form\control\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
+..\com\sun\star\xforms\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xforms
+..\com\sun\star\xsd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
 ..\com\sun\star\formula\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\formula
 ..\com\sun\star\frame\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\frame
 ..\com\sun\star\frame\status\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\frame\status
