@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-15 10:29:08 $
+ *  last change: $Author: mi $ $Date: 2001-12-10 17:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 #include <com/sun/star/text/XTextTablesSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+#endif
+
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
@@ -127,16 +131,12 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextDocument
 /** A text document is a model component which contains text
     structured by paragraphs.
-
-
 
     <p>Each paragraph and each portion of text can be fitted with
     some attributes (technically properties).
 
-    </p>
     <p>In addition, all text objects can be searched.</p>
  */
 service TextDocument
@@ -185,6 +185,8 @@ service TextDocument
 
     // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextTablesSupplier;
+
+    [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
     //-------------------------------------------------------------------------
 
@@ -238,6 +240,9 @@ service TextDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/05/15 10:29:08  kz
+    add. some missing headers
+
     Revision 1.4  2001/05/09 14:06:21  mi
     HypertextDocument and AdvancedTextDocument now deprecated, all members now optional in TextDocument
 
