@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:52:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1995,9 +1995,11 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl( USHORT       nId,
         nActFamily          ( 0xffff ),
         bListening          ( FALSE )
 {
+    USHORT i;
+
     rBindings.ENTERREGISTRATIONS();
 
-    for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+    for ( i=0; i<MAX_FAMILIES; i++ )
     {
         pBoundItems [i] = new SfxStyleControllerItem_Impl( SID_STYLE_FAMILY_START + i, rBindings, *this );
         pFamilyState[i] = NULL;
@@ -2229,14 +2231,17 @@ void SvxStyleToolBoxControl::SetFamilyState( USHORT nIdx,
 
 IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, pVoid )
 {
+    USHORT i;
+
     // Call ReBind() && UnBind() according to visibility
     SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)( GetToolBox().GetItemWindow( GetId() ));
     if ( pBox->IsVisible() && !IsBound() )
     {
+
         // Rebind controllers again
         GetBindings().ENTERREGISTRATIONS();
 
-        for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+        for ( i=0; i<MAX_FAMILIES; i++ )
             pBoundItems [i]->ReBind();
 
         ReBind();
@@ -2249,7 +2254,7 @@ IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, pVoid )
     }
     else if ( !pBox->IsVisible() && IsBound() )
     {
-        for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+        for ( i=0; i<MAX_FAMILIES; i++ )
             pBoundItems [i]->UnBind();
         UnBind();
     }
