@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-27 09:06:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,11 @@ SvxSearchConfig::SvxSearchConfig(sal_Bool bEnableNotify) :
     pImpl(new SvxSearchConfig_Impl)
 {
     if(bEnableNotify)
-        EnableNotification(lcl_GetSearchPropertyNames_Impl());
+    {
+        //request notifications from the node
+        Sequence<OUString> aEnable(1);
+        EnableNotification(aEnable);
+    }
     Load();
 }
 /* -----------------------------16.01.01 15:36--------------------------------
@@ -320,6 +324,7 @@ void SvxSearchConfig::RemoveData(const rtl::OUString& rEngineName)
         if(pImpl->aEngineArr[nPos]->sEngineName == rEngineName)
         {
             pImpl->aEngineArr.DeleteAndDestroy(nPos, 1);
+            SetModified();
             return ;
         }
     }
