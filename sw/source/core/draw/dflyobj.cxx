@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:46:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 
 SwFlyDrawObj::SwFlyDrawObj()
 {
-    bNotPersistent = TRUE;
+//BFS01 bNotPersistent = TRUE;
 }
 
 SwFlyDrawObj::~SwFlyDrawObj()
@@ -154,7 +154,7 @@ SwFlyDrawObj::~SwFlyDrawObj()
 |*
 *************************************************************************/
 
-sal_Bool SwFlyDrawObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SwFlyDrawObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     return TRUE;
 }
@@ -200,7 +200,8 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 {
     //#110094#-1
     // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = TRUE;
-    bNotPersistent = bNeedColorRestore = TRUE;
+//BFS01 bNotPersistent = bNeedColorRestore = TRUE;
+//BFS01 bNeedColorRestore = TRUE;
 
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
@@ -243,7 +244,7 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 |*
 *************************************************************************/
 
-sal_Bool SwVirtFlyDrawObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SwVirtFlyDrawObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     //#110094#-2
     // Moved here from SwViewImp::PaintDispatcher
