@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-18 13:29:57 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 16:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_BREAKTYPE_HPP_
@@ -423,10 +426,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             }
 
             LanguageType aLang = rInf.GetFont()->GetLanguage();
-            ForbiddenCharacters &aForbidden = pBreakIt->GetForbidden( aLang );
-            LineBreakUserOptions aUserOpt( aForbidden.beginLine,
-                aForbidden.endLine, rInf.HasForbiddenChars(), rInf.IsHanging(),
-                sal_False );
+            const ForbiddenCharacters aForbidden(
+                    *rInf.GetTxtFrm()->GetNode()->GetDoc()->
+                                GetForbiddenCharacters( aLang, TRUE ));
+            LineBreakUserOptions aUserOpt(
+                    aForbidden.beginLine, aForbidden.endLine,
+                    rInf.HasForbiddenChars(), rInf.IsHanging(), sal_False );
             LineBreakResults aResult =
                 pBreakIt->xBreak->getLineBreak( rInf.GetTxt(), nRightPos,
                 pBreakIt->GetLocale(aLang), rInf.GetIdx(), aHyphOpt, aUserOpt );
