@@ -3,15 +3,15 @@
  *  $RCSfile: childwin.cxx,v $
  *
 <<<<<<< childwin.cxx
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
 =======
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
 >>>>>>> 1.13.142.2
  *
 <<<<<<< childwin.cxx
- *  last change: $Author: kz $ $Date: 2005-01-13 19:07:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:23:13 $
 =======
- *  last change: $Author: kz $ $Date: 2005-01-13 19:07:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:23:13 $
 >>>>>>> 1.13.142.2
  *
  *  The Contents of this file are made available subject to the terms of
@@ -386,8 +386,17 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         aInfo.aWinState = ((SystemWindow*)pWindow)->GetWindowState( nMask );
     }
-    else if ( pWindow->GetType() == RSC_DOCKINGWINDOW && ((DockingWindow*)pWindow)->GetFloatingWindow() )
-        aInfo.aWinState = ((DockingWindow*)pWindow)->GetFloatingWindow()->GetWindowState();
+    else if ( pWindow->GetType() == RSC_DOCKINGWINDOW )
+    {
+        if (((DockingWindow*)pWindow)->GetFloatingWindow() )
+            aInfo.aWinState = ((DockingWindow*)pWindow)->GetFloatingWindow()->GetWindowState();
+        else
+        {
+            SfxChildWinInfo aTmpInfo;
+            ((SfxDockingWindow*)pWindow)->FillInfo( aTmpInfo );
+            aInfo.aExtraString = aTmpInfo.aExtraString;
+        }
+    }
 
     aInfo.bVisible = pImp->bVisible;
     aInfo.nFlags = 0;
