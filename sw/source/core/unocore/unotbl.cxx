@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-17 07:36:13 $
+ *  last change: $Author: os $ $Date: 2000-11-17 14:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,13 +961,12 @@ uno::Reference< XTextCursor >  SwXCell::createTextCursorByRange(const uno::Refer
     if((pStartNode || IsValid()) && SwXTextRange::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
-        const SwStartNode* pTmp = aPam.GetNode()->FindStartNode();
-        while(pTmp && pTmp->IsSectionNode())
-        {
-            pTmp = pTmp->FindStartNode();
-        }
+        //skip sections
+        SwStartNode* p1 = aPam.GetNode()->FindStartNode();
+        while(p1->IsSectionNode())
+            p1 = p1->FindStartNode();
 
-        if(pTmp == pSttNd)
+        if( p1 == pSttNd )
             aRef =  (XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_TBLTEXT, GetDoc(), aPam.GetMark());
     }
     else

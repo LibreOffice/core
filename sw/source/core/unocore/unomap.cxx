@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 15:26:37 $
+ *  last change: $Author: os $ $Date: 2000-11-17 14:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,6 +1002,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCellMap_Impl;
