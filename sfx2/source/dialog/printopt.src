@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:42:40 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Reduce printing data";
         Text[ french ] = "Réduire les données d'impression";
         Text[ spanish ] = "Reducir datos de impresión";
-        Text[ italian ] = "Reduce printing data";
+        Text[ italian ] = "Riduce la data di stampa";
         Text[ danish ] = "Reduce printing data";
         Text[ swedish ] = "Reducera utskriftsdata";
         Text[ polish ] = "Zmniejsz iloœæ danych do wydruku";
@@ -120,7 +120,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Settings for";
         Text[ french ] = "Paramètres pour";
         Text[ spanish ] = "Configuración para";
-        Text[ italian ] = "Settings for";
+        Text[ italian ] = "Impostazioni per";
         Text[ danish ] = "Settings for";
         Text[ swedish ] = "Inställningar för";
         Text[ polish ] = "Ustawienia dotycz¹";
@@ -148,7 +148,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "~Printer";
         Text[ french ] = "~Imprimante";
         Text[ spanish ] = "Imp~resora";
-        Text[ italian ] = "~Printer";
+        Text[ italian ] = "~Stampante";
         Text[ danish ] = "~Printer";
         Text[ swedish ] = "S~krivare";
         Text[ polish ] = "Drukarka";
@@ -176,7 +176,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Print to ~file";
         Text[ french ] = "~Imprimer dans un fichier";
         Text[ spanish ] = "Imprimir en ~archivo";
-        Text[ italian ] = "Print to ~file";
+        Text[ italian ] = "Stampa nel ~file";
         Text[ danish ] = "Print to ~file";
         Text[ swedish ] = "Skriv ut t~ill fil";
         Text[ polish ] = "Drukuj do pliku";
@@ -207,7 +207,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "~Reduce transparency";
         Text[ french ] = "Réduire la ~transparence";
         Text[ spanish ] = "~Reducir transparencia";
-        Text[ italian ] = "~Reduce transparency";
+        Text[ italian ] = "~Riduci trasparenza";
         Text[ danish ] = "~Reduce transparency";
         Text[ swedish ] = "~Reducera transparens";
         Text[ polish ] = "Zredukuj przezroczystoœæ";
@@ -235,7 +235,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Auto~matic";
         Text[ french ] = "Auto~matique";
         Text[ spanish ] = "Auto~mático";
-        Text[ italian ] = "Auto~matic";
+        Text[ italian ] = "Auto~matico";
         Text[ danish ] = "Auto~matic";
         Text[ swedish ] = "Auto~matiskt";
         Text[ polish ] = "Automatycznie";
@@ -263,7 +263,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "~No transparency";
         Text[ french ] = "~Aucune transparence";
         Text[ spanish ] = "~Sin transparencia";
-        Text[ italian ] = "~No transparency";
+        Text[ italian ] = "Nessuna trasparenza";
         Text[ danish ] = "~No transparency";
         Text[ swedish ] = "I~ngen transparens";
         Text[ polish ] = "Bez przezroczystoœci";
@@ -294,7 +294,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Reduce ~gradients";
         Text[ french ] = "Réduire les dé~gradés";
         Text[ spanish ] = "Reducir ~gradientes";
-        Text[ italian ] = "Reduce ~gradients";
+        Text[ italian ] = "RIduci sfumature";
         Text[ danish ] = "Reduce ~gradients";
         Text[ swedish ] = "Reducera färg~gradienter";
         Text[ polish ] = "Zredukuj gradienty";
@@ -322,7 +322,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Gradient ~stripes";
         Text[ french ] = "Bandes de dégradé~s";
         Text[ spanish ] = "Tiras de gra~dientes";
-        Text[ italian ] = "Gradient ~stripes";
+        Text[ italian ] = "Bande sfumate";
         Text[ danish ] = "Gradient ~stripes";
         Text[ swedish ] = "Färggra~dientränder";
         Text[ polish ] = "Paski gradientu";
@@ -361,7 +361,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Medium ~color";
         Text[ french ] = "Couleur ~intermédiaire";
         Text[ spanish ] = "~Color intermedio";
-        Text[ italian ] = "Medium ~color";
+        Text[ italian ] = "Colore intermedio";
         Text[ danish ] = "Medium ~color";
         Text[ swedish ] = "~Mellanfärg";
         Text[ polish ] = "Kolor poœredni";
@@ -392,7 +392,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Reduce ~bitmaps";
         Text[ french ] = "Réduire les ~bitmaps";
         Text[ spanish ] = "Reducir ~bitmaps";
-        Text[ italian ] = "Reduce ~bitmaps";
+        Text[ italian ] = "Riduci bitmap";
         Text[ danish ] = "Reduce ~bitmaps";
         Text[ swedish ] = "Reducera ~bitmaps";
         Text[ polish ] = "Zredukuj mapy bitowe";
@@ -415,12 +415,12 @@ TabPage TP_COMMONPRINTOPTIONS
         Text [ ENGLISH ] = "Good ~quality" ;
         Text[ english_us ] = "~Good print quality";
         Text[ portuguese ] = "~Boa qualidade de impressão";
-        Text[ russian ] = "~Õîðîøåå êà÷åñòâî ïå÷àòè";
+        Text[ russian ] = "~Íîðìàëüíîå êà÷åñòâî ïå÷àòè";
         Text[ greek ] = "~Good quality";
         Text[ dutch ] = "~Good quality";
         Text[ french ] = "Qualité d'impression ~optimale";
         Text[ spanish ] = "~Buena calidad de impresión";
-        Text[ italian ] = "~Good quality";
+        Text[ italian ] = "Stampa di ~buona qualità";
         Text[ danish ] = "~Good quality";
         Text[ swedish ] = "God utskrifts~kvalitet";
         Text[ polish ] = "Wysoka jakoœæ wydruku";
@@ -448,7 +448,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "N~ormal quality";
         Text[ french ] = "Qualité d'impression ~standard";
         Text[ spanish ] = "Calidad ~normal de impresión";
-        Text[ italian ] = "N~ormal quality";
+        Text[ italian ] = "Qualità ~normale";
         Text[ danish ] = "N~ormal quality";
         Text[ swedish ] = "N~ormal utskriftskvalitet";
         Text[ polish ] = "Zwyk³a jakoœæ wydruku";
@@ -476,7 +476,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Reso~lution";
         Text[ french ] = "~Résolution";
         Text[ spanish ] = "R~esolución";
-        Text[ italian ] = "Reso~lution";
+        Text[ italian ] = "~Risoluzione";
         Text[ danish ] = "Reso~lution";
         Text[ swedish ] = "Uppl~ösning";
         Text[ polish ] = "Rozdzielczoœæ";
@@ -593,7 +593,7 @@ TabPage TP_COMMONPRINTOPTIONS
             < "72 DPI"; 0; > ;
         < "96 DPI"; 0;  > ;
         < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "200 DPI (standard)"; 0; > ;
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
     };
@@ -720,7 +720,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Include transparent ob~jects";
         Text[ french ] = "Inclure les ob~jets transparents";
         Text[ spanish ] = "Incluir ob~jetos transparentes";
-        Text[ italian ] = "Include transparent ob~jects";
+        Text[ italian ] = "Includi oggetti trasparenti";
         Text[ danish ] = "Include transparent ob~jects";
         Text[ swedish ] = "Inkludera transparenta ob~jekt";
         Text[ polish ] = "Do³¹cz przezroczyste obiekty";
@@ -751,7 +751,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Con~vert colors to greyscales";
         Text[ french ] = "Con~vertir les couleurs en niveaux de gris";
         Text[ spanish ] = "Con~vertir colores en escala de grises";
-        Text[ italian ] = "Con~vert colors to greyscales";
+        Text[ italian ] = "Con~verti i colori in sfumature di grigio";
         Text[ danish ] = "Con~vert colors to greyscales";
         Text[ swedish ] = "Om~vandla färger till gråskalor";
         Text[ polish ] = "Zamieñ kolory na odcienie szaroœci";
@@ -866,7 +866,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "~Transparency";
         Text[ french ] = "~Transparence";
         Text[ spanish ] = "~Transparencia";
-        Text[ italian ] = "~Transparency";
+        Text[ italian ] = "~Trasparenza";
         Text[ danish ] = "~Transparency";
         Text[ swedish ] = "~Transparens";
         Text[ polish ] = "Przezroczystoœæ";
@@ -1015,7 +1015,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ dutch ] = "~Cancel";
         Text[ french ] = "~Annuler";
         Text[ spanish ] = "~Cancelar";
-        Text[ italian ] = "~Cancel";
+        Text[ italian ] = "~Annulla";
         Text[ danish ] = "~Cancel";
         Text[ swedish ] = "~Avbryt";
         Text[ polish ] = "Anuluj";
@@ -1060,3 +1060,4 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
