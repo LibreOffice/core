@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+#   last change: $Author: ka $ $Date: 2001-01-30 15:04:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ SLOFILES=                                                           \
 SLOFILES	+= $(SLO)$/netbsd.obj
 .ENDIF
 
+EXCEPTIONSFILES=	$(SLO)$/formats.obj							
 
 # --- Targets -------------------------------------------------------
 
