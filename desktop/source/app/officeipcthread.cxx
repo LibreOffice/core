@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:31:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,18 +467,25 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // because the thread hangs in accept of pipe
         OPipe Pipe( pOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
         //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
-        Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
+        if (Pipe.isValid())
+        {
+            Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
 
-        // close the pipe so that the streampipe on the other
-        // side produces EOF
-        Pipe.close();
+            // close the pipe so that the streampipe on the other
+            // side produces EOF
+            Pipe.close();
+        }
 
         // release mutex to avoid deadlocks
         aMutex.clear();
 
+        OfficeIPCThread::SetReady(pOfficeIPCThread);
+
         // exit gracefully and join
         pOfficeIPCThread->join();
-        delete pOfficeIPCThread;
+        delete pGlobalOfficeIPCThread;
+
+
     }
 }
 
@@ -507,6 +514,15 @@ static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStrin
     aStringList += aURL;
 }
 
+void OfficeIPCThread::SetReady(OfficeIPCThread* pThread)
+{
+    if (pThread == NULL) pThread = pGlobalOfficeIPCThread;
+    if (pThread != NULL)
+    {
+        pThread->cReady.set();
+    }
+}
+
 void SAL_CALL OfficeIPCThread::run()
 {
     do
@@ -517,7 +533,21 @@ void SAL_CALL OfficeIPCThread::run()
 
         if( nError == OStreamPipe::E_None )
         {
+
+            // #111143# and others:
+            // if we receive a request while the office is displaying some dialog or error during
+            // bootstrap, that dialogs event loop might get events that are dispatched by this thread
+            // we have to wait for cReady to be set by the real main loop.
+            // only reqests that dont dispatch events may be processed before cReady is set.
+            cReady.wait();
+
+            // we might have decided to shutdown while we were sleeping
+            if (!pGlobalOfficeIPCThread) return;
+
+            // only lock the mutex when processing starts, othewise we deadlock when the office goes
+            // down during wait
             osl::ClearableMutexGuard aGuard( GetMutex() );
+
             ByteString aArguments;
             // test byte by byte
             const int nBufSz = 2048;
@@ -691,13 +721,13 @@ void SAL_CALL OfficeIPCThread::run()
                 ApplicationEvent* pAppEvent =
                         new ApplicationEvent( aEmpty, aEmpty, "APPEAR", aEmpty );
                 ImplPostForeignAppEvent( pAppEvent );
-                cProcessed.set();
             }
 
             // we don't need the mutex any longer...
             aGuard.clear();
             // wait for processing to finish
-            cProcessed.wait();
+            if (bDocRequestSent)
+                cProcessed.wait();
             // processing finished, inform the requesting end
             nBytes = 0;
             while (
