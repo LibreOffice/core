@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-02 07:07:18 $
+ *  last change: $Author: pb $ $Date: 2002-11-05 07:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "log",   TRUE,  STR_DESCRIPTION_LOGFILE,               0 },
     { "lst",   TRUE,  STR_DESCRIPTION_LOGFILE,               0 },
     { "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
-    { "mml",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
+    { "mml",   FALSE, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
     { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
     { "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
     { "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
@@ -203,13 +203,13 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "std",   FALSE, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
     { "sti",   FALSE, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
     { "stw",   FALSE, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
-    { "sxc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
-    { "sxd",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
-    { "sxg",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
-    { "sxi",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
-    { "sxm",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
-    { "sxs",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART },
-    { "sxw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
+    { "sxc",   FALSE, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
+    { "sxd",   FALSE, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
+    { "sxg",   FALSE, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
+    { "sxi",   FALSE, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
+    { "sxm",   FALSE, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
+    { "sxs",   FALSE, STR_DESCRIPTION_SXCHART_DOC,           IMG_CHART },
+    { "sxw",   FALSE, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
     { "sys",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
     { "tif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
     { "tiff",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
