@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:44:46 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:22:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,32 +75,15 @@ TARGET=copying
 #----------------------------------------------------
 
 OFFICEBEAN_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/BasicOfficeBean.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/BeanInfoAdapter.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeCommand.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OOoBeanViewer.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeIconColor16.jpg \
     $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeIconColor32.jpg \
     $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeIconMono16.jpg \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeIconMono32.jpg
-
-OFFICEWRITERBEAN_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeWriterBean$/DocViewer.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Makefile \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Office.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeBeanInfo.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriter.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBeanInfo.java
-
-SIMPLEBEAN_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/SimpleBean$/Makefile \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBean.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBeanBeanInfo.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleViewer.java
+    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/OfficeIconMono32.jpg \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/OfficeBean$/Makefile
 
 DIR_FILE_LIST= \
-    $(OFFICEBEAN_FILES) \
-    $(OFFICEWRITERBEAN_FILES) \
-    $(SIMPLEBEAN_FILES)
+    $(OFFICEBEAN_FILES) 
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/devguide_officebean_dirs_created.txt
