@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:19:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 
 #ifndef WW8STRUC_HXX
 #include "ww8struc.hxx"         // FIB, STSHI, STD...
+#endif
+#ifndef _TYPES_HXX
+#include <types.hxx>
 #endif
 
 #define APPEND_CONST_ASC(s) AppendAscii(RTL_CONSTASCII_STRINGPARAM(s))
@@ -214,7 +217,7 @@ String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1);
  */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
     USHORT nExtraLen, rtl_TextEncoding eCS, ::std::vector<String> &rArray,
-    ::std::vector<String>* pExtraArray = 0);
+    ::std::vector<ww::bytes>* pExtraArray = 0);
 
 struct WW8FieldDesc
 {
@@ -870,7 +873,7 @@ private:
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFtn, *pEdn, *pBkm, *pPcd,
         *pPcdA, *pAnd;
-    WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables;
+    WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
 
     const WW8Fib* pWwFib;
 
@@ -928,6 +931,7 @@ public:
     WW8PLCFspecial* GetTxbx() const { return pTxbx; }
     WW8PLCFspecial* GetTxbxBkd() const { return pTxbxBkd; }
     WW8PLCFspecial* GetMagicTables() const { return pMagicTables; }
+    WW8PLCFspecial* GetWkbPLCF() const { return pSubdocs; }
     short GetManType() const { return nManType; }
     bool GetDoingDrawTextBox() const { return mbDoingDrawTextBox; }
 };
@@ -974,6 +978,7 @@ private:
     WW8PLCFspecial*   pHdFtTxbx;        // TextBoxen in Header / Footer
     WW8PLCFspecial*   pHdFtTxbxBkd;     // Break-Deskriptoren fuer diese
     WW8PLCFspecial*   pMagicTables;     // Break-Deskriptoren fuer diese
+    WW8PLCFspecial*   pSubdocs;         // subdoc references in master document
     WW8PLCFx_Book*    pBook;            // Bookmarks
 
     WW8PLCFpcd*         pPiecePLCF; // fuer FastSave ( Basis-PLCF ohne Iterator )
@@ -1264,7 +1269,7 @@ public:
     INT32 lcbWss;       // 0x14c count of bytes of WSS. ==0 if unable to store the window state.
 
     WW8_FC fcDop;       // 0x150 file offset of document property data structure.
-    INT32 lcbDop;       // 0x154 count of bytes of document properties.
+    sal_uInt32 lcbDop;       // 0x154 count of bytes of document properties.
         // cbDOP is 84 when nFib < 103
 
 
@@ -1387,6 +1392,9 @@ public:
     INT32 lcbPlcfHdrtxbxTxt;// 0x236
     WW8_FC fcPlcffldHdrTxbx;// 0x23a ...PLCF of field boundaries recorded in the header textbox subdoc.
     INT32 lcbPlcffldHdrTxbx;// 0x23e
+
+    WW8_FC fcSttbFnm;       // 0x02da offset in the table stream of masters subdocument names
+    INT32 lcbSttbFnm;       // 0x02de length
 
     /*
         spezielle Listenverwaltung fuer WW8
@@ -1661,7 +1669,7 @@ public:
     BYTE    nDataEnd;
 
     /* Constructor for importing, needs to know the version of word used */
-    WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize );
+    WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize);
 
     /* Constructs default DOP suitable for exporting */
     WW8Dop();
