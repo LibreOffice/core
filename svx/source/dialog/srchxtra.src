@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-16 20:15:21 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ polish ] = "Uk�ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
                 Text[ japanese ] = "日本語レイアウト";
-                Text[ korean ] = "아시아 레이아웃";
+                Text[ korean ] = "한글 입력 체계";
                 Text[ chinese_simplified ] = "中日韩版式";
                 Text[ chinese_traditional ] = "中日韓版式";
                 Text[ turkish ] = "Asian Layout";
@@ -391,11 +391,11 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "S�lection" ;
-        Text [ swedish ] = "Urval" ;
+        Text [ swedish ] = "~Urval" ;
         Text [ dutch ] = "Selectie" ;
-        Text [ spanish ] = "Selecci�n" ;
+        Text [ spanish ] = "~Selecci�n" ;
         Text [ english_us ] = "~Options" ;
-        Text[ chinese_simplified ] = "选择";
+        Text[ chinese_simplified ] = "选项";
         Text[ russian ] = "�����";
         Text[ polish ] = "Wyb�r";
         Text[ japanese ] = "選択";
