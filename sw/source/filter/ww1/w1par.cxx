@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1par.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:07:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _PAM_HXX
 #include <pam.hxx>              // fuer SwPam
