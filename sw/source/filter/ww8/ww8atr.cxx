@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,22 +550,55 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
 // und damit im falschen landen wuerden.
 void SwWW8Writer::Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd )
 {
+    //Output a sectionbreak if theres a new pagedesciptor.
+    //otherwise output a pagebreak if there is a pagebreak here, unless
+    //the new page (follow style) is different to the current one, in
+    //which case plump for a section.
     if( rSet.Count() )
     {
         bBreakBefore = true;
 
-        const SfxPoolItem* pItem;
+        bool bNewPageDesc = false;
+        const SfxPoolItem* pItem=0;
+        const SwFmtPageDesc *pPgDesc=0;
         if (!bStyDef && !bOutKF && !bInWriteEscher && !bOutPageDescs &&
             SFX_ITEM_SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem)
             && ((SwFmtPageDesc*)pItem)->GetRegisteredIn())
+        {
+            bNewPageDesc = true;
+            pPgDesc = (const SwFmtPageDesc*)pItem;
+            pAktPageDesc = pPgDesc->GetPageDesc();
+        }
+        else if (SFX_ITEM_SET == rSet.GetItemState(RES_BREAK, false, &pItem))
+        {
+            ASSERT(pAktPageDesc, "should not be possible");
+            //If because of this pagebreak the page desc following the
+            //page break is the follow style of the current page desc
+            //then output a section break using that style instead.
+            //At least in those cases we end up with the same style
+            //in word and writer, nothing can be done when it happens
+            //when we get a new pagedesc because we overflow from the
+            //first page style.
+            if (pAktPageDesc)
+            {
+                const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
+                if (pCurrent != pAktPageDesc)
+                {
+                    pAktPageDesc = pCurrent;
+                    bNewPageDesc = true;
+                }
+            }
+            if (!bNewPageDesc)
+                OutWW8_SwFmtBreak( *this, *pItem );
+        }
+
+        if (bNewPageDesc)
         {
             // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur
             // in WW8Writer::pSepx mit der entsprechenden Position
             // eingetragen.  Das Aufbauen und die Ausgabe der am PageDesc
             // haengenden Attribute und Kopf/Fusszeilen passiert nach dem
             // Haupttext und seinen Attributen.
-            const SwFmtPageDesc& rPgDesc = *(SwFmtPageDesc*)pItem;
-            pAktPageDesc = rPgDesc.GetPageDesc();
             if( pAktPageDesc )
             {
                 ULONG nFcPos = ReplaceCr( 0x0c ); // Page/Section-Break
@@ -578,13 +611,21 @@ void SwWW8Writer::Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd )
                 // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
                 // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
                 if( nFcPos )
-                    pSepx->AppendSep( Fc2Cp( nFcPos ), rPgDesc, rNd, pFmt,
-                                      ((SwFmtLineNumber&)rSet.Get(
-                                            RES_LINENUMBER )).GetStartValue());
+                {
+                    if (pPgDesc)
+                    {
+                        pSepx->AppendSep( Fc2Cp( nFcPos ), *pPgDesc, rNd, pFmt,
+                            ((const SwFmtLineNumber&)rSet.Get(RES_LINENUMBER )).GetStartValue());
+                    }
+                    else
+                    {
+                        pSepx->AppendSep( Fc2Cp( nFcPos ), pAktPageDesc, rNd,
+                            pFmt,
+                            ((const SwFmtLineNumber&)rSet.Get(RES_LINENUMBER )).GetStartValue());
+                    }
+                }
             }
         }
-        else if (SFX_ITEM_SET == rSet.GetItemState(RES_BREAK, false, &pItem))
-            OutWW8_SwFmtBreak( *this, *pItem );
 
         bBreakBefore = false;
     }
