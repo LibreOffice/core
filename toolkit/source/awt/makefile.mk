@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: tbe $ $Date: 2002-07-10 18:27:04 $
+#   last change: $Author: tbe $ $Date: 2002-08-19 16:13:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,8 @@ SLOFILES=   \
             $(SLO)$/vclxaccessiblepopupmenu.obj			\
             $(SLO)$/vclxaccessibleradiobutton.obj		\
             $(SLO)$/vclxaccessiblescrollbar.obj			\
+            $(SLO)$/vclxaccessibletabcontrol.obj		\
+            $(SLO)$/vclxaccessibletabpage.obj			\
             $(SLO)$/vclxaccessibletextcomponent.obj		\
             $(SLO)$/vclxaccessibletoolbox.obj			\
             $(SLO)$/vclxaccessibletoolboxitem.obj		\
