@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawutil.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-16 14:43:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,28 +84,26 @@ inline Fraction MakeFraction( long nA, long nB )
     return ( nA && nB ) ? Fraction(nA,nB) : Fraction(1,1);
 }
 
-void ScDrawUtil::CalcScale( ScDocument* pDoc, USHORT nTab,
-                            USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
+                            SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             OutputDevice* pDev,
                             const Fraction& rZoomX, const Fraction& rZoomY,
                             double nPPTX, double nPPTY,
                             Fraction& rScaleX, Fraction& rScaleY )
 {
-    USHORT i;
-
     long nPixelX = 0;
     long nTwipsX = 0;
     long nPixelY = 0;
     long nTwipsY = 0;
-    for (i=nStartCol; i<nEndCol; i++)
+    for (SCCOL i=nStartCol; i<nEndCol; i++)
     {
         USHORT nWidth = pDoc->GetColWidth(i,nTab);
         nTwipsX += (long) nWidth;
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
-    for (i=nStartRow; i<nEndRow; i++)
+    for (SCROW j=nStartRow; j<nEndRow; j++)
     {
-        USHORT nHeight = pDoc->GetRowHeight(i,nTab);
+        USHORT nHeight = pDoc->GetRowHeight(j,nTab);
         nTwipsY += (long) nHeight;
         nPixelY += ScViewData::ToPixel( nHeight, nPPTY );
     }
