@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,8 +688,6 @@ public:
     void HyphEnd();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
                 HyphContinue( USHORT* pPageCnt, USHORT* pPageSt );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-                SpellContinue( USHORT* pPageCnt, USHORT* pPageSt );
     // zu trennendes Wort ignorieren
     void HyphIgnore();
 
@@ -739,14 +737,23 @@ public:
         // setze das InsertDB als Tabelle Undo auf:
     void AppendUndoForInsertFromDB( BOOL bIsTable );
 
+    /*
+        functions used for spell checking and text conversion
+    */
+
     // Selektionen sichern
     void SpellStart( SwDocPositions eStart, SwDocPositions eEnde,
-                        SwDocPositions eCurr );
+                     SwDocPositions eCurr, sal_Bool bIsConversion = sal_False );
     // Selektionen wiederherstellen
-    void SpellEnd();
+    void SpellEnd( sal_Bool bIsConversion = sal_False );
+    ::com::sun::star::uno::Any SpellContinue(
+                    USHORT* pPageCnt, USHORT* pPageSt,
+                    sal_Bool bIsConversion = sal_False );
 
     // Is spelling active somewhere else?
     BOOL HasSpellIter() const;
+    // Is text conversion active somewhere else?
+    BOOL HasConvIter() const;
     // Is hyphenation active somewhere else?
     BOOL HasHyphIter() const;
 
