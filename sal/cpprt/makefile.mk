@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:45:32 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:47:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,15 +73,29 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-CXXFILES =	\
-    operators_new_delete.cxx
-
 SLOFILES =	\
     $(SLO)$/operators_new_delete.obj
 
+
+.IF "$(OS)" != "SOLARIS"
+
+# build as archive
 LIB1TARGET=$(LB)$/$(TARGET).lib
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
 LIB1OBJFILES=$(SLOFILES)
+
+.ELSE  # SOLARIS
+
+# build as shared library (interposer needed for -Bdirect)
+LINKFLAGS+= -z interpose
+
+SHL1TARGET=	$(TARGET)
+SHL1IMPLIB=	i$(TARGET)
+
+SHL1STDLIBS=$(SALLIB)
+SHL1OBJS=	$(SLOFILES)
+
+.ENDIF # SOLARIS
 
 # --- Targets ------------------------------------------------------
 
