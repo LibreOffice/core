@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 11:21:20 $
+ *  last change: $Author: hro $ $Date: 2002-08-19 08:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 
 #include "system.h"
-#include "dirw9x.h"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
@@ -1062,7 +1061,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
         else if ((rtl_ustr_ascii_compare_WithLength(pPath, RTL_CONSTASCII_LENGTH(STR_INI_METASYS), STR_INI_METASYS) == 0) &&
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METASYS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METASYS)] == '/')))
         {
-            if (((nPathLen = GetWindowsDirectory(wcsPath, MAX_PATH)) == 0) || (nPathLen >= MAX_PATH))
+            if (((nPathLen = GetWindowsDirectoryW(wcsPath, MAX_PATH)) == 0) || (nPathLen >= MAX_PATH))
                 return (sal_False);
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METASYS))
