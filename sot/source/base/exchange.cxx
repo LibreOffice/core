@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:35:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/           { "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"", "Star EMBS", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/            { "application/x-openoffice-link-source;windows_formatname=\"Star LNKS\"", "Star LNKS", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/           { "application/x-openoffice-embedded-obj;windows_formatname=\"Star EMBO\"", "Star EMBO", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-#else                                   ;;
+#else
 /* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/       { "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"", "Star Object Descriptor (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/      { "application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"", "Star Link Source Descriptor (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/           { "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"", "Star Embed Source (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
