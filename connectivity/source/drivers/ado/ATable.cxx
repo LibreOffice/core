@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 11:23:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,4 @@ void OAdoTable::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     SysFreeString(aBSTR);
     return sRetStr;
 }
-
-
 
