@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-28 15:15:14 $
+ *  last change: $Author: pb $ $Date: 2000-11-29 10:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,11 +904,14 @@ void SvtPathOptions_Impl::Commit()
         {
             String aFullPath( aTempStr );
             USHORT nCount = aFullPath.GetTokenCount(), nIdx = 0;
-            sal_Int32 nPos = 0;
-            Sequence < OUString > aList( nCount );
-            while ( STRING_NOTFOUND != nIdx )
-                aList[nPos++] = OUString( aFullPath.GetToken( 0, ';', nIdx ) );
-            pValues[nProp] <<= aList;
+            if ( nCount > 0  )
+            {
+                sal_Int32 nPos = 0;
+                Sequence < OUString > aList( nCount );
+                while ( STRING_NOTFOUND != nIdx )
+                    aList[nPos++] = OUString( aFullPath.GetToken( 0, ';', nIdx ) );
+                pValues[nProp] <<= aList;
+            }
         }
         else
             pValues[nProp] <<= aTempStr;
