@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
+#   last change: $Author: oj $ $Date: 2002-04-29 07:56:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ EXCEPTIONSFILES=	\
 
 SLOFILES=	\
         $(EXCEPTIONSFILES)					\
+        $(SLO)$/ToolBoxHelper.obj			\
         $(SLO)$/filenotation.obj			\
         $(SLO)$/WExtendPages.obj			\
         $(SLO)$/WNameMatch.obj				\
