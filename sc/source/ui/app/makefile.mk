@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:22:27 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:13:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ SLOFILES =  \
     $(SLO)$/client.obj
 
 EXCEPTIONSFILES= \
+    $(SLO)$/drwtrans.obj \
     $(SLO)$/scmod2.obj \
     $(SLO)$/scmod.obj
 
