@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:39:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,8 +194,10 @@ namespace dbp
         {
             ::rtl::OUString sDataSourceName;
             rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
-            Reference< XConnection > xConnection = ::dbtools::getActiveConnectionFromParent(rContext.xForm);
-            if ( xConnection.is() )
+
+            Reference< XConnection > xConnection;
+            bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
+            if ( bEmbedded )
             {
                 m_aDatasource.Hide();
                 m_aDatasourceLabel.Hide();
