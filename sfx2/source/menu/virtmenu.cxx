@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:42:50 $
+ *  last change: $Author: mba $ $Date: 2002-04-18 14:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void SfxMenuImageControl_Impl::Update()
     {
         USHORT nId = pSVMenu->GetItemId( nPos );
         const SfxSlot* pSlot = pPool->GetSlot( nId );
-        if ( pSlot && pSlot->IsMode( SFX_SLOT_ROTATEIMAGE ) )
+        if ( pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ) )
         {
             pSVMenu->SetItemImageMirrorMode( nId, FALSE );
             pSVMenu->SetItemImageAngle( nId, lRotation );
