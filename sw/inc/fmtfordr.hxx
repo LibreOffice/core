@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfordr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 13:05:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )
     return *this;
 }
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(BOOL bInP) const
     { return (const SwFmtFillOrder&)Get( RES_FILL_ORDER,bInP); }

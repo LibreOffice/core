@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcntnt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 12:55:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ public:
     void SetNewCntntIdx( const SwNodeIndex *pIdx );
 };
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.hxx; revisit with gcc3
 inline const SwFmtCntnt &SwAttrSet::GetCntnt(BOOL bInP) const
     { return (const SwFmtCntnt&)Get( RES_CNTNT,bInP); }
