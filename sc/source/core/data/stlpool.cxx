@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:31:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ void ScStyleSheetPool::UpdateStdNames()
                     {
                         //  Page-Styles umsetzen
                         //  TableCount am Doc ist noch nicht initialisiert
-                        for (USHORT nTab=0; nTab<=MAXTAB && pDoc->HasTable(nTab); nTab++)
+                        for (SCTAB nTab=0; nTab<=MAXTAB && pDoc->HasTable(nTab); nTab++)
                             if (pDoc->GetPageStyle(nTab) == aOldName)
                                 pDoc->SetPageStyle(nTab, aNewName);
                     }
