@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCheckBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:33 $
+ *  last change: $Date: 2003-03-27 11:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ public class AccessibleCheckBox extends TestCase {
 
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
+    DiagThread psDiag = null;
 
     /**
      * Opens 'Insert Table' dialog using document dispatch provider
@@ -131,7 +132,21 @@ public class AccessibleCheckBox extends TestCase {
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
+        log.println("Creating text document");
+        if (xTextDoc == null) {
+            try {
+                SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+                xTextDoc = SOF.createTextDoc(null);
+            } catch (com.sun.star.uno.Exception e) {
+                throw new StatusException("Can't create document", e);
+            }
+        }
+
+        shortWait();
+
         XInterface oObj = null;
+
+        log.println("getting toolkit");
 
         try {
             oObj = (XInterface) Param.getMSF().createInstance
@@ -147,19 +162,23 @@ public class AccessibleCheckBox extends TestCase {
 
         shortWait();
 
-        DiagThread psDiag = new DiagThread(xTextDoc,Param.getMSF());
+        log.println("Opening Dialog in second thread");
+
+        psDiag = new DiagThread(xTextDoc,Param.getMSF());
         psDiag.start();
 
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
+        log.println("Getting the active TopWindow");
+
         XWindow xWindow = (XWindow)
                 UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(log, xRoot);
+        //at.printAccessibleTree(log, xRoot);
 
         oObj = at.getAccessibleObjectForRole
             (xRoot, AccessibleRole.PUSHBUTTON,"Cancel");
@@ -198,28 +217,25 @@ public class AccessibleCheckBox extends TestCase {
      * <code>createTestEnvironment()</code>.
      */
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    closing dialog " );
+
         try {
+            log.println( "closing dialog" );
             action.doAccessibleAction(0);
+            log.println( "interrupting corresponding Thread" );
+            psDiag.interrupt();
+            log.println( "closing the document" );
+            xTextDoc.dispose();
+            log.println( "reinitialize the variable" );
+            xTextDoc = null;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
             log.println("Couldn't close dialog");
         } catch (com.sun.star.lang.DisposedException de) {
             log.println("Dialog already disposed");
         }
-        log.println("    disposing doc ");
-        xTextDoc.dispose();
     }
 
-    /**
-     * Opens new writer document.
-     */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
-            xTextDoc = SOF.createTextDoc(null);
-        } catch (com.sun.star.uno.Exception e) {
-            throw new StatusException("Can't create document", e);
-        }
+
     }
 
 
