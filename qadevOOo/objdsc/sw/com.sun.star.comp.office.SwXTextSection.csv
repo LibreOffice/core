@@ -44,6 +44,8 @@
 "SwXTextSection";"com::sun::star::text::TextSection";"EndnoteNumberingSuffix"
 "SwXTextSection";"com::sun::star::text::TextSection";"IsAutomaticUpdate"
 "SwXTextSection";"com::sun::star::text::TextSection";"TextColumns"
+"SwXTextSection";"com::sun::star::text::TextSection";"SectionLeftMargin#optional"
+"SwXTextSection";"com::sun::star::text::TextSection";"SectionRightMargin#optional"
 "SwXTextSection";"com::sun::star::beans::XPropertyState";"getPropertyState()"
 "SwXTextSection";"com::sun::star::beans::XPropertyState";"getPropertyStates()"
 "SwXTextSection";"com::sun::star::beans::XPropertyState";"setPropertyToDefault()"
