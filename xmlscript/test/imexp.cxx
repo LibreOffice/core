@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 09:20:42 $
+ *  last change: $Author: dbo $ $Date: 2001-05-11 13:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,10 +334,21 @@ void MyApp::Main()
         OSL_ENSURE( 0, aStr.getStr() );
     }
 
-    Reference< lang::XComponent > xComp( xMSF, UNO_QUERY );
-    if (xComp.is())
+    // dispose component context
+    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+    if (xProps.is())
     {
-        xComp->dispose();
+        try
+        {
+            Reference< lang::XComponent > xComp;
+            if (xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xComp)
+            {
+                xComp->dispose();
+            }
+        }
+        catch (beans::UnknownPropertyException &)
+        {
+        }
     }
 }
 
