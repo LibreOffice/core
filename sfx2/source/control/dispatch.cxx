@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:33:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,9 @@
 #include <svtools/svstdarr.hxx>
 #include <svtools/helpopt.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "sfxhelp.hxx"
 #include "appdata.hxx"
@@ -148,10 +150,18 @@ struct SfxToDo_Impl
     sal_Bool                bDelete;
     sal_Bool                bUntil;
 
-    SfxToDo_Impl():
-        bPush(sal_False), bDelete(sal_False), bUntil(sal_False), pCluster(0) {}
-    SfxToDo_Impl( sal_Bool bOpPush, sal_Bool bOpDelete, sal_Bool bOpUntil, SfxShell& rCluster ):
-        bPush(bOpPush), bDelete(bOpDelete), bUntil(bOpUntil), pCluster(&rCluster) {}
+    SfxToDo_Impl()
+        : pCluster(0)
+        , bPush(sal_False)
+        , bDelete(sal_False)
+        , bUntil(sal_False)
+                {}
+    SfxToDo_Impl( sal_Bool bOpPush, sal_Bool bOpDelete, sal_Bool bOpUntil, SfxShell& rCluster )
+        : pCluster(&rCluster)
+        , bPush(bOpPush)
+        , bDelete(bOpDelete)
+        , bUntil(bOpUntil)
+                {}
     ~SfxToDo_Impl(){}
 
     sal_Bool operator==( const SfxToDo_Impl& rWith ) const
@@ -1266,7 +1276,7 @@ SfxExecuteItem::SfxExecuteItem( const SfxExecuteItem& rArg )
 SfxExecuteItem::SfxExecuteItem(
     sal_uInt16 nWhich, sal_uInt16 nSlotP, SfxCallMode eModeP,
     const SfxPoolItem*  pArg1, ... ) :
-    SfxPoolItem( nWhich ), eCall( eModeP ), nSlot( nSlotP ), nModifier( 0 )
+    SfxPoolItem( nWhich ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
 {
     va_list pVarArgs;
     va_start( pVarArgs, pArg1 );
@@ -1606,7 +1616,7 @@ void SfxDispatcher::LeaveAction()
 //--------------------------------------------------------------------
 void SfxDispatcher::SetMenu_Impl()
 {
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();  // -Wall is this required...
     if ( pImp->pFrame )
     {
         if ( !pImp->pFrame->GetViewShell() )
@@ -1641,7 +1651,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( pImp->bUILocked )
         return 0;
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();  // -Wall is this required???
     SfxDispatcher *pDisp = this;
     sal_Bool bUpdate = bForce;
     while ( pDisp && pDisp->pImp->pFrame )
@@ -1748,7 +1758,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         CollectTools_Impl( pWorkWin );
 
     // Jetzt rekursiv die Dispatcher abklappern
-    sal_uInt32 nHelpId = _Update_Impl( bUIActive, !pIPFrame, bIsIPOwner, pAppMenu, bSet ? pTaskWin : NULL );
+    _Update_Impl( bUIActive, !pIPFrame, bIsIPOwner, pAppMenu, bSet ? pTaskWin : NULL );
     if ( bUIActive || bIsActive )
     {
         pWorkWin->UpdateObjectBars_Impl();
@@ -1782,7 +1792,7 @@ void SfxDispatcher::CollectTools_Impl( SfxWorkWindow* pWorkWin )
 {
     // Innerhalb eines ToolSpace werden auch die Tools von nicht aktiven Frames
     // angezeigt, damit es beim Wechsel der Frames nicht zappelt
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     SfxToolBoxConfig *pTbxCfg = pWorkWin->GetBindings().GetToolBoxConfig();
 
     // Die Objectbars aller ViewFrames der aktuellen Task einsammeln
@@ -1854,7 +1864,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
             sal_Bool bIsIPOwner, SfxMenuBarManager *pAppMenu, SfxWorkWindow *pTaskWin )
 {
     sal_uInt32 nHelpId = 0L;
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
     sal_Bool bIsActive = sal_False;
     sal_Bool bIsTaskActive = sal_False;
@@ -2532,8 +2542,8 @@ sal_Bool SfxDispatcher::_FindServer
     // Verb-Slot?
     else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
-        SfxShell *pSh = 0;
-        for ( sal_uInt16 nShell = 0; pSh = GetShell(nShell); ++nShell )
+        SfxShell *pSh;
+        for ( sal_uInt16 nShell = 0; (pSh = GetShell(nShell)); ++nShell )
         {
             if ( pSh->ISA(SfxViewShell) )
             {
@@ -2911,8 +2921,8 @@ void SfxDispatcher::ShowObjectBar(sal_uInt16 nId, SfxShell *pShell) const
 {
     ResId aResId(nId);
     sal_uInt16 nPos = USHRT_MAX;
-    sal_uInt16 nNo;
-    SfxInterface *pIFace;
+    sal_uInt16 nNo = 0;
+    SfxInterface *pIFace = 0;
 
     if ( pShell )
     {
@@ -3278,6 +3288,7 @@ sal_Bool SfxDispatcher::IsAllowed
             bFound = sal_True;
     }
 
+#ifdef _DEBUG
     // Slot in der Liste gefunden ?
     sal_uInt16 nPos = bFound ? nMid : nLow;
 
@@ -3285,6 +3296,7 @@ sal_Bool SfxDispatcher::IsAllowed
     DBG_ASSERT( nPos == nCount || nSlot <= rList[nPos], "" );
     DBG_ASSERT( nPos == 0 || nSlot > rList[nPos-1], "" );
     DBG_ASSERT( ( (nPos+1) >= nCount ) || nSlot < rList[nPos+1], "" );
+#endif
 
     return !bFound;
 }
@@ -3462,8 +3474,8 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
     else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
         // Verb-Slot?
-        SfxShell *pSh = 0;
-        for ( sal_uInt16 nShell = 0; pSh = GetShell(nShell); ++nShell )
+        SfxShell *pSh;
+        for ( sal_uInt16 nShell = 0; (pSh = GetShell(nShell)); ++nShell )
         {
             if ( pSh->ISA(SfxViewShell) )
                 return sal_True;
