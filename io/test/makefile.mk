@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2001-01-25 14:07:10 $
+#   last change: $Author: jbu $ $Date: 2001-03-15 17:55:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,6 @@ APP1STDLIBS = 	$(SALLIB) \
 APP2TARGET = testconnection
 APP2OBJS   = $(OBJ)$/testconnection.obj
 APP2STDLIBS = 	$(SALLIB) \
-        $(VOSLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB)
 

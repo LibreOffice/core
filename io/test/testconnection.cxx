@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:31:18 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 17:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #endif
 
 #include <osl/diagnose.h>
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 
@@ -76,7 +76,7 @@
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/connection/XAcceptor.hpp>
 
-using namespace ::vos;
+using namespace ::osl;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -87,7 +87,7 @@ using namespace ::com::sun::star::connection;
 
 
 class MyThread :
-    public OThread
+    public Thread
 {
 public:
     MyThread( const Reference< XAcceptor > &r , const OUString & sConnectionDescription) :
