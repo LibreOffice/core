@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:30:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,8 @@
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
 #endif
 #ifndef _SVX_FNTSZCTL_HXX //autogen
 #include <svx/fntszctl.hxx>
@@ -143,8 +137,12 @@
 #include <svx/lboxctrl.hxx>
 #endif
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
-#include <offmgr/hyprlink.hxx>
+#include <svx/hyprlink.hxx>
 #endif
+#include <svx/imapdlg.hxx>
+#include <svx/srchdlg.hxx>
+#include <svx/hyprlink.hxx>
+#include <svx/hyperdlg.hxx>
 #ifndef _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -346,6 +344,7 @@
 #include <svtools/colorcfg.hxx>
 #endif
 
+#include <svx/acorrcfg.hxx>
 #include <svtools/moduleoptions.hxx>
 
 #include <app.hrc>
@@ -361,6 +360,8 @@ sal_Bool    bNoInterrupt    = sal_False;
 #ifndef PROFILE
 #pragma code_seg()
 #endif
+
+#include <svx/svxerr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -379,7 +380,7 @@ TYPEINIT1( SwModule, SfxModule );
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
-    : SfxModule( SFX_APP()->CreateResManager( "sw" ), sal_False, pWebFact,
+    : SfxModule( SfxApplication::CreateResManager( "sw" ), sal_False, pWebFact,
                      pFact, pGlobalFact, NULL ),
     pModuleConfig(0),
     pView(0),
@@ -405,6 +406,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 {
     SetName( String::CreateFromAscii("StarWriter") );
     pSwResMgr = GetResMgr();
+    SvxErrorHandler::Get();
     pErrorHdl = new SfxErrorHandler( RID_SW_ERRHDL,
                                      ERRCODE_AREA_SW,
                                      ERRCODE_AREA_SW_END,
@@ -424,14 +426,14 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pAuthorNames = new SvStringsDtor(5, 1); // Alle Redlining-Autoren
 
     //JP 18.10.96: SvxAutocorrect gegen die SwAutocorrect austauschen
-    OfficeApplication* pOffApp = OFF_APP();
-    OfaAutoCorrCfg* pACfg = pOffApp->GetAutoCorrConfig();
+    SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
     if( pACfg )
     {
         const SvxAutoCorrect* pOld = pACfg->GetAutoCorrect();
         pACfg->SetAutoCorrect(new SwAutoCorrect( *pOld ));
     }
-    StartListening( *pOffApp );
+
+    StartListening( *SFX_APP() );
 
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
@@ -476,7 +478,7 @@ void SwModule::CreateLngSvcEvtListener()
 void SwDLL::RegisterFactories()
 {
     //Diese Id's duerfen nicht geaendert werden. Mittels der Id's wird vom
-    //Sfx die sdbcx::View (Dokumentansicht wiederherstellen) erzeugt.
+    //Sfx die View (Dokumentansicht wiederherstellen) erzeugt.
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 
@@ -590,6 +592,9 @@ void SwDLL::RegisterControls()
     SwHeadFootMenuControl::RegisterControl( FN_INSERT_PAGEHEADER, pMod );
     SwHeadFootMenuControl::RegisterControl( FN_INSERT_PAGEFOOTER, pMod );
 
+    SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
+    SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
+    SvxHlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
