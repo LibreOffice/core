@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-08 20:11:41 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,17 +1387,17 @@ ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
     Message[ russian ] = "Please change the table name. It is too long.";
     Message[ greek ] = "Please change the table name. It is too long.";
     Message[ dutch ] = "Please change the table name. It is too long.";
-    Message[ french ] = "Please change the table name. It is too long.";
+    Message[ french ] = "Veuillez modifier le nom de la table : il est trop long.";
     Message[ spanish ] = "Please change the table name. It is too long.";
     Message[ finnish ] = "Please change the table name. It is too long.";
     Message[ italian ] = "Please change the table name. It is too long.";
     Message[ danish ] = "Please change the table name. It is too long.";
-    Message[ swedish ] = "Please change the table name. It is too long.";
+    Message[ swedish ] = "�ndra tabellnamnet. Det �r f�r l�ngt.";
     Message[ polish ] = "Please change the table name. It is too long.";
-    Message[ japanese ] = "Please change the table name. It is too long.";
-    Message[ korean ] = "Please change the table name. It is too long.";
-    Message[ chinese_simplified ] = "Please change the table name. It is too long.";
-    Message[ chinese_traditional ] = "Please change the table name. It is too long.";
+    Message[ japanese ] = "表名を変更してください。名前が長すぎます。";
+    Message[ korean ] = "이름이 너무 깁니다. 테이블 이름을 바꿔주십시오.";
+    Message[ chinese_simplified ] = "请您更改表格的名称。当前的名称太长了。";
+    Message[ chinese_traditional ] = "請變更表格名稱。目前的名稱太長了。";
     Message[ turkish ] = "Please change the table name. It is too long.";
     Message[ arabic ] = "Please change the table name. It is too long.";
 };
