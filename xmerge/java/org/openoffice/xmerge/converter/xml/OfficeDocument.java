@@ -231,11 +231,45 @@ public abstract class OfficeDocument
     }
 
 
-
+    /**
+     * Sets the content tree of the document.
+     *
+     * @param   newDom  <code>Node</code> containing the new content tree.
+     */
     public void setContentDOM( Node newDom) {
-
-     contentDoc=(Document)newDom;
+        contentDoc = (Document)newDom;
     }
+
+
+    /**
+     * Sets the meta tree of the document.
+     *
+     * @param   newDom  <code>Node</code> containing the new meta tree.
+     */
+    public void setMetaDOM (Node newDom) {
+        metaDoc = (Document)newDom;
+    }
+
+
+    /**
+     * Sets the settings tree of the document.
+     *
+     * @param   newDom  <code>Node</code> containing the new settings tree.
+     */
+    public void setSettingsDOM (Node newDom) {
+        settingsDoc = (Document)newDom;
+    }
+
+
+    /**
+     * Sets the style tree of the document.
+     *
+     * @param   newDom  <code>Node</code> containing the new style tree.
+     */
+    public void setStyleDOM (Node newDom) {
+        styleDoc = (Document)newDom;
+    }
+
 
     /**
      *  Return a DOM <code>Document</code> object of the style.xml file.
