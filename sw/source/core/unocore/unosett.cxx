@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:59:53 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 09:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,6 +1391,8 @@ SwXNumberingRules::~SwXNumberingRules()
 {
     if(sCreatedNumRuleName.Len())
         pDoc->DelNumRule( sCreatedNumRuleName );
+    if( pNumRule && bOwnNumRuleCreated )
+        delete pNumRule;
 }
 /*-- 14.12.98 14:57:58---------------------------------------------------
 
@@ -1454,7 +1456,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     else if(!pNumRule && pDoc && sCreatedNumRuleName.Len() &&
         0 != (pRule = pDoc->FindNumRulePtr( sCreatedNumRuleName )))
     {
-        SwXNumberingRules::setNumberingRuleByIndex( *pNumRule,
+        SwXNumberingRules::setNumberingRuleByIndex( *pRule,
                             rProperties, nIndex);
         sal_uInt16 nPos = pDoc->FindNumRule( sCreatedNumRuleName );
         pDoc->UpdateNumRule( sCreatedNumRuleName, nPos );
@@ -2428,6 +2430,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/19 13:59:53  os
+    check numbering type of footnotes
+
     Revision 1.5  2000/10/18 09:03:35  os
     #78254# use of NumberingRules service completed
 
