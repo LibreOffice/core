@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:25:41 $
+ *  last change: $Author: nn $ $Date: 2001-08-03 15:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,10 @@ void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
                     pViewData->GetView()->ShowCursor();     // fehlt bei KillEditView, weil nicht aktiv
                 }
             }
+        }
+        else if ( nCommand == COMMAND_CURSORPOS )
+        {
+            //  don't call InputChanged for COMMAND_CURSORPOS
         }
         else
             SC_MOD()->InputChanged( pEditView );
