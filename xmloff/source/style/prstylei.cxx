@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-11 19:08:18 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-06 16:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,9 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 }
             }
         }
+
+        if (xStyle.is())
+            xStyle->setParentStyle(OUString());
 
         FillPropertySet( xPropSet );
     }
