@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:09:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ czech ] = "Oblast";
         Text[ hebrew ] = "Bereich";
         Text[ hindi ] = "फैलाव";
+        Text[ slovak ] = "Oblasť";
     };
     ListBox LB_RANGE
     {
@@ -151,6 +152,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     RadioButton BTN_COLHEAD
     {
@@ -185,6 +187,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ czech ] = "Obsahuje záhlaví sloupců";
         Text[ hebrew ] = "enthält ~Spaltenbeschriftungen";
         Text[ hindi ] = "~स्तंभ शीर्षकों को सम्मिलित किया है";
+        Text[ slovak ] = "Obsahuje záhlavia stĺp~cov";
     };
     RadioButton BTN_ROWHEAD
     {
@@ -218,6 +221,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ czech ] = "Obsahuje záhlaví řádků";
         Text[ hebrew ] = "enthält ~Zeilenbeschriftungen";
         Text[ hindi ] = "~पंक्ति शीर्षकों को सम्मिलित किया है";
+        Text[ slovak ] = "Obsahuje záhlavia ~riadkov";
     };
     FixedText FT_DATA_LABEL
     {
@@ -250,6 +254,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ czech ] = "Pro oblast dat";
         Text[ hebrew ] = "für ~Datenbereich";
         Text[ hindi ] = "~ड़ॉटा फैलाव केलिए";
+        Text[ slovak ] = "Pre ~dátovú oblasť";
     };
     Edit ED_DATA
     {
@@ -290,6 +295,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     OKButton BTN_OK
     {
@@ -337,6 +343,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton BTN_REMOVE
     {
@@ -371,6 +378,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     HelpButton BTN_HELP
     {
@@ -403,7 +411,10 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ czech ] = "Definovat oblast popisků";
     Text[ hebrew ] = "Beschriftungsbereich festlegen";
     Text[ hindi ] = "लेबिल फैलाव को परिभाषा दो";
+    Text[ slovak ] = "Definovať oblasť popiskov";
 };
+
+
 
 
 
