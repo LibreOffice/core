@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_uno.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:25:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,14 @@
 #endif
 
 #define STR_REMEMBERPASSWORD_PERSISTENT     RID_STR_UNO_START
+#define STR_QUERY_SAVE_DOCUMENT                 ( RID_STR_UNO_START + 1 )
+#define STR_NOSAVEANDCLOSE                      ( RID_STR_UNO_START + 2 )
+#define STR_SAVEDOC                             ( RID_STR_UNO_START + 3 )
+
 
 // please adjust checking before insert new strings
 
-#if STR_REMEMBERPASSWORD_PERSISTENT > RID_STR_UNO_END
+#if STR_SAVEDOC > RID_STR_UNO_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
