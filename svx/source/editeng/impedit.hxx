@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:01:11 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,7 @@ private:
 
     USHORT              nAsianCompressionMode;
     BOOL                bKernAsianPunctuation;
+    BOOL                bAddExtLeading;
 
     EEHorizontalTextDirection eDefaultHorizontalTextDirection;
 
@@ -976,6 +977,9 @@ public:
 
     void                SetKernAsianPunctuation( BOOL b );
     BOOL                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
+
+    void                SetAddExtLeading( BOOL b );
+    BOOL                IsAddExtLeading() const { return bAddExtLeading; }
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
