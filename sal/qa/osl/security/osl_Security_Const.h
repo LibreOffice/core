@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Security_Const.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:41:19 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #endif
 
 #include <cppunit/simpleheader.hxx>
-#include <testshl/cmdlinebits.hxx>
+// LLA: #include <testshl2/cmdlinebits.hxx>
 
 
 #define BUFSIZE 1024
