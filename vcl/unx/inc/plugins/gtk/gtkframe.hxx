@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:24:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ class GtkSalFrame : public SalFrame
     Size                    m_aMaxSize;
     Size                    m_aMinSize;
 
+    GdkEventKey             m_aLastKeyPress;
+
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
@@ -143,7 +145,7 @@ class GtkSalFrame : public SalFrame
     static void         signalIMPreeditEnd( GtkIMContext*, gpointer );
     static void         signalIMPreeditStart( GtkIMContext*, gpointer );
     static gboolean     signalIMRetrieveSurrounding( GtkIMContext*, gpointer );
-
+    static void         signalDestroy( GtkObject*, gpointer );
 
     GtkSalDisplay*  getDisplay();
     GdkDisplay*     getGdkDisplay();
