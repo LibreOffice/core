@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:30:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -1815,6 +1812,8 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             {
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.PrintPreviewSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
+                else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
+                    xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
             }
             if(!xRet.is())
             {
