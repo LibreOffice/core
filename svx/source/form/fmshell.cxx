@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:29:05 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,8 @@ sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
     SID_FM_FORMATTEDFIELD,
     SID_FM_FILTER_NAVIGATOR,
     SID_FM_AUTOCONTROLFOCUS,
+    SID_FM_SCROLLBAR,
+    SID_FM_SPINBUTTON,
 
     0
 };
@@ -739,6 +741,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CURRENCYFIELD:
         case SID_FM_PATTERNFIELD:
         case SID_FM_FORMATTEDFIELD:
+        case SID_FM_SCROLLBAR:
+        case SID_FM_SPINBUTTON:
             m_nLastSlot = nSlot;
             GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             break;
@@ -822,6 +826,12 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FORMATTEDFIELD:
             nIdentifier = OBJ_FM_FORMATTEDFIELD;
             break;
+        case SID_FM_SCROLLBAR:
+            nIdentifier = OBJ_FM_SCROLLBAR;
+            break;
+        case SID_FM_SPINBUTTON:
+            nIdentifier = OBJ_FM_SPINBUTTON;
+            break;
     }
 
     switch ( nSlot )
@@ -844,6 +854,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CURRENCYFIELD:
         case SID_FM_PATTERNFIELD:
         case SID_FM_FORMATTEDFIELD:
+        case SID_FM_SCROLLBAR:
+        case SID_FM_SPINBUTTON:
         {
             SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_GRABCONTROLFOCUS, sal_False );
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
@@ -917,6 +929,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CONVERTTO_PATTERN       :
         case SID_FM_CONVERTTO_IMAGECONTROL  :
         case SID_FM_CONVERTTO_FORMATTED     :
+        case SID_FM_CONVERTTO_SCROLLBAR     :
+        case SID_FM_CONVERTTO_SPINBUTTON    :
             GetImpl()->ExecuteControlConversionSlot(Reference< ::com::sun::star::form::XFormComponent > (GetImpl()->getCurControl(), UNO_QUERY),
                 nSlot);
             // nach dem Konvertieren die Selektion neu bestimmern, da sich ja das selektierte Objekt
@@ -1614,6 +1628,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CURRENCYFIELD:
             case SID_FM_PATTERNFIELD:
             case SID_FM_FORMATTEDFIELD:
+            case SID_FM_SCROLLBAR:
+            case SID_FM_SPINBUTTON:
                 if (!m_bDesignMode)
                     rSet.DisableItem( nWhich );
                 else
@@ -1775,6 +1791,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_PATTERN       :
             case SID_FM_CONVERTTO_IMAGECONTROL  :
             case SID_FM_CONVERTTO_FORMATTED     :
+            case SID_FM_CONVERTTO_SCROLLBAR     :
+            case SID_FM_CONVERTTO_SPINBUTTON    :
             {
                 if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurControl().is())
                     rSet.DisableItem( nWhich );
