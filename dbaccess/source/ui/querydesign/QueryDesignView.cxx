@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:48:21 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2184,7 +2184,7 @@ namespace
                                                         xMetaData,
                                                         &pController->getParser()->getContext(),
                                                         sal_True,
-                                                        sal_False);
+                                                        sal_True); // quote is to true because we need quoted elements inside the function
 
                             aInfo->SetDataType(DataType::DOUBLE);
                             aInfo->SetFieldType(TAB_NORMAL_FIELD);
@@ -3005,5 +3005,3 @@ sal_Bool OQueryDesignView::HasTable() const
     return !m_pTableView->GetTabWinMap()->empty();
 }
 // -----------------------------------------------------------------------------
-
-
