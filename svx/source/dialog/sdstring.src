@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String RID_SVXSTR_SOLID
     Text [ ENGLISH ] = "Solid" ;
     Text [ norwegian ] = "Solid" ;
     Text [ italian ] = "Piena" ;
-    Text [ portuguese_brazilian ] = "S?ido" ;
+    Text [ portuguese_brazilian ] = "Cont�nuo" ;
     Text [ portuguese ] = "Cont�nuo" ;
     Text [ finnish ] = "Jatkuva" ;
     Text [ danish ] = "Gennemg�ende" ;
@@ -92,6 +92,9 @@ String RID_SVXSTR_SOLID
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Continu";
     Text[ thai ] = "ต่อเนื่อง";
+    Text[ czech ] = "Spojitě";
+    Text[ hebrew ] = "Durchgängig";
+    Text[ hindi ] = "निरन्तर";
 };
 String RID_SVXSTR_GRADIENT
 {
@@ -99,7 +102,7 @@ String RID_SVXSTR_GRADIENT
     Text [ ENGLISH ] = "Gradient" ;
     Text [ norwegian ] = "Gradient" ;
     Text [ italian ] = "Sfumatura" ;
-    Text [ portuguese_brazilian ] = "D?grad?" ;
+    Text [ portuguese_brazilian ] = "Gradiente" ;
     Text [ portuguese ] = "Grada��o" ;
     Text [ finnish ] = "Liukuv�rj�ys" ;
     Text [ danish ] = "Farvegraduering" ;
@@ -120,6 +123,9 @@ String RID_SVXSTR_GRADIENT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gradient de color";
     Text[ thai ] = "ไล่ระดับสี";
+    Text[ czech ] = "Přechod";
+    Text[ hebrew ] = "Farbverlauf";
+    Text[ hindi ] = "ग्रेडिऐन्ट्";
 };
 String RID_SVXSTR_DESC_GRADIENT
 {
@@ -129,7 +135,7 @@ String RID_SVXSTR_DESC_GRADIENT
     Text [ ENGLISH ] = "Please insert a Name for the Gradient:" ;
     Text [ norwegian ] = "Please insert a Name for the Gradient:" ;
     Text [ italian ] = "Digitate un nome per la sfumatura:" ;
-    Text [ portuguese_brazilian ] = "Please insert a Name for the Gradient:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para o gradiente:" ;
     Text [ portuguese ] = "Introduza aqui um nome para a grada��o:" ;
     Text [ french ] = "Saisissez un nom pour le d�grad� :" ;
     Text [ dutch ] = "Typ hier een naam voor de kleurovergangen:" ;
@@ -150,6 +156,9 @@ String RID_SVXSTR_DESC_GRADIENT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom pel gradient:";
     Text[ thai ] = "กรุณาใส่ชื่อเพื่อไล่ระดับสี:";
+    Text[ czech ] = "Prosím zadejte název přechodu:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für den Farbverlauf ein:";
+    Text[ hindi ] = "कृपया ग्रेडिऐन्ट् केलिए एक नाम प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DEL_GRADIENT
 {
@@ -159,7 +168,7 @@ String RID_SVXSTR_DEL_GRADIENT
     Text [ ENGLISH ] = "Delete Gradient" ;
     Text [ norwegian ] = "Slett+++ Gradient" ;
     Text [ italian ] = "Elimina sfumatura" ;
-    Text [ portuguese_brazilian ] = "Apagar D?grad?" ;
+    Text [ portuguese_brazilian ] = "Excluir gradiente" ;
     Text [ portuguese ] = "Eliminar grada��o" ;
     Text [ finnish ] = "Poista liukuv�rj�ys" ;
     Text [ danish ] = "Slet farvegradueringen" ;
@@ -180,6 +189,9 @@ String RID_SVXSTR_DEL_GRADIENT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix el gradient de color";
     Text[ thai ] = "ลบการไล่ระดับสี";
+    Text[ czech ] = "Odstranit přechod";
+    Text[ hebrew ] = "Farbverlauf löschen";
+    Text[ hindi ] = "ग्रेडिऐन्ट् मिटाओ";
 };
 String RID_SVXSTR_ASK_DEL_GRADIENT
 {
@@ -189,7 +201,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text [ ENGLISH ] = "Do you want to delete the Gradient?" ;
     Text [ norwegian ] = "Vil du slette+++ Gradient?" ;
     Text [ italian ] = "Eliminare la sfumatura?" ;
-    Text [ portuguese_brazilian ] = "Deseja apagar o D?grad??" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir o gradiente?" ;
     Text [ portuguese ] = "Deseja realmente eliminar a grada��o?" ;
     Text [ finnish ] = "Haluatko poistaa liukuv�rj�yksen?" ;
     Text [ danish ] = "Er du sikker p�, at du vil slette farvegradueringen?" ;
@@ -200,16 +212,19 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text [ english_us ] = "Do you want to delete the gradient?" ;
     Text[ chinese_simplified ] = "真要删除这个彩色图案吗？";
     Text[ russian ] = "������� ��������?";
-    Text[ polish ] = "Czy chcesz na pewno usun�� gradient?";
+    Text[ polish ] = "Czy chcesz usun�� gradient?";
     Text[ japanese ] = "このグラデーションを削除してかまいませんか。";
     Text[ chinese_traditional ] = "真要刪除這個彩色圖案？";
     Text[ arabic ] = "�� ���� ������ ��� ���� �����";
     Text[ greek ] = "������ ���������� �� ����� �������� ��� ����������� ��������;";
-    Text[ korean ] = "그라디언트를 정말로 삭제하겠습니까?";
+    Text[ korean ] = "그라디언트를 정말로 삭제하시겠습니까?";
     Text[ turkish ] = "Gradyan ger�ekten silinsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu realment suprimir el gradient de color?";
     Text[ thai ] = "คุณต้องการลบการไล่ระดับสีหรือไม่?";
+    Text[ czech ] = "Chcete odstranit přechod?";
+    Text[ hebrew ] = "Soll der Farbverlauf wirklich gelöscht werden?";
+    Text[ hindi ] = "आप ग्रेडिऐन्ट् को मिटाना चाहते है?";
 };
 String RID_SVXSTR_ASK_CHANGE_GRADIENT
 {
@@ -219,7 +234,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text [ ENGLISH ] = "The Gradient was modified without Save? \nChange the selceted Gradient or add a new Gradient." ;
     Text [ norwegian ] = "+++The Gradient ble endret uten � lagres? \nEndre den merkede +++Gradient eller legg til en ny +++Gradient." ;
     Text [ italian ] = "La sfumatura � stata modificata ma non cambiata \nPotete cambiare la sfumatura selezionata \no aggiungerne una nuova." ;
-    Text [ portuguese_brazilian ] = "O D?grad? foi modificado sem Gravar? \nMude o D?grad? selecionado ou acrescente um novo D?grad?." ;
+    Text [ portuguese_brazilian ] = "O gradiente foi modificado sem ser salvo.\nModifique o gradiente selecionado ou adicione um novo." ;
     Text [ portuguese ] = "A grada��o da cor foi modificada e n�o guardada.\nPoder� modificar a grada��o seleccionada\nou adicionar uma nova." ;
     Text [ finnish ] = "Liukuv�rj�yst� ei tallennettu muutoksen j�lkeen. \nMuuta valittua liukuv�rj�yst� tai lis�� uusi liukuv�rj�ys." ;
     Text [ danish ] = "Farvegradueringen er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede farvegraduering \neller tilf�je en ny." ;
@@ -230,16 +245,19 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text [ english_us ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
     Text[ chinese_simplified ] = "这个彩色图案已经更改，但是还没有保存。\n您能够更改选中的彩色图案\n或者新增一个新的彩色图案。";
     Text[ russian ] = "�������� ��� ������� ��� ����������. \n�������� ��������� \n��� �������� ����� ��������.";
-    Text[ polish ] = "Gradient zosta� zmieniony i nie zapisany. \nMo�esz zmieni� zaznaczony gradient \nlub doda� nowy gradient.";
+    Text[ polish ] = "Gradient zosta� zmieniony, lecz nie zapisany. \nMo�esz zmieni� zaznaczony gradient \nlub doda� nowy.";
     Text[ japanese ] = "グラデーションが変更されて保存されていません。\n選択したグラデーションの変更または\n新しいグラデーションの追加ができます。";
     Text[ chinese_traditional ] = "這個彩色圖案已經變更﹐但是尚未儲存。\n您能夠變更選取的彩色圖案\n或者增加一個新的彩色圖案。";
     Text[ arabic ] = "�� ��� ��� ���� ����� ��� ������. \n����� ����� ���� ����� ������ \n�� ����� ���� ��� ����.";
     Text[ greek ] = "� ���������� ��� �������� ������������� ��� ��� ������������. \n�������� �� �������� ��� ���������� ���������� �������� \n� �� ���������� � ";
-    Text[ korean ] = "그라디언트가 변경되었으나 저장되지 않았습니다.\n선택된 그라디언트를 변경하거나 \n새 그라디언트를 추가할 수 있습니다.";
+    Text[ korean ] = "그라디언트가 수정되었으나 저장되지 않았습니다.\n선택된 그라디언트를 수정하거나 새 그라디언트를 추가할 수 있습니다.";
     Text[ turkish ] = "Gradyan de�i�tirildi ancak kaydedilmedi.\nSe�ili gradyan� de�i�tirebilir ya da\nyeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El gradient de color s'ha modificat sense desar-lo.\nPodeu modificar-lo\no afegir-ne un de nou.";
     Text[ thai ] = "ดัดแปลงแก้ไขการไล่ระดับสีโดยไม่มีการบันทึก \nดัดแปลงแก้ไขการไล่ระดับสีที่เลือกหรือเพิ่มการไล่ระดับสีใหม่";
+    Text[ czech ] = "Přechod byl změněn bez uložení.\nZměnit vybraný přechod nebo přidat nový?";
+    Text[ hebrew ] = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen.";
+    Text[ hindi ] = "संचित किये बिना ग्रेडिऐन्ट् को सुधार किया है । \nचुने हुए ग्रेडिऐन्ट् को सुधारो अथवा एक नया ग्रेडिऐन्ट् को जोड़ो ।";
 };
 String RID_SVXSTR_BITMAP
 {
@@ -262,10 +280,13 @@ String RID_SVXSTR_BITMAP
     Text[ korean ] = "비트맵";
     Text[ chinese_simplified ] = "位图";
     Text[ chinese_traditional ] = "點陣圖";
-    Text[ turkish ] = "Bit e�lem";
+    Text[ turkish ] = "Bitmap";
     Text[ arabic ] = "���� �����";
     Text[ catalan ] = "Mapa de bits";
     Text[ thai ] = "บิทแม็ป";
+    Text[ czech ] = "Bitová mapa";
+    Text[ hebrew ] = "Bitmap";
+    Text[ hindi ] = "बिटमॉप्";
 };
 String RID_SVXSTR_DESC_NEW_BITMAP
 {
@@ -275,7 +296,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text [ ENGLISH ] = "Please insert a Name for the Bitmap:" ;
     Text [ norwegian ] = "Please insert a Name for the Bitmap:" ;
     Text [ italian ] = "Digitare un nome per la Bitmap:" ;
-    Text [ portuguese_brazilian ] = "Please insert a Name for the Bitmap:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para o bitmap:" ;
     Text [ portuguese ] = "Por favor introduza um nome para o mapa de bits:" ;
     Text [ french ] = "Saisissez un nom pour le bitmap :" ;
     Text [ dutch ] = "Typ hier een naam voor de bitmap:" ;
@@ -296,6 +317,9 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom pel mapa de bits:";
     Text[ thai ] = "กรุณาใส่ชื่อบิทแม็ป:";
+    Text[ czech ] = "Prosím zadejte název bitmapy:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für die Bitmap ein:";
+    Text[ hindi ] = "कृपया बिटमॉप् केलिए एक नाम प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DESC_EXT_BITMAP
 {
@@ -305,7 +329,7 @@ String RID_SVXSTR_DESC_EXT_BITMAP
     Text [ ENGLISH ] = "Please insert a Name for the external Bitmap:" ;
     Text [ norwegian ] = "Sett inn Navn p� den eksterne Punktmatrisen:" ;
     Text [ italian ] = "Digitate il nome per la bitmap esterna:" ;
-    Text [ portuguese_brazilian ] = "Por favor insira um Nome para o Bitmap externo:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para o bitmap externo:" ;
     Text [ portuguese ] = "Por favor introduza um nome para o mapa de bits externo:" ;
     Text [ finnish ] = "Kirjoita ulkoisen bittikartan nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den eksterne bitmap:" ;
@@ -326,6 +350,9 @@ String RID_SVXSTR_DESC_EXT_BITMAP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom pel mapa de bits extern:";
     Text[ thai ] = "กรุณาใส่ชื่อบิทแม็ปภายนอก:";
+    Text[ czech ] = "Prosím zadejte název externí bitmapy:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für die externe Bitmap ein:";
+    Text[ hindi ] = "कृपया बाहरी बिटमॉप् केलिए एक नाम प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DEL_BITMAP
 {
@@ -335,7 +362,7 @@ String RID_SVXSTR_DEL_BITMAP
     Text [ ENGLISH ] = "Delete Bitmap:" ;
     Text [ norwegian ] = "Slett Punktmatrise:" ;
     Text [ italian ] = "Cancella Bitmap" ;
-    Text [ portuguese_brazilian ] = "Apagar Bitmap:" ;
+    Text [ portuguese_brazilian ] = "Excluir bitmap" ;
     Text [ portuguese ] = "Eliminar Bitmap:" ;
     Text [ finnish ] = "Poista bittikartta" ;
     Text [ danish ] = "Slet bitmap" ;
@@ -356,6 +383,9 @@ String RID_SVXSTR_DEL_BITMAP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix el mapa de bits";
     Text[ thai ] = "ลบบิทแม็ป";
+    Text[ czech ] = "Odstranit bitovou mapu";
+    Text[ hebrew ] = "Bitmap löschen";
+    Text[ hindi ] = "बिटमॉप् मिटाओ";
 };
 String RID_SVXSTR_ASK_DEL_BITMAP
 {
@@ -365,7 +395,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text [ ENGLISH ] = "Do you want to delete the Bitmap?" ;
     Text [ norwegian ] = "Vil du slette Punktmatrisen?" ;
     Text [ italian ] = "Eliminare la bitmap?" ;
-    Text [ portuguese_brazilian ] = "Deseja apagar o Bitmap?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir o bitmap?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o bitmap?" ;
     Text [ finnish ] = "Haluatko varmasti poistaa bittikartan?" ;
     Text [ danish ] = "Er du sikker p�, at du vil slette denne bitmap?" ;
@@ -376,7 +406,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text [ english_us ] = "Are you sure you want to delete the bitmap?" ;
     Text[ chinese_simplified ] = "真要删除这个位图吗？";
     Text[ russian ] = "�� ������������� ������ ������� ���� �����?";
-    Text[ polish ] = "Czy chcesz na pewno usun�� map� bitow�?";
+    Text[ polish ] = "Czy na pewno chcesz usun�� map� bitow�?";
     Text[ japanese ] = "このビットマップを削除してかまいませんか。";
     Text[ chinese_traditional ] = "您真要刪除這個點陣圖？";
     Text[ arabic ] = "�� ���� ������ ��� ������ ������ɿ";
@@ -386,6 +416,9 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Esteu segur que voleu suprimir el mapa de bits?";
     Text[ thai ] = "คุณแน่ใจหรือไม่ที่ต้องการลบบิทแม็ป?";
+    Text[ czech ] = "Opravdu chcete odstranit bitmapu?";
+    Text[ hebrew ] = "Soll die Bitmap wirklich gelöscht werden?";
+    Text[ hindi ] = "आप सचमुच में बिटमॉप् को मिटाना चाहते है?";
 };
 String RID_SVXSTR_ASK_CHANGE_BITMAP
 {
@@ -395,7 +428,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text [ ENGLISH ] = "The Bitmap was modified without Save? \nChange the selected Bitmap or add a new Bitmap." ;
     Text [ norwegian ] = "Punktmatrisen ble endret uten � lagres? \nEndre den merkede Punktmatrisen eller legg til en ny Punktmatrise." ;
     Text [ italian ] = "La bitmap � stata modificata ma non salvata \nPotete cambiare la bitmap selezionata \no naggiungerne una nuova." ;
-    Text [ portuguese_brazilian ] = "O Bitmap foi modificado sem Gravar? \nMude o Bitmap selecionado ou acrescente um novo Bitmap." ;
+    Text [ portuguese_brazilian ] = "O bitmap foi modificado sem ser salvo. \nModifique o bitmap selecionado ou adicione um novo." ;
     Text [ portuguese ] = "O bitmap foi alterado e n�o guardado? \nPoder� modificar o bitmap seleccionado \nou adicionar um novo." ;
     Text [ finnish ] = "Bittikarttaa ei tallennettu muutoksen j�lkeen. \nMuuta valittua bittikarttaa tai lis�� uusi bittikartta." ;
     Text [ danish ] = "Denne bitmap er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede bitmap\n eller tilf�je en ny." ;
@@ -406,16 +439,19 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text [ english_us ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
     Text[ chinese_simplified ] = "这个位图样式已经更改，但是没有保存。 \n您能够更改选中的位图\n或者新增一个新位图。";
     Text[ russian ] = "����� ��� ������� ��� ����������. \n�������� ��������� \n��� �������� ����� �����.";
-    Text[ polish ] = "Mapa bitowa zosta�a zmieniona i nie zapisana. \nMo�esz zmieni� zaznaczon� map� bitow� \nlub doda� now� map� bitow�.";
+    Text[ polish ] = "Mapa bitowa zosta�a zmieniona, lecz nie zapisana. \nMo�esz zmieni� zaznaczon� map� bitow� \nlub doda� now�.";
     Text[ japanese ] = "ビットマップが変更されて保存されていません。\n選択したビットマップの変更または\n新しいビットマップの追加ができます。";
     Text[ chinese_traditional ] = "這個點陣圖的樣式已經變更﹐但是尚未儲存。 \n您能夠變更選取的點陣圖\n或者增加一個新的點陣圖。";
     Text[ arabic ] = "�� ����� ������ ������� ��� ��� ����� ���.\n����� ����� ������ ������� ������ɡ\n�� ����� ���� ����� �����.";
     Text[ greek ] = "�� bitmap ������������� ����� �� ����� ����������. \n�������� �� �������� ��� ���������� bitmap \n� �� ���������� ��� ��������� bitmap.";
-    Text[ korean ] = "비트맵이 변경되었으나 저장되지 않았습니다. \n선택된 비트맵을 변경하거나 \n새 비트맵을 추가할 수 있습니다.";
+    Text[ korean ] = "비트맵이 수정되었으나 저장되지 않았습니다. \n선택된 비트맵을 수정하거나 새 비트맵을 추가할 수 있습니다.";
     Text[ turkish ] = "Bit e�lem de�i�tirildi ancak kaydedilmedi.\nSe�ili bit e�lemi de�i�tirebilir ya da\nyeni bir bit e�lem ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El mapa de bits s'ha modificat sense haver-lo desat. \nModifica el mapa de bits seleccionat o afegeix un nou mapa de bits.";
     Text[ thai ] = "ดัดแปลงแก้ไขบิทแม็ปโดยไม่มีการบันทึก \nดัดแปลงแก้ไขบิทแม็ปที่เลือกหรือเพิ่มบิทแม็ปใหม่";
+    Text[ czech ] = "Bitmapa byla změněna bez uložení.\nZměnit vybranou bitmapu nebo přidat novou?";
+    Text[ hebrew ] = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen.";
+    Text[ hindi ] = "संचित किये बिना बिटमॉप् को सुधार किया है ।\nचुने हुए बिटमॉप् को सुधारो अथवा एक नया बिटमॉप् को जोड़ो ।";
 };
 String RID_SVXSTR_LINESTYLE
 {
@@ -444,6 +480,9 @@ String RID_SVXSTR_LINESTYLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estil de l�nia";
     Text[ thai ] = "ลักษณะเส้น";
+    Text[ czech ] = "Styl čáry";
+    Text[ hebrew ] = "‮סגנון קו‬";
+    Text[ hindi ] = "रेखा शैली";
 };
 String RID_SVXSTR_DESC_LINESTYLE
 {
@@ -453,7 +492,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text [ ENGLISH ] = "Please insert a Name for the Linestyle:" ;
     Text [ norwegian ] = "Please insert a Name for the Linestyle:" ;
     Text [ italian ] = "Digitare un nome per lo stile di linea:" ;
-    Text [ portuguese_brazilian ] = "Please insert a Name for the Linestyle:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para o estilo de linha:" ;
     Text [ portuguese ] = "Por favor introduza um nome para o estilo de linha:" ;
     Text [ french ] = "Saisissez un nom pour le style de ligne :" ;
     Text [ dutch ] = "Typ hier een naam voor het nieuwe lijntype:" ;
@@ -464,7 +503,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text [ english_us ] = "Please enter a name for the line style:" ;
     Text[ chinese_simplified ] = "请您在此为新的线条式样输入一个名称：";
     Text[ russian ] = "������� �������� ����� �����:";
-    Text[ polish ] = "Wpisz tutaj nazw� dla nowego stylu linii:";
+    Text[ polish ] = "Podaj nazw� nowego stylu linii:";
     Text[ japanese ] = "線スタイルの名前をここに入力してください：";
     Text[ chinese_traditional ] = "請在此為新的線條式樣輸入一個名稱：";
     Text[ arabic ] = "������ ����� ��� ��� ���� ���:";
@@ -474,6 +513,9 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom per l'estil de l�nia:";
     Text[ thai ] = "กรุณ่ใส่ชื่อลักษณะเส้น:";
+    Text[ czech ] = "Prosím zadejte název stylu čáry:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für den Linienstil ein:";
+    Text[ hindi ] = "कृपया रेखा शैली केलिए एक नाम प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DEL_LINESTYLE
 {
@@ -483,7 +525,7 @@ String RID_SVXSTR_DEL_LINESTYLE
     Text [ ENGLISH ] = "Delete Linestyle:" ;
     Text [ norwegian ] = "Slett Linjestil:" ;
     Text [ italian ] = "Cancella stile linea" ;
-    Text [ portuguese_brazilian ] = "Apagar Estilo de linha:" ;
+    Text [ portuguese_brazilian ] = "Excluir estilo de linha" ;
     Text [ portuguese ] = "Eliminar estilo de linha" ;
     Text [ finnish ] = "Poista viivatyyli" ;
     Text [ danish ] = "Slet stregtype" ;
@@ -504,6 +546,9 @@ String RID_SVXSTR_DEL_LINESTYLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix l'estil de l�nia";
     Text[ thai ] = "ลบลักษณะเส้น";
+    Text[ czech ] = "Odstranit styl čáry";
+    Text[ hebrew ] = "Linienstil löschen";
+    Text[ hindi ] = "रेखा शैली मिटाओ";
 };
 String RID_SVXSTR_ASK_DEL_LINESTYLE
 {
@@ -513,7 +558,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text [ ENGLISH ] = "Do you want to delete the Linestyle?" ;
     Text [ norwegian ] = "Vil du slette Linjestilen?" ;
     Text [ italian ] = "Eliminare lo stile della linea?" ;
-    Text [ portuguese_brazilian ] = "Deseja apagar o Estilo de linha?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir o estilo de linha?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o estilo de linha?" ;
     Text [ finnish ] = "Haluatko poistaa viivatyylin?" ;
     Text [ danish ] = "Er du sikker p�, at du vil slette stregtypen?" ;
@@ -524,7 +569,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text [ english_us ] = "Do you want to delete the line style?" ;
     Text[ chinese_simplified ] = "真要删除这个线条式样？";
     Text[ russian ] = "������� ����� �����?";
-    Text[ polish ] = "Czy styl linii ma na pewno zosta� usuni�ty?";
+    Text[ polish ] = "Czy chcesz usun�� styl linii?";
     Text[ japanese ] = "この線スタイルを本当に削除しますか。";
     Text[ chinese_traditional ] = "真要刪除這個線條式樣？";
     Text[ arabic ] = "�� ���� ������ ��� ��� ���ؿ";
@@ -534,6 +579,9 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu realment suprimir l'estil de l�nia?";
     Text[ thai ] = "คุณต้องการลบลักษณะเส้นหรือไม่?";
+    Text[ czech ] = "Přejete si odstranit styl čáry?";
+    Text[ hebrew ] = "Soll der Linienstil wirklich gelöscht werden?";
+    Text[ hindi ] = "आप रेखा शैली को मिटाना चाहते है?";
 };
 String RID_SVXSTR_ASK_CHANGE_LINESTYLE
 {
@@ -543,7 +591,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text [ ENGLISH ] = "The Linestyle was modified without Save? \nChange the selected Linestyle or add a new Linestyle." ;
     Text [ norwegian ] = "Linjestilen ble endret uten � lagres\nEndre den merkede Linjestilen eller legg til en ny Linjestil." ;
     Text [ italian ] = "Lo stile � stato modificato ma non salvato.\nPotetecambiare lo stile selezionato\\o aggiungerne uno nuovo." ;
-    Text [ portuguese_brazilian ] = "O Estilo de linha foi modificado sem Gravar? \nMude o Estilo de linha selecionado ou acrescente um novo Estilo de linha." ;
+    Text [ portuguese_brazilian ] = "O estilo de linha foi modificado sem ser salvo. \nModifique o estilo de linha selecionado ou adicione um novo." ;
     Text [ portuguese ] = "O fim de linha foi modificado e n�o guardado.\nPoder� modificar o fim de linha seleccionado\nou adicionar um novo." ;
     Text [ finnish ] = "Viivatyyli� ei tallennettu muutoksen j�lkeen. \nMuuta valittua viivatyyli� tai lis�� uusi viivatyyli." ;
     Text [ danish ] = "Stregtypen er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede stregtype \neller tilf�je en ny." ;
@@ -554,16 +602,19 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text [ english_us ] = "The line style was modified without saving. \nModify the selected line style or add a new line style." ;
     Text[ chinese_simplified ] = "这个线条式样已经更改，但是没有保存。 \n您能够更改选中的线条式样\n或者新增一个线条式样。";
     Text[ russian ] = "����� ����� ��� ������� ��� ����������. \n�������� ���������\n��� �������� ����� ����� �����.";
-    Text[ polish ] = "Styl linii zosta� zmieniony i nie zapisany. \nMo�esz zmieni� zaznaczony styl linii \nlub doda� nowy styl linii.";
+    Text[ polish ] = "Styl linii zosta� zmieniony, lecz nie zapisany. \nMo�esz zmieni� zaznaczony styl linii \nlub doda� nowy.";
     Text[ japanese ] = "線スタイルが変更されて保存されていません。\n選択した線スタイルの変更\nまたは新しい線スタイルの追加ができます。";
     Text[ chinese_traditional ] = "這個線條式樣已經變更﹐但是尚未儲存。 \n您能夠變更選取的線條式樣\n或者增加一個新的線條式樣。";
     Text[ arabic ] = "�� ����� ��� ���� ��� ��� ���� ���.\n����� ����� ��� ���� �����ϡ\n�� ����� ��� �� ����.";
     Text[ greek ] = "�� ���� ������� ������������� ����� �� ����� ����������. \n�������� �� �������� �� ���������� ���� \n� �� ���������� ��� ��������� ���� ���� ";
-    Text[ korean ] = "선 스타일이 변경되었지만 저장되지 않았습니다.\n선택한 선 스타일을 변경하거나 새로운 선 스타일을 추가할 수 있습니다.";
+    Text[ korean ] = "선 스타일이 수정되었지만 저장되지 않았습니다.\n선택한 선 스타일을 수정하거나 새로운 선 스타일을 추가할 수 있습니다.";
     Text[ turkish ] = "�izgi bi�imi de�i�tirildi ancak kaydedilmedi. \nSe�ili �izgi bi�imini de�i�tirebilir ya da \nyeni bir �izgi bi�imi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "L'estil de l�nia s'ha modificat sense desar-lo.\nPodeu modificar l'estil de l�nia seleccionat\no afegir-ne un de nou.";
     Text[ thai ] = "ดัดแปลงแก้ไขลักษณะเส้นโดยไม่มีการบันทึก \nดัดแปลงแก้ไขลักษณะเส้นที่เลือกหรือเพิ่มลักษณะเส้นใหม่";
+    Text[ czech ] = "Styl čáry byl změněn bez uložení.\nZměnit vybraný styl čáry nebo přidat nový?";
+    Text[ hebrew ] = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen.";
+    Text[ hindi ] = "संचित किये बिना रेखा शैली को सुधार किया है ।\nचुने हुए रेखा शैली को सुधारो अथवा एक नया रेखा शैली को जोड़ो ।";
 };
 String RID_SVXSTR_INVISIBLE
 {
@@ -571,7 +622,7 @@ String RID_SVXSTR_INVISIBLE
     Text [ ENGLISH ] = "Invisible" ;
     Text [ norwegian ] = "Usynlig" ;
     Text [ italian ] = "Invisibile" ;
-    Text [ portuguese_brazilian ] = "Invis?vel" ;
+    Text [ portuguese_brazilian ] = "Invis�vel" ;
     Text [ portuguese ] = "Invis�vel" ;
     Text [ finnish ] = "N�kym�t�n" ;
     Text [ danish ] = "Usynlig" ;
@@ -592,6 +643,9 @@ String RID_SVXSTR_INVISIBLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Invisible";
     Text[ thai ] = "มองไม่เห็น";
+    Text[ czech ] = "Neviditelná";
+    Text[ hebrew ] = "Unsichtbar";
+    Text[ hindi ] = "अदृष्टिगोचर";
 };
 String RID_SVXSTR_COLOR
 {
@@ -620,6 +674,9 @@ String RID_SVXSTR_COLOR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color";
     Text[ thai ] = "สี";
+    Text[ czech ] = "Barva";
+    Text[ hebrew ] = "‮צבע‬";
+    Text[ hindi ] = "रंग";
 };
 String RID_SVXSTR_HATCH
 {
@@ -627,7 +684,7 @@ String RID_SVXSTR_HATCH
     Text [ ENGLISH ] = "Hatch" ;
     Text [ norwegian ] = "Hatch" ;
     Text [ italian ] = "Tratteggio" ;
-    Text [ portuguese_brazilian ] = "Sombreado" ;
+    Text [ portuguese_brazilian ] = "Hachurado" ;
     Text [ portuguese ] = "Tracejado" ;
     Text [ finnish ] = "Viivoitus" ;
     Text [ danish ] = "Skravering" ;
@@ -648,6 +705,9 @@ String RID_SVXSTR_HATCH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ombreig";
     Text[ thai ] = "แรเงา";
+    Text[ czech ] = "Šrafování";
+    Text[ hebrew ] = "Schraffur";
+    Text[ hindi ] = "हाचिंग";
 };
 String RID_SVXSTR_DESC_HATCH
 {
@@ -657,7 +717,7 @@ String RID_SVXSTR_DESC_HATCH
     Text [ ENGLISH ] = "Please insert a Name for the hatch:" ;
     Text [ norwegian ] = "Please insert a Name for the hatch:" ;
     Text [ italian ] = "Digitare un nome per il tratteggio:" ;
-    Text [ portuguese_brazilian ] = "Please insert a Name for the hatch:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para o hachurado:" ;
     Text [ portuguese ] = "Indique o nome para o tracejado:" ;
     Text [ french ] = "Saisissez un nom pour la hachure :" ;
     Text [ dutch ] = "Typ hier een naam voor de arcering:" ;
@@ -668,7 +728,7 @@ String RID_SVXSTR_DESC_HATCH
     Text [ english_us ] = "Please enter a name for the hatching:" ;
     Text[ chinese_simplified ] = "请您在此为新的阴影输入一个名称:";
     Text[ russian ] = "������� �������� ����� ���������:";
-    Text[ polish ] = "Wpisz nazw� dla kreskowania:";
+    Text[ polish ] = "Podaj nazw� kreskowania:";
     Text[ japanese ] = "ハッチングの名前をここに入力してください：";
     Text[ chinese_traditional ] = "請您在此為新的陰影線輸入一個名稱：";
     Text[ arabic ] = "������ ����� ��� ����� ���:";
@@ -678,6 +738,9 @@ String RID_SVXSTR_DESC_HATCH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom per l'ombreig:";
     Text[ thai ] = "กรุณาใส่ชื่อการแรเงา:";
+    Text[ czech ] = "Prosím zadejte název šrafování:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für die Schraffur ein:";
+    Text[ hindi ] = "कृपया हाचिंग केलिए एक नाम प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DEL_HATCH
 {
@@ -687,7 +750,7 @@ String RID_SVXSTR_DEL_HATCH
     Text [ ENGLISH ] = "Delete hatch" ;
     Text [ norwegian ] = "Slett skravering" ;
     Text [ italian ] = "Elimina tratteggio" ;
-    Text [ portuguese_brazilian ] = "Apagar tra?o de sombreado" ;
+    Text [ portuguese_brazilian ] = "Excluir hachurado" ;
     Text [ portuguese ] = "Eliminar tracejado" ;
     Text [ finnish ] = "Poista viivoitus" ;
     Text [ danish ] = "Slet skravering" ;
@@ -708,6 +771,9 @@ String RID_SVXSTR_DEL_HATCH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix l'ombreig";
     Text[ thai ] = "ลบการแรเงา";
+    Text[ czech ] = "Odstranit šrafování";
+    Text[ hebrew ] = "Schraffur löschen";
+    Text[ hindi ] = "हाचिंग मिटाओ";
 };
 String RID_SVXSTR_ASK_DEL_HATCH
 {
@@ -717,7 +783,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text [ ENGLISH ] = "Do you want to delete the hatch?" ;
     Text [ norwegian ] = "Vil du slette skraveringen?" ;
     Text [ italian ] = "Eliminare il tratteggio?" ;
-    Text [ portuguese_brazilian ] = "Deseja apagar o tra?o de sombreado?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir o hachurado?" ;
     Text [ portuguese ] = "Eliminar o tracejado?" ;
     Text [ finnish ] = "Haluatko poistaa viivoituksen?" ;
     Text [ danish ] = "Er du sikker p�, at du vil slette skraveringen?" ;
@@ -728,7 +794,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text [ english_us ] = "Do you want to delete the hatching?" ;
     Text[ chinese_simplified ] = "真要删除这个阴影吗？";
     Text[ russian ] = "������� ���������?";
-    Text[ polish ] = "Czy na pewno usun�� kreskowanie?";
+    Text[ polish ] = "Czy chcesz usun�� kreskowanie?";
     Text[ japanese ] = "このハッチングを削除してかまいませんか。";
     Text[ chinese_traditional ] = "您真要刪除這個陰影線？";
     Text[ arabic ] = "�� ���� ������ ��� ����Կ";
@@ -738,6 +804,9 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu suprimir l'ombreig?";
     Text[ thai ] = "คุณต้องการลบการแรเงาหรือไม่?";
+    Text[ czech ] = "Chcete odstranit šrafování?";
+    Text[ hebrew ] = "Soll die Schraffur wirklich gelöscht werden?";
+    Text[ hindi ] = "आप हाचिंग को मिटाना चाहते है?";
 };
 String RID_SVXSTR_ASK_CHANGE_HATCH
 {
@@ -747,7 +816,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text [ ENGLISH ] = "The hatch was modified without Save? \nChange the selceted hatch or add a new hatch." ;
     Text [ norwegian ] = "Skraveringen ble slettet uten � lagres\nEndre den merkede skraveringen eller legg til en ny skravering." ;
     Text [ italian ] = "Il tratteggio � stato modificato ma non salvato \nPotete cambiare il tratteggio selezionato \noppure aggiungerne uno nuovo." ;
-    Text [ portuguese_brazilian ] = "The tra?o de sombreado foi modificado sem Gravar? \nMude o tra?o de sombreado selecionado ou acrescente um novo tra?o de sombreado." ;
+    Text [ portuguese_brazilian ] = "O hachurado foi modificado sem ser salvo \nModifique o hachurado selecionado ou adicione um novo." ;
     Text [ portuguese ] = "Tracejado foi alterado e n�o guardado.\nPoder� alterar o tracejado seleccionado\nou adicionar um novo." ;
     Text [ finnish ] = "Viivoitustyyppi� on muutettu ilman tallennusta. \nMuuta valittua viivoitustyyppi� tai lis�� uusi viivoitustyyppi." ;
     Text [ danish ] = "Skraveringen er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede skravering\n eller tilf�je en ny." ;
@@ -758,16 +827,19 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text [ english_us ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
     Text[ chinese_simplified ] = "这个阴影已经更改，但是没有保存。 \n您能够更改选中的阴影\n或者新增一个新的阴影。";
     Text[ russian ] = "��� ��������� ��� ������� ��� ����������. \n�������� ��������� ��������� \n��� �������� ����� ���������.";
-    Text[ polish ] = "Kreskowanie zosta�o zmienione i nie zapisane. \nMo�esz zmieni� zaznaczone kreskowanie \ni lub doda� nowe kreskowanie.";
+    Text[ polish ] = "Kreskowanie zosta�o zmienione, lecz nie zapisane. \nMo�esz zmieni� zaznaczone kreskowanie \nlub doda� nowe.";
     Text[ japanese ] = "ハッチングが変更されて保存されていません。\n選択したハッチングの変更または\n新しいハッチングの追加ができます。";
     Text[ chinese_traditional ] = "這個陰影已經變更﹐但是尚未儲存。 \n您能夠變更選取的陰影\n或者增加一個新的陰影。";
     Text[ arabic ] = "�� ����� ����� ��� ��� ���� ���.\n����� ����� ����� �����ϡ\n�� ����� ��� ����.";
     Text[ greek ] = "� ���������� ������������� ����� �� ����� ����������. \n�������� �� �������� ��� ���������� ���������� \n� �� ���������� ��� ��������� ���� ";
-    Text[ korean ] = "해칭이 변경되었으나 저장되지 않았습니다. \n선택된 해칭을 변경하거나 \n새 해칭을 추가할 수 있습니다.";
+    Text[ korean ] = "해칭이 수정되었으나 저장되지 않았습니다. \n선택된 해칭을 수정하거나 새 해칭을 추가할 수 있습니다.";
     Text[ turkish ] = "Tarama de�i�tirildi ancak kaydedilmedi.\nSe�ili deseni de�i�tirebilir ya da\nyeni bir tarama ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El tipus d'ombreig s'ha modificat sense haver-lo desat. \nModifica el tipus d'ombreig seleccionat o afegeix un nou tipus d'ombreig.";
     Text[ thai ] = "ดัดแปลงแก้ไขชนิดการแรเงาแต่ไม่บันทึก \nดัดแปลงแก้ไขชนิดการแรเงาที่เลือกหรือเพิ่มชนิดการแรเงาใหม่";
+    Text[ czech ] = "Šrafování bylo změněno bez uložení.\nZměnit vybrané šrafování nebo přidat nové?";
+    Text[ hebrew ] = "Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen.";
+    Text[ hindi ] = "संचित किये बिना हाचिंग वर्ग को सुधार किया है ।\nचुने हुए हाचिंग वर्ग को सुधारो अथवा एक नया हाचिंग वर्ग को जोड़ो ।";
 };
 String RID_SVXSTR_CHANGE
 {
@@ -793,11 +865,14 @@ String RID_SVXSTR_CHANGE
     Text[ chinese_traditional ] = "修改";
     Text[ arabic ] = "�����";
     Text[ greek ] = "�����������";
-    Text[ korean ] = "변경";
+    Text[ korean ] = "수정";
     Text[ turkish ] = "De�i�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica";
     Text[ thai ] = "ดัดแปลงแก้ไข";
+    Text[ czech ] = "Změnit";
+    Text[ hebrew ] = "‮שינוי‬";
+    Text[ hindi ] = "सुधारो";
 };
 String RID_SVXSTR_ADD
 {
@@ -807,7 +882,7 @@ String RID_SVXSTR_ADD
     Text [ ENGLISH ] = "Add" ;
     Text [ norwegian ] = "Add" ;
     Text [ italian ] = "Aggiungi" ;
-    Text [ portuguese_brazilian ] = "Acrescentar" ;
+    Text [ portuguese_brazilian ] = "Adicionar" ;
     Text [ portuguese ] = "Adicionar" ;
     Text [ finnish ] = "Lis��" ;
     Text [ danish ] = "Tilf�j" ;
@@ -828,6 +903,9 @@ String RID_SVXSTR_ADD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix";
     Text[ thai ] = "เพิ่ม";
+    Text[ czech ] = "Přidat";
+    Text[ hebrew ] = "‮הוספה‬";
+    Text[ hindi ] = "जोड़ो";
 };
 String RID_SVXSTR_DESC_COLOR
 {
@@ -837,18 +915,18 @@ String RID_SVXSTR_DESC_COLOR
     Text [ ENGLISH ] = "Please insert a Name for the new Color:" ;
     Text [ norwegian ] = "Sett inn nytt Navn p� den nye Fargen:" ;
     Text [ italian ] = "Digitate il nome per il nuovo colore:" ;
-    Text [ portuguese_brazilian ] = "Por favor insira um Nome para a nova Cor:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para a nova cor:" ;
     Text [ portuguese ] = "Por favor introduza um nome para a nova cor:" ;
     Text [ finnish ] = "Kirjoita uuden v�rin nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye farve:" ;
     Text [ french ] = "Saisissez un nom pour la nouvelle couleur :" ;
     Text [ swedish ] = "Ange namn f�r den nya f�rgen:" ;
     Text [ dutch ] = "Typ hier een naam voor de nieuwe kleur:" ;
-    Text [ spanish ] = "Inserte aqu� el nombre del nuevo color:" ;
+    Text [ spanish ] = "Inserte aqu� el nombre del color nuevo:" ;
     Text [ english_us ] = "Please enter a name for the new color:" ;
     Text[ chinese_simplified ] = "请您在此为新的颜色输入一个名称：";
     Text[ russian ] = "������� �������� ������ �����:";
-    Text[ polish ] = "Wpisz nazw� nowego koloru:";
+    Text[ polish ] = "Podaj nazw� nowego koloru:";
     Text[ japanese ] = "新しい色の名前を入力してください:";
     Text[ chinese_traditional ] = "請在這裡輸入一個新顏色的名稱：";
     Text[ arabic ] = "������ ����� ��� ����� ������ ���:";
@@ -858,6 +936,9 @@ String RID_SVXSTR_DESC_COLOR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom pel nou color:";
     Text[ thai ] = "กรุณาใส่ชื่อสีใหม่:";
+    Text[ czech ] = "Prosím zadejte název pro novou barvu:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für die neue Farbe ein:";
+    Text[ hindi ] = "कृपया नया रंग केलिए एक नाम को प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DEL_COLOR
 {
@@ -867,7 +948,7 @@ String RID_SVXSTR_DEL_COLOR
     Text [ ENGLISH ] = "Delete Color" ;
     Text [ norwegian ] = "Slett Farge" ;
     Text [ italian ] = "Cancella colore" ;
-    Text [ portuguese_brazilian ] = "Apagar Cor" ;
+    Text [ portuguese_brazilian ] = "Excluir cor" ;
     Text [ portuguese ] = "Eliminar cor" ;
     Text [ finnish ] = "Poista v�ri" ;
     Text [ danish ] = "Slet farve" ;
@@ -888,6 +969,9 @@ String RID_SVXSTR_DEL_COLOR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix el color";
     Text[ thai ] = "ลบสี";
+    Text[ czech ] = "Odstranit barvu";
+    Text[ hebrew ] = "Farbe löschen";
+    Text[ hindi ] = "रंग मिटाओ";
 };
 String RID_SVXSTR_ASK_DEL_COLOR
 {
@@ -897,7 +981,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text [ ENGLISH ] = "Do you want to delete the Color?" ;
     Text [ norwegian ] = "Vil du slette Fargen?" ;
     Text [ italian ] = "Eliminare veramente il colore?" ;
-    Text [ portuguese_brazilian ] = "Deseja apagar a Cor?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir a cor?" ;
     Text [ portuguese ] = "Deseja realmente eliminar a cor?" ;
     Text [ finnish ] = "Haluatko poistaa v�rin?" ;
     Text [ danish ] = "Er du sikker p�, at du vil slette farven?" ;
@@ -908,7 +992,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text [ english_us ] = "Do you want to delete the color?" ;
     Text[ chinese_simplified ] = "真要删除这个颜色吗？";
     Text[ russian ] = "�� ������������� ������ ������� ���� ����?";
-    Text[ polish ] = "Czy chcesz na pewno usun�� kolor?";
+    Text[ polish ] = "Czy chcesz usun�� kolor?";
     Text[ japanese ] = "この色を削除してかまいませんか。";
     Text[ chinese_traditional ] = "您真要刪除這個顏色？";
     Text[ arabic ] = "�� ���� ������ ��� �����";
@@ -918,6 +1002,9 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu suprimir el color?";
     Text[ thai ] = "คุณต้องการลบสีหรือไม่?";
+    Text[ czech ] = "Chcete odstranit barvu?";
+    Text[ hebrew ] = "Soll die Farbe wirklich gelöscht werden?";
+    Text[ hindi ] = "आप रंग को मिटाना चाहते है?";
 };
 String RID_SVXSTR_ASK_CHANGE_COLOR
 {
@@ -927,7 +1014,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text [ ENGLISH ] = "The Color was modified without Save? \nChange the selceted Color or add a new Color." ;
     Text [ norwegian ] = "Fargen ble endret uten � lagres? \nEndre den merkede fargen eller legg til en ny Farge." ;
     Text [ italian ] = "Il colore � stato modificato ma non salvato.\nPotete cambiare il colore selezionato \no aggiungerne\n uno nuovo." ;
-    Text [ portuguese_brazilian ] = "A Cor foi modificada sem Gravar? \nMude a Cor selecionada ou acrescente uma nova Cor." ;
+    Text [ portuguese_brazilian ] = "A cor foi modificada sem ser salva. \nModifique a cor selecionada ou adicione uma nova." ;
     Text [ portuguese ] = "A cor foi modificada e n�o guardada? \nPoder� modificar a cor seleccionada\nou adicionar uma nova." ;
     Text [ finnish ] = "V�ri� on muutettu tallentamatta.\nMuuta valittua v�ri� tai lis�� uusi v�ri." ;
     Text [ danish ] = "Farven er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede farve\n eller tilf�je en ny." ;
@@ -938,16 +1025,19 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text [ english_us ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
     Text[ chinese_simplified ] = "这个颜色已经更改，但是没有保存。 \n您能够更改选中的颜色\n或者新增一个新颜色。";
     Text[ russian ] = "���� ��� ������� ��� ����������. \n�������� ��������� \n��� �������� ����� ����.";
-    Text[ polish ] = "Kolor zosta� zmieniony i nie zapisany. \nMo�esz zmieni� zaznaczony kolor \nlub doda� nowy kolor.";
+    Text[ polish ] = "Kolor zosta� zmieniony, lecz nie zapisany. \nMo�esz zmieni� zaznaczony kolor \nlub doda� nowy.";
     Text[ japanese ] = "色が変更されて保存されていません。\n選択した色の変更または\n新しい色の追加ができます。";
     Text[ chinese_traditional ] = "已經變更這個顏色﹐但是尚未儲存。 \n您能夠變更選取的顏色\n或者增加一個新的顏色。";
     Text[ arabic ] = "�� ����� ����� ��� ��� ���� ���.\n����� ����� ����� �����ϡ\n�� ����� ��� ����.";
     Text[ greek ] = "�� ����� ������������� ����� �� ����� ����������. \n�������� �� �������� �� ���������� ����� \n� �� ���������� ��� ��������� �����.";
-    Text[ korean ] = "색상이 변경되었지만 저장되지 않았습니다.\n선택된 색을 변경하거나 \n새로운 색을 추가할 수 있습니다.";
+    Text[ korean ] = "색상이 수정되었지만 저장되지 않았습니다.\n선택된 색을 수정하거나 새로운 색을 추가할 수 있습니다.";
     Text[ turkish ] = "Renk de�i�tirildi ancak kaydedilmedi.\nSe�ili rengi de�i�tirebilir ya da\nyeni bir renk ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El color s'ha modificat sense haver-lo desat. \nModifica el color seleccionat o afegeix un nou color.";
     Text[ thai ] = "ดัดแปลงแก้ไขสีโดยไม่มีการบันทึก\nดัดแปลงแก้ไขสีที่เลือกหรือเพิ่มสีใหม่";
+    Text[ czech ] = "Barva byla změněna bez uložení.\nZměnit vybranou barvu nebo přidat novou?";
+    Text[ hebrew ] = "Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen.";
+    Text[ hindi ] = "संचित किये बिना रंग को सुधार किया है ।\nचुने हुए रंग को सुधारो अथवा एक नया रंग को जोड़ो ।";
 };
 String RID_SVXSTR_TABLE
 {
@@ -976,6 +1066,9 @@ String RID_SVXSTR_TABLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taula";
     Text[ thai ] = "ตาราง";
+    Text[ czech ] = "Tabulka";
+    Text[ hebrew ] = "Tabelle";
+    Text[ hindi ] = "सारणी";
 };
 String RID_SVXSTR_WRITE_DATA_ERROR
 {
@@ -983,7 +1076,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text [ ENGLISH ] = "The file couldn't be saved!" ;
     Text [ norwegian ] = "The file couldn't be saved!" ;
     Text [ italian ] = "Non � stato possibile salvare il file!" ;
-    Text [ portuguese_brazilian ] = "The file couldn't be saved!" ;
+    Text [ portuguese_brazilian ] = "N�o foi poss�vel salvar o arquivo!" ;
     Text [ portuguese ] = "Foi imposs�vel guardar o ficheiro!" ;
     Text [ french ] = "Impossible de sauvegarder ce fichier." ;
     Text [ dutch ] = "Het bestand kan niet worden opgeslagen!" ;
@@ -1004,6 +1097,9 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El fitxer no es pot desar!";
     Text[ thai ] = "ไม่สามารถบันทึกแฟ้มได้!";
+    Text[ czech ] = "Nelze uložit soubor!";
+    Text[ hebrew ] = "Die Datei konnte nicht gesichert werden";
+    Text[ hindi ] = "फाइल को संचित नहीं कर सकते है!";
 };
 String RID_SVXSTR_READ_DATA_ERROR
 {
@@ -1011,7 +1107,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text [ ENGLISH ] = "The file couldn't be loaded!" ;
     Text [ norwegian ] = "Filen kan ikke lastes inn!" ;
     Text [ italian ] = "Impossibile caricare il file!" ;
-    Text [ portuguese_brazilian ] = "O arquivo n?o pode ser carregado!" ;
+    Text [ portuguese_brazilian ] = "N�o foi poss�vel carregar o arquivo!" ;
     Text [ portuguese ] = "Foi imposs�vel carregar o ficheiro!" ;
     Text [ finnish ] = "Tiedoston lataaminen ei onnistunut." ;
     Text [ danish ] = "Det var ikke muligt at indl�se filen!" ;
@@ -1022,7 +1118,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text [ english_us ] = "The file could not be loaded!" ;
     Text[ chinese_simplified ] = "无法装入这个文件！";
     Text[ russian ] = "���������� ��������� ����!";
-    Text[ polish ] = "Plik nie m�g� zosta� za�adowany!";
+    Text[ polish ] = "Pliku nie mo�na za�adowa�!";
     Text[ japanese ] = "ファイルは読み込みできませんでした。";
     Text[ chinese_traditional ] = "無法載入這個檔案！";
     Text[ arabic ] = "���� ����� �����!";
@@ -1032,6 +1128,9 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El fitxer no es pot carregar!";
     Text[ thai ] = "ไม่สามารถโหลดแฟ้มได้!";
+    Text[ czech ] = "Nelze načíst soubor!";
+    Text[ hebrew ] = "Die Datei konnte nicht geladen werden";
+    Text[ hindi ] = "फाइल को लोड़ नहीं कर सकते है!";
 };
 String RID_SVXSTR_WARN_TABLE_OVERWRITE
 {
@@ -1041,7 +1140,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text [ ENGLISH ] = "The table was modified without save. Would you like to save the table?" ;
     Text [ norwegian ] = "Tabellen ble endret uten � lagres. Vil du lagre tabellen?" ;
     Text [ italian ] = "La tabella � stata modificata senza salvare. \nSalvare la tabella?" ;
-    Text [ portuguese_brazilian ] = "A tabela foi modificada sem gravar. Gostaria de gravar a tabela?" ;
+    Text [ portuguese_brazilian ] = "A lista foi modificada sem ser salva. Deseja salv�-la agora?" ;
     Text [ portuguese ] = "A tabela foi modificada e n�o guardada.\nGuardar agora?" ;
     Text [ finnish ] = "Luetteloa on muutettu ilman tallennusta. Haluatko tallentaa luettelon nyt?" ;
     Text [ danish ] = "Tabellen er blevet �ndret, men ikke gemt.\nVil du gemme tabellen nu?" ;
@@ -1052,7 +1151,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text [ english_us ] = "The list was modified without saving. Would you like to save the list now?" ;
     Text[ chinese_simplified ] = "这个表格已经被更改，但是没有被保存。 \n您要保存这个表格吗？";
     Text[ russian ] = "������� ���� �������� ��� ����������. \n��������� �������?";
-    Text[ polish ] = "Tabela zosta�a zmieniona i nie jest zapisana. \nCzy tabela ma by� zapisana?";
+    Text[ polish ] = "Lista zosta�a zmieniona, lecz nie jest zapisana. \nCzy j� zapisa� teraz?";
     Text[ japanese ] = "表の変更があり保存されていません。\n表を保存しますか。";
     Text[ chinese_traditional ] = "這個表格已經變更﹐但是尚未儲存。 \n您要儲存這個表格？";
     Text[ arabic ] = "�� ����� ������ ��� ��� ���� ���.\n�� ���� ��� ������ ����";
@@ -1062,6 +1161,9 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La llista s'ha modificat sense haver-la desat. Voleu desar la llista ara?";
     Text[ thai ] = "ดัดแปลงแก้ไขรายการโดยไม่มีการบันทึก  คุณต้องการบันทึกรายการตอนนี้หรือไม่?";
+    Text[ czech ] = "Seznam byl změněn bez uložení. Přejete si seznam nyní uložit?";
+    Text[ hebrew ] = "Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden?";
+    Text[ hindi ] = "सूची को संचित किये बिना सुधार किया है । आप अभी सूची को संचित करना चाहते है?";
 };
 String RID_SVXSTR_WARN_NAME_DUPLICATE
 {
@@ -1069,18 +1171,18 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
     Text [ ENGLISH ] = "Your choosen Name already exists. \nPlease Choose another name." ;
     Text [ norwegian ] = "Your choosen Name already exists. \nPlease Choose another name." ;
     Text [ italian ] = "Il nome scelto � gi� esistente. \nScegliete un altro nome." ;
-    Text [ portuguese_brazilian ] = "O nome escolhido j? existe. \nEscolha outro nome." ;
+    Text [ portuguese_brazilian ] = "O nome indicado j� existe. \n Por favor escolha outro nome." ;
     Text [ portuguese ] = "O nome indicado j� existe. \nIndique um outro." ;
     Text [ finnish ] = "M��ritetty nimi on jo k�yt�ss�. \nValitse jokin muu nimi." ;
     Text [ danish ] = "Det navn, du har indtastet, eksisterer allerede.\nIndtast venligst et andet navn." ;
     Text [ french ] = "Le nom que vous avez saisi existe d�j�. \nVeuillez en saisir un autre." ;
     Text [ swedish ] = "Namnet du valde finns redan. \nV�lj ett annat namn." ;
     Text [ dutch ] = "De door u gekozen naam bestaat reeds. \nKies een andere naam." ;
-    Text [ spanish ] = "Este nombre ya existe. \nIntroduzca otro nombre por favor." ;
+    Text [ spanish ] = "Este nombre ya existe. \nIntroduzca otro nombre." ;
     Text [ english_us ] = "The name you have entered already exists. \nPlease choose another name." ;
     Text[ chinese_simplified ] = "您输入的名称已经存在。\n请您输入一个其他的名称。";
     Text[ russian ] = "��������� ��� ��� ����������. \n������� ������ ���.";
-    Text[ polish ] = "Wpisana przez ciebie nazwa ju� istnieje.\nWpisz inn� nazw�.";
+    Text[ polish ] = "Podana nazwa ju� istnieje.\nWybierz inn� nazw�.";
     Text[ japanese ] = "入力した名前はすでにあります。\n別の名前を入力してください。";
     Text[ chinese_traditional ] = "您輸入的名稱已經存在。\n請您輸入一個其他的名稱。";
     Text[ arabic ] = "����� ���� ��� ������� ����� ������.\n������ ����� ��� ����.";
@@ -1090,6 +1192,9 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aquest nom ja existeix. \nIntrodu�u un altre nom.";
     Text[ thai ] = "ชื่อที่คุณใส่มีอยู่แล้ว \nกรุณาเลือกชื่ออื่น";
+    Text[ czech ] = "Zadaný název již existuje.\nProsím zvolte jiný.";
+    Text[ hebrew ] = "Der von Ihnen eingegebene Name ist schon vorhanden. \nGeben Sie bitte einen anderen Namen ein.";
+    Text[ hindi ] = "आपने जो नाम प्रविष्ट किया है, वह पहिले से ही अस्तित्व में है ।\nकृपया किसी दूसरा नाम को प्रविष्ट कीजिए ।";
 };
 String RID_SVXSTR_LINEEND
 {
@@ -1097,7 +1202,7 @@ String RID_SVXSTR_LINEEND
     Text [ ENGLISH ] = "Line end" ;
     Text [ norwegian ] = "Line end" ;
     Text [ italian ] = "Estremit� linea" ;
-    Text [ portuguese_brazilian ] = "Fim de linha" ;
+    Text [ portuguese_brazilian ] = "Pontas de Seta" ;
     Text [ portuguese ] = "Fim de linha" ;
     Text [ finnish ] = "Nuolenk�rjet" ;
     Text [ danish ] = "Pile" ;
@@ -1108,7 +1213,7 @@ String RID_SVXSTR_LINEEND
     Text [ english_us ] = "Arrowheads" ;
     Text[ chinese_simplified ] = "线条箭头";
     Text[ russian ] = "����� �������";
-    Text[ polish ] = "Ko�c�wki linii";
+    Text[ polish ] = "Groty strza�ek";
     Text[ japanese ] = "線の終点";
     Text[ chinese_traditional ] = "線條箭頭";
     Text[ arabic ] = "����� ����";
@@ -1118,6 +1223,9 @@ String RID_SVXSTR_LINEEND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Extrems de la fletxa";
     Text[ thai ] = "หัวลูกศร";
+    Text[ czech ] = "Kótovací šipky";
+    Text[ hebrew ] = "Linienende";
+    Text[ hindi ] = "तीर की चोटी";
 };
 String RID_SVXSTR_DESC_LINEEND
 {
@@ -1127,7 +1235,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text [ ENGLISH ] = "Please insert a Name for the new line end:" ;
     Text [ norwegian ] = "Please insert a Name for the new line end:" ;
     Text [ italian ] = "Digitare un nome per la nuova estremit� di linea:" ;
-    Text [ portuguese_brazilian ] = "Insira um nome para o novo fim de linha:" ;
+    Text [ portuguese_brazilian ] = "Indique um nome para a nova ponta da seta:" ;
     Text [ portuguese ] = "Por favor introduza um nome para o novo fim de linha:" ;
     Text [ finnish ] = "Kirjoita uuden nuolenk�rjen nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye piltype:" ;
@@ -1138,7 +1246,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text [ english_us ] = "Please enter a name for the new arrowhead:" ;
     Text[ chinese_simplified ] = "请您在此为新的线条箭头输入一个名称:";
     Text[ russian ] = "������� �������� ����� ��������� �������:";
-    Text[ polish ] = "Podaj nazw� dla nowych ko�c�wek linii:";
+    Text[ polish ] = "Podaj nazw� nowego grota strza�ki:";
     Text[ japanese ] = "新しい線端の名前をここに入力してください：";
     Text[ chinese_traditional ] = "請在此為新線條箭頭輸入一個名稱：";
     Text[ arabic ] = "������ ����� ��� ������� ������� ���� ���:";
@@ -1148,6 +1256,9 @@ String RID_SVXSTR_DESC_LINEEND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inseriu aqu� el nom pel nou fi de l�nia:";
     Text[ thai ] = "กรุณาใส่ชื่อหัวลูกศรใหม่:";
+    Text[ czech ] = "Prosím zadejte název pro novou šipkou:";
+    Text[ hebrew ] = "Geben Sie hier bitte den Namen für das neue Linienende ein:";
+    Text[ hindi ] = "कृपया नया तीर की चोटी केलिए एक नाम प्रविष्ट कीजिए:";
 };
 String RID_SVXSTR_DEL_LINEEND
 {
@@ -1157,7 +1268,7 @@ String RID_SVXSTR_DEL_LINEEND
     Text [ ENGLISH ] = "Delete line end" ;
     Text [ norwegian ] = "Slett Linjeslutt" ;
     Text [ italian ] = "Cancella estremit� linea" ;
-    Text [ portuguese_brazilian ] = "Delete line end" ;
+    Text [ portuguese_brazilian ] = "Excluir termina��o de linha" ;
     Text [ portuguese ] = "Eliminar fim de linha" ;
     Text [ finnish ] = "Poista viivanp��t" ;
     Text [ danish ] = "Slet pil" ;
@@ -1178,6 +1289,9 @@ String RID_SVXSTR_DEL_LINEEND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix el fi de l�nia";
     Text[ thai ] = "ลบส่วนท้ายของบรรทัด";
+    Text[ czech ] = "Odstranit konce čar";
+    Text[ hebrew ] = "Linienende löschen";
+    Text[ hindi ] = "रेखा के अंत को मिटाओ";
 };
 String RID_SVXSTR_ASK_DEL_LINEEND
 {
@@ -1187,7 +1301,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text [ ENGLISH ] = "Do you want to delete the line end?" ;
     Text [ norwegian ] = "Vil du slette linjeslutten?" ;
     Text [ italian ] = "Cancellare l'estremit� di linea?" ;
-    Text [ portuguese_brazilian ] = "Do you want to delete the line end?" ;
+    Text [ portuguese_brazilian ] = "Deseja excluir a ponta da seta?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o fim de linha?" ;
     Text [ finnish ] = "Haluatko poistaa nuolenk�rjen?" ;
     Text [ danish ] = "Er du sikker p�, at du vil slette piltypen?" ;
@@ -1198,7 +1312,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text [ english_us ] = "Do you want to delete the arrowhead?" ;
     Text[ chinese_simplified ] = "真要删除这个线条箭头？";
     Text[ russian ] = "������� ��������� �������?";
-    Text[ polish ] = "Czy chcesz na pewno usun�� ko�c�wki linii?";
+    Text[ polish ] = "Czy chcesz usun�� grot strza�ki?";
     Text[ japanese ] = "この線端を削除してかまいませんか。";
     Text[ chinese_traditional ] = "您真要刪除這個線條箭頭？";
     Text[ arabic ] = "�� ���� ������ ��� ����� ���ؿ";
@@ -1208,6 +1322,9 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu suprimir l'extrem de la fletxa?";
     Text[ thai ] = "คุณต้องการลบหัวลูกศรหรือไม่?";
+    Text[ czech ] = "Chcete odstranit šipku?";
+    Text[ hebrew ] = "Soll das Linienende wirklich gelöscht werden?";
+    Text[ hindi ] = "आप तीर की चोटी को मिटाना चाहते है?";
 };
 String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
@@ -1223,10 +1340,10 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text [ swedish ] = "Linjeslutet �ndrades utan att sparas.\nVill du spara det nu?" ;
     Text [ danish ] = "Piltypen er blevet �ndret, men ikke gemt. \nDu kan �ndre den markerede pil\n eller tilf�je en ny." ;
     Text [ portuguese ] = "O fim de linha foi modificado e n�o guardado.\nGuardar agora?" ;
-    Text [ portuguese_brazilian ] = "Das Linienende wurde ge?ndert und nicht gesichert. \nM?hten Sie das Linienende jetzt sichern?" ;
+    Text [ portuguese_brazilian ] = "A ponta de seta foi modificada sem ser salva.\nDeseja salv�-la agora?" ;
     Text[ chinese_simplified ] = "这个线条箭头已经更改，但是没有保存。\n您要现在保存这个线条箭头？";
     Text[ russian ] = "��������� ������� ���� �������� ��� ����������. \n��������� ��������� �������?";
-    Text[ polish ] = "Ko�c�wki linii zosta�y zmienione i nie zapisane. \nCzy chcesz zmieni� teraz ko�c�wki linii?";
+    Text[ polish ] = "Groty zosta�y zmienione, lecz nie zapisane. \nCzy zapisa� je teraz?";
     Text[ japanese ] = "線端が変更されて保存されていません。\nこの線端を今すぐ保存しますか。";
     Text[ chinese_traditional ] = "這個線條箭頭已經變更﹐但是尚未儲存。\n您要現在儲存這個線條箭頭？";
     Text[ arabic ] = "�� ����� ����� ���� ��� ��� ����� ���.\n�� ���� ��� ����� ���� ����";
@@ -1237,6 +1354,9 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text[ catalan ] = "L'extrem de la fletxa s'ha modificat sense haver-lo desat.\nVoleu desar l'extrem de la fletxa ara?";
     Text[ finnish ] = "Nuolenk�rke� on muutettu ilman tallennusta.\nHaluatko tallentaa nuolenk�rjen nyt?";
     Text[ thai ] = "ดัดแปลงแก้ไขหัวลูกศรโดยไม่มีการบันทึก\nคุณต้องการบันทึกหัวลูกศรตอนนี้หรือไม่?";
+    Text[ czech ] = "Šipka byla změněna bez uložení.\nZměnit vybranou šipku nebo přidat novou?";
+    Text[ hebrew ] = "Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern?";
+    Text[ hindi ] = "तीर की चोटी को संचित किये बिना सुधार किया है । आप अभी तीर की चोटी को संचित करना चाहते है?";
 };
 String RID_SVXSTR_CLOSE
 {
@@ -1267,6 +1387,9 @@ String RID_SVXSTR_CLOSE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tanca";
     Text[ thai ] = "ปิด";
+    Text[ czech ] = "Zavřít";
+    Text[ hebrew ] = "‮סגירה‬";
+    Text[ hindi ] = "बन्द करो";
 };
 String RID_SVXSTR_BLACK
 {
@@ -1295,6 +1418,9 @@ String RID_SVXSTR_BLACK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Negre";
     Text[ thai ] = "ดำ";
+    Text[ czech ] = "Černá";
+    Text[ hebrew ] = "Schwarz";
+    Text[ hindi ] = "काला";
 };
 String RID_SVXSTR_BLUE
 {
@@ -1323,6 +1449,9 @@ String RID_SVXSTR_BLUE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Blau";
     Text[ thai ] = "น้ำเงิน";
+    Text[ czech ] = "Modrá";
+    Text[ hebrew ] = "Blau";
+    Text[ hindi ] = "नीला";
 };
 String RID_SVXSTR_GREEN
 {
@@ -1353,6 +1482,9 @@ String RID_SVXSTR_GREEN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Verd";
     Text[ thai ] = "เขียว";
+    Text[ czech ] = "Zelená";
+    Text[ hebrew ] = "Grün";
+    Text[ hindi ] = "हरा";
 };
 String RID_SVXSTR_CYAN
 {
@@ -1362,7 +1494,7 @@ String RID_SVXSTR_CYAN
     Text [ ENGLISH ] = "Cyan" ;
     Text [ norwegian ] = "Cyan" ;
     Text [ italian ] = "Ciano" ;
-    Text [ portuguese_brazilian ] = "Ciano" ;
+    Text [ portuguese_brazilian ] = "Turquesa" ;
     Text [ portuguese ] = "Turquesa" ;
     Text [ french ] = "Turquoise" ;
     Text [ dutch ] = "Turkoois" ;
@@ -1383,6 +1515,9 @@ String RID_SVXSTR_CYAN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Turquesa";
     Text[ thai ] = "ฟ้า";
+    Text[ czech ] = "Tyrkysová";
+    Text[ hebrew ] = "Türkis";
+    Text[ hindi ] = "टर्कोइस";
 };
 String RID_SVXSTR_RED
 {
@@ -1411,6 +1546,9 @@ String RID_SVXSTR_RED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vermell";
     Text[ thai ] = "แดง";
+    Text[ czech ] = "Červená";
+    Text[ hebrew ] = "Rot";
+    Text[ hindi ] = "लाल";
 };
 String RID_SVXSTR_MAGENTA
 {
@@ -1440,6 +1578,9 @@ String RID_SVXSTR_MAGENTA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Magenta";
     Text[ thai ] = "ม่วง";
+    Text[ czech ] = "Purpurová";
+    Text[ hebrew ] = "Magenta";
+    Text[ hindi ] = "मेजन्टा";
 };
 String RID_SVXSTR_BROWN
 {
@@ -1468,6 +1609,9 @@ String RID_SVXSTR_BROWN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marr�";
     Text[ thai ] = "น้ำตาล";
+    Text[ czech ] = "Hnědá";
+    Text[ hebrew ] = "Braun";
+    Text[ hindi ] = "भूरा";
 };
 String RID_SVXSTR_GREY
 {
@@ -1496,6 +1640,9 @@ String RID_SVXSTR_GREY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gris";
     Text[ thai ] = "เทา";
+    Text[ czech ] = "Šedá";
+    Text[ hebrew ] = "Grau";
+    Text[ hindi ] = "ग्रे";
 };
 String RID_SVXSTR_LIGHTGREY
 {
@@ -1503,7 +1650,7 @@ String RID_SVXSTR_LIGHTGREY
     Text [ ENGLISH ] = "Lightgrey" ;
     Text [ norwegian ] = "Lightgrey" ;
     Text [ italian ] = "Grigio chiaro" ;
-    Text [ portuguese_brazilian ] = "Lightgrey" ;
+    Text [ portuguese_brazilian ] = "Cinza claro" ;
     Text [ portuguese ] = "Cinzento-claro" ;
     Text [ french ] = "Gris clair" ;
     Text [ dutch ] = "Lichtgrijs" ;
@@ -1524,6 +1671,9 @@ String RID_SVXSTR_LIGHTGREY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gris clar";
     Text[ thai ] = "เทาอ่อน";
+    Text[ czech ] = "Světle šedá";
+    Text[ hebrew ] = "Hellgrau";
+    Text[ hindi ] = "हल्का ग्रे";
 };
 String RID_SVXSTR_LIGHTBLUE
 {
@@ -1542,7 +1692,7 @@ String RID_SVXSTR_LIGHTBLUE
     Text [ english_us ] = "Light blue" ;
     Text[ chinese_simplified ] = "浅蓝色";
     Text[ russian ] = "������-�����";
-    Text[ polish ] = "Jasnoniebieski";
+    Text[ polish ] = "B��kitny";
     Text[ japanese ] = "明るい青";
     Text[ chinese_traditional ] = "淺藍色";
     Text[ arabic ] = "���� ����";
@@ -1552,6 +1702,9 @@ String RID_SVXSTR_LIGHTBLUE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Blau clar";
     Text[ thai ] = "น้ำเงินอ่อน";
+    Text[ czech ] = "Světle modrá";
+    Text[ hebrew ] = "Hellblau";
+    Text[ hindi ] = "हल्का नीला";
 };
 String RID_SVXSTR_LIGHTGREEN
 {
@@ -1582,6 +1735,9 @@ String RID_SVXSTR_LIGHTGREEN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Verd clar";
     Text[ thai ] = "เขียวอ่อน";
+    Text[ czech ] = "Světle zelená";
+    Text[ hebrew ] = "Hellgrün";
+    Text[ hindi ] = "हल्का हरा";
 };
 String RID_SVXSTR_LIGHTCYAN
 {
@@ -1591,7 +1747,7 @@ String RID_SVXSTR_LIGHTCYAN
     Text [ ENGLISH ] = "Lightcyan" ;
     Text [ norwegian ] = "Lys cyanfarge" ;
     Text [ italian ] = "Ciano chiaro" ;
-    Text [ portuguese_brazilian ] = "Cian claro" ;
+    Text [ portuguese_brazilian ] = "Ciano claro" ;
     Text [ portuguese ] = "Turquesa-claro" ;
     Text [ french ] = "Turquoise clair" ;
     Text [ dutch ] = "Licht turkoois" ;
@@ -1602,7 +1758,7 @@ String RID_SVXSTR_LIGHTCYAN
     Text [ english_us ] = "Light cyan" ;
     Text[ chinese_simplified ] = "浅蓝绿色";
     Text[ russian ] = "������-���������";
-    Text[ polish ] = "Jasnoturkusowy";
+    Text[ polish ] = "Jasnoseledynowy";
     Text[ japanese ] = "明るい青緑";
     Text[ chinese_traditional ] = "淺藍綠色";
     Text[ arabic ] = "������ ����";
@@ -1612,6 +1768,9 @@ String RID_SVXSTR_LIGHTCYAN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cian clar";
     Text[ thai ] = "ฟ้าอ่อน";
+    Text[ czech ] = "Světle modrozelená";
+    Text[ hebrew ] = "Helltürkis";
+    Text[ hindi ] = "हल्का सियान";
 };
 String RID_SVXSTR_LIGHTRED
 {
@@ -1640,6 +1799,9 @@ String RID_SVXSTR_LIGHTRED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vermell clar";
     Text[ thai ] = "แดงอ่อน";
+    Text[ czech ] = "Světle červená";
+    Text[ hebrew ] = "Hellrot";
+    Text[ hindi ] = "हल्का लाल";
 };
 String RID_SVXSTR_LIGHTMAGENTA
 {
@@ -1669,6 +1831,9 @@ String RID_SVXSTR_LIGHTMAGENTA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Magenta clar";
     Text[ thai ] = "ม่วงอ่อน";
+    Text[ czech ] = "Světle purpurová";
+    Text[ hebrew ] = "Hellmagenta";
+    Text[ hindi ] = "हल्का मेजन्टा";
 };
 String RID_SVXSTR_YELLOW
 {
@@ -1697,6 +1862,9 @@ String RID_SVXSTR_YELLOW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Groc";
     Text[ thai ] = "เหลือง";
+    Text[ czech ] = "Žlutá";
+    Text[ hebrew ] = "Gelb";
+    Text[ hindi ] = "पीला";
 };
 String RID_SVXSTR_WHITE
 {
@@ -1727,6 +1895,9 @@ String RID_SVXSTR_WHITE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Blanc";
     Text[ thai ] = "ขาว";
+    Text[ czech ] = "Bílá";
+    Text[ hebrew ] = "Weiß";
+    Text[ hindi ] = "सफ़ेद";
 };
 String RID_SVXSTR_BLUEGREY
 {
@@ -1734,7 +1905,7 @@ String RID_SVXSTR_BLUEGREY
     Text [ ENGLISH ] = "Bluegrey" ;
     Text [ norwegian ] = "Bluegrey" ;
     Text [ italian ] = "Grigioblu" ;
-    Text [ portuguese_brazilian ] = "Bluegrey" ;
+    Text [ portuguese_brazilian ] = "Cinza azulado" ;
     Text [ portuguese ] = "Azul acizentado" ;
     Text [ french ] = "Gris bleu" ;
     Text [ dutch ] = "Blauwgrijs" ;
@@ -1745,7 +1916,7 @@ String RID_SVXSTR_BLUEGREY
     Text [ english_us ] = "Blue gray" ;
     Text[ chinese_simplified ] = "蓝灰色";
     Text[ russian ] = "����-�����";
-    Text[ polish ] = "B��kitnoszary";
+    Text[ polish ] = "Szaroniebieski";
     Text[ japanese ] = "青灰色";
     Text[ chinese_traditional ] = "藍灰色";
     Text[ arabic ] = "����� ����";
@@ -1755,6 +1926,9 @@ String RID_SVXSTR_BLUEGREY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gris blav�s";
     Text[ thai ] = "น้ำเงินเทา";
+    Text[ czech ] = "Modrošedá";
+    Text[ hebrew ] = "Blaugrau";
+    Text[ hindi ] = "नीला ग्रे";
 };
 String RID_SVXSTR_ORANGE
 {
@@ -1762,7 +1936,7 @@ String RID_SVXSTR_ORANGE
     Text [ ENGLISH ] = "Orange" ;
     Text [ norwegian ] = "Orange" ;
     Text [ italian ] = "Arancione" ;
-    Text [ portuguese_brazilian ] = "Orange" ;
+    Text [ portuguese_brazilian ] = "Laranja" ;
     Text [ portuguese ] = "Laranja" ;
     Text [ french ] = "Orange" ;
     Text [ dutch ] = "Oranje" ;
@@ -1783,6 +1957,9 @@ String RID_SVXSTR_ORANGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taronja";
     Text[ thai ] = "ส้ม";
+    Text[ czech ] = "Oranžová";
+    Text[ hebrew ] = "Orange";
+    Text[ hindi ] = "नारंगी";
 };
 String RID_SVXSTR_ARROW
 {
@@ -1790,7 +1967,7 @@ String RID_SVXSTR_ARROW
     Text [ ENGLISH ] = "Arrow" ;
     Text [ norwegian ] = "Arrow" ;
     Text [ italian ] = "Freccia" ;
-    Text [ portuguese_brazilian ] = "Arrow" ;
+    Text [ portuguese_brazilian ] = "Seta" ;
     Text [ portuguese ] = "Seta" ;
     Text [ french ] = "Fl�che" ;
     Text [ dutch ] = "Pijl" ;
@@ -1811,6 +1988,9 @@ String RID_SVXSTR_ARROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fletxa";
     Text[ thai ] = "ลูกศร";
+    Text[ czech ] = "Šipka";
+    Text[ hebrew ] = "Pfeil";
+    Text[ hindi ] = "तीर";
 };
 String RID_SVXSTR_SQUARE
 {
@@ -1839,6 +2019,9 @@ String RID_SVXSTR_SQUARE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quadrat";
     Text[ thai ] = "สี่เหลี่ยมจัตุรัส";
+    Text[ czech ] = "Čtverec";
+    Text[ hebrew ] = "Quadrat";
+    Text[ hindi ] = "सम चतुर्भुज";
 };
 String RID_SVXSTR_CIRCLE
 {
@@ -1846,7 +2029,7 @@ String RID_SVXSTR_CIRCLE
     Text [ ENGLISH ] = "Circle" ;
     Text [ norwegian ] = "Sirkel" ;
     Text [ italian ] = "Cerchio" ;
-    Text [ portuguese_brazilian ] = "C?rculo" ;
+    Text [ portuguese_brazilian ] = "C�rculo" ;
     Text [ portuguese ] = "C�rculo" ;
     Text [ french ] = "Cercle" ;
     Text [ dutch ] = "Cirkel" ;
@@ -1867,6 +2050,9 @@ String RID_SVXSTR_CIRCLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cercle";
     Text[ thai ] = "วงกลม";
+    Text[ czech ] = "Kruh";
+    Text[ hebrew ] = "Kreis";
+    Text[ hindi ] = "वृत्त";
 };
 String RID_SVXSTR_NONE
 {
@@ -1880,7 +2066,7 @@ String RID_SVXSTR_NONE
     Text [ swedish ] = "- inget -" ;
     Text [ danish ] = "- ingen -" ;
     Text [ portuguese ] = "- nenhum -" ;
-    Text [ portuguese_brazilian ] = "- kein -" ;
+    Text [ portuguese_brazilian ] = "- nenhum -" ;
     Text[ chinese_simplified ] = "- 无 -";
     Text[ russian ] = "- ��� -";
     Text[ polish ] = "- brak -";
@@ -1894,6 +2080,9 @@ String RID_SVXSTR_NONE
     Text[ catalan ] = "- cap -";
     Text[ finnish ] = "- ei mit��n -";
     Text[ thai ] = "- ไม่มี -";
+    Text[ czech ] = "- nic -";
+    Text[ hebrew ] = "- kein -";
+    Text[ hindi ] = "- कोई नहीं -";
 };
 String RID_SVXSTR_TRANSPARENCE
 {
@@ -1907,10 +2096,10 @@ String RID_SVXSTR_TRANSPARENCE
     Text [ swedish ] = "Transparens" ;
     Text [ danish ] = "Transparens" ;
     Text [ portuguese ] = "Transpar�ncia" ;
-    Text [ portuguese_brazilian ] = "Transparenz" ;
+    Text [ portuguese_brazilian ] = "Transpar�ncia" ;
     Text[ chinese_simplified ] = "透明";
     Text[ russian ] = "������������";
-    Text[ polish ] = "Prze�roczysto��";
+    Text[ polish ] = "Przezroczysto��";
     Text[ japanese ] = "透過性";
     Text[ chinese_traditional ] = "透明";
     Text[ arabic ] = "�����";
@@ -1921,6 +2110,9 @@ String RID_SVXSTR_TRANSPARENCE
     Text[ catalan ] = "Transpar�ncia";
     Text[ finnish ] = "L�pin�kyvyys";
     Text[ thai ] = "โปร่งแสง";
+    Text[ czech ] = "Průhlednost";
+    Text[ hebrew ] = "Transparenz";
+    Text[ hindi ] = "पारदर्शकता";
 };
 String RID_SVXSTR_CENTERED
 {
@@ -1934,10 +2126,10 @@ String RID_SVXSTR_CENTERED
     Text [ swedish ] = "Centrerat" ;
     Text [ danish ] = "Centreret" ;
     Text [ portuguese ] = "Centrado" ;
-    Text [ portuguese_brazilian ] = "Zentriert" ;
+    Text [ portuguese_brazilian ] = "Centralizado" ;
     Text[ chinese_simplified ] = "居中";
     Text[ russian ] = "�� ������";
-    Text[ polish ] = "Do �rodka";
+    Text[ polish ] = "Po�rodku";
     Text[ japanese ] = "中央揃え";
     Text[ chinese_traditional ] = "置中";
     Text[ arabic ] = "�����";
@@ -1948,6 +2140,9 @@ String RID_SVXSTR_CENTERED
     Text[ catalan ] = "Centrat";
     Text[ finnish ] = "Keskitetty";
     Text[ thai ] = "ศูนย์กลาง";
+    Text[ czech ] = "Na střed";
+    Text[ hebrew ] = "Zentriert";
+    Text[ hindi ] = "केन्द्रित";
 };
 String RID_SVXSTR_NOTCENTERED
 {
@@ -1961,10 +2156,10 @@ String RID_SVXSTR_NOTCENTERED
     Text [ swedish ] = "Inte centrerad" ;
     Text [ danish ] = "Ikke centreret" ;
     Text [ portuguese ] = "N�o centrado" ;
-    Text [ portuguese_brazilian ] = "Nicht Zentriert" ;
+    Text [ portuguese_brazilian ] = "N�o centralizado" ;
     Text[ chinese_simplified ] = "不居中";
     Text[ russian ] = "�� �� ������";
-    Text[ polish ] = "Nie wy�rodkowany";
+    Text[ polish ] = "Niewy�rodkowany";
     Text[ japanese ] = "中央揃えでない";
     Text[ chinese_traditional ] = "不置中";
     Text[ arabic ] = "��� ����";
@@ -1975,6 +2170,9 @@ String RID_SVXSTR_NOTCENTERED
     Text[ catalan ] = "No centrat";
     Text[ finnish ] = "Ei keskitetty";
     Text[ thai ] = "ไม่อยู่ตรงศูนย์กลาง";
+    Text[ czech ] = "Nevystředěno";
+    Text[ hebrew ] = "Nicht Zentriert";
+    Text[ hindi ] = "केन्द्रित नहीं";
 };
 String RID_SVXSTR_GRAFMODE_STANDARD
 {
@@ -1991,7 +2189,7 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
     Text[ polish ] = "Domy�lnie";
-    Text[ portuguese_brazilian ] = "Padr?o";
+    Text[ portuguese_brazilian ] = "Padr�o";
     Text[ japanese ] = "標準";
     Text[ korean ] = "기본값";
     Text[ chinese_simplified ] = "标准";
@@ -2001,6 +2199,9 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ catalan ] = "Per defecte";
     Text[ finnish ] = "Oletus";
     Text[ thai ] = "ค่าเริ่มต้น";
+    Text[ czech ] = "Výchozí";
+    Text[ hebrew ] = "‮ברירת מחדל‬";
+    Text[ hindi ] = "अनुपस्थिति";
 };
 String RID_SVXSTR_GRAFMODE_GREYS
 {
@@ -2017,7 +2218,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ danish ] = "Gr�toner";
     Text[ swedish ] = "Gr�skalor";
     Text[ polish ] = "Odcienie szaro�ci";
-    Text[ portuguese_brazilian ] = "Greyscales";
+    Text[ portuguese_brazilian ] = "Tons de cinza";
     Text[ japanese ] = "グレースケール";
     Text[ korean ] = "회색조";
     Text[ chinese_simplified ] = "灰度";
@@ -2028,6 +2229,9 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ catalan ] = "Escala de grisos";
     Text[ finnish ] = "Harmaas�vy";
     Text[ thai ] = "สเกลสีเทา";
+    Text[ czech ] = "Stupně šedi";
+    Text[ hebrew ] = "Graustufen";
+    Text[ hindi ] = "ग्रेस्केल";
 };
 String RID_SVXSTR_GRAFMODE_MONO
 {
@@ -2044,7 +2248,7 @@ String RID_SVXSTR_GRAFMODE_MONO
     Text[ danish ] = "Sort-hvid";
     Text[ swedish ] = "Svartvitt";
     Text[ polish ] = "Czarno-bia�y";
-    Text[ portuguese_brazilian ] = "Black/White";
+    Text[ portuguese_brazilian ] = "Preto/Branco";
     Text[ japanese ] = "白黒";
     Text[ korean ] = "흑/ 백";
     Text[ chinese_simplified ] = "黑/白";
@@ -2054,6 +2258,9 @@ String RID_SVXSTR_GRAFMODE_MONO
     Text[ catalan ] = "Negre/Blanc";
     Text[ finnish ] = "Mustavalkoinen";
     Text[ thai ] = "ดำ/ขาว";
+    Text[ czech ] = "Černobílá";
+    Text[ hebrew ] = "Schwarz/Weiß";
+    Text[ hindi ] = "काला/सफेद";
 };
 String RID_SVXSTR_GRAFMODE_WATERMARK
 {
@@ -2070,7 +2277,7 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ danish ] = "Vandm�rke";
     Text[ swedish ] = "Vattenm�rke";
     Text[ polish ] = "Znak wodny";
-    Text[ portuguese_brazilian ] = "Watermark";
+    Text[ portuguese_brazilian ] = "Marca d'�gua";
     Text[ japanese ] = "透かし";
     Text[ korean ] = "워터마크";
     Text[ chinese_simplified ] = "水印";
@@ -2080,6 +2287,9 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ catalan ] = "Marca d'aigua";
     Text[ finnish ] = "Vesileima";
     Text[ thai ] = "ลายน้ำ";
+    Text[ czech ] = "Vodoznak";
+    Text[ hebrew ] = "Wasserzeichen";
+    Text[ hindi ] = "जलसंकेत";
 };
 String STR_INSERT_VIDEO_EXTFILTER_IVF
 {
@@ -2096,7 +2306,7 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
     Text[ danish ] = "Intel Indeo Video (*.ivf)";
     Text[ swedish ] = "Intel Indeo Video (*.ivf)";
     Text[ polish ] = "Intel Indeo Video (*.ivf)";
-    Text[ portuguese_brazilian ] = "Intel Indeo Video (*.ivf)";
+    Text[ portuguese_brazilian ] = "Intel Indeo V�deo (*.ivf)";
     Text[ japanese ] = "Intel Indeo Video (*.ivf)";
     Text[ korean ] = "Intel 인데오 (*.ivf)";
     Text[ chinese_simplified ] = "Intel Indeo Video (*.ivf)";
@@ -2106,6 +2316,9 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
     Text[ catalan ] = "Intel Indeo Video (*.ivf)";
     Text[ finnish ] = "Intel Indeo Video (*.ivf)";
     Text[ thai ] = "Intel Indeo Video (*.ivf)";
+    Text[ czech ] = "Intel Indeo Video (*.ivf)";
+    Text[ hebrew ] = "Intel Indeo Video (*.ivf)";
+    Text[ hindi ] = "Intel Indeo Video (*.ivf)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_AVI
@@ -2123,16 +2336,19 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ danish ] = "Video til Windows (*.avi)";
     Text[ swedish ] = "Video f�r Windows (*.avi)";
     Text[ polish ] = "Video dla Windows (*.avi)";
-    Text[ portuguese_brazilian ] = "Video for Windows (*.avi)";
+    Text[ portuguese_brazilian ] = "V�deo para Windows (*.avi)";
     Text[ japanese ] = "Video for Windows (*.avi)";
     Text[ korean ] = "윈도우용 동영상(*.avi)";
     Text[ chinese_simplified ] = "Video for Windows (*.avi)";
     Text[ chinese_traditional ] = "Video for Windows (*.avi)";
     Text[ arabic ] = "����� �� (*.avi) Windows";
-    Text[ turkish ] = "Video for Windows (*.avi)";
+    Text[ turkish ] = "Windows i�in Video (*.avi)";
     Text[ catalan ] = "V�deo per Windows (*.avi)";
     Text[ finnish ] = "Video for Windows (*.avi)";
     Text[ thai ] = "วิดีโอสำหรับวินโดวส์ (*.avi)";
+    Text[ czech ] = "Video pro Windows (*.avi)";
+    Text[ hebrew ] = "Video für Windows (*.avi)";
+    Text[ hindi ] = "Video for Windows (*.avi)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MOV
@@ -2160,6 +2376,9 @@ String STR_INSERT_VIDEO_EXTFILTER_MOV
     Text[ catalan ] = "QuickTime Movie (*.mov)";
     Text[ finnish ] = "QuickTime Movie (*.mov)";
     Text[ thai ] = "QuickTime Movie (*.mov)";
+    Text[ czech ] = "QuickTime Movie (*.mov)";
+    Text[ hebrew ] = "QuickTime Movie (*.mov)";
+    Text[ hindi ] = "QuickTime Movie (*.mov)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MPEG
@@ -2187,6 +2406,9 @@ String STR_INSERT_VIDEO_EXTFILTER_MPEG
     Text[ catalan ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ finnish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ thai ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ czech ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ hebrew ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ hindi ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
 };
 
 String STR_EXTFILTER_ALL
@@ -2203,8 +2425,8 @@ String STR_EXTFILTER_ALL
     Text[ italian ] = "<Tutti>";
     Text[ danish ] = "<Alle>";
     Text[ swedish ] = "<Alla>";
-    Text[ polish ] = "<Wszystkie>";
-    Text[ portuguese_brazilian ] = "<All>";
+    Text[ polish ] = "<Wszystko>";
+    Text[ portuguese_brazilian ] = "<Todos>";
     Text[ japanese ] = "<すべて>";
     Text[ korean ] = "<모두>";
     Text[ chinese_simplified ] = "<全部>";
@@ -2214,6 +2436,9 @@ String STR_EXTFILTER_ALL
     Text[ catalan ] = "<tots>";
     Text[ finnish ] = "<Kaikki>";
     Text[ thai ] = "<ทั้งหมด>";
+    Text[ czech ] = "<Vše>";
+    Text[ hebrew ] = "<Alle>";
+    Text[ hindi ] = "<सब>";
 };
 
 String STR_INSERT_SOUND_TITLE
@@ -2231,7 +2456,7 @@ String STR_INSERT_SOUND_TITLE
     Text[ danish ] = "Inds�t lyd";
     Text[ swedish ] = "Infoga ljud";
     Text[ polish ] = "Wstaw d�wi�k";
-    Text[ portuguese_brazilian ] = "Insert sound";
+    Text[ portuguese_brazilian ] = "Inserir som";
     Text[ japanese ] = "サウンドの挿入";
     Text[ korean ] = "사운드 삽입";
     Text[ chinese_simplified ] = "插入声音";
@@ -2242,6 +2467,9 @@ String STR_INSERT_SOUND_TITLE
     Text[ catalan ] = "Insereix un so";
     Text[ finnish ] = "Lis�� ��ni";
     Text[ thai ] = "แทรกเสียง";
+    Text[ czech ] = "Vložit zvuk";
+    Text[ hebrew ] = "Klang einfügen";
+    Text[ hindi ] = "ध्वनी जोड़ो";
 };
 
 String STR_INSERT_VIDEO_TITLE
@@ -2258,8 +2486,8 @@ String STR_INSERT_VIDEO_TITLE
     Text[ italian ] = "Inserisci video";
     Text[ danish ] = "Inds�t video";
     Text[ swedish ] = "Infoga video";
-    Text[ polish ] = "Wstaw video";
-    Text[ portuguese_brazilian ] = "Insert video";
+    Text[ polish ] = "Wstaw wideo";
+    Text[ portuguese_brazilian ] = "Inserir v�deo";
     Text[ japanese ] = "ビデオの挿入";
     Text[ korean ] = "비디오 삽입";
     Text[ chinese_simplified ] = "插入影视";
@@ -2269,6 +2497,9 @@ String STR_INSERT_VIDEO_TITLE
     Text[ catalan ] = "Insereix v�deo";
     Text[ finnish ] = "Lis�� videokuva";
     Text[ thai ] = "แทรกวีดีโอ";
+    Text[ czech ] = "Vložit video";
+    Text[ hebrew ] = "Video einfügen";
+    Text[ hindi ] = "वीडियो जोड़ो";
 };
 
 
@@ -2288,8 +2519,8 @@ String RID_SVXSTR_VIOLET
     Text[ italian ] = "Lilla";
     Text[ danish ] = "Lilla";
     Text[ swedish ] = "Lila";
-    Text[ polish ] = "Filolet";
-    Text[ portuguese_brazilian ] = "Violet";
+    Text[ polish ] = "Fiolet";
+    Text[ portuguese_brazilian ] = "Violeta";
     Text[ japanese ] = "紫";
     Text[ korean ] = "보라색";
     Text[ chinese_simplified ] = "紫色";
@@ -2299,6 +2530,9 @@ String RID_SVXSTR_VIOLET
     Text[ catalan ] = "Violeta";
     Text[ finnish ] = "Violetti";
     Text[ thai ] = "ม่วง";
+    Text[ czech ] = "Fialová";
+    Text[ hebrew ] = "Lila";
+    Text[ hindi ] = "बैंगनी";
 };
 
 String RID_SVXSTR_BORDEAUX
@@ -2316,7 +2550,7 @@ String RID_SVXSTR_BORDEAUX
     Text[ danish ] = "Bordeauxr�d";
     Text[ swedish ] = "Bordeaux";
     Text[ polish ] = "Bordowy";
-    Text[ portuguese_brazilian ] = "Bordeaux";
+    Text[ portuguese_brazilian ] = "Bord�";
     Text[ japanese ] = "えんじ";
     Text[ korean ] = "보르도";
     Text[ chinese_simplified ] = "深红色";
@@ -2326,6 +2560,9 @@ String RID_SVXSTR_BORDEAUX
     Text[ catalan ] = "Burdeus";
     Text[ finnish ] = "Bordeaux";
     Text[ thai ] = "บอร์โด";
+    Text[ czech ] = "Tmavě červená";
+    Text[ hebrew ] = "Bordeaux";
+    Text[ hindi ] = "बोर्डयक्स";
 };
 
 String RID_SVXSTR_PALE_YELLOW
@@ -2343,7 +2580,7 @@ String RID_SVXSTR_PALE_YELLOW
     Text[ danish ] = "Bleggul";
     Text[ swedish ] = "Blekgul";
     Text[ polish ] = "Blado��ty";
-    Text[ portuguese_brazilian ] = "Pale yellow";
+    Text[ portuguese_brazilian ] = "Amarelo-p�lido";
     Text[ japanese ] = "淡黄色";
     Text[ korean ] = "담황색";
     Text[ chinese_simplified ] = "浅黄色";
@@ -2353,6 +2590,9 @@ String RID_SVXSTR_PALE_YELLOW
     Text[ catalan ] = "Groc pastel";
     Text[ finnish ] = "Vaaleankeltainen";
     Text[ thai ] = "เหลืองซีด";
+    Text[ czech ] = "Světle žlutá";
+    Text[ hebrew ] = "Blassgelb";
+    Text[ hindi ] = "फीका पीला";
 };
 
 String RID_SVXSTR_PALE_GREEN
@@ -2370,7 +2610,7 @@ String RID_SVXSTR_PALE_GREEN
     Text[ danish ] = "Bleggr�n";
     Text[ swedish ] = "Blekgr�n";
     Text[ polish ] = "Bladozielony";
-    Text[ portuguese_brazilian ] = "Pale green";
+    Text[ portuguese_brazilian ] = "Verde-p�lido";
     Text[ japanese ] = "淡緑";
     Text[ korean ] = "담녹색";
     Text[ chinese_simplified ] = "淡绿色";
@@ -2380,6 +2620,9 @@ String RID_SVXSTR_PALE_GREEN
     Text[ catalan ] = "Verd pastel";
     Text[ finnish ] = "Vaaleanvihre�";
     Text[ thai ] = "เขียวซีด";
+    Text[ czech ] = "Světle zelená";
+    Text[ hebrew ] = "Blassgrün";
+    Text[ hindi ] = "फीका हरा";
 };
 
 String RID_SVXSTR_DKVIOLET
@@ -2396,8 +2639,8 @@ String RID_SVXSTR_DKVIOLET
     Text[ italian ] = "Lilla scuro";
     Text[ danish ] = "M�rkelilla";
     Text[ swedish ] = "M�rklila";
-    Text[ polish ] = "Ciemny filolet";
-    Text[ portuguese_brazilian ] = "Dark violet";
+    Text[ polish ] = "Ciemny fiolet";
+    Text[ portuguese_brazilian ] = "Violeta escuro";
     Text[ japanese ] = "濃紫";
     Text[ korean ] = "진보라색";
     Text[ chinese_simplified ] = "深紫色";
@@ -2407,6 +2650,9 @@ String RID_SVXSTR_DKVIOLET
     Text[ catalan ] = "Violeta fosc";
     Text[ finnish ] = "Tummanvioletti";
     Text[ thai ] = "ม่วงเข้ม";
+    Text[ czech ] = "Tmavě fialová";
+    Text[ hebrew ] = "Dunkellila";
+    Text[ hindi ] = "गहरा नीला";
 };
 
 String RID_SVXSTR_SALMON
@@ -2424,7 +2670,7 @@ String RID_SVXSTR_SALMON
     Text[ danish ] = "Laksefarvet";
     Text[ swedish ] = "Lax";
     Text[ polish ] = "�ososiowy";
-    Text[ portuguese_brazilian ] = "Salmon";
+    Text[ portuguese_brazilian ] = "Salm�o";
     Text[ japanese ] = "サーモンピンク";
     Text[ korean ] = "연어 살색";
     Text[ chinese_simplified ] = "橙红色";
@@ -2434,6 +2680,9 @@ String RID_SVXSTR_SALMON
     Text[ catalan ] = "Salm�";
     Text[ finnish ] = "Lohisuomu";
     Text[ thai ] = "ชมพู";
+    Text[ czech ] = "Lososová";
+    Text[ hebrew ] = "Lachs";
+    Text[ hindi ] = "नारंगी";
 };
 
 String RID_SVXSTR_SEABLUE
@@ -2451,7 +2700,7 @@ String RID_SVXSTR_SEABLUE
     Text[ danish ] = "Azurbl�";
     Text[ swedish ] = "Havsbl�";
     Text[ polish ] = "Lazurowy";
-    Text[ portuguese_brazilian ] = "Sea blue";
+    Text[ portuguese_brazilian ] = "Azul marinho";
     Text[ japanese ] = "海の青";
     Text[ korean ] = "심청색";
     Text[ chinese_simplified ] = "湖蓝色";
@@ -2461,6 +2710,9 @@ String RID_SVXSTR_SEABLUE
     Text[ catalan ] = "Blau mar�";
     Text[ finnish ] = "Merensininen";
     Text[ thai ] = "น้ำเงินทะเล";
+    Text[ czech ] = "Námořnická modř";
+    Text[ hebrew ] = "Seeblau";
+    Text[ hindi ] = "समुद्री नीला";
 };
 
 String RID_SVXSTR_COLOR_SUN
@@ -2491,6 +2743,9 @@ String RID_SVXSTR_COLOR_SUN
     Text[ catalan ] = "Sun";
     Text[ finnish ] = "Aurinko";
     Text[ thai ] = "ซัน";
+    Text[ czech ] = "Zlatá";
+    Text[ hebrew ] = "Sun";
+    Text[ hindi ] = "Sun";
 };
 
 String RID_SVXSTR_TBLAFMT_3D
@@ -2507,7 +2762,7 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ italian ] = "3D";
     Text[ danish ] = "3D";
     Text[ swedish ] = "3D";
-    Text[ polish ] = "3-W";
+    Text[ polish ] = "3D";
     Text[ portuguese_brazilian ] = "3D";
     Text[ japanese ] = "3D";
     Text[ korean ] = "3Ｄ";
@@ -2519,6 +2774,9 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ catalan ] = "3D";
     Text[ finnish ] = "Kolmiulotteinen";
     Text[ thai ] = "3มิติ";
+    Text[ czech ] = "3D";
+    Text[ hebrew ] = "3D";
+    Text[ hindi ] = "3D";
 };
 String RID_SVXSTR_TBLAFMT_BLACK1
 {
@@ -2535,7 +2793,7 @@ String RID_SVXSTR_TBLAFMT_BLACK1
     Text[ danish ] = "Sort 1";
     Text[ swedish ] = "Svart 1";
     Text[ polish ] = "Czarny 1";
-    Text[ portuguese_brazilian ] = "Black 1";
+    Text[ portuguese_brazilian ] = "Preto 1";
     Text[ japanese ] = "黒 1";
     Text[ korean ] = "검은색 1";
     Text[ chinese_simplified ] = "黑色 1";
@@ -2546,6 +2804,9 @@ String RID_SVXSTR_TBLAFMT_BLACK1
     Text[ catalan ] = "Negre 1";
     Text[ finnish ] = "Musta 1";
     Text[ thai ] = "ดำ 1";
+    Text[ czech ] = "Černá 1";
+    Text[ hebrew ] = "Schwarz 1";
+    Text[ hindi ] = "काला 1";
 };
 String RID_SVXSTR_TBLAFMT_BLACK2
 {
@@ -2562,7 +2823,7 @@ String RID_SVXSTR_TBLAFMT_BLACK2
     Text[ danish ] = "Sort 2";
     Text[ swedish ] = "Svart 2";
     Text[ polish ] = "Czarny 2";
-    Text[ portuguese_brazilian ] = "Black 2";
+    Text[ portuguese_brazilian ] = "Preto 2";
     Text[ japanese ] = "黒 2";
     Text[ korean ] = "검은색 2";
     Text[ chinese_simplified ] = "黑色 2";
@@ -2573,6 +2834,9 @@ String RID_SVXSTR_TBLAFMT_BLACK2
     Text[ catalan ] = "Negre 2";
     Text[ finnish ] = "Musta 2";
     Text[ thai ] = "ดำ 2";
+    Text[ czech ] = "Černá 2";
+    Text[ hebrew ] = "Schwarz 2";
+    Text[ hindi ] = "काला 2";
 };
 String RID_SVXSTR_TBLAFMT_BLUE
 {
@@ -2589,7 +2853,7 @@ String RID_SVXSTR_TBLAFMT_BLUE
     Text[ danish ] = "Bl�";
     Text[ swedish ] = "Bl�tt";
     Text[ polish ] = "Niebieski";
-    Text[ portuguese_brazilian ] = "Blue";
+    Text[ portuguese_brazilian ] = "Azul";
     Text[ japanese ] = "青";
     Text[ korean ] = "청색";
     Text[ chinese_simplified ] = "蓝色";
@@ -2599,6 +2863,9 @@ String RID_SVXSTR_TBLAFMT_BLUE
     Text[ catalan ] = "Blau";
     Text[ finnish ] = "Sininen";
     Text[ thai ] = "น้ำเงิน";
+    Text[ czech ] = "Modrá";
+    Text[ hebrew ] = "Blau";
+    Text[ hindi ] = "नीला";
 };
 String RID_SVXSTR_TBLAFMT_BROWN
 {
@@ -2615,7 +2882,7 @@ String RID_SVXSTR_TBLAFMT_BROWN
     Text[ danish ] = "Brun";
     Text[ swedish ] = "Brunt";
     Text[ polish ] = "Br�zowy";
-    Text[ portuguese_brazilian ] = "Brown";
+    Text[ portuguese_brazilian ] = "Marrom";
     Text[ japanese ] = "茶色";
     Text[ korean ] = "갈색";
     Text[ chinese_simplified ] = "棕色";
@@ -2625,6 +2892,9 @@ String RID_SVXSTR_TBLAFMT_BROWN
     Text[ catalan ] = "Marr�";
     Text[ finnish ] = "Ruskea";
     Text[ thai ] = "น้ำตาล";
+    Text[ czech ] = "Hnědá";
+    Text[ hebrew ] = "Braun";
+    Text[ hindi ] = "भूरा";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY
 {
@@ -2641,7 +2911,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY
     Text[ danish ] = "Valuta";
     Text[ swedish ] = "Valuta";
     Text[ polish ] = "Waluta";
-    Text[ portuguese_brazilian ] = "Currency";
+    Text[ portuguese_brazilian ] = "Moeda";
     Text[ japanese ] = "通貨";
     Text[ korean ] = "통화";
     Text[ chinese_simplified ] = "货币";
@@ -2651,6 +2921,9 @@ String RID_SVXSTR_TBLAFMT_CURRENCY
     Text[ catalan ] = "Moneda";
     Text[ finnish ] = "Valuutta";
     Text[ thai ] = "สกุลเงิน";
+    Text[ czech ] = "Měna";
+    Text[ hebrew ] = "Währung";
+    Text[ hindi ] = "मुद्रा";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_3D
 {
@@ -2666,8 +2939,8 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ italian ] = "Valuta 3D";
     Text[ danish ] = "Valuta 3D";
     Text[ swedish ] = "Valuta 3D";
-    Text[ polish ] = "Waluta 3-W";
-    Text[ portuguese_brazilian ] = "Currency 3D";
+    Text[ polish ] = "Waluta 3D";
+    Text[ portuguese_brazilian ] = "Moeda 3D";
     Text[ japanese ] = "通貨 3D";
     Text[ korean ] = "통화 3Ｄ";
     Text[ chinese_simplified ] = "货币 3 维";
@@ -2677,6 +2950,9 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ catalan ] = "Moneda 3D";
     Text[ finnish ] = "Valuutta kolmiulotteisena";
     Text[ thai ] = "สกุลเงิน 3มิติ";
+    Text[ czech ] = "Měna, 3D";
+    Text[ hebrew ] = "Währung 3D";
+    Text[ hindi ] = "मुद्रा 3D";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
 {
@@ -2693,7 +2969,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
     Text[ danish ] = "Valuta gr�";
     Text[ swedish ] = "Valuta gr�tt";
     Text[ polish ] = "Waluta Szara";
-    Text[ portuguese_brazilian ] = "Currency Gray";
+    Text[ portuguese_brazilian ] = "Moeda cor cinza";
     Text[ japanese ] = "通貨 灰色";
     Text[ korean ] = "통화 회색";
     Text[ chinese_simplified ] = "货币 灰色";
@@ -2703,6 +2979,9 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
     Text[ catalan ] = "Gris moneda";
     Text[ finnish ] = "Valuutta harmaana";
     Text[ thai ] = "สกุลเงินสีเทา";
+    Text[ czech ] = "Měna, šedá";
+    Text[ hebrew ] = "Währung Grau";
+    Text[ hindi ] = "मुद्रा ग्रे";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
 {
@@ -2719,7 +2998,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
     Text[ danish ] = "Valuta lysviolet";
     Text[ swedish ] = "Valuta syrenlila";
     Text[ polish ] = "Waluta Fioletowa";
-    Text[ portuguese_brazilian ] = "Currency Lavender";
+    Text[ portuguese_brazilian ] = "Moeda cor lil�s";
     Text[ japanese ] = "通貨 ラベンダー";
     Text[ korean ] = "통화 담자색";
     Text[ chinese_simplified ] = "货币 淡紫色";
@@ -2729,6 +3008,9 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
     Text[ catalan ] = "Lavanda Moneda";
     Text[ finnish ] = "Valuutta laventelinvihre�n�";
     Text[ thai ] = "สกุลเงินสีม่วงอ่อน";
+    Text[ czech ] = "Měna, levandulová";
+    Text[ hebrew ] = "Währung Flieder";
+    Text[ hindi ] = "मुद्रा हल्का पीला";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
 {
@@ -2745,7 +3027,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ danish ] = "Valuta turkis";
     Text[ swedish ] = "Valuta turkost";
     Text[ polish ] = "Waluta Turkusowa";
-    Text[ portuguese_brazilian ] = "Currency Turquoise";
+    Text[ portuguese_brazilian ] = "Moeda cor turquesa";
     Text[ japanese ] = "通貨 青緑";
     Text[ korean ] = "통화 청옥색";
     Text[ chinese_simplified ] = "货币 蓝玉色";
@@ -2755,6 +3037,9 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ catalan ] = "Turquesa moneda";
     Text[ finnish ] = "Valuutta turkoosina";
     Text[ thai ] = "สกุลเงินสีน้ำเงินทะเล";
+    Text[ czech ] = "Měna, tyrkysová";
+    Text[ hebrew ] = "Währung Türkis";
+    Text[ hindi ] = "मुद्रा टर्कोइस";
 };
 String RID_SVXSTR_TBLAFMT_GRAY
 {
@@ -2771,7 +3056,7 @@ String RID_SVXSTR_TBLAFMT_GRAY
     Text[ danish ] = "Gr�";
     Text[ swedish ] = "Gr�tt";
     Text[ polish ] = "Szary";
-    Text[ portuguese_brazilian ] = "Gray";
+    Text[ portuguese_brazilian ] = "Cinza";
     Text[ japanese ] = "灰色";
     Text[ korean ] = "회색";
     Text[ chinese_simplified ] = "灰色";
@@ -2781,6 +3066,9 @@ String RID_SVXSTR_TBLAFMT_GRAY
     Text[ catalan ] = "Gris";
     Text[ finnish ] = "Harmaa";
     Text[ thai ] = "เทา";
+    Text[ czech ] = "Šedá";
+    Text[ hebrew ] = "Grau";
+    Text[ hindi ] = "ग्रे";
 };
 String RID_SVXSTR_TBLAFMT_GREEN
 {
@@ -2797,7 +3085,7 @@ String RID_SVXSTR_TBLAFMT_GREEN
     Text[ danish ] = "Gr�n";
     Text[ swedish ] = "Gr�nt";
     Text[ polish ] = "Zielony";
-    Text[ portuguese_brazilian ] = "Green";
+    Text[ portuguese_brazilian ] = "Verde";
     Text[ japanese ] = "緑";
     Text[ korean ] = "녹색";
     Text[ chinese_simplified ] = "绿色";
@@ -2807,6 +3095,9 @@ String RID_SVXSTR_TBLAFMT_GREEN
     Text[ catalan ] = "Verd";
     Text[ finnish ] = "Vihre�";
     Text[ thai ] = "เขียว";
+    Text[ czech ] = "Zelená";
+    Text[ hebrew ] = "Grün";
+    Text[ hindi ] = "हरा";
 };
 String RID_SVXSTR_TBLAFMT_LAVENDER
 {
@@ -2823,7 +3114,7 @@ String RID_SVXSTR_TBLAFMT_LAVENDER
     Text[ danish ] = "Lysviolet";
     Text[ swedish ] = "Syrenlila";
     Text[ polish ] = "Fioletowy";
-    Text[ portuguese_brazilian ] = "Lavender";
+    Text[ portuguese_brazilian ] = "Lil�s";
     Text[ japanese ] = "ラベンダー";
     Text[ korean ] = "담자색";
     Text[ chinese_simplified ] = "淡紫色";
@@ -2833,6 +3124,9 @@ String RID_SVXSTR_TBLAFMT_LAVENDER
     Text[ catalan ] = "Lavanda";
     Text[ finnish ] = "Laventelinvihre�";
     Text[ thai ] = "ม่วงอ่อน";
+    Text[ czech ] = "Levandulová";
+    Text[ hebrew ] = "Flieder";
+    Text[ hindi ] = "हल्का पीला";
 };
 String RID_SVXSTR_TBLAFMT_RED
 {
@@ -2849,7 +3143,7 @@ String RID_SVXSTR_TBLAFMT_RED
     Text[ danish ] = "R�d";
     Text[ swedish ] = "R�tt";
     Text[ polish ] = "Czerwony";
-    Text[ portuguese_brazilian ] = "Red";
+    Text[ portuguese_brazilian ] = "Vermelho";
     Text[ japanese ] = "赤";
     Text[ korean ] = "적색";
     Text[ chinese_simplified ] = "红色";
@@ -2859,6 +3153,9 @@ String RID_SVXSTR_TBLAFMT_RED
     Text[ catalan ] = "Vermell";
     Text[ finnish ] = "Punainen";
     Text[ thai ] = "แดง";
+    Text[ czech ] = "Červená";
+    Text[ hebrew ] = "Rot";
+    Text[ hindi ] = "लाल";
 };
 String RID_SVXSTR_TBLAFMT_TURQUOISE
 {
@@ -2875,7 +3172,7 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ danish ] = "Turkis";
     Text[ swedish ] = "Turkost";
     Text[ polish ] = "Turkusowy";
-    Text[ portuguese_brazilian ] = "Turquoise";
+    Text[ portuguese_brazilian ] = "Turquesa";
     Text[ japanese ] = "青緑";
     Text[ korean ] = "청록색";
     Text[ chinese_simplified ] = "蓝玉色";
@@ -2885,6 +3182,9 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ catalan ] = "Turquesa";
     Text[ finnish ] = "Turkoosi";
     Text[ thai ] = "น้ำเงินทะเล";
+    Text[ czech ] = "Tyrkysová";
+    Text[ hebrew ] = "Türkis";
+    Text[ hindi ] = "टर्कोइस";
 };
 String RID_SVXSTR_TBLAFMT_YELLOW
 {
@@ -2901,7 +3201,7 @@ String RID_SVXSTR_TBLAFMT_YELLOW
     Text[ danish ] = "Gul";
     Text[ swedish ] = "Gult";
     Text[ polish ] = "��ty";
-    Text[ portuguese_brazilian ] = "Yellow";
+    Text[ portuguese_brazilian ] = "Amarelo";
     Text[ japanese ] = "黄色";
     Text[ korean ] = "황색";
     Text[ chinese_simplified ] = "黄色";
@@ -2911,6 +3211,9 @@ String RID_SVXSTR_TBLAFMT_YELLOW
     Text[ catalan ] = "Groc";
     Text[ finnish ] = "Keltainen";
     Text[ thai ] = "เหลือง";
+    Text[ czech ] = "Žlutá";
+    Text[ hebrew ] = "Gelb";
+    Text[ hindi ] = "पीला";
 };
 
 String RID_SVXSTR_LINEJOINT_MIDDLE
@@ -2927,8 +3230,8 @@ String RID_SVXSTR_LINEJOINT_MIDDLE
     Text[ italian ] = "Giuntura, media";
     Text[ danish ] = "Linjeovergang, middelv�rdi";
     Text[ swedish ] = "Linje�verg�ng, medelv�rde";
-    Text[ polish ] = "Wy�rodkowane po��czenie linii";
-    Text[ portuguese_brazilian ] = "Line joint middle";
+    Text[ polish ] = "U�rednione po��czenie linii";
+    Text[ portuguese_brazilian ] = "Jun��o de linhas; mediana";
     Text[ japanese ] = "線の継ぎ目 均分";
     Text[ korean ] = "선 이음 평균";
     Text[ chinese_simplified ] = "平均值型线条接合";
@@ -2938,6 +3241,9 @@ String RID_SVXSTR_LINEJOINT_MIDDLE
     Text[ catalan ] = "Mitjana de juntes de l�nia";
     Text[ finnish ] = "Keskim��r�inen viivaliitos";
     Text[ thai ] = "จุดบรรจบกันของบรรทัดโดยเฉลี่ย";
+    Text[ czech ] = "Napojení čar - v půli";
+    Text[ hebrew ] = "Linienübergang gemittelt";
+    Text[ hindi ] = "रेखा सन्धि माध्य";
 };
 String RID_SVXSTR_LINEJOINT_BEVEL
 {
@@ -2953,8 +3259,8 @@ String RID_SVXSTR_LINEJOINT_BEVEL
     Text[ italian ] = "Giuntura, unita";
     Text[ danish ] = "Linjeovergang, forbundet";
     Text[ swedish ] = "Linje�verg�ng, f�rbunden";
-    Text[ polish ] = "Powi�zane po��czenie linii";
-    Text[ portuguese_brazilian ] = "Line joint bevel";
+    Text[ polish ] = "Ukosowane po��czenie linii";
+    Text[ portuguese_brazilian ] = "Jun��o de linhas, conjugada";
     Text[ japanese ] = "線の継ぎ目 斜角";
     Text[ korean ] = "선 이음 빗면";
     Text[ chinese_simplified ] = "联结型线条接合";
@@ -2964,6 +3270,9 @@ String RID_SVXSTR_LINEJOINT_BEVEL
     Text[ catalan ] = "Junta de l�nies unida";
     Text[ finnish ] = "Viisto viivaliitos";
     Text[ thai ] = "จุดบรรจบกันของบรรทัดบาก";
+    Text[ czech ] = "Napojení čar - úkosem";
+    Text[ hebrew ] = "Linienübergang verbunden";
+    Text[ hindi ] = "रेखा सन्धि तिरछा";
 };
 String RID_SVXSTR_LINEJOINT_MITER
 {
@@ -2980,7 +3289,7 @@ String RID_SVXSTR_LINEJOINT_MITER
     Text[ danish ] = "Linjeovergang, sk�ret";
     Text[ swedish ] = "Linje�verg�ng, klippt";
     Text[ polish ] = "Przeci�te po��czenie linii";
-    Text[ portuguese_brazilian ] = "Line joint miter";
+    Text[ portuguese_brazilian ] = "Jun��o de linhas, secante";
     Text[ japanese ] = "線の継ぎ目 交差";
     Text[ korean ] = "선 이음 교차";
     Text[ chinese_simplified ] = "剪接型线条接合";
@@ -2990,6 +3299,9 @@ String RID_SVXSTR_LINEJOINT_MITER
     Text[ catalan ] = "Junta de l�nies tallada";
     Text[ finnish ] = "Kanttiviivaliitos";
     Text[ thai ] = "เส้นบรรจบกันเป็นมุม 45 องศา";
+    Text[ czech ] = "Napojení čar - pokosem";
+    Text[ hebrew ] = "Linienübergang geschnitten";
+    Text[ hindi ] = "रेखा सन्धि मैटर";
 };
 String RID_SVXSTR_LINEJOINT_ROUND
 {
@@ -3006,7 +3318,7 @@ String RID_SVXSTR_LINEJOINT_ROUND
     Text[ danish ] = "Linjeovergang, rund";
     Text[ swedish ] = "Linje�verg�ng, rund";
     Text[ polish ] = "Okr�g�e po��czenie linii";
-    Text[ portuguese_brazilian ] = "Line joint round";
+    Text[ portuguese_brazilian ] = "Jun��o de linhas, redonda";
     Text[ japanese ] = "線の継ぎ目 丸く";
     Text[ korean ] = "선 이음 둥글게";
     Text[ chinese_simplified ] = "圆形线条接合";
@@ -3016,6 +3328,9 @@ String RID_SVXSTR_LINEJOINT_ROUND
     Text[ catalan ] = "Junta de l�nies rodonda";
     Text[ finnish ] = "Py�re� viivaliitos";
     Text[ thai ] = "รอบจุดบรรจบกันของบรรทัด";
+    Text[ czech ] = "Napojení čar - zaoblené";
+    Text[ hebrew ] = "Linienübergang rund";
+    Text[ hindi ] = "रेखा सन्धि गोल";
 };
 
 String RID_SVXSTR_GRFILTER_OPENERROR
@@ -3024,7 +3339,7 @@ String RID_SVXSTR_GRFILTER_OPENERROR
     TEXT [ English ] = "Can't open graphic file" ;
     TEXT [ norwegian ] = "Can't open graphic file" ;
     TEXT [ italian ] = "Impossibile aprire il file grafico" ;
-    TEXT [ portuguese_brazilian ] = "N?o consigo abrir arquivo gr?fico" ;
+    TEXT [ portuguese_brazilian ] = "N�o foi poss�vel abrir o arquivo da figura" ;
     TEXT [ portuguese ] = "Imposs�vel abrir ficheiro gr�fico" ;
     TEXT [ finnish ] = "Grafiikkatiedostoa ei voi avata." ;
     TEXT [ danish ] = "Grafikfil kan ikke �bnes" ;
@@ -3035,7 +3350,7 @@ String RID_SVXSTR_GRFILTER_OPENERROR
     TEXT [ english_us ] = "Graphics file cannot be opened" ;
     TEXT[ chinese_simplified ] = "无法打开图形文件";
     TEXT[ russian ] = "���������� ������� ����������� ����";
-    TEXT[ polish ] = "Pliku graficznego nie mo�na otworzy�";
+    TEXT[ polish ] = "Nie mo�na otworzy� pliku graficznego";
     TEXT[ japanese ] = "画像ファイルは開けません。";
     TEXT[ chinese_traditional ] = "無法開啟圖形檔案";
     TEXT[ arabic ] = "�� ���� ��� ��� ��������";
@@ -3045,6 +3360,9 @@ String RID_SVXSTR_GRFILTER_OPENERROR
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No es pot obrir el fitxer gr�fic";
     TEXT[ thai ] = "ไม่สามารถเปิดแฟ้มกราฟิคได้";
+    TEXT[ czech ] = "Není možné otevřít grafický soubor";
+    TEXT[ hebrew ] = "Grafikdatei kann nicht geöffnet werden";
+    TEXT[ hindi ] = "सुचित्र फाइल को खोल नहीं सकते है";
 };
 String RID_SVXSTR_GRFILTER_IOERROR
 {
@@ -3052,7 +3370,7 @@ String RID_SVXSTR_GRFILTER_IOERROR
     TEXT [ English ] = "Can't read graphic file" ;
     TEXT [ norwegian ] = "Can't read graphic file" ;
     TEXT [ italian ] = "Impossibile leggere il file grafico" ;
-    TEXT [ portuguese_brazilian ] = "N?o consigo ler arquivo gr?fico" ;
+    TEXT [ portuguese_brazilian ] = "N�o foi poss�vel ler o arquivo da figura" ;
     TEXT [ portuguese ] = "Imposs�vel ler o ficheiro gr�fico" ;
     TEXT [ finnish ] = "Grafiikkatiedostoa ei voi lukea." ;
     TEXT [ danish ] = "Grafikfil kan ikke l�ses" ;
@@ -3063,7 +3381,7 @@ String RID_SVXSTR_GRFILTER_IOERROR
     TEXT [ english_us ] = "Graphics file cannot be read" ;
     TEXT[ chinese_simplified ] = "无法读出图形文件";
     TEXT[ russian ] = "���������� ��������� ����������� ����";
-    TEXT[ polish ] = "Pliku graficznego nie mo�na otworzy�";
+    TEXT[ polish ] = "Nie mo�na odczyta� pliku graficznego";
     TEXT[ japanese ] = "画像ファイルは読み取れません。";
     TEXT[ chinese_traditional ] = "無法讀出圖形檔案";
     TEXT[ arabic ] = "�� ���� ����� ��� ��������";
@@ -3073,6 +3391,9 @@ String RID_SVXSTR_GRFILTER_IOERROR
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No es pot llegir el fitxer gr�fic";
     TEXT[ thai ] = "ไม่สามารถอ่านแฟ้มกราฟิคได้";
+    TEXT[ czech ] = "Není možné načíst grafický soubor";
+    TEXT[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
+    TEXT[ hindi ] = "सुचित्र फाइल को पढ़ नहीं सकते है";
 };
 String RID_SVXSTR_GRFILTER_FORMATERROR
 {
@@ -3080,7 +3401,7 @@ String RID_SVXSTR_GRFILTER_FORMATERROR
     TEXT [ English ] = "Unknown graphic format" ;
     TEXT [ norwegian ] = "Unknown graphic format" ;
     TEXT [ italian ] = "Formato grafico sconosciuto" ;
-    TEXT [ portuguese_brazilian ] = "Formato gr?fico desconhecido" ;
+    TEXT [ portuguese_brazilian ] = "Formato da figura desconhecido" ;
     TEXT [ portuguese ] = "Formato gr�fico desconhecido" ;
     TEXT [ finnish ] = "Tuntematon grafiikkamuoto" ;
     TEXT [ danish ] = "Ukendt grafikformat" ;
@@ -3097,10 +3418,13 @@ String RID_SVXSTR_GRFILTER_FORMATERROR
     TEXT[ arabic ] = "����� ������ ��� �����";
     TEXT[ greek ] = "������� ����� ��������";
     TEXT[ korean ] = "알 수 없는 그림 서식";
-    TEXT[ turkish ] = "Bilinmeyen grafik format�";
+    TEXT[ turkish ] = "Bilinmeyen bir grafik bi�imi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Format d'imatge desconegut";
     TEXT[ thai ] = "ไม่รู้จักรูปแบบกราฟิค";
+    TEXT[ czech ] = "Neznámý grafický formát";
+    TEXT[ hebrew ] = "Unbekanntes Grafikformat";
+    TEXT[ hindi ] = "अज्ञात सुचित्र रचना";
 };
 String RID_SVXSTR_GRFILTER_VERSIONERROR
 {
@@ -3108,7 +3432,7 @@ String RID_SVXSTR_GRFILTER_VERSIONERROR
     TEXT [ English ] = "Version of graphic file not supported" ;
     TEXT [ norwegian ] = "Version of graphic file not supported" ;
     TEXT [ italian ] = "Versione del file grafico non supportata" ;
-    TEXT [ portuguese_brazilian ] = "Vers?o de arquivo gr?fico n?o suportada" ;
+    TEXT [ portuguese_brazilian ] = "A vers�o do arquivo da figura n�o tem suporte." ;
     TEXT [ portuguese ] = "Vers�o do ficheiro gr�fico n�o tem suporte" ;
     TEXT [ finnish ] = "Grafiikkatiedoston versiota ei tueta." ;
     TEXT [ danish ] = "Grafikfilens version supporteres ikke" ;
@@ -3119,16 +3443,19 @@ String RID_SVXSTR_GRFILTER_VERSIONERROR
     TEXT [ english_us ] = "This version of the graphics file is not supported" ;
     TEXT[ chinese_simplified ] = "不支持这个图形文件版本";
     TEXT[ russian ] = "�� �������������� ��� ������ ������������ �����";
-    TEXT[ polish ] = "Wersja pliku graficznego nie jest obs�ugiwana";
+    TEXT[ polish ] = "Ta wersja pliku graficznego nie jest obs�ugiwana";
     TEXT[ japanese ] = "画像ファイルのバージョンはサポートされません。";
     TEXT[ chinese_traditional ] = "不支持這個圖形檔案版本";
     TEXT[ arabic ] = "�� ��� ��� ����� ��� ��������";
     TEXT[ greek ] = "��� ������������� � ������ ����� ��� �������� �������.";
     TEXT[ korean ] = "그림 파일의 이 버전은 지원되지 않습니다.";
-    TEXT[ turkish ] = "Grafik dosyas�n�n s�r�m� desteklenmiyor";
+    TEXT[ turkish ] = "Grafik dosyas�n�n bu s�r�m� desteklenmiyor";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No se suporta la versi� del fitxer gr�fic";
     TEXT[ thai ] = "ไม่สนับสนุนเวอร์ชั่นของแฟ้มกราฟิค";
+    TEXT[ czech ] = "Tato verze obrázku není podporována";
+    TEXT[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstützt";
+    TEXT[ hindi ] = "सुचित्र फाइल का इस आवृत्ति समर्थित नहीं है";
 };
 String RID_SVXSTR_GRFILTER_FILTERERROR
 {
@@ -3136,7 +3463,7 @@ String RID_SVXSTR_GRFILTER_FILTERERROR
     TEXT [ English ] = "Graphic filter not found" ;
     TEXT [ norwegian ] = "Graphic filter not found" ;
     TEXT [ italian ] = "Filtro grafico non trovato" ;
-    TEXT [ portuguese_brazilian ] = "Filtro gr?fico n?o encontrado" ;
+    TEXT [ portuguese_brazilian ] = "O filtro da figura n�o foi encontrado" ;
     TEXT [ portuguese ] = "Filtro gr�fico n�o encontrado" ;
     TEXT [ finnish ] = "Grafiikkasuodatinta ei l�ytynyt." ;
     TEXT [ danish ] = "Grafikfilter ikke fundet" ;
@@ -3147,16 +3474,19 @@ String RID_SVXSTR_GRFILTER_FILTERERROR
     TEXT [ english_us ] = "Graphics filter not found" ;
     TEXT[ chinese_simplified ] = "没有找到图形过滤器";
     TEXT[ russian ] = "�� ������ ������ ����������� ��������";
-    TEXT[ polish ] = "Filtru graficznego nie znaleziono";
+    TEXT[ polish ] = "Nie znaleziono filtru grafiki";
     TEXT[ japanese ] = "画像フィルタは見つかりません。";
     TEXT[ chinese_traditional ] = "沒有找到圖形過濾器";
     TEXT[ arabic ] = "���� ������ ��� ���� ��������";
     TEXT[ greek ] = "�� ������ �������� ��� �������";
     TEXT[ korean ] = "그래픽 필터를 찾지 못했습니다.";
-    TEXT[ turkish ] = "Grafik filtresi bulunamad�";
+    TEXT[ turkish ] = "Grafik s�zgeci bulunamad�";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No s'ha trobat el filtre d'imatges";
     TEXT[ thai ] = "ไม่พบตัวกรองกราฟิค";
+    TEXT[ czech ] = "Grafický filtr nebyl nalezen";
+    TEXT[ hebrew ] = "Grafikfilter nicht gefunden";
+    TEXT[ hindi ] = "सुचित्र फिल्टर नहीं मिला";
 };
 String RID_SVXSTR_GRFILTER_TOOBIG
 {
@@ -3164,7 +3494,7 @@ String RID_SVXSTR_GRFILTER_TOOBIG
     TEXT [ English ] = "Not enough memory to insert graphic" ;
     TEXT [ norwegian ] = "Not enough memory to insert graphic" ;
     TEXT [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
-    TEXT [ portuguese_brazilian ] = "Mem?ia insuficiente para inserir o gr?fico" ;
+    TEXT [ portuguese_brazilian ] = "N�o h� mem�ria suficiente para inserir a figura " ;
     TEXT [ portuguese ] = "Mem�ria insuficiente para inserir a imagem." ;
     TEXT [ finnish ] = "Muisti ei riit� kuvan lis��miseen." ;
     TEXT [ danish ] = "Ikke tilstr�kkelig hukommelse til inds�tning af grafik" ;
@@ -3175,16 +3505,19 @@ String RID_SVXSTR_GRFILTER_TOOBIG
     TEXT [ english_us ] = "Not enough memory to insert graphic" ;
     TEXT[ chinese_simplified ] = "内存不足，无法插入图形";
     TEXT[ russian ] = "������������ ������ ��� ������� ������������ �������";
-    TEXT[ polish ] = "Brakuje pami�ci potrzebnej do wstawienia grafiki";
+    TEXT[ polish ] = "Za ma�o pami�ci, aby wstawi� grafik�";
     TEXT[ japanese ] = "図の挿入に必要なディスク空き容量がありません。";
     TEXT[ chinese_traditional ] = "記憶體不足﹐無法插入圖形";
     TEXT[ arabic ] = "�� ���� ����� ����� ������ �����";
     TEXT[ greek ] = "��� ������� ������ ����� ��� ��� �������� ��� ��������";
     TEXT[ korean ] = "메모리가 부족하여 그래픽 삽입을 삽입할 수 없습니다.";
-    TEXT[ turkish ] = "Grafi�in eklenmesi i�in yeterli bellek mevcut de�il";
+    TEXT[ turkish ] = "Grafi�i eklemek i�in yetersiz haf�za";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No hi ha prou mem�ria per inserir la imatge";
     TEXT[ thai ] = "หน่วยความจำไม่พอในการแทรกกราฟิค";
+    TEXT[ czech ] = "Nedostatek paměti pro vložení obrázku";
+    TEXT[ hebrew ] = "Nicht genug Speicher zum Einfügen der Grafik";
+    TEXT[ hindi ] = "सुचित्र जोड़ने केलिए मेमरी पर्याप्त नहीं है";
 };
 
 
@@ -3396,7 +3729,7 @@ String RID_SVXSTR_GRDT0
     Text[ danish ] = "Farvegraduering";
     Text[ swedish ] = "F�rggradient";
     Text[ polish ] = "Gradient";
-    Text[ portuguese_brazilian ] = "Gradient";
+    Text[ portuguese_brazilian ] = "Gradiente";
     Text[ japanese ] = "グラデーション";
     Text[ korean ] = "그라디언트";
     Text[ chinese_simplified ] = "彩色图案";
@@ -3406,6 +3739,9 @@ String RID_SVXSTR_GRDT0
     Text[ catalan ] = "Gradient";
     Text[ finnish ] = "Liukuv�rj�ys";
     Text[ thai ] = "ไล่ระดับสี";
+    Text[ czech ] = "Přechod";
+    Text[ hebrew ] = "Farbverlauf";
+    Text[ hindi ] = "ग्रेडिऐन्ट्";
 };
 String RID_SVXSTR_GRDT1
 {
@@ -3421,8 +3757,8 @@ String RID_SVXSTR_GRDT1
     Text[ italian ] = "Lineare blu/bianco";
     Text[ danish ] = "Line�r bl�/hvid";
     Text[ swedish ] = "Linj�r bl�tt/vitt";
-    Text[ polish ] = "Linearny niebieski/bia�y";
-    Text[ portuguese_brazilian ] = "Linear blue/white";
+    Text[ polish ] = "Liniowy b��kit-biel";
+    Text[ portuguese_brazilian ] = "Linear azul / branco";
     Text[ japanese ] = "線状 青/白";
     Text[ korean ] = "선형 청색/흰색";
     Text[ chinese_simplified ] = "线性 蓝/白";
@@ -3432,6 +3768,9 @@ String RID_SVXSTR_GRDT1
     Text[ catalan ] = "Blau/blanc lineal";
     Text[ finnish ] = "Lineaarinen sininen/valkoinen";
     Text[ thai ] = "เส้นสีน้ำเงิน/ขาว";
+    Text[ czech ] = "Lineární modrá/bílá";
+    Text[ hebrew ] = "Linear Blau/weiß";
+    Text[ hindi ] = "संकुचित नीला/सफेद";
 };
 String RID_SVXSTR_GRDT2
 {
@@ -3447,8 +3786,8 @@ String RID_SVXSTR_GRDT2
     Text[ italian ] = "Lineare magenta/verde";
     Text[ danish ] = "Line�r violet/gr�n";
     Text[ swedish ] = "Linj�r violett/gr�nt";
-    Text[ polish ] = "Linearny fioletowy/zielony";
-    Text[ portuguese_brazilian ] = "Linear magenta/green";
+    Text[ polish ] = "Liniowy purpura-ziele�";
+    Text[ portuguese_brazilian ] = "Linear magenta / verde";
     Text[ japanese ] = "線状 紫/緑";
     Text[ korean ] = "선형 보라색/녹색";
     Text[ chinese_simplified ] = "线性 紫/绿";
@@ -3458,6 +3797,9 @@ String RID_SVXSTR_GRDT2
     Text[ catalan ] = "Magenta/verd lineal";
     Text[ finnish ] = "Lineaarinen magenta/vihre�";
     Text[ thai ] = "เส้นสีม่วง/เขียว";
+    Text[ czech ] = "Lineární purpurová/zelená";
+    Text[ hebrew ] = "Linear violett/grün";
+    Text[ hindi ] = "संकुचित मेजन्टा/हरा";
 };
 String RID_SVXSTR_GRDT3
 {
@@ -3473,8 +3815,8 @@ String RID_SVXSTR_GRDT3
     Text[ italian ] = "Lineare giallo/marrone";
     Text[ danish ] = "Line�r gul/brun";
     Text[ swedish ] = "Linj�r gult/brunt";
-    Text[ polish ] = "Linearny ��ty/br�zowy";
-    Text[ portuguese_brazilian ] = "Linear yellow/brown";
+    Text[ polish ] = "Liniowy ���-br�z";
+    Text[ portuguese_brazilian ] = "Linear amarelo / marrom";
     Text[ japanese ] = "線状 黄色/茶色";
     Text[ korean ] = "선형 황색/갈색";
     Text[ chinese_simplified ] = "线性 黄/棕色";
@@ -3484,6 +3826,9 @@ String RID_SVXSTR_GRDT3
     Text[ catalan ] = "Marr�/groc lineal";
     Text[ finnish ] = "Lineaarinen keltainen/ruskea";
     Text[ thai ] = "เส้นสีเหลือง/น้ำตาล";
+    Text[ czech ] = "Lineární žlutá/hnědá";
+    Text[ hebrew ] = "Linear gelb/braun";
+    Text[ hindi ] = "संकुचित पीला/भूरा";
 };
 String RID_SVXSTR_GRDT4
 {
@@ -3499,8 +3844,8 @@ String RID_SVXSTR_GRDT4
     Text[ italian ] = "Radiale verde/nero";
     Text[ danish ] = "Radial gr�n/sort";
     Text[ swedish ] = "Radiellt gr�nt/svart";
-    Text[ polish ] = "Radialny zielony/czarny";
-    Text[ portuguese_brazilian ] = "Radial green/black";
+    Text[ polish ] = "Radialny ziele�-czer�";
+    Text[ portuguese_brazilian ] = "Radial verde / preto";
     Text[ japanese ] = "放射状 緑/黒";
     Text[ korean ] = "방사형 녹색/검은색";
     Text[ chinese_simplified ] = "径向 绿/黑";
@@ -3510,6 +3855,9 @@ String RID_SVXSTR_GRDT4
     Text[ catalan ] = "Radial verd/negre";
     Text[ finnish ] = "S�teitt�inen vihre�/musta";
     Text[ thai ] = "รัศมีสีเขียว/ดำ";
+    Text[ czech ] = "Radiální zelená/černá";
+    Text[ hebrew ] = "Radial grün/schwarz";
+    Text[ hindi ] = "किरण-सम्बन्धी हरा/काला";
 };
 String RID_SVXSTR_GRDT5
 {
@@ -3525,8 +3873,8 @@ String RID_SVXSTR_GRDT5
     Text[ italian ] = "Radiale rosso/giallo";
     Text[ danish ] = "Radial r�d/gul";
     Text[ swedish ] = "Radiellt r�tt/gult";
-    Text[ polish ] = "Radialny czerwony/��ty";
-    Text[ portuguese_brazilian ] = "Radial red/yellow";
+    Text[ polish ] = "Radialny czerwie�-���";
+    Text[ portuguese_brazilian ] = "Radial vermelho / amarelo";
     Text[ japanese ] = "放射状 赤/黄色";
     Text[ korean ] = "방사형 적색/황색";
     Text[ chinese_simplified ] = "径向 红/黄";
@@ -3536,6 +3884,9 @@ String RID_SVXSTR_GRDT5
     Text[ catalan ] = "Radial vermell/groc";
     Text[ finnish ] = "S�teitt�inen punainen/keltainen";
     Text[ thai ] = "รัศมีสีแดง/เหลือง";
+    Text[ czech ] = "Radiální červená/žlutá";
+    Text[ hebrew ] = "Radial rot/gelb";
+    Text[ hindi ] = "किरण-सम्बन्धी लाल/पीला";
 };
 String RID_SVXSTR_GRDT6
 {
@@ -3551,8 +3902,8 @@ String RID_SVXSTR_GRDT6
     Text[ italian ] = "Rettangolare rosso/bianco";
     Text[ danish ] = "Rektangel r�d/hvid";
     Text[ swedish ] = "Rektangul�r r�tt/vitt";
-    Text[ polish ] = "Prostok�t czerwony/bia�y";
-    Text[ portuguese_brazilian ] = "Rectangular red/white";
+    Text[ polish ] = "Rombowy czerwie�-biel";
+    Text[ portuguese_brazilian ] = "Retangular vermelho / branco";
     Text[ japanese ] = "長方形 赤/白";
     Text[ korean ] = "직사각형 적색/흰색";
     Text[ chinese_simplified ] = "矩形 红/白";
@@ -3562,6 +3913,9 @@ String RID_SVXSTR_GRDT6
     Text[ catalan ] = "Rectangular vermell/blanc";
     Text[ finnish ] = "Suorakulmio punainen/valkoinen";
     Text[ thai ] = "สีเหลี่ยมสีแดง/ขาว";
+    Text[ czech ] = "Pravoúhlé červená/bílá";
+    Text[ hebrew ] = "Rechteck rot/weiß";
+    Text[ hindi ] = "आयताकार लाल/सफेद";
 };
 String RID_SVXSTR_GRDT7
 {
@@ -3577,8 +3931,8 @@ String RID_SVXSTR_GRDT7
     Text[ italian ] = "Quadrato giallo/bianco";
     Text[ danish ] = "Kvadratisk gul/hvid";
     Text[ swedish ] = "Kvadratisk gult/vitt";
-    Text[ polish ] = "Kwadratowe ��te/bia�e";
-    Text[ portuguese_brazilian ] = "Square yellow/white";
+    Text[ polish ] = "Kwadratowy ���-biel";
+    Text[ portuguese_brazilian ] = "Quadrado amarelo / branco";
     Text[ japanese ] = "正方形 黄色/白";
     Text[ korean ] = "정사각형 황색/흰색";
     Text[ chinese_simplified ] = "正方形 黄/白";
@@ -3588,6 +3942,9 @@ String RID_SVXSTR_GRDT7
     Text[ catalan ] = "Quadrat groc/blanc";
     Text[ finnish ] = "Neli� keltainen/valkoinen";
     Text[ thai ] = "สีเหลี่ยมจัตุรัสสีเหลือง/ขาว";
+    Text[ czech ] = "Čtverce žlutá/bílá";
+    Text[ hebrew ] = "Quadratisch gelb/weiß";
+    Text[ hindi ] = "समचतुर्भुज पीला/सफेद";
 };
 String RID_SVXSTR_GRDT8
 {
@@ -3603,8 +3960,8 @@ String RID_SVXSTR_GRDT8
     Text[ italian ] = "Ellissoidale blu-grigio/celeste";
     Text[ danish ] = "Ellipsoide bl�gr�/lysebl�";
     Text[ swedish ] = "Ellipsoid bl�gr�/ljusbl�";
-    Text[ polish ] = "Elips. niebiesko-szary/jasnoniebieski";
-    Text[ portuguese_brazilian ] = "Ellipsoid blue gray/light blue";
+    Text[ polish ] = "Eliptyczny szaro��-b��kit";
+    Text[ portuguese_brazilian ] = "Elips�ide cinza-azulado / azul-claro";
     Text[ japanese ] = "楕円体 青灰色/明るい青";
     Text[ korean ] = "타원형 회청색/밝은 청색";
     Text[ chinese_simplified ] = "椭圆体 蓝灰/浅蓝";
@@ -3614,6 +3971,9 @@ String RID_SVXSTR_GRDT8
     Text[ catalan ] = "Elipsoide blau gris/blau clar";
     Text[ finnish ] = "Ellipsoidi siniharmaa/kirkas sininen";
     Text[ thai ] = "วงรีสีน้ำเงินเทา/น้ำเงินอ่อน";
+    Text[ czech ] = "Oválné modrošedá/světle modrá";
+    Text[ hebrew ] = "Ellipsoid blaugrau/hellblau";
+    Text[ hindi ] = "दीर्घवृत्तज नीला ग्रे/हल्का नीला";
 };
 String RID_SVXSTR_GRDT9
 {
@@ -3629,8 +3989,8 @@ String RID_SVXSTR_GRDT9
     Text[ italian ] = "Assiale rosso chiaro/bianco";
     Text[ danish ] = "Aksial lys r�d/hvid";
     Text[ swedish ] = "Axialt ljusr�tt/vitt";
-    Text[ polish ] = "Osiowy jasnoczerw./bia�y";
-    Text[ portuguese_brazilian ] = "Axial light red/white";
+    Text[ polish ] = "Osiowy r�-biel";
+    Text[ portuguese_brazilian ] = "Axial vermelho-claro / branco";
     Text[ japanese ] = "軸状 明るい赤/白";
     Text[ korean ] = "축 밝은 적색/흰색";
     Text[ chinese_simplified ] = "轴向 浅红/白";
@@ -3640,6 +4000,9 @@ String RID_SVXSTR_GRDT9
     Text[ catalan ] = "Llum axial vermella/blanca";
     Text[ finnish ] = "Akselivalaistus punainen/valkoinen";
     Text[ thai ] = "แกนสีแดงอ่อน/ขาว";
+    Text[ czech ] = "Axiální světle červená/bílá";
+    Text[ hebrew ] = "Axial hellrot/weiß";
+    Text[ hindi ] = "धुरी-सम्बन्धी हल्का लाल/सफेद";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3717,8 +4080,8 @@ String RID_SVXSTR_HATCH0
     Text[ italian ] = "Nero 45 gradi, ampio";
     Text[ danish ] = "Sort 45 grader vidt";
     Text[ swedish ] = "Svart 45 grader vid";
-    Text[ polish ] = "Czarny 45 stopni, rozci�gni�ty";
-    Text[ portuguese_brazilian ] = "Black 45 Degrees Wide";
+    Text[ polish ] = "Czarne 45� szerokie";
+    Text[ portuguese_brazilian ] = "Preto 45 graus espa�ado";
     Text[ japanese ] = "黒 45度 幅広";
     Text[ korean ] = "검은색 45도 넓이";
     Text[ chinese_simplified ] = "黑色 45 度(宽距)";
@@ -3728,6 +4091,9 @@ String RID_SVXSTR_HATCH0
     Text[ catalan ] = "Negre d'ample 45 graus";
     Text[ finnish ] = "Musta 45 astetta leve�";
     Text[ thai ] = "กว้าง  45 องศาสีดำ";
+    Text[ czech ] = "Černá 45 stupňů široká";
+    Text[ hebrew ] = "Schwarz 45 Grad weit";
+    Text[ hindi ] = "काला 45 डिग्रियाँ चौड़ाई";
 };
 String RID_SVXSTR_HATCH1
 {
@@ -3743,8 +4109,8 @@ String RID_SVXSTR_HATCH1
     Text[ italian ] = "Nero 45 gradi";
     Text[ danish ] = "Sort 45 grader";
     Text[ swedish ] = "Svart 45 grader";
-    Text[ polish ] = "Czarny 45 stopni";
-    Text[ portuguese_brazilian ] = "Black 45 Degrees";
+    Text[ polish ] = "Czarne 45�";
+    Text[ portuguese_brazilian ] = "Preto 45 graus";
     Text[ japanese ] = "黒 45度";
     Text[ korean ] = "검은색 45도";
     Text[ chinese_simplified ] = "黑色 45 度";
@@ -3754,6 +4120,9 @@ String RID_SVXSTR_HATCH1
     Text[ catalan ] = "Negre 45 graus";
     Text[ finnish ] = "Musta 45 astetta";
     Text[ thai ] = " 45 องศาสีดำ";
+    Text[ czech ] = "Černá 45 stupňů";
+    Text[ hebrew ] = "Schwarz 45 Grad";
+    Text[ hindi ] = "काला 45 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH2
 {
@@ -3769,8 +4138,8 @@ String RID_SVXSTR_HATCH2
     Text[ italian ] = "Nero -45 gradi";
     Text[ danish ] = "Sort -45 grader";
     Text[ swedish ] = "Svart -45 grader";
-    Text[ polish ] = "Czarny -45 stopni";
-    Text[ portuguese_brazilian ] = "Black -45 Degrees";
+    Text[ polish ] = "Czarne -45�";
+    Text[ portuguese_brazilian ] = "Preto -45 graus";
     Text[ japanese ] = "黒 -45度";
     Text[ korean ] = "검은색 45 도";
     Text[ chinese_simplified ] = "黑色 -45 度";
@@ -3780,6 +4149,9 @@ String RID_SVXSTR_HATCH2
     Text[ catalan ] = "Negre -45 graus";
     Text[ finnish ] = "Musta -45 astetta";
     Text[ thai ] = "สีดำ -45 องศา";
+    Text[ czech ] = "Černá -45 stupňů";
+    Text[ hebrew ] = "Schwarz -45 Grad";
+    Text[ hindi ] = "काला -45 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH3
 {
@@ -3795,8 +4167,8 @@ String RID_SVXSTR_HATCH3
     Text[ italian ] = "Nero 90 gradi";
     Text[ danish ] = "Sort 90 grader";
     Text[ swedish ] = "Svart 90 grader";
-    Text[ polish ] = "Czarny 90 stopni";
-    Text[ portuguese_brazilian ] = "Black 90 Degrees";
+    Text[ polish ] = "Czarne 90�";
+    Text[ portuguese_brazilian ] = "Preto 90 graus";
     Text[ japanese ] = "黒 90度";
     Text[ korean ] = "검은색 90 도";
     Text[ chinese_simplified ] = "黑色 90 度";
@@ -3806,6 +4178,9 @@ String RID_SVXSTR_HATCH3
     Text[ catalan ] = "Negre 90 graus";
     Text[ finnish ] = "Musta 90 astetta";
     Text[ thai ] = "90 องศาสีดำ";
+    Text[ czech ] = "Černá 90 stupňů";
+    Text[ hebrew ] = "Schwarz 90 Grad";
+    Text[ hindi ] = "काला 90 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH4
 {
@@ -3821,8 +4196,8 @@ String RID_SVXSTR_HATCH4
     Text[ italian ] = "Rosso a rete 45 gradi";
     Text[ danish ] = "R�dt gitter 45 grader";
     Text[ swedish ] = "R�tt n�t 45 grader";
-    Text[ polish ] = "Czerw. siatka 45 stopni";
-    Text[ portuguese_brazilian ] = "Red Crossed 45 Degrees";
+    Text[ polish ] = "Czerwona siatka 45�";
+    Text[ portuguese_brazilian ] = "Vermelho cruzado 45 graus";
     Text[ japanese ] = "赤 縞 45度";
     Text[ korean ] = "적색 네트 45도";
     Text[ chinese_simplified ] = "红色网格线 45 度";
@@ -3832,6 +4207,9 @@ String RID_SVXSTR_HATCH4
     Text[ catalan ] = "Vermell encreuat 45 graus";
     Text[ finnish ] = "Punainen ristiss� 45 astetta";
     Text[ thai ] = "45 องศาขวางสีแดง";
+    Text[ czech ] = "Červené šrafování 45 stupňů";
+    Text[ hebrew ] = "Rot Netz 45 Grad";
+    Text[ hindi ] = "लाल कटा हुआ 45 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH5
 {
@@ -3847,8 +4225,8 @@ String RID_SVXSTR_HATCH5
     Text[ italian ] = "Rosso a rete 0 gradi";
     Text[ danish ] = "R�dt gitter 0 grader";
     Text[ swedish ] = "R�tt n�t 0 grader";
-    Text[ polish ] = "Czerw. siatka 0 stopni";
-    Text[ portuguese_brazilian ] = "Red Crossed 0 Degrees";
+    Text[ polish ] = "Czerwona siatka 0�";
+    Text[ portuguese_brazilian ] = "Vermelho cruzado 0 graus";
     Text[ japanese ] = "赤 縞 0度";
     Text[ korean ] = "적색 네트 0도";
     Text[ chinese_simplified ] = "红色网格线 0 度";
@@ -3858,6 +4236,9 @@ String RID_SVXSTR_HATCH5
     Text[ catalan ] = "Vermell encreuat 0 graus";
     Text[ finnish ] = "Punainen ristiss� 0 astetta";
     Text[ thai ] = " 0 องศาขวางสีแดง";
+    Text[ czech ] = "Červené šrafování 0 stupňů";
+    Text[ hebrew ] = "Rot Netz 0 Grad";
+    Text[ hindi ] = "लाल कटा हुआ 0 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH6
 {
@@ -3873,8 +4254,8 @@ String RID_SVXSTR_HATCH6
     Text[ italian ] = "Blu a rete 45 gradi";
     Text[ danish ] = "Bl�t gitter 45 grader";
     Text[ swedish ] = "Bl�tt n�t 45 grader";
-    Text[ polish ] = "Nieb. siatka 45 stopni";
-    Text[ portuguese_brazilian ] = "Blue Crossed 45 Degrees";
+    Text[ polish ] = "Niebieska siatka 45�";
+    Text[ portuguese_brazilian ] = "Azul cruzado 45 graus";
     Text[ japanese ] = "青 縞 45度";
     Text[ korean ] = "청색 네트 45도";
     Text[ chinese_simplified ] = "蓝色网格线 45 度";
@@ -3884,6 +4265,9 @@ String RID_SVXSTR_HATCH6
     Text[ catalan ] = "Blau encreuat 45 graus";
     Text[ finnish ] = "Sininen ristiss� 45 astetta";
     Text[ thai ] = " 45 องศาขวางสีน้ำเงิน";
+    Text[ czech ] = "Modré šrafování 45 stupňů";
+    Text[ hebrew ] = "Blau Netz 45 Grad";
+    Text[ hindi ] = "नीला कटा हुआ 45 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH7
 {
@@ -3899,8 +4283,8 @@ String RID_SVXSTR_HATCH7
     Text[ italian ] = "Blu a rete 0 gradi";
     Text[ danish ] = "Bl�t gitter 0 grader";
     Text[ swedish ] = "Bl�tt n�t 0 grader";
-    Text[ polish ] = "Nieb. siatka 0 stopni";
-    Text[ portuguese_brazilian ] = "Blue Crossed 0 Degrees";
+    Text[ polish ] = "Niebieska siatka 0�";
+    Text[ portuguese_brazilian ] = "Azul cruzado 0 graus";
     Text[ japanese ] = "青 縞 0度";
     Text[ korean ] = "청색 네트 0도";
     Text[ chinese_simplified ] = "蓝色网格线 0 度";
@@ -3910,6 +4294,9 @@ String RID_SVXSTR_HATCH7
     Text[ catalan ] = "Blau encreuat 0 graus";
     Text[ finnish ] = "Sininen ristiss� 0 astetta";
     Text[ thai ] = " 0 องศาขวางสีน้ำเงิน";
+    Text[ czech ] = "Modré šrafování 0 stupňů";
+    Text[ hebrew ] = "Blau Netz 0 Grad";
+    Text[ hindi ] = "नीला कटा हुआ 0 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH8
 {
@@ -3925,8 +4312,8 @@ String RID_SVXSTR_HATCH8
     Text[ italian ] = "Blu tripla rete 90 gradi";
     Text[ danish ] = "Bl�t 3'er gitter 90 grader";
     Text[ swedish ] = "Bl�tt trippeln�t 90 grader";
-    Text[ polish ] = "Nieb. potr�jna siatka 90 stopni";
-    Text[ portuguese_brazilian ] = "Blue Triple 90 Degrees";
+    Text[ polish ] = "Potr�jne niebieskie 90�";
+    Text[ portuguese_brazilian ] = "Azul triplo 90 graus";
     Text[ japanese ] = "青 3本縞 90度";
     Text[ korean ] = "청색 3중네트 90도";
     Text[ chinese_simplified ] = "蓝色三重网格线 90 度";
@@ -3936,6 +4323,9 @@ String RID_SVXSTR_HATCH8
     Text[ catalan ] = "Blau triple 90 graus";
     Text[ finnish ] = "Sininen kolminkertainen 90 astetta";
     Text[ thai ] = " 90 องศาสามอันสีน้ำเงิน";
+    Text[ czech ] = "Modrá třikrát 90 stupňů";
+    Text[ hebrew ] = "Blau 3er Netz 90 Grad";
+    Text[ hindi ] = "नीला तिगुना 90 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH9
 {
@@ -3951,8 +4341,8 @@ String RID_SVXSTR_HATCH9
     Text[ italian ] = "Nero 0 gradi";
     Text[ danish ] = "Sort 0 grader";
     Text[ swedish ] = "Svart 0 grader";
-    Text[ polish ] = "Czarny 0 stopni";
-    Text[ portuguese_brazilian ] = "Black 0 Degrees";
+    Text[ polish ] = "Czarne 0�";
+    Text[ portuguese_brazilian ] = "Preto 0 graus";
     Text[ japanese ] = "黒 0度";
     Text[ korean ] = "검은색 0도";
     Text[ chinese_simplified ] = "黑色 0 度";
@@ -3962,6 +4352,9 @@ String RID_SVXSTR_HATCH9
     Text[ catalan ] = "Negre 0 graus";
     Text[ finnish ] = "Musta 0 astetta";
     Text[ thai ] = "0 องศาสีดำ";
+    Text[ czech ] = "Černá 0 stupňů";
+    Text[ hebrew ] = "Schwarz 0 Grad";
+    Text[ hindi ] = "काला 0 डिग्रियाँ";
 };
 String RID_SVXSTR_HATCH10
 {
@@ -3969,7 +4362,7 @@ String RID_SVXSTR_HATCH10
     Text [ ENGLISH ] = "Hatch" ;
     Text [ norwegian ] = "Hatch" ;
     Text [ italian ] = "Tratteggio" ;
-    Text [ portuguese_brazilian ] = "Sombreado" ;
+    Text [ portuguese_brazilian ] = "Hachurado" ;
     Text [ portuguese ] = "Tracejado" ;
     Text [ finnish ] = "Viivoitus" ;
     Text [ danish ] = "Skravering" ;
@@ -3990,6 +4383,9 @@ String RID_SVXSTR_HATCH10
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ombreig";
     Text[ thai ] = "แรเงา";
+    Text[ czech ] = "Šrafování";
+    Text[ hebrew ] = "Schraffur";
+    Text[ hindi ] = "हाचिंग";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4124,7 +4520,7 @@ String RID_SVXSTR_BMP0
     Text[ danish ] = "Tomt";
     Text[ swedish ] = "Tomt";
     Text[ polish ] = "Pusty";
-    Text[ portuguese_brazilian ] = "Blank";
+    Text[ portuguese_brazilian ] = "Em branco";
     Text[ japanese ] = "空白";
     Text[ korean ] = "공백";
     Text[ chinese_simplified ] = "空缺";
@@ -4134,6 +4530,9 @@ String RID_SVXSTR_BMP0
     Text[ catalan ] = "En blanc";
     Text[ finnish ] = "Tyhj�";
     Text[ thai ] = "ช่องว่าง";
+    Text[ czech ] = "Prázdné";
+    Text[ hebrew ] = "Leer";
+    Text[ hindi ] = "खाली";
 };
 String RID_SVXSTR_BMP1
 {
@@ -4150,7 +4549,7 @@ String RID_SVXSTR_BMP1
     Text[ danish ] = "Himmel";
     Text[ swedish ] = "Himmel";
     Text[ polish ] = "Niebo";
-    Text[ portuguese_brazilian ] = "Orange";
+    Text[ portuguese_brazilian ] = "C�u";
     Text[ japanese ] = "空";
     Text[ korean ] = "하늘";
     Text[ chinese_simplified ] = "天空";
@@ -4160,6 +4559,9 @@ String RID_SVXSTR_BMP1
     Text[ catalan ] = "Cel";
     Text[ finnish ] = "Taivas";
     Text[ thai ] = "ท้องฟ้า";
+    Text[ czech ] = "Obloha";
+    Text[ hebrew ] = "Himmel";
+    Text[ hindi ] = "आकाश";
 };
 String RID_SVXSTR_BMP2
 {
@@ -4176,7 +4578,7 @@ String RID_SVXSTR_BMP2
     Text[ danish ] = "Vand";
     Text[ swedish ] = "Vatten";
     Text[ polish ] = "Woda";
-    Text[ portuguese_brazilian ] = "Wallpaper";
+    Text[ portuguese_brazilian ] = "�gua";
     Text[ japanese ] = "水面";
     Text[ korean ] = "수면";
     Text[ chinese_simplified ] = "水";
@@ -4186,6 +4588,9 @@ String RID_SVXSTR_BMP2
     Text[ catalan ] = "Aigua";
     Text[ finnish ] = "Vesi";
     Text[ thai ] = "น้ำ";
+    Text[ czech ] = "Voda";
+    Text[ hebrew ] = "Wasser";
+    Text[ hindi ] = "पानी";
 };
 String RID_SVXSTR_BMP3
 {
@@ -4201,8 +4606,8 @@ String RID_SVXSTR_BMP3
     Text[ italian ] = "Grana grossa";
     Text[ danish ] = "Grynet";
     Text[ swedish ] = "Grovkornig";
-    Text[ polish ] = "Gruboziarnisty";
-    Text[ portuguese_brazilian ] = "Texture";
+    Text[ polish ] = "Chropowato��";
+    Text[ portuguese_brazilian ] = "Granulado grosso";
     Text[ japanese ] = "ざらざらした面";
     Text[ korean ] = "거친 알갱이";
     Text[ chinese_simplified ] = "粗颗粒";
@@ -4212,6 +4617,9 @@ String RID_SVXSTR_BMP3
     Text[ catalan ] = "En gra gruixut";
     Text[ finnish ] = "Karkea jyvitys";
     Text[ thai ] = "เนื้อหยาบ";
+    Text[ czech ] = "Hrubozrnný";
+    Text[ hebrew ] = "Grobkörnig";
+    Text[ hindi ] = "कोऐर्स ग्रेइन्ड";
 };
 String RID_SVXSTR_BMP4
 {
@@ -4228,7 +4636,7 @@ String RID_SVXSTR_BMP4
     Text[ danish ] = "Kviks�lv";
     Text[ swedish ] = "Kvicksilver";
     Text[ polish ] = "Rt��";
-    Text[ portuguese_brazilian ] = "Chocolate";
+    Text[ portuguese_brazilian ] = "Merc�rio";
     Text[ japanese ] = "スペースメタル";
     Text[ korean ] = "수은";
     Text[ chinese_simplified ] = "水银";
@@ -4238,6 +4646,9 @@ String RID_SVXSTR_BMP4
     Text[ catalan ] = "Mercuri";
     Text[ finnish ] = "Elohopea";
     Text[ thai ] = "ปรอท";
+    Text[ czech ] = "Měděný";
+    Text[ hebrew ] = "Quecksilber";
+    Text[ hindi ] = "मर्कुरी";
 };
 String RID_SVXSTR_BMP5
 {
@@ -4254,7 +4665,7 @@ String RID_SVXSTR_BMP5
     Text[ danish ] = "Verdensrum";
     Text[ swedish ] = "V�rldsrymd";
     Text[ polish ] = "Kosmos";
-    Text[ portuguese_brazilian ] = "Metal";
+    Text[ portuguese_brazilian ] = "Espa�o";
     Text[ japanese ] = "銀河星雲";
     Text[ korean ] = "우주";
     Text[ chinese_simplified ] = "宇宙";
@@ -4264,6 +4675,9 @@ String RID_SVXSTR_BMP5
     Text[ catalan ] = "Espai";
     Text[ finnish ] = "Avaruus";
     Text[ thai ] = "อวกาศ";
+    Text[ czech ] = "Mezera";
+    Text[ hebrew ] = "Weltraum";
+    Text[ hindi ] = "अंतरिक्ष";
 };
 String RID_SVXSTR_BMP6
 {
@@ -4280,7 +4694,7 @@ String RID_SVXSTR_BMP6
     Text[ danish ] = "Metal";
     Text[ swedish ] = "Metall";
     Text[ polish ] = "Metal";
-    Text[ portuguese_brazilian ] = "Wet";
+    Text[ portuguese_brazilian ] = "Metal";
     Text[ japanese ] = "つぶつぶした面";
     Text[ korean ] = "금속";
     Text[ chinese_simplified ] = "金属";
@@ -4290,6 +4704,9 @@ String RID_SVXSTR_BMP6
     Text[ catalan ] = "Metall";
     Text[ finnish ] = "Metalli";
     Text[ thai ] = "โลหะ";
+    Text[ czech ] = "Kov";
+    Text[ hebrew ] = "Metall";
+    Text[ hindi ] = "लोहा";
 };
 String RID_SVXSTR_BMP7
 {
@@ -4306,7 +4723,7 @@ String RID_SVXSTR_BMP7
     Text[ danish ] = "Dr�ber";
     Text[ swedish ] = "Droppar";
     Text[ polish ] = "Krople";
-    Text[ portuguese_brazilian ] = "Marble";
+    Text[ portuguese_brazilian ] = "Got�culas";
     Text[ japanese ] = "しずく";
     Text[ korean ] = "물방울";
     Text[ chinese_simplified ] = "水滴";
@@ -4316,6 +4733,9 @@ String RID_SVXSTR_BMP7
     Text[ catalan ] = "Gotetes";
     Text[ finnish ] = "Pisarat";
     Text[ thai ] = "หยดนิดเดียว";
+    Text[ czech ] = "Kapky";
+    Text[ hebrew ] = "Tropfen";
+    Text[ hindi ] = "ड्रोप्लेट्स्";
 };
 String RID_SVXSTR_BMP8
 {
@@ -4332,7 +4752,7 @@ String RID_SVXSTR_BMP8
     Text[ danish ] = "Marmor";
     Text[ swedish ] = "Marmor";
     Text[ polish ] = "Marmur";
-    Text[ portuguese_brazilian ] = "Linen";
+    Text[ portuguese_brazilian ] = "M�rmore";
     Text[ japanese ] = "白大理石";
     Text[ korean ] = "대리석";
     Text[ chinese_simplified ] = "大理石";
@@ -4342,6 +4762,9 @@ String RID_SVXSTR_BMP8
     Text[ catalan ] = "Marbre";
     Text[ finnish ] = "Marmori";
     Text[ thai ] = "หินอ่อน";
+    Text[ czech ] = "Mramor";
+    Text[ hebrew ] = "Marmor";
+    Text[ hindi ] = "संगमरमर";
 };
 String RID_SVXSTR_BMP9
 {
@@ -4358,7 +4781,7 @@ String RID_SVXSTR_BMP9
     Text[ danish ] = "L�rred";
     Text[ swedish ] = "Linne";
     Text[ polish ] = "Len";
-    Text[ portuguese_brazilian ] = "Stone";
+    Text[ portuguese_brazilian ] = "Linho";
     Text[ japanese ] = "リネン地";
     Text[ korean ] = "아마포";
     Text[ chinese_simplified ] = "麻布";
@@ -4368,6 +4791,9 @@ String RID_SVXSTR_BMP9
     Text[ catalan ] = "Lli";
     Text[ finnish ] = "Pellava";
     Text[ thai ] = "ลินิน";
+    Text[ czech ] = "Vlákna";
+    Text[ hebrew ] = "Leinen";
+    Text[ hindi ] = "लिनन";
 };
 String RID_SVXSTR_BMP10
 {
@@ -4384,7 +4810,7 @@ String RID_SVXSTR_BMP10
     Text[ danish ] = "Sten";
     Text[ swedish ] = "Sten";
     Text[ polish ] = "Kamie�";
-    Text[ portuguese_brazilian ] = "Quicksilver";
+    Text[ portuguese_brazilian ] = "Pedra";
     Text[ japanese ] = "花崗岩";
     Text[ korean ] = "돌";
     Text[ chinese_simplified ] = "石碑";
@@ -4394,6 +4820,9 @@ String RID_SVXSTR_BMP10
     Text[ catalan ] = "Pedra";
     Text[ finnish ] = "Kivi";
     Text[ thai ] = "หิน";
+    Text[ czech ] = "Kámen";
+    Text[ hebrew ] = "Stein";
+    Text[ hindi ] = "पत्थर";
 };
 String RID_SVXSTR_BMP11
 {
@@ -4410,7 +4839,7 @@ String RID_SVXSTR_BMP11
     Text[ danish ] = "Grus";
     Text[ swedish ] = "Makadam";
     Text[ polish ] = "�wir";
-    Text[ portuguese_brazilian ] = "Pebbles";
+    Text[ portuguese_brazilian ] = "Cascalho";
     Text[ japanese ] = "砂利道";
     Text[ korean ] = "자갈";
     Text[ chinese_simplified ] = "碎石";
@@ -4420,6 +4849,9 @@ String RID_SVXSTR_BMP11
     Text[ catalan ] = "Grava";
     Text[ finnish ] = "Sora";
     Text[ thai ] = "กรวด";
+    Text[ czech ] = "Štěrk";
+    Text[ hebrew ] = "Schotter";
+    Text[ hindi ] = "कंकड";
 };
 String RID_SVXSTR_BMP12
 {
@@ -4436,7 +4868,7 @@ String RID_SVXSTR_BMP12
     Text[ danish ] = "Mur";
     Text[ swedish ] = "Mur";
     Text[ polish ] = "Mur";
-    Text[ portuguese_brazilian ] = "Wall";
+    Text[ portuguese_brazilian ] = "Parede";
     Text[ japanese ] = "石垣";
     Text[ korean ] = "벽";
     Text[ chinese_simplified ] = "墙";
@@ -4446,6 +4878,9 @@ String RID_SVXSTR_BMP12
     Text[ catalan ] = "Mur";
     Text[ finnish ] = "Sein�";
     Text[ thai ] = "ผนัง";
+    Text[ czech ] = "Zeď";
+    Text[ hebrew ] = "Mauer";
+    Text[ hindi ] = "वॉल";
 };
 String RID_SVXSTR_BMP13
 {
@@ -4462,7 +4897,7 @@ String RID_SVXSTR_BMP13
     Text[ danish ] = "Teglsten";
     Text[ swedish ] = "Tegelstenar";
     Text[ polish ] = "Ceg�y";
-    Text[ portuguese_brazilian ] = "Brownstone";
+    Text[ portuguese_brazilian ] = "Tijolos";
     Text[ japanese ] = "れんが塀";
     Text[ korean ] = "벽돌";
     Text[ chinese_simplified ] = "红砖墙";
@@ -4472,6 +4907,9 @@ String RID_SVXSTR_BMP13
     Text[ catalan ] = "Totxo";
     Text[ finnish ] = "Tiilenruskea";
     Text[ thai ] = "หินสีน้ำตาล";
+    Text[ czech ] = "Drahokamy";
+    Text[ hebrew ] = "Ziegelsteine";
+    Text[ hindi ] = "ब्रउनस्टोन्";
 };
 String RID_SVXSTR_BMP14
 {
@@ -4488,7 +4926,7 @@ String RID_SVXSTR_BMP14
     Text[ danish ] = "Fletv�rk";
     Text[ swedish ] = "Fl�tverk";
     Text[ polish ] = "Plecionka";
-    Text[ portuguese_brazilian ] = "Pattern";
+    Text[ portuguese_brazilian ] = "Malha";
     Text[ japanese ] = "麻織物";
     Text[ korean ] = "엮어짐";
     Text[ chinese_simplified ] = "编织物";
@@ -4498,6 +4936,9 @@ String RID_SVXSTR_BMP14
     Text[ catalan ] = "Malla";
     Text[ finnish ] = "Verkko";
     Text[ thai ] = "ตาข่าย";
+    Text[ czech ] = "Pletivo";
+    Text[ hebrew ] = "Geflecht";
+    Text[ hindi ] = "नेट्टिंग";
 };
 String RID_SVXSTR_BMP15
 {
@@ -4514,7 +4955,7 @@ String RID_SVXSTR_BMP15
     Text[ danish ] = "L�v";
     Text[ swedish ] = "L�v";
     Text[ polish ] = "Li�cie";
-    Text[ portuguese_brazilian ] = "Leaves";
+    Text[ portuguese_brazilian ] = "Folhagem";
     Text[ japanese ] = "蔦";
     Text[ korean ] = "나뭇잎";
     Text[ chinese_simplified ] = "树叶";
@@ -4524,6 +4965,9 @@ String RID_SVXSTR_BMP15
     Text[ catalan ] = "Fulles";
     Text[ finnish ] = "Lehdet";
     Text[ thai ] = "ใบไม้";
+    Text[ czech ] = "Listí";
+    Text[ hebrew ] = "Laub";
+    Text[ hindi ] = "पत्ता";
 };
 String RID_SVXSTR_BMP16
 {
@@ -4540,7 +4984,7 @@ String RID_SVXSTR_BMP16
     Text[ danish ] = "Kunstig pl�ne";
     Text[ swedish ] = "Konstgjord gr�smatta";
     Text[ polish ] = "Sztuczny trawnik";
-    Text[ portuguese_brazilian ] = "Artificial Lawn";
+    Text[ portuguese_brazilian ] = "Grama Artificial";
     Text[ japanese ] = "人工芝生";
     Text[ korean ] = "인공잔디";
     Text[ chinese_simplified ] = "人造草地";
@@ -4550,6 +4994,9 @@ String RID_SVXSTR_BMP16
     Text[ catalan ] = "Gespa artificial";
     Text[ finnish ] = "Keinonurmi";
     Text[ thai ] = "หญ้าเทียม";
+    Text[ czech ] = "Pažit neboli trávník";
+    Text[ hebrew ] = "Kunstrasen";
+    Text[ hindi ] = "कृत्रिम ढेला";
 };
 String RID_SVXSTR_BMP17
 {
@@ -4565,8 +5012,8 @@ String RID_SVXSTR_BMP17
     Text[ italian ] = "Margherite";
     Text[ danish ] = "Tusindfryd";
     Text[ swedish ] = "Tusensk�nor";
-    Text[ polish ] = "Kacze�ce";
-    Text[ portuguese_brazilian ] = "Daisy";
+    Text[ polish ] = "Stokrotka";
+    Text[ portuguese_brazilian ] = "Margarida";
     Text[ japanese ] = "デージー";
     Text[ korean ] = "데이지꽃";
     Text[ chinese_simplified ] = "雏菊";
@@ -4576,6 +5023,9 @@ String RID_SVXSTR_BMP17
     Text[ catalan ] = "Margarida";
     Text[ finnish ] = "P�iv�nkakkara";
     Text[ thai ] = "เดซี่";
+    Text[ czech ] = "Sedmikráska";
+    Text[ hebrew ] = "Gänseblümchen";
+    Text[ hindi ] = "गुलबहार";
 };
 String RID_SVXSTR_BMP18
 {
@@ -4591,8 +5041,8 @@ String RID_SVXSTR_BMP18
     Text[ italian ] = "Arancione";
     Text[ danish ] = "Orange";
     Text[ swedish ] = "Orange";
-    Text[ polish ] = "Pomara�czowy";
-    Text[ portuguese_brazilian ] = "Orange";
+    Text[ polish ] = "Pomara�cza";
+    Text[ portuguese_brazilian ] = "Laranja";
     Text[ japanese ] = "オレンジ";
     Text[ korean ] = "주황색";
     Text[ chinese_simplified ] = "橙色";
@@ -4602,6 +5052,9 @@ String RID_SVXSTR_BMP18
     Text[ catalan ] = "Taronja";
     Text[ finnish ] = "Oranssi";
     Text[ thai ] = "ส้ม";
+    Text[ czech ] = "Oranžová";
+    Text[ hebrew ] = "Orange";
+    Text[ hindi ] = "नारंग";
 };
 String RID_SVXSTR_BMP19
 {
@@ -4617,8 +5070,8 @@ String RID_SVXSTR_BMP19
     Text[ italian ] = "Fiamma";
     Text[ danish ] = "Flammende";
     Text[ swedish ] = "Eldig";
-    Text[ polish ] = "Ognisty";
-    Text[ portuguese_brazilian ] = "Fiery";
+    Text[ polish ] = "P�omienie";
+    Text[ portuguese_brazilian ] = "Chamas";
     Text[ japanese ] = "灼熱";
     Text[ korean ] = "불꽃";
     Text[ chinese_simplified ] = "火焰";
@@ -4628,6 +5081,9 @@ String RID_SVXSTR_BMP19
     Text[ catalan ] = "Fog�s";
     Text[ finnish ] = "Tulinen";
     Text[ thai ] = "เพลิง";
+    Text[ czech ] = "Plameny";
+    Text[ hebrew ] = "Feurig";
+    Text[ hindi ] = "तीक्ष्ण";
 };
 String RID_SVXSTR_BMP20
 {
@@ -4644,7 +5100,7 @@ String RID_SVXSTR_BMP20
     Text[ danish ] = "Roser";
     Text[ swedish ] = "Rosor";
     Text[ polish ] = "R�e";
-    Text[ portuguese_brazilian ] = "Roses";
+    Text[ portuguese_brazilian ] = "Rosas";
     Text[ japanese ] = "真っ赤なバラ";
     Text[ korean ] = "장미";
     Text[ chinese_simplified ] = "玫瑰";
@@ -4654,6 +5110,9 @@ String RID_SVXSTR_BMP20
     Text[ catalan ] = "Roses";
     Text[ finnish ] = "Ruusut";
     Text[ thai ] = "กุหลาบ";
+    Text[ czech ] = "Růže";
+    Text[ hebrew ] = "Rosen";
+    Text[ hindi ] = "गुलाब";
 };
 
 String RID_SVXSTR_BMP21
@@ -4676,11 +5135,14 @@ String RID_SVXSTR_BMP21
     Text[ korean ] = "비트맵";
     Text[ chinese_simplified ] = "位图";
     Text[ chinese_traditional ] = "點陣圖";
-    Text[ turkish ] = "Bit e�lem";
+    Text[ turkish ] = "Bitmap";
     Text[ arabic ] = "���� �����";
     Text[ catalan ] = "Mapa de bits";
     Text[ finnish ] = "Bittikartta";
     Text[ thai ] = "บิทแม็ป";
+    Text[ czech ] = "Bitová mapa";
+    Text[ hebrew ] = "Bitmap";
+    Text[ hindi ] = "बिटमॉप्";
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -4763,7 +5225,7 @@ String RID_SVXSTR_DASH0
     Text[ danish ] = "Ultrafin stiplet";
     Text[ swedish ] = "Mycket fint streckad";
     Text[ polish ] = "Bardzo cienkie kreski";
-    Text[ portuguese_brazilian ] = "Ultrafine Dashed";
+    Text[ portuguese_brazilian ] = "Tracejado ultra fino";
     Text[ japanese ] = "極細の破線";
     Text[ korean ] = "미세한 파선";
     Text[ chinese_simplified ] = "超细划线";
@@ -4773,6 +5235,9 @@ String RID_SVXSTR_DASH0
     Text[ catalan ] = "Tra�os molt fins";
     Text[ finnish ] = "Hyvin ohut katkoviiva";
     Text[ thai ] = "เส้นประที่บางมาก";
+    Text[ czech ] = "Velmi jemný nátěr";
+    Text[ hebrew ] = "Ultrafein gestrichelt";
+    Text[ hindi ] = "अत्यन्त सूक्ष्म बिन्दुओं से डॉश् की हुयी";
 };
 String RID_SVXSTR_DASH1
 {
@@ -4789,7 +5254,7 @@ String RID_SVXSTR_DASH1
     Text[ danish ] = "Fin stiplet";
     Text[ swedish ] = "Fint streckad";
     Text[ polish ] = "Cienkie kreski";
-    Text[ portuguese_brazilian ] = "Fine Dashed";
+    Text[ portuguese_brazilian ] = "Tracejado fino";
     Text[ japanese ] = "細かい破線";
     Text[ korean ] = "섬세한 파선";
     Text[ chinese_simplified ] = "细划线";
@@ -4799,6 +5264,9 @@ String RID_SVXSTR_DASH1
     Text[ catalan ] = "Tra�os fins";
     Text[ finnish ] = "Ohut katkoviiva";
     Text[ thai ] = "เส้นประบาง";
+    Text[ czech ] = "Jemný nátěr";
+    Text[ hebrew ] = "Fein gestrichelt";
+    Text[ hindi ] = "सूक्ष्म बिन्दुओं से डॉश् की हुयी";
 };
 String RID_SVXSTR_DASH2
 {
@@ -4815,7 +5283,7 @@ String RID_SVXSTR_DASH2
     Text[ danish ] = "Ultrafin 2 punkter 3 streger";
     Text[ swedish ] = "Mycket fint 2 prickar 3 streck";
     Text[ polish ] = "Bardzo cienkie 2 kropki 3 kreski";
-    Text[ portuguese_brazilian ] = "Ultrafine 2 Dots 3 Dashes";
+    Text[ portuguese_brazilian ] = "3 tra�os 2 pontos ultra fino";
     Text[ japanese ] = "極細の二点三破線";
     Text[ korean ] = "섬세한 2점 3파선";
     Text[ chinese_simplified ] = "超细2点3划线";
@@ -4825,6 +5293,9 @@ String RID_SVXSTR_DASH2
     Text[ catalan ] = "Ultraf� 2 punts 2 tra�os";
     Text[ finnish ] = "Hyvin ohut, 2 pistett�, 3 katkoviivaa";
     Text[ thai ] = "เส้นประ 2 จุด 3 ขีดที่บางมาก";
+    Text[ czech ] = "Velmi jemné dvě tečky a tři nátěry";
+    Text[ hebrew ] = "Ultrafein 2 Punkte 3 Striche";
+    Text[ hindi ] = "अत्यन्त सूक्ष्म 2 बिन्दु 3 डॉश";
 };
 String RID_SVXSTR_DASH3
 {
@@ -4841,7 +5312,7 @@ String RID_SVXSTR_DASH3
     Text[ danish ] = "Fin punkteret";
     Text[ swedish ] = "Fint prickig";
     Text[ polish ] = "Delikatne kropki";
-    Text[ portuguese_brazilian ] = "Fine Dotted";
+    Text[ portuguese_brazilian ] = "Pontilhado fino";
     Text[ japanese ] = "細かい点線";
     Text[ korean ] = "여린 점선";
     Text[ chinese_simplified ] = "细点线";
@@ -4851,6 +5322,9 @@ String RID_SVXSTR_DASH3
     Text[ catalan ] = "Amb puntejat fi";
     Text[ finnish ] = "Pienet pisteet";
     Text[ thai ] = "จุดบาง";
+    Text[ czech ] = "Jemně tečkovaný";
+    Text[ hebrew ] = "Fein gepunktet";
+    Text[ hindi ] = "सूक्ष्म बिन्दी";
 };
 String RID_SVXSTR_DASH4
 {
@@ -4866,8 +5340,8 @@ String RID_SVXSTR_DASH4
     Text[ italian ] = "Linea con punti fini";
     Text[ danish ] = "Streg med fine prikker";
     Text[ swedish ] = "Streck med fina prickar";
-    Text[ polish ] = "Kreski z delikatnymi kropkami";
-    Text[ portuguese_brazilian ] = "Line with Fine Dots";
+    Text[ polish ] = "Linia z delikatnymi kropkami";
+    Text[ portuguese_brazilian ] = "Tra�o com pontilhado fino";
     Text[ japanese ] = "細かい点の集まった線";
     Text[ korean ] = "섬세한 점선";
     Text[ chinese_simplified ] = "细点划线";
@@ -4877,6 +5351,9 @@ String RID_SVXSTR_DASH4
     Text[ catalan ] = "Tra� amb punts fins";
     Text[ finnish ] = "Viiva pienill� pisteill�";
     Text[ thai ] = "เส้นเป็นจุดบาง";
+    Text[ czech ] = "Čára tvořená jemnými tečkami";
+    Text[ hebrew ] = "Strich mit feinen Punkten";
+    Text[ hindi ] = "सूक्ष बिन्दुओं सहित रेखा";
 };
 String RID_SVXSTR_DASH5
 {
@@ -4893,7 +5370,7 @@ String RID_SVXSTR_DASH5
     Text[ danish ] = "Fin stiplet (variabel)";
     Text[ swedish ] = "Fint streckad (variabel)";
     Text[ polish ] = "Cienkie kreski (zmienne)";
-    Text[ portuguese_brazilian ] = "Fine Dashed (var)";
+    Text[ portuguese_brazilian ] = "Tracejado fino (vari�vel)";
     Text[ japanese ] = "細かい破線(可変)";
     Text[ korean ] = "섬세한 파선(가변)";
     Text[ chinese_simplified ] = "细划线 (可变)";
@@ -4903,6 +5380,9 @@ String RID_SVXSTR_DASH5
     Text[ catalan ] = "Tra�os fins (variable)";
     Text[ finnish ] = "Pienet katkoviivat (muuttuja)";
     Text[ thai ] = "เส้นประบาง (ตัวแปร)";
+    Text[ czech ] = "Jemný nátěr (proměnný)";
+    Text[ hebrew ] = "Fein gestrichelt (variabel)";
+    Text[ hindi ] = "सूक्ष्म रूप से डॉश की हुयी (वेरिऐबल्)";
 };
 String RID_SVXSTR_DASH6
 {
@@ -4919,7 +5399,7 @@ String RID_SVXSTR_DASH6
     Text[ danish ] = "3 streger 3 punkter (variabel)";
     Text[ swedish ] = "3 streck 3 prickar (variabel)";
     Text[ polish ] = "3 kreski 3 kropki (zmienne)";
-    Text[ portuguese_brazilian ] = "3 Dashes 3 Dots (var)";
+    Text[ portuguese_brazilian ] = "3 tra�os 3 pontos (vari�vel)";
     Text[ japanese ] = "三破線三点鎖線(可変)";
     Text[ korean ] = "삼파선 삼점 쇄선(가변)";
     Text[ chinese_simplified ] = "3 划 3 点 (可变)";
@@ -4929,6 +5409,9 @@ String RID_SVXSTR_DASH6
     Text[ catalan ] = "3 tra�os 3 punts (variable)";
     Text[ finnish ] = "3 katkoviivaa, 3 pistett� (muuttuja)";
     Text[ thai ] = "3 ขีด 3 จุด (ตัวแปร)";
+    Text[ czech ] = "3 čárky 3 tečky (proměnné)";
+    Text[ hebrew ] = "3 Striche 3 Punkte (variabel)";
+    Text[ hindi ] = "3 डॉश 3 बिन्दु (वेरिऐबल्)";
 };
 String RID_SVXSTR_DASH7
 {
@@ -4945,7 +5428,7 @@ String RID_SVXSTR_DASH7
     Text[ danish ] = "Ultrafin punkteret (variabel)";
     Text[ swedish ] = "Mycket fint prickig (variabel)";
     Text[ polish ] = "Bardzo delikatne kropki (zmienne)";
-    Text[ portuguese_brazilian ] = "Ultrafine Dotted (var)";
+    Text[ portuguese_brazilian ] = "Pontilhado ultra fino (vari�vel)";
     Text[ japanese ] = "極細の点線(可変)";
     Text[ korean ] = "미세한 점선(가변)";
     Text[ chinese_simplified ] = "超细点线 (可变)";
@@ -4955,6 +5438,9 @@ String RID_SVXSTR_DASH7
     Text[ catalan ] = "Puntejat molt fi (variable)";
     Text[ finnish ] = "Hyvin ohut pisteviiva (muuttuja)";
     Text[ thai ] = "จุดบางมาก(ตัวแปร)";
+    Text[ czech ] = "Velmi jemně tečkovat (proměnné)";
+    Text[ hebrew ] = "Ultrafein gepunktet (variabel)";
+    Text[ hindi ] = "बिन्दुओं से चिह्नित अत्यन्य सूक्ष्म रेखा (वेरिऐबल्)";
 };
 String RID_SVXSTR_DASH8
 {
@@ -4971,7 +5457,7 @@ String RID_SVXSTR_DASH8
     Text[ danish ] = "Stregtype 9";
     Text[ swedish ] = "Linjestil 9";
     Text[ polish ] = "Styl linii 9";
-    Text[ portuguese_brazilian ] = "Line Style 9";
+    Text[ portuguese_brazilian ] = "Estilo de linha 9";
     Text[ japanese ] = "線スタイル 9";
     Text[ korean ] = "선 스타일 9";
     Text[ chinese_simplified ] = "线条式样 9";
@@ -4981,6 +5467,9 @@ String RID_SVXSTR_DASH8
     Text[ catalan ] = "Estil de l�nia 9";
     Text[ finnish ] = "Viivatyyli 9";
     Text[ thai ] = "เส้นลักษณะที่ 9";
+    Text[ czech ] = "Styl čáry 9";
+    Text[ hebrew ] = "Linienstil 9";
+    Text[ hindi ] = "रेखा शैली 9";
 };
 String RID_SVXSTR_DASH9
 {
@@ -4997,7 +5486,7 @@ String RID_SVXSTR_DASH9
     Text[ danish ] = "2 punkter 1 streg";
     Text[ swedish ] = "2 prickar 1 streck";
     Text[ polish ] = "2 kropki 1 kreska";
-    Text[ portuguese_brazilian ] = "2 Dots 1 Dash";
+    Text[ portuguese_brazilian ] = "2 pontos 1 tra�o";
     Text[ japanese ] = "二点鎖線";
     Text[ korean ] = "이점 쇄선";
     Text[ chinese_simplified ] = "2 点 1 划";
@@ -5007,6 +5496,9 @@ String RID_SVXSTR_DASH9
     Text[ catalan ] = "2 punts 1 tra�";
     Text[ finnish ] = "2 pistett�, 1 katkoviiva";
     Text[ thai ] = "2 จุด 1 ขีด";
+    Text[ czech ] = "2 tečky 1 čárka";
+    Text[ hebrew ] = "2 Punkte 1 Strich";
+    Text[ hindi ] = "2 बिन्दु 1 डॉश";
 };
 String RID_SVXSTR_DASH10
 {
@@ -5023,7 +5515,7 @@ String RID_SVXSTR_DASH10
     Text[ danish ] = "Stiplet (variabel)";
     Text[ swedish ] = "Streckad (variabel)";
     Text[ polish ] = "Kreski (zmienne)";
-    Text[ portuguese_brazilian ] = "Dashed (var)";
+    Text[ portuguese_brazilian ] = "Tracejado (vari�vel)";
     Text[ japanese ] = "破線(可変)";
     Text[ korean ] = "파선(가변)";
     Text[ chinese_simplified ] = "划线 (可变)";
@@ -5033,6 +5525,9 @@ String RID_SVXSTR_DASH10
     Text[ catalan ] = "Tra�os (variable)";
     Text[ finnish ] = "Katkoviiva (muuttuja)";
     Text[ thai ] = "เส้นประ (ตัวแปร)";
+    Text[ czech ] = "Čárky (proměnné)";
+    Text[ hebrew ] = "Gestrichelt (variabel)";
+    Text[ hindi ] = "डॉश किया हुआ (वेरिऐबल्)";
 };
 String RID_SVXSTR_DASH11
 {
@@ -5049,16 +5544,19 @@ String RID_SVXSTR_DASH11
     Text[ danish ] = "Stiplet";
     Text[ swedish ] = "Streckat";
     Text[ polish ] = "Kreski";
-    Text[ portuguese_brazilian ] = "Dashed";
+    Text[ portuguese_brazilian ] = "Tracejado";
     Text[ japanese ] = "破線状";
     Text[ korean ] = "파선";
     Text[ chinese_simplified ] = "破折号";
     Text[ chinese_traditional ] = "破折號";
-    Text[ turkish ] = "Dashed";
+    Text[ turkish ] = "Kesik �izgi";
     Text[ arabic ] = "����";
     Text[ catalan ] = "Tra�at";
     Text[ finnish ] = "Katkoviiva";
     Text[ thai ] = "เส้นประ";
+    Text[ czech ] = "Čárky";
+    Text[ hebrew ] = "Gestrichelt";
+    Text[ hindi ] = "डॉश की हुयी";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5142,7 +5640,7 @@ String RID_SVXSTR_LEND0
     Text[ danish ] = "Pil konkav";
     Text[ swedish ] = "Pil konkav";
     Text[ polish ] = "Strza�ka wkl�s�a";
-    Text[ portuguese_brazilian ] = "Arrow concave";
+    Text[ portuguese_brazilian ] = "Seta c�ncava";
     Text[ japanese ] = "中くぼみの矢印";
     Text[ korean ] = "오목 화살표";
     Text[ chinese_simplified ] = "凹形箭头";
@@ -5152,6 +5650,9 @@ String RID_SVXSTR_LEND0
     Text[ catalan ] = "Fletxa c�ncava";
     Text[ finnish ] = "Kovera nuoli";
     Text[ thai ] = "ลูกศรที่เว้าเข้าข้างใน";
+    Text[ czech ] = "Konkávní šipka";
+    Text[ hebrew ] = "Pfeil konkav";
+    Text[ hindi ] = "तीर नतोदर";
 };
 String RID_SVXSTR_LEND1
 {
@@ -5168,7 +5669,7 @@ String RID_SVXSTR_LEND1
     Text[ danish ] = "Kvadrat 45";
     Text[ swedish ] = "Kvadrat 45";
     Text[ polish ] = "Kwadrat 45";
-    Text[ portuguese_brazilian ] = "Square 45";
+    Text[ portuguese_brazilian ] = "Losango";
     Text[ japanese ] = "真四角 45度傾斜";
     Text[ korean ] = "정사각형 45";
     Text[ chinese_simplified ] = "正方形 45 度";
@@ -5178,6 +5679,9 @@ String RID_SVXSTR_LEND1
     Text[ catalan ] = "Quadrat 45";
     Text[ finnish ] = "Neli� 45";
     Text[ thai ] = "สี่เหลี่ยมจัตุรัส 45";
+    Text[ czech ] = "Čtverec 45";
+    Text[ hebrew ] = "Quadrat 45";
+    Text[ hindi ] = "समचतुर्भुज 45";
 };
 String RID_SVXSTR_LEND2
 {
@@ -5194,7 +5698,7 @@ String RID_SVXSTR_LEND2
     Text[ danish ] = "Smal pil";
     Text[ swedish ] = "Smal pil";
     Text[ polish ] = "Cienka strza�ka";
-    Text[ portuguese_brazilian ] = "Small Arrow";
+    Text[ portuguese_brazilian ] = "Seta pequena";
     Text[ japanese ] = "長細い矢印";
     Text[ korean ] = "가는 화살표";
     Text[ chinese_simplified ] = "细箭头";
@@ -5204,6 +5708,9 @@ String RID_SVXSTR_LEND2
     Text[ catalan ] = "Fletxa petita";
     Text[ finnish ] = "Pieni nuoli";
     Text[ thai ] = "ลูกศรเล็ก";
+    Text[ czech ] = "Malá šipka";
+    Text[ hebrew ] = "Schmaler Pfeil";
+    Text[ hindi ] = "छोटा तीर";
 };
 String RID_SVXSTR_LEND3
 {
@@ -5219,8 +5726,8 @@ String RID_SVXSTR_LEND3
     Text[ italian ] = "Estremit� quotatura";
     Text[ danish ] = "Dimensioneringsstreger";
     Text[ swedish ] = "Dimensionerings�ndar";
-    Text[ polish ] = "Ko�ce wymiarowania";
-    Text[ portuguese_brazilian ] = "Dimension Lines";
+    Text[ polish ] = "Linie wymiarowe";
+    Text[ portuguese_brazilian ] = "Linhas de cota";
     Text[ japanese ] = "寸法線の終点";
     Text[ korean ] = "치수선";
     Text[ chinese_simplified ] = "定尺寸线条";
@@ -5230,6 +5737,9 @@ String RID_SVXSTR_LEND3
     Text[ catalan ] = "Fines de dimensions";
     Text[ finnish ] = "Mittajanat";
     Text[ thai ] = "เส้นมีมิติ";
+    Text[ czech ] = "Kótovací čáry";
+    Text[ hebrew ] = "Bemaßungsenden";
+    Text[ hindi ] = "परिमाण सम्बन्धी रेखाएँ";
 };
 String RID_SVXSTR_LEND4
 {
@@ -5246,7 +5756,7 @@ String RID_SVXSTR_LEND4
     Text[ danish ] = "Dobbeltpil";
     Text[ swedish ] = "Dubbel pil";
     Text[ polish ] = "Podw�jna strza�ka";
-    Text[ portuguese_brazilian ] = "Double Arrow";
+    Text[ portuguese_brazilian ] = "Seta dupla";
     Text[ japanese ] = "二重矢印";
     Text[ korean ] = "이중 화살표";
     Text[ chinese_simplified ] = "双箭头";
@@ -5256,6 +5766,9 @@ String RID_SVXSTR_LEND4
     Text[ catalan ] = "Fletxa doble";
     Text[ finnish ] = "Tuplanuoli";
     Text[ thai ] = "ลูกศรคู่";
+    Text[ czech ] = "Dvojitá šipka";
+    Text[ hebrew ] = "Doppelpfeil";
+    Text[ hindi ] = "द्विगुणित तीर";
 };
 String RID_SVXSTR_LEND5
 {
@@ -5272,7 +5785,7 @@ String RID_SVXSTR_LEND5
     Text[ danish ] = "Afrundet kort pil";
     Text[ swedish ] = "Avrundad kort pil";
     Text[ polish ] = "Zaokr. kr�tka strza�ka";
-    Text[ portuguese_brazilian ] = "Rounded short Arrow";
+    Text[ portuguese_brazilian ] = "Seta pequena arredondada";
     Text[ japanese ] = "先の丸い短かめの矢印";
     Text[ korean ] = "둥글린 짧은 화살표";
     Text[ chinese_simplified ] = "圆形短箭头";
@@ -5282,6 +5795,9 @@ String RID_SVXSTR_LEND5
     Text[ catalan ] = "Fletxa curta arrodonida";
     Text[ finnish ] = "Py�ristetty lyhyt nuoli";
     Text[ thai ] = "ลูกศรสั้นมน";
+    Text[ czech ] = "Zaoblená krátká šipka";
+    Text[ hebrew ] = "Abgerundeter kurzer Pfeil";
+    Text[ hindi ] = "गोल आकार का छोटा तीर";
 };
 String RID_SVXSTR_LEND6
 {
@@ -5297,8 +5813,8 @@ String RID_SVXSTR_LEND6
     Text[ italian ] = "Freccia simmetrica";
     Text[ danish ] = "Symmetrisk pil";
     Text[ swedish ] = "Symmetrisk pil";
-    Text[ polish ] = "Symetryczna strza�ka";
-    Text[ portuguese_brazilian ] = "Symmetric Arrow";
+    Text[ polish ] = "Strza�ka symetryczna";
+    Text[ portuguese_brazilian ] = "Seta sim�trica";
     Text[ japanese ] = "バランスのとれた矢印";
     Text[ korean ] = "대칭 화살표";
     Text[ chinese_simplified ] = "对称箭头";
@@ -5308,6 +5824,9 @@ String RID_SVXSTR_LEND6
     Text[ catalan ] = "Fletxa sim�trica";
     Text[ finnish ] = "Symmetrinen nuoli";
     Text[ thai ] = "ลูกศรสมมาตร";
+    Text[ czech ] = "Souměrná šipka";
+    Text[ hebrew ] = "Symmetrischer Pfeil";
+    Text[ hindi ] = "समरूप का तीर";
 };
 String RID_SVXSTR_LEND7
 {
@@ -5323,8 +5842,8 @@ String RID_SVXSTR_LEND7
     Text[ italian ] = "Linea freccia";
     Text[ danish ] = "Streg-pil";
     Text[ swedish ] = "Linjepil";
-    Text[ polish ] = "Strza�ka w postaci linii";
-    Text[ portuguese_brazilian ] = "Line Arrow";
+    Text[ polish ] = "Strza�ka linii";
+    Text[ portuguese_brazilian ] = "Seta tipo linha";
     Text[ japanese ] = "線状の矢印";
     Text[ korean ] = "선 화살표";
     Text[ chinese_simplified ] = "线条箭头";
@@ -5334,6 +5853,9 @@ String RID_SVXSTR_LEND7
     Text[ catalan ] = "Fletxa l�nia";
     Text[ finnish ] = "Viivanuoli";
     Text[ thai ] = "เส้นลูกศร";
+    Text[ czech ] = "Čárová šipka";
+    Text[ hebrew ] = "Linien-Pfeil";
+    Text[ hindi ] = "रेखा तीर";
 };
 String RID_SVXSTR_LEND8
 {
@@ -5350,7 +5872,7 @@ String RID_SVXSTR_LEND8
     Text[ danish ] = "Afrundet lang pil";
     Text[ swedish ] = "Avrundad stor pil";
     Text[ polish ] = "Zaokr. d�uga strza�ka";
-    Text[ portuguese_brazilian ] = "Rounded large Arrow";
+    Text[ portuguese_brazilian ] = "Seta grande arredondada";
     Text[ japanese ] = "先の丸い長めの矢印";
     Text[ korean ] = "둥글린 긴 화살표";
     Text[ chinese_simplified ] = "圆形长箭头";
@@ -5360,6 +5882,9 @@ String RID_SVXSTR_LEND8
     Text[ catalan ] = "Fletxa gran arrodonida";
     Text[ finnish ] = "Py�ristetty iso nuoli";
     Text[ thai ] = "ลูกศรใหญ่มน";
+    Text[ czech ] = "Zaoblená velká šipka";
+    Text[ hebrew ] = "Abgerundeter langer Pfeil";
+    Text[ hindi ] = "गोल आकार का बड़ा तीर";
 };
 String RID_SVXSTR_LEND9
 {
@@ -5376,7 +5901,7 @@ String RID_SVXSTR_LEND9
     Text[ danish ] = "Cirkel";
     Text[ swedish ] = "Cirkel";
     Text[ polish ] = "Ko�o";
-    Text[ portuguese_brazilian ] = "Circle";
+    Text[ portuguese_brazilian ] = "C�rculo";
     Text[ japanese ] = "丸印";
     Text[ korean ] = "원";
     Text[ chinese_simplified ] = "圆";
@@ -5386,6 +5911,9 @@ String RID_SVXSTR_LEND9
     Text[ catalan ] = "Cercle";
     Text[ finnish ] = "Ympyr�";
     Text[ thai ] = "วงกลม";
+    Text[ czech ] = "Kruh";
+    Text[ hebrew ] = "Kreis";
+    Text[ hindi ] = "वृत्त";
 };
 String RID_SVXSTR_LEND10
 {
@@ -5402,7 +5930,7 @@ String RID_SVXSTR_LEND10
     Text[ danish ] = "Kvadrat";
     Text[ swedish ] = "Kvadrat";
     Text[ polish ] = "Kwadrat";
-    Text[ portuguese_brazilian ] = "Square";
+    Text[ portuguese_brazilian ] = "Quadrado";
     Text[ japanese ] = "真四角";
     Text[ korean ] = "정사각형";
     Text[ chinese_simplified ] = "正方形";
@@ -5412,6 +5940,9 @@ String RID_SVXSTR_LEND10
     Text[ catalan ] = "Quadrat";
     Text[ finnish ] = "Neli�";
     Text[ thai ] = "สี่เหลี่ยมจัตุรัส";
+    Text[ czech ] = "Čtverec";
+    Text[ hebrew ] = "Quadrat";
+    Text[ hindi ] = "समचतुर्भुज";
 };
 String RID_SVXSTR_LEND11
 {
@@ -5428,7 +5959,7 @@ String RID_SVXSTR_LEND11
     Text[ danish ] = "Pil";
     Text[ swedish ] = "Pil";
     Text[ polish ] = "Strza�ka";
-    Text[ portuguese_brazilian ] = "Arrow";
+    Text[ portuguese_brazilian ] = "Seta";
     Text[ japanese ] = "矢印";
     Text[ korean ] = "화살표";
     Text[ chinese_simplified ] = "箭头";
@@ -5438,6 +5969,9 @@ String RID_SVXSTR_LEND11
     Text[ catalan ] = "Fletxa";
     Text[ finnish ] = "Nuoli";
     Text[ thai ] = "ลูกศร";
+    Text[ czech ] = "Šipka";
+    Text[ hebrew ] = "Pfeil";
+    Text[ hindi ] = "तीर";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5464,8 +5998,8 @@ String RID_SVXSTR_TRASNGR0
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Fladetransparens";
     Text[ swedish ] = "Yttransparens";
-    Text[ polish ] = "Przezroczysto�� powierzchni";
-    Text[ portuguese_brazilian ] = "Transparence";
+    Text[ polish ] = "Przezroczysto��";
+    Text[ portuguese_brazilian ] = "Transpar�ncia";
     Text[ japanese ] = "表面の透化性";
     Text[ chinese_simplified ] = "透明";
     Text[ chinese_traditional ] = "平面透明";
@@ -5474,13 +6008,85 @@ String RID_SVXSTR_TRASNGR0
     Text[ chinese_simplified ] = "透明";
     Text[ greek ] = "��������� ����������";
     Text[ korean ] = "면의 투명 효과";
-    Text[ turkish ] = "Y�zey saydaml���";
+    Text[ turkish ] = "Saydaml�k";
     Text[ catalan ] = "Transpar�ncia";
     Text[ finnish ] = "L�pin�kyvyys";
     Text[ thai ] = "โปร่งแสง";
+    Text[ czech ] = "Průhlednost";
+    Text[ hebrew ] = "Flächentransparenz";
+    Text[ hindi ] = "पारदर्शकता";
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
