@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 14:59:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,23 +778,6 @@ const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
     return 0;
 }
 
-#ifdef USED
-
-
-BOOL SwDoc::DeleteTOXType(TOXTypes eTyp, USHORT nId)
-{
-    // was passiert mit den Abhaengigen ??
-    //  - alle Marken und alle Verzeichnisse aus dem Text loeschen ??
-    SwTOXType* pTOXTyp = (SwTOXType*)GetTOXType( eTyp, nId );
-
-    ASSERT( !pTOXTyp->GetDepends(), "noch Marken/Verzeichnisse am Typ" );
-    delete pTOXTyp;     // ???
-
-    return TRUE;
-}
-
-#endif
-
 /*--------------------------------------------------------------------
 
  --------------------------------------------------------------------*/
@@ -878,22 +861,6 @@ BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     }
     return bRet;
 }
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
-void SwDoc::SetTOXBaseProtection(const SwTOXBase& rTOXBase, BOOL bProtect)
-{
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ),
-                    "keine TOXBaseSection!" );
-    SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
-    if(bProtect != pTOX->IsProtected())
-    {
-        pTOX->SetProtect(bProtect);
-        pTOX->SetProtected(bProtect);
-        SetModified();
-    }
-}
-
 
 /*  */
 
