@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-22 13:29:02 $
+ *  last change: $Author: vg $ $Date: 2002-08-06 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,7 @@ class VCLXToolkit : public VCLXToolkit_Impl,
     void callTopWindowListeners(
         ::VclSimpleEvent const * pEvent,
         void (SAL_CALL ::com::sun::star::awt::XTopWindowListener::* pFn)(
-            ::com::sun::star::lang::EventObject const &)
-        throw (::com::sun::star::uno::RuntimeException));
+            ::com::sun::star::lang::EventObject const &));
 
     long callKeyHandlers(::VclSimpleEvent const * pEvent, bool bPressed);
 
