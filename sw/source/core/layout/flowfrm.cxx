@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 13:13:45 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,6 +1736,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     SwPageFrm * const pOldPage = pOldBoss->FindPageFrm();
     SwLayoutFrm *pNewUpper = 0;
     FASTBOOL bCheckPageDescs = FALSE;
+    bool bCheckPageDescOfNextPage = false;
 
     if ( pFtn )
     {
@@ -1808,6 +1809,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                             {
                                 pNewUpper = (SwLayoutFrm*)pLayout;
                                 SwFlowFrm::SetMoveBwdJump( FALSE );
+                                bCheckPageDescOfNextPage = true;
                             }
                         }
                     }
@@ -2002,7 +2004,12 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             if ( !pNewPage->GetFmt()->GetDoc()->IsBrowseMode() )
             {
                 if ( bCheckPageDescs && pNewPage->GetNext() )
-                    SwFrm::CheckPageDescs( (SwPageFrm*)pNewPage->GetNext(), FALSE);
+                {
+                    SwPageFrm* pStartPage = bCheckPageDescOfNextPage ?
+                                            pNewPage :
+                                            (SwPageFrm*)pNewPage->GetNext();
+                    SwFrm::CheckPageDescs( pStartPage, FALSE);
+                }
                 else if ( rThis.GetAttrSet()->GetPageDesc().GetPageDesc() )
                 {
                     //Erste Seite wird etwa durch Ausblenden eines Bereiches leer
