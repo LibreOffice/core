@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:28:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ public:
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawInStream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetPlainRawInStream();
 
     void InputStreamDisposed( OInputCompStream* pStream );
 
