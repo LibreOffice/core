@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:55:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,13 +209,11 @@ namespace com{namespace sun {namespace star{
 struct WW8LFOInfo;
 typedef WW8LFOInfo* WW8LFOInfo_Ptr;
 // Redlining: match WinWord author ids to StarWriter author ids
-struct WW8AuthorInfo;
-typedef WW8AuthorInfo* WW8AuthorInfo_Ptr;
 struct WW8OleMap;
 typedef WW8OleMap* WW8OleMap_Ptr;
 
 SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16,16)
-SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,16,16)
+// SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,16,16)
 SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
 struct WW8OleMap
@@ -334,24 +332,6 @@ public:
     const SfxPoolItem* GetStackAttr(const SwPosition& rPos, USHORT nWhich);
 };
 
-class wwRedlineStack
-{
-private:
-    std::vector<SwFltStackEntry *> maStack;
-    typedef std::vector<SwFltStackEntry *>::reverse_iterator myriter;
-    SwDoc &mrDoc;
-public:
-    explicit wwRedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
-    void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
-    void close(const SwPosition& rPos, SwRedlineType eType);
-    void closeall(const SwPosition& rPos);
-    ~wwRedlineStack();
-private:
-    //No copying
-    wwRedlineStack(const wwRedlineStack&);
-    wwRedlineStack& operator=(const wwRedlineStack&);
-};
-
 //The only thing this is for is RES_FLTR_ANCHOR, anything else is an error.
 //For graphics whose anchoring position would otherwise be automatically moved
 //along by the insertion of text.
@@ -413,27 +393,6 @@ private:
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
 };
 
-//-----------------------------------------
-//     Redlining Authors
-//-----------------------------------------
-struct WW8AuthorInfo
-{
-    USHORT nWWAuthorId;
-    USHORT nOurId;
-
-    WW8AuthorInfo(USHORT nWWAuthorId_, USHORT nOurId_ = 0):
-        nWWAuthorId( nWWAuthorId_ ),
-        nOurId(      nOurId_ )
-        {}
-    bool operator==(const WW8AuthorInfo& rEntry) const
-    {
-        return (nWWAuthorId == rEntry.nWWAuthorId);
-    }
-    bool operator<(const WW8AuthorInfo& rEntry) const
-    {
-        return (nWWAuthorId < rEntry.nWWAuthorId);
-    }
-};
 
 namespace sw
 {
@@ -475,7 +434,7 @@ private:
     std::deque<FieldEntry> maOldFieldStack;
     SwWW8FltControlStack* mpOldStck;
     SwWW8FltAnchorStack* mpOldAnchorStck;
-    wwRedlineStack *mpOldRedlines;
+    sw::util::RedlineStack *mpOldRedlines;
     WW8PLCFMan* mpOldPlcxMan;
     WW8FlyPara* mpWFlyPara;
     WW8SwFlyPara* mpSFlyPara;
@@ -879,7 +838,7 @@ private:
     This stack is for redlines, because their sequence of discovery can
     be out of order of their order of insertion into the document.
     */
-    wwRedlineStack *mpRedlineStack;
+    sw::util::RedlineStack *mpRedlineStack;
 
     /*
     This stack is for fields whose true conversion cannot be determined until
@@ -1017,7 +976,7 @@ private:
 
     std::vector<String>* mpAtnNames;
 
-    WW8AuthorInfos* pAuthorInfos;
+    sw::util::AuthorInfos* pAuthorInfos;
 
                                 // Ini-Flags:
     ULONG nIniFlags;            // Flags aus der writer.ini
