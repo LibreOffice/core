@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:00:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,8 @@ ModalDialog RID_SVXDLG_NAME
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 165 , 63 ) ;
-    Text = "Name" ;
-    Text [ English ] = "Name" ;
-    Text [ norwegian ] = "Navn" ;
-    Text [ italian ] = "Nome" ;
-    Text [ portuguese_brazilian ] = "Nome" ;
-    Text [ portuguese ] = "Nome" ;
-    Text [ finnish ] = "Nimi" ;
-    Text [ danish ] = "Navn" ;
-    Text [ french ] = "Nom" ;
-    Text [ swedish ] = "Namn" ;
-    Text [ dutch ] = "Naam" ;
-    Text [ spanish ] = "Nombre" ;
-    Text [ english_us ] = "Name" ;
+    Text [ de ] = "Name" ;
+    Text [ en-US ] = "Name" ;
     Moveable = TRUE ;
     Edit EDT_STRING
     {
@@ -117,24 +106,7 @@ ModalDialog RID_SVXDLG_NAME
         Size = MAP_APPFONT ( 98 , 31 ) ;
         WordBreak = TRUE ;
     };
-    Text[ chinese_simplified ] = "ÂêçÁß∞";
-    Text[ russian ] = "»Ïˇ";
-    Text[ polish ] = "Nazwa";
-    Text[ japanese ] = "ÂêçÂâç";
-    Text[ chinese_traditional ] = "ÂêçÁ®±";
-    Text[ arabic ] = "«·«”„";
-    Text[ greek ] = "ºÌÔÏ·";
-    Text[ korean ] = "Ïù¥Î¶Ñ";
-    Text[ turkish ] = "Ad";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nom";
-    Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠";
-    Text[ czech ] = "N√°zev";
-    Text[ hebrew ] = "Name";
-    Text[ hindi ] = "‡§®‡§æ‡§Æ";
-    Text[ slovak ] = "N√°zov";
-    Text[ hungarian ] = "N√©v";
-    Text[ slovenian ] = "Ime";
+    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_MESSBOX -------------------------------------------------------
 ModalDialog RID_SVXDLG_MESSBOX
