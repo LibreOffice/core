@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-13 16:33:59 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,6 +762,9 @@
 #define STR_AL_TITLE_VERT_OUTLINE_CLIPART (RID_APP_START+675)
 
 #define STR_HTMLEXP_DEFAULT_EXTENSION       (RID_APP_START+680)
+
+#define STR_DESC_RENAMESLIDE                (RID_APP_START+682)
+#define STR_TITLE_RENAMESLIDE               (RID_APP_START+683)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-25 15:50:23 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13681,31 +13681,15 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparència";
     Text[ finnish ] = "Läpikuultavuus";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_TITLE_RENAMESLIDE
+{
+    Text = "Seite umbenennen" ;
+    Text [ ENGLISH ] = "Rename Slide" ;
+    Text[ english_us ] = "Rename Slide";
+};
+String STR_DESC_RENAMESLIDE
+{
+    Text = "Name" ;
+    Text [ ENGLISH ] = "Name" ;
+    Text[ english_us ] = "Name";
+};
