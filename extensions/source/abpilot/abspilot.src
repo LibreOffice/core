@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:06:38 $
+ *  last change: $Author: vg $ $Date: 2002-02-21 21:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,7 +926,7 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ polish ] = "Sprawd� ustawienia �r�d�a danych.";
     Text[ portuguese_brazilian ] = "Please check the settings made for the data source.";
     Text[ japanese ] = "データソースの設定項目をもう一度確認してください。";
-    Text[ korean ] = "데이터 소스에 대한 설정을 확인하십시오.";
+    Text[ korean ] = "데이터 소스 설정을 확인하십시오.";
     Text[ chinese_simplified ] = "请检查一下数据源设定。";
     Text[ chinese_traditional ] = "請檢查資料源的設定。";
     Text[ turkish ] = "Please check the settings made for the data source.";
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2002/02/08 21:06:38  kz
+ *  Merge SRC641: 08.02.02 - 22:06:25
+ *
  *  Revision 1.27  2002/01/14 21:13:17  kz
  *  Merge SRC641: 14.01.02 - 22:07:42
  *
