@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 11:00:52 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ class PopupMenu;
 class SfxBmkMenu;
 class SvVerbList;
 class SfxProgress;
-class SfxConfigManager;
 class SfxChildWinFactArr_Impl;
 class SfxToolBoxConfig;
 class SfxDdeDocTopics_Impl;
@@ -156,7 +155,6 @@ public:
     SfxCancelManager*                   pCancelMgr;
     ResMgr*                             pLabelResMgr;
     SfxStatusDispatcher*                pAppDispatch;
-    SfxConfigManager*                   pAppCfg;
     SfxDocumentTemplates*               pTemplates;
 
     // global pointers
