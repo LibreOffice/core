@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:30:28 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 15:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,6 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
