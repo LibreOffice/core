@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ int cdecl main ( int argc, char ** argv) {
 #ifdef MAC
     InitCursorCtl( 0 );
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );
 #endif
 
