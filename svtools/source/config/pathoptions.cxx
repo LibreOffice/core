@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-13 11:54:54 $
+ *  last change: $Author: mba $ $Date: 2000-11-13 12:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,13 +114,16 @@ using namespace com::sun::star::uno;
 #define SUBSTITUTE_INST                 ASCII_STR("$(inst)")
 #define SUBSTITUTE_PROG                 ASCII_STR("$(prog)")
 #define SUBSTITUTE_USER                 ASCII_STR("$(user)")
+#define SUBSTITUTE_INSTPATH             ASCII_STR("$(inst)")
+#define SUBSTITUTE_PROGPATH             ASCII_STR("$(prog)")
+#define SUBSTITUTE_USERPATH             ASCII_STR("$(user)")
 #define SUBSTITUTE_INSTURL              ASCII_STR("$(insturl)")
 #define SUBSTITUTE_PROGURL              ASCII_STR("$(progurl)")
 #define SUBSTITUTE_USERURL              ASCII_STR("$(userurl)")
 #define SUBSTITUTE_PATH                 ASCII_STR("$(path)")
 #define SUBSTITUTE_LANG                 ASCII_STR("$(lang)")
 #define SUBSTITUTE_LANGID               ASCII_STR("$(langid)")
-#define SUBSTITUTE_SYSLANGID            ASCII_STR("$(syslangid)")
+//#define SUBSTITUTE_SYSLANGID            ASCII_STR("$(syslangid)")
 #define SUBSTITUTE_VLANG                ASCII_STR("$(vlang)")
 
 // Length of SUBSTITUTE_... to replace it with real values.
@@ -133,7 +136,7 @@ using namespace com::sun::star::uno;
 #define REPLACELENGTH_PATH              7
 #define REPLACELENGTH_LANG              7
 #define REPLACELENGTH_LANGID            9
-#define REPLACELENGTH_SYSLANGID         12
+//#define REPLACELENGTH_SYSLANGID         12
 #define REPLACELENGTH_VLANG             8
 
 // Strings to replace $(vlang)
@@ -394,7 +397,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         else
         // -------------------------------------------------------------------------------------------------------------------
         // $(user) - directory of the user installation (== dir of soffice.ini)
-        if ( SUBSTITUTE_USER == aSubString )
+        if ( SUBSTITUTE_USER == aSubString || SUBSTITUTE_USERPATH == aSubString )
         {
             nReplaceLength = REPLACELENGTH_USER;
             aReplacement = m_aUserURL;
@@ -403,7 +406,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         else
         // -------------------------------------------------------------------------------------------------------------------
         // $(prog) - directory of the executable file
-        if ( SUBSTITUTE_PROG == aSubString )
+        if ( SUBSTITUTE_PROG == aSubString || SUBSTITUTE_PROGPATH == aSubString )
         {
             nReplaceLength = REPLACELENGTH_PROG;
             aReplacement = m_aProgURL;
@@ -412,7 +415,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         else
         // -------------------------------------------------------------------------------------------------------------------
         // $(insturl) - directory of the master (server) installation as URL
-        if ( SUBSTITUTE_INSTURL == aSubString )
+        if ( SUBSTITUTE_INSTURL == aSubString || SUBSTITUTE_INSTPATH == aSubString )
         {
             nReplaceLength = REPLACELENGTH_INSTURL;
             aReplacement = m_aInstURL;
