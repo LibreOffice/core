@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:38:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,10 +199,10 @@ TabPage RID_SCTAB_FUNCTION
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Recentemente usadas" ; Default ; > ;
+            < "As ϊltimas usadas" ; Default ; > ;
             < "Todas" ; Default ; > ;
             < "Banco de Dados" ; Default ; > ;
-            < "Data & Hora" ; Default ; > ;
+            < "Data&Hora" ; Default ; > ;
             < "Financeiras" ; Default ; > ;
             < "Informaηγo" ; Default ; > ;
             < "Lσgicas" ; Default ; > ;
@@ -211,7 +211,7 @@ TabPage RID_SCTAB_FUNCTION
             < "Estatνsticas" ; Default ; > ;
             < "Planilha" ; Default ; > ;
             < "Texto" ; Default ; > ;
-            < "Aditivos" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
              //         < "Definido pelo usuαrio"; Default; >;
         };
         StringList [ portuguese ] =
@@ -437,11 +437,11 @@ TabPage RID_SCTAB_FUNCTION
         < "Ημερομηνία και Ώρα" ; Default ; > ;
         < "Οικονομικά" ; Default ; > ;
         < "Πληροφορίες" ; Default ; > ;
-        < "Λογικά" ; Default ; > ;
+        < "Λογικές" ; Default ; > ;
         < "Μαθηματικά" ; Default ; > ;
-        < "Μήτρα" ; Default ; > ;
-        < "Στατιστικά" ; Default ; > ;
         < "Πίνακας" ; Default ; > ;
+        < "Στατιστικά" ; Default ; > ;
+        < "Υπολογιστικό φύλλο" ; Default ; > ;
         < "Κείμενο" ; Default ; > ;
         < "Πρόσθετο (Add-In)" ; Default ; > ;
     };
@@ -479,19 +479,19 @@ TabPage RID_SCTAB_FUNCTION
     };
     StringList [ language_user1 ] =
     {
-            < "Zuletzt verwendet" ; Default ; > ;
-        < "Alle" ; Default ; > ;
-        < "Datenbank" ; Default ; > ;
-        < "Datum&Zeit" ; Default ; > ;
-        < "Finanz" ; Default ; > ;
-        < "Information" ; Default ; > ;
-        < "Logisch" ; Default ; > ;
-        < "Mathematik" ; Default ; > ;
-        < "Matrix" ; Default ; > ;
-        < "Statistik" ; Default ; > ;
-        < "Tabelle" ; Default ; > ;
-        < "Text" ; Default ; > ;
-        < "Add In" ; Default ; > ;
+            < "; Zuletzt verwendet" ; Default ; > ;
+        < "; Alle" ; Default ; > ;
+        < "; Datenbank" ; Default ; > ;
+        < "; Datum&Zeit" ; Default ; > ;
+        < "; Finanz" ; Default ; > ;
+        < "; Information" ; Default ; > ;
+        < "; Logisch" ; Default ; > ;
+        < "; Mathematik" ; Default ; > ;
+        < "; Matrix" ; Default ; > ;
+        < "; Statistik" ; Default ; > ;
+        < "; Tabelle" ; Default ; > ;
+        < "; Text" ; Default ; > ;
+        < "; Add In" ; Default ; > ;
     };
     StringList [ catalan ] =
     {
@@ -1063,7 +1063,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ japanese ] = "θ΅ε—";
         Text[ chinese_traditional ] = "η©ι™£";
         Text[ arabic ] = "γΥέζέΙ";
-        Text[ greek ] = "Μήτρα";
+        Text[ greek ] = "Πίνακας";
         Text[ korean ] = "ν–‰λ ¬";
         Text[ turkish ] = "Matrik~s";
         Text[ catalan ] = "Matriu";
@@ -1183,7 +1183,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ russian ] = "~Δΰλεε >>";
         Text[ polish ] = "~Dalej >>";
         Text[ japanese ] = "ζ¬΅γΈ(~N) >>";
-        Text[ chinese_traditional ] = "ηΉΌηΊ(~N) >>";
+        Text[ chinese_traditional ] = "δΈ‹δΈ€ζ­¥(~N) >>";
         Text[ arabic ] = "ΗαΚΗαν <<";
         Text[ greek ] = "Επόμενο >>";
         Text[ korean ] = "λ‹¤μ(~N) >>";
@@ -1224,7 +1224,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ japanese ] = "ι–Άζ•°γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ";
         Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†";
         Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ";
-        Text[ greek ] = "AutoPilot συνάρτησης";
+        Text[ greek ] = "Αυτόματος πιλότος συνάρτησης";
         Text[ korean ] = "μλ™ νμΌλΏ: ν•¨μ";
         Text[ turkish ] = "Otopilot: Fonksiyonlar";
         Text[ catalan ] = "AutoPilot: Funcions";
@@ -1255,7 +1255,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ japanese ] = "ι–Άζ•°γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ-";
         Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†  -";
         Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ  -";
-        Text[ greek ] = "AutoPilot συνάρτησης -  ";
+        Text[ greek ] = "Αυτόματος πιλότος συνάρτησης -  ";
         Text[ korean ] = "μλ™ νμΌλΏ κΈ°λ¥  -";
         Text[ turkish ] = "Otopilot: Fonksiyonlar  -";
         Text[ catalan ] = "AutoPilot: Funcions  -";
@@ -1266,6 +1266,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ slovak ] = "Sprievodca: Funkcie  -";
     };
 };
+
 
 
 
