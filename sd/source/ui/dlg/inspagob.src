@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:11:33 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,4 +175,5 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ catalan ] = "Insertar p·ginas/objetos";
     Text[ finnish ] = "Lis‰‰ diat/objektit";
 };
+
 
