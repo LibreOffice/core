@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-25 18:07:19 $
+ *  last change: $Author: mib $ $Date: 2001-06-26 09:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillHatchName",                  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,       XML_TYPE_STRING, CTF_FILLHATCHNAME },
     { "FillBackground",                 XML_NAMESPACE_DRAW, sXML_fill_hatch_solid,      XML_TYPE_BOOL, 0 },
     { "FillBitmapName",                 XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, CTF_FILLBITMAPNAME },
-    { "FillTransparence",               XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16, 0 },
+    { "FillTransparence",               XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 },    // exists in SW, too
     { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, CTF_FILLTRANSNAME },
 
     { "FillBitmapSizeX",                XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
@@ -271,12 +271,12 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "TextContourFrame",               XML_NAMESPACE_DRAW, sXML_fit_to_contour,        XML_TYPE_BOOL, 0 },
     { "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   sXML_max_height,            XML_TYPE_MEASURE, 0 },
     { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   sXML_max_width,             XML_TYPE_MEASURE, 0 },
-    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
     { "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   sXML_min_width,             XML_TYPE_MEASURE, 0 },
-    { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_padding_top,           XML_TYPE_MEASURE, 0 },
-    { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_padding_bottom,        XML_TYPE_MEASURE, 0 },
-    { "TextLeftDistance",               XML_NAMESPACE_FO,   sXML_padding_left,          XML_TYPE_MEASURE, 0 },
-    { "TextRightDistance",              XML_NAMESPACE_FO,   sXML_padding_right,         XML_TYPE_MEASURE, 0 },
+    { "TextUpperDistance",              XML_NAMESPACE_FO,   sXML_padding_top,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextLowerDistance",              XML_NAMESPACE_FO,   sXML_padding_bottom,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextLeftDistance",               XML_NAMESPACE_FO,   sXML_padding_left,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
+    { "TextRightDistance",              XML_NAMESPACE_FO,   sXML_padding_right,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 },  // exists in SW, too
     { "TextWritingMode",                XML_NAMESPACE_DRAW, sXML_writing_mode,          XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE },
     { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style,            XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
     { "NumberingRules",                 XML_NAMESPACE_TEXT, sXML_list_style_name,       XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
@@ -289,14 +289,14 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "ShadowTransparence",             XML_NAMESPACE_DRAW, sXML_shadow_transparency,   XML_TYPE_PERCENT, 0 },
 
     // graphic attributes
-    { "GraphicColorMode",               XML_NAMESPACE_DRAW, sXML_color_mode,            XML_TYPE_COLOR_MODE, 0 },
-    { "AdjustLuminance",                XML_NAMESPACE_DRAW, sXML_luminance,             XML_TYPE_PERCENT16, 0 },        // signed?
-    { "AdjustContrast",                 XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
-    { "Gamma",                          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },           // signed?
-    { "AdjustRed",                      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
-    { "AdjustGreen",                    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
-    { "AdjustBlue",                     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
-    { "GraphicCrop",                    XML_NAMESPACE_FO,   sXML_clip,                  XML_TYPE_TEXT_CLIP, 0 },
+    { "GraphicColorMode",               XML_NAMESPACE_DRAW, sXML_color_mode,            XML_TYPE_COLOR_MODE, 0 }, // exists in SW, too, with same property name
+    { "AdjustLuminance",                XML_NAMESPACE_DRAW, sXML_luminance,             XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustContrast",                 XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "Gamma",                          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustRed",                      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustGreen",                    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "AdjustBlue",                     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 }, // signed? exists in SW, too, with same property name
+    { "GraphicCrop",                    XML_NAMESPACE_FO,   sXML_clip,                  XML_TYPE_TEXT_CLIP, 0 }, // exists in SW, too, with same property name
 
     // animation text attributes
     { "TextAnimationKind",              XML_NAMESPACE_STYLE,sXML_text_blinking,         XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING },
@@ -382,10 +382,10 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FrameIsBorder",              XML_NAMESPACE_DRAW, sXML_frame_display_border,      XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER },
     { "FrameMarginWidth",           XML_NAMESPACE_DRAW, sXML_frame_margin_horizontal,   XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI },
     { "FrameMarginHeight",          XML_NAMESPACE_DRAW, sXML_frame_margin_vertical,     XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_VERT },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_left,         XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY,    CTF_SD_OLE_VIS_AREA_LEFT },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_top,          XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY,     CTF_SD_OLE_VIS_AREA_TOP },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_width,        XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
-    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_height,       XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_left,         XML_TYPE_RECTANGLE_LEFT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,    CTF_SD_OLE_VIS_AREA_LEFT },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_top,          XML_TYPE_RECTANGLE_TOP|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,     CTF_SD_OLE_VIS_AREA_TOP },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_width,        XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
+    { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_height,       XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
     { "IsInternal",                 XML_NAMESPACE_DRAW, NULL,                           XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL },
 
     // caption properties

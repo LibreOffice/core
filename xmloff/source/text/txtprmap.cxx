@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-25 17:22:38 $
+ *  last change: $Author: mib $ $Date: 2001-06-26 09:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,11 +316,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "TopBorder",           STYLE,  border_line_width_top,    XML_TYPE_BORDER_WIDTH, CTF_TOPBORDERWIDTH ),
     M_E( "BottomBorder",        STYLE,  border_line_width_bottom, XML_TYPE_BORDER_WIDTH, CTF_BOTTOMBORDERWIDTH ),
 
-    M_E( "LeftBorderDistance",  FO,     padding,                  XML_TYPE_MEASURE, CTF_ALLBORDERDISTANCE ), // need special import filtering
-    M_E( "LeftBorderDistance",  FO,     padding_left,             XML_TYPE_MEASURE, CTF_LEFTBORDERDISTANCE ),
-    M_E( "RightBorderDistance", FO,     padding_right,            XML_TYPE_MEASURE, CTF_RIGHTBORDERDISTANCE ),
-    M_E( "TopBorderDistance",   FO,     padding_top,              XML_TYPE_MEASURE, CTF_TOPBORDERDISTANCE ),
-    M_E( "BottomBorderDistance",FO,     padding_bottom,           XML_TYPE_MEASURE, CTF_BOTTOMBORDERDISTANCE ),
+    M_E( "LeftBorderDistance",  FO,     padding,                  XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_ALLBORDERDISTANCE ), // need special import filtering
+    M_E( "LeftBorderDistance",  FO,     padding_left,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_LEFTBORDERDISTANCE ),
+    M_E( "RightBorderDistance", FO,     padding_right,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_RIGHTBORDERDISTANCE ),
+    M_E( "TopBorderDistance",   FO,     padding_top,              XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_TOPBORDERDISTANCE ),
+    M_E( "BottomBorderDistance",FO,     padding_bottom,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_BOTTOMBORDERDISTANCE ),
 
     M_E( "LeftBorder",          FO,     border,                   XML_TYPE_BORDER, CTF_ALLBORDER ),
     M_E( "LeftBorder",          FO,     border_left,              XML_TYPE_BORDER, CTF_LEFTBORDER ),
@@ -587,7 +587,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // see above
     // RES_BACKGROUND
     M_ED( "BackColor",  FO, background_color,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
-    M_ED( "BackTransparent",    FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    M_ED( "BackTransparent",    FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "BackGraphicLocation", STYLE,  position,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
     M_E( "BackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
     M_E( "BackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
@@ -659,19 +659,19 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_GRFATR_INVERT
     { "GraphicIsInverted", XML_NAMESPACE_DRAW, sXML_color_inversion,        XML_TYPE_BOOL, 0 },
     // RES_GRFATR_TRANSPARENCY
-    { "Transparency",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16, 0 },
+    { "Transparency",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 },
     // RES_GRFATR_DRAWMODE
     { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_TYPE_COLOR_MODE, 0 },
     // special entries for floating frames
-    M_E( "",            DRAW,   frame_display_scrollbar,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
-    M_E( "",            DRAW,   frame_display_border,   XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY, CTF_FRAME_DISPLAY_BORDER ),
-    M_E( "",            DRAW,   frame_margin_horizontal,    XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY,   CTF_FRAME_MARGIN_HORI ),
-    M_E( "",            DRAW,   frame_margin_vertical,  XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY,   CTF_FRAME_MARGIN_VERT ),
-    M_E( "",            DRAW,   visible_area_left,      XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_LEFT ),
-    M_E( "",            DRAW,   visible_area_top,       XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_TOP ),
-    M_E( "",            DRAW,   visible_area_width,     XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_WIDTH ),
-    M_E( "",            DRAW,   visible_area_height,    XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_HEIGHT ),
-    M_E( "",            DRAW,   draw_aspect,            XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_NO_PROPERTY, CTF_OLE_DRAW_ASPECT ),
+    M_E( "",            DRAW,   frame_display_scrollbar,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
+    M_E( "",            DRAW,   frame_display_border,   XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_BORDER ),
+    M_E( "",            DRAW,   frame_margin_horizontal,    XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_FRAME_MARGIN_HORI ),
+    M_E( "",            DRAW,   frame_margin_vertical,  XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_FRAME_MARGIN_VERT ),
+    M_E( "",            DRAW,   visible_area_left,      XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_LEFT ),
+    M_E( "",            DRAW,   visible_area_top,       XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_TOP ),
+    M_E( "",            DRAW,   visible_area_width,     XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_WIDTH ),
+    M_E( "",            DRAW,   visible_area_height,    XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_HEIGHT ),
+    M_E( "",            DRAW,   draw_aspect,            XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_OLE_DRAW_ASPECT ),
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     { 0, 0, 0, 0 }
