@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:44:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ Menu MN_READONLY_POPUP
             Text [ English ] = "Forward" ;
             Text [ english_us ] = "~Forward" ;
             Text [ italian ] = "A~vanti" ;
-            Text [ spanish ] = "~Avanzar" ;
+            Text [ spanish ] = "~Continuar" ;
             Text [ french ] = "~Suivant" ;
             Text [ dutch ] = "~Vooruit" ;
             Text [ swedish ] = "~Framåt" ;
@@ -1189,11 +1189,11 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ polish ] = "Znacznik zapisu lub selekcji znajduje siê na chronionej pozycji.\nZmiany nie mo¿na zaakceptowaæ.";
     MESSAGE[ portuguese_brazilian ] = "Readonly content may not be changed.";
     MESSAGE[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í“Ç‚İæ‚èê—p‚Å‚·B“à—e‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
+    MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÄÄÚÈİÊÇÊÜ±£»¤µÄ¡£\nÒò´ËÎŞ·¨¸ÄĞ´ÄÚÈİ¡£";
     MESSAGE[ chinese_traditional ] = "¿é¤J¥ú¼Ğ©Î¿ï¨úªº¦ì¸m¬O¨ü«OÅ@ªº¡C\nµLªk­×§ï°ßÅªªº¤º®e¡C";
     MESSAGE[ arabic ] = "ÊŞÚ ÚáÇãÉ ÇáßÊÇÈÉ Ãæ ÇáÊÍÏíÏ İí ãæÖÚ ãÍãí ÖÏ ÇáßÊÇÈÉ.\náåĞÇ áÇ íãßä ŞÈæá ÃíÉ ÊÛííÑÇÊ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
-    MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
+    MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÄÄÚÈİÊÇÊÜ±£»¤µÄ¡£\nÒò´ËÎŞ·¨¸ÄĞ´ÄÚÈİ¡£";
     MESSAGE[ greek ] = "Ôï óçìÜäé ôçò åããñáöŞò Ş ç åğéëïãŞ âñßóêåôáé óå ìßá ğñïóôáôåõüìåíç èİóç.\nÃé áõôü ôï ëüãï äåí ìğïñïıí íá ãßíïõí äåêôİò ïğïéåóäŞğïôå ôñïğïğï? ";
     MESSAGE[ korean ] = "¾²±â ¸¶Å© ¶Ç´Â ¼±ÅÃÀº º¸È£µÈ À§Ä¡¿¡ ÀÖ½À´Ï´Ù.\n¼öÁ¤Àº Çã¿ëµÇÁö ¾Ê½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Salt okunur bir içerik değiştirilemez.\nYapılan değişiklikler nu nedenle kabul edilmeyecek.";
@@ -1201,6 +1201,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ catalan ] = "La marca o selección se encuentra en una posición protegida.\nPor ello no se puede aceptar una modificación.";
     MESSAGE[ finnish ] = "Vain luku -sisältöä ei voi muuttaa.\nMuokkauksia ei hyväksytä";
 };
+
 
 
 
