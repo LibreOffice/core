@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:31:19 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ Menu MN_SPELL_POPUP
             Text[ czech ] = "Kontrola pravopisu...";
             Text[ hebrew ] = "‮בדיקת איות...‬";
             Text[ hindi ] = "~अक्षर की जाँच...";
+            Text[ slovak ] = "Kontrola ~pravopisu...";
         };
         MenuItem
         {
@@ -137,6 +138,7 @@ Menu MN_SPELL_POPUP
             Text[ czech ] = "Přidat";
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
+            Text[ slovak ] = "~Pridať";
         };
         MenuItem
         {
@@ -174,6 +176,7 @@ Menu MN_SPELL_POPUP
             Text[ czech ] = "Ignorovat vše";
             Text[ hebrew ] = "Alle i~gnorieren";
             Text[ hindi ] = "सब उपेक्षा करो";
+            Text[ slovak ] = "Ignorovať všetko";
         };
         MenuItem
         {
@@ -211,6 +214,7 @@ Menu MN_SPELL_POPUP
             Text[ czech ] = "Automatické opravy";
             Text[ hebrew ] = "‮תיקון אוטומטי‬";
             Text[ hindi ] = "स्वचालित ढंग से ठीक करो";
+            Text[ slovak ] = "Automatické opravy";
         };
     };
 };
@@ -221,23 +225,23 @@ String STR_WORD
     Text [ portuguese ] = "Palavra em " ;
     Text [ english_us ] = "Word is " ;
     Text [ portuguese_brazilian ] = "A palavra �" ;
-    Text [ swedish ] = "Ordet �r  " ;
+    Text [ swedish ] = "Ordet �r " ;
     Text [ danish ] = "Ordet er " ;
     Text [ italian ] = "Il termine � " ;
-    Text [ spanish ] = "La palabra es " ;
+    Text [ spanish ] = "La palabra est� en" ;
     Text [ french ] = "Le mot est en " ;
     Text [ dutch ] = "Woord is" ;
-    Text[ chinese_simplified ] = "单词是 ";
+    Text[ chinese_simplified ] = "字是 ";
     Text[ russian ] = "���� �����: ";
     Text[ polish ] = "Wyraz jest ";
     Text[ japanese ] = "単語は ";
     Text[ chinese_traditional ] = "字是 ";
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = "EM June 2003: This string appears in front of any language. E.g. \"Word is German\", \"Word is French\", \"Word is Spanish\". This is in conjunction with Spellchecking: right click foreign word which is marked as misspelled to see entry on menu that opens.";
     Text[ arabic ] = "��� ������: ";
     Text[ dutch ] = "Woord is";
-    Text[ chinese_simplified ] = "单词是 ";
+    Text[ chinese_simplified ] = "字是 ";
     Text[ greek ] = "� ���� ����� ";
-    Text[ korean ] = "단어는 ";
+    Text[ korean ] = "단어 ";
     Text[ turkish ] = "S�zc�k: ";
     Text[ catalan ] = "La paraula �s ";
     Text[ finnish ] = "sana on ";
@@ -245,6 +249,7 @@ String STR_WORD
     Text[ czech ] = "slovo je ";
     Text[ hebrew ] = "Wort ist";
     Text[ hindi ] = "शब्द ";
+    Text[ slovak ] = "slovo je ";
 };
 String STR_PARAGRAPH
 {
@@ -256,7 +261,7 @@ String STR_PARAGRAPH
     Text [ swedish ] = "Stycket �r  " ;
     Text [ danish ] = "Afsnittet er " ;
     Text [ italian ] = "Il paragrafo � " ;
-    Text [ spanish ] = "El p�rrafo es  " ;
+    Text [ spanish ] = "El p�rrafo est� en  " ;
     Text [ french ] = "Le paragraphe est en" ;
     Text [ dutch ] = "Alinea is" ;
     Text[ chinese_simplified ] = "段落是 ";
@@ -277,6 +282,7 @@ String STR_PARAGRAPH
     Text[ czech ] = "Odstavec je ";
     Text[ hebrew ] = "Absatz ist";
     Text[ hindi ] = "परिच्छेद ";
+    Text[ slovak ] = "Odstavec je ";
 };
 String STR_SPELL_OK
 {
@@ -310,6 +316,7 @@ String STR_SPELL_OK
     Text[ czech ] = "Kontrola pravopisu je ukončena.";
     Text[ hebrew ] = "Die Rechtschreibprüfung ist abgeschlossen";
     Text[ hindi ] = "अक्षर की जाँच समाप्त हुआ ।";
+    Text[ slovak ] = "Kontrola pravopisu je ukončená.";
 };
 String STR_HYP_OK
 {
@@ -342,7 +349,12 @@ String STR_HYP_OK
     Text[ czech ] = "Dělení slov je ukončeno";
     Text[ hebrew ] = "Die Silbentrennung ist abgeschlossen";
     Text[ hindi ] = "हाइफनेशन समाप्त हुआ";
+    Text[ slovak ] = "Delenie slov je ukončené";
 };
+
+
+
+
 
 
 
