@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:27:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ greek ] = "Ìåôáâëçôİò:";
         Text[ dutch ] = "~Variabelen";
         Text[ french ] = "Variables";
-        Text[ spanish ] = "~Variables";
+        Text[ spanish ] = "~Predeterminaciones";
         Text[ finnish ] = "~Muuttujat:";
         Text[ italian ] = "~Variabili";
         Text[ danish ] = "~Variabler:";
@@ -2919,15 +2919,15 @@ ModalDialog RID_SYMBOLDIALOG
         Text [ danish ] = "Accepter" ;
         Text [ portuguese_brazilian ] = "~?bernehmen" ;
         Text [ portuguese ] = "~Aplicar" ;
-        Text[ chinese_simplified ] = "½ÓÊÜ(~I)";
+        Text[ chinese_simplified ] = "²ÉÓÃ(~I)";
         Text[ russian ] = "Ïğèíÿòü";
         Text[ polish ] = "Zastosuj";
         Text[ japanese ] = "‘}“ü(~I)";
         Text[ russian ] = "Ïğèíÿòü";
     Text[ polish ] = "Zastosuj";
     Text[ japanese ] = "‘}“ü(~I)";
-    Text[ chinese_simplified ] = "½ÓÊÜ(~I)";
-    Text[ chinese_traditional ] = "±µ¨ü(~I)";
+    Text[ chinese_simplified ] = "²ÉÓÃ(~I)";
+    Text[ chinese_traditional ] = "±Ä¥Î(~I)";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ greek ] = "ÅöáñìïãŞ";
         Text[ korean ] = "Àû¿ë(~I)";
@@ -3240,7 +3240,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ russian ] = "Êàòåãîğèÿ";
         Text[ greek ] = "Ğåñéï÷Ş";
         Text[ dutch ] = "~Bereik";
-        Text[ french ] = "~Sous-ensemble";
+        Text[ french ] = "~Plage";
         Text[ spanish ] = "~Área";
         Text[ italian ] = "So~ttoinsieme";
         Text[ danish ] = "~Subset";
@@ -3502,7 +3502,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message [ english_us ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
     Message[ chinese_simplified ] = "Òª½«¸ü¸ÄÄÚÈİ×÷Îª±ê×¼¸ñÊ½´æÅÌ£¿\n\nÕâ¸ö¸ü¸Ä»áÓ°ÏìËùÓĞĞÂ¹«Ê½¡£";
     Message[ russian ] = "Ñîõğàíèòü èçìåíåíèÿ êàê ñòàíäàğòíûå ?\n\nİòè èçìåíåíèÿ ïîâëèÿşò íà âñå íîâûå ôîğìóëû.";
-    Message[ polish ] = "Czy zapisaæ zmiany jako domyœlne?\n\nTe zmiany wywieraj¹ wp³yw na wszystkie nowe formu³y.";
+    Message[ polish ] = "Czy zapisaæ zmiany jako domyœlne?\n\nZmiany te maj¹ wp³yw na wszystkie nowe formu³y.";
     Message[ japanese ] = "‚±‚Ì•ÏX‚ğ•W€‚Æ‚µ‚Ä•Û‘¶‚µ‚Ü‚·‚©B\n\n‚±‚Ì•ÏX‚Í‚·‚×‚Ä‚ÌV‚µ‚¢”®‚É‰e‹¿‚µ‚Ü‚·B";
     Message[ chinese_traditional ] = "­n±NÅÜ§ó·í§@¼Ğ·Ç®æ¦¡Àx¦s¡H\n\n³o­ÓÅÜ§ó·|¼vÅT©Ò¦³ªº·s¤½¦¡¡C";
     Message[ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ ßÇİÊÑÇÖí¿\n\nÓæİ íßæä áåĞå ÇáÊÛííÑÇÊ ÃËÑÇğ Úáì ßá ÇáÕíÛ ÇáÌÏíÏÉ.";
@@ -4128,7 +4128,7 @@ Menu RID_FONTMENU
             Text [ french ] = "Variables" ;
             Text [ swedish ] = "Variabler" ;
             Text [ dutch ] = "Variabelen" ;
-            Text [ spanish ] = "Variables" ;
+            Text [ spanish ] = "Predeterminaciones" ;
             Text [ english_us ] = "Variables" ;
             Text[ chinese_simplified ] = "±äÁ¿";
             Text[ russian ] = "Ïåğåìåííûå";
@@ -4606,7 +4606,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ portuguese ] = "Multiplicação (ponto)" ;
                 Text[ chinese_simplified ] = "³Ë·¨(µã)";
                 Text[ russian ] = "Óìíîæåíèå (òî÷êà)";
-                Text[ polish ] = "Mno¿enie (Kropka)";
+                Text[ polish ] = "Mno¿enie (kropka)";
                 Text[ japanese ] = "æZ(“_)";
                 Text[ chinese_traditional ] = "­¼ªk(ÂI)";
                 Text[ arabic ] = "(.) ÖÑÈ";
@@ -4750,7 +4750,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ portuguese ] = "Divisão (fracção)" ;
                 Text[ chinese_simplified ] = "³ı·¨(·ÖÊı)";
                 Text[ russian ] = "Äåëåíèå (äğîáü)";
-                Text[ polish ] = "Dzielenie (U³amek)";
+                Text[ polish ] = "Dzielenie (u³amek)";
                 Text[ japanese ] = "œZ(•ª”)";
                 Text[ chinese_traditional ] = "°£ªk(¤À¼Æ)";
                 Text[ arabic ] = "ŞÓãÉ (ßÓÑ)";
@@ -5654,7 +5654,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "owns" ;
                 Text [ english_us ] = "Owns" ;
                 Text [ portuguese_brazilian ] = "enth?lt" ;
-                Text [ swedish ] = "Innehåller" ;
+                Text [ swedish ] = "innehåller" ;
                 Text [ danish ] = "indeholder" ;
                 Text [ italian ] = "Contiene" ;
                 Text [ spanish ] = "contiene" ;
@@ -5722,7 +5722,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "fællesmængde" ;
                 Text [ italian ] = "Intersezione" ;
                 Text [ spanish ] = "Promedio" ;
-                Text [ french ] = "Moyenne" ;
+                Text [ french ] = "Intersection" ;
                 Text [ dutch ] = "Gemiddelde" ;
                 Text [ portuguese ] = "Média" ;
                 Text[ chinese_simplified ] = "Æ½¾ùÖµ";
@@ -5774,7 +5774,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "difference" ;
                 Text [ english_us ] = "Difference" ;
                 Text [ portuguese_brazilian ] = "Differenz" ;
-                Text [ swedish ] = "differens" ;
+                Text [ swedish ] = "Differens" ;
                 Text [ danish ] = "differensmængde" ;
                 Text [ italian ] = "Differenza" ;
                 Text [ spanish ] = "Diferencia" ;
@@ -5806,7 +5806,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "kvotientmængde " ;
                 Text [ italian ] = "Insieme quoziente " ;
                 Text [ spanish ] = "Conjunto cociente " ;
-                Text [ french ] = "Ensemble quotient " ;
+                Text [ french ] = "Ensemble de quotient " ;
                 Text [ dutch ] = "Quotiëntenverzameling  " ;
                 Text [ portuguese ] = "Conjunto de quociente " ;
                 Text[ chinese_simplified ] = "ÉÌÊı¼¯ ";
@@ -5832,7 +5832,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese_brazilian ] = "aleph ";
                 TEXT[ portuguese ] = "aleph ";
                 TEXT[ danish ] = "aleph ";
-                TEXT[ french ] = "aleph.";
+                TEXT[ french ] = "Aleph ";
                 TEXT[ swedish ] = "Alef ";
                 TEXT[ dutch ] = "aleph  ";
                 TEXT[ spanish ] = "aleph ";
@@ -5894,7 +5894,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "delmængde" ;
                 Text [ italian ] = "Insieme parziale o uguale" ;
                 Text [ spanish ] = "Conjunto parcial o igual" ;
-                Text [ french ] = "est sous-ensemble de ou égal à" ;
+                Text [ french ] = "Sous-ensemble ou égal" ;
                 Text [ dutch ] = "Subset of gelijk aan" ;
                 Text [ portuguese ] = "Parcial ou igual" ;
                 Text[ chinese_simplified ] = "×Ó¼¯»òµÈ¼¯";
@@ -5950,7 +5950,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "indeholder som delmængde" ;
                 Text [ italian ] = "Insieme superiore o uguale" ;
                 Text [ spanish ] = "Conjunto superior o igual" ;
-                Text [ french ] = "est sur-ensemble de ou égal à" ;
+                Text [ french ] = "Sur-ensemble ou égal" ;
                 Text [ dutch ] = "Superset of gelijk aan" ;
                 Text [ portuguese ] = "Conjunto superior ou igual" ;
                 Text[ chinese_simplified ] = "È«¼¯»òµÈ¼¯";
@@ -5986,7 +5986,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "ikke ægte delmængde" ;
                 Text [ italian ] = "Insieme non parziale" ;
                 Text [ spanish ] = "Conjunto no parcial" ;
-                Text [ french ] = "n'est pas sous-ensemble de" ;
+                Text [ french ] = "Pas sous-ensemble" ;
                 Text [ dutch ] = "niet subset" ;
                 Text [ portuguese ] = "não é subconjunto" ;
                 Text[ chinese_simplified ] = "·Ç×Ó¼¯";
@@ -6014,7 +6014,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "ikke delmængde" ;
                 Text [ italian ] = "Insieme non parziale o uguale" ;
                 Text [ spanish ] = "Conjunto no parcial o igual" ;
-                Text [ french ] = "n'est pas sous-ensemble de ni égal à" ;
+                Text [ french ] = "Pas sous-ensemble ou égal" ;
                 Text [ dutch ] = "niet subset of gelijk aan" ;
                 Text [ portuguese ] = "não é subconjunto nem igual" ;
                 Text[ chinese_simplified ] = "·Ç×Ó¼¯»òµÈ¼¯";
@@ -6042,7 +6042,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "indeholder ikke som ægte delmængde" ;
                 Text [ italian ] = "Insieme non superiore" ;
                 Text [ spanish ] = "Conjunto no superior" ;
-                Text [ french ] = "n'est pas sur-ensemble de" ;
+                Text [ french ] = "Pas sur-ensemble" ;
                 Text [ dutch ] = "niet superset" ;
                 Text [ portuguese ] = "Conjunto não superior" ;
                 Text[ chinese_simplified ] = "²»ÊÇÈ«¼¯";
@@ -6070,7 +6070,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "indeholder ikke som delmængde" ;
                 Text [ italian ] = "Insieme non superiore o uguale" ;
                 Text [ spanish ] = "Conjunto no superior o igual" ;
-                Text [ french ] = "n'est pas sur-ensemble de ni égal à" ;
+                Text [ french ] = "Pas sur-ensemble ou égal" ;
                 Text [ dutch ] = "niet superset of gelijk aan" ;
                 Text [ portuguese ] = "Conjunto não superior ou igual" ;
                 Text[ chinese_simplified ] = "²»ÊÇÈ«¼¯»òµÈ¼¯";
@@ -7519,7 +7519,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ italian ] = "Accento verso sinistra";
                 Text[ danish ] = "accent grave";
                 Text[ swedish ] = "Accent åt vänster";
-                Text[ polish ] = "Akcent w lewo na dó³";
+                Text[ polish ] = "Akcent w prawo na dó³";
                 Text[ portuguese_brazilian ] = "Accent nach links";
                 Text[ japanese ] = "¸ŞÚ°ÌŞ";
                 Text[ korean ] = "¾Ç¼¾Æ® ¿ŞÂÊÀ¸·Î";
@@ -9910,7 +9910,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "Mængdeoperationer" ;
                 Text [ italian ] = "Operazioni degli insiemi" ;
                 Text [ spanish ] = "Operaciones de conjuntos" ;
-                Text [ french ] = "Opérations quantitatives" ;
+                Text [ french ] = "Opérateurs d'ensemble" ;
                 Text [ dutch ] = "Definities" ;
                 Text [ portuguese ] = "Operações de conjuntos" ;
                 Text[ chinese_simplified ] = "ÊıÁ¿ÔËËã";
@@ -11202,6 +11202,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
