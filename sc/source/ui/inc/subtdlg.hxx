@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,10 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 
+#include "scui_def.hxx" //CHINA001
 //------------------------------------------------------------------------
 
-#define SCRET_REMOVE    0x42
+//CHINA001 #define SCRET_REMOVE 0x42
 
 //==================================================================
 

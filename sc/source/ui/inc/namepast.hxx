@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namepast.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,10 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#define BTN_PASTE_NAME  100
-#define BTN_PASTE_LIST  101
-
+#include "scui_def.hxx" //CHINA001
+//CHINA001 #define BTN_PASTE_NAME   100
+//CHINA001 #define BTN_PASTE_LIST   101
+//CHINA001
 class ScRangeName;
 
 class ScNamePasteDlg : public ModalDialog
