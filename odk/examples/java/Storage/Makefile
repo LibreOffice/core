@@ -46,7 +46,7 @@ JavaStorageTestExample : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use following command to execute the example!
 	@echo ------
-	@echo make StorageFunctionality.run
+	@echo $(MAKE) StorageFunctionality.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
