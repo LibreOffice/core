@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 14:05:35 $
+#   last change: $Author: obo $ $Date: 2004-07-05 16:04:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,7 @@ IDLFILES=\
     Gradient.idl\
     GradientStyle.idl\
     ImageAlign.idl\
+    ImagePosition.idl\
     ImageStatus.idl\
     InputEvent.idl\
     InvalidateStyle.idl\
@@ -218,6 +219,7 @@ IDLFILES=\
     UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
     VclWindowPeerAttribute.idl\
+    VisualEffect.idl\
     WindowAttribute.idl\
     WindowClass.idl\
     WindowDescriptor.idl\
