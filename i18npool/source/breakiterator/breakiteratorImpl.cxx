@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
     throw RuntimeException();
 }
 
-const sal_Char cBreakIterator[] = "com.sun.star.i18n.BreakIterator";
+static const sal_Char cBreakIterator[] = "com.sun.star.i18n.BreakIterator";
 
 OUString SAL_CALL
 BreakIteratorImpl::getImplementationName(void) throw( RuntimeException )
