@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-02 15:43:25 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 #include "unoapi.hxx"
 #include "unofield.hxx"
 #include "flditem.hxx"
+#include "unoshprp.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -141,6 +142,8 @@ SfxItemPropertyMap aEmptyPropMap[] =
 {
     {0,0}
 };
+
+extern const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap();
 
 // ====================================================================
 // helper fuer Item/Property Konvertierung
@@ -574,6 +577,19 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
 
             uno::Reference< text::XTextField > xField( new SvxUnoTextField( xAnchor, aPresentation, pData ) );
             aAny <<= xField;
+        }
+    }
+    else if( pMap->nWID == WID_PORTIONTYPE )
+    {
+        if ( pAttribs->GetItemState( EE_FEATURE_FIELD, sal_False )  & SFX_ITEM_SET )
+        {
+            OUString aType( RTL_CONSTASCII_USTRINGPARAM("TextField") );
+            aAny <<= aType;
+        }
+        else
+        {
+            OUString aType( RTL_CONSTASCII_USTRINGPARAM("Text") );
+            aAny <<= aType;
         }
     }
     else
@@ -1055,8 +1071,9 @@ uno::Reference< uno::XInterface > SvxUnoTextRange_NewInstance()
     return xRange;
 }
 
-SvxUnoTextRange::SvxUnoTextRange( const SvxUnoText& rParent ) throw()
-:SvxUnoTextRangeBase( rParent )
+SvxUnoTextRange::SvxUnoTextRange( const SvxUnoText& rParent, sal_Bool bPortion /* = sal_False */ ) throw()
+:SvxUnoTextRangeBase( rParent.GetEditSource(), bPortion ? ImplGetSvxTextPortionPropertyMap() : rParent.getPropertyMap() ),
+ mbPortion( bPortion )
 {
     xParentText =  (text::XText*)&rParent;
 }
@@ -1425,7 +1442,7 @@ void SAL_CALL SvxUnoText::insertTextContent( const uno::Reference< text::XTextRa
     aSelection.nStartPos = aSelection.nEndPos;
     pRange->SetSelection( aSelection );
 
-    delete pField;
+    delete pFieldData;
 }
 
 void SAL_CALL SvxUnoText::removeTextContent( const uno::Reference< text::XTextContent >& xContent ) throw(container::NoSuchElementException, uno::RuntimeException)
