@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:23:37 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,123 +397,4 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
     return pDView;
 }
 
-/************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.7  2002/04/11 14:00:49  mib
-      #98604#: Don't GPF if layout is desctructed by the the last view
-
-      Revision 1.6  2001/08/10 10:52:57  rt
-      #87576# so3/advise.hxx is obsolete
-
-      Revision 1.5  2001/07/31 16:51:18  jp
-      Task #90434#: add author to the profiling statements
-
-      Revision 1.4  2001/07/23 17:18:16  jp
-      Task #90121#: add profiling statements
-
-      Revision 1.3  2000/10/25 12:03:41  jp
-      Spellchecker/Hyphenator are not longer member of the shells
-
-      Revision 1.2  2000/09/28 11:30:29  jp
-      remove old code of using no graphicobject
-
-      Revision 1.1.1.1  2000/09/19 00:08:29  hr
-      initial import
-
-      Revision 1.132  2000/09/18 16:04:38  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.131  2000/07/06 16:57:25  jp
-      DTOR: dont laod the graphic to stop the animation
-
-      Revision 1.130  2000/07/04 15:21:42  tl
-      XHyphenator1 => XHyphenator
-
-      Revision 1.129  2000/03/23 06:48:25  os
-      UNOIII
-
-      Revision 1.128  2000/02/16 20:55:52  tl
-      #72219# Locale Umstellung
-
-      Revision 1.127  1999/11/23 08:21:54  os
-      header corrected
-
-      Revision 1.126  1999/11/19 16:40:19  os
-      modules renamed
-
-      Revision 1.125  1999/10/25 19:08:51  tl
-      ongoing ONE_LINGU implementation
-
-      Revision 1.124  1999/04/09 15:50:26  MA
-      #64467# EndAction und VirDev
-
-
-      Rev 1.123   09 Apr 1999 17:50:26   MA
-   #64467# EndAction und VirDev
-
-      Rev 1.122   02 Mar 1999 16:07:32   AMA
-   Fix #62568#: Invalidierungen so sparsam wie moeglich, so gruendlich wie noetig
-
-      Rev 1.121   22 Feb 1999 08:35:22   MA
-   1949globale Shell entsorgt, Shells am RootFrm
-
-      Rev 1.120   02 Feb 1999 13:15:20   JP
-   Bug #61335#: im Init vorm anlegen des Layouts ReadOnly-Status feststellen
-
-      Rev 1.119   06 Oct 1998 12:44:12   JP
-   Bug #57153#: neu GetDrawViewWithValidMarkList
-
-      Rev 1.118   05 Oct 1998 17:44:00   MA
-   #57380# Reset fuer NewLayout
-
-      Rev 1.117   09 Sep 1998 14:59:22   MA
-   #56106# Array aus im CoreInit initialisieren
-
-      Rev 1.116   09 Sep 1998 11:47:46   MA
-   #56106# CurrShell-Verwaltung aufwendiger
-
-      Rev 1.115   27 Jul 1998 16:56:00   JP
-   Bug #45529#: LoadStyles muss ggfs. das Zuruecksetzen des ModifiedFlags verhindern
-
-      Rev 1.114   19 Jul 1998 17:55:24   JP
-   Bug #52312#: PagePreviewFlag wird im CTOR benoetigt
-
-      Rev 1.113   24 Jun 1998 18:45:20   MA
-   DataChanged fuer ScrollBar und Retouche, Retouche ganz umgestellt
-
-      Rev 1.112   19 May 1998 10:12:40   TJ
-   include wg. ice
-
-      Rev 1.111   29 Apr 1998 09:31:30   MA
-   RetoucheBrush -> RetoucheColor
-
-      Rev 1.110   27 Apr 1998 15:09:10   MA
-   ein paar sv2vcl
-
-      Rev 1.109   23 Apr 1998 09:33:36   MA
-   #49472# Optional ein Outdev durchschleusen
-
-      Rev 1.108   26 Mar 1998 17:58:50   MA
-   Wechsel fuer Drucker/Jobsetup jetzt vollstaendig und am Dokument
-
-      Rev 1.107   20 Nov 1997 12:40:38   MA
-   includes
-
-      Rev 1.106   17 Nov 1997 09:47:28   JP
-   Umstellung Numerierung
-
-      Rev 1.105   03 Nov 1997 13:07:28   MA
-   precomp entfernt
-
-      Rev 1.104   22 Oct 1997 14:28:46   MA
-   fix: Brush mit Style NULL fuer Drucker-Retouche
-
-      Rev 1.103   13 Oct 1997 15:54:28   JP
-   pNext vom Ring wurde privat; zugriff ueber GetNext()
-
-      Rev 1.102   09 Oct 1997 16:05:20   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-*************************************************************************/
 

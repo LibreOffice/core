@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:07:38 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,33 +477,4 @@ void SwXReferenceMark::removeVetoableChangeListener(
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2002/02/01 12:42:16  jp
-    Task #92291#: add new character skip modifier
-
-    Revision 1.3  2001/11/06 08:34:24  jp
-    Bug #93914#: optimize the modify calls
-
-    Revision 1.2  2001/01/12 16:12:45  os
-    new: Redline container
-
-    Revision 1.1.1.1  2000/09/19 00:08:28  hr
-    initial import
-
-    Revision 1.4  2000/09/18 16:04:34  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  2000/09/12 11:42:59  os
-    #78682# support of service TextContent
-
-    Revision 1.2  2000/09/11 09:57:06  os
-    TYPEINFO
-
-    Revision 1.1  2000/05/04 15:14:14  os
-    reduce size of unoobj.cxx
-
-
-------------------------------------------------------------------------*/
 

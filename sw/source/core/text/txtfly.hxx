@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-17 14:46:14 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,64 +258,5 @@ inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, sal_Bool bTop ) const
     return bOn ? _GetFrm( rRect, bTop ) : SwRect();
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2001/12/06 15:54:16  fme
-      Chg: Vertical Formatting - Changed argument order for CalcBoundRect
-
-      Revision 1.3  2001/10/12 08:11:40  fme
-      Fix #93009#: Frames anchored at page should not affect text in footer or header
-
-      Revision 1.2  2001/08/31 06:19:23  fme
-      New: Vertical text formatting
-
-      Revision 1.1.1.1  2000/09/19 00:08:26  hr
-      initial import
-
-      Revision 1.105  2000/09/18 16:04:23  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.104  2000/09/08 13:25:45  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.103  2000/04/13 09:59:17  ama
-      Unicode changes
-
-      Revision 1.102  2000/03/03 15:17:21  os
-      StarView remainders removed
-
-      Revision 1.101  1999/04/06 12:13:32  AMA
-      Fix #64178#: Geringe Zeilenhoehe und grosse Rahmen ohne Umlauf
-
-
-      Rev 1.100   06 Apr 1999 14:13:32   AMA
-   Fix #64178#: Geringe Zeilenhoehe und grosse Rahmen ohne Umlauf
-
-      Rev 1.99   01 Apr 1998 11:17:46   AMA
-   Fix #48894#: Bei AnchorOnly muss natuerlich der Master verglichen werden!
-
-      Rev 1.98   28 Jan 1998 13:41:56   MA
-   ueberfluessiges Hell-Paint vom Text entfernt
-
-      Rev 1.97   20 Nov 1997 17:33:20   MA
-   includes
-
-      Rev 1.96   09 Oct 1997 16:16:10   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.95   26 Sep 1997 14:44:12   AMA
-   Opt: IsAnyObj meldet Ueberlappung mit Objekten ohne Kontur/Umlauf-Feinheiten
-
-      Rev 1.94   24 Sep 1997 09:46:24   AMA
-   Opt: Weniger Flackern durch Nutzung eines virtuellen OutputDevices
-
-      Rev 1.93   23 Sep 1997 12:03:44   AMA
-   Opt: Weniger Flackern durch Nutzung eines virtuellen OutputDevices
-
-      Rev 1.92   23 Jul 1997 13:07:36   AMA
-   Fix #41891#: Fuer Fly/Footer-Loops wird MakeFlyDummy reanimiert und optimiert
-
-*************************************************************************/
 
 #endif

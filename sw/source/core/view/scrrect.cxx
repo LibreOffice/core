@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-11-20 09:51:59 $
+ *  last change: $Author: os $ $Date: 2002-12-05 13:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,54 +1174,4 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
         delete pStripes;
 }
 
-/************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2002/09/16 10:07:48  fme
-      #100842# Do not read uninitialized nControl from document
-
-      Revision 1.4  2001/11/29 15:50:52  ama
-      Fix: Paragraph scrolling in vertical text
-
-      Revision 1.3  2001/06/08 13:03:27  ama
-      Fix #87926#: Don't paint outside the page frame
-
-      Revision 1.2  2001/03/01 11:15:24  ama
-      Fix #84455#: memory leak
-
-      Revision 1.1.1.1  2000/09/19 00:08:29  hr
-      initial import
-
-      Revision 1.10  2000/09/18 16:04:37  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.9  2000/09/05 08:07:52  ama
-      Fix: Wrong insert position
-
-      Revision 1.8  2000/09/04 13:58:17  ama
-      Fix: some paint problems with negative indents
-
-      Revision 1.7  2000/09/01 15:02:04  ama
-      Opt.: Scrolling, paints and negative indents
-
-      Revision 1.6  2000/08/17 11:26:05  ama
-      Fix #77608#: Scrolling bugs
-
-      Revision 1.5  2000/07/21 11:47:53  ama
-      Opt: some comment may be helpful
-
-      Revision 1.4  2000/07/20 15:09:13  ama
-      Fix #77064#: Wrong paintarea
-
-      Revision 1.3  2000/07/18 15:17:13  ama
-      Fix: InsertCol instead insert
-
-      Revision 1.2  2000/07/18 14:37:51  ama
-      Fix: Scrolling of scrolled critical areas
-
-      Revision 1.1  2000/07/17 10:32:09  ama
-      Opt: Smarter scrolling for RVP
-
-
-*************************************************************************/
 
