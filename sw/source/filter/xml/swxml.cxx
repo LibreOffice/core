@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-25 16:33:53 $
+ *  last change: $Author: tl $ $Date: 2002-11-20 14:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,6 +659,13 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             rDoc.ReadLayoutCache( *xStrm );
         }
     }
+
+    // Notify math objects
+    if( bInsertMode )
+        rDoc.PrtOLENotify( FALSE );
+    else if ( rDoc.IsOLEPrtNotifyPending() )
+        rDoc.PrtOLENotify( TRUE );
+
     if( !nRet )
     {
         if( nWarn )
