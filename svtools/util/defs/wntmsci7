@@ -9017,3 +9017,4 @@ lpfnGetWindowTextW
 ?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABJ@Z
 ?s_pType_com_sun_star_system_XProxySettings@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXProxySettings@system@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?set@?$Reference@VXProxySettings@system@star@sun@com@@@uno@star@sun@com@@QAAEPAVXProxySettings@system@345@@Z
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABN@Z
