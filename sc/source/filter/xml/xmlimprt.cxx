@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-27 11:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
+#define SC_CURRENCYSYMBOL   "CurrencySymbol"
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -1916,6 +1917,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
 
 sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency)
 {
+    rtl::OUString sTemp;
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
     if (xNumberFormatsSupplier.is())
     {
@@ -1942,7 +1944,8 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                         aBuffer.append(rCurrency);
                         aBuffer.appendAscii("]");
                         UnlockSolarMutex();
-                        return xNumberFormats->addNew(aBuffer.makeStringAndClear(), aLocale);
+                        sTemp = aBuffer.makeStringAndClear();
+                        return xNumberFormats->addNew(sTemp, aLocale);
                     }
                 }
             }
@@ -1953,6 +1956,31 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
         }
     }
        return nKey;
+}
+
+sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol)
+{
+    uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
+    if (xNumberFormatsSupplier.is())
+    {
+        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+        if (xNumberFormats.is())
+        {
+            try
+            {
+                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+                uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURRENCYSYMBOL)));
+                rtl::OUString sTemp;
+                if ( aCurrencySymbol >>= sTemp)
+                    return sCurrencySymbol.equals(sTemp);
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
+            }
+        }
+    }
+    return sal_False;
 }
 
 void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
@@ -1969,10 +1997,10 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         }
         DBG_ASSERT(rNumberFormat != -1, "no NumberFormat");
         sal_Bool bIsStandard;
-        rtl::OUString sCurrentCurrency;
+        rtl::OUString sCurrentBankCurrency;
         sal_Int32 nCurrentCellType(
             GetNumberFormatAttributesExportHelper()->GetCellType(
-                rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
+                rNumberFormat, sCurrentBankCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
         if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
             ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
             (nCurrentCellType == util::NumberFormat::FRACTION) ||
@@ -2020,14 +2048,17 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         }
         else
         {
-            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentCurrency.getLength())
+            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentBankCurrency.getLength())
             {
-                if (!sCurrentCurrency.equals(rCurrency))
+                if (!sCurrentBankCurrency.equals(rCurrency))
                 {
-                    sal_Int32 nKey = SetCurrencySymbol(rNumberFormat, rCurrency);
-                    uno::Any aAny;
-                    aAny <<= nKey;
-                    rProperties->setPropertyValue( sNumberFormat, aAny);
+                    if (!IsCurrencySymbol(rNumberFormat, rCurrency))
+                    {
+                        sal_Int32 nKey = SetCurrencySymbol(rNumberFormat, rCurrency);
+                        uno::Any aAny;
+                        aAny <<= nKey;
+                        rProperties->setPropertyValue( sNumberFormat, aAny);
+                    }
                 }
             }
         }

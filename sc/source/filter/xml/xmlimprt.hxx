@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-27 11:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,6 +942,7 @@ public:
     rtl::OUString GetFirstTableStyle() { return sFirstTableStyle; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
+    sal_Bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol);
     void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties,
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
