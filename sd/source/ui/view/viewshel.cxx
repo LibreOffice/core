@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: af $ $Date: 2002-09-18 08:13:09 $
+ *  last change: $Author: bm $ $Date: 2002-11-01 11:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1563,7 +1563,8 @@ void SdViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
 
 void SdViewShell::ExecReq( SfxRequest& rReq )
 {
-    switch( rReq.GetSlot() )
+    USHORT nSlot = rReq.GetSlot();
+    switch( nSlot )
     {
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
         {
@@ -1578,6 +1579,31 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
         }
         break;
 
+        case SID_OUTPUT_QUALITY_COLOR:
+        case SID_OUTPUT_QUALITY_GRAYSCALE:
+        case SID_OUTPUT_QUALITY_BLACKWHITE:
+        case SID_OUTPUT_QUALITY_CONTRAST:
+        {
+            ULONG nMode = OUTPUT_DRAWMODE_COLOR;
+
+            switch( nSlot )
+            {
+                case SID_OUTPUT_QUALITY_COLOR: nMode = OUTPUT_DRAWMODE_COLOR; break;
+                case SID_OUTPUT_QUALITY_GRAYSCALE: nMode = OUTPUT_DRAWMODE_GRAYSCALE; break;
+                case SID_OUTPUT_QUALITY_BLACKWHITE: nMode = OUTPUT_DRAWMODE_BLACKWHITE; break;
+                case SID_OUTPUT_QUALITY_CONTRAST: nMode = OUTPUT_DRAWMODE_CONTRAST; break;
+            }
+
+            pWindow->SetDrawMode( nMode );
+            pFrameView->SetDrawMode( nMode );
+            GetView()->ReleaseMasterPagePaintCache();
+            pWindow->Invalidate();
+
+            Invalidate();
+            rReq.Done();
+            break;
+        }
+
         case SID_PREVIEW_QUALITY_COLOR:
         case SID_PREVIEW_QUALITY_GRAYSCALE:
         case SID_PREVIEW_QUALITY_BLACKWHITE:
@@ -1585,7 +1611,7 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
         {
             ULONG nMode = PREVIEW_DRAWMODE_COLOR;
 
-            switch( rReq.GetSlot() )
+            switch( nSlot )
             {
                 case SID_PREVIEW_QUALITY_COLOR: nMode = PREVIEW_DRAWMODE_COLOR; break;
                 case SID_PREVIEW_QUALITY_GRAYSCALE: nMode = PREVIEW_DRAWMODE_GRAYSCALE; break;
