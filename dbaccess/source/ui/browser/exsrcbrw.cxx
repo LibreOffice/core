@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:39:55 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 14:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,32 +412,35 @@ void SAL_CALL SbaExternalSourceBrowser::unloading(const ::com::sun::star::lang::
 //------------------------------------------------------------------
 void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 {
-    // switch the control to design mode
-    if (getBrowserView() && getBrowserView()->getGridControl().is())
-        getBrowserView()->getGridControl()->setDesignMode(sal_True);
-
-    // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
     Any aOldPos;
-    // restore the old position
+    sal_Bool bWasInsertRow = sal_False;
     sal_Bool bBeforeFirst   = sal_True;
     sal_Bool bAfterLast     = sal_True;
-    Reference< ::com::sun::star::sdbc::XResultSet >  xResultSet(xMaster, UNO_QUERY);
-    Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(xMaster, UNO_QUERY);
-    if (xCursor.is() && xResultSet.is())
+    Reference< XResultSet > xResultSet(xMaster, UNO_QUERY);
+    Reference< XRowLocate > xCursor(xMaster, UNO_QUERY);
+    Reference< XPropertySet > xMasterProps(xMaster, UNO_QUERY);
+    try
     {
-        bBeforeFirst = xResultSet->isBeforeFirst();
-        bAfterLast   = xResultSet->isBeforeFirst();
-        if(!bBeforeFirst && !bAfterLast)
-            aOldPos = xCursor->getBookmark();
-    }
+        // switch the control to design mode
+        if (getBrowserView() && getBrowserView()->getGridControl().is())
+            getBrowserView()->getGridControl()->setDesignMode(sal_True);
 
-    sal_Bool bWasInsertRow = sal_False;
-    Reference< ::com::sun::star::beans::XPropertySet >  xMasterProps(xMaster, UNO_QUERY);
-    if (xMasterProps.is())
+        // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
+        // restore the old position
+        if (xCursor.is() && xResultSet.is())
+        {
+            bBeforeFirst = xResultSet->isBeforeFirst();
+            bAfterLast   = xResultSet->isAfterLast();
+            if(!bBeforeFirst && !bAfterLast)
+                aOldPos = xCursor->getBookmark();
+        }
+
+        if (xMasterProps.is())
+            xMasterProps->getPropertyValue(PROPERTY_ISNEW) >>= bWasInsertRow;
+    }
+    catch(Exception&)
     {
-        try { bWasInsertRow = ::comphelper::getBOOL(xMasterProps->getPropertyValue(PROPERTY_ISNEW)); }
-        catch(Exception&)
-        { }
+        OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::Attach: caught an exception in part 1 (analyzing)!");
     }
 
     stopListening();
