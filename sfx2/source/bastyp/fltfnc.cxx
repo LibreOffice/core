@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: as $ $Date: 2001-10-24 09:35:52 $
+ *  last change: $Author: as $ $Date: 2001-10-24 11:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,6 +1669,14 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                             if( sHumanName.getLength() )
                             {
                                 nClipboardId = SotExchange::RegisterFormatName( sHumanName );
+                            }
+                            // register SfxFilter
+                            // first erase module name from old filter names!
+                            // e.g: "scalc: DIF" => "DIF"
+                            sal_Int32 nStartRealName = sFilterName.indexOf( DEFINE_CONST_UNICODE(": "), 0 );
+                            if( nStartRealName != -1 )
+                            {
+                                sFilterName = sFilterName.copy( nStartRealName+2 );
                             }
 
                             SfxFilter *pFilter = new SfxFilter( sFilterName             ,
