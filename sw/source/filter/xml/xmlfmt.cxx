@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:07:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,10 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
         const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
-        SwStyleNameMapper::FillUIName( pCond->GetApplyStyle(),
+        OUString aDisplayName(
+            GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                pCond->GetApplyStyle() ) );
+        SwStyleNameMapper::FillUIName( aDisplayName,
                                       aString,
                                       GET_POOLID_TXTCOLL,
                                       sal_True);
@@ -711,7 +714,10 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        if( IsXMLToken( rLocalName, XML_PROPERTIES ) )
+        if( IsXMLToken( rLocalName, XML_TABLE_PROPERTIES ) ||
+            IsXMLToken( rLocalName, XML_TABLE_COLUMN_PROPERTIES ) ||
+            IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES ) ||
+            IsXMLToken( rLocalName, XML_TABLE_CELL_PROPERTIES ) )
         {
             pContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
         }
@@ -743,6 +749,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
                                    sName,
                                    GET_POOLID_PAGEDESC,
                                    sal_True);
+    sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
+                                             sName );
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {
