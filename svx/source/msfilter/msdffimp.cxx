@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-16 16:09:53 $
+ *  last change: $Author: jp $ $Date: 2000-12-05 17:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4889,13 +4889,20 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
     };
 
     SvInPlaceObjectRef xIPObj;
+    SvGlobalName aStgNm;
+    BOOL bFirstCompare = TRUE;
     for( const _ObjImpType* pArr = aArr; pArr->nFlag; ++pArr )
         if( nConvertFlags & pArr->nFlag )
         {
             SvGlobalName aTypeName( pArr->n1, pArr->n2, pArr->n3,
                             pArr->b8, pArr->b9, pArr->b10, pArr->b11,
                             pArr->b12, pArr->b13, pArr->b14, pArr->b15 );
-            if( rSrcStg.GetClassName() == aTypeName )
+            if( bFirstCompare )
+            {
+                aStgNm = rSrcStg.GetClassName();
+                bFirstCompare = FALSE;
+            }
+            if( aStgNm == aTypeName )
             {
                 String sStarName( String::CreateFromAscii( pArr->pFactoryNm ));
                 const SfxObjectFactory* pFact =
@@ -4966,20 +4973,22 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
             if( xObjStg.Is()  )
             {
-                BYTE aTestA[10];    // exist the \1CompObj-Stream ?
-                SvStorageStreamRef xSrcTst = xObjStg->OpenStream(
-                            String( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ),
-                                    RTL_TEXTENCODING_MS_1252 ));
-                bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
-                                xSrcTst->Read( aTestA, sizeof( aTestA ) );
-                if( !bValidStorage )
                 {
-                    // or the \1Ole-Stream ?
-                    xSrcTst = xObjStg->OpenStream(
-                                String( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ),
+                    BYTE aTestA[10];    // exist the \1CompObj-Stream ?
+                    SvStorageStreamRef xSrcTst = xObjStg->OpenStream(
+                                String( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ),
                                         RTL_TEXTENCODING_MS_1252 ));
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
                                     xSrcTst->Read( aTestA, sizeof( aTestA ) );
+                    if( !bValidStorage )
+                    {
+                        // or the \1Ole-Stream ?
+                        xSrcTst = xObjStg->OpenStream(
+                                    String( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ),
+                                            RTL_TEXTENCODING_MS_1252 ));
+                        bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
+                                        xSrcTst->Read( aTestA, sizeof( aTestA ) );
+                    }
                 }
 
                 if( bValidStorage && nConvertFlags )
