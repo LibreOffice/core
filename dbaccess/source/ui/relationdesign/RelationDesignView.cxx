@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:52:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #endif
 #ifndef DBAUI_RELATION_TABLEVIEW_HXX
 #include "RelationTableView.hxx"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBAUI_RELATIONCONTROLLER_HXX
 #include "RelationController.hxx"
