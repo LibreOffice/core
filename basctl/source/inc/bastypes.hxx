@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:50:42 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ public:
 
 
 
-void            CutLines( String& rStr, USHORT nStartLine, USHORT nLines, BOOL bEraseTrailingEmptyLines = FALSE );
+void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines = FALSE );
 String          CreateMgrAndLibStr( const String& rMgrName, const String& rLibName );
 String          GetMgrFromMgrAndLib( const String& rMgrAndLib );
 String          GetLibFromMgrAndLib( const String& rMgrAndLib );
