@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:58:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,13 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36.6.1  2003/07/16 17:11:04  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.36  2003/07/03 17:58:51  hr
+ *  INTEGRATION: CWS rc2merge (1.35.8); FILE MERGED
+ *  2003/07/03 14:44:05 ihi 1.35.8.1: rc-2 merge all languages
+ *
  *  Revision 1.35.8.1  2003/07/03 14:44:05  ihi
  *  rc-2 merge all languages
  *
@@ -559,6 +566,8 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
+
 
 
 
