@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 17:18:27 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,7 +1028,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text [ portuguese ] = "Este documento poderб conter atributos e informaзхes que nгo podem ser guardados no\nformato $(FORMAT). Guardar as modificaзхes no\nformato $(OWNFORMAT)?" ;
     Text [ portuguese_brazilian ] = "Dieses Dokument kann Formatierungen und Informationen\nenthalten, die nicht im $(FORMAT) Format gespeichert\nwerden kцnnen. Mцchten Sie die Дnderungen im\n$(OWNFORMAT) Format speichern?" ;
     Text[ chinese_simplified ] = "ХвёцОДµµїЙДЬє¬УРТ»Р©ОЮ·ЁУГ $(FORMAT) ёсКЅґжЕМµДёсКЅєНРЕПўЎЈ\nДъТЄК№УГ $(OWNFORMAT) ёсКЅґжЕМОДµµµДёьёДВрЈї";
-    Text[ russian ] = "Возможно, что в этом документе содержатся форматирования и информация, которые невозможно сохранить в формате $(FORMAT). Вы хотите сохранить изменения в\nформате$(OWNFORMAT)?";
+    Text[ russian ] = "Возможно, что в этом документе содержатся форматирования и информация, которые невозможно сохранить в формате $(FORMAT). Вы хотите сохранить изменения в формате $(OWNFORMAT)?";
     Text[ polish ] = "Dokument ten moїe zawieraж formatowania\ni informacje, ktуrych nie bкdzie moїna zapisaж\nw formacie $(FORMAT). Czy chcesz zapisaж\nzmiany w formacie $(OWNFORMAT)?";
     Text[ japanese ] = "‚±‚МДЮ·­ТЭД‚Н $(FORMAT) Џ‘Ћ®‚Е•Ы‘¶‚Е‚«‚И‚ўЏ‘Ћ®ђЭ’и‚ЖЏо•с‚р\nЉЬ‚с‚Е‚ў‚Ь‚·ЃB•ПЌX‚р\n$(OWNFORMAT) Џ‘Ћ®‚Й•Ы‘¶‚µ‚Ь‚·‚©ЃB";
     Text[ chinese_traditional ] = "іo­У¤еҐуҐiЇа§t¦і¤@ЁЗµLЄkҐО $(FORMAT) ®ж¦ЎАx¦sЄє®ж¦ЎЎC\n±z­nЁПҐО $(OWNFORMAT) ®ж¦ЎАx¦s¤еҐуЄєЕЬ§уЎH";
@@ -1227,7 +1227,7 @@ String STR_WIZARD
 {
     Text = "wizard" ;
     Text [ ENGLISH ] = "wizard" ;
-    Text [ english_us ] = "wizard" ;
+    Text [ english_us ] = " AutoPilot" ;
     Text [ italian ] = "wizard" ;
     Text [ spanish ] = "asistente" ;
     Text [ french ] = "Assistant" ;
