@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 16:50:51 $
+ *  last change: $Author: aw $ $Date: 2002-05-22 10:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,13 +540,24 @@ void SdrLinkList::RemoveLink(const Link& rLink)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// #98988# Re-implement GetDraftFillColor(...)
 
 FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
     XFillStyle eFill=((XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE)).GetValue();
-    switch (eFill) {
-        case XFILL_SOLID: rCol=((XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetValue(); return TRUE;
-        case XFILL_HATCH: {
+    FASTBOOL bRetval(FALSE);
+
+    switch(eFill)
+    {
+        case XFILL_SOLID:
+        {
+            rCol = ((XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetValue();
+            bRetval = TRUE;
+
+            break;
+        }
+        case XFILL_HATCH:
+        {
             Color aCol1(((XFillHatchItem&)rSet.Get(XATTR_FILLHATCH)).GetValue().GetColor());
             Color aCol2(COL_WHITE);
 
@@ -557,93 +568,73 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 aCol2 = ((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetValue();
             }
 
-            // What the hell is this old color mixing try from JOE? It's bloody WRONG
-            // USHORT nRt=(USHORT)(((ULONG)aCol1.GetRed  ()+(ULONG)aCol2.GetRed  ())/2);
-            // USHORT nGn=(USHORT)(((ULONG)aCol1.GetGreen()+(ULONG)aCol2.GetGreen())/2);
-            // USHORT nBl=(USHORT)(((ULONG)aCol1.GetBlue ()+(ULONG)aCol2.GetBlue ())/2);
+            ((B3dColor&)rCol).CalcMiddle(aCol1, aCol2);
+            bRetval = TRUE;
 
-            UINT8 nRt = (UINT8)(((aCol1.GetRed() + 1)>>1) + (aCol2.GetRed()>>1));
-            UINT8 nGn = (UINT8)(((aCol1.GetGreen() + 1)>>1) + (aCol2.GetGreen()>>1));
-            UINT8 nBl = (UINT8)(((aCol1.GetBlue() + 1)>>1) + (aCol2.GetBlue()>>1));
-
-            rCol=Color(nRt,nGn,nBl);
-            return TRUE;
+            break;
         }
         case XFILL_GRADIENT: {
             const XGradient& rGrad=((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetValue();
             Color aCol1(rGrad.GetStartColor());
             Color aCol2(rGrad.GetEndColor());
+            ((B3dColor&)rCol).CalcMiddle(aCol1, aCol2);
+            bRetval = TRUE;
 
-            // Same here, look above.
-            UINT8 nRt = (UINT8)(((aCol1.GetRed() + 1)>>1) + (aCol2.GetRed()>>1));
-            UINT8 nGn = (UINT8)(((aCol1.GetGreen() + 1)>>1) + (aCol2.GetGreen()>>1));
-            UINT8 nBl = (UINT8)(((aCol1.GetBlue() + 1)>>1) + (aCol2.GetBlue()>>1));
-
-            rCol=Color(nRt,nGn,nBl);
-            return TRUE;
+            break;
         }
-        case XFILL_BITMAP: {
-            const Bitmap& rBmp=((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetValue().GetBitmap();
+        case XFILL_BITMAP:
+        {
+            const Bitmap& rBitmap = ((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetValue().GetBitmap();
+            const Size aSize(rBitmap.GetSizePixel());
+            const sal_uInt32 nWidth = aSize.Width();
+            const sal_uInt32 nHeight = aSize.Height();
+            Bitmap aBitmap(rBitmap);
+            BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
 
-            Size aSiz(rBmp.GetSizePixel());
-            if (aSiz.Width()>0 && aSiz.Height()>0) {
-                if (aSiz.Width ()>8) aSiz.Width ()=8;
-                if (aSiz.Height()>8) aSiz.Height()=8;
+            if(pAccess && nWidth > 0 && nHeight > 0)
+            {
+                sal_uInt32 nRt(0L);
+                sal_uInt32 nGn(0L);
+                sal_uInt32 nBl(0L);
+                const sal_uInt32 nMaxSteps(8L);
+                const sal_uInt32 nXStep((nWidth > nMaxSteps) ? nWidth / nMaxSteps : 1L);
+                const sal_uInt32 nYStep((nHeight > nMaxSteps) ? nHeight / nMaxSteps : 1L);
+                sal_uInt32 nAnz(0L);
 
-                ULONG nRt=0,nGn=0,nBl=0;
-
-                // in VCL koennen wir die Pixel von der Bitmap holen;
-                // alles wird gut... (KA 21.09.97)
-                Bitmap              aBmp( rBmp );
-                BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
-
-                if( pAcc )
+                for(sal_uInt32 nY(0L); nY < nHeight; nY += nYStep)
                 {
-                    const long nWidth = aSiz.Width();
-                    const long nHeight = aSiz.Height();
-
-                    if( pAcc->HasPalette() )
+                    for(sal_uInt32 nX(0L); nX < nWidth; nX += nXStep)
                     {
-                        for( long nY = 0L; nY < nHeight; nY++ )
-                        {
-                            for( long nX = 0L; nX < nWidth; nX++ )
-                            {
-                                const BitmapColor& rCol = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
-                                nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
+                        const BitmapColor& rCol = (pAccess->HasPalette())
+                            ? pAccess->GetPaletteColor((BYTE)pAccess->GetPixel(nY, nX))
+                            : pAccess->GetPixel(nY, nX);
 
-                            }
-                        }
+                        nRt += rCol.GetRed();
+                        nGn += rCol.GetGreen();
+                        nBl += rCol.GetBlue();
+                        nAnz++;
                     }
-                    else
-                    {
-                        for( long nY = 0L; nY < nHeight; nY++ )
-                        {
-                            for( long nX = 0L; nX < nWidth; nX++ )
-                            {
-                                const BitmapColor aCol( pAcc->GetPixel( nY, nX ) );
-                                nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();
-
-                            }
-                        }
-                    }
-
-                    aBmp.ReleaseAccess( pAcc );
                 }
 
-                unsigned nAnz=unsigned(aSiz.Width()*aSiz.Height());
+                nRt /= nAnz;
+                nGn /= nAnz;
+                nBl /= nAnz;
 
-                // same problem here (see above), also no cropping, but good enough for
-                // now (was good enough since Jul 1998)
-                nRt/=nAnz;
-                nGn/=nAnz;
-                nBl/=nAnz;
+                rCol = Color(UINT8(nRt), UINT8(nGn), UINT8(nBl));
 
-                rCol=Color(UINT8(nRt),UINT8(nGn),UINT8(nBl));
-                return TRUE;
+                bRetval = TRUE;
             }
+
+            if(pAccess)
+            {
+                aBitmap.ReleaseAccess(pAccess);
+            }
+
+            break;
         }
-    } // switch
-    return FALSE;
+    }
+
+    return bRetval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
