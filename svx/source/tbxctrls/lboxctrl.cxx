@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:15:41 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     ToolBox &       rToolBox;
     BOOL            bUserSel;
     // disallow copy-constructor and assignment-operator
-
-    SvxPopupWindowListBox(const int& );
-    SvxPopupWindowListBox & operator = (const int& );
 
     SvxPopupWindowListBox( USHORT nSlotId,
                            ToolBox& rTbx, USHORT nTbxItemId );
@@ -279,6 +276,17 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
 void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
+
+    ListBox &rListBox = pPopupWin->GetListBox();
+
+    USHORT nId;
+    if (nCount == 1)
+        nId = SID_UNDO == GetId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
+    else
+        nId = SID_UNDO == GetId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
+
+    aActionStr = String(SVX_RES(nId));
+
     String aText( aActionStr );
     aText.SearchAndReplaceAllAscii( "$(ARG1)", String::CreateFromInt32( nCount ) );
     pPopupWin->GetInfo().SetText( aText );
@@ -342,9 +350,6 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
                 rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
         rListBox.SelectEntryPos( 0 );
 
-        aActionStr = String( SVX_RES( SID_UNDO == nId
-                                        ? RID_SVXSTR_NUM_UNDO_ACTIONS
-                                           : RID_SVXSTR_NUM_REDO_ACTIONS ) );
         Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
 
@@ -355,6 +360,3 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
     }
     return pPopupWin;
 }
-
-
-
