@@ -3,9 +3,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 06:55:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
+#endif
 
 namespace
 {
@@ -113,7 +116,7 @@ namespace
 
 void Splitter::ImplInitData()
 {
-    mbSplitter        = TRUE;
+    mpWindowImpl->mbSplitter        = TRUE;
     mpRefWin          = NULL;
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;
