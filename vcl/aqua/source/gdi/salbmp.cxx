@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-05 21:18:14 $
+ *  last change: $Author: pluby $ $Date: 2001-01-05 23:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
     ImplSVData* pSVData = ImplGetSVData();
     BOOL bRet = FALSE;
 
-    // Stub code: we can only handle 32 bit pixel depth's right now
-    nBitCount = 32;
-
     if ( rSize.Width() && rSize.Height() )
     {
         // Create a SalVirtualDevice
@@ -110,9 +107,25 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
 
         if ( mpVirDev )
         {
-            mnBitCount = nBitCount;
-            maSize = rSize;
-            bRet = TRUE;
+            // Get the SalGraphics which contains the GWorld we will draw to
+            SalGraphics *pGraphics = GetGraphics();
+
+            if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+            {
+                mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+
+                if ( mhPixMap )
+                {
+                    USHORT nBits = (**mhPixMap).pixelSize;
+                    mnBitCount = ( nBits <= 8 ) ? nBits : 24;
+                    maSize = rSize;
+                    bRet = TRUE;
+                }
+            }
+
+            // Release the SalGraphics so that others can get a handle to it
+            // in future GetGraphics() calls
+            ReleaseGraphics( pGraphics );
         }
     }
 
@@ -163,6 +176,7 @@ void SalBitmap::Destroy()
     if ( mpVirDev )
         pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
 
+    mhPixMap = NULL;
     maSize = Size();
     mnBitCount = 0;
 }
@@ -180,25 +194,74 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
         if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
         {
-            PixMapHandle hPixMap = NULL;
-
-            hPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
-
-            if ( hPixMap )
+            if ( mhPixMap )
             {
+                USHORT nBits = (**mhPixMap).pixelSize;
                 pBuffer = new BitmapBuffer();
 
                 // Lock the GWorld so that the calling functions can write to
                 // this buffer
                 LockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
 
-                pBuffer->mnBitCount = (**hPixMap).pixelSize;
-                pBuffer->mnWidth = mpVirDev->maVirDevData.mnWidth;
-                pBuffer->mnHeight = mpVirDev->maVirDevData.mnHeight;
-                pBuffer->mnBitCount = (**hPixMap).pixelSize;
-                pBuffer->mnScanlineSize = GetPixRowBytes( hPixMap );
-                pBuffer->mpBits = (BYTE *)GetPixBaseAddr( hPixMap );
-                pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN | BMP_FORMAT_32BIT_TC_MASK;
+                pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN;
+                pBuffer->mnBitCount = ( nBits <= 8 ) ? nBits : 24;
+
+                switch ( nBits )
+                {
+                    case 1:
+                        pBuffer->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL;
+                        break;
+                    case 4:
+                        pBuffer->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL;
+                        break;
+                    case 8:
+                        pBuffer->mnFormat |= BMP_FORMAT_8BIT_PAL;
+                        break;
+                    case 16:
+                        pBuffer->mnFormat |= BMP_FORMAT_16BIT_TC_MASK;
+                        pBuffer->maColorMask = ColorMask( 0x7b00, 0x03e0, 0x001f);
+                        break;
+                    case 32:
+                        pBuffer->mnFormat |= BMP_FORMAT_32BIT_TC_ARGB;
+                        break;
+                    default:
+                        break;
+                }
+
+                if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
+                {
+                    pBuffer->mnWidth = mpVirDev->maVirDevData.mnWidth;
+                    pBuffer->mnHeight = mpVirDev->maVirDevData.mnHeight;
+                    pBuffer->mnScanlineSize = GetPixRowBytes( mhPixMap );
+                    pBuffer->mpBits = (BYTE *)GetPixBaseAddr( mhPixMap );
+
+                    // If the pixel depth is <= 8, we need to map QuickDraw's
+                    // internal color table to the platform independent
+                    // BitmapPalette color table
+                    if ( nBits <= 8 )
+                    {
+                        CTabHandle hCTab = (**mhPixMap).pmTable;
+                        USHORT nColors = (**hCTab).ctSize + 1;
+                        BitmapPalette& rPal = pBuffer->maPalette;
+
+                        rPal.SetEntryCount( nColors );
+
+                        // Map each color in the QuickDraw color table to a
+                        // BitmapColor
+                        for ( USHORT i = 0; i < nColors; i++ )
+                        {
+                            BitmapColor& rCol = rPal[i];
+                            ColorSpec aColSpec = (**hCTab).ctTable[i];
+                            rCol.SetRed( (BYTE)( aColSpec.rgb.red >> 8 ) );
+                            rCol.SetGreen( (BYTE) ( aColSpec.rgb.green >> 8 ) );
+                            rCol.SetBlue( (BYTE) ( aColSpec.rgb.blue >> 8 ) );
+                        }
+                    }
+                }
+                else
+                {
+                    ReleaseBuffer( pBuffer, TRUE );
+                }
             }
 
             // Release the SalGraphics so that others can get a handle to it
