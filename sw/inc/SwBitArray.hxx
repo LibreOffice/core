@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwBitArray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:09:01 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 13:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ class SwBitArray
     /**
        size of a group of bits
     */
-    static const size_t mGroupSize = sizeof(uint);
+    static const size_t mGroupSize = sizeof(sal_uInt32);
 
     /**
        Returns number of groups.
@@ -84,12 +84,12 @@ class SwBitArray
     /**
        array of group of bits
     */
-    uint * mArray;
+    sal_uInt32 * mArray;
 
     /**
        number of groups
     */
-    uint nSize;
+    sal_uInt32 nSize;
 
     /**
        Returns group of bits according to an index.
@@ -98,10 +98,10 @@ class SwBitArray
 
        @return group of bits according to given index
      */
-    uint * GetGroup(uint n) const { return &mArray[n/mGroupSize]; }
+    sal_uInt32 * GetGroup(sal_uInt32 n) const { return &mArray[n/mGroupSize]; }
 
 public:
-    SwBitArray(uint _nSize);
+    SwBitArray(sal_uInt32 _nSize);
     SwBitArray(const SwBitArray & rArray);
     ~SwBitArray();
 
@@ -111,14 +111,14 @@ public:
        @retval TRUE    the index is valid
        @retval FALSE   else
     */
-    BOOL IsValid(uint n) const;
+    BOOL IsValid(sal_uInt32 n) const;
 
     /**
        Returns the number of bits stored in the array.
 
        @return number of bits in the array
     */
-    uint Size() const { return nSize; }
+    sal_uInt32 Size() const { return nSize; }
 
     /**
        Sets/unsets a bit.
@@ -127,7 +127,7 @@ public:
        @param nValue   -TRUE   set the bit
                        -FALSE  unset the bit
      */
-    void Set(uint n, BOOL nValue);
+    void Set(sal_uInt32 n, BOOL nValue);
 
     /**
        Unsets all bits of the array.
@@ -142,7 +142,7 @@ public:
        @retval TRUE    the bit is set
        @retval FALSE   else
     */
-    BOOL Get(uint n) const;
+    BOOL Get(sal_uInt32 n) const;
 
     /**
        Assigns a bit array to this bit array.
