@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerucb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:23:55 $
+ *  last change: $Author: sb $ $Date: 2000-11-15 13:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,20 +110,30 @@ registerAtUcb(
     VOS_ENSURE(rServiceFactory.is(),
                "ucb::registerAtUcb(): No service factory");
 
+    bool bNoProxy
+        = rArguments.compareToAscii(RTL_CONSTASCII_STRINGPARAM("{noproxy}"))
+              == 0;
+    rtl::OUString
+        aProviderArguments(bNoProxy ?
+                               rArguments.
+                                   copy(RTL_CONSTASCII_LENGTH("{noproxy}")) :
+                               rArguments);
+
     uno::Reference< star::ucb::XContentProviderFactory > xProxyFactory;
-    try
-    {
-        xProxyFactory
-            = uno::Reference< star::ucb::XContentProviderFactory >(
-                  rServiceFactory->
-                      createInstance(
-                          rtl::OUString::createFromAscii(
-                              "com.sun.star.ucb."
-                                  "ContentProviderProxyFactory")),
-                  uno::UNO_QUERY);
-    }
-    catch (uno::RuntimeException const &) { throw; }
-    catch (uno::Exception const &) {}
+    if (!bNoProxy)
+        try
+        {
+            xProxyFactory
+                = uno::Reference< star::ucb::XContentProviderFactory >(
+                      rServiceFactory->
+                          createInstance(
+                              rtl::OUString::createFromAscii(
+                                  "com.sun.star.ucb."
+                                      "ContentProviderProxyFactory")),
+                      uno::UNO_QUERY);
+        }
+        catch (uno::RuntimeException const &) { throw; }
+        catch (uno::Exception const &) {}
 
     // First, try to instantiate proxy for provider:
     uno::Reference< star::ucb::XContentProvider > xProvider;
@@ -152,7 +162,7 @@ registerAtUcb(
         {
             xInstance
                 = xParameterized->registerInstance(rTemplate,
-                                                   rArguments,
+                                                   aProviderArguments,
                                                    true);
                 //@@@ if this call replaces an old instance, the commit-or-
                 // rollback code below will not work
@@ -173,7 +183,8 @@ registerAtUcb(
             if (xParameterized.is())
                 try
                 {
-                    xParameterized->deregisterInstance(rTemplate, rArguments);
+                    xParameterized->deregisterInstance(rTemplate,
+                                                       aProviderArguments);
                 }
                 catch (lang::IllegalArgumentException const &) {}
             xOriginalProvider = 0;
@@ -183,7 +194,8 @@ registerAtUcb(
             if (xParameterized.is())
                 try
                 {
-                    xParameterized->deregisterInstance(rTemplate, rArguments);
+                    xParameterized->deregisterInstance(rTemplate,
+                                                       aProviderArguments);
                 }
                 catch (lang::IllegalArgumentException const &) {}
             throw;
@@ -192,7 +204,7 @@ registerAtUcb(
     if (pInfo)
     {
         pInfo->m_xProvider = xOriginalProvider;
-        pInfo->m_aArguments = rArguments;
+        pInfo->m_aArguments = aProviderArguments;
         pInfo->m_aTemplate = rTemplate;
     }
 }
