@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-12 13:16:15 $
+ *  last change: $Author: mt $ $Date: 2002-09-03 13:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,7 @@ void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
 
         xWindow = xWindow.query( mxPeer );
     }
+
     if( xWindow.is() )
         xWindow->setPosSize( X, Y, Width, Height, Flags );
 }
@@ -537,7 +538,13 @@ awt::Rectangle UnoControl::getPosSize(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    return awt::Rectangle( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight);
+    awt::Rectangle aRect( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight);
+
+    Reference< XWindow > xWindow( mxPeer, uno::UNO_QUERY );
+    if( xWindow.is() )
+        aRect = xWindow->getPosSize();
+
+    return aRect;
 }
 
 void UnoControl::setVisible( sal_Bool bVisible ) throw(RuntimeException)
@@ -975,6 +982,8 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         updateFromModel();
 
         xV->setZoom( aComponentInfos.nZoomX, aComponentInfos.nZoomY );
+
+        setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, maComponentInfos.nFlags );
 
         if( aComponentInfos.bVisible && !bDesignMode )
             // Erst nach dem setzen der Daten anzeigen
