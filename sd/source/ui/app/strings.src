@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:57:51 $
+ *  last change: $Author: aw $ $Date: 2001-09-28 11:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5721,30 +5721,43 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ finnish ] = "T?m? toiminto poistaa valitun sivun.\nHuomautus: sivulla on piirrosobjekteja.";
 };
 
-String STR_WARN_DEL_UNDO_STACK
+ModalDialog RID_UNDO_DELETE_WARNING
 {
-    Text = "Diese Aktion löscht die Liste der Arbeitsschritte, die rückgängig gemacht werden können. Bisher gemachte Änderungen am Dokument bleiben erhalten, können jedoch nicht mehr rückgängig gemacht werden. Wollen Sie fortfahren und die neue Seitenvorlage zuweisen?" ;
-    Text [ ENGLISH ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?" ;
-    Text[ english_us ] = "This action deletes the list of undoable actions. Changes made to the document up till now remain, but cannot be undone anymore. Do you want to continue and assign the new design?";
-    Text[ portuguese ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ russian ] = "Äàííîå äåéñòâèå óäàëèò ñïèñîê øàãîâ, êîòîğûå ìîæíî îòìåíèòü. Âûïîëíåííûå äî ñèõ ïîğ èçìåíåíèÿ äîêóìåíòà áóäóò ñîõğàíåíû, íî èõ áîëøå íåëüçÿ áóäåò îòìåíèòü. Ïğîäîëæèòü è íàçíà÷èòü íîâûé ñòèëü ñòğàíèöû?";
-    Text[ greek ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ dutch ] = "Hiermee wist u de lijst van commando's die ongedaan gemaakt kunnen worden. De tot dan toe aangebrachte wijzigingen in het document blijven behouden en kunnen niet meer ongedaan worden gemaakt. Wilt u doorgaan en de nieuwe sjabloon toewijzen?";
-    Text[ french ] = "Cette action supprime la liste des opérations pouvant être annulées. Ceci n'affecte pas les modifications apportées au document, mais empêche de les annuler. Voulez-vous poursuivre et assigner le nouveau style de page ?";
-    Text[ spanish ] = "Esta acción elimina la lista de las acciones que se pueden deshacer. Se conservarán las modificaciones realizadas hasta ahora en el documento, pero no se podrán deshacer. ¿Desea continuar y asignar la nueva plantilla?";
-    Text[ finnish ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ italian ] = "Questo tipo di azione elimina l'elenco delle fasi di lavoro che si possono annullare. Le modifiche apportate fino a questo momento rimangono inalterate ma non si possono più annullare. Volete procedre comunque ed assegnare il nuovo modello di pagina?";
-    Text[ danish ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ swedish ] = "Den här åtgärden raderar listan med arbetssteg som går att ångra. Ändringar som har gjorts hittills finns kvar, men de går inte att ångra. Vill du fortsätta och tilldela den nya sidformatmallen?";
-    Text[ polish ] = "Akcja ta usuwa wykaz etapów operacji, które mo¿na cofn¹æ. Modyfikacje dokonane na dokumencie zostan¹ zachowane, cofniêcie ich nie bêdzie jednak mo¿liwe. Kontynuowaæ wybieraj¹c nowy styl strony?";
-    Text[ portuguese_brazilian ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ japanese ] = "ã“ã®ï½±ï½¸ï½¼ï½®ï¾ã§å…ƒã«æˆ»ã™ã“ã¨ãŒã§ãã‚‹ä½œæ¥­éç¨‹ã®ï¾˜ï½½ï¾„ã‚’å‰Šé™¤ã—ã¾ã™ã€‚ã„ã¾ã¾ã§ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã§è¡Œã£ãŸå¤‰æ›´ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ãŒã€å…ƒã«æˆ»ã™ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚ç¶šè¡Œã—ã¦æ–°ã—ã„ã„ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™ã‚’é©ç”¨ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ chinese_simplified ] = "è¿™é¡¹æ“ä½œä¼šåˆ é™¤ç”¨æ¥æ’¤æ¶ˆå‘½ä»¤çš„å·¥ä½œæ­¥éª¤åˆ—å•ã€‚è‡³ä»Šä¸ºæ­¢æ‚¨å¯¹æ–‡æ¡£æ‰€åšçš„æ›´æ”¹ä¼šè¢«ä¿å­˜ï¼Œä½†æ˜¯æ‚¨æ— æ³•å†æ’¤æ¶ˆè¿™äº›æ›´æ”¹ã€‚è¦ç»§ç»­å¹¶ä½¿ç”¨æ–°çš„é¡µé¢æ ·å¼ï¼Ÿ";
-    Text[ chinese_traditional ] = "é€™å€‹å‹•ä½œæœƒåˆªé™¤å¾©åŸæ¸…å–®çš„é …ç›®ã€‚å·²ç¶“è®Šæ›´çš„å†…å®¹å°‡æœƒè¢«ä¿ç•™ä¸è®Šï¼Œä½†æ˜¯ä¸å¯ä»¥å†å¾©åŸæ‰€æœ‰çš„è®Šæ›´å†…å®¹ã€‚è¦ç¹¼çºŒä¸¦ä¸”ä½¿ç”¨é€™å€‹æ–°çš„é é¢æ¨£å¼ï¼Ÿ";
-    Text[ turkish ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ arabic ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
-    Text[ catalan ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?";
+    OutputSize = TRUE;
+    Size = MAP_APPFONT( 175 + 39 + (3 * 6), (7 * 12) + 6 );
+    Moveable = TRUE;
+    Closeable = TRUE;
+    FixedImage IMG_UNDO_DELETE_WARNING
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 30, 30 );
+    };
+    FixedText FT_UNDO_DELETE_WARNING
+    {
+        Pos = MAP_APPFONT( 39, 6 );
+        Size = MAP_APPFONT( 175, 4 * 12 );
+        WordBreak = TRUE;
+        Text = "Diese Aktion löscht die Liste der Arbeitsschritte, die\nrückgängig gemacht werden können. Bisher gemachte\nÄnderungen am Dokument bleiben erhalten, können jedoch nicht\nmehr rückgängig gemacht werden. Wollen Sie fortfahren\nund die neue Seitenvorlage zuweisen?";
+        Text [ ENGLISH ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?" ;
+    };
+    CheckBox CB_UNDO_DELETE_DISABLE
+    {
+        Pos = MAP_APPFONT( 39, (4 * 12) + 9 );
+        Size = MAP_APPFONT( 175, 12 );
+        Text = "~Diese Warnung in Zukunft nicht mehr anzeigen";
+        Text [English] = "~Don't show this warning again";
+    };
+    OKButton BTN_UNDO_DELETE_YES
+    {
+        Pos = MAP_APPFONT( 60, (5 * 12) + 13 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+    CancelButton BTN_UNDO_DELETE_NO
+    {
+        Pos = MAP_APPFONT( 120, (5 * 12) + 13 );
+        Size = MAP_APPFONT( 50, 14 );
+        DefButton = TRUE;
+    };
 };
 
 String STR_DEL_SHAPE

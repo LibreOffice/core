@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-21 15:23:08 $
+ *  last change: $Author: aw $ $Date: 2001-09-28 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,12 @@
 
 #define STR_WARN_DEL_SEL_PAGE               (RID_APP_START+557)
 
-#define STR_WARN_DEL_UNDO_STACK             (RID_APP_START+558)
+#define RID_UNDO_DELETE_WARNING             (RID_APP_START+558)
+#define IMG_UNDO_DELETE_WARNING             (RID_APP_START+559)
+#define FT_UNDO_DELETE_WARNING              (RID_APP_START+560)
+#define CB_UNDO_DELETE_DISABLE              (RID_APP_START+561)
+#define BTN_UNDO_DELETE_YES                 (RID_APP_START+562)
+#define BTN_UNDO_DELETE_NO                  (RID_APP_START+564)
 
 #define STR_ERROR_OBJNOCREATE_PLUGIN        (RID_APP_START+563)
 
