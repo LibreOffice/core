@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarcontrollerfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:57:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
-#include <drafts/com/sun/star/frame/XUIControllerRegistration.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
+#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -136,7 +136,7 @@ class ConfigurationAccess_StatusbarControllerFactory;
 class StatusbarControllerFactory :  public com::sun::star::lang::XTypeProvider                      ,
                                     public com::sun::star::lang::XServiceInfo                       ,
                                     public com::sun::star::lang::XMultiComponentFactory             ,
-                                    public drafts::com::sun::star::frame::XUIControllerRegistration ,
+                                    public ::com::sun::star::frame::XUIControllerRegistration ,
                                     private ThreadHelpBase                                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                     public ::cppu::OWeakObject
 {
