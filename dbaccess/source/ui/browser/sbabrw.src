@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 08:41:11 $
+ *  last change: $Author: oj $ $Date: 2001-01-11 09:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,10 @@
         ID_BROWSER_QUERY_DISTINCT_VALUES;\
         ID_BROWSER_CLOSE;\
         ID_BROWSER_ESACPEPROCESSING;\
+        ID_BROWSER_SAVEASDOC;\
     };\
     IdCount = {\
-    35;\
+    36;\
     }
 
  // Default Image-Liste ----------------------------------------------------------------
@@ -926,6 +927,13 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             HelpId = ID_BROWSER_SAVEDOC ;
             Text = "Speichern" ;
             Text [ ENGLISH ] = "Save" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEASDOC ;
+            HelpId = ID_BROWSER_SAVEASDOC ;
+            Text = "Speichern als" ;
+            Text [ ENGLISH ] = "Save as" ;
         };
         ToolBoxItem
         {
