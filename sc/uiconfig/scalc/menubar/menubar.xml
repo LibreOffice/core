@@ -233,7 +233,10 @@
             <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder" menu:helpid="6669" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MacroDialog" menu:helpid="5959" menu:label="" />
+                    <menu:menuitem menu:id=".uno:RunMacro" menu:label="" />
+                    <menu:menu menu:id=".uno:ScriptOrganizer" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:helpid="10958" menu:label="" />
