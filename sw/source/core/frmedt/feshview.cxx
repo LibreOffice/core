@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:44:39 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,26 +620,62 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
 |*
 *************************************************************************/
 
+const SdrMarkList* SwFEShell::_GetMarkList() const
+{
+    const SdrMarkList* pMarkList = NULL;
+    if( Imp()->GetDrawView() != NULL )
+        pMarkList = &Imp()->GetDrawView()->GetMarkList();
+    return pMarkList;
+}
+
 USHORT SwFEShell::GetSelFrmType() const
 {
-    const SdrMarkList* pMrkList;
-    if( !Imp()->GetDrawView() ||
-        0 == (pMrkList = &Imp()->GetDrawView()->GetMarkList()) ||
-        !pMrkList->GetMarkCount())
-        return FRMTYPE_NONE;
+    enum FrmType eType;
 
-    const SwFlyFrm *pFly = ::GetFlyFromMarked( pMrkList, (ViewShell*)this );
-
-    if ( pFly )
+    // get marked frame list, and check if anything is selected
+    const SdrMarkList* pMarkList = _GetMarkList();
+    if( pMarkList == NULL  ||  pMarkList->GetMarkCount() == 0 )
+        eType = FRMTYPE_NONE;
+    else
     {
-        if( pFly->IsFlyLayFrm() )
-            return FRMTYPE_FLY_FREE;
-        else if( pFly->IsFlyAtCntFrm() )
-            return FRMTYPE_FLY_ATCNT;
-        ASSERT( pFly->IsFlyInCntFrm(), "Neuer Rahmentyp?" );
-        return FRMTYPE_FLY_INCNT;
+        // obtain marked item as fly frame; if no fly frame, it must
+        // be a draw object
+        const SwFlyFrm* pFly = ::GetFlyFromMarked(pMarkList, (ViewShell*)this);
+        if ( pFly != NULL )
+        {
+            if( pFly->IsFlyLayFrm() )
+                eType = FRMTYPE_FLY_FREE;
+            else if( pFly->IsFlyAtCntFrm() )
+                eType = FRMTYPE_FLY_ATCNT;
+            else
+            {
+                ASSERT( pFly->IsFlyInCntFrm(), "Neuer Rahmentyp?" );
+                eType = FRMTYPE_FLY_INCNT;
+            }
+        }
+        else
+            eType = FRMTYPE_DRAWOBJ;
     }
-    return FRMTYPE_DRAWOBJ;
+
+    return eType;
+}
+
+// #108784# does the draw selection contain a control?
+bool SwFEShell::IsSelContainsControl() const
+{
+    bool bRet = false;
+
+    // basically, copy the mechanism from GetSelFrmType(), but call
+    // CheckControl... if you get a drawing object
+    const SdrMarkList* pMarkList = _GetMarkList();
+    if( pMarkList != NULL  &&  pMarkList->GetMarkCount() == 1 )
+    {
+        // if we have one marked object, get the SdrObject and check
+        // whether it contains a control
+        const SdrObject* pSdrObject = pMarkList->GetMark( 0 )->GetObj();
+        bRet = CheckControlLayer( pSdrObject );
+    }
+    return bRet;
 }
 
 /*************************************************************************
@@ -1020,13 +1056,17 @@ short SwFEShell::GetLayerId() const
 |*  Letzte Aenderung    AMA 04. Jun. 98
 |*
 *************************************************************************/
-
-void SwFEShell::ChangeOpaque( BYTE nLayerId )
+// OD 25.06.2003 #108784#
+// Note: only visible objects can be marked. Thus, objects with invisible
+//       layer IDs have not to be considered.
+//       If <SwFEShell> exists, layout exists!!
+void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
 {
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
-        const BYTE nControls = GetDoc()->GetControlsId();
+        // OD 25.06.2003 #108784# - correct type of <nControls>
+        const SdrLayerID nControls = GetDoc()->GetControlsId();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -1057,45 +1097,6 @@ void SwFEShell::SelectionToHell()
     ChangeOpaque( GetDoc()->GetHellId() );
 }
 
-#if 0
-/*************************************************************************
-|*
-|*  SwFEShell::FlipHellAndHeaven()
-|*
-|*  Beschreibung        Alle Zeichenobjekte aus der Hoelle in den Himmel
-|*                      und umgekehrt.
-|*  Ersterstellung      MA 12. Jan. 95
-|*  Letzte Aenderung    AMA 04. Jun. 98
-|*
-*************************************************************************/
-
-void SwFEShell::FlipHellAndHeaven()
-{
-    SwDoc *pDoc = GetDoc();
-    if ( pDoc->GetDrawModel() )
-    {
-        SdrPage* pPage = pDoc->GetDrawModel()->GetPage( 0 );
-        SdrLayerID nHeaven = (SdrLayerID)pDoc->GetHeavenId();
-        SdrLayerID nHell   = (SdrLayerID)pDoc->GetHellId();
-        SdrLayerID nControls = (SdrLayerID)pDoc->GetControlsId();
-        BOOL bChanged = FALSE;
-        for ( USHORT i = 0; i < pPage->GetObjCount(); ++i )
-        {
-            SdrObject *pObj = pPage->GetObj( i );
-            if ( !pObj->IsWriterFlyFrame() && nControls != pObj->GetLayer() )
-            {
-                pObj->SetLayer( nHeaven == pObj->GetLayer() ? nHell : nHeaven );
-                bChanged = TRUE;
-            }
-        }
-        if( bChanged )
-        {
-            InvalidateWindows( pDoc->GetRootFrm()->Frm() );
-            GetDoc()->SetModified();
-        }
-    }
-}
-#endif
 /*************************************************************************
 |*
 |*  SwFEShell::IsObjSelected(), IsFrmSelected()
@@ -1766,8 +1767,14 @@ BOOL SwFEShell::ImpEndCreate()
 
     if( !bCharBound )
     {
-        BOOL bBodyOnly = OBJ_NONE != nIdent, bAtPage = FALSE;
-        const SwFrm *pPage = 0;
+        // OD 16.05.2003 #108784# - allow native drawing objects in header/footer.
+        // Thus, set <bBodyOnly> to <false> for these objects using value
+        // of <nIdent> - value <0xFFFF> indicates control objects, which aren't
+        // allowed in header/footer.
+        //bool bBodyOnly = OBJ_NONE != nIdent;
+        bool bBodyOnly = 0xFFFF == nIdent;
+        bool bAtPage = false;
+        const SwFrm* pPage = 0;
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt );
         SwPosition aPos( GetDoc()->GetNodes() );
@@ -1777,7 +1784,7 @@ BOOL SwFEShell::ImpEndCreate()
         if( aPos.nNode.GetNode().IsProtect() )
             // dann darf er nur seitengebunden sein. Oder sollte man
             // die naechste nicht READONLY Position suchen?
-            bAtPage = TRUE;
+            bAtPage = true;
 
         pAnch = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aPoint, 0, FALSE );
 
@@ -1816,7 +1823,7 @@ BOOL SwFEShell::ImpEndCreate()
             if( aPos.nNode.GetNode().IsProtect() )
                 // dann darf er nur seitengebunden sein. Oder sollte man
                 // die naechste nicht READONLY Position suchen?
-                bAtPage = TRUE;
+                bAtPage = true;
             else
             {
                 aAnch.SetType( FLY_AT_CNTNT );
@@ -1963,8 +1970,20 @@ BOOL SwFEShell::ImpEndCreate()
 
         pContact->ConnectToLayout();
 
-        Imp()->GetDrawView()->MarkObj( &rSdrObj, Imp()->GetPageView(),
-                                        FALSE, FALSE );
+        // OD 25.06.2003 #108784# - mark object at frame the object is inserted at.
+        {
+            SdrObject* pMarkObj = pContact->GetDrawObjectByAnchorFrm( *pAnch );
+            if ( pMarkObj )
+            {
+                Imp()->GetDrawView()->MarkObj( pMarkObj, Imp()->GetPageView(),
+                                                FALSE, FALSE );
+            }
+            else
+            {
+                Imp()->GetDrawView()->MarkObj( &rSdrObj, Imp()->GetPageView(),
+                                                FALSE, FALSE );
+            }
+        }
     }
 
     GetDoc()->SetModified();
@@ -2308,38 +2327,93 @@ BOOL SwFEShell::IsGroupSelected()
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-            if ( pObj->IsA( TYPE(SdrObjGroup) ) &&
+            // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
+            // Thus, use corresponding method instead of checking type.
+            if ( pObj->IsGroupObject() &&
                  FLY_IN_CNTNT != ((SwDrawContact*)GetUserCall(pObj))->
-                                        GetFmt()->GetAnchor().GetAnchorId() )
+                                      GetFmt()->GetAnchor().GetAnchorId() )
+            {
                 return TRUE;
+            }
         }
     }
     return FALSE;
 }
 
-BOOL SwFEShell::IsGroupAllowed() const
+// OD 27.06.2003 #108784# - change return type.
+// OD 27.06.2003 #108784# - adjustments for drawing objects in header/footer:
+//      allow group, only if all selected objects are in the same header/footer
+//      or not in header/footer.
+bool SwFEShell::IsGroupAllowed() const
 {
-    BOOL bRet;
+    bool bIsGroupAllowed = false;
     if ( IsObjSelected() > 1 )
     {
-        bRet = TRUE;
-        const SdrObject* pUpGroup;
+        bIsGroupAllowed = true;
+        const SdrObject* pUpGroup = 0L;
+        const SwFrm* pHeaderFooterFrm = 0L;
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
-        for ( USHORT i = 0; bRet && i < rMrkList.GetMarkCount(); ++i )
+        for ( USHORT i = 0; bIsGroupAllowed && i < rMrkList.GetMarkCount(); ++i )
         {
-            const SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-            if( i )
-                bRet = pObj->GetUpGroup() == pUpGroup;
+            const SdrObject* pObj = rMrkList.GetMark( i )->GetObj();
+            if ( i )
+                bIsGroupAllowed = pObj->GetUpGroup() == pUpGroup;
             else
                 pUpGroup = pObj->GetUpGroup();
 
-            if( FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
-                bRet = FALSE;
+            if ( bIsGroupAllowed &&
+                 FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() )
+            {
+                bIsGroupAllowed = false;
+            }
+
+            // OD 27.06.2003 #108784# - check, if all selected objects are in the
+            // same header/footer or not in header/footer.
+            if ( bIsGroupAllowed )
+            {
+                const SwFrm* pAnchorFrm = 0L;
+                if ( pObj->IsWriterFlyFrame() )
+                {
+                    const SwFlyFrm* pFlyFrm =
+                            static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+                    if ( pFlyFrm )
+                    {
+                        pAnchorFrm = pFlyFrm->GetAnchor();
+                    }
+                }
+                else
+                {
+                    if ( pObj->ISA(SwDrawVirtObj) )
+                    {
+                        pAnchorFrm = static_cast<const SwDrawVirtObj*>(pObj)->GetAnchorFrm();
+                    }
+                    else
+                    {
+                        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
+                        if ( pDrawContact )
+                        {
+                            pAnchorFrm = pDrawContact->GetAnchor();
+                        }
+                    }
+                }
+                if ( pAnchorFrm )
+                {
+                    if ( i )
+                    {
+                        bIsGroupAllowed =
+                            ( pAnchorFrm->FindFooterOrHeader() == pHeaderFooterFrm );
+                    }
+                    else
+                    {
+                        pHeaderFooterFrm = pAnchorFrm->FindFooterOrHeader();
+                    }
+                }
+            }
+
         }
     }
-    else
-        bRet = FALSE;
-    return bRet;
+
+    return bIsGroupAllowed;
 }
 
 /*************************************************************************
