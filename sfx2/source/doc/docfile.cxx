@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:53:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,20 +1056,28 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
                     aStorage = new SvStorage( pUCBStorage );
                 }
-                else if ( IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
-                {
-                    CreateTempFile();
-                    aStorage = new SvStorage( bUCBStorage, aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
-                }
                 else
                 {
-                    if ( bUCBStorage && !UCBStorage::IsStorageFile( pInStream ) )
-                        return NULL;
+                    if( SotStorage::IsStorageFile( pInStream ) )
+                    {
+                        if ( IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
+                        {
+                            CreateTempFile();
+                            aStorage = new SvStorage( bUCBStorage, aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                        }
+                        else
+                        {
+                            if ( bUCBStorage && !UCBStorage::IsStorageFile( pInStream ) )
+                                return NULL;
 
-                    // create a storage on the stream
-                    aStorage = new SvStorage( pInStream, sal_False );
-                    if ( !aStorage->GetName().Len() )
-                           aStorage->SetName( aStorageName );
+                            // create a storage on the stream
+                            aStorage = new SvStorage( pInStream, sal_False );
+                            if ( !aStorage->GetName().Len() )
+                                   aStorage->SetName( aStorageName );
+                        }
+                    }
+                    else
+                        return NULL;
                 }
             }
         }
