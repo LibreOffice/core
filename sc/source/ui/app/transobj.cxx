@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 16:00:35 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "impex.hxx"
 #include "cell.hxx"
 #include "printfun.hxx"
+#include "scmod.hxx"
 
 // for InitDocShell
 #include "scitems.hxx"
@@ -189,17 +190,36 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     }
 
     aBlock = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-
-    //
-    //
-    //
-
-    ScGlobal::CaptureClip();        // remove when global ClipDoc is no longer used
 }
 
 ScTransferObj::~ScTransferObj()
 {
-    // delete pDoc when global ClipDoc is no longer used
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetClipData().pCellClipboard == this )
+    {
+        DBG_ERROR("ScTransferObj wasn't released");
+        pScMod->SetClipObject( NULL, NULL );
+    }
+
+    delete pDoc;        // ScTransferObj is owner of clipboard document
+}
+
+// static
+ScTransferObj* ScTransferObj::GetOwnClipboard()
+{
+    ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
+    if ( pObj )
+    {
+        //  check formats to see if pObj is really in the system clipboard
+
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
+        {
+//          DBG_ERROR("ScTransferObj wasn't released");
+            pObj = NULL;
+        }
+    }
+    return pObj;
 }
 
 void ScTransferObj::AddSupportedFormats()
@@ -395,7 +415,10 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 
 void ScTransferObj::ObjectReleased()
 {
-    ScGlobal::ReleaseClip();                // remove when global ClipDoc is no longer used
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetClipData().pCellClipboard == this )
+        pScMod->SetClipObject( NULL, NULL );
+
     TransferableHelper::ObjectReleased();
 }
 

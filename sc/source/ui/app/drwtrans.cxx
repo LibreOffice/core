@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-13 11:20:59 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "viewdata.hxx"
+#include "scmod.hxx"
 
 using namespace com::sun::star;
 
@@ -215,18 +216,26 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     aView.MarkAll(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
     aObjDesc.maSize = aSrcSize;
-
-    //
-    //
-    //
-
-    ScGlobal::SetClipDraw(pModel);      // remove when global ClipDraw is no longer used
 }
 
 ScDrawTransferObj::~ScDrawTransferObj()
 {
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetClipData().pDrawClipboard == this )
+    {
+        DBG_ERROR("ScDrawTransferObj wasn't released");
+        pScMod->SetClipObject( NULL, NULL );
+    }
+
     delete pModel;
     delete pBookmark;
+}
+
+// static
+ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard()
+{
+    ScDrawTransferObj* pObj = SC_MOD()->GetClipData().pDrawClipboard;
+    return pObj;
 }
 
 void ScDrawTransferObj::AddSupportedFormats()
@@ -405,8 +414,9 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
 
 void ScDrawTransferObj::ObjectReleased()
 {
-    if (ScGlobal::GetClipModel() == pModel)     // remove when global ClipDoc is no longer used
-        ScGlobal::ReleaseClip();                // (still owner of pModel - deleted in dtor)
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetClipData().pDrawClipboard == this )
+        pScMod->SetClipObject( NULL, NULL );
 
     TransferableHelper::ObjectReleased();
 }
