@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:30 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,6 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_VSCROLL,"VScroll");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_TABSTOP,"Tabstop");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_AUTOCOMPLETE,"Autocomplete");
-    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_HARDLINEBREAKS,"HardLineBreaks");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_PRINTABLE,"Printable");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_ECHO_CHAR,"EchoChar");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_ROWHEIGHT,"RowHeight");
@@ -294,6 +293,21 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_TEXTLINECOLOR, "TextLineColor");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FONTEMPHASISMARK, "FontEmphasisMark");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FONTRELIEF, "FontRelief");
+
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SCROLLVALUE_MIN     , "ScrollValueMin"     );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SCROLLVALUE_MAX     , "ScrollValueMax"     );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SCROLLVALUE , "DefaultScrollValue" );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_LINEINCREMENT       , "LineIncrement"      );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_BLOCKINCREMENT      , "BlockIncrement"     );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_ORIENTATION         , "Orientation"        );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_REPEAT              , "Repeat"             );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_REPEATDELAY         , "RepeatDelay"        );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SYMBOLCOLOR         , "SymbolColor"        );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_VISIBILESIZE        , "VisibleSize"        );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MIN       , "SpinValueMin"       );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MAX       , "SpinValueMin"       );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SPINVALUE   , "DefaultSpinValue"   );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPININCREMENT       , "SpinIncrement"      );
 
 }   // namespace svxform
 
@@ -402,7 +416,6 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_MULTI,               sal_True,  RID_STR_MULTILINE),
             FmPropertyInfo(FM_PROP_MULTILINE,           sal_True,  RID_STR_MULTILINE),
             FmPropertyInfo(FM_PROP_MULTISELECTION,      sal_True,  RID_STR_MULTISELECTION),
-            FmPropertyInfo(FM_PROP_HARDLINEBREAKS,      sal_True,  RID_STR_HARDLINEBREAKS),
             FmPropertyInfo(FM_PROP_HSCROLL,             sal_True,  RID_STR_HSCROLL),
             FmPropertyInfo(FM_PROP_VSCROLL,             sal_True,  RID_STR_VSCROLL),
             FmPropertyInfo(FM_PROP_SPIN,                sal_True,  RID_STR_SPIN),
@@ -435,7 +448,21 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_HELPURL,             sal_False, RID_STR_HELPURL),
             FmPropertyInfo(FM_PROP_CURSORCOLOR,         sal_True, 0),
             FmPropertyInfo(FM_PROP_ALWAYSSHOWCURSOR,    sal_True, 0),
-            FmPropertyInfo(FM_PROP_DISPLAYSYNCHRON,     sal_True, 0)
+            FmPropertyInfo(FM_PROP_DISPLAYSYNCHRON,     sal_True, 0),
+            FmPropertyInfo( FM_PROP_SCROLLVALUE_MIN,    sal_True, 0),
+            FmPropertyInfo( FM_PROP_SCROLLVALUE_MAX,    sal_True, 0),
+            FmPropertyInfo( FM_PROP_DEFAULT_SCROLLVALUE,sal_True, 0),
+            FmPropertyInfo( FM_PROP_LINEINCREMENT,      sal_True, 0),
+            FmPropertyInfo( FM_PROP_BLOCKINCREMENT,     sal_True, 0),
+            FmPropertyInfo( FM_PROP_ORIENTATION,        sal_True, 0),
+            FmPropertyInfo( FM_PROP_REPEAT,             sal_True, 0),
+            FmPropertyInfo( FM_PROP_REPEATDELAY,        sal_True, 0),
+            FmPropertyInfo( FM_PROP_SYMBOLCOLOR,        sal_True, 0),
+            FmPropertyInfo( FM_PROP_VISIBILESIZE,       sal_True, 0),
+            FmPropertyInfo( FM_PROP_SPINVALUE_MIN,      sal_True, 0),
+            FmPropertyInfo( FM_PROP_SPINVALUE_MAX,      sal_True, 0),
+            FmPropertyInfo( FM_PROP_DEFAULT_SPINVALUE,  sal_True, 0),
+            FmPropertyInfo( FM_PROP_SPININCREMENT,      sal_True, 0)
         };
 
         pPropertyInfos = (FmPropertyInfo*)aPropertyInfos;
