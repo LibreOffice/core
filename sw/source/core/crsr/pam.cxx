@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:43:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,25 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+
+// --> FME 2004-06-29 #114856# Formular view
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
+#ifndef _FMTEIRO_HXX //autogen
+#include <fmteiro.hxx>
+#endif
+#ifndef _SECTION_HXX
+#include <section.hxx>
+#endif
+#ifndef _SECTFRM_HXX
+#include <sectfrm.hxx>
+#endif
+// <--
+
+#ifndef _NDTXT_HXX
 #include <ndtxt.hxx> // #111827#
+#endif
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
@@ -654,9 +672,36 @@ USHORT SwPaM::GetPageNum( BOOL bAtPoint, const Point* pLayPos )
     return 0;
 }
 
+// --> FME 2004-06-29 #114856# Formular view
+// See also SwCrsrShell::IsCrsrReadonly()
+const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
+{
+    const SwFrm* pRet = 0;
+
+    const SwFlyFrm* pFly;
+    const SwSectionFrm* pSectionFrm;
+
+    if( rFrm.IsInFly() &&
+       (pFly = rFrm.FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
+        pFly->Lower() &&
+       !pFly->Lower()->IsNoTxtFrm() )
+    {
+       pRet = pFly;
+    }
+    else if ( rFrm.IsInSct() &&
+              0 != ( pSectionFrm = rFrm.FindSctFrm() )->GetSection() &&
+              pSectionFrm->GetSection()->IsEditInReadonlyFlag() )
+    {
+        pRet = pSectionFrm;
+    }
+
+    return pRet;
+}
+// <--
+
 // steht in etwas geschuetztem oder in die Selektion umspannt
 // etwas geschuetztes.
-FASTBOOL SwPaM::HasReadonlySel() const
+FASTBOOL SwPaM::HasReadonlySel( bool bFormView ) const
 {
     FASTBOOL bRet = FALSE;
     Point aTmpPt;
@@ -668,12 +713,24 @@ FASTBOOL SwPaM::HasReadonlySel() const
     else
         pFrm = 0;
 
-    if( pFrm && pFrm->IsProtected() )
+    // --> FME 2004-06-29 #114856# Formular view
+    // Will be set if point/mark are inside edit-in-readonly environment
+    const SwFrm* pSttEIRFrm = 0;
+    const SwFrm* pEndEIRFrm = 0;
+
+    if( pFrm && ( pFrm->IsProtected() ||
+                  // --> FME 2004-06-29 #114856# Formular view
+                  ( bFormView &&
+                     0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
+                  // <--
         bRet = TRUE;
     else if( pNd )
     {
         const SwSectionNode* pSNd = pNd->GetSectionNode();
-        if( pSNd && pSNd->GetSection().IsProtectFlag() )
+        if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
+                      // --> FME 2004-06-29 #114856# Formular view
+                      bFormView && !pSNd->GetSection().IsEditInReadonlyFlag() ) )
+                      // <--
             bRet = TRUE;
     }
 
@@ -684,14 +741,31 @@ FASTBOOL SwPaM::HasReadonlySel() const
         else
             pFrm = 0;
 
-        if( pFrm && pFrm->IsProtected() )
+        if( pFrm && ( pFrm->IsProtected() ||
+                  // --> FME 2004-06-29 #114856# Formular view
+                  ( bFormView &&
+                     0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
+                  // <--
             bRet = TRUE;
         else if( pNd )
         {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
-            if( pSNd && pSNd->GetSection().IsProtectFlag() )
+            if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
+                          // --> FME 2004-06-29 #114856# Formular view
+                          bFormView && !pSNd->GetSection().IsEditInReadonlyFlag() ) )
+                          // <--
                 bRet = TRUE;
         }
+
+        // --> FME 2004-06-29 #114856# Formular view
+        if ( !bRet && bFormView )
+        {
+           // Check if start and end frame are inside the _same_
+           // edit-in-readonly-environment. Otherwise we better return 'true'
+           if ( pSttEIRFrm != pEndEIRFrm )
+                bRet = TRUE;
+        }
+        // <--
 
         // oder sollte eine geschuetzte Section innerhalb der
         // Selektion liegen?
