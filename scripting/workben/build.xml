@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-06-18 14:05:19 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:54:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,6 @@
     <pathelement location="${solar.jar}/juh.jar"/>
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
-    <pathelement location="${solar.jar}/sandbox.jar"/>
   </path>
   <path id="scriptexampleclasspath">
     <pathelement location="${solar.jar}/unoil.jar"/>
@@ -96,7 +95,6 @@
     <pathelement location="${solar.jar}/juh.jar"/>
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
-    <pathelement location="${solar.jar}/sandbox.jar"/>
     <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
   </path>
 
