@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:52:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,15 +449,22 @@ MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::NamedValu
 -----------------------------------------------*/
 sal_Bool MediaDescriptor::isStreamReadOnly() const
 {
-    /* Attention: dont check for the property "ReadOnly" here.
-       see documentation inside header for more information ... */
-
     static ::rtl::OUString CONTENTSCHEME_FILE     = ::rtl::OUString::createFromAscii("file");
     static ::rtl::OUString CONTENTPROP_ISREADONLY = ::rtl::OUString::createFromAscii("IsReadOnly");
     static sal_Bool        READONLY_FALLBACK      = sal_False;
 
+    sal_Bool bReadOnly = READONLY_FALLBACK;
+
+    // check for explicit readonly state
+    const_iterator pIt = find(MediaDescriptor::PROP_READONLY());
+    if (pIt != end())
+    {
+        pIt->second >>= bReadOnly;
+        return bReadOnly;
+    }
+
     // streams based on post data are readonly by definition
-    const_iterator pIt = find(MediaDescriptor::PROP_POSTDATA());
+    pIt = find(MediaDescriptor::PROP_POSTDATA());
     if (pIt != end())
         return sal_True;
 
@@ -470,7 +477,6 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
     // Only file system content provider is able to provide XStream
     // so for this content impossibility to create XStream triggers
     // switch to readonly mode.
-    sal_Bool bReadOnly = READONLY_FALLBACK;
     try
     {
         css::uno::Reference< css::ucb::XContent > xContent = getUnpackedValueOrDefault(MediaDescriptor::PROP_UCBCONTENT(), css::uno::Reference< css::ucb::XContent >());
@@ -495,7 +501,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
     catch(const css::uno::Exception&)
         {}
 
-    return READONLY_FALLBACK;
+    return bReadOnly;
 }
 
 /*-----------------------------------------------
@@ -559,8 +565,8 @@ sal_Bool MediaDescriptor::addInputStream()
 sal_Bool MediaDescriptor::impl_openStreamWithPostData(const css::uno::Reference< css::io::XInputStream >& xPostData)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    /* Attention: dont set the ReadOnly property here.
-       see isReadOnly() for further informations ... */
+    // PostData cant be used in read/write mode!
+    (*this)[MediaDescriptor::PROP_READONLY()] <<= sal_True;
 
     ::rtl::OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), ::rtl::OUString());
     if (!sMediaType.getLength())
@@ -763,6 +769,31 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {
+        try
+        {
+            css::uno::Reference< css::ucb::XContentIdentifier > xContId(
+                aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
+
+            rtl::OUString aScheme;
+            if ( xContId.is() )
+                aScheme = xContId->getContentProviderScheme();
+
+            // Only file system content provider is able to provide XStream
+            // so for this content impossibility to create XStream triggers
+            // switch to readonly mode
+            if( aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+                bReadOnly = sal_True;
+            else
+                aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bReadOnly;
+        }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
+        catch(const css::uno::Exception&)
+            { /* no error handling if IsReadOnly property does not exist for UCP */ }
+
+        if ( bReadOnly )
+               (*this)[MediaDescriptor::PROP_READONLY()] <<= bReadOnly;
+
         pInteraction->resetInterceptions();
         pInteraction->resetErrorStates();
         try
@@ -782,8 +813,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
         (*this)[MediaDescriptor::PROP_STREAM()] <<= xStream;
     if (xInputStream.is())
         (*this)[MediaDescriptor::PROP_INPUTSTREAM()] <<= xInputStream;
-    /* Attention: dont set the ReadOnly property here.
-       see isReadOnly() for further informations ... */
 
     // At least we need an input stream. The r/w stream is optional ...
     return xInputStream.is();
