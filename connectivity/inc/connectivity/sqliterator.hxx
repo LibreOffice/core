@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:27:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,19 +114,6 @@ namespace connectivity
         SQL_STATEMENT_SELECT_COUNT
     };
 
-    enum OSQLPredicateType {
-        SQL_PRED_EQUAL = 'a',       // Als sichtbare ASCII-Zeichen, damit man
-        SQL_PRED_NOTEQUAL,          // den Predicate Type auch in Strings
-        SQL_PRED_LESS,              // speichern kann.
-        SQL_PRED_LESSOREQUAL,
-        SQL_PRED_GREATER,
-        SQL_PRED_GREATEROREQUAL,
-        SQL_PRED_LIKE,
-        SQL_PRED_ISNULL,
-        SQL_PRED_ISNOTNULL,
-        SQL_PRED_NOTLIKE
-    };
-
     //==================================================================
     // SbaParseIteratorErrorInfo wird dem Call von aErrorHdl aus SbaParseIterator "ubergeben
     // nErrorCode enth"alt eine Zusatzinformation "uber den Fehler
@@ -169,7 +156,7 @@ namespace connectivity
         void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
                                                 OSQLParseNode * pColumnRef,
-                                                OSQLPredicateType ePredicateType,
+                                                sal_Int32 ePredicateType,
                                                 ::rtl::OUString& aValue,
                                                 sal_Bool bCompareNull,
                                                 OSQLParseNode * pParameter);
@@ -325,7 +312,7 @@ namespace connectivity
         virtual void setANDCriteriaPost();
         virtual void setPredicate(const ::rtl::OUString & rColumnName,
                                   const ::rtl::OUString & rTableRange,
-                                  OSQLPredicateType ePredicateType,
+                                  sal_Int32 ePredicateType,
                                   const ::rtl::OUString & rValue,
                                   const ::rtl::OUString & rParameterName);
 
