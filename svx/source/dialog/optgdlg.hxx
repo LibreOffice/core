@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:10:38 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ private:
     MetricField     aWindowSizeMF;
     FixedText       aIconSizeFT;
     ListBox         aIconSizeLB;
+    CheckBox        m_aSystemFont;
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     CheckBox        aFontAntiAliasing;
