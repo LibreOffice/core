@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 21:01:58 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ french ] = "~Modifications" ;
         Text [ dutch ] = "~Wijzigingen" ;
         Text [ portuguese ] = "~Modificações" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~G)";
+        Text[ chinese_simplified ] = "æ›´æ”¹(~G)";
         Text[ russian ] = "Èñïğàâëåíèÿ";
         Text[ polish ] = "Zmiany";
-        Text[ japanese ] = "•ÏX(~G)";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~G)";
+        Text[ japanese ] = "å¤‰æ›´(~G)";
+        Text[ chinese_traditional ] = "è®Šæ›´(~G)";
         Text[ arabic ] = "ÇáÊÛííÑÇÊ";
         Text[ greek ] = "Áëëáãİò";
-        Text[ korean ] = "º¯°æ(~G)";
+        Text[ korean ] = "ë³€ê²½(~G)";
         Text[ turkish ] = "~Değişiklikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificaciones";
@@ -111,14 +111,14 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ spanish ] = "~Eliminaciones" ;
         Text [ french ] = "~Suppressions" ;
         Text [ dutch ] = "~Verwijderingen" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëåíèÿ";
         Text[ polish ] = "Usuniêcia";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "Äéáãñáöİò";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Silinenler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminaciones";
@@ -139,14 +139,14 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ spanish ] = "~Inserciones" ;
         Text [ french ] = "~Insertions" ;
         Text [ dutch ] = "~Invoegingen" ;
-        Text[ chinese_simplified ] = "²åÈë(~I)";
+        Text[ chinese_simplified ] = "æ’å…¥(~I)";
         Text[ russian ] = "Âñòàâêè";
         Text[ polish ] = "Wstawienia";
-        Text[ japanese ] = "‘}“ü(~I)";
-        Text[ chinese_traditional ] = "´¡¤J(~I)";
+        Text[ japanese ] = "æŒ¿å…¥(~I)";
+        Text[ chinese_traditional ] = "æ’å…¥(~I)";
         Text[ arabic ] = "ÅÏÑÇÌÇÊ";
         Text[ greek ] = "ĞñïóèŞêåò";
-        Text[ korean ] = "»ğÀÔ(~I)";
+        Text[ korean ] = "ì‚½ì…(~I)";
         Text[ turkish ] = "~Eklemeler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Inserciones";
@@ -167,14 +167,14 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ spanish ] = "~Desplazamientos" ;
         Text [ french ] = "~Déplacements" ;
         Text [ dutch ] = "~Verplaatsingen" ;
-        Text[ chinese_simplified ] = "ÒÆ¶¯(~M)";
+        Text[ chinese_simplified ] = "ç§»åŠ¨(~M)";
         Text[ russian ] = "Cìåùåíèÿ";
         Text[ polish ] = "Przesuniêcia";
-        Text[ japanese ] = "ˆÚ“®(~M)";
-        Text[ chinese_traditional ] = "²¾°Ê(~M)";
+        Text[ japanese ] = "ç§»å‹•(~M)";
+        Text[ chinese_traditional ] = "ç§»å‹•(~M)";
         Text[ arabic ] = "ÅÒÇÍÇÊ";
         Text[ greek ] = "ÌåôáêéíŞóåéò";
-        Text[ korean ] = "ÀÌµ¿(~M)";
+        Text[ korean ] = "ì´ë™(~M)";
         Text[ turkish ] = "~Taşınan girişler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desplazamientos";
@@ -195,14 +195,14 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ spanish ] = "Colores para las modificaciones" ;
         Text [ french ] = "Couleurs pour les modifications" ;
         Text [ dutch ] = "Kleur voor wijzigingen" ;
-        Text[ chinese_simplified ] = "²ÊÉ«ÏÔÊ¾¸ü¸ÄµÄ²¿·Ö";
+        Text[ chinese_simplified ] = "å½©è‰²æ˜¾ç¤ºæ›´æ”¹çš„éƒ¨åˆ†";
         Text[ russian ] = "Öâåò äëÿ èñïğàâëåíèé";
         Text[ polish ] = "Kolory zmian";
-        Text[ japanese ] = "•ÏX‰ÓŠ‚Ég‚¤F";
-        Text[ chinese_traditional ] = "±m¦âÅã¥ÜÅÜ§óªº³¡¤À";
+        Text[ japanese ] = "å¤‰æ›´ç®‡æ‰€ã«ä½¿ã†è‰²";
+        Text[ chinese_traditional ] = "å½©è‰²é¡¯ç¤ºè®Šæ›´çš„éƒ¨åˆ†";
         Text[ arabic ] = "áæä ÇáÊÛííÑÇÊ";
         Text[ greek ] = "×ñşìáôá ôùí áëëáãşí";
-        Text[ korean ] = "º¯°æ »ö»ó";
+        Text[ korean ] = "ë³€ê²½ ìƒ‰ìƒ";
         Text[ turkish ] = "Değişiklikleri gösteren renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores para las modificaciones";
@@ -249,20 +249,21 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ spanish ] = "Según autor" ;
         Text [ french ] = "Par auteur" ;
         Text [ dutch ] = "Naar auteur" ;
-        Text[ chinese_simplified ] = "ÒÀ×÷ÕßÉè¶¨";
+        Text[ chinese_simplified ] = "ä¾ä½œè€…è®¾å®š";
         Text[ russian ] = "Ïî àâòîğó";
         Text[ polish ] = "Wed³ug autora";
-        Text[ japanese ] = "ì¬Ò‚×‚Â";
-        Text[ chinese_traditional ] = "¨Ì§@ªÌ³]©w";
+        Text[ japanese ] = "ä½œæˆè€…ã¹ã¤";
+        Text[ chinese_traditional ] = "ä¾ä½œè€…è¨­å®š";
         Text[ arabic ] = "ÍÓÈ ÇáãÄáİ";
         Text[ greek ] = "ÊáôÜ óõíôÜêôç";
-        Text[ korean ] = "ÀÛ¼ºÀÚ";
+        Text[ korean ] = "ì‘ì„±ì";
         Text[ turkish ] = "Yazana göre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Según autor";
         Text[ finnish ] = "Laatija";
     };
 };
+
 
 
 
