@@ -53,28 +53,53 @@
  *
  ************************************************************************/
 
-import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XInitialization;
+/** You can find more
+ * information on the following web page:
+ * http://api.openoffice.org/common/ref/com/sun/star/index.html
+ */
+
+
+/*Java Uno Helper Classes*/
+import com.sun.star.lib.uno.adapters.XInputStreamToInputStreamAdapter;
+import com.sun.star.lib.uno.adapters.XOutputStreamToOutputStreamAdapter;
+
+/*StarOffice/Uno Classes*/
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XTypeProvider;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XServiceName;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.uno.Type;
-import com.sun.star.documentconversion.XConverterBridge;
+import com.sun.star.frame.XConfigManager;
+import com.sun.star.xml.sax.InputSource;
+import com.sun.star.xml.sax.XParser;
+import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
+import com.sun.star.xml.sax.XDocumentHandler;
+
+/* Generated from Idls */
+import com.sun.star.xml.XImportFilter;
+import com.sun.star.xml.XExportFilter;
+
+/* XMerge Classes */
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.Convert;
 import org.openoffice.xmerge.ConverterFactory;
+import org.openoffice.xmerge.Document;
+import org.openoffice.xmerge.ConvertData;
+import org.openoffice.xmerge.converter.xml.OfficeDocument;
+/*Java Classes*/
 import java.util.Enumeration;
 import java.util.Vector;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConvertData;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
+
+
 
 /** This outer class provides an inner class to implement the service
  * description, a method to instantiate the
@@ -83,19 +108,35 @@ import org.openoffice.xmerge.converter.xml.OfficeDocument;
  */
 public class XMergeBridge {
 
+
+    private static XMultiServiceFactory xMSF;
+    private static XDocumentHandler exportDocHandler=null;
+    private static XInputStream xInStream =null;
+    private static XOutputStream xOutStream=null;
+    private static String  udJarPath=null;
+    private static XOutputStream xos = null;
+    private static XOutputStreamToOutputStreamAdapter adaptedStream=null;
+    private static String sFileName=null;
+
+    //private static FileOutputStream adaptedStream =null;
+
     /** This inner class provides the component as a concrete implementation
      * of the service description. It implements the needed interfaces.
      * @implements XTypeProvider
      */
     static public class _XMergeBridge implements
-        XConverterBridge,
+                                               XImportFilter,
+     XExportFilter,
         XServiceName,
         XServiceInfo,
+    XDocumentHandler,
         XTypeProvider {
 
         /** The component will be registered under this name.
          */
         static private final String __serviceName = "com.sun.star.documentconversion.XMergeBridge";
+
+
 
         public com.sun.star.uno.Type[] getTypes() {
             Type[] typeReturn = {};
@@ -103,7 +144,8 @@ public class XMergeBridge {
             try {
                 typeReturn = new Type[] {
                 new Type( XTypeProvider.class ),
-                new Type( XConverterBridge.class ),
+                new Type( XImportFilter.class ),
+        new Type( XExportFilter.class ),
                 new Type( XServiceName.class ),
                 new Type( XServiceInfo.class ) };
             }
@@ -114,22 +156,266 @@ public class XMergeBridge {
             return( typeReturn );
         }
 
-     public void convert (com.sun.star.io.XInputStream xml,
-            com.sun.star.io.XOutputStream device,boolean convertFromOffice,String pluginUrl,String FileName) throws com.sun.star.uno.RuntimeException {
-         System.out.println("\nFound the Convert method "+pluginUrl);
-         String jarName = pluginUrl;
-         String name=null;
-         if(FileName.equalsIgnoreCase(""))
-           name = "OutFile";
-         else
-          name = FileName.substring(0,(FileName.lastIndexOf(".")));
+    String getFileName(String origName)
+    {
+        String name=null;
+        if (origName !=null)
+        {
+        if(origName.equalsIgnoreCase(""))
+            name = "OutFile";
+        else {
+            if (origName.lastIndexOf("/")>=0){
+                origName=origName.substring(origName.lastIndexOf("/")+1,origName.length());
+            }
+            if (origName.lastIndexOf(".")>=0){
+            name = origName.substring(0,(origName.lastIndexOf(".")));
+            }
+            else{
+            name=origName;
+            }
+        }
+        }
+        else{
+        name = "OutFile";
+        }
+        return name;
+    }
 
+
+
+    public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
+                com.sun.star.xml.sax.XDocumentHandler xDocHandler,
+                java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
+        /*
+        System.out.println("\nFound the Importer!\n");
+
+        System.out.println("\n"+msUserData[0]);
+        System.out.println("\n"+msUserData[1]);
+        System.out.println("\n"+msUserData[2]);
+        System.out.println("\n"+msUserData[3]);
+        System.out.println("\n"+xDocHandler);
+        */
+        sFileName=null;
+        String sDirectory = null;
+        String sURL=null;
+        String udConvertClass=msUserData[0];
+        udJarPath=msUserData[1];
+        String udImport =msUserData[2];
+        String udExport =msUserData[3];
+        com.sun.star.io.XInputStream xis=null;
+        com.sun.star.beans.PropertyValue[] pValue = aSourceData;
+
+        for  (int  i = 0 ; i < pValue.length; i++)
+        {
+        if (pValue[i].Name.compareTo("InputStream")==0){
+            xis =(com.sun.star.io.XInputStream) pValue[i].Value;
+
+            //System.out.println(pValue[i].Name+" "+xis);
+        }
+        if (pValue[i].Name.compareTo("FileName")==0){
+            sFileName=(String) pValue[i].Value;
+            //System.out.println(pValue[i].Name+" "+sFileName);
+        }
+        if (pValue[i].Name.compareTo("URL")==0){
+            sURL = (String)pValue[i].Value;
+            //System.out.println(pValue[i].Name+" "+sURL);
+        }
+        }
+
+        try{
+
+        Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
+         XConfigManager xCfgMgr = (XConfigManager) UnoRuntime.queryInterface(
+                                            XConfigManager.class , xCfgMgrObj );
+        String PathString=xCfgMgr.substituteVariables("$(progurl)" );
+        PathString= PathString.concat("/");
+        udJarPath= PathString.concat(udJarPath);
+
+        Object xPipeObj=xMSF.createInstance("com.sun.star.io.Pipe");
+        xInStream = (XInputStream) UnoRuntime.queryInterface(
+                        XInputStream.class , xPipeObj );
+            xOutStream = (XOutputStream) UnoRuntime.queryInterface(
+                        XOutputStream.class , xPipeObj );
+
+        convert (xis,xOutStream,false,udJarPath,sFileName);
+
+        Object xSaxParserObj=xMSF.createInstance("com.sun.star.xml.sax.Parser");
+
+        XParser xParser = (XParser) UnoRuntime.queryInterface(
+                        XParser.class , xSaxParserObj );
+
+        InputSource aInput = new InputSource();
+        aInput.sSystemId = sFileName;
+        aInput.aInputStream =xInStream;
+                xParser.setDocumentHandler ( xDocHandler );
+        xParser.parseStream ( aInput );
+
+        }
+        catch (Exception e){
+        System.out.println("Exception "+e);
+        }
+
+        return true;
+    }
+
+       public boolean exporter(com.sun.star.beans.PropertyValue[] aSourceData,
+                   java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException{
+       /*
+        System.out.println("\nFound the Exporter!\n");
+
+        System.out.println("\n"+msUserData[0]);
+        System.out.println("\n"+msUserData[1]);
+        System.out.println("\n"+msUserData[2]);
+        System.out.println("\n"+msUserData[3]);
+       */
+        sFileName=null;
+        String sDirectory = null;
+        String sURL=null;
+        String udConvertClass=msUserData[0];
+        udJarPath=msUserData[1];
+        String udImport =msUserData[2];
+        String udExport =msUserData[3];
+
+
+        com.sun.star.beans.PropertyValue[] pValue = aSourceData;
+        for  (int  i = 0 ; i < pValue.length; i++)
+        {
+        if (pValue[i].Name.compareTo("OutputStream")==0){
+            xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
+
+            //    System.out.println(pValue[i].Name+" "+xos);
+        }
+        if (pValue[i].Name.compareTo("FileName")==0){
+            sFileName=(String) pValue[i].Value;
+            //System.out.println(pValue[i].Name+" "+sFileName);
+        }
+        if (pValue[i].Name.compareTo("URL")==0){
+            sURL = (String)pValue[i].Value;
+            //System.out.println(pValue[i].Name+" "+sURL);
+        }
+        }
+
+
+         try{
+         Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
+         XConfigManager xCfgMgr = (XConfigManager) UnoRuntime.queryInterface(
+                                            XConfigManager.class , xCfgMgrObj );
+
+        String PathString=xCfgMgr.substituteVariables("$(progurl)" );
+        PathString= PathString.concat("/");
+        udJarPath= PathString.concat(udJarPath);
+
+        Object xPipeObj=xMSF.createInstance("com.sun.star.io.Pipe");
+        xInStream = (XInputStream) UnoRuntime.queryInterface(
+                        XInputStream.class , xPipeObj );
+        xOutStream = (XOutputStream) UnoRuntime.queryInterface(
+                        XOutputStream.class , xPipeObj );
+           }
+        catch (Exception e){
+        System.out.println("Exception "+e);
+        }
+        return true;
+       }
+
+
+
+       public void  startDocument ()    {
+
+       }
+
+    public void endDocument()
+    {
+
+        convert (xInStream,xos,true,udJarPath,sFileName);
+
+    }
+
+    public void startElement (String str, com.sun.star.xml.sax.XAttributeList xattribs)
+    {
+
+        str="<".concat(str);
+        if (xattribs !=null)
+        {
+        str= str.concat(" ");
+        int len=xattribs.getLength();
+        for (short i=0;i<len;i++)
+            {
+            str=str.concat(xattribs.getNameByIndex(i));
+            str=str.concat("=\"");
+            str=str.concat(xattribs.getValueByIndex(i));
+            str=str.concat("\" ");
+            }
+        }
+        str=str.concat(">");
+        // System.out.println(str);
+        try{
+         xOutStream.writeBytes(str.getBytes());
+        }
+        catch (Exception e){
+        System.out.println("\n"+e);
+        }
+
+    }
+
+    public void endElement(String str){
+
+        str="</".concat(str);
+        str=str.concat(">");
+        try{
+         xOutStream.writeBytes(str.getBytes());
+
+        }
+        catch (Exception e){
+        System.out.println("\n"+e);
+        }
+        //System.out.println(str);
+
+    }
+    public void characters(String str){
+        //System.out.println(str);
+        try{
+         xOutStream.writeBytes(str.getBytes());
+        }
+       catch (Exception e){
+           System.out.println("\n"+e);
+       }
+
+
+    }
+
+    public void ignorableWhitespace(String str){
+
+
+    }
+       public void processingInstruction(String aTarget, String aData){
+
+       }
+
+    public void setDocumentLocator(com.sun.star.xml.sax.XLocator xLocator){
+
+    }
+
+
+
+
+
+
+    public void convert (com.sun.star.io.XInputStream xml,com.sun.star.io.XOutputStream device,
+             boolean convertFromOffice,String pluginUrl,String FileName) throws com.sun.star.uno.RuntimeException {
+        //System.out.println("\nFound the Convert method "+pluginUrl+"   New Xmerge");
+         String jarName = pluginUrl;
+         String name= getFileName(FileName);
+
+         //System.out.println("Filename test = "+ name);
          ConverterInfo converterInfo = null;
          Enumeration ciEnum= null;
+
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
 
-             XOutputStreamToOutputStreamAdapter xos =
-                 new XOutputStreamToOutputStreamAdapter(device);
+
+         XOutputStreamToOutputStreamAdapter newxos =new XOutputStreamToOutputStreamAdapter(device);
+
+
 
          try{
          ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
@@ -143,12 +429,12 @@ public class XMergeBridge {
          {
 
          try {
-
-             while (ciEnum.hasMoreElements()) {
+             //Check to see if jar contains a plugin Impl
+             if (ciEnum.hasMoreElements()) {
              converterInfo = (ConverterInfo)ciEnum.nextElement();
 
 
-             //System.out.println("\nFound the "+converterInfo.getDisplayName()+" Converter\n");
+             System.out.println("\nFound the "+converterInfo.getDisplayName()+" Converter\n");
 
 
 
@@ -157,23 +443,27 @@ public class XMergeBridge {
              if (cv == null) {
                  System.out.println("\nNo plug-in exists to convert from <staroffice/sxw> to <specified format> ");
              }
-             cv.addInputStream(name,(InputStream)xis,false);
+             //System.out.println("\nAdding InputStream " );
+
+                    cv.addInputStream(name,(InputStream)xis,false);
+
              ConvertData dataOut = cv.convert();
 
              Enumeration docEnum = dataOut.getDocumentEnumeration();
              while (docEnum.hasMoreElements()) {
                  Document docOut      = (Document)docEnum.nextElement();
                  String fileName      = docOut.getFileName();
+                 docOut.write(newxos);
 
-                 docOut.write(xos);
-                 xos.flush();
-                 xos.close();
+                 newxos.flush();
+                 newxos.close();
+
+             }
+
+
 
              }
 
-
-
-             }
 
          }
          catch (Exception e) {
@@ -183,8 +473,8 @@ public class XMergeBridge {
          else{
 
          try {
-
-             while (ciEnum.hasMoreElements()) {
+              //Check to see if jar contains a plugin Impl
+             if (ciEnum.hasMoreElements()) {
              converterInfo = (ConverterInfo)ciEnum.nextElement();
 
              //System.out.println("\nFound the "+converterInfo.getDisplayName()+" Converter\n");
@@ -194,19 +484,18 @@ public class XMergeBridge {
              if (cv == null) {
                  System.out.println("\nNo plug-in exists to convert to <staroffice/sxw> from <specified format>");
              }
-
              cv.addInputStream(name,(InputStream)xis,false);
              ConvertData dataIn = cv.convert();
-
-              Enumeration docEnum = dataIn.getDocumentEnumeration();
+             Enumeration docEnum = dataIn.getDocumentEnumeration();
              while (docEnum.hasMoreElements()) {
                  OfficeDocument docIn      = (OfficeDocument)docEnum.nextElement();
-                 docIn.write(xos,false);
+                 docIn.write(newxos,false);
+
 
              }
-             xos.write(-1); //EOF character
-             xos.flush();
-             xos.close();
+             newxos.write(-1); //EOF character
+             newxos.flush();
+             newxos.close();
 
 
              }
@@ -221,6 +510,8 @@ public class XMergeBridge {
          //System.out.flush();
 
      }
+
+
 
 
 
@@ -271,8 +562,8 @@ public class XMergeBridge {
     public static XSingleServiceFactory __getServiceFactory(String implName,
     XMultiServiceFactory multiFactory,
     XRegistryKey regKey) {
+    xMSF= multiFactory;
         XSingleServiceFactory xSingleServiceFactory = null;
-
         if (implName.equals(_XMergeBridge.class.getName()) ) {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_XMergeBridge.class,
             _XMergeBridge.__serviceName,
@@ -297,3 +588,6 @@ public class XMergeBridge {
         _XMergeBridge.__serviceName, regKey);
     }
 }
+
+
+
