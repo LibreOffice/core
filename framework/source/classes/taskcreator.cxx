@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:51:59 $
+ *  last change: $Author: as $ $Date: 2002-07-29 08:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #include <classes/taskcreator.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_PERSISTENTWINDOWSTATE_HXX_
+#include <helper/persistentwindowstate.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -307,6 +311,18 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( 
 
             if (bVisible)
                 xWindow->setVisible(bVisible);
+
+            // Special feature: It's allowed for system tasks only - not for browser plugged ones!
+            // We must create a special listener service and couple it with the new created task frame.
+            // He will restore or save the window state of it ...
+            // See used classes for further informations too.
+            PersistentWindowState* pPersistentStateHandler = new PersistentWindowState(xSMGR);
+            css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY);
+            // This will start listening at the task frame ... and then these two objects hold herself alive!
+            // We can forget xInit without any problems.
+            css::uno::Sequence< css::uno::Any > lInitData(1);
+            lInitData[0] <<= xTask;
+            xInit->initialize(lInitData);
         }
     }
 
