@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 12:16:44 $
+ *  last change: $Author: mt $ $Date: 2002-11-08 12:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1134,8 +1134,10 @@ SvxTabStop ContentAttribs::FindTabStop( long nCurPos, USHORT nDefTab )
 
 void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 {
+    BOOL bStyleChanged = ( pStyle != pS );
     pStyle = pS;
-    if ( pStyle )
+    // #104799# Only when other style sheet, not when current style sheet modified
+    if ( pStyle && bStyleChanged )
     {
         // Gezielt die Attribute aus der Absatzformatierung entfernen, die im Style
         // spezifiziert sind, damit die Attribute des Styles wirken koennen.
