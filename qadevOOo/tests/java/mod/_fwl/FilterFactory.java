@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:54:01 $
+ *  last change:$Date: 2003-10-06 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,13 @@ public class FilterFactory extends TestCase {
         XInterface oObj = null;
         Object oInterface = null ;
 
-        //now get the OButtonControl
         try {
             oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.comp.framework.FilterFactory") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e );
+            throw new StatusException("Couldn't get FilterFactory", e );
         }
 
         if (oInterface == null) {
@@ -136,6 +135,38 @@ public class FilterFactory extends TestCase {
         XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         String[] filterNames = xNA.getElementNames();
+
+        // XNameContainer; XNameReplace
+        String filterName = filterNames[0];
+        Object[] instance = null;;
+        PropertyValue instanceProp = new PropertyValue();
+        try{
+            instance = (Object[]) xNA.getByName(filterName);
+            instanceProp = (PropertyValue) instance[0];
+        } catch (com.sun.star.container.NoSuchElementException e){
+            throw new StatusException(
+            Status.failed("Couldn't get elements from object"));
+        } catch (com.sun.star.lang.WrappedTargetException e){
+            throw new StatusException(
+            Status.failed("Couldn't get elements from object"));
+        }
+
+        log.println("adding INSTANCEn as obj relation to environment");
+
+        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+
+        for (int n = 1; n < (THRCNT + 1); n++) {
+            log.println("adding INSTANCE" + n +
+                        " as obj relation to environment");
+
+            instanceProp.Value = "INSTANCE"+n;
+            instance[0] = instanceProp;
+
+            tEnv.addObjRelation("INSTANCE" + n, instance);
+        }
+
+
+        // XMSF
         Vector vFTypes = new Vector();
         Vector vFArgs = new Vector();
         for (int i = 0; i < filterNames.length; i++) {
