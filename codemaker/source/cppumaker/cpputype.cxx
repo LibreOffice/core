@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:32:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,23 +1325,48 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
             o << "(sal_uInt16)" << constValue.m_value.aUShort;
             break;
         case RT_TYPE_INT32:
-            o << "(sal_Int32)" << constValue.m_value.aLong;
+            // Avoid C++ compiler warnings about (un)signedness of literal
+            // -2^31:
+            if (constValue.m_value.aLong == SAL_MIN_INT32) {
+                o << "SAL_MIN_INT32";
+            } else {
+                o << "(sal_Int32)" << constValue.m_value.aLong;
+            }
             break;
         case RT_TYPE_UINT32:
-            o << "(sal_uInt32)" << constValue.m_value.aULong;
+            o << "(sal_uInt32)"
+              << OString::valueOf(
+                  static_cast< sal_Int64 >(constValue.m_value.aULong)).getStr()
+              << "U";
             break;
         case RT_TYPE_INT64:
-            {
-                ::rtl::OString tmp( OString::valueOf(constValue.m_value.aHyper) );
-                // o << "(sal_Int64)" << tmp.getStr() << "L";
+            // Avoid C++ compiler warnings about (un)signedness of literal
+            // -2^63:
+            if (constValue.m_value.aHyper == SAL_MIN_INT64) {
+                o << "SAL_MIN_INT64";
+            } else {
+                ::rtl::OString tmp(OString::valueOf(constValue.m_value.aHyper));
                 o << "(sal_Int64) SAL_CONST_INT64(" << tmp.getStr() << ")";
             }
             break;
         case RT_TYPE_UINT64:
             {
-                ::rtl::OString tmp( OString::valueOf((sal_Int64)constValue.m_value.aUHyper) );
-                // o << "(sal_uInt64)" << tmp.getStr() << "L";
-                o << "(sal_Int64) SAL_CONST_UINT64(" << tmp.getStr() << ")";
+                o << "SAL_CONST_UINT64(";
+                sal_uInt64 n = constValue.m_value.aUHyper;
+                if (n == 0) {
+                    o << "0";
+                } else {
+                    std::vector< char > buf;
+                    for (; n != 0; n /= 10) {
+                        buf.push_back('0' + static_cast< char >(n % 10));
+                    }
+                    for (std::vector< char >::reverse_iterator i(buf.rbegin());
+                         i != buf.rend(); ++i)
+                    {
+                        o << rtl::OString::valueOf(*i).getStr();
+                    }
+                }
+                o << ")";
             }
             break;
         case RT_TYPE_FLOAT:
