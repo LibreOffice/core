@@ -2,9 +2,9 @@
  *
  *  $RCSfile: out_position.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:11:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,6 @@ namespace
 {
 
 const int       C_nAssumedMaxLinkLength = 500;
-
-const int       C_nMaxDepth = 30;
-char            C_sUpLinkArray[3*C_nMaxDepth+1] =
-                        "../../../../../../../../../../"
-                        "../../../../../../../../../../"
-                        "../../../../../../../../../../";
-
-const char *    C_sUpLink = &C_sUpLinkArray[0];
-
 
 void                move_ToParent(
                         Node * &            io_node,
@@ -239,22 +230,44 @@ Position::Set( Node &           i_node,
 
 
 const char *
-get_UpLink(intt i_depth)
+get_UpLink(uintt i_depth)
 {
-    intt nDepth;
+    static const uintt
+        C_nMaxDepth = 30;
+    static const char
+        C_sUpLinkArray[3*C_nMaxDepth+1] =
+                        "../../../../../../../../../../"
+                        "../../../../../../../../../../"
+                        "../../../../../../../../../../";
+    static const char *
+        C_sUpLink = &C_sUpLinkArray[0];
 
     if ( i_depth <= C_nMaxDepth )
-        return C_sUpLink + 3*(C_nMaxDepth - i_depth);
-
-
-    StreamLock  aRet(i_depth*3 + 1);
-    StreamStr & rRet = aRet();
-    for ( nDepth = i_depth; nDepth > C_nMaxDepth; nDepth -= C_nMaxDepth )
     {
-        rRet << C_sUpLink;
+        return C_sUpLink + 3*(C_nMaxDepth - i_depth);
     }
-    rRet << C_sUpLink + 3*(C_nMaxDepth - nDepth);
-    return rRet.c_str();
+    else
+    {   // not THREAD fast
+        static std::vector<char>
+            aRet;
+        uintt nNeededSize = i_depth * 3 + 1;
+
+        if (aRet.size() < nNeededSize)
+        {
+            aRet.resize(nNeededSize);
+            char * pEnd = &aRet[nNeededSize-1];
+            *pEnd = '\0';
+
+            for ( char * pFill = &(*aRet.begin());
+                  pFill != pEnd;
+                  pFill += 3 )
+            {
+                memcpy(pFill, C_sUpLink, 3);
+            }
+        }   // end if
+
+        return &aRet[aRet.size() - 1 - 3*i_depth];
+    }
 }
 
 
