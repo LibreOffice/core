@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:01 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 08:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,7 +1067,13 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 
     // a new record count ? -> may be our search availability has changed
     if (evt.PropertyName.equals(PROPERTY_ROWCOUNT))
-        InvalidateFeature(ID_BROWSER_SEARCH);
+    {
+        sal_Int32 nNewValue,nOldValue;
+        evt.NewValue >>= nNewValue;
+        evt.OldValue >>= nOldValue;
+        if((nOldValue == 0 && nNewValue != 0) || (nOldValue != 0 && nNewValue == 0))
+            InvalidateAll();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1478,8 +1484,10 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                     break;
 
                 aReturn.bEnabled = ::comphelper::getBOOL(xCurrentField->getPropertyValue(PROPERTY_ISSEARCHABLE));
-                if(aReturn.bEnabled && getRowSet().is()) // check if we stand on a valid row
-                    aReturn.bEnabled = !(getRowSet()->isBeforeFirst() || getRowSet()->isAfterLast() ||getRowSet()->rowDeleted());
+                Reference< XRowSet > xRow = getRowSet();
+                Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
+                if(aReturn.bEnabled && xRow.is()) // check if we stand on a valid row
+                    aReturn.bEnabled = !(xRow->isBeforeFirst() || xRow->isAfterLast() || xRow->rowDeleted() || ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_ROWCOUNT)) == 0);
             }
             break;
 
@@ -1494,8 +1502,10 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                                         xCurrentField.is() &&
                                        ::comphelper::getBOOL(xCurrentField->getPropertyValue(PROPERTY_ISSEARCHABLE));
 
-                    if(aReturn.bEnabled && getRowSet().is()) // check if we stand on a valid row
-                        aReturn.bEnabled = !(getRowSet()->isBeforeFirst() || getRowSet()->isAfterLast() ||getRowSet()->rowDeleted());
+                    Reference< XRowSet > xRow = getRowSet();
+                    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
+                    if(aReturn.bEnabled && xRow.is()) // check if we stand on a valid row
+                        aReturn.bEnabled = !(xRow->isBeforeFirst() || xRow->isAfterLast() || xRow->rowDeleted() || ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_ROWCOUNT)) == 0);
                     // a native statement can't be filtered or sorted
                     //  aReturn.bEnabled &= m_xParser.is();
                 }
