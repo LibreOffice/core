@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,84 +944,86 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                                                                                 rAttr.GetBottomCrop() ),
                                                                           aMap100 );
 
-        // #104115# Crop the bitmap
-        if( rAttr.IsCropped() )
+        // convert from prefmapmode to pixel
+        const Size aSrcSizePixel( Application::GetDefaultDevice()->LogicToPixel( aSrcSize,
+                                                                                 aMapGraph ) );
+
+        // setup crop rectangle in pixel
+        Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
+                             aSrcSizePixel.Width() - aCropRightBottom.Width(),
+                             aSrcSizePixel.Height() - aCropRightBottom.Height() );
+
+        // #105641# Also crop animations
+        if( aTransGraphic.IsAnimated() )
         {
-            Size aSrcSize( aTransGraphic.GetPrefSize() );
+            int nFrame;
+            Animation aAnim( aTransGraphic.GetAnimation() );
 
-            // setup crop rectangle in prefmapmode system
-            Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
-                                 aSrcSize.Width() - aCropRightBottom.Width(),
-                                 aSrcSize.Height() - aCropRightBottom.Height() );
+            for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
+            {
+                AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 
-            // convert from prefmapmode to pixel
-            aCropRect = Application::GetDefaultDevice()->LogicToPixel( aCropRect,
-                                                                       aMapGraph );
+                if( !aCropRect.IsInside( Rectangle(aAnimBmp.aPosPix, aAnimBmp.aSizePix) ) )
+                {
+                    // setup actual cropping (relative to frame position)
+                    Rectangle aCropRectRel( aCropRect );
+                    aCropRectRel.Move( -aAnimBmp.aPosPix.X(),
+                                       -aAnimBmp.aPosPix.Y() );
 
-            aBmpEx.Crop( aCropRect );
+                    // cropping affects this frame, apply it then
+                    // do _not_ apply enlargement, this is done below
+                    ImplTransformBitmap( aAnimBmp.aBmpEx, rAttr, Size(), Size(),
+                                         aCropRectRel, rDestSize, FALSE );
 
-            // #104115# Negative crop sizes mean: enlarge bitmap and pad
+                    aAnim.Replace( aAnimBmp, nFrame );
+                }
+                // else: bitmap completely within crop area,
+                // i.e. nothing is cropped away
+            }
+
+            // now, apply enlargement (if any) through global animation size
             if( aCropLeftTop.Width() < 0 ||
                 aCropLeftTop.Height() < 0 ||
                 aCropRightBottom.Width() < 0 ||
                 aCropRightBottom.Height() < 0 )
             {
-                Size aBmpSize( aBmpEx.GetSizePixel() );
-                sal_Int32 nPadLeft( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0 );
-                sal_Int32 nPadTop( aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
-                sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0) );
-                sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0) );
-
-                BitmapEx aBmpEx2;
-
-                if( aBmpEx.IsTransparent() )
-                {
-                    if( aBmpEx.IsAlpha() )
-                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetAlpha() );
-                    else
-                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
-                }
-                else
-                {
-                    // #104115# Generate mask bitmap and init to zero
-                    Bitmap aMask( aBmpSize, 1 );
-                    aMask.Erase( Color(0,0,0) );
-
-                    // #104115# Always generate transparent bitmap, we need the border transparent
-                    aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aMask );
-
-                    // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
-                    aBmpEx = aBmpEx2;
-                }
-
-                aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
-                aBmpEx2.Erase( Color(0xFF,0,0,0) );
-                aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &aBmpEx );
-                aBmpEx = aBmpEx2;
+                Size aNewSize( aAnim.GetDisplaySizePixel() );
+                aNewSize.Width() += aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0;
+                aNewSize.Width() += aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0;
+                aNewSize.Height() += aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0;
+                aNewSize.Height() += aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0;
+                aAnim.SetDisplaySizePixel( aNewSize );
             }
-        }
 
-        const Size  aSizePixel( aBmpEx.GetSizePixel() );
-
-        if( rAttr.GetRotation() != 0 && !IsAnimated() )
-        {
-            if( aSizePixel.Width() && aSizePixel.Height() && rDestSize.Width() && rDestSize.Height() )
+            // if topleft has changed, we must move all frames to the
+            // right and bottom, resp.
+            if( aCropLeftTop.Width() < 0 ||
+                aCropLeftTop.Height() < 0 )
             {
-                double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
-                double fDstWH = (double) rDestSize.Width() / rDestSize.Height();
-                double fScaleX = 1.0, fScaleY = 1.0;
+                Point aPosOffset( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0,
+                                  aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
 
-                // always choose scaling to shrink bitmap
-                if( fSrcWH < fDstWH )
-                    fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
-                else
-                    fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+                for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
+                {
+                    AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 
-                aBmpEx.Scale( fScaleX, fScaleY );
+                    aAnimBmp.aPosPix += aPosOffset;
+
+                    aAnim.Replace( aAnimBmp, nFrame );
+                }
             }
-        }
 
-        aTransGraphic = aBmpEx;
+            aTransGraphic = aAnim;
+        }
+        else
+        {
+            BitmapEx aBmpEx( aTransGraphic.GetBitmapEx() );
+
+            ImplTransformBitmap( aBmpEx, rAttr, aCropLeftTop, aCropRightBottom,
+                                 aCropRect, rDestSize, TRUE );
+
+            aTransGraphic = aBmpEx;
+        }
 
         aTransGraphic.SetPrefSize( rDestSize );
         aTransGraphic.SetPrefMapMode( rDestMap );
