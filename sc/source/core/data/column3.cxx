@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:55:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,6 +1469,14 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollecti
             }
 
             pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
+        }
+        ScPostIt aCellNote(pDocument);
+        // Hide visible notes during Filtering.
+        if(pCell->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
+            aCellNote.SetShown(FALSE);
+            pCell->SetNote(aCellNote);
         }
 
         if ( !rStrings.Insert( pData ) )
