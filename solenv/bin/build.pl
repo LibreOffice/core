@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-09 17:13:28 $
+#   last change: $Author: vg $ $Date: 2002-12-10 17:41:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.75 $ ';
+$id_str = ' $Revision: 1.76 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -239,7 +239,7 @@ sub GetParentDeps {
 #
 sub BuildAll {
     if ($BuildAllParents) {
-        my ($Prj, $PrjDir);
+        my ($Prj, $PrjDir, $orig_prj);
         &GetParentDeps( $CurrentPrj, \%ParentDepsHash);
         if ($build_from) {
             &remove_extra_prjs(\%ParentDepsHash);
@@ -249,8 +249,11 @@ sub BuildAll {
             return;
         };
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
+            $orig_prj = '';
+            $orig_prj = $` if ($Prj =~ /\.lnk/o);
             if ($build_from_opt) {
-                if ($build_from_opt ne $Prj) {
+                if (($build_from_opt ne $Prj) &&
+                    ($build_from_opt ne $orig_prj)) {
                     &RemoveFromDependencies($Prj, \%ParentDepsHash);
                     next;
                 } else {
@@ -258,7 +261,8 @@ sub BuildAll {
                 };
             };
             if ($build_since) {
-                if ($build_since ne $Prj) {
+                if (($build_since ne $Prj) &&
+                    ($build_since ne $orig_prj)) {
                     &RemoveFromDependencies($Prj, \%ParentDepsHash);
                 } else {
                     &RemoveFromDependencies($Prj, \%ParentDepsHash);
