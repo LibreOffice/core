@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:52:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,6 @@ SwFrmNotify::~SwFrmNotify()
     if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
          bPrtWidth || bPrtHeight || bChgFlyBasePos )
     {
-#ifdef ACCESSIBLE_LAYOUT
         if( pFrm->IsAccessibleFrm() )
         {
             SwRootFrm *pRootFrm = pFrm->FindRootFrm();
@@ -323,7 +322,6 @@ SwFrmNotify::~SwFrmNotify()
                 pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pFrm, aFrm );
             }
         }
-#endif
 
         //Auch die Flys wollen etwas von den Veraenderungen mitbekommen,
         //FlyInCnts brauchen hier nicht benachrichtigt werden.
@@ -412,8 +410,26 @@ SwFrmNotify::~SwFrmNotify()
                     if( !pFrmFmt ||
                         FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                     {
-                        pObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                        ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
+                        // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
+                        if ( pObj->ISA(SwDrawVirtObj) )
+                        {
+                            SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                            pDrawVirtObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                            pDrawVirtObj->AdjustRelativePosToReference();
+                        }
+                        else
+                        {
+                            pObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                            ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
+                            // OD 30.06.2003 #108784# - correct relative position
+                            // of 'virtual' drawing objects.
+                            SwDrawContact* pDrawContact =
+                                static_cast<SwDrawContact*>(pObj->GetUserCall());
+                            if ( pDrawContact )
+                            {
+                                pDrawContact->CorrectRelativePosOfVirtObjs();
+                            }
+                        }
                     }
                 }
             }
@@ -495,8 +511,26 @@ void MA_FASTCALL lcl_MoveDrawObjs( SwFrm *pLow, const Point &rDiff,
         }
         else
         {
-            pObj->SetAnchorPos( pObj->GetAnchorPos() + rDiff );
-            ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
+            // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
+            if ( pObj->ISA(SwDrawVirtObj) )
+            {
+                SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                pDrawVirtObj->SetAnchorPos( pObj->GetAnchorPos() + rDiff );
+                pDrawVirtObj->AdjustRelativePosToReference();
+            }
+            else
+            {
+                pObj->SetAnchorPos( pObj->GetAnchorPos() + rDiff );
+                ((SwDrawContact*)GetUserCall(pObj))->ChkPage();
+                // OD 30.06.2003 #108784# - correct relative position
+                // of 'virtual' drawing objects.
+                SwDrawContact* pDrawContact =
+                        static_cast<SwDrawContact*>(pObj->GetUserCall());
+                if ( pDrawContact )
+                {
+                    pDrawContact->CorrectRelativePosOfVirtObjs();
+                }
+            }
         }
     }
 }
@@ -1009,15 +1043,21 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
         if ( rAnch.GetCntntAnchor() &&
              (rAnch.GetCntntAnchor()->nNode.GetIndex() == nIndex) )
         {
-            BOOL bFlyAtFly = rAnch.GetAnchorId() == FLY_AT_FLY; // LAYER_IMPL
+            const bool bFlyAtFly = rAnch.GetAnchorId() == FLY_AT_FLY; // LAYER_IMPL
+            //Wird ein Rahmen oder ein SdrObject beschrieben?
+            const bool bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
+            // OD 23.06.2003 #108784# - append also drawing objects anchored
+            // as character.
+            const bool bDrawObjInCntnt = bSdrObj &&
+                                         rAnch.GetAnchorId() == FLY_IN_CNTNT;
 
-            if( bFlyAtFly || rAnch.GetAnchorId() == FLY_AT_CNTNT ||
-                rAnch.GetAnchorId() == FLY_AUTO_CNTNT )
+            if( bFlyAtFly ||
+                rAnch.GetAnchorId() == FLY_AT_CNTNT ||
+                rAnch.GetAnchorId() == FLY_AUTO_CNTNT ||
+                bDrawObjInCntnt )
             {
-                //Wird ein Rahmen oder ein SdrObject beschrieben?
-                const BOOL bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
-                SdrObject *pSdrObj = 0;
-                if ( bSdrObj  && 0 == (pSdrObj = pFmt->FindSdrObject()) )
+                SdrObject* pSdrObj = 0;
+                if ( bSdrObj && 0 == (pSdrObj = pFmt->FindSdrObject()) )
                 {
                     ASSERT( !bSdrObj, "DrawObject not found." );
                     pFmt->GetDoc()->DelFrmFmt( pFmt );
@@ -1027,11 +1067,35 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                 if ( pSdrObj )
                 {
                     if ( !pSdrObj->GetPage() )
+                    {
                         pFmt->GetDoc()->GetDrawModel()->GetPage(0)->
                                 InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
+                    }
+                    // OD 25.06.2003 #108784# - move object to visible layer,
+                    // if necessary.
+                    if ( !pFmt->GetDoc()->IsVisibleLayerId( pSdrObj->GetLayer() ) )
+                    {
+                        SdrLayerID nVisibleLayerId =
+                            pFmt->GetDoc()->GetVisibleLayerIdByInvisibleOne( pSdrObj->GetLayer() );
+                        pSdrObj->SetLayer( nVisibleLayerId );
+                    }
+
                     SwDrawContact *pNew = (SwDrawContact*)GetUserCall(pSdrObj);
                     if( !pNew->GetAnchor() )
+                    {
                         pFrm->AppendDrawObj( pNew );
+                    }
+                    // OD 19.06.2003 #108784# - add 'virtual' drawing object,
+                    // if necessary. But control objects have to be excluded.
+                    else if ( !CheckControlLayer( pSdrObj ) &&
+                              pNew->GetAnchor() != pFrm &&
+                              !pNew->GetDrawObjectByAnchorFrm( *pFrm ) )
+                    {
+                        SwDrawVirtObj* pDrawVirtObj = pNew->AddVirtObj();
+                        pFrm->AppendVirtDrawObj( pNew, pDrawVirtObj );
+                        pDrawVirtObj->SendRepaintBroadcast();
+                    }
+
                 }
                 else
                 {
@@ -1065,6 +1129,30 @@ FASTBOOL MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
     return FALSE;
 }
 
+/** helper method to determine, if a <SwFrmFmt>, which has an object connected,
+    is located in header or footer.
+
+    OD 23.06.2003 #108784#
+
+    @author OD
+*/
+bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
+{
+    ASSERT( lcl_ObjConnected( &_rFmt ),
+            "::lcl_InHeaderOrFooter(..) - <SwFrmFmt> has no connected object" );
+
+    bool bRetVal = false;
+
+    const SwFmtAnchor& rAnch = _rFmt.GetAnchor();
+
+    if ( rAnch.GetAnchorId() != FLY_PAGE )
+    {
+        bRetVal = _rFmt.GetDoc()->IsInHeaderFooter( rAnch.GetCntntAnchor()->nNode );
+    }
+
+    return bRetVal;
+}
+
 void AppendAllObjs( const SwSpzFrmFmts *pTbl )
 {
     //Verbinden aller Objekte, die in der SpzTbl beschrieben sind mit dem
@@ -1090,8 +1178,12 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
                 //Seitengebunde sind bereits verankert, zeichengebundene
                 //will ich hier nicht.
                 bRemove = TRUE;
-            else if ( FALSE == (bRemove = ::lcl_ObjConnected( pFmt )) )
+            else if ( FALSE == (bRemove = ::lcl_ObjConnected( pFmt )) ||
+                      ::lcl_InHeaderOrFooter( *pFmt ) )
             {
+            // OD 23.06.2003 #108784# - correction: for objects in header
+            // or footer create frames, in spite of the fact that an connected
+            // objects already exists.
                 //Fuer Flys und DrawObjs nur dann ein MakeFrms rufen wenn noch
                 //keine abhaengigen Existieren, andernfalls, oder wenn das
                 //MakeFrms keine abhaengigen erzeugt, entfernen.
@@ -1449,7 +1541,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
     SwNodeIndex aTmp( rSttIdx );
     ULONG nEndIdx = rEndIdx.GetIndex();
-    SwNode *pNd = pDoc->GetNodes().FindPrvNxtFrmNode( aTmp,
+    SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrmNode( aTmp,
                                             pDoc->GetNodes()[ nEndIdx-1 ]);
     if ( pNd )
     {
@@ -1614,7 +1706,9 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     bSplit = FALSE;
                 ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(), FALSE,
                               nEndIdx, pPrv );
-                if( bAllowMove && !bDontCreateObjects )
+                // OD 23.06.2003 #108784# - correction: append objects doesn't
+                // depend on value of <bAllowMove>
+                if( !bDontCreateObjects )
                 {
                     const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
                     if( pTbl->Count() )
@@ -2592,12 +2686,28 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
         }
         else
         {
-            SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-            if ( pContact->GetPage() != pPage )
+            SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+            // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
+            if ( pObj->ISA(SwDrawVirtObj) )
             {
-                if ( pContact->GetPage() )
-                    pContact->GetPage()->SwPageFrm::RemoveDrawObj( pContact );
-                pPage->AppendDrawObj( pContact );
+                SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                if ( pDrawVirtObj->GetPageFrm() != pPage )
+                {
+                    if ( pDrawVirtObj->GetPageFrm() )
+                    {
+                        pDrawVirtObj->GetPageFrm()->RemoveVirtDrawObj( pContact, pDrawVirtObj );
+                    }
+                    pPage->AppendVirtDrawObj( pContact, pDrawVirtObj );
+                }
+            }
+            else
+            {
+                if ( pContact->GetPage() != pPage )
+                {
+                    if ( pContact->GetPage() )
+                        pContact->GetPage()->SwPageFrm::RemoveDrawObj( pContact );
+                    pPage->AppendDrawObj( pContact );
+                }
             }
         }
 
