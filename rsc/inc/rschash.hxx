@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rschash.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ public:
             HashString( USHORT nMaxEntries );   // max size of hash-tabel
             ~HashString();
     USHORT  HashFunc( const void * pElement );  // return hash value
+    static USHORT  Hash_Func( const void * pElement );  // return hash value
     BOOL    IsEntry( HASHID nIndex );
     COMPARE Compare( const void * pElement, HASHID nIndex );
     HASHID  Insert( const char * pStr );        // test of insert string
