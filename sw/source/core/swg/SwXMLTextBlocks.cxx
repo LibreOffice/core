@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:46:25 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,7 +1298,8 @@ ULONG SwXMLTextBlocks::SetMacroTable(
             xDocStream.Clear();
             xRoot->Commit();
             xRoot.Clear();
-            xBlkRoot->Commit();
+            if ( !bFileAlreadyOpen )
+                xBlkRoot->Commit();
         }
         else
             nRes = ERR_SWG_WRITE_ERROR;
