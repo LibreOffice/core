@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-16 14:45:13 $
+ *  last change: $Author: mt $ $Date: 2001-04-09 12:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_LISTBOX:
-                pNewWindow = new ListBox( pParent, nWinBits );
+                pNewWindow = new ListBox( pParent, nWinBits|WB_SIMPLEMODE );
                 ((ListBox*)pNewWindow)->EnableAutoSize( sal_False );
                 *ppNewComp = new VCLXListBox;
             break;
