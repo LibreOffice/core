@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:56:12 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ korean ] = "필터 이름";
         Text[ chinese_simplified ] = "筛选器名称";
         Text[ chinese_traditional ] = "篩選器名稱";
+        Text[ slovak ] = "Názov filtra";
     };
 
     Edit ED_XML_FILTER_NAME
@@ -130,6 +131,20 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ korean ] = "응용 프로그램";
         Text[ chinese_simplified ] = "应用程序";
         Text[ chinese_traditional ] = "應用程式";
+        Text[ portuguese ] = "Aplica��o";
+        Text[ russian ] = "����������";
+        Text[ greek ] = "��������";
+        Text[ dutch ] = "Toepassing";
+        Text[ finnish ] = "Sovellus";
+        Text[ czech ] = "Aplikace";
+        Text[ polish ] = "Aplikacja";
+        Text[ portuguese_brazilian ] = "Aplica��o";
+        Text[ turkish ] = "Uygulama";
+        Text[ arabic ] = "�����";
+        Text[ hebrew ] = "‮יישום‬";
+        Text[ catalan ] = "Aplicaci�";
+        Text[ thai ] = "โปรแกรมประยุกต์";
+        Text[ slovak ] = "Aplikácia";
     };
 
     ComboBox CB_XML_APPLICATION
@@ -151,14 +166,15 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 16 ) ;
         Text                = "Name des\nDateityps";
         Text [english_us]   = "Name of\nfile type";
-        Text[ french ] = "Nom sur\nl'interface utilisateur";
-        Text[ spanish ] = "Nombre en la\ninterfaz del usuario";
-        Text[ italian ] = "Nome per\nl'interfaccia utente";
-        Text[ swedish ] = "Namn f�r\nanv�ndargr�nssnittet";
-        Text[ japanese ] = "\nユーザーインターフェース上の名前";
-        Text[ korean ] = "\n사용자 인터페이스상의 이름";
-        Text[ chinese_simplified ] = "用于使用界面的名称";
-        Text[ chinese_traditional ] = "用於使用介面的名稱";
+        Text[ french ] = "Nom du\ntype de fichier";
+        Text[ spanish ] = "Nombre del\ntipo de archivo";
+        Text[ italian ] = "Nome per\ntipo di file";
+        Text[ swedish ] = "Namn f�r\nfiltyp";
+        Text[ japanese ] = "ファイルの種類\n名前";
+        Text[ korean ] = "파일 형식\n이름";
+        Text[ chinese_simplified ] = "文件类型名称";
+        Text[ chinese_traditional ] = "檔案類型名稱";
+        Text[ slovak ] = "Názov\ntypu súboru";
     };
 
     Edit ED_XML_INTERFACE_NAME
@@ -185,6 +201,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ korean ] = "파일 확장자";
         Text[ chinese_simplified ] = "文件扩展名";
         Text[ chinese_traditional ] = "檔案副檔名";
+        Text[ slovak ] = "Prípona k súboru";
     };
 
     Edit ED_XML_EXTENSION
@@ -211,6 +228,21 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ korean ] = "설명";
         Text[ chinese_simplified ] = "注解";
         Text[ chinese_traditional ] = "註解";
+        Text[ portuguese ] = "Coment�rio";
+        Text[ russian ] = "�����������";
+        Text[ greek ] = "������";
+        Text[ dutch ] = "Opmerkingen";
+        Text[ finnish ] = "Huomautukset";
+        Text[ czech ] = "Komentáře";
+        Text[ danish ] = "Kommentar";
+        Text[ polish ] = "Komentarz";
+        Text[ portuguese_brazilian ] = "Observa��es";
+        Text[ turkish ] = "A��klama";
+        Text[ arabic ] = "�����";
+        Text[ hebrew ] = "‮הערות‬";
+        Text[ catalan ] = "Comentaris";
+        Text[ thai ] = "ข้อคิดเห็น";
+        Text[ slovak ] = "Poznámky";
     };
 
     MultiLineEdit ED_XML_DESCRIPTION
@@ -229,6 +261,21 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     Text[ korean ] = "일반";
     Text[ chinese_simplified ] = "常规";
     Text[ chinese_traditional ] = "一般";
+    Text[ portuguese ] = "Geral";
+    Text[ russian ] = "�����";
+    Text[ greek ] = "������";
+    Text[ dutch ] = "Algemeen";
+    Text[ finnish ] = "Yleist�";
+    Text[ czech ] = "Obecné";
+    Text[ polish ] = "Og�lne";
+    Text[ portuguese_brazilian ] = "Geral";
+    Text[ arabic ] = "���";
+    Text[ hebrew ] = "‮כללי‬";
+    Text[ catalan ] = "Continguts";
+    Text[ thai ] = "ทั่วไป";
+    Text[ slovak ] = "Všeobecné";
 };
+
+
 
 
