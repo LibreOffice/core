@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 09:27:58 $
+ *  last change: $Author: nn $ $Date: 2002-04-05 19:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,10 +649,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
         else
             bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
 
-        if ( bWidth && bBreak )
-            return 0;
-
-        //  restliche Attribute aus Pattern und bedingter Formatierung zusammensuchen
+        //  get other attributes from pattern and conditional formatting
 
         SvxCellOrientation eOrient;
         if (pCondSet &&
@@ -661,6 +658,14 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
         else
             eOrient = (SvxCellOrientation)((const SvxOrientationItem&)
                                             pPattern->GetItem(ATTR_ORIENTATION)).GetValue();
+        BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
+                ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
+        if ( bAsianVertical )
+            bBreak = FALSE;
+
+        if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
+            return 0;
+
         long nRotate = 0;
         SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
         if ( eOrient == SVX_ORIENTATION_STANDARD )
@@ -683,6 +688,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                     eRotMode = SVX_ROTATE_MODE_STANDARD;    // keinen Ueberlauf
             }
         }
+
         const SvxMarginItem* pMargin;
         if (pCondSet &&
                 pCondSet->GetItemState(ATTR_MARGIN, TRUE, &pCondItem) == SFX_ITEM_SET)
@@ -837,7 +843,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             }
 
             Size aPaper = Size( 1000000, 1000000 );
-            if (eOrient==SVX_ORIENTATION_STACKED)
+            if ( eOrient==SVX_ORIENTATION_STACKED && !bAsianVertical )
                 aPaper.Width() = 1;
             else if (bBreak)
             {
@@ -883,6 +889,8 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                     pEngine->SetDefaults(pSet);
             }
 
+            BOOL bEngineVertical = pEngine->IsVertical();
+            pEngine->SetVertical( bAsianVertical );
             pEngine->SetUpdateMode( TRUE );
 
             BOOL bEdWidth = bWidth;
@@ -952,9 +960,20 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                         nValue += (long) ( nIndent * nPPT );
                 }
                 else
+                {
                     nValue += (long) ( pMargin->GetTopMargin() * nPPT ) +
                               (long) ( pMargin->GetBottomMargin() * nPPT );
+
+                    if ( bAsianVertical && pDev->GetOutDevType() != OUTDEV_PRINTER )
+                    {
+                        //  add 1pt extra (default margin value) for line breaks with SetVertical
+                        nValue += (long) ( 20 * nPPT );
+                    }
+                }
             }
+
+            //  EditEngine is cached and re-used, so the old vertical flag must be restored
+            pEngine->SetVertical( bEngineVertical );
 
             pDocument->DisposeFieldEditEngine(pEngine);
 

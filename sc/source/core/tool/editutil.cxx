@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-20 09:26:42 $
+ *  last change: $Author: nn $ $Date: 2002-04-05 19:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,14 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
+
+    //  asian vertical is always edited top-aligned
+    BOOL bAsianVertical = (SvxCellOrientation)((const SvxOrientationItem&)
+            pPattern->GetItem(ATTR_ORIENTATION)).GetValue() == SVX_ORIENTATION_STACKED &&
+        ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
+
     if ( eJust == SVX_VER_JUSTIFY_TOP ||
-            ( bForceToTop && SC_MOD()->GetInputOptions().GetTextWysiwyg() ) )
+            ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
         nPixDifY = nTopMargin;
     else
     {

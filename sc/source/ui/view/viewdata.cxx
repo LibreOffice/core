@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-04-05 19:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,6 +866,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     BOOL bBreak = ( eJust == SVX_HOR_JUSTIFY_BLOCK ) ||
                     ((SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
 
+    BOOL bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
+
     nEditCol = nNewX;
     nEditRow = nNewY;
     const ScMergeAttr* pMergeAttr = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
@@ -880,8 +882,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                         pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
                                             GetEditArea( pPattern, TRUE );
 
-    //  bei rechtsbuendigem Editieren muss rechts noch Platz fuer den Cursor sein
-    if ( nEditAdjust == SVX_ADJUST_RIGHT )
+    //  when right-aligned, leave space for the cursor
+    //  in vertical mode, editing is always right-aligned
+    if ( nEditAdjust == SVX_ADJUST_RIGHT || bAsianVertical )
         aPixRect.Right() += 1;
 
     Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
@@ -890,7 +893,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if ( bActive && eWhich == GetActivePart() )
     {
         long nSizeXPix;
-        if (bBreak)
+        if (bBreak && !bAsianVertical)
             nSizeXPix = aPixRect.GetWidth();    // Papersize -> kein H-Scrolling
         else
         {
@@ -969,7 +972,7 @@ IMPL_LINK_INLINE_END( ScViewData, EmptyEditHdl, EditStatus *, pStatus )
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
 {
     ULONG nStatus = pStatus->GetStatusWord();
-    if (nStatus & (EE_STAT_HSCROLL | EE_STAT_TEXTHEIGHTCHANGED | EE_STAT_CURSOROUT))
+    if (nStatus & (EE_STAT_HSCROLL | EE_STAT_TEXTHEIGHTCHANGED | EE_STAT_TEXTWIDTHCHANGED | EE_STAT_CURSOROUT))
     {
         EditGrowY();
         EditGrowX();
@@ -1039,7 +1042,10 @@ void ScViewData::EditGrowX()
 
         pCurView->SetOutputArea(aArea);
 
-        aArea.Left() = nOldRight;
+        //  In vertical mode, the whole text is moved to the next cell (right-aligned),
+        //  so everything must be repainted. Otherwise, paint only the new area.
+        if ( !pEngine->IsVertical() )
+            aArea.Left() = nOldRight;
         pWin->Invalidate(aArea);
     }
 }

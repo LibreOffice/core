@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:38:12 $
+ *  last change: $Author: nn $ $Date: 2002-04-05 19:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,10 +1355,22 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
             break;
     }
 
+    BOOL bAsianVertical = pLastPattern &&
+        (SvxCellOrientation)((const SvxOrientationItem&)
+            pLastPattern->GetItem(ATTR_ORIENTATION)).GetValue() == SVX_ORIENTATION_STACKED &&
+        ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
+    if ( bAsianVertical )
+    {
+        //  always edit at top of cell -> LEFT when editing vertically
+        eSvxAdjust = SVX_ADJUST_LEFT;
+    }
+
     pEditDefaults->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
     pEngine->SetDefaults( *pEditDefaults );
 
     nEditAdjust = eSvxAdjust;       //! an ViewData setzen oder beim PostEditView
+
+    pEngine->SetVertical( bAsianVertical );
 }
 
 void ScInputHandler::RemoveAdjust()

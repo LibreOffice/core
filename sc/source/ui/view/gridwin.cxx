@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:45:16 $
+ *  last change: $Author: nn $ $Date: 2002-04-05 19:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,6 +1971,8 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             BOOL bAlt = rMEvt.IsMod2();
             if ( !bAlt && !nButtonDown && pEditView && pEditView->GetFieldUnderMousePointer() )
                 SetPointer( Pointer( POINTER_REFHAND ) );
+            else if ( pEditView && pEditView->GetEditEngine()->IsVertical() )
+                SetPointer( Pointer( POINTER_TEXT_VERTICAL ) );
             else
                 SetPointer( Pointer( POINTER_TEXT ) );
             return;

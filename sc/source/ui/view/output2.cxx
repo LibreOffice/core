@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: nn $ $Date: 2002-04-05 19:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1783,6 +1783,17 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             bHidden = TRUE;     // gedreht wird getrennt ausgegeben
                         }
 
+                        BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
+                                ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
+                        if ( bAsianVertical )
+                        {
+                            // in asian mode, use EditEngine::SetVertical instead of EE_CNTRL_ONECHARPERLINE
+                            eOrient = SVX_ORIENTATION_STANDARD;
+                            // default alignment for asian vertical mode is top-right
+                            if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD )
+                                eHorJust = SVX_HOR_JUSTIFY_RIGHT;
+                        }
+
                         const ScMergeAttr* pMerge =
                                 (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
                         BOOL bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
@@ -1791,7 +1802,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                         long nStartY = nPosY;
                         if (nX<nX1)
                         {
-                            if ((bBreak || eOrient!=SVX_ORIENTATION_STANDARD) && !bMerged)
+                            if ((bBreak || eOrient!=SVX_ORIENTATION_STANDARD) && !bMerged && !bAsianVertical)
                                 bHidden = TRUE;
                             else
                             {
@@ -1852,6 +1863,10 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 eVerJust = (SvxCellVerJustify)((const SvxVerJustifyItem&)pPattern->
                                                         GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
+                            // default alignment for asian vertical mode is top-right
+                            if ( bAsianVertical && eVerJust == SVX_VER_JUSTIFY_STANDARD )
+                                eVerJust = SVX_VER_JUSTIFY_TOP;
+
                             // Syntax-Modus wird hier ignoriert...
 
                             // StringDiffer doesn't look at hyphenate, language items
@@ -1892,7 +1907,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 eSvxAdjust = SVX_ADJUST_CENTER;
                             else if (bBreak)
                             {
-                                if (eOrient==SVX_ORIENTATION_STANDARD)
+                                if (eOrient==SVX_ORIENTATION_STANDARD && !bAsianVertical)
                                     switch (eHorJust)
                                     {
                                         case SVX_HOR_JUSTIFY_STANDARD:
@@ -1916,7 +1931,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     switch (eVerJust)
                                     {
                                         case SVX_VER_JUSTIFY_TOP:
-                                            eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM) ?
+                                            eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM || bAsianVertical) ?
                                                         SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
                                             break;
                                         case SVX_VER_JUSTIFY_CENTER:
@@ -1924,7 +1939,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                             break;
                                         case SVX_VER_JUSTIFY_BOTTOM:
                                         case SVX_HOR_JUSTIFY_STANDARD:
-                                            eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM) ?
+                                            eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM || bAsianVertical) ?
                                                         SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT;
                                             break;
                                     }
@@ -1967,8 +1982,19 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             nOutHeight -= nTopM + (long) ( pMargin->GetBottomMargin() * nPPTY );
 
                             Size aPaperSize = Size( 1000000, 1000000 );
-                            if (eOrient==SVX_ORIENTATION_STACKED)
+                            if ( eOrient==SVX_ORIENTATION_STACKED )
                                 aPaperSize.Width() = nOutWidth;             // zum Zentrieren
+                            else if (bAsianVertical)
+                            {
+                                aPaperSize.Width() = nOutWidth;
+                                if (bBreak)
+                                {
+                                    //  add some extra height (default margin value) for safety
+                                    //  as long as GetEditArea isn't used below
+                                    long nExtraHeight = (long)( 20 * nPPTY );
+                                    aPaperSize.Height() = nOutHeight + nExtraHeight;
+                                }
+                            }
                             else if (bBreak)
                             {
                                 if (eOrient == SVX_ORIENTATION_STANDARD)
@@ -1989,7 +2015,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             }
                             if (bPixelToLogic)
                             {
-                                if ( bBreak && pFmtDevice != pRefDevice )
+                                //! also handle bAsianVertical in GetEditArea
+                                if ( bBreak && pFmtDevice != pRefDevice && !bAsianVertical )
                                 {
                                     //  calculate PaperSize for automatic line breaks from logic size,
                                     //  not pixel sizes, to get the same breaks at all scales
@@ -2051,10 +2078,11 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             else
                                 DBG_ERROR("pCell == NULL");
 
+                            pEngine->SetVertical( bAsianVertical );
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
 
                             long nEngineWidth;
-                            if ( bBreak && eOrient != SVX_ORIENTATION_STACKED )
+                            if ( bBreak && eOrient != SVX_ORIENTATION_STACKED && !bAsianVertical )
                                 nEngineWidth = 0;
                             else
                                 nEngineWidth = (long) pEngine->CalcTextWidth();
@@ -2109,7 +2137,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         nEngineWidth = (long) pEngine->CalcTextWidth();
                                     }
                                 }
-                                else if ( !bBreak || eOrient!=SVX_ORIENTATION_STANDARD )
+                                else if ( !bBreak || eOrient!=SVX_ORIENTATION_STANDARD || bAsianVertical )
                                 {
                                     if ( eOrient == SVX_ORIENTATION_STANDARD && !bMerged )
                                     {
@@ -2265,7 +2293,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     aLogicStart = pRefDevice->PixelToLogic( Point(nStartX,nStartY) );
                                 else
                                     aLogicStart = Point(nStartX, nStartY);
-                                if ( (eOrient!=SVX_ORIENTATION_STANDARD || !bBreak) && !bExtend )
+                                if ( (eOrient!=SVX_ORIENTATION_STANDARD || bAsianVertical || !bBreak) && !bExtend )
                                 {
                                     long nAvailWidth = aCellSize.Width();
                                     if (eType==OUTTYPE_WINDOW &&
@@ -2289,7 +2317,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
                                     //  horizontale Ausrichtung
 
-                                    if (eOrient==SVX_ORIENTATION_STANDARD)
+                                    if (eOrient==SVX_ORIENTATION_STANDARD && !bAsianVertical)
                                     {
                                         if (eHorJust==SVX_HOR_JUSTIFY_RIGHT ||
                                             eHorJust==SVX_HOR_JUSTIFY_CENTER ||
@@ -2323,7 +2351,14 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                             aLogicStart.X() += (nAvailWidth - nEngineWidth) / 2;
                                     }
                                 }
-                                if ( eOrient==SVX_ORIENTATION_STANDARD ||
+
+                                if ( bAsianVertical )
+                                {
+                                    // paper size is subtracted below (with or without bExtend)
+                                    aLogicStart.X() += nEngineWidth;
+                                }
+
+                                if ( ( eOrient==SVX_ORIENTATION_STANDARD && !bAsianVertical ) ||
                                      eOrient==SVX_ORIENTATION_STACKED || !bBreak )
                                 {
                                     if (eVerJust==SVX_VER_JUSTIFY_BOTTOM ||
@@ -2371,7 +2406,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     pEngine->SetPaperSize(aPaperLogic);
                                 }
 
-                                if ( bSimClip && !nOriVal )
+                                if ( bSimClip && !nOriVal && !bAsianVertical )
                                 {
                                     //  kein hartes Clipping, aber nur die betroffenen
                                     //  Zeilen ausgeben
@@ -2381,7 +2416,15 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     pEngine->Draw( pDev, aClipRect, aDocStart, FALSE );
                                 }
                                 else
+                                {
+                                    if (bAsianVertical)
+                                    {
+                                        //  with SetVertical, the start position is top left of
+                                        //  the whole output area, not the text itself
+                                        aLogicStart.X() -= pEngine->GetPaperSize().Width();
+                                    }
                                     pEngine->Draw( pDev, aLogicStart, nOriVal );
+                                }
 
                                 if (bClip)
                                 {
