@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
 &apos; Todo Den Bug mit der Statuszeilengeschichte überprüfen
 &apos; Todo Vorselektion der Listbox
@@ -14,7 +14,7 @@ Sub Main()
 		bPreSelected = True
 		DocDisposed = False
 		oDocument = StarDesktop.CurrentFrame.Controller.Model
-		RetrieveDocumentObjects()									&apos; Statusline, SheetsCollection etc.
+		RetrieveDocumentObjects()											&apos; Statusline, SheetsCollection etc.
 		InitializeConverter(oDocument.CharLocale, 1)
 		GetPreSelectedRange()
 		If GoOn Then
@@ -29,7 +29,6 @@ End Sub
 Sub SelectListItem()
 Dim Listbox as Object
 Dim oListSheet as Object
-Dim AddRange as Boolean
 Dim CurStyleName as String
 Dim oCursheet as Object
 Dim oTempRanges as Object
@@ -38,11 +37,10 @@ Dim RangeName as String
 Dim oSheetRanges as Object
 Dim ListIndex as Integer
 Dim a as Integer
-Dim s as Integer
 Dim i as Integer
 Dim n as Integer
 Dim m as Integer
-Dim AddStyle as Boolean
+Dim MaxIndex as Integer
 	Listbox = DialogModel.lstSelection
 	If Ubound(Listbox.SelectedItems()) &gt; -1 Then
 &apos;		ToggleWindow(False)
@@ -50,7 +48,7 @@ Dim AddStyle as Boolean
 		oSelRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 
 		&apos; Is the sheet the basis, then the sheetobject has to be created
-		If DialogModel.optDocRanges.State= 1 Then
+		If DialogModel.optDocRanges.State = 1 Then
 			&apos; Document is the basis for the conversion
 			ListIndex = Listbox.SelectedItems(0)
 			oCurSheet = RetrieveSheetoutofRangeName(ListIndex)
@@ -59,56 +57,44 @@ Dim AddStyle as Boolean
 			oCurSheet = oDocument.CurrentController.ActiveSheet
 		End If
 		sCurSheetName = oCurSheet.Name
-		AddStyle = True
 		If DialogModel.optCellTemplates.State = 1 Then
-			&apos;Soft formatation is selected
-			For s = 0 To oSheets.Count-1
-				If oSheets.GetbyIndex(s).IsProtected Then
-					AddStyle = UnprotectSheet(oSheets.GetbyIndex(s))
-					If Not AddStyle Then
-						Exit For
-					End If
-				End If
-			Next s
-			If AddStyle Then
-				Dim CurIndex as Integer
-				For i = 0 To Ubound(Listbox.SelectedItems())
-					CurIndex = Listbox.SelectedItems(i)
-					CurStylename = Listbox.StringItemList(CurIndex)
-					oSheetRanges = oCursheet.CellFormatRanges.createEnumeration
-					While oSheetRanges.hasMoreElements
-						oRange = oSheetRanges.NextElement
-						If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
-							If oRange.CellStyle = CurStyleName Then
-								oSelRanges.InsertbyName(&quot;&quot;,oRange)
-							End If
+			Dim CurIndex as Integer
+			For i = 0 To Ubound(Listbox.SelectedItems())
+				CurIndex = Listbox.SelectedItems(i)
+				CurStylename = Listbox.StringItemList(CurIndex)
+				oSheetRanges = oCursheet.CellFormatRanges.createEnumeration
+				While oSheetRanges.hasMoreElements
+					oRange = oSheetRanges.NextElement
+					If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
+						If oRange.CellStyle = CurStyleName Then
+							oSelRanges.InsertbyName(&quot;&quot;,oRange)
 						End If
-					Wend
-				Next i
-			Else
-				EmptyListbox(Listbox)
-			End If
+					End If
+				Wend
+			Next i
 		Else
-			a = 1
+			a = -1
 			&apos; Hard Formatation is selected
 			For n = 0 To Ubound(Listbox.SelectedItems())
 				m = Listbox.SelectedItems(n)
 				RangeName = Listbox.StringItemList(m)
 				oListSheet = RetrieveSheetoutofRangeName(RangeName)
-				AddRange = UnprotectSheet(oListSheet)
-&apos; Todo: Klären wie das am besten geht!
-				If Not AddRange Then
-					DeselectListboxItem(Listbox, n)
-				Else
-					SelRangeList(a) = RangeName
-					SelRangeList(0) = Str(a)
-					a = a + 1
-					If oListSheet.Name = sCurSheetName Then
-						oRange = RetrieveRangeoutofRangeName(RangeName)
-						oSelRanges.InsertbyName(&quot;&quot;,oRange)
-					End If
+				a = a + 1
+				MaxIndex = Ubound(SelRangeList())
+				If a &gt; MaxIndex Then
+					Redim Preserve SelRangeList(MaxIndex + SBRANGEUBOUND)
+				End If
+				SelRangeList(a) = RangeName
+				If oListSheet.Name = sCurSheetName Then
+					oRange = RetrieveRangeoutofRangeName(RangeName)
+					oSelRanges.InsertbyName(&quot;&quot;,oRange)
 				End If
 			Next n
+		End If
+		If a &gt; -1 Then
+			ReDim Preserve SelRangeList(a)
+		Else
+			ReDim SelRangeList()
 		End If
 		oDocument.CurrentController.Select(oSelRanges)
 		EnableStep1DialogControls(True, True, True)
@@ -129,17 +115,18 @@ Sub EnableStep1DialogControls(bCurrEnabled as Boolean, bFrameEnabled as Boolean,
 Dim bNoComboSelection as Boolean
 Dim bNoLBSelection as Boolean
 	&apos; Controls around the Currency-Listbox
-	DialogModel.lblCurrencies.Enabled = bCurrEnabled
-	DialogModel.lstCurrencies.Enabled = bCurrEnabled
+	With DialogModel
+		.lblCurrencies.Enabled = bCurrEnabled
+		.lstCurrencies.Enabled = bCurrEnabled	
 
-	DialogModel.lstSelection.Enabled = bFrameEnabled
-	DialogModel.lblSelection.Enabled = bFrameEnabled
-	DialogModel.frmSelection.Enabled = bFrameEnabled
-	DialogModel.optCellTemplates.Enabled = bFrameEnabled
-	DialogModel.optSheetRanges.Enabled = bFrameEnabled
-	DialogModel.optDocRanges.Enabled = bFrameEnabled
-	DialogModel.optSelRange.Enabled = bFrameEnabled
-
+		.lstSelection.Enabled = bFrameEnabled
+		.lblSelection.Enabled = bFrameEnabled
+		.hlnSelection.Enabled = bFrameEnabled
+		.optCellTemplates.Enabled = bFrameEnabled
+		.optSheetRanges.Enabled = bFrameEnabled
+		.optDocRanges.Enabled = bFrameEnabled
+		.optSelRange.Enabled = bFrameEnabled
+	End With
 	&apos; The CheckBox has the Value &apos;True&apos; when the Controls in the Frame are disabled
 	If bButtonsEnabled Then
 		bNoComboSelection = Ubound(DialogModel.lstCurrencies.SelectedItems()) = -1
@@ -160,43 +147,35 @@ End Sub
 
 Sub ConvertRangesOrStylesOfDocument()
 Dim i as Integer
-Dim Listbox as Object
 Dim ItemName as String
-Dim ThisList() as String
-Dim ThisSel() as Boolean
+Dim SelList() as String
 
-	&apos; Variable, in der der aktuelle Stand der Fortschrittsleiste angzeigt wird
-	CurCellCount = 0
-	Listbox = DialogModel.lstSelection
-	EnableStep1DialogControls(False, False, False)
-
-	oStatusline.Start(sStsPROGRESS,100)  &apos; &quot;Konvertierungsfortschritt:&quot;
-	StatusValue = 0
-	If DialogModel.optSelRange.State = 1 Then
-		SelectListItem()
+	bDocHasProtectedSheets = CheckSheetProtection(oSheets)
+	If bDocHasProtectedSheets Then
+		bDocHasProtectedSheets = UnprotectSheetsWithPassWord(oSheets)
+		DialogModel.cmdGoOn.Enabled = False
 	End If
-	ThisSel() = GetSelectedListboxItems(Listbox)
-	ThisList() = Listbox.StringItemList()
-	If DialogModel.optCellTemplates.State &lt;&gt; 1 Then
-		&apos; Option &apos;Hard Formatation is selected
-		SelectRange()
-		ConverttheHardWay(ThisList(), ThisSel(), False, False)
-	Else
-		&apos; Option &apos;Soft&apos; Formatation is selected
-		AssignRangestoStyle(ThisList(), ThisSel())
-		ConverttheSoftWay(ThisList(), ThisSel(), False)
+	If Not bDocHasProtectedSheets Then
+		EnableStep1DialogControls(False, False, False)
+		InitializeProgressBar()
+		If DialogModel.optSelRange.State = 1 Then
+			SelectListItem()
+		End If
+		SelList() =  DialogConvert.GetControl(&quot;lstSelection&quot;).SelectedItems()
+		If DialogModel.optCellTemplates.State = 1 Then
+			&apos; Option &apos;Soft&apos; Formatation is selected
+			AssignRangestoStyle(DialogModel.lstSelection.StringItemList(), SelList())
+			ConverttheSoftWay(SelList(), True)
+		Else
+			&apos; Option &apos;Hard Formatation is selected
+			SelectRange()
+			ConverttheHardWay(SelList(), False, True)
+		End If
+		oStatusline.End
+		EnableStep1DialogControls(True, False, True)
+		DialogModel.cmdGoOn.Enabled = True
+		oDocument.CurrentController.Select(oSelRanges)
 	End If
-	oStatusline.End
-	i = 0
-	&apos; Todo: Dieses Array vorab neu dimensionieren und in For - Schleife abarbeiten
-	While RemoveList(i) &lt;&gt; &quot;&quot;
-		ItemName = RemoveList(i)
-		RemoveItemfromListbox(Listbox, ItemName)
-		i = i + 1
-	Wend
-	EnableStep1DialogControls(True, False, True)
-	DialogModel.cmdGoOn.Enabled = True
-	oDocument.CurrentController.Select(oSelRanges)
 End Sub
 
 
@@ -220,19 +199,16 @@ End Sub
 &apos; Alles was selektiert wurde wird deselektiert
 Sub EmptySelection()
 Dim RangeName as String
-Dim i, MaxIndex as Integer
-Dim EmptySelRangeList(30) as String
+Dim i as Integer
+Dim MaxIndex as Integer
+Dim EmptySelRangeList() as String
 
 	If Not IsNull(oSelRanges) Then
 		If oSelRanges.HasElements Then
 			EmptySelRangeList() = ArrayOutofString(oSelRanges.RangeAddressesasString, &quot;;&quot;, MaxIndex)
-			i = 0
-			Do
-				If EmptySelRangeList(i) &lt;&gt; &quot;&quot; Then
-					oSelRanges.RemovebyName(EmptySelRangeList(i))
-					i = i + 1
-				End If
-			Loop Until EmptySelRangeList(i) = &quot;&quot;
+			For i = 0 To MaxIndex
+				oSelRanges.RemovebyName(EmptySelRangeList(i))
+			Next i
 		End If
 		oDocument.CurrentController.Select(oSelRanges)
 	Else
@@ -243,7 +219,7 @@ End Sub
 
 Sub AddSelectedRangeToSelRangesEnum()
 	osheet = oDocument.CurrentController.GetActiveSheet
-	oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+&apos;	oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	oSelRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	&apos; Check if a Currency-Range has been selected
 	oRange = oDocument.CurrentController.Selection
@@ -263,7 +239,7 @@ Dim OldCurExtension(1) as String
 		OldCurrSymbolList() = CurrSymbolList()
 		OldCurExtension() = CurExtension()
 		OldCurrIndex = CurrIndex
-		For i = 0 To 10
+		For i = 0 To 11
 			CurrIndex = i
 			CurExtension(0) = LangIDValue(CurrIndex,0,2)
 			CurExtension(1) = LangIDValue(CurrIndex,1,2)
@@ -303,7 +279,7 @@ End Sub
 Sub AddRangeToListbox()
 	EmptyListBox(DialogModel.lstSelection)
 	&apos; Den Namen der Range ermitteln und in ein Array packen
-	PreName = RetrieveRangeNamefromAddress(oRange.RangeAddress, oSheet.Name)
+	PreName = RetrieveRangeNamefromAddress(oRange)
 	AddSingleItemToListbox(DialogModel.lstSelection, Prename)&apos;, 0)
 	SelectListboxItem(DialogModel.lstCurrencies, CurrIndex)
 	TotCellCount = CountRangeCells(oRange)
@@ -352,9 +328,11 @@ End Function
 
 
 Sub	SetOptionValuestoNull()
-	DialogModel.optCellTemplates.State = 0
-	DialogModel.optSheetRanges.State = 0
-	DialogModel.optDocRanges.State = 0
-	DialogModel.optSelRange.State = 0
+	With DialogModel
+		.optCellTemplates.State = 0
+		.optSheetRanges.State = 0
+		.optDocRanges.State = 0
+		.optSelRange.State = 0
+	End With
 End Sub
 </script:module>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic">REM  *****  BASIC  *****
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM  *****  BASIC  *****
 Public DialogModel as Object
 Public DialogConvert as Object
 Public DialogPassword as Object
@@ -11,7 +11,7 @@ Sub	RetrieveDocumentObjects()
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 	    oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
-		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+&apos;		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	End If
     oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
     &apos; Retrieve the indices for the cellformatations
@@ -22,18 +22,6 @@ End Sub
 Sub CloseDialog
 Dim n, m as Integer
 	If Not bMacroStopped Then
-		&apos; Die Zuordnungstabelle löschen
-&apos; Todo: Check if Values in the following variables are cleared if the macro is restarted		
-&apos;		If Not IsNull(oStyles) Then
-&apos;			Redim StyleRangeAssignmentList(20,50)as String
-&apos;		End If
-&apos;		ReDim RangeList(100) as String
-&apos;		ReDim SelRangeList(100) as String
-&apos;		Redim RangeBools(100) as Boolean
-&apos;		ReDim RemoveList(100) as String
-&apos;		ClearArray(ListboxItems())
-		&apos; Prevent That this Procedure is called again the second time 
-		&apos; by the Unload Event of the dialog
 		bMacroStopped = True
 		DialogConvert.EndExecute
 		If Not DocDisposed Then
@@ -45,62 +33,30 @@ End Sub
 
 
 Function ConvertDocument()
-Dim i, a as integer
-Dim CurStylename as String
-Dim DummyList(100) as String
-Dim RangeName as String
-Dim oDummySheet as Object
-Dim AddRange as Boolean
-Dim CurMimeType as String
 	GoOn = True
 	DocDisposed = True
-	CurCellCount = 0
-	StatusValue = 0
-	AddRange = True
-	oStatusline.Start(sStsPROGRESS,100) 			&apos;&quot;Konvertierungsfortschritt:&quot;
-	StatusValue = 0
+	InitializeProgressbar()	
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
-		If Not bRangeListDefined Then
-			TotCellCount = 0
-			CreateRangeEnumeration(True)	
-		Else
-			IncreaseStatusvalue(SBRelGet/3)
+		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
+		If bDocHasProtectedSheets Then
+			bDocHasProtectedSheets = UnprotectSheetsWithPassword(oSheets)
 		End If
-		&apos; Check protected Areas
-		a = 1
-		i = 0
-		For i = 1 To Val(RangeList(0))
-			RangeName = RangeList(i)
-			If Rangename &lt;&gt; &quot;&quot; Then
-				oDummySheet = RetrieveSheetoutofRangeName(RangeName)	
-
-				&apos; Unprotect the sheet if necessary
-				AddRange = UnprotectSheet(oDummySheet)
-				If AddRange Then
-&apos; Todo: Umschreiben mit Redim RangeList(RangeIndex) Preserve
-					DummyList(a) = RangeName
-					DummyList(0) = Str(a)
-					a = a + 1
-				Else
-					Exit For
-				End If
+		If Not bDocHasProtectedSheets Then
+			If Not bRangeListDefined Then
+				TotCellCount = 0
+				CreateRangeEnumeration(True)	
+			Else
+				IncreaseStatusvalue(SBRelGet/3)
 			End If
-		Next
-		RangeIndex = Val(DummyList(0))
-		If AddRange And RangeIndex &gt; 0 Then
-			Dim LocRangeList(RangeIndex-1) as String
-			Dim LocRangeBools(RangeIndex-1) as String
-			For i = 1 To RangeIndex
-				LocRangeList(i-1 ) = DummyList(i)
-				LocRangeBools(i-1) = True
-			Next i
-			ConvertThehardWay(LocRangeList(), LocRangeBools(), True, True)
-			MakeStyleEnumeration(True)
-			oDocument.calculateAll()
+			RangeIndex = Ubound(RangeList(), 1)
+			If RangeIndex &gt; -1 Then
+				ConvertThehardWay(RangeList(), True, False)
+				MakeStyleEnumeration(True)
+				oDocument.calculateAll()
+			End If
+			ReprotectSheets()
+			bRangeListDefined = False
 		End If
-		ReprotectSheets()
-		bRangeListDefined = False
-		ConvertDocument = AddRange
 	Else
 		oStatusline.SetValue(10)
 		ConvertTextFields()
@@ -108,7 +64,6 @@ Dim CurMimeType as String
 		ConvertWriterTables()
 	End If	
 	oStatusline.End
-
 	On Local Error Goto 0 
 End Function
 
@@ -120,6 +75,7 @@ Dim nFormatLeading as Integer
 Dim bFormatLeading as Integer
 Dim bFormatNegRed as Integer
 Dim bFormatThousands as Integer
+Dim aLocLocale As New com.sun.star.lang.Locale
 Dim i as Integer
 Dim aNewStr as String
 Dim iNumberFormat as Long
@@ -144,10 +100,11 @@ Dim AddToList as Boolean
 	nFormatLeading = aFormat.LeadingZeros
 	bFormatNegRed = aFormat.NegativeRed
 	bFormatThousands = aFormat.ThousandsSeparator
-	oLocale = aFormat.Locale
+	aLocLocale = aFormat.Locale
 	aNewStr = oFormats.generateFormat( nSimpleKey, oLocale, _
 			bFormatThousands, bFormatNegRed, nFormatDecimals, nFormatLeading)
-	oObject.NumberFormat = Numberformat(oFormats, aNewStr, oLocale)
+	
+	oObject.NumberFormat = Numberformat(oFormats, aNewStr, aLocLocale)
 	NOKEY:
 	If Err &lt;&gt; 0 Then
 		Resume CLERROR
@@ -156,7 +113,7 @@ Dim AddToList as Boolean
 End Sub
 
 
-Function Numberformat( oFormats as Object, aFormatStr as String, oLocale as Variant )
+Function Numberformat( oFormats as Object, aFormatStr as String, oLocale)
 Dim nRetkey 
 	nRetKey = oFormats.queryKey( aFormatStr, oLocale, True )
 	If nRetKey = -1 Then
@@ -291,4 +248,8 @@ Dim MaxIndex as Integer
 End Sub
 
 
-</script:module>
+Sub InitializeProgressbar()
+	CurCellCount = 0
+	oStatusline.Start(sStsPROGRESS,100) 			&apos;&quot;Konvertierungsfortschritt:&quot;
+	StatusValue = 0
+End Sub</script:module>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
 REM  *****  BASIC  *****
 
@@ -11,6 +11,14 @@ REM  *****  BASIC  *****
 &apos; -&gt; bei den letztgenannten Optionen müsste der Dialog in seiner Höhe vergrößert werden.
 &apos; Wir sollten informiert werden, ob und wie oder wann das Standard - Währungsformat für die Euroländer umgesetzt
 &apos; wird.
+
+Public Const SBRANGEUBOUND = 20
+Public StyleRangeAssignmentList(SBRANGEUBOUND)as String
+Public SelRangeList(SBRANGEUBOUND) as String
+Public RangeList(SBRANGEUBOUND, 1) as String
+Public UnprotectList() as String
+Public FilterNames(7,1) as String
+
 
 Public sREADY as String
 Public sPROTECT as String
@@ -86,7 +94,6 @@ Public oRange as Object
 Public nLanguage as integer
 Public nFormatLanguage as integer
 Public aCellFormat as Variant
-Public StyleRangeAssignmentList(20,50)as String
 Public oDocument as Object
 Public StartCol, StartRow, EndCol, EndRow as String
 Public oSheet as Object
@@ -95,16 +102,12 @@ Public oSelRanges as Object
 Public nFormatType as Integer
 Public sFormatCurrency as String
 Public sFormatLanguage as String
-Public RangeList(200) as String
-Public SelRangeList(200) as String
-Public ListboxItems(200) as String
 Public CurSheetName as String
 Public oStatusLine as Object
 Public Const SBRELGET = 50
 Public StatusValue as Single
 Public TotCellCount as Long
 Public StyleIndex as Integer
-Public RemoveList(100) as String
 Public RangeIndex as Integer
 Public CurrIndex as Integer
 Public ActLangNumber(1) as Integer
@@ -115,15 +118,13 @@ Public CurrLanguage as String
 Public CurrValue(11,5)
 Public LangIDValue(11,2,2) as String
 Public PreName as String
-Public oAddressRanges as Object
 Public Separator as String
 Public BitmapDir as String
 Public TypeIndex as Integer, CSIndex as Integer, LangIndex as Integer, FSIndex as Integer
-Public oLocale as Object
+Public oLocale as New com.sun.star.lang.Locale
 Public sEuroSign as String
 Public oPointer as Object
 Public sDocType as String
-Public RangeBools(100) as Boolean
 Public bPreSelected as Boolean
 Public DocDisposed as Boolean
 Public bMacroStopped as Boolean
@@ -131,101 +132,122 @@ Public bRecursive as Boolean
 Public bCancelProtection as Boolean
 Public CurrRoundMode as Boolean
 Public bRangeListDefined as Boolean
+&apos; Note the variable bDocHasProtectedSheets does not contain information
+&apos; wether sheets have to be reprotected
+Public bDocHasProtectedSheets as Boolean
 Public sGOON as String
 Public sHELP as String
 Public sCANCEL as String
 
 
 Sub InitializeResources()
-	&apos; Strings that are also needed by the Password Dialog
-	sGoOn = GetResText(1003)
-	sHelp = GetResText(1001)
-	sCANCEL = GetResText(1000)
-	DialogModel.cmdCancel.Label =  sCANCEL
-	DialogModel.cmdHelp.Label =  sHELP
-	DialogModel.cmdBack.Label =  GetResText(1002)
-	DialogModel.cmdGoOn.Label =  sGOON
-	DialogModel.lblHint.Label =  GetResText(1004)
-	DialogModel.lblCurrencies.Label = GetResText(1006)
+	With DialogModel
+		&apos; Strings that are also needed by the Password Dialog
+		sGoOn = GetResText(1003)
+		sHelp = GetResText(1001)
+		sCANCEL = GetResText(1000)
+		.cmdCancel.Label =  sCANCEL
+		.cmdHelp.Label =  sHELP
+		.cmdBack.Label =  GetResText(1002)
+		.cmdGoOn.Label =  sGOON
+		.lblHint.Label =  GetResText(1004)
+		.lblCurrencies.Label = GetResText(1006)
 &apos; Todo: Dieses Model später am Control unsichtbar machen	
-	If DialogModel.Step = 1 Then
-		DialogModel.chkComplete.Label = GetResText(1100)
-		DialogModel.frmSelection.Label = GetResText(1101)
-		DialogModel.optCellTemplates.Label = GetResText(1102)
-		DialogModel.optSheetRanges.Label = GetResText(1103)
-		DialogModel.optDocRanges.Label = GetResText(1104)
-		DialogModel.optSelRange.Label = GetResText(1105)
+		If .Step = 1 Then
+			.chkComplete.Label = GetResText(1100)
+			.hlnSelection.Label = GetResText(1101)
+			.optCellTemplates.Label = GetResText(1102)
+			.optSheetRanges.Label = GetResText(1103)
+			.optDocRanges.Label = GetResText(1104)
+			.optSelRange.Label = GetResText(1105)
+			sCURRRANGES = GetResText(1108)
+			.lblSelection.Label = sCURRRANGES
+		Else
+		 	.hlnExtent.Label = GetResText(1200)
+&apos;Todo: Diese Strings in Resourcen!!
+			FilterNames(0,0) = &quot;Calc 6.0&quot;
+			FilterNames(0,1) = &quot;*.sxc&quot;
+			FilterNames(1,0) = &quot;Calc 6.0 Vorlage&quot;
+			FilterNames(1,1) = &quot;*.stc&quot;	
+			FilterNames(2,0) = &quot;Star Calc 5.0&quot;
+			FilterNames(2,1) = &quot;*.sdc&quot;
+			FilterNames(3,0) = &quot;Star Calc 5.0 Vorlage&quot;
+			FilterNames(3,1) = &quot;*.vor&quot;
+			FilterNames(4,0) = &quot;Star Calc 4.0&quot;
+			FilterNames(4,1) = &quot;*.sdc&quot;
+			FilterNames(5,0) = &quot;Star Calc 4.0 Vorlage&quot;
+			FilterNames(5,1) = &quot;*.vor&quot;
+			FilterNames(6,0) = &quot;Star Calc 3.0&quot;
+			FilterNames(6,1) = &quot;*.sdc&quot;
+			FilterNames(7,0) = &quot;Star Calc 3.0 Vorlage&quot;
+			FilterNames(7,1) = &quot;*.vor&quot;	
+			.optSingleFile.Label = &quot;Einzelnes Tabellen- oder Textdokument&quot;&apos;GetResText(1201)
+ 			.optWholeDir.Label = GetResText(1202)
+ 			.chkProtect.Label = GetResText(1207)
+ 			.chkTextDocuments.Label = &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;
+			sSOURCEFILE = GetResText(1203)
+			sSOURCEDIR = GetResText(1204)
+ 			.lblSource.Label = sSOURCEDIR
+ 			.chkRecursive.Label = GetResText(1205)
+			sTARGETDIR = GetResText(1206)
+ 			.lblTarget.Label = STARGETDIR 
+			.optWholeDir.State = 1
+			.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
+			.txtTarget.Text = .txtSource.Text
+			.hlnProgress.Label = GetResText(1600)
+			.lblConfig.Label = GetResText(1603)
+			sPrgsRETRIEVAL = GetResText(1601)
+			sPrgsCONVERTING = GetResText(1602)
+			sPrgsUNPROTECT = GetResText(1604)
+		End If
+		.cmdBack.Enabled = False
+		sPROTECT = GetResText(1005)
+		sCONTINUE = GetResText(1007)
+		sSELTEMPL = GetResText(1106)
+		sSELCELL = GetResText(1107)
 		sCURRRANGES = GetResText(1108)
-		DialogModel.lblSelection.Label = sCURRRANGES
-	Else
-	 	DialogModel.frmExtent.Label = GetResText(1200)
-		DialogModel.optSingleFile.Label = &quot;Einzelnes Tabellen- oder Textdokument&quot;&apos;GetResText(1201)
- 		DialogModel.optWholeDir.Label = GetResText(1202)
- 		DialogModel.chkProtect.Label = GetResText(1207)
- 		DialogModel.chkTextDocuments.Label = &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;
-		sSOURCEFILE = GetResText(1203)
-		sSOURCEDIR = GetResText(1204)
- 		DialogModel.lblSource.Label = sSOURCEDIR
- 		DialogModel.chkRecursive.Label = GetResText(1205)
-		sTARGETDIR = GetResText(1206)
- 		DialogModel.lblTarget.Label = STARGETDIR 
-		DialogModel.optWholeDir.State = 1
-		DialogModel.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
-		DialogModel.txtTarget.Text = DialogModel.txtSource.Text
-		DialogModel.frmProgress.Label = GetResText(1600)
-		DialogModel.lblConfig.Label = GetResText(1603)
-		sPrgsRETRIEVAL = GetResText(1601)
-		sPrgsCONVERTING = GetResText(1602)
-		sPrgsUNPROTECT = GetResText(1604)
-	End If
-	DialogModel.cmdBack.Enabled = False
-	sPROTECT = GetResText(1005)
-	sCONTINUE = GetResText(1007)
-	sSELTEMPL = GetResText(1106)
-	sSELCELL = GetResText(1107)
-	sCURRRANGES = GetResText(1108)
-	sTEMPLATES = GetResText(1109)
-	sStsPROGRESS = GetResText(1300)
-	sStsCELLPROGRSS = GetResText(1301)
-	sStsRELSHEETRANGES = GetResText(1302)
-	sStsRELRANGES = GetResText(1303)
-	sStsREPROTECT = GetResText(1304)
-
-	sMsgREADY = GetResText(1400)
-	sMsgSELDIR = GetResText(1401)
-	sMsgSELFILE = GetResText(1402)
-	sMsgTARGETDIR = GetResText(1403)
-	sMsgNOTTHERE = GetResText(1404)
-	sMsgDLGTITLE = GetResText(1405)
-	sMsgUNPROTECT = GetResText(1406)
-	sMsgPWPROTECT = GetResText(1407)
-	sMsgWRONGPW = GetResText(1408)
-	sMsgSHEETPROTECTED = GetResText(1409)
-	sMsgWARNING = GetResText(1410)
-	sMsgSHEETSNOPROTECT = GetResText(1411)
-	sMsgSHEETNOPROTECT = GetResText(1412)
-	sMsgCHOOSECURRENCY = GetResText(1415)
-	sMsgPASSWORD = GetResText(1416)
-	sMsgOK = GetResText(1417)
-	sMsgCANCEL = GetResText(1418)
-	sMsgFILEINVALID = GetResText(1419)
-	sMsgFILEINVALID = ReplaceString(sMsgFILEINVALID,&quot;%PRODUCTNAME&quot;, GetProductname())
-	SMsgNODIRECTORY = GetResText(1420)
-	sMsgDOCISREADONLY = GetResText(1421)
-	sCurrPORTUGUESE = GetResText(1500)
-	sCurrDUTCH = GetResText(1501)
-	sCurrFRENCH = GetResText(1502)
-	sCurrSPANISH = GetResText(1503)
-	sCurrITALIAN = GetResText(1504)
-	sCurrGERMAN = GetResText(1505)
-	sCurrBELGIAN = GetResText(1506)
-	sCurrIRISH = GetResText(1507)
-	sCurrLUXEMBOURG = GetResText(1508)
-	sCurrAUSTRIAN = GetResText(1509)
-	sCurrFINNISH = GetResText(1510)
-	sCurrGREEK = GetResText(1511)
-	sCurrUNKNOWN = GetResText(1511)
-	sCurrSYSUNKNOWN = GetResText(1512)
+		sTEMPLATES = GetResText(1109)
+		sStsPROGRESS = GetResText(1300)
+		sStsCELLPROGRSS = GetResText(1301)
+		sStsRELSHEETRANGES = GetResText(1302)
+		sStsRELRANGES = GetResText(1303)
+		sStsREPROTECT = GetResText(1304)
+		sMsgREADY = GetResText(1400)
+		sMsgSELDIR = GetResText(1401)
+		sMsgSELFILE = GetResText(1402)
+		sMsgTARGETDIR = GetResText(1403)
+		sMsgNOTTHERE = GetResText(1404)
+		sMsgDLGTITLE = GetResText(1405)
+		sMsgUNPROTECT = GetResText(1406)
+		sMsgPWPROTECT = GetResText(1407)
+		sMsgWRONGPW = GetResText(1408)
+		sMsgSHEETPROTECTED = GetResText(1409)
+		sMsgWARNING = GetResText(1410)
+		sMsgSHEETSNOPROTECT = GetResText(1411)
+		sMsgSHEETNOPROTECT = GetResText(1412)
+		sMsgCHOOSECURRENCY = GetResText(1415)
+		sMsgPASSWORD = GetResText(1416)
+		sMsgOK = GetResText(1417)
+		sMsgCANCEL = GetResText(1418)
+		sMsgFILEINVALID = GetResText(1419)
+		sMsgFILEINVALID = ReplaceString(sMsgFILEINVALID,&quot;%PRODUCTNAME&quot;, GetProductname())
+		SMsgNODIRECTORY = GetResText(1420)
+		sMsgDOCISREADONLY = GetResText(1421)
+		sCurrPORTUGUESE = GetResText(1500)
+		sCurrDUTCH = GetResText(1501)
+		sCurrFRENCH = GetResText(1502)
+		sCurrSPANISH = GetResText(1503)
+		sCurrITALIAN = GetResText(1504)
+		sCurrGERMAN = GetResText(1505)
+		sCurrBELGIAN = GetResText(1506)
+		sCurrIRISH = GetResText(1507)
+		sCurrLUXEMBOURG = GetResText(1508)
+		sCurrAUSTRIAN = GetResText(1509)
+		sCurrFINNISH = GetResText(1510)
+		sCurrGREEK = GetResText(1511)
+		sCurrUNKNOWN = GetResText(1511)
+		sCurrSYSUNKNOWN = GetResText(1512)
+	End With
 End Sub
 
 
@@ -415,13 +437,14 @@ Dim i as Integer
 	CurrValue(10,4) = &quot;mk&quot;
 	CurrValue(10,5) = &quot;FIM&quot;
 
+&apos; Todo: Werte verlorengegangen?
 	CurrValue(11,0) = sCurrGREEK
 	&apos; Wahrer Umrechnungskurs
 	CurrValue(11,1) = 340.750
 	&apos; Gerundeter Umrechnungskurs
 	CurrValue(11,2) = 400
-	CurrValue(11,3) = &quot;Δρχ&quot;
-	CurrValue(11,4) = &quot;Δρχ&quot;
+	CurrValue(11,3) = chr(916) &amp; chr(961) &amp; chr(967)
+	CurrValue(11,4) = chr(916) &amp; chr(961) &amp; chr(967)
 	CurrValue(11,5) = &quot;GRD&quot;
 
 	i = -1
@@ -447,7 +470,11 @@ Dim Isthere as Boolean
 	bCancelProtection = False
 	bMacroStopped = False
 	bRangeListDefined = False
+	PWIndex = -1
 	sDocType = GetDocumentType(StarDesktop.ActiveFrame.Controller.Model)
+	If sDocType = &quot;sCalc&quot; Then
+		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
+	End If
 	DialogConvert = LoadDialog(&quot;Euro&quot;, &quot;DlgConvert&quot;)
 	DialogModel = DialogConvert.Model
 	DialogPassword = LoadDialog(&quot;Euro&quot;, &quot;DlgPassword&quot;)
@@ -466,7 +493,6 @@ Dim Isthere as Boolean
 	FilterList(5) = &quot;application/vnd.sun.xml.calc&quot;
 	FilterList(6) = &quot;application/vnd.sun.xml.writer&quot;
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
-	UnprotectList(0,0) = &quot;0&quot;
 	FillUpCurrencyListbox()
 	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	
 	DialogConvert.Title = sMsgDLGTITLE

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Hard" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 &apos;ToDo: WÃ¤hrung wechseln und dann sehen, ob die Listbox mit den neuen Ranges aufgefrischt wird
@@ -7,11 +7,11 @@ Option Explicit
 
 Sub CreateRangeList()
 Dim MaxIndex as Integer
+	MaxIndex = -1
 	EnableStep1DialogControls(False, False, False)
 	EmptySelection()
-	DialogModel.lblSelection.Label = sCURRRANGES  	&apos;&quot;WÃ¤hrungsbereiche:&quot;
+	DialogModel.lblSelection.Label = sCURRRANGES  	&apos;&quot;Währungsbereiche:&quot;
 	EmptyListbox(DialogModel.lstSelection)
-	Msgbox DialogModel.optCellTemplates.State
 	oDocument.CurrentController.Select(oSelRanges)
 	If (DialogModel.optSheetRanges.State = 1) AND (DialogModel.chkComplete.State &lt;&gt; 1) Then
 		&apos; Ist das Sheet Grundlage für die Bearbeitung?
@@ -19,6 +19,7 @@ Dim MaxIndex as Integer
 		osheet = oDocument.CurrentController.GetActiveSheet
 		oRanges = osheet.CellFormatRanges.createEnumeration()
 		MaxIndex = AddSheetRanges(oRanges, MaxIndex, oSheet, False)
+		ReDim Preserve RangeList(MaxIndex,1)
 	Else
 		CreateRangeEnumeration(False)
 		bRangeListDefined = True
@@ -29,10 +30,10 @@ End Sub
 
 
 Sub CreateRangeEnumeration(bAutopilot as Boolean)
-Dim i, MaxIndex as integer
+Dim i as Integer
+Dim MaxIndex as integer
 Dim sStatustext as String
-	MaxIndex = 0
-	&apos; oder das Dokument - dann müsssen alle Sheets abgearbeitet werden	
+	MaxIndex = -1
 	If Not bRangeListDefined Then
 		&apos; Die Ranges sind noch nicht definiert
 		oSheets = oDocument.Sheets
@@ -46,18 +47,21 @@ Dim sStatustext as String
 				oStatusline.SetText(sStatusText)
 			End If
 			oRanges = osheet.CellFormatRanges.createEnumeration
-			RangeList(0) = AddSheetRanges(oRanges, MaxIndex, oSheet, bAutopilot)
+			MaxIndex = AddSheetRanges(oRanges, MaxIndex, oSheet, bAutopilot)
 		Next i
 	Else
-		oStatusline.SetText(sStsRELRANGES)  	&apos;&quot;Erfassung der relevanten Bereiche...&quot;
-		&apos; Die Ranges sind schon definiert
-		For I = 0 To CInt(RangeList(0))
-			If RangeList(i) &lt;&gt; &quot;&quot; AND RangeBools(i) = True  Then
-				If Not bAutoPilot Then
+		If Not bAutoPilot Then
+			oStatusline.SetText(sStsRELRANGES)  	&apos;&quot;Erfassung der relevanten Bereiche...&quot;
+			&apos; Die Ranges sind schon definiert
+			For i = 0 To Ubound(RangeList(),1)
+				If RangeList(i,0) &lt;&gt; &quot;&quot; AND Rangelist(i,1) = True Then
 					AddSingleItemToListBox(DialogModel.lstSelection, RangeList(i))
 				End If
-			End If
-		Next
+			Next
+		End If
+	End If
+	If MaxIndex &gt; -1 Then
+		ReDim Preserve RangeList(MaxIndex,1)
 	End If
 	Rangeindex = MaxIndex
 End Sub
@@ -68,54 +72,51 @@ Function AddSheetRanges(oRanges as Object, r as Integer, oSheet as Object, bAuto
 Dim RangeName as String
 Dim AddtoList as Boolean
 Dim iCurStep as Integer
+Dim MaxIndex as Integer
 	iCurStep = DialogModel.Step
 	While oRanges.hasMoreElements
 		oRange = oRanges.NextElement
 		AddToList = CheckFormatType(oRange)
 		If AddToList Then
-			&apos; Den Namen der Range ermitteln und in ein Array packen
-			RangeName = RetrieveRangeNamefromAddress(oRange.RangeAddress, oSheet.Name)
+			RangeName = RetrieveRangeNamefromAddress(oRange)
 			TotCellCount = TotCellCount + CountRangeCells(oRange)
 			If Not bAutoPilot Then
 				AddSingleItemToListbox(DialogModel.lstSelection, RangeName)
 			End If
 			&apos; The Ranges are only passed to an Array when the whole Document is the basis
+			&apos; Redimension the RangeList Array if necessary
+			MaxIndex = Ubound(RangeList(),1)
 			r = r + 1
-			RangeList(r) = RangeName
-			RangeBools(r) = True
+			If r &gt; MaxIndex Then
+				MaxIndex = MaxIndex + SBRANGEUBOUND
+				ReDim Preserve RangeList(MaxIndex,1)
+			End If
+			RangeList(r,0) = RangeName
+			RangeList(r,1) = True
 		End If
 	Wend
 	AddSheetRanges = r
 End Function
 
 
-
 &apos; Fügt einen Bereich zur selektierten Kollektion hinzu
 Sub SelectRange()
-Dim i, a, s as Integer
-Dim Listbox as Object
+Dim i as Integer
 Dim RangeName as String
 Dim SelItem as String
-Dim LocRangeList(100) as String
 Dim CurRange as String
 Dim SheetRangeName as String
-Dim DescriptionList(1) as String
-Dim MaxRangeIndex, StatusValue as Integer
-
+Dim DescriptionList() as String
+Dim MaxRangeIndex as Integer
+Dim StatusValue as Integer
 	StatusValue = 0
-	MaxRangeIndex = Val(SelRangeList(0))
-	Listbox = DialogModel.lstSelection
-	a = 0
+	MaxRangeIndex = Ubound(SelRangeList())
 	CurSheetName = oSheet.Name
-	For i = 1 To MaxRangeIndex
+	For i = 0 To MaxRangeIndex
 		SelItem = SelRangeList(i)
 		&apos; Is the Range already included in the collection?
 		oRange = RetrieveRangeoutOfRangename(SelItem)
 		TotCellCount = TotCellCount + CountRangeCells(oRange)
-		LocRangeList(a) = SelItem
-		a = a + 1
-		&apos; Der Listboxeintrag ist frisch selektiert worden und muß der Range - Kollektion 
-		&apos; hinzugefügt werden
 		DescriptionList() = ArrayOutofString(SelItem,&quot;.&quot;,1)
 		SheetRangeName = DeleteStr(DescriptionList(0),&quot;&apos;&quot;)
 		If SheetRangeName = CurSheetName Then
@@ -123,65 +124,45 @@ Dim MaxRangeIndex, StatusValue as Integer
 		End If
 		IncreaseStatusValue(SBRELGET/MaxRangeIndex)
 	Next i
-	
-	&apos; Das Array mit den selektierten Listboxeinträgen aktualisieren
-	ClearArray(ListboxItems())
-	For s = 0 To a - 1
-		CurRange = LocRangeList(s)
-		ListboxItems(s) = CurRange
-	Next s
 End Sub
 
 
-Sub ConvertThehardWay(ListboxList(), ThisSel(), SwitchFormat as Boolean, bAutopilot as Boolean)
-Dim i, a, r as Integer
+Sub ConvertThehardWay(ListboxList(), SwitchFormat as Boolean, bRemove as Boolean)
+Dim i as Integer &apos; r, a
 Dim AddCells as Long
 Dim OldStatusValue as Single
 Dim RangeName as String
 Dim LastIndex as Integer
+Dim oSelListbox as Object
 
+	oSelListbox = DialogConvert.GetControl(&quot;lstSelection&quot;)
 	Lastindex = Ubound(ListboxList())
 	If TotCellCount &gt; 0 Then
-		&apos; Index für die Removelist
-		a = 0
 		OldStatusValue = StatusValue
 		&apos; Harte Formatierung
 		For i = 0 To LastIndex
-			If ThisSel(i) = True Then
-				RangeName = ListboxList(i)
-				oRange = RetrieveRangeoutofRangeName(RangeName)
-				ConvertCellCurrencies(oRange)
-				If NOT bAutoPilot Then
-&apos; The following line has been put beside due to Bug #73157 (Two ranges lying side by side)
-&apos;				If oSelRanges.HasbyName(RangeName) Then
+			RangeName = ListboxList(i)
+			oRange = RetrieveRangeoutofRangeName(RangeName)
+			ConvertCellCurrencies(oRange)
+			If bRemove Then
+				If oSelRanges.HasbyName(RangeName) Then
 					oSelRanges.RemovebyName(RangeName)
-					oDocument.CurrentController.Select(oSelRanges)
-&apos;				End If
+					oDocument.CurrentController.Select(oSelRanges)	
 				End If
-
-				If SwitchFormat Then
-					If oRange.getPropertyState(&quot;NumberFormat&quot;) &lt;&gt; 1 Then
-						&apos; Range Ist hart formatiert
-						SwitchNumberFormat(oRange, oFormats, sEuroSign)&apos; &quot;â‚¬&quot;)
-					End If
-				Else
-					SwitchNumberFormat(oRange, oFormats, sEuroSign) &apos;&quot;â‚¬&quot;
+			End If
+			If SwitchFormat Then
+				If oRange.getPropertyState(&quot;NumberFormat&quot;) &lt;&gt; 1 Then
+					&apos; Range Ist hart formatiert
+					SwitchNumberFormat(oRange, oFormats, sEuroSign)&apos; &quot;€&quot;)
 				End If
-				AddCells = CountRangeCells(oRange)
-				CurCellCount = AddCells
-				IncreaseStatusValue((CurCellCount/TotCellCount)*(100-OldStatusValue))
-
-				&apos; Die selektierte Stilvorlage muÃŸ zum SchluÃŸ aus der Listbox entfernt werden
-				If bPreSelected Then
-					RemoveList(0) = ListboxList(i)
-				Else
-					r = IndexinArray(ListboxList(i), RangeList())
-					If r &lt;&gt; -1 Then
-						RangeBools(r) = False
-						RemoveList(a) = RangeList(r)
-						a = a + 1
-					End If
-				End If
+			Else
+				SwitchNumberFormat(oRange, oFormats, sEuroSign) &apos;&quot;€&quot;
+			End If
+			AddCells = CountRangeCells(oRange)
+			CurCellCount = AddCells
+			IncreaseStatusValue((CurCellCount/TotCellCount)*(100-OldStatusValue))
+			If bRemove Then
+				RemoveListBoxItemByName(oSelListbox.Model,Rangename)
 			End If
 		Next
 	End If
@@ -192,7 +173,7 @@ Sub ConvertCellCurrencies(oRange as Object)
 Dim oValues as Object
 Dim oCells as Object
 Dim oCell as Object
-  	oValues = oRange.queryContentCells( com.sun.star.sheet.CellFlags.VALUE )
+  	oValues = oRange.queryContentCells(com.sun.star.sheet.CellFlags.VALUE)
 	If (oValues.Count &gt; 0) Then
 		oCells = oValues.Cells.createEnumeration
 		While oCells.hasMoreElements

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="AutoPilotRun" script:language="StarBasic">Option Explicit
 
 Public SourceDir as String
@@ -7,15 +7,12 @@ Public TargetDir as String
 Public TargetStemDir as String
 Public SourceFile as String
 Public TargetFile as String
-Public EuroStyles(50) as String
-Public EuroBools(50) as Boolean
 Public Source as String
 Public SubstFile as String
 Public SubstDir as String
 Public NoArgs()
 Public FilterList(6) as String
 Public GoOn as Boolean
-Public UnprotectList(50,1) as String
 Public DoUnprotect as Integer
 Public Password as String
 Public DocIndex as Integer
@@ -55,12 +52,12 @@ Dim FilesList()
 			SourceDir = Source
 			TargetStemDir = TargetDir
 			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
-			TotDocCount = CInt(FilesList(0,0))
+			TotDocCount = Ubound(FilesList(),1) + 1
 		End If
 		InitializeProgressPage(DialogModel)
 &apos;		ChangeToNextProgressStep()
 		sTotDocCount = CStr(TotDocCount)
-		For DocIndex = 1 To TotDocCount
+		For DocIndex = 0 To TotDocCount - 1
 			If InitializeDocument(FilesList()) Then
 				ConvertDocument()
 				DocDisposed = StoreDocument()
@@ -160,7 +157,6 @@ Sub SwapExtent()
 End Sub
 
 
-
 Sub SourceSearchDialog()
 	If DialogModel.optWholeDir.State = 1 Then
 		&apos;Konvertierung eines gesamten Verzeichnisses
@@ -172,126 +168,9 @@ Sub SourceSearchDialog()
 End Sub
 
 
-
 Sub TargetDirectorySearchDialog()
 	TargetDir = Application.FileDialog( &quot;P&quot;, sMsgTARGETDIR, DialogModel.txtTarget.Text )
 	DialogModel.txtTarget.Text = AssignFileName(TargetDir, DialogModel.LblTarget.Label,False)
-End Sub
-
-
-Function UnprotectSheet(oListSheet as Object)
-Dim PWIsCorrect as Boolean
-&apos;Dim Password as String
-Dim QueryText as String
-Dim ListSheetName as String
-Dim OldDoUnprotect as Integer
-Dim sStatustext as String
-	ListSheetName = oListSheet.Name
-	If oListSheet.IsProtected Then
-		OldDoUnprotect = DoUnprotect
-		If DoUnprotect = 0 Then
-			&apos; At First query if sheets shall generally be unprotected
-			DoUnprotect = Msgbox(sMsgUNPROTECT,36,sMsgDLGTITLE)
-		End If
-		If DoUnprotect = 6 Then
-			&apos;the answer is yes...
-			&apos; Try to unprotect the sheet without a Password
-			oListSheet.Unprotect(&quot;&quot;)
-			If oListSheet.IsProtected Then
-				&apos; Sheet is protected by a Password
-				oDocument.CurrentController.SetActiveSheet(oListSheet)
-
-				QueryText = ReplaceString(sMsgPWPROTECT,&quot;&apos;&quot; &amp; ListSheetName &amp; &quot;&apos;&quot;, &quot;%1TableName%1&quot;)
-				&apos;&quot;Geben Sie das Kennwort zum Entschützen der Tabelle &apos;&quot; &amp; ListSheetName &amp; &quot; ein:&apos;&quot;
-				Do
-					InitializePasswordDialog(QueryText)
-					If bCancelProtection Then
-						bCancelProtection = False
-						Msgbox (sMsgSHEETSNOPROTECT, 64, sMsgDLGTITLE)
-						UnprotectSheet() = False   &apos;&quot;Tabelle wird nicht entschützt!&quot;
-						exit Function
-					End If
-					oListSheet.Unprotect(Password)
-					If oListSheet.IsProtected Then
-						PWIsCorrect = False
-						Msgbox (sMsgWRONGPW, 64, sMsgDLGTITLE)
-					Else
-						&apos; Sheet could be unprotected
-						AddSheettoUnprotectionlist(ListSheetName,Password)
-						PWIsCorrect = True
-					End If
-				Loop Until PWIsCorrect
-				UnProtectSheet() = True
-			Else
-				&apos; The Sheet could be unprotected without a password
-				AddSheettoUnprotectionlist(ListSheetName,&quot;&quot;)
-				UnprotectSheet() = True
-			End If
-		Else
-			&apos; The Answer is &apos;No&apos; (Tables shall not be unprotected)
-			If OldDoUnprotect = 0 Then
-				Msgbox (sMsgSHEETSNOPROTECT, 64, sMsgDLGTITLE)
-			End If       &apos;&quot;Tabellen werden nicht entschützt!&quot;
-			Unprotectsheet() = False
-		End If
-	Else
-		UnprotectSheet() = True
-	End If
-End Function
-
-
-Sub	InitializePasswordDialog(QueryText as String)
-	With PasswordModel
-		.Title = QueryText
-		.frmPassword.Label = sMsgPASSWORD
-		.cmdGoOn.Label = sMsgOK
-		.cmdCancel.Label = sMsgCANCEL
-		.cmdHelp.Label = sHELP
-	End With
-	DialogPassword.cmdGoOn.DefaultButton = True
-	DialogPassword.Execute
-End Sub
-
-Sub ReadPassword()
-	Password = DialogPW.TextBox1.Text
-	DialogPassword.EndExecute
-End Sub
-
-
-Sub RejectPassword()
-	bCancelProtection = True
-	DialogPassword.EndExecute
-End Sub
-
-
-&apos; Reprotects the previousliy protected sheets
-&apos; The passwordinformation is stored in the List &apos;UnProtectList()&apos;
-Sub ReprotectSheets()
-Dim i as Integer
-Dim oProtectSheet as Object
-	If Val(UnProtectList(0,0)) &gt; 0 Then
-&apos;		oStatusline.SetText(sStsREPROTECT)
-		For i = 1 To Val(UnProtectList(0,0))
-			oProtectSheet =  oSheets.GetbyName(UnProtectList(i,0)
-			If Not oProtectSheet.IsProtected Then
-				oProtectSheet.Protect(UnProtectList(i,1))
-			End If
-			UnprotectList(i,0) = &quot;&quot;
-			UnprotectList(i,1) = &quot;&quot;
-		Next i
-	End If
-	UnprotectList(0,0) = &quot;&quot;
-End Sub
-
-
-&apos; Add a Sheet to the list of sheets that finally have to be
-&apos; unprotected
-Sub AddSheettoUnprotectionlist(ListSheetName,Password)
-	UnprotectList(Int(UnProtectList(0,0))+ 1,0) = ListSheetName
-	UnprotectList(Int(UnProtectList(0,0))+ 1,1) = Password
-	&apos; The first Field contains the highest Index of the list
-	&apos; and therefor has to be incremented
-	UnprotectList(0,0) = Str(Val(UnProtectList(0,0)) + 1)
 End Sub
 
 
@@ -341,27 +220,28 @@ End Sub
 
 
 Sub EnableStep2DialogControls(OnValue as Boolean)
-	DialogModel.frmExtent.Enabled = OnValue
-	DialogModel.optWholeDir.Enabled = OnValue
-	DialogModel.optSingleFile.Enabled = OnValue
-	DialogModel.chkProtect.Enabled = OnValue
-&apos; Todo: Aktivieren nicht vergessen!	
-	DialogModel.cmdCallSourceDialog.Enabled = False
-	DialogModel.cmdCallTargetDialog.Enabled = False
-	DialogModel.lblSource.Enabled = OnValue
-	DialogModel.lblTarget.Enabled = OnValue
-	DialogModel.txtSource.Enabled = OnValue
-	DialogModel.txtTarget.Enabled = OnValue
-	DialogModel.imgPreview.Enabled = OnValue
-	DialogModel.lstCurrencies.Enabled = OnValue
-	DialogModel.lblCurrencies.Enabled = OnValue
-	If OnValue Then
-		ToggleGoOnButton()
-		DialogModel.chkRecursive.Enabled = DialogModel.optWholeDir.State = 1
-	Else
-		DialogModel.cmdGoOn.Enabled = False
-		DialogModel.chkRecursive.Enabled = False
-	End If
+	With DialogModel
+		.hlnExtent.Enabled = OnValue
+		.optWholeDir.Enabled = OnValue
+		.optSingleFile.Enabled = OnValue
+		.chkProtect.Enabled = OnValue
+		.cmdCallSourceDialog.Enabled = OnValue
+		.cmdCallTargetDialog.Enabled = OnValue
+		.lblSource.Enabled = OnValue
+		.lblTarget.Enabled = OnValue
+		.txtSource.Enabled = OnValue
+		.txtTarget.Enabled = OnValue
+		.imgPreview.Enabled = OnValue
+		.lstCurrencies.Enabled = OnValue
+		.lblCurrencies.Enabled = OnValue
+		If OnValue Then
+			ToggleGoOnButton()
+			.chkRecursive.Enabled = .optWholeDir.State = 1
+		Else
+			.cmdGoOn.Enabled = False
+			.chkRecursive.Enabled = False
+		End If
+	End With
 End Sub
 
 
@@ -429,4 +309,18 @@ Dim sPath as String
 		bDoEnable = oUcb.Exists(DialogModel.txtTarget.Text)
 	End If
 	DialogModel.cmdGoOn.Enabled = bDoEnable
+End Sub
+
+
+Sub CallFolderPicker()
+	GetFolderName(DialogModel.txtTarget)
+End Sub
+
+
+Sub CallFilePicker()
+	If DialogModel.optSingleFile.State = 1 Then
+		GetFileName(DialogModel.txtSource, Filternames())
+	Else
+		GetFolderName(DialogModel.txtSource)
+	End If
 End Sub</script:module>

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Soft" script:language="StarBasic">Option Explicit
 REM  *****  BASIC  *****
-
-&apos;Assignmentlist:
-
-&apos; Stylename ; Defined ; Selected ; RangeCellCount ; Range No 1 ; Range No 2 ... 
-&apos;	  0          1         2             3              4
 
 
 Sub CreateStyleEnumeration()
@@ -18,138 +13,142 @@ Sub CreateStyleEnumeration()
 End Sub
 
 
-Sub MakeStyleEnumeration(bAutoPilot as Boolean)
+Sub MakeStyleEnumeration(bAddToListbox as Boolean)
 Dim m as integer
 Dim aStyleFormat as Object
 Dim Stylename as String
-Dim AddToList as Boolean
- 	StyleIndex = 0
+ 	StyleIndex = -1
 	oStyles = oDocument.StyleFamilies.GetbyIndex(0)
 	For m = 0 To oStyles.count-1
 		oStyle = oStyles.GetbyIndex(m)
 		StyleName = oStyle.Name
-		AddToList = CheckFormatType(oStyle)
-		If AddToList Then 
-			If Not bAutoPilot Then
+		If CheckFormatType(oStyle) Then 
+			If Not bAddToListBox Then
 				AddSingleItemToListbox(DialogModel.lstSelection, Stylename)
 			Else 
-				SwitchNumberFormat(ostyle, oFormats, sEuroSign)&apos; &quot;â‚¬&quot;)
-				EuroStyles(StyleIndex) = Stylename
-				EuroBools(StyleIndex) = True
+				SwitchNumberFormat(ostyle, oFormats, sEuroSign)
 			End If
-			StyleRangeAssignmentList(StyleIndex,0) = Stylename
 			StyleIndex = StyleIndex + 1
+			StyleRangeAssignmentList(StyleIndex) = 	&quot;&lt;STYLENAME&gt;&quot; &amp; Stylename &amp; &quot;&lt;/STYLENAME&gt;&quot; &amp; _
+													&quot;&lt;DEFINED&gt;FALSE&lt;/DEFINED&gt;&quot; &amp; &quot;&lt;RANGES&gt;&lt;/RANGES&gt;&quot; &amp;_
+													&quot;&lt;CELLCOUNT&gt;0&lt;/CELLCOUNT&gt;&quot; &amp;_
+													&quot;&lt;SELECTED&gt;FALSE&lt;/SELECTED&gt;&quot;
 		End If
 	Next m
+	If StyleIndex &gt; -1 Then
+		Redim Preserve StyleRangeAssignmentList(StyleIndex)
+	Else
+		ReDim StyleRangeAssignmentList()
+	End If
 End Sub
 
 
-Sub AssignRangestoStyle(Stylelist(), SelList())
-Dim CurStyleName as String
-Dim oTempRanges as Object
-Dim i, n, m, t as integer
-Dim Rangename as String
-Dim oRangeAddress as Object
-Dim SheetName as String
-Dim SheetThere as Boolean
-Dim StyleCellCount as Long
-Dim AddRange as Boolean
-Dim oListSheet as Object
-Dim SheetsCount as Integer
+Sub AssignRangestoStyle(StyleList(), SelList())
+Dim i as Integer
+Dim n as integer
 Dim LastIndex as Integer
-
+Dim CurStyleName as String
+Dim AssignString as String
 	LastIndex = Ubound(StyleList())
 	StatusValue = 0
-	SheetsCount = oSheets.Count
 	oStatusLine.SetText(sStsRELRANGES)       &apos;&quot;Erfassung der relevanten Bereiche...&quot;
-	&apos; Zähler für die selektierten EintrÃ¤ge
-	StyleCellCount = 0
-	TotCellcount = 0
 	For i = 0 To LastIndex
 		CurStyleName = StyleList(i)
-
-		&apos; Finde den Index in der Zuordnungstabelle
-		n = IndexinArray(CurStyleName, StyleRangeAssignmentList())
-
-		&apos; Ist der Listboxeintrag selektiert?
-		If SelList(i) = True Then
-			m = 4
-			StyleRangeAssignmentList(n,2) = 1
-		
-			If StyleRangeAssignmentList(n,1) &lt;&gt; 1 Then
-				&apos; Die Ranges für diesen Style sind noch nicht definiert
-				StyleCellCount = 0
-				For t = 0 To sheetscount - 1
-					oSheet = oSheets.GetbyIndex(t)
-					SheetName = oSheet.Name
-					&apos; Der Listboxeintrag ist frisch selektiert worden und muÃŸ der Ranges - Kollektion 
-					&apos; hinzugefügt werden
-	
-					&apos; Dem Stylenamen sind keine Ranges zugeordnet
-					&apos; Diese holen wir mit der folgenden Schleife nach
-					oRanges = osheet.CellFormatRanges.createEnumeration
-
-					While oRanges.hasMoreElements
-						oRange = oRanges.NextElement
-						If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then	
-							If oRange.CellStyle = CurStyleName Then
-								oRangeAddress = oRange.RangeAddress
-								RangeName = RetrieveRangeNamefromAddress(oRangeAddress,SheetName)
-								oListSheet = RetrieveSheetoutofRangeName(RangeName)
-								AddRange = UnprotectSheet(oListSheet)
-								If AddRange Then
-									&apos; Jetzt den Index für den Style ermitteln
-									StyleRangeAssignmentList(n,m) =  RangeName
-
-									&apos; Die gesamtZahl der Zellen anpassen
-									StyleCellCount = StyleCellCount + CountRangeCells(oRange)
-									m = m + 1
-								End If
-							End If
-						End If
-					Wend
-				Next t	
-				TotCellCount = TotCellCount + StyleCellCount
-				&apos; Die Ranges für den Stil sind jetzt definiert
-				StyleRangeAssignmentList(n,1) = &quot;1&quot;
-				StyleRangeAssignmentList(n,3) = cStr(StyleCellCount)
+		n = PartStringInArray(StyleRangeAssignmentList(), CurStyleName, 0)
+		AssignString = StyleRangeAssignmentlist(n)
+		If IndexInArray(CurStyleName, SelList()) &lt;&gt; -1 Then
+			&apos; Style is selected
+			If FindPartString(AssignString, &quot;&lt;DEFINED&gt;&quot;, &quot;&lt;/DEFINED&gt;&quot;, 1) = &quot;FALSE&quot; Then
+				AssignString = ReplaceString(AssignString, &quot;&lt;SELECTED&gt;TRUE&lt;/SELECTED&gt;&quot;, &quot;&lt;SELECTED&gt;FALSE&lt;/SELECTED&gt;&quot;)
+				AssignCellFormatRanges(n, AssignString, CurStyleName)
 			End If
-&apos;			TotCellCount = TotCellCount + Int(StyleRangeAssignmentlist(n,3)
-		Else 
+		Else
 			&apos; Style is not selected
-			If StyleRangeAssignmentList(n,2) = &quot;1&quot; Then
-				StyleRangeAssignmentList(n,2) = &quot;0&quot;
-				DeselectStyle(CurStyleName)
+			If FindPartString(AssignString, &quot;&lt;SELECTED&gt;&quot;, &quot;&lt;/SELECTED&gt;&quot;, 1) = &quot;FALSE&quot; Then
+				DeselectStyle(CurStyleName, n)
 			End If
 		End If
 		IncreaseStatusvalue(SBRELGET/(LastIndex+1))
 	Next i
-End Sub			
+End Sub
+
+
+Sub AssignCellFormatRanges(n as Integer, AssignString as String, CurStyleName as String)
+Dim oRanges() as Object
+Dim oRange as Object
+Dim oRangeAddress
+Dim oSheet as Object
+Dim StyleCellCount as Long
+Dim i as Integer
+Dim MaxIndex as Integer
+Dim RangeString as String
+Dim SheetName as String
+Dim RangeName as String
+Dim CellCountString as String
+	StyleCellCount = 0
+	RangeString = &quot;&lt;RANGES&gt;&quot;
+	MaxIndex = oSheets.Count-1
+	For i = 0 To MaxIndex
+		oSheet = oSheets(i)
+		SheetName = oSheet.Name
+		oRanges = osheet.CellFormatRanges.CreateEnumeration
+		While oRanges.hasMoreElements
+			oRange = oRanges.NextElement
+			If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then	
+				If oRange.CellStyle = CurStyleName Then
+					oRangeAddress = oRange.RangeAddress
+					RangeName = RetrieveRangeNamefromAddress(oRange)
+					RangeString = RangeString &amp; RangeName &amp; &quot;,&quot;
+					StyleCellCount = StyleCellCount + CountRangeCells(oRange)
+				End If
+			End If
+		Wend
+	Next i
+	If StyleCellCount &gt; 0 Then
+		TotCellCount = TotCellCount + StyleCellCount	
+		RangeString = RTrimStr(RangeString,&quot;,&quot;)
+		RangeString = RangeString &amp; &quot;&lt;/RANGES&gt;&quot;
+		CellCountString = &quot;&lt;CELLCOUNT&gt;&quot; &amp; StyleCellCount &amp; &quot;&lt;/CELLCOUNT&quot;
+		AssignString = ReplaceString(AssignString, RangeString,&quot;&lt;RANGES&gt;&lt;/RANGES&gt;&quot;)
+		AssignString = ReplaceString(AssignString, CellCountString,&quot;&lt;CELLCOUNT&gt;0&lt;/CELLCOUNT&gt;&quot;)
+	End If
+	AssignString = ReplaceString(AssignString, &quot;&lt;DEFINED&gt;TRUE&lt;/DEFINED&gt;&quot;, &quot;&lt;DEFINED&gt;FALSE&lt;/DEFINED&gt;&quot;)
+	StyleRangeAssignmentList(n)	= AssignString
+End Sub				
 
 
 &apos; löscht eine Stilvorlage aus der Kollektion, die die Ranges selektiert
-Sub DeselectStyle(DeSelStyleName as String)
-Dim n, m as Integer
+Sub DeselectStyle(DeSelStyleName as String, n as Integer)
+Dim i as Integer
 Dim RangeName as String
-
-	&apos; Finde den Index in der Zuordnungstabelle
-	n = IndexinArray(DeSelStyleName, StyleRangeAssignmentList(), 1)
-	m = 4
-	Do 
-		RangeName = StyleRangeAssignmentList(n,m)
-		If RangeName &lt;&gt; &quot;&quot; Then
+Dim SelectString as String
+Dim AssignString as String
+Dim StyleRangeList() as String
+Dim MaxIndex as Integer
+	SelectString =&quot;&lt;SELECTED&gt;FALSE&lt;/SELECTED&gt;&quot;
+	AssignString = StyleRangeAssignmentList(n)
+	RangeString = FindPartString(AssignString,&quot;&lt;RANGES&gt;&quot;,&quot;&lt;/RANGES&gt;&quot;,1)
+	StyleRangeList() = ArrayoutofString(RangeString,&quot;,&quot;)
+	MaxIndex = Ubound(StyleRangeList())
+	For i = 0 To MaxIndex
+		RangeName = StyleRangeList(i)
+		If oSelRanges.HasbyName(RangeName) Then
 			oSelRanges.RemovebyName(RangeName)										
-			m = m + 1
 		End If
-	Loop until RangeName = &quot;&quot;
+	Next i
+	AssignString = ReplaceString(AssignString, &quot;&lt;SELECTED&gt;FALSE&lt;/SELECTED&gt;&quot;, &quot;&lt;SELECTED&gt;TRUE&lt;/SELECTED&gt;&quot;)
+	StyleRangeAssignmentList(n) = AssignString
 End Sub		
 
 
-Function RetrieveRangeNamefromAddress(oRangeAddress as Object, Sheetname as String) as String
+Function RetrieveRangeNamefromAddress(oRange as Object) as String
 Dim Rangename as String
+Dim oAddressRanges as Object
+	oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 	oAddressRanges.InsertbyName(&quot;&quot;,oRange)
 	Rangename = oAddressRanges.RangeAddressesasString	
-	oAddressRanges.RemovebyName(RangeName)
+&apos;	Msgbox &quot;Adresse: &quot; &amp; oRangeAddress.StartColumn &amp; &quot; ; &quot; &amp; oRangeAddress.EndColumn &amp; &quot; ; &quot; &amp; oRangeAddress.StartRow &amp; &quot; ; &quot; &amp; oRangeAddress.EndRow &amp; chr(13) &amp; RangeName
+&apos;	oAddressRanges.RemovebyName(RangeName)
 	RetrieveRangeNamefromAddress = Rangename
 End Function
 
@@ -176,58 +175,65 @@ Function RetrieveRangeoutofRangeName(TableText as String)
 End Function
 
 
-Sub ConvertTheSoftWay(StyleList() as String, ThisSel() as Boolean, bAutopilot as Boolean)
-Dim a, i, m, n, s as Integer
+Sub ConvertTheSoftWay(StyleList(), bDeSelect as Boolean)
+Dim i as Integer
+Dim l as Integer
+Dim s as Integer
+Dim n as Integer
 Dim CurStyleName as String
 Dim RangeName as String
 Dim OldStatusValue as Integer
 Dim LastIndex as Integer
+Dim oSelListbox as Object
+Dim StyleRangeList() as String
+Dim MaxIndex as Integer
+	oSelListbox = DialogConvert.GetControl(&quot;lstSelection&quot;)
 	LastIndex = Ubound(StyleList())
-	&apos; Index für die Removelist
-	a = 0
 	OldStatusValue = StatusValue
 	For i = 0 To LastIndex
-		If ThisSel(i) = True Then
-			CurStyleName = StyleList(i)
-			oStyle = oStyles.GetbyName(CurStyleName)
-
-			&apos; Jetzt die Ranges abarbeiten, die mit der Vorlage verknüpft sind
-			&apos; Gibt es den Listboxeintrag schon in der Zuordnungstabelle?
-			n = IndexinArray(CurStyleName, StyleRangeAssignmentList(), 1)
-			m = 4
-
-			Do
-				RangeName = StyleRangeAssignmentList(n,m)
-				If RangeName &lt;&gt; &quot;&quot; Then
-					oRange = RetrieveRangeoutofRangeName(RangeName)
-					If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
-						&apos; Range Ist hart formatiert
-						ConvertCellCurrencies(oRange)
-						CurCellCount = CountRangeCells(oRange)
-					End If
-					IncreaseStatusvalue((CurCellCount/TotCellCount)*(95-OldStatusValue))
-					If NOT bAutoPilot Then
-&apos; The following line has been put aside due to Bug #73157 (Two ranges lying side by side)
-&apos; They should be reintegrated after the bugfix, as in future versions oSelRangs might throw an exception
-&apos;						If oSelRanges.HasbyName(RangeName) Then
-						oSelRanges.RemovebyName(RangeName)
-						oDocument.CurrentController.Select(oSelRanges)
-&apos;						End If
-					End If
-					m = m + 1
+		CurStyleName = StyleList(i)
+		oStyle = oStyles.GetbyName(CurStyleName)
+		StyleRangeList() = GetAssignedRanges(CurStyleName, n)
+		MaxIndex = Ubound(StyleRangeList())
+		For s = 0 To MaxIndex
+			RangeName = StyleRangeList(s)
+			oRange = RetrieveRangeoutofRangeName(RangeName)
+			If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
+				&apos; Range Ist hart formatiert
+				ConvertCellCurrencies(oRange)
+				CurCellCount = CountRangeCells(oRange)
+			End If
+			IncreaseStatusvalue((CurCellCount/TotCellCount)*(95-OldStatusValue))
+			If bDeSelect Then
+				&apos; Note: On Problems see Bug #73157
+				If oSelRanges.HasbyName(RangeName) Then
+					oSelRanges.RemovebyName(RangeName)
+					oDocument.CurrentController.Select(oSelRanges)
 				End If
-			Loop Until RangeName = &quot;&quot;
-
-			&apos; Zuletzt das Währungsformat in den Vorlagen anpassen
-			SwitchNumberFormat( ostyle, oFormats, sEuroSign)
-&apos;			oStatusline.SetValue(100)
-			&apos; Die Vorlage wird aus der Zuordnungstabelle gelöscht
-			For s = 0 To m - 1
-				StyleRangeAssignmentList(n,s) = &quot;&quot;
-			Next
-			&apos; Die selektierte Stilvorlage muÃŸ zum SchluÃŸ aus der Listbox entfernt werden
-			RemoveList(a) = StyleList(i)
-			a = a + 1
-		End If
+			End If
+		Next s
+		SwitchNumberFormat( ostyle, oFormats, sEuroSign)
+&apos;		oStatusline.SetValue(100)
+		StyleRangeAssignmentList(n) = &quot;&quot;
+		l = GetItemPos(oSelListBox.Model, CurStyleName)
+		oSelListbox.RemoveItems(l,1)			
 	Next
-End Sub</script:module>
+End Sub
+
+
+Function GetAssignedRanges(CurStyleName as String, n as Integer)
+Dim StyleRangeList() as String
+Dim RangeString as String
+Dim AssignString as String
+	n = PartStringInArray(StyleRangeAssignmentList(), CurStyleName, 0)
+	If n &lt;&gt; -1 Then
+		AssignString = StyleRangeAssignmentList(n)
+		RangeString = FindPartString(AssignString,&quot;&lt;RANGES&gt;&quot;, &quot;&lt;/RANGES&gt;&quot;,1)
+		If RangeString &lt;&gt; &quot;&quot; Then
+			StyleRangeList() = ArrayoutofString(RangeString,&quot;,&quot;)
+		End If
+	End If
+	GetAssignedRanges() = StyleRangeList()
+End Function
+
+</script:module>
