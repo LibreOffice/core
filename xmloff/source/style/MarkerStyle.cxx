@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-23 10:05:52 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ sal_Bool XMLMarkerStyleImport::importXML(
     uno::Any& rValue,
     OUString& rStrName )
 {
-    sal_Bool bRet           = sal_False;
     sal_Bool bHasViewBox    = sal_False;
     sal_Bool bHasPathData   = sal_False;
 
@@ -138,6 +137,8 @@ sal_Bool XMLMarkerStyleImport::importXML(
 
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+
+    OUString strPathData;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -157,55 +158,57 @@ sal_Bool XMLMarkerStyleImport::importXML(
             bHasViewBox = sal_True;
 
         }
-        else if( bHasViewBox && IsXMLToken( aStrAttrName, XML_D ) )
+        else if( IsXMLToken( aStrAttrName, XML_D ) )
         {
-            SdXMLImExSvgDElement aPoints(aStrValue, *pViewBox, awt::Point( 0, 0 ),
-                awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
-                rUnitConverter );
-
-            if(aPoints.IsCurve())
-            {
-                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-                    aPoints.GetPointSequenceSequence(),
-                    aPoints.GetFlagSequenceSequence());
-                rValue <<= aSourcePolyPolygon;
-            }
-            else
-            {
-                drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
-                aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
-                aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
-
-                // Zeiger auf innere sequences holen
-                const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
-                drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
-
-                for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
-                {
-                    pInnerSequenceFlags->realloc(pInnerSequence->getLength());
-                    drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
-
-                    for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
-                        *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
-
-                    // next run
-                    pInnerSequence++;
-                    pInnerSequenceFlags++;
-                }
-
-                rValue <<= aSourcePolyPolygon;
-            }
-
+            strPathData = aStrValue;
             bHasPathData = sal_True;
+        }
+    }
+
+    if( bHasViewBox && bHasPathData )
+    {
+        SdXMLImExSvgDElement aPoints(strPathData, *pViewBox, awt::Point( 0, 0 ),
+            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
+            rUnitConverter );
+
+        if(aPoints.IsCurve())
+        {
+            drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
+                aPoints.GetPointSequenceSequence(),
+                aPoints.GetFlagSequenceSequence());
+            rValue <<= aSourcePolyPolygon;
+        }
+        else
+        {
+            drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+            aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
+            aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
+
+            // Zeiger auf innere sequences holen
+            const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
+            drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
+
+            for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
+            {
+                pInnerSequenceFlags->realloc(pInnerSequence->getLength());
+                drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
+
+                for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
+                    *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
+
+                // next run
+                pInnerSequence++;
+                pInnerSequenceFlags++;
+            }
+
+            rValue <<= aSourcePolyPolygon;
         }
     }
 
     if( pViewBox )
         delete pViewBox;
 
-    bRet = bHasViewBox && bHasPathData;
-
-    return bRet;
+    return bHasViewBox && bHasPathData;
 }
 
 
