@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentIndexMark.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 11:04:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** is a <type>TextRange</type> which is explicitly marked
     as an index entry for a <type>ContentIndex</type>.
  */
-service ContentIndexMark
+published service ContentIndexMark
 {
     service com::sun::star::text::TextContent;
 
