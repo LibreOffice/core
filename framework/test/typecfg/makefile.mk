@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2001-05-23 13:34:55 $
+#   last change: $Author: as $ $Date: 2001-06-06 05:12:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,6 +121,51 @@ APP1DEPN=		$(SLO)$/servicemanager.obj			\
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
 APP1DEF=        $(MISC)$/xml2xcd.def
+.ENDIF
+
+# --- applikation: "cfgview" --------------------------------------------------
+
+APP2TARGET=     cfgview
+
+APP2OBJS=		$(SLO)$/cfgview.obj					\
+                $(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercachedata.obj			\
+                $(SLO)$/filtercache.obj				\
+                $(SLO)$/wildcard.obj				\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/writeguard.obj				\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
+                $(SLO)$/gate.obj					\
+                $(SLO)$/resetableguard.obj
+
+APP2STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(OSLLIB)							\
+                $(SALLIB)							\
+                $(VOSLIB)							\
+                $(TOOLSLIB) 						\
+                $(SVTOOLLIB)						\
+                $(TKLIB)							\
+                $(COMPHELPERLIB)					\
+                $(UNOTOOLSLIB)						\
+                $(SVLIB)
+
+APP2DEPN=		$(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercachedata.obj			\
+                $(SLO)$/filtercache.obj				\
+                $(SLO)$/wildcard.obj				\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/writeguard.obj				\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
+                $(SLO)$/gate.obj					\
+                $(SLO)$/resetableguard.obj
+
+.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+APP2DEF=        $(MISC)$/cfgview.def
 .ENDIF
 
 # --- Targets ------------------------------------------------------
