@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:33:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1865,7 +1865,19 @@ void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin
 
 
 
+SdPage* OutlineViewShell::getCurrentPage() const
+{
+    // since there are no master pages in outline view, we can
+    // for now use the GetActualPage method
+    return const_cast<OutlineViewShell*>(this)->GetActualPage();
+}
 
+/*************************************************************************
+|*
+|* Liefert die erste selektierte Seite zurueck.
+|* Wenn nichts selektiert ist, wird die erste Seite zurueckgeliefert.
+|*
+\************************************************************************/
 SdPage* OutlineViewShell::GetActualPage()
 {
     return pOlView->GetActualPage();
