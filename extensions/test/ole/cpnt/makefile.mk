@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jl $ $Date: 2002-09-17 10:55:45 $
+#   last change: $Author: rt $ $Date: 2003-04-23 17:13:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,8 @@ NO_BSYMBOLIC=	TRUE
 SLOFILES=	\
         $(SLO)$/cpnt.obj	
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb $(BIN)$/oletest.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb $(BIN)$/oletest.rdb
+UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
+UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
 
 UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
