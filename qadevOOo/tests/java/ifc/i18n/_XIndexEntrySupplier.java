@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XIndexEntrySupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:41:23 $
+ *  last change:$Date: 2004-12-10 17:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,11 @@ public class _XIndexEntrySupplier extends MultiMethodTest {
     */
     public void _getIndexCharacter() {
         boolean res = true;
-
+        log.println("getIndexCharacter('chapter', getLocale(i), '')");
         for (int i=0; i<7; i++) {
+            log.print("getIndexCharacter('chapter', " + countries[i] + ") :");
             String get = oObj.getIndexCharacter("chapter", getLocale(i), "");
+            log.println(get);
             res &= get.equals("C");
         }
         tRes.tested("getIndexCharacter()", res);
