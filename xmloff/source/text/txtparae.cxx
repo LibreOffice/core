@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:31:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 09:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ static int txtparae_bContainsIllegalCharacters = sal_False;
 // NumberingRules               if style exists     always
 // TextSection                  always              always
 // ParaChapterNumberingLevel    never               always
+// NumberingIsNumber            never               always
 
 // The conclusion is that for auto styles the first three properties
 // should be queried using a multi property set if, and only if, an
@@ -332,6 +333,7 @@ enum eParagraphPropertyNamesEnumAuto
 
 static const sal_Char* aParagraphPropertyNames[] =
 {
+    "NumberingIsNumber",
     "ParaChapterNumberingLevel",
     "ParaConditionalStyleName",
     "ParaStyleName",
@@ -341,10 +343,11 @@ static const sal_Char* aParagraphPropertyNames[] =
 
 enum eParagraphPropertyNamesEnum
 {
-    PARA_CHAPTER_NUMERBING_LEVEL = 0,
-    PARA_CONDITIONAL_STYLE_NAME = 1,
-    PARA_STYLE_NAME = 2,
-    TEXT_SECTION = 3
+    NUMBERING_IS_NUMBER = 0,
+    PARA_CHAPTER_NUMERBING_LEVEL = 1,
+    PARA_CONDITIONAL_STYLE_NAME = 2,
+    PARA_STYLE_NAME = 3,
+    TEXT_SECTION = 4
 };
 
 
@@ -1768,6 +1771,23 @@ void XMLTextParagraphExport::exportParagraph(
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_OUTLINE_LEVEL,
                                   sTmp.makeStringAndClear() );
+
+                    if( rPropSetHelper.hasProperty( NUMBERING_IS_NUMBER ) )
+                    {
+                        if( xMultiPropSet.is() )
+                            aAny = rPropSetHelper.getValue(
+                                       NUMBERING_IS_NUMBER, xMultiPropSet );
+                        else
+                            aAny = rPropSetHelper.getValue(
+                                       NUMBERING_IS_NUMBER, xPropSet );
+
+                        bool bIsNumber;
+                        aAny >>= bIsNumber;
+                        if( ! bIsNumber )
+                            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                      XML_IS_LIST_HEADER,
+                                                      XML_TRUE );
+                    }
                 }
             }
         }
