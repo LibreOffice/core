@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-07-23 14:01:00 $
+*  last change: $Author: dfoster $ $Date: 2003-08-12 14:01:51 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -169,10 +169,10 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             // Creates a ScriptProvider ( if one is not created allready )
             createScriptProvider( aURL.Complete );
 
-            Reference< provider::XScript > xFunc =
+            Reference< provider::XScript > xScript =
                 m_xScriptProvider->getScript( aURL.Complete );
-            validateXRef( xFunc,
-                "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
+            validateXRef( xScript,
+                "ScriptProtocolHandler::dispatchWithNotification: validate xScript - unable to obtain XScript interface" );
 
 
             Sequence< Any > inArgs( 0 );
@@ -203,7 +203,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    }
                }
             }
-            invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
+            invokeResult = xScript->invoke( inArgs, outIndex, outArgs );
             bSuccess = sal_True;
         }
 
