@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-25 13:19:56 $
+#   last change: $Author: hjs $ $Date: 2002-08-22 17:26:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,12 @@ avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP$(TNR)TARGET)"!=""
+ZIP$(TNR)ISO_LANGDIRS*=$(ZIPISO_LANGDIRS)
+.IF "$(ZIP$(TNR)ISO_LANGDIRS)"==""
+langdir_type*=longlang
+.ELSE			# "$(ZIP$(TNR)ISO_LANGDIRS)"==""
+langdir_type*=iso
+.ENDIF			# "$(ZIP$(TNR)ISO_LANGDIRS)"==""
 ZIP$(TNR)DIR*=$(ZIPDIR)
 ZIP$(TNR)FLAGS*=$(ZIPFLAGS)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
@@ -108,7 +114,7 @@ zip$(TNR)langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) .
 .ELSE			# "$(GUI)"=="UNX"
 zip$(TNR)langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
-zip$(TNR)alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip$(TNR)langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+zip$(TNR)alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip$(TNR)langdirs) $(eq,$($(langdir_type)_$i),$j  $i $(NULL))))
 .ENDIF			# "$(ZIP$(TNR)TARGET)"!=""
 
 .IF "$(ZIP$(TNR)TARGETN)"!=""
@@ -137,12 +143,12 @@ $(ZIP$(TNR)TARGETN) :
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP$(TNR)TMP).zip >& $(NULLDEV)
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIP$(TNR)DIR)) $(command_seperator) zip $(ZIP$(TNR)FLAGS) $(ZIP$(TNR)TMP).zip $(ZIP$(TNR)LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIP$(TNR)DIR)) $(command_seperator) zip $(ZIP$(TNR)FLAGS) $(ZIP$(TNR)TMP).zip $(ZIP$(TNR)LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
     +$(COPY) $(ZIP$(TNR)TMP).zip $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)    
     +$(RM) $(ZIP$(TNR)TMP).zip
 .ELSE			# "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
-    +-zip $(ZIP$(TNR)FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
+    +-zip $(ZIP$(TNR)FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -156,25 +162,25 @@ $(ZIP$(TNR)TARGETN) :
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP$(TNR)TMP).zip >& $(NULLDEV)
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIP$(TNR)DIR)) $(command_seperator) zip $(ZIP$(TNR)FLAGS) $(ZIP$(TNR)TMP).zip $(ZIP$(TNR)LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIP$(TNR)DIR)) $(command_seperator) zip $(ZIP$(TNR)FLAGS) $(ZIP$(TNR)TMP).zip $(ZIP$(TNR)LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
     +$(COPY) $(ZIP$(TNR)TMP).zip  $@ 
     +$(RM) $(ZIP$(TNR)TMP).zip
 .ELSE			# "$(ZIP$(TNR)DIR)" != ""
-    +-zip $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
+    +-zip $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
-    +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR))) $(command_seperator) $(ZIPDEP) $(ZIP$(TNR)FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR)))$/ $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR))) $(command_seperator) $(ZIPDEP) $(ZIP$(TNR)FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR)))$/ $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$($(langdir_type)_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIP$(TNR)DIR)" != ""
-    +-$(ZIPDEP) $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-$(ZIPDEP) $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
-    +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR))) $(command_seperator) $(ZIPDEP) $(ZIP$(TNR)FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR)))$/ $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR))) $(command_seperator) $(ZIPDEP) $(ZIP$(TNR)FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR)))$/ $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$($(langdir_type)_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ELSE			# "$(ZIP$(TNR)DIR)" != ""
-    +-$(ZIPDEP) $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
+    +-$(ZIPDEP) $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$($(langdir_type)_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
