@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Jumper (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.2 2000-10-10 10:31:14 sab Exp $
+	$Id: table.mod,v 1.3 2000-10-10 10:38:31 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -69,6 +69,7 @@
 	table:style-name %styleName; #IMPLIED
 	table:use-cell-protection %boolean; "false"
 	table:cell-protection-key CDATA #IMPLIED
+	table:print-ranges %cell-range-address-list; #IMPLIED
 >
 <!ELEMENT table:scenario EMPTY>
 <!ATTLIST table:scenario
