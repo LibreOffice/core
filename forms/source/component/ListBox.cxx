@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.33 $
+*   $Revision: 1.34 $
 *
-*   last change: $Author: hr $ $Date: 2004-08-02 16:28:56 $
+*   last change: $Author: rt $ $Date: 2004-09-08 14:26:55 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -1020,9 +1020,9 @@ namespace frm
         if (bUseNULL && m_nNULLPos == -1)
         {
             if (m_bBoundComponent)
-                aValueList.insert(aValueList.begin());
+                aValueList.insert(aValueList.begin(), ::rtl::OUString());
 
-            aStringList.insert(aStringList.begin());
+            aStringList.insert(aStringList.begin(), ::rtl::OUString());
             m_nNULLPos = 0;
         }
 
