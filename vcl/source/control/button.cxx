@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:32:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2179,8 +2179,8 @@ void RadioButton::ImplInitSettings( BOOL bFont,
     if ( bBackground )
     {
         Window* pParent = GetParent();
-        if ( (pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-            || IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
+        if ( !IsControlBackground() &&
+            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) ) )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -3194,8 +3194,8 @@ void CheckBox::ImplInitSettings( BOOL bFont,
     if ( bBackground )
     {
         Window* pParent = GetParent();
-        if ( ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
-            || IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
+        if ( !IsControlBackground() &&
+            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) ) )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
