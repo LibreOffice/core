@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:13:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,22 +114,11 @@ private:
     CheckBox    aAutoUpdateFields;
     CheckBox    aAutoUpdateCharts;
 
-    FixedLine   aCaptionFL;
-    CheckBox    aCaptionCB;
-    FixedText   aCaptionFT;
-    PushButton  aCaptionPB;
-
     FixedLine   aSettingsFL;
     FixedText   aMetricFT;
     ListBox     aMetricLB;
     FixedText   aTabFT;
     MetricField aTabMF;
-
-    FixedLine   aCompatFL;
-    CheckBox    aPrinterMetricsCB;
-    CheckBox    aMergeDistCB;
-    CheckBox    aMergeDistPageStartCB;
-    CheckBox    aTabAlignment;
 
     SwWrtShell* pWrtShell;
     sal_Bool    bHTMLMode;
@@ -141,9 +130,8 @@ private:
     DECL_LINK(UpdateHdl, CheckBox* );
 
 public:
-                        SwLoadOptPage( Window* pParent,
-                                         const SfxItemSet& rSet );
-                        ~SwLoadOptPage();
+    SwLoadOptPage( Window* pParent, const SfxItemSet& rSet );
+    ~SwLoadOptPage();
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -151,10 +139,10 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 class SwCaptionOptDlg : public SfxSingleTabDialog
 {
 public:
@@ -179,12 +167,25 @@ public:
 /*-----------------31.08.96 10.09-------------------
 
 --------------------------------------------------*/
+
+class SwCaptionPreview : public Window
+{
+private:
+    String          maText;
+    Point           maDrawPos;
+public:
+                    SwCaptionPreview( Window* pParent, const ResId& rResId );
+    void            SetPreviewText( const String& rText );
+    virtual void    Paint( const Rectangle& rRect );
+};
+
 class SwCaptionOptPage : public SfxTabPage
 {
 private:
+    FixedText       aCheckFT;
     SvxCheckListBox aCheckLB;
 
-    FixedText       aSampleText;
+    FixedLine       aSettingsGroupFL;
     FixedText       aCategoryText;
     CaptionComboBox aCategoryBox;
     FixedText       aFormatText;
@@ -193,11 +194,19 @@ private:
     Edit            aTextEdit;
     FixedText       aPosText;
     ListBox         aPosBox;
+
+    FixedLine       aNumCaptFL;
     FixedText       aFtLevel;
     ListBox         aLbLevel;
     FixedText       aFtDelim;
     Edit            aEdDelim;
-    FixedLine       aSettingsGroupFL;
+
+    FixedLine       aCategoryFL;
+    FixedText       aCharStyleFT;
+    ListBox         aCharStyleLB;
+    CheckBox        aApplyBorderCB;
+
+    SwCaptionPreview    aPreview;
 
     String          sSWTable;
     String          sSWFrame;
@@ -213,6 +222,8 @@ private:
     String          sEnd;
     String          sAbove;
     String          sBelow;
+
+    String          sNone;
 
     SwFldMgr        *pMgr;
     USHORT          eType;
