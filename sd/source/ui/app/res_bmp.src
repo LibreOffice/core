@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:08:45 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 17:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <svtools/style.hrc>
 #include "glob.hrc"
 #include "res_bmp.hrc"
+
 PushButton RID_TIME_BUTTON
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
