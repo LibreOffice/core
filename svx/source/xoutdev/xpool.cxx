@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:43:47 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttr
     ppPoolDefaults[XATTR_FILLFLOATTRANSPARENCE  -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, FALSE );
 
     // Reserven fuer FillItems
-    ppPoolDefaults[XATTR_FILLRESERVED2          -XATTR_START] = new SfxVoidItem(XATTR_FILLRESERVED2);
+    ppPoolDefaults[XATTR_SECONDARYFILLCOLOR     -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     ppPoolDefaults[XATTR_FILLRESERVED3          -XATTR_START] = new SfxVoidItem(XATTR_FILLRESERVED3);
     ppPoolDefaults[XATTR_FILLRESERVED4          -XATTR_START] = new SfxVoidItem(XATTR_FILLRESERVED4);
     ppPoolDefaults[XATTR_FILLRESERVED5          -XATTR_START] = new SfxVoidItem(XATTR_FILLRESERVED5);
@@ -369,7 +369,7 @@ void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttr
     pSlotIds[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = 0;
 
     // Fill-Reserven
-    pSlotIds[XATTR_FILLRESERVED2        -XATTR_START] = 0;
+    pSlotIds[XATTR_SECONDARYFILLCOLOR   -XATTR_START] = 0;
     pSlotIds[XATTR_FILLRESERVED3        -XATTR_START] = 0;
     pSlotIds[XATTR_FILLRESERVED4        -XATTR_START] = 0;
     pSlotIds[XATTR_FILLRESERVED5        -XATTR_START] = 0;
