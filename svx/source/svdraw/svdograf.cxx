@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-15 13:25:16 $
+ *  last change: $Author: aw $ $Date: 2002-05-30 12:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,7 +937,8 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
                 // #98825# Look if graphics animation is disabled by
                 // accessibility options
-                if(bEnable)
+                if(rInfoRec.pPV // #99632# This may be zero when it's an animated GIF /e.g.)
+                    && bEnable)
                 {
                     const SdrView& rTargetView = rInfoRec.pPV->GetView();
                     const SvtAccessibilityOptions& rOpt = ((SdrView&)rTargetView).getAccessibilityOptions();
