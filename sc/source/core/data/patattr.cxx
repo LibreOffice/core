@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 20:27:25 $
+ *  last change: $Author: nn $ $Date: 2001-04-19 18:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,15 +670,30 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 
 void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 {
-    SfxItemSet* pSet = &GetItemSet();
-    const SfxItemSet* pOldSet = &pOldAttrs->GetItemSet();
+    SfxItemSet& rThisSet = GetItemSet();
+    const SfxItemSet& rOldSet = pOldAttrs->GetItemSet();
+
+    const SfxPoolItem* pThisItem;
+    const SfxPoolItem* pOldItem;
 
     for ( USHORT nWhich=ATTR_PATTERN_START; nWhich<=ATTR_PATTERN_END; nWhich++ )
     {
-        const SfxPoolItem* pItem1 = &pSet->Get( nWhich );
-        const SfxPoolItem* pItem2 = &pOldSet->Get( nWhich );
-        if ( pItem1 == pItem2 )
-            pSet->ClearItem( nWhich );
+        //  only items that are set are interesting
+        if ( rThisSet.GetItemState( nWhich, FALSE, &pThisItem ) == SFX_ITEM_SET )
+        {
+            if ( rOldSet.GetItemState( nWhich, TRUE, &pOldItem ) == SFX_ITEM_SET )
+            {
+                //  item is set in OldAttrs (or its parent) -> compare pointers
+                if ( pThisItem == pOldItem )
+                    rThisSet.ClearItem( nWhich );
+            }
+            else
+            {
+                //  not set in OldAttrs -> compare item value to default item
+                if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nWhich ) )
+                    rThisSet.ClearItem( nWhich );
+            }
+        }
     }
 }
 
