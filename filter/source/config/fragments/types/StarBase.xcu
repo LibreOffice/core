@@ -1,0 +1,13 @@
+    <node oor:name="StarBase" oor:op="replace">
+        <prop oor:name="DetectService"><value>org.openoffice.comp.dbflt.DBTypeDetection</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/sdatabase*</value></prop>
+        <prop oor:name="Extensions"><value>odb</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.sun.xml.base</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarOffice XML (Base)</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="de">StarBase</value>
+            <value xml:lang="en-US">StarBase</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>StarBase 6.0</value></prop>
+    </node>
