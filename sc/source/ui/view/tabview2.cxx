@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:32:16 $
+ *  last change: $Author: nn $ $Date: 2001-02-28 14:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,14 +465,27 @@ void ScTabView::SelectAllTables()
 
 BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
                         long nWindowX, long nWindowY, ScDocument* pDoc, USHORT nTab,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow )
+                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+                        USHORT nFixPosX, USHORT nFixPosY )
 {
     double fZoomFactor = (double)Fraction(nZoom,100);
     fScaleX *= fZoomFactor;
     fScaleY *= fZoomFactor;
 
     long nBlockX = 0;
-    for (USHORT nCol=nStartCol; nCol<=nEndCol; nCol++)
+    USHORT nCol;
+    for (nCol=0; nCol<nFixPosX; nCol++)
+    {
+        //  for frozen panes, add both parts
+        USHORT nColTwips = pDoc->GetColWidth( nCol, nTab );
+        if (nColTwips)
+        {
+            nBlockX += (long)(nColTwips * fScaleX);
+            if (nBlockX > nWindowX)
+                return FALSE;
+        }
+    }
+    for (nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
         USHORT nColTwips = pDoc->GetColWidth( nCol, nTab );
         if (nColTwips)
@@ -482,8 +495,21 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
                 return FALSE;
         }
     }
+
     long nBlockY = 0;
-    for (USHORT nRow=nStartRow; nRow<=nEndRow; nRow++)
+    USHORT nRow;
+    for (nRow=0; nRow<nFixPosY; nRow++)
+    {
+        //  for frozen panes, add both parts
+        USHORT nRowTwips = pDoc->GetRowHeight( nRow, nTab );
+        if (nRowTwips)
+        {
+            nBlockY += (long)(nRowTwips * fScaleY);
+            if (nBlockY > nWindowY)
+                return FALSE;
+        }
+    }
+    for (nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
         USHORT nRowTwips = pDoc->GetRowHeight( nRow, nTab );
         if (nRowTwips)
@@ -493,6 +519,7 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
                 return FALSE;
         }
     }
+
     return TRUE;
 }
 
@@ -530,36 +557,70 @@ USHORT ScTabView::CalcZoom( SvxZoomType eType, USHORT nOldZoom )
                     if ( nTab < nStartTab && nTab > nEndTab )
                         nTab = nStartTab;
 
-                    //  Wegen der Pixel-Rundungs-Arie kann man zuverlaessig nur nachrechnen,
-                    //  ob ein bestimmter Zoom in das Fenster passt - darum wird geschachtelt
+                    ScSplitPos eUsedPart = aViewData.GetActivePart();
 
-                    Size aWinSize = pGridWin[aViewData.GetActivePart()]->GetOutputSizePixel();
-
-                    ScDocShell* pDocSh = aViewData.GetDocShell();
-                    double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
-                    double nPPTY = ScGlobal::nScreenPPTY;
-
-                    USHORT nMin = MINZOOM;
-                    USHORT nMax = MAXZOOM;
-                    while ( nMax > nMin )
+                    USHORT nFixPosX = 0;
+                    USHORT nFixPosY = 0;
+                    if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
                     {
-                        USHORT nTest = (nMin+nMax+1)/2;
-                        if ( lcl_FitsInWindow(
-                                    nPPTX, nPPTY, nTest, aWinSize.Width(), aWinSize.Height(),
-                                    pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow ) )
-                            nMin = nTest;
-                        else
-                            nMax = nTest-1;
+                        //  use right part
+                        eUsedPart = (WhichV(eUsedPart)==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
+                        nFixPosX = aViewData.GetFixPosX();
+                        if ( nStartCol < nFixPosX )
+                            nStartCol = nFixPosX;
                     }
-                    DBG_ASSERT( nMin == nMax, "Schachtelung ist falsch" );
-                    nZoom = nMin;
+                    if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
+                    {
+                        //  use bottom part
+                        eUsedPart = (WhichH(eUsedPart)==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
+                        nFixPosY = aViewData.GetFixPosY();
+                        if ( nStartRow < nFixPosY )
+                            nStartRow = nFixPosY;
+                    }
 
-                    // 1 paar {} wg compiler bug
-                    if ( nZoom != nOldZoom )
-                    {   for (USHORT i=0; i<2; i++)
+                    if (pGridWin[eUsedPart])
+                    {
+                        //  Because scale is rounded to pixels, the only reliable way to find
+                        //  the right scale is to check if a zoom fits
+
+                        Size aWinSize = pGridWin[eUsedPart]->GetOutputSizePixel();
+
+                        //  for frozen panes, use sum of both parts for calculation
+
+                        if ( nFixPosX )
+                            aWinSize.Width() += GetGridWidth( SC_SPLIT_LEFT );
+                        if ( nFixPosY )
+                            aWinSize.Height() += GetGridHeight( SC_SPLIT_TOP );
+
+                        ScDocShell* pDocSh = aViewData.GetDocShell();
+                        double nPPTX = ScGlobal::nScreenPPTX / pDocSh->GetOutputFactor();
+                        double nPPTY = ScGlobal::nScreenPPTY;
+
+                        USHORT nMin = MINZOOM;
+                        USHORT nMax = MAXZOOM;
+                        while ( nMax > nMin )
                         {
-                            aViewData.SetPosX( (ScHSplitPos) i, nStartCol );
-                            aViewData.SetPosY( (ScVSplitPos) i, nStartRow );
+                            USHORT nTest = (nMin+nMax+1)/2;
+                            if ( lcl_FitsInWindow(
+                                        nPPTX, nPPTY, nTest, aWinSize.Width(), aWinSize.Height(),
+                                        pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow,
+                                        nFixPosX, nFixPosY ) )
+                                nMin = nTest;
+                            else
+                                nMax = nTest-1;
+                        }
+                        DBG_ASSERT( nMin == nMax, "Schachtelung ist falsch" );
+                        nZoom = nMin;
+
+                        if ( nZoom != nOldZoom )
+                        {
+                            // scroll to block only in active split part
+                            // (the part for which the size was calculated)
+
+                            if ( nStartCol <= nEndCol )
+                                aViewData.SetPosX( WhichH(eUsedPart), nStartCol );
+                            if ( nStartRow <= nEndRow )
+                                aViewData.SetPosY( WhichV(eUsedPart), nStartRow );
                         }
                     }
                 }
