@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-02 13:01:26 $
+ *  last change: $Author: er $ $Date: 2001-03-14 14:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 
 #ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
 #include <tools/solmath.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX //autogen wg. International
-#include <tools/intn.hxx>
 #endif
 #include <unotools/localedatawrapper.hxx>
 
