@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-01 14:49:00 $
+ *  last change: $Author: ssa $ $Date: 2001-11-07 08:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
          (nSysWinMode & SYSTEMWINDOW_MODE_DIALOG) )
     {
         // create window with a small border ?
-        if ( (nStyle & (WB_BORDER | WB_NOBORDER /*| WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE*/)) == WB_BORDER )
+        if ( (nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER )
         {
             ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_FRAME );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
