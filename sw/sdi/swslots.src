@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:29:19 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1585,11 +1585,11 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ polish ] = "Przerzuæ w poziomie";
     SlotName[ portuguese_brazilian ] = "GraphicFlipHorizontal";
     SlotName[ japanese ] = "ã‰º”½“]";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
-    SlotName[ chinese_traditional ] = "¤ô¥­¤Ï¬M";
+    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
+    SlotName[ chinese_traditional ] = "¤ô¥­Â½Âà";
     SlotName[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
     SlotName[ dutch ] = "Horizontaal spiegelen";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
+    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
     SlotName[ language_user1 ] = " ";
     SlotName[ greek ] = "Ïñéæüíôéá áíáóôñïöŞ";
     SlotName[ korean ] = "¼öÆòÀ¸·Î ´ëÄª";
@@ -1611,11 +1611,11 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ polish ] = "Przerzuæ w pionie";
     SlotName[ portuguese_brazilian ] = "FlipImageVertical";
     SlotName[ japanese ] = "¶‰E”½“]";
-    SlotName[ chinese_simplified ] = "´¹Ö±·´Ó³";
-    SlotName[ chinese_traditional ] = "««ª½¤Ï¬M";
+    SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
+    SlotName[ chinese_traditional ] = "««ª½Â½Âà";
     SlotName[ arabic ] = "ÇäÚßÇÓ ÑÃÓí";
     SlotName[ dutch ] = "Verticaal spiegelen";
-    SlotName[ chinese_simplified ] = "´¹Ö±·´Ó³";
+    SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
     SlotName[ greek ] = "ÊÜèåôç áíáóôñïöŞ";
     SlotName[ korean ] = "¼öÁ÷À¸·Î ´ëÄª";
     SlotName[ turkish ] = "Dikey yansıt";
@@ -2287,11 +2287,11 @@ SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
     SlotName[ polish ] = "Przerzuæ na parzystych stronach";
     SlotName[ portuguese_brazilian ] = "MirrorOnEvenPages";
     SlotName[ japanese ] = "‹ô”Íß°¼Ş‚É”½“]";
-    SlotName[ chinese_simplified ] = "·´Ó³µ½Å¼ÊıÒ³Ãæ";
-    SlotName[ chinese_traditional ] = "¤Ï¬M¨ì°¸¼Æ­¶­±";
+    SlotName[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ";
+    SlotName[ chinese_traditional ] = "Â½Âà¨ì°¸¼Æ­¶­±";
     SlotName[ arabic ] = "ÇäÚßÇÓ Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
     SlotName[ dutch ] = "Op even pagina's spiegelen";
-    SlotName[ chinese_simplified ] = "·´Ó³µ½Å¼ÊıÒ³Ãæ";
+    SlotName[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ";
     SlotName[ greek ] = "Êáôïğôñéóìüò óå ìïíİò óåëßäåò";
     SlotName[ korean ] = "Â¦¼ö ÆäÀÌÁö¿¡¼­ ´ëÄª";
     SlotName[ turkish ] = "Çift numaralı sayfalarda yansıt";
@@ -2859,11 +2859,11 @@ SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
     SlotName[ polish ] = "Przerzuæ grafikê na nieparzystych stronach";
     SlotName[ portuguese_brazilian ] = "MirrorGraphicOnEvenPages";
     SlotName[ japanese ] = "¸Ş×Ì¨¯¸‚ğ‹ô”Íß°¼Ş‚É”½“]";
-    SlotName[ chinese_simplified ] = "Í¼ĞÎ·´Ó³µ½Å¼ÊıÒ³Ãæ";
-    SlotName[ chinese_traditional ] = "¹Ï¤ù¤Ï¬M¨ì°¸¼Æ­¶­±";
+    SlotName[ chinese_simplified ] = "Í¼ĞÎ·­×ªµ½Å¼ÊıÒ³Ãæ";
+    SlotName[ chinese_traditional ] = "¹Ï¤ùÂ½Âà¨ì°¸¼Æ­¶­±";
     SlotName[ arabic ] = "ÇäÚßÇÓ ÇáÕæÑÉ Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
     SlotName[ dutch ] = "Afbeeldingen op even pagina's spiegelen";
-    SlotName[ chinese_simplified ] = "Í¼ĞÎ·´Ó³µ½Å¼ÊıÒ³Ãæ";
+    SlotName[ chinese_simplified ] = "Í¼ĞÎ·­×ªµ½Å¼ÊıÒ³Ãæ";
     SlotName[ language_user1 ] = " ";
     SlotName[ greek ] = "ÁíáóôñïöŞ ãñáöéêïı óôéò Üñôéåò óåëßäåò";
     SlotName[ korean ] = "Â¦¼ö ÆäÀÌÁö»óÀÇ ±×·¡ÇÈ ´ëÄª";
@@ -6101,7 +6101,7 @@ SfxSlotInfo FN_REPEAT_SEARCH
     SlotName[ portuguese_brazilian ] = "RepeatSearch";
     SlotName[ japanese ] = "ÄŒŸõ";
     SlotName[ chinese_simplified ] = "ÖØ¸´ËÑÑ°";
-    SlotName[ chinese_traditional ] = "­«½Æ´M§ä";
+    SlotName[ chinese_traditional ] = "­«½Æ·j´M";
     SlotName[ arabic ] = "ÊßÑÇÑ ÇáÈÍË";
     SlotName[ dutch ] = "Zoeken herhalen";
     SlotName[ chinese_simplified ] = "ÖØ¸´ËÑÑ°";
@@ -8047,11 +8047,11 @@ SfxSlotInfo FN_TOOL_HMIRROR
     SlotName[ polish ] = "Przerzuæ w poziomie";
     SlotName[ portuguese_brazilian ] = "ObjectFlipHorizontal";
     SlotName[ japanese ] = "ã‰º”½“]";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
-    SlotName[ chinese_traditional ] = "¤ô¥­¤Ï¬M";
+    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
+    SlotName[ chinese_traditional ] = "¤ô¥­Â½Âà";
     SlotName[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
     SlotName[ dutch ] = "Horizontaal spiegelen";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
+    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
     SlotName[ greek ] = "ÁíáóôñïöŞ ïñéæüíôéá";
     SlotName[ korean ] = "¼öÆò ´ëÄª";
     SlotName[ turkish ] = "Yatay yansıt";
@@ -8099,11 +8099,11 @@ SfxSlotInfo FN_TOOL_VMIRROR
     SlotName[ polish ] = "Przerzuæ w pionie";
     SlotName[ portuguese_brazilian ] = "ObjectFlipVertical";
     SlotName[ japanese ] = "¶‰E”½“]";
-    SlotName[ chinese_simplified ] = "´¹Ö±·½Ïò·´Ó³";
-    SlotName[ chinese_traditional ] = "««ª½¤Ï¬M";
+    SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
+    SlotName[ chinese_traditional ] = "««ª½Â½Âà";
     SlotName[ arabic ] = "ÇäÚßÇÓ ÑÃÓí";
     SlotName[ dutch ] = "Verticaal spiegelen";
-    SlotName[ chinese_simplified ] = "´¹Ö±·½Ïò·´Ó³";
+    SlotName[ chinese_simplified ] = "´¹Ö±·­×ª";
     SlotName[ greek ] = "ÁíáóôñïöŞ êáôáêüñõöá";
     SlotName[ korean ] = "¼öÁ÷ ´ëÄª";
     SlotName[ turkish ] = "Dikey yansıt";
@@ -8559,11 +8559,11 @@ SfxSlotInfo FN_VSCROLLBAR
     SlotName[ polish ] = "Pionowy pasek przewijania obrazu";
     SlotName[ portuguese_brazilian ] = "ViewVertScroll";
     SlotName[ japanese ] = "‚’¼½¸Û°ÙÊŞ°";
-    SlotName[ chinese_simplified ] = "´¹Ö±Ïò¹ö¶¯À¸";
+    SlotName[ chinese_simplified ] = "´¹Ö±¹ö¶¯Ìõ";
     SlotName[ chinese_traditional ] = "««ª½¼v¹³¨÷¶b";
     SlotName[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
     SlotName[ dutch ] = "Verticale schuifbalk";
-    SlotName[ chinese_simplified ] = "´¹Ö±Ïò¹ö¶¯À¸";
+    SlotName[ chinese_simplified ] = "´¹Ö±¹ö¶¯Ìõ";
     SlotName[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
     SlotName[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ ¹Ù";
     SlotName[ turkish ] = "Dikey kaydırma çubuğu";
@@ -8715,11 +8715,11 @@ SfxSlotInfo SID_TEMPLATE_LOAD
     SlotName[ polish ] = "£aduj style";
     SlotName[ portuguese_brazilian ] = "FormatStylesLoad";
     SlotName[ japanese ] = "½À²Ù‚Ì“Ç‚İ‚İ";
-    SlotName[ chinese_simplified ] = "×°ÔØÑùÊ½";
-    SlotName[ chinese_traditional ] = "¸Ë¸ü¼Ë¦¡";
+    SlotName[ chinese_simplified ] = "×°ÈëÑùÊ½";
+    SlotName[ chinese_traditional ] = "¸ü¤J¼Ë¦¡";
     SlotName[ arabic ] = "ÊÍãíá ÃäãÇØ";
     SlotName[ dutch ] = "Opmaakprofielen laden";
-    SlotName[ chinese_simplified ] = "×°ÔØÑùÊ½";
+    SlotName[ chinese_simplified ] = "×°ÈëÑùÊ½";
     SlotName[ greek ] = "Öüñôùóç ğñïôığùí";
     SlotName[ korean ] = "·Îµå À¯Çü";
     SlotName[ turkish ] = "Şablonları yükle";
