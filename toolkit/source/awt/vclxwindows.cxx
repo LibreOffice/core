@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-03-08 08:55:03 $
+ *  last change: $Author: tbe $ $Date: 2002-03-11 17:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEBUTTON_HXX_
 #include <toolkit/awt/vclxaccessiblebutton.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECHECKBOX_HXX_
+#include <toolkit/awt/vclxaccessiblecheckbox.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWLISTBOX_HXX_
 #include <toolkit/awt/vclxaccessibledropdownlistbox.hxx>
@@ -547,12 +550,6 @@ IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
-{
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
-}
-
-
 void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -748,6 +745,12 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         }
     }
 }
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleCheckBox( this );
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXRadioButton
