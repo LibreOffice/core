@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoaderFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:54:12 $
+ *  last change:$Date: 2004-01-28 19:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._fwl;
 
+import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 
 import lib.Status;
@@ -105,14 +106,13 @@ public class FrameLoaderFactory extends TestCase {
         XInterface oObj = null;
         Object oInterface = null ;
 
-        //now get the OButtonControl
         try {
             oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.frame.FrameLoaderFactory") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get GridControl", e );
+            throw new StatusException("Couldn't get FrameLoaderFactory", e );
         }
 
         if (oInterface == null) {
@@ -129,6 +129,16 @@ public class FrameLoaderFactory extends TestCase {
         XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         tEnv.addObjRelation("XMSF.serviceNames", xNA.getElementNames());
+
+        // com.sun.star.container.XContainerQuery
+        NamedValue[] querySequenze = new NamedValue[1];
+        NamedValue query = new NamedValue();
+        query.Name = "Name";
+        query.Value = "com.sun.star.frame.Bibliography";
+        querySequenze[0] = query;
+
+        tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
+            querySequenze);
 
         return tEnv;
     } // finish method getTestEnvironment
