@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdta.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 13:21:21 $
+ *  last change: $Author: rt $ $Date: 2004-12-02 09:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <linguistic/misc.hxx>
+#include <misc.hxx>
 
 #include "thesdta.hxx"
 
