@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-12-09 11:14:18 $
+ *  last change: $Author: od $ $Date: 2002-12-10 14:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,9 +532,11 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
         Color aBackground(pSh->GetShapeBackgrd());
-//        EditEngine* pEditEng = pSdrView->GetTextEditOutlinerView()->GetEditView().GetEditEngine();
         pOutliner->SetBackgroundColor(aBackground);
-//        pEditEng->SetBackgroundColor(aBackground);
+        // OD 09.12.2002 #103045# - set default horizontal text direction at outliner
+        EEHorizontalTextDirection aDefHoriTextDir =
+            pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
+        pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
     sal_Bool bRet = pSdrView->BegTextEdit( pObj, pPV, pWin, TRUE, pOutliner );
 
