@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:44:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,14 +1772,6 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         pImp->nMacroMode = pMacroModeItem ? pMacroModeItem->GetValue() : MacroExecMode::NEVER_EXECUTE;
     }
 
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-    if ( pUpdateDocItem && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE )
-    {
-        // no execution of macros if all updates and dialogs prohibited
-        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-        return;
-    }
-
     // get setting from configuration if required
     sal_Int16 nAutoConformation = 0;
     if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG
@@ -2123,7 +2115,7 @@ void SfxObjectShell::InPlaceActivate( BOOL bActivate )
     } */
 }
 
-BOOL SfxObjectShell::HasMacros_Impl() const
+BOOL SfxObjectShell::HasMacrosLib_Impl() const
 {
     BOOL bHasMacros = (pImp->pBasicLibContainer != 0);
     try
@@ -2151,6 +2143,38 @@ BOOL SfxObjectShell::HasMacros_Impl() const
     }
     catch( uno::Exception& )
     {
+    }
+
+    return bHasMacros;
+}
+
+BOOL SfxObjectShell::HasMacrosStor_Impl() const
+{
+    sal_Bool bHasMacros = sal_False;
+    if ( pImp->m_xDocStorage.is() )
+        bHasMacros = StorageHasMacros( pImp->m_xDocStorage );
+
+    return bHasMacros;
+}
+
+BOOL SfxObjectShell::StorageHasMacros( const uno::Reference< embed::XStorage >& xStorage )
+{
+    sal_Bool bHasMacros = sal_False;
+
+    if ( xStorage.is() )
+    {
+        try
+        {
+            bHasMacros =
+                ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Basic") )
+                    && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Basic") ) )
+                ||  ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Scripts") )
+                    && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Scripts") ) );
+        }
+        catch ( uno::Exception& )
+        {
+            OSL_ASSERT( "Something is wrong with the checked storage!\n" );
+        }
     }
 
     return bHasMacros;
