@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-06 08:14:05 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 10:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1479,9 +1482,21 @@ namespace pcr
 
             if ( pMacroDlg->Execute() == RET_OK )
             {
-                // formerly (before we outsources this code) here was a SetModified on the SdrModel of
-                // the shell we're working with ...
-                // TODO: need a replacement for this
+                // OJ: #96105#
+                {
+                    Reference<XChild> xChild;
+                    m_aIntrospectee >>= xChild;
+                    Reference<XModifiable> xModifiable(xChild,UNO_QUERY);
+                    while( !xModifiable.is() && xChild.is() )
+                    {
+                        Reference<XInterface> xParent = xChild->getParent();
+                        xModifiable = Reference<XModifiable>(xParent,UNO_QUERY);
+                        xChild = Reference<XChild>(xParent,UNO_QUERY);
+                    }
+
+                    if ( xModifiable.is() )
+                        xModifiable->setModified(sal_True);
+                }
 
                 const SvxMacroTableDtor& aTab = pMacroTabPage->GetMacroTbl();
 
@@ -2718,6 +2733,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2002/08/06 08:14:05  oj
+ *  #102058# set control type to BCT_COMBOBOX
+ *
  *  Revision 1.48  2001/12/10 07:13:25  fs
  *  #95263# when retrieving the columns of a SQL-command form, use a '0=1' filter instead of the one supplied with the statement
  *
