@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-08 18:58:55 $
+ *  last change: $Author: cdt $ $Date: 2002-04-29 11:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2253,8 +2253,6 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
             mpDDInfo->bStarterOfDD = TRUE;
             mpDDInfo->aDndStartSel = aSel;
 
-            if ( GetCursor() )
-                GetCursor()->Hide();
 
             if ( IsTracking() )
                 EndTracking();  // Vor D&D Tracking ausschalten
@@ -2264,6 +2262,9 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
             if ( !IsReadOnly() )
                 nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
             rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
+            if ( GetCursor() )
+                GetCursor()->Hide();
+
         }
     }
 }
