@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.14 $
+#  $Revision: 1.15 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:31:25 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:17:11 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,17 +48,19 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=NotesAccessExample
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+EXAMPLE_NAME=NotesAccessExample
+OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
+
+APP_NAME=NotesAccess
+APP_JAR=$(OUT_APP_CLASS)/$(APP_NAME).jar
 
 JAVAFILES  = \
 	NotesAccess.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+CLASSFILES = $(patsubst %.java,$(OUT_APP_CLASS)/%.class,$(JAVAFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/Notes.jar\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
 
 
 # Targets
@@ -68,32 +70,50 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OFFICE_CLASSES_DIR)/Notes.jar : 
+NotesAPIs : 
 	@echo --------------------------------------------------------------------------------
 	@echo This example uses external APIs from Lotus Notes/Domino. You can download a 
-	@echo trial version from "$(QM)http://www.lotus.com/downloads$(QM)". After installing
+	@echo trial version from "$(QM)http://www.lotus.com/downloads$(QM)". After installation
 	@echo please do the following:
 	@echo  1. Add the install path to the PATH or LD_LIBRARY_PATH of this shell.
-	@echo  2. Copy the "$(QM)Notes.jar$(QM)" into your "$(QM)$(OFFICE_CLASSES_DIR)$(QM)" 
-	@echo     directory or adapt the SDK_CLASSPATH variable in this makefile to use the
-	@echo     right "$(QM)Notes.jar$(QM)" of your installation.
+	@echo     e.g "$(QM)PATH=C:\Program Files\lotus\notes;...$(QM)"
+	@echo  2. Add the "$(QM)Notes.jar$(QM)" to your CLASSPATH
+	@echo     e.g. "$(QM)CLASSPATH=C:\Program Files\lotus\notes\Notes.jar;$(QM)"
 	@echo --------------------------------------------------------------------------------
 
 
-$(CLASSFILES) : $(OFFICE_CLASSES_DIR)/Notes.jar $(JAVAFILES) 
+$(CLASSFILES) : $(JAVAFILES) 
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_APP_CLASS) $(JAVAFILES) 
 
-JavaNotesAccessExample : $(CLASSFILES)
+$(OUT_APP_CLASS)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Class-Path: Notes.jar> $@
+	@echo Main-Class: com.sun.star.lib.loader.Loader>> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(APP_JAR) : $(OUT_APP_CLASS)/$(APP_NAME).mf $(OUT_APP_CLASS)/$(APP_NAME).class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(APP_NAME).mf $(APP_NAME).class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+JavaNotesAccessExample : NotesAPIs $(APP_JAR)
 	@echo --------------------------------------------------------------------------------
+	@echo NOTE: Before you run this example make sure that the exaternal "$(QM)Notes.jar$(QM)" can
+	@echo be found besides "$(QM)$(APP_JAR)"$(QM)
+	@echo and that the PATH variable includes the Notes installation directory.
+	@echo -   
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make NotesAccess.run
+	@echo $(MAKE) NotesAccess.run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) "" "" "" "Stocks.nsf"
+%.run: $(APP_JAR)
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< "$(QM)$(QM)" "$(QM)$(QM)" "$(QM)$(QM)" Stocks.nsf
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst \\,\,$(subst /,$(PS),$(OUT_APP_CLASS)))
