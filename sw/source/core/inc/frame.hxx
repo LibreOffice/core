@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:45:27 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ class SvxBrushItem;
 class SwTxtFtn;
 struct SwPosition;
 struct SwCrsrMoveState;
+// OD 20.05.2003 #108784#
+class SwDrawVirtObj;
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
@@ -508,6 +510,11 @@ public:
 
     void AppendDrawObj( SwDrawContact *pObj );
     void RemoveDrawObj( SwDrawContact *pToRemove );
+    // OD 20.05.2003 #108784# - <AppendDrawObj>/<RemoveDrawObj> for virtual drawing objects
+    void AppendVirtDrawObj( SwDrawContact* _pDrawContact,
+                            SwDrawVirtObj* _pDrawVirtObj );
+    void RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
+                            SwDrawVirtObj* _pDrawVirtObj );
 
     //Arbeiten mit der Kette der FlyFrms
     void  AppendFly( SwFlyFrm *pNew );
