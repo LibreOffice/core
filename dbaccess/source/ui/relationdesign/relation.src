@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:17:41 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,104 +73,6 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
-#ifndef DBAUI_TOOLBOX_HXX
-#include "toolbox.hrc"
-#endif
-
-#define MN_EDIT     20
-#define MN_VIEW     21
-#define MN_EXTRA    22
-#define MN_INDEX    23
-#define MN_INSERT   24
-#define MN_WIN      30
-#define MN_HELP     31
-
-
-ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 3 , 1 ) ;
-    //  Size = MAP_APPFONT ( 200 , 14 ) ;
-    OutputSize = TRUE ;
-    Align = BOXALIGN_TOP ;
-    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
-    HideWhenDeactivate = TRUE ;
-    HelpId = HID_TLB_RELATIONDESIGN ;
-
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_EDITDOC ;
-            HelpId = SID_EDITDOC ;
-            Checkable = TRUE;
-            Text [ de ] = "Bearbeiten" ;
-            Text [ en-US ] = "Edit";
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_SAVEDOC ;
-            HelpId = SID_SAVEDOC ;
-            Text [ de ] = "Speichern" ;
-            Text [ en-US ] = "Save";
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PRINTDOCDIRECT ;
-            HelpId = SID_PRINTDOCDIRECT ;
-            Hide = TRUE;
-            Text [ de ] = "Drucken" ;
-            Text [ en-US ] = "Print";
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_UNDO ;
-            HelpId = SID_UNDO ;
-            MID_UNDO
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_REDO ;
-            HelpId = SID_REDO ;
-            MID_REDO
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            MID_DBUI_JOIN_ADD_TABLE
-        };
-        ToolboxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR;
-        };
-        ToolboxItem
-        {
-            MID_DBUI_REALTION_ADD_RELATION
-        };
-/*      ToolBoxItem
-        {
-            Identifier = SID_ZOOM_OUT ;
-            HelpId = SID_ZOOM_OUT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOM_IN ;
-            HelpId = SID_ZOOM_IN ;
-        };
-*/
-    };
-};
 
 String STR_QUERY_REL_EDIT_RELATION
 {
