@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-18 12:03:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,10 @@ namespace basegfx
             {
                 double fBig, fSum, fDum;
                 double fStorage[RowSize];
-                sal_uInt16 a, b, c, nAMax;
+                sal_uInt16 a, b, c;
+
+                // #i30874# Initialize nAMax (compiler warns)
+                sal_uInt16 nAMax = 0;
 
                 nParity = 1;
 
