@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 11:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,8 @@ void SvXMLImportPropertyMapper::importXML(
             }
             else
             {
-                if( XML_NAMESPACE_NONE == nPrefix || XML_NAMESPACE_UNKNOWN == nPrefix )
+                if( XML_NAMESPACE_NONE == nPrefix || XML_NAMESPACE_UNKNOWN == nPrefix ||
+                   (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) != 0 )
                 {
                     if( !xAttrContainer.is() )
                     {
