@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 15:32:21 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ greek ] = "O~bjects";
         Text[ dutch ] = "O~bjects";
         Text[ french ] = "Objects";
-        Text[ spanish ] = "O~bjects";
+        Text[ spanish ] = "O~bjetos";
         Text[ finnish ] = "O~bjects";
         Text[ italian ] = "Oggetti";
         Text[ danish ] = "O~bjects";
