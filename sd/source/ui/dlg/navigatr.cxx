@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:03:35 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ SdNavigatorWin::SdNavigatorWin(
     aToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     aToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
     aToolbox.SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
+    aToolbox.SetItemBits( TBI_DRAGTYPE, aToolbox.GetItemBits( TBI_DRAGTYPE ) | TIB_DROPDOWNONLY );
 
     // TreeListBox
     // set position below toolbox
