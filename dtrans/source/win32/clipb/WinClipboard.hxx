@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:10:17 $
+ *  last change: $Author: tra $ $Date: 2001-07-24 07:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -140,11 +140,10 @@ protected:
 
 class CWinClipboard :
     public CWinClipboardDummy,
-    public cppu::WeakComponentImplHelper5<
+    public cppu::WeakComponentImplHelper4<
         ::com::sun::star::datatransfer::clipboard::XClipboardEx, \
         ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
         ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
-        ::com::sun::star::lang::XEventListener,
         ::com::sun::star::lang::XServiceInfo >
 {
 public:
@@ -196,13 +195,6 @@ public:
     //------------------------------------------------
 
     virtual void SAL_CALL disposing();
-
-    //------------------------------------------------
-    // XEventListener
-    //------------------------------------------------
-
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo

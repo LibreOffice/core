@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:10:17 $
+ *  last change: $Author: tra $ $Date: 2001-07-24 07:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,9 @@ namespace
 //------------------------------------------------------------------------
 // ctor
 //------------------------------------------------------------------------
-
+/*XEventListener,*/
 CWinClipboard::CWinClipboard( const Reference< XMultiServiceFactory >& rServiceManager, const OUString& aClipboardName ) :
-    WeakComponentImplHelper5< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XEventListener, XServiceInfo >( m_aCbListenerMutex ),
+    WeakComponentImplHelper4< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XServiceInfo >( m_aCbListenerMutex ),
     m_SrvMgr( rServiceManager )
 {
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
@@ -246,13 +246,6 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 
-    // if the listener supports XComponent then we will register
-    // as a listener so that we can remove the listener from our
-    // list in case of disposing if not already done
-    Reference< XComponent > xComponent( listener, UNO_QUERY );
-    if ( xComponent.is( ) )
-        xComponent->addEventListener( static_cast< XEventListener* >(this) );
-
     rBHelper.aLC.addInterface( getCppuType( &listener ), listener );
 }
 
@@ -272,12 +265,6 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
         throw IllegalArgumentException( OUString::createFromAscii( "empty reference" ),
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
-
-    // remove ourself as an eventlistener from this component if
-    // it supports XComponent
-    Reference< XComponent > xComponent( listener, UNO_QUERY );
-    if ( xComponent.is( ) )
-        xComponent->removeEventListener( static_cast< XEventListener* >(this) );
 
     rBHelper.aLC.removeInterface( getCppuType( &listener ), listener );
 }
@@ -338,18 +325,6 @@ void SAL_CALL CWinClipboard::disposing()
 
     // force destruction of the impl class
     m_pImpl.reset( NULL );
-}
-
-// -------------------------------------------------
-// XEventListener
-// -------------------------------------------------
-
-void SAL_CALL CWinClipboard::disposing( const EventObject& aEvent ) throw(RuntimeException)
-{
-    Reference< XClipboardListener > xClipboardListener( aEvent.Source, UNO_QUERY );
-
-    if ( xClipboardListener.is( ) )
-        removeClipboardListener( xClipboardListener );
 }
 
 // -------------------------------------------------
