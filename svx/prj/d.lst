@@ -440,6 +440,7 @@ hedabu: ..\inc\xflboxy.hxx %_DEST%\inc%_EXT%\svx\xflboxy.hxx
 hedabu: ..\inc\xflbstit.hxx %_DEST%\inc%_EXT%\svx\xflbstit.hxx
 hedabu: ..\inc\xflbtoxy.hxx %_DEST%\inc%_EXT%\svx\xflbtoxy.hxx
 hedabu: ..\inc\xflclit.hxx %_DEST%\inc%_EXT%\svx\xflclit.hxx
+hedabu: ..\inc\xsflclit.hxx %_DEST%\inc%_EXT%\svx\xsflclit.hxx
 hedabu: ..\inc\xflgrit.hxx %_DEST%\inc%_EXT%\svx\xflgrit.hxx
 hedabu: ..\inc\xflftrit.hxx %_DEST%\inc%_EXT%\svx\xflftrit.hxx
 hedabu: ..\inc\xflhtit.hxx %_DEST%\inc%_EXT%\svx\xflhtit.hxx
@@ -572,6 +573,7 @@ hedabu: ..\inc\prtqry.hxx %_DEST%\inc%_EXT%\svx\prtqry.hxx
 hedabu: ..\inc\msoleexp.hxx %_DEST%\inc%_EXT%\svx\msoleexp.hxx
 hedabu: ..\inc\unoapi.hxx %_DEST%\inc%_EXT%\svx\unoapi.hxx
 hedabu: ..\inc\sdasaitm.hxx %_DEST%\inc%_EXT%\svx\sdasaitm.hxx
+hedabu: ..\inc\sdasitm.hxx %_DEST%\inc%_EXT%\svx\sdasitm.hxx
 hedabu: ..\inc\unofill.hxx %_DEST%\inc%_EXT%\svx\unofill.hxx
 hedabu: ..\source\dialog\grfpage.hxx %_DEST%\inc%_EXT%\svx\grfpage.hxx
 hedabu: ..\inc\grfcrop.hxx %_DEST%\inc%_EXT%\svx\grfcrop.hxx
@@ -625,6 +627,11 @@ hedabu: ..\inc\pgrditem.hxx %_DEST%\inc%_EXT%\svx\pgrditem.hxx
 hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
 hedabu: ..\inc\countryid.hxx %_DEST%\inc%_EXT%\svx\countryid.hxx
+hedabu: ..\inc\svdoashp.hxx %_DEST%\inc%_EXT%\svx\svdoashp.hxx
+hedabu: ..\inc\extrusioncontrols.hxx %_DEST%\inc%_EXT%\svx\extrusioncontrols.hxx
+hedabu: ..\inc\extrusionbar.hxx %_DEST%\inc%_EXT%\svx\extrusionbar.hxx
+hedabu: ..\inc\fontworkbar.hxx %_DEST%\inc%_EXT%\svx\fontworkbar.hxx
+hedabu: ..\inc\fontworkgallery.hxx %_DEST%\inc%_EXT%\svx\fontworkgallery.hxx
 hedabu: ..\inc\svxdlg.hxx %_DEST%\inc%_EXT%\svx\svxdlg.hxx
 hedabu: ..\inc\acorrcfg.hxx %_DEST%\inc%_EXT%\svx\acorrcfg.hxx
 hedabu: ..\inc\htmlcfg.hxx %_DEST%\inc%_EXT%\svx\htmlcfg.hxx
