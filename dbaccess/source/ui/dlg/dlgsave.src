@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:14:51 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ ModalDialog DLG_SAVE_AS
         Text[ portuguese_brazilian ] = "O nome \"$name$:  $\" j� existe.\nPor favor digite outro nome.";
         Text[ japanese ] = "'$name$:  $' の名前はすでにあります。\n新しい名前を入力してください。";
         Text[ korean ] = "'$#$' 이름이 이미 있습니다.\n다른 이름을 입력해주십시오.";
-        Text[ chinese_simplified ] = "这个名称 '$Name: not supported by cvs2svn $' 已经存在。\n请输入一个有效的名称。";
+        Text[ chinese_simplified ] = "这个名称 '$#$' 已经存在。\n请输入其他名称。";
         Text[ chinese_traditional ] = "名稱 '$#$' 已經存在。\n請輸入另一個名稱。";
         Text[ turkish ] = "'$#$' halihaz�rda mevcut. \nL�tfen ba�ka bir isim giriniz.";
         Text[ arabic ] = "�����'$name$:  $' ����� ������.\n������ ����� ��� ����.";
@@ -450,7 +450,7 @@ ModalDialog DLG_SAVE_AS
         Text[ portuguese_brazilian ] = "O nome \"$name$:  $\" j� existe.\nDeseja substitu�-lo?";
         Text[ japanese ] = "'$name$:  $' の名前はすでにあります。\n上書きしますか。";
         Text[ korean ] = "이름 '$#$'이(가) 이미 있습니다.\n덮어쓰시겠습니까?";
-        Text[ chinese_simplified ] = "这个名称 '$Name: not supported by cvs2svn $' 已经存在。\n要改写？";
+        Text[ chinese_simplified ] = "这个名称 '$#$' 已经存在。\n要覆盖吗？";
         Text[ chinese_traditional ] = "名稱 '$#$' 已經存在。\n要覆寫？";
         Text[ turkish ] = "'$#$' halihaz�rda mevcut. \n�zerine yazmak istermisiniz?";
         Text[ arabic ] = "����� '$name$:  $' ����� ������.\n�� ���� ������� ����";
