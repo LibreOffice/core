@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-09 18:10:33 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 10:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aEdLeadZeroes   ( this, ResId( ED_LEADZEROES ) ),
         aEdDecimals     ( this, ResId( ED_DECIMALS ) ),
         aFtLanguage     ( this, ResId( FT_LANGUAGE ) ),
-        aLbLanguage     ( this, ResId( LB_LANGUAGE ) ),
+        aLbLanguage     ( this, ResId( LB_LANGUAGE ), FALSE ),
         aGbOptions      ( this, ResId( GB_OPTIONS ) ),
         aFtComment      ( this, ResId( FT_COMMENT ) ),
         aStrEurope      ( ResId( STR_EUROPE) ),
