@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: jb $ $Date: 2000-12-03 11:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ namespace configmgr
             Tree                        getTree() const { return m_aTree; }
 
         // self-locked methods for dispose handling
+            bool isAlive()  const;
             void checkAlive()   const;
             bool disposeTree(bool bForce);
             void disposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);

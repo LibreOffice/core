@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 20:32:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-03 11:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,9 +164,14 @@ void ApiTreeImpl::setNodeInstance(configuration::NodeRef const& aNode, UnoInterf
 
 //-------------------------------------------------------------------------
 
+bool ApiTreeImpl::isAlive() const
+{
+    return m_aNotifier->m_aListeners.checkAlive();
+}
+//-------------------------------------------------------------------------
 void ApiTreeImpl::checkAlive() const
 {
-    bool bAlive = m_aNotifier->m_aListeners.checkAlive();
+    bool bAlive = this->isAlive();
     if (!bAlive)
     {
         OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Object was disposed"));
@@ -391,6 +396,9 @@ uno::Any SAL_CALL ApiTreeImpl::queryInterface(uno::Type const& rType) throw()
 
 void SAL_CALL ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
 {
+    // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+    UnoInterfaceRef xKeepAlive( getUnoInstance() );
+
     // Tree write Lock should be set by sender
     setParentTree(0);
     implDisposeTree();
@@ -447,7 +455,11 @@ void ApiRootTreeImpl::implSetLocation()
 
 void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 {
-    OSL_ASSERT(pSource == m_pNotificationSource);
+    // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+    UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
+
+    OSL_VERIFY( implSetNotificationSource(0) == pSource || !m_aTreeImpl.isAlive());
+
     m_pNotificationSource = 0;
 
     m_aTreeImpl.disposeTree(true);
@@ -509,11 +521,16 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
     using configuration::NodeChanges;
     using configuration::RelativePath;
 
-    OSL_ASSERT( m_pNotificationSource == pSource );
+    // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+    UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
 
+    // do not dipatch if we are dying/dead anyway
+    if (m_aTreeImpl.isAlive())
     try
     {
         OClearableWriteSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
+
+        OSL_ASSERT( m_pNotificationSource == pSource );
 
         Tree aTree( m_aTreeImpl.getTree() );
 
@@ -576,8 +593,12 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 
 void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSource)
 {
+    // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+    UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
+
 #ifdef DBG_UTIL
     using configuration::Path;
+
 
     {
         OReadSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
@@ -594,7 +615,7 @@ void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSo
     }
 #endif
 
-    OSL_VERIFY( implSetNotificationSource(0) == pSource );
+    OSL_VERIFY( implSetNotificationSource(0) == pSource || !m_aTreeImpl.isAlive());
 
     m_aTreeImpl.disposeTree(true);
 }
