@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-10 06:57:45 $
+ *  last change: $Author: cd $ $Date: 2002-07-11 10:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
 #endif
+#ifndef _RTL_DIGEST_H_
+#include <rtl/digest.h>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 using namespace vos;
 using namespace rtl;
@@ -122,6 +128,33 @@ OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 OSecurity           OfficeIPCThread::maSecurity;
 #endif
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
+
+
+String CreateMD5FromString( const OUString& aMsg )
+{
+    rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
+    if ( handle > 0 )
+    {
+        const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
+        sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
+        sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
+        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nSize ];
+
+        rtl_digest_init( handle, pData, nSize );
+        rtl_digest_get( handle, pMD5KeyBuffer, nMD5KeyLen );
+        rtl_digest_destroy( handle );
+
+        // Create hex-value string from the MD5 value to keep the string size minimal
+        OUStringBuffer aBuffer(( nMD5KeyLen * 2 ) + 1 );
+        for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
+            aBuffer.append( (sal_Int32)pMD5KeyBuffer[i], 16 );
+
+        delete []pMD5KeyBuffer;
+        return aBuffer.makeStringAndClear();
+    }
+
+    return String();
+}
 
 class ProcessEventsClass_Impl
 {
@@ -450,9 +483,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if( pGlobalOfficeIPCThread )
         return IPC_STATUS_OK;
 
-    ::rtl::OUString aOfficeInstallPath;
     ::rtl::OUString aUserInstallPath;
-    ::rtl::OUString aLastIniFile;
     ::rtl::OUString aDummy;
 
     ::vos::OStartupInfo aInfo;
@@ -476,7 +507,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     // First we try to create our pipe if this fails we try to connect. We have to do this
     // in a loop because the the other office can crash or shutdown between createPipe
     // and connectPipe!!
-    pThread->maPipeIdent = pThread->maPipeIdent + OUString::valueOf( (sal_Int32)aDummy.hashCode() );
+    OUString aUserInstallPathHashCode = CreateMD5FromString( aDummy );
+
+    // Check result to create a hash code from the user install path
+    if ( aUserInstallPathHashCode.getLength() == 0 )
+        return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
+
+    pThread->maPipeIdent = pThread->maPipeIdent + aUserInstallPathHashCode;
 
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
     do
