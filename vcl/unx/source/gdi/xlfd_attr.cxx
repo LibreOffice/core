@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 01:20:44 $
+ *  last change: $Author: cp $ $Date: 2000-12-19 11:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,13 @@ Attribute::TagFeature( unsigned short nFeature )
         mnFeature |= XLFD_FEATURE_APPLICATION_FONT;
     }
     if (   (nFeature & XLFD_FEATURE_INTERFACE_FONT)
-        && (   (strcmp(mpName, "arial")       == 0) /* european */
+        && (   (strcmp(mpName, "arial")       == 0) /* european          */
             || (strcmp(mpName, "helvetica")   == 0)
-            || (strcmp(mpName, "hg mincho l") == 0) /* japanese */
-            || (strcmp(mpName, "heiseimin")   == 0)
-            || (strcmp(mpName, "myeongjo")    == 0)
-            || (strcmp(mpName, "kai")         == 0) /* chinese */
+            || (strcmp(mpName, "hg mincho l") == 0) /* solaris: japanese */
+            || (strcmp(mpName, "minchol")     == 0) /* turbo linux: jisx201 / jisx208 */
+            || (strcmp(mpName, "heiseimin")   == 0) /* */
+            || (strcmp(mpName, "myeongjo")    == 0) /* solaris: korean   */
+            || (strcmp(mpName, "kai")         == 0) /* solaris: chinese  */
            )
        )
     {
