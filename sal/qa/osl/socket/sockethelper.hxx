@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sockethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:24:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ extern "C"
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/wait.h>
 
 #else                                   // Windows
 
@@ -192,7 +193,10 @@ void printSocketResult( oslSocketResult eResult );
 /** if 4 parts of an IP addr are equal to specified values
 */
 sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq2, sal_Int8 seq3, sal_Int8 seq4 );
-
+/** if the IP or hostname is  availble( alive )
+*/
+//sal_Bool ifAvailable( const char *  stringAddrOrHostName );
+sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName );
 /*
 class ClientSocketThread : public Thread
 class ServerSocketThread : public Thread
