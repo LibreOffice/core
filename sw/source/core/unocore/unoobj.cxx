@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:42:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,18 +485,7 @@ void SwXTextCursor::SelectPam(SwPaM& rCrsr, sal_Bool bExpand)
         rCrsr.DeleteMark();
 
 }
-/* -----------------20.05.98 14:59-------------------
- *
- * --------------------------------------------------*/
-void lcl_Append(sal_Unicode*& pCurrent, const SVBT16* pStr, sal_uInt32 nLen)
-{
-    for(sal_uInt32 i = 0; i < nLen; i++)
-    {
-         sal_uInt16 nVal = SVBT16ToShort( *pStr );
-        pStr += 1;
-        *pCurrent++ = nVal;
-    }
-}
+
 /* -----------------20.05.98 14:59-------------------
  *
  * --------------------------------------------------*/
@@ -983,13 +972,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
 /******************************************************************
  * SwXTextCursor
  ******************************************************************/
-/*-----------------24.03.98 14:49-------------------
 
---------------------------------------------------*/
-uno::Reference< uno::XInterface >  SwXTextCursor_NewInstance_Impl()
-{
-    return (cppu::OWeakObject*)new SwXTextCursor();
-};
 /*-- 09.12.98 14:19:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1048,18 +1031,7 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent, const SwPosition&
     }
     pUnoCrsr->Add(this);
 }
-/*-- 09.12.98 14:19:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXTextCursor::SwXTextCursor(SwXText* pParent) :
-    xParentText(pParent),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
-    pLastSortOptions(0),
-    eType(CURSOR_INVALID),
-    aLstnrCntnr( (util::XSortable*)this)
-{
-
-}
 /* -----------------04.03.99 09:02-------------------
  *
  * --------------------------------------------------*/
