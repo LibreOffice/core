@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
+ *  last change: $Author: mba $ $Date: 2000-10-30 13:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -161,6 +161,7 @@ using namespace ::com::sun::star::ucb;
 #include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
+#include <ucbhelper/contentbroker.hxx>
 
 #include "ucbhelp.hxx"
 #include "helper.hxx"
@@ -536,6 +537,7 @@ public:
     sal_Bool bDontCreateCancellable : 1;
     sal_Bool bDownloadDone          : 1;
     sal_Bool bStreamReady: 1;
+    sal_Bool bIsStorage: 1;
 
     sal_uInt16       nPrio;
 
@@ -562,8 +564,8 @@ public:
     SfxVersionTableDtor*    pVersions;
     FileSource_Impl*    pSource;
     FileSink_Impl*      pSink;
-    TempFile*           pTempDir;
-    TempFile*           pTempFile;
+    ::utl::TempFile*           pTempDir;
+    ::utl::TempFile*           pTempFile;
 
     SfxPoolCancelManager* GetCancelManager();
 
@@ -617,7 +619,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
     bUsesCache(sal_True), pCancellable( 0 ),
     nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
-    bForceSynchron( sal_False ), bStreamReady( sal_False ),
+    bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
     bDownloadDone( sal_True ), nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
@@ -797,6 +799,7 @@ SvStream* SfxMedium::GetOutStream()
 
         if ( pImp->pTempFile )
         {
+//            pOutStream = ::utl::UcbStreamHelper::CreateStream( pImp->pTempFile->GetURL(), nStorOpenMode );
             pOutStream = new SvFileStream( aName, STREAM_STD_READWRITE );
             CloseStorage();
         }
@@ -837,7 +840,7 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
 //------------------------------------------------------------------
 const String& SfxMedium::GetPhysicalName() const
 {
-    if ( !pImp->pTempFile && (INET_PROT_FILE != GetURLObject().GetProtocol() ) )
+    if ( !aName.Len() )
         (( SfxMedium*)this)->CreateFileStream();
 
     // return the name then
@@ -847,39 +850,27 @@ const String& SfxMedium::GetPhysicalName() const
 //------------------------------------------------------------------
 void SfxMedium::CreateFileStream()
 {
-    GetMedium_Impl();
-
-    if( pInStream && ! pImp->pTempFile )
+    ForceSynchronStream_Impl( TRUE );
+    GetInStream();
+    if( pInStream )
     {
-        DBG_WARNING( "W1: erzeuge FileStream" );
-
-        pImp->pTempFile = new TempFile;
-        pImp->pTempFile->EnableKillingFile( sal_True );
-
-        aName = pImp->pTempFile->GetName();
+        if ( !pImp->pTempFile )
+            CreateTempFile();
 
         SvFileStream aTmpStream( aName, STREAM_STD_WRITE );
         char        *pBuf = new char [8192];
         sal_uInt32   nErr = ERRCODE_NONE;
 
         pInStream->Seek( 0L );
-
-        // Stream synchron downloaden
-        while( !pInStream->IsEof() &&
-               ( nErr == ERRCODE_NONE || nErr == ERRCODE_IO_PENDING ) )
+        while( !pInStream->IsEof() && nErr == ERRCODE_NONE )
         {
             sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
             nErr = pInStream->GetError();
             aTmpStream.Write( pBuf, nRead );
-            if( nErr == ERRCODE_IO_PENDING )
-            {
-                Application::Yield();
-                pInStream->ResetError();
-            }
         }
+
         delete pBuf;
         pImp->bIsTemp = sal_True;
-
         CloseInStream_Impl();
     }
 }
@@ -907,13 +898,16 @@ sal_Bool SfxMedium::Commit()
 //------------------------------------------------------------------
 sal_Bool SfxMedium::IsStorage()
 {
-    if ( aStorage.Is() )
-        return sal_True;
+    if ( bTriedStorage )
+        return pImp->bIsStorage;
 
     if ( pImp->pTempFile )
-        return SotStorage::IsStorageFile( pImp->pTempFile->GetName() );
+        pImp->bIsStorage = SotStorage::IsStorageFile( pImp->pTempFile->GetFileName() );
     else
-        return SotStorage::IsStorageFile( GetInStream() );
+        pImp->bIsStorage = SotStorage::IsStorageFile( GetInStream() );
+    if ( !pImp->bIsStorage )
+        bTriedStorage = TRUE;
+    return pImp->bIsStorage;
 }
 
 //------------------------------------------------------------------
@@ -982,7 +976,7 @@ sal_Bool SfxMedium::TryStorage()
     ::rtl::OUString aTempDoku = aExtraData.copy( nIndex1, nIndex2 - nIndex1 );
 
     // create a temp dir to unpack to
-    pImp->pTempDir = new TempFile( NULL, sal_True );
+    pImp->pTempDir = new ::utl::TempFile( NULL, sal_True );
     pImp->pTempDir->EnableKillingFile( sal_True );
 
     // unpack all files to temp dir
@@ -997,10 +991,10 @@ sal_Bool SfxMedium::TryStorage()
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > files(0);
 
-    if( !xPacker->unpack( pImp->pTempDir->GetName(), aPath, files, aArgs ) )
+    if( !xPacker->unpack( pImp->pTempDir->GetURL(), aPath, files, aArgs ) )
         return sal_False;
 
-    String aNewName = pImp->pTempDir->GetName();
+    String aNewName = pImp->pTempDir->GetURL();
     aNewName += '/';
     aNewName += String( aTempDoku );
     CloseInStream_Impl();
@@ -1065,15 +1059,15 @@ SvStorage* SfxMedium::GetStorage()
     BOOL bResetSorage = FALSE;
     SvStream *pStream;
 
-    INetURLObject aStorageName;
+    String aStorageName;
     if ( pImp->pTempFile )
     {
-        aStorageName.SetURL( pImp->pTempFile->GetName() );
+        aStorageName = pImp->pTempFile->GetFileName();
         pStream = GetOutStream();
     }
     else
     {
-        aStorageName = GetURLObject();
+        aStorageName = GetURLObject().GetMainURL();
         pStream = GetInStream();
         if ( pStream )
         {
@@ -1089,8 +1083,7 @@ SvStorage* SfxMedium::GetStorage()
         return aStorage;
 
     aStorage = new SvStorage( pStream, FALSE );
-    if ( INET_PROT_FILE == aStorageName.GetProtocol() )
-       aStorage->SetName( aStorageName.PathToFileName() );
+    aStorage->SetName( aStorageName );
 
     if ( aStorage->GetError() == SVSTREAM_OK )
         GetVersionList();
@@ -1134,9 +1127,9 @@ SvStorage* SfxMedium::GetStorage()
 
                 if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
                 {
-                        // Stream ins TempDir auspacken
-                    TempFile        aTempFile;
-                    String          aTmpName = aTempFile.GetName();
+                    // Stream ins TempDir auspacken
+                    ::utl::TempFile        aTempFile;
+                    String          aTmpName = aTempFile.GetURL();
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
                     ZCodec aCodec;
@@ -1177,6 +1170,7 @@ SvStorage* SfxMedium::GetStorage()
         pStream->Seek( 0L );
     }
 
+    pImp->bIsStorage = aStorage.Is();
     return aStorage;
 }
 
@@ -1185,6 +1179,7 @@ void SfxMedium::CloseStorage()
 {
     aStorage.Clear();
     bTriedStorage = sal_False;
+    pImp->bIsStorage = sal_False;
 }
 
 //------------------------------------------------------------------
@@ -1223,7 +1218,7 @@ void SfxMedium::Transfer_Impl()
         BOOL            bTryTransfer = FALSE;
         String          aName;
         INetURLObject   aDest = GetURLObject();
-        INetURLObject   aSource( pImp->pTempFile->GetName() );
+        INetURLObject   aSource( pImp->pTempFile->GetURL() );
 
         aName = GetLongName();
         if ( !aName.Len() )
@@ -1601,55 +1596,35 @@ void SfxMedium::DownLoad( const Link& aLink )
 //------------------------------------------------------------------
 void SfxMedium::Init_Impl()
 /*  [Beschreibung]
-    Setzt in den Lo.Ischen Namen eine gueltige ::com::sun::star::util::URL (Falls zuvor ein Filename
+    Setzt in den Logischen Namen eine gueltige ::com::sun::star::util::URL (Falls zuvor ein Filename
     drin war) und setzt den physikalschen Namen auf den Filenamen, falls
     vorhanden.
  */
 
 {
     pImp->pVersions = NULL;
-    INetURLObject aUrl;
-    aUrl.SetSmartProtocol( INET_PROT_FILE );
-    aUrl.SetSmartURL( aLogicName );
 
-    // Ein leerer LogicName soll auch einen leeren Namen ergeben
-    if( aUrl.GetProtocol() == INET_PROT_FILE && aLogicName.Len() )
+    if( aLogicName.Len() )
     {
-        String aTemp( aUrl.GetMainURL() );
-        INetURLObject aObj( aTemp );
-        if ( INET_PROT_FTP == aObj.GetProtocol() )
+        INetURLObject aUrl( aLogicName );
+        INetProtocol eProt = aUrl.GetProtocol();
+        if ( eProt == INET_PROT_NOT_VALID )
         {
-#if 0   //(dv)
-            CntINetConfig::load (NULL, NULL);
-            INetProxyConfig aProxyConfig;
-            if (CntINetConfig::shouldUseProxy (NULL, aTemp, aProxyConfig) &&
-                aProxyConfig.hasFtpProxy())
-                // ::com::sun::star::chaos::Anchor wird on demand erzeugt
-                aLogicName = aTemp;
-            else
-                pImp->xAnchor = xAnchor;
-#endif
+            DBG_ERROR ( "Unknown protocol!" );
         }
         else
         {
-            aLogicName = aUrl.GetMainURL();
-            if ( aObj.GetProtocol() == INET_PROT_FILE )
+            // try to convert the URL into a physical name
+            if ( !::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName ) && eProt == INET_PROT_FILE )
             {
-                if( !pImp->bIsTemp )
-                    aName = aUrl.PathToFileName();
-                else
-                    DBG_ERROR( "What name ?!" );
-            }
-            else
-            {
-                if( aName == aLogicName || !aName.Len() )
+                // no content provider found for this URL scheme; try if UCB is present
+                ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+                if ( !pBroker )
+                    // no UCB present; all file-URLs are local file names
                     aName = aUrl.PathToFileName();
             }
         }
     }
-    else if( aLogicName.Len() )
-        // Falls ein FileName reinkam
-        aLogicName = aUrl.GetMainURL();
 
     SetIsRemote_Impl();
 
@@ -1658,6 +1633,7 @@ void SfxMedium::Init_Impl()
     if ( pSalvageItem )
         pImp->bIsTemp = sal_True;
 }
+
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium()
@@ -1810,33 +1786,8 @@ void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
         pImp->aOrigURL = aNameP;
     aLogicName = aNameP;
     DELETEZ( pURLObj );
-
-//(dv)  if ( pImp->xAnchor.Is() && aNameP != pImp->xAnchor->GetViewURL() )
-//(dv)      pImp->xAnchor = NULL;
-
-    if ( aLogicName.Len() )
-    {
-        INetURLObject aUrl;
-        aUrl.SetSmartProtocol( INET_PROT_FILE );
-        aUrl.SetSmartURL( aLogicName );
-        String aTemp( aUrl.GetMainURL() );
-        INetURLObject aObj( aTemp );
-
-        if ( INET_PROT_FTP == aObj.GetProtocol() )
-        {
-#if 0   //(dv)
-            CntINetConfig::load (NULL, NULL);
-            INetProxyConfig aProxyConfig;
-            if (CntINetConfig::shouldUseProxy (NULL, aTemp, aProxyConfig))
-                if (aProxyConfig.hasFtpProxy())
-                    aLogicName = aTemp;
-#endif  //(dv)
-        }
-
-        aLogicName = GetURLObject().GetMainURL();
-    }
-
-    SetIsRemote_Impl();
+    pImp->xContent = ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent > ();
+    Init_Impl();
 }
 
 //----------------------------------------------------------------
@@ -1846,6 +1797,7 @@ const String& SfxMedium::GetOrigURL() const
 }
 
 //----------------------------------------------------------------
+
 void SfxMedium::SetPhysicalName( const String& rNameP )
 {
     if( pImp->pTempFile )
@@ -1856,19 +1808,9 @@ void SfxMedium::SetPhysicalName( const String& rNameP )
 
     aName = rNameP;
     bTriedStorage = sal_False;
-
+    pImp->bIsStorage = sal_False;
     if ( aName.Len() )
-    {
-        INetURLObject aURL;
-        Reference < XContent > xContent;
-
-        aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetSmartURL( aName );
-
-        xContent = UCB_Helper::CreateContent( aURL.GetMainURL() );
-        if ( xContent.is() )
-            pImp->xContent = xContent;
-    }
+        pImp->xContent = Reference < XContent >();
 }
 
 //------------------------------------------------------------------
@@ -1888,7 +1830,7 @@ sal_Bool SfxMedium::IsTemporary() const
 sal_Bool SfxMedium::Exists( sal_Bool bForceSession )
 {
     DBG_ERROR( "Not implemented!" );
-    return sal_False;
+    return sal_True;
 }
 
 //------------------------------------------------------------------
@@ -2164,12 +2106,7 @@ ErrCode SfxMedium::CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowModeChan
             {
                 // erst der Zugriff auf den Storage erzeugt den Fehlercode
                 SvStorageRef aStor;
-#if SUPD<508
-                aStor = GetStorage();
-                if ( !aStor.Is() )
-#endif
-                    GetInStream();
-
+                GetInStream();
                 if( aStor.Is() && bReadOnly && !bTriesCopy && !pImp->bIsTemp )
                 {
                     SfxApplication *pSfxApp = SFX_APP();
@@ -2591,10 +2528,10 @@ void SfxMedium::CreateTempFile()
     if ( aParent.removeSegment() )
         aParentName = aParent.GetMainURL();
 
-    pImp->pTempFile = new TempFile( &aParentName );
+    pImp->pTempFile = new ::utl::TempFile( &aParentName );
     pImp->pTempFile->EnableKillingFile( sal_True );
 
-    aName = pImp->pTempFile->GetName();
+    aName = pImp->pTempFile->GetFileName();
 
     CloseOutStream_Impl();
     CloseStorage();
