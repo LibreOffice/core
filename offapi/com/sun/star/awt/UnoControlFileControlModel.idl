@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFileControlModel.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-24 11:11:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,13 @@ service UnoControlFileControlModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies that the content of the control cannot be modified by the user.
+
+        @since #100115#
+     */
+    [optional, property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
     /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
