@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,9 +614,9 @@ void Image::GetColorTransformArrays( ImageColorTransform eColorTransform,
 {
     if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
     {
-        rpSrcColor = new Color[ 3 ];
-        rpDstColor = new Color[ 3 ];
-        rColorCount = 3;
+        rpSrcColor = new Color[ 4 ];
+        rpDstColor = new Color[ 4 ];
+        rColorCount = 4;
 
         rpSrcColor[ 0 ] = Color( COL_BLACK );
         rpDstColor[ 0 ] = Color( COL_WHITE );
@@ -626,6 +626,9 @@ void Image::GetColorTransformArrays( ImageColorTransform eColorTransform,
 
         rpSrcColor[ 2 ] = Color( COL_BLUE );
         rpDstColor[ 2 ] = Color( COL_WHITE );
+
+        rpSrcColor[ 3 ] = Color( COL_LIGHTBLUE );
+        rpDstColor[ 3 ] = Color( COL_WHITE );
     }
     else
     {
