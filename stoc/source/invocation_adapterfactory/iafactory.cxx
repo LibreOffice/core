@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2002-08-28 15:06:47 $
+ *  last change: $Author: jl $ $Date: 2002-09-10 10:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,8 @@ inline void AdapterImpl::acquire()
 inline void AdapterImpl::release()
     SAL_THROW( () )
 {
+    bool delete_this = false;
+    {
     MutexGuard guard( m_pFactory->m_mutex );
     if (! ::osl_decrementInterlockedCount( &m_nRef ))
     {
@@ -268,8 +270,11 @@ inline void AdapterImpl::release()
             m_pFactory->m_receiver2adapters.erase( iFind );
             OSL_ASSERT( 1 == erased );
         }
-        delete this;
+        delete_this = true;
     }
+    }
+    if (delete_this)
+        delete this;
 }
 
 //--------------------------------------------------------------------------------------------------
