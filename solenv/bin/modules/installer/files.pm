@@ -2,9 +2,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:27:12 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:34:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ sub read_file
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_file : $localfile"); }
 
-    open( IN, $localfile ) || installer::exiter::exit_program("ERROR: Cannot open file: $localfile", "read_file");
+    open( IN, $localfile ) || installer::exiter::exit_program("ERROR: Cannot open file $localfile for reading", "read_file");
     my @localfile = <IN>;
     close( IN );
 
@@ -104,7 +104,7 @@ sub save_file
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_file : $savefile : $#{$savecontent}"); }
 
-    open( OUT, ">$savefile" );
+    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_file");
     print OUT @{$savecontent};
     close( OUT);
 }
@@ -127,7 +127,7 @@ sub save_hash
         push(@printcontent, $line);
     }
 
-    open( OUT, ">$savefile" );
+    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_hash");
     print OUT @printcontent;
     close( OUT);
 }
@@ -157,7 +157,7 @@ sub save_array_of_hashes
         push(@printcontent, $line);
     }
 
-    open( OUT, ">$savefile" );
+    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_array_of_hashes");
     print OUT @printcontent;
     close( OUT);
 }
