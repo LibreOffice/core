@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:37:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <svx/langitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/scriptspaceitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/shdditem.hxx>
@@ -711,6 +712,13 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SvxLanguageItem   ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
     rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE, bHyphenate ) );
     rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
+
+    // #111216# Script spacing is always off.
+    // The cell attribute isn't used here as long as there is no UI to set it
+    // (don't evaluate attributes that can't be changed).
+    // If a locale-dependent default is needed, it has to go into the cell
+    // style, like the fonts.
+    rEditSet.Put( SvxScriptSpaceItem( FALSE, EE_PARA_ASIANCJKSPACING ) );
 }
 
 void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet ) const
