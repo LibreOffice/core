@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:05:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 using namespace ::std;
 using namespace ::System::Reflection;
 
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -105,6 +106,7 @@ static char const s_usingText [] =
 "                               emitted into the output assembly file\n"
 " -r, --reference               reference metadata from assembly file\n"
 "   <assembly-file>\n"
+" -k, --keyfile                 keyfile needed for strong name\n"
 " --assembly-version <version>  sets assembly version\n"
 " --assembly-description <text> sets assembly description text\n"
 " --assembly-product <text>     sets assembly product name\n"
@@ -136,6 +138,8 @@ static const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("types"), 'T', true },
     { RTL_CONSTASCII_STRINGPARAM("extra"), 'X', true },
     { RTL_CONSTASCII_STRINGPARAM("reference"), 'r', true },
+    { RTL_CONSTASCII_STRINGPARAM("keyfile"), 'k', true },
+    { RTL_CONSTASCII_STRINGPARAM("delaySign"), 'd', true },
     { RTL_CONSTASCII_STRINGPARAM("assembly-version"), '\0', true },
     { RTL_CONSTASCII_STRINGPARAM("assembly-description"), '\0', true },
     { RTL_CONSTASCII_STRINGPARAM("assembly-product"), '\0', true },
@@ -367,6 +371,10 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             get_option_info( OUSTR("reference") );
         OptionInfo const * info_extra =
             get_option_info( OUSTR("extra") );
+        OptionInfo const * info_keyfile =
+            get_option_info( OUSTR("keyfile") );
+        OptionInfo const * info_delaySign =
+            get_option_info( OUSTR("delaySign") );
         OptionInfo const * info_version =
             get_option_info( OUSTR("assembly-version") );
         OptionInfo const * info_product =
@@ -385,7 +393,8 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         vector< OUString > extra_registries;
         vector< OUString > extra_assemblies;
         vector< OUString > explicit_types;
-        OUString version, product, description, company, copyright, trademark;
+        OUString version, product, description, company, copyright, trademark,
+            keyfile, delaySign;
 
         OUString cmd_arg;
         for ( sal_uInt32 nPos = 0; nPos < nCount; )
@@ -423,7 +432,9 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                      !read_argument( &product, info_product, &nPos ) &&
                      !read_argument( &company, info_company, &nPos ) &&
                      !read_argument( &copyright, info_copyright, &nPos ) &&
-                     !read_argument( &trademark, info_trademark, &nPos ))
+                     !read_argument( &trademark, info_trademark, &nPos ) &&
+                     !read_argument( &keyfile, info_keyfile, &nPos ) &&
+                     !read_argument( &delaySign, info_delaySign, &nPos ))
             {
                 oslProcessError rc = osl_getCommandArg( nPos, &cmd_arg.pData );
                 OSL_ASSERT( rc == osl_Process_E_None );
@@ -559,10 +570,37 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         ::System::String * output_dir = ustring_to_String( sys_output_dir );
         ::System::String * output_file = ustring_to_String( filename );
 
+        //Get the key pair for making a strong name
+        StrongNameKeyPair* kp = NULL;
+        if (keyfile.getLength() > 0)
+        {
+            ::System::String * sKeyFile = ustring_to_String(keyfile);
+            try {
+                System::IO::FileStream* fs = new System::IO::FileStream(
+                    sKeyFile, System::IO::FileMode::Open);
+                kp = new StrongNameKeyPair(fs);
+                fs->Close();
+            }
+            catch (System::IO::FileNotFoundException * e)
+            {
+                throw Exception(OUSTR("Could not find the keyfile. Verify the --keyfile argument!"), 0);
+            }
+        }
+        else
+        {
+            if (g_verbose)
+            {
+                ::System::Console::Write(
+                    S"> no key file specified. Cannot create strong name!\n");
+            }
+        }
         // setup assembly info: xxx todo set more? e.g. avoid strong versioning
         AssemblyName * assembly_name = new AssemblyName();
         assembly_name->set_CodeBase( output_dir );
         assembly_name->set_Name( name );
+        if (kp != NULL)
+            assembly_name->set_KeyPair(kp);
+
         if (version.getLength() != 0)
         {
             assembly_name->set_Version(
