@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:00:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,6 @@
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef _XCEPTION_HXX_
-#include <vos/xception.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -3008,7 +3005,7 @@ String SfxViewFrame::GetHelpFile_Impl()
             Reference< ::com::sun::star::beans::XPropertySet > xProp( xController, UNO_QUERY );
             if ( xProp.is() )
             {
-                TRY
+                try
                 {
                     Any aAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "HelpFileName" ) );
                     ::rtl::OUString sTemp ;
@@ -3016,10 +3013,9 @@ String SfxViewFrame::GetHelpFile_Impl()
                     aHelpFileName = String( sTemp );
                     return aHelpFileName;
                 }
-                CATCH_ALL()
+                catch(...)
                 {
                 }
-                END_CATCH;
             }
 
             aHelpFileName = DEFINE_CONST_UNICODE( "schedule.hlp" );
