@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:08:33 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,8 +786,8 @@ TabPage PAGE_GENERAL
                 "globally unique, you have to choose another one.";
         Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, please choose another one.";
         Text [ portuguese ] = "Já existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser únicos, por esta razão é recomendável seleccionar outro nome.";
-        Text [ russian ] = "Ïîä òàêèì èìåíåì óæå ñóùåñòâóåò îäèí èñòî÷íèê äàííûõ. Ïîñêîëüêó èìåíà èñòî÷íèêîâ äàííûõ äîëæíû áûòü óíèêàëüíûìè, íåîáõîäèìî ïğèñâîèòü äğóãîå èìÿ.";
-        Text [ greek ] = "ÕğÜñ÷åé Şäç ìéá ğñïİëåõóç äåäïìİíùí ìå áõôü ôï üíïìá. ÊÜèå üíïìá ôùí ğñïåëåıóåùí ôùí äåäïìİíùí åğéôñİğåôáé íá õğÜñ÷åé ìüíï ìéá öïñÜ. Ğáñáêá ";
+        Text [ russian ] = "Ïîä òàêèì èìåíåì óæå ñóùåñòâóåò îäèí èñòî÷íèê äàííûõ. Ïîñêîëüêó èìåíà èñòî÷íèêîâ äàííûõ äîëæíû áûòü óíèêàëüíûìè, íåîáõîäèìî ïğèñâîèòü äğ";
+        Text [ greek ] = "ÕğÜñ÷åé Şäç ìéá ğñïİëåõóç äåäïìİíùí ìå áõôü ôï üíïìá. ÊÜèå üíïìá ôùí ğñïåëåıóåùí ôùí äåäïìİíùí åğéôñİğåôáé íá õğÜñ÷åé ìüíï ìéá öïñÜ. Ğáñáê";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a déjà été attribué à une autre source de données. Étant donné que les sources de données doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
         Text [ spanish ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente único.";
@@ -837,7 +837,7 @@ TabPage PAGE_GENERAL
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
         Text [ portuguese ] = "Ou foi impossível carregar a biblioteca #lib# do programa ou esta está com defeito. A selecção da fonte de dados ODBC não está disponível.";
         Text [ russian ] = "Áèáëèîòåêà ïğîãğàììû #lib# íå çàãğóæàåòñÿ èëè îíà ïîâğåæäåíà. Âûáîğ èñòî÷íèêà äàííûõ ODBC íå äîñòóïåí.";
-        Text [ greek ] = "Ç âéâëéïèŞêç ôïõ ğñïãñÜììáôïò #lib# äåí Şôáí äõíáôüí íá öïñôùèåß Ş åßíáé åëáôôùìáôéêŞ. Ç åğéëïãŞ ôçò ğñïİëåõóçò ôùí äåäïìİíùí ôïõ ODBC äåí åßíá? ";
+        Text [ greek ] = "Ç âéâëéïèŞêç ôïõ ğñïãñÜììáôïò #lib# äåí Şôáí äõíáôüí íá öïñôùèåß Ş åßíáé åëáôôùìáôéêŞ. Ç åğéëïãŞ ôçò ğñïİëåõóçò ôùí äåäïìİíùí ôïõ ODBC äåí åßí";
         Text [ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbronnen kiezen is niet beschikbaar.";
         Text [ french ] = "La bibliothèque de programme #lib# n'a pas pu être chargée ou est défectueuse. La sélection de la source de données ODBC n'est pas disponible.";
         Text [ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La selección de fuente de datos ODBC no está disponible.";
@@ -886,7 +886,7 @@ TabPage PAGE_GENERAL
         Text [ english ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text [ english_us ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
         Text[ portuguese ] = "Esta plataforma não tem suporte para este tipo de fonte de dados.\nPoderá modificar as definições, contudo a ligação à base de dados é improvável.";
-        Text[ russian ] = "Òèï ıòîãî èñòî÷íèêà äàííûõ íà ıòîé ïëàòôîğìå íà ïîääåğæèâàåòñÿ.\nÂû ìîæåòå èçìåíèòü íàñòğîéêè, íî òîãäà, âåğîÿòíåå âñåãî, Âû íå ñìîæåòå ñåäèíèòüñÿ ñ ıòîé áàçîé äàííûõ.";
+        Text[ russian ] = "Òèï ıòîãî èñòî÷íèêà äàííûõ íà ıòîé ïëàòôîğìå íà ïîääåğæèâàåòñÿ.\nÂû ìîæåòå èçìåíèòü íàñòğîéêè, íî òîãäà, âåğîÿòíåå âñåãî, Âû íå ñìîæåòå ñåä";
         Text[ greek ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ dutch ] = "Dit type gegevensbron wordt op dit platform niet ondersteund.\nU kunt wel de instellingen veranderen, maar vermoedelijk geen verbinding met de database tot stand brengen.";
         Text[ french ] = "Ce type de source de données n'est pas supporté par la plateforme en question.\nMême si les paramètres sont modifiables, une connexion à la BD n'est pas garantie.";
@@ -1667,7 +1667,7 @@ TabPage PAGE_LDAP
         Text[ turkish ] = "~Base DN";
         Text[ arabic ] = "~Base DN";
         Text[ catalan ] = "~Base DN";
-        Text[ language_user1 ] = "ZL: I got this information about Base DN-----------------------------------------Name of the LDAP Base Distinguished Name (DN) to use for LDAP lookupsFormat: Base DN  Example: o=exampleCompany.com,c=US  Specifying a Base DNThe base DN refers to the part of the directory held on your local server. The DN is the LDAP equivalent of the fully qualified domain name. If the Base DN contains spaces, for example o=MyCompany.com, c=US, it must be enclosed by quotation marks. The configuration wizard automatically adds any necessary quotation marks to the base DN.";
+        Text[ language_user1 ] = "ZL: I got this information about Base DN-----------------------------------------Name of the LDAP Base Distinguished Name (DN) to use for LDAP lookupsFormat: Base DN  Example: o=exampleCompany.com,c=US  Specifying a Base DNThe base DN refers to the part";
     };
     Edit ET_BASEDN
     {
@@ -2547,8 +2547,8 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message [ english ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message [ english_us ] = "The name of the deleted data source has already been given to another data source. You have to rename the latter before you can restore the former.";
     Message[ portuguese ] = "O nome da fonte de dados eliminada já foi atribuído a outra fonte de dados! Primeiro terá que mudar o nome a esta última para poder restaurar a actual.";
-    Message[ russian ] = "Âû óæå ïğèñâîèëè äğóãîìó èñòî÷íèêó äàííûõ èìÿ óäàëåíîãî èñòî÷íèêà. Âû äîëæíû ïåğåèìåíîâàòü ïğåæíèé èñòî÷íèê äëÿ âîññòàíîâëåíèÿ òåêóùåãî.";
-    Message[ greek ] = "Ôï üíïìá ôçò ğñïİëåõóçò äåäïìİíùí ğïõ äéáãñÜöçêå, äüèçêå Şäç óå ìéá Üëëç ğñïİëåõóç äåäïìİíùí! Èá ğñİğåé íá ìåôïíïìÜóåôå ôçí õğÜñ÷ïõóá ğñïİ? ";
+    Message[ russian ] = "Âû óæå ïğèñâîèëè äğóãîìó èñòî÷íèêó äàííûõ èìÿ óäàëåíîãî èñòî÷íèêà. Âû äîëæíû ïåğåèìåíîâàòü ïğåæíèé èñòî÷íèê äëÿ âîññòàíîâëåíèÿ òåêóùåãî";
+    Message[ greek ] = "Ôï üíïìá ôçò ğñïİëåõóçò äåäïìİíùí ğïõ äéáãñÜöçêå, äüèçêå Şäç óå ìéá Üëëç ğñïİëåõóç äåäïìİíùí! Èá ğñİğåé íá ìåôïíïìÜóåôå ôçí õğÜñ÷ïõóá ğñï";
     Message[ dutch ] = "De naam van de gewiste gegevensbron heeft u reeds gebruikt voor een andere! Wilt u de gewiste gegevensbron weer herstellen dan moet u eerst de naam van de andere wijzigen.";
     Message[ french ] = "Le nom de la source de données supprimée a déjà été attribué à une autre source que vous devez commencer par renommer afin de pouvoir restaurer l'ancienne.";
     Message[ spanish ] = "¡Ya ha aplicado a otra fuente de datos el nombre de la eliminada! Debe cambiar el nombre a la primera para poder restaurar la actual.";
@@ -2562,7 +2562,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ chinese_simplified ] = "ÄúÒÑ¾­ÓÃÒ»¸ö±»É¾³ıµÄÊı¾İÔ´Ãû³ÆÃüÃûÁËÒ»¸öÆäËûµÄÊı¾İÔ´£¡Äú±ØĞëÖØÃüÃûÄÇÒ»¸öÊı¾İÔ´£¬È»ºó²ÅÄÜ»Ö¸´µ±Ç°µÄÊı¾İÔ´¡£";
     Message[ chinese_traditional ] = "±z¤w¸g¬°¥t¤@­Ó¸ê®Æ¨Ó·½³]©w¤F³o­Ó¦WºÙ¡I±z¥²¶·¥ı°õ¦æ­«·s©R¦W¡AµM¦Z¤~¯à°÷ÁÙ­ì²{¦bªº¸ê®Æ¨Ó·½¡C";
     Message[ turkish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
-    Message[ arabic ] = "áŞÏ ŞãÊ ÈÇáİÚá ÈÅÚØÇÁ ÇÓã ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÍĞæİ áãÕÏÑ ÈíÇäÇÊ ÂÎÑ. íÌÈ Ãä ÊŞæã ÈÅÚÇÏÉ ÊÓãíÉ ãÕÏÑ ÇáÈíÇäÇÊ ÇáÂÎÑ¡ ÍÊì ÊÊãßä ãä ÇÓÊÚÇÏÉ ÇáãÕÏÑ ";
+    Message[ arabic ] = "áŞÏ ŞãÊ ÈÇáİÚá ÈÅÚØÇÁ ÇÓã ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÍĞæİ áãÕÏÑ ÈíÇäÇÊ ÂÎÑ. íÌÈ Ãä ÊŞæã ÈÅÚÇÏÉ ÊÓãíÉ ãÕÏÑ ÇáÈíÇäÇÊ ÇáÂÎÑ¡ ÍÊì ÊÊãßä ãä ÇÓÊÚÇÏÉ ÇáãÕÏ";
     Message[ finnish ] = "Poistetun tietolähteen nimi on jo toisella tietolähteellä. Et voi palauttaa poistettua tietolähdettä ennen kuin nimeät uuden tietolähteen uudelleen.";
     Message[ catalan ] = "¡Ya ha aplicado a otra fuente de datos el nombre de la eliminada! Debe cambiar el nombre a la primera para poder restaurar la actual.";
 };
@@ -2891,7 +2891,7 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ language_user1 ] = "For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
     Message[ portuguese ] = "É necessário guardar a fonte de dados para poder gerir os respectivos $objects$.\nGuardar todas as modificações efectuadas até agora nesta caixa de diálogo?";
     Message[ russian ] = "Äëÿ óïğàâëåíèÿ $objects$ èñòî÷íèêà äàííûõ, íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÑîõğàíèòü âñå èçìåíåíèÿ, âûïîëíåííûå â ıòîì äèàëîãå?";
-    Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÈİëåôå íá áğïèçêåõôïıí üëåò ïé áëëáãİò ğïõ ";
+    Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÈİëåôå íá áğïèçêåõôïıí üëåò ïé áëëáãİò ğï";
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze zijn opgeslagen.\nWilt u de wijzigingen die u in deze dialoog heeft aangebracht nu opslaan?";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nEnregistrer toutes les modifications effectuées dans cette boîte de dialogue ?";
     Message[ spanish ] = "Para poder administrar $objects$ de una fuente de datos, debe guardarse esta.\n¿Desea guardar todas las modificaciones realizadas hasta ahora en este diálogo?";
@@ -2918,28 +2918,28 @@ ErrorBox ERR_CANTADMINQUERIES
     Message [ english ] = "To administrate the $objects$ of a data source, it must be saved.\n"
         "But, the current settings do not allow to save the changes (there are name conflicts).\n\n"
         "You won't be able to administrate the $objects$ until these conflicts are resolved and the changes are saved.";
-    Message [ english_us ] = "To administrate the $objects$ of a data source, the data source must be saved.\nHowever, the current settings do not allow you to save the changes (due to conflicting names).\n\nYou will not be able to administrate the $objects$ until these conflicts are resolved and the changes are saved.";
+    Message [ english_us ] = "To administrate the $objects$ of a data source, the data source must be saved.\nHowever, the current settings do not allow you to save the changes (due to conflicting names).\n\nYou will not be able to administrate the $objects$ until these conflicts ar";
 
     Message[ language_user1 ] = "For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
-    Message[ portuguese ] = "É necessário guardar a fonte de dados para poder gerir os respectivos $objects$.\nNo entanto, os parâmetros actuais não permitem guardar as modificações (há conflito de nomes).\n\nNão é possível gerir $objects$ enquanto estes conflitos não forem resolvidos e as modificações guardadas.";
-    Message[ russian ] = "Äëÿ óïğàâëåíèÿ $objects$ èñòî÷íèêà äàííûõ íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíåíèÿ (èç-çà êîíôëèêòà èìåí).\n\nÄî òåõ ïîğ, ïîêà ıòîò êîíôëèêò íå óñòğàíåí, à èçìåíåíèÿ íå ñîõğàíåíû, óïğàâëåíèå $objects$ íåâîçìîæíî.";
-    Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò äåäïìİíùí, áõôŞ èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÏé ôñİ÷ïõóåò åéóáãùãİò äåí åğéôñİğïõí üìùò ôçí áğïèŞêåõóç ôùí áëëáãşí åğåéäŞ õğÜñ÷ïõí äéåíİîåéò ïíïìÜôùí.\n\nÇ äéá÷åßñéóç ôùí åñùôçìÜôùí äåí åßíáé äõíáôŞ üóï óõíå÷ßæïõí íá õğÜñ÷ïõí áõôİò ïé äéåíİîåéò êáé äåí ìğïñïıí íá áğïèçêåõôïıí ïé áëëáãİò.";
-    Message[ dutch ] = "Om de STR_QUERY_OBJECTS van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de STR_DOCUMENT_OBJECTS niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
-    Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas été enregistrées, la gestion des $objects$ sera impossible.";
-    Message[ spanish ] = "Para administrar $objects$ de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar $objects$ mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
-    Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente dati è necessario prima salvare la sorgente dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarà impossibile gestire $objects$.";
-    Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
-    Message[ swedish ] = "En datakälla måste sparas om det ska gå att administrera $objects$ i den.\nMen de aktuella inmatningarna tillåter inte att ändringarna sparas (det finns namnkonflikter).\n\nDu kan inte administrera $objects$ sålänge de här konflikterna inte är lösta och ändringarna har sparats.";
-    Message[ polish ] = "Administracja $objects$ okreœlonego Ÿród³a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalaj¹ jednak zapisaæ Ÿród³a danych (wyst¹pi³ konflikt nazw).\n\nAdministracja $objects$ mo¿liwa bêdzie dopiero po rozwi¹zaniu konfliktu i zapisaniu zmian.";
-    Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
-    Message[ japanese ] = "ÃŞ°À¿°½‚Ì $objects$ ‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªA–¼‘O‚Ì‹¤—Lˆá”½‚ª‹N‚±‚Á‚½‚½‚ßAŒ»İ‚Ì“ü—Í‚Å‚Í•ÏX‚Ì•Û‘¶‚Í‚Å‚«‚Ü‚¹‚ñB\n\n‚±‚Ì‹¤—Lˆá”½‚ªíœ‚³‚ê‚Ä•ÏX‚ª•Û‘¶‚³‚ê‚È‚¢‚¤‚¿‚ÍA$objects$ ‚ÌŠÇ—‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Message[ korean ] = "µ¥ÀÌÅÍ¼Ò½ºÀÇ ÁúÀÇ¸¦ °ü¸®ÇÏ±â À§ÇØ, ÀÌ¸¦ ¹İµå½Ã ÀúÀåÇØ¾ß ÇÕ´Ï´Ù, ÇöÀçÀÇ ¼¼ÆÃÀº º¯°æ»çÇ× ÀúÀåÀ» Çã¿ëÇÏÁö ¾Ê½À´Ï´Ù\n  (ÀÌ¸§ Ãæµ¹).\n\nÀÌ Ãæµ¹À» Á¦°ÅÇÏ°í, º¯°æ»çÇ×À»  ÀúÀåÇÏÁö ¾Ê´ÂÇÑ »ç¿ëÀÚ´Â ÁúÀÇ¸¦ °ü¸®ÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Message[ portuguese ] = "É necessário guardar a fonte de dados para poder gerir os respectivos $objects$.\nNo entanto, os parâmetros actuais não permitem guardar as modificações (há conflito de nomes).\n\nNão é possível gerir $objects$ enquanto estes conflitos não fo";
+    Message[ russian ] = "Äëÿ óïğàâëåíèÿ $objects$ èñòî÷íèêà äàííûõ íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíå";
+    Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò äåäïìİíùí, áõôŞ èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÏé ôñİ÷ïõóåò åéóáãùãİò äå";
+    Message[ dutch ] = "Om de STR_QUERY_OBJECTS van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de STR_DOCUMENT_OBJECTS niet beheren zolang deze ";
+    Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les m";
+    Message[ spanish ] = "Para administrar $objects$ de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar $objects$ mientras no solucione estos conf";
+    Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente dati è necessario prima salvare la sorgente dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i n";
+    Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes a";
+    Message[ swedish ] = "En datakälla måste sparas om det ska gå att administrera $objects$ i den.\nMen de aktuella inmatningarna tillåter inte att ändringarna sparas (det finns namnkonflikter).\n\nDu kan inte administrera $objects$ sålänge de här konflikterna inte är ";
+    Message[ polish ] = "Administracja $objects$ okreœlonego Ÿród³a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalaj¹ jednak zapisaæ Ÿród³a danych (wyst¹pi³ konflikt nazw).\n\nAdministracja $objects$ mo¿liwa bêdzie dopiero po rozwi¹zaniu konf";
+    Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes a";
+    Message[ japanese ] = "ÃŞ°À¿°½‚Ì $objects$ ‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªA–¼‘O‚Ì‹¤—Lˆá”½‚ª‹N‚±‚Á‚½‚½‚ßAŒ»İ‚Ì“ü—Í‚Å‚Í•ÏX‚Ì•Û‘¶‚Í‚Å‚«‚Ü‚¹‚ñB\n\n‚±‚Ì‹¤—Lˆá”½‚ª";
+    Message[ korean ] = "µ¥ÀÌÅÍ¼Ò½ºÀÇ ÁúÀÇ¸¦ °ü¸®ÇÏ±â À§ÇØ, ÀÌ¸¦ ¹İµå½Ã ÀúÀåÇØ¾ß ÇÕ´Ï´Ù, ÇöÀçÀÇ ¼¼ÆÃÀº º¯°æ»çÇ× ÀúÀåÀ» Çã¿ëÇÏÁö ¾Ê½À´Ï´Ù\n  (ÀÌ¸§ Ãæµ¹).\n\nÀÌ Ãæµ¹À» Á¦°ÅÇÏ°í, º¯°æ»çÇ×À»  ÀúÀåÇÏÁö ¾Ê´ÂÇÑ »";
     Message[ chinese_simplified ] = "Òª¹ÜÀíÒ»¸ö×ÊÁÏÔ´µÄ $objects$ £¬±ØĞëÏÈ´¢´æËü¡£\nµ«ÊÇÏÖÔÚÄú²»¿ÉÒÔ´æÅÌ¸ü¸ÄµÄÄÚÈİ£¬ÒòÎª´æÔÚÒ»¸öÃû³Æ³åÍ»µÄ´íÎó¡£\n\nÔÚÅÅ³ı´íÎóÖ®Ç°ÄúÎŞ·¨´æÅÌ¸ü¸Ä $objects$ ¡£";
     Message[ chinese_traditional ] = "­nºŞ²z¤@­Ó¸ê®Æ·½ªº $objects$ ¡A¥²¶·¥ıÀx¦s¥¦¡C\n¦ı¬O²{¦b±z¤£¥i¥HÀx¦sÅÜ§ó¤º®e¡A¦]¬°¦s¦b¦WºÙ¨R¬ğ¿ù»~¡C\n\n¦b±Æ°£¿ù»~¤§«e±zµLªk¦sÀxÅÜ§ó $objects$ ¡C";
-    Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
-    Message[ arabic ] = "áÅÏÇÑÉ $objects$ áãÕÏÑ ÈíÇäÇÊ ãÇ¡ íÌÈ Ãä ÊŞæã ÃæáÇğ ÈÍİÙ åĞÇ ÇáãÕÏÑ¡\nÅáÇ Ãä ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ áÇ ÊÓãÍ ÈÍİÙ ÇáÊÛííÑÇÊ (ÈÓÈÈ æÌæÏ ÊÚÇÑÖ İí ÇáÃÓãÇÁ).\n\náÇ íãßäß ÅÏÇÑÉ $objects$ ÅáÇ ÈÚÏ Íá åĞÇ ÇáÊÚÇÑÖ¡ æÍİÙ ÇáÊÛííÑÇÊ.";
-    Message[ finnish ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nAllerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\nSie können die $objects$ nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
-    Message[ catalan ] = "Para administrar consultas de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar las consultas mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
+    Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes a";
+    Message[ arabic ] = "áÅÏÇÑÉ $objects$ áãÕÏÑ ÈíÇäÇÊ ãÇ¡ íÌÈ Ãä ÊŞæã ÃæáÇğ ÈÍİÙ åĞÇ ÇáãÕÏÑ¡\nÅáÇ Ãä ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ áÇ ÊÓãÍ ÈÍİÙ ÇáÊÛííÑÇÊ (ÈÓÈÈ æÌæÏ ÊÚÇÑÖ İí ÇáÃÓãÇ";
+    Message[ finnish ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nAllerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\nSie können die $objects$ nicht administrieren, solange";
+    Message[ catalan ] = "Para administrar consultas de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar las consultas mientras no solucione estos ";
 };
 
 ErrorBox ERR_CANTDOTABLEACTION
@@ -2951,22 +2951,22 @@ ErrorBox ERR_CANTDOTABLEACTION
         "However, the current settings do not allow this, due to conflicting names of different data sources.\n\n"
         "As long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message [ english_us ] = "For this operation, the changes to the data source must be saved.\nHowever, they cannot be saved due to conflicting names of different data sources.\n\nYou must resolve this conflict in order to perform the operation.";
-    Message[ portuguese ] = "Para poder executar esta operação terá que guardar as modificações na fonte de dados.\nContudo, as actuais indicações não o permitem, uma vez que existe conflito de nomes entre várias fontes de dados.\n\nTerá que solucionar primeiro estes conflitos para poder executar a operação.";
-    Message[ russian ] = "Äëÿ ıòîé îïåğàöèè íåîáõîäèìî ñîõğàíèòü èçìåíåíèÿ â èñòî÷íèêå äàííûõ.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ıòîãî, ò.ê. ñóùåñòâóåò êîíôëèêò èìåí ìåæäó ğàçëè÷íûìè èñòî÷íèêàìè äàííûõ.\n\nÄî òåõ ïîğ, ïîêà ıòè êîíôëèêòû íå ğàçğåøåíû, ıòà îïåğàöèÿ íå âûïîëíèìà.";
+    Message[ portuguese ] = "Para poder executar esta operação terá que guardar as modificações na fonte de dados.\nContudo, as actuais indicações não o permitem, uma vez que existe conflito de nomes entre várias fontes de dados.\n\nTerá que solucionar primeiro estes conf";
+    Message[ russian ] = "Äëÿ ıòîé îïåğàöèè íåîáõîäèìî ñîõğàíèòü èçìåíåíèÿ â èñòî÷íèêå äàííûõ.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ıòîãî, ò.ê. ñóùåñòâóåò êîíôëè";
     Message[ greek ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ dutch ] = "Om dit commando te kunnen uitvoeren moet de gegevensbron opgeslagen worden.\nMet de bestaande gegevens is dit niet mogelijk, daar er problemen zijn met de namen van de verschillende gegevensbronnen.\n\nU moet deze problemen eerst oplossen voordat u dit commando kunt uitvoeren.";
-    Message[ french ] = "Vous devez enregistrer les modifications apportées à la source de données afin de pouvoir exécuter cette opération.\nLes paramètres actifs ne permettent cependant pas de le faire car il y a des conflits de noms entre plusieurs sources de données.\n\nTant que ces conflits persisteront, l'exécution de cette opération sera impossible.";
-    Message[ spanish ] = "Para ejecutar esta acción se deben guardar las modificaciones en la fuente de datos.\nPero la información introducida no lo permite debido a conflicto con los nombres de las diversas fuentes de datos.\n\nPara realizar la acción debe solucionar primero este conflicto.";
+    Message[ dutch ] = "Om dit commando te kunnen uitvoeren moet de gegevensbron opgeslagen worden.\nMet de bestaande gegevens is dit niet mogelijk, daar er problemen zijn met de namen van de verschillende gegevensbronnen.\n\nU moet deze problemen eerst oplossen voordat u dit ";
+    Message[ french ] = "Vous devez enregistrer les modifications apportées à la source de données afin de pouvoir exécuter cette opération.\nLes paramètres actifs ne permettent cependant pas de le faire car il y a des conflits de noms entre plusieurs sources de données.";
+    Message[ spanish ] = "Para ejecutar esta acción se deben guardar las modificaciones en la fuente de datos.\nPero la información introducida no lo permite debido a conflicto con los nombres de las diversas fuentes de datos.\n\nPara realizar la acción debe solucionar primer";
     Message[ finnish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ italian ] = "Per questa operazione è necessario salvare le modifiche della sorgente dati.\nTuttavia non è possibile salvare le modifiche a causa di un conflitto di nomi tra diverse sorgenti di dati.\n\nFintanto non verrà risolto il problema sarà impossibile salvare le modifiche.";
+    Message[ italian ] = "Per questa operazione è necessario salvare le modifiche della sorgente dati.\nTuttavia non è possibile salvare le modifiche a causa di un conflitto di nomi tra diverse sorgenti di dati.\n\nFintanto non verrà risolto il problema sarà impossibile salv";
     Message[ danish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ swedish ] = "För den här åtgärden måste ändringarna av datakällan sparas.\nMen de aktuella inmatningarna tillåter inte detta eftersom det finns namnkonflikter mellan olika datakällor.\n\nSålänge de här konflikterna inte är lösta kan du inte utföra den här åtgärden.";
-    Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w Ÿródle danych.\nNiestety, bie¿¹ce dane uniemo¿liwiaj¹ zapisania zmian, poniewa¿ miêdzy ró¿nymi Ÿród³ami danych powsta³y konflikty nazw.\n\nWykonanie operacji mo¿liwe bêdzie dopiero po rozwi¹zaniu wymienionych konfliktów.";
+    Message[ swedish ] = "För den här åtgärden måste ändringarna av datakällan sparas.\nMen de aktuella inmatningarna tillåter inte detta eftersom det finns namnkonflikter mellan olika datakällor.\n\nSålänge de här konflikterna inte är lösta kan du inte utföra den";
+    Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w Ÿródle danych.\nNiestety, bie¿¹ce dane uniemo¿liwiaj¹ zapisania zmian, poniewa¿ miêdzy ró¿nymi Ÿród³ami danych powsta³y konflikty nazw.\n\nWykonanie operacji mo¿liwe bêdzie dopiero po rozwi";
     Message[ portuguese_brazilian ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ japanese ] = "‚±‚Ì±¸¼®İ‚É‚ÍÃŞ°À¿°½‚Ì•ÏX‚ğ•Û‘¶‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªAˆÙ‚È‚Á‚½ÃŞ°À¿°½ŠÔ‚Å–¼‘O‚ÌºİÌØ¸Ä‚ª‹N‚±‚Á‚Ä‚¢‚é‚½‚ßAŒ»İ‚Ì“ü—Í‚Ì‚Ü‚Ü‚Å‚Í–³—‚Å‚·B\n\n‚±‚ÌºİÌØ¸Ä‚ªíœ‚³‚ê‚È‚¢‚Ü‚Å‚ÍA±¸¼®İ‚ÌÀs‚Í•s‰Â”\\‚Å‚·B";
+    Message[ japanese ] = "‚±‚Ì±¸¼®İ‚É‚ÍÃŞ°À¿°½‚Ì•ÏX‚ğ•Û‘¶‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªAˆÙ‚È‚Á‚½ÃŞ°À¿°½ŠÔ‚Å–¼‘O‚ÌºİÌØ¸Ä‚ª‹N‚±‚Á‚Ä‚¢‚é‚½‚ßAŒ»İ‚Ì“ü—Í‚Ì‚Ü‚Ü‚Å‚Í–³—‚";
     Message[ korean ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ chinese_simplified ] = "ÒªÖ´ĞĞÕâ¸öÃüÁî±ØĞëÏÈ´æÅÌÊı¾İÔ´µÄ¸ü¸ÄÄÚÈİ¡£\nµ«ÊÇ£¬µ±Ç°µÄÊäÈë×ÊÁÏ²»ÔÊĞíÖ´ĞĞÕâ¸öÃüÁî£¬ÒòÎªÔÚ¸÷¸öÊı¾İÔ´Ö®¼ä´æÔÚÒ»¸öÃû³Æ³åÍ»µÄ´íÎó¡£\n\nÔÚÅÅ³ıÕâ¸ö´íÎóÖ®Ç°ÊÇÎŞ·¨Ö´ĞĞÕâ¸öÃüÁîµÄ¡£";
-    Message[ chinese_traditional ] = "­n°õ¦æ³o­Ó°Ê§@¥²¶·¥ıÀx¦s¸ê®Æ·½ªºÅÜ§ó¤º®e¡C\n¦ı¬O¡A·í«eªº¿é¤J¸ê®Æ¤£¤¹³\\°õ¦æ³o­Ó°Ê§@¡A¦]¬°¦b¦U­Ó¸ê®Æ·½¤§¶¡¦s¦b¤@­Ó¦WºÙ¨R¬ğªº¿ù»~¡C\n\n¦b±Æ°£³o­Ó¿ù»~¤§«e¬OµLªk°õ¦æ³o­Ó°Ê§@ªº¡C";
+    Message[ chinese_simplified ] = "ÒªÖ´ĞĞÕâ¸öÃüÁî±ØĞëÏÈ´æÅÌÊı¾İÔ´µÄ¸ü¸ÄÄÚÈİ¡£\nµ«ÊÇ£¬µ±Ç°µÄÊäÈë×ÊÁÏ²»ÔÊĞíÖ´ĞĞÕâ¸öÃüÁî£¬ÒòÎªÔÚ¸÷¸öÊı¾İÔ´Ö®¼ä´æÔÚÒ»¸öÃû³Æ³åÍ»µÄ´íÎó¡£\n\nÔÚÅÅ³ıÕâ¸ö´íÎóÖ®Ç°ÊÇÎŞ·¨Ö´ĞĞÕâ¸öÃüÁîµÄ";
+    Message[ chinese_traditional ] = "­n°õ¦æ³o­Ó°Ê§@¥²¶·¥ıÀx¦s¸ê®Æ·½ªºÅÜ§ó¤º®e¡C\n¦ı¬O¡A·í«eªº¿é¤J¸ê®Æ¤£¤¹³\\°õ¦æ³o­Ó°Ê§@¡A¦]¬°¦b¦U­Ó¸ê®Æ·½¤§¶¡¦s¦b¤@­Ó¦WºÙ¨R¬ğªº¿ù»~¡C\n\n¦b±Æ°£³o­Ó¿ù»~¤§«e¬OµLªk°õ¦æ³o­Ó°Ê§@ªº¡";
     Message[ turkish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ arabic ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ catalan ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
@@ -3240,6 +3240,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.58  2001/06/20 07:08:33  oj
+ *  #88434# new page for user admin
+ *
  *  Revision 1.57  2001/06/15 21:49:59  kz
  *  Merge SRC633: 15.06.01 - 23:50:17
  *
@@ -3302,6 +3305,7 @@ String STR_ADDRESSBOOK_LDAP
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
