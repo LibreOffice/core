@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:32:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,33 +76,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Table</value>
               <value xml:lang="de">Tabelle</value>
-              <value xml:lang="x-comment">Table</value>
-              <value xml:lang="pt">Tabela</value>
-              <value xml:lang="ru">Таблица</value>
-              <value xml:lang="el">Πίνακας</value>
-              <value xml:lang="nl">Tabel</value>
-              <value xml:lang="fr">Tableau</value>
-              <value xml:lang="es">Tabla</value>
-              <value xml:lang="fi">Taulukko</value>
-              <value xml:lang="it">Tabella</value>
-              <value xml:lang="da">Tabel</value>
-              <value xml:lang="sv">Tabell</value>
-              <value xml:lang="pl">Tabela</value>
-              <value xml:lang="pt-BR">Planilha de Cálculo</value>
-              <value xml:lang="ja">表</value>
-              <value xml:lang="ko">표</value>
-              <value xml:lang="zh-CN">表格</value>
-              <value xml:lang="zh-TW">表格</value>
-              <value xml:lang="tr">Tablo</value>
-              <value xml:lang="ar">الجدول</value>
-              <value xml:lang="ca">Crea</value>
-              <value xml:lang="th">กระดาษคำนวณ</value>
-                <value xml:lang="cs">Tabulka</value>
-                <value xml:lang="sk">Tabuĺka</value>
-                <value xml:lang="he">‮טבלה‬</value>
-                <value xml:lang="hi-IN">Table</value>
-                <value xml:lang="hu">Táblázat</value>
-                <value xml:lang="sl">Tabela</value>
             </prop>
           </node>
         </node>
@@ -111,33 +84,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Text</value>
               <value xml:lang="de">Text</value>
-              <value xml:lang="x-comment">Text</value>
-              <value xml:lang="pt">Texto</value>
-              <value xml:lang="ru">Текст</value>
-              <value xml:lang="el">Κείμενο</value>
-              <value xml:lang="nl">Tekst</value>
-              <value xml:lang="fr">Texte</value>
-              <value xml:lang="es">Texto</value>
-              <value xml:lang="fi">Teksti</value>
-              <value xml:lang="it">Testo</value>
-              <value xml:lang="da">Tekst</value>
-              <value xml:lang="sv">Text</value>
-              <value xml:lang="pl">Tekst</value>
-              <value xml:lang="pt-BR">Text</value>
-              <value xml:lang="ja">テキスト</value>
-              <value xml:lang="ko">텍스트</value>
-              <value xml:lang="zh-CN">文字</value>
-              <value xml:lang="zh-TW">文字</value>
-              <value xml:lang="tr">Metin</value>
-              <value xml:lang="ar">Old_text</value>
-              <value xml:lang="ca">Text</value>
-              <value xml:lang="th">ข้อความ</value>
-                <value xml:lang="cs">Text</value>
-                <value xml:lang="sk">Text</value>
-                <value xml:lang="he">‮טקסט‬</value>
-                <value xml:lang="hi-IN">Text</value>
-                <value xml:lang="hu">Szöveg</value>
-                <value xml:lang="sl">Besedilo</value>
             </prop>
           </node>
         </node>
@@ -146,33 +92,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -183,33 +102,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -218,33 +110,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -253,33 +118,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -288,33 +126,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -323,33 +134,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -358,33 +142,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
@@ -393,33 +150,6 @@
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
               <value xml:lang="de">Abbildung</value>
-              <value xml:lang="x-comment">Illustration</value>
-              <value xml:lang="pt">Ilustração</value>
-              <value xml:lang="ru">Иллюстрация</value>
-              <value xml:lang="el">Εικόνα</value>
-              <value xml:lang="nl">Afbeelding</value>
-              <value xml:lang="fr">Illustration</value>
-              <value xml:lang="es">Ilustración</value>
-              <value xml:lang="fi">Kuvitus</value>
-              <value xml:lang="it">Illustrazione</value>
-              <value xml:lang="da">Illustration</value>
-              <value xml:lang="sv">Illustration</value>
-              <value xml:lang="pl">Ilustracja</value>
-              <value xml:lang="pt-BR">Ilustração</value>
-              <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">삽화</value>
-              <value xml:lang="zh-CN">插图</value>
-              <value xml:lang="zh-TW">插圖</value>
-              <value xml:lang="tr">Suret</value>
-              <value xml:lang="ar">رسم توضيحي</value>
-              <value xml:lang="ca">Il.lustració</value>
-              <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Obrázek</value>
-                <value xml:lang="sk">Obrázok</value>
-                <value xml:lang="he">‮איור‬</value>
-                <value xml:lang="hi-IN">Illustration</value>
-                <value xml:lang="hu">Ábra</value>
-                <value xml:lang="sl">Ilustracija</value>
             </prop>
           </node>
         </node>
