@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-01 17:18:16 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,6 +1051,113 @@ sal_Bool XMLTextCombineCharPropHdl_Impl::exportXML(
 XMLTextCombineCharPropHdl_Impl::~XMLTextCombineCharPropHdl_Impl()
 {
 }
+
+// ---------------------------------------------------------------------------
+
+class XMLTextRelWidthHeightPropHdl_Impl : public XMLPropertyHandler
+{
+public:
+    XMLTextRelWidthHeightPropHdl_Impl() {}
+    virtual ~XMLTextRelWidthHeightPropHdl_Impl();
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
+        const OUString& rStrImpValue,
+           Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet;
+    sal_Int32 nValue;
+    bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
+    if( bRet )
+        rValue <<= (sal_Int8)nValue;
+
+    return bRet;
+}
+
+sal_Bool XMLTextRelWidthHeightPropHdl_Impl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int8 nValue;
+    rValue >>= nValue;
+    if( nValue > 0 )
+    {
+        OUStringBuffer aOut;
+         rUnitConverter.convertPercent( aOut, nValue );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+XMLTextRelWidthHeightPropHdl_Impl::~XMLTextRelWidthHeightPropHdl_Impl()
+{
+}
+
+// ---------------------------------------------------------------------------
+
+class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
+{
+    const OUString sValue;
+
+public:
+    XMLTextSyncWidthHeightPropHdl_Impl( const sal_Char *pValue ) :
+           sValue( OUString::createFromAscii(pValue) )  {}
+    virtual ~XMLTextSyncWidthHeightPropHdl_Impl();
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
+        const OUString& rStrImpValue,
+           Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bValue = (rStrImpValue == sValue );
+    rValue.setValue( &bValue, ::getBooleanCppuType() );
+
+    return sal_True;
+}
+
+sal_Bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    if( *(sal_Bool *)rValue.getValue() )
+    {
+        rStrExpValue = sValue;
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+XMLTextSyncWidthHeightPropHdl_Impl::~XMLTextSyncWidthHeightPropHdl_Impl()
+{
+}
 // ---------------------------------------------------------------------------
 class XMLTextPropertyHandlerFactory_Impl
 {
@@ -1164,6 +1271,15 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_strict ) ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_normal ) ) );
+        break;
+    case XML_TYPE_TEXT_REL_WIDTH_HEIGHT:
+        pHdl = new XMLTextRelWidthHeightPropHdl_Impl;
+        break;
+    case XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT:
+        pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( sXML_scale );
+        break;
+    case XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT_MIN:
+        pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( sXML_scale_min );
         break;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
+#include <com/sun/star/text/SizeType.hpp>
 #endif
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
 #include "XMLFontStylesContext.hxx"
@@ -166,6 +169,7 @@ XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper,
             XMLFontStylesContext *pFontDecls ) :
     SvXMLImportPropertyMapper( rMapper ),
+    nSizeTypeIndex( -2 ),
     xFontDecls( pFontDecls )
 {
 }
@@ -211,6 +215,9 @@ void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
+    sal_Bool bHasAnyHeight = sal_False;
+    sal_Bool bHasAnyMinHeight = sal_False;
+
     XMLPropertyState* pFontFamilyName = 0;
     XMLPropertyState* pFontStyleName = 0;
     XMLPropertyState* pFontFamily = 0;
@@ -281,6 +288,17 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_ANCHORTYPE:            pAnchorType = property; break;
         case CTF_VERTICALPOS:           pVertOrient = property; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsChar = property; break;
+
+        case CTF_FRAMEHEIGHT_MIN_ABS:
+        case CTF_FRAMEHEIGHT_MIN_REL:
+//      case CTF_SYNCHEIGHT_MIN:
+                                        bHasAnyMinHeight = sal_True;
+                                        // no break here!
+        case CTF_FRAMEHEIGHT_ABS:
+        case CTF_FRAMEHEIGHT_REL:
+//      case CTF_SYNCHEIGHT:
+                                        bHasAnyHeight = sal_True; break;
+
         }
     }
 
@@ -468,6 +486,35 @@ void XMLTextImportPropertyMapper::finished(
         }
         pVertOrientRelAsChar->mnIndex = -1;
     }
+
+    if( bHasAnyHeight )
+    {
+        if( nSizeTypeIndex == -2 )
+        {
+            const_cast < XMLTextImportPropertyMapper * > ( this )
+                ->nSizeTypeIndex  = -1;
+            sal_Int32 nCount = getPropertySetMapper()->GetEntryCount();
+            for( sal_Int32 i=0; i < nCount; i++ )
+            {
+                if( CTF_SIZETYPE == getPropertySetMapper()
+                        ->GetEntryContextId( i ) )
+                {
+                    const_cast < XMLTextImportPropertyMapper * > ( this )
+                        ->nSizeTypeIndex = i;
+                    break;
+                }
+            }
+        }
+        if( nSizeTypeIndex != -1 )
+        {
+            XMLPropertyState aSizeTypeState( nSizeTypeIndex );
+            aSizeTypeState.maValue <<= (sal_Int16)( bHasAnyMinHeight
+                                                        ? SizeType::MIN
+                                                        : SizeType::FIX);
+            rProperties.push_back( aSizeTypeState );
+        }
+    }
+
 }
 
 

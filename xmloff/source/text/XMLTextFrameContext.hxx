@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ class XMLTextFrameContext : public SvXMLImportContext
     const ::rtl::OUString sHeight;
     const ::rtl::OUString sRelativeHeight;
     const ::rtl::OUString sSizeType;
-    const ::rtl::OUString sSizeRelative;
+    const ::rtl::OUString sIsSyncWidthToHeight;
+    const ::rtl::OUString sIsSyncHeightToWidth;
     const ::rtl::OUString sHoriOrientPosition;
     const ::rtl::OUString sVertOrientPosition;
     const ::rtl::OUString sChainNextName;

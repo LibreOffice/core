@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:32:11 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sHeight(RTL_CONSTASCII_USTRINGPARAM("Height")),
     sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight")),
     sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType")),
-    sSizeRelative(RTL_CONSTASCII_USTRINGPARAM("SizeRelative")),
+    sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight")),
+    sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth")),
     sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
     sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")),
     sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
@@ -943,7 +944,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
 {
     if( pPageTextFrameIdxs )
     {
-        for( sal_Int32 i = 0; i < pPageTextFrameIdxs->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pPageTextFrameIdxs->Count(); i++ )
         {
             Any aAny = xTextFrames->getByIndex( (*pPageTextFrameIdxs)[i] );
             Reference < XTextFrame > xTxtFrame;
@@ -954,7 +955,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     }
     if( pPageGraphicIdxs )
     {
-        for( sal_Int32 i = 0; i < pPageGraphicIdxs->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pPageGraphicIdxs->Count(); i++ )
         {
             Any aAny = xGraphics->getByIndex( (*pPageGraphicIdxs)[i] );
             Reference < XTextContent > xTxtCntnt;
@@ -964,7 +965,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     }
     if( pPageEmbeddedIdxs )
     {
-        for( sal_Int32 i = 0; i < pPageEmbeddedIdxs->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pPageEmbeddedIdxs->Count(); i++ )
         {
             Any aAny = xEmbeddeds->getByIndex( (*pPageEmbeddedIdxs)[i] );
             Reference < XTextContent > xTxtCntnt;
@@ -974,7 +975,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     }
     if( pPageShapeIdxs )
     {
-        for( sal_Int32 i = 0; i < pPageShapeIdxs->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pPageShapeIdxs->Count(); i++ )
         {
             Any aAny = xShapes->getByIndex( (*pPageShapeIdxs)[i] );
             Reference < XShape > xShape;
@@ -1489,83 +1490,89 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     Reference< XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
 
     // svg:width
-    sal_Int8 nRelWidth =  0;
-    if( xPropSetInfo->hasPropertyByName( sRelativeWidth ) )
-    {
-        aAny = rPropSet->getPropertyValue( sRelativeWidth );
-        aAny >>= nRelWidth;
-        DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
-                    "Got illegal relative width from API" );
-    }
-    if( nRelWidth > 0 )
-    {
-        // TODO: instead of checking this value for 255 a new property
-        // must be introduced like for heights.
-        if( nRelWidth != 255 )
-            GetExport().GetMM100UnitConverter().convertPercent( sValue,
-                                                                nRelWidth );
-    }
-    else if( xPropSetInfo->hasPropertyByName( sWidth ) )
-
+    if( xPropSetInfo->hasPropertyByName( sWidth ) )
     {
         sal_Int32 nWidth =  0;
         aAny = rPropSet->getPropertyValue( sWidth );
         aAny >>= nWidth;
         GetExport().GetMM100UnitConverter().convertMeasure( sValue, nWidth );
-    }
-    if( sValue.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_width,
                                   sValue.makeStringAndClear() );
-
-    // svg:height or fo:min-height
-    sal_Bool bSyncHeight = sal_False;
-    if( xPropSetInfo->hasPropertyByName( sSizeRelative ) )
+    }
+    sal_Bool bSyncWidth = sal_False;
+    if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
     {
-        aAny = rPropSet->getPropertyValue( sSizeRelative );
-        bSyncHeight = *(sal_Bool *)aAny.getValue();
+        aAny = rPropSet->getPropertyValue( sIsSyncWidthToHeight );
+        bSyncWidth = *(sal_Bool *)aAny.getValue();
+        if( bSyncWidth )
+            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_rel_width,
+                                             sXML_scale );
+    }
+    if( !bSyncWidth && xPropSetInfo->hasPropertyByName( sRelativeWidth ) )
+    {
+        sal_Int8 nRelWidth =  0;
+        aAny = rPropSet->getPropertyValue( sRelativeWidth );
+        aAny >>= nRelWidth;
+        DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
+                    "Got illegal relative width from API" );
+        if( nRelWidth > 0 )
+        {
+            GetExport().GetMM100UnitConverter().convertPercent( sValue,
+                                                                nRelWidth );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_rel_width,
+                                      sValue.makeStringAndClear() );
+        }
     }
 
+    // svg:height, fo:min-height or style:rel-height
     sal_Int16 nSizeType = SizeType::FIX;
     if( xPropSetInfo->hasPropertyByName( sSizeType ) )
     {
         aAny = rPropSet->getPropertyValue( sSizeType );
         aAny >>= nSizeType;
     }
-
-    DBG_ASSERT( !bSyncHeight || SizeType::VARIABLE != nSizeType,
-                "sync height and variable size unexpected" );
-
-    if( !bSyncHeight && SizeType::VARIABLE != nSizeType )
+    sal_Bool bSyncHeight = sal_False;
+    if( xPropSetInfo->hasPropertyByName( sIsSyncHeightToWidth ) )
     {
-        sal_Int8 nRelHeight =  0;
-        if( xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
-        {
-            aAny = rPropSet->getPropertyValue( sRelativeHeight );
-            aAny >>= nRelHeight;
-        }
-        if( nRelHeight > 0 )
-        {
-            GetExport().GetMM100UnitConverter().convertPercent( sValue,
-                                                                nRelHeight );
-        }
-        else if( xPropSetInfo->hasPropertyByName( sHeight ) )
+        aAny = rPropSet->getPropertyValue( sIsSyncHeightToWidth );
+        bSyncHeight = *(sal_Bool *)aAny.getValue();
+    }
+    sal_Int8 nRelHeight =  0;
+    if( !bSyncHeight && xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
+    {
+        aAny = rPropSet->getPropertyValue( sRelativeHeight );
+        aAny >>= nRelHeight;
+    }
+    if( xPropSetInfo->hasPropertyByName( sHeight ) )
+    {
+        sal_Int32 nHeight =  0;
+        aAny = rPropSet->getPropertyValue( sHeight );
+        aAny >>= nHeight;
+        GetExport().GetMM100UnitConverter().convertMeasure( sValue,
+                                                            nHeight );
+        if( SizeType::MIN == nSizeType && 0==nRelHeight && !bSyncHeight )
+            GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_min_height,
+                                      sValue.makeStringAndClear() );
+        else
+            GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
+                                      sValue.makeStringAndClear() );
+    }
+    if( bSyncHeight )
+    {
+        GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_rel_height,
+                SizeType::MIN == nSizeType ? sXML_scale_min : sXML_scale );
 
-        {
-            sal_Int32 nHeight =  0;
-            aAny = rPropSet->getPropertyValue( sHeight );
-            aAny >>= nHeight;
-            GetExport().GetMM100UnitConverter().convertMeasure( sValue,
-                                                                nHeight );
-        }
-        if( sValue.getLength() )
-        {
-            if( SizeType::MIN == nSizeType )
-                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_min_height,
-                                          sValue.makeStringAndClear() );
-            else
-                GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
-                                          sValue.makeStringAndClear() );
-        }
+    }
+    else if( nRelHeight > 0 )
+    {
+        GetExport().GetMM100UnitConverter().convertPercent( sValue,
+                                                            nRelHeight );
+        if( SizeType::MIN == nSizeType )
+            GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_min_height,
+                                      sValue.makeStringAndClear() );
+        else
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_rel_height,
+                                      sValue.makeStringAndClear() );
     }
 
     OUString sZOrder( RTL_CONSTASCII_USTRINGPARAM( "ZOrder" ) );

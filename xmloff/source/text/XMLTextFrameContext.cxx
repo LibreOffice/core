@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:07:00 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,8 @@ XMLTextFrameContext::XMLTextFrameContext(
     sHeight(RTL_CONSTASCII_USTRINGPARAM("Height")),
     sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight")),
     sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType")),
-    sSizeRelative(RTL_CONSTASCII_USTRINGPARAM("SizeRelative")),
+    sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight")),
+    sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth")),
     sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")),
     sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")),
     sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
@@ -339,19 +340,18 @@ XMLTextFrameContext::XMLTextFrameContext(
     sal_Int32   nX = 0;
     sal_Int32   nY = 0;
     sal_Int32   nWidth = 0;
-    sal_Int32   nMinWidth = 0;
     sal_Int32   nHeight = 0;
-    sal_Int32   nMinHeight = 0;
+    sal_Int8    nRelWidth = 0;
+    sal_Int8    nRelHeight = 0;
     sal_Int32   nZIndex = -1;
     sal_Int16   nPage = 0;
     sal_Int16   nRotation = 0;
 
     TextContentAnchorType   eAnchorType = eATyp;
 
-    sal_Bool    bRelWidth = sal_False;
-    sal_Bool    bRelMinWidth = sal_False;
-    sal_Bool    bRelHeight = sal_False;
-    sal_Bool    bRelMinHeight = sal_False;
+    sal_Bool    bMinHeight = sal_False;
+    sal_Bool    bSyncWidth = sal_False;
+    sal_Bool    bSyncHeight = sal_False;
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
     const SvXMLTokenMap& rTokenMap =
@@ -404,32 +404,81 @@ XMLTextFrameContext::XMLTextFrameContext(
             GetImport().GetMM100UnitConverter().convertMeasure( nY, rValue );
             break;
         case XML_TOK_TEXT_FRAME_WIDTH:
-            bRelWidth = rValue.indexOf( '%' ) != -1;
-            if( bRelWidth )
-                GetImport().GetMM100UnitConverter().convertPercent( nWidth, rValue );
+            // relative widths are obsolete since SRC617. Remove them some day!
+            if( rValue.indexOf( '%' ) != -1 )
+            {
+                sal_Int32 nTmp;
+                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
+                                                                    rValue );
+                nRelWidth = (sal_Int8)nTmp;
+            }
             else
-                GetImport().GetMM100UnitConverter().convertMeasure( nWidth, rValue, 0 );
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+                                                                    rValue, 0 );
+            }
             break;
-        case XML_TOK_TEXT_FRAME_MIN_WIDTH:
-            bRelMinWidth = rValue.indexOf( '%' ) != -1;
-            if( bRelMinWidth )
-                GetImport().GetMM100UnitConverter().convertPercent( nMinWidth, rValue );
+        case XML_TOK_TEXT_FRAME_REL_WIDTH:
+            if( rValue.equalsAsciiL( sXML_scale, sizeof(sXML_scale)-1 ) )
+            {
+                bSyncWidth = sal_True;
+            }
             else
-                GetImport().GetMM100UnitConverter().convertMeasure( nMinWidth, rValue, 0 );
+            {
+                sal_Int32 nTmp;
+                if( GetImport().GetMM100UnitConverter().
+                        convertPercent( nTmp, rValue ) )
+                    nRelWidth = (sal_Int8)nTmp;
+            }
             break;
         case XML_TOK_TEXT_FRAME_HEIGHT:
-            bRelHeight = rValue.indexOf( '%' ) != -1;
-            if( bRelHeight )
-                GetImport().GetMM100UnitConverter().convertPercent( nHeight, rValue );
+            // relative heights are obsolete since SRC617. Remove them some day!
+            if( rValue.indexOf( '%' ) != -1 )
+            {
+                sal_Int32 nTmp;
+                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
+                                                                    rValue );
+                nRelHeight = (sal_Int8)nTmp;
+            }
             else
-                GetImport().GetMM100UnitConverter().convertMeasure( nHeight, rValue, 0 );
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+                                                                    rValue, 0 );
+            }
+            break;
+        case XML_TOK_TEXT_FRAME_REL_HEIGHT:
+            if( rValue.equalsAsciiL( sXML_scale, sizeof(sXML_scale)-1 ) )
+            {
+                bSyncHeight = sal_True;
+            }
+            else if( rValue.equalsAsciiL( sXML_scale_min,
+                                          sizeof(sXML_scale_min)-1 ) )
+            {
+                bSyncHeight = sal_True;
+                bMinHeight = sal_True;
+            }
+            else
+            {
+                sal_Int32 nTmp;
+                if( GetImport().GetMM100UnitConverter().
+                        convertPercent( nTmp, rValue ) )
+                    nRelHeight = (sal_Int8)nTmp;
+            }
             break;
         case XML_TOK_TEXT_FRAME_MIN_HEIGHT:
-            bRelMinHeight = rValue.indexOf( '%' ) != -1;
-            if( bRelMinHeight )
-                GetImport().GetMM100UnitConverter().convertPercent( nMinHeight, rValue );
+            if( rValue.indexOf( '%' ) != -1 )
+            {
+                sal_Int32 nTmp;
+                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
+                                                                    rValue );
+                nRelHeight = (sal_Int8)nTmp;
+            }
             else
-                GetImport().GetMM100UnitConverter().convertMeasure( nMinHeight, rValue, 0 );
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+                                                                    rValue, 0 );
+            }
+            bMinHeight = sal_True;
             break;
         case XML_TOK_TEXT_FRAME_Z_INDEX:
             GetImport().GetMM100UnitConverter().convertNumber( nZIndex, rValue, -1 );
@@ -560,63 +609,45 @@ XMLTextFrameContext::XMLTextFrameContext(
     xPropSet->setPropertyValue( sVertOrientPosition, aAny );
 
     // width
-    if( !nWidth )
+    if( nWidth > 0 )
     {
-        nWidth = nMinWidth;
-        bRelWidth = bRelMinWidth;
+        aAny <<= nWidth;
+        xPropSet->setPropertyValue( sWidth, aAny );
     }
-    sal_Bool bMinHeight = sal_False;
-    if( !nHeight )
+    if( nRelWidth > 0 || nWidth > 0 )
     {
-        nHeight = nMinHeight;
-        bRelHeight = bRelMinHeight;
-        bMinHeight = sal_True;
+        aAny <<= nRelWidth;
+        xPropSet->setPropertyValue( sRelativeWidth, aAny );
     }
-    if( nWidth )
+    if( bSyncWidth || nWidth > 0 )
     {
-        if( bRelWidth > 0 )
-        {
-            aAny <<= (sal_Int8)nWidth;
-            xPropSet->setPropertyValue( sRelativeWidth, aAny );
-        }
-        else
-        {
-            aAny <<= nWidth;
-            xPropSet->setPropertyValue( sWidth, aAny );
-        }
-    }
-    else if( XML_TEXT_FRAME_GRAPHIC == nType && nHeight > 0 )
-    {
-        // TODO: synchronize width to height
+        aAny.setValue( &bSyncWidth, ::getBooleanCppuType() );
+        xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
     }
 
     if( nHeight > 0 )
     {
-        if( xPropSetInfo->hasPropertyByName( sSizeType ) )
-        {
-            sal_Int16 nSizeType =
-                (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
-                                                                : SizeType::FIX;
-            aAny <<= nSizeType;
-            xPropSet->setPropertyValue( sSizeType, aAny );
-        }
-        if( bRelHeight > 0 )
-        {
-            aAny <<= (sal_Int8)nHeight;
-            xPropSet->setPropertyValue( sRelativeHeight, aAny );
-        }
-        else
-        {
-            aAny <<= nHeight;
-            xPropSet->setPropertyValue( sHeight, aAny );
-        }
+        aAny <<= nHeight;
+        xPropSet->setPropertyValue( sHeight, aAny );
     }
-    else if( XML_TEXT_FRAME_GRAPHIC == nType && nWidth > 0 )
+    if( nRelHeight > 0 || nHeight > 0 )
     {
-        // synchroize height to width
-        sal_Bool bTmp = sal_True;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( sSizeRelative, aAny );
+        aAny <<= nRelHeight;
+        xPropSet->setPropertyValue( sRelativeHeight, aAny );
+    }
+    if( bSyncHeight || nHeight > 0 )
+    {
+        aAny.setValue( &bSyncHeight, ::getBooleanCppuType() );
+        xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
+    }
+    if( xPropSetInfo->hasPropertyByName( sSizeType ) && bMinHeight ||
+         nHeight > 0 || nRelHeight > 0 )
+    {
+        sal_Int16 nSizeType =
+            (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
+                                                            : SizeType::FIX;
+        aAny <<= nSizeType;
+        xPropSet->setPropertyValue( sSizeType, aAny );
     }
 
     if( XML_TEXT_FRAME_GRAPHIC == nType )

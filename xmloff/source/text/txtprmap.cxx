@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:02:58 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,14 +473,19 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_FILL_ORDER
     // TODO: not required???
     // RES_FRM_SIZE
-    M_ED( "Width",          SVG, width,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEWIDTH_ABS ),
-    M_ED( "RelativeWidth",  SVG, width,             XML_TYPE_PERCENT8, CTF_FRAMEWIDTH_REL ),
-    M_ED( "Height",         SVG, height,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_ABS ),
+    M_ED( "Width",          SVG, width,             XML_TYPE_MEASURE, 0 ),
+    M_ED( "RelativeWidth",  STYLE, rel_width,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT, 0 ),
+//  M_ED( "RelativeWidth",  STYLE, rel_width,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, 0 ),
+//  M_ED( "IsSyncWidthToHeight",STYLE, rel_width,   XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, 0 ),
+
+    M_ED( "Height",         SVG, height,            XML_TYPE_MEASURE, CTF_FRAMEHEIGHT_ABS ),
     M_ED( "Height",         FO, min_height,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_MIN_ABS ),
-    M_ED( "RelativeHeight", SVG, height,            XML_TYPE_PERCENT8, CTF_FRAMEHEIGHT_REL ),
-    M_ED( "RelativeHeight", FO, min_height,         XML_TYPE_PERCENT8, CTF_FRAMEHEIGHT_MIN_REL ),
+    M_ED( "RelativeHeight", FO, min_height,         XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEHEIGHT_MIN_REL ),
+    M_ED( "RelativeHeight", STYLE, rel_height,      XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEHEIGHT_REL ),
+//  M_ED( "RelativeHeight", STYLE, rel_height,      XML_TYPE_TEXT_REL_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_REL ),
+//  M_ED( "IsSyncHeightToWidth",STYLE, rel_height,  XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_SYNCHEIGHT ),
+//  M_ED( "IsSyncHeightToWidth",STYLE, rel_height,  XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT_MIN, CTF_SYNCHEIGHT_MIN ),
     M_ED( "SizeType",       FO, text_box,           XML_TYPE_NUMBER16|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SIZETYPE ),
-    M_ED( "SizeRelative",   FO, text_box,                   XML_TYPE_BOOL|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SYNCHEIGHT ),
     // RES_PAPER_BIN
     // not required
     // RES_ANCHOR
@@ -676,7 +681,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         pMap = aXMLFramePropMap;
         break;
     case TEXT_PROP_MAP_AUTO_FRAME:
-        pMap = &(aXMLFramePropMap[12]);
+        pMap = &(aXMLFramePropMap[11]);
         DBG_ASSERT( pMap->msXMLName == sXML_margin_left, "frame map changed" );
         break;
     case TEXT_PROP_MAP_SHAPE:
