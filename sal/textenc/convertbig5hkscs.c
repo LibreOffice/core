@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertbig5hkscs.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-02-25 15:07:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
             {
                 sal_uInt32 nUnicode = 0xFFFF;
                 sal_Int32 nOffset = pBig5Hkscs2001RowOffsets[nRow];
-                sal_uInt32 nFirst;
-                sal_uInt32 nLast;
+                sal_uInt32 nFirst=0;
+                sal_uInt32 nLast=0;
                 if (nOffset != -1)
                 {
                     sal_uInt32 nFirstLast = pBig5Hkscs2001Data[nOffset++];
