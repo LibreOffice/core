@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-13 15:22:55 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 13:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "connectivity/DateConversion.hxx"
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
@@ -966,7 +966,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::s
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = DateConversion::toDouble(x);
+    (*m_aInsertRow)[columnIndex] = x;
 }
 // -------------------------------------------------------------------------
 
@@ -979,7 +979,7 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::s
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = DateConversion::toDouble(x);
+    (*m_aInsertRow)[columnIndex] = x;
 }
 // -------------------------------------------------------------------------
 
@@ -992,7 +992,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
     columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
-    (*m_aInsertRow)[columnIndex] = DateConversion::toDouble(x);
+    (*m_aInsertRow)[columnIndex] = x;
 }
 // -------------------------------------------------------------------------
 
@@ -2026,19 +2026,22 @@ BOOL OResultSet::OpenImpl()
                     {
                         xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
                         Reference<XPropertySet> xColProp;
-                        xNames->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
-                        // iterate through the indexes to find the matching column
-                        for(sal_Int32 i=0;i<xIndexes->getCount();++i)
+                        if(nOrderbyColumnNumber[0] < xNames->getCount())
                         {
-                            Reference<XColumnsSupplier> xIndex;
-                            xIndexes->getByIndex(i) >>= xIndex;
-                            Reference<XNameAccess> xIndexCols = xIndex->getColumns();
-                            if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
+                            xNames->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
+                            // iterate through the indexes to find the matching column
+                            for(sal_Int32 i=0;i<xIndexes->getCount();++i)
                             {
-                                m_pFileSet = new OKeySet();
+                                Reference<XColumnsSupplier> xIndex;
+                                xIndexes->getByIndex(i) >>= xIndex;
+                                Reference<XNameAccess> xIndexCols = xIndex->getColumns();
+                                if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
+                                {
+                                    m_pFileSet = new OKeySet();
 
-                                if(fillIndexValues(xIndex))
-                                    goto DISTINCT;
+                                    if(fillIndexValues(xIndex))
+                                        goto DISTINCT;
+                                }
                             }
                         }
                     }
