@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:37:14 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 07:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace dbaui
     class OPropNumericEditCtrl;
     class OFieldDescription;
     class OTypeInfo;
+    class OPropColumnEditCtrl;
     //==================================================================
     class OFieldDescControl : public TabPage
     {
@@ -143,7 +144,7 @@ namespace dbaui
         OPropNumericEditCtrl*   pScale;
         OPropEditCtrl*          pFormatSample;
         OPropListBoxCtrl*       pBoolDefault;
-        OPropEditCtrl*          m_pColumnName;
+        OPropColumnEditCtrl*    m_pColumnName;
         OPropListBoxCtrl*       m_pType;
 
         PushButton*             pFormat;

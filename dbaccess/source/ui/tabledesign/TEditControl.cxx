@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 07:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef DBAUI_SQLNAMEEDIT_HXX
+#include "SqlNameEdit.hxx"
+#endif
 
 using namespace dbaui;
 using namespace comphelper;
@@ -153,6 +156,7 @@ DBG_NAME(OTableEditorCtrl);
 #define CONTROL_WIDTH_2     100 // 60
 #define CONTROL_WIDTH_3     250
 #define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
+
 
 //==================================================================
 //------------------------------------------------------------------
@@ -309,13 +313,15 @@ void OTableEditorCtrl::InitCellController()
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Zelle Feldname
-    pNameCell = new Edit( &GetDataWindow(), WB_LEFT );
-    Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
+    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
 
-    xub_StrLen nMaxTextLen((xub_StrLen)xMetaData->getMaxColumnNameLength());
+    xub_StrLen nMaxTextLen((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
 
     if( nMaxTextLen == 0 )
-        nMaxTextLen = USHRT_MAX;    // TODO : need xub_MaxStrLen or something like that
+        nMaxTextLen = EDIT_NOLIMIT;
+
+    pNameCell = new OSQLNameEdit( &GetDataWindow(), xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString(),WB_LEFT );
     pNameCell->SetMaxTextLen( nMaxTextLen );
 
     //////////////////////////////////////////////////////////////////////
@@ -587,9 +593,10 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const String& rFieldName )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
-    Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
+    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
 
-    ::comphelper::UStringMixEqual bCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
 
     ::std::vector<OTableRow*>::iterator aIter = m_pRowList->begin();
     OFieldDescription* pFieldDescr;
@@ -868,8 +875,10 @@ String OTableEditorCtrl::GenerateName( const String& rName )
     //////////////////////////////////////////////////////////////////////
     // Basisnamen zum Anhaengen einer Numerierung erstellen
     String aBaseName;
-    Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
-    xub_StrLen nMaxTextLen((xub_StrLen)xMetaData->getMaxColumnNameLength());
+    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+
+    xub_StrLen nMaxTextLen((xub_StrLen)( xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0));
 
     if( (rName.Len()+2) >nMaxTextLen )
         aBaseName = rName.Copy( 0, nMaxTextLen-2 );
@@ -1304,10 +1313,11 @@ sal_Bool OTableEditorCtrl::IsDeleteAllowed( long nRow )
         return sal_False;
 
     // Wenn nur Felder hinzugefuegt werden duerfen, Delete nur auf neuen Feldern
-    Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
+    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
 
     return  !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) ||
-            (   xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn());
+            ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn());
 }
 
 //------------------------------------------------------------------------------
@@ -1321,7 +1331,10 @@ sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
     if(!(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY))
         return sal_True;
 
-    Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
+    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    if(!xMetaData.is())
+        return sal_False;
     //////////////////////////////////////////////////////////////
     // Wenn nur Felder geloescht werden duerfen, Paste disablen
 
@@ -1349,8 +1362,9 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
 
     //////////////////////////////////////////////////////////////
     // Datenbank kann keine PrimKeys verarbeiten oder keine Zeilenselektion
-    Reference< XDatabaseMetaData> xMetaData = GetView()->getController()->getConnection()->getMetaData();
-    if(!xMetaData->supportsCoreSQLGrammar())
+    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
         return sal_False;
 
     //////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-14 14:34:43 $
+#   last change: $Author: oj $ $Date: 2001-03-14 07:37:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/SqlNameEdit.obj			\
         $(SLO)$/FieldDescControl.obj	\
         $(SLO)$/listviewitems.obj		\
         $(SLO)$/undosqledit.obj			\

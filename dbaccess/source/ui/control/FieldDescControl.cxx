@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:42:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 07:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,7 +1023,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
         Reference< XDatabaseMetaData> xMetaData = getMetaData();
 
-        if(xMetaData->supportsNonNullableColumns())
+        if(xMetaData.is() && xMetaData->supportsNonNullableColumns())
         {
             nPos++;
             pRequiredText = new FixedText( this );
@@ -1126,14 +1126,18 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( m_pColumnName )
             return;
         nPos++;
-        m_pColumnNameText = new FixedText( this );
-        m_pColumnNameText->SetText( ModuleRes(STR_TAB_FIELD_NAME) );
-        m_pColumnName = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PRPOERTY_COLUMNNAME, WB_BORDER );
-        m_pColumnName->SetHelpId(HID_TAB_ENT_COLUMNNAME);
         {
             Reference< XDatabaseMetaData> xMetaData = getMetaData();
-            sal_uInt32 nMax = xMetaData->getMaxColumnNameLength();
-            m_pColumnName->SetMaxTextLen( nMax ? nMax : EDIT_NOLIMIT);
+            sal_uInt32 nMax = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : EDIT_NOLIMIT;
+            m_pColumnNameText = new FixedText( this );
+            m_pColumnNameText->SetText( ModuleRes(STR_TAB_FIELD_NAME) );
+            m_pColumnName = new OPropColumnEditCtrl( this,
+                            xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString(),
+                                                    STR_HELP_DEFAULT_VALUE,
+                                                    FIELD_PRPOERTY_COLUMNNAME,
+                                                    WB_BORDER );
+            m_pColumnName->SetHelpId(HID_TAB_ENT_COLUMNNAME);
+            m_pColumnName->SetMaxTextLen(xub_StrLen( nMax ? nMax : EDIT_NOLIMIT));
         }
 
         SetPosSize( (Control**)&m_pColumnNameText, nPos, 0 );
