@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:40 $
+ *  last change: $Author: abi $ $Date: 2003-05-08 09:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,19 @@ BaseContent::execute( const Command& aCommand,
                                       TASKHANDLING_WRONG_INSERT_ARGUMENT );
         else
             insert( CommandId,aInsertArgument );
+    }
+    else if( ! aCommand.Name.compareToAscii( "getCasePreservingURL" ) )
+    {
+        Sequence< beans::Property > seq(1);
+        seq[0] = beans::Property(
+            rtl::OUString::createFromAscii("CasePreservingURL"),
+            -1,
+            getCppuType( static_cast< sal_Bool* >(0) ),
+            0 );
+        Reference< sdbc::XRow > xRow = getPropertyValues( CommandId,seq );
+        rtl::OUString CasePreservingURL = xRow->getString(1);
+        if(!xRow->wasNull())
+            aAny <<= CasePreservingURL;
     }
     else
         m_pMyShell->installError( CommandId,
