@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:12:15 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#ifndef _SVX_TSTPITEM_HXX
+#include <svx/tstpitem.hxx>
+#endif
 
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
@@ -195,9 +198,6 @@
 #ifndef _SWRECT_HXX //autogen
 #include <swrect.hxx>
 #endif
-#ifndef _FLYPOS_HXX
-#include <flypos.hxx>           // SwPosFlyFrms
-#endif
 #ifndef _REFFLD_HXX //autogen wg. SwGetRefField
 #include <reffld.hxx>
 #endif
@@ -224,6 +224,9 @@
 #endif
 #ifndef _TXTATR_HXX
 #include <txtatr.hxx>
+#endif
+#ifndef _FMTSRND_HXX
+#include <fmtsrnd.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -280,17 +283,6 @@ WW8_AttrIter::~WW8_AttrIter()
 // Mit OutAttr() werden die Attribute an der angegebenen SwPos
 // ausgegeben.
 
-class swFlyFrm
-{
-public:
-    const SwFrmFmt* mpFlyFrm;
-    const SwCntntNode *mpNode;
-    SwPosition maPos;
-    swFlyFrm(const SwFrmFmt* pFlyFrm, const SwCntntNode *pNode,
-        const SwPosition &rPos)
-    :   mpFlyFrm(pFlyFrm), mpNode(pNode), maPos(rPos) {}
-};
-
 class WW8_SwAttrIter : public WW8_AttrIter
 {
 private:
@@ -320,11 +312,10 @@ private:
     bool mbCharIsRTL;
     bool mbParaIsRTL;
 
-    SwFmtDrop* pSwFmtDrop;
+    const SwFmtDrop &mrSwFmtDrop;
 
-    std::vector<swFlyFrm> maFlyFrms;     // #i2916#
-    typedef std::vector<swFlyFrm>::iterator myflyiter;
-    myflyiter maFlyIter;
+    sw::Frames maFlyFrms;     // #i2916#
+    sw::FrameIter maFlyIter;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
     void FieldVanish( const String& rTxt );
@@ -360,7 +351,7 @@ public:
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
     String GetSnippet(const String &rStr, xub_StrLen nAktPos,
         xub_StrLen nLen) const;
-    SwFmtDrop* GetSwFmtDrop() const                 { return pSwFmtDrop; }
+    const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
 };
 
 void SwWW8Writer::push_charpropstart(xub_StrLen nPos)
@@ -387,12 +378,12 @@ bool SwWW8Writer::empty_charpropstart() const
 }
 
 class sortswflys :
-    public std::binary_function<const swFlyFrm&, const swFlyFrm&, bool>
+    public std::binary_function<const sw::Frame&, const sw::Frame&, bool>
 {
 public:
-    bool operator()(const swFlyFrm &rOne, const swFlyFrm &rTwo) const
+    bool operator()(const sw::Frame &rOne, const sw::Frame &rTwo) const
     {
-        return rOne.maPos.nContent.GetIndex() < rTwo.maPos.nContent.GetIndex();
+        return rOne.GetPosition() < rTwo.GetPosition();
     }
 };
 
@@ -418,7 +409,8 @@ sal_Int16 WW8_SwAttrIter::getScriptClass(sal_Unicode cChar) const
 
 WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
     : WW8_AttrIter(rWr), rNd(rTxtNd), pCurRedline(0), nAktSwPos(0),
-    nCurRedlinePos(USHRT_MAX), mbCharIsRTL(false)
+    nCurRedlinePos(USHRT_MAX), mbCharIsRTL(false),
+    mrSwFmtDrop(rTxtNd.GetSwAttrSet().GetDrop())
 {
     SwPosition aPos(rTxtNd);
     if (FRMDIR_HORI_RIGHT_TOP == rWr.pDoc->GetTextDirection(aPos))
@@ -426,7 +418,6 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
     else
         mbParaIsRTL = false;
 
-    pSwFmtDrop = new SwFmtDrop(rTxtNd.GetSwAttrSet().GetDrop());
     const String &rTxt = rTxtNd.GetTxt();
 
     if (rTxt.Len() && pBreakIt->xBreak.is())
@@ -527,33 +518,21 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
      #i2916#
      Get list of any graphics which may be anchored from this paragraph.
     */
-    ULONG nCurPos = rNd.GetIndex();
-    for (USHORT n = rWr.maFlyPos.Count(); n > 0;)
-    {
-        SwNodeIndex aIdx = rWr.maFlyPos[--n]->GetNdIndex();
-        ULONG nFlyNdPos = aIdx.GetIndex();
-
-        if (nFlyNdPos == nCurPos)
-        {
-            const SwFrmFmt* pEntry = &rWr.maFlyPos[n]->GetFmt();
-            const SwPosition* pAnchor = pEntry->GetAnchor().GetCntntAnchor();
-            if (pAnchor)
-            {
-                maFlyFrms.push_back(swFlyFrm(pEntry,
-                    aIdx.GetNode().GetCntntNode(), *pAnchor));
-            }
-            else
-            {
-                SwPosition aPos(aIdx);
-                if (SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode())
-                    aPos.nContent.Assign(pTxtNd, 0);
-                maFlyFrms.push_back(swFlyFrm(pEntry,
-                    aIdx.GetNode().GetCntntNode(), aPos));
-            }
-        }
-    }
-
+    maFlyFrms = sw::util::GetFramesInNode(rWr.maFrames, rNd);
     std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortswflys());
+
+
+    /*
+     #i18480#
+     If we are inside a frame then anything anchored inside this frame can
+     only be supported by word anchored inline ("as character"), so force
+     this in the supportable case.
+    */
+    if (rWr.bWrtWW8 && rWr.bInWriteEscher)
+    {
+        std::for_each(maFlyFrms.begin(), maFlyFrms.end(),
+            std::mem_fun_ref(&sw::Frame::ForceTreatAsInline));
+    }
 
     maFlyIter = maFlyFrms.begin();
 
@@ -611,10 +590,11 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
         }
     }
 
-    if(pSwFmtDrop->GetWholeWord() && nStartPos <= rNd.GetDropLen(0))
+
+    if (mrSwFmtDrop.GetWholeWord() && nStartPos <= rNd.GetDropLen(0))
         nMinPos = rNd.GetDropLen(0);
-    else if(nStartPos <= pSwFmtDrop->GetChars())
-        nMinPos = pSwFmtDrop->GetChars();
+    else if(nStartPos <= mrSwFmtDrop.GetChars())
+        nMinPos = mrSwFmtDrop.GetChars();
 
     if(const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
@@ -675,13 +655,13 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
     */
     if (maFlyIter != maFlyFrms.end())
     {
-        const SwPosition &rAnchor = maFlyIter->maPos;
+        const SwPosition &rAnchor = maFlyIter->GetPosition();
 
         nPos = rAnchor.nContent.GetIndex();
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
 
-        if (maFlyIter->mpFlyFrm->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
+        if (maFlyIter->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
         {
             ++nPos;
             if (nPos >= nStartPos && nPos <= nMinPos)
@@ -793,7 +773,7 @@ void WW8_SwAttrIter::OutFlys(xub_StrLen nSwPos)
     */
     while (maFlyIter != maFlyFrms.end())
     {
-        const SwPosition &rAnchor = maFlyIter->maPos;
+        const SwPosition &rAnchor = maFlyIter->GetPosition();
         xub_StrLen nPos = rAnchor.nContent.GetIndex();
 
         if (nPos != nSwPos)
@@ -801,7 +781,7 @@ void WW8_SwAttrIter::OutFlys(xub_StrLen nSwPos)
         else
         {
             SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-            rWrtWW8.OutFlyFrm(*maFlyIter->mpNode, *maFlyIter->mpFlyFrm);
+            rWrtWW8.OutFlyFrm(*maFlyIter);
             ++maFlyIter;
         }
     }
@@ -826,23 +806,19 @@ bool WW8_SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
 bool WW8_SwAttrIter::IsDropCap( int nSwPos )
 {
     // see if the current position falls on a DropCap
-    if(pSwFmtDrop)
+    int nDropChars = mrSwFmtDrop.GetChars();
+    bool bWholeWord = mrSwFmtDrop.GetWholeWord();
+    if (bWholeWord)
     {
-        int nDropChars = pSwFmtDrop->GetChars();
-        bool bWholeWord = pSwFmtDrop->GetWholeWord();
-        if (bWholeWord)
-        {
-            short nWordLen = rNd.GetDropLen(0);
-            if(nSwPos == nWordLen && nSwPos != 0)
-                return true;
-        }
-        else
-        {
-            if (nSwPos == nDropChars && nSwPos != 0)
-                return true;
-        }
+        short nWordLen = rNd.GetDropLen(0);
+        if(nSwPos == nWordLen && nSwPos != 0)
+            return true;
     }
-
+    else
+    {
+        if (nSwPos == nDropChars && nSwPos != 0)
+            return true;
+    }
     return false;
 }
 
@@ -1597,7 +1573,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     SwTxtNode* pNd = &((SwTxtNode&)rNode);
 
-    bool bFlyInTable = rWW8Wrt.pFlyFmt && rWW8Wrt.bIsInTable;
+    bool bFlyInTable = rWW8Wrt.mpParentFrame && rWW8Wrt.bIsInTable;
 
     // akt. Style
     if( !bFlyInTable )
@@ -1671,9 +1647,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         if (aAttrIter.IsDropCap(nNextAttr))
         {
-            const SwFmtDrop *pSwFmtDrop = aAttrIter.GetSwFmtDrop();
-            short nDropLines = pSwFmtDrop->GetLines();
-            short nDistance = pSwFmtDrop->GetDistance();
+
+            const SwFmtDrop &rSwFmtDrop = aAttrIter.GetSwFmtDrop();
+            short nDropLines = rSwFmtDrop.GetLines();
+            short nDistance = rSwFmtDrop.GetDistance();
 
             pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
 
@@ -1805,8 +1782,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
 
-    if( rWW8Wrt.pFlyFmt && !rWW8Wrt.bIsInTable )    // Fly-Attrs
-        rWW8Wrt.Out_SwFmt(*rWW8Wrt.pFlyFmt, false, false, true);
+    if (rWW8Wrt.mpParentFrame && !rWW8Wrt.bIsInTable)    // Fly-Attrs
+        rWW8Wrt.Out_SwFmt(rWW8Wrt.mpParentFrame->GetFrmFmt(), false, false, true);
 
     if( rWW8Wrt.bOutTable )
     {                                               // Tab-Attr
@@ -1892,8 +1869,16 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             else
                 pTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
-            pTmpSet->Put( aLR );
-            SwWW8Writer::CorrTabStopInSet( *pTmpSet, pFmt->GetAbsLSpace() );
+            pTmpSet->Put(aLR);
+
+            //#i21847#
+            SvxTabStopItem aItem(
+                ItemGet<SvxTabStopItem>(*pTmpSet, RES_PARATR_TABSTOP));
+            SvxTabStop aTabStop(pFmt->GetAbsLSpace());
+            aItem.Insert(aTabStop);
+            pTmpSet->Put(aItem);
+
+            SwWW8Writer::CorrTabStopInSet(*pTmpSet, pFmt->GetAbsLSpace());
         }
 
         /*
@@ -2018,6 +2003,47 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
     return rAt.Count();
 }
 
+//See #i19484# for why we need this
+bool CellContainsProblematicGraphic(const SwWriteTableCell *pCell,
+    const SwWW8Writer &rWr)
+{
+    const SwNode *pStart = pCell ? pCell->GetBox()->GetSttNd() : 0;
+    const SwNode *pEnd = pStart ? pStart->EndOfSectionNode() : 0;
+    ASSERT(pStart && pEnd, "No start or end?");
+    if (!(pStart && pEnd))
+        return false;
+
+    bool bHasGraphic = false;
+
+    using namespace sw::util;
+    sw::Frames aFrames(GetFramesBetweenNodes(rWr.maFrames, *pStart, *pEnd));
+    sw::FrameIter aEnd = aFrames.end();
+    for (sw::FrameIter aIter = aFrames.begin(); aIter != aEnd; ++aIter)
+    {
+        const SwFrmFmt &rEntry = aIter->GetFrmFmt();
+        if (rEntry.GetSurround().GetSurround() == SURROUND_THROUGHT)
+        {
+            bHasGraphic = true;
+            break;
+        }
+    }
+    return bHasGraphic;
+}
+
+bool RowContainsProblematicGraphic(const SwWriteTableCellPtr *pRow,
+    USHORT nCols, const SwWW8Writer &rWr)
+{
+    bool bHasGraphic = false;
+    for (USHORT nI = 0; nI < nCols; ++nI)
+    {
+        if (CellContainsProblematicGraphic(pRow[nI], rWr))
+        {
+            bHasGraphic = true;
+            break;
+        }
+    }
+    return bHasGraphic;
+}
 
 //---------------------------------------------------------------------------
 //       Tabellen
@@ -2031,7 +2057,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     ASSERT(pFmt,"Impossible");
     if (!pFmt)
         return rWrt;
-    rWW8Wrt.Out_SfxBreakItems(pFmt->GetAttrSet(), rNode);
+    rWW8Wrt.Out_SfxBreakItems(&(pFmt->GetAttrSet()), rNode);
 
     /*
     ALWAYS relative when HORI_NONE (nPageSize + ( nPageSize / 10 )) < nTblSz,
@@ -2055,7 +2081,9 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         if (aRect.IsEmpty())
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
-            const SwFrmFmt* pParentFmt = rWW8Wrt.pFlyFmt ? rWW8Wrt.pFlyFmt :
+            const SwFrmFmt* pParentFmt =
+                rWW8Wrt.mpParentFrame ?
+                &(rWW8Wrt.mpParentFrame->GetFrmFmt()) :
                 rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
             aRect = pParentFmt->FindLayoutRect(true);
             if (!(nPageSize = aRect.Width()))
@@ -2143,6 +2171,9 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             bFixRowHeight = true;
         }
 
+        if (!bFixRowHeight)
+            bFixRowHeight = RowContainsProblematicGraphic(pBoxArr, nColCnt, rWW8Wrt);
+
         //Winword column export limited to 31/64 cells
         sal_uInt8 nWWColMax = nRealColCnt > nMaxCols ?
             nMaxCols : msword_cast<sal_uInt8>(nRealColCnt);
@@ -2210,7 +2241,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if( nBox && pBoxArr[ nBox-1 ] == pBoxArr[ nBox ] )
                 continue;
 
-            if( pBoxArr[ nBox ]->GetRowSpan() == pRowSpans[ nBox ] )
+            if (pBoxArr[nBox] && pBoxArr[nBox]->GetRowSpan() == pRowSpans[nBox])
             {
                 // new Box
                 const SwStartNode* pSttNd = pBoxArr[nBox]->GetBox()->GetSttNd();
@@ -2439,8 +2470,12 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 for(USHORT nI = 0; nI < nBackg; ++nI)
                 {
                     SwWW8Writer::InsUInt32(aAt, 0xFF000000);
-                    SwWW8Writer::InsUInt32(aAt,
-                        wwUtility::RGBToBGR(pColors[nI].GetColor()));
+                    sal_uInt32 nBgColor = pColors[nI].GetColor();
+                    if (nBgColor == COL_AUTO)
+                        nBgColor = 0xFF000000;
+                    else
+                        nBgColor = wwUtility::RGBToBGR(nBgColor);
+                    SwWW8Writer::InsUInt32(aAt, nBgColor);
                     SwWW8Writer::InsUInt16(aAt, 0x0000);
                 }
             }
@@ -2564,6 +2599,8 @@ Writer& OutWW8_SwSectionNode( Writer& rWrt, SwSectionNode& rSectionNode )
 
 void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
 {
+    ASSERT(!bWrtWW8, "I shouldn't be needed for Word >=8");
+
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
         for( USHORT n=0; n < pTxtAttrs->Count(); ++n )
@@ -2595,8 +2632,9 @@ void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
 
                         // wird in Out_SwFmt() ausgewertet
                         pFlyOffset = &aOffset;
-                        pFlyFmt = (SwFlyFrmFmt*)&rFlyFrmFmt;
-                        eNewAnchorType = pFlyFmt->GetAnchor().GetAnchorId();
+                        eNewAnchorType = rFlyFrmFmt.GetAnchor().GetAnchorId();
+                        sw::Frame aFrm(rFlyFrmFmt, SwPosition(rNd));
+                        mpParentFrame = &aFrm;
                         // Ok, rausschreiben:
                         WriteText();
                     }
@@ -2607,35 +2645,44 @@ void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
 }
 
 
-void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
+void SwWW8Writer::OutWW8FlyFrm(const sw::Frame& rFmt, const Point& rNdTopLeft)
 {
+    const SwFrmFmt &rFrmFmt = rFmt.GetFrmFmt();
     const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
 
-    /*
-    ##897##
-    Note that something anchored as a character must be
-    exported using the older WW6 mechanism
-    */
-    if (!bWrtWW8 || (FLY_IN_CNTNT == rAnch.GetAnchorId()))
-    {
-        if (RES_DRAWFRMFMT == rFrmFmt.Which())
-        {
-            bool bComboBoxHack = false;
-            if (bWrtWW8 && (FLY_IN_CNTNT == rAnch.GetAnchorId())) //#110185#
-                bComboBoxHack = MiserableFormFieldExportHack(rFrmFmt);
-            ASSERT(bComboBoxHack , "OutWW8FlyFrm: DrawInCnt-Baustelle " );
-            return ;
-        }
+    bool bUseEscher = bWrtWW8;
 
+    if (bWrtWW8 && rFmt.IsInline())
+    {
+        sw::Frame::WriterSource eType = rFmt.GetWriterType();
+        if ((eType == sw::Frame::eGraphic) || (eType == sw::Frame::eOle))
+            bUseEscher = false;
+        else
+            bUseEscher = true;
+
+        /*
+         #110185#
+         A special case for converting some inline form controls to form fields
+         when in winword 8+ mode
+        */
+        if ((bUseEscher == true) && (eType == sw::Frame::eFormControl))
+        {
+            if (MiserableFormFieldExportHack(rFrmFmt))
+                return ;
+        }
+    }
+
+    if (bUseEscher)
+    {
+        ASSERT(bWrtWW8, "this has gone horribly wrong");
+        // write as escher
+        AppendFlyInFlys(rFmt, rNdTopLeft);
+    }
+    else
+    {
         bool bDone = false;
 
         // Hole vom Node und vom letzten Node die Position in der Section
-        /*
-        const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-
-        ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
-        ULONG nEnd = pDoc->GetNodes()[ nStt - 1 ]->EndOfSectionIndex();
-        */
         const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
 
         ULONG nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
@@ -2644,11 +2691,10 @@ void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
         if( nStt >= nEnd )      // kein Bereich, also kein gueltiger Node
             return;
 
-        if( !bIsInTable && (FLY_IN_CNTNT == rAnch.GetAnchorId()) )
+        if (!bIsInTable && rFmt.IsInline())
         {
-            // ein zeichen(!)gebundener Rahmen liegt vor
+            //Test to see if this textbox contains only a single graphic/ole
             SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
-
             if( pParTxtNode && !pDoc->GetNodes()[ nStt ]->IsNoTxtNode() )
                 bDone = true;
         }
@@ -2664,7 +2710,7 @@ void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
                 WW8SaveData aSaveData( *this, nStt, nEnd );
 
                 Point aOffset;
-                if( pFlyFmt )
+                if (mpParentFrame)
                 {
                     /*
                     #90804#
@@ -2678,49 +2724,40 @@ void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
                     eNewAnchorType = FLY_PAGE;
                 }
 
-                pFlyFmt = (SwFlyFrmFmt*)&rFrmFmt;
-                if( pFlyFmt )
+                mpParentFrame = &rFmt;
+                if (
+                     bIsInTable && (FLY_PAGE != rAnch.GetAnchorId()) &&
+                     !pDoc->GetNodes()[ nStt ]->IsNoTxtNode()
+                   )
                 {
-                    if( bIsInTable && (FLY_PAGE != rAnch.GetAnchorId()) &&
-                        !pDoc->GetNodes()[ nStt ]->IsNoTxtNode() )
-                    {
-                        // Beachten: Flag  bOutTable  wieder setzen,
-                        //           denn wir geben ja ganz normalen Content der
-                        //           Tabelenzelle aus und keinen Rahmen
-                        //           (Flag wurde oben in  aSaveData()  geloescht)
-                        bOutTable = true;
-                        const String& rName = pFlyFmt->GetName();
-                        StartCommentOutput( rName );
-                        WriteText();
-                        EndCommentOutput( rName );
-                    }
-                    else
-                        WriteText();
+                    // Beachten: Flag  bOutTable  wieder setzen,
+                    //           denn wir geben ja ganz normalen Content der
+                    //           Tabelenzelle aus und keinen Rahmen
+                    //           (Flag wurde oben in  aSaveData()  geloescht)
+                    bOutTable = true;
+                    const String& rName = rFrmFmt.GetName();
+                    StartCommentOutput(rName);
+                    WriteText();
+                    EndCommentOutput(rName);
                 }
                 else
-                    ASSERT( !this, "+Fly-Ausgabe ohne FlyFmt" );
+                    WriteText();
             }
-            // ASSERT( !pFlyFmt, " pFlyFmt ist hinter einem Rahmen nicht 0" );
         }
-    }
-    else
-    {
-        // write as escher
-        WW8_CP nCP = Fc2Cp( Strm().Tell() );
-        AppendFlyInFlys( nCP, rFrmFmt, rNdTopLeft );
     }
 }
 
-void SwWW8Writer::OutFlyFrm(const SwCntntNode& rNode, const SwFrmFmt& rFmt)
+void SwWW8Writer::OutFlyFrm(const sw::Frame& rFmt)
 {
-    if (bInWriteEscher)
+    if (!rFmt.GetCntntNode())
         return;
 
+    const SwCntntNode &rNode = *rFmt.GetCntntNode();
     Point aNdPos, aPgPos;
     Point* pLayPos;
     bool bValidNdPos = false, bValidPgPos = false;
 
-    if (FLY_PAGE == rFmt.GetAnchor().GetAnchorId())
+    if (FLY_PAGE == rFmt.GetFrmFmt().GetAnchor().GetAnchorId())
     {
         // get the Layout Node-Position.
         if (!bValidPgPos)
