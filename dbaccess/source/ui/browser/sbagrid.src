@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:39:03 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,14 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ dutch ] = "~Kolomopmaak..." ;
             Text [ spanish ] = "Formateado de ~columnas..." ;
             Text [ english_us ] = "Column ~Format..." ;
-            Text[ chinese_simplified ] = "ÁĞ¸ñÊ½(~F)...";
+            Text[ chinese_simplified ] = "åˆ—æ ¼å¼(~F)...";
             Text[ russian ] = "Ôîğìàò êîëîíîê...";
             Text[ polish ] = "Formatowanie kolumn...";
-            Text[ japanese ] = "—ñ‚Ì‘®(~F)...";
-            Text[ chinese_traditional ] = "Äæ®æ¦¡(~F)...";
+            Text[ japanese ] = "åˆ—ã®æ›¸å¼(~F)...";
+            Text[ chinese_traditional ] = "æ¬„æ ¼å¼(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
-            Text[ korean ] = "¿­ Æ÷¸ËÆÃ(~F)...";
+            Text[ korean ] = "ì—´ í¬ë§·íŒ…(~F)...";
             Text[ turkish ] = "Sütun formatı...";
             Text[ catalan ] = "Formateado de ~columnas...";
         };
@@ -117,14 +117,14 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ italian ] = "~Larghezza colonna..." ;
             Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
             Text [ portuguese ] = "~Largura de coluna..." ;
-            Text[ chinese_simplified ] = "ÁĞ¿í(~W)...";
+            Text[ chinese_simplified ] = "åˆ—å®½(~W)...";
             Text[ russian ] = "Øèğèíà êîëîíîê...";
             Text[ polish ] = "Szerokoœæ kolumn...";
-            Text[ japanese ] = "—ñ•(~W)...";
-            Text[ chinese_traditional ] = "Äæ¼e(~W)...";
+            Text[ japanese ] = "åˆ—å¹…(~W)...";
+            Text[ chinese_traditional ] = "æ¬„å¯¬(~W)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
             Text[ greek ] = "ĞëÜôïò óôŞëçò...";
-            Text[ korean ] = "¿­ ³Êºñ(~W)...";
+            Text[ korean ] = "ì—´ ë„ˆë¹„(~W)...";
             Text[ turkish ] = "Sütun genişliği...";
             Text[ catalan ] = "Anc~ho de columna...";
         };
@@ -146,10 +146,10 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ swedish ] = "Kopiera kolumnb~eskrivning";
             Text[ polish ] = "~Kopiuj opis kolumny";
             Text[ portuguese_brazilian ] = "Copy column d~escription";
-            Text[ japanese ] = "—ñ‚ÌŒ©o‚µ‚ğºËß°(~E)";
-            Text[ korean ] = "¿­ ¼³¸í º¹»ç(~E)";
-            Text[ chinese_simplified ] = "¸´ÖÆÁĞ±êÌâ(~E)";
-            Text[ chinese_traditional ] = "½Æ»s¦C¼ĞÃD(~E)";
+            Text[ japanese ] = "åˆ—ã®è¦‹å‡ºã—ã‚’ï½ºï¾‹ï¾Ÿï½°(~E)";
+            Text[ korean ] = "ì—´ ì„¤ëª… ë³µì‚¬(~E)";
+            Text[ chinese_simplified ] = "å¤åˆ¶åˆ—æ ‡é¢˜(~E)";
+            Text[ chinese_traditional ] = "è¤‡è£½åˆ—æ¨™é¡Œ(~E)";
             Text[ turkish ] = "Copy column d~escription";
             Text[ arabic ] = "äÓÎ æÕİ ÇáÚãæÏ";
             Text[ catalan ] = "Copy column d~escription";
@@ -177,14 +177,14 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ danish ] = "Tabelformatering..." ;
             Text [ portuguese_brazilian ] = "Tabellenformatierung..." ;
             Text [ portuguese ] = "Formatar tabela..." ;
-            Text[ chinese_simplified ] = "±í¸ñ¸ñÊ½...";
+            Text[ chinese_simplified ] = "è¡¨æ ¼æ ¼å¼...";
             Text[ russian ] = "Ôîğìàò òàáëèöû...";
             Text[ polish ] = "Formatowanie tabeli...";
-            Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘®...";
-            Text[ chinese_traditional ] = "¤u§@ªí®æ¦¡...";
+            Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®æ›¸å¼...";
+            Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ ¼å¼...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá...";
             Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá...";
-            Text[ korean ] = "Ç¥ Æ÷¸ËÆÃ...";
+            Text[ korean ] = "í‘œ í¬ë§·íŒ…...";
             Text[ turkish ] = "Tablo formatı...";
             Text[ catalan ] = "Formateado de tabla...";
             Text[ finnish ] = "~Taulukon muotoilu";
@@ -206,14 +206,14 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ dutch ] = "Rijhoogte..." ;
             Text [ spanish ] = "Altura de fila..." ;
             Text [ english_us ] = "Row Height..." ;
-            Text[ chinese_simplified ] = "ĞĞ¸ß...";
+            Text[ chinese_simplified ] = "è¡Œé«˜...";
             Text[ russian ] = "Âûñîòà ñòğîê...";
             Text[ polish ] = "Wysokoœæ wierszy...";
-            Text[ japanese ] = "s‚Ì‚‚³...";
-            Text[ chinese_traditional ] = "¦C°ª...";
+            Text[ japanese ] = "è¡Œã®é«˜ã•...";
+            Text[ chinese_traditional ] = "åˆ—é«˜...";
             Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİæİ...";
             Text[ greek ] = "¾øïò ãñáììŞò...";
-            Text[ korean ] = "Çà ³ôÀÌ...";
+            Text[ korean ] = "í–‰ ë†’ì´...";
             Text[ turkish ] = "Satır yüksekliği...";
             Text[ catalan ] = "Altura de fila...";
         };
@@ -236,10 +236,10 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ swedish ] = "Ångra: datainmatning";
     Text[ polish ] = "Cofniêcie: wpisywania danych";
     Text[ portuguese_brazilian ] = "Undo: input data";
-    Text[ japanese ] = "Œ³‚É–ß‚·: ÃŞ°À‚Ì“ü—Í";
-    Text[ korean ] = "½ÇÇàÃë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
-    Text[ chinese_simplified ] = "³·ÏúÃüÁî£ºÊäÈëÊı¾İ";
-    Text[ chinese_traditional ] = "´_­ì¡G¿é¤J¸ê®Æ";
+    Text[ japanese ] = "å…ƒã«æˆ»ã™: ï¾ƒï¾ï½°ï¾€ã®å…¥åŠ›";
+    Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ: ë°ì´í„° ì…ë ¥";
+    Text[ chinese_simplified ] = "æ’¤é”€å‘½ä»¤ï¼šè¾“å…¥æ•°æ®";
+    Text[ chinese_traditional ] = "å¾©åŸï¼šè¼¸å…¥è³‡æ–™";
     Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
     Text[ turkish ] = "Geri al: Veri girişi";
     Text[ catalan ] = "Deshacer: Entrada de datos";
@@ -261,14 +261,14 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ swedish ] = "Spara aktuell datapost";
     Text[ polish ] = "Zapisz bie¿¹cy rekord";
     Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern";
-    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğ•Û‘¶";
-    Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";
-    Text[ chinese_traditional ] = "Àx¦s·í«eªº¸ê®Æ±ø¥Ø";
+    Text[ japanese ] = "ç¾åœ¨ã®ï¾šï½ºï½°ï¾„ï¾ã‚’ä¿å­˜";
+    Text[ chinese_simplified ] = "å­˜ç›˜å½“å‰çš„æ•°æ®æ¡ç›®";
+    Text[ chinese_traditional ] = "å„²å­˜ç•¶å‰çš„è³‡æ–™æ¢ç›®";
     Text[ arabic ] = "ÍİÙ ÇáÓÌá ÇáÍÇáí";
     Text[ dutch ] = "Actuele record opslaan";
-    Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";
+    Text[ chinese_simplified ] = "å­˜ç›˜å½“å‰çš„æ•°æ®æ¡ç›®";
     Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò";
-    Text[ korean ] = "ÇöÀçÀÇ  ·¹ÄÚµå ÀúÀå";
+    Text[ korean ] = "í˜„ì¬ì˜  ë ˆì½”ë“œ ì €ì¥";
     Text[ turkish ] = "Yürürlükteki verileri kaydet";
     Text[ catalan ] = "guardar registro actual";
     Text[ finnish ] = "Tallenna nykyinen tietue";
@@ -287,15 +287,15 @@ String STR_QRY_TITLE
     Text [ spanish ] = "Consulta #" ;
     Text [ french ] = "Requête #" ;
     Text [ dutch ] = "Query #" ;
-    Text[ chinese_simplified ] = "²éÑ¯ #";
+    Text[ chinese_simplified ] = "æŸ¥è¯¢ #";
     Text[ russian ] = "Çàïğîñ #";
     Text[ polish ] = "Kwerenda #";
-    Text[ japanese ] = "¸´Ø° #";
+    Text[ japanese ] = "ï½¸ï½´ï¾˜ï½° #";
     Text[ dutch ] = "Query #";
-    Text[ chinese_simplified ] = "²éÑ¯ #";
+    Text[ chinese_simplified ] = "æŸ¥è¯¢ #";
     Text[ greek ] = "Åñşôçìá #";
-    Text[ korean ] = "ÁúÀÇ #";
-    Text[ chinese_traditional ] = "¬d¸ß #";
+    Text[ korean ] = "ì§ˆì˜ #";
+    Text[ chinese_traditional ] = "æŸ¥è©¢ #";
     Text[ arabic ] = "ÇáÇÓÊİÓÇÑ #";
     Text[ turkish ] = "Sorgu #";
     Text[ language_user1 ] = " ";
@@ -315,15 +315,15 @@ String STR_TBL_TITLE
     Text [ spanish ] = "Tabla #" ;
     Text [ french ] = "Table #" ;
     Text [ dutch ] = "Tabel #" ;
-    Text[ chinese_simplified ] = "±í¸ñ #";
+    Text[ chinese_simplified ] = "è¡¨æ ¼ #";
     Text[ russian ] = "Òàáëèöà #";
     Text[ polish ] = "Tabela #";
-    Text[ japanese ] = "Ã°ÌŞÙ #";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ #";
     Text[ dutch ] = "Tabel #";
-    Text[ chinese_simplified ] = "±í¸ñ #";
+    Text[ chinese_simplified ] = "è¡¨æ ¼ #";
     Text[ greek ] = "Ğßíáêáò #";
-    Text[ korean ] = "Ç¥ #";
-    Text[ chinese_traditional ] = "ªí®æ #";
+    Text[ korean ] = "í‘œ #";
+    Text[ chinese_traditional ] = "è¡¨æ ¼ #";
     Text[ arabic ] = "ÇáÌÏæá #";
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
@@ -346,15 +346,16 @@ String STR_VIEW_TITLE
     Text[ swedish ] = "Vy #";
     Text[ polish ] = "Widok #";
     Text[ portuguese_brazilian ] = "View #";
-    Text[ japanese ] = "ËŞ­° #";
-    Text[ korean ] = "Àü¸é #";
-    Text[ chinese_simplified ] = "ÊÓÍ¼ #";
-    Text[ chinese_traditional ] = "ÀËµø #";
+    Text[ japanese ] = "ï¾‹ï¾ï½­ï½° #";
+    Text[ korean ] = "ì „ë©´ #";
+    Text[ chinese_simplified ] = "è§†å›¾ #";
+    Text[ chinese_traditional ] = "æª¢è¦– #";
     Text[ turkish ] = "View #";
     Text[ arabic ] = "View #";
     Text[ catalan ] = "View #";
     Text[ finnish ] = "Ansicht #";
 };
+
 
 
 
