@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:50:03 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ chinese_traditional ] = "©M¤W¤@­Óªí®æ¦X¨Ö(~P)";
         Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÓÇÈŞ";
         Text[ greek ] = "İíùóç ìå ğñïçãïıìåíï ğßíáêá";
-        Text[ korean ] = "ÀÌÀü Ç¥¿Í ÇÔ²²(~P)";
+        Text[ korean ] = "ÀÌÀü Ç¥¿¡¡¡¿¬°á";
         Text[ turkish ] = "~Önceki tablo ile birleştir";
         Text[ language_user1 ] = " ";
     };
@@ -167,7 +167,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ chinese_traditional ] = "©M¤U¤@­Óªí®æ¦X¨Ö(~N)";
         Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÊÇáí";
         Text[ greek ] = "İíùóç ìå åğüìåíï ğßíáêá";
-        Text[ korean ] = "´ÙÀ½ Ç¥¿Í ÇÔ²²(~N)";
+        Text[ korean ] = "´ÙÀ½ Ç¥¿¡¡¡¿¬°á";
         Text[ turkish ] = "S~onraki tablo ile birleştir";
         Text[ language_user1 ] = " ";
     };
