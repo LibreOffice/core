@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:22:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,6 +900,9 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
     if( nType == CTRL_MENUBAR )
     {
+        if( nPart != PART_ENTIRE_CONTROL )
+            return FALSE;
+
         MenubarValue *pValue = (MenubarValue*) aValue.getOptionalVal();
         if( pValue )
             rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
@@ -996,20 +999,17 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
     rc.top    = buttonRect.Top();
     rc.bottom = buttonRect.Bottom()+1;
 
-    HDC hDC = GetDC( mhWnd );
-
     // set default text alignment
-    int ta = SetTextAlign( hDC, TA_LEFT|TA_TOP|TA_NOUPDATECP );
+    int ta = SetTextAlign( mhDC, TA_LEFT|TA_TOP|TA_NOUPDATECP );
 
     OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
-    bOk = ImplDrawNativeControl(hDC, hTheme, rc,
+    bOk = ImplDrawNativeControl(mhDC, hTheme, rc,
                             nType, nPart, nState, aValue,
                             rControlHandle, aCaptionStr );
 
     // restore alignment
-    SetTextAlign( hDC, ta );
+    SetTextAlign( mhDC, ta );
 
-    ReleaseDC( mhWnd, hDC );
 
     //GdiFlush();
 
