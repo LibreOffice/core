@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-31 12:58:15 $
+ *  last change: $Author: mt $ $Date: 2001-02-01 15:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,8 @@ void Outliner::Init( USHORT nMode )
     pEditEngine->SetControlWord( nCtrl );
 
     ImplInitDepth( 0, GetMinDepth(), FALSE );
+
+    GetUndoManager().Clear();
 }
 
 void Outliner::SetMinDepth( USHORT nDepth, BOOL bCheckParagraphs )
