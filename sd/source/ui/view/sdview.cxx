@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 14:18:02 $
+ *  last change: $Author: cl $ $Date: 2001-08-01 08:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,7 @@ void SdView::DoConnect(SdrOle2Obj* pObj)
     if (pViewSh)
     {
         const SvInPlaceObjectRef& rIPObjRef = pObj->GetObjRef();
-        SfxInPlaceClientRef pSdClient = (SdClient*) rIPObjRef->GetIPClient();
+        SfxInPlaceClientRef pSdClient = rIPObjRef.Is() ? (SdClient*) rIPObjRef->GetIPClient() : NULL;
 
         if ( !pSdClient.Is() )
         {
