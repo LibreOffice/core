@@ -8316,3 +8316,5 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ??1?$Reference@VXStatusIndicatorFactory@task@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?s_pType_com_sun_star_task_XStatusIndicatorFactory@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXStatusIndicatorFactory@task@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2618221127@@YAXABVSbxVariableRef@@PAX@Z
+?hasEventListeners@SfxBaseModel@@QBEEXZ
+?notifyEvent@SfxBaseModel@@QBEXABUEventObject@document@star@sun@com@@@Z
