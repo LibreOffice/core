@@ -1,0 +1,240 @@
+/*************************************************************************
+ *
+ *  $RCSfile: circleproperties.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:48:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SDR_PROPERTIES_CIRCLEPROPERTIES_HXX
+#include <svx/sdr/properties/circleproperties.hxx>
+#endif
+
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
+
+#ifndef _SVDDEF_HXX
+#include <svddef.hxx>
+#endif
+
+#ifndef _EEITEM_HXX
+#include <eeitem.hxx>
+#endif
+
+#ifndef _SVDOCIRC_HXX
+#include <svdocirc.hxx>
+#endif
+
+#ifndef _SXCISITM_HXX
+#include <sxcisitm.hxx>
+#endif
+
+#ifndef _SXCIKITM_HXX
+#include <sxcikitm.hxx>
+#endif
+
+#ifndef _SXCIAITM_HXX
+#include <sxciaitm.hxx>
+#endif
+
+#ifndef _SXCIAITM_HXX
+#include <sxciaitm.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace properties
+    {
+        // create a new itemset
+        SfxItemSet& CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        {
+            return *(new SfxItemSet(rPool,
+
+                // range from SdrAttrObj
+                SDRATTR_START, SDRATTRSET_SHADOW,
+                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+
+                // range from SdrCircObj
+                SDRATTR_CIRC_FIRST, SDRATTRSET_CIRC,
+
+                // range from SdrTextObj
+                EE_ITEMS_START, EE_ITEMS_END,
+
+                // end
+                0, 0));
+        }
+
+        CircleProperties::CircleProperties(SdrObject& rObj)
+        :   RectangleProperties(rObj)
+        {
+        }
+
+        CircleProperties::CircleProperties(const CircleProperties& rProps, SdrObject& rObj)
+        :   RectangleProperties(rProps, rObj)
+        {
+        }
+
+        CircleProperties::~CircleProperties()
+        {
+        }
+
+        BaseProperties& CircleProperties::Clone(SdrObject& rObj) const
+        {
+            return *(new CircleProperties(*this, rObj));
+        }
+
+        void CircleProperties::ItemSetChanged(const SfxItemSet& rSet)
+        {
+            SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
+
+            // call parent
+            RectangleProperties::ItemSetChanged(rSet);
+
+            // local changes
+            rObj.ImpSetAttrToCircInfo();
+        }
+
+        void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        {
+            SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
+
+            // local changes
+            rObj.SetXPolyDirty();
+
+            // call parent
+            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+
+            // local changes
+            rObj.ImpSetAttrToCircInfo();
+        }
+
+        void CircleProperties::PreProcessSave()
+        {
+            // call parent
+            RectangleProperties::PreProcessSave();
+
+            // prepare SetItems for storage
+            const SfxItemSet& rSet = *mpItemSet;
+            const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
+
+            SdrCircSetItem aCircAttr(rSet.GetPool());
+            aCircAttr.GetItemSet().Put(rSet);
+            aCircAttr.GetItemSet().SetParent(pParent);
+            mpItemSet->Put(aCircAttr);
+        }
+
+        void CircleProperties::PostProcessSave()
+        {
+            // call parent
+            RectangleProperties::PostProcessSave();
+
+            // remove SetItems from local itemset
+            if(mpItemSet)
+            {
+                mpItemSet->ClearItem(SDRATTRSET_CIRC);
+            }
+        }
+
+        void CircleProperties::ForceDefaultAttributes()
+        {
+            SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
+            SdrCircKind eKindA = SDRCIRC_FULL;
+            SdrObjKind eKind = rObj.GetCircleKind();
+
+            if(eKind == OBJ_SECT)
+            {
+                eKindA = SDRCIRC_SECT;
+            }
+            else if(eKind == OBJ_CARC)
+            {
+                eKindA = SDRCIRC_ARC;
+            }
+            else if(eKind == OBJ_CCUT)
+            {
+                eKindA = SDRCIRC_CUT;
+            }
+
+            if(eKindA != SDRCIRC_FULL)
+            {
+                GetObjectItemSet();
+                mpItemSet->Put(SdrCircKindItem(eKindA));
+
+                if(rObj.GetStartWink())
+                {
+                    mpItemSet->Put(SdrCircStartAngleItem(rObj.GetStartWink()));
+                }
+
+                if(rObj.GetEndWink() != 36000)
+                {
+                    mpItemSet->Put(SdrCircEndAngleItem(rObj.GetEndWink()));
+                }
+            }
+
+            // call parent after SetObjectItem(SdrCircKindItem())
+            // because ForceDefaultAttr() will call
+            // ImpSetAttrToCircInfo() which needs a correct
+            // SdrCircKindItem
+            RectangleProperties::ForceDefaultAttributes();
+        }
+    } // end of namespace properties
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+// eof
