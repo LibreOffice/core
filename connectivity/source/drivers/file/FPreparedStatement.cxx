@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:46:24 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,8 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
 {
     OStatement_Base::construct(sql);
 
-    m_aParameterRow = new OValueVector();
-    m_aParameterRow->push_back(sal_Int32(0));
+    m_aParameterRow = new OValueRefVector();
+    m_aParameterRow->push_back(new ORowSetValueDecorator(sal_Int32(0)) );
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
@@ -180,7 +180,8 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
         describeParameter();
     }
 
-    OResultSet::setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
+    OValueRefRow aTemp;
+    OResultSet::setBoundedColumns(m_aEvaluateRow,aTemp,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
 
     m_pResultSet = createResultSet();
     m_pResultSet->acquire();
@@ -334,10 +335,10 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     ::osl::MutexGuard aGuard( m_aMutex );
     checkAndResizeParameters(parameterIndex);
 
-    if(m_aAssignValues.isValid())
-        (*m_aAssignValues)[m_aParameterIndexes[parameterIndex]].setNull();
+    if ( m_aAssignValues.isValid() )
+        (*m_aAssignValues)[m_aParameterIndexes[parameterIndex]]->setNull();
     else
-        (*m_aParameterRow)[parameterIndex].setNull();
+        (*m_aParameterRow)[parameterIndex]->setNull();
 }
 // -------------------------------------------------------------------------
 
@@ -423,7 +424,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     m_aParameterRow->clear();
-    m_aParameterRow->push_back(sal_Int32(0));
+    m_aParameterRow->push_back(new ORowSetValueDecorator(sal_Int32(0)) );
 }
 // -------------------------------------------------------------------------
 OResultSet* OPreparedStatement::createResultSet()
@@ -466,7 +467,15 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
     if ( m_aAssignValues.isValid() && (parameterIndex < 1 || parameterIndex >= static_cast<sal_Int32>(m_aParameterIndexes.size())) )
         throwInvalidIndexException(*this);
     else if ( static_cast<sal_Int32>((*m_aParameterRow).size()) <= parameterIndex )
+    {
+        sal_Int32 i = m_aParameterRow->size();
         (*m_aParameterRow).resize(parameterIndex+1);
+        for ( ;i <= parameterIndex+1; ++i )
+        {
+            if ( !(*m_aParameterRow)[i].isValid() )
+                (*m_aParameterRow)[i] = new ORowSetValueDecorator;
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetValue& x)
@@ -475,9 +484,9 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
     checkAndResizeParameters(parameterIndex);
 
     if(m_aAssignValues.isValid())
-        (*m_aAssignValues)[m_aParameterIndexes[parameterIndex]] = x;
+        *(*m_aAssignValues)[m_aParameterIndexes[parameterIndex]] = x;
     else
-        (*m_aParameterRow)[parameterIndex] = x;
+        *((*m_aParameterRow)[parameterIndex]) = x;
 }
 // -----------------------------------------------------------------------------
 UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
@@ -593,9 +602,6 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
             m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
         }
     }
-
-//  m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
-//  m_pResultSet->setEvaluationKeySet(m_pEvaluationKeySet);
 }
 // -----------------------------------------------------------------------------
 void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem)
