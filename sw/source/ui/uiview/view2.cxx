@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-27 13:16:19 $
+ *  last change: $Author: mba $ $Date: 2001-11-29 16:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,20 +1311,8 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
     SwDocShell* pDocSh = GetDocShell();
     if( rFileName.Len() )
     {
-        const SfxFilter* pFilter = 0;
-
         SfxObjectFactory& rFact = pDocSh->GetFactory();
-        const USHORT nCount = rFact.GetFilterCount();
-        for( USHORT i = 0; i < nCount; i++ )
-        {
-            const SfxFilter* pFlt = rFact.GetFilter( i );
-            if( pFlt->GetName() == rFilterName ||
-                pFlt->GetFilterName() == rFilterName )
-            {
-                pFilter = pFlt;
-                break;
-            }
-        }
+        const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter( rFilterName );
         if ( !pFilter )
         {
             pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, 0, 0 );
