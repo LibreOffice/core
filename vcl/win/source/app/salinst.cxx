@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:50:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@
 #include <process.h>
 #endif
 
-#define _SV_SALINST_CXX
-
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
@@ -122,8 +120,8 @@
 #include <timer.hxx>
 #endif
 
-#ifndef CS_DROPSHADOW
-#define CS_DROPSHADOW       0x00020000
+#ifndef _SV_WINCOMP_HXX
+#include <wincomp.hxx>  // CS_DROPSHADOW
 #endif
 
 // =======================================================================
@@ -461,12 +459,11 @@ SalInstance* CreateSalInstance()
     SalData* pSalData = GetSalData();
 
     // determine the windows version
-    aSalShlData.mbW40 = 0;
     aSalShlData.mbWNT = 0;
     aSalShlData.mbWXP = 0;
     WORD nVer = (WORD)GetVersion();
     aSalShlData.mnVersion = (((WORD)LOBYTE(nVer)) * 100) + HIBYTE(nVer);
-    if ( aSalShlData.mnVersion >= W95_VERSION )
+    if ( aSalShlData.mnVersion >= 400 )
         aSalShlData.mbW40 = 1;
     OSVERSIONINFO aVerInfo;
     aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
