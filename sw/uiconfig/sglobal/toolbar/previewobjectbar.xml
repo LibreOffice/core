@@ -10,7 +10,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages" toolbar:helpid="helpid:21252" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomPlus" toolbar:helpid="helpid:10097" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:helpid="helpid:10098" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMinus" toolbar:helpid="helpid:10098" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:PreviewZoom" toolbar:helpid="helpid:53071" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FullScreen" toolbar:helpid="helpid:5627" toolbar:text="" />
