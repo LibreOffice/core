@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slide.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:09:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,13 @@ namespace presentation
              */
             void setUserPaintColor( const ::comphelper::OptionalValue< RGBColor >& rColor );
 
+            /// Query the XDrawPage's size
+            basegfx::B2ISize getSlideSize() const;
+
+            /// Get size of the slide in device coordinates for given view
+            ::basegfx::B2ISize getSlideSizePixel(
+                UnoViewSharedPtr const & pView ) const;
+
         private:
             // default: disabled copy/assignment
             Slide(const Slide&);
@@ -299,11 +306,10 @@ namespace presentation
             bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
                                                   ::com::sun::star::animations::XAnimationNode >& xRootAnimationNode );
 
-            /// Get size of the slide in device coordinates for given view
-            ::basegfx::B2ISize getSlideSize( const UnoViewSharedPtr& rView );
-
             /// Renders current slide content to bitmap
-            SlideBitmapSharedPtr createCurrentSlideBitmap( const UnoViewSharedPtr& rView );
+            SlideBitmapSharedPtr createCurrentSlideBitmap(
+                const UnoViewSharedPtr& rView,
+                ::basegfx::B2ISize const & rSlideSize );
 
             /// Prefetch all shapes (not the animations)
             bool prefetchShapes();
@@ -311,11 +317,8 @@ namespace presentation
             /// Prefetch show, but don't call applyInitialShapeAttributes()
             bool implPrefetchShow();
 
-            /// Query the XDrawPage's size
-            bool getPageSize                ( ::basegfx::B2ISize& o_rPageSize ) const;
-
-            /// Query the rectangle covered by the page
-            ::basegfx::B2DRectangle getPageRect() const;
+            /// Query the rectangle covered by the slide
+            ::basegfx::B2DRectangle getSlideRect() const;
 
             /// Start GIF and other intrinsic shape animations
             void endIntrinsicAnimations();
