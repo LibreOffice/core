@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:02:08 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:39:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,10 @@ HNJLIB=libhnj.lib
 
 .IF "$(ULINGULIB)"==""
 .IF "$(GUI)"=="UNX"
-ULINGULIB=-lulingu$(UPD)$(DLLPOSTFIX)
+ULINGULIB=-lulingu
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
-ULINGULIB=$(LIBPRE) ulingu.lib
+ULINGULIB=libulingu.lib
 .ENDIF # wnt
 .ENDIF
 
