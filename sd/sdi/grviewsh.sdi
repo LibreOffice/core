@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grviewsh.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:21:02 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,8 @@ interface GraphicEditView : DrawView
     ]
 }
 
-shell SdGraphicViewShell : SfxViewShell
+shell GraphicViewShell
 {
     import GraphicEditView[Automation];
-    import View;
+//  import View;
 }
-
-
