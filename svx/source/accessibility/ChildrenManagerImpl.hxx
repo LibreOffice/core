@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-06-03 15:12:11 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include "AccessibleContextBase.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #include <vos/mutex.hxx>
 #include <vector>
@@ -106,6 +106,7 @@ class AccessibleShape;
 
 class ChildDescriptor; // See below for declaration.
 
+// Re-using MutexOwner class defined in AccessibleContextBase.hxx
 
 /** This class contains the actual implementation of the children manager.
 
@@ -133,7 +134,8 @@ class ChildDescriptor; // See below for declaration.
     @see ChildrenManager
 */
 class ChildrenManagerImpl
-    :   public cppu::WeakImplHelper2<
+    :   public MutexOwner,
+        public cppu::WeakComponentImplHelper2<
             ::com::sun::star::document::XEventListener,
             ::com::sun::star::view::XSelectionChangeListener>,
         public IAccessibleViewForwarderListener,
@@ -336,9 +338,6 @@ public:
 
 
 protected:
-    /// Mutex guarding objects of this class.
-    mutable ::vos::OMutex maMutex;
-
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.
 
@@ -388,6 +387,11 @@ protected:
         listeners of new and remved children.
     */
     AccessibleContextBase& mrContext;
+
+    /** This method is called from the component helper base class while
+        disposing.
+    */
+    virtual void SAL_CALL disposing (void);
 
     /** Experimental: Get the index of the specified accessible object with
         respect to the list of children maintained by this object.

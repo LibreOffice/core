@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 08:11:18 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 #include <rtl/ustring.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -90,7 +91,10 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     const uno::Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
-    : mxShapeList (rxShapeList),
+    : ::cppu::WeakComponentImplHelper2<
+          ::com::sun::star::document::XEventListener,
+          ::com::sun::star::view::XSelectionChangeListener>(maMutex),
+      mxShapeList (rxShapeList),
       mxParent (rxParent),
       maShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext)
@@ -103,19 +107,8 @@ ChildrenManagerImpl::ChildrenManagerImpl (
 
 ChildrenManagerImpl::~ChildrenManagerImpl (void)
 {
-    // Remove from broadcasters.
-    Reference<view::XSelectionSupplier> xSelectionSupplier (
-        maShapeTreeInfo.GetController(), uno::UNO_QUERY);
-    if (xSelectionSupplier.is())
-        xSelectionSupplier->removeSelectionChangeListener (
-            static_cast<view::XSelectionChangeListener*>(this));
-
-    if (maShapeTreeInfo.GetModelBroadcaster().is())
-        maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
-            static_cast<document::XEventListener*>(this));
-
-    ClearAccessibleShapeList ();
-    OSL_TRACE ("~ChildrenManagerImpl");
+    DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
+        "~AccessibleDrawDocumentView: object has not been disposed");
 }
 
 
@@ -176,7 +169,7 @@ uno::Reference<XAccessible>
 {
     if ( ! rChildDescriptor.mxAccessibleShape.is())
     {
-        ::vos::OGuard aGuard (maMutex);
+        ::osl::MutexGuard aGuard (maMutex);
         //        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
         // Make sure that the requested accessible object has not been
         // created while locking the global mutex.
@@ -268,7 +261,7 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 
     // 6. Replace the current list of visible shapes with the new one.  Do
     // the same with the visible area.
-    ::vos::OGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (maMutex);
     maVisibleChildren = aNewChildList;
     maVisibleArea = aVisibleArea;
 }
@@ -279,7 +272,7 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 void ChildrenManagerImpl::CreateListOfVisibleShapes (
     ChildDescriptorListType& raDescriptorList)
 {
-    ::vos::OGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (maMutex);
 
     OSL_ASSERT (maShapeTreeInfo.GetViewForwarder() != NULL);
 
@@ -520,7 +513,7 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
     Reference<document::XEventBroadcaster> xCurrentBroadcaster;
     Reference<view::XSelectionSupplier> xCurrentSelectionSupplier;
     {
-        ::vos::OGuard aGuard (maMutex);
+        ::osl::MutexGuard aGuard (maMutex);
         xCurrentBroadcaster = maShapeTreeInfo.GetModelBroadcaster();
         xCurrentSelectionSupplier = Reference<view::XSelectionSupplier> (
             maShapeTreeInfo.GetController(), uno::UNO_QUERY);
@@ -633,12 +626,33 @@ void  SAL_CALL
 
 
 
+void SAL_CALL ChildrenManagerImpl::disposing (void)
+{
+    OSL_TRACE ("ChildrenManagerImpl::disposing()");
+
+    // Remove from broadcasters.
+    Reference<view::XSelectionSupplier> xSelectionSupplier (
+        maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->removeSelectionChangeListener (
+            static_cast<view::XSelectionChangeListener*>(this));
+
+    if (maShapeTreeInfo.GetModelBroadcaster().is())
+        maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
+            static_cast<document::XEventListener*>(this));
+
+    ClearAccessibleShapeList ();
+}
+
+
+
+
 // This method is experimental.  Use with care.
 long int ChildrenManagerImpl::GetChildIndex (const ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible>& xChild) const
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard (maMutex);
+    ::osl::MutexGuard aGuard (maMutex);
     for (unsigned long i=0; i<maVisibleChildren.size(); i++)
     {
         // Is this equality comparison valid?
@@ -661,7 +675,7 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
         Update (false);
     else
     {
-        ::vos::OGuard aGuard (maMutex);
+        ::osl::MutexGuard aGuard (maMutex);
         for (unsigned long i=0; i<maVisibleChildren.size(); i++)
         {
             AccessibleShape* pShape = maVisibleChildren[i].GetAccessibleShape();
@@ -880,7 +894,10 @@ bool ChildDescriptor::operator == (const ChildDescriptor& aDescriptor)
 */
 bool ChildDescriptor::operator < (const ChildDescriptor& aDescriptor)
 {
-    return mxShape < aDescriptor.mxShape;
+    if (mxShape < aDescriptor.mxShape)
+        return true;
+    else
+        return false;
 }
 
 
