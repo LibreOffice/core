@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:19:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,43 +69,15 @@ ModalDialog DLG_RENAME_XNAMED
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 60 ) ;
-    Text = "Objekt umbenennen: " ;
-    Text [ ENGLISH ] = "Rename object: " ;
+    Text [ de ] = "Objekt umbenennen: " ;
     Moveable = TRUE ;
     FixedText FT_NEW_NAME
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Neuer Name" ;
-        Text [ ENGLISH ] = "New name" ;
-        Text[ english_us ] = "New name";
-        Text[ portuguese ] = "Novo nome";
-        Text[ russian ] = "Íîâîå èìÿ";
-        Text[ greek ] = "Íİï üíïìá";
-        Text[ dutch ] = "Nieuwe naam";
-        Text[ french ] = "Nouveau nom";
-        Text[ spanish ] = "Nombre nuevo";
-        Text[ italian ] = "Nome nuovo";
-        Text[ danish ] = "Nyt navn";
-        Text[ swedish ] = "Nytt namn";
-        Text[ polish ] = "Nowa nazwa";
-        Text[ portuguese_brazilian ] = "Novo nome";
-        Text[ japanese ] = "æ–°ã—ã„åå‰";
-        Text[ korean ] = "ìƒˆ ì´ë¦„";
-        Text[ chinese_simplified ] = "æ–°åç§°";
-        Text[ chinese_traditional ] = "æ–°åç¨±";
-        Text[ arabic ] = "ÇáÇÓã ÇáÌÏíÏ";
-        Text[ turkish ] = "Yeni ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom nou";
-        Text[ finnish ] = "Uusi nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½ nÃ¡zev";
-        Text[ hebrew ] = "Neuer Name";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NovÃ½ nÃ¡zov";
-        Text[ hungarian ] = "Ãšj nÃ©v";
-        Text[ slovenian ] = "Novo ime";
+        Text [ de ] = "Neuer Name" ;
+        Text [ en-US ] = "New name";
+        Text [ x-comment ] = " ";
     };
     Edit ED_NEW_NAME
     {
@@ -117,36 +89,9 @@ ModalDialog DLG_RENAME_XNAMED
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text = "Name ändern";
-        Text [ ENGLISH ] = "Change name" ;
-        Text[ english_us ] = "Change name";
-        Text[ portuguese ] = "Mudar nome";
-        Text[ russian ] = "Èçìåíèòü èìÿ";
-        Text[ greek ] = "ÁëëáãŞ ïíüìáôïò";
-        Text[ dutch ] = "Naam wijzigen";
-        Text[ french ] = "Modifier le nom";
-        Text[ spanish ] = "Cambiar nombre";
-        Text[ italian ] = "Cambia nome";
-        Text[ danish ] = "Rediger navn";
-        Text[ swedish ] = "Ändra namn";
-        Text[ polish ] = "Zmieñ nazwê";
-        Text[ portuguese_brazilian ] = "Alterar o nome";
-        Text[ japanese ] = "åå‰ã®å¤‰æ›´";
-        Text[ korean ] = "ì´ë¦„ ë³€ê²½";
-        Text[ chinese_simplified ] = "æ›´æ”¹åç§°";
-        Text[ chinese_traditional ] = "è®Šæ›´åç¨±";
-        Text[ arabic ] = "ÊÚÏíá ÇáÇÓã";
-        Text[ turkish ] = "İsim değiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Canvia el nom";
-        Text[ finnish ] = "Muuta nimi";
-        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "ZmÄ›nit nÃ¡zev";
-        Text[ hebrew ] = "Name Ã¤ndern";
-        Text[ hindi ] = "à¤¨à¤¾à¤® à¤¬à¤¦à¤²à¥‹";
-        Text[ slovak ] = "ZmeniÅ¥ nÃ¡zov";
-        Text[ hungarian ] = "VÃ¡lasszon nevet";
-        Text[ slovenian ] = "Spremeni ime";
+        Text [ de ] = "Name ändern";
+        Text [ en-US ] = "Change name";
+        Text [ x-comment ] = " ";
     };
     OKButton PB_OK
     {
@@ -170,251 +115,36 @@ ModalDialog DLG_RENAME_XNAMED
         TabStop = TRUE ;
         Group = TRUE ;
     };
-    Text[ english_us ] = "Rename object: ";
-    Text[ portuguese ] = "Mudar nome do objecto: ";
-    Text[ russian ] = "Ïåğåèìåíîâàòü îáúåêò:  ";
-    Text[ greek ] = "Ìåôïíïìáóßá áíôéêåéìİíïõ: ";
-    Text[ dutch ] = "Objectnaam wijzigen: ";
-    Text[ french ] = "Renommer l'objet :  ";
-    Text[ spanish ] = "Cambiar nombre de objeto: ";
-    Text[ italian ] = "Rinomina oggetto: ";
-    Text[ danish ] = "Omdøb objekt: ";
-    Text[ swedish ] = "Byt namn på objekt:  ";
-    Text[ polish ] = "Zmieñ nazwê obiektu: ";
-    Text[ portuguese_brazilian ] = "Renomear objeto: ";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåã®å¤‰æ›´: ";
-    Text[ korean ] = "ê°œì²´ ì´ë¦„ ë°”ê¾¸ê¸°: ";
-    Text[ chinese_simplified ] = "é‡å‘½åå¯¹è±¡ï¼š ";
-    Text[ chinese_traditional ] = "é‡æ–°å‘½åç‰©ä»¶ï¼š ";
-    Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáßÇÆä: ";
-    Text[ turkish ] = "Nesneyi yeniden adlandır: ";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reanomena l'objecte: ";
-    Text[ finnish ] = "Nimeä objekti uudelleen: ";
-    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸§à¸±à¸•à¸–à¸¸: ";
-    Text[ czech ] = "PÅ™ejmenovat objekt:";
-    Text[ hebrew ] = "Objekt umbenennen:";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤ªà¥à¤¨à¤ƒ à¤¨à¤¾à¤® à¤¦à¥‹: ";
-    Text[ slovak ] = "PremenovaÅ¥ objekt:";
-    Text[ hungarian ] = "Objektum Ã¡tnevezÃ©se:";
-    Text[ slovenian ] = "Preimenuj predmet:";
+    Text [ en-US ] = "Rename object: ";
+    Text [ x-comment ] = " ";
 };
 String STR_SERVICE_UNAVAILABLE
 {
-    Text = "Der folgende Service ist nicht verfügbar: " ;
-    Text [ English ] = "The following service is not available: " ;
-    Text[ english_us ] = "The following service is not available: ";
-    Text[ portuguese ] = "O seguinte serviço não está disponível: ";
-    Text[ russian ] = "Íåäîñòóïíà ñëåäóşùàÿ ñëóæáà:  ";
-    Text[ greek ] = "Ç áêüëïõèç õğçñåóßá äåí åßíáé äéáèİóéìç: ";
-    Text[ dutch ] = "De volgende service is niet beschikbaar:";
-    Text[ french ] = "Le service suivant n'est pas disponible :  ";
-    Text[ spanish ] = "El siguiente servicio no está disponible: ";
-    Text[ italian ] = "Il seguente servizio non è disponibile. ";
-    Text[ danish ] = "Følgende service er ikke tilgængelig: ";
-    Text[ swedish ] = "Följande service är inte tillgänglig:  ";
-    Text[ polish ] = "Nastêpuj¹ca us³uga jest niedostêpna: ";
-    Text[ portuguese_brazilian ] = "O seguinte serviço está indisponível: ";
-    Text[ japanese ] = "æ¬¡ã®ã‚µãƒ¼ãƒ“ã‚¹ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“: ";
-    Text[ korean ] = "ë‹¤ìŒê³¼ ê°™ì€ ì„œë¹„ìŠ¤ëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤: ";
-    Text[ chinese_simplified ] = "ä¸å­˜åœ¨ä¸‹åˆ—æœåŠ¡åŠŸèƒ½ï¼š ";
-    Text[ chinese_traditional ] = "é€™å€‹æœå‹™åŠŸèƒ½ä¸å­˜åœ¨ï¼š ";
-    Text[ arabic ] = "ÇáÎÏãÉ ÇáÊÇáíÉ ÛíÑ ãÊæİÑÉ: ";
-    Text[ turkish ] = "Aşağıdaki servis bulunmamaktadır: ";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El següent servei no està disponible: ";
-    Text[ finnish ] = "Seuraava palvelu ei ole käytettävissä: ";
-    Text[ thai ] = "à¸šà¸£à¸´à¸à¸²à¸£à¸™à¸µà¹‰à¹ƒà¸Šà¹‰à¹„à¸¡à¹ˆà¹„à¸”à¹‰: ";
-    Text[ czech ] = "Tato sluÅ¾ba nenÃ­ dostupnÃ¡: ";
-    Text[ hebrew ] = "Der folgende Service ist nicht verfÃ¼gbar:";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¸à¥‡à¤µà¤¾ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ: ";
-    Text[ slovak ] = "TÃ¡to sluÅ¾ba nie je dostupnÃ¡: ";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ szolgÃ¡ltatÃ¡s nem Ã©rhetÅ‘ el:";
-    Text[ slovenian ] = "SledeÄa storitev ni na voljo:";
+    Text [ de ] = "Der folgende Service ist nicht verfügbar: " ;
+    Text [ en-US ] = "The following service is not available: ";
+    Text [ x-comment ] = " ";
 };
 Resource RES_FRMEX_MENU
 {
     StringArray 1
     {
-        ItemList =
+        ItemList [ de ] =
         {
             < "~Maßstab" ;      ST_MENU_ZOOM; > ;
             < "Nach ~oben" ;    ST_MENU_UP;     > ;
             < "Nach ~unten" ;   ST_MENU_DOWN; > ;
         };
-        ItemList [English]=
-        {
-            < "~Zoom" ; ST_MENU_ZOOM; > ;
-            < "Go up" ; ST_MENU_UP; > ;
-            < "Go down" ; ST_MENU_DOWN; > ;
-        };
-    ItemList [ language_user1 ] =
+    ItemList [ x-comment ] =
     {
             < " " ;         ST_MENU_ZOOM; > ;
         < "; Nach ~oben" ;  ST_MENU_UP;     > ;
         < "; Nach ~unten" ;     ST_MENU_DOWN; > ;
     };
-    ItemList [ english_us ] =
+    ItemList [ en-US ] =
     {
             < "~Zoom" ;         ST_MENU_ZOOM; > ;
         < "~Upwards" ;  ST_MENU_UP;     > ;
         < "Do~wnwards" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ portuguese ] =
-    {
-            < "~Escala" ;       ST_MENU_ZOOM; > ;
-        < "Para ~cima" ;    ST_MENU_UP;     > ;
-        < "Para ~baixo" ;   ST_MENU_DOWN; > ;
-    };
-    ItemList [ russian ] =
-    {
-            < "~Ìàñøòàá" ;      ST_MENU_ZOOM; > ;
-        < "Ââåğõ" ;     ST_MENU_UP;     > ;
-        < "Âíèç" ;  ST_MENU_DOWN; > ;
-    };
-    ItemList [ greek ] =
-    {
-            < "Êëß~ìáêá" ;      ST_MENU_ZOOM; > ;
-        < "Ğñ~ïò ôá ğÜíù" ;     ST_MENU_UP;     > ;
-        < "Ğñïò ôá êÜôù" ;  ST_MENU_DOWN; > ;
-    };
-    ItemList [ dutch ] =
-    {
-            < "~Maatstaf" ;         ST_MENU_ZOOM; > ;
-        < "Naar b~oven" ;   ST_MENU_UP;     > ;
-        < "Naar be~neden" ;     ST_MENU_DOWN; > ;
-    };
-    ItemList [ french ] =
-    {
-            < "~Échelle" ;      ST_MENU_ZOOM; > ;
-        < "Vers le ~haut" ;     ST_MENU_UP;     > ;
-        < "Vers le bas" ;   ST_MENU_DOWN; > ;
-    };
-    ItemList [ spanish ] =
-    {
-            < "~Escala" ;       ST_MENU_ZOOM; > ;
-        < "Hacia ~arriba" ;     ST_MENU_UP;     > ;
-        < "Hacia a~bajo" ;  ST_MENU_DOWN; > ;
-    };
-    ItemList [ italian ] =
-    {
-            < "~Zoom" ;         ST_MENU_ZOOM; > ;
-        < "In alt~o" ;  ST_MENU_UP;     > ;
-        < "In basso" ;  ST_MENU_DOWN; > ;
-    };
-    ItemList [ danish ] =
-    {
-            < "~Målestok" ;         ST_MENU_ZOOM; > ;
-        < "~Opad" ;     ST_MENU_UP;     > ;
-        < "~Nedad" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ swedish ] =
-    {
-            < "Skala" ;         ST_MENU_ZOOM; > ;
-        < "Uppåt" ;     ST_MENU_UP;     > ;
-        < "Nedåt" ;     ST_MENU_DOWN; > ;
-    };
-    ItemList [ polish ] =
-    {
-            < "~Powiêkszenie" ;         ST_MENU_ZOOM; > ;
-        < "W ~górê" ;   ST_MENU_UP;     > ;
-        < "W ~dó³" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ portuguese_brazilian ] =
-    {
-            < "~Zoom" ;         ST_MENU_ZOOM; > ;
-        < "Para ~cima" ;    ST_MENU_UP;     > ;
-        < "Para ~baixo" ;   ST_MENU_DOWN; > ;
-    };
-    ItemList [ japanese ] =
-    {
-            < "ã‚ºãƒ¼ãƒ (~Z)" ;         ST_MENU_ZOOM; > ;
-        < "ä¸Šã¸(~U)" ;    ST_MENU_UP;     > ;
-        < "ä¸‹ã¸(~W)" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ korean ] =
-    {
-            < "ì¶•ì†Œ/í™•ëŒ€(~Z)" ;         ST_MENU_ZOOM; > ;
-        < "ìœ„ë¡œ(~U)" ;    ST_MENU_UP;     > ;
-        < "ì•„ë˜ë¡œ(~W)" ;     ST_MENU_DOWN; > ;
-    };
-    ItemList [ chinese_simplified ] =
-    {
-            < "æ˜¾ç¤ºæ¯”ä¾‹(~Z)" ;      ST_MENU_ZOOM; > ;
-        < "å‘ä¸Š(~U)" ;    ST_MENU_UP;     > ;
-        < "å‘ä¸‹(~W)" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ chinese_traditional ] =
-    {
-            < "é¡¯ç¤ºæ¯”ä¾‹(~Z)" ;      ST_MENU_ZOOM; > ;
-        < "å‘ä¸Š(~U)" ;    ST_MENU_UP;     > ;
-        < "å‘ä¸‹(~W)" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ arabic ] =
-    {
-            < "ÊßÈíÑ/ÊÕÛíÑ" ;       ST_MENU_ZOOM; > ;
-        < "Åáì ÃÚáì" ;  ST_MENU_UP;     > ;
-        < "Åáì ÃÓİá" ;  ST_MENU_DOWN; > ;
-    };
-    ItemList [ turkish ] =
-    {
-            < "~Yakınlaştır" ;      ST_MENU_ZOOM; > ;
-        < "~Yukarı" ;   ST_MENU_UP;     > ;
-        < "A~şağı" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ catalan ] =
-    {
-            < "~Zoom" ;         ST_MENU_ZOOM; > ;
-        < "~Cap amunt" ;    ST_MENU_UP;     > ;
-        < "Cap ~avall" ;    ST_MENU_DOWN; > ;
-    };
-    ItemList [ finnish ] =
-    {
-            < "~Zoomaus" ;      ST_MENU_ZOOM; > ;
-        < "~Ylös" ;     ST_MENU_UP;     > ;
-        < "Al~as" ;     ST_MENU_DOWN; > ;
-    };
-    ItemList [ thai ] =
-    {
-         < "~Maà¸¿stab" ;       ST_MENU_ZOOM; > ;
-        < "Nach ~oben" ;    ST_MENU_UP;     > ;
-        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
-    };
-    ItemList [ czech ] =
-    {
-         < "ZvÄ›tÅ¡enÃ­" ;      ST_MENU_ZOOM; > ;
-        < "Nahoru" ;    ST_MENU_UP;     > ;
-        < "DolÅ¯" ;     ST_MENU_DOWN; > ;
-    };
-    ItemList [ hebrew ] =
-    {
-         < "â€®×–×•×â€¬" ;         ST_MENU_ZOOM; > ;
-        < "Nach ~oben" ;    ST_MENU_UP;     > ;
-        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
-    };
-    ItemList [ hindi ] =
-    {
-         < "~MaÃ¯Â¿Â½stab" ;        ST_MENU_ZOOM; > ;
-        < "~à¤Šà¤ªà¤° à¤•à¥€ à¤“à¤°" ;  ST_MENU_UP;     > ;
-        < "~à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤“à¤°" ;   ST_MENU_DOWN; > ;
-    };
-    ItemList [ slovak ] =
-    {
-         < "~ZvÃ¤ÄÅ¡enie" ;        ST_MENU_ZOOM; > ;
-        < "~Hore" ;     ST_MENU_UP;     > ;
-        < "~Dole" ;     ST_MENU_DOWN; > ;
-    };
-    ItemList [ hungarian ] =
-    {
-         < "~NagyÃ­tÃ¡s" ;      ST_MENU_ZOOM; > ;
-        < "~FelfelÃ©" ;     ST_MENU_UP;     > ;
-        < "~LefelÃ©" ;  ST_MENU_DOWN; > ;
-    };
-    ItemList [ slovenian ] =
-    {
-         < "~Zoom" ;        ST_MENU_ZOOM; > ;
-        < "Navzg~or" ;  ST_MENU_UP;     > ;
-        < "Navz~dol" ;  ST_MENU_DOWN; > ;
     };
     };
 };
