@@ -61,12 +61,8 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    osl::FileBase::RC err,d;
-    if(( err = d = m_aFile.open(OpenFlag_Read | OpenFlag_Write)) == osl::FileBase::E_None  ||
-       ( d == osl::FileBase::E_NOENT &&
-         ( err = m_aFile.open(OpenFlag_Read | OpenFlag_Write | OpenFlag_Create)) == osl::FileBase::E_None ))
-        m_nIsOpen = true;
-    else
+    osl::FileBase::RC err = m_aFile.open( OpenFlag_Read | OpenFlag_Write );
+    if(  err != osl::FileBase::E_None )
     {
         m_nIsOpen = false;
         m_aFile.close();
@@ -74,6 +70,8 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
         m_nErrorCode = TASKHANDLING_OPEN_FOR_STREAM;
         m_nMinorErrorCode = err;
     }
+    else
+        m_nIsOpen = true;
 }
 
 
