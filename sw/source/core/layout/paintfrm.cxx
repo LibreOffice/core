@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 13:04:50 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3689,7 +3689,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                 // return first cell in first row
                 SwFrm* pTmpFrm = const_cast<SwFrm*>(pFirstRow->GetLower());
                 while ( !pTmpFrm->IsCellFrm() ||
-                        ( pTmpFrm->GetLower() && pTmpFrm->GetLower()->IsLayoutFrm() )
+                        ( pTmpFrm->GetLower() && pTmpFrm->GetLower()->IsRowFrm() )
                       )
                 {
                     pTmpFrm = pTmpFrm->GetLower();
@@ -3718,7 +3718,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                 // return first bottom border cell in last row
                 SwFrm* pTmpFrm = const_cast<SwFrm*>(pLastRow->GetLower());
                 while ( !pTmpFrm->IsCellFrm() ||
-                        ( pTmpFrm->GetLower() && pTmpFrm->GetLower()->IsLayoutFrm() )
+                        ( pTmpFrm->GetLower() && pTmpFrm->GetLower()->IsRowFrm() )
                       )
                 {
                     if ( pTmpFrm->IsRowFrm() )
