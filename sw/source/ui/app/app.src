@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:00:54 $
+ *  last change: $Author: hjs $ $Date: 2004-07-05 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ String STR_PAGE_COUNT_MACRO
            SID_INSERT_DRAW                  ;\
         SID_DOCTEMPLATE                 ;\
         SID_AUTOFORMAT                  ;\
+        SID_AUTOSPELL_CHECK             ;\
         SID_EXTENDEDHELP                ;\
         SID_ATTR_CHAR_FONT              ;\
         SID_ATTR_CHAR_FONTHEIGHT        ;\
