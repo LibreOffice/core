@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,10 +475,10 @@ void OEditModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,           BOUND,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,           BOUND, MAYBEVOID);
+        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,      READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
@@ -557,11 +557,12 @@ sal_Int16 OEditModel::getPersistenceFlags() const
 void OEditModel::_loaded(const EventObject& rEvent)
 {
     m_bNumericField = sal_False;
-    if (m_xField.is())
+    Reference<XPropertySet> xField = getField();
+    if (xField.is())
     {
         // jetzt den Key und typ ermitteln
-        m_nFieldType  = getINT32(m_xField->getPropertyValue(PROPERTY_FIELDTYPE));
-        m_nFormatKey = getINT32(m_xField->getPropertyValue(PROPERTY_FORMATKEY));
+        m_nFieldType  = getINT32(xField->getPropertyValue(PROPERTY_FIELDTYPE));
+        m_nFormatKey = getINT32(xField->getPropertyValue(PROPERTY_FORMATKEY));
 
         switch (m_nFieldType)
         {
@@ -606,7 +607,7 @@ void OEditModel::_loaded(const EventObject& rEvent)
             if ( !m_bMaxTextLenModified )
             {
                 sal_Int32 nFieldLen;
-                m_xField->getPropertyValue(::rtl::OUString::createFromAscii("Precision")) >>= nFieldLen;
+                xField->getPropertyValue(::rtl::OUString::createFromAscii("Precision")) >>= nFieldLen;
 
                 if (nFieldLen && nFieldLen <= USHRT_MAX)
                 {
@@ -627,7 +628,7 @@ void OEditModel::_loaded(const EventObject& rEvent)
 void OEditModel::_unloaded()
 {
     OEditBaseModel::_unloaded();
-    if (m_xField.is())
+    if (getField().is())
     {
         if ( m_bMaxTextLenModified )
         {
