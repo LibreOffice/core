@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:44:40 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ greek ] = "Ó~åô ÷áñáêôÞñùí";
         Text[ dutch ] = "~Tekenset";
         Text[ french ] = "~Jeu de caractères";
-        Text[ spanish ] = "~Caracteres";
+        Text[ spanish ] = "~Juego de caracteres";
         Text[ italian ] = "Ti~po di carattere";
         Text[ danish ] = "Tegnsæt";
         Text[ swedish ] = "Teckenuppsättning";
@@ -389,6 +389,7 @@ ModalDialog DLG_ASCII_FILTER
     Text[ catalan ] = "Opciones de filtro ASCII";
     Text[ finnish ] = "ASCII-suodatusasetukset";
 };
+
 
 
 
