@@ -55,7 +55,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..
 
 PRJPCH=
@@ -69,6 +68,7 @@ USE_JAVAVER=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  icuversion.mk
 
 .IF "$(ENABLE_CRASHDUMP)"!=""
 SCPDEFS+=-DENABLE_CRASHDUMP
@@ -141,6 +141,11 @@ SCPDEFS+=-DSYSTEM_STDLIBS
 .IF "$(JDK)" == "gcj"
 SCPDEFS+=-DGCJ
 .ENDIF
+
+SCPDEFS+=\
+    -DICU_MAJOR=$(ICU_MAJOR) \
+    -DICU_MINOR=$(ICU_MINOR) \
+    -DICU_MICRO=$(ICU_MICRO)
 
 SCP_PRODUCT_TYPE=osl
 
