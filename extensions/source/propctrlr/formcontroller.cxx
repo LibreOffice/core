@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:51:27 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 15:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1972,7 +1972,7 @@ namespace pcr
 
                 if ((pProps->Attributes & PropertyAttribute::MAYBEVOID) && nPropId != PROPERTY_ID_BORDER) //&& eState!=DIRECT_VALUE
                 {
-                    pProperty->bHasDefaultValue =sal_True;
+                    pProperty->bHasDefaultValue = sal_True;
                     if (!aVal.hasValue())
                         pProperty->sValue = m_sStandard;
                 }
@@ -2613,8 +2613,6 @@ namespace pcr
                 aValue = StringToAny( aUserVal, aProp, nPropId);
             }
 
-            sal_Bool bDontSetToDefault = sal_False;
-
             if  (   (   (nPropId == PROPERTY_ID_DEFAULT_VALUE)
                     ||  (nPropId == PROPERTY_ID_DEFAULT_DATE)
                     ||  (nPropId == PROPERTY_ID_DEFAULT_TIME)
@@ -2624,7 +2622,6 @@ namespace pcr
                 )
             {
                 aValue = Any();
-                bDontSetToDefault = sal_True;
             }
 
             //////////////////////////////////////////////////////////////////////
@@ -2637,16 +2634,11 @@ namespace pcr
             {
                 bDontForwardToPropSet = sal_True;
                 // the string fo the control label is not to be set as PropertyValue, it's only for displaying
-                bDontSetToDefault = sal_True;
             }
 
             if (!bDontForwardToPropSet)
                 m_xPropValueAccess->setPropertyValue( rName, aValue );
 
-            if (m_xPropStateAccess.is() && aValue.getValueType().equals( ::getVoidCppuType()) && !bDontSetToDefault)
-            {
-                m_xPropStateAccess->setPropertyToDefault(rName);
-            }
             //////////////////////////////////////////////////////////////////////
             // Wert neu holen und ggf. neu setzen
             Any aNewValue = m_xPropValueAccess->getPropertyValue(rName);
@@ -2804,6 +2796,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/05/14 09:51:27  pl
+ *  rtl string api changes
+ *
  *  Revision 1.19  2001/05/11 10:37:11  fs
  *  replaced the SfxFileDialog/SvxImportGraphicsDialog
  *
