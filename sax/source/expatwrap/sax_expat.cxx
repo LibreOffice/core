@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 14:32:35 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
 Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = SaxExpatParser::getImplementationName_Static();
+    aRet.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME) );
     return aRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 09:36:12 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ OUString SaxWriter_getImplementationName() throw()
 Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = SaxWriter_getImplementationName();
+    aRet.getArray()[0] = SaxWriter_getServiceName();
     return aRet;
 }
 
