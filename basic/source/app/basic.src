@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:30:54 $
+ *  last change: $Author: kz $ $Date: 2002-05-23 22:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3907,13 +3907,13 @@ TabPage RID_TP_SPECIAL {
         Text[ finnish ] = "Save before execute";
         Text[ italian ] = "Save before execute";
         Text[ danish ] = "Save before execute";
-        Text[ swedish ] = "Save before execute";
+        Text[ swedish ] = "Save before running";
         Text[ polish ] = "Save before execute";
         Text[ portuguese_brazilian ] = "Save before execute";
         Text[ japanese ] = "Save before execute";
         Text[ korean ] = "Save before execute";
         Text[ chinese_simplified ] = "Save before execute";
-        Text[ chinese_traditional ] = "Save before execute";
+        Text[ chinese_traditional ] = "Save before running";
         Text[ turkish ] = "Save before execute";
         Text[ arabic ] = "Save before execute";
         Text[ catalan ] = "Save before execute";
@@ -3940,13 +3940,13 @@ TabPage RID_TP_FONT {
         Text[ finnish ] = "Tyyppi";
         Text[ italian ] = "Tipo";
         Text[ danish ] = "Type";
-        Text[ swedish ] = "Typ";
+        Text[ swedish ] = "Type";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "art";
         Text[ japanese ] = "ç¨®é¡ž";
         Text[ korean ] = "ì¢…ë¥˜";
         Text[ chinese_simplified ] = "ç±»åž‹";
-        Text[ chinese_traditional ] = "é¡žåž‹";
+        Text[ chinese_traditional ] = "Type";
         Text[ turkish ] = "Tür";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ catalan ] = "Mode";
@@ -3972,13 +3972,13 @@ TabPage RID_TP_FONT {
         Text[ finnish ] = "??????";
         Text[ italian ] = "??????";
         Text[ danish ] = "??????";
-        Text[ swedish ] = "??????";
+        Text[ swedish ] = "Typeface";
         Text[ polish ] = "??????";
         Text[ portuguese_brazilian ] = "??????";
         Text[ japanese ] = "??????";
         Text[ korean ] = "??????";
         Text[ chinese_simplified ] = "??????";
-        Text[ chinese_traditional ] = "??????";
+        Text[ chinese_traditional ] = "Typeface";
         Text[ turkish ] = "??????";
         Text[ arabic ] = "??????";
         Text[ catalan ] = "??????";
