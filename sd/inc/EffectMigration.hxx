@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EffectMigration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:44:07 $
+ *  last change: $Author: cl $ $Date: 2005-03-29 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
