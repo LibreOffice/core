@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:33:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ static SbiStatement StmntTable [] = {
 { OPTION,   &SbiParser::Option,     Y, N, }, // OPTION
 { PRINT,    &SbiParser::Print,      N, Y, }, // PRINT
 { PRIVATE,  &SbiParser::Dim,        Y, N, }, // PRIVATE
+{ PROPERTY, &SbiParser::SubFunc,    Y, N, }, // FUNCTION
 { PUBLIC,   &SbiParser::Dim,        Y, N, }, // PUBLIC
 { REDIM,    &SbiParser::ReDim,      N, Y, }, // DIM
 { RESUME,   &SbiParser::Resume,     N, Y, }, // RESUME
@@ -172,6 +173,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bNewGblDefs =
     bSingleLineIf =
     bExplicit = FALSE;
+    bClassModule = FALSE;
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
         eDefTypes[ i ] = SbxVARIANT;    // Kein expliziter Defaulttyp
@@ -440,7 +442,8 @@ BOOL SbiParser::Parse()
                 // globalen Chain pflegen
                 // AB #41606/#40689: Durch die neue static-Behandlung kann noch
                 // ein nGblChain vorhanden sein, daher vorher abfragen
-                if( bNewGblDefs && ( eCurTok == SUB || eCurTok == FUNCTION ) && nGblChain == 0 )
+                if( bNewGblDefs && nGblChain == 0 &&
+                    ( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ) )
                 {
                     nGblChain = aGen.Gen( _JUMP, 0 );
                     bNewGblDefs = FALSE;
@@ -702,6 +705,11 @@ void SbiParser::Option()
                 AddConstants();
             bCompatible = TRUE;
             break;
+
+        case CLASSMODULE:
+            bClassModule = TRUE;
+            break;
+
         default:
             Error( SbERR_BAD_OPTION, eCurTok );
     }
