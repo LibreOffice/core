@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: mt $ $Date: 2000-12-06 16:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,5 +312,15 @@ void OutlinerParaObject::FinishStore()
 void OutlinerParaObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
 {
     pText->FinishLoad( pStyleSheetPool );
+}
+
+void OutlinerParaObject::SetVertical( BOOL bVertical )
+{
+    pText->SetVertical( bVertical );
+}
+
+BOOL OutlinerParaObject::IsVertical() const
+{
+    return pText->IsVertical();
 }
 

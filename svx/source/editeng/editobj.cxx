@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
+ *  last change: $Author: mt $ $Date: 2000-12-06 16:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,14 @@ BOOL EditTextObject::IsVertical() const
     return FALSE;
 }
 
+void EditTextObject::SetVertical( BOOL bVertical )
+{
+#if  SUPD >= 615
+    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+#endif
+    ((BinTextObject*)this)->SetVertical( bVertical );
+}
+
 USHORT EditTextObject::GetScriptType() const
 {
 #if SUPD >= 615
@@ -623,12 +631,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
 
 __EXPORT BinTextObject::~BinTextObject()
 {
-    if ( pPortionInfo )
-    {
-        for ( USHORT n = pPortionInfo->Count(); n; )
-            delete pPortionInfo->GetObject( --n );
-        delete pPortionInfo;
-    }
+    ClearPortionInfo();
     DeleteContents();
     if ( bOwnerOfPool )
     {
@@ -666,7 +669,11 @@ BOOL BinTextObject::IsVertical() const
 
 void BinTextObject::SetVertical( BOOL b )
 {
-    bVertical = b;
+    if ( b != bVertical )
+    {
+        bVertical = b;
+        ClearPortionInfo();
+    }
 }
 
 USHORT BinTextObject::GetScriptType() const
@@ -792,8 +799,13 @@ BOOL BinTextObject::HasPortionInfo() const
 
 void BinTextObject::ClearPortionInfo()
 {
-    delete pPortionInfo;
-    pPortionInfo = 0;
+    if ( pPortionInfo )
+    {
+        for ( USHORT n = pPortionInfo->Count(); n; )
+            delete pPortionInfo->GetObject( --n );
+        delete pPortionInfo;
+        pPortionInfo = NULL;
+    }
 }
 
 BOOL BinTextObject::HasOnlineSpellErrors() const
