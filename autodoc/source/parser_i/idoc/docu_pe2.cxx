@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:43:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 // NOT FULLY DEFINED SERVICES
 #include <ary_i/codeinf2.hxx>
 #include <ary_i/d_token.hxx>
+#include <adc_cl.hxx>
 #include <s2_dsapi/dsapitok.hxx>
 #include <s2_dsapi/tk_atag2.hxx>
 #include <s2_dsapi/tk_html.hxx>
@@ -223,8 +224,9 @@ SapiDocu_PE::Process_XmlLink_BeginTag( const Tok_XmlLink_BeginTag & i_rToken )
         case Tok_XmlLink_Tag::type:
             (this->*fCurTokenAddFunction)(*new DT_MupType(i_rToken.Scope()));
             break;
-        // default:
-        //          Do nothing.
+        default:
+            //  Do nothing.
+            ;
     }
 
     if ( i_rToken.Dim().length() > 0 )
@@ -247,8 +249,9 @@ SapiDocu_PE::Process_XmlLink_EndTag( const Tok_XmlLink_EndTag & i_rToken )
         case Tok_XmlLink_Tag::type:
             (this->*fCurTokenAddFunction)(*new DT_MupType(true));
             break;
-        // default:
-        //          Do nothing.
+        default:
+            //  Do nothing.
+            ;
     }
     if ( sCurDimAttribute.length() > 0 )
     {
@@ -271,8 +274,9 @@ SapiDocu_PE::Process_XmlFormat_BeginTag( const Tok_XmlFormat_BeginTag & i_rToken
         case Tok_XmlFormat_Tag::atom:
             (this->*fCurTokenAddFunction)(*new DT_Style("<code>",true));
             break;
-        // default:
-        //          Do nothing.
+        default:
+            //  Do nothing.
+            ;
     }
     if ( i_rToken.Dim().length() > 0 )
         sCurDimAttribute = i_rToken.Dim();
@@ -294,8 +298,9 @@ SapiDocu_PE::Process_XmlFormat_EndTag( const Tok_XmlFormat_EndTag & i_rToken )
         case Tok_XmlFormat_Tag::atom:
             (this->*fCurTokenAddFunction)(*new DT_Style("</code>",true));
             break;
-        // default:
-        //          Do nothing.
+        default:
+            //  Do nothing.
+            ;
     }
     if ( sCurDimAttribute.length() > 0 )
     {
@@ -426,7 +431,8 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::info::DocuToken & let_drNewToken 
 
     char cFirst = *pToken->GetText();
     const char cCiphersend = '9' + 1;
-    if ( NOT csv::in_range('0', cFirst, cCiphersend) )
+    if ( autodoc::CommandLine::Get_().DoesTransform_SinceTag()
+         AND NOT csv::in_range('0', cFirst, cCiphersend) )
     {
         delete &let_drNewToken;
         return;
@@ -446,7 +452,7 @@ SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::info::DocuToken & let_drNewToken 
     {
         String & sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
         StreamLock sHelp(100);
-        sValue = sHelp() << sValue << pToken->GetText() << c_str;
+        sValue = sHelp() << sValue << " " << pToken->GetText() << c_str;
     }
 
       delete &let_drNewToken;
@@ -471,6 +477,9 @@ AtTagTitle( const Tok_AtTag & i_rToken )
         case Tok_AtTag::guarantees: return "Guarantees";
         case Tok_AtTag::exception:  return "Exception";
         case Tok_AtTag::since:      return "Since version";
+        default:
+            //  See below.
+            ;
     }
     return i_rToken.Text();
 }
