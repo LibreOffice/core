@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:01 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,12 +139,25 @@ void Bridge::handle_java_exc(
 
 #if defined _DEBUG
     // patch Message, append stack trace
-    *reinterpret_cast< OUString * >( uno_data.get() ) += jni.get_stack_trace( jo_exc.get() );
+    reinterpret_cast< ::com::sun::star::uno::Exception * >( uno_data.get() )->Message +=
+        jni.get_stack_trace( jo_exc.get() );
 #endif
 
     typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
     uno_exc->pType = td.get()->pWeakRef;
     uno_exc->pData = uno_data.release();
+
+#if defined DEBUG
+    OUStringBuffer trace_buf( 128 );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("exception occured uno->java: [") );
+    trace_buf.append( exc_name );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
+    trace_buf.append(
+        reinterpret_cast< ::com::sun::star::uno::Exception const * >( uno_exc->pData )->Message );
+    OString cstr_trace(
+        OUStringToOString( trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+    OSL_TRACE( cstr_trace.getStr() );
+#endif
 }
 //__________________________________________________________________________________________________
 void Bridge::call_java(
@@ -200,10 +213,37 @@ void Bridge::call_java(
         }
     }
 
+    jmethodID method_id = info->m_methods[ function_pos ];
+
+#if defined DEBUG
+    OUStringBuffer trace_buf( 128 );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("calling ") );
+    JLocalAutoRef jo_method( jni, jni->ToReflectedMethod( info->m_class, method_id, JNI_FALSE ) );
+    jni.ensure_no_exception();
+    JLocalAutoRef jo_descr(
+        jni, jni->CallObjectMethodA( jo_method.get(), m_jni_info->m_method_Object_toString, 0 ) );
+    jni.ensure_no_exception();
+    trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on ") );
+    jo_descr.reset(
+        jni->CallObjectMethodA( javaI, m_jni_info->m_method_Object_toString, 0 ) );
+    jni.ensure_no_exception();
+    trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (") );
+    JLocalAutoRef jo_class( jni, jni->GetObjectClass( javaI ) );
+    jo_descr.reset(
+        jni->CallObjectMethodA( jo_class.get(), m_jni_info->m_method_Object_toString, 0 ) );
+    jni.ensure_no_exception();
+    trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
+    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(")") );
+    OString cstr_trace(
+        OUStringToOString( trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+    OSL_TRACE( cstr_trace.getStr() );
+#endif
+
     // complex return value
     JLocalAutoRef java_ret( jni );
 
-    jmethodID method_id = info->m_methods[ function_pos ];
     switch (return_type->eTypeClass)
     {
     case typelib_TypeClass_VOID:
@@ -495,7 +535,7 @@ void SAL_CALL UNO_proxy_acquire( uno_Interface * pUnoI )
 void SAL_CALL UNO_proxy_release( uno_Interface * pUnoI )
     SAL_THROW_EXTERN_C()
 {
-    UNO_proxy * that = static_cast< UNO_proxy * >( pUnoI );
+    UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
     that->release();
 }
 
@@ -536,15 +576,7 @@ void SAL_CALL UNO_proxy_dispatch(
                 function_pos < iface_td->nMapFunctionIndexToMemberIndex,
                 "### illegal function index!" );
 
-            if (uno_ret) // is getter method
-            {
-                bridge->call_java(
-                    that->m_javaI, that->m_type_info, function_pos,
-                    ((typelib_InterfaceAttributeTypeDescription *)member_td)->pAttributeTypeRef,
-                    0, 0, // no params
-                    uno_ret, 0, uno_exc );
-            }
-            else // is setter method
+            if (0 == uno_ret) // is setter method
             {
                 typelib_MethodParameter param;
                 param.pTypeRef =
@@ -557,6 +589,14 @@ void SAL_CALL UNO_proxy_dispatch(
                     bridge->m_jni_info->m_void_type.getTypeLibType(),
                     &param, 1,
                     0, uno_args, uno_exc );
+            }
+            else // is getter method
+            {
+                bridge->call_java(
+                    that->m_javaI, that->m_type_info, function_pos,
+                    ((typelib_InterfaceAttributeTypeDescription *)member_td)->pAttributeTypeRef,
+                    0, 0, // no params
+                    uno_ret, 0, uno_exc );
             }
             break;
         }
@@ -646,7 +686,7 @@ void SAL_CALL UNO_proxy_dispatch(
                         {
                             uno_any_construct( (uno_Any *)uno_ret, 0, 0, 0 );
                         }
-                        // no excetpion occured
+                        // no exception occured
                         *uno_exc = 0;
                     }
                 }
@@ -661,11 +701,11 @@ void SAL_CALL UNO_proxy_dispatch(
                 break;
             }
             case 1: // acquire this proxy
-                UNO_proxy_acquire( const_cast< UNO_proxy * >( that ) );
+                that->acquire();
                 *uno_exc = 0;
                 break;
             case 2: // release this proxy
-                UNO_proxy_release( const_cast< UNO_proxy * >( that ) );
+                that->release();
                 *uno_exc = 0;
                 break;
             default: // arbitrary method call
@@ -687,22 +727,6 @@ void SAL_CALL UNO_proxy_dispatch(
             throw BridgeRuntimeError( OUSTR("illegal member type description!") );
         }
         }
-
-#if defined DEBUG
-        if (0 != *uno_exc)
-        {
-            OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("exception occured uno->java: [") );
-            buf.append( *reinterpret_cast< OUString const * >( &(*uno_exc)->pType->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
-            buf.append(
-                reinterpret_cast< ::com::sun::star::uno::Exception const * >(
-                    (*uno_exc)->pData )->Message );
-            OString cstr_msg(
-                OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( cstr_msg.getStr() );
-        }
-#endif
     }
     catch (BridgeRuntimeError & err)
     {
