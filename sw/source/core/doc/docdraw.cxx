@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:53:49 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
             //Ankerpos und Relpos synchronisieren, damit die Position der
             //Objekte erhalten bleibt.
-            const Point aAbs( pContact->GetAnchor()->GetAnchorPos() +
+            const Point aAbs( pContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) ) +
                               pObj->GetRelativePos() );
 
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
