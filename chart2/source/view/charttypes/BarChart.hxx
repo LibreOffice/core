@@ -10,6 +10,12 @@ namespace chart
 //.............................................................................
 class BarPositionHelper;
 
+enum Geometry3D { GEOMETRY_UNKNOWN
+                , GEOMETRY_CUBOID
+                , GEOMETRY_CYLINDER
+                , GEOMETRY_CONE
+                , GEOMETRY_PYRAMID };
+
 class BarChart : public VSeriesPlotter
 {
     //-------------------------------------------------------------------------
