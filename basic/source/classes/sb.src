@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 17:06:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "Êı¾İÀàĞÍ²»Æ¥Åä";
         Text[ russian ] = "Íåñîâìåñòèìûå òèïû äàííûõ";
         Text[ polish ] = "Niezgodne typy danych";
-        Text[ japanese ] = "ÃŞ°À‚Ìí—Ş‚Ì‹¦’²«‚È‚µ";
+        Text[ japanese ] = "ÃŞ°À‚Ìí—Ş‚É‹¦’²«‚È‚µ";
         Text[ chinese_traditional ] = "¸ê®ÆÃş«¬¤£¤Ç°t";
         Text[ arabic ] = "ÚÏã ãØÇÈŞÉ ÃäæÇÚ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "Gegevenstypen komen niet overeen";
@@ -2192,7 +2192,7 @@ Resource RID_BASIC_START
         Text[ russian ] = "İòà îïåğàöèÿ äàííûì îáúåêòîì íå ïîääåğæèâàåòñÿ";
         Text[ polish ] = "Ta akcja nie jest obs³ugiwana przez podany obiekt";
         Text[ japanese ] = "‚±‚Ì±¸¼®İ‚Íw’è‚³‚ê‚½µÌŞ¼Şª¸Ä‚©‚çx‰‡‚³‚ê‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "«ü©wªºª«¥ó¤£¤ä´©³o­Ó¾Ş§@";
+        Text[ chinese_traditional ] = "«ü©wªºª«¥ó¤£¤ä´©³o­Ó°Ê§@";
         Text[ arabic ] = "ÇáßÇÆä ÇáãÚØì áÇ íÏÚã åĞå ÇáÚãáíÉ";
         Text[ dutch ] = "Deze handeling wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "¸ø¶¨µÄ¶ÔÏó²»Ö§³ÖÕâ¸ö²Ù×÷";
