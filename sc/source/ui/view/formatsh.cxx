@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:46 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,6 +886,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             case FID_USE_NAME:
             case FID_INSERT_NAME:
             case SID_SPELLING:
+            case SID_HANGUL_HANJA_CONVERSION:
 
             pScMod->InputEnterHandler();
             pTabViewShell->UpdateInputHandler();
