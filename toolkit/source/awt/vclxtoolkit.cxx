@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-11 11:07:56 $
+ *  last change: $Author: sb $ $Date: 2002-07-16 09:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,8 +1305,11 @@ void VCLXToolkit::windowOpened(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->windowOpened(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowOpened(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1317,8 +1320,11 @@ void VCLXToolkit::windowClosing(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->windowClosing(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowClosing(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1329,8 +1335,11 @@ void VCLXToolkit::windowClosed(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->windowClosed(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowClosed(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1341,8 +1350,11 @@ void VCLXToolkit::windowMinimized(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->windowMinimized(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowMinimized(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1353,9 +1365,11 @@ void VCLXToolkit::windowNormalized(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->
-            windowNormalized(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowNormalized(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1366,8 +1380,11 @@ void VCLXToolkit::windowActivated(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->windowActivated(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowActivated(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1378,9 +1395,11 @@ void VCLXToolkit::windowDeactivated(::vcl::TopWindowEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aTopWindowListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->
-            windowDeactivated(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XTopWindowListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->windowDeactivated(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1395,9 +1414,12 @@ bool VCLXToolkit::keyPressed(::vcl::KeyEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aHandlers(m_aKeyHandlers.getElements());
     for (sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
-        if (!::css::uno::Reference< ::dcss::awt::XKeyHandler >(
-                aHandlers[i], ::css::uno::UNO_QUERY)->keyPressed(aAwtEvent))
+    {
+        ::css::uno::Reference< ::dcss::awt::XKeyHandler > xHandler(
+            aHandlers[i], ::css::uno::UNO_QUERY);
+        if (!xHandler->keyPressed(aAwtEvent))
             return false;
+    }
     return true;
 }
 
@@ -1413,9 +1435,12 @@ bool VCLXToolkit::keyReleased(::vcl::KeyEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aHandlers(m_aKeyHandlers.getElements());
     for (sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
-        if (!::css::uno::Reference< ::dcss::awt::XKeyHandler >(
-                aHandlers[i], ::css::uno::UNO_QUERY)->keyReleased(aAwtEvent))
+    {
+        ::css::uno::Reference< ::dcss::awt::XKeyHandler > xHandler(
+            aHandlers[i], ::css::uno::UNO_QUERY);
+        if (!xHandler->keyReleased(aAwtEvent))
             return false;
+    }
     return true;
 }
 
@@ -1430,8 +1455,11 @@ void VCLXToolkit::focusGained(::vcl::FocusEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aFocusListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XFocusListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->focusGained(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XFocusListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->focusGained(aAwtEvent);
+    }
 }
 
 // virtual
@@ -1445,6 +1473,9 @@ void VCLXToolkit::focusLost(::vcl::FocusEvent const & rEvent)
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
               aListeners(m_aFocusListeners.getElements());
     for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
-        ::css::uno::Reference< ::css::awt::XFocusListener >(
-            aListeners[i], ::css::uno::UNO_QUERY)->focusLost(aAwtEvent);
+    {
+        ::css::uno::Reference< ::css::awt::XFocusListener > xListener(
+            aListeners[i], ::css::uno::UNO_QUERY);
+        xListener->focusLost(aAwtEvent);
+    }
 }
