@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:46:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,7 @@ void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
 void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
 {
     mpSrcRange = CreateTokenArray( rSrcRange );
-    mnEntryCount = rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1;
+    mnEntryCount = static_cast<sal_uInt16>(rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1);
 }
 
 void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const
@@ -1526,8 +1526,8 @@ ULONG XclExpLabelSst::GetDiffLen() const
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
-ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, UINT16 nTab ) :
-    ExcBundlesheetBase( rRootData, nTab )
+ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB nTab ) :
+    ExcBundlesheetBase( rRootData, static_cast<sal_uInt16>(nTab) )
 {
     String sTabName;
     rRootData.pDoc->GetName( nTab, sTabName );
@@ -1627,7 +1627,7 @@ ULONG ExcPane8::GetLen() const
 
 // --- class ExcWindow28 ---------------------------------------------
 
-ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, USHORT nScTab ) :
+ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),
     pPaneRec( NULL ),
     nFlags( 0 ),
@@ -1652,6 +1652,7 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, USHORT nScTab ) :
     ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_DISPLAYED,    rTabInfo.IsActiveTab( nScTab ) );
 
     ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_DEFAULTCOLOR, !rExtDocOpt.pGridCol );
+
     nGridColorSer = rExtDocOpt.pGridCol ?
         GetPalette().InsertColor( *rExtDocOpt.pGridCol, xlColorGrid ) :
         XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
@@ -1661,8 +1662,8 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, USHORT nScTab ) :
         ::set_flag( nFlags, static_cast< sal_uInt16 >( EXC_WIN2_FROZEN | EXC_WIN2_FROZENNOSPLIT ), pExtTabOpt->bFrozen );
         nLeftCol = pExtTabOpt->nLeftCol;
         nTopRow = pExtTabOpt->nTopRow;
-        nActiveCol = pExtTabOpt->aLastSel.aStart.Col();
-        nActiveRow = pExtTabOpt->aLastSel.aStart.Row();
+        nActiveCol = static_cast< sal_uInt16 >( pExtTabOpt->aLastSel.aStart.Col() );
+        nActiveRow = static_cast< sal_uInt16 >( pExtTabOpt->aLastSel.aStart.Row() );
         bHorSplit = (pExtTabOpt->nSplitX != 0);
         bVertSplit = (pExtTabOpt->nSplitY != 0);
         if( bHorSplit || bVertSplit )
@@ -1785,8 +1786,10 @@ BOOL XclExpCellMerging::FindNextMerge( const ScAddress& rPos, UINT16& rnCol )
 {
     rnCol = 0xFFFF;
     for( XclExpMergedCell* pCell = FirstCell(); pCell; pCell = NextCell() )
-        if( (pCell->nRow1 <= rPos.Row()) && (rPos.Row() <= pCell->nRow2) &&
-            (rPos.Col() <= pCell->nCol1) && (pCell->nCol1 < rnCol) )
+        if( (static_cast<SCROW>(pCell->nRow1) <= rPos.Row()) &&
+                (rPos.Row() <= static_cast<SCROW>(pCell->nRow2)) &&
+                (rPos.Col() <= static_cast<SCCOL>(pCell->nCol1) &&
+                 (pCell->nCol1 < rnCol)))
             rnCol = pCell->nCol1;
     return rnCol < 0xFFFF;
 }
@@ -1795,8 +1798,10 @@ BOOL XclExpCellMerging::FindNextMerge( const ScAddress& rPos, UINT16& rnCol )
 BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId, UINT16& rnColCount )
 {
     for( XclExpMergedCell* pCell = FirstCell(); pCell; pCell = NextCell() )
-        if( (pCell->nCol1 <= rPos.Col()) && (rPos.Col() <= pCell->nCol2) &&
-            (pCell->nRow1 <= rPos.Row()) && (rPos.Row() <= pCell->nRow2) )
+        if( (static_cast<SCCOL>(pCell->nCol1) <= rPos.Col()) &&
+                (rPos.Col() <= static_cast<SCCOL>(pCell->nCol2)) &&
+                (static_cast<SCROW>(pCell->nRow1) <= rPos.Row()) &&
+                (rPos.Row() <= static_cast<SCROW>(pCell->nRow2)))
         {
             rnXFId = pCell->mnXFId;
             rnColCount = pCell->nCol2 - rPos.Col() + 1;
@@ -1880,7 +1885,7 @@ void ExcEScenarioCell::WriteText( XclExpStream& rStrm )
 
 XclExpString ExcEScenario::sUsername;
 
-ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
+ExcEScenario::ExcEScenario( ScDocument& rDoc, SCTAB nTab )
 {
     String  sTmpName;
     String  sTmpComm;
@@ -1911,7 +1916,8 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
         return;
 
     BOOL    bContLoop = TRUE;
-    UINT16  nRow, nCol;
+    SCROW   nRow;
+    SCCOL   nCol;
     String  sText;
     double  fVal;
 
@@ -1932,7 +1938,8 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
                 }
                 else
                     rDoc.GetString( nCol, nRow, nTab, sText );
-                bContLoop = Append( nCol, nRow, sText );
+                bContLoop = Append( static_cast<sal_uInt16>(nCol),
+                        static_cast<sal_uInt16>(nRow), sText );
             }
     }
 }
@@ -1992,21 +1999,21 @@ ULONG ExcEScenario::GetLen() const
 
 
 
-ExcEScenarioManager::ExcEScenarioManager( ScDocument& rDoc, UINT16 nTab ) :
+ExcEScenarioManager::ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab ) :
         nActive( 0 )
 {
     if( rDoc.IsScenario( nTab ) )
         return;
 
-    UINT16 nFirstTab    = nTab + 1;
-    UINT16 nNewTab      = nFirstTab;
+    SCTAB nFirstTab = nTab + 1;
+    SCTAB nNewTab       = nFirstTab;
 
     while( rDoc.IsScenario( nNewTab ) )
     {
         Append( new ExcEScenario( rDoc, nNewTab ) );
 
         if( rDoc.IsActiveScenario( nNewTab ) )
-            nActive = nNewTab - nFirstTab;
+            nActive = static_cast<sal_uInt16>(nNewTab - nFirstTab);
         nNewTab++;
     }
 }
