@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-06 11:15:25 $
+ *  last change: $Author: os $ $Date: 2000-12-07 12:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1908,15 +1908,20 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DOCINFOFLD);
                 sal_uInt16 nSubType = aDocInfoSubTypeFromService[
                         m_nServiceId - SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR];
-                if(m_pProps->bBool2) //IsDate
+                if(SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME == m_nServiceId ||
+                        SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME == m_nServiceId ||
+                        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME == m_nServiceId)
                 {
-                    nSubType |= DI_SUB_DATE;
-                    nSubType &= ~DI_SUB_TIME;
-                }
-                else
-                {
-                    nSubType |= DI_SUB_TIME;
-                    nSubType &= ~DI_SUB_DATE;
+                    if(m_pProps->bBool2) //IsDate
+                    {
+                        nSubType &= 0xf0ff;
+                        nSubType |= DI_SUB_DATE;
+                    }
+                    else
+                    {
+                        nSubType &= 0xf0ff;
+                        nSubType |= DI_SUB_TIME;
+                    }
                 }
                 if(m_pProps->bBool1)
                     nSubType |= DI_SUB_FIXED;
