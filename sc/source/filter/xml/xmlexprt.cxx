@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 12:28:32 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
 #include "XMLTableMasterPageExport.hxx"
+#endif
+#ifndef SC_DRWLAYER_HXX
+#include "drwlayer.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -301,7 +304,7 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
     xCellStylesExportPropertySetMapper = new ScXMLCellExportPropertyMapper(xCellStylesPropertySetMapper);
     xColumnStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
-    xRowStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xRowStylesPropertySetMapper);
+    xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
     xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper);
 
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
@@ -956,13 +959,14 @@ void ScXMLExport::_ExportContent()
                         SvXMLElementExport aElemT(*this, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
                         CheckAttrList();
                         WriteScenario();
+                        GetxCurrentShapes(xCurrentShapes);
+                        WriteTableShapes();
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                         SetLastColumn(nTable, aRange.EndColumn);
                         SetLastRow(nTable, aRange.EndRow);
                         aCellsItr.SetCurrentTable(nTable);
                         aGroupColumns.NewTable();
                         aGroupRows.NewTable();
-                        GetxCurrentShapes(xCurrentShapes);
                         FillColumnRowGroups();
                         table::CellRangeAddress aColumnHeaderRange;
                         sal_Bool bHasColumnHeader(GetColumnHeader(aColumnHeaderRange));
@@ -1087,6 +1091,7 @@ void ScXMLExport::_ExportAutoStyles()
         {
             sal_Int32 nTableCount = xIndex->getCount();
             aCellStyles.AddNewTable(nTableCount - 1);
+            aTableShapes.resize(nTableCount);
             for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
             {
                 uno::Any aTable = xIndex->getByIndex(nTable);
@@ -1134,20 +1139,35 @@ void ScXMLExport::_ExportAutoStyles()
                                                 CollectInternalShape( xShape );
                                             else
                                             {
-                                                GetShapeExport()->collectShapeAutoStyles(xShape);
-                                                if (pDoc)
+                                                SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+                                                if (pShapeImp)
                                                 {
-                                                    awt::Point aPoint = xShape->getPosition();
-                                                    awt::Size aSize = xShape->getSize();
-                                                    Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                    ScRange aRange = pDoc->GetRange(nTable, aRectangle);
-                                                    ScMyShape aMyShape;
-                                                    aMyShape.aAddress = aRange.aStart;
-                                                    aMyShape.aEndAddress = aRange.aEnd;
-                                                    aMyShape.nIndex = nShape;
-                                                    aShapesContainer.AddNewShape(aMyShape);
-                                                    SetLastColumn(nTable, aRange.aStart.Col());
-                                                    SetLastRow(nTable, aRange.aStart.Row());
+                                                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                                                    if (pSdrObj)
+                                                    {
+                                                        GetShapeExport()->collectShapeAutoStyles(xShape);
+                                                        if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
+                                                        {
+                                                            if (pDoc)
+                                                            {
+                                                                awt::Point aPoint = xShape->getPosition();
+                                                                awt::Size aSize = xShape->getSize();
+                                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                                                                ScRange aRange = pDoc->GetRange(nTable, aRectangle);
+                                                                ScMyShape aMyShape;
+                                                                aMyShape.aAddress = aRange.aStart;
+                                                                aMyShape.aEndAddress = aRange.aEnd;
+                                                                aMyShape.nIndex = nShape;
+                                                                aShapesContainer.AddNewShape(aMyShape);
+                                                                SetLastColumn(nTable, aRange.aStart.Col());
+                                                                SetLastRow(nTable, aRange.aStart.Row());
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            aTableShapes[nTable].push_back(nShape);
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -1779,6 +1799,24 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     }
 }
 
+void ScXMLExport::WriteTableShapes()
+{
+    DBG_ASSERT(aTableShapes.size() > nCurrentTable, "wrong Table");
+    if (aTableShapes[nCurrentTable].size())
+    {
+        SvXMLElementExport aShapesElem(*this, XML_NAMESPACE_TABLE, sXML_shapes, sal_True, sal_False);
+        ScMyTableShapeIndexes::iterator aItr = aTableShapes[nCurrentTable].begin();
+        while (aItr != aTableShapes[nCurrentTable].end())
+        {
+            uno::Any aAny = xCurrentShapes->getByIndex(*aItr);
+            uno::Reference<drawing::XShape> xShape;
+            if (aAny >>= xShape)
+                GetShapeExport()->exportShape(xShape);
+            aItr = aTableShapes[nCurrentTable].erase(aItr);
+        }
+    }
+}
+
 void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
 {
     if( rMyCell.bHasAreaLink )
@@ -1890,10 +1928,18 @@ void ScXMLExport::SetRepeatAttribute (const sal_Int32 nEqualCellCount)
     }
 }
 
-sal_Bool ScXMLExport::IsCellTypeEqual (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell1,
-        const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell2) const
+sal_Bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const
 {
-    return (xCell1->getType() == xCell2->getType());
+    if (!aCell1.bHasEmptyDatabase && !aCell2.bHasEmptyDatabase)
+        return (aCell1.xCell->getType() == aCell2.xCell->getType());
+    else
+        if (aCell1.bHasEmptyDatabase == aCell2.bHasEmptyDatabase && aCell1.bHasEmptyDatabase)
+            return sal_True;
+        else
+            if (aCell1.bHasEmptyDatabase)
+                return (aCell2.xCell->getType() == table::CellContentType_EMPTY);
+            else
+                return (aCell1.xCell->getType() == table::CellContentType_EMPTY);
 }
 
 sal_Bool ScXMLExport::IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
@@ -1975,7 +2021,7 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
                     GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2))
                 {
                     if ((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) &&
-                        IsCellTypeEqual(aCell1.xCell, aCell2.xCell))
+                        IsCellTypeEqual(aCell1, aCell2))
                     {
                         table::CellContentType eCellType = aCell1.xCell->getType();
                         switch ( eCellType )

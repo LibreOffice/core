@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: xmltabi.hxx,v $
+ *  $RCSfile: XMLTableShapesContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-#ifndef SC_XMLTABI_HXX
-#define SC_XMLTABI_HXX
+
+#ifndef _SC_XMLTABLESHAPESCONTEXT_HXX
+#define _SC_XMLTABLESHAPESCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
@@ -67,23 +68,17 @@
 
 class ScXMLImport;
 
-class ScXMLTableContext : public SvXMLImportContext
+class ScXMLTableShapesContext : public SvXMLImportContext
 {
-    rtl::OUString   sPrintRanges;
-
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
 public:
-
-    ScXMLTableContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLTableShapesContext( ScXMLImport& rImport, USHORT nPrfx,
                         const NAMESPACE_RTL(OUString)& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bTempIsSubTable = sal_False,
-                        const sal_Int32 nSpannedCols = 0);
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLTableContext();
+    virtual ~ScXMLTableShapesContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const NAMESPACE_RTL(OUString)& rLocalName,

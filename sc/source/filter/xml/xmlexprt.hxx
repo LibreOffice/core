@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 
 class ScOutlineArray;
 
+typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
+typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
+
 class ScXMLExport : public SvXMLExport
 {
     ScDocument*                 pDoc;
@@ -113,6 +116,7 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup         aGroupColumns;
     ScMyOpenCloseColumnRowGroup         aGroupRows;
+    ScMyTableShapes                     aTableShapes;
 
     sal_Bool                    bHasRowHeader;
     sal_Bool                    bRowHeaderOpen;
@@ -182,10 +186,10 @@ class ScXMLExport : public SvXMLExport
     void WriteAnnotation(const ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
     void WriteShapes(const ScMyCell& rMyCell);
+    void WriteTableShapes();
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
-    sal_Bool IsCellTypeEqual (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell1,
-        const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell2) const;
+    sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
     sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
     sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);

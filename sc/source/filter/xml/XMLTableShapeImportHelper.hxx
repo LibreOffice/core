@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: xmltabi.hxx,v $
+ *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
@@ -58,39 +58,41 @@
  *
  *
  ************************************************************************/
-#ifndef SC_XMLTABI_HXX
-#define SC_XMLTABI_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
+#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#define _SC_XMLTABLESHAPEIMPORTHELPER_HXX
+
+#ifndef _XMLOFF_SHAPEIMPORT_HXX_
+#include <xmloff/shapeimport.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
 #endif
 
 class ScXMLImport;
 
-class ScXMLTableContext : public SvXMLImportContext
+class XMLTableShapeImportHelper : public XMLShapeImportHelper
 {
-    rtl::OUString   sPrintRanges;
+    ScXMLImport& rImport;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
+    ::com::sun::star::awt::Point* pPoint;
+    sal_Bool bOnTable;
 public:
 
-    ScXMLTableContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const NAMESPACE_RTL(OUString)& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bTempIsSubTable = sal_False,
-                        const sal_Int32 nSpannedCols = 0);
+    XMLTableShapeImportHelper( ScXMLImport& rImp );
+    ~XMLTableShapeImportHelper();
 
-    virtual ~ScXMLTableContext();
+    virtual void addShape(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape >& rShape,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes >& rShapes );
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
+    void SetPoint (::com::sun::star::awt::Point* pTempPoint) { pPoint = pTempPoint; }
+    void SetOnTable (sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
 };
 
 #endif

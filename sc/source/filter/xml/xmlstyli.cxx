@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include <xmloff/xmlprcon.hxx>
 #endif
@@ -130,37 +133,17 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 //using namespace ::com::sun::star::text;
 
-ScXMLImportPropertyMapper::ScXMLImportPropertyMapper(
+ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper ) :
     SvXMLImportPropertyMapper( rMapper )
 {
 }
 
-ScXMLImportPropertyMapper::~ScXMLImportPropertyMapper()
+ScXMLCellImportPropertyMapper::~ScXMLCellImportPropertyMapper()
 {
 }
 
-/*sal_Bool ScXMLImportPropertyMapper::handleSpecialItem(
-        XMLPropertyState& rProperty,
-        ::std::vector< XMLPropertyState >& rProperties,
-        const ::rtl::OUString& rValue,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
-{
-    return sal_True;
-}*/
-
-/*sal_Bool ScXMLImportPropertyMapper::handleNoItem(
-        sal_Int32 nIndex,
-        ::std::vector< XMLPropertyState >& rProperties,
-        const ::rtl::OUString& rValue,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
-{
-    return sal_True;
-}*/
-
-void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty = NULL;
@@ -234,6 +217,41 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
             rProperties.push_back(*pNewBorders[i]);
             delete pNewBorders[i];
         }
+    }
+}
+
+ScXMLRowImportPropertyMapper::ScXMLRowImportPropertyMapper(
+        const UniReference< XMLPropertySetMapper >& rMapper ) :
+    SvXMLImportPropertyMapper( rMapper )
+{
+}
+
+ScXMLRowImportPropertyMapper::~ScXMLRowImportPropertyMapper()
+{
+}
+
+void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+{
+    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
+    XMLPropertyState* pHeight = NULL;
+    XMLPropertyState* pOptimalHeight = NULL;
+    ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+    for (property; property != rProperties.end(); property++)
+    {
+        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
+        switch (nContextID)
+        {
+            case CTF_ROWHEIGHT                  : pHeight = property; break;
+            case CTF_ROWOPTIMALHEIGHT           : pOptimalHeight = property; break;
+        }
+    }
+    if (!pOptimalHeight)
+    {
+        pOptimalHeight = new XMLPropertyState(0, ::cppu::bool2any( sal_True ));
+        if (pHeight)
+            pOptimalHeight->maValue = ::cppu::bool2any( sal_False );
+        rProperties.push_back(*pOptimalHeight);
+        delete pOptimalHeight;
     }
 }
 
@@ -694,7 +712,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xCellImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xCellImpPropMapper =
-                        new ScXMLImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper() );
+                        new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper() );
                 xMapper = xCellImpPropMapper;
             }
             break;
@@ -702,7 +720,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xColumnImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xColumnImpPropMapper =
-                        new ScXMLImportPropertyMapper( GetScImport().GetColumnStylesPropertySetMapper() );
+                        new SvXMLImportPropertyMapper( GetScImport().GetColumnStylesPropertySetMapper() );
                 xMapper = xColumnImpPropMapper;
             }
              break;
@@ -710,7 +728,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xRowImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xRowImpPropMapper =
-                        new ScXMLImportPropertyMapper( GetScImport().GetRowStylesPropertySetMapper() );
+                        new ScXMLRowImportPropertyMapper( GetScImport().GetRowStylesPropertySetMapper() );
                 xMapper = xRowImpPropMapper;
             }
              break;
@@ -718,7 +736,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xTableImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xTableImpPropMapper =
-                        new ScXMLImportPropertyMapper( GetScImport().GetTableStylesPropertySetMapper() );
+                        new SvXMLImportPropertyMapper( GetScImport().GetTableStylesPropertySetMapper() );
                 xMapper = xTableImpPropMapper;
             }
              break;

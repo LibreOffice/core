@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+#   last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,7 +115,9 @@ CXXFILES = \
         XMLColumnRowGroupExport.cxx \
         XMLStylesExportHelper.cxx \
         XMLExportDataPilot.cxx \
-        XMLExportDatabaseRanges.cxx
+        XMLExportDatabaseRanges.cxx \
+        XMLTableShapeImportHelper.cxx \
+        XMLTableShapesContext.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -150,7 +152,9 @@ SLOFILES =  \
         $(SLO)$/XMLColumnRowGroupExport.obj \
         $(SLO)$/XMLStylesExportHelper.obj \
         $(SLO)$/XMLExportDataPilot.obj \
-        $(SLO)$/XMLExportDatabaseRanges.obj
+        $(SLO)$/XMLExportDatabaseRanges.obj \
+        $(SLO)$/XMLTableShapeImportHelper.obj \
+        $(SLO)$/XMLTableShapesContext.obj
 
 
 # --- Tagets -------------------------------------------------------

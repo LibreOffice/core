@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef _SC_XMLTABLESHAPESCONTEXT_HXX
+#include "XMLTableShapesContext.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -203,6 +206,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_TABLE_SCENARIO:
         pContext = new ScXMLTableScenarioContext( GetScImport(), nPrefix, rLName, xAttrList);
+        break;
+    case XML_TOK_TABLE_SHAPES:
+        pContext = new ScXMLTableShapesContext( GetScImport(), nPrefix, rLName, xAttrList);
         break;
     }
 

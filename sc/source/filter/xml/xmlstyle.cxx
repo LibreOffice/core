@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #include <rtl/ustrbuf.hxx>
 
@@ -201,9 +204,11 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
 
 const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
 {
-    { "Height", XML_NAMESPACE_STYLE, sXML_row_height, XML_TYPE_MEASURE, 0 },
+    // This Position in the Map should not be changed
+    { "OptimalHeight", XML_NAMESPACE_STYLE, sXML_use_optimal_row_height, XML_TYPE_BOOL, CTF_ROWOPTIMALHEIGHT}, // This Position in the Map should not be changed
+    // This Position in the Map should not be changed
+    { "Height", XML_NAMESPACE_STYLE, sXML_row_height, XML_TYPE_MEASURE, CTF_ROWHEIGHT},
     { "IsManualPageBreak", XML_NAMESPACE_FO, sXML_break_before, XML_SC_TYPE_BREAKBEFORE, 0},
-    { "OptimalHeight", XML_NAMESPACE_STYLE, sXML_use_optimal_row_height, XML_TYPE_BOOL, 0},
     { 0L }
 };
 
@@ -386,6 +391,45 @@ void ScXMLCellExportPropertyMapper::handleSpecialItem(
     // the SpecialItem ConditionlaFormat must not be handled by this method
 }
 
+ScXMLRowExportPropertyMapper::ScXMLRowExportPropertyMapper(
+            const UniReference< XMLPropertySetMapper >& rMapper )
+            : SvXMLExportPropertyMapper(rMapper)
+{
+}
+
+ScXMLRowExportPropertyMapper::~ScXMLRowExportPropertyMapper()
+{
+}
+
+void ScXMLRowExportPropertyMapper::ContextFilter(
+    ::std::vector< XMLPropertyState >& rProperties,
+    uno::Reference< beans::XPropertySet > rPropSet ) const
+{
+    XMLPropertyState* pHeight = NULL;
+    XMLPropertyState* pOptimalHeight = NULL;
+
+    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
+         propertie != rProperties.end();
+         propertie++ )
+    {
+        switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
+        {
+            case CTF_ROWHEIGHT:             pHeight = propertie; break;
+            case CTF_ROWOPTIMALHEIGHT:      pOptimalHeight = propertie; break;
+        }
+    }
+    if (pHeight && pOptimalHeight)
+        if ( ::cppu::any2bool( pOptimalHeight->maValue ) )
+        {
+            pHeight->mnIndex = -1;
+            pHeight->maValue.clear();
+        }
+    if (pOptimalHeight)
+    {
+        pOptimalHeight->mnIndex = -1;
+        pOptimalHeight->maValue.clear();
+    }
+}
 void ScXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,

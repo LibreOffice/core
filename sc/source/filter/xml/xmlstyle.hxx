@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_MAP                                 19
 #define CTF_PARAINDENT                          20
 
+#define CTF_ROWHEIGHT                           50
+#define CTF_ROWOPTIMALHEIGHT                    51
+
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
 
@@ -159,6 +162,19 @@ public:
             sal_uInt32 nIdx = 0 ) const;
 };
 
+class ScXMLRowExportPropertyMapper : public SvXMLExportPropertyMapper
+{
+protected:
+    /** Application-specific filter. By default do nothing. */
+    virtual void ContextFilter(
+            ::std::vector< XMLPropertyState >& rProperties,
+            ::com::sun::star::uno::Reference<
+                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
+public:
+    ScXMLRowExportPropertyMapper(
+            const UniReference< XMLPropertySetMapper >& rMapper );
+    virtual ~ScXMLRowExportPropertyMapper();
+};
 class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
     ScXMLExport& rScXMLExport;

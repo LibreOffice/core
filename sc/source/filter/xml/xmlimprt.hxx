@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,8 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_HEADER_ROWS,
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
-    XML_TOK_TABLE_SCENARIO
+    XML_TOK_TABLE_SCENARIO,
+    XML_TOK_TABLE_SHAPES
 };
 
 enum ScXMLTableRowsTokens
@@ -595,6 +596,7 @@ class SvXMLTokenMap;
 class SvXMLStyleContext;
 class SfxItemSet;
 class SvXMLNumFmtHelper;
+class XMLShapeImportHelper;
 //class ScDocument;
 
 struct tScMyCellRange
@@ -733,6 +735,7 @@ protected:
                                       const ::rtl::OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual XMLShapeImportHelper* CreateShapeImport();
 
 public:
     rtl::OUString sSC_float;

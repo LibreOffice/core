@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include "document.hxx"
 #include "cellsuno.hxx"
 #include "docuno.hxx"
+#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#include "XMLTableShapeImportHelper.hxx"
+#endif
 
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
@@ -433,8 +436,11 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                     aPoint.X = aRec.Left();
                     aPoint.Y = aRec.Top();
                     awt::Point* pPoint = &aPoint;
+                    XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
+                    pTableShapeImport->SetOnTable(sal_False);
+                    pTableShapeImport->SetPoint(pPoint);
                     pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-                        rXMLImport, nPrefix, rLName, xAttrList, xShapes/*, pPoint*/);
+                        rXMLImport, nPrefix, rLName, xAttrList, xShapes);
                     if (pContext)
                         bIsEmpty = sal_False;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#include "XMLTableShapeImportHelper.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -248,6 +251,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS          },
     { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW           },
     { XML_NAMESPACE_TABLE, sXML_scenario,               XML_TOK_TABLE_SCENARIO      },
+    { XML_NAMESPACE_TABLE, sXML_shapes,                 XML_TOK_TABLE_SHAPES        },
     XML_TOKEN_MAP_END
 };
 
@@ -1440,6 +1444,11 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
                                               rLocalName );
 
     return pContext;
+}
+
+XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
+{
+    return new XMLTableShapeImportHelper( *this );
 }
 
 sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
