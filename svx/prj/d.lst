@@ -636,6 +636,7 @@ hedabu: ..\inc\svxdlg.hxx %_DEST%\inc%_EXT%\svx\svxdlg.hxx
 hedabu: ..\inc\acorrcfg.hxx %_DEST%\inc%_EXT%\svx\acorrcfg.hxx
 hedabu: ..\inc\htmlcfg.hxx %_DEST%\inc%_EXT%\svx\htmlcfg.hxx
 hedabu: ..\inc\ofaitem.hxx %_DEST%\inc%_EXT%\svx\ofaitem.hxx
+hedabu: ..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
