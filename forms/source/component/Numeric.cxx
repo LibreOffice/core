@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:09:39 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::form;
 
 //==================================================================
 // ONumericControl
@@ -120,7 +121,6 @@ Sequence<Type> ONumericControl::_getTypes()
 //==================================================================
 // ONumericModel
 //==================================================================
-sal_Int32   ONumericModel::nValueHandle = -1;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -137,15 +137,13 @@ Sequence<Type> ONumericModel::_getTypes()
 DBG_NAME( ONumericModel )
 //------------------------------------------------------------------
 ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_CONTROL_NUMERICFIELD)
+                :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_CONTROL_NUMERICFIELD, sal_True )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( ONumericModel, NULL );
 
     m_nClassId = FormComponentType::NUMERICFIELD;
-    m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
-    if (ONumericModel::nValueHandle == -1)
-        ONumericModel::nValueHandle = getOriginalHandle(PROPERTY_ID_VALUE);
+    initValueProperty( PROPERTY_VALUE, PROPERTY_ID_VALUE );
 }
 
 //------------------------------------------------------------------
@@ -170,9 +168,10 @@ IMPLEMENT_DEFAULT_CLONING( ONumericModel )
 StringSequence ONumericModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     ::rtl::OUString*pArray = aSupported.getArray();
+    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_NUMERICFIELD;
     pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_NUMERICFIELD;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_NUMERICFIELD;
     return aSupported;
@@ -218,62 +217,58 @@ void ONumericModel::fillProperties(
     return FRM_COMPONENT_NUMERICFIELD;  // old (non-sun) name for compatibility !
 }
 
-// XBoundComponent
 //------------------------------------------------------------------------------
-sal_Bool ONumericModel::_commit()
+sal_Bool ONumericModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( ONumericModel::nValueHandle );
-    if (!compare(aNewValue, m_aSaveValue))
+    Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
+    if ( !compare( aControlValue, m_aSaveValue ) )
     {
-        if (!aNewValue.hasValue())
+        if ( !aControlValue.hasValue() )
             m_xColumnUpdate->updateNull();
         else
         {
             try
             {
-                m_xColumnUpdate->updateDouble(getDouble(aNewValue));
+                m_xColumnUpdate->updateDouble( getDouble( aControlValue ) );
             }
             catch(Exception&)
             {
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+        m_aSaveValue = aControlValue;
     }
     return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void ONumericModel::_onValueChanged()
+Any ONumericModel::translateDbColumnToControlValue()
 {
     m_aSaveValue <<= (double)m_xColumn->getDouble();
-    if (m_xColumn->wasNull())
+    if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
 
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(ONumericModel::nValueHandle, m_aSaveValue);
-    }
+    return m_aSaveValue;
 }
 
-// XReset
 //------------------------------------------------------------------------------
-void ONumericModel::_reset()
+Any ONumericModel::getDefaultForReset() const
 {
     Any aValue;
     if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
         aValue = m_aDefault;
 
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(ONumericModel::nValueHandle, aValue);
-    }
+    return aValue;
+}
+
+//------------------------------------------------------------------------------
+sal_Bool ONumericModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+{
+    OSL_PRECOND( _rxBinding.is(), "ONumericModel::approveValueBinding: invalid binding!" );
+
+    // only strings are accepted for simplicity
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< double* >( NULL ) ) );
 }
 
 //.........................................................................
