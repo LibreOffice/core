@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:17:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@
 
 #include "htmlpars.hxx"
 #include "global.hxx"
-#include "flttools.hxx"
 #include "document.hxx"
 #include "rangelst.hxx"
 
