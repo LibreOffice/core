@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 17:16:00 $
+ *  last change: $Author: sb $ $Date: 2000-11-15 15:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,8 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
 
    ; private
-   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://./" *DIGIT ["?" *uric]
+   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" reg_name ["/" *DIGIT] ["?" *uric]
+   reg_name = 1*(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
@@ -807,14 +808,36 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
         switch (m_eScheme)
         {
             case INET_PROT_VND_SUN_STAR_HELP:
-                if (pEnd - pPos < 3
-                    || *pPos++ != '/' || *pPos++ != '/' || *pPos++ != '.')
+            {
+                if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef += '.';
+                UniString aSynAuthority;
+                while (pPos < pEnd
+                       && *pPos != '/' && *pPos != '?'
+                       && *pPos != nFragmentDelimiter)
+                {
+                    EscapeType eEscapeType;
+                    sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                                 cEscapePrefix, eMechanism,
+                                                 eCharset, eEscapeType);
+                    appendUCS4(aSynAuthority, nUTF32, eEscapeType, bOctets,
+                               PART_AUTHORITY, cEscapePrefix, eCharset,
+                               false);
+                }
+                if (aSynAuthority.Len() == 0)
+                {
+                    setInvalid();
+                    return false;
+                }
+                m_aHost.set(aSynAbsURIRef,
+                            aSynAuthority,
+                            aSynAbsURIRef.Len());
+                    // misusing m_aHost to store the authority
                 break;
+            }
 
             case INET_PROT_FILE:
                 if (bSmart)
@@ -2256,19 +2279,24 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             break;
 
         case INET_PROT_VND_SUN_STAR_HELP:
-            if (pPos == pEnd || *pPos++ != '/')
+            if (pPos == pEnd)
+                aTheSynPath = '/';
+            else
             {
-                setInvalid();
-                return false;
-            }
-            while (pPos < pEnd && *pPos != nQueryDelimiter
-                   && *pPos != nFragmentDelimiter)
-                if (!INetMIME::isDigit(*pPos++))
+                if (*pPos++ != '/')
                 {
                     setInvalid();
                     return false;
                 }
-            aTheSynPath = UniString(*pBegin, pPos - *pBegin);
+                while (pPos < pEnd && *pPos != nQueryDelimiter
+                       && *pPos != nFragmentDelimiter)
+                    if (!INetMIME::isDigit(*pPos++))
+                    {
+                        setInvalid();
+                        return false;
+                    }
+                aTheSynPath = UniString(*pBegin, pPos - *pBegin);
+            }
             break;
 
         case INET_PROT_JAVASCRIPT:
@@ -3146,6 +3174,9 @@ void INetURLObject::makeAuthCanonic()
 UniString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {
+    // Check because PROT_VND_SUN_STAR_HELP misuses m_aHost:
+    if (!getSchemeInfo().m_bHost)
+        return UniString();
     UniString aHostPort(decode(m_aHost, getEscapePrefix(), eMechanism,
                                eCharset));
     if (m_aPort.isPresent())
