@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #include <vcl/svapp.hxx>
 
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include "cfgids.hxx"
 #include "appoptio.hxx"
 #include "rechead.hxx"
@@ -77,6 +80,11 @@
 #include "userlist.hxx"
 #include "sc.hrc"
 #include "compiler.hrc"
+#include "miscuno.hxx"
+
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -288,56 +296,506 @@ void ScAppOptions::SetLRUFuncList( const USHORT* pList, const USHORT nCount )
 }
 
 //==================================================================
-// CfgItem fuer App-Optionen
+//  Config Item containing app options
 //==================================================================
 
-ScAppCfg::ScAppCfg() : SfxConfigItem( SCCFG_APP )
+void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 {
+    Sequence<sal_Int32> aSeq;
+    if ( rValue >>= aSeq )
+    {
+        long nCount = aSeq.getLength();
+        if ( nCount < USHRT_MAX )
+        {
+            const sal_Int32* pArray = aSeq.getConstArray();
+            USHORT* pUShorts = new USHORT[nCount];
+            for (long i=0; i<nCount; i++)
+                pUShorts[i] = (USHORT) pArray[i];
+
+            rOpt.SetLRUFuncList( pUShorts, nCount );
+
+            delete[] pUShorts;
+        }
+    }
 }
 
-//------------------------------------------------------------------------
-
-int __EXPORT ScAppCfg::Load( SvStream& rStream )
+void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 {
-    USHORT nVersion;
-
-    rStream >> nVersion;
-    rStream >> (ScAppOptions&)*this;
-
-    SetDefault( FALSE );
-
-    return ( nVersion == SC_VERSION )
-                ? SfxConfigItem::ERR_OK
-                : SfxConfigItem::WARNING_VERSION;
+    long nCount = rOpt.GetLRUFuncListCount();
+    USHORT* pUShorts = rOpt.GetLRUFuncList();
+    if ( nCount && pUShorts )
+    {
+        Sequence<sal_Int32> aSeq( nCount );
+        sal_Int32* pArray = aSeq.getArray();
+        for (long i=0; i<nCount; i++)
+            pArray[i] = pUShorts[i];
+        rDest <<= aSeq;
+    }
+    else
+        rDest <<= Sequence<sal_Int32>(0);   // empty
 }
 
-//------------------------------------------------------------------------
-
-BOOL __EXPORT ScAppCfg::Store( SvStream& rStream)
+void lcl_SetSortList( const Any& rValue )
 {
-    rStream << SC_VERSION;
-    rStream << *this;
+    Sequence<OUString> aSeq;
+    if ( rValue >>= aSeq )
+    {
+        long nCount = aSeq.getLength();
+        const OUString* pArray = aSeq.getConstArray();
+        ScUserList aList;
 
-    SetDefault( FALSE );
+        //  if setting is "default", keep default values from ScUserList ctor
+        //! mark "default" in a safe way
+        BOOL bDefault = ( nCount == 1 &&
+                        pArray[0].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NULL" ) ) );
 
-    return SfxConfigItem::ERR_OK;
+        if (!bDefault)
+        {
+            aList.FreeAll();
+
+            for (long i=0; i<nCount; i++)
+            {
+                ScUserListData* pNew = new ScUserListData( pArray[i] );
+                if ( !aList.Insert(pNew) )
+                    delete pNew;
+            }
+        }
+
+        ScGlobal::SetUserList( &aList );
+    }
 }
 
-//------------------------------------------------------------------------
-
-void __EXPORT ScAppCfg::UseDefault()
+void lcl_GetSortList( Any& rDest )
 {
-    SetDefaults();
-    SetDefault( TRUE );
+    const ScUserList* pUserList = ScGlobal::GetUserList();
+    if (pUserList)
+    {
+        long nCount = pUserList->GetCount();
+        Sequence<OUString> aSeq( nCount );
+        OUString* pArray = aSeq.getArray();
+        for (long i=0; i<nCount; i++)
+            pArray[i] = (*pUserList)[i]->GetString();
+        rDest <<= aSeq;
+    }
+    else
+        rDest <<= Sequence<OUString>(0);    // empty
+}
+
+//------------------------------------------------------------------
+
+#define CFGPATH_LAYOUT      "Office.Calc/Layout"
+
+#define SCLAYOUTOPT_MEASURE         0
+#define SCLAYOUTOPT_STATUSBAR       1
+#define SCLAYOUTOPT_ZOOMVAL         2
+#define SCLAYOUTOPT_ZOOMTYPE        3
+#define SCLAYOUTOPT_COUNT           4
+
+#define CFGPATH_INPUT       "Office.Calc/Input"
+
+#define SCINPUTOPT_LASTFUNCS        0
+#define SCINPUTOPT_AUTOINPUT        1
+#define SCINPUTOPT_DET_AUTO         2
+#define SCINPUTOPT_COUNT            3
+
+#define CFGPATH_REVISION    "Office.Calc/Revision/Color"
+
+#define SCREVISOPT_CHANGE           0
+#define SCREVISOPT_INSERTION        1
+#define SCREVISOPT_DELETION         2
+#define SCREVISOPT_MOVEDENTRY       3
+#define SCREVISOPT_COUNT            4
+
+#define CFGPATH_CONTENT     "Office.Calc/Content/Update"
+
+#define SCCONTENTOPT_LINK           0
+#define SCCONTENTOPT_COUNT          1
+
+#define CFGPATH_SORTLIST    "Office.Calc/SortList"
+
+#define SCSORTLISTOPT_LIST          0
+#define SCSORTLISTOPT_COUNT         1
+
+
+Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Other/MeasureUnit",        // SCLAYOUTOPT_MEASURE
+        "Other/StatusbarFunction",  // SCLAYOUTOPT_STATUSBAR
+        "Zoom/Value",               // SCLAYOUTOPT_ZOOMVAL
+        "Zoom/Type"                 // SCLAYOUTOPT_ZOOMTYPE
+    };
+    Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCLAYOUTOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
+Sequence<OUString> ScAppCfg::GetInputPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "LastFunctions",            // SCINPUTOPT_LASTFUNCS
+        "AutoInput",                // SCINPUTOPT_AUTOINPUT
+        "DetectiveAuto"             // SCINPUTOPT_DET_AUTO
+    };
+    Sequence<OUString> aNames(SCINPUTOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCINPUTOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
+Sequence<OUString> ScAppCfg::GetRevisionPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Change",                   // SCREVISOPT_CHANGE
+        "Insertion",                // SCREVISOPT_INSERTION
+        "Deletion",                 // SCREVISOPT_DELETION
+        "MovedEntry"                // SCREVISOPT_MOVEDENTRY
+    };
+    Sequence<OUString> aNames(SCREVISOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCREVISOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
+Sequence<OUString> ScAppCfg::GetContentPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Link"                      // SCCONTENTOPT_LINK
+    };
+    Sequence<OUString> aNames(SCCONTENTOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCCONTENTOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
+Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "List"                      // SCSORTLISTOPT_LIST
+    };
+    Sequence<OUString> aNames(SCSORTLISTOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCSORTLISTOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
 }
 
 
-//------------------------------------------------------------------------
-
-String __EXPORT ScAppCfg::GetName() const
+ScAppCfg::ScAppCfg() :
+    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
+    aInputItem( OUString::createFromAscii( CFGPATH_INPUT ) ),
+    aRevisionItem( OUString::createFromAscii( CFGPATH_REVISION ) ),
+    aContentItem( OUString::createFromAscii( CFGPATH_CONTENT ) ),
+    aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) )
 {
-    return String( ScResId( SCSTR_CFG_APP ) );
+    sal_Int32 nIntVal;
+
+    Sequence<OUString> aNames;
+    Sequence<Any> aValues;
+    const Any* pValues = NULL;
+
+    aNames = GetLayoutPropertyNames();
+    aValues = aLayoutItem.GetProperties(aNames);
+    aLayoutItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCLAYOUTOPT_MEASURE:
+                        if (pValues[nProp] >>= nIntVal) SetAppMetric( (FieldUnit) nIntVal );
+                        break;
+                    case SCLAYOUTOPT_STATUSBAR:
+                        if (pValues[nProp] >>= nIntVal) SetStatusFunc( (USHORT) nIntVal );
+                        break;
+                    case SCLAYOUTOPT_ZOOMVAL:
+                        if (pValues[nProp] >>= nIntVal) SetZoom( (USHORT) nIntVal );
+                        break;
+                    case SCLAYOUTOPT_ZOOMTYPE:
+                        if (pValues[nProp] >>= nIntVal) SetZoomType( (SvxZoomType) nIntVal );
+                        break;
+                }
+            }
+        }
+    }
+    aLayoutItem.SetCommitLink( LINK( this, ScAppCfg, LayoutCommitHdl ) );
+
+    aNames = GetInputPropertyNames();
+    aValues = aInputItem.GetProperties(aNames);
+    aInputItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCINPUTOPT_LASTFUNCS:
+                        lcl_SetLastFunctions( *this, pValues[nProp] );
+                        break;
+                    case SCINPUTOPT_AUTOINPUT:
+                        SetAutoComplete( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCINPUTOPT_DET_AUTO:
+                        SetDetectiveAuto( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                }
+            }
+        }
+    }
+    aInputItem.SetCommitLink( LINK( this, ScAppCfg, InputCommitHdl ) );
+
+    aNames = GetRevisionPropertyNames();
+    aValues = aRevisionItem.GetProperties(aNames);
+    aRevisionItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCREVISOPT_CHANGE:
+                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( (ULONG) nIntVal );
+                        break;
+                    case SCREVISOPT_INSERTION:
+                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( (ULONG) nIntVal );
+                        break;
+                    case SCREVISOPT_DELETION:
+                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( (ULONG) nIntVal );
+                        break;
+                    case SCREVISOPT_MOVEDENTRY:
+                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( (ULONG) nIntVal );
+                        break;
+                }
+            }
+        }
+    }
+    aRevisionItem.SetCommitLink( LINK( this, ScAppCfg, RevisionCommitHdl ) );
+
+    aNames = GetContentPropertyNames();
+    aValues = aContentItem.GetProperties(aNames);
+    aContentItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCCONTENTOPT_LINK:
+                        if (pValues[nProp] >>= nIntVal) SetLinkMode( (ScLkUpdMode) nIntVal );
+                        break;
+                }
+            }
+        }
+    }
+    aContentItem.SetCommitLink( LINK( this, ScAppCfg, ContentCommitHdl ) );
+
+    aNames = GetSortListPropertyNames();
+    aValues = aSortListItem.GetProperties(aNames);
+    aSortListItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCSORTLISTOPT_LIST:
+                        lcl_SetSortList( pValues[nProp] );
+                        break;
+                }
+            }
+        }
+    }
+    aSortListItem.SetCommitLink( LINK( this, ScAppCfg, SortListCommitHdl ) );
 }
 
+IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetLayoutPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCLAYOUTOPT_MEASURE:
+                pValues[nProp] <<= (sal_Int32) GetAppMetric();
+                break;
+            case SCLAYOUTOPT_STATUSBAR:
+                pValues[nProp] <<= (sal_Int32) GetStatusFunc();
+                break;
+            case SCLAYOUTOPT_ZOOMVAL:
+                pValues[nProp] <<= (sal_Int32) GetZoom();
+                break;
+            case SCLAYOUTOPT_ZOOMTYPE:
+                pValues[nProp] <<= (sal_Int32) GetZoomType();
+                break;
+        }
+    }
+    aLayoutItem.PutProperties(aNames, aValues);
+
+    return 0;
+}
+
+IMPL_LINK( ScAppCfg, InputCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetInputPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCINPUTOPT_LASTFUNCS:
+                lcl_GetLastFunctions( pValues[nProp], *this );
+                break;
+            case SCINPUTOPT_AUTOINPUT:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetAutoComplete() );
+                break;
+            case SCINPUTOPT_DET_AUTO:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetDetectiveAuto() );
+                break;
+        }
+    }
+    aInputItem.PutProperties(aNames, aValues);
+
+    return 0;
+}
+
+IMPL_LINK( ScAppCfg, RevisionCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetRevisionPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCREVISOPT_CHANGE:
+                pValues[nProp] <<= (sal_Int32) GetTrackContentColor();
+                break;
+            case SCREVISOPT_INSERTION:
+                pValues[nProp] <<= (sal_Int32) GetTrackInsertColor();
+                break;
+            case SCREVISOPT_DELETION:
+                pValues[nProp] <<= (sal_Int32) GetTrackDeleteColor();
+                break;
+            case SCREVISOPT_MOVEDENTRY:
+                pValues[nProp] <<= (sal_Int32) GetTrackMoveColor();
+                break;
+        }
+    }
+    aRevisionItem.PutProperties(aNames, aValues);
+
+    return 0;
+}
+
+IMPL_LINK( ScAppCfg, ContentCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetContentPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCCONTENTOPT_LINK:
+                pValues[nProp] <<= (sal_Int32) GetLinkMode();
+                break;
+        }
+    }
+    aContentItem.PutProperties(aNames, aValues);
+
+    return 0;
+}
+
+IMPL_LINK( ScAppCfg, SortListCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetSortListPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCSORTLISTOPT_LIST:
+                lcl_GetSortList( pValues[nProp] );
+                break;
+        }
+    }
+    aSortListItem.PutProperties(aNames, aValues);
+
+    return 0;
+}
+
+void ScAppCfg::SetOptions( const ScAppOptions& rNew )
+{
+    *(ScAppOptions*)this = rNew;
+    OptionsChanged();
+}
+
+void ScAppCfg::OptionsChanged()
+{
+    aLayoutItem.SetModified();
+    aInputItem.SetModified();
+    aRevisionItem.SetModified();
+    aContentItem.SetModified();
+    aSortListItem.SetModified();
+}
 
 

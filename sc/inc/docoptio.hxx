@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docoptio.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,18 @@
 #define SC_DOCOPTIO_HXX
 
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
 
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
+#ifndef SC_VIEWOPTI_HXX
+#include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
+#endif
+
 
 
 class ScDocOptions
@@ -224,21 +229,24 @@ private:
 };
 
 //==================================================================
-// CfgItem fuer Doc-Optionen
+//  Config Item containing document options
 //==================================================================
 
-class ScDocCfg : public ScDocOptions,
-                 public SfxConfigItem
+class ScDocCfg : public ScDocOptions
 {
+    ScLinkConfigItem    aCalcItem;
+    ScLinkConfigItem    aLayoutItem;
+
+    DECL_LINK( CalcCommitHdl, void* );
+    DECL_LINK( LayoutCommitHdl, void* );
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
+
 public:
             ScDocCfg();
 
-    virtual String GetName() const;
-
-protected:
-    virtual int     Load        (SvStream& rStream);
-    virtual BOOL    Store       (SvStream& rStream);
-    virtual void    UseDefault  ();
+    void    SetOptions( const ScDocOptions& rNew );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unitconv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:19 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,33 +65,18 @@
 
 #pragma hdrstop
 
-#ifndef SC_UNITCONV_HXX
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include "unitconv.hxx"
-#endif
-#ifndef SC_SCGLOB_HXX
 #include "global.hxx"
-#endif
-#ifndef _SFXDOCFILE_HXX
-#include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX //autogen wg. International
-#include <tools/intn.hxx>
-#endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
+#include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
+
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
+
+// --------------------------------------------------------------------
 
 const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
 
@@ -147,116 +132,68 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 
 // --- ScUnitConverter ------------------------------------------------
 
-ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDelta )
-        :
+#define CFGPATH_UNIT        "Office.Calc/UnitConversion"
+#define CFGSTR_UNIT_FROM    "FromUnit"
+#define CFGSTR_UNIT_TO      "ToUnit"
+#define CFGSTR_UNIT_FACTOR  "Factor"
+
+ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDelta ) :
         StrCollection( nInit, nDelta, FALSE )
 {
-    ReadIniFiles();
-}
+    //  read from configuration - "convert.ini" is no longer used
+    //! config item as member to allow change of values
 
+    ScLinkConfigItem aConfigItem( OUString::createFromAscii( CFGPATH_UNIT ) );
 
-inline const sal_Unicode* SkipWhite( const sal_Unicode* p )
-{
-    while ( *p == ' ' || *p == '\t' )
-        p++;
-    return p;
-}
+    // empty node name -> use the config item's path itself
+    Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( OUString() );
 
-
-void ScUnitConverter::ReadIniFiles()
-{
-    International aIntl( LANGUAGE_ENGLISH_US );
-    String aName( RTL_CONSTASCII_USTRINGPARAM("convert.ini") );
-    INetURLObject aURL;
-
-    // share/config/convert.ini first, global definitions
-    String aPath( SFX_INIMANAGER()->Get( SFX_KEY_CONFIG_DIR ) );
-    if ( aPath.Len() > 0 )
+    long nNodeCount = aNodeNames.getLength();
+    if ( nNodeCount )
     {
-        aURL.SetSmartURL( aPath );
-        aURL.setFinalSlash();
-        aURL.Append( aName );
-        ReadIniFile( aURL.GetMainURL(), aIntl );
-    }
+        const OUString* pNodeArray = aNodeNames.getConstArray();
+        Sequence<OUString> aValNames( nNodeCount * 3 );
+        OUString* pValNameArray = aValNames.getArray();
+        const OUString sSlash('/');
 
-    // user/config/convert.ini may NOT overwrite globals (StrCollecion no dupes)
-    aPath = SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH );
-    if ( aPath.Len() > 0 )
-    {
-        aURL.SetSmartURL( aPath );
-        aURL.setFinalSlash();
-        aURL.Append( aName );
-        ReadIniFile( aURL.GetMainURL(), aIntl );
-    }
-}
-
-
-void ScUnitConverter::ReadIniFile( const String& rFileName, International& rIntl )
-{
-    SfxMedium aMedium( rFileName,
-        STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE, TRUE );
-    SvStream* pStream = aMedium.GetInStream();
-    if ( !pStream || pStream->GetError() != 0 )
-        return ;
-    SvStream& rStream = *pStream;
-
-    ByteString aByteLine;
-    BOOL bIsConv = FALSE;
-    while ( !bIsConv && rStream.ReadLine( aByteLine ) )
-    {
-        aByteLine.EraseAllChars( ' ' );
-        bIsConv = aByteLine.Equals( "[UnitConversion]" );
-    }
-
-    while ( bIsConv && rStream.ReadLine( aByteLine ) )
-    {
-        String aLine( aByteLine, osl_getThreadTextEncoding() );
-        const sal_Unicode* const pBeg = aLine.GetBuffer();
-        register const sal_Unicode* p = SkipWhite( pBeg );
-        // Format: "FromUnit";"ToUnit";1.23 ;evtl. Kommentar
-        if ( *p == '"' )
+        long nIndex = 0;
+        for (long i=0; i<nNodeCount; i++)
         {
-            //! keine '"' in Unit
-            const sal_Unicode* const p1 = ++p;
-            while ( *p != '"' )
-                p++;
-            String aFromUnit( aLine.Copy( p1 - pBeg, p - p1 ) );
-            p = SkipWhite( ++p );
-            if ( *p == ';' )
+            OUString sPrefix = pNodeArray[i];
+            sPrefix += sSlash;
+
+            pValNameArray[nIndex] = sPrefix;
+            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_FROM );
+            pValNameArray[nIndex] = sPrefix;
+            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_TO );
+            pValNameArray[nIndex] = sPrefix;
+            pValNameArray[nIndex++] += OUString::createFromAscii( CFGSTR_UNIT_FACTOR );
+        }
+
+        Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);
+
+        if (aProperties.getLength() == aValNames.getLength())
+        {
+            const Any* pProperties = aProperties.getConstArray();
+
+            OUString sFromUnit;
+            OUString sToUnit;
+            double fFactor;
+
+            nIndex = 0;
+            for (long i=0; i<nNodeCount; i++)
             {
-                p = SkipWhite( ++p );
-                if ( *p == '"' )
-                {
-                    //! keine '"' in Unit
-                    const sal_Unicode* const p1 = ++p;
-                    while ( *p != '"' )
-                        p++;
-                    String aToUnit( aLine.Copy( p1 - pBeg, p - p1 ) );
-                    p = SkipWhite( ++p );
-                    if ( *p == ';' )
-                    {
-                        p = SkipWhite( ++p );
-                        int nErrno;
-                        const sal_Unicode* pEnd;
-                        double fValue = SolarMath::StringToDouble(
-                            p, rIntl, nErrno, &pEnd );
-                        if ( !nErrno && pEnd > p )
-                        {
-                            ScUnitConverterData* pData =
-                                new ScUnitConverterData( aFromUnit, aToUnit,
-                                fValue );
-                            if ( !Insert( pData ) )
-                                delete pData;
-                        }
-                    }
-                }
+                pProperties[nIndex++] >>= sFromUnit;
+                pProperties[nIndex++] >>= sToUnit;
+                pProperties[nIndex++] >>= fFactor;
+
+                ScUnitConverterData* pNew = new ScUnitConverterData( sFromUnit, sToUnit, fFactor );
+                if ( !Insert( pNew ) )
+                    delete pNew;
             }
         }
-        else if ( *p == '[' && ScGlobal::UnicodeStrChr( p+1, ']' ) )
-            bIsConv = FALSE;        // neue [Section]
     }
 }
-
 
 BOOL ScUnitConverter::GetValue( double& fValue, const String& rFromUnit,
                 const String& rToUnit ) const

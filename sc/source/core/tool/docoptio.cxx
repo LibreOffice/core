@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docoptio.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,33 @@
 #include <vcl/svapp.hxx>
 #include <svtools/zforlist.hxx>
 
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include "cfgids.hxx"
 #include "docoptio.hxx"
 #include "rechead.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
+#include "miscuno.hxx"
+
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
 //------------------------------------------------------------------------
 
 #define SC_VERSION ((USHORT)251)
 
 TYPEINIT1(ScTpCalcItem, SfxPoolItem);
+
+//------------------------------------------------------------------------
+
+//! these functions should be moved to some header file
+inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
+
+inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
 
 //------------------------------------------------------------------------
 
@@ -280,58 +296,252 @@ SfxPoolItem* __EXPORT ScTpCalcItem::Clone( SfxItemPool * ) const
 }
 
 //==================================================================
-// CfgItem fuer Doc-Optionen
+//  Config Item containing document options
 //==================================================================
 
-ScDocCfg::ScDocCfg() : SfxConfigItem( SCCFG_DOC )
+#define CFGPATH_CALC        "Office.Calc/Calculate"
+
+#define SCCALCOPT_ITER_ITER         0
+#define SCCALCOPT_ITER_STEPS        1
+#define SCCALCOPT_ITER_MINCHG       2
+#define SCCALCOPT_DATE_DAY          3
+#define SCCALCOPT_DATE_MONTH        4
+#define SCCALCOPT_DATE_YEAR         5
+#define SCCALCOPT_DECIMALS          6
+#define SCCALCOPT_CASESENSITIVE     7
+#define SCCALCOPT_PRECISION         8
+#define SCCALCOPT_SEARCHCRIT        9
+#define SCCALCOPT_FINDLABEL         10
+#define SCCALCOPT_COUNT             11
+
+#define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
+
+#define SCDOCLAYOUTOPT_TABSTOP      0
+#define SCDOCLAYOUTOPT_COUNT        1
+
+
+Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
+    static const char* aPropNames[] =
+    {
+        "IterativeReference/Iteration",     // SCCALCOPT_ITER_ITER
+        "IterativeReference/Steps",         // SCCALCOPT_ITER_STEPS
+        "IterativeReference/MinimumChange", // SCCALCOPT_ITER_MINCHG
+        "Other/Date/DD",                    // SCCALCOPT_DATE_DAY
+        "Other/Date/MM",                    // SCCALCOPT_DATE_MONTH
+        "Other/Date/YY",                    // SCCALCOPT_DATE_YEAR
+        "Other/DecimalPlaces",              // SCCALCOPT_DECIMALS
+        "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
+        "Other/Precision",                  // SCCALCOPT_PRECISION
+        "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
+        "Other/FindLabel"                   // SCCALCOPT_FINDLABEL
+    };
+    Sequence<OUString> aNames(SCCALCOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCCALCOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
 }
 
-//------------------------------------------------------------------------
-
-int __EXPORT ScDocCfg::Load( SvStream& rStream )
+Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
-    USHORT  nVersion;
+    static const char* aPropNames[] =
+    {
+        "TabStop"                   // SCDOCLAYOUTOPT_TABSTOP
+    };
+    Sequence<OUString> aNames(SCDOCLAYOUTOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCDOCLAYOUTOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    rStream >> nVersion;
-    ScDocOptions::Load( rStream );
-
-    SetDefault( FALSE );
-
-    return ( nVersion == SC_VERSION )
-                ? SfxConfigItem::ERR_OK
-                : SfxConfigItem::WARNING_VERSION;
+    return aNames;
 }
 
-//------------------------------------------------------------------------
-
-BOOL __EXPORT ScDocCfg::Store( SvStream& rStream)
+ScDocCfg::ScDocCfg() :
+    aCalcItem( OUString::createFromAscii( CFGPATH_CALC ) ),
+    aLayoutItem( OUString::createFromAscii( CFGPATH_DOCLAYOUT ) )
 {
-    //  TRUE = alles speichern, unabhaengig von der Stream-Version
-    //  (am Config-Stream ist noch SOFFICE_FILEFORMAT_40 eingestellt)
+    sal_Int32 nIntVal;
+    double fDoubleVal;
 
-    rStream << SC_VERSION;
-    ScDocOptions::Save( rStream, TRUE );
+    Sequence<OUString> aNames;
+    Sequence<Any> aValues;
+    const Any* pValues = NULL;
 
-    SetDefault( FALSE );
+    USHORT nDateDay, nDateMonth, nDateYear;
+    GetDate( nDateDay, nDateMonth, nDateYear );
 
-    return SfxConfigItem::ERR_OK;
+    aNames = GetCalcPropertyNames();
+    aValues = aCalcItem.GetProperties(aNames);
+    aCalcItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCCALCOPT_ITER_ITER:
+                        SetIter( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCCALCOPT_ITER_STEPS:
+                        if (pValues[nProp] >>= nIntVal) SetIterCount( (USHORT) nIntVal );
+                        break;
+                    case SCCALCOPT_ITER_MINCHG:
+                        if (pValues[nProp] >>= fDoubleVal) SetIterEps( fDoubleVal );
+                        break;
+                    case SCCALCOPT_DATE_DAY:
+                        if (pValues[nProp] >>= nIntVal) nDateDay = (USHORT) nIntVal;
+                        break;
+                    case SCCALCOPT_DATE_MONTH:
+                        if (pValues[nProp] >>= nIntVal) nDateMonth = (USHORT) nIntVal;
+                        break;
+                    case SCCALCOPT_DATE_YEAR:
+                        if (pValues[nProp] >>= nIntVal) nDateYear = (USHORT) nIntVal;
+                        break;
+                    case SCCALCOPT_DECIMALS:
+                        if (pValues[nProp] >>= nIntVal) SetStdPrecision( (USHORT) nIntVal );
+                        break;
+                    case SCCALCOPT_CASESENSITIVE:
+                        // content is reversed
+                        SetIgnoreCase( !ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCCALCOPT_PRECISION:
+                        SetCalcAsShown( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCCALCOPT_SEARCHCRIT:
+                        SetMatchWholeCell( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCCALCOPT_FINDLABEL:
+                        SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                }
+            }
+        }
+    }
+    aCalcItem.SetCommitLink( LINK( this, ScDocCfg, CalcCommitHdl ) );
+
+    SetDate( nDateDay, nDateMonth, nDateYear );
+
+    aNames = GetLayoutPropertyNames();
+    aValues = aLayoutItem.GetProperties(aNames);
+    aLayoutItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCDOCLAYOUTOPT_TABSTOP:
+                        // TabDistance in ScDocOptions is in twips
+                        if (pValues[nProp] >>= nIntVal)
+                            SetTabDistance( (USHORT) HMMToTwips( nIntVal ) );
+                        break;
+                }
+            }
+        }
+    }
+    aLayoutItem.SetCommitLink( LINK( this, ScDocCfg, LayoutCommitHdl ) );
 }
 
-//------------------------------------------------------------------------
-
-void __EXPORT ScDocCfg::UseDefault()
+IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
 {
-    ResetDocOptions();
-    SetDefault( TRUE );
+    Sequence<OUString> aNames = GetCalcPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    USHORT nDateDay, nDateMonth, nDateYear;
+    GetDate( nDateDay, nDateMonth, nDateYear );
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCCALCOPT_ITER_ITER:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsIter() );
+                break;
+            case SCCALCOPT_ITER_STEPS:
+                pValues[nProp] <<= (sal_Int32) GetIterCount();
+                break;
+            case SCCALCOPT_ITER_MINCHG:
+                pValues[nProp] <<= (double) GetIterEps();
+                break;
+            case SCCALCOPT_DATE_DAY:
+                pValues[nProp] <<= (sal_Int32) nDateDay;
+                break;
+            case SCCALCOPT_DATE_MONTH:
+                pValues[nProp] <<= (sal_Int32) nDateMonth;
+                break;
+            case SCCALCOPT_DATE_YEAR:
+                pValues[nProp] <<= (sal_Int32) nDateYear;
+                break;
+            case SCCALCOPT_DECIMALS:
+                pValues[nProp] <<= (sal_Int32) GetStdPrecision();
+                break;
+            case SCCALCOPT_CASESENSITIVE:
+                // content is reversed
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], !IsIgnoreCase() );
+                break;
+            case SCCALCOPT_PRECISION:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsCalcAsShown() );
+                break;
+            case SCCALCOPT_SEARCHCRIT:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsMatchWholeCell() );
+                break;
+            case SCCALCOPT_FINDLABEL:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], IsLookUpColRowNames() );
+                break;
+        }
+    }
+    aCalcItem.PutProperties(aNames, aValues);
+
+    return 0;
 }
 
-//------------------------------------------------------------------------
-
-String __EXPORT ScDocCfg::GetName() const
+IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
 {
-    return String( ScResId( SCSTR_CFG_DOC ) );
+    Sequence<OUString> aNames = GetLayoutPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCDOCLAYOUTOPT_TABSTOP:
+                //  TabDistance in ScDocOptions is in twips
+                //  use only even numbers, so defaults don't get changed
+                //  by modifying other settings in the same config item
+                pValues[nProp] <<= (sal_Int32) TwipsToEvenHMM( GetTabDistance() );
+                break;
+        }
+    }
+    aLayoutItem.PutProperties(aNames, aValues);
+
+    return 0;
 }
 
+
+void ScDocCfg::SetOptions( const ScDocOptions& rNew )
+{
+    *(ScDocOptions*)this = rNew;
+
+    aCalcItem.SetModified();
+    aLayoutItem.SetModified();
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unitconv.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@ class International;
 
 class ScUnitConverter : public StrCollection
 {
-        void                ReadIniFiles();
-        void                ReadIniFile( const String& rFileName, International& rIntl );
-
                             // not implemented
                             ScUnitConverter( const ScUnitConverter& );
         ScUnitConverter&    operator=( const ScUnitConverter& );
@@ -109,3 +106,4 @@ public:
 
 
 #endif
+

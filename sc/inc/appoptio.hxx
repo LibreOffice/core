@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:47 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,18 @@
 #include <svx/zoomitem.hxx>
 #endif
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+
+#ifndef SC_VIEWOPTI_HXX
+#include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
+#endif
+
 
 class ScAppOptions
 {
@@ -140,21 +145,37 @@ private:
 
 
 //==================================================================
-// CfgItem fuer App-Optionen
+//  Config Item containing app options
 //==================================================================
 
-class ScAppCfg : public ScAppOptions,
-                 public SfxConfigItem
+class ScAppCfg : public ScAppOptions
 {
+    //  spread about 5 config paths
+    //! split ScAppOptions into different classes
+
+    ScLinkConfigItem    aLayoutItem;
+    ScLinkConfigItem    aInputItem;
+    ScLinkConfigItem    aRevisionItem;
+    ScLinkConfigItem    aContentItem;
+    ScLinkConfigItem    aSortListItem;
+
+    DECL_LINK( LayoutCommitHdl, void* );
+    DECL_LINK( InputCommitHdl, void* );
+    DECL_LINK( RevisionCommitHdl, void* );
+    DECL_LINK( ContentCommitHdl, void* );
+    DECL_LINK( SortListCommitHdl, void* );
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetInputPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetRevisionPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetContentPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetSortListPropertyNames();
+
 public:
             ScAppCfg();
 
-    virtual String GetName() const;
-
-protected:
-    virtual int     Load        (SvStream& rStream);
-    virtual BOOL    Store       (SvStream& rStream);
-    virtual void    UseDefault  ();
+    void    SetOptions( const ScAppOptions& rNew );
+    void    OptionsChanged();   // after direct access to ScAppOptions base class
 };
 
 
