@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:54:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
     bNew     =
     bStatic  =
     bOpt     =
+    bParamArray =
     bByVal   =
     bChained =
     bGlobal  = FALSE;
@@ -485,7 +486,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
         // Kein Typabgleich; das wird beim Laufen erledigt
         // aber ist sie evtl. mit zu wenigen Parametern aufgerufen
         // worden?
-        if( !po && !pn->IsOptional() )
+        if( !po && !pn->IsOptional() && !pn->IsParamArray() )
             break;
         po = pOld->aParams.Next();
     }
