@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2002-08-12 13:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ class SwFlyFrmAttrMgr
 
     BOOL        bAbsPos,
                 bNewFrm;
+    BOOL        bIsInVertical;
 
     // interne Verrechnung fuer Umrandung
     SwTwips             CalcTopSpace();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-06 11:34:23 $
+ *  last change: $Author: os $ $Date: 2002-08-12 13:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ static USHORT __FAR_DATA aFrmMgrRange[] = {
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
     bAbsPos( FALSE ),
     bNewFrm( bNew ),
+    bIsInVertical( FALSE ),
     aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
     pOwnSh( pSh )
 
@@ -140,7 +141,10 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
             aSet.Put( SwFmtHoriOrient( 0, HORI_LEFT, PRTAREA ) );
     }
     else if ( nType == FRMMGR_TYPE_NONE )
+    {
         pOwnSh->GetFlyFrmAttr( aSet );
+        bIsInVertical = pOwnSh->IsFrmInVertical();
+    }
     ::PrepareBoxInfo( aSet, *pOwnSh );
 }
 
@@ -330,6 +334,22 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
     if (bOnlyPercentRefValue)
         return;
 
+    if(bIsInVertical)
+    {
+        Point aPos(aBoundRect.Pos());
+        long nTmp = aPos.X();
+        aPos.X() = aPos.Y();
+        aPos.Y() = nTmp;
+        Size aSize(aBoundRect.SSize());
+        nTmp = aSize.Width();
+        aSize.Width() = aSize.Height();
+        aSize.Height() = nTmp;
+        aBoundRect.Chg( aPos, aSize );
+        //exchange width/height to enable correct values
+        nTmp = rVal.nWidth;
+        rVal.nWidth = rVal.nHeight;
+        rVal.nHeight = nTmp;
+    }
     if ( rVal.eArea == FLY_PAGE || rVal.eArea == FLY_AT_FLY )
     {
         // MinimalPosition
@@ -437,6 +457,14 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
             rVal.nMaxVPos = -aBoundRect.Height();
         }
     }
+    if(bIsInVertical)
+    {
+        //restore width/height exchange
+        long nTmp = rVal.nWidth;
+        rVal.nWidth = rVal.nHeight;
+        rVal.nHeight = nTmp;
+    }
+
     if (rVal.nMaxWidth < rVal.nWidth)
         rVal.nWidth = rVal.nMaxWidth;
     if (rVal.nMaxHeight < rVal.nHeight)
@@ -633,218 +661,4 @@ SwFrmValid::SwFrmValid() :
 {
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:37  hr
-    initial import
-
-    Revision 1.168  2000/09/18 16:05:33  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.167  1998/11/04 18:43:28  MA
-    #58858# Format fuer MakeNewFly durchreichen
-
-
-      Rev 1.166   04 Nov 1998 19:43:28   MA
-   #58858# Format fuer MakeNewFly durchreichen
-
-      Rev 1.165   07 Apr 1998 12:00:42   OM
-   Maximalwerte fuer Umlauf
-
-      Rev 1.164   01 Apr 1998 15:15:22   OM
-   #49023 Prozentuale Controller rechtzeitig initialisieren
-
-      Rev 1.163   05 Feb 1998 15:27:38   OM
-   Maximalwertberechnung fuer Rahmenausrichtung
-
-      Rev 1.162   04 Feb 1998 15:53:56   AMA
-   Chg: CalcBoundRect beruecksichtigt die neuen Rahmenausrichtungen
-
-      Rev 1.161   24 Nov 1997 17:40:08   MA
-   include
-
-      Rev 1.160   20 Nov 1997 12:14:36   AMA
-   Opt. SwSurround: GoldCut jetzt als Enum; nicht implementierte Enums entfernt
-
-      Rev 1.159   12 Sep 1997 16:32:36   AMA
-   Neu: Wenn am Rahmen verankerte Rahmen ausserhalb sein duerfen ...
-
-      Rev 1.158   12 Sep 1997 10:38:00   OS
-   ITEMID_* definiert
-
-      Rev 1.157   15 Aug 1997 12:13:24   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.156   12 Aug 1997 15:58:10   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.155   07 Aug 1997 14:59:12   OM
-   Headerfile-Umstellung
-
-      Rev 1.154   30 Jul 1997 18:17:48   HJS
-   includes
-
-      Rev 1.153   23 Apr 1997 10:44:34   AMA
-   Fix: FLY_AUTO_CNTNT Abstaende richtig berechnen
-
-      Rev 1.152   16 Apr 1997 16:24:14   OS
-   neu: SetContour und SetAnchorOnly
-
-      Rev 1.151   16 Apr 1997 11:08:58   NF
-   Include-Reihenfolge wegen Internal Compiler Error
-
-      Rev 1.150   15 Apr 1997 16:27:58   AMA
-   New: Rahmengebundene Rahmen und auto.positionierte Rahmen
-
-      Rev 1.149   03 Feb 1997 16:00:36   OM
-   Maximalwertberechnung fuer zeichengebundene Rahmen geaendert
-
-      Rev 1.148   29 Jan 1997 13:06:24   MA
-   unbenutzes entfernt
-
-      Rev 1.147   28 Jan 1997 10:12:18   NF
-   includes ...
-
-      Rev 1.146   27 Jan 1997 16:22:30   OS
-   HtmlMode wird ueber GetHtmlMode ermittelt
-
-      Rev 1.145   06 Nov 1996 16:26:10   OM
-   Maximalwertberechnung verbessert
-
-      Rev 1.144   04 Nov 1996 16:50:44   OM
-   Maximalwertbegrenzung fuer Umlauf-TP
-
-      Rev 1.143   04 Nov 1996 14:58:42   OM
-   ValidateMetric umgestellt
-
-      Rev 1.142   30 Sep 1996 07:52:36   MA
-   new: CalcWidthSpace, CalcHeightSpace
-
-      Rev 1.141   26 Sep 1996 09:03:08   MA
-   defautls fuer Rahmen + Aufraeumarbeiten
-
-      Rev 1.140   23 Sep 1996 13:30:54   OS
-   richtige max. V-Position und Hoehe fuer absatzgebundene Rahmen
-
-      Rev 1.139   18 Sep 1996 10:39:18   OM
-   Umlauf: Nur Anker
-
-      Rev 1.138   12 Sep 1996 17:01:50   OS
-   GetAnyCurRect() ersetzt GetCur*Rect
-
-      Rev 1.137   11 Sep 1996 16:51:44   MA
-   new: Umlauf nur Anker
-
-      Rev 1.136   10 Sep 1996 17:00:44   OM
-   Prozentuale Rahmen
-
-      Rev 1.135   10 Sep 1996 14:21:48   MA
-   chg: ein bischen vereinfacht
-
-      Rev 1.134   10 Sep 1996 14:00:46   OM
-   Aufgeraeumt
-
-      Rev 1.133   06 Sep 1996 14:15:20   OM
-   #31010# GPF bei fehlenden Groessenangaben behoben
-
-      Rev 1.132   28 Aug 1996 11:52:48   OS
-   includes
-
-      Rev 1.131   01 Jul 1996 14:55:02   OM
-   Neue Segs
-
-      Rev 1.130   01 Jul 1996 14:53:58   OM
-   Basic: Rahmengroesse in Prozent setzen
-
-      Rev 1.129   15 May 1996 15:47:18   OS
-   SwVertOrient -> SvxFrameVertOrient
-
-      Rev 1.128   25 Apr 1996 15:59:24   MA
-   #27183# neg. Position von zeichengeb. beruecksichtigen
-
-      Rev 1.127   19 Apr 1996 17:00:34   MA
-   chg: Vorbereitung fuer kleine Rahmen
-
-      Rev 1.126   18 Apr 1996 14:10:32   JP
-   unbenutzte Methoden entfernt
-
-      Rev 1.125   22 Mar 1996 15:06:00   OS
-   Umstellung 311
-
-      Rev 1.124   21 Mar 1996 14:06:32   OM
-   Umstellung 311
-
-      Rev 1.123   20 Feb 1996 17:03:06   JP
-   Umbau SfxItemPool -> SwAttrPool
-
-      Rev 1.122   24 Nov 1995 16:58:12   OM
-   PCH->PRECOMPILED
-
-      Rev 1.121   17 Nov 1995 18:11:42   OM
-   Rahmennamen setzen
-
-      Rev 1.120   03 Nov 1995 20:17:30   MA
-   GetUpper..Rect returne keine Objecte mehr
-
-      Rev 1.119   30 Oct 1995 18:44:04   OM
-   FrameNotify umgestellt
-
-      Rev 1.118   30 Oct 1995 11:25:34   MA
-   chg: Geraffel entfernt
-
-      Rev 1.117   09 Aug 1995 21:50:48   ER
-   ! static data _vor_ seg_eofglobals
-
-      Rev 1.116   25 Jul 1995 19:12:06   OS
-   +ProtectPos(), +ProtectSize()
-
-      Rev 1.115   24 Jul 1995 19:13:30   MA
-   chg: Ctor nur noch mit Shell
-
-      Rev 1.114   17 Jul 1995 16:10:56   OS
-   Default-Konstanten jetzt im Header
-
-      Rev 1.113   21 May 1995 15:41:58   MA
-   opt: FRMTYE_FLY_ANY.
-
-      Rev 1.112   25 Apr 1995 17:34:06   OM
-   Range des Set-Konstruktors um BoxInfoItem erweitert
-
-      Rev 1.111   23 Apr 1995 20:45:26   OS
-   Position/Size beim Aufziehen
-
-      Rev 1.110   31 Mar 1995 12:07:38   MA
-   fix: Bei PosProtect nicht den Inhalt schuetzen.
-   opt: Diverse.
-   opt: unoetige includes entfernt.
-
-      Rev 1.109   24 Mar 1995 20:28:32   PK
-   neuer member: pownsh
-
-      Rev 1.108   21 Mar 1995 07:38:36   OM
-   InsertFlyFrm wieder drin
-
-      Rev 1.107   20 Mar 1995 19:18:30   OS
-   unbenutzte Funktionen entfernt
-
-      Rev 1.106   14 Feb 1995 17:26:06   MS
-   PrepareBoxInfo
-
-      Rev 1.105   13 Feb 1995 21:11:50   MS
-   Rahmen aktiviert
-
-      Rev 1.104   23 Jan 1995 18:14:14   OM
-   Auf neue precompiled Header umgestellt
-
-      Rev 1.103   09 Jan 1995 17:08:10   ER
-    del: cmdid h
-
-      Rev 1.102   20 Dec 1994 11:54:06   MA
-   SS Drawing.
-
-      Rev 1.101   18 Nov 1994 16:17:22   MA
-   min -> Min, max -> Max.
-
-------------------------------------------------------------------------*/
 
