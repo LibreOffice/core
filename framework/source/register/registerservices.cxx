@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-12-13 09:23:06 $
+ *  last change: $Author: as $ $Date: 2000-12-13 09:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #include <baeh_services/desktop.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_DOCUMENTPROPERTIES_HXX_
+#include <services/documentproperties.hxx>
+#endif
+
 #ifndef __FRAMEWORK_SERVICES_TASK_HXX_
 #include <services/task.hxx>
 #endif
@@ -136,6 +140,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::FrameLoaderFactory          )
                         COMPONENTINFO( ::framework::FilterFactory               )
                         COMPONENTINFO( ::framework::TypeDetection               )
+                        COMPONENTINFO( ::framework::DocumentProperties          )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -145,7 +150,8 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::Frame                           )   else
                         IFFACTORY( ::framework::FrameLoaderFactory              )   else
                         IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )
+                        IFFACTORY( ::framework::TypeDetection                   )   else
+                        IFFACTORY( ::framework::DocumentProperties              )
                     )
 #else//MUSTFILTER
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
@@ -154,6 +160,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::Task                        )
                         COMPONENTINFO( ::framework::Frame                       )
                         COMPONENTINFO( ::framework::FrameLoaderFactory          )
+                        COMPONENTINFO( ::framework::DocumentProperties          )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -161,6 +168,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::Desktop                         )   else
                         IFFACTORY( ::framework::Task                            )   else
                         IFFACTORY( ::framework::Frame                           )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )
+                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
+                        IFFACTORY( ::framework::DocumentProperties              )
                     )
 #endif//MUSTFILTER
