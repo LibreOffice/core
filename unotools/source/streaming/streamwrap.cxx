@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 11:32:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,13 +309,80 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
 void SAL_CALL OOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     rStream.Flush();
-    if (rStream.GetError() != ERRCODE_NONE)
-        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+    checkError();
 }
 
 //------------------------------------------------------------------
 void SAL_CALL OOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
+}
+
+//------------------------------------------------------------------------------
+void OOutputStreamWrapper::checkError() const
+{
+    if (rStream.GetError() != ERRCODE_NONE)
+        // TODO: really evaluate the error
+        throw stario::NotConnectedException(::rtl::OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
+}
+
+//==================================================================
+//= OSeekableOutputStreamWrapper
+//==================================================================
+//------------------------------------------------------------------------------
+OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
+    :OOutputStreamWrapper(_rStream)
+{
+}
+
+//------------------------------------------------------------------------------
+Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
+{
+    Any aReturn = OOutputStreamWrapper::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = OSeekableOutputStreamWrapper_Base::queryInterface(_rType);
+    return aReturn;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OSeekableOutputStreamWrapper::acquire(  ) throw ()
+{
+    OOutputStreamWrapper::acquire();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OSeekableOutputStreamWrapper::release(  ) throw ()
+{
+    OOutputStreamWrapper::release();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException)
+{
+    rStream.Seek((sal_uInt32)_nLocation);
+    checkError();
+}
+
+//------------------------------------------------------------------------------
+sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  ) throw (IOException, RuntimeException)
+{
+    sal_uInt32 nPos = rStream.Tell();
+    checkError();
+    return (sal_Int64)nPos;
+}
+
+//------------------------------------------------------------------------------
+sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOException, RuntimeException)
+{
+    sal_uInt32 nCurrentPos = rStream.Tell();
+    checkError();
+
+    rStream.Seek(STREAM_SEEK_TO_END);
+    sal_uInt32 nEndPos = rStream.Tell();
+    rStream.Seek(nCurrentPos);
+
+    checkError();
+
+    return (sal_Int64)nEndPos;
 }
 
 } // namespace utl
