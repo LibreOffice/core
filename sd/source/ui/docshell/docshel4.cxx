@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:52:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,7 @@ BOOL DrawDocShell::Load( SvStorage* pStore )
             else if( bXML )
             {
                 // #80365# use the medium from the DrawDocShell, do not construct an own one
-                pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True );
+                pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Normal, nStoreVer );
             }
 
             bRet = pFilter ? pFilter->Import() : FALSE;
@@ -579,7 +579,7 @@ BOOL DrawDocShell::LoadFrom(SvStorage* pStor)
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
 
-        SdFilter* pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer );
+        SdFilter* pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer, nStoreVer );
 
         bRet = pFilter ? pFilter->Import() : FALSE;
         delete pFilter;
@@ -621,11 +621,18 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         pDoc->StopWorkStartupDelay();
         pFilter = new SdPPTFilter( rMedium, *this, sal_True );
     }
-    else if (aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND || aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND )
+    else if (aFilterName.SearchAscii("impress8" )  != STRING_NOTFOUND ||
+             aFilterName.SearchAscii("draw8")  != STRING_NOTFOUND )
     {
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
         pFilter = new SdXMLFilter( rMedium, *this, sal_True );
+    }
+    else if (aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND || aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND )
+    {
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+        pFilter = new SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
     }
     else if( aFilterName.EqualsAscii( "CGM - Computer Graphics Metafile" ) )
     {
@@ -679,7 +686,7 @@ BOOL DrawDocShell::Save()
         SdFilter*   pFilter = NULL;
 
         if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
-            pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+            pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, pStore->GetVersion() );
         else
             pFilter = new SdBINFilter( aMedium, *this, sal_True );
 
@@ -716,7 +723,7 @@ BOOL DrawDocShell::SaveAs( SvStorage* pStore )
         if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
         {
             SfxMedium aMedium( pStore );
-            pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+            pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, pStore->GetVersion() );
 
             // #86834# Call UpdateDocInfoForSave() before export
             UpdateDocInfoForSave();
@@ -781,10 +788,16 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
         {
             pFilter = new SdCGMFilter( rMedium, *this, sal_True );
         }
-        else if( ( aTypeName.SearchAscii( "StarOffice_XML_Impress " ) != STRING_NOTFOUND ) ||
-                 ( aTypeName.SearchAscii( "StarOffice_XML_Draw" ) != STRING_NOTFOUND ) )
+        else if( ( aTypeName.SearchAscii( "draw8" ) != STRING_NOTFOUND ) ||
+                 ( aTypeName.SearchAscii( "impress8" ) != STRING_NOTFOUND ) )
         {
             pFilter = new SdXMLFilter( rMedium, *this, sal_True );
+            UpdateDocInfoForSave();
+        }
+        else if( ( aTypeName.SearchAscii( "StarOffice_XML_Impress" ) != STRING_NOTFOUND ) ||
+                 ( aTypeName.SearchAscii( "StarOffice_XML_Draw" ) != STRING_NOTFOUND ) )
+        {
+            pFilter = new SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
             UpdateDocInfoForSave();
         }
         else
@@ -1110,29 +1123,41 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
                 *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_50));
             }
         }
-        else if (nFileFormat == SOFFICE_FILEFORMAT_CURRENT)
+        else if (nFileFormat == SOFFICE_FILEFORMAT_60)
         {
-                       if ( eDocType == DOCUMENT_TYPE_DRAW )
-                       {
-                               *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                               *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
-                               *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
-                       }
-                       else
-                       {
-                               *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                               *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
-                               *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
-                       }
+            if ( eDocType == DOCUMENT_TYPE_DRAW )
+            {
+                    *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+                    *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
+                    *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
+            }
+            else
+            {
+                    *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+                    *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
+                    *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
+            }
+        }
+        else if (nFileFormat == SOFFICE_FILEFORMAT_8)
+        {
+            if ( eDocType == DOCUMENT_TYPE_DRAW )
+            {
+                    *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+                    *pFormat = SOT_FORMATSTR_ID_STARDRAW_8;
+                    *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8")); // HACK: method will be removed with new storage API
+            }
+            else
+            {
+                    *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+                    *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_8;
+                    *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Impress 8")); // HACK: method will be removed with new storage API
+            }
         }
 
         *pShortTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
                                           STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
     }
 }
-
-
-
 
 OutputDevice* DrawDocShell::GetDocumentRefDev (void)
 {
