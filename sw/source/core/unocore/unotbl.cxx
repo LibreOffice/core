@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-17 16:20:32 $
+ *  last change: $Author: mtg $ $Date: 2001-10-18 15:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, sal
     aCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     aCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
 
-    pTable->GetTabCols( aCols, pBox, sal_False );
+    pTable->GetTabCols( aCols, pBox, sal_False, bRow );
 
     sal_uInt16 nSepCount = aCols.Count();
     uno::Sequence< TableColumnSeparator> aColSeq(nSepCount);
@@ -631,7 +631,7 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
     aOldCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     aOldCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
 
-    pTable->GetTabCols( aOldCols, pBox, sal_False );
+    pTable->GetTabCols( aOldCols, pBox, sal_False, bRow );
     sal_uInt16 nOldCount = aOldCols.Count();
 
     const uno::Sequence< TableColumnSeparator>* pSepSeq =
