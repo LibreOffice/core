@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 14:49:13 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,12 +361,8 @@ BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 //------------------------------------------------------------------
 void ODbaseIndex::Collect(ONDXPage* pPage)
 {
-    OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     if (pPage)
-    {
-        //  pPage->acquire();
         m_aCollector.push_back(pPage);
-    }
 }
 //------------------------------------------------------------------
 void ODbaseIndex::Release(BOOL bSave)
