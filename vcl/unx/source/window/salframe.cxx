@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 10:05:04 $
+ *  last change: $Author: pl $ $Date: 2001-11-07 16:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,8 +1114,11 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT n
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 {
-    maFrameData.bAlwaysOnTop_ = bOnTop;
-    maFrameData.pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bOnTop );
+    if( ! maFrameData.IsOverrideRedirect() )
+    {
+        maFrameData.bAlwaysOnTop_ = bOnTop;
+        maFrameData.pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bOnTop );
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1622,6 +1625,7 @@ MessageToXAutoLock( Display *p_display, int n_message )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::StartPresentation( BOOL bStart )
 {
+    I18NStatus::get().show( !bStart );
     if ( bStart )
         MessageToXAutoLock( _GetXDisplay(), XAUTOLOCK_DISABLE );
     else
