@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-04 15:55:17 $
+ *  last change: $Author: cl $ $Date: 2002-07-24 10:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,7 +807,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     // #98198# when a text-editable object is selected and the
     // input character is printable, activate text edit on that object
     // and feed character to object
-    if(!bReturn)
+    if(!bReturn && !pDocSh->IsReadOnly())
     {
         if(!pView->IsTextEdit() && pViewShell)
         {
