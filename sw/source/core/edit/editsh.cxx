@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:05:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _VCL_CMDEVT_HXX //autogen
 #include <vcl/cmdevt.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 #ifndef _SCH_DLL_HXX //autogen
 #include <sch/schdll.hxx>
@@ -174,6 +171,8 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+
+using namespace com::sun::star;
 
 SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
 
@@ -517,8 +516,7 @@ void SwEditShell::ClearAutomaticContour()
  *      soll
  ******************************************************************************/
 
-
-SvInPlaceObjectRef SwEditShell::GetOLEObj() const
+svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
 {
     ASSERT(  CNT_OLE == GetCntType(), "GetOLEObj: kein OLENode." );
     ASSERT( !GetCrsr()->HasMark() ||
@@ -529,7 +527,7 @@ SvInPlaceObjectRef SwEditShell::GetOLEObj() const
     SwOLENode *pOLENode = GetCrsr()->GetNode()->GetOLENode();
     ASSERT( pOLENode, "GetOLEObj: kein OLENode." );
     SwOLEObj& rOObj = pOLENode->GetOLEObj();
-    return rOObj.GetOleRef();
+    return rOObj.GetObject();
 }
 
 
@@ -559,9 +557,9 @@ void SwEditShell::SetChartName( const String &rName )
     pONd->SetChartTblName( rName );
 }
 
-const String& SwEditShell::GetChartName( SvInPlaceObject* pObj )
+const String& SwEditShell::GetChartName( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
-    if( pObj )
+    if( xObj.is() )
     {
         SwClientIter aIter( *(SwModify*)GetDoc()->GetDfltGrfFmtColl() );
         SwClient *pCli;
@@ -569,7 +567,7 @@ const String& SwEditShell::GetChartName( SvInPlaceObject* pObj )
             do{
                 if( ((SwCntntNode*)pCli)->IsOLENode() &&
                     ((SwOLENode*)pCli)->GetOLEObj().IsOleRef() &&
-                    pObj == &((SwOLENode*)pCli)->GetOLEObj().GetOleRef() )
+                    xObj == ((SwOLENode*)pCli)->GetOLEObj().GetOleRef() )
                 {
                     return ((SwOLENode*)pCli)->GetChartTblName();
                 }
@@ -822,8 +820,7 @@ Graphic SwEditShell::GetIMapGraphic( BOOL bWait ) const
         }
         else if ( pNd->IsOLENode() )
         {
-            GDIMetaFile aMtf;
-            aRet = GetOLEObj()->GetGDIMetaFile( aMtf );
+            aRet = *((SwOLENode*)pNd)->GetGraphic();
         }
         else
             aRet = pNd->GetCntntNode()->GetFrm()->FindFlyFrm()->
