@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:15:31 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
 #endif
@@ -556,7 +555,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         XclImpFont aFont( GetRoot() );
         aFont.ReadCFFontBlock( rStrm );
-        aFont.FillToItemSet( rStyleItemSet, xlFontScIDs );
+        aFont.FillToItemSet( rStyleItemSet, EXC_FONTMODE_CELL );
     }
 
     // *** border block ***
