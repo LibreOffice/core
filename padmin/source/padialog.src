@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:11:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,6 @@ ModalDialog RID_PADIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 1 , 1 ) ;
     Size = MAP_APPFONT ( 260 , 167 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
