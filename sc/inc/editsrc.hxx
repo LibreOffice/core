@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-15 18:05:39 $
+ *  last change: $Author: nn $ $Date: 2001-06-07 19:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,11 @@
 #endif
 
 class ScEditEngineDefaulter;
-class SfxBroadcaster;
-class SfxHint;
 class SvxEditEngineForwarder;
 
 class ScDocShell;
 class ScHeaderFooterContentObj;
+class ScCellTextData;
 
 
 class ScHeaderFooterChangedHint : public SfxHint
@@ -122,28 +121,37 @@ public:
 };
 
 
-class ScCellEditSource : public SvxEditSource, public SfxListener
+//  Data (incl. EditEngine) for cell EditSource is now shared in ScCellTextData
+
+class ScSharedCellEditSource : public SvxEditSource
 {
 private:
-    ScDocShell*             pDocShell;
-    ScAddress               aCellPos;
-    ScEditEngineDefaulter*  pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
-    BOOL                    bDataValid;
-    BOOL                    bInUpdate;
+    ScCellTextData*         pCellTextData;
+
+protected:
+    ScCellTextData*         GetCellTextData() const { return pCellTextData; }   // for ScCellEditSource
 
 public:
-                                ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                     ~ScCellEditSource();
+                                ScSharedCellEditSource( ScCellTextData* pData );
+    virtual                     ~ScSharedCellEditSource();
 
-    //! GetEditEngine nur als Uebergang, bis die Feld-Funktionen am Forwarder sind !!!
-    ScEditEngineDefaulter*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    //  GetEditEngine is needed because the forwarder doesn't have field functions
+    ScEditEngineDefaulter*      GetEditEngine();
 
-    virtual SvxEditSource*      Clone() const ;
+    virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual void                UpdateData();
+};
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+//  ScCellEditSource with local copy of ScCellTextData is used by ScCellFieldsObj, ScCellFieldObj
+
+class ScCellEditSource : public ScSharedCellEditSource
+{
+public:
+                                ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP );
+    virtual                     ~ScCellEditSource();
+
+    virtual SvxEditSource*      Clone() const;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-07 09:40:46 $
+ *  last change: $Author: nn $ $Date: 2001-06-07 19:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5248,9 +5248,7 @@ SvxUnoText& ScCellObj::GetUnoText()
 {
     if (!pUnoText)
     {
-        ScCellEditSource aEditSource( GetDocShell(), aCellPos );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetEditPropertyMap(),
-                                    uno::Reference<text::XText>() );
+        pUnoText = new ScCellTextObj( GetDocShell(), aCellPos );
         pUnoText->acquire();
     }
     return *pUnoText;

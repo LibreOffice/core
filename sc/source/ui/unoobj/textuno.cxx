@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-01 18:56:45 $
+ *  last change: $Author: nn $ $Date: 2001-06-07 19:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "cellsuno.hxx"
+#include "hints.hxx"
+#include "patattr.hxx"
+#include "cell.hxx"
+#include "docfunc.hxx"
 
 using namespace com::sun::star;
 
@@ -787,4 +791,150 @@ EditTextObject* ScEditEngineTextObj::CreateTextObject()
 }
 
 //------------------------------------------------------------------------
+
+ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
+    pDocShell( pDocSh ),
+    aCellPos( rP ),
+    pEditEngine( NULL ),
+    pForwarder( NULL ),
+    bDataValid( FALSE ),
+    bInUpdate( FALSE ),
+    pOriginalSource( NULL )
+{
+    if (pDocShell)
+        pDocShell->GetDocument()->AddUnoObject(*this);
+}
+
+ScCellTextData::~ScCellTextData()
+{
+    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+
+    if (pDocShell)
+        pDocShell->GetDocument()->RemoveUnoObject(*this);
+
+    delete pForwarder;
+    delete pEditEngine;
+
+    delete pOriginalSource;
+}
+
+ScSharedCellEditSource* ScCellTextData::GetOriginalSource()
+{
+    if (!pOriginalSource)
+        pOriginalSource = new ScSharedCellEditSource( this );
+    return pOriginalSource;
+}
+
+SvxTextForwarder* ScCellTextData::GetTextForwarder()
+{
+    if (!pEditEngine)
+    {
+        if ( pDocShell )
+        {
+            const ScDocument* pDoc = pDocShell->GetDocument();
+            pEditEngine = new ScFieldEditEngine( pDoc->GetEnginePool(),
+                pDoc->GetEditPool(), FALSE );
+        }
+        else
+        {
+            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            pEnginePool->FreezeIdRanges();
+            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+        }
+#if SUPD > 600
+        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+        //  this will be fixed (in EditEngine) by src600
+//      pEditEngine->SetUpdateMode( FALSE );
+#endif
+        pEditEngine->EnableUndo( FALSE );
+        pEditEngine->SetRefMapMode( MAP_100TH_MM );
+        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+    }
+
+    if (bDataValid)
+        return pForwarder;
+
+    BOOL bEditCell = FALSE;
+    String aText;
+
+    if (pDocShell)
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+
+        const ScBaseCell* pCell = pDoc->GetCell( aCellPos );
+        if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
+        {
+            pEditEngine->SetText( *((const ScEditCell*)pCell)->GetData() );
+            bEditCell = TRUE;
+        }
+        else
+            pDoc->GetInputString( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aText );
+
+        SfxItemSet aDefaults( pEditEngine->GetEmptyItemSet() );
+        const ScPatternAttr* pPattern =
+                pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() );
+        pPattern->FillEditItemSet( &aDefaults );
+        pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
+        pEditEngine->SetDefaults( aDefaults );
+    }
+
+    if (!bEditCell)
+        pEditEngine->SetText( aText );
+
+    bDataValid = TRUE;
+    return pForwarder;
+}
+
+void ScCellTextData::UpdateData()
+{
+    if ( pDocShell && pEditEngine )
+    {
+        //  during the own UpdateData call, bDataValid must not be reset,
+        //  or things like attributes after the text would be lost
+        //  (are not stored in the cell)
+
+        bInUpdate = TRUE;   // prevents bDataValid from being reset
+
+        ScDocFunc aFunc(*pDocShell);
+        aFunc.PutData( aCellPos, *pEditEngine, FALSE, TRUE );   // always as text
+
+        bInUpdate = FALSE;
+    }
+}
+
+void ScCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( ScUpdateRefHint ) )
+    {
+        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+
+        //! Ref-Update
+    }
+    else if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+        {
+            pDocShell = NULL;                       // invalid now
+
+            DELETEZ( pForwarder );
+            DELETEZ( pEditEngine );     // EditEngine uses document's pool
+        }
+        else if ( nId == SFX_HINT_DATACHANGED )
+        {
+            if (!bInUpdate)                         // not for own UpdateData calls
+                bDataValid = FALSE;                 // text has to be read from the cell again
+        }
+    }
+}
+
+ScCellTextObj::ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP) :
+    ScCellTextData( pDocSh, rP ),
+    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() )
+{
+}
+
+ScCellTextObj::~ScCellTextObj()
+{
+}
 

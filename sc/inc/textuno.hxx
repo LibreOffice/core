@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-15 18:05:39 $
+ *  last change: $Author: nn $ $Date: 2001-06-07 19:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,19 @@
 #ifndef SC_TEXTSUNO_HXX
 #define SC_TEXTSUNO_HXX
 
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"           // ScRange, ScAddress
+#endif
+
 #ifndef _SVX_UNOTEXT_HXX
 #include <svx/unotext.hxx>
 #endif
 
 #ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
+#endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
@@ -98,6 +105,7 @@ class ScDocShell;
 class ScAddress;
 class ScCellObj;
 class ScSimpleEditSource;
+class ScSharedCellEditSource;
 class ScEditEngineDefaulter;
 
 struct ScHeaderFieldData;
@@ -349,6 +357,44 @@ public:
     void                SetText( const String& rStr );
     void                SetText( const EditTextObject& rTextObject );
     EditTextObject*     CreateTextObject();
+};
+
+
+//  ScCellTextData: shared data between sub objects of a cell text object
+
+class ScCellTextData : public SfxListener
+{
+    ScDocShell*             pDocShell;
+    ScAddress               aCellPos;
+    ScEditEngineDefaulter*  pEditEngine;
+    SvxEditEngineForwarder* pForwarder;
+    BOOL                    bDataValid;
+    BOOL                    bInUpdate;
+    ScSharedCellEditSource* pOriginalSource;
+
+public:
+                            ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);
+    virtual                 ~ScCellTextData();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+                            // helper functions for ScSharedCellEditSource:
+    SvxTextForwarder*       GetTextForwarder();
+    void                    UpdateData();
+    ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+
+    ScSharedCellEditSource* GetOriginalSource();        // used as argument for SvxUnoText ctor
+
+                            // used for ScCellEditSource:
+    ScDocShell*             GetDocShell() const     { return pDocShell; }
+    const ScAddress&        GetCellPos() const      { return aCellPos; }
+};
+
+class ScCellTextObj : public ScCellTextData, public SvxUnoText
+{
+public:
+                ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
+    virtual     ~ScCellTextObj();
 };
 
 

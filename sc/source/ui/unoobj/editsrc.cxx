@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-01 19:12:54 $
+ *  last change: $Author: nn $ $Date: 2001-06-07 19:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,22 +65,14 @@
 
 #pragma hdrstop
 
-#ifndef _SFXSMPLHINT_HXX //autogen
-#include <svtools/smplhint.hxx>
-#endif
-
 #include "scitems.hxx"
-#include <tools/debug.hxx>
-#include <svx/editeng.hxx>
 #include <svx/unofored.hxx>
-#include <svx/editobj.hxx>
 
-#include "textuno.hxx"
 #include "editsrc.hxx"
+#include "textuno.hxx"
 #include "editutil.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
-#include "cell.hxx"
 #include "hints.hxx"
 #include "patattr.hxx"
 #include "scmod.hxx"
@@ -216,135 +208,56 @@ void ScHeaderFooterEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
 
 //------------------------------------------------------------------------
 
-ScCellEditSource::ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
-    pDocShell( pDocSh ),
-    aCellPos( rP ),
-    pEditEngine( NULL ),
-    pForwarder( NULL ),
-    bDataValid( FALSE ),
-    bInUpdate( FALSE )
+ScSharedCellEditSource::ScSharedCellEditSource( ScCellTextData* pData ) :
+    pCellTextData( pData )
 {
-    if (pDocShell)
-        pDocShell->GetDocument()->AddUnoObject(*this);
+    //  pCellTextData is part of the ScCellTextObj.
+    //  Text range and cursor keep a reference to their parent text, so the text object is
+    //  always alive and the CellTextData is valid as long as there are children.
+}
+
+ScSharedCellEditSource::~ScSharedCellEditSource()
+{
+}
+
+SvxEditSource* ScSharedCellEditSource::Clone() const
+{
+    return new ScSharedCellEditSource( pCellTextData );
+}
+
+SvxTextForwarder* ScSharedCellEditSource::GetTextForwarder()
+{
+    return pCellTextData->GetTextForwarder();
+}
+
+void ScSharedCellEditSource::UpdateData()
+{
+    pCellTextData->UpdateData();
+}
+
+ScEditEngineDefaulter* ScSharedCellEditSource::GetEditEngine()
+{
+    return pCellTextData->GetEditEngine();
+}
+
+//------------------------------------------------------------------------
+
+//  each ScCellEditSource object has its own ScCellTextData
+
+ScCellEditSource::ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP ) :
+    ScSharedCellEditSource( new ScCellTextData( pDocSh, rP ) )
+{
 }
 
 ScCellEditSource::~ScCellEditSource()
 {
-    ScUnoGuard aGuard;      //  needed for EditEngine dtor
-
-    if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
-
-    delete pForwarder;
-    delete pEditEngine;
+    delete GetCellTextData();   // not accessed in ScSharedCellEditSource dtor
 }
 
 SvxEditSource* ScCellEditSource::Clone() const
 {
-    return new ScCellEditSource( pDocShell, aCellPos );
-}
-
-SvxTextForwarder* ScCellEditSource::GetTextForwarder()
-{
-    if (!pEditEngine)
-    {
-        if ( pDocShell )
-        {
-            const ScDocument* pDoc = pDocShell->GetDocument();
-            pEditEngine = new ScFieldEditEngine( pDoc->GetEnginePool(),
-                pDoc->GetEditPool(), FALSE );
-        }
-        else
-        {
-            SfxItemPool* pEnginePool = EditEngine::CreatePool();
-            pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
-        }
-#if SUPD > 600
-        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
-        //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( FALSE );
-#endif
-        pEditEngine->EnableUndo( FALSE );
-        pEditEngine->SetRefMapMode( MAP_100TH_MM );
-        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
-    }
-
-    if (bDataValid)
-        return pForwarder;
-
-    BOOL bEditCell = FALSE;
-    String aText;
-
-    if (pDocShell)
-    {
-        ScDocument* pDoc = pDocShell->GetDocument();
-
-        const ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
-        {
-            pEditEngine->SetText( *((const ScEditCell*)pCell)->GetData() );
-            bEditCell = TRUE;
-        }
-        else
-            pDoc->GetInputString( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aText );
-
-        SfxItemSet aDefaults( pEditEngine->GetEmptyItemSet() );
-        const ScPatternAttr* pPattern =
-                pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() );
-        pPattern->FillEditItemSet( &aDefaults );
-        pPattern->FillEditParaItems( &aDefaults );  // auch Ausrichtung etc. auslesbar
-        pEditEngine->SetDefaults( aDefaults );
-    }
-
-    if (!bEditCell)
-        pEditEngine->SetText( aText );
-
-    bDataValid = TRUE;
-    return pForwarder;
-}
-
-void ScCellEditSource::UpdateData()
-{
-    if ( pDocShell && pEditEngine )
-    {
-        //  beim eigenen Update darf bDataValid nicht zurueckgesetzt werden,
-        //  damit z.B. Attribute hinter dem Text nicht verloren gehen
-        //  (werden in die Zelle nicht uebernommen)
-
-        bInUpdate = TRUE;   // damit wird bDataValid nicht zurueckgesetzt
-
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.PutData( aCellPos, *pEditEngine, FALSE, TRUE );   // immer Text
-
-        bInUpdate = FALSE;
-    }
-}
-
-void ScCellEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-    if ( rHint.ISA( ScUpdateRefHint ) )
-    {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
-        //! Ref-Update
-    }
-    else if ( rHint.ISA( SfxSimpleHint ) )
-    {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
-        if ( nId == SFX_HINT_DYING )
-        {
-            pDocShell = NULL;                       // ungueltig geworden
-
-            DELETEZ( pForwarder );
-            DELETEZ( pEditEngine );     // EditEngine uses document's pool
-        }
-        else if ( nId == SFX_HINT_DATACHANGED )
-        {
-            if (!bInUpdate)                         // eigene Updates zaehlen nicht
-                bDataValid = FALSE;                 // Text muss neu geholt werden
-        }
-    }
+    const ScCellTextData* pData = GetCellTextData();
+    return new ScCellEditSource( pData->GetDocShell(), pData->GetCellPos() );
 }
 
 //------------------------------------------------------------------------
