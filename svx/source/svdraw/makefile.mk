@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 18:25:07 $
+#   last change: $Author: thb $ $Date: 2002-11-08 16:20:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,7 @@ SLOFILES=\
          $(SLO)$/svdmrkv1.obj        \
          $(SLO)$/svdoattr.obj        \
          $(SLO)$/svdobj.obj          \
+         $(SLO)$/impgrfll.obj        \
          $(SLO)$/svdocapt.obj        \
          $(SLO)$/svdocirc.obj        \
          $(SLO)$/svdoedge.obj        \
@@ -170,6 +171,7 @@ SVXLIGHTOBJFILES=\
          $(OBJ)$/svdmrkv1.obj        \
          $(OBJ)$/svdoattr.obj        \
          $(OBJ)$/svdobj.obj          \
+         $(OBJ)$/impgrfll.obj        \
          $(OBJ)$/svdocapt.obj        \
          $(OBJ)$/svdocirc.obj        \
          $(OBJ)$/svdoedge.obj        \

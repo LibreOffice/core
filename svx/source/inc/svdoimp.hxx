@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:57:17 $
+ *  last change: $Author: thb $ $Date: 2002-11-08 16:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,66 @@ private:
     const ExtOutputDevice&  mrXOut;
     bool                    mbCommentWritten;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+// #104609# Extracted from XOutputDevice::ImpCalcBmpFillStartValues
+
+/** Calc offset and size for bitmap fill
+
+    This method calculates the size and the offset from the left, top
+    position of a shape in logical coordinates
+
+    @param rStartOffset
+    The offset from the left, top position of the output rectangle is returned
+
+    @param rBmpOutputSize
+    The output size of the bitmap is returned herein
+
+    @param rOutputRect
+    Specifies the output rectangle into which the bitmap should be tiled into
+
+    @param rOutputMapMode
+    Specifies the logical coordinate system the output rectangle is in
+
+    @param rFillBitmap
+    Specifies the bitmap to fill with
+
+    @param rBmpSize
+    The desired destination bitmap size. If null, size is taken from the bitmap
+
+    @param rBmpPerCent
+    Percentage of bitmap size, relative to the output rectangle
+
+    @param rBmpOffPerCent
+    Offset for bitmap tiling, in percentage relative to bitmap output size
+
+    @param bBmpLogSize
+    True when using the preferred bitmap size, False when using the percentage value
+
+    @param bBmpTile
+    True for tiling. False only paints one instance of the bitmap
+
+    @param bBmpStretch
+    True if bitmap should be stretched to output rect dimension
+
+    @param eBmpRectPoint
+    Position of the start point relative to the bitmap
+
+ */
+void ImpCalcBmpFillSizes( Size&            rStartOffset,
+                          Size&            rBmpOutputSize,
+                          const Rectangle& rOutputRect,
+                          const MapMode&   rOutputMapMode,
+                          const Bitmap&    rFillBitmap,
+                          const Size&      rBmpSize,
+                          const Size&      rBmpPerCent,
+                          const Size&      rBmpOffPerCent,
+                          BOOL             bBmpLogSize,
+                          BOOL             bBmpTile,
+                          BOOL             bBmpStretch,
+                          RECT_POINT       eBmpRectPoint );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
