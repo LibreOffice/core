@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 09:58:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
                                 ( sizeof ( x ) == sizeof( float) ) ?      \
                               __isnanf ( x ) :                            \
                               __isnan  ( x ) )
+#endif
+
+#if defined (FREEBSD)
+using namespace __gnu_cxx;  //for isnan #iz27753 for FreeBSD
 #endif
 
 namespace psp {
