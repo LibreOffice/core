@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-15 09:00:31 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 10:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,54 +744,68 @@ sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
 void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
                         const AuthorCharAttr &rAttr )
 {
-    Color aCol((ColorData)rAttr.nColor);
+    Color aCol( (ColorData)rAttr.nColor );
 
-    if (rAttr.nColor == COL_TRANSPARENT)
+    if( COL_TRANSPARENT == rAttr.nColor )
     {
-// dynamische Vergabe der Attribute
-        static ColorData aColArr[ 10 ] = {
+        // dynamische Vergabe der Attribute
+        static const ColorData aColArr[] = {
                 COL_LIGHTRED,       COL_LIGHTBLUE,      COL_LIGHTMAGENTA,
                 COL_GREEN,          COL_RED,            COL_BLUE,
                 COL_BROWN,          COL_MAGENTA,        COL_CYAN };
-
-        aCol.SetColor(aColArr[ nAuthor % 10 ]);
+        aCol.SetColor( aColArr[ nAuthor % (sizeof( aColArr ) /
+                                           sizeof( aColArr[0] )) ] );
     }
 
-    sal_Bool bBackGr = sal_False;
-
-    if (rAttr.nColor == COL_NONE)
-        bBackGr = sal_True;
+    sal_Bool bBackGr = COL_NONE == rAttr.nColor;
 
     switch (rAttr.nItemId)
     {
-        case SID_ATTR_CHAR_WEIGHT:
-            rSet.Put(SvxWeightItem( (FontWeight)rAttr.nAttr, RES_CHRATR_WEIGHT));
-            break;
+    case SID_ATTR_CHAR_WEIGHT:
+        {
+            SvxWeightItem aW( (FontWeight)rAttr.nAttr, RES_CHRATR_WEIGHT );
+            rSet.Put( aW );
+            aW.SetWhich( RES_CHRATR_CJK_WEIGHT );
+            rSet.Put( aW );
+            aW.SetWhich( RES_CHRATR_CTL_WEIGHT );
+            rSet.Put( aW );
+        }
+        break;
 
-        case SID_ATTR_CHAR_POSTURE:
-            rSet.Put(SvxPostureItem((FontItalic)rAttr.nAttr, RES_CHRATR_POSTURE));
-            break;
+    case SID_ATTR_CHAR_POSTURE:
+        {
+            SvxPostureItem aP( (FontItalic)rAttr.nAttr, RES_CHRATR_POSTURE );
+            rSet.Put( aP );
+            aP.SetWhich( RES_CHRATR_CJK_POSTURE );
+            rSet.Put( aP );
+            aP.SetWhich( RES_CHRATR_CTL_POSTURE );
+            rSet.Put( aP );
+        }
+        break;
 
-        case SID_ATTR_CHAR_UNDERLINE:
-            rSet.Put(SvxUnderlineItem( (FontUnderline)rAttr.nAttr, RES_CHRATR_UNDERLINE));
-            break;
+    case SID_ATTR_CHAR_UNDERLINE:
+        rSet.Put( SvxUnderlineItem( (FontUnderline)rAttr.nAttr,
+                                    RES_CHRATR_UNDERLINE));
+        break;
 
-        case SID_ATTR_CHAR_STRIKEOUT:
-            rSet.Put(SvxCrossedOutItem( (FontStrikeout)rAttr.nAttr, RES_CHRATR_CROSSEDOUT));
-            break;
+    case SID_ATTR_CHAR_STRIKEOUT:
+        rSet.Put(SvxCrossedOutItem( (FontStrikeout)rAttr.nAttr,
+                                    RES_CHRATR_CROSSEDOUT));
+        break;
 
-        case SID_ATTR_CHAR_CASEMAP:
-            rSet.Put(SvxCaseMapItem((SvxCaseMap)rAttr.nAttr, RES_CHRATR_CASEMAP));
-            break;
+    case SID_ATTR_CHAR_CASEMAP:
+        rSet.Put( SvxCaseMapItem( (SvxCaseMap)rAttr.nAttr,
+                                    RES_CHRATR_CASEMAP));
+        break;
 
-        case SID_ATTR_BRUSH:
-            rSet.Put(SvxBrushItem(aCol, RES_CHRATR_BACKGROUND));
-            bBackGr = sal_True;
-            break;
+    case SID_ATTR_BRUSH:
+        rSet.Put( SvxBrushItem( aCol, RES_CHRATR_BACKGROUND ));
+        bBackGr = sal_True;
+        break;
     }
 
-    if (!bBackGr)
-        rSet.Put(SvxColorItem(aCol));
+    if( !bBackGr )
+        rSet.Put( SvxColorItem( aCol ) );
 }
 
 /*--------------------------------------------------------------------
