@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:37:31 $
+#   last change: $Author: hr $ $Date: 2003-04-28 17:06:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,7 @@ APP1STDLIBS=	\
     -lXext -lX11
 
 APP2TARGET=so$/spadmin.bin
-APP2DEPN+=$(SHL1TARGETN)
+APP2DEPN+=$(SHL1TARGETN) $(APP1TARGETN)
 
 APP2OBJS=\
     $(OBJ)/pamain.obj \
@@ -158,4 +158,4 @@ all: $(BIN)$/so ALLTAR
 .INCLUDE :  target.mk
 
 $(BIN)$/so: makefile.mk
-    @+-mkdir $(BIN)$/so
+    @+-mkdir $(BIN)$/so >& $(NULLDEV)
