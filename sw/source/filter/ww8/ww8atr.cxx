@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-18 14:41:59 $
+ *  last change: $Author: cmc $ $Date: 2001-10-19 08:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2489,7 +2489,7 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
     }
     Strm().Seek( nPos );
 
-    if( 0x7 == nC1 )            // at end of TableRow ?
+    if( 0x7 == nC1 )                        // at end of TableRow ?
     {
         // then write as normal char
         WriteChar( nChar );
@@ -2509,7 +2509,10 @@ void SwWW8Writer::WriteCellEnd()
 {
     //Technically in a word document this is a different value for a
     //cell without a graphic. But it doesn't seem to make a difference
-    pMagicTable->Append(Fc2Cp(ReplaceCr( (BYTE)0x07 )),0x122);
+    ULONG nOffset = ReplaceCr( (BYTE)0x07 );
+    ASSERT(nOffset, "Eek!, no para end mark to replace with row end mark");
+    if (nOffset)
+        pMagicTable->Append(Fc2Cp(nOffset),0x122);
 }
 
 void SwWW8Writer::WriteRowEnd()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-19 08:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,20 +934,21 @@ BOOL WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
                         OutSwFmtINetFmt( (SwFmtINetFmt&)*pItem, FALSE );
                 }
                 break;
-
             case RES_TXTATR_REFMARK:
                 if( nPos == *pHt->GetStart() )
+                {
                     OutSwFmtRefMark( (SwFmtRefMark&)*pItem, TRUE );
+                    bRet = TRUE;
+                }
                 if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
                     OutSwFmtRefMark( (SwFmtRefMark&)*pItem, FALSE );
                 break;
-
             case RES_TXTATR_TOXMARK:
-                if( 0 != ( pEnd = pHt->GetEnd() ) ? nPos == *pEnd
-                                                  : nPos == *pHt->GetStart())
+                if( nPos == *pHt->GetStart() )
+                    bRet = TRUE;
+                if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
                     OutSwTOXMark( (SwTOXMark&)*pItem, FALSE );
                 break;
-
             case RES_TXTATR_CJK_RUBY:
                 if( nPos == *pHt->GetStart() )
                 {
@@ -957,7 +958,6 @@ BOOL WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
                 if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
                     OutSwFmtRuby( (SwFmtRuby&)*pItem, FALSE );
                 break;
-
             }
         }
         nTmpSwPos = 0;      // HasTextItem nur in dem obigen Bereich erlaubt
