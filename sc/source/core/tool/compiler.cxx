@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: er $ $Date: 2001-03-01 19:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2197,6 +2197,8 @@ void ScCompiler::Factor()
                 SetError(errPairExpected);
             if (eOp != ocClose)
                 SetError(errPairExpected);
+            else if ( !pArr->GetError() )
+                pFacToken->SetByte( 1 );
             PutCode( pFacToken );
             eOp = NextToken();
         }
