@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-28 11:26:44 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 15:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,6 +1120,7 @@ XML_CONSTASCII_ACTION( sXML_notes, "notes" );
 XML_CONSTASCII_ACTION( sXML_notin, "notin" );
 XML_CONSTASCII_ACTION( sXML_notsubset, "notsubset" );
 XML_CONSTASCII_ACTION( sXML_null_date, "null-date" );
+XML_CONSTASCII_ACTION( sXML_null_year, "null-year" );
 XML_CONSTASCII_ACTION( sXML_num_format, "num-format" );
 XML_CONSTASCII_ACTION( sXML_num_letter_sync, "num-letter-sync" );
 XML_CONSTASCII_ACTION( sXML_num_prefix, "num-prefix" );
