@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-05 08:59:43 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,23 @@
 #include <basidesh.hrc>
 #include <baside3.hxx>
 
-#include <dlged.hxx>
-
-#ifndef _BASCTL_PROPBRW_HXX
-#include <propbrw.hxx>
+#ifndef _BASCTL_ACCESSIBLEDIALOGWINDOW_HXX_
+#include <accessibledialogwindow.hxx>
 #endif
-
+#ifndef _BASCTL_DLGED_HXX
+#include <dlged.hxx>
+#endif
+#ifndef _BASCTL_DLGEDMOD_HXX
+#include <dlgedmod.hxx>
+#endif
+#ifndef _BASCTL_DLGEDVIEW_HXX
+#include <dlgedview.hxx>
+#endif
 #ifndef _BASCTL_DLGEDDEF_HXX
 #include <dlgeddef.hxx>
+#endif
+#ifndef _BASCTL_PROPBRW_HXX
+#include <propbrw.hxx>
 #endif
 
 #include <basobj.hxx>
@@ -689,9 +698,19 @@ void DialogWindow::UpdateBrowser()
         ((PropBrw*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
 }
 
-SdrView* DialogWindow::GetView() const
+DlgEdModel* DialogWindow::GetModel() const
 {
-    return GetEditor()->GetView();
+    return pEditor ? pEditor->GetModel() : NULL;
+}
+
+DlgEdPage* DialogWindow::GetPage() const
+{
+    return pEditor ? pEditor->GetPage() : NULL;
+}
+
+DlgEdView* DialogWindow::GetView() const
+{
+    return pEditor ? pEditor->GetView() : NULL;
 }
 
 BOOL __EXPORT DialogWindow::IsModified()
@@ -811,4 +830,9 @@ void DialogWindow::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > DialogWindow::CreateAccessible()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessible*) new AccessibleDialogWindow( this );
 }
