@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-24 13:16:12 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,4 +950,32 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text[ arabic ] = "Editing of a graph";
     Text[ catalan ] = "Editing of a graph";
     Text[ thai ] = "Editing of a graph";
+};
+
+String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
+{
+    Text = "Absatz: $(ARG) " ;
+    Text [ english ] = "Paragraph: $(ARG) " ;
+    Text [ english_us ] = "Paragraph: $(ARG) " ;
+};
+
+String RID_SVXSTR_A11Y_PARAGRAPH_NAME
+{
+    Text = "Absatz $(ARG)" ;
+    Text [ english ] = "Paragraph $(ARG)" ;
+    Text [ english_us ] = "Paragraph $(ARG)" ;
+};
+
+String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
+{
+    Text = "Grafisches Aufzählungszeichen in Absatz: $(ARG)" ;
+    Text [ english ] = "Image bullet in paragraph: $(ARG)" ;
+    Text [ english_us ] = "Image bullet in paragraph: $(ARG)" ;
+};
+
+String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
+{
+    Text = "Grafisches Aufzählungszeichen" ;
+    Text [ english ] = "Image bullet" ;
+    Text [ english_us ] = "Image bullet" ;
 };

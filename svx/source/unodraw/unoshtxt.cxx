@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:26:10 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner );
 
-        // delay listener subscription until Outliner is fully setup
+        // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = sal_True;
 
         mbForwarderIsEditMode = sal_False;
@@ -540,8 +540,17 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mbDataValid = TRUE;
     }
 
-    if( bCreated && HasView() )
+    if( bCreated && mpOutliner && HasView() )
     {
+#if 0
+        // only for UAA edit source: setup outliner equivalently as in
+        // SdrTextObj::Paint(), such that formatting equals screen
+        // layout
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        if( pTextObj )
+            pTextObj->SetupOutlinerFormatting( *mpOutliner );
+#endif
+
         // register as listener - need to broadcast state change messages
         mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
     }
@@ -766,7 +775,8 @@ Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& r
 {
     if( IsValid() )
     {
-        return mpWindow->LogicToPixel( rPoint, rMapMode );
+        Point aPoint( mpWindow->LogicToLogic( rPoint, rMapMode, mpWindow->GetMapMode() ) );
+        return mpWindow->LogicToPixel( aPoint );
     }
 
     return Point();
@@ -776,7 +786,8 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
 {
     if( IsValid() )
     {
-        return mpWindow->PixelToLogic( rPoint, rMapMode );
+        Point aPoint( mpWindow->PixelToLogic( rPoint ) );
+        return mpWindow->LogicToLogic( rPoint, mpWindow->GetMapMode(), rMapMode );
     }
 
     return Point();

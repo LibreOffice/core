@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,14 +707,8 @@ namespace accessibility
     void AccessibleTextHelper_Impl::UpdateVisibleData()
     {
         // send CHILD_EVENT to affected children
-        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
-
-        ::std::advance( begin, mnFirstVisibleChild );
-        ::std::advance( end, mnLastVisibleChild );
-
         AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
-        ::std::for_each( begin, end, aFunctor );
+        ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
     }
 
 #ifdef DBG_UTIL
@@ -766,220 +760,214 @@ namespace accessibility
             // precondition: solar mutex locked
             if( pEditSourceHint )
             {
-                if( pEditSourceHint->GetValue() < GetTextForwarder().GetParagraphCount() )
+                switch( pEditSourceHint->GetId() )
                 {
-                    switch( pEditSourceHint->GetId() )
+                    case EDITSOURCE_HINT_PARASMOVED:
                     {
-                        case EDITSOURCE_HINT_PARASMOVED:
+                        DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
+                                    pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
+                                    "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
+
+                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+                        sal_Int32 nFirst, nMiddle, nLast;
+
+                        /* rotate paragraphs
+                         * =================
+                         *
+                         * Three cases:
+                         *
+                         * 1.
+                         *   ... nParagraph ... nParam1 ... nParam2 ...
+                         *       |______________[xxxxxxxxxxx]
+                         *              becomes
+                         *       [xxxxxxxxxxx]|______________
+                         *
+                         * tail is 0
+                         *
+                         * 2.
+                         *   ... nParam1 ... nParagraph ... nParam2 ...
+                         *       [xxxxxxxxxxx|xxxxxxxxxxxxxx]____________
+                         *              becomes
+                         *       ____________[xxxxxxxxxxx|xxxxxxxxxxxxxx]
+                         *
+                         * tail is nParagraph - nParam1
+                         *
+                         * 3.
+                         *   ... nParam1 ... nParam2 ... nParagraph ...
+                         *       [xxxxxxxxxxx]___________|____________
+                         *              becomes
+                         *       ___________|____________[xxxxxxxxxxx]
+                         *
+                         * tail is nParam2 - nParam1
+                         */
+
+                        // sort nParagraph, nParam1 and nParam2 in ascending order, calc range
+                        if( pEditSourceHint->GetValue() < pEditSourceHint->GetStartValue() )
                         {
-                            DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
-                                        pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
-                                        "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
-
-                            const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-                            sal_Int32 nFirst, nMiddle, nLast;
-
-                            /* rotate paragraphs
-                             * =================
-                             *
-                             * Three cases:
-                             *
-                             * 1.
-                             *   ... nParagraph ... nParam1 ... nParam2 ...
-                             *       |______________[xxxxxxxxxxx]
-                             *              becomes
-                             *       [xxxxxxxxxxx]|______________
-                             *
-                             * tail is 0
-                             *
-                             * 2.
-                             *   ... nParam1 ... nParagraph ... nParam2 ...
-                             *       [xxxxxxxxxxx|xxxxxxxxxxxxxx]____________
-                             *              becomes
-                             *       ____________[xxxxxxxxxxx|xxxxxxxxxxxxxx]
-                             *
-                             * tail is nParagraph - nParam1
-                             *
-                             * 3.
-                             *   ... nParam1 ... nParam2 ... nParagraph ...
-                             *       [xxxxxxxxxxx]___________|____________
-                             *              becomes
-                             *       ___________|____________[xxxxxxxxxxx]
-                             *
-                             * tail is nParam2 - nParam1
-                             */
-
-                            // sort nParagraph, nParam1 and nParam2 in ascending order, calc range
-                            if( pEditSourceHint->GetValue() < pEditSourceHint->GetStartValue() )
-                            {
-                                nFirst = pEditSourceHint->GetValue();
-                                nMiddle = pEditSourceHint->GetStartValue();
-                                nLast = pEditSourceHint->GetEndValue();
-                            }
-                            else if( pEditSourceHint->GetValue() < pEditSourceHint->GetEndValue() )
-                            {
-                                nFirst = pEditSourceHint->GetStartValue();
-                                nMiddle = pEditSourceHint->GetValue();
-                                nLast = pEditSourceHint->GetEndValue() + nMiddle - nFirst;
-                            }
-                            else
-                            {
-                                nFirst = pEditSourceHint->GetStartValue();
-                                nMiddle = pEditSourceHint->GetEndValue();
-                                nLast = pEditSourceHint->GetValue() + nMiddle - nFirst;
-                            }
-
-                            if( nFirst < nParas && nMiddle < nParas && nLast < nParas )
-                            {
-                                // since we have no "paragraph index
-                                // changed" event on UAA, remove
-                                // [first,last] and insert again later (in
-                                // UpdateVisibleChildren)
-
-                                // maParaManager.Rotate( nFirst, nMiddle, nLast );
-
-                                maParaManager.Release(nFirst, nLast);
-
-                                // send CHILD_EVENT to affected children
-                                ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-                                ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
-
-                                ::std::advance( begin, nFirst );
-                                ::std::advance( end, nLast );
-
-                                AccessibleTextHelper_LostChildEvent aFunctor( *this );
-
-                                ::std::for_each( begin, end, aFunctor );
-                            }
-#ifdef DBG_UTIL
-                            else
-                            {
-                                DBG_ERROR("AccessibleTextHelper_Impl::NotifyHdl: Invalid move ranges");
-                            }
-#endif
-                            break;
+                            nFirst = pEditSourceHint->GetValue();
+                            nMiddle = pEditSourceHint->GetStartValue();
+                            nLast = pEditSourceHint->GetEndValue();
+                        }
+                        else if( pEditSourceHint->GetValue() < pEditSourceHint->GetEndValue() )
+                        {
+                            nFirst = pEditSourceHint->GetStartValue();
+                            nMiddle = pEditSourceHint->GetValue();
+                            nLast = pEditSourceHint->GetEndValue() + nMiddle - nFirst;
+                        }
+                        else
+                        {
+                            nFirst = pEditSourceHint->GetStartValue();
+                            nMiddle = pEditSourceHint->GetEndValue();
+                            nLast = pEditSourceHint->GetValue() + nMiddle - nFirst;
                         }
 
-                        case EDITSOURCE_HINT_SELECTIONCHANGED:
-                            // notify listeners
-                            ESelection aSelection;
-                            try
-                            {
-                                if( GetEditViewForwarder().GetSelection( aSelection ) )
-                                    UpdateSelection( aSelection );
-                                else
-                                    UpdateSelection( ESelection() );
-                            }
-                            // maybe we're not in edit mode (this is not an error)
-                            catch( const uno::Exception& ) {}
-                            break;
+                        if( nFirst < nParas && nMiddle < nParas && nLast < nParas )
+                        {
+                            // since we have no "paragraph index
+                            // changed" event on UAA, remove
+                            // [first,last] and insert again later (in
+                            // UpdateVisibleChildren)
+
+                            // maParaManager.Rotate( nFirst, nMiddle, nLast );
+
+                            maParaManager.Release(nFirst, nLast);
+
+                            // send CHILD_EVENT to affected children
+                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+
+                            ::std::advance( begin, nFirst );
+                            ::std::advance( end, nLast );
+
+                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+
+                            ::std::for_each( begin, end, aFunctor );
+                        }
+#ifdef DBG_UTIL
+                        else
+                        {
+                            DBG_ERROR("AccessibleTextHelper_Impl::NotifyHdl: Invalid move ranges");
+                        }
+#endif
+                        break;
                     }
 
-                    // in all cases, check visibility afterwards.
-                    UpdateVisibleChildren();
+                    case EDITSOURCE_HINT_SELECTIONCHANGED:
+                        // notify listeners
+                        ESelection aSelection;
+                        try
+                        {
+                            if( GetEditViewForwarder().GetSelection( aSelection ) )
+                                UpdateSelection( aSelection );
+                            else
+                                UpdateSelection( ESelection() );
+                        }
+                        // maybe we're not in edit mode (this is not an error)
+                        catch( const uno::Exception& ) {}
+                        break;
                 }
-#ifdef DBG_UTIL
-                else
-                {
-                    DBG_ERROR("AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
-                }
-#endif
+
+                // in all cases, check visibility afterwards.
+                UpdateVisibleChildren();
             }
             else if( pTextHint )
             {
-                if( pTextHint->GetValue() < GetTextForwarder().GetParagraphCount() )
+                sal_Bool bUpdateVisibleData = sal_False;
+
+                switch( pTextHint->GetId() )
                 {
-                    sal_Bool bUpdateVisibleData = sal_False;
-
-                    switch( pTextHint->GetId() )
-                    {
-                        case TEXT_HINT_MODIFIED:
-                            // notify listeners
+                    case TEXT_HINT_MODIFIED:
+                        // notify listeners
+                        if( pTextHint->GetValue() == EE_PARA_ALL )
+                            maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                        else
                             maParaManager.FireEvent( pTextHint->GetValue(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
-                            break;
+                        break;
 
-                        case TEXT_HINT_PARAINSERTED:
-                        {
-                            // resize child vector to the current child count
-                            const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+                    case TEXT_HINT_PARAINSERTED:
+                    {
+                        // resize child vector to the current child count
+                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
 
-                            maParaManager.SetNum( nParas );
+                        maParaManager.SetNum( nParas );
 
-                            // since we have no "paragraph index
-                            // changed" event on UAA, remove
-                            // [first,last] and insert again later (in
-                            // UpdateVisibleChildren)
+                        sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas);
 
-                            // move successors of inserted paragraph one position further
-                            //maParaManager.MoveRightFrom( pTextHint->GetValue() );
+                        if( pTextHint->GetValue() == EE_PARA_ALL )
+                            nFirst = 0; // all paragraphs
 
-                            // release everything from the insertion position until the end
-                            maParaManager.Release(pTextHint->GetValue(), nParas);
+                        // since we have no "paragraph index
+                        // changed" event on UAA, remove
+                        // [first,last] and insert again later (in
+                        // UpdateVisibleChildren)
 
-                            // send CHILD_EVENT to affected children
-                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+                        // move successors of inserted paragraph one position further
+                        //maParaManager.MoveRightFrom( pTextHint->GetValue() );
 
-                            ::std::advance( begin, pTextHint->GetValue() );
-                            ::std::advance( end, nParas );
+                        // release everything from the insertion position until the end
+                        maParaManager.Release(nFirst, nLast);
 
-                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
-                            ::std::for_each( begin, end, aFunctor );
-                            break;
-                        }
+                        // send CHILD_EVENT to affected children
+                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-                        case TEXT_HINT_PARAREMOVED:
-                        {
-                            const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+                        ::std::advance( begin, nFirst );
+                        ::std::advance( end, nLast );
 
-                            // since we have no "paragraph index
-                            // changed" event on UAA, remove
-                            // [first,last] and insert again later (in
-                            // UpdateVisibleChildren)
-
-                            // move successors of removed paragraph one position closer
-                            // maParaManager.MoveLeftFrom( pTextHint->GetValue() );
-
-                            // release everything from the remove position until the end
-                            maParaManager.Release(pTextHint->GetValue(), nParas);
-
-                            // send CHILD_EVENT to affected children
-                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-                            ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
-
-                            ::std::advance( begin, pTextHint->GetValue() );
-                            ::std::advance( end, nParas );
-
-                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
-                            ::std::for_each( begin, end, aFunctor );
-
-                            // resize child vector to the current child count
-                            maParaManager.SetNum( nParas );
-                            break;
-                        }
-
-                        case TEXT_HINT_TEXTHEIGHTCHANGED:
-                            bUpdateVisibleData = sal_True;
-                            break;
-
-                        case TEXT_HINT_VIEWSCROLLED:
-                            bUpdateVisibleData = sal_True;
-                            break;
+                        AccessibleTextHelper_LostChildEvent aFunctor( *this );
+                        ::std::for_each( begin, end, aFunctor );
+                        break;
                     }
 
-                    // in all cases, check visibility afterwards.
-                    UpdateVisibleChildren();
+                    case TEXT_HINT_PARAREMOVED:
+                    {
+                        const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
 
-                    if( bUpdateVisibleData )
-                        UpdateVisibleData();
-                }
-#ifdef DBG_UTIL
-                else
-                {
-                    DBG_ERROR("AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
+                        sal_Int32 nFirst(pTextHint->GetValue()), nLast(nParas);
 
+                        if( pTextHint->GetValue() == EE_PARA_ALL )
+                            nFirst = 0; // all paragraphs
+
+                        // since we have no "paragraph index
+                        // changed" event on UAA, remove
+                        // [first,last] and insert again later (in
+                        // UpdateVisibleChildren)
+
+                        // move successors of removed paragraph one position closer
+                        // maParaManager.MoveLeftFrom( pTextHint->GetValue() );
+
+                        // release everything from the remove position until the end
+                        maParaManager.Release(nFirst, nLast);
+
+                        // send CHILD_EVENT to affected children
+                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+                        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+
+                        ::std::advance( begin, nFirst );
+                        ::std::advance( end, nLast );
+
+                        AccessibleTextHelper_LostChildEvent aFunctor( *this );
+                        ::std::for_each( begin, end, aFunctor );
+
+                        // resize child vector to the current child count
+                        maParaManager.SetNum( nParas );
+                        break;
+                    }
+
+                    case TEXT_HINT_TEXTHEIGHTCHANGED:
+                        bUpdateVisibleData = sal_True;
+                        break;
+
+                    case TEXT_HINT_VIEWSCROLLED:
+                        bUpdateVisibleData = sal_True;
+                        break;
                 }
-#endif
+
+                // in all cases, check visibility afterwards.
+                UpdateVisibleChildren();
+
+                if( bUpdateVisibleData )
+                    UpdateVisibleData();
             }
             else if( pViewHint )
             {
@@ -1057,7 +1045,12 @@ namespace accessibility
         // -- object locked --
         ::osl::ClearableMutexGuard aGuard( maMutex );
 
-        AccessibleEventObject aEvent(mxFrontEnd, nEventId, rNewValue, rOldValue);
+        AccessibleEventObject aEvent;
+
+        if( mxFrontEnd.is() )
+            aEvent = AccessibleEventObject(mxFrontEnd->getAccessibleContext(), nEventId, rNewValue, rOldValue);
+        else
+            aEvent = AccessibleEventObject(uno::Reference< uno::XInterface >(), nEventId, rNewValue, rOldValue);
 
         ::cppu::OInterfaceIteratorHelper aIter( const_cast< AccessibleTextHelper_Impl* >(this)->maStateListeners );
 

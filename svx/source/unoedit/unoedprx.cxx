@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:46:18 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,21 @@ Rectangle SvxAccessibleTextAdapter::GetParaBounds( USHORT nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    return mrTextForwarder->GetParaBounds( nPara );
+    EBulletInfo aBulletInfo = GetBulletInfo( nPara );
+
+    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+        aBulletInfo.bVisible &&
+        aBulletInfo.nType != SVX_NUM_BITMAP )
+    {
+        // include bullet in para bounding box
+        Rectangle aRect( mrTextForwarder->GetParaBounds( nPara ) );
+
+        aRect.Union( aBulletInfo.aBounds );
+
+        return aRect;
+    }
+    else
+        return mrTextForwarder->GetParaBounds( nPara );
 }
 
 MapMode SvxAccessibleTextAdapter::GetMapMode() const
@@ -1077,10 +1091,25 @@ USHORT SvxAccessibleTextAdapter::GetLineLen( USHORT nPara, USHORT nLine ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
-    SvxAccessibleTextIndex aIndex;
-    aIndex.SetEEIndex( nPara, mrTextForwarder->GetLineLen( nPara, nLine ), *this );
+    SvxAccessibleTextIndex aStartIndex;
+    SvxAccessibleTextIndex aEndIndex;
+    USHORT nCurrLine;
+    sal_Int32 nCurrIndex, nLastIndex;
+    for( nCurrLine=0, nCurrIndex=0, nLastIndex=0; nCurrLine<nLine; ++nCurrLine )
+    {
+        nLastIndex = nCurrIndex;
+        nCurrIndex += mrTextForwarder->GetLineLen( nPara, nCurrLine );
+    }
 
-    return static_cast< USHORT >(aIndex.GetIndex());
+    aEndIndex.SetEEIndex( nPara, nCurrIndex, *this );
+    if( nLine > 0 )
+    {
+        aStartIndex.SetEEIndex( nPara, nLastIndex, *this );
+
+        return static_cast< USHORT >(aEndIndex.GetIndex() - aStartIndex.GetIndex());
+    }
+    else
+        return static_cast< USHORT >(aEndIndex.GetIndex());
 }
 
 sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:44:03 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,12 @@
 #ifndef _SVX_ACCESSIBLE_EDITABLE_TEXT_PARA_HXX
 #include "AccessibleEditableTextPara.hxx"
 #endif
+
+#ifndef _SVX_DIALMGR_HXX
+#include "dialmgr.hxx"
+#endif
+
+#include "accessibility.hrc"
 
 
 using namespace ::com::sun::star;
@@ -639,7 +645,10 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        ::rtl::OUString aStr( RTL_CONSTASCII_USTRINGPARAM("Paragraph containing: ") );
+        // Get the string from the resource for the specified id.
+        String sStr(SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION));
+        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
+                               String( ::rtl::OUString::valueOf( GetParagraphIndex() ) ) );
 
         // append first 40 characters from text, or first line, if shorter
         // (writer takes first sentence here, but that's not supported
@@ -669,18 +678,19 @@ namespace accessibility
             }
         }
 
-        return aStr + aLine;
+        return ::rtl::OUString( sStr ) + aLine;
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName() throw (uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        ::rtl::OUString aStr( RTL_CONSTASCII_USTRINGPARAM("Paragraph ") );
+        // Get the string from the resource for the specified id.
+        String sStr(SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_NAME));
+        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
+                               String( ::rtl::OUString::valueOf( GetParagraphIndex() ) ) );
 
-        aStr += ::rtl::OUString::valueOf( GetParagraphIndex() );
-
-        return aStr;
+        return ::rtl::OUString( sStr );
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::getAccessibleRelationSet() throw (uno::RuntimeException)
@@ -983,6 +993,10 @@ namespace accessibility
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         Rectangle aRect = rCacheTF.GetCharBounds( static_cast< USHORT >( GetParagraphIndex() ), static_cast< USHORT >( nIndex ) );
 
+        // offset from parent (paragraph)
+        Rectangle aParaRect = rCacheTF.GetParaBounds( static_cast< USHORT >( GetParagraphIndex() ) );
+        aRect.Move( -aParaRect.Left(), -aParaRect.Top() );
+
         // convert to screen
         Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
                                                                           rCacheTF.GetMapMode(),
@@ -1019,6 +1033,10 @@ namespace accessibility
         // convert to logical coordinates
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         Point aLogPoint( GetViewForwarder().PixelToLogic( aPoint, rCacheTF.GetMapMode() ) );
+
+        // re-offset to parent (paragraph)
+        Rectangle aParaRect = rCacheTF.GetParaBounds( static_cast< USHORT >( GetParagraphIndex() ) );
+        aLogPoint.Move( aParaRect.Left(), aParaRect.Top() );
 
         if( rCacheTF.GetIndexAtPoint( aLogPoint, nPara, nIndex ) &&
             GetParagraphIndex() == nPara )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,14 @@
 #include "AccessibleImageBullet.hxx"
 #endif
 
+#ifndef _SVX_DIALMGR_HXX
+#include "dialmgr.hxx"
+#endif
+
 #include "editdata.hxx"
 #include "editeng.hxx"
 #include "outliner.hxx"
+#include "accessibility.hrc"
 
 
 using namespace ::com::sun::star;
@@ -134,6 +139,9 @@ namespace accessibility
         mxParent( rParent ),
         maStateListeners( maMutex )
     {
+        // Create the state set.
+        ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
+        mxStateSet = pStateSet;
     }
 
     AccessibleImageBullet::~AccessibleImageBullet()
@@ -183,16 +191,24 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        ::rtl::OUString aStr( RTL_CONSTASCII_USTRINGPARAM("Image bullet in paragraph ") );
+        // Get the string from the resource for the specified id.
+        String sStr(SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION));
+        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
+                               String( ::rtl::OUString::valueOf( GetParagraphIndex() ) ) );
 
-        aStr += ::rtl::OUString::valueOf( GetParagraphIndex() );
-
-        return aStr;
+        return ::rtl::OUString( sStr );
     }
 
     ::rtl::OUString SAL_CALL  AccessibleImageBullet::getAccessibleName() throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Image bullet") );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        // Get the string from the resource for the specified id.
+        String sStr(SVX_RESSTR (RID_SVXSTR_A11Y_IMAGEBULLET_NAME));
+        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
+                               String( ::rtl::OUString::valueOf( GetParagraphIndex() ) ) );
+
+        return ::rtl::OUString( sStr );
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet() throw (uno::RuntimeException)

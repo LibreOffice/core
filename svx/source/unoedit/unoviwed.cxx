@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwed.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
+ *  last change: $Author: thb $ $Date: 2002-05-27 16:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,10 @@ Rectangle SvxEditEngineViewForwarder::GetVisArea() const
         EditEngine* pEditEngine = mrView.GetEditEngine();
 
         if( pEditEngine )
-            return pOutDev->LogicToPixel( aVisArea, pEditEngine->GetRefMapMode() );
+        {
+            aVisArea = pOutDev->LogicToLogic( aVisArea, pEditEngine->GetRefMapMode(), pOutDev->GetMapMode() );
+            return pOutDev->LogicToPixel( aVisArea );
+        }
     }
 
     return Rectangle();
@@ -111,7 +114,8 @@ Point SvxEditEngineViewForwarder::LogicToPixel( const Point& rPoint, const MapMo
 
     if( pOutDev )
     {
-        return pOutDev->LogicToPixel( rPoint, rMapMode );
+        Point aPoint( pOutDev->LogicToLogic( rPoint, rMapMode, pOutDev->GetMapMode() ) );
+        return pOutDev->LogicToPixel( aPoint );
     }
 
     return Point();
@@ -123,7 +127,8 @@ Point SvxEditEngineViewForwarder::PixelToLogic( const Point& rPoint, const MapMo
 
     if( pOutDev )
     {
-        return pOutDev->PixelToLogic( rPoint, rMapMode );
+        Point aPoint( pOutDev->PixelToLogic( rPoint ) );
+        return pOutDev->LogicToLogic( aPoint, pOutDev->GetMapMode(), rMapMode );
     }
 
     return Point();
