@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:36:18 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,41 @@ String SCSTR_QHELP_POSWND
     Text[ greek ] = "Ğåñéï÷Ş öıëëïõ";
     Text[ korean ] = "ì‹œíŠ¸ ì˜ì—­";
     Text[ turkish ] = "Tablo bölümü";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Àrea del full";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
+    Text[ czech ] = "Oblast listu";
+    Text[ hebrew ] = "Tabellenbereich";
+    Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
+    Text[ slovak ] = "OblasÅ¥ listu";
+    Text[ hungarian ] = "MunkalapterÃ¼let";
+    Text[ slovenian ] = "ObmoÄje lista";
+};
+
+String SCSTR_QHELP_INPUTWND
+{
+    Text = "Eingabezeile" ;
+    Text [ english ] = "Inputline" ;
+    Text [ norwegian ] = "Inputline" ;
+    Text [ italian ] = "Riga di digitazione" ;
+    Text [ portuguese_brazilian ] = "Linha de entrada" ;
+    Text [ portuguese ] = "Linha de entrada" ;
+    Text [ finnish ] = "Syöttörivi" ;
+    Text [ danish ] = "Inputlinje" ;
+    Text [ french ] = "Ligne de saisie" ;
+    Text [ swedish ] = "Inmatningsrad" ;
+    Text [ dutch ] = "Invoerregel" ;
+    Text [ spanish ] = "Línea de entrada" ;
+    Text [ english_us ] = "Input line" ;
+    Text[ chinese_simplified ] = "è¾“å…¥è¡Œ";
+    Text[ russian ] = "Ñòğîêà ââîäà";
+    Text[ polish ] = "Wiersz wprowadzania";
+    Text[ japanese ] = "æ•°å¼å…¥åŠ›ãƒœãƒƒã‚¯ã‚¹";
+    Text[ chinese_traditional ] = "è¼¸å…¥æ¬„";
+    Text[ arabic ] = "ÓØÑ ÇáÅÏÎÇá";
+    Text[ greek ] = "ÃñáììŞ åéóáãùãŞò";
+    Text[ korean ] = "ì…ë ¥ì¤„";
+    Text[ turkish ] = "Giriş satırı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línia d'entrada";
     Text[ thai ] = "à¸›à¹‰à¸­à¸™à¸šà¸£à¸£à¸—à¸±à¸”";
