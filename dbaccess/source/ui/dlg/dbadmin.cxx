@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-28 11:41:42 $
+ *  last change: $Author: fs $ $Date: 2000-11-28 13:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,7 +1611,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     ApplyResult eResult = AR_LEAVE_UNCHANGED;
 
     // save the settings for the currently selected data source
-    if (DELETED != m_aSelector.getSelectedState())
+    if (m_aSelector.count() && (DELETED != m_aSelector.getSelectedState()))
     {
         ::rtl::OUString sCurrentlySelected = m_aSelector.getSelected();
         if (m_aDatasources[sCurrentlySelected]->isModified())
@@ -2192,6 +2192,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2000/11/28 11:41:42  oj
+ *  #80827# check dbroot if dbconfig failed
+ *
  *  Revision 1.20  2000/11/23 09:03:58  oj
  *  #80558# don't show delete when no datasource exist
  *
