@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-29 13:21:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,8 +496,9 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     XMLTypedPropertiesOOoTContext_Impl * pIntervalMinorDivisorContext = 0;
     double fIntervalMajor = 0.0;
     double fIntervalMinor = 0.0;
-    bool bMoveProtect = false;
-    bool bSizeProtect = false;
+    sal_Bool bMoveProtect = sal_False;
+    sal_Bool bSizeProtect = sal_False;
+    OUString aProtectAttrValue;
     XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -933,6 +934,10 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             bSizeProtect = IsXMLToken( sAttrValue, XML_TRUE );
             pProtectContext = pContext;
             break;
+        case XML_ATACTION_PROTECT:
+            aProtectAttrValue = sAttrValue;
+            pProtectContext = pContext;
+            break;
         case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
             {
                 const OUString aAttrValue( GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE ) ? XML_HORIZONTAL : XML_NONE ) );
@@ -959,20 +964,28 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         }
     }
 
-    if( bMoveProtect || bSizeProtect )
+    if( bMoveProtect || bSizeProtect || aProtectAttrValue.getLength() )
     {
-        OUString aAttrValue;
-        if( bMoveProtect )
+        if( (bMoveProtect ||bSizeProtect) && IsXMLToken( aProtectAttrValue, XML_NONE ) )
+            aProtectAttrValue = OUString();
+
+        const OUString& rPosition = GetXMLToken( XML_POSITION );
+        if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rPosition ) )
         {
-            aAttrValue = GetXMLToken( XML_POSITION );
-            if( bSizeProtect )
-                aAttrValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+            if( aProtectAttrValue.getLength() )
+                aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
+            aProtectAttrValue += rPosition;
         }
 
-        if( bSizeProtect )
-            aAttrValue += GetXMLToken( XML_SIZE );
+        const OUString& rSize = GetXMLToken( XML_SIZE );
+        if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rSize ) )
+        {
+            if( aProtectAttrValue.getLength() )
+                aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
+            aProtectAttrValue += rSize;
+        }
 
-        pProtectContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken( XML_PROTECT ) ), aAttrValue );
+        pProtectContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken( XML_PROTECT ) ), aProtectAttrValue );
     }
 
     if( pIntervalMinorDivisorContext )
