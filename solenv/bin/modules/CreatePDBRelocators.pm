@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CreatePDBRelocators.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-17 11:42:18 $
+#   last change: $Author: rt $ $Date: 2003-08-07 11:43:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,7 +164,6 @@ sub create_pdb_relocators
             $target = "$pdb_dir/$relocator";
         }
 
-        print "writing $target\n";
         if ( !open(RELOCATOR, ">$target") ) {
             print STDERR "can't write file '$target'\n";
             return undef;
