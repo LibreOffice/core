@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:29:43 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 14:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,19 +127,21 @@ using namespace ::comphelper;
 //========================================================================
 //= OTableTreeListBox
 //========================================================================
-OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle )
+OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle,sal_Bool _bShowFirstEntry )
     :OMarkableTreeListBox(pParent,nWinStyle)
     ,m_aTableImage(ResId(TABLE_TREE_ICON))
     ,m_aViewImage(ResId(VIEW_TREE_ICON))
+    ,m_bShowFirstEntry(_bShowFirstEntry)
 {
     SetDefaultExpandedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
     SetDefaultCollapsedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
 }
 //------------------------------------------------------------------------
-OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId )
+OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId ,sal_Bool _bShowFirstEntry)
     :OMarkableTreeListBox(pParent,rResId)
     ,m_aTableImage(ModuleRes(TABLE_TREE_ICON))
     ,m_aViewImage(ModuleRes(VIEW_TREE_ICON))
+    ,m_bShowFirstEntry(_bShowFirstEntry)
 {
     SetDefaultExpandedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
     SetDefaultCollapsedEntryBmp(Image(ModuleRes(TABLEFOLDER_TREE_ICON)));
@@ -366,14 +368,18 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
     try
     {
         // the root entry saying "all objects"
-        String sRootEntryText;
-        if (!_rViews.getLength())
-            sRootEntryText = String(ModuleRes(STR_ALL_TABLES));
-        else if (!_rTables.getLength())
-            sRootEntryText = String(ModuleRes(STR_ALL_VIEWS));
-        else
-            sRootEntryText = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-        SvLBoxEntry* pAllObjects = InsertEntry(sRootEntryText);
+        SvLBoxEntry* pAllObjects = NULL;
+        if(m_bShowFirstEntry)
+        {
+            String sRootEntryText;
+            if (!_rViews.getLength())
+                sRootEntryText = String(ModuleRes(STR_ALL_TABLES));
+            else if (!_rTables.getLength())
+                sRootEntryText = String(ModuleRes(STR_ALL_VIEWS));
+            else
+                sRootEntryText = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
+            pAllObjects = InsertEntry(sRootEntryText);
+        }
 
         // get the table/view names
         const ::rtl::OUString* pTables = NULL;
@@ -456,7 +462,7 @@ void OTableTreeListBox::checkWildcard(SvLBoxEntry* _pEntry)
 //------------------------------------------------------------------------
 SvLBoxEntry* OTableTreeListBox::getAllObjectsEntry() const
 {
-    return First();
+    return m_bShowFirstEntry ? First() : NULL;
 }
 
 //------------------------------------------------------------------------
@@ -520,6 +526,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/01/30 08:29:43  fs
+ *  'wildcard checking'
+ *
  *  Revision 1.6  2001/01/15 10:55:43  oj
  *  wrong image for table used
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:28:15 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 14:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,11 @@ protected:
     Image           m_aViewImage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+    sal_Bool        m_bShowFirstEntry; // should the first entry be visible
 
 public:
-    OTableTreeListBox( Window* pParent, WinBits nWinStyle = NULL );
-    OTableTreeListBox( Window* pParent, const ResId& rResId );
+    OTableTreeListBox( Window* pParent, WinBits nWinStyle = NULL,sal_Bool _bShowFirstEntry=sal_True );
+    OTableTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bShowFirstEntry=sal_True );
 
     void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         { m_xORB = _rxORB; }
@@ -163,6 +164,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/30 08:28:15  fs
+ *  'wildcard checking'
+ *
  *  Revision 1.2  2000/10/30 15:20:02  fs
  *  #79816# second UpdateTableList got other parameters
  *
