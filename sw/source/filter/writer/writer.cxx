@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:17:46 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 
     String *pSrc = new String( rFileNm );
     String *pDest = new String( aTargetUrl.GetPartBeforeLastName() );
-    *pDest += aFileUrl.GetName();
+    *pDest += String(aFileUrl.GetName());
 
     SfxMedium aSrcFile( *pSrc, STREAM_READ, FALSE );
     SfxMedium aDstFile( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, FALSE );
