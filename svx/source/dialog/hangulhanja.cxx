@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:06 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ namespace svx
 
         // state
         OUString                m_sCurrentPortion;      // the text which we are currently working on
+        LanguageType            m_nCurrentPortionLang;  // language of m_sCurrentPortion found
         sal_Int32               m_nCurrentStartIndex;   // the start index within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nCurrentEndIndex;     // the end index (excluding) within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nReplacementBaseIndex;// index which ReplaceUnit-calls need to be relative to
@@ -237,9 +238,6 @@ namespace svx
         inline  sal_Bool    IsByCharacter( ) const { return m_bByCharacter; }
 
         inline  sal_Bool    IsValid() const { return m_xConverter.is(); }
-
-        inline sal_Bool                 GetTryBothDirections()          { return m_bTryBothDirections; }
-        inline HHC::ConversionDirection GetPrimaryConversionDirection() { return m_ePrimaryConversionDirection; }
 
         inline LanguageType GetSourceLang() const   { return m_nSourceLang; }
         inline LanguageType GetTargetLang() const   { return m_nTargetLang; }
@@ -299,13 +297,11 @@ namespace svx
         */
         bool        implRetrieveNextPortion( );
 
-        /** fill in m_ePrimaryConversionDirection from m_sCurrentPortion
-            (used to determine the initial(!) conversion direction)
-
+        /** determine the ConversionDirection for m_sCurrentPortion
             @return
                 <FALSE/> if and only if something went wrong
         */
-        bool        implDeterminePrimaryDirection( );
+        bool        implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection );
 
         /** member m_aCurrentSuggestions and m_nCurrentEndIndex are updated according to the other settings and current dictionaries
 
@@ -329,7 +325,7 @@ namespace svx
         */
         void implUpdateData();
 
-        /** get the conversion direction dependent from m_eConvType and m_ePrimaryConversionDirection
+        /** get the conversion direction dependent from m_eConvType and m_eCurrentConversionDirection
             in case of switching the direction is allowed this can be triggered with parameter bSwitchDirection
         */
         sal_Int16 implGetConversionType( bool bSwitchDirection=false ) const;
@@ -362,6 +358,7 @@ namespace svx
         ,m_aSourceLocale( _rSourceLocale )
         ,m_nSourceLang( SvxLocaleToLanguage( _rSourceLocale ) )
         ,m_nTargetLang( SvxLocaleToLanguage( _rTargetLocale ) )
+        ,m_nCurrentPortionLang( LANGUAGE_NONE )
         ,m_pTargetFont( _pTargetFont )
         ,m_bIsInteractive( _bIsInteractive )
     {
@@ -431,7 +428,7 @@ namespace svx
     {
         sal_Int16 nConversionType = -1;
         if (m_eConvType == HHC::eConvHangulHanja)
-            nConversionType = HHC::eHangulToHanja == ( m_ePrimaryConversionDirection && !bSwitchDirection ) ? TO_HANJA : TO_HANGUL;
+            nConversionType = HHC::eHangulToHanja == ( m_eCurrentConversionDirection && !bSwitchDirection ) ? TO_HANJA : TO_HANGUL;
         else if (m_eConvType == HHC::eConvSimplifiedTraditional)
             nConversionType = LANGUAGE_CHINESE_SIMPLIFIED == m_nTargetLang ? TO_SCHINESE : TO_TCHINESE;
         DBG_ASSERT( nConversionType != -1, "unexpected conversion type" );
@@ -490,7 +487,7 @@ namespace svx
                         aResult = aSecondResult;
 
                         // our current conversion direction changed now
-                        m_eCurrentConversionDirection = ( HHC::eHangulToHanja == m_ePrimaryConversionDirection )
+                        m_eCurrentConversionDirection = ( HHC::eHangulToHanja == m_eCurrentConversionDirection )
                             ? HHC::eHanjaToHangul : HHC::eHangulToHanja;
                         bFoundAny = sal_True;
                     }
@@ -563,31 +560,22 @@ namespace svx
         // ask the TextConversion service for the next convertible piece of text
         sal_Int32 nStartLookupAt = _nStartAt;
 
-        // get current primary conversion direction to use (if set)
-        if (m_pAntiImpl->IsUseSavedConversionDirectionState())
-            m_ePrimaryConversionDirection = m_pAntiImpl->m_ePrimaryConversionDirectionSave;
-        else if (m_pConversionDialog && !m_pConversionDialog->GetUseBothDirections())
+        // get current values from dialog
+        if( m_eConvType == HHC::eConvHangulHanja && m_pConversionDialog )
         {
-            m_ePrimaryConversionDirection
-                    = m_pConversionDialog->GetDirection( m_ePrimaryConversionDirection );
-        }
-        // save curently used value for possible later use
-        m_pAntiImpl->m_ePrimaryConversionDirectionSave = m_ePrimaryConversionDirection;
+            m_bTryBothDirections = m_pConversionDialog->GetUseBothDirections();
+            HHC::ConversionDirection eDialogDirection = HHC::eHangulToHanja;
+            eDialogDirection = m_pConversionDialog->GetDirection( eDialogDirection );
 
-        if (m_eConvType == HHC::eConvHangulHanja) // for eConvSimplifiedTraditional: there is only a single direction (specified by m_nTargetLang)
-        {
-            if (m_pAntiImpl->IsUseSavedConversionDirectionState())
-                m_bTryBothDirections = m_pAntiImpl->m_bTryBothDirectionsSave;
-            else
-                // if the dialog does not yet exist we'll try both conversion directions
-                m_bTryBothDirections = m_pConversionDialog ? m_pConversionDialog->GetUseBothDirections() : sal_True;
+            if( !m_bTryBothDirections && eDialogDirection != m_eCurrentConversionDirection )
+            {
+                m_eCurrentConversionDirection = eDialogDirection;
+            }
+
             // save curently used value for possible later use
             m_pAntiImpl->m_bTryBothDirectionsSave = m_bTryBothDirections;
+            m_pAntiImpl->m_ePrimaryConversionDirectionSave = m_eCurrentConversionDirection;
         }
-
-        // until we know better, assume that this very conversion attempt will end up with
-        // the conversion direction which is our primary direction
-        m_eCurrentConversionDirection = m_ePrimaryConversionDirection;
 
         bool bFoundAny = implUpdateSuggestions( true, _nStartAt );
 
@@ -599,11 +587,17 @@ namespace svx
     bool HangulHanjaConversion_Impl::implRetrieveNextPortion( )
     {
         m_sCurrentPortion = OUString();
-        m_pAntiImpl->GetNextPortion( m_sCurrentPortion );
+        m_nCurrentPortionLang = LANGUAGE_NONE;
+        m_pAntiImpl->GetNextPortion( m_sCurrentPortion, m_nCurrentPortionLang );
         m_nReplacementBaseIndex = 0;
         m_nCurrentStartIndex = m_nCurrentEndIndex = 0;
 
-        return 0 != m_sCurrentPortion.getLength();
+        bool bRet = 0 != m_sCurrentPortion.getLength();
+
+        if (m_eConvType == HHC::eConvHangulHanja && m_bTryBothDirections)
+            implGetConversionDirectionForCurrentPortion( m_eCurrentConversionDirection );
+
+        return bRet;
     }
 
     //-------------------------------------------------------------------------
@@ -714,19 +708,17 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    bool HangulHanjaConversion_Impl::implDeterminePrimaryDirection( )
+    bool HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection )
     {
-        // - For eConvHangulHanja the primary direction is determined by
+        // - For eConvHangulHanja the direction is determined by
         // the first encountered Korean character.
         // - For eConvSimplifiedTraditional the conversion direction
         // is already specified by the source language.
 
         bool bSuccess = true;
 
-        if (m_eConvType == HHC::eHangulToHanja)
+        if (m_eConvType == HHC::eConvHangulHanja)
         {
-            m_ePrimaryConversionDirection = HHC::eHangulToHanja;    // default
-
             bSuccess = false;
             try
             {
@@ -754,11 +746,11 @@ namespace svx
                             ||  ( UnicodeScript_kHangulSyllable == nScript )
                             )
                         {
-                            m_ePrimaryConversionDirection = HHC::eHangulToHanja;
+                            rDirection = HHC::eHangulToHanja;
                         }
                         else
                         {
-                            m_ePrimaryConversionDirection = HHC::eHanjaToHangul;
+                            rDirection = HHC::eHanjaToHangul;
                         }
 
                         bSuccess = true;
@@ -768,7 +760,7 @@ namespace svx
             catch( const Exception& e )
             {
                 e;  // make compiler happy
-                DBG_ERROR( "HangulHanjaConversion_Impl::implDeterminePrimaryDirection: caught an exception!" );
+                DBG_ERROR( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
             }
         }
 
@@ -792,16 +784,38 @@ namespace svx
             // nothing to do
             return;
         }
-        if ( !implDeterminePrimaryDirection( ) )
-            // something went wrong, has already been asserted
-            return;
+        if( m_eConvType == HHC::eConvHangulHanja )
+        {
+            //init conversion direction from saved value
+            HHC::ConversionDirection eDirection = HHC::eHangulToHanja;
+            if(!implGetConversionDirectionForCurrentPortion( eDirection ))
+                // something went wrong, has already been asserted
+                return;
 
+            if (m_pAntiImpl->IsUseSavedConversionDirectionState())
+            {
+                m_ePrimaryConversionDirection = m_pAntiImpl->m_ePrimaryConversionDirectionSave;
+                m_bTryBothDirections = m_pAntiImpl->m_bTryBothDirectionsSave;
+                if( m_bTryBothDirections )
+                    m_eCurrentConversionDirection = eDirection;
+                else
+                    m_eCurrentConversionDirection = m_ePrimaryConversionDirection;
+            }
+            else
+            {
+                m_ePrimaryConversionDirection = eDirection;
+                m_eCurrentConversionDirection = eDirection;
+            }
+        }
 
         if (m_bIsInteractive  &&  m_eConvType == HHC::eConvHangulHanja)
         {
             //always open dialog if at least having a hangul or hanja text portion
             createDialog();
-            implUpdateData();
+            if(m_pAntiImpl->IsUseSavedConversionDirectionState())
+                ContinueConversion( sal_False );
+            else
+                implUpdateData();
             m_pConversionDialog->Execute();
             DELETEZ( m_pConversionDialog );
         }
@@ -867,8 +881,23 @@ namespace svx
         //remind this decision
         m_aRecentlyUsedList[ GetCurrentUnit() ] = _rChangeInto;
 
+        LanguageType *pNewUnitLang = 0;
+        LanguageType  nNewUnitLang = LANGUAGE_NONE;
+        if (m_eConvType == HHC::eConvSimplifiedTraditional)
+        {
+            // check if language needs to be changed
+            if ( m_pAntiImpl->GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL &&
+                !m_pAntiImpl->IsTraditional( m_nCurrentPortionLang ))
+                nNewUnitLang = LANGUAGE_CHINESE_TRADITIONAL;
+            else if ( m_pAntiImpl->GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED &&
+                     !m_pAntiImpl->IsSimplified( m_nCurrentPortionLang ))
+                nNewUnitLang = LANGUAGE_CHINESE_SIMPLIFIED;
+            if (nNewUnitLang != LANGUAGE_NONE)
+                pNewUnitLang = &nNewUnitLang;
+        }
+
         // do the replacement
-        m_pAntiImpl->ReplaceUnit( nStartIndex, nEndIndex, _rChangeInto, eAction );
+        m_pAntiImpl->ReplaceUnit( nStartIndex, nEndIndex, _rChangeInto, eAction, pNewUnitLang );
 
 
         // adjust the replacement base
@@ -1132,14 +1161,15 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion::GetNextPortion( OUString& /* [out] */ _rNextPortion )
+    void HangulHanjaConversion::GetNextPortion( OUString& /* [out] */ _rNextPortion, LanguageType& /* [out] */ _rLangOfPortion )
     {
         DBG_ERROR( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
     }
 
     //-------------------------------------------------------------------------
     void HangulHanjaConversion::ReplaceUnit( const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
-            const OUString& _rReplaceWith, ReplacementAction _eAction )
+            const OUString& _rReplaceWith, ReplacementAction _eAction,
+            LanguageType *pNewUnitLanguage )
     {
         DBG_ERROR( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
     }
