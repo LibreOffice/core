@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDockableWindowListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:19:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XDockableWindowListener_idl__
+#define __com_sun_star_awt_XDockableWindowListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+#ifndef __com_sun_star_awt_DockingData_idl__
+#include <com/sun/star/awt/DockingData.idl>
+#endif
+#ifndef __com_sun_star_awt_EndDockingEvent_idl__
+#include <com/sun/star/awt/EndDockingEvent.idl>
+#endif
+#ifndef __com_sun_star_awt_DockingEvent_idl__
+#include <com/sun/star/awt/DockingEvent.idl>
+#endif
+#ifndef __com_sun_star_awt_EndPopupModeEvent_idl__
+#include <com/sun/star/awt/EndPopupModeEvent.idl>
+#endif
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** makes it possible to receive docking events.
+ */
+interface XDockableWindowListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+
+    /** is invoked when the docking procedure starts.
+     */
+    void startDocking( [in] com::sun::star::awt::DockingEvent e );
+
+    //-------------------------------------------------------------------------
+
+    /** is invoked during the docking procedure when the window has been moved.
+
+        on return the DockingData must contain either the old tracking rectangle
+        or a changed rectangle if required, additionally it must indicate if
+        the window should be docked or floating
+
+        Note: the tracking rectangle indicates to the user where the window would
+            be placed if he releases the mouse.
+
+     */
+    DockingData docking( [in] com::sun::star::awt::DockingEvent e );
+
+    //-------------------------------------------------------------------------
+
+    /** is invoked when the docking procedure ends.
+        aWindowRect contains the new position and size of the window
+     */
+    void endDocking( [in] com::sun::star::awt::EndDockingEvent e );
+
+    //-------------------------------------------------------------------------
+
+    /** is invoked when the the floating mode is about to be changed between
+            floating and docked or vice versa
+
+        if returned FALSE the floating mode will not be changed
+     */
+    boolean prepareToggleFloatingMode( [in] com::sun::star::lang::EventObject e );
+
+    //-------------------------------------------------------------------------
+
+    /** is invoked when the floating mode is changed between
+            floating and docked or vice versa
+     */
+    void toggleFloatingMode( [in] com::sun::star::lang::EventObject e );
+
+    //-------------------------------------------------------------------------
+
+    /** is invoked when the window was actively closed
+     */
+    void closed( [in] com::sun::star::lang::EventObject e );
+
+    //-------------------------------------------------------------------------
+
+    /** is invoked when the window currently is in popupmode and wants to be undocked
+        or closed
+     */
+    void endPopupMode( [in] com::sun::star::awt::EndPopupModeEvent e );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
