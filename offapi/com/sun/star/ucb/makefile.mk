@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: mav $ $Date: 2002-01-11 17:41:13 $
+#   last change: $Author: abi $ $Date: 2002-04-26 12:51:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,8 @@ IDLFILES=\
     FolderListEntry.idl\
     GlobalTransferCommandArgument.idl\
     HandleCookiesRequest.idl\
+    HelpContentProvider.idl\
+    HelpContent.idl\
     HierarchyContentProvider.idl\
         HierarchyDataSource.idl\
         HierarchyDataReadAccess.idl\
