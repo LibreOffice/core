@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:23:36 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ static const sal_Int32 CMD_PROTOCOL_SIZE        = 5;
 static const char CMD_PROTOCOL[]                = ".uno:";
 static const char ADDDIRECT_CMD[]               = ".uno:AddDirect" ;
 static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu" ;
-static const char FORMATMENU_CMD[]              = ".uno:FormatMenu" ;
 static const char FILEMENU_CMD[]                = ".uno:Picklist" ;
 static const char WINDOWMENU_CMD[]              = ".uno:WindowList" ;
 
@@ -891,26 +890,6 @@ throw ( SAXException, RuntimeException )
                 {
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL );
                     bSeparator = sal_False;
-                }
-                else if ( aCommandURL.equalsAscii( FORMATMENU_CMD ))
-                {
-                    // special popup menu - must be written as empty popup!
-                    AttributeListImpl* pListMenu = new AttributeListImpl;
-                    Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
-
-                    pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
-                                            m_aAttributeType,
-                                            aCommandURL );
-
-                    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )), xListMenu );
-                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )), m_xEmptyList );
-                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )) );
-                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
-                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    bSeparator = FALSE;
                 }
                 else if (( aCommandURL.getLength() > 0 ) && !AddonPopupMenu::IsCommandURLPrefix ( aCommandURL ))
                 {
