@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: as $ $Date: 2002-09-13 06:41:14 $
+ *  last change: $Author: mav $ $Date: 2002-09-19 09:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ SfxMedium* SfxApplication::InsertDocumentDialog
         pMedium = 0;
         SvStringsDtor* pURLList = NULL;
         String aFilter;
-        SfxItemSet* pSet;
+        SfxItemSet* pSet = NULL;
         ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
         if( !nErr )
         {
