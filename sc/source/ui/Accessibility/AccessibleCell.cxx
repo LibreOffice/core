@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:44:49 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -324,7 +324,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 sal_Bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
          (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
@@ -384,7 +384,7 @@ void ScAccessibleCell::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData
+        ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
             (new ScAccessibleCellTextData(mpViewShell, maCellAddress, meSplitPos));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
 
@@ -465,7 +465,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
                 for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
                 {
                     pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
-                    nPos++;
+                    ++nPos;
                 }
             }
             DBG_ASSERT(nCount == nPos, "something wents wrong");
