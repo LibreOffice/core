@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 09:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 typedef void* oslSemaphore;
