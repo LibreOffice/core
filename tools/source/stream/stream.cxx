@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-01-10 16:02:17 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 13:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,6 +870,51 @@ BOOL SvStream::ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharS
     else
         return ReadByteStringLine( rStr, eSrcCharSet );
 }
+
+/*************************************************************************
+|*
+|*    Stream::ReadCString
+|*
+*************************************************************************/
+
+BOOL SvStream::ReadCString( ByteString& rStr )
+{
+    if( rStr.Len() )
+        rStr.Erase();
+
+    sal_Char buf[ 256 + 1 ];
+    BOOL bEnd = FALSE;
+    ULONG nFilePos = Tell();
+
+    while( !bEnd && !GetError() )
+    {
+        USHORT nLen = (USHORT)Read( buf, sizeof(buf)-1 );
+        if( !nLen )
+            break;
+
+        const sal_Char* pPtr = buf;
+        while( *pPtr && nLen )
+            ++pPtr, --nLen;
+
+        bEnd = 0 == *pPtr;
+        rStr.Append( buf, pPtr - buf );
+    }
+
+    nFilePos += rStr.Len();
+    if( Tell() > nFilePos )
+        nFilePos++;
+    Seek( nFilePos );  // seeken wg. obigem BlockRead!
+    return bEnd;
+}
+
+BOOL SvStream::ReadCString( String& rStr, rtl_TextEncoding eToEncode )
+{
+    ByteString sStr;
+    BOOL bRet = ReadCString( sStr );
+    rStr = String( sStr, eToEncode );
+    return bRet;
+}
+
 
 /*************************************************************************
 |*
