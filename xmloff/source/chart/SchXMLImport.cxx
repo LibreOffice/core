@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:04:44 $
+ *  last change: $Author: bm $ $Date: 2000-12-09 15:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ static __FAR_DATA SvXMLTokenMapEntry aLegendAttrTokenMap[] =
     { XML_NAMESPACE_CHART,  sXML_legend_position,       XML_TOK_LEGEND_POSITION     },
     { XML_NAMESPACE_SVG,    sXML_x,                     XML_TOK_LEGEND_X            },
     { XML_NAMESPACE_SVG,    sXML_y,                     XML_TOK_LEGEND_Y            },
+    { XML_NAMESPACE_CHART,  sXML_style_name,            XML_TOK_LEGEND_STYLE_NAME   },
     XML_TOKEN_MAP_END
 };
 

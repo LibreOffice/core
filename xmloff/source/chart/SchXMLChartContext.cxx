@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-07 18:18:01 $
+ *  last change: $Author: bm $ $Date: 2000-12-09 15:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,8 +588,6 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
     if( mxTitleShape.is())
     {
-        mxTitleShape->setPosition( aPosition );
-
         uno::Reference< beans::XPropertySet > xProp( mxTitleShape, uno::UNO_QUERY );
         if( xProp.is())
         {
@@ -603,6 +601,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
         }
+        mxTitleShape->setPosition( aPosition );
     }
 }
 
@@ -672,6 +671,8 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     if( xLegendShape.is())
         aPosition = xLegendShape->getPosition();
 
+    rtl::OUString sAutoStyleName;
+
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -683,6 +684,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         {
             case XML_TOK_LEGEND_POSITION:
                 {
+                    // set anchor position
                     uno::Reference< beans::XPropertySet > xProp( xDoc->getLegend(), uno::UNO_QUERY );
                     if( xProp.is())
                     {
@@ -710,9 +712,27 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
             case XML_TOK_LEGEND_Y:
                 GetImport().GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
                 break;
+            case XML_TOK_LEGEND_STYLE_NAME:
+                sAutoStyleName = aValue;
         }
     }
 
+    // set auto-styles for Area
+    uno::Reference< beans::XPropertySet > xProp( xDoc->getLegend(), uno::UNO_QUERY );
+    if( xProp.is())
+    {
+        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+        if( pStylesCtxt )
+        {
+            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+
+            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+        }
+    }
+
+    // set absolute position
     if( xLegendShape.is())
         xLegendShape->setPosition( aPosition );
 }

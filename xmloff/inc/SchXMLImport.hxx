@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:03:08 $
+ *  last change: $Author: bm $ $Date: 2000-12-09 15:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,8 @@ enum SchXMLLegendAttrMap
 {
     XML_TOK_LEGEND_POSITION,
     XML_TOK_LEGEND_X,
-    XML_TOK_LEGEND_Y
+    XML_TOK_LEGEND_Y,
+    XML_TOK_LEGEND_STYLE_NAME
 };
 
 enum SchXMLAutoStyleAttrMap
