@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:53:01 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "적용";
                 Text[ turkish ] = "Uygula";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Asignar";
+                Text[ catalan ] = "Aplica";
                 Text[ finnish ] = "K�yt�";
                 Text[ thai ] = "ใช้";
             };
@@ -138,7 +138,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "열기...";
                 Text[ turkish ] = "A�...";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Abrir...";
+                Text[ catalan ] = "Obre...";
                 Text[ finnish ] = "Avaa";
                 Text[ thai ] = "เปิด...";
             };
@@ -168,7 +168,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "저장...";
                 Text[ turkish ] = "Kaydet...";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Guardar...";
+                Text[ catalan ] = "Desa...";
                 Text[ finnish ] = "Tallenna...";
                 Text[ thai ] = "บันทึก...";
             };
@@ -203,7 +203,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "선택";
                 Text[ turkish ] = "Se�im";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Selecci�n";
+                Text[ catalan ] = "Selecciona";
                 Text[ finnish ] = "Valitse";
                 Text[ thai ] = "เลือก";
             };
@@ -234,7 +234,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "사각형";
                 Text[ turkish ] = "Dikd�rtgen";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Rect�ngulo";
+                Text[ catalan ] = "Rectangle";
                 Text[ finnish ] = "Suorakulmio";
                 Text[ thai ] = "สี่เหลี่ยม";
             };
@@ -296,7 +296,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "다각형";
                 Text[ turkish ] = "�okgen";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pol�gono";
+                Text[ catalan ] = "Pol�gon";
                 Text[ finnish ] = "Polygoni";
                 Text[ thai ] = "หลายเหลี่ยม";
             };
@@ -327,7 +327,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "자유 다각형";
                 Text[ turkish ] = "Serbest �okgen";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pol�gono a mano alzada";
+                Text[ catalan ] = "Pol�gon a m� al�ada";
                 Text[ finnish ] = "Vapaamuotoinen polygoni";
                 Text[ thai ] = "รูปหลายเหลี่ยมแบบอิสระ";
             };
@@ -362,7 +362,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "항목 편집";
                 Text[ turkish ] = "Noktalar� d�zenle";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Modificar puntos";
+                Text[ catalan ] = "Edita els punts";
                 Text[ thai ] = "แก้ไขจุด";
             };
             ToolBoxItem
@@ -394,7 +394,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "점 이동";
                 Text[ turkish ] = "Noktalar� ta��";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Desplazar puntos";
+                Text[ catalan ] = "Mou els punts";
                 Text[ thai ] = "ย้ายจุด";
             };
             ToolBoxItem
@@ -428,7 +428,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "점 삽입";
                 Text[ turkish ] = "Nokta ekle";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Insertar puntos";
+                Text[ catalan ] = "Insereix els punts";
                 Text[ thai ] = "แทรกจุด";
             };
             ToolBoxItem
@@ -460,7 +460,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "점 삭제";
                 Text[ turkish ] = "Noktalar� sil";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Eliminar puntos";
+                Text[ catalan ] = "Suprimeix els punts";
                 Text[ thai ] = "ลบจุด";
             };
             ToolBoxItem
@@ -494,7 +494,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "실행 취소 ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Deshacer  ";
+                Text[ catalan ] = "Desf�s  ";
                 Text[ thai ] = "เลิกทำ ";
             };
             ToolBoxItem
@@ -522,7 +522,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "되돌리기 ";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Restaurar  ";
+                Text[ catalan ] = "Restaura  ";
                 Text[ finnish ] = "Toista ";
                 Text[ thai ] = "ทำซ้ำ";
             };
@@ -555,7 +555,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "활성";
                 Text[ turkish ] = "Etkin";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Activo";
+                Text[ catalan ] = "Actiu";
                 Text[ finnish ] = "Aktiivinen";
                 Text[ thai ] = "ใช้งานอยู่";
             };
@@ -613,7 +613,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ korean ] = "등록정보...";
                 Text[ turkish ] = "�zellikler...";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Propiedades...";
+                Text[ catalan ] = "Propietats...";
                 Text[ finnish ] = "Ominaisuudet";
                 Text[ thai ] = "คุณสมบัติ...";
             };
@@ -659,7 +659,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Text[ korean ] = "주소:";
         Text[ turkish ] = "Adres:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Direcci�n:";
+        Text[ catalan ] = "Direcci�:";
         Text[ finnish ] = "Osoite:";
         Text[ thai ] = "ที่อยู่:";
     };
@@ -697,7 +697,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Text[ korean ] = "텍스트:";
         Text[ turkish ] = "Metin:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Texto:";
+        Text[ catalan ] = "Text:";
         Text[ finnish ] = "Teksti:";
         Text[ thai ] = "ข้อความ:";
     };
@@ -729,7 +729,7 @@ ModelessDialog RID_SVXDLG_IMAP
     Text[ korean ] = "이미지 맵 편집기";
     Text[ turkish ] = "Resim e�lem edit�r�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editor ImageMap";
+    Text[ catalan ] = "Editor del mapa d'imatge";
     Text[ finnish ] = "Kuvakartan editori";
 
     FixedText RID_SVXCTL_FT_TARGET
@@ -825,7 +825,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "설명...";
             Text[ turkish ] = "A��klama...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Descripci�n...";
+            Text[ catalan ] = "~Descripci�...";
             Text[ finnish ] = "Kuvaus...";
             Text[ thai ] = "คำอธิบาย...";
         };
@@ -853,7 +853,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "매크로(~M)...";
             Text[ turkish ] = "Makro...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Ma~cro...";
+            Text[ catalan ] = "~Macro...";
             Text[ finnish ] = "~Makro...";
             Text[ thai ] = "~มาโคร...";
         };
@@ -881,7 +881,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "활성";
             Text[ turkish ] = "Etkin";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Activo";
+            Text[ catalan ] = "Actiu";
             Text[ finnish ] = "Aktiivinen";
             Text[ thai ] = "ใช้งานอยู่";
         };
@@ -935,7 +935,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "맨 앞으로";
                         Text[ turkish ] = "En �ne getir";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Traer al ~frente";
+                        Text[ catalan ] = "Porta al davant";
                         Text[ thai ] = "นำไปด้านหน้า";
                     };
                     MenuItem
@@ -964,7 +964,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "계속해서 앞으로(~F)";
                         Text[ turkish ] = "Bir �ne getir";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Traer ~m�s adelante";
+                        Text[ catalan ] = "Porta ~m�s endavant";
                         Text[ thai ] = "นำ~ส่งต่อ";
                     };
                     MenuItem
@@ -993,7 +993,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "계속해서 뒤로(~W)";
                         Text[ turkish ] = "Bir alta g�nder";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Enviar hacia a~tr�s";
+                        Text[ catalan ] = "Envia cap ~enrere";
                         Text[ thai ] = "ส่งย้อน~กลับ";
                     };
                     MenuItem
@@ -1022,7 +1022,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "맨 뒤로(~S)";
                         Text[ turkish ] = "En alta g�nder";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Enviar al ~fondo";
+                        Text[ catalan ] = "~Envia al fons";
                         Text[ thai ] = "~ย้ายไปไว้ข้างหลังสุด";
                     };
                 };
@@ -1037,7 +1037,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "배열";
             Text[ turkish ] = "S�ralama";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Posici�n";
+            Text[ catalan ] = "Organitza";
             Text[ thai ] = "จัดเรียง";
         };
         MenuItem
@@ -1072,7 +1072,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "모두 선택(~A)";
             Text[ turkish ] = "T�m�n� se�";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Seleccionar todo";
+            Text[ catalan ] = "Selecciona ~tots";
             Text[ thai ] = "เลือก~ทั้งหมด";
         };
         MenuItem
@@ -1104,7 +1104,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "삭제(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "~Suprimeix";
             Text[ thai ] = "~ลบ";
         };
     };
@@ -1151,7 +1151,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ greek ] = "����������� �������:";
         Text[ korean ] = "대체 텍스트(~T):";
         Text[ turkish ] = "Alternatif metin:";
-        Text[ catalan ] = "Texto alternativo:";
+        Text[ catalan ] = "Text alternatiu:";
         Text[ finnish ] = "~Vaihtoehtoinen teksti";
         Text[ thai ] = "~ข้อความทดแทน";
     };
@@ -1188,7 +1188,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "~URL 텍스트:";
         Text[ turkish ] = "URL:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "URL:";
+        Text[ catalan ] = "Text URL:";
         Text[ finnish ] = "~URL-osoite";
         Text[ thai ] = "~URL";
     };
@@ -1238,7 +1238,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "하이퍼링크";
         Text[ turkish ] = "Hyperlink";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Hiperenlace";
+        Text[ catalan ] = "Hiperenlla�";
         Text[ finnish ] = "Hyperlinkki";
         Text[ thai ] = "เชื่อมโยงหลายมิติ";
     };
@@ -1267,7 +1267,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "프레임(~R):";
         Text[ turkish ] = "Frame:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Frame:";
+        Text[ catalan ] = "Marc:";
         Text[ finnish ] = "K~ehys";
         Text[ thai ] = "ก~รอบ";
     };
@@ -1306,7 +1306,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "이름(~N):";
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre:";
+        Text[ catalan ] = "Nom:";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "~ชื่อ";
     };
@@ -1330,7 +1330,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     Text[ korean ] = "설명";
     Text[ turkish ] = "A��klama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Descripci�n";
+    Text[ catalan ] = "Descripci�";
     Text[ finnish ] = "Kuvaus";
     Text[ thai ] = "คำอธิบาย";
 };
@@ -1361,7 +1361,7 @@ String STR_IMAPDLG_SAVE
     Text[ korean ] = "이미지 맵이 수정되었습니다.\n변경된 내용을 저장하겠습니까?";
     Text[ turkish ] = "Resim e�lem de�i�tirildi.\nDe�i�iklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se ha modificado el ImageMap.\n�Desea guardar los cambios?";
+    Text[ catalan ] = "S'ha modificat el mapa d'imatge.\nVoleu desar-ne els canvis?";
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
     Text[ thai ] = "ดัดแปลงแก้ไขภาพแผนที่แล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
 };
@@ -1390,7 +1390,7 @@ String STR_IMAPDLG_MODIFY
     Text[ korean ] = "이미지 맵이 수정되었습니다.\n변경된 내용을 적용하겠습니까?";
     Text[ turkish ] = "Resim e�lem de�i�tirildi.\nDe�i�iklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se ha modificado el ImageMap.\n�Desea guardar las modificaciones?";
+    Text[ catalan ] = "S'ha modificat el mapa d'imatge.\nVoleu desar-ne els canvis?";
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
     Text[ thai ] = "ดัดแปลงแก้ไขภาพแผนที่แล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
 };
