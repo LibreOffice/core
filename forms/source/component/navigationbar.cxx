@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigationbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 11:24:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace frm
     //------------------------------------------------------------------
     ONavigationBarModel::ONavigationBarModel( const Reference< XMultiServiceFactory >& _rxFactory )
         :OControlModel( _rxFactory, ::rtl::OUString() )
+        ,FontControlModel( true )
     {
         DBG_CTOR( ONavigationBarModel, NULL );
 
