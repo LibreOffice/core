@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflcnst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-09 11:54:41 $
+ *  last change: $Author: jsc $ $Date: 2000-10-12 08:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,7 @@ extern const sal_uInt16 majorVersion;
 #define OFFSET_TYPE_SOURCE          (OFFSET_N_ENTRIES + sizeof(sal_uInt16))
 #define OFFSET_TYPE_CLASS           (OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
 #define OFFSET_THIS_TYPE            (OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
-#define OFFSET_SUPER_TYPE           (OFFSET_THIS_TYPE + sizeof(sal_uInt16))
-#define OFFSET_UIK                  (OFFSET_SUPER_TYPE + sizeof(sal_uInt16))
+#define OFFSET_UIK                  (OFFSET_THIS_TYPE + sizeof(sal_uInt16))
 #define OFFSET_DOKU                 (OFFSET_UIK + sizeof(sal_uInt16))
 #define OFFSET_FILENAME             (OFFSET_DOKU + sizeof(sal_uInt16))
 
