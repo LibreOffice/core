@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:09:08 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ using namespace ::com::sun::star;
 
 SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
                : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
-//BFS02              pPolygon                   (NULL),
                  eEffect                    (presentation::AnimationEffect_NONE),
                  eTextEffect                (presentation::AnimationEffect_NONE),
                  eSpeed                     (presentation::AnimationSpeed_SLOW),
@@ -106,19 +105,18 @@ SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
                  bDimHide                   (FALSE),
                  bSoundOn                   (FALSE),
                  bPlayFull                  (FALSE),
-//BFS02              pPathSuro                  (NULL),
                  pPathObj                   (NULL),
                  eClickAction               (presentation::ClickAction_NONE),
                  eSecondEffect              (presentation::AnimationEffect_NONE),
                  eSecondSpeed               (presentation::AnimationSpeed_SLOW),
                  bSecondSoundOn             (FALSE),
                  bSecondPlayFull            (FALSE),
-                 bInvisibleInPresentation   (FALSE),
+//               bInvisibleInPresentation   (FALSE),
                  nVerb                      (0),
                  pDoc                       (pTheDoc),
-                 bShow                      (TRUE),
-                 bIsShown                   (TRUE),
-                 bDimmed                    (FALSE),
+//               bShow                      (TRUE),
+//               bIsShown                   (TRUE),
+//               bDimmed                    (FALSE),
                  nPresOrder                 (LIST_APPEND)
 {
     aBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
@@ -135,9 +133,8 @@ SdAnimationInfo::SdAnimationInfo(SdDrawDocument* pTheDoc)
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                : SdrObjUserData             (rAnmInfo),
-//BFS02              pPolygon                   (NULL),
-                 aStart                     (rAnmInfo.aStart),
-                 aEnd                       (rAnmInfo.aEnd),
+//               aStart                     (rAnmInfo.aStart),
+//               aEnd                       (rAnmInfo.aEnd),
                  eEffect                    (rAnmInfo.eEffect),
                  eTextEffect                (rAnmInfo.eTextEffect),
                  eSpeed                     (rAnmInfo.eSpeed),
@@ -151,25 +148,21 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                  bSoundOn                   (rAnmInfo.bSoundOn),
                  bPlayFull                  (rAnmInfo.bPlayFull),
                  pPathObj                   (NULL),
-//BFS02              pPathSuro                  (NULL),
                  eClickAction               (rAnmInfo.eClickAction),
                  eSecondEffect              (rAnmInfo.eSecondEffect),
                  eSecondSpeed               (rAnmInfo.eSecondSpeed),
                  bSecondSoundOn             (rAnmInfo.bSecondSoundOn),
                  bSecondPlayFull            (rAnmInfo.bSecondPlayFull),
-                 bInvisibleInPresentation   (rAnmInfo.bInvisibleInPresentation),
+//               bInvisibleInPresentation   (rAnmInfo.bInvisibleInPresentation),
                  nVerb                      (rAnmInfo.nVerb),
                  aBookmark                  (rAnmInfo.aBookmark),
                  aSecondSoundFile           (rAnmInfo.aSecondSoundFile),
                  pDoc                       (NULL),
-                 bShow                      (rAnmInfo.bShow),
-                 bIsShown                   (rAnmInfo.bIsShown),
-                 bDimmed                    (rAnmInfo.bDimmed),
+//               bShow                      (rAnmInfo.bShow),
+//               bIsShown                   (rAnmInfo.bIsShown),
+//               bDimmed                    (rAnmInfo.bDimmed)
                  nPresOrder                 (LIST_APPEND)
 {
-//BFS02 if (pPolygon)
-//BFS02     pPolygon = new Polygon(*(rAnmInfo.pPolygon));
-
     // kann nicht uebertragen werden
     if (eEffect == presentation::AnimationEffect_PATH)
         eEffect =  presentation::AnimationEffect_NONE;
@@ -183,8 +176,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
 
 SdAnimationInfo::~SdAnimationInfo()
 {
-//BFS02 delete pPathSuro;
-//BFS02 delete pPolygon;
 }
 
 /*************************************************************************
@@ -256,21 +247,5 @@ void SdAnimationInfo::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, con
         }
     }
 }
-
-/*************************************************************************
-|*
-|* AfterRead, ggfs. Surrogat aufloesen
-|*
-\************************************************************************/
-
-//BFS02void SdAnimationInfo::AfterRead()
-//BFS02{
-//BFS02 if (pPathSuro)
-//BFS02 {
-//BFS02     pPathObj = (SdrPathObj*)pPathSuro->GetObject();
-//BFS02     DBG_ASSERT(pPathObj, "Surrogat kann nicht aufgeloest werden");
-//BFS02 }
-//BFS02}
-
 
 
