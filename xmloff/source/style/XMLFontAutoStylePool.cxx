@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontAutoStylePool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ OUString XMLFontAutoStylePool::Add(
 void XMLFontAutoStylePool::exportXML()
 {
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
-                              XML_FONT_DECLS,
+                              XML_FONT_FACE_DECLS,
                               sal_True, sal_True );
     Any aAny;
     OUString sTmp;
@@ -308,13 +308,13 @@ void XMLFontAutoStylePool::exportXML()
 
         aAny <<= pEntry->GetFamilyName();
         if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
-            GetExport().AddAttribute( XML_NAMESPACE_FO,
+            GetExport().AddAttribute( XML_NAMESPACE_SVG,
                                       XML_FONT_FAMILY, sTmp );
 
         const OUString& rStyleName = pEntry->GetStyleName();
         if( rStyleName.getLength() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                      XML_FONT_STYLE_NAME,
+                                      XML_FONT_ADORNMENTS,
                                       rStyleName );
 
         aAny <<= (sal_Int16)pEntry->GetFamily();
@@ -333,7 +333,7 @@ void XMLFontAutoStylePool::exportXML()
                                       XML_FONT_CHARSET, sTmp );
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                  XML_FONT_DECL,
+                                  XML_FONT_FACE,
                                   sal_True, sal_True );
     }
 }
