@@ -82,7 +82,7 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         try {
             if (AnyConverter.isObject(any)) {
                 XAccessible unoAccessible = (XAccessible) AnyConverter.toObject(
-                    Container.XAccessibleType, any);
+                    AccessibleObjectFactory.XAccessibleType, any);
                 if (unoAccessible != null) {
                     // FIXME: have to handle non transient objects here ..
                     descendant = new ListItem(unoAccessible);
@@ -125,14 +125,14 @@ public class List extends DescendantManager implements javax.accessibility.Acces
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
