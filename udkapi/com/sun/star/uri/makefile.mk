@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 13:18:49 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:37:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,12 +68,16 @@ PACKAGE := com$/sun$/star$/uri
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 IDLFILES = \
+    ExternalUriReferenceTranslator.idl \
     RelativeUriExcessParentSegments.idl \
     UriReferenceFactory.idl \
     UriSchemeParser_vndDOTsunDOTstarDOTscript.idl \
+    VndSunStarPkgUrlReferenceFactory.idl \
+    XExternalUriReferenceTranslator.idl \
     XUriReference.idl \
     XUriReferenceFactory.idl \
     XUriSchemeParser.idl \
+    XVndSunStarPkgUrlReferenceFactory.idl \
     XVndSunStarScriptUrl.idl \
     XVndSunStarScriptUrlReference.idl
 
