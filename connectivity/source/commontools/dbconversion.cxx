@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:46:15 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const ::rtl::OUString& rString,
                                 sal_Int32 nKey,
                                 sal_Int16 nFieldType,
-                                sal_Int16 nKeyType) throw(starlang::IllegalArgumentException)
+                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
     double fValue = 0;
     if (rString.len())
@@ -176,9 +176,9 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     {
         switch (nFieldType)
         {
-            case starsdbc::DataType::CHAR:
-            case starsdbc::DataType::VARCHAR:
-            case starsdbc::DataType::LONGVARCHAR:
+            case ::com::sun::star::sdbc::DataType::CHAR:
+            case ::com::sun::star::sdbc::DataType::VARCHAR:
+            case ::com::sun::star::sdbc::DataType::LONGVARCHAR:
                 xVariant->updateString(rString);
                 break;
             default:
@@ -191,7 +191,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Date& rNullDate,
                                 const double& rValue,
-                                sal_Int16 nKeyType) throw(starlang::IllegalArgumentException)
+                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
     switch (nKeyType & ~NumberFormat::DEFINED)
     {
@@ -228,9 +228,9 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     }
 }
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getValue(const Reference<starbeans::XPropertySet>& _xColumn,
+::rtl::OUString DBTypeConversion::getValue(const Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
-                                           const starlang::Locale& _rLocale,
+                                           const ::com::sun::star::lang::Locale& _rLocale,
                                            const Date& _rNullDate)
 {
     sal_Int32 nKey;
@@ -632,6 +632,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/19 11:46:15  oj
+ *  remove tools from dbtools
+ *
  *  Revision 1.1  2000/10/05 08:50:32  fs
  *  moved the files from unotools to here
  *
