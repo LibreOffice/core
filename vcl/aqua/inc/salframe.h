@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-15 23:00:43 $
+ *  last change: $Author: pluby $ $Date: 2000-11-17 03:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@
 #include <VCLWindow.h>
 #endif
 
-#if defined __cplusplus || SUPD >= 612
-
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
@@ -116,6 +114,5 @@ struct SalFrameData
     BOOL                    mbCompositionMode;      // TRUE: Wir befinden uns im Composition-Modus
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
 };
-#endif // __cplusplus || SUPD >= 612
 
 #endif // _SV_SALFRAME_H
