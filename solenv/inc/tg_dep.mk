@@ -93,13 +93,21 @@ ALLDPC: \
 .ENDIF			# "$(nodep)"!=""
 .ELSE		# irgendwas abhaengiges
 
+
 ALLDPC:
     @echo ------------------------------
     @echo No Dependencies
+.IF "$(GUI)"=="UNX"
     @echo "#" > $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
     @echo "#" > $(MISC)$/$(TARGET).dpw
 .ENDIF
+.ELSE			# "$(GUI)"=="UNX"
+    @echo # > $(MISC)$/$(TARGET).dpc
+.IF "$(GROUP)"=="WRITER"
+    @echo # > $(MISC)$/$(TARGET).dpw
+.ENDIF
+.ENDIF			# "$(GUI)"=="UNX"
 
 ALLDEP:
     @echo ------------------------------
