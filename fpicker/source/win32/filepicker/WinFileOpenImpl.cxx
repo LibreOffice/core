@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:15 $
+ *  last change: $Author: tra $ $Date: 2001-07-02 08:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter(  ) throw(RuntimeException)
 //=================================================================================================================
 
 void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     if ( m_bInExecuteMode )
     {
@@ -441,32 +441,31 @@ void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aContr
         // the filter listbox can be manipulated via this
         // method the caller should use XFilterManager
         if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
-            throw IllegalArgumentException(
-                OUString::createFromAscii( "invalid control id" ),
-                static_cast< XFilePicker* >( m_FilePicker ),
-                1 );
+        {
+            OSL_ENSURE( sal_False, "invalid control id" );
+            return;
+        }
 
         CTRL_CLASS aCtrlClass = GetCtrlClass( hwndCtrl );
         if ( UNKNOWN == aCtrlClass )
-            throw IllegalArgumentException(
-                OUString::createFromAscii( "unsupported control class" ),
-                static_cast< XFilePicker* >( m_FilePicker ),
-                1 );
+        {
+            OSL_ENSURE( sal_False, "unsupported control class" );
+            return;
+        }
 
         CTRL_SETVALUE_FUNCTION_T lpfnSetValue =
             GetCtrlSetValueFunction( aCtrlClass, aControlAction );
 
         if ( !lpfnSetValue )
-            throw IllegalArgumentException(
-                OUString::createFromAscii( "unsupported control action" ),
-                static_cast< XFilePicker* >( m_FilePicker ),
-                2 );
+        {
+            OSL_ENSURE( sal_False, "unsupported control action" );
+            return;
+        }
 
         // the function that we call should throw an IllegalArgumentException if
         // the given value is invalid or empty, that's why we provide a Reference
         // to an XInterface and a argument position
         lpfnSetValue( hwndCtrl, aValue, static_cast< XFilePicker* >( m_FilePicker ), 3 );
-
     }
     else
     {
@@ -483,7 +482,7 @@ void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aContr
 //-----------------------------------------------------------------------------------------
 
 Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     Any aAny;
 
@@ -494,26 +493,26 @@ Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aContro
         // the filter listbox can be manipulated via this
         // method the caller should use XFilterManager
         if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
-            throw IllegalArgumentException(
-                OUString::createFromAscii( "invalid control id" ),
-                static_cast< XFilePicker* >( m_FilePicker ),
-                1 );
+        {
+            OSL_ENSURE( sal_False, "invalid control id" );
+            return aAny;
+        }
 
         CTRL_CLASS aCtrlClass = GetCtrlClass( hwndCtrl );
         if ( UNKNOWN == aCtrlClass )
-            throw IllegalArgumentException(
-                OUString::createFromAscii( "unsupported control class" ),
-                static_cast< XFilePicker* >( m_FilePicker ),
-                1 );
+        {
+            OSL_ENSURE( sal_False, "unsupported control class" );
+            return aAny;
+        }
 
         CTRL_GETVALUE_FUNCTION_T lpfnGetValue =
             GetCtrlGetValueFunction( aCtrlClass, aControlAction );
 
         if ( !lpfnGetValue )
-            throw IllegalArgumentException(
-                OUString::createFromAscii( "unsupported control action" ),
-                static_cast< XFilePicker* >( m_FilePicker ),
-                2 );
+        {
+            OSL_ENSURE( sal_False, "unsupported control action" );
+            return aAny;
+        }
 
         aAny = lpfnGetValue( hwndCtrl );
     }
@@ -541,15 +540,15 @@ Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aContro
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEnable )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( ControlID );
 
     if ( !hwndCtrl )
-        throw IllegalArgumentException(
-            OUString::createFromAscii( "Invalid element id"),
-            static_cast< XFilePicker* >( m_FilePicker ),
-            1 );
+    {
+        OSL_ENSURE( sal_False, "invalid element id");
+        return;
+    }
 
     EnableWindow( hwndCtrl, bEnable );
 }
@@ -559,15 +558,15 @@ void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEn
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     if ( !hwndCtrl )
-        throw IllegalArgumentException(
-            OUString::createFromAscii( "Invalid element id"),
-            static_cast< XFilePicker* >( m_FilePicker ),
-            1 );
+    {
+        OSL_ENSURE( sal_False, "invalid element id");
+        return;
+    }
 
     // somewhat risky because we don't know if OUString
     // has a terminating '\0'
@@ -579,15 +578,15 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUS
 //-----------------------------------------------------------------------------------------
 
 OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
-        throw (IllegalArgumentException, RuntimeException)
+        throw (RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     if ( !hwndCtrl )
-        throw IllegalArgumentException(
-            OUString::createFromAscii( "Invalid element id"),
-            static_cast< XFilePicker* >( m_FilePicker ),
-            1 );
+    {
+        OSL_ENSURE( sal_False, "invalid element id");
+        return OUString( );
+    }
 
     sal_Unicode aLabel[MAX_LABEL];
     int nRet = GetWindowTextW( hwndCtrl, aLabel, MAX_LABEL );
