@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-05 12:23:16 $
+ *  last change: $Author: er $ $Date: 2002-11-06 13:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2959,6 +2959,7 @@ ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRo
         pFormatter->FillKeywordTable( *pKeywordTable, LANGUAGE_ENGLISH_US );
         // remap codes unknown to Excel
         (*pKeywordTable)[NF_KEY_NN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
+        (*pKeywordTable)[NF_KEY_NNN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
         // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
         (*pKeywordTable)[NF_KEY_NNNN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
     }
