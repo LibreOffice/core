@@ -2,8 +2,8 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.4 $
- *  last change: $Author: vg $ $Date: 2003-05-22 08:36:12 $
+ *  $Revision: 1.5 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,15 @@ using namespace ::com::sun::star::lang  ;
 #define PROPERTYNAME_IMAGEBIG                           OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBig" ))
 #define PROPERTYNAME_IMAGESMALLHC                       OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHC" ))
 #define PROPERTYNAME_IMAGEBIGHC                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHC" ))
+#define PROPERTYNAME_IMAGESMALL_URL                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallURL" ))
+#define PROPERTYNAME_IMAGEBIG_URL                       OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigURL" ))
+#define PROPERTYNAME_IMAGESMALLHC_URL                   OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHCURL" ))
+#define PROPERTYNAME_IMAGEBIGHC_URL                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHCURL" ))
 
 #define IMAGES_NODENAME                                 OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefinedImages" ))
 #define PRIVATE_IMAGE_URL                               OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
 
+// The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_MENUITEM                          6
 #define OFFSET_MENUITEM_URL                             0
 #define OFFSET_MENUITEM_TITLE                           1
@@ -159,12 +164,14 @@ using namespace ::com::sun::star::lang  ;
 #define OFFSET_MENUITEM_SUBMENU                         4
 #define OFFSET_MENUITEM_CONTEXT                         5
 
+// The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_POPUPMENU                         4
 #define OFFSET_POPUPMENU_TITLE                          0
 #define OFFSET_POPUPMENU_CONTEXT                        1
 #define OFFSET_POPUPMENU_SUBMENU                        2
 #define OFFSET_POPUPMENU_URL                            3   // Used for property set
 
+// The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_TOOLBARITEM                       5
 #define OFFSET_TOOLBARITEM_URL                          0
 #define OFFSET_TOOLBARITEM_TITLE                        1
@@ -172,13 +179,22 @@ using namespace ::com::sun::star::lang  ;
 #define OFFSET_TOOLBARITEM_TARGET                       3
 #define OFFSET_TOOLBARITEM_CONTEXT                      4
 
-#define PROPERTYCOUNT_IMAGES                            4
+// The following order is mandatory. Please add properties at the end!
+#define PROPERTYCOUNT_IMAGES                            8
+#define PROPERTYCOUNT_EMBEDDED_IMAGES                   4
 #define OFFSET_IMAGES_SMALL                             0
 #define OFFSET_IMAGES_BIG                               1
 #define OFFSET_IMAGES_SMALLHC                           2
 #define OFFSET_IMAGES_BIGHC                             3
+#define OFFSET_IMAGES_SMALL_URL                         4
+#define OFFSET_IMAGES_BIG_URL                           5
+#define OFFSET_IMAGES_SMALLHC_URL                       6
+#define OFFSET_IMAGES_BIGHC_URL                         7
 
-#define EXPAND_PROTOCOL                                 "vnd.sun.star.expand"
+#define EXPAND_PROTOCOL                                 "vnd.sun.star.expand:"
+
+const Size  aImageSizeSmall( 16, 16 );
+const Size  aImageSizeBig( 26, 26 );
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -288,6 +304,12 @@ class AddonsOptions_Impl : public ConfigItem
 
         typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
 
+        enum ImageSize
+        {
+            IMGSIZE_SMALL,
+            IMGSIZE_BIG
+        };
+
         /*-****************************************************************************************************//**
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return the current list of key names! We need it to get needed values from our
@@ -314,7 +336,9 @@ class AddonsOptions_Impl : public ConfigItem
         sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
+        Image                ReadImageFromURL( ImageSize nImageSize, const OUString& aURL );
         sal_Bool             HasAssociatedImages( const OUString& aURL );
+        void                 SubstituteVariables( OUString& aURL );
 
         sal_Bool             ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
         void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
@@ -378,6 +402,10 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropImagesNames[ OFFSET_IMAGES_BIG               ] = PROPERTYNAME_IMAGEBIG;
     m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC           ] = PROPERTYNAME_IMAGESMALLHC;
     m_aPropImagesNames[ OFFSET_IMAGES_BIGHC             ] = PROPERTYNAME_IMAGEBIGHC;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL         ] = PROPERTYNAME_IMAGESMALL_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL           ] = PROPERTYNAME_IMAGEBIG_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL       ] = PROPERTYNAME_IMAGESMALLHC_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL         ] = PROPERTYNAME_IMAGEBIGHC_URL;
 
     Reference< XComponentContext > xContext;
     Reference< com::sun::star::beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
@@ -990,10 +1018,56 @@ sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
+void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
+{
+    if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
+        m_xMacroExpander.is() )
+    {
+        // cut protocol
+        OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+        // decode uric class chars
+        macro = Uri::decode(
+            macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        // expand macro string
+        aURL = m_xMacroExpander->expandMacros( macro );
+    }
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+Image AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString& aImageURL )
+{
+    const Color aTransparentColor( COL_LIGHTMAGENTA );
+
+    Image aImage;
+
+    SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
+    if ( pStream && ( pStream->GetErrorCode() == 0 ))
+    {
+        Bitmap aBitmap;
+
+        aBitmap.Read( *pStream );
+
+        const Size aSize = ( nImageSize == IMGSIZE_SMALL ) ? aImageSizeSmall : aImageSizeBig; // Sizes used for menu/toolbox images
+        if ( aBitmap.GetSizePixel() != aSize )
+            aBitmap.Scale( aSize, BMP_SCALE_INTERPOLATE );
+
+        aImage = Image( aBitmap, aTransparentColor );
+    }
+
+    if ( pStream )
+        delete pStream;
+
+    return aImage;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
 void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
 {
     const int   MAX_NUM_IMAGES = 4;
-    const Color aTransparentColor( COL_LIGHTMAGENTA );
     const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26", "_16h", "_26h" };
     const char* pBmpExt = ".bmp";
 
@@ -1005,37 +1079,19 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     Bitmap      aBitmap;
     OUString    aImageURL( aImageId );
 
-    if (( aImageURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL ":" )) == 0 ) &&
-        m_xMacroExpander.is() )
-    {
-        // cut protocol
-        OUString macro( aImageURL.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
-        // decode uric class chars
-        macro = Uri::decode(
-            macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        aImageURL = m_xMacroExpander->expandMacros( macro );
-    }
-    else return;
+    SubstituteVariables( aImageURL );
 
     // Loop to create the four possible image names and try to read the bitmap files
     for ( int i = 0; i < MAX_NUM_IMAGES; i++ )
     {
-        OUStringBuffer aFileNameBuf( aImageURL );
-        aFileNameBuf.appendAscii( aExtArray[i] );
-        aFileNameBuf.appendAscii( pBmpExt );
+        OUStringBuffer aFileURL( aImageURL );
+        aFileURL.appendAscii( aExtArray[i] );
+        aFileURL.appendAscii( pBmpExt );
 
-        OUString aFileName( aFileNameBuf.makeStringAndClear() );
-        SvStream* pStream = UcbStreamHelper::CreateStream( aFileName, STREAM_STD_READ );
-        if ( pStream && ( pStream->GetErrorCode() == 0 ))
+        Image aImage = ReadImageFromURL( ((i==0)||(i==2)) ? IMGSIZE_SMALL : IMGSIZE_BIG, aFileURL.makeStringAndClear() );
+        if ( !!aImage )
         {
-            aBitmap.Read( *pStream );
-
-            const Size aSize = ((i == 0) || (i == 2))  ? Size( 16, 16 ) : Size( 26, 26 ); // Sizes used for menu/toolbox images
-            if ( aBitmap.GetSizePixel() != aSize )
-                aBitmap.Scale( aSize, BMP_SCALE_INTERPOLATE );
-
-            Image aImage( aBitmap, aTransparentColor );
+            bImageFound = true;
             switch ( i )
             {
                 case 0:
@@ -1051,11 +1107,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
                     aImageEntry.aImageBigHC     = aImage;
                     break;
             }
-            bImageFound = true;
         }
-
-        if ( pStream )
-            delete pStream;
     }
 
     if ( bImageFound )
@@ -1070,30 +1122,65 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
     Sequence< OUString > aImageDataNodeNames = GetPropertyNamesImages( aImagesNodeName );
     Sequence< Any >      aPropertyData;
     Sequence< sal_Int8 > aImageDataSeq;
+    OUString             aImageURL;
 
     Image       aImage;
     ImageEntry* pEntry = NULL;
 
+    // It is possible to use both forms (embedded image data and URLs to external bitmap files) at the
+    // same time. Embedded image data has a higher priority.
     aPropertyData = GetProperties( aImageDataNodeNames );
     for ( int i = 0; i < PROPERTYCOUNT_IMAGES; i++ )
     {
-        if (( aPropertyData[i] >>= aImageDataSeq ) &&
-            ( CreateImageFromSequence( aImage,
-                                      (( i == OFFSET_IMAGES_BIG ) ||
-                                       ( i == OFFSET_IMAGES_BIGHC )),
-                                      aImageDataSeq )) )
+        if ( i < PROPERTYCOUNT_EMBEDDED_IMAGES )
         {
-            if ( !pEntry )
-                pEntry = new ImageEntry;
+            // Extract image data from the embedded hex binary sequence
+            if (( aPropertyData[i] >>= aImageDataSeq ) &&
+                aImageDataSeq.getLength() > 0 &&
+                ( CreateImageFromSequence( aImage,
+                                        (( i == OFFSET_IMAGES_BIG ) ||
+                                        ( i == OFFSET_IMAGES_BIGHC )),
+                                        aImageDataSeq )) )
+            {
+                if ( !pEntry )
+                    pEntry = new ImageEntry;
 
-            if ( i == OFFSET_IMAGES_SMALL )
-                pEntry->aImageSmall = aImage;
-            else if ( i == OFFSET_IMAGES_BIG )
-                pEntry->aImageBig = aImage;
-            else if ( i == OFFSET_IMAGES_SMALLHC )
-                pEntry->aImageSmallHC = aImage;
-            else
-                pEntry->aImageBigHC = aImage;
+                if ( i == OFFSET_IMAGES_SMALL )
+                    pEntry->aImageSmall = aImage;
+                else if ( i == OFFSET_IMAGES_BIG )
+                    pEntry->aImageBig = aImage;
+                else if ( i == OFFSET_IMAGES_SMALLHC )
+                    pEntry->aImageSmallHC = aImage;
+                else
+                    pEntry->aImageBigHC = aImage;
+            }
+        }
+        else
+        {
+            // Retrieve image data from a external bitmap file. Make sure that embedded image data
+            // has a higher priority.
+            aPropertyData[i] >>= aImageURL;
+
+            if ( aImageURL.getLength() > 0 )
+            {
+                SubstituteVariables( aImageURL );
+                aImage = ReadImageFromURL( ((i==OFFSET_IMAGES_SMALL_URL)||(i==OFFSET_IMAGES_SMALLHC_URL)) ? IMGSIZE_SMALL : IMGSIZE_BIG,
+                                            aImageURL );
+                if ( !!aImage )
+                {
+                    if ( !pEntry )
+                        pEntry = new ImageEntry;
+
+                    if ( i == OFFSET_IMAGES_SMALL_URL && !pEntry->aImageSmall )
+                        pEntry->aImageSmall = aImage;
+                    else if ( i == OFFSET_IMAGES_BIG_URL && !pEntry->aImageBig )
+                        pEntry->aImageBig = aImage;
+                    else if ( i == OFFSET_IMAGES_SMALLHC_URL && !pEntry->aImageSmallHC )
+                        pEntry->aImageSmallHC = aImage;
+                    else if ( !pEntry->aImageBigHC )
+                        pEntry->aImageBigHC = aImage;
+                }
+            }
         }
     }
 
@@ -1107,7 +1194,7 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
 {
     sal_Bool    bResult = sal_False;
     Color       aTransparentColor( COL_LIGHTMAGENTA );
-    Size        aSize = bBig ? Size( 26, 26 ) : Size( 16, 16 ); // Sizes used for menu/toolbox images
+    Size        aSize = bBig ? aImageSizeBig : aImageSizeSmall; // Sizes used for menu/toolbox images
 
     if ( rBitmapDataSeq.getLength() > 0 )
     {
@@ -1189,6 +1276,10 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
     lResult[1] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG        ] );
     lResult[2] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC    ] );
     lResult[3] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC      ] );
+    lResult[4] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL  ] );
+    lResult[5] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL    ] );
+    lResult[6] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL] );
+    lResult[7] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL  ] );
 
     return lResult;
 }
