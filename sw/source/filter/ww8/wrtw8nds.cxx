@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:49:02 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,7 +1788,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 0 != ( pRule = pNd->GetNumRule() )) ||
                 ( 0 != ( pNum = pNd->GetOutlineNum() ) &&
                 0 != ( pRule = rWrt.pDoc->GetOutlineNumRule() ) ) ) &&
-                pNum->GetLevel() < NO_NUM )
+                pNum->IsShowNum() )
         {
             BYTE nLvl = GetRealLevel( pNum->GetLevel() );
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
