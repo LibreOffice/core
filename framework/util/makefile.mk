@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 12:57:58 $
+#   last change: $Author: vg $ $Date: 2005-03-23 14:13:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,8 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
                 $(SLO)$/acceleratorinfo.obj        	            \
                 $(SLO)$/sfxhelperfunctions.obj                  \
                 $(SLO)$/uielementwrapperbase.obj                \
-                $(SLO)$/uiconfigelementwrapperbase.obj
+                $(SLO)$/uiconfigelementwrapperbase.obj          \
+                $(SLO)$/configimporter.obj
 
 # --- import classes library ---------------------------------------------------
 
