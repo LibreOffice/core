@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-07-26 11:58:00 $
+#   last change: $Author: dbo $ $Date: 2001-08-01 11:20:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,8 @@ CFLAGS += -DCPPU_ASSERTIONS
 # other stuff
 
 .IF "$(cppu_no_leak)" == ""
+.IF "$(bndchk)" == ""
 CFLAGS += -DCPPU_LEAK_STATIC_DATA
+.ENDIF
 .ENDIF
 

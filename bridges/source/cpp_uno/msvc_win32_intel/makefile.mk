@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
+#   last change: $Author: dbo $ $Date: 2001-08-01 11:23:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,9 @@ CFLAGS += /Ob0
 .ENDIF
 
 .IF "$(cppu_no_leak)" == ""
+.IF "$(bndchk)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
+.ENDIF
 .ENDIF
 
 SLOFILES= \
