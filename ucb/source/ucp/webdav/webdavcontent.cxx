@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
+ *  last change: $Author: kso $ $Date: 2002-10-21 10:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2528,9 +2528,6 @@ const rtl::OUString Content::getBaseURI()
                                         "Content-Location" ) ) ) >>= aLocation;
         if ( aLocation.getLength() )
         {
-#if 0
-    // @@@ rtl::Uri::convertRelToAbs not yet available, will be after release
-    //     of 6.1 EA2.
             try
             {
                 // Do not use m_xIdentifier->getContentIdentifier() because it
@@ -2542,7 +2539,6 @@ const rtl::OUString Content::getBaseURI()
             catch ( rtl::MalformedUriException const & )
             {
             }
-#endif
         }
     }
 
