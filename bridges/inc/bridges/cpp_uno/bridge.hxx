@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:44:41 $
+ *  last change: $Author: dbo $ $Date: 2000-12-22 10:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
     ::typelib_typedescription_acquire( (typelib_TypeDescription *)pTypeDescr );
     if (! ((typelib_TypeDescription *)pTypeDescr)->bComplete)
         ::typelib_typedescription_complete( (typelib_TypeDescription **)&pTypeDescr );
+    OSL_ENSURE( ((typelib_TypeDescription *)pTypeDescr)->bComplete, "### type is incomplete!" );
     (*pBridge->pUnoEnv->registerInterface)(
         pBridge->pUnoEnv, reinterpret_cast< void ** >( &pUnoI ), oid.pData, pTypeDescr );
     (*pUnoI->acquire)( pUnoI );
@@ -300,6 +301,7 @@ inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
     ::typelib_typedescription_acquire( (typelib_TypeDescription *)pTypeDescr );
     if (! ((typelib_TypeDescription *)pTypeDescr)->bComplete)
         ::typelib_typedescription_complete( (typelib_TypeDescription **)&pTypeDescr );
+    OSL_ENSURE( ((typelib_TypeDescription *)pTypeDescr)->bComplete, "### type is incomplete!" );
     (*pBridge->pCppEnv->registerInterface)(
         pBridge->pCppEnv, reinterpret_cast< void ** >( &pCppI ), oid.pData, pTypeDescr );
     pCppI->acquire();
