@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jbu $ $Date: 2000-10-06 16:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,23 +189,14 @@ void OComponentHelper::dispose()
 void OComponentHelper::addEventListener(const Reference<XEventListener > & rxListener)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
-    if( !rBHelper.bInDispose && !rBHelper.bDisposed )
-        // only add listeners if you are not disposed
-        rBHelper.aLC.addInterface( ::getCppuType( (Reference< XEventListener > *)0 ), rxListener );
+    rBHelper.addListener( ::getCppuType( &rxListener ) , rxListener );
 }
 
 // XComponent
 void OComponentHelper::removeEventListener(const Reference<XEventListener > & rxListener)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
-    if( !rBHelper.bInDispose && !rBHelper.bDisposed )
-        rBHelper.aLC.removeInterface( ::getCppuType( (Reference< XEventListener > *)0 ), rxListener );
+    rBHelper.removeListener( ::getCppuType( &rxListener ) , rxListener );
 }
 
 }

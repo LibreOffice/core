@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jbu $ $Date: 2000-10-06 16:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,35 +726,14 @@ void OPropertySetHelper::addPropertiesChangeListener (
         const Reference < XPropertiesChangeListener > & rListener
                                                       )
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not addPropertyChangeListener in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
-    if( !rBHelper.bInDispose && !rBHelper.bDisposed )
-    {
-        // Listener wird zu allen Properties angemeldet, besser ist
-        // sie ueber die Namen anzumelden
-        rBHelper.aLC.addInterface(
-                        getPropertiesTypeIdentifier(  ),
-                        rListener
-                                  );
-    }
+    rBHelper.addListener( getCppuType(&rListener) , rListener );
 }
 
 // XMultiPropertySet
 void OPropertySetHelper::removePropertiesChangeListener
-    ( const Reference < XPropertiesChangeListener > & rxListener )
+    ( const Reference < XPropertiesChangeListener > & rListener )
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
-    // all listeners are automaticly released in a dispose call
-    if( !rBHelper.bInDispose && !rBHelper.bDisposed )
-    {
-        rBHelper.aLC.removeInterface(
-                        getPropertiesTypeIdentifier(  ),
-                        rxListener
-                                    );
-    }
+    rBHelper.removeListener( getCppuType(&rListener) , rListener );
 }
 
 // XMultiPropertySet
