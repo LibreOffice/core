@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.15 $
+#*  $Revision: 1.16 $
 #*
-#*  last change: $Author: er $ $Date: 2002-10-18 21:29:50 $
+#*  last change: $Author: er $ $Date: 2002-11-17 21:23:13 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -133,6 +133,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_es_SV.cxx  \
     $(MISC)$/localedata_es_UY.cxx  \
     $(MISC)$/localedata_es_VE.cxx  \
+    $(MISC)$/localedata_et_EE.cxx  \
     $(MISC)$/localedata_fi_FI.cxx  \
     $(MISC)$/localedata_fr_BE.cxx  \
     $(MISC)$/localedata_fr_CA.cxx  \
@@ -273,13 +274,11 @@ SHL3OBJS=	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_tr_TR.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
-    $(SLO)$/localedata_de_LI.obj
+    $(SLO)$/localedata_de_LI.obj	\
+    $(SLO)$/localedata_et_EE.obj
 
 LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
 LIB3OBJFILES=$(SHL3OBJS)
-
-# Missing
-#	$(SLO)$/localedata_et_EE.obj
 
 # Other Locales
 SHL4TARGET=localedata_others
