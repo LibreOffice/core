@@ -5,11 +5,11 @@
 ..\%__SRC%\bin\*.lst %_DEST%\bin%_EXT%\*.lst
 ..\%__SRC%\bin\thencode* %_DEST%\bin%_EXT%
 
-..\%__SRC%\bin\lth* %_DEST%\bin%_EXT%\lth*
-..\%__SRC%\lib\ilth* %_DEST%\lib%_EXT%\ilth*
-..\%__SRC%\lib\liblth.a %_DEST%\lib%_EXT%\liblth.a
-..\%__SRC%\lib\liblth*.dylib %_DEST%\lib%_EXT%\liblth*.dylib
-..\%__SRC%\lib\liblth*.so %_DEST%\lib%_EXT%\liblth*.so
+..\%__SRC%\bin\lnth* %_DEST%\bin%_EXT%\lnth*
+..\%__SRC%\lib\ilnth* %_DEST%\lib%_EXT%\ilnth*
+..\%__SRC%\lib\liblnth.a %_DEST%\lib%_EXT%\liblnth.a
+..\%__SRC%\lib\liblnth*.dylib %_DEST%\lib%_EXT%\liblnth*.dylib
+..\%__SRC%\lib\liblnth*.so %_DEST%\lib%_EXT%\liblnth*.so
 
 ..\%__SRC%\bin\spell* %_DEST%\bin%_EXT%\spell*
 ..\%__SRC%\lib\ilspell* %_DEST%\lib%_EXT%\ilspell*
