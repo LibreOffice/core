@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 12:54:06 $
+ *  last change: $Author: er $ $Date: 2001-08-27 15:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@ public:
 
 
     // convenience methods
+
+    /// get epoch start (should be 01Jan1970)
+    inline  const DateTime&     getEpochStart() const
+                                    { return aEpochStart; }
 
     /// set a gregorian DateTime
     inline  void                setGregorianDateTime( const DateTime& rDateTime )
