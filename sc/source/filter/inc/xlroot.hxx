@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:49:35 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ protected:
         @param rPos  The cell address to check.
         @param rMaxPos  Highest valid cell address.
         @return  true = cell address is valid. */
-    bool                        CheckCellAddress( const ScAddress& rPos, const ScAddress rMaxPos ) const;
+    bool                        CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const;
     /** Checks and eventually crops the cell range to passed dimensions.
         @descr  Sets the internal flag that produces a warning box, if the cell range
         contains invalid cells. If the range is partly valid, this function sets
@@ -244,7 +244,7 @@ protected:
         @param rRange  (In/out) The cell range to check.
         @param rMaxPos  Highest valid cell address.
         @return  true = rRange contains a valid cell range (original or cropped). */
-    bool                        CheckCellRange( ScRange& rRange, const ScAddress rMaxPos ) const;
+    bool                        CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const;
     /** Checks and eventually crops the cell ranges to passed dimensions.
         @descr  Sets the internal flag that produces a warning box, if at least one
         cell range contains invalid cells. If the range is partly valid, this function
