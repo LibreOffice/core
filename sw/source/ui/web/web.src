@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:42:27 $
+ *  last change: $Author: os $ $Date: 2001-02-09 15:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,11 +335,6 @@ ToolBox RID_WEBTOOLS_TOOLBOX
         {
             Identifier = SID_SEARCH_DLG ;
             HelpID = SID_SEARCH_DLG ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HYPERLINK_INSERT ;
-            HelpID = SID_HYPERLINK_INSERT ;
         };
         ToolBoxItem
         {
