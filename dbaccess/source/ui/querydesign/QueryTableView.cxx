@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,8 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     ::std::vector< OTableWindowData*>::iterator aWinIter = pWindowData->begin();
     for(;aWinIter != pWindowData->end();++aWinIter)
     {
-        pNewTabWinData = static_cast<OQueryTableWindowData*>(*aWinIter);
-        if(pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == strTableName)
+        pNewTabWinData = PTR_CAST(OQueryTableWindowData, *aWinIter);
+        if (pNewTabWinData && pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == strTableName)
             break;
     }
     if(bAppend = (aWinIter == pWindowData->end()))
