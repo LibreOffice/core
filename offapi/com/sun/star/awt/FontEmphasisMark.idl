@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontEmphasisMark.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 /** These values are used to specify the kind of emphasis mark.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants FontEmphasisMark
 {
@@ -107,16 +107,19 @@ constants FontEmphasisMark
 
     //-------------------------------------------------------------------------
 
-    /** specifies that the emphasis mark should be positioned above the characters
+    /** specifies that the emphasis mark should be positioned above the
+        characters.
      */
     const short ABOVE = 0x1000;
 
     //-------------------------------------------------------------------------
 
-    /** specifies that the emphasis mark should be positioned below the characters
+    /** specifies that the emphasis mark should be positioned below the
+        characters.
      */
     const short BELOW = 0x2000;
- };
+
+};
 
 //=============================================================================
 
