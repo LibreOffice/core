@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 15:56:26 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ sal_Bool SAL_CALL AccessibleComponentBase::contains (
 awt::Point SAL_CALL AccessibleComponentBase::getLocation (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Point aLocation;
-    return aLocation;
+    awt::Rectangle aBBox (getBounds());
+    return awt::Point (aBBox.X, aBBox.Y);
 }
 
 
@@ -160,8 +160,8 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
 ::com::sun::star::awt::Size SAL_CALL AccessibleComponentBase::getSize (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Size aSize;
-    return aSize;
+    awt::Rectangle aBBox (getBounds());
+    return awt::Size (aBBox.Width, aBBox.Height);
 }
 
 
