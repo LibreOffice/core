@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:08:34 $
+ *  last change: $Author: kz $ $Date: 2004-09-07 10:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,7 @@ private:
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
     void        EndListening( const ScAddress& rAddress, SvtListener* pListener );
     void        StartAllListeners();
-    void        StartNameListeners( BOOL bOnlyRelNames );
+    void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE
     void        SetRelNameDirty();
 
     SCSIZE      FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2,
