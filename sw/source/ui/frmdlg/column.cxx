@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:47:23 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,7 +970,10 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
     nCols = (USHORT)aCLNrEdt.GetValue();
     //#107890# the handler is also called from LoseFocus()
     //then no change has been made and thus no action should be taken
-    if(pColMgr->GetCount() != nCols)
+    // #i17816# changing the displayed types within the ValueSet
+    //from two columns to two columns with different settings doesn't invalidate the
+    // example windows in ::ColModify()
+    if(!pNF ||(pColMgr->GetCount() != nCols))
     {
         if(pNF)
             aDefaultVS.SetNoSelection();
