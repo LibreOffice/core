@@ -242,28 +242,42 @@ class MyTableModel extends AbstractTableModel {
 
     MyTableModel (Properties properties, String [] validVersions) {
         data = new ArrayList();
-        //System.out.println(properties);
-
+        boolean isWindows =
+            (System.getProperty("os.name").indexOf("Windows") != -1);
         int len = validVersions.length;
-        for (int i = 0; i < len; i++) {
-            String key = validVersions[i];
+        for (Enumeration e = properties.propertyNames(); e.hasMoreElements() ;) {
+            String key = (String)e.nextElement();
             String path = null;
 
-            if ((path = properties.getProperty(key)) != null) {
-                ArrayList row = new ArrayList();
-                row.add(0, new Boolean(false));
-
-                row.add(1, key);
-                if (key.length() > ((String)longValues[1]).length()) {
-                    longValues[1] = key;
+            if ( !( key.startsWith("#") ) &&
+                  ( path = properties.getProperty(key)) != null) {
+                String pkgChkPath = path + File.separator + "program" + File.separator;
+                if ( isWindows )
+                {
+                    pkgChkPath += "pkgchk.exe";
                 }
-
-                row.add(2, path);
-                if (path.length() > ((String)longValues[2]).length()) {
-                    longValues[2] = path;
+                else
+                {
+                    pkgChkPath += "pkgchk";
                 }
+                File pkgChk = new File( pkgChkPath );
+                if ( pkgChk.exists() )
+                {
+                    ArrayList row = new ArrayList();
+                    row.add(0, new Boolean(false));
+
+                    row.add(1, key);
+                    if (key.length() > ((String)longValues[1]).length()) {
+                        longValues[1] = key;
+                    }
+
+                    row.add(2, path);
+                    if (path.length() > ((String)longValues[2]).length()) {
+                        longValues[2] = path;
+                    }
 
                 data.add(row);
+                }
             }
         }
     }// MyTableModel
