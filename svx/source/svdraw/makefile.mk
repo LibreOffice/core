@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: thb $ $Date: 2002-11-08 16:20:43 $
+#   last change: $Author: rt $ $Date: 2003-04-24 14:48:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,7 +139,8 @@ SLOFILES=\
          $(SLO)$/svdview.obj         \
          $(SLO)$/svdviter.obj        \
          $(SLO)$/svdvmark.obj        \
-         $(SLO)$/svdxcgv.obj
+         $(SLO)$/svdxcgv.obj		 \
+         $(SLO)$/clonelist.obj
 
 SVXLIGHTOBJFILES=\
          $(OBJ)$/svdoutlinercache.obj \
