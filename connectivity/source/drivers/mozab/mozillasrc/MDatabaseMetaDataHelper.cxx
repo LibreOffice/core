@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:31:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,28 @@
 #ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
 #include "MNSMozabProxy.hxx"
 #endif
+#ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
+#include <MNSDeclares.hxx>
+#endif
 static ::osl::Mutex m_aMetaMutex;
 
+#include <osl/diagnose.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <unotools/processfactory.hxx>
+#ifndef _COM_SUN_STAR_MOZILLA_XMOZILLABOOTSTRAP_HPP_
+#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#endif
 
-#if OSL_DEBUG_LEVEL > 1
+
+#if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
@@ -110,10 +128,11 @@ static NS_DEFINE_CID(kAddrBookSessionCID, NS_ADDRBOOKSESSION_CID);
 
 using namespace connectivity::mozab;
 using namespace connectivity;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
+using namespace com::sun::star::mozilla;
 
 namespace connectivity
 {
@@ -123,14 +142,14 @@ namespace connectivity
     }
 }
 
+extern sal_Bool MNS_Init(sal_Bool& aProfileExists,sal_Int32 nProduct);
+
 // -------------------------------------------------------------------------
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     : m_bProfileExists(sal_False)
 {
     OSL_TRACE( "IN MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()\n" );
-    sal_Bool rv = MNS_Init(m_bProfileExists);
 
-    OSL_TRACE( "\tMAB_NS_Init returned %s\n", rv?"True":"False" );
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()\n" );
 
 }
@@ -140,7 +159,17 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
     m_aTableNames.clear();
     m_aTableTypes.clear();
 
-    sal_Bool rv = MNS_Term();
+    if (m_bProfileExists)
+    {
+        Reference<XMozillaBootstrap> xMozillaBootstrap;
+        Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
+        OSL_ENSURE( xFactory.is(), "can't get service factory" );
+
+        Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+        OSL_ENSURE( xInstance.is(), "failed to create instance" );
+        xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
+        m_bProfileExists = xMozillaBootstrap->shutdownProfile() > 0;
+    }
 
     OSL_TRACE( "IN/OUT MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()\n" );
 }
@@ -212,10 +241,26 @@ static nsresult insertPABDescription()
     }
     return rv;
 }
+//
+// nsAbDirectoryDataSource
+//
+#define NS_RDF_CONTRACTID                           "@mozilla.org/rdf"
+#define NS_RDF_DATASOURCE_CONTRACTID                NS_RDF_CONTRACTID "/datasource;1"
+#define NS_RDF_DATASOURCE_CONTRACTID_PREFIX NS_RDF_DATASOURCE_CONTRACTID "?name="
+#define NS_ABDIRECTORYDATASOURCE_CONTRACTID \
+  NS_RDF_DATASOURCE_CONTRACTID_PREFIX "addressdirectory"
+#define database_uri "@mozilla.org/rdf/datasource;1?name=addressdirectory"
+#define NS_ABDIRECTORYDATASOURCE_CID            \
+{ /* 0A79186D-F754-11d2-A2DA-001083003D0C */        \
+    0xa79186d, 0xf754, 0x11d2,              \
+    {0xa2, 0xda, 0x0, 0x10, 0x83, 0x0, 0x3d, 0xc}   \
+}
+
 // -------------------------------------------------------------------------
 // Case where we get a parent uri, and need to list its children.
 static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **aSubs)
 {
+
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
     *aSubs = nsnull ;
     nsresult retCode = NS_OK ;
@@ -229,6 +274,13 @@ static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **a
     nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &retCode)) ;
     NS_ENSURE_SUCCESS(retCode, retCode) ;
     nsCOMPtr<nsIRDFResource> rdfResource ;
+
+    nsCOMPtr<nsIRDFDataSource> rdfDirectory ;
+
+    rtl::OString dir("rdf:addressdirectory");
+    retCode = rdfService->GetDataSource(dir.getStr(),getter_AddRefs(rdfDirectory)) ;
+
+
 
     OSL_TRACE("uri: %s\n", aParent.getStr()) ;
     retCode = rdfService->GetResource(nsDependentCString(aParent.getStr(),aParent.getLength()), getter_AddRefs(rdfResource)) ;
@@ -340,10 +392,15 @@ static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
 
 void MDatabaseMetaDataHelper::setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI )
 {
-    if ( ! bGivenURI ) {
+
+    if ( ! bGivenURI && m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Mozilla) {
         m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Mozilla Addressbook Directories Exist"));
     }
     else {
+        if ( m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Thunderbird) {
+            m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Thunderbird Addressbook Directories Exist"));
+        }
+        else
         if (_pCon->usesFactory()) {
             if ( _pCon->isOutlookExpress() ) {
                 m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No Outlook Express Addressbook Exists"));
@@ -403,6 +460,8 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
     PRBool                  bIsMailList = PR_FALSE;
 
     ::rtl::OUString aTableName;
+    nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &rv)) ;
+    NS_ENSURE_SUCCESS(rv, rv) ;
 
     nmap->reset();
     do {
@@ -436,6 +495,10 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
 
         rv = nmap->add( aTableName, subDirectory);
+        nsCOMPtr<nsIRDFResource> rdfResource = do_QueryInterface(subDirectory, &rv) ;
+        if (!NS_FAILED(rv))
+            rdfService->UnregisterResource(rdfResource);
+
         if (!NS_FAILED(rv)) //failed means we have added this directory
         {
             //map mailing lists as views
@@ -460,8 +523,8 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
                                                    ::std::vector< ::rtl::OUString >&   _rTypes)
 {
     sal_Bool                                    bGivenURI;
-    rtl::OUString                               sAbURI;
-    OString                                     sAbURIString;
+    ::rtl::OUString                             sAbURI;
+    ::rtl::OString                                      sAbURIString;
 
     OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)\n", _pCon, _pCon->getForceLoadTables()?"True":"False" );
 
@@ -496,6 +559,18 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     nsresult rv = NS_OK;
     nsCOMPtr<nsIEnumerator> subDirectories;
     sal_Int32 nDirectoryType=0;
+    m_ProductType=::com::sun::star::mozilla::MozillaProductType_Mozilla;
+    m_ProfileName = _pCon->getMozProfile();
+
+
+    if (_pCon->isThunderbird())
+    {
+        if (!bGivenURI)
+            sAbURIString = s_pADDRESSBOOKROOTDIR;
+        nDirectoryType = SDBCAddress::ThunderBird;
+        m_ProductType = ::com::sun::star::mozilla::MozillaProductType_Thunderbird;
+    }
+    else
     if (!bGivenURI) {
         sAbURIString = s_pADDRESSBOOKROOTDIR;
         nDirectoryType = SDBCAddress::Mozilla;
@@ -514,7 +589,30 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
             }
         }
     }
-    if (nDirectoryType == SDBCAddress::Mozilla && !m_bProfileExists)
+
+    if (!m_bProfileExists)
+    {
+        Reference<XMozillaBootstrap> xMozillaBootstrap;
+        Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
+        OSL_ENSURE( xFactory.is(), "can't get service factory" );
+         Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+        OSL_ENSURE( xInstance.is(), "failed to create instance" );
+        xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
+        m_bProfileExists = sal_False;
+        //If there are no profiles for this product
+        //Or the given profile name does not found
+        //We will reaise a "No Addressbook Directories Exist" error
+        if ( xMozillaBootstrap->getProfileCount(m_ProductType) == 0 ||
+            ( m_ProfileName.getLength() && !(xMozillaBootstrap->getProfilePath(m_ProductType,m_ProfileName).getLength())))
+            m_bProfileExists = sal_False;
+        else
+            if (xMozillaBootstrap->bootupProfile(m_ProductType,m_ProfileName) > 0)
+                m_bProfileExists = sal_True;
+
+    }
+    if ( ( nDirectoryType == SDBCAddress::Mozilla
+         || m_ProductType ==::com::sun::star::mozilla::MozillaProductType_Thunderbird)
+        && !m_bProfileExists)
     {
         setAbSpecificError( _pCon, bGivenURI );
         return sal_False;
@@ -535,7 +633,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     args.arg4 = (void*)&m_aTableNames;
     args.arg5 = (void*)&m_aTableTypes;
     args.arg6 = (void*)&m_aErrorString;
-    rv = xMProxy.StartProxy(&args);
+    rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
 
     if (NS_FAILED(rv))
     {
@@ -626,13 +724,13 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 
     sal_Int32 pos = sAbURI.indexOf( MOZ_SCHEMA );
     if ( pos != -1 ) {
-        sAbURI = sAbURI.replaceAt (pos, strlen( MOZ_SCHEMA ), OString(LDAP_SCHEMA) );
+        sAbURI = sAbURI.replaceAt (pos, strlen( MOZ_SCHEMA ), ::rtl::OString(LDAP_SCHEMA) );
     }
 
     pos = sAbURI.indexOf( QUERY_CHAR );
     if ( pos != -1 ) {
         sal_Int32 len =  sAbURI.getLength();
-        sAbURI = sAbURI.replaceAt( pos, len - pos, OString("") );
+        sAbURI = sAbURI.replaceAt( pos, len - pos, ::rtl::OString("") );
     }
     const sal_Unicode* bindDN=nsnull;
     if (sAbBindDN.getLength() != 0)
@@ -649,14 +747,14 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     args.arg4 = (void*)&useSSL;
 
     MNSMozabProxy xMProxy;
-    if (xMProxy.StartProxy(&args))  //Init LDAP
+    if (xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()))  //Init LDAP,pass OUString() to StarProxy to ignore profile switch
     {
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
         TimeValue               timeValue = { 1, 0 };  // 1 * 60 Seconds timeout
         sal_Int32               times=0;
         while( times < 60 )
         {
-            rv = xMProxy.StartProxy(&args); //check whether ldap is connect
+            rv = xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()); //check whether ldap is connect
             if (!rv )
             {
                 osl_waitThread(&timeValue);
@@ -666,8 +764,8 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
                 break;
         }
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
-        rv = xMProxy.StartProxy(&args); //release resource
-    }
+        rv = xMProxy.StartProxy(&args,m_ProductType,::rtl::OUString()); //release resource
+        }
     return rv;
 }
 
@@ -693,7 +791,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
     args.funcIndex = ProxiedFunc::FUNC_NEW_ADDRESS_BOOK;
     args.argCount = 1;
     args.arg1 = (void*)&aTableName;
-    rv = xMProxy.StartProxy(&args);
+    rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
 
     _pCon->setForceLoadTables(sal_True); //force reload table next time
     if (rv == NS_ERROR_FILE_IS_LOCKED)
@@ -709,7 +807,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
 }
 nsresult NewAddressBook(const ::rtl::OUString * aName)
 {
-    if (isProfileLocked())
+    if (isProfileLocked(NULL))
         return NS_ERROR_FILE_IS_LOCKED;
     nsresult rv;
     nsCOMPtr<nsIAbDirectoryProperties> aProperties = do_CreateInstance(NS_ABDIRECTORYPROPERTIES_CONTRACTID, &rv);
