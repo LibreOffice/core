@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:07:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1955,12 +1955,28 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                         {
                             //  fuer alle eingeblendeten CR_MANUALSIZE loeschen,
                             //  dann SetOptimalHeight mit bShrink = FALSE
-                            for (SCCOLROW nRow=nStartNo; nRow<=nEndNo; nRow++)
+                            ScCompressedArrayIterator< SCROW, BYTE> aIter(
+                                    pDoc->GetRowFlagsArray( nTab), nStartNo,
+                                    nEndNo);
+                            do
                             {
-                                BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
+                                BYTE nOld = *aIter;
                                 if ( (nOld & CR_HIDDEN) == 0 && ( nOld & CR_MANUALSIZE ) )
-                                    pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
-                            }
+                                {
+                                    SCROW nRangeEnd = aIter.GetRangeEnd();
+                                    pDoc->SetRowFlags( aIter.GetRangeStart(),
+                                            nRangeEnd, nTab,
+                                            nOld & ~CR_MANUALSIZE);
+                                    aIter.Resync( nRangeEnd);
+                                    // Range may be extended due to merges and
+                                    // now aIter.GetRangeEnd() may point behind
+                                    // the previous row, but all flags of this
+                                    // range have the CR_MANUALSIZE bit
+                                    // removed, so it is safe to continue with
+                                    // the next range, not necessary to catch
+                                    // up with the remaining rows.
+                                }
+                            } while (aIter.NextRange());
                         }
 
                         double nPPTX = GetViewData()->GetPPTX();
