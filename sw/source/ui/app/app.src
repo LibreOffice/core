@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-17 13:29:08 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ spanish ] =
         {
          < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
-            < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
             < "Estilos de usuario" ; SFXSTYLEBIT_USERDEF ; > ;
             < "Automático" ; SFXSTYLEBIT_AUTO ; > ;
             < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
@@ -2772,7 +2772,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ swedish ] = "Den här åtgärden kräver mycket minne för Ångra-funktionen.\nVill du stänga av Ångra-funktionen?" ;
     Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?" ;
     Message [ spanish ] = "Esta acción necesita mucha memoria para la operación de Deshacer.\n¿Desea desactivar la opción de deshacer?" ;
-    Message [ english_us ] = "A large amount of memory is required to undo this action.\nDo you want to cancel the undo?" ;
+    Message [ english_us ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
     Message[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤åŠŸèƒ½éœ€è¦å¾ˆå¤šçš„å†…å­˜ã€‚\nè¦å–æ¶ˆæ’¤æ¶ˆå‘½ä»¤åŠŸèƒ½ï¼Ÿ";
     Message[ russian ] = "İòîìó äåéñòâèş íåîáõîäèìî äëÿ îòìåíû ñëèøêîì ìíîãî ïàìÿòè.\nÂû õîòèòå îòêëş÷èòü îòìåíó?";
     Message[ polish ] = "Cofniêcie tej akcji wymaga du¿ej iloœci pamiêci.\nCzy chcesz przerwaæ cofniêcie?";
