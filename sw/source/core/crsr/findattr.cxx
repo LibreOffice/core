@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-
 
 
 SV_DECL_PTRARR_SORT( SwpFmts, SwFmt*, 0, 4 )
@@ -1252,12 +1251,12 @@ struct SwFindParaAttr : public SwFindParas
 {
     BOOL bValue;
     const SfxItemSet *pSet, *pReplSet;
-    const SearchParam *pTxtPara;
+    const utl::SearchParam *pTxtPara;
     SwCursor& rCursor;
-    SearchText* pSTxt;
+    utl::TextSearch* pSTxt;
 
     SwFindParaAttr( const SfxItemSet& rSet, BOOL bNoCollection,
-                    const SearchParam* pTextParam, const SfxItemSet* pRSet,
+                    const utl::SearchParam* pTextParam, const SfxItemSet* pRSet,
                     SwCursor& rCrsr )
         : pSet( &rSet ), pReplSet( pRSet ), rCursor( rCrsr ),
             bValue( bNoCollection ), pTxtPara( pTextParam ), pSTxt( 0 )
@@ -1306,9 +1305,9 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             // dann darin den Text
             if( !pSTxt )
             {
-                SearchParam aTmp( *pTxtPara );
+                utl::SearchParam aTmp( *pTxtPara );
                 aTmp.SetSrchInSelection( TRUE );
-                pSTxt = new SearchText( aTmp, Application::GetAppInternational());
+                pSTxt = new utl::TextSearch( aTmp, LANGUAGE_SYSTEM );
             }
             // Bug 24665: suche im richtigen Bereich weiter (pTextRegion!)
             if( pCrsr->Find( *pTxtPara, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
@@ -1347,7 +1346,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
     if( bReplaceTxt )
     {
-        int bRegExp = SearchParam::SRCH_REGEXP == pTxtPara->GetSrchType();
+        int bRegExp = utl::SearchParam::SRCH_REGEXP == pTxtPara->GetSrchType();
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
 
@@ -1431,7 +1430,7 @@ int SwFindParaAttr::IsReplaceMode() const
 ULONG SwCursor::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                     SwDocPositions nStart, SwDocPositions nEnde,
                     FindRanges eFndRngs,
-                    const SearchParam* pTextPara, const SfxItemSet* pReplSet )
+                    const utl::SearchParam* pTextPara, const SfxItemSet* pReplSet )
 {
     // OLE-Benachrichtigung abschalten !!
     SwDoc* pDoc = GetDoc();

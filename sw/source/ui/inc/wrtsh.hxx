@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:04:43 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     String  GetRepeatString() const;
 
     //Suchen oder Ersetzen
-    ULONG SearchPattern(const SearchParam& rParam,
+    ULONG SearchPattern(const utl::SearchParam& rParam,
                          SwDocPositions eStart, SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
                          int bReplace = FALSE );
@@ -365,7 +365,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                          BOOL bNoColls,
                          SwDocPositions eStart,SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
-                         const SearchParam* pParam = 0,
+                         const utl::SearchParam* pParam = 0,
                          const SfxItemSet* pReplaceSet = 0);
 
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar = ' ' );

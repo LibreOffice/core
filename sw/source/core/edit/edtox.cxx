@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 20:30:14 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ void SwEditShell::ApplyAutoMark()
                     String sWordOnly    = sLine.GetToken(0, ';', nTokenPos);
 
                     //3.
-                    SearchParam aParam( sToSelect, SearchParam::SRCH_NORMAL,
+                    utl::SearchParam aParam( sToSelect, utl::SearchParam::SRCH_NORMAL,
                                                 TRUE, FALSE, FALSE );
                     BOOL bCaseSensitive = sCase.Len() && sCase != sZero;
                     BOOL bWordOnly = sWordOnly.Len() && sWordOnly != sZero;

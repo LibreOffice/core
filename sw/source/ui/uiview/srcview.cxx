@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 14:55:38 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,14 +827,14 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
             pTextView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
     }
 
-    SearchParam aSearchParam( rSearchItem.GetSearchString(),
-                        SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
+    utl::SearchParam    aSearchParam( rSearchItem.GetSearchString(),
+                        utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
                         rSearchItem.GetWordOnly(), rSearchItem.GetSelection() );
     if ( rSearchItem.GetRegExp() )
-        aSearchParam.SetSrchType( SearchParam::SRCH_REGEXP );
+        aSearchParam.SetSrchType( utl::SearchParam::SRCH_REGEXP );
     else if ( rSearchItem.IsLevenshtein() )
     {
-        aSearchParam.SetSrchType( SearchParam::SRCH_LEVDIST );
+        aSearchParam.SetSrchType( utl::SearchParam::SRCH_LEVDIST );
         aSearchParam.SetSrchRelaxed( rSearchItem.IsLEVRelaxed() ? TRUE : FALSE );
         aSearchParam.SetLEVOther( rSearchItem.GetLEVOther() );
         aSearchParam.SetLEVShorter( rSearchItem.GetLEVShorter() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 14:52:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,16 +667,16 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))
     {
         // Suche nach Attributen
-        SearchParam aPar( pSrchItem->GetSearchString() );
+        utl::SearchParam aPar( pSrchItem->GetSearchString() );
         if( aPar.GetSrchStr().Len() )
         {
             if( bDoReplace )
                 aPar.SetReplaceStr( pSrchItem->GetReplaceString() );
             aPar.SetSrchType( pSrchItem->GetRegExp()
-                                ? SearchParam::SRCH_REGEXP :
+                                ? utl::SearchParam::SRCH_REGEXP :
                                 pSrchItem->IsLevenshtein() ?
-                                    SearchParam::SRCH_LEVDIST :
-                                    SearchParam::SRCH_NORMAL );
+                                    utl::SearchParam::SRCH_LEVDIST :
+                                    utl::SearchParam::SRCH_NORMAL );
             aPar.SetCaseSensitive( pSrchItem->GetExact() );
             aPar.SetSrchInSelection( pSrchItem->GetSelection() );
             aPar.SetSrchWordOnly( pSrchItem->GetWordOnly() );
@@ -709,12 +709,12 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     {
         // Normale Suche
 
-        SearchParam aParam( pSrchItem->GetSearchString(),
+        utl::SearchParam aParam( pSrchItem->GetSearchString(),
                             pSrchItem->GetRegExp()
-                                ? SearchParam::SRCH_REGEXP :
+                                ? utl::SearchParam::SRCH_REGEXP :
                                 pSrchItem->IsLevenshtein() ?
-                                    SearchParam::SRCH_LEVDIST :
-                                        SearchParam::SRCH_NORMAL,
+                                    utl::SearchParam::SRCH_LEVDIST :
+                                        utl::SearchParam::SRCH_NORMAL,
                             pSrchItem->GetExact(),
                             pSrchItem->GetWordOnly(),
                             pSrchItem->GetSelection() );
@@ -834,6 +834,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 14:52:05  jp
+    Bug #79645#: ExecSearch - RepeatSearch without SearchItem must create it's own item
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 

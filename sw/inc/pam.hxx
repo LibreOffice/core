@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,13 @@ class SfxItemSet;
 class SwDoc;
 class SwNode;
 class SwCntntNode;
-class SearchParam;
-class SearchText;
 class SwNodes;
 class SwPaM;
 
+namespace utl {
+    class SearchParam;
+    class TextSearch;
+};
 
 struct SwPosition
 {
@@ -182,7 +184,7 @@ public:
                     SwGoInDoc fnGo = fnGoCntnt );
 
     // Suchen
-    BYTE Find(  const SearchParam& rParam, SearchText& rSTxt,
+    BYTE Find(  const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE);
     FASTBOOL Find(  const SwFmt& rFmt,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
 
 
-BYTE SwPaM::Find( const SearchParam& rParam, SearchText& rSTxt,
+BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                     SwMoveFn fnMove, const SwPaM * pRegion,
                     FASTBOOL bInReadOnly )
 {
@@ -304,7 +304,7 @@ BYTE SwPaM::Find( const SearchParam& rParam, SearchText& rSTxt,
                     if( !Move( fnMoveForward, fnGoCntnt ) )
                         GetPoint()->nContent = nTxtLen;
                 }
-                if( SearchParam::SRCH_REGEXP == rParam.GetSrchType() &&
+                if( utl::SearchParam::SRCH_REGEXP == rParam.GetSrchType() &&
                     1 < Abs( (int)(GetPoint()->nNode.GetIndex() - GetMark()->nNode.GetIndex())))
                     // Fehler: es koennen maximal 2 Nodes selektiert werden !!
                     continue;
@@ -324,14 +324,14 @@ BYTE SwPaM::Find( const SearchParam& rParam, SearchText& rSTxt,
 // Parameter fuers Suchen und Ersetzen von Text
 struct SwFindParaText : public SwFindParas
 {
-    const SearchParam& rParam;
+    const utl::SearchParam& rParam;
     SwCursor& rCursor;
-    SearchText aSTxt;
+    utl::TextSearch aSTxt;
     BOOL bReplace;
 
-    SwFindParaText( const SearchParam& rPara, int bRepl, SwCursor& rCrsr )
+    SwFindParaText( const utl::SearchParam& rPara, int bRepl, SwCursor& rCrsr )
         : rCursor( rCrsr ), bReplace( bRepl ), rParam( rPara ),
-        aSTxt( rPara, Application::GetAppInternational() )
+        aSTxt( rPara, LANGUAGE_SYSTEM )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, FASTBOOL bInReadOnly );
     virtual int IsReplaceMode() const;
@@ -352,7 +352,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bFnd && bReplace )          // String ersetzen ??
     {
         // Replace-Methode vom SwDoc benutzen
-        int bRegExp = SearchParam::SRCH_REGEXP == rParam.GetSrchType();
+        int bRegExp = utl::SearchParam::SRCH_REGEXP == rParam.GetSrchType();
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
         // damit die Region auch verschoben wird, in den Shell-Cursr-Ring
@@ -390,7 +390,7 @@ int SwFindParaText::IsReplaceMode() const
 }
 
 
-ULONG SwCursor::Find( const SearchParam& rParam,
+ULONG SwCursor::Find( const utl::SearchParam& rParam,
                         SwDocPositions nStart, SwDocPositions nEnde,
                         FindRanges eFndRngs, int bReplace )
 {

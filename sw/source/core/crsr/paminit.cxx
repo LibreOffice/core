@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ static SwMoveFnCollection aFwrd = {
     /* fnSections   */  &GoEndSection,
     /* fnCmpOp      */  &SwPosition::operator<,
     /* fnGetHint    */  &GetFrwrdTxtHint,
-    /* fnSearch     */  &SearchText::SearchFrwrd,
+    /* fnSearch     */  &utl::TextSearch::SearchFrwrd,
     /* fnSection    */  &SwNodes::GoStartOfSection
 };
 
@@ -88,7 +88,7 @@ static SwMoveFnCollection aBwrd = {
     /* fnSections   */  &GoStartSection,
     /* fnCmpOp      */  &SwPosition::operator>,
     /* fnGetHint    */  &GetBkwrdTxtHint,
-    /* fnSearch     */  &SearchText::SearchBkwrd,
+    /* fnSearch     */  &utl::TextSearch::SearchBkwrd,
     /* fnSection    */  &SwNodes::GoEndOfSection
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 12:09:20 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     const SwXTextSearch* pSearch = (const SwXTextSearch*)
             xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId());
 
-    SearchParam aSrchParam(pSearch->sSearchText);
+    utl::SearchParam aSrchParam(pSearch->sSearchText);
     aSrchParam.SetReplaceStr(pSearch->sReplaceText);
     sal_Bool bBackward = sal_False;
     int eRanges(FND_IN_BODY|FND_IN_SELALL);
@@ -751,10 +751,10 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     aSrchParam.SetLEVShorter(pSearch->nLevRemove);
     aSrchParam.SetLEVLonger(pSearch->nLevAdd);
     if(pSearch->bExpr)
-        aSrchParam.SetSrchType(SearchParam::SRCH_REGEXP);
+        aSrchParam.SetSrchType(utl::SearchParam::SRCH_REGEXP);
     // similarity setzt sich gegen RegExp durch!
     if(pSearch->bSimilarity)
-        aSrchParam.SetSrchType(SearchParam::SRCH_LEVDIST);
+        aSrchParam.SetSrchType(utl::SearchParam::SRCH_LEVDIST);
     SwDocPositions eStart = pSearch->bBack ? DOCPOS_END : DOCPOS_START;
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
 
@@ -874,7 +874,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
         bParentInExtra = SwNormalStartNode != pTmp->GetStartNodeType();
     }
 
-    SearchParam aSrchParam(pSearch->sSearchText);
+    utl::SearchParam aSrchParam(pSearch->sSearchText);
     sal_Bool bBackward = sal_False;
 /*
  * folgende Kombinationen sind erlaubt:
@@ -900,10 +900,10 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     aSrchParam.SetLEVShorter(pSearch->nLevRemove);
     aSrchParam.SetLEVLonger(pSearch->nLevAdd);
     if(pSearch->bExpr)
-        aSrchParam.SetSrchType(SearchParam::SRCH_REGEXP);
+        aSrchParam.SetSrchType(utl::SearchParam::SRCH_REGEXP);
     // similarity setzt sich gegen RegExp durch!
     if(pSearch->bSimilarity)
-        aSrchParam.SetSrchType(SearchParam::SRCH_LEVDIST);
+        aSrchParam.SetSrchType(utl::SearchParam::SRCH_LEVDIST);
     SwDocPositions eStart = !bAll ? DOCPOS_CURR : pSearch->bBack ? DOCPOS_END : DOCPOS_START;
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
 

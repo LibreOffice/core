@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamtyp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,8 @@ typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef FASTBOOL (SwPosition:: *CmpOp)( const SwPosition& ) const;
 typedef const SwTxtAttr* (*GetHint)( const SwpHints&, USHORT&, xub_StrLen );
-typedef int (SearchText:: *SearchTxt)( const String&, xub_StrLen*, xub_StrLen* );
+typedef int (utl::TextSearch:: *SearchTxt)( const String&, xub_StrLen*,
+                    xub_StrLen*, ::com::sun::star::util::SearchResult* =0 );
 typedef void (SwNodes:: *MvSection)( SwNodeIndex * ) const;
 
 

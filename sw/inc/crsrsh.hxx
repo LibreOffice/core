@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 11:53:57 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@ class SwCellFrms;
 class SwTOXMark;
 struct SwPosition;
 
-class SearchParam;
+namespace utl {
+    class SearchParam;
+};
 class SwRedline;
 
 // enum und struktur, um ueber die Doc-Position Informationen zu erfragen
@@ -397,7 +399,7 @@ public:
     FASTBOOL MoveRegion( SwWhichRegion, SwPosRegion );
 
     // die Suchfunktionen
-    ULONG Find( const SearchParam& rParam,
+    ULONG Find( const utl::SearchParam& rParam,
                 SwDocPositions eStart, SwDocPositions eEnde,
                 FindRanges eRng, int bReplace = FALSE );
 
@@ -407,7 +409,7 @@ public:
 
     ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnde,
-                FindRanges eRng, const SearchParam* pTextPara = 0,
+                FindRanges eRng, const utl::SearchParam* pTextPara = 0,
                 const SfxItemSet* rReplSet = 0 );
 
     // Positionieren des Cursors

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:36:07 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ long SwWrtShell::SelAll()
 ------------------------------------------------------------------------*/
 
 
-ULONG SwWrtShell::SearchPattern( const SearchParam& rParam,
+ULONG SwWrtShell::SearchPattern( const utl::SearchParam& rParam,
                                 SwDocPositions eStt, SwDocPositions eEnd,
                                 FindRanges eFlags, int bReplace )
 {
@@ -272,7 +272,7 @@ ULONG SwWrtShell::SearchTempl( const String &rTempl,
 
 ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
                                 SwDocPositions eStart, SwDocPositions eEnde,
-                                FindRanges eFlags, const SearchParam* pParam,
+                                FindRanges eFlags, const utl::SearchParam* pParam,
                                 const SfxItemSet* pReplaceSet )
 {
     // Keine Erweiterung bestehender Selektionen
@@ -961,11 +961,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.2 2000-10-25 15:36:07 jp Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.3 2000-11-20 09:25:03 jp Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.2  2000/10/25 15:36:07  jp
+          use CharClass/BreakIt instead of old WordSelection
+
           Revision 1.1.1.1  2000/09/18 17:14:53  hr
           initial import
 

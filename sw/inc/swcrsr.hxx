@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:39:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ public:
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
-    ULONG Find( const SearchParam& rParam,
+    ULONG Find( const utl::SearchParam& rParam,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 FindRanges = FND_IN_BODY,
                 int bReplace = FALSE );
@@ -154,7 +154,7 @@ public:
     ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 FindRanges = FND_IN_BODY,
-                const SearchParam* pTextPara = 0,
+                const utl::SearchParam* pTextPara = 0,
                 const SfxItemSet* rReplSet = 0 );
 
     FASTBOOL IsStartWord()const;

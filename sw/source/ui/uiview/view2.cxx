@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 12:02:01 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,7 +1157,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
             {
                 // Normale Textsuche
                 pWrtShell->EnterStdMode();
-                SearchParam aParam( sName, SearchParam::SRCH_NORMAL,
+                utl::SearchParam aParam( sName, utl::SearchParam::SRCH_NORMAL,
                                     TRUE, FALSE, FALSE );
 
                 if( pWrtShell->SearchPattern( aParam, DOCPOS_START, DOCPOS_END ))
