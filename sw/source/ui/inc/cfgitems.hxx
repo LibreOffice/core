@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:57:09 $
+ *  last change: $Author: rt $ $Date: 2004-08-24 16:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ public:
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog - Testeinstellungen
 --------------------------------------------------------- */
-class SwTestItem : public SfxPoolItem
+class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
 {
     friend class SwModule;
     friend class SwWriterApp;
