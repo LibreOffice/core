@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,17 +79,34 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#include <rtl/ustring.hxx>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
-/* -----------------------------27.04.01 15:50--------------------------------
 
- ---------------------------------------------------------------------------*/
-SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
-    SfxToolBoxControl( nId, rTbx, rBindings ),
+// -----------------------------27.04.01 15:50--------------------------------
+
+SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
+{
+    SetVert(FALSE);
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CTLFontState" )));
+}
+
+SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
+{
+    SetVert(TRUE);
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:VerticalTextState" )));
+}
+
+/* ---------------------------------------------------------------------------*/
+SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
     bCheckVertical(sal_True)
 {
 }
+
 /* -----------------------------27.04.01 15:53--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -99,8 +116,10 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 /* -----------------------------27.04.01 15:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SvxVertCTLTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState )
+void SvxVertCTLTextTbxCtrl::StateChanged(
+    USHORT nSID,
+    SfxItemState eState,
+    const SfxPoolItem* pState )
 {
     SvtLanguageOptions aLangOptions;
     BOOL bCalc = sal_False;
