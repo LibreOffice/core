@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:08:56 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,23 +130,21 @@ void SfxDockingWindow::Resize()
 */
 {
     DockingWindow::Resize();
-    if ( !pImp->pSplitWin )
+    Invalidate();
+    if ( pImp->bConstructed && pMgr )
     {
-        Invalidate();
-        if ( pImp->bConstructed )
+        if ( IsFloatingMode() )
         {
-            if ( IsFloatingMode() && pMgr )
-            {
-                if( !GetFloatingWindow()->IsRollUp() )
-                    SetFloatingSize( GetOutputSizePixel() );
-                pImp->aWinState = GetFloatingWindow()->GetWindowState();
-                SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-                SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
-                if ( pImp->bSplitable )
-                    eIdent = SFX_CHILDWIN_SPLITWINDOW;
-                pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
-            }
+            if( !GetFloatingWindow()->IsRollUp() )
+                SetFloatingSize( GetOutputSizePixel() );
+            pImp->aWinState = GetFloatingWindow()->GetWindowState();
         }
+
+        SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
+        SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+        if ( pImp->bSplitable )
+            eIdent = SFX_CHILDWIN_SPLITWINDOW;
+        pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
     }
 }
 

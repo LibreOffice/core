@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 17:54:53 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,12 +458,13 @@ void SfxWorkWindow::DeleteControllers_Impl()
         SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
+/*
             BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
             pCW->aInfo = pChild->GetInfo();
             if ( bTask )
                 pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
             SaveStatus_Impl(pChild, pCW->aInfo);
-
+*/
             pChild->Hide();
 
             // Wenn das ChildWindow ein direktes Childfenster ist und nicht
@@ -1810,16 +1811,17 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             break;
     }
 
-    if ( n == aSortedList.Count() )
+    if ( n < aSortedList.Count() )
         // sometimes called while toggeling float mode
-        return;
-
-    nPos = aSortedList[n];
+        nPos = aSortedList[n];
 
     switch ( eConfig )
     {
         case SFX_SETDOCKINGRECTS :
         {
+            if ( nPos == USHRT_MAX )
+                return;
+
             SfxChild_Impl *pChild = (*pChilds)[nPos];
             Rectangle aOuterRect( GetTopRect_Impl() );
             aOuterRect.SetPos(
@@ -1946,9 +1948,12 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         case SFX_ALIGNDOCKINGWINDOW :
         case SFX_TOGGLEFLOATMODE:
         {
+            if ( nPos == USHRT_MAX && !pCW )
+                return;
+
             SfxChildAlignment eAlign;
-            SfxChild_Impl *pCli = (*pChilds)[nPos];
-            if (pBox)
+            SfxChild_Impl *pCli = ( nPos != USHRT_MAX ) ? (*pChilds)[nPos] : 0;
+            if ( pBox )
             {
                 if ( pBox->IsFloatingMode() )
                 {
@@ -1967,7 +1972,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                         pCli->aSize.Height() = aActSize.Height();
                 }
             }
-            else
+            else if ( pCli )
             {
                 eAlign = pDockWin->GetAlignment();
                 if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW ||
@@ -1980,11 +1985,17 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 }
             }
 
-            if ( pCli->eAlign != eAlign )
-                bSorted = FALSE;
-            pCli->eAlign = eAlign;
-            ArrangeChilds_Impl();
-            ShowChilds_Impl();
+            if ( pCli )
+            {
+                if( pCli->eAlign != eAlign )
+                {
+                    bSorted = FALSE;
+                    pCli->eAlign = eAlign;
+                }
+
+                ArrangeChilds_Impl();
+                ShowChilds_Impl();
+            }
 
             // INI schreiben
             if ( pCW )
