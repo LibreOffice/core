@@ -2,9 +2,9 @@
 *
 *  $RCSfile: RecordParser.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:35:57 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:15:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -136,7 +136,7 @@ public class RecordParser extends QueryMetaData {
                 DblValue = new Double(xResultSetRow.getDouble(ColIndex) + (double) super.getNullDateCorrection());
             else
                 DblValue = new Double(xResultSetRow.getDouble(ColIndex));
-//          if (!xResultSetRow.wasNull())
+            if (!xResultSetRow.wasNull())
                 return DblValue;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
