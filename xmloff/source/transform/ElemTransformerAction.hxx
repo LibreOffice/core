@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ElemTransformerAction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:47:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@ enum XMLElemTransformerAction
                                         // - param1: namespace +
                                         //           token of parent element
                                         // - param2: attr acation map
+    XML_ETACTION_EXTRACT_CHARACTERS,    // takes the characters of the current
+                                        // element and all child elements
+                                        // and put them together into the
+                                        // current element
+                                        // the child elements are removed
     XML_ETACTION_USER_DEFINED=0x80000000,// user defined actions start here
     XML_ETACTION_END=XML_TACTION_END
 };

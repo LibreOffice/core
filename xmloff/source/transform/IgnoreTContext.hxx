@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IgnoreTContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:52:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ class XMLIgnoreTransformerContext : public XMLTransformerContext
 {
     sal_Bool m_bIgnoreCharacters;
     sal_Bool m_bIgnoreElements;
+    sal_Bool m_bAllowCharactersRecursive;
+    sal_Bool m_bRecursiveUse;
 
 public:
     TYPEINFO();
@@ -83,6 +85,13 @@ public:
                            const ::rtl::OUString& rQName,
                               sal_Bool bIgnoreCharacters,
                               sal_Bool bIgnoreElements  );
+    // A contexts constructor does anything that is required if an element
+    // starts. Namespace processing has been done already.
+    // Note that virtual methods cannot be used inside constructors. Use
+    // StartElement instead if this is required.
+    XMLIgnoreTransformerContext( XMLTransformerBase& rTransformer,
+                           const ::rtl::OUString& rQName,
+                              sal_Bool bAllowCharactersRecursive );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.

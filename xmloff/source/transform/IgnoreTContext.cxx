@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IgnoreTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:52:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,20 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
         sal_Bool bIgnoreElems ) :
     XMLTransformerContext( rImp, rQName ),
     m_bIgnoreCharacters( bIgnoreChars ),
-    m_bIgnoreElements( bIgnoreElems )
+    m_bIgnoreElements( bIgnoreElems ),
+    m_bRecursiveUse( sal_False )
+{
+}
+
+XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
+        XMLTransformerBase& rTransformer,
+        const ::rtl::OUString& rQName,
+        sal_Bool bAllowCharactersRecursive ) :
+    XMLTransformerContext( rTransformer, rQName ),
+    m_bIgnoreCharacters( sal_False ),
+    m_bIgnoreElements( sal_False ),
+    m_bAllowCharactersRecursive( bAllowCharactersRecursive ),
+    m_bRecursiveUse( sal_True )
 {
 }
 
@@ -98,6 +111,9 @@ XMLTransformerContext *XMLIgnoreTransformerContext::CreateChildContext(
         pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                     rQName, sal_True,
                                                     sal_True );
+    else if (m_bRecursiveUse)
+        pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                                                    rQName, m_bAllowCharactersRecursive );
     else
         pContext = XMLTransformerContext::CreateChildContext(
                         nPrefix, rLocalName, rQName, xAttrList );
@@ -118,6 +134,8 @@ void XMLIgnoreTransformerContext::EndElement()
 void XMLIgnoreTransformerContext::Characters( const OUString& rChars )
 {
     if( !m_bIgnoreCharacters )
+        GetTransformer().GetDocHandler()->characters( rChars );
+    else if ( m_bRecursiveUse && m_bAllowCharactersRecursive )
         GetTransformer().GetDocHandler()->characters( rChars );
 }
 
