@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-07 14:18:17 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 06:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@
 #endif
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
+#endif
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
@@ -635,6 +638,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
     SetAlign( ALIGN_BASELINE );
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
+    SetPropWidth( pAttrSet->GetCharScaleW().GetValue() );
     SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
     if( pAttrSet->GetAutoKern().GetValue() )
         SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
