@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-08 14:12:38 $
+ *  last change: $Author: obr $ $Date: 2002-08-09 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,21 @@ public class AccessibleObjectFactory {
     java.util.Hashtable objectList = new java.util.Hashtable();
     XAccessibilityInformationProvider infoProvider;
 
-    public AccessibleObjectFactory(XAccessibilityInformationProvider provider) {
+    private static AccessibleObjectFactory defaultFactory = new AccessibleObjectFactory();
+
+    protected AccessibleObjectFactory() {
+        // FIXME: provide default implementation of XAccessibilityInformationProvider
+//      infoProvider = provider;
+    }
+
+    /** Returns the default accessible object factory */
+    public static AccessibleObjectFactory getDefault() {
+        return defaultFactory;
+    }
+
+    /** Sets a new AccessibleInformationProvider to be used by this factory object */
+    public void setInformationProvider(XAccessibilityInformationProvider provider) {
         infoProvider = provider;
-        System.out.println("ObjectFactory created");
     }
 
     public AccessibleObject getAccessibleObject(XAccessible xAccessible, Accessible parent) {
@@ -215,7 +227,8 @@ public class AccessibleObjectFactory {
                     break;
                 default:
                     if( Build.DEBUG) {
-                        System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(info.Role));
+                        System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(info.Role)
+                         + " (id = " + info.Role + ")");
                     }
                     o = new AccessibleWindow(AccessibleRoleMap.toAccessibleRole(info.Role), xAccessibleContext);
                     break;
@@ -264,8 +277,6 @@ public class AccessibleObjectFactory {
 
     // Set the initial values of this accessible object
     protected void initializeAccessibleObject(AccessibleObject o, AccessibleComponentInfo info) {
-        // Set the factory to retrieve callback on finalize
-        o.setObjectFactory(this);
 
         // Set accessible name and description
         o.setAccessibleName(info.Name);
@@ -322,7 +333,9 @@ public class AccessibleObjectFactory {
         AccessibleObject o = null;
         // Check if we already have a wrapper object for this context
         synchronized (objectList) {
-            WeakReference r = (WeakReference) objectList.remove(oid);
+            // Do not remove the object from the list, may need to recycle
+            // them as long as they are do garbage collected
+            WeakReference r = (WeakReference) objectList.get(oid);
             if(r != null) {
                 o = (AccessibleObject) r.get();
             }
