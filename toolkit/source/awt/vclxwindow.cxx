@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-07 17:19:24 $
+ *  last change: $Author: mt $ $Date: 2002-11-20 09:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,6 +705,10 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
     ::vos::OGuard aGuard( GetMutex() );
 
     GetWindowListeners().addInterface( rxListener );
+
+    // #100119# Get all resize events, even if height or width 0, or invisible
+    if ( GetWindow() )
+        GetWindow()->EnableAllResize( TRUE );
 }
 
 void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
