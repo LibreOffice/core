@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_XSTATISTICDISPLAY_HPP_
+#include <com/sun/star/chart/XStatisticDisplay.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
@@ -303,6 +306,7 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     // determine if data is in rows
     sal_Bool bSwitchData = sal_False;
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
+    rtl::OUString sChartType ( xDiagram->getDiagramType());
     if( xDiaProp.is())
     {
         try
@@ -315,7 +319,6 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             mbRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
 
             // the chart core treats donut chart with interchanged rows/columns
-            rtl::OUString sChartType = xDiagram->getDiagramType();
             if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
             {
                 mbRowSourceColumns = ! mbRowSourceColumns;
@@ -415,16 +418,11 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
 
     // attributes
     // determine class
-    rtl::OUString sChartType;
-    if( xDiagram.is())
-    {
-        // domain axes are also needed for auto-styles
-        sChartType = xDiagram->getDiagramType();
-        if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.XYDiagram" )))
-            mnDomainAxes = 1;
-        else
-            mnDomainAxes = 0;
-    }
+    // domain axes are also needed for auto-styles
+    if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.XYDiagram" )))
+        mnDomainAxes = 1;
+    else
+        mnDomainAxes = 0;
 
     if( bExportContent )
     {
@@ -1520,6 +1518,81 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         // close series element
         if( pSeries )
             delete pSeries;
+    }
+
+    // stock-chart elements
+    rtl::OUString sChartType ( xDiagram->getDiagramType());
+    if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.StockDiagram" )))
+    {
+        uno::Reference< chart::XStatisticDisplay > xStockPropProvider( xDiagram, uno::UNO_QUERY );
+        if( xStockPropProvider.is())
+        {
+            // stock-gain-marker
+            uno::Reference< beans::XPropertySet > xStockPropSet = xStockPropProvider->getUpBar();
+            if( xStockPropSet.is())
+            {
+                aPropertyStates.clear();
+                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+
+                if( aPropertyStates.size() > 0 )
+                {
+                    if( bExportContent )
+                    {
+                        AddAutoStyleAttribute( aPropertyStates );
+
+                        SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_GAIN_MARKER, sal_True, sal_True );
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
+            }
+
+            // stock-loss-marker
+            xStockPropSet = xStockPropProvider->getDownBar();
+            if( xStockPropSet.is())
+            {
+                aPropertyStates.clear();
+                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+
+                if( aPropertyStates.size() > 0 )
+                {
+                    if( bExportContent )
+                    {
+                        AddAutoStyleAttribute( aPropertyStates );
+
+                        SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_LOSS_MARKER, sal_True, sal_True );
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
+            }
+
+            // stock-range-line
+            xStockPropSet = xStockPropProvider->getMinMaxLine();
+            if( xStockPropSet.is())
+            {
+                aPropertyStates.clear();
+                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+
+                if( aPropertyStates.size() > 0 )
+                {
+                    if( bExportContent )
+                    {
+                        AddAutoStyleAttribute( aPropertyStates );
+
+                        SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_RANGE_LINE, sal_True, sal_True );
+                    }
+                    else
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                }
+            }
+        }
     }
 
     // wall and floor element

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
+ *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ namespace com { namespace sun { namespace star {
     namespace chart {
         class XDiagram;
         class X3DDisplay;
+        class XStatisticDisplay;
     }
     namespace xml { namespace sax {
         class XAttributeList;
@@ -286,6 +287,34 @@ public:
                             com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
                             ContextType eContextType );
     ~SchXMLWallFloorContext();
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+};
+
+// ----------------------------------------
+
+class SchXMLStockContext : public SvXMLImportContext
+{
+public:
+    enum ContextType
+    {
+        CONTEXT_TYPE_GAIN,
+        CONTEXT_TYPE_LOSS,
+        CONTEXT_TYPE_RANGE
+    };
+
+private:
+    SchXMLImportHelper& mrImportHelper;
+    com::sun::star::uno::Reference< com::sun::star::chart::XStatisticDisplay > mxStockPropProvider;
+    ContextType meContextType;
+
+public:
+    SchXMLStockContext( SchXMLImportHelper& rImportHelper,
+                        SvXMLImport& rImport,
+                        sal_uInt16 nPrefix,
+                        const rtl::OUString& rLocalName,
+                        com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
+                        ContextType eContextType );
+    ~SchXMLStockContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 

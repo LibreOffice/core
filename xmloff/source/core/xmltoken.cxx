@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:01 $
+ *  last change: $Author: bm $ $Date: 2001-12-17 10:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2082,6 +2082,10 @@ namespace xmloff { namespace token {
         TOKEN( "embedded-text" ),              // XML_EMBEDDED_TEXT
 
         TOKEN( "merge-last-paragraph"),        // XML_MERGE_LAST_PARAGRAPH
+
+        TOKEN( "stock-loss-marker" ),          // XML_STOCK_LOSS_MARKER
+        TOKEN( "stock-gain-marker" ),          // XML_STOCK_GAIN_MARKER
+        TOKEN( "stock-range-line" ),           // XML_STOCK_RANGE_LINE
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

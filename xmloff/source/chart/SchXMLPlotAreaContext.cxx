@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: bm $ $Date: 2001-12-17 10:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
 #include <com/sun/star/chart/X3DDisplay.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_XSTATISTICDISPLAY_HPP_
+#include <com/sun/star/chart/XStatisticDisplay.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
@@ -276,6 +279,20 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
         case XML_TOK_PA_LIGHT_SOURCE:
             pContext = maSceneImportHelper.create3DLightContext( nPrefix, rLocalName, xAttrList );
+            break;
+
+        // elements for stock charts
+        case XML_TOK_PA_STOCK_GAIN:
+            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+                                               SchXMLStockContext::CONTEXT_TYPE_GAIN );
+            break;
+        case XML_TOK_PA_STOCK_LOSS:
+            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+                                               SchXMLStockContext::CONTEXT_TYPE_LOSS );
+            break;
+        case XML_TOK_PA_STOCK_RANGE:
+            pContext = new SchXMLStockContext( mrImportHelper, GetImport(), nPrefix, rLocalName, mxDiagram,
+                                               SchXMLStockContext::CONTEXT_TYPE_RANGE );
             break;
 
         default:
@@ -1277,6 +1294,78 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
                                                          ? mxWallFloorSupplier->getWall()
                                                          : mxWallFloorSupplier->getFloor(),
                                                          uno::UNO_QUERY );
+            if( xProp.is())
+            {
+                const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+                if( pStylesCtxt )
+                {
+                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+
+                    if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                        (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                }
+            }
+        }
+    }
+}
+
+// ========================================
+
+SchXMLStockContext::SchXMLStockContext(
+    SchXMLImportHelper& rImpHelper,
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const rtl::OUString& rLocalName,
+    uno::Reference< chart::XDiagram >& xDiagram,
+    ContextType eContextType ) :
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        mrImportHelper( rImpHelper ),
+        mxStockPropProvider( xDiagram, uno::UNO_QUERY ),
+        meContextType( eContextType )
+{
+}
+
+SchXMLStockContext::~SchXMLStockContext()
+{
+}
+
+void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    if( mxStockPropProvider.is())
+    {
+        sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+        rtl::OUString sAutoStyleName;
+
+        for( sal_Int16 i = 0; i < nAttrCount; i++ )
+        {
+            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+            rtl::OUString aLocalName;
+            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+            if( nPrefix == XML_NAMESPACE_CHART &&
+                IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+            {
+                sAutoStyleName = xAttrList->getValueByIndex( i );
+            }
+        }
+
+        if( sAutoStyleName.getLength())
+        {
+            // set properties
+            uno::Reference< beans::XPropertySet > xProp;
+            switch( meContextType )
+            {
+                case CONTEXT_TYPE_GAIN:
+                    xProp = mxStockPropProvider->getUpBar();
+                    break;
+                case CONTEXT_TYPE_LOSS:
+                    xProp = mxStockPropProvider->getDownBar();
+                    break;
+                case CONTEXT_TYPE_RANGE:
+                    xProp = mxStockPropProvider->getMinMaxLine();
+                    break;
+            }
             if( xProp.is())
             {
                 const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();

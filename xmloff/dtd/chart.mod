@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.27 2001-12-14 18:47:17 dvo Exp $
+	$Id: chart.mod,v 1.28 2001-12-17 10:22:10 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -128,6 +128,9 @@
 						   chart:axis*,
 						   chart:categories?,
 						   chart:series*,
+						   chart:stock-gain-marker?,
+						   chart:stock-loss-marker?,
+						   chart:stock-range-line?,
 						   chart:wall?,
 						   chart:floor?) >
 
@@ -168,6 +171,20 @@
 		  svg:width %length; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED >
 
+<!-- Stock chart elements -->
+
+<!ELEMENT chart:stock-gain-marker EMPTY>
+<!ATTLIST chart:stock-gain-marker
+		  chart:style-name %styleName; #IMPLIED >
+
+<!ELEMENT chart:stock-loss-marker EMPTY>
+<!ATTLIST chart:stock-loss-marker
+		  chart:style-name %styleName; #IMPLIED >
+
+<!ELEMENT chart:stock-range-line EMPTY>
+<!ATTLIST chart:stock-range-line
+		  chart:style-name %styleName; #IMPLIED >
+
 <!-- Axis -->
 
 <!ELEMENT chart:axis (chart:title?, chart:grid*)>
@@ -204,7 +221,7 @@
 
 <!ELEMENT chart:categories EMPTY>
 <!ATTLIST chart:categories
-		  table:cell-range-address %cell-range-address; #REQUIRED >
+		  table:cell-range-address %cell-range-address; #IMPLIED >
 
 <!--
 	each series element must have an cell-range-address element that points
