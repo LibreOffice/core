@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+ *  last change: $Author: mib $ $Date: 2000-10-24 13:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,5 +179,5 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         }
     }
 
-    SvXMLElementExport( GetExport(), nPrefix, rLocalName, sal_True, sal_True );
+    SvXMLElementExport aElem( GetExport(), nPrefix, rLocalName, sal_True, sal_True );
 }
