@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-01-15 15:17:33 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <sfx2/app.hxx>
 #include "impgrf.hxx"
 #include "xoutbmp.hxx"
+#include <svtools/FilterConfigItem.hxx>
 
 // -----------
 // - Defines -
@@ -80,9 +81,6 @@
 #define FORMAT_GIF  String(RTL_CONSTASCII_USTRINGPARAM("gif"))
 #define FORMAT_JPG  String(RTL_CONSTASCII_USTRINGPARAM("jpg"))
 #define FORMAT_PNG  String(RTL_CONSTASCII_USTRINGPARAM("png"))
-
-#define OPT_BMP     "BMP-COLORS"
-#define OPT_JPG     "JPG_EXPORT_COLORMODE"
 
 // --------------
 // - XOutBitmap -
@@ -534,61 +532,46 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
 
     if( pOStm )
     {
-        Config* pOptionsConfig = rFilter.GetOptionsConfig();
-
         pGrfFilter = &rFilter;
 
-        if( bIgnoreOptions && rFilter.AreOptionsEnabled() )
-        {
-            rFilter.EnableOptions( FALSE );
-            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL(), *pOStm, nFormat );
-            rFilter.EnableOptions( TRUE );
-        }
+        if( bIgnoreOptions )
+            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL(), *pOStm, nFormat, bIgnoreOptions );
         else
         {
             Graphic aGraphic;
+            const String aFormat( rFilter.GetExportFormatShortName( nFormat ).ToLowerAscii() );
 
-            if( pOptionsConfig )
+            // Optionen fuer die einzelnen Format beruecksichtigen
+            if( aFormat == FORMAT_BMP )
             {
-                const String aFormat( rFilter.GetExportFormatShortName( nFormat ).ToLowerAscii() );
-
-                // Optionen fuer die einzelnen Format beruecksichtigen
-                if( aFormat == FORMAT_BMP )
+                FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/BMP" ) ) );
+                sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
+                if( !nColorRes || ( nColorRes > (USHORT) BMP_CONVERSION_24BIT ) )
+                    aGraphic = rGraphic;
+                else
                 {
-                    USHORT nColorRes = pOptionsConfig->ReadKey( ByteString(OPT_BMP) ).ToInt32();
+                    Bitmap aTmp( rGraphic.GetBitmap() );
 
-                    if( !nColorRes || ( nColorRes > (USHORT) BMP_CONVERSION_24BIT ) )
-                        aGraphic = rGraphic;
-                    else
-                    {
-                        Bitmap aTmp( rGraphic.GetBitmap() );
-
-                        if( aTmp.Convert( (BmpConversion) nColorRes ) )
-                            aGraphic = aTmp;
-                        else
-                            aGraphic = rGraphic;
-                    }
-                }
-                else if( aFormat == FORMAT_JPG )
-                {
-                    Bitmap              aTmp( rGraphic.GetBitmap() );
-                    const BOOL          bGreys = (BOOL) pOptionsConfig->ReadKey( ByteString(OPT_JPG) ).ToInt32();
-                    const BmpConversion eConv = bGreys ? BMP_CONVERSION_8BIT_GREYS : BMP_CONVERSION_24BIT;
-
-                    if( aTmp.Convert( eConv ) )
+                    if( aTmp.Convert( (BmpConversion) nColorRes ) )
                         aGraphic = aTmp;
                     else
                         aGraphic = rGraphic;
                 }
-                else if( aFormat == FORMAT_GIF )
-                    aGraphic = rGraphic;
+            }
+            else if( aFormat == FORMAT_JPG )
+            {
+                FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) ) );
+                const sal_Bool bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
+                Bitmap aTmp( rGraphic.GetBitmap() );
+                const BmpConversion eConv = bGreys ? BMP_CONVERSION_8BIT_GREYS : BMP_CONVERSION_24BIT;
+                if( aTmp.Convert( eConv ) )
+                    aGraphic = aTmp;
                 else
                     aGraphic = rGraphic;
             }
             else
                 aGraphic = rGraphic;
-
-            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL(), *pOStm, nFormat );
+            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL(), *pOStm, nFormat, sal_False );
         }
 
         pGrfFilter = NULL;

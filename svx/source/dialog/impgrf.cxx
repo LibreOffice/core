@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 11:41:38 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ String GetImportFormatOSType( GraphicFilter& rFlt, USHORT nFormat, String pFmtSt
     String aOSType;
 
     if ( rFlt.GetImportFormatCount() )
-        aOSType = rFlt.GetImportFormatType( nFormat );
+        aOSType = rFlt.GetImportFormatShortName( nFormat );
     else
     {
 #ifdef MAC
@@ -209,18 +209,6 @@ GraphicFilter* GetGrfFilter()
 USHORT FillFilter( GraphicFilter& rFilter )
 {
     ResMgr* pMgr = DIALOG_MGR();
-    SvtPathOptions aPathOpt;
-    String aURL;
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathOpt.GetFilterPath(), aURL );
-    INetURLObject aFilterPathUrl( aURL );
-    rFilter.SetFilterPath( aFilterPathUrl );
-
-    INetURLObject aUserConfigPathUrl( aPathOpt.GetUserConfigPath() );
-    if ( aUserConfigPathUrl.HasError() )
-        aUserConfigPathUrl = INetURLObject( aPathOpt.GetUserConfigPath(), INET_PROT_FILE );
-    aUserConfigPathUrl.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( IMPGRF_GRAPHIC_OPTIONS_FILE ) ) );
-    rFilter.SetOptionsConfigPath( aUserConfigPathUrl );
-
     return rFilter.GetImportFormatCount();
 }
 
