@@ -2,9 +2,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 16:22:55 $
+#   last change: $Author: rt $ $Date: 2005-04-04 10:02:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -386,7 +386,7 @@ sub create_files_table
 
         my $oneline = $file{'File'} . "\t" . $file{'Component_'} . "\t" . $file{'FileName'} . "\t"
                 . $file{'FileSize'} . "\t" . $file{'Version'} . "\t" . $file{'Language'} . "\t"
-                . $file{'Attributes'} . "\t" .$file{'Sequence'} . "\n";
+                . $file{'Attributes'} . "\t" . $file{'Sequence'} . "\n";
 
         push(@filetable, $oneline);
     }
