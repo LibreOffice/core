@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:16 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,15 @@ class PackageUri
 
 private:
     void init() const;
-    static ::rtl::OUString decodeSegment( const ::rtl::OUString& rSource );
 
 public:
     PackageUri() : m_bValid( false ) {}
     PackageUri( const ::rtl::OUString & rPackageUri )
     : m_aUri( rPackageUri ), m_bValid( false ) {}
+
+    static ::rtl::OUString decodeSegment( const ::rtl::OUString& rSource );
+    static ::rtl::OUString encodeSegment( const ::rtl::OUString& rSource );
+    static ::rtl::OUString encodeSegmentsForSure( const rtl::OUString& rSource );
 
     sal_Bool isValid() const
     { init(); return m_bValid; }
