@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:05:26 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 22:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1710,7 +1710,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     StringList [ japanese ] =
     {
-            < "ÍÞ°½×²Ý‚Ìã" ; > ;
+            < "Šîü‚Ìã" ; > ;
         < "Šîü‚Ì’†‰›" ; > ;
         < "Šîü‚Ì‰º" ; > ;
         < "•¶Žš‚Ìã" ; > ;
@@ -2384,6 +2384,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
 
 
 
