@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mt $ $Date: 2001-08-03 13:47:44 $
+#   last change: $Author: mt $ $Date: 2001-11-27 09:50:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ SLOFILES=	$(SLO)$/access.obj		\
             $(SLO)$/timer.obj		\
             $(SLO)$/dndhelp.obj     \
             $(SLO)$/unohelp.obj     \
+            $(SLO)$/vclevent.obj	\
             $(SLO)$/i18nhelp.obj
 
 .IF "$(remote)"!=""
