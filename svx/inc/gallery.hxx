@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tv $ $Date: 2001-10-04 12:42:33 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,10 @@
 #define GALLERY_THEME_EDUCATION         33
 #define GALLERY_THEME_TROUBLE           34
 #define GALLERY_THEME_SCREENBEANS       35
+#define GALLERY_THEME_FONTWORK          36
+#define GALLERY_THEME_FONTWORK_VERTICAL 37
 
-#define GALLERY_THEME_DUMMY5            36
+#define GALLERY_THEME_DUMMY5            38
 
 // -------------------
 // - GalleryExplorer -
@@ -136,6 +138,7 @@ class FmFormModel;
 class Graphic;
 class FmFormModel;
 class Bitmap;
+class OutputDevice;
 
 class GalleryExplorer
 {
@@ -197,6 +200,8 @@ public:
 
     static BOOL                 EndLocking( const String& rThemeName );
     static BOOL                 EndLocking( ULONG nThemeId );
+
+    static BOOL                 DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
 #endif // _GALLERY_HXX_
