@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 14:11:21 $
+ *  last change: $Author: os $ $Date: 2001-04-19 10:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),                 PropertyAttribute::MAYBEVOID,     0},                                                       \
         { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),                   FN_UNO_PAGE_STYLE,      &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
         { SW_PROP_NAME(UNO_NAME_NUMBERING_STYLE_NAME),      RES_PARATR_NUMRULE,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID,   0},                                                           \
-        { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                             \
+        { SW_PROP_NAME(UNO_NAME_CHAR_WORD_MODE),            RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                             \
         { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_NUMBER),       FN_UNO_IS_NUMBER,       &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                                 \
         { SW_PROP_NAME(UNO_NAME_NUMBERING_LEVEL),           FN_UNO_NUM_LEVEL,       &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, 0},                                                            \
         { SW_PROP_NAME(UNO_NAME_NUMBERING_RULES),           FN_UNO_NUM_RULES,       &::getCppuType((const uno::Reference<container::XIndexReplace>*)0),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                        \
@@ -787,12 +787,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),      RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_CONTOURED),                RES_CHRATR_CONTOUR,     &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
-                    { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PROPERTY_NONE ,MID_URL_VISITED_FMT       },
-                    { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),           PROPERTY_NONE ,MID_URL_UNVISITED_FMT     },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_WORD_MODE ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,    PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),   RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),                  FN_UNO_IS_PHYSICAL,    &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
@@ -868,7 +863,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_TOP_MARGIN_RELATIVE),    RES_UL_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, MID_UP_REL_MARGIN},
                     { SW_PROP_NAME(UNO_NAME_PARA_BOTTOM_MARGIN_RELATIVE), RES_UL_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, MID_LO_REL_MARGIN},
                     TABSTOPS_MAP_ENTRY
-                    { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_WORD_MODE ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,    PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
@@ -879,12 +874,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_FOLLOW_STYLE),          FN_UNO_FOLLOW_STYLE,    &::getCppuType((const OUString*)0), PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),           RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
-                    { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PROPERTY_NONE ,MID_URL_VISITED_FMT       },
-                    { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),           PROPERTY_NONE ,MID_URL_UNVISITED_FMT     },
-                    { SW_PROP_NAME(UNO_NAME_PARA_IS_HYPHENATION                ),   RES_PARATR_HYPHENZONE,      &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },
+                    { SW_PROP_NAME(UNO_NAME_PARA_IS_HYPHENATION                ),   RES_PARATR_HYPHENZONE,      &::getBooleanCppuType(),  PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },
                     { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS ),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },
                     { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },
                     { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS       ),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},
@@ -1217,7 +1207,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     TABSTOPS_MAP_ENTRY
                     { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_WORD_MODE  ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,    PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_COLOR),                    RES_CHRATR_COLOR,       &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_BACK_COLOR      ),     RES_CHRATR_BACKGROUND,  &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_BACK_COLOR       },
                     { SW_PROP_NAME(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND,  &::getBooleanCppuType(),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT      },
@@ -1733,7 +1723,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION    ),             FN_UNO_TABLE_CELL_BACKGROUND,   &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_POSITION},
                     { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),         FN_UNO_TABLE_CELL_BACKGROUND,   &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_BACK_COLOR       },
                     { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ),     FN_UNO_TABLE_CELL_BACKGROUND,   &::getBooleanCppuType(),    PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT      },
-                    { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_WORD_MODE),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,    PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),         PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),   RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},

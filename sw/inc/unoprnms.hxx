@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 14:13:40 $
+ *  last change: $Author: os $ $Date: 2001-04-19 10:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_VERT_ORIENT_POSITION             
 extern const SwPropNameLen __FAR_DATA UNO_NAME_VERT_ORIENT_RELATION             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_VISIBLE                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_WIDTH                            ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_WORD_MODE                    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_WORD_MODE                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_CROP                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_FORMAT_NONE          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_POSITION                ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 14:11:21 $
+ *  last change: $Author: os $ $Date: 2001-04-19 10:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_VERT_ORIENT_POSITION                   
 const SwPropNameLen __FAR_DATA  UNO_NAME_VERT_ORIENT_RELATION                   (MAP_CHAR_LEN("VertOrientRelation"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_VISIBLE                             (MAP_CHAR_LEN("IsVisible"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_WIDTH                                  (MAP_CHAR_LEN("Width"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_WORD_MODE                              (MAP_CHAR_LEN("CharWordMode"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_WORD_MODE                         (MAP_CHAR_LEN("CharWordMode"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_GRAPHIC_CROP                           (MAP_CHAR_LEN("GraphicCrop"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHARACTER_FORMAT_NONE                  (MAP_CHAR_LEN("CharacterFormatNone"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_POSITION                          (MAP_CHAR_LEN("TextPosition"));
