@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:47:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include "xiroot.hxx"
 #endif
 
-class XclImpStream;
 class ScDocumentPool;
 
 /* ============================================================================
