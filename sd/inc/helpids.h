@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:04:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,3 +233,5 @@
 
 #define HID_SD_TABPAGE_HEADERFOOTER_SLIDE           (HID_SD_START + 133)
 #define HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT    (HID_SD_START + 134)
+
+#define HID_SD_DRAW_MEDIA_TOOLBOX           (HID_SD_START + 135)
