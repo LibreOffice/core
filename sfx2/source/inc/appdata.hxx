@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:54:11 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 11:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,8 @@ public:
     SfxEventConfiguration*              pEventConfig;
     SvUShorts*                          pDisabledSlotList;
     SvStrings*                          pSecureURLs;
-    SfxBmkMenu*                         pNewMenu;
-    SfxBmkMenu*                         pAutoPilotMenu;
+    PopupMenu*                          pNewMenu;
+    PopupMenu*                          pAutoPilotMenu;
     SfxMiscCfg*                         pMiscConfig;
     SvtSaveOptions*                     pSaveOptions;
     SvtUndoOptions*                     pUndoOptions;
