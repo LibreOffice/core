@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2002-10-30 14:58:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@
 #ifndef CONNECTIVITY_TABLEHELPER_HXX
 #include <connectivity/TTableHelper.hxx>
 #endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
-#endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -123,6 +120,7 @@ namespace dbaccess
     //= OTables
     //==========================================================================
     class ODBTable;
+    class OContainerMediator;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
     typedef ::connectivity::OTableHelper                            OTable_Base;
     typedef ::connectivity::sdbcx::OTableDescriptor_BASE OTable_Linux;
@@ -130,10 +128,11 @@ namespace dbaccess
     class ODBTable  :public ODataSettings_Base
                     ,public ODBTable_PROP
                     ,public OTable_Base
-                    ,public OConfigurationFlushable
                     ,public IColumnFactory
     {
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumnDefinitions;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
 
     // <properties>
@@ -142,12 +141,11 @@ namespace dbaccess
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-        // OConfigurationFlushable
-        virtual void flush_NoBroadcast_NoCommit();
 
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+        virtual void columnDropped(const ::rtl::OUString& _sName);
 
         /** creates the column collection for the table
             @param  _rNames
@@ -179,13 +177,18 @@ namespace dbaccess
             @param          _rType          the type of the table, as supplied by the driver
             @param          _rDesc          the description of the table, as supplied by the driver
         */
-        ODBTable(connectivity::sdbcx::OCollection* _pTables,const ::utl::OConfigurationNode& _rTableConfig,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-                const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
-                const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
+        ODBTable(connectivity::sdbcx::OCollection* _pTables
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn
+                ,const ::rtl::OUString& _rCatalog
+                , const ::rtl::OUString& _rSchema
+                , const ::rtl::OUString& _rName
+                ,const ::rtl::OUString& _rType
+                , const ::rtl::OUString& _rDesc
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumnDefinitions)
             throw(::com::sun::star::sdbc::SQLException);
 
-        ODBTable(connectivity::sdbcx::OCollection* _pTables,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn)
+        ODBTable(connectivity::sdbcx::OCollection* _pTables
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn)
                 throw(::com::sun::star::sdbc::SQLException);
         virtual ~ODBTable();
 
