@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ bool ShutdownIcon::GetAutostart( )
 
 // ---------------------------------------------------------------------------
 
-void ShutdownIcon::OpenURL( ::rtl::OUString& aURL, const Sequence< PropertyValue >& aArgs )
+void ShutdownIcon::OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& rTarget, const Sequence< PropertyValue >& aArgs )
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
@@ -217,7 +217,7 @@ void ShutdownIcon::OpenURL( ::rtl::OUString& aURL, const Sequence< PropertyValue
             {
                 xLoader->loadComponentFromURL(
                     aURL,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
+                    rTarget,
                     0,
                     aArgs );
             }
@@ -331,7 +331,7 @@ void ShutdownIcon::FileOpen()
                     }
 
                     if ( 1 == nFiles )
-                        OpenURL( sFiles[0], aArgs );
+                        OpenURL( sFiles[0], OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), aArgs );
                     else
                     {
                         OUString    aBaseDirURL = sFiles[0];
@@ -343,13 +343,10 @@ void ShutdownIcon::FileOpen()
                         {
                             OUString    aURL = aBaseDirURL;
                             aURL += sFiles[iFiles];
-                            OpenURL( aURL, aArgs );
+                            OpenURL( aURL, OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), aArgs );
                         }
                     }
-
                 }
-
-
             }
             catch ( ... )
             {
