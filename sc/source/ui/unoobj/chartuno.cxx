@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:22:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
 
 ScChartObj* ScChartsObj::GetObjectByName_Impl(const rtl::OUString& aName) const
 {
-    String aNameString = aName;
+    String aNameString(aName);
     if ( lcl_FindChartObj( pDocShell, nTab, aNameString ) )
         return new ScChartObj( pDocShell, nTab, aNameString );
     return NULL;
@@ -231,7 +231,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     //  chart can't be inserted if any ole object with that name exists on any table
     //  (empty string: generate valid name)
 
-    String aNameString = aName;
+    String aNameString(aName);
     SCTAB nDummy;
     if ( aNameString.Len() && pModel->GetNamedObject( aNameString, OBJ_OLE2, nDummy ) )
     {
@@ -271,9 +271,9 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
             Rectangle aInsRect( aRectPos, aRectSize );
 
-            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-            Size aSize = aInsRect.GetSize();
+            sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
+            MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));
+            Size aSize(aInsRect.GetSize());
             aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
             awt::Size aSz;
             aSz.Width = aSize.Width();
@@ -308,7 +308,7 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aName;
+    String aNameString(aName);
     SdrOle2Obj* pObj = lcl_FindChartObj( pDocShell, nTab, aNameString );
     if (pObj)
     {
@@ -367,13 +367,12 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XTableChart> xChart = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<table::XTableChart> xChart(GetObjectByIndex_Impl(nIndex));
     if (xChart.is())
-        aAny <<= xChart;
+        return uno::makeAny(xChart);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException)
@@ -393,13 +392,12 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XTableChart> xChart = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<table::XTableChart> xChart(GetObjectByName_Impl(aName));
     if (xChart.is())
-        aAny <<= xChart;
+        return uno::makeAny(xChart);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
@@ -450,7 +448,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const rtl::OUString& aName )
                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aName;
+    String aNameString(aName);
     return ( lcl_FindChartObj( pDocShell, nTab, aNameString ) != NULL );
 }
 
@@ -579,7 +577,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
         table::CellRangeAddress* pAry = aSeq.getArray();
         for (USHORT i=0; i<nCount; i++)
         {
-            ScRange aRange = *xRanges->GetObject(i);
+            ScRange aRange(*xRanges->GetObject(i));
 
             aRangeAddress.Sheet       = aRange.aStart.Tab();
             aRangeAddress.StartColumn = aRange.aStart.Col();
