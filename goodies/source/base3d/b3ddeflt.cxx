@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:53:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,14 +100,12 @@ Base3DDefault::Base3DDefault(OutputDevice* pOutDev)
     pPictureWrite(NULL),
     pTransparenceWrite(NULL),
     fDetail(1.0),
+    fDetailBackup( -1.0 ),
+    nMaxPixels(500000),
     bReducedDetail(FALSE),
     bDetailBackedup(FALSE),
+    mbPTCorrection(sal_True)
 
-    // #96837#
-    mbPTCorrection(sal_True),
-
-    fDetailBackup( -1.0 ),
-    nMaxPixels(500000)
 {
 }
 
