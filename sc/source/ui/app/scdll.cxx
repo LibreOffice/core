@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:51:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
