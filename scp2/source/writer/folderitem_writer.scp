@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_writer.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:15:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ FolderItem gid_Folderitem_Swriter
     FileID = gid_File_Exe_Swriter;
     IconFile = gid_File_Exe_Swriter;
     IconID = 0;
-    Parameter = "-writer";
+    WkDir = gid_Dir_Program;
+    Parameter = "";
     Styles = (NOWEB);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_WRITER);
 End
