@@ -215,9 +215,13 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
     }
 
 
+    // ActiveSync sometimes gives out long file names, especially when automatically syncing
+    appArgs += "\"";
     appArgs += psf->szFullpath;
-    appArgs += " ";
+    appArgs += "\" \"";
     appArgs += pdf->szFullpath;
+    appArgs += "\"";
+
 
     if(!CreateProcess(NULL,
                   (char*)appArgs.c_str(),
