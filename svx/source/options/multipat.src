@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:06:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ String RID_MULTIPATH_DBL_ERR
     Text[ dutch ] = "Pad %1 bestaat reeds.";
     Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
     Text[ greek ] = "Ç äéáäñïìŞ %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "°æ·Î%1Àº(´Â) ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "°æ·Î%1ÀÌ(°¡) ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Veri yolu %1 mevcut durumda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La ruta %1 ya existe.";
@@ -266,7 +266,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ dutch ] = "Bestand %1 bestaat reeds";
     Text[ chinese_simplified ] = "Õâ¸öÎÄ¼ş %1 ÒÑ¾­´æÔÚ¡£";
     Text[ greek ] = "Ôï áñ÷åßï %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "ÆÄÀÏ%1Àº(´Â) ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "ÆÄÀÏ%1ÀÌ(°¡) ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Dosya %1 mevcut durumda.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El archivo %1 ya existe.";
@@ -329,5 +329,6 @@ String RID_SVXSTR_FILE_GB
     Text[ finnish ] = "Tiedostot";
 };
  // ******************************************************************* EOF
+
 
 
