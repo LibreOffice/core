@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 13:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,18 +439,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     if(xColSupp.is())
     {
         SwWrtShell& rSh = pView->GetWrtShell();
+        Locale aDocLocale( SvxCreateLocale( rSh.GetCurLang() ));
         SvNumberFormatter* pNumFmtr = rSh.GetNumberFormatter();
-        SfxItemSet aSet(pView->GetPool(), RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE);
-        rSh.GetAttr( aSet );
-        Locale aDocLocale;
-        if(SFX_ITEM_DEFAULT <= aSet.GetItemState(RES_CHRATR_LANGUAGE, TRUE))
-        {
-            Any aLoc;
-            const SfxPoolItem& rItem = aSet.Get(RES_CHRATR_LANGUAGE);
-            rItem.QueryValue(aLoc,  MID_LANG_LOCALE);
-            aDocLocale = *(Locale*)aLoc.getValue();
-        }
-
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNumFmtr );
         Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
         Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
@@ -1476,16 +1466,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                     }
                 }
             }
-            SfxItemSet aSet(pView->GetPool(), RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE);
-            rSh.GetAttr( aSet );
-            if(SFX_ITEM_DEFAULT <= aSet.GetItemState(RES_CHRATR_LANGUAGE, TRUE))
-            {
-                Any aLoc;
-                const SfxPoolItem& rItem = aSet.Get(RES_CHRATR_LANGUAGE);
-                rItem.QueryValue(aLoc,  MID_LANG_LOCALE);
-                aDBFormatData.aLocale = *(Locale*)aLoc.getValue();
-            }
-
+            aDBFormatData.aLocale = SvxCreateLocale( rSh.GetCurLang() );
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
                                         C2S("1"), aEmptyStr, aDBData );

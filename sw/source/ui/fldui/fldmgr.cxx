@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 13:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,12 +1795,8 @@ void SwFldMgr::EvalExpFlds(SwWrtShell* pSh)
 USHORT SwFldMgr::GetCurrLanguage() const
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    if(pSh)
-    {
-        SfxItemSet aSet( pSh->GetAttrPool(), RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE);
-        pSh->GetAttr(aSet);
-        return ((const SvxLanguageItem&)aSet.Get( RES_CHRATR_LANGUAGE ) ).GetLanguage();
-    }
+    if( pSh )
+        pSh->GetCurLang();
 
     return SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
 }
