@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetsObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:15:17 $
+ *  last change:$Date: 2003-09-08 12:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
@@ -68,12 +76,6 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 /**
 * Test for object which is represented by service
@@ -163,11 +165,9 @@ public class ScTableSheetsObj extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         log.println("creating instance of the sheet object to use it in tests");
-        XSpreadsheet oSheet = null;
         XSpreadsheet oSecondSheet = null;
 
         try {
-            oSheet = SOF.createSpreadsheet(xSpreadsheetDoc);
             oSecondSheet = SOF.createSpreadsheet(xSpreadsheetDoc);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -179,8 +179,7 @@ public class ScTableSheetsObj extends TestCase {
 
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println( "adding INSTANCEn as mod relation to environment" );
-        XComponent xComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
+
         int THRCNT = 1;
         if ((String)Param.get("THRCNT") != null) {
             THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
