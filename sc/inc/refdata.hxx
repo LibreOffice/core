@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 
 // Ref-Flags for old (until release 3.1) documents
 
@@ -89,12 +93,12 @@ struct OldSingleRefBools
 
 struct SingleRefData        // Single reference (one address) into the sheet
 {
-    INT16   nCol;       // Absolute values
-    INT16   nRow;
-    INT16   nTab;
-    INT16   nRelCol;    // Values relative to the position
-    INT16   nRelRow;
-    INT16   nRelTab;
+    SCsCOL  nCol;       // Absolute values
+    SCsROW  nRow;
+    SCsTAB  nTab;
+    SCsCOL  nRelCol;    // Values relative to the position
+    SCsROW  nRelRow;
+    SCsTAB  nRelTab;
 
     union
     {
