@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-02 12:13:58 $
+ *  last change: $Author: thb $ $Date: 2002-08-23 15:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,12 @@
 #endif
 #ifndef _SFXECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
+#endif
+#ifndef _SVX_IMPGRF_HXX
+#include <svx/impgrf.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
 #endif
 
 #include "drawdoc.hxx"
@@ -1060,11 +1066,14 @@ BOOL HtmlExport::CreateImagesForPresPages()
 {
     ULONG nError = 0;
 
+    // #100563# GraphicFilter now needs its configuration via property values
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
     if(m_eFormat == FORMAT_JPG && m_nCompression != -1)
     {
-        String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
-        FilterConfigItem aFilterConfigItem( aFilterConfigPath );
-        aFilterConfigItem.WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), m_nCompression );
+        aFilterData.realloc(1);
+        aFilterData[0].Name  = String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) );
+        aFilterData[0].Value <<= m_nCompression;
+        aFilterData[0].State = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     }
 
     for (USHORT nSdPage = 0; nSdPage < m_nSdPageCount && nError == 0; nSdPage++)
@@ -1080,7 +1089,17 @@ BOOL HtmlExport::CreateImagesForPresPages()
         nError = aFile.createStream(aFull,pStrm);
         if(nError == 0)
         {
-            nError = GraphicConverter::Export(*pStrm, aGraphic, m_eFormat==FORMAT_GIF?CVT_GIF:CVT_JPG );
+            // #100563# Use GraphicFilter and set config items by hand
+            GraphicFilter* pGrfFilter = GetGrfFilter();
+
+            pGrfFilter->ExportGraphic( aGraphic,
+                                       String(),
+                                       *pStrm,
+                                       m_eFormat==FORMAT_GIF ?
+                                       pGrfFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( GIF_SHORTNAME ) ) ) :
+                                       pGrfFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ),
+                                       sal_False,
+                                       &aFilterData );
 
             if(nError == 0)
                 nError = aFile.close();
