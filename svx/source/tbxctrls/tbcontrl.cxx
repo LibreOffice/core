@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-22 14:12:41 $
+ *  last change: $Author: gt $ $Date: 2002-12-04 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,8 @@ private:
     ValueSet        aLineSet;
 
 #if _SOLAR__PRIVATE
-    void            MakeLineBitmap( USHORT nNo, Bitmap& rBmp,
-                                    const Size& rSize, String& rStr );
+    void            MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
+                                    const Color& rLine, const Color& rBack );
     DECL_LINK( SelectHdl, void * );
 #endif
 
@@ -386,7 +386,8 @@ protected:
     virtual BOOL    Close();
     virtual Window* GetPreferredKeyInputWindow();
     virtual void    GetFocus();
-
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    void            CreateBitmaps( void );
 public:
     SvxLineWindow_Impl( USHORT nId, SfxBindings& rBindings );
 
@@ -1431,20 +1432,13 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, SfxBindings &rBindings ) :
     aLineSet( this, WinBits( WB_3DLOOK | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_NONEFIELD | WB_NO_DIRECTSELECT ) )
 {
     Size    aBmpSize( 55, 12 );
-    Bitmap  aBmp;
-    String  aStr;
-
-    for ( USHORT i = 1; i < 17; i++ )
-    {
-        MakeLineBitmap( i, aBmp, aBmpSize, aStr );
-        aLineSet.InsertItem( i, aBmp, aStr );
-    }
+    CreateBitmaps();
 
     aLineSet.SetColCount( 2 );
     aLineSet.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
     aLineSet.SetText( SVX_RESSTR(STR_NONE) );
 
-    lcl_CalcSizeValueSet( *this, aLineSet,aBmpSize);
+    lcl_CalcSizeValueSet( *this, aLineSet, aBmpSize );
 
     SetHelpId( HID_POPUP_LINE );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
@@ -1458,9 +1452,8 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 
 // -----------------------------------------------------------------------
 
-void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo,
-                                             Bitmap& rBmp, const Size& rSize,
-                                             String& rStr )
+void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
+                                            const Color& rLineCol, const Color& rBackCol )
 {
     VirtualDevice   aVirDev( *this );
     Rectangle       aRect( Point(2,0), Size(rSize.Width()-4,0) );
@@ -1468,9 +1461,9 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo,
     // grau einfaerben und Bitmap sichern:
     aVirDev.SetOutputSizePixel( rSize );
     aVirDev.SetLineColor();
-    aVirDev.SetFillColor( Color( COL_WHITE ) );
+    aVirDev.SetFillColor( rBackCol );
     aVirDev.DrawRect( Rectangle( Point(0,0), rSize ) );
-    aVirDev.SetFillColor( Color( COL_BLACK ) );
+    aVirDev.SetFillColor( rLineCol );
 
     sal_uInt16 nLineWidth = 0;
     switch ( nNo )
@@ -1736,6 +1729,35 @@ Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 void SvxLineWindow_Impl::GetFocus()
 {
     aLineSet.GrabFocus();
+}
+
+void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxPopupWindow::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        CreateBitmaps();
+        Invalidate();
+    }
+}
+
+void SvxLineWindow_Impl::CreateBitmaps( void )
+{
+    Size                    aBmpSize( 55, 12 );
+    Bitmap                  aBmp;
+    String                  aStr;
+
+    const StyleSettings&    rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color                   aLineCol( rStyleSettings.GetWindowTextColor() );
+    Color                   aBackCol( rStyleSettings.GetWindowColor() );
+    aLineSet.Clear();
+
+    for( USHORT i = 1 ; i < 17 ; ++i )
+    {
+        MakeLineBitmap( i, aBmp, aBmpSize, aStr, aLineCol, aBackCol );
+        aLineSet.InsertItem( i, aBmp, aStr );
+    }
 }
 
 // -----------------------------------------------------------------------
