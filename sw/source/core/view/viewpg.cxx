@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: od $ $Date: 2002-12-06 16:26:55 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 10:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ void ViewShell::PreViewPage(
     const StyleSettings& rSettings = GetWin()->GetSettings().GetStyleSettings();
     if(rSettings.GetHighContrastMode())
         aLineColor = rSettings.GetHighlightTextColor();
-    const Color& rColor = rSettings.GetFieldTextColor();
+    const Color& rColor = SwViewOption::GetFontColor();
     for( nCntRow = 0; pPage && nCntRow < nRow; ++nCntRow )
     {
         aCalcPt.X() = aFreePt.X();
@@ -1440,7 +1440,7 @@ bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
     if ( rSettings.GetHighContrastMode() )
         aSelPgLineColor = rSettings.GetHighlightTextColor();
 
-    Color aEmptyPgShadowBorderColor = rSettings.GetFieldTextColor();
+    Color aEmptyPgShadowBorderColor = SwViewOption::GetFontColor();
 
     {
         PrevwVisiblePageConstIter aPageIter =

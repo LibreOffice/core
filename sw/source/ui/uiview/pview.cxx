@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: od $ $Date: 2002-12-06 16:18:33 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 10:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ void    PrtPrvWindow::Paint(const Rectangle&)
         if(bUseSystemColors)
         {
             SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
-            SetLineColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
+            SetLineColor( SwViewOption::GetFontColor() );
         }
         else
         {
