@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 12:22:52 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 12:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,7 +1403,7 @@ SfxMacroConfig* SfxApplication::GetMacroConfig() const
 }
 
 //--------------------------------------------------------------------
-
+#if SUPD < 623
 void SfxApplication::RegisterEvent(USHORT nId, const String& rEventName)
 {
     if (!pAppData_Impl->pEventConfig)
@@ -1411,6 +1411,7 @@ void SfxApplication::RegisterEvent(USHORT nId, const String& rEventName)
     String aDummy( "untitled event", RTL_TEXTENCODING_ASCII_US );
     SfxEventConfiguration::RegisterEvent(nId, rEventName, aDummy);
 }
+#endif
 
 //--------------------------------------------------------------------
 
