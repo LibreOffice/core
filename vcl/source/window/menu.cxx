@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-03 11:15:30 $
+ *  last change: $Author: pl $ $Date: 2002-06-06 14:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,6 +508,8 @@ public:
     void            PopupClosed( Menu* pMenu );
 
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
+    void SetAutoPopup( BOOL bAuto ) { mbAutoPopup = bAuto; }
 };
 
 
@@ -2286,6 +2288,9 @@ void MenuBar::SelectEntry( USHORT nId )
         pMenuWin->GrabFocus();
         nId = GetItemPos( nId );
 
+        // #99705# popup the selected menu
+        pMenuWin->SetAutoPopup( TRUE );
+
         if( ITEMPOS_INVALID == pMenuWin->nHighlightedItem )
         {
             if( ( nId != ITEMPOS_INVALID ) && ( nId != pMenuWin->nHighlightedItem ) )
@@ -3868,8 +3873,8 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
     HighlightItem( nHighlightedItem, TRUE );
     pMenu->ImplCallHighlight( nHighlightedItem );
 
-    // #99705# always popup the selected menu
-    ImplCreatePopup( bSelectEntry );
+    if( mbAutoPopup )
+        ImplCreatePopup( bSelectEntry );
 
     // #58935# #73659# Focus, wenn kein Popup drunter haengt...
     if ( bJustActivated && !pActivePopup )
@@ -4033,13 +4038,13 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
             if( pActivePopup )
             {
                 // bring focus to menu bar without any open popup
-                KillActivePopup();
                 mbAutoPopup = FALSE;
                 USHORT n = nHighlightedItem;
                 nHighlightedItem = ITEMPOS_INVALID;
                 bStayActive = TRUE;
                 ChangeHighlightItem( n, FALSE );
                 bStayActive = FALSE;
+                KillActivePopup();
                 GrabFocus();
             }
             else
