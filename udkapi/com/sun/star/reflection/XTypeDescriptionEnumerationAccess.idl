@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescriptionEnumerationAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:24:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,18 +143,56 @@ interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
             represented by specialized interfaces derived from
             <type>XTypeDescription</type> can be returned by the enumerator:
 
-            <table border=1>
-            <th>IDL       </th><th>interface</th>
-            <td>module    </td><td><type>XModuleTypeDescription</td></type>
-            <td>interface </td><td><type>XInterfaceTypeDescription2</td></type>
-            <td>service   </td><td><type>XServiceTypeDescription</td></type>
-            <td>struct    </td><td><type>XCompoundTypeDescription</td></type>
-            <td>enum      </td><td><type>XEnumTypeDescription</td></type>
-            <td>exception </td><td><type>XCompoundTypeDescription</td></type>
-            <td>typedef   </td><td><type>XIndirectTypeDescription</td></type>
-            <td>constant  </td><td><type>XConstantTypeDescription</td></type>
-            <td>constants </td><td><type>XConstantsTypeDescription</td></type>
-            <td>singleton </td><td><type>XSingletonTypeDescription</td></type>
+            <table border="1">
+                <thead><tr><th>IDL</th><th>interface</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>enum</td>
+                        <td><type>XEnumTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>struct</td>
+                        <td><type>XCompoundTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>exception</td>
+                        <td><type>XCompoundTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>interface</td>
+                        <td><type>XInterfaceTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XInterfaceTypeDescription2</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>service</td>
+                        <td><type>XServiceTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XServiceTypeDescription2</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>singleton</td>
+                        <td><type>XSingletonTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XSingletonTypeDescription2</type>)</td>
+                    </tr>
+                    <tr>
+                        <td>module</td>
+                        <td><type>XModuleTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>typedef</td>
+                        <td><type>XIndirectTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>constant</td>
+                        <td><type>XConstantTypeDescription</type></td>
+                    </tr>
+                    <tr>
+                        <td>constants</td>
+                        <td><type>XConstantsTypeDescription</type></td>
+                    </tr>
+                </tbody>
             </table>
 
         @throws NoSuchTypeNameException
