@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         {
             // step 1: get value count
             sal_uInt32 nValueCount = 0;
-            for( sal_uInt32 i = 0; i < nCount; i++, pStates++ )
+            sal_uInt32 i;
+
+            for( i = 0; i < nCount; i++, pStates++ )
             {
                 if( *pStates == PropertyState_DIRECT_VALUE )
                     nValueCount++;
