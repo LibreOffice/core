@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 13:57:41 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 14:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@
 #include "splitwin.hxx"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
+#include "sfxhelp.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -192,6 +193,9 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
             pContainer = pCurrent;
         if ( pView && pView != pContainer )
             pView->MakeActive_Impl( FALSE );
+        Window* pWindow = rNEvt.GetWindow();
+        if ( pWindow->GetHelpId() )
+            SfxHelp::OpenHelpAgent( pFrame, pWindow->GetHelpId() );
         return sal_True;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:14:17 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 14:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1653,4 +1653,19 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
         pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
     }
 }
+
+#if SUPD>=636
+long SfxTabDialog::Notify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == EVENT_GETFOCUS )
+    {
+        Window* pWindow = rNEvt.GetWindow();
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if ( pWindow->GetHelpId() && pViewFrame )
+            SfxHelp::OpenHelpAgent( pViewFrame->GetFrame(), pWindow->GetHelpId() );
+    }
+
+    return TabDialog::Notify( rNEvt );
+}
+#endif
 

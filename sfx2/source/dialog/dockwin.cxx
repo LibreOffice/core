@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-21 09:37:55 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 14:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "splitwin.hxx"
 #include "viewsh.hxx"
 #include "accmgr.hxx"
+#include "sfxhelp.hxx"
 
 #define MAX_TOGGLEAREA_WIDTH        100  // max. 100 Pixel
 #define MAX_TOGGLEAREA_HEIGHT       100  // max. 100 Pixel
@@ -1432,6 +1433,10 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
             pImp->pSplitWin->SetActiveWindow_Impl( this );
         else
             pMgr->Activate_Impl();
+
+        Window* pWindow = rEvt.GetWindow();
+        if ( pWindow->GetHelpId() )
+            SfxHelp::OpenHelpAgent( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), pWindow->GetHelpId() );
 /*
         // Nur wg. PlugIn
         SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
