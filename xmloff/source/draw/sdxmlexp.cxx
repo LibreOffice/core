@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:39:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1972,9 +1972,6 @@ void SdXMLExport::_ExportContent()
             if( maDrawPagesStyleNames[nPageInd].getLength() )
                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                         maDrawPagesStyleNames[nPageInd]);
-
-            if( IsImpress() )
-                AddAttribute(XML_NAMESPACE_DRAW, XML_ID, OUString::valueOf( sal_Int32( nPageInd + 1 ) ) );
 
             // draw:master-page-name
             Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, UNO_QUERY);
