@@ -1,4 +1,4 @@
-/* RCS  $Id: extern.h,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: extern.h,v 1.2 2001-04-20 14:21:05 mh Exp $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -60,7 +60,7 @@
 /* Include this last as it invalidates some functions that are defined
  * externally above and turns them into no-ops.  Have to do this after
  * the extern declarations however. */
-#include "config.h"
+#include "conf.h"
 #include "posix.h"
 
 #endif
