@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 18:56:59 $
+ *  last change: $Author: mt $ $Date: 2001-01-31 12:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ void Outliner::ParagraphDeleted( USHORT nPara )
     pParaList->Remove( nPara );
     delete pPara;
 
-    if( !pEditEngine->IsInUndo() )
+    if( !pEditEngine->IsInUndo() && !bPasting )
     {
         pPara = pParaList->GetParagraph( nPara );
         if ( pPara && ( pPara->GetDepth() > nDepth ) )
@@ -1325,7 +1325,8 @@ void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
                 const SfxUInt16Item& rLevel = (const SfxUInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
                 nDepth = rLevel.GetValue();
             }
-            ImplInitDepth( (USHORT)nStartPara, nDepth, FALSE );
+            if ( nDepth != GetDepth( nStartPara ) )
+                ImplInitDepth( (USHORT)nStartPara, nDepth, FALSE );
         }
 
         nCount--;
