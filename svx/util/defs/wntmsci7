@@ -24223,3 +24223,4 @@ _real@8@3ffe9999999999999800
 _real@8@3ffed999999999999800
 _real@8@3ffee8f5c28f5c28f800
 ?RemoveOutlinerCharacterAttribs@SdrTextObj@@QAEXABV?$vector@GV?$allocator@G@_STL@@@_STL@@@Z
+?GetBestMimeEncoding@SvxTextEncodingBox@@SAGXZ
