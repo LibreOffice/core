@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:13:24 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 14:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,7 +926,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
     sal_Int32 nLine = 0;
     while ( nLine < nStartLine )
     {
-        nStartPos = rStr.indexOf( LINE_SEP, nStartPos );
+        nStartPos = searchEOL( rStr, nStartPos );
         if( nStartPos == -1 )
             break;
         nStartPos++;    // nicht das \n.
@@ -939,7 +939,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
     {
         nEndPos = nStartPos;
         for ( sal_Int32 i = 0; i < nLines; i++ )
-            nEndPos = rStr.indexOf( LINE_SEP, nEndPos+1 );
+            nEndPos = searchEOL( rStr, nEndPos+1 );
 
         if ( nEndPos == -1 ) // kann bei letzter Zeile passieren
             nEndPos = rStr.getLength();
@@ -954,8 +954,11 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
     {
         sal_Int32 n = nStartPos;
         sal_Int32 nLen = rStr.getLength();
-        while ( ( n < nLen ) && ( rStr.getStr()[ n ] == LINE_SEP ) )
+        while ( ( n < nLen ) && ( rStr.getStr()[ n ] == LINE_SEP ||
+                                  rStr.getStr()[ n ] == LINE_SEP_CR ) )
+        {
             n++;
+        }
 
         if ( n > nStartPos )
         {
