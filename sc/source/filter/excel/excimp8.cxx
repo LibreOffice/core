@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1782,61 +1782,51 @@ struct BackgroundGraphic
 
 static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphic )
 {
-    sal_Bool    bRetValue = FALSE;
-    sal_uInt32  nSize = (sal_uInt32) rIn.GetRecLen();
+    sal_Bool            bRetValue = FALSE;
+    BackgroundGraphic   aBackground;
 
-    if( nSize > sizeof( BackgroundGraphic ) )
+    rIn >> aBackground.nMagicNumber
+        >> aBackground.nUnknown1
+        >> aBackground.nUnknown2
+        >> aBackground.nWidth
+        >> aBackground.nHeight
+        >> aBackground.nPlanes
+        >> aBackground.nBitsPerPixel;
+
+    if( rIn.IsValid()
+        && ( aBackground.nMagicNumber == 0x00010009 )
+        && ( aBackground.nBitsPerPixel == 24 )
+        && ( aBackground.nPlanes == 1 ) )
     {
-        BackgroundGraphic   aBackground;
-        rIn >> aBackground.nMagicNumber
-            >> aBackground.nUnknown1
-            >> aBackground.nUnknown2
-            >> aBackground.nWidth
-            >> aBackground.nHeight
-            >> aBackground.nPlanes
-            >> aBackground.nBitsPerPixel;
-        if( ( aBackground.nMagicNumber == 0x00010009 )
-            && ( aBackground.nBitsPerPixel == 24 )
-            && ( aBackground.nPlanes == 1 ) )
+        sal_Bool                bImportPossible;
+        sal_Bool                bAlignment = FALSE;
+        sal_uInt32              nWidth = aBackground.nWidth;
+        sal_uInt32              nHeight = aBackground.nHeight;
+        sal_uInt16              nPadding = aBackground.nWidth % 4;
+
+        if( rIn.GetRecLeft() == nHeight * (nWidth * 3 + nPadding) )
         {
-            sal_Bool            bImportPossible;
-            sal_Bool            bAlignment = FALSE;
-            sal_uInt32          nSizeLeft = nSize - 20;
-            sal_uInt32          nWidth = aBackground.nWidth;
-            sal_uInt32          nHeight = aBackground.nHeight;
-            const sal_uInt32    nGuessSize = nWidth * nHeight * 3;
-            bImportPossible = ( nGuessSize == nSizeLeft );
-            if( !bImportPossible )
-            {
-                bImportPossible = ( ( nGuessSize + nHeight ) == nSizeLeft );
-                bAlignment = TRUE;
-            }
-            if( bImportPossible )
-            {
-                Bitmap              aBmp( Size( nWidth, nHeight ), aBackground.nBitsPerPixel );
-                BitmapWriteAccess*  pAcc = aBmp.AcquireWriteAccess();
+            Bitmap              aBmp( Size( nWidth, nHeight ), aBackground.nBitsPerPixel );
+            BitmapWriteAccess*  pAcc = aBmp.AcquireWriteAccess();
 
-                sal_uInt8           nBlue, nGreen, nRed;
-                sal_uInt32          x, y, ys;
-                ys = nHeight - 1;
-                for( y = 0 ; y < nHeight ; y++, ys-- )
+            sal_uInt8           nBlue, nGreen, nRed;
+            sal_uInt32          x, y, ys;
+            ys = nHeight - 1;
+            for( y = 0 ; y < nHeight ; y++, ys-- )
+            {
+                for( x = 0 ; x < nWidth ; x++ )
                 {
-                    for( x = 0 ; x < nWidth ; x++ )
-                    {
-                        rIn >> nBlue >> nGreen >> nRed;
+                    rIn >> nBlue >> nGreen >> nRed;
 
-                        pAcc->SetPixel( ys, x, BitmapColor( nRed, nGreen, nBlue ) );
+                    pAcc->SetPixel( ys, x, BitmapColor( nRed, nGreen, nBlue ) );
 
-                    }
-
-                    if( bAlignment )
-                        rIn.Ignore( 1 );
                 }
-
-                aBmp.ReleaseAccess( pAcc );
-                rGraphic = aBmp;
-                bRetValue = TRUE;
+                rIn.Ignore( nPadding );
             }
+
+            aBmp.ReleaseAccess( pAcc );
+            rGraphic = aBmp;
+            bRetValue = TRUE;
         }
     }
     return bRetValue;
@@ -1850,7 +1840,7 @@ void ImportExcel8::BGPic( void )
 
     Graphic             aGraphic;
     if( lcl_ImportBackgroundGraphic( aIn, aGraphic ) )
-        pStyleSheetItemSet->Put( SvxBrushItem( aGraphic, GPOS_AREA ) );
+        pStyleSheetItemSet->Put( SvxBrushItem( aGraphic, GPOS_TILED ) );
 }
 
 
