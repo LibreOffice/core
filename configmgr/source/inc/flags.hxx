@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flags.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 14:34:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,8 @@ namespace configmgr
 
                 flag_mandatory      = 0x10, // marks this element as non-removable/replacable
                 flag_readonly       = 0x20, // marks this element as read-only
-                flag_default_avail  = 0x40  // marks this element as containing default values
+                flag_default_avail  = 0x40, // marks this element as containing default values
+                flag_removable      = 0x80  // marks this element as removable
             };
             typedef sal_uInt8 Field;
         }
