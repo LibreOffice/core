@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-17 12:00:07 $
+ *  last change: $Author: thb $ $Date: 2001-08-17 13:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1062,11 +1062,17 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
                 {
                     if(!bInDestruction)
                     {
+                        // prevent SetModified (don't want no update here)
+                        sal_Bool bWasEnabled = (*ppObjRef)->IsEnableSetModified();
+                        if ( bWasEnabled )
+                            (*ppObjRef)->EnableSetModified( sal_False );
+
                         // Kein RefDevice oder RefDevice kein Printer
-                        BOOL bModified = (*ppObjRef)->IsModified();
                         Printer* pPrinter = (Printer*) pModel->GetRefDevice();
                         (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
-                        (*ppObjRef)->SetModified( bModified );
+
+                        // reset state
+                        (*ppObjRef)->EnableSetModified( bWasEnabled );
                     }
                 }
             }
