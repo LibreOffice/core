@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: mav $ $Date: 2004-10-08 15:38:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3134,6 +3134,88 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     return bResult;
 }
 
+
+sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XStorage >& xSource,
+                                                    const uno::Reference< embed::XStorage >& xTarget )
+{
+    OSL_ENSURE( xSource.is() && xTarget.is(), "Source and/or target storages are not available!\n" );
+    if ( !xSource.is() || !xTarget.is() || xSource == xTarget )
+        return sal_True;
+
+    try
+    {
+        uno::Sequence< ::rtl::OUString > aSubElements = xSource->getElementNames();
+        for ( sal_Int32 nInd = 0; nInd < aSubElements.getLength(); nInd++ )
+        {
+            if ( xSource->isStorageElement( aSubElements[nInd] ) )
+            {
+                uno::Reference< embed::XStorage > xSubStorage;
+                try {
+                    xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
+                } catch( uno::Exception& )
+                {}
+
+                if ( !xSubStorage.is() )
+                {
+                    // TODO/LATER: as optimization in future a substorage of target storage could be used
+                    //             instead of the temporary storage; this substorage should be removed later
+                    //             if the MimeType is wrong
+                    xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                    xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
+                }
+
+                uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
+                ::rtl::OUString aMediaType;
+                xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+
+                // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
+                //             probably it should be placed in the MimeType-ClassID table or in standalone table
+                if ( aMediaType.getLength()
+                  && aMediaType.compareToAscii( "application/vnd.sun.star.oleobject" ) != COMPARE_EQUAL )
+                {
+                    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+                    aDataFlavor.MimeType = aMediaType;
+                    sal_uInt32 nFormat = SotExchange::GetFormat( aDataFlavor );
+
+                    switch ( nFormat )
+                    {
+                        case SOT_FORMATSTR_ID_STARWRITER_60 :
+                        case SOT_FORMATSTR_ID_STARWRITERWEB_60 :
+                        case SOT_FORMATSTR_ID_STARWRITERGLOB_60 :
+                        case SOT_FORMATSTR_ID_STARDRAW_60 :
+                        case SOT_FORMATSTR_ID_STARIMPRESS_60 :
+                        case SOT_FORMATSTR_ID_STARCALC_60 :
+                        case SOT_FORMATSTR_ID_STARCHART_60 :
+                        case SOT_FORMATSTR_ID_STARMATH_60 :
+                        case SOT_FORMATSTR_ID_STARWRITER_8:
+                        case SOT_FORMATSTR_ID_STARWRITERWEB_8:
+                        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
+                        case SOT_FORMATSTR_ID_STARDRAW_8:
+                        case SOT_FORMATSTR_ID_STARIMPRESS_8:
+                        case SOT_FORMATSTR_ID_STARCALC_8:
+                        case SOT_FORMATSTR_ID_STARCHART_8:
+                        case SOT_FORMATSTR_ID_STARMATH_8:
+                            break;
+
+                        default:
+                        {
+                            if ( !xTarget->hasByName( aSubElements[nInd] ) );
+                                return sal_False;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Cant check storage consistency!\n" );
+    }
+
+    return sal_True;
+}
+
+
 sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {
     sal_Bool bResult = sal_False;
@@ -3142,8 +3224,10 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
         if ( pImp->mpObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
         bResult = SwitchChildrenPersistance( xStorage );
-        OSL_ENSURE( sal_False, "The substorages that have unknown mimetypes will be lost here!\n" );
-        // TODO/LATER: substorages that have unknown mimetypes should be copied to the target storage
+
+        // TODO/LATER: substorages that have unknown mimetypes probably should be copied to the target storage here
+        OSL_ENSURE( StoragesOfUnknownMediaTypeAreCopied_Impl( pImp->m_xDocStorage, xStorage ),
+                    "Some of substorages with unknown mimetypes is lost!" );
     }
 
     if ( bResult )
