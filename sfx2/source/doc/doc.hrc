@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:45:24 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "sfx.hrc"
 
 // #defines *****************************************************************
+
+#define RID_SFX_DOC_END                     (RID_SFX_DIALOG_START-1)
 
 #define STR_NODEFPRINTER                    (RID_SFX_DOC_START+ 0)
 #define STR_PRINTER_NOTAVAIL_1              (RID_SFX_DOC_START+ 1)
@@ -180,7 +182,10 @@
 
 #define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
 #define STR_EDITOBJECT                      (RID_SFX_DOC_START+ 85)
+// --> PB 2004-08-20 #i33095#
+/* obsolete
 #define STR_OPENOBJECT                      (RID_SFX_DOC_START+ 86)
+*/
 
 #define DLOAD_URL 1
 #define DLOAD_STATUS 2
@@ -215,6 +220,23 @@
 #define BMP_128X128_MATH_DOC                (RID_SFX_DOC_START+107)
 #define BMP_128X128_WRITER_DOC              (RID_SFX_DOC_START+108)
 #define BMP_128X128_WRITER_TEMP             (RID_SFX_DOC_START+109)
+
+#define STR_HIDDENINFO_CONTAINS             (RID_SFX_DOC_START+110)
+#define STR_HIDDENINFO_RECORDCHANGES        (RID_SFX_DOC_START+111)
+#define STR_HIDDENINFO_NOTES                (RID_SFX_DOC_START+112)
+#define STR_HIDDENINFO_DOCVERSIONS          (RID_SFX_DOC_START+113)
+#define STR_HIDDENINFO_FIELDS               (RID_SFX_DOC_START+114)
+#define STR_HIDDENINFO_LINKDATA             (RID_SFX_DOC_START+115)
+#define STR_HIDDENINFO_CONTINUE_SAVING      (RID_SFX_DOC_START+116)
+#define STR_HIDDENINFO_CONTINUE_PRINTING    (RID_SFX_DOC_START+117)
+#define STR_HIDDENINFO_CONTINUE_SIGNING     (RID_SFX_DOC_START+118)
+#define STR_HIDDENINFO_CONTINUE_CREATEPDF   (RID_SFX_DOC_START+119)
+
+// please update to the last id
+#define ACT_SFX_DOC_END STR_HIDDENINFO_CONTINUE_CREATEPDF
+#if ACT_SFX_DOC_END > RID_SFX_DOC_END
+#error resource overflow in #line, #file
+#endif
 
 #endif
 
