@@ -1,7 +1,67 @@
-// Test_Stl_Stream.cpp : Definiert den Einsprungpunkt für die Konsolenanwendung.
-//
+/*************************************************************************
+ *
+ *  $RCSfile: lngconvex.cxx,v $
+ *
+ *  $Revision: 1.7 $
+ *
+ *  last change: $Author: hjs $ $Date: 2004-06-25 14:59:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
-//#define WIN32_LEAN_AND_MEAN
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 
 #include <tools/presys.h>
 #include <windows.h>
@@ -9,159 +69,100 @@
 
 #define VCL_NEED_BASETSD
 
+#include "cmdline.hxx"
+
+#include "osl/thread.h"
+#include "osl/process.h"
+#include "osl/file.hxx"
+
+#include "tools/config.hxx"
+#include "tools/isolang.hxx"
+
 #include <iostream>
 #include <fstream>
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
 #include <assert.h>
 #include <map>
 #include <sstream>
 #include <iterator>
 #include <algorithm>
 
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-
-#ifndef _TOOLS_CONFIG_HXX_
-#include <tools/config.hxx>
-#endif
-
-#ifndef _TOOLS_L2TXTENC_HXX_
-#include <tools/l2txtenc.hxx>
-#endif
-
-#ifndef _CMDLINE_HXX_
-#include "cmdline.hxx"
-#endif
-
-#ifndef _OSL_MODULE_H_
-#include <osl/module.h>
-#endif
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-
 namespace /* private */
 {
 
-//-------------------------------
-/** Various constants
-*/
-const std::string RC_PLACEHOLDER_LANGUAGE    = "%LANGUAGE%";
-const std::string RC_PLACEHOLDER_SUBLANGUAGE = "%SUBLANGUAGE%";
+using rtl::OUString;
+using rtl::OString;
 
-
-//####################################
-
-
-typedef int CountryIdentifier_t;
-
-typedef std::vector<CountryIdentifier_t> CountryIdentifierContainer_t;
-
-CountryIdentifierContainer_t g_country_lng_file_countries;
-CountryIdentifierContainer_t g_lng_file_countries;
-
-// we support only this languages that are
-// in the ctrylng file as well as appearing
-// in the lng file
-CountryIdentifierContainer_t g_country_intersection;
-
-//------------------------------------
-// Helper function
-//------------------------------------
-
-
+//###########################################
 void ShowUsage()
 {
-    std::cout << "Usage: -lng lng_file -rc rc_output_file -c country_language_file -rct rc_template_file" << std::endl;
-    std::cout << "-lng Name of the lng file" << std::endl;
-    std::cout << "-rc Name of the resulting resource file" << std::endl;
-    std::cout << "-c Name of the country_language file" << std::endl;
+    std::cout << "Usage: -ulf ulf_file -rc rc_output_file -rct rc_template_file -rch rch_file -rcf rcf_file" << std::endl;
+    std::cout << "-ulf Name of the ulf file" << std::endl;
+    std::cout << "-rc  Name of the resulting resource file" << std::endl;
     std::cout << "-rct Name of the resource template file" << std::endl;
     std::cout << "-rch Name of the resource file header" << std::endl;
     std::cout << "-rcf Name of the resource file footer" << std::endl;
 }
 
-//-------------------------------------------
+//###########################################
+inline OUString OStringToOUString(const OString& str)
+{ return rtl::OStringToOUString(str, osl_getThreadTextEncoding()); }
+
+//###########################################
+inline OString OUStringToOString(const OUString& str)
+{ return rtl::OUStringToOString(str, osl_getThreadTextEncoding()); }
+
+//###########################################
 /** Get the directory where the module
-    is located as system directory,
-    the returned directory has a trailing '\'
-*/
-
-rtl::OUString GetModuleDirectory()
+    is located as system directory, the
+    returned directory has a trailing '\'  */
+OUString get_module_path()
 {
-    rtl::OUString cwd_url;
-    rtl::OUString module_dir;
-
+    OUString cwd_url;
+    OUString module_path;
     if (osl_Process_E_None == osl_getProcessWorkingDir(&cwd_url.pData))
-        osl::FileBase::getSystemPathFromFileURL(cwd_url, module_dir);
+        osl::FileBase::getSystemPathFromFileURL(cwd_url, module_path);
 
-    return module_dir;
+    return module_path;
 }
 
-//-------------------------------------------
+//###########################################
 /** Make the absolute directory of a base and
-    a relative directory,
-    if the relative directory is absolute the
-    the relative directory will be returned
-    unchanged.
+    a relative directory, if the relative
+    directory is absolute the the relative
+    directory will be returned unchanged.
     Base and relative directory should be
     system paths the returned directory is
-    a system path too
-*/
-rtl::OUString GetAbsoluteDirectory(
-    const rtl::OUString& BaseDir, const rtl::OUString& RelDir)
+    a system path too */
+OUString get_absolute_path(
+    const OUString& BaseDir, const OUString& RelDir)
 {
-    rtl::OUString base_url;
-    rtl::OUString rel_url;
+    OUString base_url;
+    OUString rel_url;
 
     osl::FileBase::getFileURLFromSystemPath(BaseDir, base_url);
     osl::FileBase::getFileURLFromSystemPath(RelDir, rel_url);
 
-    rtl::OUString abs_url;
+    OUString abs_url;
     osl::FileBase::getAbsoluteFileURL(base_url, rel_url, abs_url);
 
-    rtl::OUString abs_sys_path;
+    OUString abs_sys_path;
     osl::FileBase::getSystemPathFromFileURL(abs_url, abs_sys_path);
 
     return abs_sys_path;
 }
 
-//--------------------------
-/**
-*/
-rtl::OUString OStr2OUStr(const rtl::OString& aOStr)
+//###########################################
+OString get_absolute_file_path(const std::string& file_name)
 {
-    return rtl::OStringToOUString(aOStr, osl_getThreadTextEncoding());
+    OUString fp = get_absolute_path(
+        get_module_path(), OStringToOUString(file_name.c_str()));
+    return OUStringToOString(fp);
 }
 
-
-//--------------------------
-/**
-*/
-rtl::OString OUStr2OStr(const rtl::OUString& aOUStr)
-{
-    return rtl::OUStringToOString(aOUStr, osl_getThreadTextEncoding());
-}
-
-//####################################
-
-//-------------------------------------------
+//###########################################
 /** A helper class, enables stream exceptions
     on construction, restors the old exception
-    state on destruction
-*/
+    state on destruction */
 class StreamExceptionsEnabler
 {
 public:
@@ -178,383 +179,221 @@ public:
     {
         m_IoStrm.exceptions(m_OldIos);
     }
-
 private:
     std::ios& m_IoStrm;
     std::ios::iostate m_OldIos;
 };
 
+typedef std::vector<std::string> string_container_t;
 
-//####################################
-
-
-//-----------------------------
-/** A line struct (in order to
-    define line reading
-    operators for file streams)
-*/
-struct Line
+//###########################################
+class iso_lang_identifier
 {
-    std::string m_Line;
+public:
+    iso_lang_identifier() {};
+
+    iso_lang_identifier(const OString& str) :
+        lang_(str)
+    { init(); }
+
+    iso_lang_identifier(const std::string& str) :
+        lang_(str.c_str())
+    { init(); }
+
+    OString language() const
+    { return lang_; }
+
+    OString country() const
+    { return country_; }
+
+    OString make_OString() const
+    { return lang_ + "-" + country_; }
+
+    std::string make_std_string() const
+    {
+        OString tmp(lang_ + "-" + country_);
+        return tmp.getStr();
+    }
+
+private:
+    void init()
+    {
+        sal_Int32 idx = lang_.indexOf("-");
+
+        if (idx > -1)
+        {
+            country_ = lang_.copy(idx + 1);
+            lang_ = lang_.copy(0, idx);
+        }
+    }
+
+private:
+    OString lang_;
+    OString country_;
 };
 
-typedef std::vector<Line> LineBuffer_t;
-
-//-----------------------------
-/** A line input operator
-*/
-template<class charT, class traits>
-std::basic_istream<charT,traits>& operator>>(
-    std::basic_istream<charT,traits>& strm, Line& l)
-{
-    // reset line
-    l.m_Line = std::string();
-
-    char chr;
-    while(strm.get(chr))
-    {
-        if (chr != '\n')
-            l.m_Line.push_back(chr);
-        else
-            break;
-    }
-
-    return strm;
-}
-
-//-----------------------------
-/** A line output operator
-*/
-template<class charT, class traits>
-std::basic_ostream<charT, traits>& operator<<(
-    std::basic_ostream<charT, traits>& os, const Line& l)
-{
-    os << l.m_Line;
-    return os;
-}
-
-
-//#####################################
-
-
-//------------------------------------
-// global variables
-//------------------------------------
-
-LineBuffer_t g_resource_template;
-
-
-//#####################################
-
-
-//-------------------------------------
-/** A replacement table contains pairs
-    of placeholders and the appropriate
-    substitute
-*/
-class Substitutor
-{
-private:
-    typedef std::map<std::string, std::string> ReplacementTable_t;
-    typedef std::map<CountryIdentifier_t, ReplacementTable_t*> CountryReplacementTable_t;
-
-public:
-    typedef CountryReplacementTable_t::iterator iterator;
-    typedef CountryReplacementTable_t::const_iterator const_iterator;
-
-public:
-
-    /** ctor
-    */
-    Substitutor() :
-        m_ActiveCountry(0)
-    {};
-
-    explicit Substitutor(CountryIdentifier_t ActiveCountry) :
-        m_ActiveCountry(ActiveCountry)
-    {};
-
-    /** dtor
-    */
-    ~Substitutor()
-    {
-        CountryReplacementTable_t::iterator iter_end = m_CountryReplacementTbl.end();
-        CountryReplacementTable_t::iterator iter = m_CountryReplacementTbl.begin();
-
-        for( /* no init */; iter != iter_end; ++iter)
-            delete iter->second;
-
-        m_CountryReplacementTbl.clear();
-    }
-
-    /**
-    */
-    void SetActiveCountry(CountryIdentifier_t CtryId)
-    {
-        m_ActiveCountry = CtryId;
-    }
-
-    /**
-    */
-    CountryIdentifier_t GetActiveCountry() const
-    {
-        return m_ActiveCountry;
-    }
-
-    /** If Text is a placeholder substitute it with
-        its substitute else leave it unchanged
-    */
-    void Substitute(std::string& Text)
-    {
-        ReplacementTable_t* prt = GetReplacementTable(m_ActiveCountry);
-        assert(prt);
-        ReplacementTable_t::iterator iter = prt->find(Text);
-
-        if (iter != prt->end())
-            Text = iter->second;
-    }
-
-    /** Add a new substitution
-    */
-    void AddSubstitution(
-        const std::string& Placeholder, const std::string& Substitute)
-    {
-        ReplacementTable_t* prt = GetReplacementTable(m_ActiveCountry);
-        assert(prt);
-        prt->insert(std::make_pair(Placeholder, Substitute));
-    }
-
-private:
-
-    /** Return the replacement table for the country id
-        create a new one if not already present
-    */
-    ReplacementTable_t* GetReplacementTable(const CountryIdentifier_t& CountryId)
-    {
-        CountryReplacementTable_t::iterator iter = m_CountryReplacementTbl.find(CountryId);
-
-        ReplacementTable_t* prt = 0;
-
-        if (m_CountryReplacementTbl.end() == iter)
-        {
-            prt = new ReplacementTable_t();
-            m_CountryReplacementTbl.insert(std::make_pair(CountryId, prt));
-        }
-        else
-        {
-            prt = iter->second;
-        }
-
-        return prt;
-    }
-
-private:
-    CountryReplacementTable_t m_CountryReplacementTbl;
-    CountryIdentifier_t m_ActiveCountry;
-};
-
-
-//-----------------------------------------------------
-/*  LangSubLangPair_t contains the Languages and the
-    SubLanguage defines as string (see MS Platform SDK
-    winnt.h), e.g LANG_GERMAN, SUBLANG_GERMAN
-
-    CountryLanguageMap_t associates country identifiers
-    (the country phone preselection) and the appropriate
-    LangSubLangPair_t's
-*/
-typedef std::pair<std::string, std::string> LangSubLangPair_t;
-typedef std::pair<CountryIdentifier_t, LangSubLangPair_t> CountryLanguagePair_t;
-
-//-------------------------------
-/** A stream input operator for
-    country language file lines
-*/
-template<class charT, class traits>
-std::basic_istream<charT,traits>& operator>>(
-    std::basic_istream<charT,traits>& strm, CountryLanguagePair_t& cl_pair)
-{
-    strm >> cl_pair.first;
-    strm >> cl_pair.second.first;
-    strm >> cl_pair.second.second;
-
-    return strm;
-}
-
-//--------------------------------
-/** Read the country language file
-    and add the entries to the
-    substitutor
-
-    The format of the country
-    language file is:
-
-    Country Identifier LANG_??? SUBLANG_???
-    ...
-
-    e.g.
-
-    01 LANG_ENGLISH SUBLANG_ENGLISH_US
-    49 LANG_GERMAN SUBLANG_GERMAN
-    ...
-
-    Will not detect if the entries of the
-    file are valid.
-
-
-    @param  is
-    a file stream
-
-    @param substitutor
-    the substitutor
-
-    @precond the file stream is open
-    and the file is in a proper format
-
-    @throws std::ios::failure
-    if the file could not be read at all
-    or the format of the file is invalid
-*/
-
-void ReadCtryLngFile(
-    std::ifstream& is, Substitutor& substitutor, CountryIdentifierContainer_t& CtryContainer)
-{
-    CountryLanguagePair_t cl_pair;
-
-    StreamExceptionsEnabler sexc(is);
-
-    try
-    {
-        while (is >> cl_pair)
-        {
-            CtryContainer.push_back(cl_pair.first);
-
-            substitutor.SetActiveCountry(cl_pair.first);
-
-            substitutor.AddSubstitution(
-                RC_PLACEHOLDER_LANGUAGE,
-                cl_pair.second.first);
-
-            substitutor.AddSubstitution(
-                RC_PLACEHOLDER_SUBLANGUAGE,
-                cl_pair.second.second);
-        }
-    }
-    catch(const std::ios::failure&)
-    {
-        if (!is.eof())
-            throw;
-    }
-
-    // sort the country container
-    std::sort(CtryContainer.begin(), CtryContainer.end());
-}
-
-
-//####################################
-
-
-//-----------------------------------
-/** Convert a OUString to the MS
-    resource file format string
-    e.g.
-    OUString -> L"\x1A00\x2200\x3400"
-*/
-std::string OUStringToWinResourceString(const rtl::OUString& aString)
+//###########################################
+/** Convert a OUString to the MS resource
+    file format string e.g.
+    OUString -> L"\x1A00\x2200\x3400" */
+std::string make_winrc_unicode_string(const OUString& str)
 {
     std::ostringstream oss;
-
     oss << "L\"";
 
-    size_t length = aString.getLength();
-    const sal_Unicode* pchr = aString.getStr();
+    size_t length = str.getLength();
+    const sal_Unicode* pchr = str.getStr();
 
     for (size_t i = 0; i < length; i++)
         oss << "\\x" << std::hex << (int)*pchr++;
 
     oss << "\"";
-
     return oss.str();
 }
 
-//-------------------------------
-/**
-*/
-void AddGroupEntriesToSubstitutor(
-    Config& aConfig, const ByteString& GroupName, Substitutor& Substitutor, CountryIdentifierContainer_t& CtryContainer)
+//###########################################
+std::string make_winrc_unicode_string(const std::string& str)
 {
-    // precondition
+    return make_winrc_unicode_string(
+        OUString::createFromAscii(str.c_str()));
+}
+
+//################################################
+/** A replacement table contains pairs of
+    placeholders and the appropriate substitute */
+class Substitutor
+{
+private:
+    typedef std::map<std::string, std::string> replacement_table_t;
+    typedef std::map<std::string, replacement_table_t*> iso_lang_replacement_table_t;
+
+public:
+    typedef iso_lang_replacement_table_t::iterator iterator;
+    typedef iso_lang_replacement_table_t::const_iterator const_iterator;
+
+    iterator begin()
+    { return iso_lang_replacement_table_.begin(); }
+
+    iterator end()
+    { return iso_lang_replacement_table_.end(); }
+
+public:
+
+    Substitutor() {};
+
+    ~Substitutor()
+    {
+        iso_lang_replacement_table_t::iterator iter_end = iso_lang_replacement_table_.end();
+        iso_lang_replacement_table_t::iterator iter = iso_lang_replacement_table_.begin();
+
+        for( /* no init */; iter != iter_end; ++iter)
+            delete iter->second;
+
+        iso_lang_replacement_table_.clear();
+    }
+
+    void set_language(const iso_lang_identifier& iso_lang)
+    {
+        active_iso_lang_ = iso_lang;
+    }
+
+    // If Text is a placeholder substitute it with
+    //its substitute else leave it unchanged
+    void substitute(std::string& Text)
+    {
+        replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
+        assert(prt);
+        replacement_table_t::iterator iter = prt->find(Text);
+        if (iter != prt->end())
+            Text = iter->second;
+    }
+
+    void add_substitution(
+        const std::string& Placeholder, const std::string& Substitute)
+    {
+        replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
+        assert(prt);
+        prt->insert(std::make_pair(Placeholder, Substitute));
+    }
+
+
+private:
+    // Return the replacement table for the iso lang id
+    // create a new one if not already present
+    replacement_table_t* get_replacement_table(const std::string& iso_lang)
+    {
+        iso_lang_replacement_table_t::iterator iter =
+            iso_lang_replacement_table_.find(iso_lang);
+
+        replacement_table_t* prt = NULL;
+
+        if (iso_lang_replacement_table_.end() == iter)
+        {
+            prt = new replacement_table_t();
+            iso_lang_replacement_table_.insert(std::make_pair(iso_lang, prt));
+        }
+        else
+        {
+            prt = iter->second;
+        }
+        return prt;
+    }
+
+private:
+    iso_lang_replacement_table_t iso_lang_replacement_table_;
+    iso_lang_identifier active_iso_lang_;
+};
+
+//###########################################
+void add_group_entries(
+    Config& aConfig,
+    const ByteString& GroupName,
+    Substitutor& Substitutor)
+{
     assert(aConfig.HasGroup(GroupName));
 
     aConfig.SetGroup(GroupName);
-
     size_t key_count = aConfig.GetKeyCount();
 
     for (size_t i = 0; i < key_count; i++)
     {
-        ByteString key = aConfig.GetKeyName(i);
+        ByteString iso_lang = aConfig.GetKeyName(i);
+        ByteString key_value_utf8 = aConfig.ReadKey(i);
 
-        bool is_numeric_key = key.IsNumericAscii();
+        Substitutor.set_language(iso_lang_identifier(iso_lang));
 
-        assert(is_numeric_key);
+        key_value_utf8.EraseLeadingAndTrailingChars('\"');
 
-        if (is_numeric_key)
-        {
-            CountryIdentifier_t country_id = key.ToInt32();
+        OUString key_value_utf16 =
+            rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
-            CtryContainer.push_back(country_id);
-
-            Substitutor.SetActiveCountry(country_id);
-
-            ByteString key_value = aConfig.ReadKey(i);
-
-            key_value.EraseLeadingAndTrailingChars('\"');
-
-            rtl::OUString key_value_unicode =
-                rtl::OStringToOUString(key_value, Langcode2TextEncoding(country_id));
-
-            Substitutor.AddSubstitution(
-                GroupName.GetBuffer(),
-                OUStringToWinResourceString(key_value_unicode));
-        }
+        Substitutor.add_substitution(
+            GroupName.GetBuffer(), make_winrc_unicode_string(key_value_utf16));
     }
 }
 
-//-------------------------------
-/** Read the lng file ...
-*/
-void ReadLngFile(
-    const std::string& FileName, Substitutor& Substitutor, CountryIdentifierContainer_t& CtryContainer)
+//###########################################
+void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
 {
-    Config config(
-        rtl::OStringToOUString(FileName.c_str(), osl_getThreadTextEncoding()).getStr());
-
-    size_t group_count = config.GetGroupCount();
-
-    for (size_t i = 0; i < group_count; i++)
-    {
-        AddGroupEntriesToSubstitutor(
-            config, config.GetGroupName(i), Substitutor, CtryContainer);
-    }
-
-    // sort the country container
-    std::sort(CtryContainer.begin(), CtryContainer.end());
+    Config config(OStringToOUString(FileName.c_str()).getStr());
+    size_t grpcnt = config.GetGroupCount();
+    for (size_t i = 0; i < grpcnt; i++)
+        add_group_entries(config, config.GetGroupName(i), Substitutor);
 }
 
-//-------------------------------
-/** Read the content of a file
-    into a line buffer
-*/
-void ReadFile(const std::string& FileName, LineBuffer_t& LineBuffer)
+//###########################################
+void read_file(
+    const std::string& fname,
+    string_container_t& string_container)
 {
-    std::ifstream file(FileName.c_str());
+    std::ifstream file(fname.c_str());
     StreamExceptionsEnabler sexc(file);
 
     try
     {
-        Line line;
-        while (file >> line)
-            LineBuffer.push_back(line);
+        std::string line;
+        while (std::getline(file, line))
+            string_container.push_back(line);
     }
     catch(const std::ios::failure&)
     {
@@ -563,54 +402,25 @@ void ReadFile(const std::string& FileName, LineBuffer_t& LineBuffer)
     }
 }
 
-//-------------------------------
-/** A simple helper function that
-    appens the content of one
-    file to another one
-
-    @throws std::ios::failure
-    if a read or write error
-    occurs
-*/
-void FileAppendFile(std::ostream& os, std::istream& is)
+//###########################################
+/** A simple helper function that appens the
+    content of one file to another one  */
+void concatenate_files(std::ostream& os, std::istream& is)
 {
     StreamExceptionsEnabler os_sexc(os);
     StreamExceptionsEnabler is_sexc(is);
 
     try
     {
-        std::istream_iterator<Line> ii(is);
-        std::istream_iterator<Line> eos;
-
-        std::ostream_iterator<Line> oi(os, "\n");
-
-        std::copy(ii, eos, oi);
+        std::string line;
+        while (std::getline(is, line))
+            os << line << std::endl;
     }
     catch(const std::ios::failure&)
     {
         if (!is.eof())
             throw;
     }
-}
-
-//----------------------------
-/** Helper functions for docu
-    purposes
-*/
-
-inline void ReadResourceTemplate(const std::string& FileName, LineBuffer_t& LineBuffer)
-{
-    ReadFile(FileName, LineBuffer);
-}
-
-inline void FileAppendRcHeader(std::ostream& os, std::istream& is)
-{
-    FileAppendFile(os, is);
-}
-
-inline void FileAppendRcFooter(std::ostream& os, std::istream& is)
-{
-    FileAppendFile(os, is);
 }
 
 //###########################################
@@ -622,47 +432,60 @@ bool is_placeholder(const std::string& str)
 }
 
 //###########################################
-void std_string_to_winrc_string(std::string& str)
+void start_language_section(
+    std::ostream_iterator<std::string>& ostream_iter, const iso_lang_identifier& iso_lang)
 {
-    str = OUStringToWinResourceString(
-        rtl::OUString::createFromAscii(str.c_str()));
+    ostream_iter = std::string();
+
+    std::string lang_section("LANGUAGE ");
+
+    LanguageType ltype = ConvertIsoNamesToLanguage(iso_lang.language(), iso_lang.country());
+
+    char buff[10];
+    _itoa(PRIMARYLANGID(ltype), buff, 16);
+    lang_section += std::string("0x") + std::string(buff);
+
+    lang_section += std::string(" , ");
+
+    _itoa(SUBLANGID(ltype), buff, 16);
+    lang_section += std::string("0x") + std::string(buff);
+    ostream_iter = lang_section;
 }
 
-//-------------------------------------------
+//###########################################
 /** Iterate all languages in the substitutor,
     replace the all placeholder and append the
-    result to the output file
-
-    @throws std::ios::failure
-    on write errors
-*/
-void InflateRcTemplateAndAppendToFile(
-    std::ostream& os, const LineBuffer_t& RcTemplate, Substitutor& substitutor, const CountryIdentifierContainer_t& Countries)
+    result to the output file */
+void inflate_rc_template_to_file(
+    std::ostream& os, const string_container_t& rctmpl, Substitutor& substitutor)
 {
     StreamExceptionsEnabler sexc(os);
 
-    CountryIdentifierContainer_t::const_iterator iter = Countries.begin();
-    CountryIdentifierContainer_t::const_iterator iter_end = Countries.end();
+    Substitutor::const_iterator iter = substitutor.begin();
+    Substitutor::const_iterator iter_end = substitutor.end();
 
     std::ostream_iterator<std::string> oi(os, "\n");
 
-    for (/**/ ;iter != iter_end; ++iter)
+    for ( /**/ ;iter != iter_end; ++iter)
     {
-        substitutor.SetActiveCountry(*iter);
+        substitutor.set_language(iso_lang_identifier(iter->first));
 
-        LineBuffer_t::const_iterator rct_iter    = RcTemplate.begin();
-        LineBuffer_t::const_iterator rct_iter_end = RcTemplate.end();
+        string_container_t::const_iterator rct_iter = rctmpl.begin();
+        string_container_t::const_iterator rct_iter_end = rctmpl.end();
 
-        for (/**/ ;rct_iter != rct_iter_end; ++rct_iter)
+        if (!rctmpl.empty())
+            start_language_section(oi, iter->first);
+
+        for ( /**/ ;rct_iter != rct_iter_end; ++rct_iter)
         {
-            std::istringstream iss = rct_iter->m_Line;
+            std::istringstream iss = *rct_iter;
             std::string line;
 
             while (iss)
             {
                 std::string token;
                 iss >> token;
-                substitutor.Substitute(token);
+                substitutor.substitute(token);
 
                 // #110274# HACK for partially merged
                 // *.lng files where some strings have
@@ -670,118 +493,56 @@ void InflateRcTemplateAndAppendToFile(
                 // don't have in order to keep the
                 // build
                 if (is_placeholder(token))
-                    std_string_to_winrc_string(token);
+                    token = make_winrc_unicode_string(token);
 
                 line += token;
                 line += " ";
             }
-
             oi = line;
         }
     }
 }
 
-//--------------------------------
-/** It is only usefull to generate
-    resources for languages that
-    are in the lng file and in the
-    country-language file, that's
-    why we make the intersection
-    of the both country lists
-*/
-void MakeUniqueIntersection(
-    const CountryIdentifierContainer_t& CtryContainer1,
-    const CountryIdentifierContainer_t& CtryContainer2,
-    CountryIdentifierContainer_t& CtryContainer)
-{
-    std::back_insert_iterator<CountryIdentifierContainer_t> bii(CtryContainer);
-
-    std::set_intersection(
-        CtryContainer1.begin(),
-        CtryContainer1.end(),
-        CtryContainer2.begin(),
-        CtryContainer2.end(),
-        bii);
-
-    std::unique(CtryContainer.begin(), CtryContainer.end());
-}
-
 } // namespace /* private */
 
+//####################################################
+/* MAIN
+   The file names provided via command line should be
+   absolute or relative to the directory of this module.
 
-//####################################
-
-
-//-------------------------------
-/** Main
-
-    The file names provided via
-    command line should be absolute
-    or relative to the directory
-    of this module
+   Algo:
+   1. read the ulf file and initialize the substitutor
+   2. read the resource template file
+   3. create the output file and append the header
+   4. inflate the resource template to the output file
+      for every language using the substitutor
+   5. append the footer
 */
+#define MAKE_ABSOLUTE(s) (get_absolute_file_path((s)).getStr())
+#define ULF_FILE(c)    MAKE_ABSOLUTE((c).get_arg("-ulf"))
+#define RC_TEMPLATE(c) MAKE_ABSOLUTE((c).get_arg("-rct"))
+#define RC_FILE(c)     MAKE_ABSOLUTE((c).get_arg("-rc"))
+#define RC_HEADER(c)   MAKE_ABSOLUTE((c).get_arg("-rch"))
+#define RC_FOOTER(c)   MAKE_ABSOLUTE((c).get_arg("-rcf"))
+
 int main(int argc, char* argv[])
 {
     try
     {
         CommandLine cmdline(argc, argv);
+
         Substitutor substitutor;
+        read_ulf_file(ULF_FILE(cmdline), substitutor);
 
-        rtl::OUString module_dir = GetModuleDirectory();
+        string_container_t rc_tmpl;
+        read_file(RC_TEMPLATE(cmdline), rc_tmpl);
 
-        rtl::OUString oustr_abs_name = GetAbsoluteDirectory(
-            module_dir, OStr2OUStr(cmdline.GetArgument("-c").c_str()));
+        std::ofstream rc_file(RC_FILE(cmdline));
+        concatenate_files(rc_file, std::ifstream(RC_HEADER(cmdline)));
 
-        ReadCtryLngFile(
-            std::ifstream(OUStr2OStr(oustr_abs_name).getStr()),
-            substitutor,
-            g_country_lng_file_countries);
+        inflate_rc_template_to_file(rc_file, rc_tmpl, substitutor);
 
-        oustr_abs_name = GetAbsoluteDirectory(
-            module_dir, OStr2OUStr(cmdline.GetArgument("-lng").c_str()));
-
-        ReadLngFile(
-            OUStr2OStr(oustr_abs_name).getStr(),
-            substitutor,
-            g_lng_file_countries);
-
-        MakeUniqueIntersection(
-            g_country_lng_file_countries,
-            g_lng_file_countries,
-            g_country_intersection);
-
-        oustr_abs_name = GetAbsoluteDirectory(
-            module_dir, OStr2OUStr(cmdline.GetArgument("-rct").c_str()));
-
-        ReadResourceTemplate(
-            OUStr2OStr(oustr_abs_name).getStr(),
-            g_resource_template);
-
-        oustr_abs_name = GetAbsoluteDirectory(
-            module_dir, OStr2OUStr(cmdline.GetArgument("-rc").c_str()));
-
-        std::ofstream rc_output_file(OUStr2OStr(oustr_abs_name).getStr());
-
-        oustr_abs_name = GetAbsoluteDirectory(
-            module_dir, OStr2OUStr(cmdline.GetArgument("-rch").c_str()));
-
-        FileAppendRcHeader(
-            rc_output_file,
-            std::ifstream(OUStr2OStr(oustr_abs_name).getStr()));
-
-        InflateRcTemplateAndAppendToFile(
-            rc_output_file,
-            g_resource_template,
-            substitutor,
-            g_country_intersection);
-
-        oustr_abs_name = GetAbsoluteDirectory(
-            module_dir, OStr2OUStr(cmdline.GetArgument("-rcf").c_str()));
-
-        FileAppendRcFooter(
-            rc_output_file,
-            std::ifstream(OUStr2OStr(oustr_abs_name).getStr()));
-
+        concatenate_files(rc_file, std::ifstream(RC_FOOTER(cmdline)));
     }
     catch(const std::ios::failure& ex)
     {
@@ -796,7 +557,6 @@ int main(int argc, char* argv[])
     {
         std::cout << "Unexpected error..." << std::endl;
     }
-
     return 0;
 }
 
