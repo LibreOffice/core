@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vari2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,9 @@ class PE_Variable : public UnoIDL_PE,
     virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-
+    virtual void        Process_BuiltInType(
+                            const TokBuiltInType &
+                                                i_rToken );
   private:
     enum E_State
     {
