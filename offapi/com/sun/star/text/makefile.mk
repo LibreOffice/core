@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 15:15:55 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:48:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,16 @@ PACKAGE=com$/sun$/star$/text
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleEndnoteView.idl\
+    AccessibleFootnoteView.idl\
+    AccessibleHeaderFooterView.idl\
+    AccessiblePageView.idl\
+    AccessibleParagraphView.idl\
+    AccessibleTextDocumentPageView.idl\
+    AccessibleTextDocumentView.idl\
+    AccessibleTextEmbeddedObject.idl\
+    AccessibleTextFrameView.idl\
+    AccessibleTextGraphicObject.idl\
     AdvancedTextDocument.idl\
     AuthorDisplayFormat.idl\
     AutoTextContainer.idl\
