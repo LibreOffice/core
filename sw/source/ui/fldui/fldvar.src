@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:18:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 03:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇÊµåÀ¯Çü";
+        Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
         Text[ turkish ] = "A~lan tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipo de campo";
@@ -133,7 +133,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¿ï¨ú(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
+        Text[ korean ] = "¼±ÅÃ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Selección";
@@ -217,7 +217,7 @@ TabPage TP_FLD_VAR
         TEXT[ chinese_traditional ] = "Áô¤Jªº(~B)";
         TEXT[ arabic ] = "ÛíÑ ãÑÆí";
         TEXT[ greek ] = "Ìç ïñáôÜ";
-        TEXT[ korean ] = "¾Èº¸ÀÓ";
+        TEXT[ korean ] = "¾Èº¸ÀÓ(~B)";
         TEXT[ turkish ] = "Görünmez";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Invisi~ble";
@@ -274,7 +274,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¯Å(~L)";
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
-        Text[ korean ] = "¼öÁØ";
+        Text[ korean ] = "¼öÁØ(~L)";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nivel";
@@ -404,7 +404,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "³s±µ²Å(~S)";
         Text[ arabic ] = "İÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "±¸ºĞÀÚ";
+        Text[ korean ] = "±¸ºĞÀÚ(~S)";
         Text[ turkish ] = "A~yırma işareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
@@ -442,7 +442,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¦WºÙ(~M)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -481,7 +481,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª(V)";
+        Text[ korean ] = "°ª(V)(~V)";
         Text[ turkish ] = "De~ğer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
@@ -585,6 +585,7 @@ TabPage TP_FLD_VAR
     Text[ catalan ] = "Variables";
     Text[ finnish ] = "Muuttujat";
 };
+
 
 
 
