@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:07:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,8 +1261,9 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
                 HelpEvent aHelpEvent( aPos, HELPMODE_BALLOON );
                 aHelpEvent.SetKeyboardActivated( TRUE );
-                pSVData->maHelpData.mbKeyboardHelp = TRUE;
+                pSVData->maHelpData.mbSetKeyboardHelp = TRUE;
                 pChild->RequestHelp( aHelpEvent );
+                pSVData->maHelpData.mbSetKeyboardHelp = FALSE;
             }
             else if ( (nCode == KEY_F1) || (nCode == KEY_HELP) )
             {
