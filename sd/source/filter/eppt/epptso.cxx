@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-17 20:32:16 $
+ *  last change: $Author: sj $ $Date: 2002-02-18 16:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,7 +1657,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         }
         else
         {
-            if ( nLineSpacing >= 0 )
+            if ( nLineSpacing > 0 )
             {
                 if ( pDesc )
                      nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
