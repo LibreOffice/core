@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-21 08:57:21 $
+ *  last change: $Author: hro $ $Date: 2001-07-20 09:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,31 @@ oslFileError SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize );
 
 oslFileError SAL_CALL osl_readFile( oslFileHandle Handle, void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64 *pBytesRead );
 
+
+/** Tests if the end of a file is reached.
+
+    @param  Handle [in] Handle to an open file.
+    @param  pIsEOF [out] Points to a variable that receives the end of file
+    status.
+    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
+    osl_File_E_INVAL        the format of the parameters was not valid<br>
+
+    These errorcodes can (eventually) be returned:<p>
+    osl_File_E_INTR         function call was interrupted<br>
+    osl_File_E_IO           I/O error<br>
+    osl_File_E_ISDIR        Is a directory<br>
+    osl_File_E_BADF         Bad file<br>
+    osl_File_E_FAULT        Bad address<br>
+    osl_File_E_AGAIN        Operation would block<br>
+    osl_File_E_NOLINK       Link has been severed<p>
+
+    @see    osl_openFile
+    @see    osl_readFile
+    @see    osl_readLine
+    @see    osl_setFilePos
+*/
+
+oslFileError SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF );
 
 /** Writes a number of bytes to a file. The internal file pointer is increased by the number of bytes
     read.
