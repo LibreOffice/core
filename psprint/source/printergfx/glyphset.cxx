@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cp $ $Date: 2002-07-22 13:51:48 $
+ *  last change: $Author: pl $ $Date: 2002-08-28 16:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ GlyphSet::AddGlyphID (
         maGlyphList.push_back (aMapp);
     }
     // if the last map is full, create a new one
-    if ((!nMappedChar) && (maCharList.back().size() == 255))
+    if ((!nMappedChar) && (maGlyphList.back().size() == 255))
     {
         glyph_map_t aMap;
         maGlyphList.push_back (aMap);
