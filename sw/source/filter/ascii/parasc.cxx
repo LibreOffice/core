@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-30 14:40:31 $
+ *  last change: $Author: jp $ $Date: 2001-11-13 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,10 +805,12 @@ ULONG SwASCIIParser::ReadChars()
         BOOL bIns = TRUE, bSplitNode = FALSE;
         switch( *pStt )
         {
-        case 0:
-                    pEnd = pStt;
-                    bIns = FALSE;
-                    break;
+//JP 12.11.2001: task 94636 - don't ignore all behind the zero character,
+//                            change it to the default "control character"
+//      case 0:
+//                  pEnd = pStt;
+//                  bIns = FALSE;
+//                  break;
 
         case 0x0a:  if( LINEEND_LF == rOpt.GetParaFlags() )
                     {
