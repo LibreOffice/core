@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:48:16 $
+ *  last change: $Author: fs $ $Date: 2002-08-08 04:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@
 #define UID_PROP_DLG_ATTR_TARGET_URL            (UID_PROP_DLG    +    5)
 #define UID_PROP_DLG_NUMBER_FORMAT              (UID_PROP_DLG    +    6)
 #define UID_PROP_DLG_CONTROLLABEL               (UID_PROP_DLG    +    7)
+#define UID_PROP_DLG_FILLCOLOR                  (UID_PROP_DLG    +    8)
 
 // Events
 #define HID_EVT_START                           (HID_FORMS_START +  200)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-20 09:57:09 $
+ *  last change: $Author: fs $ $Date: 2002-08-08 04:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,8 +273,10 @@ hidspecial UID_PROP_DLG_BACKGROUNDCOLOR     { HelpID = UID_PROP_DLG_BACKGROUNDCO
 hidspecial UID_PROP_DLG_GRAPHIC_IMPORT      { HelpID = UID_PROP_DLG_GRAPHIC_IMPORT   ;};
 hidspecial UID_PROP_DLG_ATTR_DATASOURCE     { HelpID = UID_PROP_DLG_ATTR_DATASOURCE  ;};
 hidspecial UID_PROP_DLG_ATTR_TARGET_URL     { HelpID = UID_PROP_DLG_ATTR_TARGET_URL  ;};
+hidspecial UID_PROP_DLG_NUMBER_FORMAT       { HelpID = UID_PROP_DLG_NUMBER_FORMAT    ;};
 hidspecial UID_EVT_MACRODLG                 { HelpID = UID_EVT_MACRODLG  ;};
 hidspecial UID_PROP_DLG_CONTROLLABEL        { HelpID = UID_PROP_DLG_CONTROLLABEL ;};
+hidspecial UID_PROP_DLG_FILLCOLOR           { HelpID = UID_PROP_DLG_FILLCOLOR ;};
 
 hidspecial HID_EVT_APPROVEACTIONPERFORMED   { HelpID = HID_EVT_APPROVEACTIONPERFORMED   ;};
 hidspecial HID_EVT_APPROVERESETTED          { HelpID = HID_EVT_APPROVERESETTED          ;};
