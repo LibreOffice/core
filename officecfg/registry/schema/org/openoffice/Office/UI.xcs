@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:42 $
+ *  last change: $Author: os $ $Date: 2002-11-22 09:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@
 					<info>
 						<desc xml:lang="en-US">Specifies the visibilty of unvisited links (true = visible).</desc>
 					</info>
-					<value>true</value>
+                    <value>false</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -181,7 +181,7 @@
 					<info>
 						<desc xml:lang="en-US">Specifies the visibilty of visited links (true = visible).</desc>
 					</info>
-					<value>true</value>
+                    <value>false</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-08 16:50:24 $
+ *  last change: $Author: os $ $Date: 2002-11-22 09:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,7 +947,7 @@
         </node>
         <node oor:name="Links">
           <prop oor:name="IsVisible">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -955,7 +955,7 @@
         </node>
         <node oor:name="LinksVisited">
           <prop oor:name="IsVisible">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
