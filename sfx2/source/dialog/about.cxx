@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ok $ $Date: 2001-09-14 10:29:40 $
+ *  last change: $Author: pb $ $Date: 2001-11-08 08:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
                     FontWeight eOldWeight = aFont.GetWeight();
                     Color aOldCol = aFont.GetColor();
                     aFont.SetWeight( (FontWeight)nVal );
-                    if ( aStr.GetChar(1) != ' ' )
+                    if ( aStr.GetChar(1) != ' ' && aStr.GetChar(aStr.Len()-2) != ' ' )
                     {
                         Color aGrayCol( COL_GRAY );
                         aFont.SetColor( aGrayCol );
