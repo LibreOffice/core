@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:47:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,7 +1153,7 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
     {
         ACT_KONTEXT(this);
 
-        rView.GetEditWin().FlushInBuffer( this );
+        rView.GetEditWin().FlushInBuffer();
         BOOL bHasSel = HasSelection();
         if( bHasSel )
         {
