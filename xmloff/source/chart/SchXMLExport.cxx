@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-27 16:21:20 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 11:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,6 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             addSize( xShape );
         }
 
-        // 3d attributes
         if( xPropSet.is())
         {
             uno::Any aAny;
@@ -836,6 +835,8 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             {
                 DBG_ERROR( "Property HasSecondaryYAxis not found in Diagram" );
             }
+
+            // 3d attributes
             try
             {
                 aAny = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dim3D" )));
@@ -853,6 +854,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     if( aTransform.NeedsAction())
                         mrExport.AddAttribute( XML_NAMESPACE_DR3D, sXML_transform,
                                                aTransform.GetExportString( mrExport.GetMM100UnitConverter()));
+
+                    UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
+                    rShapeExport->export3DSceneAttributes( xPropSet );
+                    rShapeExport->export3DLamps( xPropSet );
                 }
             }
             catch( beans::UnknownPropertyException )
@@ -876,7 +881,6 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     }
     // remove property states for autostyles
     aPropertyStates.clear();
-
 
     // axis elements
     // -------------
