@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
+ *  last change: $Author: fs $ $Date: 2001-04-23 09:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
@@ -197,7 +200,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui;
-//  using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::awt;
 using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::dbaui;
@@ -799,9 +802,9 @@ void OQueryController::setQueryComposer()
     }
 }
 // -----------------------------------------------------------------------------
-VCLXWindow* OQueryController::getWindowPeer()
+Reference< XWindow > OQueryController::getComponentWindow()
 {
-    return m_pWindow->GetWindowPeer();
+    return VCLUnoHelper::GetInterface(m_pWindow);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryController::Construct(Window* pParent)

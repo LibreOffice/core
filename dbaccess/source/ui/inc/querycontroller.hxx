@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:47:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-23 09:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ namespace dbaui
         ~OQueryController();
         ::std::vector<OTableFieldDesc*>*        getTableFieldDesc()         { return &m_vTableFieldDesc; }
 
-        VCLXWindow* getWindowPeer();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getComponentWindow();
 
         virtual void    setModified(sal_Bool _bModified=sal_True);
 

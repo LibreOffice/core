@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:04:24 $
+ *  last change: $Author: fs $ $Date: 2001-04-23 09:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 #ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
 #endif
@@ -119,6 +122,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::awt;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
@@ -178,10 +182,11 @@ IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-VCLXWindow* OGenericUnoController::getWindowPeer()
+Reference< XWindow > OGenericUnoController::getComponentWindow()
 {
-    return getView()->GetWindowPeer();
+    return VCLUnoHelper::GetInterface(getView());
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
@@ -209,8 +214,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
                 if(xFrame.is() && Construct(pParentWin))
                 {
-                    //  xFrame->setComponent(getView()->GetWindowPeer(), this);
-                    xFrame->setComponent(getWindowPeer(), this);
+                    xFrame->setComponent(getComponentWindow(), this);
                     attachFrame(xFrame);
                     pParentComponent->setVisible(sal_True);
                 }
