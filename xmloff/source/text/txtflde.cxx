@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:40:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyUserText(RTL_CONSTASCII_USTRINGPARAM("UserText")),
       sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM("Offset")),
       sPropertyDataBaseName(RTL_CONSTASCII_USTRINGPARAM("DataBaseName")),
+      sPropertyDataBaseURL(RTL_CONSTASCII_USTRINGPARAM("DataBaseURL")),
       sPropertyDataTableName(RTL_CONSTASCII_USTRINGPARAM("DataTableName")),
       sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
       sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM("SetNumber")),
@@ -1506,19 +1507,16 @@ void XMLTextFieldExport::ExportFieldHelper(
     }
 
     case FIELD_ID_DATABASE_NAME:
-        ProcessString(XML_DATABASE_NAME,
-                      GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ExportElement(XML_DATABASE_NAME, sPresentation);
+        ExportDataBaseElement(XML_DATABASE_NAME, sPresentation,
+                              rPropSet, xPropSetInfo);
         break;
 
     case FIELD_ID_DATABASE_NUMBER:
-        ProcessString(XML_DATABASE_NAME,
-                      GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
@@ -1528,12 +1526,11 @@ void XMLTextFieldExport::ExportFieldHelper(
                        GetIntProperty(sPropertySetNumber, rPropSet));
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ExportElement(XML_DATABASE_ROW_NUMBER, sPresentation);
+        ExportDataBaseElement(XML_DATABASE_ROW_NUMBER, sPresentation,
+                              rPropSet, xPropSetInfo);
         break;
 
     case FIELD_ID_DATABASE_NEXT:
-        ProcessString(XML_DATABASE_NAME,
-                      GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
@@ -1541,12 +1538,11 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyCondition, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for database next field");
-        ExportElement(XML_DATABASE_NEXT);
+        ExportDataBaseElement(XML_DATABASE_NEXT, OUString(),
+                              rPropSet, xPropSetInfo);
         break;
 
     case FIELD_ID_DATABASE_SELECT:
-        ProcessString(XML_DATABASE_NAME,
-                      GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
@@ -1556,15 +1552,14 @@ void XMLTextFieldExport::ExportFieldHelper(
                        GetIntProperty(sPropertySetNumber, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for database select field");
-        ExportElement(XML_DATABASE_ROW_SELECT);
+        ExportDataBaseElement(XML_DATABASE_ROW_SELECT, OUString(),
+                              rPropSet, xPropSetInfo);
         break;
 
     case FIELD_ID_DATABASE_DISPLAY:
     {
         // get database, table and column name from field master
         const Reference<XPropertySet> & xMaster = GetMasterPropertySet(rTextField);
-        ProcessString(XML_DATABASE_NAME,
-                      GetStringProperty(sPropertyDataBaseName, xMaster));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, xMaster));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, xMaster));
@@ -1580,7 +1575,8 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ExportElement(XML_DATABASE_DISPLAY, sPresentation);
+        ExportDataBaseElement(XML_DATABASE_DISPLAY, sPresentation,
+                              xMaster, xMaster->getPropertySetInfo());
         break;
     }
 
@@ -2883,6 +2879,53 @@ void XMLTextFieldExport::ProcessStringSequence(
         SvXMLElementExport aElement( rExport, XML_NAMESPACE_TEXT, XML_LABEL,
                                      sal_False, sal_False );
     }
+}
+
+void XMLTextFieldExport::ExportDataBaseElement(
+    enum XMLTokenEnum eElementName,
+    const OUString& sPresentation,
+    const Reference<XPropertySet>& rPropertySet,
+    const Reference<XPropertySetInfo>& rPropertySetInfo )
+{
+    DBG_ASSERT( eElementName != XML_TOKEN_INVALID, "need token" );
+    DBG_ASSERT( rPropertySet.is(), "need property set" );
+    DBG_ASSERT( rPropertySetInfo.is(), "need property set info" );
+
+    // get database properties
+    OUString sDataBaseName;
+    OUString sDataBaseURL;
+    OUString sStr;
+    if( ( rPropertySet->getPropertyValue( sPropertyDataBaseName ) >>= sStr )
+        && ( sStr.getLength() > 0 ) )
+    {
+        sDataBaseName = sStr;
+    }
+    else if( rPropertySetInfo->hasPropertyByName( sPropertyDataBaseURL ) &&
+             (rPropertySet->getPropertyValue( sPropertyDataBaseURL ) >>= sStr) &&
+             (sStr.getLength() > 0) )
+    {
+        sDataBaseURL = sStr;
+    }
+
+    // add database name property (if present)
+    if( sDataBaseName.getLength() > 0 )
+        rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_DATABASE_NAME,
+                              sDataBaseName );
+    SvXMLElementExport aDataBaseElement( GetExport(),
+                                         XML_NAMESPACE_TEXT, eElementName,
+                                         sal_False, sal_False );
+
+    // write URL as children
+    if( sDataBaseURL.getLength() > 0 )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sDataBaseURL );
+        SvXMLElementExport aDataSourceElement(
+            GetExport(), XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE,
+            sal_False, sal_False );
+    }
+
+    // write presentation
+    rExport.Characters( sPresentation );
 }
 
 
