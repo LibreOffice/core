@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-04 13:36:53 $
+ *  last change: $Author: dvo $ $Date: 2002-04-05 09:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,6 +1035,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_DOCUMENT_INDEX), WID_SECT_DOCUMENT_INDEX, CPPU_E2T(CPPUTYPE_REFDOCINDEX), PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION), WID_SECT_IS_GLOBAL_DOC_SECTION, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::READONLY, 0 },
                     { SW_PROP_NMID(UNO_NAME_PROTECTION_KEY), WID_SECT_PASSWORD,      CPPU_E2T(CPPUTYPE_SEQINT8), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_DONT_BALANCE_TEXT_COLUMNS), RES_COLUMNBALANCE, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     COMMON_TEXT_CONTENT_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0}
