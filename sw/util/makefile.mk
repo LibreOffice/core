@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2001-01-24 09:24:26 $
+#   last change: $Author: vg $ $Date: 2001-02-27 18:19:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -205,7 +205,6 @@ SHL2STDLIBS= \
 
 .IF "$(GUI)" ==	"UNX"
 SHL2STDLIBS += \
-    $(SIMLIB) \
     $(SCHLIB) \
     $(SMLIB)
 .ENDIF
