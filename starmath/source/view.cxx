@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 15:25:36 $
+ *  last change: $Author: tl $ $Date: 2001-06-01 10:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,13 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
 }
 
 
+#ifdef DEBUG
+SmEditController::~SmEditController()
+{
+}
+#endif
+
+
 void SmEditController::StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     const SfxStringItem *pItem = PTR_CAST(SfxStringItem, pState);
@@ -493,6 +500,18 @@ void SmEditController::StateChanged(USHORT nSID, SfxItemState eState, const SfxP
 
 
 /**************************************************************************/
+
+SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings, SfxChildWindow *pChildWindow,
+                               Window *pParent) :
+    SfxDockingWindow(pBindings, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
+    aEdit(this),
+    aController(aEdit, SID_TEXT, *pBindings)
+{
+    Hide ();
+    aGrabTimer.SetTimeout (1000);
+    aGrabTimer.SetTimeoutHdl (LINK (this, SmCmdBoxWindow, UpdateTimeoutHdl));
+    aGrabTimer.Start ();
+}
 
 
 SmCmdBoxWindow::~SmCmdBoxWindow ()
@@ -597,19 +616,6 @@ void SmCmdBoxWindow::Grab ()
 }
 
 
-SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings, SfxChildWindow *pChildWindow,
-                               Window *pParent) :
-    SfxDockingWindow(pBindings, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
-    aEdit(this),
-    aController(aEdit, SID_TEXT, *pBindings)
-{
-    Hide ();
-    aGrabTimer.SetTimeout (1000);
-    aGrabTimer.SetTimeoutHdl (LINK (this, SmCmdBoxWindow, UpdateTimeoutHdl));
-    aGrabTimer.Start ();
-}
-
-
 SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
                                              SfxChildAlignment eWish)
 {
@@ -691,6 +697,13 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
 
     ((SmCmdBoxWindow *)pWindow)->ShowWindows ();
 }
+
+
+#ifdef DEBUG
+SmCmdBoxWrapper::~SmCmdBoxWrapper()
+{
+}
+#endif
 
 
 void SmCmdBoxWrapper::Grab ()
@@ -1474,6 +1487,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
 
+    SmEditWindow *pEditWin = GetEditWindow();
     for (USHORT nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich())
     {
         switch (nWh)
@@ -1481,17 +1495,17 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_CUT:
         case SID_COPY:
         case SID_DELETE:
-            if (! GetEditWindow() || ! GetEditWindow()->IsSelected())
+            if (! pEditWin || ! pEditWin->IsSelected())
                 rSet.DisableItem(nWh);
             break;
 
         case SID_PASTE:
-            if( !xClipEvtLstnr.is() )
+            if( !xClipEvtLstnr.is()  &&  pEditWin)
             {
                 AddRemoveClipboardListener( TRUE );
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
-                                                        GetEditWindow()) );
+                                                        pEditWin) );
 
                 bPasteState = aDataHelper.GetTransferable().is() &&
                  ( aDataHelper.HasFormat( FORMAT_STRING ) ||
@@ -1523,7 +1537,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_PREVMARK:
         case SID_DRAW:
         case SID_SELECT:
-            if (! GetEditWindow() || GetEditWindow()->IsEmpty())
+            if (! pEditWin || pEditWin->IsEmpty())
                 rSet.DisableItem(nWh);
             break;
 
@@ -1562,6 +1576,13 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
 SmViewShell::~SmViewShell()
 {
     AddRemoveClipboardListener( FALSE );
+
+    //!! this view shell is not active anymore !!
+    // Thus 'SmGetActiveView' will give a 0 pointer.
+    // Thus we need to supply this view as argument
+    SmEditWindow *pEditWin = GetEditWindow();
+    if (pEditWin)
+        pEditWin->DeleteEditView( *this );
 }
 
 void SmViewShell::Deactivate( BOOL bIsMDIActivate )
