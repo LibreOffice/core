@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: er $ $Date: 2001-08-27 15:22:22 $
+ *  last change: $Author: er $ $Date: 2001-08-30 09:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,10 +2193,10 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     BOOL bInputLine;
     xub_StrLen nCntPost;
     if ( rScan.GetStandardPrec() == 300 &&
-            0 < rInfo.nCntPost && rInfo.nCntPost < 12 )
-    {
+            0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
+    {   // round at 7 decimals (+5 of 86400 == 12 significant digits)
         bInputLine = TRUE;
-        nCntPost = 12;
+        nCntPost = 7;
     }
     else
     {
@@ -2206,28 +2206,16 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     if (bSign && !rInfo.bThousand)     // kein []-Format
         fNumber = 1.0 - fNumber;        // "Kehrwert"
     double fTime = fNumber * 86400.0;
-    double fFactor = pow( 10.0, double(nCntPost) );
-    fTime = floor( 0.5 + fTime * fFactor ) / fFactor; // runden
+    fTime = SolarMath::Round( fTime, int(nCntPost) );
     if (bSign && fTime == 0.0)
         bSign = FALSE;                      // nicht -00:00:00
 
-    ULONG nSeconds = 0;
-    ULONG nHours = 0;
     if( floor( fTime ) > _D_MAX_U_LONG_ )
     {
-    if( (floor( fTime )/3600.0) > _D_MAX_U_LONG_ )
-    {
-        OutString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###" ) );
+        OutString = rScan.GetErrorString();
         return FALSE;
     }
-    else
-    {
-        nSeconds = (ULONG)(((fTime/3600.0) - floor( fTime/3600.0 ))*3600.0);
-        nHours = (ULONG)(fTime/3600.0);
-    }
-    }
-    else
-    nSeconds = (ULONG)floor( fTime );
+    ULONG nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
 //! TODO: DoubleToString with DBNumN
@@ -2309,7 +2297,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
             case SYMBOLTYPE_DIGIT:
             {
                 xub_StrLen nLen = ( bInputLine && i > 0 &&
-                    rInfo.sStrArray[i-1] == GetFormatter().GetNumDecimalSep() ?
+                    rInfo.nTypeArray[i-1] == SYMBOLTYPE_STRING ?
                     nCntPost : rInfo.sStrArray[i].Len() );
                 for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
                 {
@@ -2469,15 +2457,10 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
 {
     using namespace ::com::sun::star::i18n;
     BOOL bRes = FALSE;
-    if (fabs(fNumber) > _D_MAX_LONG_)       // zu gross
-    {
-        OutString = rScan.GetErrorString();
-        return FALSE;
-    }
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
-    fDiff += floor( fNumber );
-    rCal.setDateTime( fDiff );
+    fNumber += fDiff;
+    rCal.setDateTime( fNumber );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
@@ -2706,19 +2689,11 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
 {
     using namespace ::com::sun::star::i18n;
     BOOL bRes = FALSE;
-    if (fabs(fNumber) > _D_MAX_LONG_)       // zu gross
-    {
-        OutString = rScan.GetErrorString();
-        return FALSE;
-    }
-    double fNum1 = floor(fNumber);          // -> Datum
-    double fNum2 = fNumber - fNum1;         // -> Zeit
-    long nNum1 = (long) fNum1;
 
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
-    fDiff += fNumber;
-    rCal.setDateTime( fDiff );
+    fNumber += fDiff;
+    rCal.setDateTime( fNumber );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
@@ -2726,33 +2701,35 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    double fTime = fNum2*86400.0;
-    double fFactor = pow(10.0,rInfo.nCntPost);
-    fTime = floor(0.5 + fTime * fFactor) / fFactor; // runden
-
-    ULONG nSeconds = 0;
-    ULONG nHours = 0;
-    if( floor( fTime ) > _D_MAX_U_LONG_ )
-    {
-    if( (floor( fTime )/3600.0) > _D_MAX_U_LONG_ )
-    {
-        OutString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###" ) );
-        return FALSE;
+    BOOL bInputLine;
+    xub_StrLen nCntPost;
+    if ( rScan.GetStandardPrec() == 300 &&
+            0 < rInfo.nCntPost && rInfo.nCntPost < 7 )
+    {   // round at 7 decimals (+5 of 86400 == 12 significant digits)
+        bInputLine = TRUE;
+        nCntPost = 7;
     }
     else
     {
-        nSeconds = (ULONG)(((fTime/3600.0) - floor( fTime/3600.0 ))*3600.0);
-        nHours = (ULONG)(fTime/3600.0);
+        bInputLine = FALSE;
+        nCntPost = xub_StrLen(rInfo.nCntPost);
     }
-    }
-    else
-        nSeconds = (ULONG)floor( fTime );
+    double fTime = (fNumber - floor( fNumber )) * 86400.0;
+    fTime = SolarMath::Round( fTime, int(nCntPost) );
+    ULONG nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
 //! TODO: DoubleToString with DBNumN
-    SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', rInfo.nCntPost);
+    SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', int(nCntPost));
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
+    if ( bInputLine )
+    {
+        sSecStr.EraseTrailingChars('0');
+        if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
+            sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
+        nCntPost = sSecStr.Len();
+    }
     xub_StrLen nSecPos = 0;                     // Zum Ziffernweisen
                                             // abarbeiten
     ULONG nHour, nMin, nSec;
@@ -2829,8 +2806,9 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 break;
             case SYMBOLTYPE_DIGIT:
             {
-                const xub_StrLen nLen = rInfo.sStrArray[i].Len();
-                const xub_StrLen nCntPost = xub_StrLen(rInfo.nCntPost);
+                xub_StrLen nLen = ( bInputLine && i > 0 &&
+                    rInfo.nTypeArray[i-1] == SYMBOLTYPE_STRING ?
+                    nCntPost : rInfo.sStrArray[i].Len() );
                 for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
                 {
                     OutString += sSecStr.GetChar(nSecPos);

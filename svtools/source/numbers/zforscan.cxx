@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2001-08-28 17:58:48 $
+ *  last change: $Author: er $ $Date: 2001-08-30 09:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,10 +1059,10 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
     xub_StrLen nPos = 0;
-    USHORT i = 0;                           // durchlaeuft die Symbole
-    short eNewType;                         // neu erkannter Typ
+    USHORT i = 0;
+    short eNewType;
 
-    SkipStrings(i, nPos);                   // Ausgabestrings ueberlesen
+    SkipStrings(i, nPos);
     while (i < nAnzStrings)
     {
         if (nTypeArray[i] > 0)
@@ -1082,7 +1082,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 break;
                 case NF_KEY_M:                          // M
                 case NF_KEY_MM:                         // MM
-                {                           // Sonderfall: Minute oder Monat
+                {                                       // minute or month
                     USHORT nIndexPre = PreviousKeyword(i);
                     USHORT nIndexNex = NextKeyword(i);
                     sal_Unicode cChar = PreviousChar(i);
@@ -1146,7 +1146,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 break;
                 case '0':
                 {
-                    if (eScannedType == NUMBERFORMAT_TIME)
+                    if ( (eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME )
                     {
                         if ( Is100SecZero( i, bDecSep ) )
                         {
@@ -1158,13 +1158,6 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                     }
                     else
                         eNewType = NUMBERFORMAT_NUMBER;
-                }
-                break;
-                case ',':
-                case '.':
-                {
-                    bDecSep = TRUE;                         // for SS,0
-                    eNewType = NUMBERFORMAT_UNDEFINED;
                 }
                 break;
                 case '%':
@@ -1206,6 +1199,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                     eNewType = NUMBERFORMAT_TEXT;
                 break;
                 default:
+                    if ( sStrArray[i] == pLoc->getTime100SecSep() )
+                        bDecSep = TRUE;                     // for SS,0
                     eNewType = NUMBERFORMAT_UNDEFINED;
                 break;
             }
@@ -1401,6 +1396,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     String sOldThousandSep  = pFormatter->GetNumThousandSep();
     String sOldDateSep      = pFormatter->GetDateSep();
     String sOldTimeSep      = pLoc->getTimeSep();
+    String sOldTime100SecSep= pLoc->getTime100SecSep();
     String sOldCurSymbol    = GetCurSymbol();
     String sOldCurString    = GetCurString();
 
@@ -2175,15 +2171,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             case '?':
                                 return nPos;
                             break;
-                            case '.':
-                            case ',':
-                            {
-                                bDecSep = TRUE;
-                                nTypeArray[i] = SYMBOLTYPE_STRING;
-                                nPos += sStrArray[i].Len();
-                                i++;
-                            }
-                            break;
                             case '[':
                             {
                                 if (bThousand)              // doppelt
@@ -2211,8 +2198,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             break;
                             default:
                             {
-                                if (bConvertMode && sStrArray[i] == sOldTimeSep)
-                                    sStrArray[i] = pLoc->getTimeSep();
+                                if ( sStrArray[i] == sOldTime100SecSep )
+                                    bDecSep = TRUE;
+                                if ( bConvertMode )
+                                {
+                                    if ( sStrArray[i] == sOldTimeSep )
+                                        sStrArray[i] = pLoc->getTimeSep();
+                                    else if ( sStrArray[i] == sOldTime100SecSep )
+                                        sStrArray[i] = pLoc->getTime100SecSep();
+                                }
                                 nTypeArray[i] = SYMBOLTYPE_STRING;
                                 nPos += sStrArray[i].Len();
                                 i++;
@@ -2275,6 +2269,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
         break;                                      // of NUMBERFORMAT_TIME
         case NUMBERFORMAT_DATETIME:
         {
+            BOOL bTimePart = FALSE;
             while (i < nAnzStrings)
             {
                 switch (nTypeArray[i])
@@ -2299,36 +2294,69 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case SYMBOLTYPE_DEL:
                     {
                         int nCalRet;
-                        if (bConvertMode && sStrArray[i] == sOldDateSep)
-                        {
-                            sStrArray[i] = pFormatter->GetDateSep();
-                            nTypeArray[i] = SYMBOLTYPE_STRING;
-                            nPos += sStrArray[i].Len();
-                            i++;
-                        }
-                        else if (bConvertMode && sStrArray[i] == sOldTimeSep)
-                        {
-                            sStrArray[i] = pLoc->getTimeSep();
-                            nTypeArray[i] = SYMBOLTYPE_STRING;
-                            nPos += sStrArray[i].Len();
-                            i++;
-                        }
-                        else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                        if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
                         {
                             if ( nCalRet < 0  )
                                 return nPos;        // error
                         }
                         else
                         {
-                            nTypeArray[i] = SYMBOLTYPE_STRING;
-                            nPos += sStrArray[i].Len();
-                            i++;
+                            switch( sStrArray[i].GetChar(0) )
+                            {
+                                case '0':
+                                {
+                                    if ( bTimePart && Is100SecZero( i, bDecSep ) )
+                                    {
+                                        bDecSep = TRUE;
+                                        nTypeArray[i] = SYMBOLTYPE_DIGIT;
+                                        String& rStr = sStrArray[i];
+                                        i++;
+                                        nPos += sStrArray[i].Len();
+                                        nCounter++;
+                                        while (i < nAnzStrings &&
+                                            sStrArray[i].GetChar(0) == '0')
+                                        {
+                                            rStr += sStrArray[i];
+                                            nPos += sStrArray[i].Len();
+                                            nTypeArray[i] = SYMBOLTYPE_EMPTY;
+                                            nAnzResStrings--;
+                                            nCounter++;
+                                            i++;
+                                        }
+                                    }
+                                    else
+                                        return nPos;
+                                }
+                                break;
+                                case '#':
+                                case '?':
+                                    return nPos;
+                                break;
+                                default:
+                                {
+                                    if ( bTimePart && sStrArray[i] == sOldTime100SecSep )
+                                        bDecSep = TRUE;
+                                    if ( bConvertMode )
+                                    {
+                                        if ( !bTimePart && sStrArray[i] == sOldDateSep )
+                                            sStrArray[i] = pFormatter->GetDateSep();
+                                        else if ( bTimePart && sStrArray[i] == sOldTimeSep )
+                                            sStrArray[i] = pLoc->getTimeSep();
+                                        else if ( bTimePart && sStrArray[i] == sOldTime100SecSep )
+                                            sStrArray[i] = pLoc->getTime100SecSep();
+                                    }
+                                    nTypeArray[i] = SYMBOLTYPE_STRING;
+                                    nPos += sStrArray[i].Len();
+                                    i++;
+                                }
+                            }
                         }
                     }
                     break;
                     case NF_KEY_AMPM:                       // AM/PM
                     case NF_KEY_AP:                         // A/P
                     {
+                        bTimePart = TRUE;
                         bExp = TRUE;                    // missbraucht fuer A/P
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                         nTypeArray[i] = SYMBOLTYPE_STRING;
@@ -2342,6 +2370,11 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_HH:                         // HH
                     case NF_KEY_S:                          // S
                     case NF_KEY_SS:                         // SS
+                        bTimePart = TRUE;
+                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        nPos += sStrArray[i].Len();
+                        i++;
+                    break;
                     case NF_KEY_M:                          // M
                     case NF_KEY_MM:                         // MM
                     case NF_KEY_MMM:                        // MMM
@@ -2368,6 +2401,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_GGG :                       // GGG
                     case NF_KEY_R :                         // R
                     case NF_KEY_RR :                        // RR
+                        bTimePart = FALSE;
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
                         nPos += sStrArray[i].Len();
                         i++;
@@ -2379,6 +2413,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     break;
                 }
             }                                       // of while
+            nCntPost = nCounter;                    // decimals (100th seconds)
             if (bExp)
                 nCntExp = 1;                        // merkt AM/PM
         }

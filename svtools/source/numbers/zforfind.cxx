@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-08-27 15:22:22 $
+ *  last change: $Author: er $ $Date: 2001-08-30 09:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ BOOL ImpSvNumberInputScan::SkipThousands(
 {
     BOOL res = FALSE;
     sal_Unicode cToken;
-    const String& rThSep = pFormatter->GetLocaleData()->getNumThousandSep();
+    const String& rThSep = pFormatter->GetNumThousandSep();
     register const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
     xub_StrLen nCounter;                                // counts 3 digits
@@ -487,7 +487,7 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
         xub_StrLen& nPos,
         USHORT nStringPos )
 {
-    const String& rSep = pFormatter->GetLocaleData()->getNumThousandSep();
+    const String& rSep = pFormatter->GetNumThousandSep();
     if (   rString == rSep                                  // nothing else
         && nStringPos < nAnzStrings - 1                     // safety first!
         && IsNum[nStringPos+1]                              // number follows
@@ -698,7 +698,25 @@ inline BOOL ImpSvNumberInputScan::GetDecSep( const String& rString, xub_StrLen& 
 {
     if ( rString.Len() > nPos )
     {
-        const String& rSep = pFormatter->GetLocaleData()->getNumDecimalSep();
+        const String& rSep = pFormatter->GetNumDecimalSep();
+        if ( rString.Equals( rSep, nPos, rSep.Len() ) )
+        {
+            nPos += rSep.Len();
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+//---------------------------------------------------------------------------
+// read a hundredth seconds separator
+
+inline BOOL ImpSvNumberInputScan::GetTime100SecSep( const String& rString, xub_StrLen& nPos )
+{
+    if ( rString.Len() > nPos )
+    {
+        const String& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
         if ( rString.Equals( rSep, nPos, rSep.Len() ) )
         {
             nPos += rSep.Len();
@@ -1261,11 +1279,11 @@ BOOL ImpSvNumberInputScan::ScanMidString(
     SkipBlanks(rString, nPos);
     if (GetDecSep(rString, nPos))                   // decimal separator?
     {
-        if (nDecPos == 1 || nDecPos == 3)           // ,12,4 or 1,E2,1
+        if (nDecPos == 1 || nDecPos == 3)           // .12.4 or 1.E2.1
             return FALSE;
-        else if (nDecPos == 2)                      // , dup: 12,4,
+        else if (nDecPos == 2)                      // . dup: 12.4.
         {
-            if (bDecSepInDateSeps)                  // , also date separator
+            if (bDecSepInDateSeps)                  // . also date separator
             {
                 if (eScannedType != NUMBERFORMAT_UNDEFINED &&
                     eScannedType != NUMBERFORMAT_DATE)  // already another type
@@ -1278,9 +1296,17 @@ BOOL ImpSvNumberInputScan::ScanMidString(
         }
         else
         {
-            nDecPos = 2;                            // , in mid string
+            nDecPos = 2;                            // . in mid string
             SkipBlanks(rString, nPos);
         }
+    }
+    else if ( ((eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME)
+            && GetTime100SecSep( rString, nPos ) )
+    {                                               // hundredth seconds separator
+        if ( nDecPos )
+            return FALSE;
+        nDecPos = 2;                                // . in mid string
+        SkipBlanks(rString, nPos);
     }
 
     if (SkipChar('/', rString, nPos))               // fraction?
@@ -1766,7 +1792,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
                 if (eSetType == NUMBERFORMAT_FRACTION)  // Sonderfall Bruch 1 = 1/1
                 {
                     if (i >= nAnzStrings ||         // kein Endstring oder ,
-                        sStrArray[i] == pFormatter->GetLocaleData()->getNumDecimalSep())
+                        sStrArray[i] == pFormatter->GetNumDecimalSep())
                     {
                         eScannedType = NUMBERFORMAT_FRACTION;
                         return TRUE;
@@ -1786,7 +1812,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
                     eScannedType == NUMBERFORMAT_UNDEFINED && // nicht D oder C
                     nDecPos == 0 &&                 // kein Dezimalkomma vorher
                     (i >= nAnzStrings ||            // kein Endstring oder ,
-                        sStrArray[i] == pFormatter->GetLocaleData()->getNumDecimalSep())
+                        sStrArray[i] == pFormatter->GetNumDecimalSep())
                 )
                 {
                     eScannedType = NUMBERFORMAT_FRACTION;
@@ -2087,7 +2113,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
 
                 case NUMBERFORMAT_TIME:
                     if (nDecPos)
-                    {                               // seconds included
+                    {                               // hundredth seconds included
                         if (nAnzNums > 4)
                             res = FALSE;
                     }
@@ -2101,13 +2127,29 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                 case NUMBERFORMAT_DATETIME:
                     if (nMonth)
                     {                               // month name and numbers
-                        if (nAnzNums > 5)
-                            res = FALSE;
+                        if (nDecPos)
+                        {                           // hundredth seconds included
+                            if (nAnzNums > 6)
+                                res = FALSE;
+                        }
+                        else
+                        {
+                            if (nAnzNums > 5)
+                                res = FALSE;
+                        }
                     }
                     else
                     {
-                        if (nAnzNums > 6)
-                            res = FALSE;
+                        if (nDecPos)
+                        {                           // hundredth seconds included
+                            if (nAnzNums > 7)
+                                res = FALSE;
+                        }
+                        else
+                        {
+                            if (nAnzNums > 6)
+                                res = FALSE;
+                        }
                     }
                     break;
 

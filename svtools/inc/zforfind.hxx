@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-08-27 15:21:17 $
+ *  last change: $Author: er $ $Date: 2001-08-30 09:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@ private:
             const String& rString,
             xub_StrLen& nPos );
     inline BOOL GetDecSep(                      // Get decimal separator and advance string position
+            const String& rString,
+            xub_StrLen& nPos );
+    inline BOOL GetTime100SecSep(               // Get hundredth seconds separator and advance string position
             const String& rString,
             xub_StrLen& nPos );
     short GetSign(                              // Get sign  and advance string position
