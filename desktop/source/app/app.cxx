@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:07:00 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,12 +1518,15 @@ void Desktop::Main()
         return;
     }
 
-    // Create TypeDetection service to have filter informations for quickstart feature
+    // Create TypeDetection service to support feature "increase startup performance for loading filter config".
+    // Its not an one-instance service any longer. But it shares a singleton cache instance internaly.
+    // On the other side the feature of concurrent write access on these TypeDetection service instance
+    // can be solved only, if we use multi-service instances ...
+    Reference< XTypeDetection > xTypeDetection;
     RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
     try
     {
-        Reference< XTypeDetection >
-            xTypeDetection( xSMgr->createInstance(
+        xTypeDetection = Reference< XTypeDetection >( xSMgr->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))), UNO_QUERY );
         SetSplashScreenProgress(85);
         Reference< XDesktop > xDesktop( xSMgr->createInstance(
