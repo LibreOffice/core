@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:41:13 $
+ *  last change: $Author: nn $ $Date: 2002-04-23 14:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,8 +202,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
     aScParaWin.SetArgumentFonts(aFntBold,aFntLight);
 
-    aFntBold.SetColor(Color(COL_BLUE));
-    aFntLight.SetColor(Color(COL_BLUE));
+    //  function description for choosing a function is no longer in a different color
 
     aFtHeadLine.SetFont(aFntBold);
     aFtFuncName.SetFont(aFntLight);
