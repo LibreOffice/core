@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfparse.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:05:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,11 +119,11 @@ ScRTFParser::~ScRTFParser()
 }
 
 
-ULONG ScRTFParser::Read( SvStream& rStream )
+ULONG ScRTFParser::Read( SvStream& rStream, const String& rBaseURL )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
-    ULONG nErr = pEdit->Read( rStream, EE_FORMAT_RTF );
+    ULONG nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
     if ( nLastToken == RTF_PAR )
     {
         ScEEParseEntry* pE = pList->Last();
