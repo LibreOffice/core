@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:02:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,8 +754,6 @@ void SAL_CALL ORowSet::disposing( const ::com::sun::star::lang::EventObject& Sou
 // XCloseable
 void SAL_CALL ORowSet::close(  ) throw(SQLException, RuntimeException)
 {
-    if(m_pCache)
-        m_pCache->close();
     {
         MutexGuard aGuard( m_aMutex );
         ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
@@ -1845,9 +1843,6 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  ) throw(SQLException
 void SAL_CALL ORowSet::cancel(  ) throw(RuntimeException)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
-
-    if(m_pCache)
-        m_pCache->cancel();
 }
 // -------------------------------------------------------------------------
 
