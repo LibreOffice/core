@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:26:10 $
+#   last change: $Author: vg $ $Date: 2003-10-06 17:19:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,7 @@ BUILD_ACTION_SEP=;
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) wdevenv allinone$/allinone Release
 BUILD_ACTION=devenv allinone$/allinone.sln /build Release /project all /useenv
 .ELSE
