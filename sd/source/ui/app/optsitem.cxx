@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-25 16:29:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,9 @@ void SdOptionsMisc::SetDefaults()
     SetSolidMarkHdl( TRUE );
     // #90356#
     SetShowUndoDeleteWarning( TRUE );
+    // The default for 6.1-and-above documents is to use printer-independent
+    // formatting.
+    SetPrinterIndependentLayout (1);
     // #97016#
     SetDefaultObjectSizeWidth(8000);
     SetDefaultObjectSizeHeight(5000);
@@ -616,6 +619,7 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
             // #90356#
             IsShowUndoDeleteWarning() == rOpt.IsShowUndoDeleteWarning() &&
+            GetPrinterIndependentLayout() == rOpt.GetPrinterIndependentLayout() &&
             // #97016#
             GetDefaultObjectSizeWidth() == rOpt.GetDefaultObjectSizeWidth() &&
             GetDefaultObjectSizeHeight() == rOpt.GetDefaultObjectSizeHeight()
@@ -644,6 +648,8 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "DefaultObjectSize/Width",
         "DefaultObjectSize/Height",
 
+        "Compatibility/PrinterIndependentLayout",
+
         // just for impress
         "NewDoc/AutoPilot",
         "Start/CurrentPage",
@@ -654,7 +660,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
     // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
     // #97016# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 18 : 14 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 19 : 15 );
     ppNames = aPropNames;
 }
 
@@ -677,19 +683,20 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     // #97016#
     if( pValues[12].hasValue() ) SetDefaultObjectSizeWidth( *(sal_uInt32*) pValues[ 12 ].getValue() );
     if( pValues[13].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 13 ].getValue() );
+    if( pValues[14].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 14 ].getValue() );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        if( pValues[14].hasValue() )
-            SetStartWithTemplate( *(sal_Bool*) pValues[ 14 ].getValue() );
         if( pValues[15].hasValue() )
-            SetStartWithActualPage( *(sal_Bool*) pValues[ 15 ].getValue() );
+            SetStartWithTemplate( *(sal_Bool*) pValues[ 15 ].getValue() );
         if( pValues[16].hasValue() )
-            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 16 ].getValue() );
-        // #90356#
+            SetStartWithActualPage( *(sal_Bool*) pValues[ 16 ].getValue() );
         if( pValues[17].hasValue() )
-            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 17 ].getValue() );
+            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 17 ].getValue() );
+        // #90356#
+        if( pValues[18].hasValue() )
+            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 18 ].getValue() );
     }
 
     return TRUE;
@@ -714,15 +721,16 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     // #97016#
     pValues[ 12 ] <<= GetDefaultObjectSizeWidth();
     pValues[ 13 ] <<= GetDefaultObjectSizeHeight();
+    pValues[ 14 ] <<= GetPrinterIndependentLayout();
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        pValues[ 14 ] <<= IsStartWithTemplate();
-        pValues[ 15 ] <<= IsStartWithActualPage();
-        pValues[ 16 ] <<= IsSummationOfParagraphs();
+        pValues[ 15 ] <<= IsStartWithTemplate();
+        pValues[ 16 ] <<= IsStartWithActualPage();
+        pValues[ 17 ] <<= IsSummationOfParagraphs();
         // #90356#
-        pValues[ 17 ] <<= IsShowUndoDeleteWarning();
+        pValues[ 18 ] <<= IsShowUndoDeleteWarning();
     }
 
     return TRUE;
@@ -751,6 +759,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
     SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
     // #90356#
     SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
+    SetPrinterIndependentLayout( pOpts->GetPrinterIndependentLayout() );
     // #97016#
     SetDefaultObjectSizeWidth( pOpts->GetDefaultObjectSizeWidth() );
     SetDefaultObjectSizeHeight( pOpts->GetDefaultObjectSizeHeight() );
@@ -827,6 +836,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );
     // #90356#
     pOpts->SetShowUndoDeleteWarning( IsShowUndoDeleteWarning() );
+    pOpts->SetPrinterIndependentLayout( GetPrinterIndependentLayout() );
     // #97016#
     pOpts->SetDefaultObjectSizeWidth( GetDefaultObjectSizeWidth() );
     pOpts->SetDefaultObjectSizeHeight( GetDefaultObjectSizeHeight() );
