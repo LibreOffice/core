@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 12:59:12 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:10:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -269,7 +269,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s38\tS38\tL64\tL255\tI2\ti2\tS72\ti2\n";
         push(@{$idtref}, $oneline);
-        $oneline = "1252\tFeature\tFeature\n";
+        $oneline = "65001\tFeature\tFeature\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -309,7 +309,7 @@ sub write_idt_header
         push(@{$idtref}, $oneline);
         $oneline = "s72\ts72\tl128\ts72\ts72\tS255\tL255\tI2\tS72\tI2\tI2\tS72\n";
         push(@{$idtref}, $oneline);
-        $oneline = "1252\tShortcut\tShortcut\n";
+        $oneline = "65001\tShortcut\tShortcut\n";
         push(@{$idtref}, $oneline);
     }
 
@@ -405,7 +405,7 @@ sub get_languagefilename
 {
     my ($idtfilename, $basedir) = @_;
 
-    $idtfilename =~ s/\.idt/\.lng/;
+    $idtfilename =~ s/\.idt/\.ulf/;
 
     my $languagefilename = $basedir . $installer::globals::separator . $idtfilename;
 
@@ -467,7 +467,7 @@ sub get_language_string_from_language_block
 
     if ( $newstring eq "" )
     {
-        $language = "01";   # defaulting to english
+        $language = "en-US";    # defaulting to english
 
         for ( my $i = 0; $i <= $#{$language_block}; $i++ )
         {
