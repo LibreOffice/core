@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 13:43:12 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 12:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,14 +762,6 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( R
 //------------------------------------------------------------------------------
 void OGenericUnoController::EmptyWindow()
 {
-    // dispatch en empty URL so we will be cleaned up
-//  Reference< XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-//  if (xProvider.is())
-//  {
-//      Reference< XDispatch >  xDispatcher = xProvider->queryDispatch(URL(), m_xCurrentFrame->getName(), 0);
-//      if (xDispatcher.is())
-//          xDispatcher->dispatch(URL(), Sequence< PropertyValue >());
-//  }
     if(m_xCurrentFrame.is())
     {
         m_xCurrentFrame->setComponent(NULL,NULL);
@@ -798,10 +790,6 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
     {
         switch (nId)
         {
-            case ID_BROWSER_REDO:
-                aReturn.bEnabled = sal_False;   // simply forget it ;). no redo possible.
-                break;
-
             case ID_BROWSER_UNDO:
             case ID_BROWSER_SAVEDOC:
                 aReturn.bEnabled = sal_True;
