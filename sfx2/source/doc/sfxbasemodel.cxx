@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 16:21:01 $
+ *  last change: $Author: cl $ $Date: 2002-01-28 10:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,3 +1675,28 @@ void SAL_CALL SfxBaseModel::setViewData( const REFERENCE < XINDEXACCESS >& aData
 }
 
 #endif
+
+/** calls all XEventListeners */
+void SfxBaseModel::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) const
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    OINTERFACECONTAINERHELPER* pIC = m_pData->m_aInterfaceContainer.getContainer(
+                                        ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) );
+    if( pIC )
+
+    {
+        OINTERFACEITERATORHELPER aIt( *pIC );
+        while( aIt.hasMoreElements() )
+            ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+    }
+}
+
+/** returns true if someone added a XEventListener to this XEventBroadcaster */
+sal_Bool SfxBaseModel::hasEventListeners() const
+{
+    return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) ) );
+}
+
