@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:16:42 $
+ *  last change: $Author: tl $ $Date: 2002-11-12 14:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ namespace svx{ class ColorConfig;}
 #define VIEWOPT_CORE2_HIDDENPARA        0x00000002L
 #define VIEWOPT_CORE2_SMOOTHSCROLL      0x00000004L
 #define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
+#define VIEWOPT_CORE2_PDF_EXPORT        0x00000010L
 
 
 #define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
@@ -409,6 +410,12 @@ public:
 
     inline void SetCursorInProtectedArea(BOOL b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
+
+    inline BOOL IsPDFExport() const
+        {return nCore2Options & VIEWOPT_CORE2_PDF_EXPORT ? TRUE : FALSE;}
+
+    inline void SetPDFExport(BOOL b)
+        { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PDF_EXPORT) : (nCore2Options &= ~VIEWOPT_CORE2_PDF_EXPORT);}
 
 /*---------------------------------------------------------------------------
 
