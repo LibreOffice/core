@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gradwrap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,15 +423,9 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
         nGreen += nStepGreen;
         nBlue  += nStepBlue;
 
-#ifndef VCL
-        nRed    = MinMax( nRed,   0, 0xFFFF );
-        nGreen  = MinMax( nGreen, 0, 0xFFFF );
-        nBlue   = MinMax( nBlue,  0, 0xFFFF );
-#else
         nRed    = MinMax( nRed,   0, 0xFF );
         nGreen  = MinMax( nGreen, 0, 0xFF );
         nBlue   = MinMax( nBlue,  0, 0xFF );
-#endif
     }
 
     // Falls PolyPolygon-Ausgabe, muessen wir noch ein letztes
@@ -596,15 +590,9 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
         nGreen += nStepGreen;
         nBlue  += nStepBlue;
 
-#ifndef VCL
-        nRed    = MinMax( nRed,   0, 65535 );
-        nGreen  = MinMax( nGreen, 0, 65535 );
-        nBlue   = MinMax( nBlue,  0, 65535 );
-#else
         nRed    = MinMax( nRed,   0, 0xFF );
         nGreen  = MinMax( nGreen, 0, 0xFF );
         nBlue   = MinMax( nBlue,  0, 0xFF );
-#endif
     }
 
     aBrush.SetColor( Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue ) );

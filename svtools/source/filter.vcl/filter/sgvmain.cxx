@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 12:14:16 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,32 +378,6 @@ SvStream& operator>>(SvStream& rInp, GrupType& rGrup)
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-#ifndef VCL
-Color Sgv2SvFarbe(BYTE nFrb1, BYTE nFrb2, BYTE nInts)
-{
-    UINT16 r1=0,g1=0,b1=0,r2=0,g2=0,b2=0;
-    BYTE   nInt2=100-nInts;
-    switch(nFrb1 & 0x07) {
-        case 0:  r1=0xFFFF; g1=0xFFFF; b1=0xFFFF; break;
-        case 1:  r1=0xFFFF; g1=0xFFFF;            break;
-        case 2:             g1=0xFFFF; b1=0xFFFF; break;
-        case 3:             g1=0xFFFF;            break;
-        case 4:  r1=0xFFFF;            b1=0xFFFF; break;
-        case 5:  r1=0xFFFF;                       break;
-        case 6:                        b1=0xFFFF; break;
-        case 7:                                   break;
-    }
-    switch(nFrb2 & 0x07) {
-        case 0:  r2=0xFFFF; g2=0xFFFF; b2=0xFFFF; break;
-        case 1:  r2=0xFFFF; g2=0xFFFF;            break;
-        case 2:             g2=0xFFFF; b2=0xFFFF; break;
-        case 3:             g2=0xFFFF;            break;
-        case 4:  r2=0xFFFF;            b2=0xFFFF; break;
-        case 5:  r2=0xFFFF;                       break;
-        case 6:                        b2=0xFFFF; break;
-        case 7:                                   break;
-    }
-#else
 Color Sgv2SvFarbe(BYTE nFrb1, BYTE nFrb2, BYTE nInts)
 {
     UINT16 r1=0,g1=0,b1=0,r2=0,g2=0,b2=0;
@@ -428,7 +402,6 @@ Color Sgv2SvFarbe(BYTE nFrb1, BYTE nFrb2, BYTE nInts)
         case 6:                    b2=0xFF; break;
         case 7:                                   break;
     }
-#endif
     r1=(UINT16)((UINT32)r1*nInts/100+(UINT32)r2*nInt2/100);
     g1=(UINT16)((UINT32)g1*nInts/100+(UINT32)g2*nInt2/100);
     b1=(UINT16)((UINT32)b1*nInts/100+(UINT32)b2*nInt2/100);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xbmread.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,12 @@
 #ifndef _XBMREAD_HXX
 #define _XBMREAD_HXX
 
-#ifdef VCL
-
 #ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
 #ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
 #endif
-
-#else // VCL
-
-#ifndef _GEN_HXX
-#include <tools/gen.hxx>
-#endif
-#ifndef _FLTDEFS_HXX
-#include "fltdefs.hxx"
-#endif
-
-#endif // VCL
 
 #ifdef _XBMPRIVATE
 
@@ -104,8 +91,6 @@ enum ReadState
 // -------------
 // - XBMReader -
 // -------------
-
-#ifdef VCL
 
 class XBMReader : public GraphicReader
 {
@@ -135,41 +120,6 @@ public:
     ReadState           ReadXBM( Graphic& rGraphic );
 };
 
-#else // VCL
-
-class XBMReader : public GraphicReader
-{
-    SvStream&   rIStm;
-    PDIBBYTE    pMonoDIB;
-    PDIBBYTE    pMonoDIBBytes;
-    PDIBBYTE    pRow1;
-    PDIBBYTE    pMonoFile;
-    short       pHexTable[ 256 ];
-    long        nLastPos;
-    long        nWidth;
-    long        nHeight;
-    long        nWidthAl1;
-    long        nMonoTotal;
-    BOOL        bStatus;
-
-    void        InitTable();
-    void        CreateMonoDIB( long nWidth, long nHeight );
-    void        CreateGraphic( Graphic& rGraphic );
-    String      FindTokenLine( SvStream* pInStm, const char* pTok1,
-                               const char* pTok2 = NULL, const char* pTok3 = NULL );
-    long        ParseDefine( const char* pDefine );
-    BOOL        ParseData( SvStream* pInStm, const String& aLastLine, XBMFormat eFormat );
-
-
-public:
-
-                XBMReader( SvStream& rStm, void* pCallData );
-    virtual     ~XBMReader();
-
-    ReadState   ReadXBM( Graphic& rGraphic );
-};
-
-#endif // VCL
 #endif // _XBMPRIVATE
 
 // -------------

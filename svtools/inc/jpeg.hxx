@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 16:01:14 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,28 +62,12 @@
 #ifndef _JPEG_HXX
 #define _JPEG_HXX
 
-#ifdef VCL
-
 #ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
 #ifndef _FLTCALL_HXX
 #include "fltcall.hxx"
 #endif
-
-#else // VCL
-
-#ifndef _GEN_HXX
-#include <tools/gen.hxx>
-#endif
-#ifndef _FLTCALL_HXX
-#include "fltcall.hxx"
-#endif
-#ifndef _FLTDEFS_HXX
-#include "fltdefs.hxx"
-#endif
-
-#endif // VCL
 
 #ifdef _JPEGPRIVATE
 
@@ -101,8 +85,6 @@ enum ReadState
 // --------------
 // - JPEGReader -
 // --------------
-
-#ifdef VCL
 
 class JPEGReader : public GraphicReader
 {
@@ -160,36 +142,6 @@ public:
     BOOL                Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions );
 };
 
-#else // VCL
-
-class JPEGReader : public GraphicReader
-{
-    Graphic     aImGraphic;
-    SvStream&   rIStm;
-    PDIBBYTE    pMonoDIB;
-    PDIBBYTE    pRow1;
-    PDIBBYTE    pMonoFile;
-    long        nLastPos;
-    long        nFormerPos;
-    long        nLastLines;
-    long        nWidthAl1;
-    long        nTotal;
-    long        nMonoTotal;
-
-    void        CreateMonoDIB( const Size& rSize );
-    void        CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
-
-
-public:
-
-                JPEGReader( SvStream& rStm, void* pCallData );
-    virtual     ~JPEGReader();
-
-
-    ReadState   ReadJpeg( Graphic& rGraphic );
-};
-
-#endif // VCL
 #endif // _JPEGPRIVATE
 
 // ---------------------

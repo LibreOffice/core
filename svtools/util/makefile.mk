@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.24 $
+#*  $Revision: 1.25 $
 #*
-#*  last change: $Author: dv $ $Date: 2001-07-03 11:54:09 $
+#*  last change: $Author: thb $ $Date: 2001-08-14 13:49:41 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -215,12 +215,9 @@ SHL1STDLIBS+= \
         $(LIBPRE) gdi32.lib
 .ENDIF
 
-.IF "$(VCL)" != ""
 SHL1STDLIBS+= \
-            $(SOTLIB)
-.ENDIF
-
-SHL1STDLIBS += $(JPEG3RDLIB)
+            $(SOTLIB) \
+            $(JPEG3RDLIB)
 
 #SHL1DEPNU=$(LB)$/isvl.lib
 #SHL1DEPNU=$(SHL2TARGETN)

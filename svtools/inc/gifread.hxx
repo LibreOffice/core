@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gifread.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,12 @@
 #ifndef _GIFREAD_HXX
 #define _GIFREAD_HXX
 
-#ifdef VCL
-
 #ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
 #ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
 #endif
-
-#else // VCL
-
-#ifndef _GEN_HXX
-#include <tools/gen.hxx>
-#endif
-#ifndef _FLTDEFS_HXX
-#include "fltdefs.hxx"
-#endif
-
-#endif // VCL
 
 #ifdef _GIFPRIVATE
 
@@ -114,8 +101,6 @@ enum ReadState
 // -------------
 
 class GIFLZWDecompressor;
-
-#ifdef VCL
 
 class SvStream;
 
@@ -182,82 +167,6 @@ public:
     virtual             ~GIFReader();
 };
 
-#else // VCL
-
-class GIFReader : public GraphicReader
-{
-    Graphic             aImGraphic;
-    Animation           aAnimation;
-    SvStream&           rIStm;
-    void*               pCallerData;
-    ULONG*              pGPalette;              // Format: 0x00RRGGBB, Groesse des Feldes: immer 256
-    BYTE*               pPalEntryFlag;
-    PDIBBYTE            pDIB;
-    PDIBBYTE            pDIBBytes;
-    PDIBBYTE            pMonoDIB;
-    PDIBBYTE            pMonoDIBBytes;
-    PDIBBYTE            pSrcBuf;
-    PDIBBYTE            pRow8;
-    PDIBBYTE            pRow1;
-    PDIBBYTE            pFile;
-    PDIBBYTE            pMonoFile;
-    GIFLZWDecompressor* pDecomp;
-    long                nLastPos;
-    long                nWidthAl8;
-    long                nWidthAl1;
-    long                nTotal;
-    long                nMonoTotal;
-    USHORT              nTimer;
-    USHORT              nGlobalWidth;           // maximale Bildbreite aus Header
-    USHORT              nGlobalHeight;          // maximale Bildhoehe aus Header
-    USHORT              nImageWidth;            // maximale Bildbreite aus Header
-    USHORT              nImageHeight;           // maximale Bildhoehe aus Header
-    USHORT              nImagePosX;
-    USHORT              nImagePosY;
-    USHORT              nImageX;                // maximale Bildbreite aus Header
-    USHORT              nImageY;                // maximale Bildhoehe aus Header
-    USHORT              nLastImageY;
-    USHORT              nGPaletteSize;          // Anzahl der belegten Eintraege in pPalette
-    USHORT              nBlackIndex;
-    USHORT              nLastInterCount;
-    USHORT              nLoops;
-    GIFAction           eActAction;
-    BOOL                bStatic;                // zeigt an, ob die GIF-Grafik animiert oder statisch ist
-    BOOL                bStatus;
-    BOOL                bDestTransparent;
-    BOOL                bLocalDestTransparent;
-    BOOL                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
-    BOOL                bInterlaced;
-    BOOL                bOverreadBlock;
-    BOOL                bImGraphicReady;
-    BOOL                bGlobalPalette;
-    BOOL                bGIF89;
-    BYTE                nBackgroundColor;       // Hintergrundfarbe
-    BYTE                nGCTransparentIndex;    // Pixel von diesem Index sind durchsichtig
-    BYTE                nGCDisposalMethod;      // 'Disposal Method' (siehe GIF-Doku)
-
-    USHORT              ReadPaletteEntries( ULONG* pPal, USHORT nNumEntries );
-    void                ClearImageExtensions();
-    BOOL                CreateBitmaps( long nWidth, long nHeight, ULONG* pDIBPal,
-                                       USHORT nPalCount, BOOL bWatchForBackgroundColor );
-    BOOL                ReadGlobalHeader();
-    BOOL                ReadExtension();
-    BOOL                ReadLocalHeader();
-    USHORT              ReadNextBlock();
-    void                FillImages( PDIBBYTE pBytes, ULONG nCount );
-    void                CreateNewBitmaps();
-    BOOL                ProcessGIF();
-
-public:
-
-    ReadState           ReadGIF( Graphic& rGraphic );
-    const Graphic&      GetIntermediateGraphic();
-
-                        GIFReader( SvStream& rStm, void* pCallData );
-    virtual             ~GIFReader();
-};
-
-#endif // VCL
 #endif // _GIFPRIVATE
 
 // -------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sj $ $Date: 2001-02-28 13:47:07 $
+#   last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,8 +69,6 @@ VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------
 
-.IF "$(VCL)" != ""
-
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
@@ -119,7 +117,7 @@ SLOFILES= $(SLO)$/filter.obj   \
           $(SLO)$/filter2.obj  \
           $(SLO)$/dlgexpor.obj \
           $(SLO)$/dlgejpg.obj  \
-            $(SLO)$/sgfbram.obj  \
+          $(SLO)$/sgfbram.obj  \
           $(SLO)$/sgvmain.obj  \
           $(SLO)$/sgvtext.obj  \
           $(SLO)$/sgvspln.obj  \
@@ -133,11 +131,4 @@ EXCEPTIONSNOOPTFILES=	$(SLO)$/filter.obj				\
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-.ELSE
-
-dummy:
-    @+echo VCL not set. nothing to do!
-
-.ENDIF # VCL
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+#   last change: $Author: thb $ $Date: 2001-08-14 13:49:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,8 +70,6 @@ TARGET2=jpg
 
 # --- Settings -----------------------------------------------------------
 
-.IF "$(VCL)" != ""
-
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
@@ -87,10 +85,3 @@ CFLAGS=$(CFLAGS) -Od
 SLOFILES=	$(SLO)$/jpeg.obj
 
 .INCLUDE :  target.mk
-
-.ELSE
-
-dummy:
-    @+echo VCL not set. nothing to do!
-
-.ENDIF #VCL
