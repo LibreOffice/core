@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+#   last change: $Author: tl $ $Date: 2001-02-19 11:19:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ CXXFILES = \
 
 SRCFILES =  \
         optasian.src	\
+        optjsearch.src	\
         optgenrl.src	\
         optdict.src		\
         optsave.src		\
@@ -121,6 +122,7 @@ SRCFILES =  \
 SLOFILES=	\
         $(SLO)$/asiancfg.obj	\
         $(SLO)$/optasian.obj	\
+        $(SLO)$/optjsearch.obj	\
         $(SLO)$/optpath.obj	\
         $(SLO)$/optdict.obj	\
         $(SLO)$/optitems.obj	\
