@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-10 11:30:37 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 09:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,23 +272,17 @@ namespace utl
         }
         return sal_False;
     }
-
     //------------------------------------------------------------------------
-    OConfigurationNode OConfigurationNode::createNode(const ::rtl::OUString& _rName) const throw()
+    OConfigurationNode OConfigurationNode::insertNode(const ::rtl::OUString& _rName,const Reference< XInterface >& _xNode) const throw()
     {
-        Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
-        OSL_ENSURE(xChildFactory.is(), "OConfigurationNode::createNode: object is invalid or read-only!");
-
-        if (xChildFactory.is()) // implies m_xContainerAccess.is()
+        if(_xNode.is())
         {
-            Reference< XInterface > xNewChild;
             try
             {
                 ::rtl::OUString sName = normalizeName(_rName, NO_CALLER);
-                xNewChild = xChildFactory->createInstance();
-                m_xContainerAccess->insertByName(sName, makeAny(xNewChild));
+                m_xContainerAccess->insertByName(sName, makeAny(_xNode));
                 // if we're here, all was ok ...
-                return OConfigurationNode(xNewChild, m_xProvider);
+                return OConfigurationNode(_xNode, m_xProvider);
             }
             catch (IllegalArgumentException&)
             {
@@ -308,14 +302,41 @@ namespace utl
             }
 
             // dispose the child if it has already been created, but could not be inserted
-            Reference< XComponent > xChildComp(xNewChild, UNO_QUERY);
+            Reference< XComponent > xChildComp(_xNode, UNO_QUERY);
             if (xChildComp.is())
                 try { xChildComp->dispose(); } catch(Exception&) { }
         }
 
         return OConfigurationNode();
     }
+    //------------------------------------------------------------------------
+    OConfigurationNode OConfigurationNode::createNode(const ::rtl::OUString& _rName) const throw()
+    {
+        Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
+        OSL_ENSURE(xChildFactory.is(), "OConfigurationNode::createNode: object is invalid or read-only!");
 
+        if (xChildFactory.is()) // implies m_xContainerAccess.is()
+        {
+            Reference< XInterface > xNewChild;
+            try
+            {
+                xNewChild = xChildFactory->createInstance();
+            }
+            catch(Exception&)
+            {
+                OSL_ENSURE(sal_False, "OConfigurationNode::createNode: caught a generic exception!");
+            }
+            return insertNode(_rName,xNewChild);
+        }
+
+        return OConfigurationNode();
+    }
+
+    //------------------------------------------------------------------------
+    OConfigurationNode OConfigurationNode::appendNode(const ::rtl::OUString& _rName,const OConfigurationNode& _aNewNode) const throw()
+    {
+        return insertNode(_rName,_aNewNode.m_xDirectAccess);
+    }
     //------------------------------------------------------------------------
     OConfigurationNode OConfigurationNode::openNode(const ::rtl::OUString& _rPath) const throw()
     {
@@ -682,6 +703,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/07/10 11:30:37  jb
+ *  #87904# Use public helpers for handling of new configuration pathes
+ *
  *  Revision 1.2  2001/07/05 15:43:16  jb
  *  #87904# Adjusted to new configuration path format
  *

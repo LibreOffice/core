@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-13 16:26:04 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ namespace utl
         ::rtl::OUString
                     m_sCompletePath;
 
+        OConfigurationNode  insertNode(const ::rtl::OUString& _rName,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xNode) const throw();
     protected:
         /// constructs a node object with an interface representing a node
         OConfigurationNode(
@@ -143,6 +144,15 @@ namespace utl
             @param      _rName      name for the new child. Must be level-1-depth.
         */
         OConfigurationNode  createNode(const ::rtl::OUString& _rName) const throw();
+        /** appends a node under a new name <p/>
+            If the object represents a set node, this method may be used to create a new child. For non-set-nodes, the
+            method will fail.<br/>
+            Unless the respective operations on the pure configuration API, the to-be-created node immediately
+            becomes a part of it's hierarchy, no explicit insertion is necessary.
+            @param      _rName      name for the new child. Must be level-1-depth.
+            @param      _aNewNode   the node which should be appended
+        */
+        OConfigurationNode  appendNode(const ::rtl::OUString& _rName,const OConfigurationNode& _aNewNode) const throw();
 
         /** remove an existent child node<p/>
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
@@ -312,6 +322,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/13 16:26:04  fs
+ *  initial checkin - non-UNO wrapper for configuration nodes
+ *
  *
  *  Revision 1.0 13.06.01 17:04:40  fs
  ************************************************************************/
