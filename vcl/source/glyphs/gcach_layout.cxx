@@ -1,11 +1,9 @@
-#define ENABLE_ICU_LAYOUT
-
 /*************************************************************************
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.9 $
- *  last change: $Author: hdu $ $Date: 2002-06-10 14:45:40 $
+ *  $Revision: 1.10 $
+ *  last change: $Author: hdu $ $Date: 2002-06-13 19:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +57,11 @@
  *
  *
  ************************************************************************/
+
+#define ENABLE_ICU_LAYOUT
+#ifdef DEBUG
+//#define VERBOSE_DEBUG
+#endif
 
 #if !defined(_SV_SALUNX_HXX) && !defined(WIN32)
 #include <salunx.h>
@@ -207,10 +210,10 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
                 long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
                 if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
                 {
-                    nGlyphWidth = pGlyphBuffer[i-1].mnWidth;
+                    nGlyphWidth = pGlyphBuffer[i-1].mnOrigWidth;
                     nDelta = (nDelta * nGlyphWidth + 2) / 4;
                     if( i == nGlyphCount )
-                        pGlyphBuffer[i].mnWidth += nDelta;
+                        pGlyphBuffer[i].mnNewWidth += nDelta;
                     nOffset += nDelta;
                 }
             }
@@ -258,7 +261,6 @@ public:
     virtual le_bool         canDisplay(LEUnicode32 ch) const;
     virtual le_int32        getUnitsPerEM() const;
 
-
     virtual void            mapCharsToGlyphs( const LEUnicode chars[],
                                 le_int32 offset, le_int32 count, le_bool reverse,
                                 const LECharMapper* mapper, LEGlyphID glyphs[] ) const;
@@ -280,7 +282,6 @@ public:
 };
 
 
-
 // -----------------------------------------------------------------------
 
 const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
@@ -294,8 +295,11 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
 
     ULONG nLength;
     const unsigned char* pBuffer = mpServerFont->GetTable( pTagName, &nLength );
-#ifdef DEBUG
-    fprintf(stderr,"IcuGetTable(\"%s\") => %p\n",pTagName,pBuffer);
+#ifdef VERBOSE_DEBUG
+    fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);
+    int mnHeight = mpServerFont->GetFontSelData().mnHeight;
+    const char* pName = mpServerFont->GetFontFileName()->getStr();
+    fprintf(stderr,"font(  h=%d, s=%\"%s\" )\n", mnHeight, pName );
 #endif
     return (const void*)pBuffer;
 }
@@ -382,8 +386,8 @@ float IcuFontFromServerFont::getXPixelsPerEm() const
 {
     const ImplFontSelectData& r = mpServerFont->GetFontSelData();
     float fX = r.mnWidth ? r.mnWidth : r.mnHeight;
-#ifdef DEBUG
-    fprintf(stderr,"mnXPixel4PM %f\n", fX );
+#ifdef VERBOSE_DEBUG
+    fprintf(stderr,"mnXPixel4EM %f\n", fX );
 #endif
     return fX;
 }
@@ -393,7 +397,7 @@ float IcuFontFromServerFont::getXPixelsPerEm() const
 float IcuFontFromServerFont::getYPixelsPerEm() const
 {
     float fY = mpServerFont->GetFontSelData().mnHeight;
-#ifdef DEBUG
+#ifdef VERBOSE_DEBUG
     fprintf(stderr,"mnYPixel4EM %f\n", fY );
 #endif
     return fY;
@@ -428,8 +432,8 @@ void IcuFontFromServerFont::unitsToPoints( LEPoint &units, LEPoint &points ) con
 {
     points.fX = xUnitsToPoints( units.fX );
     points.fY = yUnitsToPoints( units.fY );
-#ifdef DEBUG
-    fprintf(stderr,"pu2p( %f, %f ) => ( %f, %f )\n", units.fX, units.fY, points.fX, points.fY );
+#ifdef VERBOSE_DEBUG
+    fprintf(stderr,"u2p( %f, %f ) => ( %f, %f )\n", units.fX, units.fY, points.fX, points.fY );
 #endif
 }
 
@@ -441,7 +445,7 @@ float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
     fPixels *= mpServerFont->GetEmUnits();
     const ImplFontSelectData& r = mpServerFont->GetFontSelData();
     fPixels /= r.mnWidth ? r.mnWidth : r.mnHeight;
-#ifdef DEBUG
+#ifdef VERBOSE_DEBUG
     fprintf(stderr,"xp2u( %f ) => %f\n", xPixels, fPixels );
 #endif
     return fPixels;
@@ -454,8 +458,8 @@ float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
     float fPixels = yPixels;
     fPixels *= mpServerFont->GetEmUnits();
     fPixels /= mpServerFont->GetFontSelData().mnHeight;
-#ifdef DEBUG
-    fprintf(stderr,"yp2u( %f ) => %f\n", yPixels, fPixels );
+#ifdef VERBOSE_DEBUG
+    fprintf(stderr,"p2u( %f ) => %f\n", yPixels, fPixels );
 #endif
     return fPixels;
 }
@@ -464,8 +468,8 @@ float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
 
 void IcuFontFromServerFont::pixelsToUnits( LEPoint &pixels, LEPoint &units ) const
 {
-#ifdef DEBUG
-    fprintf(stderr,"pp2u( %f, %f )\n", pixels.fX, pixels.fY );
+#ifdef VERBOSE_DEBUG
+    fprintf(stderr,"p2u( %f, %f )\n", pixels.fX, pixels.fY );
 #endif
     units.fX = xPixelsToUnits( pixels.fX );
     units.fY = yPixelsToUnits( pixels.fY );
@@ -478,7 +482,7 @@ void IcuFontFromServerFont::transformFunits( float xFunits, float yFunits, LEPoi
     // TODO: avoid assumption pixels==points
     LEPoint units = { xFunits, yFunits };
     unitsToPoints( units, pixels );
-#ifdef DEBUG
+#ifdef VERBOSE_DEBUG
     fprintf(stderr,"tfu( %f, %f ) => ( %f, %f )\n", xFunits, yFunits, pixels.fX, pixels.fY );
 #endif
 }
@@ -612,8 +616,9 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
         aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
         const GlyphMetric& rGM = pFont->GetGlyphMetric( nGlyphIndex );
         int nGlyphWidth = rGM.GetCharWidth();
+        long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
         pGlyphBuffer[i] = GlyphItem( nCharIndex, nGlyphIndex, aNewPos,
-            GlyphItem::CLUSTER_START, nGlyphWidth );
+            nGlyphFlags, nGlyphWidth );
         //TODO: apply kerning if requested, set MOVED flag
     }
     aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
