@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:21:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-16 16:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         hForeignTopLevelWindow_ = hForeignParent_;
         XLIB_Window* pChildren;
         unsigned int nChildren;
+        bool bBreak = false;
         do
         {
             XQueryTree( GetDisplay()->GetDisplay(), hForeignTopLevelWindow_,
@@ -339,7 +340,15 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             XFree( pChildren );
             if( aParent != aRoot )
                 hForeignTopLevelWindow_ = aParent;
-        } while( aParent != aRoot );
+            int nCount = 0;
+            Atom* pProps = XListProperties( GetDisplay()->GetDisplay(),
+                                            hForeignTopLevelWindow_,
+                                            &nCount );
+            for( int i = 0; i < nCount && ! bBreak; ++i )
+                bBreak = (pProps[i] == XA_WM_HINTS);
+            if( pProps )
+                XFree( pProps );
+        } while( aParent != aRoot && ! bBreak );
 
         // check if this is really one of our own frames
         // do not change the input mask in that case
