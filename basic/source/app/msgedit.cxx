@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
+ *  last change: $Author: gh $ $Date: 2002-07-04 10:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
     if ( LogMsg->aDebugData.aFilename.Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         LogMsg->aDebugData.aFilename.Erase(0,2);
 
-    if ( LogMsg->aDebugData.aFilename.GetChar(0) != '~' ) // do we want to convert
+    if ( LogMsg->aDebugData.aFilename.Len() && LogMsg->aDebugData.aFilename.GetChar(0) != '~' ) // do we want to convert
     {
         DirEntry aConvert( LogMsg->aDebugData.aFilename );
         if ( pAppError->aBaseDir.Contains( aConvert ) )
