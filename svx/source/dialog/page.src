@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 19:11:08 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 13:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_PAGELAYOUT
     {
         Pos = MAP_APPFONT ( 113 , 103 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
         Text = "~Seitenlayout" ;
         Text [ ENGLISH ] = "Page la~yout" ;
         Text [ norwegian ] = "Side oppsett" ;
@@ -616,8 +616,8 @@ TabPage RID_SVXPAGE_PAGE
     ListBox LB_LAYOUT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 165, 101 ) ;
-        Size = MAP_APPFONT ( 83 , 44 ) ;
+        Pos = MAP_APPFONT ( 170, 101 ) ;
+        Size = MAP_APPFONT ( 78 , 44 ) ;
         DropDown = TRUE ;
         StringList =
         {
@@ -791,7 +791,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_NUMBER_FORMAT
     {
         Pos = MAP_APPFONT ( 113 , 119 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
         Text = "For~mat" ;
         Text [ ENGLISH ] = "For~mat" ;
         Text[ english_us ] = "For~mat";
@@ -818,8 +818,8 @@ TabPage RID_SVXPAGE_PAGE
     ListBox LB_NUMBER_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 117 ) ;
-        Size = MAP_APPFONT ( 83 , 64 ) ;
+        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Size = MAP_APPFONT ( 78 , 64 ) ;
         DropDown = TRUE ;
         StringList =
         {
