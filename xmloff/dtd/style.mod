@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.40 2001-06-26 12:59:23 sab Exp $
+	$Id: style.mod,v 1.41 2001-07-30 14:54:40 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -146,7 +146,7 @@
 <!ATTLIST style:properties fo:text-transform (none|lowercase|
 											  uppercase|capitalize) #IMPLIED>
 <!ATTLIST style:properties fo:color %color; #IMPLIED>
-<!ATTLIST style:properties style:use-window-color %boolean; #IMPLIED>
+<!ATTLIST style:properties style:use-window-font-color %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-outline %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-crossing-out
 						   (none|single-line|double-line|thick-line|slash|X)
