@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-03-21 15:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include <akrnitem.hxx>
 #include <langitem.hxx>
 #include <emphitem.hxx>
+#include <numitem.hxx>
 #include <charscaleitem.hxx>
 
 #include <impedit.hxx>
@@ -111,7 +112,24 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
             aDebStr += ByteString::CreateFromInt32( ((SvxLRSpaceItem&)rItem).GetRight() );
         break;
         case EE_PARA_NUMBULLET:
-            aDebStr += "NumItem=...";
+            {
+            aDebStr += "NumItem ";
+            for ( int nLevel = 0; nLevel < 3; nLevel++ )
+            {
+                aDebStr += "Level";
+                aDebStr += ByteString::CreateFromInt32( nLevel );
+                aDebStr += "=";
+                const SvxNumberFormat* pFmt = ((const SvxNumBulletItem&)rItem).GetNumRule()->Get( nLevel );
+                if ( pFmt )
+                {
+                    aDebStr += "(";
+                    aDebStr += ByteString::CreateFromInt32( pFmt->GetFirstLineOffset() );
+                    aDebStr += ",";
+                    aDebStr += ByteString::CreateFromInt32( pFmt->GetAbsLSpace() );
+                    aDebStr += ") ";
+                }
+            }
+            }
         break;
         case EE_PARA_BULLETSTATE:
             aDebStr += "ShowBullet=";
@@ -404,7 +422,8 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
         fprintf( fp, "\n#Vorlagen:   %lu\n", nStyles );
-        SfxStyleSheetBase* pStyle = pEE->pImpEditEngine->GetStyleSheetPool()->First();
+        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+        SfxStyleSheetBase* pStyle = aIter.First();
         while ( pStyle )
         {
             fprintf( fp, "\nVorlage:   %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
@@ -413,7 +432,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             DbgOutItemSet( fp, pStyle->GetItemSet(), FALSE, FALSE );
             fprintf( fp, "\n----------------------------------" );
 
-            pStyle = pEE->pImpEditEngine->GetStyleSheetPool()->Next();
+            pStyle = aIter.Next();
         }
     }
 
