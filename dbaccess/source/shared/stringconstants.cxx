@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 15:00:18 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_FRAME_DESKTOP, "com.sun.star.frame.Desktop"
 //============================================================
 IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN, ".component:DB/QueryDesign");
 IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN, ".component:DB/TableDesign");
+IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN, ".component:DB/RelationDesign");
 
 //============================================================
 //= configuration key names
