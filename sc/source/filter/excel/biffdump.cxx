@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-21 08:34:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-24 13:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2292,6 +2292,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
             break;
             case 0x013B:        // CHTRCELLCONTENT: change tracking: changed cell
             {
+                PreDump( nL );
                 ADDTEXT( "len: " );             ADDDEC( 4 );
                 ADDTEXT( "   index: " );        ADDDEC( 4 );
                 ADDTEXT( "   opcode: " );       ADDHEX( 2 );
@@ -2325,11 +2326,9 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                     case 0x0005:    ADDTEXT( "formula" );   break;
                     default:        ADDTEXT( "*UNKNOWN*" );
                 }
-                BOOL bHasFormatData = ((nChg & 0xFF00) == 0x1100);
-                if( bHasFormatData )
+                UINT16 nFormatData = (nChg & 0xFF00);
+                if( (nFormatData == 0x1100) || (nFormatData == 0x1300) )
                     ADDTEXT( "; contains add. data" );
-                if( nChg & 0xEEC0 )
-                    ADDTEXT( "; *UNKNOWN* data" );
                 ADDTEXT( "   format: " );       ADDHEX( 2 );
                 UINT16 nCol, nRow;
                 rIn >> nRow >> nCol;
@@ -2344,17 +2343,23 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                 ADDTEXT( "   unknown: " );      ADDHEX( 4 );
                 PRINT();
                 nLeft -= 28;
-                if( bHasFormatData )
+                UINT16 nCount = 0;
+                switch( nFormatData )
+                {
+                    case 0x1100:    nCount = 8; break;
+                    case 0x1300:    nCount = 4; break;
+                }
+                if( nCount )
                 {
                     LINESTART();
                     ADDTEXT( "additional format data:" );
-                    for( UINT16 nIndex = 0; nIndex < 8; nIndex ++ )
+                    for( UINT16 nIndex = 0; nIndex < nCount; nIndex ++ )
                     {
                         ADDTEXT( " " );
                         ADDHEX( 2 );
                     }
                     PRINT();
-                    nLeft -= 16;
+                    nLeft -= (nCount << 1);
                 }
                 if( nOldType )
                 {
@@ -5535,11 +5540,14 @@ void Biff8RecDumper::ControlsDump( SvStream& rIn )
     UINT32      nLen = rIn.Tell();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
 
-    while( nLen )
+    if( nLen < 0xFFFFFFFF )
     {
-        UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
-        ContDump( nPart );
-        nLen -= nPart;
+        while( nLen )
+        {
+            UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
+            ContDump( nPart );
+            nLen -= nPart;
+        }
     }
 
     pIn = pOldIn;
