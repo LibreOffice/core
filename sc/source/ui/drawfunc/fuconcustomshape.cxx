@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcustomshape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:14:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,17 +243,17 @@ void FuConstCustomShape::Deactivate()
 // #98185# Create default drawing objects via keyboard
 SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_FM_CREATE_CONTROL:
-
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
         0L, pDrDoc);
-
-    if(pObj)
+    if( pObj )
     {
-        pObj->SetLogicRect(rRectangle);
+        Rectangle aRectangle( rRectangle );
+        SetAttributes( pObj );
+        if ( SdrObjCustomShape::doConstructOrthogonal( aCustomShape ) )
+            ImpForceQuadratic( aRectangle );
+        pObj->SetLogicRect( aRectangle );
     }
-
     return pObj;
 }
 
