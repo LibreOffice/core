@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:02:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,6 @@ class SwFEShell : public SwEditShell
     // OD 25.06.2003 #108784# - correct type of 1st parameter
     void ChangeOpaque( SdrLayerID nLayerId );
 
-    void GetStartEndCell( SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd );
-
     const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0 ) const;
 
     //0 == in keiner Spalte
@@ -268,8 +266,6 @@ public:
 
     // befindet sich der selektierte Rahmen innerhalb eines anderen?
     const SwFrmFmt* IsFlyInFly();
-    // Innerhalb eines des sichtbaren Ankers?
-    Rectangle *IsAnchorAtPos( const Point &rPt ) const;
 
 //SS fuer DrawObjekte und Rahmen-----------------------------
 
@@ -482,9 +478,6 @@ public:
 
     BOOL GotoObj( BOOL bNext, GotoObjType eType = DRAW_ANY);
 
-    ULONG ControlCount() const;
-    BOOL  GotoControl( ULONG nIndex );
-
     //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
     void SetDragMode( UINT16 eSdrDragMode );
 
@@ -678,7 +671,6 @@ public:
     void ProtectCells();    //Falls eine Tabselektion besteht, wird sie ver-
                             // nichtet, wenn der Cursor nicht in Readonly darf
     void UnProtectCells();  // auf die Tabellenselektin
-    void UnProtectCells( const String& rTblName );  // diese Tabelle
     void UnProtectTbls();   //bei allen Tabellen in der Selektion den Schutz aufheben
     BOOL HasTblAnyProtection( const String* pTblName = 0,
                                 BOOL* pFullTblProtection = 0 );
@@ -716,7 +708,6 @@ public:
     //Phy:  Tatsaechliche Seitenanzahl.
     //Virt: Vom User evtl. gesetzten Offset mit einbeziehen.
     USHORT  GetPhyPageNum();
-    USHORT  GetVirtPageNum( const BOOL bCalcFrm = TRUE );
 
     // Setzt an der aktuellen Postion einen neuen Page Offset
     void SetNewPageOffset( USHORT nOffset );
