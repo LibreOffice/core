@@ -80,7 +80,7 @@ then
     # Path not empty: append colon.
     PATH=$PATH:
 fi
-PATH=$PATH$SDK_HOME/$directoryname/bin
+PATH=$PATH$SDK_HOME/$directoryname/bin:$OFFICE_PROGRAM_PATH
 
 # Add directory of the command make to the path, if necessary.
 if [ -n "$SDK_MAKE" ]

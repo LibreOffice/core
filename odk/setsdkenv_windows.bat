@@ -44,7 +44,7 @@ REM Set office program path.
 set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\program
 
 REM Add directory of the SDK tools to the path.
-set PATH=%PATH%;%SDK_HOME%\windows\bin
+set PATH=%PATH%;%SDK_HOME%\windows\bin;%OFFICE_PROGRAM_PATH
 
 REM Add directory of the command make to the path, if necessary.
 if defined SDK_MAKE set PATH=%PATH%;%SDK_MAKE%
