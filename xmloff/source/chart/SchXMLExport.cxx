@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-10 10:27:36 $
+ *  last change: $Author: bm $ $Date: 2001-04-25 16:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,20 +381,12 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
         {
             // determine size of data
             const uno::Sequence< double >* pSequence = xValues.getConstArray();
-            mnSeriesCount = mbRowSourceColumns
-                ? pSequence->getLength()
-                : xValues.getLength();
-            mnSeriesLength = mbRowSourceColumns
-                ? xValues.getLength()
-                : pSequence->getLength();
+            mnSeriesCount = pSequence->getLength();
+            mnSeriesLength = xValues.getLength();
 
             // determine existence of headers
-            uno::Sequence< rtl::OUString > xSeriesLabels = mbRowSourceColumns
-                ? xData->getColumnDescriptions()
-                : xData->getRowDescriptions();
-            uno::Sequence< rtl::OUString > xCategoryLabels = mbRowSourceColumns
-                ? xData->getRowDescriptions()
-                : xData->getColumnDescriptions();
+            uno::Sequence< rtl::OUString > xSeriesLabels = xData->getColumnDescriptions();
+            uno::Sequence< rtl::OUString > xCategoryLabels = xData->getRowDescriptions();
             mbHasCategoryLabels = ( xCategoryLabels.getLength() > 0 );
             mbHasSeriesLabels = ( xSeriesLabels.getLength() > 0 );
         }
@@ -708,21 +700,14 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
         uno::Sequence< uno::Sequence< double > > xValues = rData->getData();
         if( xValues.getLength())
         {
-            if( ! mbRowSourceColumns )
-                swapDataArray( xValues );
-
             const uno::Sequence< double >* pSequence = xValues.getConstArray();
             const double* pData = 0;
 
             sal_Int32 nSeries, nDataPoint;
 
             // export column headers
-            uno::Sequence< rtl::OUString > xSeriesLabels = mbRowSourceColumns
-                ? rData->getColumnDescriptions()
-                : rData->getRowDescriptions();
-            uno::Sequence< rtl::OUString > xCategoryLabels = mbRowSourceColumns
-                ? rData->getRowDescriptions()
-                : rData->getColumnDescriptions();
+            uno::Sequence< rtl::OUString > xSeriesLabels = rData->getColumnDescriptions();
+            uno::Sequence< rtl::OUString > xCategoryLabels = rData->getRowDescriptions();
             sal_Int32 nSeriesLablesLength = xSeriesLabels.getLength();
             sal_Int32 nCategoryLabelsLength = xCategoryLabels.getLength();
 
@@ -1105,7 +1090,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 // get property states for autostyles
                 try
                 {
-                    xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
+                    if( mbRowSourceColumns )
+                        xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
+                    else
+                        xPropSet = xDiagram->getDataPointProperties( nSeries, nElement );
                 }
                 catch( uno::Exception aEx )
                 {
