@@ -4,12 +4,15 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AddDirect" menu:helpid="5537" menu:label="" />
             <menu:menuitem menu:id=".uno:Open" menu:helpid="5501" menu:label="" />
+            <menu:menuitem menu:id=".uno:RecentFileList"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:helpid="6381" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CloseDoc" menu:helpid="5503" menu:label="" />
             <menu:menuitem menu:id=".uno:Save" menu:helpid="5505" menu:label="" />
             <menu:menuitem menu:id=".uno:SaveAs" menu:helpid="5502" menu:label="" />
             <menu:menuitem menu:id=".uno:SaveAll" menu:helpid="5309" menu:label="" />
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Reload" menu:helpid="5508" menu:label="" />
             <menu:menuitem menu:id=".uno:VersionDialog" menu:helpid="6583" menu:label="" />
             <menu:menuseparator/>
@@ -137,15 +140,17 @@
             <menu:menuitem menu:id=".uno:Bullet" menu:helpid="27019" menu:label="" />
             <menu:menuitem menu:id=".uno:HyperlinkDialog" menu:helpid="5678" menu:label="" />
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:Scan" menu:label="" >
+            <menu:menu menu:id=".uno:GraphicMenu" menu:label="" >
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:TwainSelect" menu:helpid="10331" menu:label="" />
-                    <menu:menuitem menu:id=".uno:TwainTransfer" menu:helpid="10332" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertGraphic" menu:helpid="10241" menu:label="" />
+                    <menu:menu menu:id=".uno:Scan" menu:label="" >
+                        <menu:menupopup>
+                            <menu:menuitem menu:id=".uno:TwainSelect" menu:helpid="10331" menu:label="" />
+                            <menu:menuitem menu:id=".uno:TwainTransfer" menu:helpid="10332" menu:label="" />
+                        </menu:menupopup>
+                    </menu:menu>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:InsertSpreadsheet" menu:helpid="10217" menu:label="" />
-            <menu:menuitem menu:id=".uno:InsertGraphic" menu:helpid="10241" menu:label="" />
             <menu:menu menu:id=".uno:ObjectMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject" menu:helpid="5561" menu:label="" />
@@ -156,6 +161,7 @@
                     <menu:menuitem menu:id=".uno:InsertMath" menu:helpid="27106" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:InsertSpreadsheet" menu:helpid="10217" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertObjectChart" menu:helpid="10140" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame" menu:helpid="5563" menu:label="" />
             <menu:menuseparator/>
@@ -166,17 +172,11 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:SetDefault" menu:helpid="10456" menu:label="" />
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FormatLine" menu:helpid="10143" menu:label="" />
-            <menu:menuitem menu:id=".uno:FormatArea" menu:helpid="10142" menu:label="" />
-            <menu:menuitem menu:id=".uno:TextAttributes" menu:helpid="27281" menu:label="" />
-            <menu:menuitem menu:id=".uno:TransformDialog" menu:helpid="10087" menu:label="" />
-            <menu:menuitem menu:id=".uno:ControlProperties" menu:helpid="10613" menu:label="" />
-            <menu:menuitem menu:id=".uno:FormProperties" menu:helpid="10614" menu:label="" />
-            <menu:menuitem menu:id=".uno:MeasureAttributes" menu:helpid="27320" menu:label="" />
-            <menu:menuitem menu:id=".uno:ConnectorAttributes" menu:helpid="27338" menu:label="" />
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FontDialog" menu:helpid="10296" menu:label="" />
+            <menu:menuitem menu:id=".uno:ParagraphDialog" menu:helpid="10297" menu:label="" />
             <menu:menuitem menu:id=".uno:OutlineBullet" menu:helpid="10156" menu:label="" />
+            <menu:menuitem menu:id=".uno:PageSetup" menu:helpid="27002" menu:label="" />
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:TransliterateMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:ChangeCaseToUpper" menu:helpid="10912" menu:label="" />
@@ -187,21 +187,14 @@
                     <menu:menuitem menu:id=".uno:ChangeCaseToKatakana" menu:helpid="10917" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:ParagraphDialog" menu:helpid="10297" menu:label="" />
-            <menu:menuitem menu:id=".uno:PageSetup" menu:helpid="27002" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:TransformDialog" menu:helpid="10087" menu:label="" />
+            <menu:menuitem menu:id=".uno:FormatLine" menu:helpid="10143" menu:label="" />
+            <menu:menuitem menu:id=".uno:FormatArea" menu:helpid="10142" menu:label="" />
+            <menu:menuitem menu:id=".uno:TextAttributes" menu:helpid="27281" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ModifyLayer" menu:helpid="27048" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menu menu:id=".uno:TemplatesMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:StyleCatalog" menu:helpid="5573" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PresentationLayout" menu:helpid="27064" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuitem menu:id=".uno:DesignerDialog" menu:helpid="5539" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FontWork" menu:helpid="10256" menu:label="" />
-            <menu:menuitem menu:id=".uno:Window3D" menu:helpid="10644" menu:label="" />
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
