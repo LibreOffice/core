@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:05:30 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ public:
     virtual ~SwHstryHint() {}       // jetzt inline
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet ) = 0;
     HISTORY_HINT Which() const                  { return eWhichId; }
+    virtual String GetDescription() const;
 };
 
 class SwSetFmtHint : public SwHstryHint
@@ -155,6 +156,8 @@ public:
     SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNode );
     virtual ~SwSetFmtHint();
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+    virtual String GetDescription() const;
+
     OUT_HSTR_HINT(SetFmtHnt)
 };
 
@@ -177,6 +180,7 @@ public:
     SwSetTxtHint( /*const*/ SwTxtAttr* pTxtHt, ULONG nNode );
     virtual ~SwSetTxtHint();
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+
     OUT_HSTR_HINT(SetTxtHnt)
 };
 
@@ -191,6 +195,12 @@ public:
     SwSetTxtFldHint( SwTxtFld* pTxtFld, ULONG nNode );
     virtual ~SwSetTxtFldHint();
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
+
+    const SwFieldType * GetFieldType() const { return pFldType; }
+    const SwFmtFld * GetField() const { return pFld; }
+
+    virtual String GetDescription() const;
+
     OUT_HSTR_HINT(SetTxtFldHnt)
 };
 
@@ -249,6 +259,9 @@ public:
 
     const SwUndoSaveSection* GetUndoObj() const { return pUndo; }
           SwUndoSaveSection* GetUndoObj()       { return pUndo; }
+
+    virtual String GetDescription() const;
+
     OUT_HSTR_HINT(SetFtnHnt)
 };
 
@@ -360,7 +373,8 @@ public:
 #endif
 
 typedef SwHstryHint* SwHstryHintPtr;
-SV_DECL_PTRARR_DEL( SwpHstry, SwHstryHintPtr, 0, 2 )
+SV_DECL_PTRARR_DEL( SwpHstry, SwHstryHintPtr, 0, 2 );
+
 class SwHistory : private SwpHstry
 {
     friend class SwDoc;     // eig. darf nur SwDoc::DelUndoObj zugreifen
