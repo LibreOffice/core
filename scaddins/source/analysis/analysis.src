@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-10 17:54:55 $
+ *  last change: $Author: dr $ $Date: 2001-12-11 10:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10145,8 +10145,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Price
         {
-            Text = "Liefert den Kurs pro 100 DM Nennwert eines Wertpapiers, das periodische Zinsen auszahlt.";
-            Text[ english ] = "Returns the price per $100 face value of a security that pays periodic interest";
+            Text = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers, das periodische Zinsen auszahlt.";
+            Text[ english ] = "Returns the price per 100 currency units face value of a security that pays periodic interest";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the price per $100 face value of a security that pays periodic interest";
             Text[ portuguese ] = "Devolve o preço por 100 euros do valor nominal de um título que paga juros periódicos.";
@@ -10553,8 +10553,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Pricedisc
         {
-            Text = "Liefert den Kurs pro 100 DM Nennwert eines unverzinslichen Werpapiers.";
-            Text[ english ] = "Returns the price per $100 face value of a discounted security";
+            Text = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines unverzinslichen Werpapiers.";
+            Text[ english ] = "Returns the price per 100 currency units face value of a discounted security";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the price per $100 face value of a discounted security";
             Text[ portuguese ] = "Devolve o preço por 100 euros do valor nominal de um título descontado.";
@@ -10853,8 +10853,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Pricemat
         {
-            Text = "Liefert den Kurs pro 100 Dm Nennwert eines Wertpapiers, das Zinsen am Fälligkeitsdatum auszahlt.";
-            Text[ english ] = "Returns the price per $100 face value of a security that pays interest at maturity";
+            Text = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers, das Zinsen am Fälligkeitsdatum auszahlt.";
+            Text[ english ] = "Returns the price per 100 currency units face value of a security that pays interest at maturity";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the price per $100 face value of a security that pays interest at maturity";
             Text[ portuguese ] = "Devolve o preço por 100 euros do valor nominal de um título que paga juros no vencimento.";
@@ -11207,8 +11207,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Mduration
         {
-            Text = "Liefert die modifizierte Macaulay-Duration eines Wertpapiers mit 100 DM Nennwert.";
-            Text[ english ] = "Returns the Macaulay modified duration for a security with an assumed par ";
+            Text = "Liefert die modifizierte Macaulay-Duration eines Wertpapiers mit 100 Währungseinheiten Nennwert.";
+            Text[ english ] = "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units.";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the Macaulay modified duration for a security with an assumed par value of $100";
             Text[ portuguese ] = "Devolve a duração alterada Macauley para um título com um valor nominal de 100 euros.";
@@ -13224,8 +13224,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Tbillprice
         {
-            Text = "Liefert den Kurs pro 100 DM Nennwert eines Schatzwechsels.";
-            Text[ english ] = "Returns the price of $100 face value for a treasury bill";
+            Text = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Schatzwechsels.";
+            Text[ english ] = "Returns the price of 100 currency units face value for a treasury bill";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the price of $100 face value for a treasury bill";
             Text[ portuguese ] = "Devolve o preço por 100 euros do valor nominal de uma Obrigação do Tesouro.";
