@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatPreviewer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
@@ -73,8 +77,8 @@
 #include <com/sun/star/util/MalformedNumberFormatException.idl>
 #endif
 
-#ifndef __com_sun_star_util_color_idl__
-#include <com/sun/star/util/color.idl>
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 
@@ -150,11 +154,11 @@ interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
             if the format string is invalid.
 
      */
-    com::sun::star::util::color queryPreviewColorForNumber( [in] string aFormat,
+    com::sun::star::util::Color queryPreviewColorForNumber( [in] string aFormat,
              [in] double fValue,
              [in] com::sun::star::lang::Locale nLocale,
              [in] boolean bAllowEnglish,
-             [in] com::sun::star::util::color aDefaultColor )
+             [in] com::sun::star::util::Color aDefaultColor )
             raises( com::sun::star::util::MalformedNumberFormatException );
 
 };
