@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flagitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-07-24 10:30:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "args.hxx"
 #include "poolitem.hxx"
