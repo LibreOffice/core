@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: accessibility_XAccessibleText.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:35 $ 
+'*  last change:$Date: 2003-06-11 16:24:59 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -78,11 +78,6 @@ option explicit
 
 '*************************************************************************
 
-
-
-
-
-
 Sub RunTest()
 
 '*************************************************************************
@@ -92,6 +87,7 @@ Sub RunTest()
 On Error Goto ErrHndl
     Dim bOK As Boolean
     Dim chCount As Integer
+    Dim accTextSegment as new com.sun.star.accessibility.TextSegment
 
     Test.StartMethod("getCharacterCount()")
     bOK = true
@@ -106,8 +102,12 @@ On Error Goto ErrHndl
     Dim carPos As Integer
     oObj.setCaretPosition(chCount - 1)
     carPos = oObj.getCaretPosition()
-    Out.Log("getCaretPosition: " + carPos)
-    bOK = bOK AND (carPos = chCount - 1)
+    if not readOnly then
+        Out.Log("getCaretPosition: " + carPos)
+        bOK = bOK AND (carPos = chCount - 1)
+    else
+        Out.Log("Object is read only and Caret position couldn't be set")
+    end if
     Test.MethodTested("getCaretPosition()",bOK)
     Test.MethodTested("setCaretPosition()",bOK)
 
@@ -115,15 +115,17 @@ On Error Goto ErrHndl
     Dim i As Integer
     bOK = true
     for i = 0 to chCount-1
-        bOK = bOK AND (chr(oObj.getCharacter(i)) = utils.getCharacter(i+1,accText))
+        bOK = bOK AND (chr(oObj.getCharacter(i)) = _
+                                                utils.getCharacter(i+1,accText))
     next i
     Test.MethodTested("getCharacter()",bOK)
 
     Test.StartMethod("getCharacterAttributes()")
     Dim attrs() As Variant
+    Dim ReqAttrs(0) as String
     bOK = true
-    attrs = oObj.getCharacterAttributes(chCount - 1)
-    bOK = bOK AND (ubound(attrs) &gt; 0)
+    attrs = oObj.getCharacterAttributes(chCount - 1, ReqAttrs())
+    bOK = bOK AND NOT isNull(attrs)
     Out.Log("Properties ubound: "+ubound(attrs))
     Test.MethodTested("getCharacterAttributes()",bOK)
 
@@ -149,24 +151,40 @@ On Error Goto ErrHndl
     Test.StartMethod("getSelectedText()")
     bOK = true
     oObj.setSelection(0, chCount)
-    bOK = bOK AND (accText = oObj.getSelectedText())
+    if not readOnly then
+        bOK = bOK AND (accText = oObj.getSelectedText())
+    else
+        Out.Log("Object is unselectable")
+    end if
     Test.MethodTested("getSelectedText()",bOK)
 
     Test.StartMethod("getSelectionStart()")
     bOK = true
     oObj.setSelection(chCount-1,chCount)
-    bOK = bOK AND (oObj.getSelectionStart() = chCount -1)
+    if not readOnly then
+        bOK = bOK AND (oObj.getSelectionStart() = chCount -1)
+    else
+        Out.Log("Object is unselectable")
+    end if
     Test.MethodTested("getSelectionStart()",bOK)
 
     Test.StartMethod("getSelectionEnd()")
     bOK = true
     oObj.setSelection(0,chCount - 1)
-    bOK = bOK AND (oObj.getSelectionEnd() = chCount - 1)
+    if not readOnly then
+        bOK = bOK AND (oObj.getSelectionEnd() = chCount - 1)
+    else
+        Out.Log("Object is unselectable")
+    end if
     Test.MethodTested("getSelectionEnd()",bOK)
 
     Test.StartMethod("setSelection()")
     bOK = true
-    bOK = bOK AND oObj.setSelection(0,chCount)
+    if not readOnly then
+        bOK = bOK AND oObj.setSelection(0,chCount)
+    else
+        Out.Log("Object is unselectable")
+    end if
     Test.MethodTested("setSelection()",bOK)
 
     Test.StartMethod("getText()")
@@ -181,22 +199,26 @@ On Error Goto ErrHndl
 
     Test.StartMethod("getTextAtIndex()")
     bOK = true
-    bOK = bOK AND (accText = oObj.getTextAtIndex(chCount - 1, 4))
+    accTextSegment = oObj.getTextAtIndex(chCount - 1, 4)
+    bOK = bOK AND (accText = accTextSegment.SegmentText)
     Test.MethodTested("getTextAtIndex()",bOK)
 
     Test.StartMethod("getTextBeforeIndex()")
     bOK = true
-    bOK = bOK AND (oObj.getTextBeforeIndex(1,1) = utils.getCharacter(1,accText))
+    accTextSegment = oObj.getTextBeforeIndex(1, 1)
+    bOK = bOK AND (accTextSegment.SegmentText = utils.getCharacter(1,accText))
     Test.MethodTested("getTextBeforeIndex()",bOK)
 
     Test.StartMethod("getTextBehindIndex()")
     bOK = true
-    bOK = bOK AND (oObj.getTextBehindIndex(chCount-2,1) = utils.getCharacter(chCount,accText))
+    accTextSegment = oObj.getTextBehindIndex(chCount-2,1)
+    bOK = bOK AND (accTextSegment.SegmentText = utils.getCharacter(chCount,accText))
     Test.MethodTested("getTextBehindIndex()",bOK)
 
     Test.StartMethod("copyText()")
     bOK = true
     bOK = bOK AND oObj.copyText(0,chCount)
+    if readOnly then bOK = true
     Test.MethodTested("copyText()",bOK)
 
 Exit Sub
