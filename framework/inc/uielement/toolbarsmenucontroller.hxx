@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:11:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,13 +122,14 @@
 #ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
 #include <toolkit/awt/vclxmenu.hxx>
 #endif
-
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
 #endif
 
 #include <vector>
@@ -185,6 +186,7 @@ namespace framework
             rtl::OUString                                                                               m_aModuleIdentifier;
             sal_Bool                                                                                    m_bModuleIdentified;
             std::vector< rtl::OUString >                                                                m_aCommandVector;
+            IntlWrapper                                                                                 m_aIntlWrapper;
     };
 }
 
