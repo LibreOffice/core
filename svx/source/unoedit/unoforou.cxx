@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,17 @@ void SvxOutlinerForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 
 void SvxOutlinerForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
 {
+
     // Um das Interface mit InsertControlCharacter() zu unterstuetzen, muss hier
     // der umgekehrte Weg gegangen werden, um entspr. Aktionen auszuloesen
     String aText( (char)13 );   // '\r' geht auf'm Mac nicht
     aText.ConvertLineEnd( LINEEND_LF );     // Zeilenenden nur einfach zaehlen
-    if( rText == aText )
+
+    if( rText.Len() == 0 )
+    {
+        rOutliner.QuickDelete( rSel );
+    }
+    else if( rText == aText )
     {
         // neuen Absatz einfuegen
 //      aText.Erase();

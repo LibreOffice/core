@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 13:15:35 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,12 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         {0,0}
     };
 
+    static SfxItemPropertyMap aMeasureFieldPropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN("Kind"),                 WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
+        {0,0}
+    };
+
     switch( mnId )
     {
     case ID_DATEFIELD:
@@ -195,7 +201,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
     case ID_AUTHORFIELD:
         return aAuthorFieldPropertyMap_Impl;
     case ID_MEASUREFIELD:
-        return aEmptyPropertyMap_Impl;
+        return aMeasureFieldPropertyMap_Impl;
 //  case ID_PAGEFIELD:
 //  case ID_PAGESFIELD:
 //  case ID_FILEFIELD:
@@ -338,6 +344,11 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         mpImpl->mbBoolean1 = sal_False;
         mpImpl->mbBoolean2 = sal_True;
         break;
+
+    case ID_MEASUREFIELD:
+        mpImpl->mnInt16 = SDRMEASUREFIELD_VALUE;
+        break;
+
     default:
         mpImpl->mbBoolean1 = sal_False;
         mpImpl->mbBoolean2 = sal_False;
@@ -404,6 +415,10 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->mnInt16    = ((SvxAuthorField*)pData)->GetFormat();
                 mpImpl->mbBoolean1 = ((SvxAuthorField*)pData)->GetType() == SVXAUTHORTYPE_FIX;
                 mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetType() != SVXAUTHORFORMAT_SHORTNAME;
+                break;
+
+            case ID_MEASUREFIELD:
+                mpImpl->mnInt16     = ((SdrMeasureField*)pData)->GetMeasureFieldKind();
                 break;
             }
         }
@@ -517,6 +532,14 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
     }
 
+    case ID_MEASUREFIELD:
+    {
+        SdrMeasureFieldKind eKind = SDRMEASUREFIELD_VALUE;
+        if( mpImpl->mnInt16 == (sal_Int16)SDRMEASUREFIELD_UNIT || mpImpl->mnInt16 == (sal_Int16)SDRMEASUREFIELD_ROTA90BLANCS )
+            eKind = (SdrMeasureFieldKind) mpImpl->mnInt16;
+        pData = new SdrMeasureField( eKind);
+        break;
+    }
     };
 
     return pData;
