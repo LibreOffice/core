@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:04:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,6 +562,23 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
         else
             nSubType |= SUB_INVISIBLE;
         SetSubType(nSubType);
+        //invalidate text node
+        if(GetTyp())
+        {
+            SwClientIter aIter( *GetTyp() );
+            SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+            while(pFld)
+            {
+                SwTxtFld *pTxtFld = pFld->GetTxtFld();
+                if(pTxtFld && (SwDBField*)pFld->GetFld() == this )
+                {
+                    //notify the change
+                    pTxtFld->NotifyContentChange(*pFld);
+                    break;
+                }
+                pFld = (SwFmtFld*)aIter.Next();
+            }
+        }
     }
     break;
     case FIELD_PROP_FORMAT:
