@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:33:36 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,36 +642,47 @@ void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& aBC, const SfxHint& aHint )
 //          xSup = (XEVENTSSUPPLIER*) this;
 
         DOCEVENTOBJECT aEvent( xSup, aName );
+        notifyEvent(aEvent);
+    }
+}
 
-        // Attention: This listener is a special one. It binds the global document events
-        // to the generic job execution framework. It's a loose binding (using weak references).
-        // So we hold this listener outside our normal listener container.
-        // The implementation behind this job executor can be replaced ...
-        // but we check for this undocumented interface!
-        REFERENCE< XDOCEVENTLISTENER > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
-        if (xJobExecutor.is())
-            xJobExecutor->notifyEvent(aEvent);
+void SAL_CALL SfxGlobalEvents_Impl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw ( RUNTIMEEXCEPTION )
+{
+    // Attention: This listener is a special one. It binds the global document events
+    // to the generic job execution framework. It's a loose binding (using weak references).
+    // So we hold this listener outside our normal listener container.
+    // The implementation behind this job executor can be replaced ...
+    // but we check for this undocumented interface!
+    REFERENCE< XDOCEVENTLISTENER > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
+    if (xJobExecutor.is())
+        xJobExecutor->notifyEvent(aEvent);
 
+    try
+    {
+        ANY aAny = m_xEvents->getByName( aEvent.EventName );
+        Execute( aAny, 0 );
+    }
+    catch ( EXCEPTION& )
+    {
+    }
+
+    ::cppu::OInterfaceIteratorHelper aIt( m_aInterfaceContainer );
+    while( aIt.hasMoreElements() )
+    {
         try
         {
-            ANY aAny = m_xEvents->getByName( aName );
-            Execute( aAny, 0 );
+            ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
         }
-        catch ( EXCEPTION& )
+        catch( RUNTIMEEXCEPTION& )
         {
-        }
-
-        ::cppu::OInterfaceIteratorHelper aIt( m_aInterfaceContainer );
-        while( aIt.hasMoreElements() )
-        {
-            try
-            {
-                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
-            }
-            catch( RUNTIMEEXCEPTION& )
-            {
-                aIt.remove();
-            }
+            aIt.remove();
         }
     }
 }
+
+void SAL_CALL SfxGlobalEvents_Impl::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw ( RUNTIMEEXCEPTION )
+{
+    // not interesting for us.
+    // It's an OneInstance-Service, which will be disposed be the global uno service manager only ...
+}
+
