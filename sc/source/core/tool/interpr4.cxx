@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-01 15:39:01 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3157,6 +3157,7 @@ StackVar ScInterpreter::Interpret()
                     case ocProduct          : ScProduct();                  break;
                     case ocNBW              : ScNBW();                      break;
                     case ocIKV              : ScIKV();                      break;
+                    case ocMIRR             : ScMIRR();                     break;
                     case ocAverage          : ScAverage( FALSE );           break;
                     case ocAverageA         : ScAverage( TRUE );            break;
                     case ocCount            : ScCount();                    break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:41:38 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1561,7 +1561,7 @@ DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
         ocZZR,              // XlfNper
         ocRMZ,              // XlfPmt
         ocZins,             // XlfRate
-        ocNoName,           // XlfMirr
+        ocMIRR,             // XlfMirr
         ocIKV,              // XlfIrr
         ocRandom,           // XlfRand
         ocMatch,            // XlfMatch

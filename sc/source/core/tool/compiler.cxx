@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-03-01 21:06:13 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
             return NUMBERFORMAT_CURRENCY;
         case ocZins:
         case ocIKV:
+        case ocMIRR:
         case ocZGZ:
         case ocEffektiv:
         case ocNominal:

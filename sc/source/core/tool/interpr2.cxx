@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-01 15:39:01 $
+ *  last change: $Author: dr $ $Date: 2001-03-05 14:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,6 +706,59 @@ void ScInterpreter::ScIKV()
 #if defined(WIN) && defined(MSC)
 #pragma optimize("",on)
 #endif
+
+
+void ScInterpreter::ScMIRR()
+{   // range_of_values ; rate_invest ; rate_reinvest
+    nFuncFmtType = NUMBERFORMAT_PERCENT;
+    if( MustHaveParamCount( GetByte(), 3 ) )
+    {
+        double fRate1_reinvest = GetDouble() + 1;
+        double fNPV_reinvest = 0.0;
+        double fPow_reinvest = 1.0;
+
+        double fRate1_invest = GetDouble() + 1;
+        double fNPV_invest = 0.0;
+        double fPow_invest = 1.0;
+
+        ScRange aRange;
+        PopDoubleRef( aRange );
+
+        if( nGlobalError )
+            SetIllegalParameter();
+        else
+        {
+            ScValueIterator aValIter( pDok, aRange, glSubTotal );
+            double fCellValue;
+            ULONG nCount = 0;
+            USHORT nIterError = 0;
+
+            BOOL bLoop = aValIter.GetFirst( fCellValue, nIterError );
+            while( bLoop )
+            {
+                if( fCellValue > 0.0 )          // reinvestments
+                    fNPV_reinvest += fCellValue * fPow_reinvest;
+                else if( fCellValue < 0.0 )     // investments
+                    fNPV_invest += fCellValue * fPow_invest;
+                fPow_reinvest /= fRate1_reinvest;
+                fPow_invest /= fRate1_invest;
+                nCount++;
+
+                bLoop = aValIter.GetNext( fCellValue, nIterError );
+            }
+            if( nIterError )
+                SetError( nIterError );
+            else
+            {
+                double fResult = -fNPV_reinvest / fNPV_invest;
+                fResult *= pow( fRate1_reinvest, nCount - 1 );
+                fResult = pow( fResult, 1.0 / (nCount - 1) );
+                PushDouble( fResult - 1.0 );
+            }
+        }
+    }
+}
+
 
 //----------------------- Finanzfunktionen ------------------------------------
 
