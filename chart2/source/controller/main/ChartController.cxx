@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-15 08:48:34 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 17:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,8 +481,6 @@ void SAL_CALL ChartController
         this->EndTextEdit();
 
     delete m_pChartView; m_pChartView = NULL;
-    delete m_pDrawViewWrapper; m_pDrawViewWrapper = NULL;
-    delete m_pDrawModelWrapper; m_pDrawModelWrapper = NULL;
 }
 
         sal_Bool SAL_CALL ChartController
@@ -493,8 +491,9 @@ void SAL_CALL ChartController
     if(!m_pChartWindow || !m_aModel.is() )
         return sal_False;
 
-    m_pDrawModelWrapper = new DrawModelWrapper(m_xCC
-        ,wrapper::SchItemPool::CreateSchItemPool());
+    if( !m_pDrawModelWrapper )
+        m_pDrawModelWrapper = new DrawModelWrapper(m_xCC
+            ,wrapper::SchItemPool::CreateSchItemPool());
 
     uno::Reference< frame::XModel > xDrawModel = m_pDrawModelWrapper->getUnoModel();
     if( xDrawModel.is())
@@ -509,7 +508,10 @@ void SAL_CALL ChartController
 //  m_pChartWindow->SetChartView(m_pChartView);//enable event flow from window to View (Window knows View)
 
     //create draw view:
-    m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow);
+    if(!m_pDrawViewWrapper)
+        m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow);
+    else
+        m_pDrawViewWrapper->ReInit();
     //test:
     //Rectangle aTest = m_pDrawViewWrapper->GetWorkArea();
     //m_pDrawViewWrapper->SetWorkArea(pOutDev->PixelToLogic(Rectangle(rOfs, rSize)));
