@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:38:59 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #include "helpid.hrc"
 #include "dialogs.hrc"
 #include "selector.hrc"
+
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 #define FIXEDTEXT_DIALOG_DESCRIPTION \
 Text [ de ]  = "Wählen Sie zuerst die Bibliothek, die das gewünschte Makro enthält. Dann wählen Sie das Makro unter 'Name des Makros'." ; \
@@ -122,6 +125,7 @@ String STR_BASICMACROS
     Text [ en-US ] = "BASIC Macros" ;
 };
 
+
 ModelessDialog RID_DLG_SCRIPTSELECTOR
 {
   OutputSize = TRUE ;
@@ -157,6 +161,26 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Size = MAP_APPFONT ( 83 , 89 ) ;
     TabStop = TRUE;
     HelpId = HID_SELECTOR_CATEGORIES;
+    String STR_MYMACROS
+    {
+        Text = "My Macros";
+        Text [ en-US ] = "My Macros";
+    };
+    String STR_PRODMACROS
+    {
+        Text = "%PRODUCTNAME Macros";
+        Text [ en-US ] = "%PRODUCTNAME Macros";
+    };
+    Image IMG_HARDDISK
+    {
+        ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_HARDDISK_HC
+    {
+        ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
+        MASKCOLOR
+    };
   };
   FixedText TXT_SELECTOR_COMMANDS
   {
