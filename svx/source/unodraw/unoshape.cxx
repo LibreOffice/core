@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:34:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 11:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,10 +1644,14 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 XPolyPolygon aEmptyPolygon;
                 Matrix3D aMatrix3D;
                 pObj->TRGetBaseGeometry(aMatrix3D, aEmptyPolygon);
-                aMatrix3D[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
-                aMatrix3D[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
-                aMatrix3D[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
-                pObj->TRSetBaseGeometry(aMatrix3D, aEmptyPolygon);
+
+                Matrix3D aTemp3D;
+                //#i37213# aMatrix3D should not be ignored, at least for polygon , polyline and path
+                aTemp3D[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
+                aTemp3D[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
+                aTemp3D[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
+                aTemp3D.Translate(aMatrix3D[0][2], aMatrix3D[1][2]);
+                pObj->TRSetBaseGeometry(aTemp3D, aEmptyPolygon);
                 return;
             }
             break;
