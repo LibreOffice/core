@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:15:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_EDITING_CYCLES, XML_TOK_TEXTFIELD_REVISION },
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL, XML_TOK_TEXTFIELD_OUTLINE_LEVEL},
     { XML_NAMESPACE_TEXT, XML_ACTIVE, XML_TOK_TEXTFIELD_ACTIVE },
+    { XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_TOK_TEXTFIELD_NOTE_CLASS },
     { XML_NAMESPACE_TEXT, XML_REFERENCE_FORMAT,
                 XML_TOK_TEXTFIELD_REFERENCE_FORMAT },
     { XML_NAMESPACE_TEXT, XML_REF_NAME, XML_TOK_TEXTFIELD_REF_NAME },
@@ -3165,8 +3166,6 @@ void XMLReferenceFieldImportContext::StartElement(
             break;
         case XML_TOK_TEXT_NOTE_REF:
             nSource = ReferenceFieldSource::FOOTNOTE;
-//          nSource = ReferenceFieldSource::ENDNOTE;
-            OSL_ENSURE( !bTypeOK, "note reference type is not set correctly" );
             break;
         case XML_TOK_TEXT_SEQUENCE_REF:
             nSource = ReferenceFieldSource::SEQUENCE_FIELD;
@@ -3187,6 +3186,10 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
 {
     switch (nAttrToken)
     {
+        case XML_TOK_TEXTFIELD_NOTE_CLASS:
+            if( IsXMLToken( sAttrValue, XML_ENDNOTE ) )
+                nSource = ReferenceFieldSource::ENDNOTE;
+            break;
         case XML_TOK_TEXTFIELD_REF_NAME:
             sName = sAttrValue;
             bNameOK = sal_True;
