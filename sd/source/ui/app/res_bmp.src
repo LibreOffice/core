@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:52:45 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ portuguese_brazilian ] = "Estilos de Objetos Grбficos" ;
             Text [ portuguese ] = "Estilos de objectos grбficos" ;
             Text[ chinese_simplified ] = "НјРО¶ФПуСщКЅ";
-            Text[ russian ] = "Стили графического объекта";
+            Text[ russian ] = "Графические стили";
             Text[ polish ] = "Style obiektуw graficznych";
             Text[ japanese ] = "ёЮЧМЁЇё ЅАІЩ";
             Text[ chinese_traditional ] = "№П§ОЄ«ҐујЛ¦Ў";
@@ -734,7 +734,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ portuguese_brazilian ] = "Prдsentationsobjektvorlagen" ;
             Text [ portuguese ] = "Estilos de objectos de apresentaзгo" ;
             Text[ chinese_simplified ] = "СЭКѕОДёе¶ФПуСщКЅ";
-            Text[ russian ] = "Стили объекта презентации";
+            Text[ russian ] = "Стили презентации";
             Text[ polish ] = "Style obiektуw prezentacji";
             Text[ japanese ] = "МЯЪѕЮЭГ°ј®Э µМЮјЮЄёД ЅАІЩ";
             Text[ chinese_traditional ] = "ВІішјЛ¦Ў";
