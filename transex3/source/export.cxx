@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:51:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,9 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
             printf("ERROR : Can't open file %s\n",rOutput.GetBuffer());
             exit ( -1 );
         }
-        aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        //aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+
         aOutput.SetLineDelimiter( LINEEND_CRLF );
     }
 
@@ -493,7 +495,8 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
     // open output stream
     if ( bEnableExport ) {
         aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
-        aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        //aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
         aOutput.SetLineDelimiter( LINEEND_CRLF );
     }
 
@@ -1403,11 +1406,11 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += sCur; sOutput += "\t";
 
 
-/*                  if ( bUTF8 ) {
-                        sXText = UTF8Converter::ConvertToUTF8( sXText, GetCharSet( LangId[ i ] ));
-                        sXHText = UTF8Converter::ConvertToUTF8( sXHText, GetCharSet( LangId[ i ] ));
-                        sXQHText = UTF8Converter::ConvertToUTF8( sXQHText, GetCharSet( LangId[ i ] ));
-                        sXTitle = UTF8Converter::ConvertToUTF8( sXTitle, GetCharSet( LangId[ i ] ));
+/*                  if ( sCur.EqualsIgnoreCaseAscii("de") ) {
+                        sXText = UTF8Converter::ConvertToUTF8( sXText, RTL_TEXTENCODING_UTF8 );
+                        sXHText = UTF8Converter::ConvertToUTF8( sXHText, RTL_TEXTENCODING_UTF8);
+                        sXQHText = UTF8Converter::ConvertToUTF8( sXQHText, RTL_TEXTENCODING_UTF8);
+                        sXTitle = UTF8Converter::ConvertToUTF8( sXTitle, RTL_TEXTENCODING_UTF8);
                     }*/
 
                     sOutput += sXText; sOutput += "\t";
@@ -1416,6 +1419,9 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += sXTitle; sOutput += "\t";
                     sOutput += sTimeStamp;
 
+                    if ( sCur.EqualsIgnoreCaseAscii("de") ) {
+                        sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
+                    }
                     aOutput.WriteLine( sOutput );
                 }
 
@@ -1499,13 +1505,14 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         //sOutput += ByteString::CreateFromInt64( LangId[ j ] ); sOutput += "\t";
                         sOutput += sCur; sOutput += "\t";
 
-                        /*if ( bUTF8 )
-                            sText = UTF8Converter::ConvertToUTF8( sText, GetCharSet( LangId[ j ] ));
-                        */
                         sOutput += sText; sOutput += "\t\t\t\t";
                         sOutput += sTimeStamp;
 
+                        if( sCur.EqualsIgnoreCaseAscii("de") ){
+                            sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
+                        }
                         aOutput.WriteLine( sOutput );
+
                     }
                 }
 //          }
@@ -1750,19 +1757,6 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
                 aOutput.WriteLine( ByteString());
             }
         }
-/*        if( rText.Len() ){
-          printf("============================\n");
-          printf("CurMacro = %d , NextMacro = %d , hasSdfData = %d , bLastWasMacro = %d , bMflag = %d \n",pParseQueue->bCurrentIsM,pParseQueue->bNextIsM,bSDFContent , pParseQueue->bLastWasM , pParseQueue->bMflag);
-
-          ByteString x(rText);
-          x.SearchAndReplaceAll('\n','#');
-          printf("'%s'\n",x.GetBuffer());
-
-          ByteString y(sText);
-          y.SearchAndReplaceAll('\n','#');
-          printf("'%s'\n",y.GetBuffer());
-        }
-*/
     }
 }
 
@@ -2431,15 +2425,9 @@ void ParserQueue::Push( const QueueEntry& aEntry ){
         else if ( aEntry.nTyp != IGNOREDTOKENS ){
             if( nLen > 1 && ( aEntry.sLine.GetChar( nLen-1 ) == '\\') ){
                 // Next is Macro
-//                ByteString x(aEntry.sLine);
-//                x.SearchAndReplaceAll('\n','#');
-//                printf("Next is Macro\n'%s'\n",x.GetBuffer());
                 bCurrentIsM = true;
              }else{
                 // Next is no Macro
- //               ByteString x(aEntry.sLine);
- //               x.SearchAndReplaceAll('\n','#');
- //               printf("Next is NO Macro\n'%s'\n",x.GetBuffer());
                 bCurrentIsM = false;
              }
         }
@@ -2450,33 +2438,20 @@ void ParserQueue::Push( const QueueEntry& aEntry ){
             if( nLen > 1 && ( aEntry.sLine.GetChar( nLen-1  ) == '\\') ){
                 // Next is Macro
                 bNextIsM = true;
-   //                 ByteString x(aEntry.sLine);
-   //                 x.SearchAndReplaceAll('\n','#');
-   //                 printf("Next is Macro\n'%s'\n",x.GetBuffer());
             }
             else{
                 // Next is no Macro
                 bNextIsM = false;
-  //                     ByteString x(aEntry.sLine);
-  //                     x.SearchAndReplaceAll('\n','#');
-  //                     printf("Next is NO Macro\n'%s'\n",x.GetBuffer());
             }
-            //}
         }else if( nLen > 2 && aEntry.sLine.GetChar( nLen-1 ) == '\n' ){
             if( aEntry.nTyp != IGNOREDTOKENS ){
                 if( nLen > 2 && ( aEntry.sLine.GetChar( nLen-2  ) == '\\') ){
                     // Next is Macro
                     bNextIsM = true;
-  //                  ByteString x(aEntry.sLine);
-  //                  x.SearchAndReplaceAll('\n','#');
-  //                  printf("Next is Macro\n'%s'\n",x.GetBuffer());
                 }
                 else{
                     // Next is no Macro
                     bNextIsM = false;
-  //                  ByteString x(aEntry.sLine);
-  //                  x.SearchAndReplaceAll('\n','#');
-  //                  printf("Next is NO Macro\n'%s'\n",x.GetBuffer());
                 }
             }
             // Pop current
@@ -2530,8 +2505,8 @@ ParserQueue::ParserQueue( Export& aExportObj )
           bStartNext( false ) ,
           bMflag( false ) ,
           bLastWasM( false ){
-            aQueueNext = new std::queue<QueueEntry>;
-            aQueueCur  = new std::queue<QueueEntry>;
+          aQueueNext = new std::queue<QueueEntry>;
+          aQueueCur  = new std::queue<QueueEntry>;
 }
 
 
