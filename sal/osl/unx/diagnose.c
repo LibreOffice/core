@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-18 16:15:51 $
+ *  last change: $Author: hro $ $Date: 2000-10-31 12:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,17 @@
     Trace output
 */
 
+static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
+
+pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc )
+{
+    pfunc_osl_printDebugMessage pOldFunc = _pPrintDebugMessage;
+    _pPrintDebugMessage = pNewFunc;
+
+    return pOldFunc;
+}
+
+
 void SAL_CALL osl_breakDebug()
 {
     exit(0);
@@ -90,33 +101,44 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 
 sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage)
 {
-/*      sal_Char szMessage[512] = ""; */
 
     /* get app name or NULL if unknown (don't call assert) */
     sal_Char* lpszAppName = "OSL";
 
-    /* format message into buffer */
+    if ( _pPrintDebugMessage )
+    {
+        sal_Char szMessage[1024] = "";
+        sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu: %s",
+                        lpszAppName, pszFileName, nLine, pszMessage);
+        _pPrintDebugMessage( szMessage );
+    }
+    else
+    {
+        /* format message into buffer */
 #ifdef S390
-    if(pszMessage != 0)
-    {
-        s390_printf( "Assertion Failed: %s: File %s, Line %d: %s\n",
-                     lpszAppName, pszFileName, nLine, pszMessage);
-    } else {
-        s390_printf( "Assertion Failed: %s: File %s, Line %d:\n",
-                     lpszAppName, pszFileName, nLine);
-    }
+        if(pszMessage != 0)
+        {
+            s390_printf( "Assertion Failed: %s: File %s, Line %d: %s\n",
+                         lpszAppName, pszFileName, nLine, pszMessage);
+        }
+        else
+        {
+            s390_printf( "Assertion Failed: %s: File %s, Line %d:\n",
+                         lpszAppName, pszFileName, nLine);
+        }
 #else
-    if(pszMessage != 0)
-    {
-        fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s",
-                lpszAppName, pszFileName, nLine, pszMessage);
-    } else {
-        fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu ",
-                lpszAppName, pszFileName, nLine);
-    }
-/*      szMessage[sizeof(szMessage)-1] = '\0'; */
-/*      fputs(szMessage, stderr); */
+        if(pszMessage != 0)
+        {
+            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s",
+                    lpszAppName, pszFileName, nLine, pszMessage);
+        }
+        else
+        {
+            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu ",
+                    lpszAppName, pszFileName, nLine);
+        }
 #endif
+    }
 
     return sal_False;   /* no abort */
 }

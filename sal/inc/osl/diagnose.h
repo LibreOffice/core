@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:12 $
+ *  last change: $Author: hro $ $Date: 2000-10-31 11:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,14 @@ void        SAL_CALL osl_breakDebug(void);
 sal_Bool    SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage);
 void        SAL_CALL osl_trace(const sal_Char* pszFormat, ...);
 sal_Int32   SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorMessage);
+
+/*
+    For message delivery
+*/
+
+typedef void (SAL_CALL *pfunc_osl_printDebugMessage)( const sal_Char * pszMessage );
+
+pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc );
 
 #ifdef __cplusplus
 }
