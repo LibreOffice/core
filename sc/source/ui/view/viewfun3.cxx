@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:28:09 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 17:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,8 +319,9 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc )
 //----------------------------------------------------------------------------
 //      C O P Y
 
-void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
+BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi )
 {
+    BOOL bDone = FALSE;
     UpdateInputLine();
 
     ScRange aRange;
@@ -368,12 +369,22 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
                 pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard
                 SC_MOD()->SetClipObject( pTransferObj, NULL );      // internal clipboard
             }
+
+            bDone = TRUE;
         }
         else
-            ErrorMessage(STR_MATRIXFRAGMENTERR);
+        {
+            if (!bApi)
+                ErrorMessage(STR_MATRIXFRAGMENTERR);
+        }
     }
     else
-        ErrorMessage(STR_NOMULTISELECT);
+    {
+        if (!bApi)
+            ErrorMessage(STR_NOMULTISELECT);
+    }
+
+    return bDone;
 }
 
 
@@ -952,13 +963,62 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 //
 //  innerhalb des Dokuments
 
-void ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
-                                BOOL bCut, BOOL bRecord, BOOL bPaint )
+BOOL ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
+                                BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     HideAllCursors();       // wegen zusammengefassten
-    BOOL bSuccess = pDocSh->GetDocFunc().MoveBlock(
-                                rSource, rDestPos, bCut, bRecord, bPaint, FALSE );
+
+    BOOL bSuccess = TRUE;
+    USHORT nDestTab = rDestPos.Tab();
+    const ScMarkData& rMark = GetViewData()->GetMarkData();
+    if ( rSource.aStart.Tab() == nDestTab && rSource.aEnd.Tab() == nDestTab && rMark.GetSelectCount() > 1 )
+    {
+        //  moving within one table and several tables selected -> apply to all selected tables
+
+        if ( bRecord )
+        {
+            String aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+        }
+
+        //  collect ranges of consecutive selected tables
+
+        ScRange aLocalSource = rSource;
+        ScAddress aLocalDest = rDestPos;
+        USHORT nTabCount = pDocSh->GetDocument()->GetTableCount();
+        USHORT nStartTab = 0;
+        while ( nStartTab < nTabCount && bSuccess )
+        {
+            while ( nStartTab < nTabCount && !rMark.GetTableSelect(nStartTab) )
+                ++nStartTab;
+            if ( nStartTab < nTabCount )
+            {
+                USHORT nEndTab = nStartTab;
+                while ( nEndTab+1 < nTabCount && rMark.GetTableSelect(nEndTab+1) )
+                    ++nEndTab;
+
+                aLocalSource.aStart.SetTab( nStartTab );
+                aLocalSource.aEnd.SetTab( nEndTab );
+                aLocalDest.SetTab( nStartTab );
+
+                bSuccess = pDocSh->GetDocFunc().MoveBlock(
+                                aLocalSource, aLocalDest, bCut, bRecord, bPaint, bApi );
+
+                nStartTab = nEndTab + 1;
+            }
+        }
+
+        if ( bRecord )
+            pDocSh->GetUndoManager()->LeaveListAction();
+    }
+    else
+    {
+        //  move the block as specified
+        bSuccess = pDocSh->GetDocFunc().MoveBlock(
+                                rSource, rDestPos, bCut, bRecord, bPaint, bApi );
+    }
+
     ShowAllCursors();
     if (bSuccess)
     {
@@ -966,17 +1026,18 @@ void ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
         ScAddress aDestEnd(
                     rDestPos.Col() + rSource.aEnd.Col() - rSource.aStart.Col(),
                     rDestPos.Row() + rSource.aEnd.Row() - rSource.aStart.Row(),
-                    rDestPos.Tab() );
+                    nDestTab );
         MarkRange( ScRange( rDestPos, aDestEnd ), FALSE );          //! FALSE ???
 
         pDocSh->UpdateOle(GetViewData());
         SelectionChanged();
     }
+    return bSuccess;
 }
 
 //  Link innerhalb des Dokuments
 
-void ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos )
+BOOL ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, BOOL bApi )
 {
     //  Test auf Ueberlappung
 
@@ -988,8 +1049,9 @@ void ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos )
         if ( rSource.aStart.Col() <= nDestEndCol && rDestPos.Col() <= rSource.aEnd.Col() &&
              rSource.aStart.Row() <= nDestEndRow && rDestPos.Row() <= rSource.aEnd.Row() )
         {
-            ErrorMessage( STR_ERR_LINKOVERLAP );
-            return;
+            if (!bApi)
+                ErrorMessage( STR_ERR_LINKOVERLAP );
+            return FALSE;
         }
     }
 
@@ -1013,6 +1075,8 @@ void ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos )
     PasteFromClip( IDF_ALL, pClipDoc, PASTE_NOFUNC, FALSE, FALSE, TRUE );       // als Link
 
     delete pClipDoc;
+
+    return TRUE;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:51:42 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 17:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ public:
     void            EnterDataAtCursor( const String& rString );         //! nicht benutzt ?
 
     void            CutToClip( ScDocument* pClipDoc=NULL );
-    void            CopyToClip( ScDocument* pClipDoc=NULL, BOOL bCut = FALSE );
+    BOOL            CopyToClip( ScDocument* pClipDoc=NULL, BOOL bCut = FALSE, BOOL bApi = FALSE );
     BOOL            PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
@@ -186,10 +186,10 @@ public:
     BOOL            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
     long            DropRequestHdl( Exchange* pExchange );
-    void            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
-                                    BOOL bCut, BOOL bRecord = TRUE, BOOL bPaint = TRUE );
+    BOOL            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
+                                    BOOL bCut, BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    void            LinkBlock( const ScRange& rSource, const ScAddress& rDestPos );
+    BOOL            LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, BOOL bApi );
 
     void            CreateNames( USHORT nFlags );
     USHORT          GetCreateNameFlags();
