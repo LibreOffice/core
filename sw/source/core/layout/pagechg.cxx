@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:22:32 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 12:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
                 {
                     SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pSdrObj);
                     if ( pContact->GetAnchor() )
-                        pContact->DisconnectFromLayout( FALSE );
+                        pContact->DisconnectFromLayout( false );
                     pPg->SwFrm::AppendDrawObj( pContact );
                 }
             }
