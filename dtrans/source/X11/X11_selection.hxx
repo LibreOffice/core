@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-23 13:46:58 $
+ *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ namespace x11 {
     public:
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() = 0;
         virtual void clearTransferable() = 0;
+        virtual void fireContentsChanged() = 0;
     };
 
     class DropTarget :
@@ -258,12 +259,16 @@ namespace x11 {
             // m_aTypes is invalid after 2 seconds
             int                         m_nLastTimestamp;
             bool                        m_bHaveUTF16;
+            bool                        m_bOwner;
+            Window                      m_aLastOwner;
 
             Selection() : m_eState( Inactive ),
                           m_pAdaptor( NULL ),
                           m_aAtom( None ),
                           m_nLastTimestamp( 0 ),
-                          m_bHaveUTF16( false )
+                          m_bHaveUTF16( false ),
+                          m_bOwner( false ),
+                          m_aLastOwner( None )
                 {}
         };
 
@@ -494,6 +499,7 @@ namespace x11 {
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
         virtual void clearTransferable();
+        virtual void fireContentsChanged();
     };
 
 // ------------------------------------------------------------------------

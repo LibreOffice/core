@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-07 11:12:22 $
+ *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,23 +187,21 @@ X11Clipboard::~X11Clipboard()
 
 void X11Clipboard::fireChangedContentsEvent()
 {
-#if 0
-    OInterfaceContainerHelper *pContainer =
-        rBHelper.aLC.getContainer(getCppuType( (Reference < XClipboardListener > *) 0));
-
-    if (pContainer)
-    {
-        ClipboardEvent aEvent(static_cast < XClipboard * > (this), m_aContents);
-        OInterfaceIteratorHelper aIterator(*pContainer);
-
-        while (aIterator.hasMoreElements())
-        {
-            Reference < XClipboardListener > xListener(aIterator.next(), UNO_QUERY);
-            if (xListener.is())
-                xListener->changedContents(aEvent);
-        }
-    }
+    ClearableMutexGuard aGuard( m_aMutex );
+#ifdef DEBUG
+    fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%d listeners)\n",
+             OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
 #endif
+    ::std::list< Reference< XClipboardListener > > listeners( m_aListeners );
+    aGuard.clear();
+
+    ClipboardEvent aEvent( m_pHolder, m_aContents);
+    while( listeners.begin() != listeners.end() )
+    {
+        if( listeners.front().is() )
+            listeners.front()->changedContents(aEvent);
+        listeners.pop_front();
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -212,7 +210,8 @@ void X11Clipboard::clearContents()
 {
     MutexGuard aGuard(m_aMutex);
 
-    if ( m_aOwner.is() ) {
+    if ( m_aOwner.is() )
+    {
         m_aOwner->lostOwnership(static_cast < XClipboard * > (this), m_aContents);
         m_aOwner.clear();
     }
@@ -286,11 +285,11 @@ sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
 
 
 // ------------------------------------------------------------------------
-#if 0
 void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
-    rBHelper.addListener( getCppuType( (const ::com::sun::star::uno::Reference< XClipboard > *) 0), listener );
+    MutexGuard aGuard( m_aMutex );
+    m_aListeners.push_back( listener );
 }
 
 // ------------------------------------------------------------------------
@@ -298,10 +297,10 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw(RuntimeException)
 {
-    rBHelper.removeListener( getCppuType( (const Reference< XClipboardListener > *) 0 ), listener );
+    MutexGuard aGuard( m_aMutex );
+    m_aListeners.remove( listener );
 }
 
-#endif
 
 // ------------------------------------------------------------------------
 
@@ -317,13 +316,21 @@ void X11Clipboard::clearTransferable()
     clearContents();
 }
 
+// ------------------------------------------------------------------------
+
+void X11Clipboard::fireContentsChanged()
+{
+    fireChangedContentsEvent();
+}
+
 /*
  *  X11ClipboardHolder
  */
 
 X11ClipboardHolder::X11ClipboardHolder() :
-        ::cppu::WeakComponentImplHelper3<
+        ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::datatransfer::clipboard::XClipboardEx,
+    ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XInitialization
         >( m_aMutex )
@@ -370,7 +377,10 @@ void X11ClipboardHolder::initialize( const Sequence< Any >& arguments )
         nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
     }
 
-    m_xRealClipboard = X11Clipboard::get( aDisplayName, nSelection );
+    X11Clipboard* pClipboard = X11Clipboard::get( aDisplayName, nSelection );
+    m_xRealClipboard = pClipboard;
+    m_xRealNotifier  = pClipboard;
+    pClipboard->setHolder( this );
 }
 
 // ------------------------------------------------------------------------
@@ -378,6 +388,22 @@ void X11ClipboardHolder::initialize( const Sequence< Any >& arguments )
 Reference< XTransferable > X11ClipboardHolder::getContents() throw(RuntimeException)
 {
     return m_xRealClipboard.is() ? m_xRealClipboard->getContents() : Reference< XTransferable >();
+}
+
+// ------------------------------------------------------------------------
+
+void X11ClipboardHolder::addClipboardListener( const Reference< XClipboardListener >& xListener ) throw(RuntimeException)
+{
+    if( m_xRealNotifier.is() )
+        m_xRealNotifier->addClipboardListener( xListener );
+}
+
+// ------------------------------------------------------------------------
+
+void X11ClipboardHolder::removeClipboardListener( const Reference< XClipboardListener >& xListener ) throw(RuntimeException)
+{
+    if( m_xRealNotifier.is() )
+        m_xRealNotifier->removeClipboardListener( xListener );
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 18:32:11 $
+ *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,6 +639,7 @@ bool SelectionManager::requestOwnership( Atom selection )
                      bSuccess ? "acquired" : "failed to acquire",
                      OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
+            m_aSelections[ selection ]->m_bOwner = bSuccess;
         }
 #ifdef DEBUG
         else
@@ -2555,6 +2556,9 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
             SelectionAdaptor* pAdaptor = getAdaptor( rEvent.xselectionclear.selection );
             if ( pAdaptor )
                 pAdaptor->clearTransferable();
+            ::std::hash_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
+            if( it != m_aSelections.end() )
+                it->second->m_bOwner = false;
         }
         break;
 
@@ -2653,11 +2657,37 @@ void SelectionManager::run( void* pThis )
 
     SelectionManager* This = (SelectionManager*)pThis;
 
+    time_t nLast = time( NULL );
     osl_yieldThread();
     while( osl_scheduleThread(This->m_aThread) )
     {
         osl_yieldThread();
         This->dispatchEvent( 200 );
+        time_t nNow = time( NULL );
+        if( nNow - nLast > 0 )
+        {
+            ClearableMutexGuard aGuard(This->m_aMutex);
+            ::std::list< SelectionAdaptor* > aChangeList;
+            nLast = nNow;
+            for( ::std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
+            {
+                if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
+                {
+                    Window aOwner = XGetSelectionOwner( This->m_pDisplay, it->first );
+                    if( aOwner != it->second->m_aLastOwner )
+                    {
+                        it->second->m_aLastOwner = aOwner;
+                        aChangeList.push_back( it->second->m_pAdaptor );
+                    }
+                }
+            }
+            aGuard.clear();
+            while( aChangeList.begin() != aChangeList.end() )
+            {
+                aChangeList.front()->fireContentsChanged();
+                aChangeList.pop_front();
+            }
+        }
     }
 }
 
@@ -2755,6 +2785,12 @@ Reference< XTransferable > SelectionManager::getTransferable()
 void SelectionManager::clearTransferable()
 {
     m_xDragSourceTransferable.clear();
+}
+
+// ------------------------------------------------------------------------
+
+void SelectionManager::fireContentsChanged()
+{
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,15 @@
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDNOTIFIER_HPP_
-//#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 
 // ------------------------------------------------------------------------
@@ -89,15 +89,18 @@
 namespace x11 {
 
     class X11ClipboardHolder :
-        public ::cppu::WeakComponentImplHelper3 <
-    ::com::sun::star::datatransfer::clipboard::XClipboardEx,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XInitialization
-                            >
+        public ::cppu::WeakComponentImplHelper4 <
+        ::com::sun::star::datatransfer::clipboard::XClipboardEx,
+        ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::lang::XInitialization
+        >
     {
         ::osl::Mutex m_aMutex;
         Reference< ::com::sun::star::datatransfer::clipboard::XClipboardEx >
                 m_xRealClipboard;
+        Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier >
+                m_xRealNotifier;
     public:
         X11ClipboardHolder();
         virtual ~X11ClipboardHolder();
@@ -145,20 +148,18 @@ namespace x11 {
         /*
          * XClipboardNotifier
          */
-#if 0
-        virtual void SAL_CALL addClipboardListener(
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+        virtual void SAL_CALL addClipboardListener( const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
             throw(RuntimeException);
 
         virtual void SAL_CALL removeClipboardListener(
             const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
             throw(RuntimeException);
-#endif
     };
 
     class X11Clipboard :
-        public ::cppu::WeakImplHelper1 <
-    ::com::sun::star::datatransfer::clipboard::XClipboardEx
+        public ::cppu::WeakImplHelper2 <
+        ::com::sun::star::datatransfer::clipboard::XClipboardEx,
+        ::com::sun::star::datatransfer::clipboard::XClipboardNotifier
         >,
         public SelectionAdaptor
     {
@@ -172,7 +173,9 @@ namespace x11 {
 
         SelectionManager&                                       m_rSelectionManager;
         Reference< ::com::sun::star::lang::XInitialization >    m_xSelectionManager;
+        ::std::list< Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
         Atom                                                    m_aSelection;
+        ::com::sun::star::datatransfer::clipboard::XClipboardEx* m_pHolder;
 
     protected:
 
@@ -189,6 +192,7 @@ namespace x11 {
         virtual ~X11Clipboard();
 
         static X11Clipboard* get( const ::rtl::OUString& rDisplayName, Atom aSelection );
+        void setHolder( ::com::sun::star::datatransfer::clipboard::XClipboardEx* pHolder ) { m_pHolder = pHolder; }
 
         /*
          * XClipboard
@@ -215,7 +219,6 @@ namespace x11 {
         /*
          * XClipboardNotifier
          */
-#if 0
         virtual void SAL_CALL addClipboardListener(
             const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
             throw(RuntimeException);
@@ -223,14 +226,13 @@ namespace x11 {
         virtual void SAL_CALL removeClipboardListener(
             const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
             throw(RuntimeException);
-#endif
 
         /*
          *  SelectionAdaptor
          */
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
         virtual void clearTransferable();
-        // returns true if conversion was successful
+        virtual void fireContentsChanged();
     };
 
 // ------------------------------------------------------------------------
