@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:39:08 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,8 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
     String sURL = aURLED.GetText();
     if(sURL.Len())
-        sURL = INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE );
+        sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
+
     SwFmtINetFmt aINetFmt(sURL, aTargetFrmLB.GetText());
     aINetFmt.SetName(aNameED.GetText());
     SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
