@@ -58,6 +58,12 @@
 
 <xsl:strip-space elements="tokens"/>
 
+<xsl:template match="office:document">
+	<html>
+	<xsl:apply-templates />
+	</html>
+</xsl:template>
+
 <xsl:template match="office:document-content">
 	<html>
 	<xsl:apply-templates />
@@ -71,6 +77,14 @@
 	</style>
 </xsl:template>
 
+<xsl:template match="office:styles">	
+</xsl:template>
+
+<xsl:template match="office:meta">	
+</xsl:template>
+
+<xsl:template match="office:settings">	
+</xsl:template>
 
 <xsl:template match="style:style">		
 	<xsl:if test="@style:family ='paragraph'">
@@ -180,7 +194,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:text disable-output-escaping="yes">"&gt;</xsl:text>
-			<xsl:value-of select="."/>
+			<xsl:apply-templates/>
 		<xsl:text disable-output-escaping="yes">&lt;/p&gt;</xsl:text>
 		<!--<xsl:value-of select="."/>-->
 		<!--<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>-->
@@ -189,5 +203,6 @@
 	
 </xsl:template>
 	
+
 
 </xsl:stylesheet>

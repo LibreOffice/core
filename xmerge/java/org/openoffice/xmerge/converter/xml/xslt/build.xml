@@ -137,7 +137,8 @@
             <classpath refid="classpath"/>
             <include name="${package}/DocumentDeserializerImpl.java"/>
             <include name="${package}/DocumentSerializerImpl.java"/>
-            <include name="${package}/PluginFactoryImpl.java"/>
+             <include name="${package}/GenericOfficeDocument.java"/>
+        <include name="${package}/PluginFactoryImpl.java"/>
         </javac>
     <copy todir="${build.class}/${package}">
             <fileset dir=".">
