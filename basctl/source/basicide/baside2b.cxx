@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-07 10:18:27 $
+ *  last change: $Author: tbe $ $Date: 2001-11-09 11:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ void EditorWindow::CreateEditEngine()
     pEditEngine->SetUpdateMode( FALSE );
     pEditEngine->InsertView( pEditView );
 
-    Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetLanguage(), DEFAULTFONT_FLAGS_ONLYONE , this ) );
+    Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
     aFont.SetTransparent( FALSE );
     Size aFontSize( 0, 10 );    // Points
 
