@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:48:42 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,117 +69,12 @@ ModalDialog RID_SVXDLG_ZOOM
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 142 ) ;
-    Text = "Maﬂstab" ;
+    Text = "Zoom" ;
     Text [ ENGLISH ] = "Zoom" ;
-    Text [ norwegian ] = "Zoom" ;
-    Text [ italian ] = "Zoom" ;
-    Text [ portuguese_brazilian ] = "Zoom" ;
-    Text [ portuguese ] = "Zoom" ;
-    Text [ finnish ] = "Zoomaa" ;
-    Text [ danish ] = "MÂlestok" ;
-    Text [ french ] = "Zoom" ;
-    Text [ swedish ] = "Skala" ;
-    Text [ dutch ] = "Zoom" ;
-    Text [ spanish ] = "Escala" ;
-    Text [ english_us ] = "Zoom" ;
-    Text[ chinese_simplified ] = "œ‘ æ±»¿˝";
-    Text[ russian ] = "Ã‡Ò¯Ú‡·";
-    Text[ polish ] = "Skala";
-    Text[ japanese ] = "Ωﬁ∞—";
-    Text[ chinese_traditional ] = "≈„•‹§Ò®“";
-    Text[ arabic ] = " ﬂ»Ì—/ ’€Ì—";
     Moveable = TRUE ;
-    RadioButton BTN_200
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~200 %" ;
-    };
-    RadioButton BTN_150
-    {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "15~0 %" ;
-    };
-    RadioButton BTN_100
-    {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~100 %" ;
-    };
-    RadioButton BTN_75
-    {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~75 %" ;
-    };
-    RadioButton BTN_50
-    {
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~50 %" ;
-    };
-    RadioButton BTN_OPTIMAL
-    {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~Optimal" ;
-        Text [ English ] = "~Optimal" ;
-        Text [ norwegian ] = "~Optimal" ;
-        Text [ italian ] = "~Ottimale" ;
-        Text [ portuguese_brazilian ] = "~Optimal" ;
-        Text [ portuguese ] = "~Optimizar" ;
-        Text [ finnish ] = "~Optimaalinen" ;
-        Text [ danish ] = "Optimal" ;
-        Text [ french ] = "~Optimal" ;
-        Text [ swedish ] = "Optimal" ;
-        Text [ dutch ] = "~Optimaal" ;
-        Text [ spanish ] = "”~ptimo" ;
-        Text [ english_us ] = "~Optimal" ;
-        Text[ chinese_simplified ] = "◊Óº—(~O)";
-        Text[ russian ] = "ŒÔÚËÏ‡Î¸ÌÓÂ";
-        Text[ polish ] = "~Optymalnie";
-        Text[ japanese ] = "ç≈ìK(~O)";
-        Text[ chinese_traditional ] = "≥Ã¶XæA(~O)";
-        Text[ arabic ] = "«·√„À·";
-        Text[ greek ] = "¬›ÎÙÈÛÙ·";
-        Text[ korean ] = "√÷¿˚(~O)";
-        Text[ turkish ] = "~Optimum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "”~ptimo";
-    };
-    RadioButton BTN_PAGE_WIDTH
-    {
-        Pos = MAP_APPFONT ( 12 , 92 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "Seiten~breite" ;
-        Text [ ENGLISH ] = "~Page width" ;
-        Text [ norwegian ] = "~Sidebredde" ;
-        Text [ italian ] = "Larg~h. pagina" ;
-        Text [ portuguese_brazilian ] = "~Largura da p?gina" ;
-        Text [ portuguese ] = "~Larg. de p·gina" ;
-        Text [ finnish ] = "~Sivun leveys" ;
-        Text [ danish ] = "Sidebredde" ;
-        Text [ french ] = "~Largeur de page" ;
-        Text [ swedish ] = "Sidbredd" ;
-        Text [ dutch ] = "~Paginabreedte" ;
-        Text [ spanish ] = "~Ancho de p·gina" ;
-        Text [ english_us ] = "~Page Width" ;
-        Text[ chinese_simplified ] = "“≥øÌ(~P)";
-        Text[ russian ] = "œÓ ¯ËËÌÂ ÒÚ‡ÌËˆ˚";
-        Text[ polish ] = "Szeroko?Ê strony";
-        Text[ japanese ] = "Õﬂ∞ºﬁïù(~P)";
-        Text[ chinese_traditional ] = "≠∂ºe(~P)";
-        Text[ arabic ] = "⁄—÷ «·’›Õ…";
-        Text[ greek ] = "–Î‹ÙÔÚ ÛÂÎﬂ‰·Ú";
-        Text[ korean ] = "¬  ≥ ∫Ò(~P)";
-        Text[ turkish ] = "~Sayfa geni˛lii";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ancho de p·gina";
-    };
     RadioButton BTN_WHOLE_PAGE
     {
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Ganze Seite" ;
         Text [ ENGLISH ] = "~Whole page" ;
@@ -206,9 +101,97 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Toda la p·gina";
     };
+    RadioButton BTN_PAGE_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "Seiten~breite" ;
+        Text [ ENGLISH ] = "~Page width" ;
+        Text [ norwegian ] = "~Sidebredde" ;
+        Text [ italian ] = "Larg~h. pagina" ;
+        Text [ portuguese_brazilian ] = "~Largura da p?gina" ;
+        Text [ portuguese ] = "~Larg. de p·gina" ;
+        Text [ finnish ] = "~Sivun leveys" ;
+        Text [ danish ] = "Sidebredde" ;
+        Text [ french ] = "~Largeur de page" ;
+        Text [ swedish ] = "Sidbredd" ;
+        Text [ dutch ] = "~Paginabreedte" ;
+        Text [ spanish ] = "~Ancho de p·gina" ;
+        Text [ english_us ] = "~Page Width" ;
+        Text[ chinese_simplified ] = "“≥øÌ(~P)";
+        Text[ russian ] = "œÓ ¯ËËÌÂ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Szeroko?Ê strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁïù(~P)";
+        Text[ chinese_traditional ] = "≠∂ºe(~P)";
+        Text[ arabic ] = "⁄—÷ «·’›Õ…";
+        Text[ greek ] = "–Î‹ÙÔÚ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "¬  ≥ ∫Ò(~P)";
+        Text[ turkish ] = "~Sayfa geni˛lii";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ancho de p·gina";
+    };
+    RadioButton BTN_OPTIMAL
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Optimal" ;
+        Text [ English ] = "~Optimal" ;
+        Text [ norwegian ] = "~Optimal" ;
+        Text [ italian ] = "~Ottimale" ;
+        Text [ portuguese_brazilian ] = "~Optimal" ;
+        Text [ portuguese ] = "~Optimizar" ;
+        Text [ finnish ] = "~Optimaalinen" ;
+        Text [ danish ] = "Optimal" ;
+        Text [ french ] = "~Optimal" ;
+        Text [ swedish ] = "Optimal" ;
+        Text [ dutch ] = "~Optimaal" ;
+        Text [ spanish ] = "”~ptimo" ;
+        Text [ english_us ] = "~Optimal" ;
+        Text[ chinese_simplified ] = "◊Óº—(~O)";
+        Text[ russian ] = "ŒÔÚËÏ‡Î¸ÌÓÂ";
+        Text[ polish ] = "~Optymalnie";
+        Text[ japanese ] = "ç≈ìK(~O)";
+        Text[ chinese_traditional ] = "≥Ã¶XæA(~O)";
+        Text[ arabic ] = "«·√„À·";
+        Text[ greek ] = "¬›ÎÙÈÛÙ·";
+        Text[ korean ] = "√÷¿˚(~O)";
+        Text[ turkish ] = "~Optimum";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "”~ptimo";
+    };
+    RadioButton BTN_50
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~50 %" ;
+    };
+    RadioButton BTN_75
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~75 %" ;
+    };
+    RadioButton BTN_100
+    {
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~100 %" ;
+    };
+    RadioButton BTN_150
+    {
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "15~0 %" ;
+    };
+    RadioButton BTN_200
+    {
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~200 %" ;
+    };
     RadioButton BTN_USER
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 42 , 10 ) ;
         Text = "~Stufenlos" ;
         Text [ ENGLISH ] = "~Custom" ;
@@ -237,7 +220,7 @@ ModalDialog RID_SVXDLG_ZOOM
     };
     MetricField ED_USER
     {
-        Pos = MAP_APPFONT ( 56 , 118 ) ;
+        Pos = MAP_APPFONT ( 56 , 120 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         Border = TRUE ;
         Group = TRUE ;
@@ -248,34 +231,12 @@ ModalDialog RID_SVXDLG_ZOOM
         CustomUnitText = "%" ;
         SpinSize = 1 ;
     };
-    GroupBox GB_ZOOM
+    FixedLine FL_ZOOM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 92 , 133 ) ;
-        Text = "Skalierung" ;
-        Text [ ENGLISH ] = "Skalierung" ;
-        Text [ norwegian ] = "Forst¯rrelse" ;
-        Text [ italian ] = "Scala" ;
-        Text [ portuguese_brazilian ] = "Magnifica??o" ;
-        Text [ portuguese ] = "Escala" ;
-        Text [ finnish ] = "Zoomaa kohteeseen" ;
-        Text [ danish ] = "Skalering" ;
-        Text [ french ] = "Facteur" ;
-        Text [ swedish ] = "Skalning" ;
-        Text [ dutch ] = "Uitvergroting" ;
-        Text [ spanish ] = "Escala" ;
-        Text [ english_us ] = "Zoom to" ;
-        Text[ chinese_simplified ] = "œ‘ æ±»¡–";
-        Text[ russian ] = "”‚ÂÎË˜ÂÌËÂ";
-        Text[ polish ] = "Skalowanie";
-        Text[ japanese ] = "î{ó¶";
-        Text[ chinese_traditional ] = "≈„•‹§Ò®“";
-        Text[ arabic ] = " ﬂ»Ì—";
-        Text[ language_user1 ] = " ";
-        Text[ greek ] = "≈ÛÙﬂ·ÛÁ";
-        Text[ korean ] = "πË¿≤";
-        Text[ turkish ] = "Yak˝nla˛t˝r";
-        Text[ catalan ] = "Escala";
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text = "Zoomfaktor" ;
+        Text [ ENGLISH ] = "Zoom" ;
     };
     OKButton BTN_ZOOM_OK
     {

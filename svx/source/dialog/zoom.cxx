@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: fme $ $Date: 2001-05-21 12:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aWholePageBtn   ( this, ResId( BTN_WHOLE_PAGE ) ),
     aUserBtn        ( this, ResId( BTN_USER ) ),
     aUserEdit       ( this, ResId( ED_USER ) ),
-    aZoomBox        ( this, ResId( GB_ZOOM ) ),
+    aZoomFl         ( this, ResId( FL_ZOOM ) ),
     aOKBtn          ( this, ResId( BTN_ZOOM_OK ) ),
     aCancelBtn      ( this, ResId( BTN_ZOOM_CANCEL ) ),
     aHelpBtn        ( this, ResId( BTN_ZOOM_HELP ) ),
