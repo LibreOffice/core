@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:56:33 $
+ *  last change: $Author: nn $ $Date: 2000-10-11 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <svx/editeng.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/saveopt.hxx>
 #include <svtools/poolcach.hxx>
+#include <svtools/saveopt.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/system.hxx>
 #include <unotools/charclass.hxx>
@@ -3602,10 +3602,12 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
     //  Compress-Mode fuer Grafiken in Brush-Items (Hintergrund im Seitenformat)
 
     USHORT nComprMode = rStream.GetCompressMode() & ~(COMPRESSMODE_ZBITMAP | COMPRESSMODE_NATIVE);
-    const SfxOptions& rOpt = SFX_APP()->GetOptions();
-    if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_40 && rOpt.IsSaveGraphicsCompressed() )
+    SvtSaveOptions aSaveOpt;
+    if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_40 &&
+            aSaveOpt.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed )
         nComprMode |= COMPRESSMODE_ZBITMAP;             //  komprimiert ab 4.0
-    if ( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 && rOpt.IsSaveOriginalGraphics() )
+    if ( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 &&
+            aSaveOpt.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal )
         nComprMode |= COMPRESSMODE_NATIVE;              //  Originalformat ab 5.0
     rStream.SetCompressMode( nComprMode );
 

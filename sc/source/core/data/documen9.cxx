@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 11:46:10 $
+ *  last change: $Author: nn $ $Date: 2000-10-11 16:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/saveopt.hxx>
+#include <svtools/saveopt.hxx>
 #include <so3/ipobj.hxx>
 #include <sch/schdll.hxx>
 #include <sch/schdll0.hxx>
@@ -386,12 +386,13 @@ void ScDocument::StoreDrawLayer(SvStream& rStream) const
         //BOOL bIndep = SFX_APP()->GetOptions().IsIndepGrfFmt();
         //pDrawLayer->SetSavePortable( bIndep );
 
-        SfxApplication* pSfxApp = SFX_APP();
+        SvtSaveOptions aSaveOpt;
+        SvtSaveOptions::SaveGraphicsMode eMode = aSaveOpt.GetSaveGraphicsMode();
 
-        BOOL bCompr = pSfxApp->GetOptions().IsSaveGraphicsCompressed();
+        BOOL bCompr = ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
         pDrawLayer->SetSaveCompressed( bCompr );
 
-        BOOL bNative = pSfxApp->GetOptions().IsSaveOriginalGraphics();
+        BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
         pDrawLayer->SetSaveNative( bNative );
 
         pDrawLayer->Store(rStream);

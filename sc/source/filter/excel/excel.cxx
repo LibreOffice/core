@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 14:20:42 $
+ *  last change: $Author: nn $ $Date: 2000-10-11 16:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/saveopt.hxx>
+#include <svtools/saveopt.hxx>
 #include <so3/svstor.hxx>
 #include <vcl/exchange.hxx>
 #include <tools/globname.hxx>
@@ -273,9 +273,10 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
         if ( bBiff8 )
         {
+            SvtSaveOptions aSaveOpt;
             BOOL            bStoreRel = rOutMedium.IsRemote()?
-                                            SFX_APP()->GetOptions().IsSaveRelINet() :
-                                            SFX_APP()->GetOptions().IsSaveRelFSys();
+                                            aSaveOpt.IsSaveRelINet() :
+                                            aSaveOpt.IsSaveRelFSys();
             ExportBiff8     aFilter( *pStorage, *xStStream, pDocument, eNach, bStoreRel );
             eRet = aFilter.Write();
         }
