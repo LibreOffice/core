@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-27 20:24:43 $
+ *  last change: $Author: vg $ $Date: 2001-08-29 21:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabDialog DLG_TEMPLATE_1
     Text [ italian ] = "Modello di carattere" ;
     Text [ portuguese_brazilian ] = "Estilo de caracter" ;
     Text [ portuguese ] = "Estilos de caracteres" ;
-    Text [ finnish ] = "Merkistön tyyli" ;
+    Text [ finnish ] = "Merkist? tyyli" ;
     Text [ danish ] = "Tegntypografi" ;
     Text [ french ] = "Style de caractères" ;
     Text [ swedish ] = "Teckenformatmall" ;
@@ -276,7 +276,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ italian ] = "Rientro e spaziatura" ;
                 Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ finnish ] = "Sisennykset ja v?lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -868,7 +868,7 @@ String STR_PAGE_STD
     Text [ italian ] = "Pagina" ;
     Text [ portuguese_brazilian ] = "P?gina" ;
     Text [ portuguese ] = "Página" ;
-    Text [ finnish ] = "Sivu" ;
+    Text [ finnish ] = "Sivu " ;
     Text [ danish ] = "Side" ;
     Text [ french ] = "Page" ;
     Text [ swedish ] = "Sida" ;
@@ -922,7 +922,7 @@ String STR_PAGE_HEADER
     Text [ italian ] = "Riga d'intestazione" ;
     Text [ portuguese_brazilian ] = "Cabe?alho" ;
     Text [ portuguese ] = "Cabeçalho" ;
-    Text [ finnish ] = "Yläotsikko" ;
+    Text [ finnish ] = "Yl?otsikko" ;
     Text [ danish ] = "Sidehoved" ;
     Text [ french ] = "En-tête" ;
     Text [ swedish ] = "Sidhuvud" ;
@@ -1114,7 +1114,7 @@ TabDialog DLG_TEMPLATE_3
                 Text [ italian ] = "Scorrimento" ;
                 Text [ portuguese_brazilian ] = "Circundamento" ;
                 Text [ portuguese ] = "Ajuste" ;
-                Text [ finnish ] = "Rivitä" ;
+                Text [ finnish ] = "Rivit?" ;
                 Text [ danish ] = "Ombrydning" ;
                 Text [ french ] = "Adaptation du texte" ;
                 Text [ swedish ] = "Textanpassning" ;
@@ -1361,7 +1361,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ turkish ] = "Anahat";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Esquema";
-                Text[ finnish ] = "Jäsennys";
+                Text[ finnish ] = "J?sennys";
             };
             PageItem
             {
@@ -1468,6 +1468,7 @@ TabDialog DLG_TEMPLATE_5
     Text[ catalan ] = "Estilo de numeración";
     Text[ finnish ] = "Numerointityyli";
 };
+
 
 
 
