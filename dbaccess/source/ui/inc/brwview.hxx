@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:14:32 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,13 +124,23 @@ namespace dbaui
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
 
-        void    showStatus( String& _rStatus );
+        void    showStatus( const String& _rStatus );
         void    hideStatus();
 
     protected:
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void resizeControl(Rectangle& rRect);
+    };
+
+    class BrowserViewStatusDisplay
+    {
+    protected:
+        UnoDataBrowserView*     m_pView;
+
+    public:
+        BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const String& _rStatus );
+        ~BrowserViewStatusDisplay( );
     };
 }
 #endif // _SBX_BRWVIEW_HXX

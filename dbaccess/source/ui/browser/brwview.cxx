@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 12:07:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     }
 }
 // -------------------------------------------------------------------------
-void UnoDataBrowserView::showStatus( String& _rStatus )
+void UnoDataBrowserView::showStatus( const String& _rStatus )
 {
     if (0 == _rStatus.Len())
         hideStatus();
@@ -349,8 +349,21 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
     }
     return nDone ? nDone : Window::PreNotify(rNEvt);
 }
-// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const String& _rStatus )
+    :m_pView(_pView)
+{
+    if (m_pView)
+        m_pView->showStatus(_rStatus);
+}
+
+// -----------------------------------------------------------------------------
+BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
+{
+    if (m_pView)
+        m_pView->showStatus(String());
+}
 
 
 
