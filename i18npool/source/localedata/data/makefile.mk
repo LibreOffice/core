@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.14 $
+#*  $Revision: 1.15 $
 #*
-#*  last change: $Author: er $ $Date: 2002-10-10 13:17:05 $
+#*  last change: $Author: er $ $Date: 2002-10-18 21:29:50 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -324,7 +324,7 @@ LIB4OBJFILES=$(SHL4OBJS)
 $(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST)
 
 $(MISC)$/localedata_%.cxx : %.xml
-    +$(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb
+    +$(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb $(SOLARBINDIR)$/types.rdb
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
