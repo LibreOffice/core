@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:42:53 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ public:
     SfxPoolItem* GetFmtStackAttr(USHORT nWhich, USHORT * pPos = 0);
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, USHORT nWhich);
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
+    void Delete(const SwPaM &rPam);
 };
 
 class SwFltAnchor : public SfxPoolItem
