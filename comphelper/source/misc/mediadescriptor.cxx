@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2004-11-26 09:24:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,24 @@ const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTTITLE()
 const ::rtl::OUString& MediaDescriptor::PROP_MODEL()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Model"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_PASSWORD()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Password"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_TITLE()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Title"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_SALVAGEDFILE()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("SalvagedFile"));
     return sProp;
 }
 
