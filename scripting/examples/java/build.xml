@@ -1,0 +1,211 @@
+<!--
+#*************************************************************************
+#
+#   $RCSfile: build.xml,v $
+#
+#   $Revision: 1.1 $
+#
+#   last change: $Author: toconnor $ $Date: 2003-08-21 15:48:06 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+-->
+<project name="Scipting Framework Installer" default="buildexamples" basedir=".">
+
+  <!-- =================== Environmental Properties ======================= -->
+
+  <property name="prj" value="../.."/>
+  <property file="${prj}/java/build.env"/>
+  <property name="build.compiler"   value="classic"/>
+  <property name="optimize"   value="on"/>
+  <property name="debug"   value="on"/>
+  <property name="installerclasses" value="${out}/class/sframeworkinstall"/>
+  <property name="jardir" value="${out}/class"/>
+  <property name="bindir" value="${out}/bin"/>
+  <property name="sfversion" value="0.3"/>
+  <property name="installerjarname" value="SFrameworkInstall.jar"/>
+  <property environment="env"/>
+
+  <!-- ==================== classpath setting ============================ -->
+  <path id="idlclasspath">
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>  -->
+    <pathelement location="${solar.jar}/jurt.jar"/>
+    <pathelement location="${solar.jar}/jut.jar"/>
+    <pathelement location="${solar.jar}/juh.jar"/>
+    <pathelement location="${solar.jar}/java_uno.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
+    <pathelement location="${solar.jar}/sandbox.jar"/>
+  </path>
+  <path id="scriptexampleclasspath">
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!-- pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/ -->
+    <pathelement location="${solar.jar}/jurt.jar"/>
+    <pathelement location="${solar.jar}/jut.jar"/>
+    <pathelement location="${solar.jar}/juh.jar"/>
+    <pathelement location="${solar.jar}/java_uno.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
+    <pathelement location="${solar.jar}/sandbox.jar"/>
+    <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
+  </path>
+
+  <path id="debuggerclasspath">
+    <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <pathelement location="${out}/class/js.jar"/>
+    <pathelement location="${solar.jar}/bsh-1.2b7.jar"/>
+  </path>
+
+  <!-- ===================== Patch the Rhino js.jar ======================-->
+  <target name="patchesJS">
+    <unzip src="${solar.bin}/js.jar"
+        dest="${out}/class/jsjartmp"/>
+    <javac srcdir="${prj}/examples/java/debugger"
+           destdir="${out}/class/jsjartmp"
+              includes="rhino/Main.java" classpathref="debuggerclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <zip destfile="${out}/class/js.jar"
+        basedir="${out}/class/jsjartmp" includes="**"/>
+  </target>
+  <!-- ===================== Build the examples ========================= -->
+  <target name="buildexamples" depends="patchesJS">
+
+    <mkdir dir="${out}/class/examples/java/debugger"/>
+    <javac srcdir="${prj}/examples/java/debugger"
+           destdir="${out}/class/examples/java/debugger"
+              includes="*.java"
+           classpathref="debuggerclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <copy todir="${out}/class/examples/java/debugger">
+        <fileset dir="${prj}/examples/java/debugger">
+            <include name="**/*.java"/>
+            <include name="*.xml"/>
+        </fileset>
+    </copy>
+
+    <jar jarfile="${out}/class/examples/java/debugger/debugger.jar"
+        basedir="${out}/class/examples/java/debugger" includes="*.class">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
+
+    <delete>
+        <fileset dir="${out}/class/examples/java/debugger" includes="*.class"/>
+    </delete>
+
+    <mkdir dir="${out}/class/examples/java/Highlight"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/Highlight/"
+              includes="**/Highlight*.java" classpathref="idlclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+    <copy todir="${out}/class/examples/java/Highlight/">
+        <fileset dir="${prj}/examples/java/">
+            <include name="**/Highlight*.java"/>
+        </fileset>
+    </copy>
+    <copy file="${prj}/examples/java/HighlightTextParcel.xml" tofile="${out}/class/examples/java/Highlight/parcel-descriptor.xml"/>
+    <jar jarfile="${out}/class/examples/java/Highlight/Highlight.jar"
+        basedir="${out}/class/examples/java/Highlight"
+        includes="**/*.java,**/*.class,**/*.xml"
+        excludes="${out}/class/examples/java/Highlight/Highlight.jar">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
+    <mkdir dir="${out}/class/examples/java/MemoryUsage"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/MemoryUsage/"
+              includes="**/MemoryUsage.java" classpathref="idlclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
+    <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/java/MemoryUsage/parcel-descriptor.xml"/>
+    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
+    <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
+
+    <mkdir dir="${out}/class/examples/java/ScriptFrmwrkHelper"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/ScriptFrmwrkHelper/"
+              includes="**/ScriptFrmwrkHelper.java" classpathref="scriptexampleclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+    <copy todir="${out}/class/examples/java/ScriptFrmwrkHelper/">
+        <fileset dir="${prj}/examples/java/">
+            <include name="**/ScriptFrmwrkHelper.java"/>
+        </fileset>
+    </copy>
+    <copy file="${prj}/examples/java/ScriptFrameWkHelperParcel.xml" tofile="${out}/class/examples/java/ScriptFrmwrkHelper/parcel-descriptor.xml"/>
+    <jar jarfile="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar"
+        basedir="${out}/class/examples/java/ScriptFrmwrkHelper"
+        includes="**/*.java,**/*.class,**/*.xml"
+        excludes="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
+  </target>
+
+  <!-- ====================== Clean Generated Files ===================== -->
+  <target name="clean">
+    <delete dir="${scriptingclasses}"/>
+    <delete dir="${storageclasses}"/>
+    <delete dir="${jardir}/${scriptingjarname}"/>
+  </target>
+
+  <!-- ========================= All In One Build ======================= -->
+  <target name="all" depends="clean,buildexamples"/>
+
+</project>

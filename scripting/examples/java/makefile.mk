@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-08-21 15:48:05 $
+#   last change: $Author: toconnor $ $Date: 2003-08-21 15:48:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,29 +60,11 @@
 #
 #*************************************************************************
 
-PRJ=..
-PRJNAME=scriptinginstaller
-TARGET=scriptinginstaller
-no_common_build_zip=true
+PRJ=..$/..
+PRJNAME=scripting
+TARGET=javaexamples
 
-.INCLUDE : settings.mk
+.INCLUDE : ant.mk
 
-ZIP1FLAGS=-r
-ZIP1TARGET=ScriptsJava
-ZIP1DIR=$(OUT)$/class/examples
-ZIP1LIST=java
+ALLTAR : ANTBUILD
 
-ZIP2FLAGS=-r
-ZIP2TARGET=ScriptsBeanShell
-ZIP2LIST=beanshell
-
-ZIP3FLAGS=-r
-ZIP3TARGET=ScriptsJavaScript
-ZIP3LIST=javascript
-
-ZIP4FLAGS=-r
-ZIP4TARGET=scriptbindinglib
-ZIP4DIR=$(PRJ)$/workben/bindings
-ZIP4LIST=*.xlb *.xdl *.xba
-
-.INCLUDE : target.mk
