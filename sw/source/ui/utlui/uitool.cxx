@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:02:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,33 +726,6 @@ void    SetDfltMetric( FieldUnit eMetric, BOOL bWeb )
 {
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
-
-/*-----------------15.07.97 10:49-------------------
-
---------------------------------------------------*/
-// Umwandlung:  Sub(LibName.ModulName) -> LibName.ModulName.Sub
-String ConvertMacroFormat(const String& rInput )
-{
-    String sTemp(rInput);
-    USHORT nFound = sTemp.Search('(');
-    USHORT nTokenCount = sTemp.GetTokenCount('.');
-    String sMac(rInput);
-    if( STRING_NOTFOUND != nFound || nTokenCount < 2)
-    {
-        if(nTokenCount < 2)
-            nFound = sTemp.Len();
-        // anderes Format: "Macro(Bibliothek.Modul)"
-        sMac = sTemp.Copy(0, nFound);
-        sTemp.Erase(0, nFound);
-        if(sTemp.Len() > 2)
-        {
-            sMac.Insert('.', 0);
-            sMac.Insert(sTemp.Copy(1, sTemp.Len() - 2), 0);
-        }
-    }
-    return sMac;
-}
-
 
 BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
                             String* pPassword, String* pFilterName,
