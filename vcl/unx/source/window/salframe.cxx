@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-19 14:14:12 $
+ *  last change: $Author: pl $ $Date: 2001-07-23 17:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,8 @@
 #define _IsMapped()         maFrameData.bMapped_
 
 static XLIB_Window hPresentationWindow = None;
+static SalFrame*    pIntroBitmap = NULL;
+static bool     bWasIntroBitmap = false;
 
 // -=-= C++ statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -602,6 +604,9 @@ SalFrame::SalFrame() : maFrameData( this ) {}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline SalFrameData::~SalFrameData()
 {
+    if( pIntroBitmap == pFrame_ )
+        pIntroBitmap = NULL;
+
     NotifyDeleteData ();
 
     if ( mpInputContext != NULL )
@@ -795,6 +800,20 @@ void SalFrame::Show( BOOL bVisible )
     maFrameData.bViewable_ = bVisible;
     if( bVisible )
     {
+        if( ! bWasIntroBitmap && maFrameData.IsOverrideRedirect() )
+        {
+            const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
+            if( maFrameData.aPosSize_.GetWidth() < rScreenSize.Width()-30 ||
+                maFrameData.aPosSize_.GetHeight() < rScreenSize.Height()-30 )
+            {
+                bWasIntroBitmap = true;
+                pIntroBitmap = this;
+            }
+        }
+        // look for intro bit map; if present, hide it
+        if( pIntroBitmap && pIntroBitmap != this )
+            pIntroBitmap->Show( FALSE );
+
         if( maFrameData.nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
             XtPopup( maFrameData.hShell_, XtGrabNone );
         else
