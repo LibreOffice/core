@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:43:44 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:39:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,7 +173,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @+-nm $@ | grep -v ' U ' | awk '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
+    @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
