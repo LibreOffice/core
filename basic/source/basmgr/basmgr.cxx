@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-31 12:27:52 $
+ *  last change: $Author: tbe $ $Date: 2001-08-27 12:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,8 +464,9 @@ public:
 
     StarBASICRef    GetLib() const
     {
-        if( mxScriptCont.is() && !mxScriptCont->isLibraryLoaded( aLibName ) )
-            return StarBASICRef();
+        if( mxScriptCont.is() && mxScriptCont->hasByName( aLibName ) &&
+            !mxScriptCont->isLibraryLoaded( aLibName ) )
+                return StarBASICRef();
         return xLib;
     }
     StarBASICRef&   GetLibRef()                         { return xLib; }
