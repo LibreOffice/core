@@ -14,6 +14,8 @@ Public TexturePath as String
 Public sQueryName as String
 Public NumberofStyles as Integer
 Public oDBConnection as Object
+Public bWithBackGraphic as Boolean
+
 
 Public bNeedFieldRefresh as Boolean
 Public oDBForm as Object
@@ -22,6 +24,7 @@ Public sDatabaseList()
 Public TableNames() as String
 Public QueryNames() as String
 Public FieldNames() as String
+Public ImgFieldNames() as String
 Public oDBContext as Object
 Public oUcb as Object
 Public oDocInfo as Object
@@ -91,7 +94,7 @@ Dim SelCount as Integer
 	bNeedFieldRefresh = True
 
 	With oDialogModel
-		.optIgnoreBinaries.State = True
+&apos;		.optIgnoreBinaries.State = True
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = False
 		.lblTables.Enabled = False
@@ -100,14 +103,17 @@ Dim SelCount as Integer
 		.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
 	End With
 	If Not IsMissing(DataSourceName) Then
+		sDBName = DataSourceName
 		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
 		If Not IsMissing(oConnection) Then
 			&apos; Scenario 3: a data source and a connection are given
 			Set oDBConnection = oConnection
+			oDataSource = oDBContext.GetByName(DataSourceName)
 			oDialogModel.lstTables.Enabled = True
 			oDialogModel.lblTables.Enabled = True
 			If GetDBMetaData() Then
 				oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+				iCommandTypes = CreateCommandTypeList()
 				If Not IsMissing(sContent) Then
 					&apos; Scenario 4: all parameters (data source name, connection, object type and object) are given
 					iCommandTypes() = CreateCommandTypeList()
@@ -120,7 +126,7 @@ Dim SelCount as Integer
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
 						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
 							SelIndex = IndexInArray(sContent, TableNames()
-							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)				
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)			
 						End If
 					End If
 					CurCommandType = CommandType
@@ -132,7 +138,7 @@ Dim SelCount as Integer
 			GetSelectedDBMetaData()
 		End If
 	Else
-		&apos; Scenario 1: No parameters are given 
+		&apos; Scenario 1: No parameters are given
 		ToggleListboxControls(oDialogModel, False)
 	End If
 
@@ -149,9 +155,9 @@ Dim SelCount as Integer
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
-	If bDisposeDoc Then
-		oDocument.Dispose
-	End If
+&apos;	If bDisposeDoc Then
+&apos;		oDocument.Dispose
+&apos;	End If
 	Exit Sub
 GlobalError:
 	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
@@ -260,11 +266,11 @@ End Sub
 
 Sub ToggleDatabasePage(bDoEnable as Boolean)
 	With oDialogModel
-		.hlnBinaries.Enabled = bDoEnable
-		.optIgnoreBinaries.Enabled = bDoEnable
-		.optBinariesasGraphics.Enabled = bDoEnable
 		.cmdHelp.Enabled = bDoEnable
 		.cmdGoOn.Enabled = Ubound(oDialogModel.lstSelFields.StringItemList()) &lt;&gt; -1
+		.hlnBinaries.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))
+		.optIgnoreBinaries.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))
+		.optBinariesasGraphics.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))
 	End With
 End Sub
 
@@ -300,10 +306,13 @@ Dim sBaseBookmarkName as String
 				i = i + 1
 				sBookmarkName = sBaseBookmarkName &amp; &quot;_&quot; &amp; i
 			Else
-				oDBBookmarks.insertByName(sBookmarkName, sTargetPath)		
+				oDBBookmarks.insertByName(sBookmarkName, sTargetPath)
 			End If
 		Loop Until Not bLinkExists
 		bDisposeDoc = False
 		DlgFormDB.EndExecute()
+		ToggleDesignMode(oDocument)
+		&apos; Todo: evtl unsinnige Standardwerte für Controls rauswerfen	
+		oDBForm.Reload()
 	End If
 End Sub</script:module>

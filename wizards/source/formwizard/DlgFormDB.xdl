@@ -39,10 +39,10 @@
   </dlg:button>
   <dlg:radiogroup>
    <dlg:radio dlg:id="optIgnoreBinaries" dlg:tab-index="15" dlg:left="122" dlg:top="169" dlg:width="104" dlg:height="10" dlg:page="1" dlg:help-url="HID:34427" dlg:value="optIgnoreBinaries">
-    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.DBMeta.RemoveBinaryFieldsFromWidthList" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="FormWizard.DBMeta.AddOrRemoveBinaryFieldsToWidthList" script:language="StarBasic"/>
    </dlg:radio>
    <dlg:radio dlg:id="optBinariesasGraphics" dlg:tab-index="16" dlg:left="12" dlg:top="169" dlg:width="104" dlg:height="10" dlg:page="1" dlg:help-url="HID:34426" dlg:value="optBinariesasGraphics">
-    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.DBMeta.AddBinaryFieldsToWidthList" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="FormWizard.DBMeta.AddOrRemoveBinaryFieldsToWidthList" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:menulist dlg:id="lstFields" dlg:tab-index="17" dlg:left="6" dlg:top="81" dlg:width="110" dlg:height="70" dlg:page="1" dlg:help-url="HID:34420" dlg:multiselection="true">

@@ -45,7 +45,6 @@ Dim oControl as Object
 End Function
 
 
-
 Function GetPeerSize(oModel as Object, oControl as Object, Optional LocText)	
 Dim oPeer as Object
 Dim aPeerSize as new com.sun.star.awt.Size
@@ -67,10 +66,10 @@ Dim aPeerSize as new com.sun.star.awt.Size
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.TIME Then
 		oControl.Time = Time
 	Else
-		Dim sText as String	
-		sText = Mid(SBSIZETEXT,1,CurFieldLength)
-		oControl.Text = sText
-&apos;		oControl.Model.Text = sText
+&apos;		oControl.Text = Mid(SBSIZETEXT,1,CurFieldLength)
+		aPeerSize = oPeer.PreferredSize()	
+		GetPeerSize() = aPeerSize
+		Exit Function
 	End If
 	aPeerSize = oPeer.PreferredSize()	
 	GetPeerSize = aPeerSize
@@ -96,7 +95,7 @@ Function PixelTo100thMMX(oControl as Object) as long
 	oPeer = oControl.GetPeer()
 	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterX/100000)
 
-&apos;	 PixelTo100thMM = nValue * 28		&apos; nur ungefähre Berechnung 
+&apos;	 PixelTo100thMM = nValue * 28					&apos; nur ungefähre Berechnung 
 End function
 
 
@@ -104,7 +103,7 @@ Function PixelTo100thMMY(oControl as Object) as long
 	oPeer = oControl.GetPeer()
 	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterY/100000)
 
-&apos;	 PixelTo100thMM = nValue * 28		&apos; nur ungefähre Berechnung 
+&apos;	 PixelTo100thMM = nValue * 28					&apos; nur ungefähre Berechnung 
 End function
 
 
@@ -127,7 +126,6 @@ End Function
 Sub	ImportStyles()
 Dim CurIndex as Integer
 Dim sImportPath as String
-Dim bWithBackGraphic as Boolean
 	ToggleLayoutPage(False)
 	oDocument.LockControllers
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
@@ -137,7 +135,7 @@ Dim bWithBackGraphic as Boolean
 	ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
 	ConfigurePageStyle()	
 	oDocument.UnlockControllers
-	ToggleLayoutPage(True)	
+	ToggleLayoutPage(True, &quot;lstStyles&quot;)	
 End Sub
 
 
@@ -168,11 +166,13 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 		Case com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
 			If oLocObject.MaxTextLen = 0 Or oLocObject.MaxTextLen &gt; 30 Then
 				oLocObject.MaxTextLen = 30
+				CurFieldLength = 30
 			Else
 				oLocObject.MaxTextLen = CurFieldLength			
 			End If
+			oLocObject.DefaultText = Mid(SBSIZETEXT,1,CurFieldLength)
 		Case com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
-			oLocObject.MaxTextLen = CurFieldLength			
+			oLocObject.MaxTextLen = CurFieldLength
 	End Select
 	
 End Function
@@ -231,7 +231,7 @@ Dim ResCount as Integer
 End Function
 
 
-Function GetDBHeight(oDBModel as Object)		
+Function GetDBHeight(oDBModel as Object)
 	If CurControlType = cImageControl Then
 		nDBWidth = 2000
 	Else

@@ -156,7 +156,6 @@ Dim aSize As New com.sun.star.awt.Size
 	aSize.Width = nPageHeight
 	aSize.Height = nPageWidth
 	oPageStyle.Size = aSize
-
 	nPageWidth = nPageHeight
 	nPageHeight = oPageStyle.Size.Height
 	nFormWidth = nPageWidth - oPageStyle.RightMargin - oPageStyle.LeftMargin - 2 * cXOffset
@@ -169,6 +168,7 @@ Sub ChangeBorderLayouts(oEvent as Object)
 Dim oModel as Object
 Dim i as Integer
 Dim oCurModel as Object
+Dim sLocText as String
 	oModel = oEvent.Source.Model
 	SwitchBorderMode(Val(Right(oModel.Name,1)))	
 	ToggleLayoutPage(False)
@@ -181,10 +181,7 @@ Dim oCurModel as Object
 	Else
 		If OldBorderType &lt;&gt; CurBorderType Then
 			For i = 0 To MaxIndex
-				oCurModel = oDBShapeList(i).GetControl
-				If oCurModel.PropertySetInfo.HasPropertyByName(&quot;Border&quot;)Then
-					oCurModel.Border = CurBorderType
-				End If
+				oDBModelList(i).Border = CurBorderType
 			Next i
 		End If
 	End If
@@ -195,7 +192,6 @@ End Sub
 
 Sub ChangeLabelAlignments(oEvent as Object)
 Dim i as Integer
-Dim oCurModel as Object
 Dim oModel as Object
 	oModel = oEvent.Source.Model
 	SwitchAlignMode(Val(Right(oModel.Name,1)))
@@ -203,8 +199,7 @@ Dim oModel as Object
 	oDocument.LockControllers()
 	If OldAlignMode &lt;&gt; CurAlignMode Then
 		For i = 0 To MaxIndex
-			oCurModel = oTCShapeList(i).GetControl
-			oCurModel.Align = CurAlignmode
+			oTCShapeList(i).GetControl.Align = CurAlignmode
 		Next i
 	End If
 	oDocument.UnlockControllers()
@@ -253,16 +248,16 @@ End Sub
 Sub	ToggleAlignGroup(ByVal bDoEnable as Boolean)
 	With oDialogModel
 		If bDoEnable Then
-			bDoEnable = CurArrangement &lt;&gt; cTabled
+			bDoEnable = CurArrangement = cColumnarLeft
 		End If
 		.hlnAlign.Enabled = bDoEnable
 		.optAlign0.Enabled = bDoEnable
-		.optAlign2.Enabled = bDoEnable			&apos;
+		.optAlign2.Enabled = bDoEnable
 	End With
 End Sub
 
 
-Sub ToggleLayoutPage(bDoEnable as Boolean)
+Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
 	With oDialogModel
 		.hlnArrangements.Enabled = bDoEnable
 		.cmdArrange1.Enabled = bDoEnable
@@ -272,16 +267,14 @@ Sub ToggleLayoutPage(bDoEnable as Boolean)
 		.cmdArrange5.Enabled = bDoEnable
 		.lstStyles.Enabled = bDoEnable
 		.lblStyles.Enabled = bDoEnable
-		.hlnBackground.Enabled = bDoEnable
-		.optTiled.Enabled = bDoEnable
-		.optArea.Enabled = bDoEnable
 		.cmdHelp.Enabled = bDoEnable
 		.cmdBack.Enabled = bDoEnable
 		.cmdGoOn.Enabled = bDoEnable
-&apos;		If DlgFormDB.GetControl(&quot;imgTheme&quot;).Visible Then
-&apos;			.imgTheme.Enabled = bDoEnable
-&apos;		End If
+		If Not IsMissing(FocusControlName) Then
+			DlgFormDB.GetControl(FocusControlName).SetFocus()
+		End If
 	End With
+	ToggleOptionButtons(oDialogModel,((bWithBackGraphic = True) AND (bDoEnable = True)))
 	ToggleAlignGroup(bDoEnable)
 	ToggleBorderGroup(bDoEnable)
 End Sub
@@ -318,5 +311,4 @@ End Sub
 Sub SwitchAlignMode(ByVal LocAlignMode as Integer)
 	OldAlignMode = CurAlignMode
 	CurAlignMode = LocAlignMode
-End Sub
-</script:module>
+End Sub</script:module>

@@ -7,6 +7,7 @@ Public sDatabaseList()
 Public iCommandTypes() as Integer
 Public CurCommandType as Integer
 Dim oDataSource as Object
+Public bEnableBinaryOptionGroup as Boolean
 
 
 Sub GetDatabaseNames()
@@ -114,7 +115,6 @@ Dim oField as Object
 	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
 	Dim ColumnMap(MaxIndex)as Integer	
 	FieldNames() = oDialogModel.lstSelFields.StringItemList()
-
 	&apos; Build a structure which maps the position of a selected field (within the selection) to the the column position within
 	&apos; the table. So we ensure that the controls are placed in the same order the according fields are selected.
 	For i = 0 To Ubound(FieldNames())
@@ -129,7 +129,6 @@ Dim oField as Object
 			n = n + 1
 		Wend
 	Next i
-
 	For n = 0 to MaxIndex
 		sFieldname = FieldNames(n)
 		oField = oColumns.GetByName(sFieldName) 
@@ -141,12 +140,14 @@ Dim oField as Object
 	Next
 	ReDim oDBShapeList(MaxIndex) as Object
 	ReDim oTCShapeList(MaxIndex) as Object
+	ReDim oDBModelList(MaxIndex) as Object
 End Sub
 
 
 Sub GetSpecificFieldNames()
 Dim n as Integer
 Dim m as Integer
+Dim s as Integer
 Dim iType as Integer
 Dim oField as Object
 Dim MaxIndex as Integer
@@ -155,6 +156,7 @@ Dim EmptyList()
 		FieldNames() = oColumns.GetElementNames()
 		MaxIndex = Ubound(FieldNames())
 		Dim ResultFieldNames(MaxIndex)
+		ReDim ImgFieldNames(MaxIndex)
 		m = 0
 		For n = 0 To MaxIndex
 			oField = oColumns.GetByName(FieldNames(n))
@@ -163,7 +165,17 @@ Dim EmptyList()
 				ResultFieldNames(m) = FieldNames(n)
 				m = m + 1
 			End If
+			If GetIndexInMultiArray(ImgWidthList(), iType, 0) &lt;&gt; -1 Then
+				ImgFieldNames(s) = FieldNames(n)
+				s = s + 1
+			End If
 		Next n
+		If s &lt;&gt; 0 Then
+			Redim Preserve ImgFieldNames(s-1)
+			bEnableBinaryOptionGroup = True
+		Else
+			bEnableBinaryOptionGroup = False		
+		End If
 		Redim Preserve ResultFieldNames(m-1)
 		Redim Preserve FieldNames(m-1)
 		FieldNames() = ResultFieldNames()
@@ -187,7 +199,7 @@ Sub CreateDBForm()
 End Sub
 
 
-Sub AddBinaryFieldsToWidthList()
+Sub AddOrRemoveBinaryFieldsToWidthList()
 Dim LocWidthList()
 Dim MaxIndex as Integer
 Dim OldMaxIndex as Integer
@@ -197,25 +209,22 @@ Dim m as Integer
 &apos; Todo: Die folgenden Zeilen könnten in einer allgemeinen Routine 
 &apos; bearbeitet werden, z. B. durch Umschreiben von AddListToList, wobei
 &apos; beim Abfragen des Ubounds der zweiten Dimension eine Fehlerabfrage nötig wäre.
-	MaxIndex = Ubound(WidthList(),1) + Ubound(ImgWidthList(),1) + 1
-	OldMaxIndex = Ubound(WidthList(),1)
-	ReDim Preserve WidthList(MaxIndex,4)
-	s = 0
-	For n = OldMaxIndex + 1 To MaxIndex
-		For m = 0 To 4
-			WidthList(n,m) = ImgWidthList(s,m)
-		Next m
-		s = s + 1
-	Next n
-	FillUpFieldsListbox(True)
-End Sub
-
-
-Sub RemoveBinaryFieldsFromWidthList()
-Dim MaxIndex as Integer
-	MaxIndex = Ubound(WidthList(),1) - Ubound(ImgWidthList(),1) - 1
-	ReDim Preserve WidthList(MaxIndex, 4)
-	FillUpFieldsListbox(True)
+	If oDialogModel.optBinariesasGraphics.State = 1 Then
+&apos;		MaxIndex = Ubound(WidthList(),1) + Ubound(ImgWidthList(),1) + 1
+&apos;		OldMaxIndex = Ubound(WidthList(),1)
+		ReDim Preserve WidthList(18,4)
+		s = 0
+		For n = OldMaxIndex + 1 To MaxIndex
+			For m = 0 To 3
+				WidthList(n,m) = ImgWidthList(s,m)
+			Next m
+			s = s + 1
+		Next n
+		MergeList(oDialogModel.lstFields, ImgFieldNames())
+	Else
+		ReDim Preserve WidthList(15, 4)
+		RemoveListItems(oDialogModel.lstFields(), oDialogModel.lstSelFields(), ImgFieldNames())
+	End If
 End Sub
 
 
@@ -244,5 +253,4 @@ Sub GetCurrentMetaValues(Index as Integer)
 	CurControlType = FieldMetaValues(Index,2)
 	CurControlName = FieldMetaValues(Index,3)
     CurFieldName = FieldNames(Index)
-End Sub
-</script:module>
+End Sub</script:module>
