@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:11 $
+ *  last change:$Date: 2003-02-21 08:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,19 @@ public class AccessibilityTools {
         log.println(indent + ac.getAccessibleRole() + "," +
             ac.getAccessibleName() + "(" + ac.getAccessibleDescription() + "):"
             + utils.getImplName(ac));
+
+        XAccessibleComponent aComp = (XAccessibleComponent)
+                UnoRuntime.queryInterface(XAccessibleComponent.class,xacc);
+        if (aComp != null) {
+            String bounds = "(" + aComp.getBounds().X+","+aComp.getBounds().Y+")"
+                            + " (" + aComp.getBounds().Width+","+aComp.getBounds().Height+")";
+            bounds = "The boundary Rectangle is "+bounds;
+            log.println(indent+indent+bounds);
+        }
+
+        boolean isShowing = ac.getAccessibleStateSet().contains(
+                drafts.com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        log.println(indent+indent+"StateType contains SHOWING: "+isShowing);
 
         int k = ac.getAccessibleChildCount();
 
