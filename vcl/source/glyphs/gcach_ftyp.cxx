@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:28 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 12:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
             return false;
     }
 
-    const FT_Bitmap& rBitmapFT = reinterpret_cast<FT_BitmapGlyph>(aGlyphFT)->bitmap;
+    const FT_Bitmap& rBitmapFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT)->bitmap;
 
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnWidth          = rBitmapFT.pitch * 8;
@@ -481,8 +481,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     const unsigned char* pSrc = rBitmapFT.buffer;
     unsigned char* pDest = rRawBitmap.mpBits;
-    for( int i = nNeededSize; --i >= 0; )
-        *(pDest++) = ~*(pSrc++);
+     for( int i = nNeededSize; --i >= 0; )
+         *(pDest++) = ~*(pSrc++);
 
     FT_Done_Glyph( aGlyphFT );
     return true;

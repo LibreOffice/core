@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:41 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 12:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <salbtype.hxx>
 #include <gcach_vdev.hxx>
 #include <gcach_ftyp.hxx>
@@ -71,8 +74,6 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 
-#include <stdlib.h>
-#include <math.h>
 
 // =======================================================================
 // GlyphCache
@@ -109,7 +110,7 @@ GlyphCache::~GlyphCache()
 
 // -----------------------------------------------------------------------
 
-inline size_t std::hash<const ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
+inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
 {
     // TODO: does it pay much to improve this hash function?
     size_t nHash = ::rtl::OUString( rFontSelData.maName ).hashCode();
@@ -205,12 +206,12 @@ long GlyphCache::FetchFontList( ImplDevFontList* pList ) const
 
 // -----------------------------------------------------------------------
 
-const ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
+ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
 {
-    FontList::const_iterator it = aFontList.find( rFontSelData );
+    FontList::iterator it = aFontList.find( rFontSelData );
     if( it != aFontList.end() )
     {
-        const ServerFont* pFound = it->second;
+        ServerFont* pFound = it->second;
         pFound->AddRef();
         return pFound;
     }
@@ -245,7 +246,7 @@ const ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData 
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::UncacheFont( const ServerFont& rServerFont )
+void GlyphCache::UncacheFont( ServerFont& rServerFont )
 {
     // the interface for rServerFont must be const because a
     // user who wants to release it only got const ServerFonts.
