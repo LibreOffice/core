@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 11:57:14 $
+#   last change: $Author: kz $ $Date: 2004-10-14 17:28:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -598,7 +598,15 @@ sub get_sourcepath_from_filename_and_includepath
         $onefile = "";  # the sourcepath has to be empty
         if ( $write_logfile)
         {
-            $infoline = "ERROR: Source for $$searchfilenameref not found!\n";   # Important error message in log file
+            if ( $ENV{'DEFAULT_TO_ENGLISH_FOR_PACKING'} )
+            {
+                $infoline = "WARNING: Source for $$searchfilenameref not found!\n";  # Important message in log file
+            }
+            else
+            {
+                $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
+            }
+
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
@@ -634,6 +642,8 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 
     installer::logger::include_header_into_logfile("$item:");
 
+    my $infoline = "";
+
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
     {
         my $onefile = ${$filesarrayref}[$i];
@@ -646,9 +656,40 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
 
         $onefile->{'sourcepath'} = $$sourcepathref; # This $$sourcepathref is empty, if no source was found
+
+        # defaulting to english for multilingual files if DEFAULT_TO_ENGLISH_FOR_PACKING is set
+
+        if ( $ENV{'DEFAULT_TO_ENGLISH_FOR_PACKING'} )
+        {
+            if (( ! $onefile->{'sourcepath'} ) && ( $onefile->{'ismultilingual'} ))
+            {
+                my $oldname = $onefile->{'Name'};
+                my $oldlanguage = $onefile->{'specificlanguage'};
+                my $newlanguage = "en-US";
+                $onefile->{'Name'} =~ s/_$oldlanguage/_$newlanguage/;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
+                $onefilename = $onefile->{'Name'};
+                $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
+                $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
+                $onefile->{'sourcepath'} = $$sourcepathref;                     # This $$sourcepathref is empty, if no source was found
+
+                if ($onefile->{'sourcepath'})   # defaulting to english was successful
+                {
+                    $infoline = "WARNING: Using $onefile->{'Name'} instead of $oldname\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    print "    $infoline";
+                    if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/$oldname/$onefile->{'Name'}/; }
+                }
+                else
+                {
+                    $infoline = "WARNING: Using $onefile->{'Name'} instead of $oldname was not successful\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $onefile->{'Name'} = $oldname;  # Switching back to old file name
+                }
+            }
+        }
     }
 
-    my $infoline = "\n";    # empty line after listing of all files
+    $infoline = "\n";   # empty line after listing of all files
     push( @installer::globals::logfileinfo, $infoline);
 }
 
