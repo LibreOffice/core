@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:21:23 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,8 +1067,12 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 // XShape
 
 //----------------------------------------------------------------------
+// The "*LogicRectHack" functions also existed in sch, and those
+// duplicate symbols cause Bad Things To Happen (TM)  #i9462#.
+// Prefixing with 'svx' and marking static to make sure name collisions
+// do not occur.
 
-sal_Bool needLogicRectHack( SdrObject* pObj )
+static sal_Bool svx_needLogicRectHack( SdrObject* pObj )
 {
     if( pObj->GetObjInventor() == SdrInventor)
     {
@@ -1096,9 +1100,9 @@ sal_Bool needLogicRectHack( SdrObject* pObj )
 
 //----------------------------------------------------------------------
 
-Rectangle getLogicRectHack( SdrObject* pObj )
+static Rectangle svx_getLogicRectHack( SdrObject* pObj )
 {
-    if(needLogicRectHack(pObj))
+    if(svx_needLogicRectHack(pObj))
     {
         return pObj->GetSnapRect();
     }
@@ -1110,9 +1114,9 @@ Rectangle getLogicRectHack( SdrObject* pObj )
 
 //----------------------------------------------------------------------
 
-void setLogicRectHack( SdrObject* pObj, const Rectangle& rRect )
+static void svx_setLogicRectHack( SdrObject* pObj, const Rectangle& rRect )
 {
-    if(needLogicRectHack(pObj))
+    if(svx_needLogicRectHack(pObj))
     {
         pObj->SetSnapRect( rRect );
     }
@@ -1130,7 +1134,7 @@ awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException)
 
     if( pObj && pModel)
     {
-        Rectangle aRect( getLogicRectHack(pObj) );
+        Rectangle aRect( svx_getLogicRectHack(pObj) );
         Point aPt( aRect.Left(), aRect.Top() );
 
         // Position is relativ to anchor, so recalc to absolut position
@@ -1157,7 +1161,7 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
         // transformation matrix
         if(!pObj->ISA(E3dCompoundObject))
         {
-            Rectangle aRect( getLogicRectHack(pObj) );
+            Rectangle aRect( svx_getLogicRectHack(pObj) );
             Point aLocalPos( Position.X, Position.Y );
             ForceMetricToItemPoolMetric(aLocalPos);
 
@@ -1183,7 +1187,7 @@ awt::Size SAL_CALL SvxShape::getSize() throw(uno::RuntimeException)
 
     if( pObj && pModel)
     {
-        Rectangle aRect( getLogicRectHack(pObj) );
+        Rectangle aRect( svx_getLogicRectHack(pObj) );
         Size aObjSize( aRect.GetWidth(), aRect.GetHeight() );
         ForceMetricTo100th_mm(aObjSize);
         return ::com::sun::star::awt::Size( aObjSize.getWidth(), aObjSize.getHeight() );
@@ -1200,7 +1204,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 
     if( pObj && pModel)
     {
-        Rectangle aRect( getLogicRectHack(pObj) );
+        Rectangle aRect( svx_getLogicRectHack(pObj) );
         Size aLocalSize( rSize.Width, rSize.Height );
         ForceMetricToItemPoolMetric(aLocalSize);
         if(pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_MEASURE )
@@ -1213,7 +1217,7 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
         else
         {
             aRect.SetSize(aLocalSize);
-            setLogicRectHack( pObj, aRect );
+            svx_setLogicRectHack( pObj, aRect );
         }
 
         pModel->SetChanged();
