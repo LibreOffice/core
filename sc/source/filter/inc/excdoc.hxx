@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:40 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,117 +97,41 @@ class XclExpStream;
 class XclExpChangeTrack;
 
 
-//--------------------------------------------------- class ExcRecordListRefs -
-
-class ExcRecordListRefs : public List
-{
-private:
-protected:
-public:
-    virtual                     ~ExcRecordListRefs();
-    inline void                 Append( XclExpRecordBase* );
-    inline XclExpRecordBase*    First();
-    inline XclExpRecordBase*    Next();
-                                List::Count;
-};
-
-
-inline void ExcRecordListRefs::Append( XclExpRecordBase* pER )
-{
-    List::Insert( pER, CONTAINER_APPEND );
-}
-
-
-inline XclExpRecordBase* ExcRecordListRefs::First()
-{
-    return ( XclExpRecordBase* ) List::First();
-}
-
-
-inline XclExpRecordBase* ExcRecordListRefs::Next()
-{
-    return ( XclExpRecordBase* ) List::Next();
-}
-
-
-//----------------------------------------------------------- class DefRowXFs -
-
-class DefRowXFs
-{
-private:
-    struct XclExpDefRowXFEntry
-    {
-        sal_uInt32                  mnXFId;
-        SCROW                       mnRow;
-        inline explicit             XclExpDefRowXFEntry() : mnXFId( 0 ), mnRow( 0 ) {}
-        inline explicit             XclExpDefRowXFEntry( sal_uInt32 nXFId, SCROW nRow ) :
-                                        mnXFId( nXFId ), mnRow( nRow ) {}
-    };
-
-    typedef ::std::vector< XclExpDefRowXFEntry > XclExpDefRowXFVec;
-
-    XclExpDefRowXFVec           maXFList;
-    UINT32                      nLastList;
-    SCROW                       nLastRow;
-
-public:
-                                DefRowXFs( void );
-
-    inline void                 Append( SCROW nRow, sal_uInt32 nXFId );
-
-    BOOL                        ChangeXF( SCROW nRow, sal_uInt32& rnXFId );
-};
-
-inline void DefRowXFs::Append( SCROW nRow, sal_uInt32 nXFId )
-{
-    maXFList.push_back( XclExpDefRowXFEntry( nXFId, nRow ) );
-}
-
-
 //------------------------------------------------------------ class ExcTable -
 
-class ExcTable : public XclExpRecordBase, public ExcRoot
+class XclExpCellTable;
+
+class ExcTable : public XclExpRecordBase, public XclExpRoot
 {
 private:
+    typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
+    typedef ScfRef< XclExpCellTable >               XclExpCellTableRef;
+
     XclExpRecordList<>          aRecList;
-    SCTAB                       nScTab;     // table number SC document
+    XclExpCellTableRef          mxCellTable;
+
+    SCTAB                       mnScTab;    // table number SC document
     UINT16                      nExcTab;    // table number Excel document
     UINT16                      nAktRow;    // fuer'n Iterator
     UINT16                      nAktCol;
-
-    ExcRowBlock*                pRowBlock;  // buffer for ROW recs
-    DefRowXFs*                  pDefRowXFs;
 
     NameBuffer*                 pTabNames;
 
     void                        Clear();
     void                        NullTab( const String* pCodename = NULL );
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
-    inline void                 Add( XclExpRecordBase* pRec );
-
-    void                        AddRow( ExcRow* pRow );
-    void                        AddUsedRow( ExcRow*& rpRow );   // Add() or delete
+    void                        Add( XclExpRecordBase* pRec );
 
 public:
-                                ExcTable( RootData* pRD );
-                                ExcTable( RootData* pRD, SCTAB nScTable );
+                                ExcTable( const XclExpRoot& rRoot );
+                                ExcTable( const XclExpRoot& rRoot, SCTAB nScTab );
                                 ~ExcTable();
 
-    void                        FillAsHeader( ExcRecordListRefs& rBundleSheetRecList );
+    void                        FillAsHeader( ExcBoundsheetList& rBoundsheetList );
     void                        FillAsTable( void );
-
-    void                        SetDefRowXF( SCROW nRowNum, sal_uInt32 nXFId );
-    BOOL                        ModifyToDefaultRowXF( SCROW nRowNum, sal_uInt32& rnXFId );
 
     void                        Write( XclExpStream& );
 };
-
-
-inline void ExcTable::Add( XclExpRecordBase* pRec )
-{
-    DBG_ASSERT( pRec, "-ExcTable::Add(): pRec ist NULL!" );
-    aRecList.Append( pRec );
-}
 
 
 //--------------------------------------------------------- class ExcDocument -
@@ -217,10 +141,15 @@ class ExcDocument : protected XclExpRoot
 friend class ExcTable;
 
 private:
-    ExcRecordListRefs   aBundleSheetRecList;
+    typedef XclExpRecordList< ExcTable >            ExcTableList;
+    typedef ExcTableList::RecordRefType             ExcTableRef;
+    typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
+    typedef ExcBoundsheetList::RecordRefType        ExcBoundsheetRef;
+
     ExcTable            aHeader;
 
-    XclExpRecordList< ExcTable > maTableList;
+    ExcTableList        maTableList;
+    ExcBoundsheetList   maBoundsheetList;
 
     XclExpChangeTrack*  pExpChangeTrack;
 
