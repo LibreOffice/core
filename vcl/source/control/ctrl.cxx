@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:54:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,32 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 void Control::ImplClearLayoutData() const
 {
     delete mpLayoutData, mpLayoutData = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void Control::DataChanged( const DataChangedEvent& rDCEvt)
+{
+    // we don't want to loose some style settings for controls created with the
+    // toolkit
+    if ( IsCreatedWithToolkit() &&
+         (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        AllSettings     aSettings = GetSettings();
+        StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
+        ULONG           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
+        ULONG           nNewOptions = aStyleSettings.GetOptions();
+
+        if ( !(nNewOptions & STYLE_OPTION_MONO) && ( nOldOptions & STYLE_OPTION_MONO ) )
+        {
+            nNewOptions |= STYLE_OPTION_MONO;
+            aStyleSettings.SetOptions( nNewOptions );
+            aStyleSettings.SetMonoColor( rDCEvt.GetOldSettings()->GetStyleSettings().GetMonoColor() );
+            aSettings.SetStyleSettings( aStyleSettings );
+            SetSettings( aSettings );
+        }
+    }
 }
 
 // -----------------------------------------------------------------
