@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,9 @@
 
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <framework/menuconfiguration.hxx>
+#include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
+#include <framework/menuconfiguration.hxx>
 #include <vcl/taskpanelist.hxx>
 
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
@@ -128,6 +129,7 @@
 #include "helpid.hrc"
 #include "imagemgr.hxx"
 #include "workwin.hxx"
+#include "imgmgr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -752,7 +754,7 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
     if (!bValid)
         aURL = sFallback;
 
-    BOOL bBig = ( SvtMiscOptions().GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    BOOL bBig = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
     GetToolBox().SetItemImage( GetId(),
                                SvFileInformationManager::GetImage( INetURLObject( aURL ),
                                bBig,
@@ -941,7 +943,6 @@ SfxAddonsToolBoxControl_Impl::SfxAddonsToolBoxControl_Impl
     , bBigImages( FALSE )
     , pMenu( 0 )
 {
-    rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
     rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
 
     // Determine the current background color of the menus
@@ -1031,10 +1032,9 @@ void SfxAddonsToolBoxControl_Impl::Select( BOOL bMod1 )
 
     if ( !pMenu )
     {
-        Reference <com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-        ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
         Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
-        pMenu = aConf.CreateAddonMenu( aXFrame );
+        pMenu = framework::AddonMenuManager::CreateAddonMenu( aXFrame );
+        RefreshMenuImages( pMenu );
     }
 
     if( pMenu )
