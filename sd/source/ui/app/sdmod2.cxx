@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-26 12:33:53 $
+ *  last change: $Author: dl $ $Date: 2001-11-23 13:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,15 +185,16 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             /******************************************************************
             * Date-Field
             ******************************************************************/
-            SvNumberFormatter* pNumberFormatter = GetNumberFormatter();
-            pInfo->SetRepresentation( ((const SvxDateField*) pField)->GetFormatted( *GetNumberFormatter(), LANGUAGE_SYSTEM) );
+            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+            pInfo->SetRepresentation( ((const SvxDateField*) pField)->GetFormatted( *GetNumberFormatter(), eLang ) );
         }
         else if( pField && pField->ISA( SvxExtTimeField ) )
         {
             /******************************************************************
             * Time-Field
             ******************************************************************/
-            pInfo->SetRepresentation( ( (const SvxExtTimeField*) pField)->GetFormatted( *GetNumberFormatter(), LANGUAGE_SYSTEM ) );
+            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+            pInfo->SetRepresentation( ( (const SvxExtTimeField*) pField)->GetFormatted( *GetNumberFormatter(), eLang ) );
         }
         else if( pField && pField->ISA( SvxExtFileField ) )
         {
