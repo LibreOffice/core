@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:30:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             {
                 // A new window has been created.  Is it an OLE object?
                 Window* pChildWindow = static_cast<Window*>(
-                    pWindowEvent->GetWindow());
+                    pWindowEvent->GetData());
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
@@ -281,7 +281,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 // A window has been destroyed.  Has that been an OLE
                 // object?
                 Window* pChildWindow = static_cast<Window*>(
-                    pWindowEvent->GetWindow());
+                    pWindowEvent->GetData());
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
