@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-30 14:04:56 $
+ *  last change: $Author: pl $ $Date: 2000-12-01 13:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,9 +783,6 @@ void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetClientSize( long nWidth, long nHeight )
 {
-    if( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
-        return;
-
     if( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
     {
         maFrameData.SetPosSize( Rectangle(
@@ -794,40 +791,82 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
         return;
     }
 
+#ifdef DEBUG
+    fprintf( stderr, "SetClientSize: (%d,%d)  (%d,%d)->(%d,%d)\n",
+             maFrameData.aPosSize_.Left(), maFrameData.aPosSize_.Top(),
+             maFrameData.aPosSize_.GetWidth(), maFrameData.aPosSize_.GetHeight(),
+             nWidth, nHeight );
+#endif
+
     XLIB_Window     aDummy;
     int             nX, nY, nScreenWidth, nScreenHeight;
+    int             nRealScreenWidth, nRealScreenHeight;
+    int             nScreenX = 0, nScreenY = 0;
 
-    nScreenWidth  = _GetDisplay()->GetScreenSize().Width();
-    nScreenHeight = _GetDisplay()->GetScreenSize().Height();
+    nScreenWidth        = _GetDisplay()->GetScreenSize().Width();
+    nScreenHeight       = _GetDisplay()->GetScreenSize().Height();
+    nRealScreenWidth    = nScreenWidth;
+    nRealScreenHeight   = nScreenHeight;
 
-    XTranslateCoordinates ( _GetXDisplay(), maFrameData.GetShellWindow(),
-                            _GetDisplay()->GetRootWindow(), 0, 0, &nX, &nY,
-                            &aDummy );
+    if( maFrameData.mpParent )
+    {
+        SalFrame* pFrame = maFrameData.mpParent;
+        while( pFrame->maFrameData.mpParent )
+            pFrame = pFrame->maFrameData.mpParent;
+        if( pFrame->maFrameData.aPosSize_.IsEmpty() )
+            pFrame->maFrameData.GetPosSize( pFrame->maFrameData.aPosSize_ );
+        nScreenX        = pFrame->maFrameData.aPosSize_.Left();
+        nScreenY        = pFrame->maFrameData.aPosSize_.Top();
+        nScreenWidth    = pFrame->maFrameData.aPosSize_.GetWidth();
+        nScreenHeight   = pFrame->maFrameData.aPosSize_.GetHeight();
+    }
+
+    nX = maFrameData.aPosSize_.Left();
+    nY = maFrameData.aPosSize_.Top();
 
     if ( maFrameData.bDefaultPosition_ )
     {
-        // center the application window
-
-        nX = (nScreenWidth  - nWidth ) / 2;
-        nY = (nScreenHeight - nHeight) / 2;
+        // center the window to its parent
+        nX = (nScreenWidth  - nWidth ) / 2 + nScreenX;
+        nY = (nScreenHeight - nHeight) / 2 + nScreenY;
+        SalFrame* pFrame = maFrameData.mpParent;
+        while( pFrame && pFrame->maFrameData.mpParent )
+        {
+            pFrame = pFrame->maFrameData.mpParent;
+            nX += 40;
+            nY += 40;
+        }
 
         maFrameData.bDefaultPosition_ = False;
     }
-    else
-    {
-        // once centered, we leave the window where it is with new size
-        // but only if it does not run out of screen
 
-        if ( nX + nWidth  > nScreenWidth  ) nX = nScreenWidth  - nWidth;
-        if ( nY + nHeight > nScreenHeight ) nY = nScreenHeight - nHeight;
-        if ( nX <  0 )                      nX = 0;
-        if ( nY < 20 )                      nY = 20;// guess size of top window
-                                                    // decoration is 20
+    // once centered, we leave the window where it is with new size
+    // but only if it does not run out of screen (unless user placed it there)
+
+    if( nWidth != maFrameData.aPosSize_.GetWidth() )
+    {
+        if ( nX + nWidth  > nRealScreenWidth  )
+            nX = nRealScreenWidth  - nWidth;
+        if ( nX <  0 )
+            nX = 0;
+    }
+    if( nHeight != maFrameData.aPosSize_.GetHeight() )
+    {
+        if ( nY + nHeight > nRealScreenHeight )
+            nY = nRealScreenHeight - nHeight;
+        // guess: size of top window decoration is 20
+        if ( nY < 20 )
+            nY = 20;
     }
 
-    Size  aSize  ( nWidth, nHeight );
     Point aPoint ( nX, nY );
-    maFrameData.SetPosSize( Rectangle ( aPoint, aSize ) );
+    Size  aSize  ( nWidth, nHeight );
+    maFrameData.SetPosSize( Rectangle( aPoint, aSize ) );
+#ifdef DEBUG
+    fprintf( stderr, "SetClientSize: (%d,%d)  (%d,%d)\n",
+             maFrameData.aPosSize_.Left(), maFrameData.aPosSize_.Top(),
+             maFrameData.aPosSize_.GetWidth(), maFrameData.aPosSize_.GetHeight() );
+#endif
 }
 
 #if 0
@@ -981,7 +1020,6 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
                                 & aChild );
      }
 
-    XtConfigureWidget( hShell_, values.x, values.y, values.width, values.height, 0 );
     if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
     {
         Arg args[10];
@@ -993,6 +1031,11 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
         XtSetValues( hShell_, args, n );
     }
 
+    XtConfigureWidget( hShell_, values.x, values.y, values.width, values.height, 0 );
+#ifdef DEBUG
+    fprintf( stderr, "XtConfigureWidget (%d,%d) (%d,%d)\n",
+             values.x, values.y, values.width, values.height );
+#endif
     if ( aPosSize_ != rPosSize )
     {
         aPosSize_ = rPosSize;
@@ -2214,16 +2257,13 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         }
     }
 
-    if( !pEvent->send_event )
-    {
-        XLIB_Window hDummy;
-        XTranslateCoordinates( GetXDisplay(),
-                               XtWindow( hShell_ ),
-                               pDisplay_->GetRootWindow(),
-                               0, 0,
-                               &pEvent->x, &pEvent->y,
-                               &hDummy );
-    }
+    XLIB_Window hDummy;
+    XTranslateCoordinates( GetXDisplay(),
+                           GetWindow(),
+                           pDisplay_->GetRootWindow(),
+                           0, 0,
+                           &pEvent->x, &pEvent->y,
+                           &hDummy );
 
     if( nMaxWidth_ || nMaxHeight_ )
     {
@@ -2253,10 +2293,8 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         }
     }
 
-    aPosSize_.Left()    = pEvent->x;
-    aPosSize_.Top()     = pEvent->y;
-    aPosSize_.Right()   = aPosSize_.Left() + pEvent->width  - 1;
-    aPosSize_.Bottom()  = aPosSize_.Top()  + pEvent->height - 1;
+    aPosSize_.SetPos( Point( pEvent->x, pEvent->y ) );
+    aPosSize_.SetSize( Size( pEvent->width, pEvent->height ) );
 
     // update children's position
     RepositionChildren();
@@ -2665,7 +2703,24 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     pEvent->xconfigure.window == hForeignTopLevelWindow_ )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
                 if( pEvent->xconfigure.window == hStackingWindow_ )
+                {
+                    // update position here as well as in HandleSizeEvent
+                    // if the window is only moved this is the only
+                    // chance to notice that.
+                    XLIB_Window hDummy;
+                    int nX, nY;
+                    XTranslateCoordinates( GetXDisplay(),
+                                           GetWindow(),
+                                           pDisplay_->GetRootWindow(),
+                                           0, 0,
+                                           &nX, &nY,
+                                           &hDummy );
+#ifdef DEBUG
+                    fprintf( stderr, "moveto: %d,%d\n", nX, nY );
+#endif
+                    aPosSize_.SetPos( Point( nX, nY ) );
                     RepositionChildren();
+                }
                 break;
         }
     }
