@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:10:41 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ enum XMLTextFieldAttrTokens
 
     XML_TOK_TEXTFIELD_MEASURE_KIND,
     XML_TOK_TEXTFIELD_TABLE_TYPE,
+
+    XML_TOK_TEXTFIELD_NOTE_CLASS,
 
     XML_TOK_TEXTFIELD_UNKNOWN
 };
