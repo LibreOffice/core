@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 10:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,12 @@ namespace connectivity
 
             WpADOKey        getImpl() const { return m_aKey;}
             // map the update/delete rules
-            RuleEnum Map2Rule(const sal_Int32& _eNum) const;
-            sal_Int32 MapRule(const RuleEnum& _eNum) const;
+            static RuleEnum Map2Rule(const sal_Int32& _eNum);
+            static sal_Int32 MapRule(const RuleEnum& _eNum);
 
             // map the keytypes
-            sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum) const;
-            KeyTypeEnum Map2KeyRule(const sal_Int32& _eNum) const;
+            static sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum);
+            static KeyTypeEnum Map2KeyRule(const sal_Int32& _eNum);
         };
     }
 }
