@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:50:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 16:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 #define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
 #ifndef _SVX_FLSTITEM_HXX
-#include <svx/flstitem.hxx>
+#include <flstitem.hxx>
 #endif
 
 //........................................................................
