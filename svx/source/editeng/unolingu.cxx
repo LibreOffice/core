@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 08:31:30 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 12:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,59 +592,6 @@ SvxDicListChgClamp::~SvxDicListChgClamp()
 }
 
 ///////////////////////////////////////////////////////////////////////////
-
-//! some code somewhere requires LANGUAGE_NONE to be the first entry!
-static const Language aLanguages[] =
-{
-    LANGUAGE_NONE,
-    LANGUAGE_GERMAN,
-    LANGUAGE_GERMAN_SWISS,
-    LANGUAGE_ENGLISH_US,
-    LANGUAGE_ENGLISH_UK,
-    LANGUAGE_FRENCH,
-    LANGUAGE_ITALIAN,
-    LANGUAGE_SPANISH,
-    LANGUAGE_PORTUGUESE,
-    LANGUAGE_DANISH,
-    LANGUAGE_DUTCH,
-    LANGUAGE_SWEDISH,
-    LANGUAGE_FINNISH,
-    LANGUAGE_NORWEGIAN_BOKMAL,
-    LANGUAGE_NORWEGIAN_NYNORSK,
-
-    // newly IPR supported languages
-    LANGUAGE_AFRIKAANS,
-    LANGUAGE_CATALAN,
-    LANGUAGE_CZECH,
-    LANGUAGE_GREEK,
-    LANGUAGE_HUNGARIAN,
-    LANGUAGE_POLISH,
-    LANGUAGE_PORTUGUESE_BRAZILIAN,
-    LANGUAGE_RUSSIAN
-};
-
-const Sequence< Language > & SvxGetSelectableLanguages()
-{
-    static const Sequence< Language >
-        aSeq( aLanguages, (sizeof(aLanguages) / sizeof(aLanguages[0])) );
-    return aSeq;
-}
-
-sal_Int32 SvxGetLanguagePos(const Sequence< Language > &rSeq, Language nLang)
-{
-    sal_Int32 nRes = -1;
-
-    sal_Int32 n = rSeq.getLength();
-    const Language *pLang = rSeq.getConstArray();
-    for (sal_Int32 i = 0;  i < n;  i++)
-        if (pLang[i] == nLang)
-        {
-            nRes = i;
-            break;
-        }
-
-    return nRes;
-}
 
 String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
 {

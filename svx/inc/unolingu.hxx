@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 08:31:09 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 12:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,18 +267,6 @@ LanguageType                        SvxLocaleToLanguage(
 ::com::sun::star::lang::Locale&     SvxLanguageToLocale(
         ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
 ::com::sun::star::lang::Locale      SvxCreateLocale( LanguageType eLang );
-
-// Sequence of non XSpellChecker, XHyphenator or XThesaurus specific
-// languages that are frequently used
-const ::com::sun::star::uno::Sequence<
-    ::com::sun::star::util::Language > &    SvxGetSelectableLanguages();
-
-// returns position of language in sequence.
-// If not found a negative value will be returned.
-sal_Int32   SvxGetLanguagePos(
-    const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::util::Language > &rSeq,
-    ::com::sun::star::util::Language nLang);
 
 String  SvxGetDictionaryURL(const String &rDicName,
                             sal_Bool bIsUserDic = sal_True);
