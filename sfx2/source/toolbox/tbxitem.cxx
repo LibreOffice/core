@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:29:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
@@ -120,6 +123,9 @@
 #ifndef _COM_SUN_STAR_UI_XUIFUNCTIONLISTENER_HPP_
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
+#endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -132,6 +138,9 @@
 #endif
 #ifndef _SVT_IMAGEITM_HXX
 #include <svtools/imageitm.hxx>
+#endif
+#ifndef _SFXVISIBILITYITEM_HXX
+#include <svtools/visitem.hxx>
 #endif
 #ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
@@ -598,6 +607,12 @@ throw ( ::com::sun::star::uno::RuntimeException )
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
+                }
+                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+                {
+                    Visibility aVisibilityStatus;
+                    rEvent.State >>= aVisibilityStatus;
+                    pItem = new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible );
                 }
                 else
                 {
@@ -1218,6 +1233,12 @@ throw ( ::com::sun::star::uno::RuntimeException )
                     rEvent.State >>= aItemStatus;
                     eState = aItemStatus.State;
                     pItem = new SfxVoidItem( nSlotId );
+                }
+                else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::Visibility*)0) )
+                {
+                    Visibility aVisibilityStatus;
+                    rEvent.State >>= aVisibilityStatus;
+                    pItem = new SfxVisibilityItem( nSlotId, aVisibilityStatus.bVisible );
                 }
                 else
                 {
