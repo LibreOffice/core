@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:19:25 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     // Alignment:
     sal_Bool bPlus = sal_False;
-    OutputDevice *pOut = GetInfo().GetOut();
+    OutputDevice* pOut = GetInfo().GetOut();
     Point aPnt1( nTmpLeft, GetInfo().GetPos().Y() );
     if ( aPnt1.X() < rPaint.Left() )
         aPnt1.X() = rPaint.Left();
@@ -363,8 +363,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             const SwTwips nOldY = GetInfo().Y();
 
             GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, 0,
-                GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), pOut ),
-                GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), pOut )
+                GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), *pOut ),
+                GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), *pOut )
             ) );
 
             pPor->PrePaint( GetInfo(), pPor );
@@ -519,7 +519,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetIdx() >= GetInfo().GetTxt().Len() )
         {
             const SwTmpEndPortion aEnd( *pEndTempl );
-            GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), pOut );
+            GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), *pOut );
 
             if ( bAdjustBaseLine )
                 GetInfo().Y( GetInfo().GetPos().Y()
