@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:07:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include <hintids.hxx>
 #include "cntfrm.hxx"
@@ -177,7 +174,7 @@ SwLayoutFrm * MA_FASTCALL lcl_FindColumns( SwLayoutFrm *pLay, USHORT nCount )
 }
 
 
-BOOL MA_FASTCALL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
+static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
 {
     SwDoc *pDoc = pCont->GetFmt()->GetDoc();
     const BOOL bMod = pDoc->IsModified();
@@ -320,7 +317,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         else if( nOldNum < nNewNum )
         {
             USHORT nAdd = nNewNum - nOldNum;
-            bAdjustAttributes = ::lcl_AddColumns( this, nAdd );
+            bAdjustAttributes = lcl_AddColumns( this, nAdd );
         }
     }
 
