@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:18:16 $
+ *  last change:$Date: 2003-11-18 16:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
+import ifc.sheet._XCellRangesQuery;
 
 
 /**
@@ -262,6 +263,7 @@ public class ScTableSheetObj extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
+
         log.println("adding ObjRelation 'noArray' to avoid the test" +
                     " 'XArrayFormulaRange'");
         tEnv.addObjRelation("noArray", "ScTableSheetObj");
@@ -269,6 +271,39 @@ public class ScTableSheetObj extends TestCase {
         XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
+        tEnv.addObjRelation("SHEET", oSheet);
+        // add expected results for the XCellRangesQuery interface test
+        String[]expectedResults = new String[7];
+        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.B5;Sheet1.C1";
+        expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "Sheet1.B5;Sheet1.C1;Sheet1.F6";
+        expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "Sheet1.A1 ... Sheet1.B1 ... Sheet1.B6 ... Sheet1.C2 ... Sheet1.D1 ... Sheet1.F1 ... Sheet1.F7 ... Sheet1.G1";
+        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYINTERSECTION] = "Sheet1.D4";
+        expectedResults[_XCellRangesQuery.QUERYROWDIFFERENCES] = "Sheet1.A5;Sheet1.C1";
+        expectedResults[_XCellRangesQuery.QUERYVISIBLECELLS] = "Sheet1.A2";
+        tEnv.addObjRelation("XCellRangesQuery.EXPECTEDRESULTS", expectedResults);
+
+        // for XFormulaQuery interface test
+        try {
+            tEnv.addObjRelation("MAKEENTRYINCELL", oSheet.getCellByPosition(15, 15));
+            tEnv.addObjRelation("RANGEINDICES", new int[]{0,0});
+            tEnv.addObjRelation("EXPECTEDDEPENDENTVALUES", new int[]{0,255,0,31999});
+            tEnv.addObjRelation("EXPECTEDPRECEDENTVALUES", new int[]{0,255,0,31999});
+        }
+        catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Cannot add the necessary object relation for XFormulaQuery test.");
+        }
+
+        // XSearchable interface test
+        try {
+            tEnv.addObjRelation("XSearchable.MAKEENTRYINCELL", oSheet.getCellByPosition(15, 15));
+        }
+        catch(com.sun.star.lang.IndexOutOfBoundsException e){
+            e.printStackTrace((PrintWriter)log);
+            log.println("Cannot make required object relation 'XSearchable.MAKEENTRYINCELL'.");
+        }
+
+
 
         //Adding relation for util.XSortable
         final PrintWriter finalLog = log;
