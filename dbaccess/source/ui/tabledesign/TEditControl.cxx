@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:02 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1778,7 +1778,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
         OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
         if( pFieldDescr && (*aIter)->IsPrimaryKey() )
         {
-            nIndex = m_pRowList->end() - aIter;
+            nIndex = aIter - m_pRowList->begin();
             AdjustFieldDescription(pFieldDescr,aDeletedPrimKeys,nIndex,bSet,sal_False);
         }
     }
