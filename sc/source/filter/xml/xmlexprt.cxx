@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
+ *  last change: $Author: sab $ $Date: 2001-07-09 08:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,7 +1350,7 @@ void ScXMLExport::_ExportContent()
         uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
         if ( xIndex.is() )
         {
-            _GetNamespaceMap().ClearQNamesCache();
+            //_GetNamespaceMap().ClearQNamesCache();
             pChangeTrackingExportHelper->CollectAndWriteChanges();
             WriteCalculationSettings(xSpreadDoc);
             sal_Int32 nTableCount = xIndex->getCount();
