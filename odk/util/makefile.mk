@@ -12,9 +12,11 @@ PRODUCT_NAME=$(TARGET)$(UPD)$(DELIVERMINOR)
 
 DESTDIR=$(OUT)$/bin$/$(PRODUCT_NAME)
 DESTDIRBIN=$(DESTDIR)$/bin$/
+DESTDIRBIN2=$(PRODUCT_NAME)$/bin$/
 DESTDIRLIB=$(DESTDIR)$/lib$/
 DESTDIRINC=$(DESTDIR)$/include$/
 DESTDIRIDL=$(DESTDIR)$/idl$/
+DESTDIRIDL2=$(PRODUCT_NAME)$/idl$/
 DESTDIRJAR=$(DESTDIRLIB)
 DESTDIREXAMPLES=$(DESTDIR)$/examples
 DESTDIRDOC=$(OUT)$/misc$/$(PRODUCT_NAME)
@@ -24,6 +26,10 @@ TARGETDIRDOC=..$/..$/www$/common
 UDKZIPPATH=$(SOLARBINDIR)
 UDKDOC0=$(shell $(FIND) $(UDKZIPPATH) -name "udk*_doc.tar.gz" -print)
 UDKDOC=$(UDKDOC0:b:b)
+UDKZIP=udk208.zip
+CHECKDIR=check
+CHECKSRCIPT=$(SOLARENV)$/bin$/checkit.pl
+UDK_UPD=*
  
 BINOUT=$(SOLARBINDIR)
 INCOUT=$(SOLARINCDIR)
@@ -51,7 +57,7 @@ MY_COPY=copy /u
 MY_COPY_RECURSIVE=copy /us 
 DLLOUT=$(SOLARBINDIR)
 MY_AUTODOC=r:\util\nt\autodoc\autodoc_oo.exe
-MY_DELETE_RECURSIVE=rmdir /s
+MY_DELETE_RECURSIVE=del /sxy
 
 RM_CVS_DIRS=$(FIND) $(DESTDIRDOC) -name "CVS" -type d -exec rm -rf $(0,text {)$(0,text }) ;
 .ELSE
@@ -76,9 +82,9 @@ RM_CVS_DIRS=$(FIND) $(DESTDIRDOC) -name "CVS" -type d -exec rm -rf $(0,text {)$(
 # TARGETS
 #--------------------------------------------------
 .IF "$(GUI)"=="WNT"
-all: docugen docu zipdocu deliver zipit 
+all: docugen docu zipdocu deliver zipit checkit cleanit
 .ELSE
-all: docu deliver convertit zipit
+all: deliver convertit zipit checkit cleanit
 .ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
@@ -92,18 +98,34 @@ BINDINGDLL=msci_uno
 .ENDIF
 
 docugen .SETDIR=$(DESTDIRDOC)$/.. .PHONY :
-    +-$(RM) -rf $(PRODUCT_NAME)
+    +-$(MY_DELETE_RECURSIVE) $(PRODUCT_NAME)
     +-$(COPY) $(UDKZIPPATH)$/$(UDKDOC).tar.gz .
     +-gzip -d $(UDKDOC).tar.gz
     +-tar xvf $(UDKDOC).tar
     +-$(RM) $(UDKDOC).tar
     +-$(RENAME) udk* $(PRODUCT_NAME)
-    +-$(RM) -rf "udk*"
+    +-$(MY_DELETE_RECURSIVE) "udk*"
 
 docu .PHONY :
     -$(MKDIR) $(DESTDIRAPIDOC) >& $(NULLDEV)
     +-$(MY_COPY_RECURSIVE) $(TARGETDIRDOC) $(DESTDIRAPIDOC)
     +$(RM_CVS_DIRS)
+
+deliver2 .SETDIR=$(DESTDIR)$/.. .PHONY :
+    +-$(COPY) $(UDKZIPPATH)$/$(UDKZIP) .
+    +-unzip -q -d . $(UDKZIP)
+    +-$(RM) $(UDKZIP)
+    +-$(RENAME) udk208 $(PRODUCT_NAME)
+    +-$(MY_DELETE_RECURSIVE) $(DESTDIRIDL2)
+#------------------------------------------------------------------------------------
+#       R D B  F I L E S
+#------------------------------------------------------------------------------------
+    +-$(RM)  $(DESTDIRBIN2)$/udkapi.rdb
+    +-$(MY_COPY)  $(BINOUT)$/applicat.rdb $(DESTDIRBIN2)
+# ------------------------------------------------------------------------------------
+#       I D L files
+# ------------------------------------------------------------------------------------
+    +-$(MY_COPY_RECURSIVE) $(IDLOUT) $(DESTDIRIDL2)
 
 deliver .PHONY :
 # ------------------------------------------------------------------------------------
@@ -125,7 +147,7 @@ deliver .PHONY :
 # ------------------------------------------------------------------------------------
 #           S H A R E D  L I B R I E S
 # ------------------------------------------------------------------------------------
-    +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)uas$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX) $(DESTDIRDLL)
+    +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)uas$(UDK_UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)urd$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)rmcxt2$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)sal2$(MY_DLLPOSTFIX) $(DESTDIRDLL)
@@ -141,7 +163,7 @@ deliver .PHONY :
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)prot_uno_uno$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)rdbtdp$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)reg2$(MY_DLLPOSTFIX) $(DESTDIRDLL)
-    +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)remote_uno$(MY_DLLPOSTFIX) $(DESTDIRDLL)
+    +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)iiop_uno$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)urp_uno$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)acceptor$(MY_DLLPOSTFIX) $(DESTDIRDLL)
     +-$(MY_COPY)  $(DLLOUT)$/$(MY_DLLPREFIX)brdgfctr$(MY_DLLPOSTFIX) $(DESTDIRDLL)
@@ -200,11 +222,25 @@ deliver .PHONY :
 #----------------------------------------------------------------------
 #       E X A M P L E S
 #----------------------------------------------------------------------
+    -$(MKDIRHIER) -p $(DESTDIREXAMPLES)$/counter >& $(NULLDEV)
+    +-$(MY_COPY) $(PRJ)$/examples$/counter$/counter.cxx $(DESTDIREXAMPLES)$/counter
+    +-$(MY_COPY) $(PRJ)$/examples$/counter$/countermain.cxx $(DESTDIREXAMPLES)$/counter
+    +-$(MY_COPY) $(PRJ)$/examples$/counter$/XCountable.idl $(DESTDIREXAMPLES)$/counter
+    +-$(MY_COPY) $(PRJ)$/examples$/counter$/README $(DESTDIREXAMPLES)$/counter
+    +-$(MY_COPY) $(PRJ)$/examples$/counter$/makefile.mk $(DESTDIREXAMPLES)$/counter
+    +-$(MY_COPY) $(PRJ)$/examples$/counter$/exports.dxp $(DESTDIREXAMPLES)$/counter
+#
     -$(MKDIRHIER) -p $(DESTDIREXAMPLES)$/remoteclient >& $(NULLDEV)
     +-$(MY_COPY) $(PRJ)$/examples$/remoteclient$/remoteclient.cxx $(DESTDIREXAMPLES)$/remoteclient
     +-$(MY_COPY) $(PRJ)$/examples$/remoteclient$/README $(DESTDIREXAMPLES)$/remoteclient
     +-$(MY_COPY) $(PRJ)$/examples$/remoteclient$/makefile.mk $(DESTDIREXAMPLES)$/remoteclient
     +-$(MY_COPY) $(PRJ)$/examples$/remoteclient$/exports.dxp $(DESTDIREXAMPLES)$/remoteclient
+#
+    -$(MKDIRHIER) -p $(DESTDIREXAMPLES)$/officeclient >& $(NULLDEV)
+    +-$(MY_COPY) $(PRJ)$/examples$/officeclient$/officeclient.cxx $(DESTDIREXAMPLES)$/officeclient
+    +-$(MY_COPY) $(PRJ)$/examples$/officeclient$/README $(DESTDIREXAMPLES)$/officeclient
+    +-$(MY_COPY) $(PRJ)$/examples$/officeclient$/makefile.mk $(DESTDIREXAMPLES)$/officeclient
+    +-$(MY_COPY) $(PRJ)$/examples$/officeclient$/exports.dxp $(DESTDIREXAMPLES)$/officeclient
 
 # ------------------------------------------------------------------------------------
 #      ZIP IT
@@ -250,3 +286,63 @@ roit .SETDIR=$(DESTDIR):
     +chmod 444 $(foreach,file,$(CXFILES_CONVERT) $(file))
     +chmod 444 $(foreach,file,$(HXFILES_CONVERT) $(file))
 .ENDIF
+
+checkit .SETDIR=$(DESTDIR)$/.. .PHONY:
+    -$(MKDIR) $(CHECKDIR) >& $(NULLDEV)
+    .IF "$(OS)"=="WNT"
+        +unzip -q -d $(CHECKDIR) $(PRODUCT_NAME).zip
+    .ELIF "$(GUI)"=="UNX"
+        +$(COPY) $(PRODUCT_NAME).tar.gz $(CHECKDIR)
+        +cd $(CHECKDIR); gzip -d $(PRODUCT_NAME).tar.gz
+        +cd $(CHECKDIR); tar xvf $(PRODUCT_NAME).tar
+    .ENDIF
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/bin $(SOLARBINDIR) > $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/bridges $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/com $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/cppu $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/cppuhelper $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/osl $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/rtl $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/sal $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/stl $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/store $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/typelib $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/uno $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/vos $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/lib $(SOLARLIBDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+    +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/idl $(SOLARIDLDIR) > $(TMP)$/odkcheck.txt
+    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(RM) $(TMP)$/odkcheck.txt
+
+cleanit .PHONY:
+    +-$(MY_DELETE_RECURSIVE) $(OUT)$/bin$/$(CHECKDIR) >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(DESTDIR) >& $(NULLDEV)
+    +-$(MY_DELETE_RECURSIVE) $(DESTDIRDOC) >& $(NULLDEV)
