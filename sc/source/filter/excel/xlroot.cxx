@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:25:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "xlroot.hxx"
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
@@ -108,7 +111,8 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rB
     mrDoc( rDocument ),
     maBasePath( rBasePath ),
     meCharSet( eCharSet ),
-    meLang( ScGlobal::eLnge ),
+    meDocLang( Application::GetSettings().GetLanguage() ),
+    meUILang( Application::GetSettings().GetUILanguage() ),
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
     maXclMaxPos( EXC_MAXCOL_BIFF2, EXC_MAXROW_BIFF2, EXC_MAXTAB_BIFF2 ),
     mnCharWidth( 110 ),
@@ -241,13 +245,6 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mpHFEditEngine;
-}
-
-XclAddInNameTranslator& XclRoot::GetAddInNames() const
-{
-    if( !mrData.mpAddInNames.get() )
-        mrData.mpAddInNames.reset( new XclAddInNameTranslator );
-    return *mrData.mpAddInNames;
 }
 
 bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress rMaxPos ) const
