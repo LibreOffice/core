@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ts $ $Date: 2000-12-11 13:57:15 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,8 @@
 #ifndef _CPPUMAKER_CPPUTYPE_HXX_
 #define _CPPUMAKER_CPPUTYPE_HXX_
 
-#ifndef _CODEMAKER_TYPEMANAGER_HXX_
-#include    <codemaker/typemanager.hxx>
-#endif
-
-#ifndef _CODEMAKER_DEPENDENCY_HXX_
-#include    <codemaker/dependency.hxx>
-#endif
+#include "codemaker/typemanager.hxx"
+#include "codemaker/dependency.hxx"
 
 enum BASETYPE
 {
@@ -113,6 +108,11 @@ public:
     virtual ~CppuType();
 
     virtual sal_Bool dump(CppuOptions* pOptions) throw( CannotDumpException );
+    virtual sal_Bool dumpFile(CppuOptions* pOptions,
+                              const ::rtl::OString& sExtension,
+                              const ::rtl::OString& sName,
+                              const ::rtl::OString& sOutPath )
+        throw( CannotDumpException );
     virtual sal_Bool dumpDependedTypes(CppuOptions* pOptions)  throw( CannotDumpException );
     virtual sal_Bool dumpHFile(FileStream& o) throw( CannotDumpException ) = 0;
     virtual sal_Bool dumpHxxFile(FileStream& o) throw( CannotDumpException ) = 0;
