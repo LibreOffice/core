@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ namespace osl
     inline SocketAddr & SAL_CALL SocketAddr::operator= (oslSocketAddr Addr)
     {
         oslSocketAddr pNewAddr = osl_copySocketAddr( Addr );
-        osl_destroySocketAddr( m_handle );
+        if( m_handle )
+            osl_destroySocketAddr( m_handle );
         m_handle = pNewAddr;
         return *this;
     }
@@ -174,6 +175,14 @@ namespace osl
     inline SocketAddr & SAL_CALL SocketAddr::operator= (const SocketAddr& Addr)
     {
         *this = (Addr.getHandle());
+    }
+
+    inline SocketAddr & SAL_CALL SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy )
+    {
+        if( m_handle )
+            osl_destroySocketAddr( m_handle );
+        m_handle = Addr;
+        return *this;
     }
 
     //______________________________________________________________________________
@@ -204,9 +213,10 @@ namespace osl
     }
 
     // (static method)______________________________________________________________
-    inline SocketAddr SAL_CALL SocketAddr::resolveHostname(const ::rtl::OUString & strHostName)
+    inline void SAL_CALL SocketAddr::resolveHostname(
+        const ::rtl::OUString & strHostName, SocketAddr &Addr)
     {
-        return SocketAddr( osl_resolveHostname( strHostName.pData ) , SAL_NO_COPY );
+        Addr = SocketAddr( osl_resolveHostname( strHostName.pData ) , SAL_NO_COPY );
     }
 
     // (static method)______________________________________________________________
@@ -289,39 +299,47 @@ namespace osl
     }
 
     //______________________________________________________________________________
-    inline SocketAddr Socket::getLocalAddr() const
+    inline void Socket::getLocalAddr( SocketAddr & addr) const
     {
-        return SocketAddr( osl_getLocalAddrOfSocket( m_handle ) , SAL_NO_COPY );
+        addr.assign( osl_getLocalAddrOfSocket( m_handle ) , SAL_NO_COPY );
     }
 
     //______________________________________________________________________________
     inline sal_Int32 Socket::getLocalPort() const
     {
-        return getLocalAddr().getPort();
+        SocketAddr addr( 0 );
+        getLocalAddr( addr );
+        return addr.getPort();
     }
 
     //______________________________________________________________________________
     inline ::rtl::OUString Socket::getLocalHost() const
     {
-        return getLocalAddr().getHostname();
+        SocketAddr addr( 0 );
+        getLocalAddr( addr );
+        return addr.getHostname();
     }
 
     //______________________________________________________________________________
-    inline SocketAddr Socket::getPeerAddr() const
+    inline void Socket::getPeerAddr( SocketAddr &addr ) const
     {
-        return SocketAddr( osl_getPeerAddrOfSocket( m_handle ), SAL_NO_COPY );
+        addr.assign( osl_getPeerAddrOfSocket( m_handle ), SAL_NO_COPY );
     }
 
     //______________________________________________________________________________
     inline sal_Int32 Socket::getPeerPort() const
     {
-        return getPeerAddr().getPort();
+        SocketAddr addr( 0 );
+        getPeerAddr( addr );
+        return addr.getPort();
     }
 
     //______________________________________________________________________________
     inline ::rtl::OUString Socket::getPeerHost() const
     {
-        return getPeerAddr().getHostname();
+        SocketAddr addr( 0 );
+        getPeerAddr( addr );
+        return addr.getHostname();
     }
 
     //______________________________________________________________________________

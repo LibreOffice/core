@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket_decl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace osl
         inline SocketAddr(const SocketAddr& Addr);
 
         /** The SocketAddr takes over the responsibility of the handle ( which means,
-            that the handle gets destructed by the destructor of this reference=
+            that the handle gets destructed by the destructor of this reference)
          */
         inline SocketAddr(const oslSocketAddr , __osl_socket_NoCopy nocopy );
 
@@ -157,6 +157,10 @@ namespace osl
          */
         inline SocketAddr & SAL_CALL operator= (const SocketAddr& Addr);
 
+        /** Assigns the socket addr without copyconstructing it.
+          */
+        inline SocketAddr & SAL_CALL assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
+
         /** Returns true if the underlying handle is identical to the Addr handle.
          */
         inline sal_Bool SAL_CALL operator== (oslSocketAddr Addr) const;
@@ -179,7 +183,8 @@ namespace osl
         /** Tries to find an address for a host.
             @return A new created socket-address or 0 if the name could not be found.
         */
-        static inline SocketAddr SAL_CALL resolveHostname(const ::rtl::OUString & strHostName);
+        static inline void SAL_CALL resolveHostname(
+            const ::rtl::OUString & strHostName , SocketAddr & Addr );
 
         /**
            Tries to find the port associated with the given service/protocol-
@@ -258,7 +263,7 @@ namespace osl
         /** Retrieves the address of the local interface of this socket.
             @return Addr [out] receives the address.
         */
-        inline SocketAddr SAL_CALL getLocalAddr() const;
+        inline void SAL_CALL getLocalAddr( SocketAddr &Addr ) const;
 
         /** Get the local port of the socket.
             @return the port number or OSL_INVALID_PORT on errors.
@@ -273,7 +278,7 @@ namespace osl
         /** Retrieves the address of the remote host of this socket.
             @param Addr [out] receives the address.
         */
-        inline SocketAddr SAL_CALL getPeerAddr() const;
+        inline void SAL_CALL getPeerAddr( SocketAddr & Addr) const;
 
         /** Get the remote port of the socket.
             @return the port number or OSL_INVALID_PORT on errors.
