@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 16:02:56 $
+ *  last change: $Author: mba $ $Date: 2000-12-11 15:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,18 +794,6 @@ void SfxApplication::SetLastFilter_Impl( const String &rNewFilter )
 }
 
 //--------------------------------------------------------------------
-#if SUPD<606
-SfxDispatcher& SfxApplication::GetDispatcher()
-{
-    return pViewFrame? *pViewFrame->GetDispatcher(): *pAppDispat;
-}
-
-SfxBindings& SfxApplication::GetBindings() const
-{
-    DBG_ASSERT( pViewFrame, "No ViewFrame available!" );
-    return pViewFrame? pViewFrame->GetBindings(): SfxViewFrame::GetFirst( 0, 0, sal_False )->GetBindings();
-}
-#endif
 
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
@@ -836,6 +824,77 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
             }
         }
 
+#if 0
+        // check if activated or deactivated frame is a InPlaceFrame
+        SfxInPlaceFrame *pOld = PTR_CAST( SfxInPlaceFrame, pViewFrame );
+        SfxInPlaceFrame *pNew = PTR_CAST( SfxInPlaceFrame, pFrame );
+
+        // get the containerframes ( if one of the frames is an InPlaceFrame )
+        SfxViewFrame *pOldContainerFrame = pViewFrame;
+        while ( pOldContainerFrame && pOldContainerFrame->GetParentViewFrame_Impl() )
+            pOldContainerFrame = pOldContainerFrame->GetParentViewFrame_Impl();
+        SfxViewFrame *pNewContainerFrame = pFrame;
+        while ( pNewContainerFrame && pNewContainerFrame->GetParentViewFrame_Impl() )
+            pNewContainerFrame = pNewContainerFrame->GetParentViewFrame_Impl();
+
+        // DocWinActivate : both frames belong to the same TopWindow
+        // TopWinActivate : both frames belong to different TopWindows
+        BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
+                    pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
+
+        if ( pOldContainerFrame )
+        {
+            // a frame has to be deactivated
+            if ( pOld )
+            {
+                // old active frame was an InPlaceFrame
+                SvInPlaceClient *pCli = pOldContainerFrame->GetViewShell() ?
+                        pOldContainerFrame->GetViewShell()->GetIPClient() : NULL;
+                if ( pCli && pCli->GetProtocol().IsUIActive() )
+                {
+                    if ( bDocWinActivate )
+                    {
+                        pCli->GetIPObj()->GetIPEnv()->DoShowUITools( sal_False );
+                        pCli->GetProtocol().DocWinActivate( sal_False );
+                    }
+                    else
+                        pCli->GetProtocol().TopWinActivate( sal_False );
+                }
+            }
+
+            if ( pOldContainerFrame != pFrame )
+            {
+                // new activated frame is not the container frame of the old deactivated frame
+                if ( !pNew )
+                    NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pOldContainerFrame->GetObjectShell() ) );
+                pOldContainerFrame->DoDeactivate( !pNew, pFrame );
+            }
+        }
+
+        pViewFrame = pFrame;
+
+        // Jetzt ist der ViewFrame gesetzt, das TopWindow kann abgefragt werden
+        SfxWorkWindow* pWork = pViewFrame ? pViewFrame->GetFrame()->GetWorkWindow_Impl() : NULL;
+        Window* pWin = pWork ? pWork->GetTopWindow() : NULL;
+        Application::SetDefDialogParent( pWin );
+
+        const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
+        if ( !pSh )
+        {
+            // Wenn es ein Dokument gibt, wird die BaseURL im Activate gesetzt
+            INetURLObject aObject( SvtPathOptions().GetWorkPath() );
+            aObject.setFinalSlash();
+            INetURLObject::SetBaseURL( aObject.GetMainURL() );
+        }
+
+        if ( pViewFrame && !pOld )
+            pViewFrame->GetObjectShell()->PostActivateEvent_Impl();
+
+        if( pViewFrame )
+            pViewFrame->DoActivate( !pOld ||
+                pViewFrame->GetBindings().GetDispatcher_Impl() != pViewFrame->GetDispatcher(),
+                pOldContainerFrame );
+#endif
         SfxInPlaceFrame *pOld = PTR_CAST( SfxInPlaceFrame, pViewFrame );
         SfxInPlaceFrame *pNew = PTR_CAST( SfxInPlaceFrame, pFrame );
         FASTBOOL bTaskActivate = !pNew;
