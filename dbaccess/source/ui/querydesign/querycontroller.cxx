@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 07:26:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 15:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,7 @@ sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     sal_Bool bRet = sal_True;
     if(m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size())))
     {
-        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
+        QueryBox aQry(getView(), ModuleRes(m_bCreateView ? QUERY_VIEW_DESIGN_SAVEMODIFIED : QUERY_DESIGN_SAVEMODIFIED));
         switch (aQry.Execute())
         {
             case RET_YES:
