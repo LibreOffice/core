@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 12:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,12 @@
 #ifndef _TXTRFMRK_HXX
 #include <txtrfmrk.hxx>
 #endif
+#ifndef _UNOFIELD_HXX
+#include <unofield.hxx>
+#endif
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
+#endif
 
 /* -----------------------------06.01.00 13:51--------------------------------
 
@@ -202,6 +208,33 @@ void SwUnoCallBack::Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue )
             }
 
         }
+        case RES_FIELD_DELETED:
+        {
+            SwClientIter aIter( *this );
+            SwXTextField* pxTextField = (SwXTextField*)aIter.First( TYPE( SwXTextField ));
+            while(pxTextField)
+            {
+                const SwField* pField = pxTextField->GetField();
+                if(pField)
+                {
+                    const SwFmtFld* pFmtFld = pxTextField->GetFldFmt();
+                    if(!pFmtFld)
+                        pxTextField->Invalidate();
+                    else
+                    {
+                        const SwTxtFld* pTxtFld = pFmtFld ? pFmtFld->GetTxtFld() : 0;
+                        if(pTxtFld && (void*)pTxtFld == ((SwPtrMsgPoolItem *)pOldValue)->pObject)
+                        {
+                            pxTextField->Invalidate();
+                            break;
+                        }
+                    }
+                }
+                else
+                    pxTextField->Invalidate();
+                pxTextField = (SwXTextField*)aIter.Next( );
+            }
+        }
         break;
     }
 }
@@ -266,6 +299,14 @@ SwXDocumentIndexMark* SwUnoCallBack::GetTOXMark(const SwTOXMark& rMark)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/30 11:30:49  dvo
+    #80616# remaining API issues needed for XML index im-/export fixed
+    - added: now TOXMarks always return the same UNO wrapper object, making them comparable
+    - added: SwXDocumentIndexes::GetObject(): converts SwTOXBaseSection into SwXDocumentIndex
+    - added: DocumentIndex-property to SwXTextSection (returns smallest enclosing index)
+    - fixed: XInsertTextContentRelative now disregards IsProtected() flag (like remainder of API)
+    - added: Bibliography now supports ContentSection and HeaderSection properties
+
     Revision 1.2  2000/10/16 10:31:05  os
     #79422# SwXDocumentIndexMark: invalidation uses SwUnoCallBack
 
