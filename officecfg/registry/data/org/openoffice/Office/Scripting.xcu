@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Scripting.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:18:28 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,21 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Scripting" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data oor:name="Scripting" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="ScriptRuntimes">
         <node oor:name="BeanShell" oor:op="replace">
             <prop oor:name="SupportedFileExtensions">
-                <value xml:lang="en-US">bsh</value>
+                <value>bsh</value>
             </prop>
         </node>
         <node oor:name="JavaScript" oor:op="replace">
             <prop oor:name="SupportedFileExtensions">
-                <value xml:lang="en-US">js</value>
+                <value>js</value>
+            </prop>
+        </node>
+        <node oor:name="Python" oor:op="replace" install:module="python">
+            <prop oor:name="SupportedFileExtensions">
+                <value>py</value>
             </prop>
         </node>
     </node>
