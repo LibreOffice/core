@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>StarDraw 5.0 Vorlage</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarDraw 5.0 Template</value>
+            <value>StarDraw 5.0 Template</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>StarDraw 5.0</value></prop>
     </node>
