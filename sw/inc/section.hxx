@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:08:00 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ enum LinkCreateType
 };
 
 
-class SwSection : public SwClient
+class SW_DLLPUBLIC SwSection : public SwClient
 {
     // damit beim Anlegen/Loeschen von Frames das Flag richtig gepflegt wird!
     friend class SwSectionNode;
@@ -142,10 +142,10 @@ class SwSection : public SwClient
     BOOL bConnectFlag : 1;      // Flag: "Verbindung zum Server" vorhanden?
 
 
-    void _SetHiddenFlag( int bHidden, int bCondition );
-    void _SetProtectFlag( int bFlag ) { bProtectFlag = bFlag; }
+    SW_DLLPRIVATE void _SetHiddenFlag( int bHidden, int bCondition );
+    SW_DLLPRIVATE void _SetProtectFlag( int bFlag ) { bProtectFlag = bFlag; }
 
-    int _IsProtect() const;
+    /* SW_DLLPUBLIC */ int _IsProtect() const;
 
 public:
     TYPEINFO();     // rtti
@@ -242,16 +242,18 @@ public:
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwSection( const SwSection& );
+    // @@@ but copy assignment "SwSection & operator= ( const SwSection& )" is public? @@@
 };
 
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
 
-class SwSectionFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwSectionFmt : public SwFrmFmt
 {
     friend class SwDoc;
-    SwSection* _GetSection() const;
-    void UpdateParent();        // Parent wurde veraendert
+
+    /* SW_DLLPUBLIC */ SwSection* _GetSection() const;
+    SW_DLLPRIVATE void UpdateParent();      // Parent wurde veraendert
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
@@ -322,6 +324,4 @@ inline SwSection* SwSectionFmt::GetParentSection() const
 }
 
 
-#endif
-    //_SECTION_HXX
-
+#endif /* _SECTION_HXX */
