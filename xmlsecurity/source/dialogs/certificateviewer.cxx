@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maIssuedToFI           ( this, ResId( FI_ISSTO ) )
     ,maIssuedByLabelFI      ( this, ResId( FI_ISSBYLABEL ) )
     ,maIssuedByFI           ( this, ResId( FI_ISSBY ) )
-    ,maValidFromLabelFI     ( this, ResId( FI_VALFROMLABEL ) )
-    ,maValidFromFI          ( this, ResId( FI_VALFROM ) )
-    ,maValidToLabelFI       ( this, ResId( FI_VALTOLABEL ) )
-    ,maValidToFI            ( this, ResId( FI_VALTO ) )
+    ,maValidDateFI          ( this, ResId( FI_VALIDDATE ) )
     ,maKeyImg               ( this, ResId( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, ResId( FI_CORRPRIVKEY ) )
 {
@@ -168,10 +165,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maIssuedToFI.SetBackground( aBack );
     maIssuedByLabelFI.SetBackground( aBack );
     maIssuedByFI.SetBackground( aBack );
-    maValidFromLabelFI.SetBackground( aBack );
-    maValidFromFI.SetBackground( aBack );
-    maValidToLabelFI.SetBackground( aBack );
-    maValidToFI.SetBackground( aBack );
+    maValidDateFI.SetBackground( aBack );
     maKeyImg.SetBackground( aBack );
     maHintCorrespPrivKeyFI.SetBackground( aBack );
 
@@ -182,8 +176,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maHintNotTrustedFI.SetFont( aFnt );
     maIssuedToLabelFI.SetFont( aFnt );
     maIssuedByLabelFI.SetFont( aFnt );
-    maValidFromLabelFI.SetFont( aFnt );
-    maValidToLabelFI.SetFont( aFnt );
+    maValidDateFI.SetFont( aFnt );
 
     // insert data
     cssu::Reference< dcss::security::XCertificate > xCert = mpDlg->mxCert;
@@ -193,18 +186,16 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
     maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName(), aCN_Id ) );
 
-    DateTime aDateTime;
-    utl::typeConvert( xCert->getNotBefore(), aDateTime );
-    maValidFromFI.SetText( GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() ) );
-    utl::typeConvert( xCert->getNotAfter(), aDateTime );
-    maValidToFI.SetText( GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() ) );
-
-    // recalc positions for date fields according to real size
-    Point   aPos( maValidFromLabelFI.GetPosPixel() );
-    AdjustPosAndSize( maValidFromLabelFI, aPos, 5 );
-    AdjustPosAndSize( maValidFromFI, aPos, 5 );
-    AdjustPosAndSize( maValidToLabelFI, aPos, 5 );
-    AdjustPosAndSize( maValidToFI, aPos, 5 );
+    DateTime aDateTimeStart;
+    DateTime aDateTimeEnd;
+    utl::typeConvert( xCert->getNotBefore(), aDateTimeStart );
+    utl::typeConvert( xCert->getNotAfter(), aDateTimeEnd );
+    String sText = maValidDateFI.GetText();
+    sText.SearchAndReplace( String::CreateFromAscii( "%SDATE%" ),
+                            GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
+    sText.SearchAndReplace( String::CreateFromAscii( "%EDATE%" ),
+                            GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
+    maValidDateFI.SetText( sText );
 
     // adjust position of fixed text depending on image sizes
     ShrinkToFit( maCertImg );
@@ -287,8 +278,10 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     const char*             pHexSep = " ";
     String                  aLBEntry;
     String                  aDetails;
+    // --> PB 2004-10-11 #i35107# - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = String::CreateFromAscii( "V" );
-    aLBEntry += String::CreateFromInt32( xCert->getVersion() );
+    aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
+    // <--
     InsertElement( String( ResId( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
