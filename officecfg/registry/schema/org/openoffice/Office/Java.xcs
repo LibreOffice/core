@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:30:42 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,12 @@
 				<desc xml:lang="sv">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="pl">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="pt-BR">Provides information used to initialize a Java Virtual Machine. </desc>
-				<desc xml:lang="ja">Provides information used to initialize a Java Virtual Machine. </desc>
+				<desc xml:lang="ja">Java 仮想マシンを初期化するための情報を提供します。 </desc>
 				<desc xml:lang="ko">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="tr">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="th">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="hi-IN">Provides information used to initialize a Java Virtual Machine. </desc>
+				<desc xml:lang="x-comment">Provides information used to initialize a Java Virtual Machine. </desc>
 			</info>
 			<prop oor:name="Home" oor:type="xs:string">
 				<!-- OldPath: Java -->
@@ -116,11 +117,12 @@
 						<desc xml:lang="sv">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="pl">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="pt-BR">Specifies the path of the Java installation.</desc>
-						<desc xml:lang="ja">Specifies the path of the Java installation.</desc>
+						<desc xml:lang="ja">Java インストールのパスを指定します。</desc>
 						<desc xml:lang="ko">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="tr">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="th">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="hi-IN">Specifies the path of the Java installation.</desc>
+						<desc xml:lang="x-comment">Specifies the path of the Java installation.</desc>
 					<label xml:lang="en-US">Java Home</label>
 					<label xml:lang="el">Java Home</label>
 					<label xml:lang="nl">Java Home</label>
@@ -140,11 +142,12 @@
 					<label xml:lang="sv">Java Home</label>
 					<label xml:lang="pl">Java Home</label>
 					<label xml:lang="pt-BR">Java Home</label>
-					<label xml:lang="ja">Java Home</label>
+					<label xml:lang="ja">Java ホーム</label>
 					<label xml:lang="ko">Java Home</label>
 					<label xml:lang="tr">Java Home</label>
 					<label xml:lang="th">Java Home</label>
 					<label xml:lang="hi-IN">Java Home</label>
+					<label xml:lang="x-comment">Java Home</label>
 				</info>
 				<value>NULL</value>
 			</prop>
@@ -172,11 +175,12 @@
 						<desc xml:lang="sv">Specifies the  version of the Java installation that is used.</desc>
 						<desc xml:lang="pl">Specifies the  version of the Java installation that is used.</desc>
 						<desc xml:lang="pt-BR">Specifies the  version of the Java installation that is used.</desc>
-						<desc xml:lang="ja">Specifies the  version of the Java installation that is used.</desc>
+						<desc xml:lang="ja">使用する Java インストールのバージョンを指定します。</desc>
 						<desc xml:lang="ko">Specifies the  version of the Java installation that is used.</desc>
 						<desc xml:lang="tr">Specifies the  version of the Java installation that is used.</desc>
 						<desc xml:lang="th">Specifies the  version of the Java installation that is used.</desc>
 						<desc xml:lang="hi-IN">Specifies the  version of the Java installation that is used.</desc>
+						<desc xml:lang="x-comment">Specifies the  version of the Java installation that is used.</desc>
 					<label xml:lang="en-US">Java Version</label>
 					<label xml:lang="el">Έκδοση Java</label>
 					<label xml:lang="nl">Java Version</label>
@@ -196,11 +200,12 @@
 					<label xml:lang="sv">Java Version</label>
 					<label xml:lang="pl">Java Version</label>
 					<label xml:lang="pt-BR">Java Version</label>
-					<label xml:lang="ja">Java Version</label>
+					<label xml:lang="ja">Java バージョン</label>
 					<label xml:lang="ko">Java Version</label>
 					<label xml:lang="tr">Java Version</label>
 					<label xml:lang="th">Java Version</label>
 					<label xml:lang="hi-IN">Java Version</label>
+					<label xml:lang="x-comment">Java Version</label>
 				</info>
 				<value>NULL</value>
 			</prop>
@@ -227,11 +232,12 @@
 					<desc xml:lang="sv">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="pl">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="pt-BR">Specifies the JVM shared library that is used.</desc>
-					<desc xml:lang="ja">Specifies the JVM shared library that is used.</desc>
+					<desc xml:lang="ja">使用する JVM 共有ライブラリを指定します。</desc>
 					<desc xml:lang="ko">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="tr">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="th">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="hi-IN">Specifies the JVM shared library that is used.</desc>
+					<desc xml:lang="x-comment">Specifies the JVM shared library that is used.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -259,11 +265,12 @@
 					<desc xml:lang="sv">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="pl">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="pt-BR">Contains jars of the Office installation and may also contain other jars or folders.</desc>
-					<desc xml:lang="ja">Contains jars of the Office installation and may also contain other jars or folders.</desc>
+					<desc xml:lang="ja">Office インストールの jar が含まれます。その他の jar またはフォルダが含まれる場合もあります。</desc>
 					<desc xml:lang="ko">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="tr">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="th">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="hi-IN">Contains jars of the Office installation and may also contain other jars or folders.</desc>
+					<desc xml:lang="x-comment">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -291,11 +298,12 @@
 						<desc xml:lang="sv">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="pl">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="pt-BR">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
-						<desc xml:lang="ja">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+						<desc xml:lang="ja">com.sun.star.java.JavaVirtualMachine サービスで JVM のインスタンスを作成するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="tr">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="th">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="hi-IN">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+						<desc xml:lang="x-comment">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 					<label xml:lang="en-US">Enable JVM</label>
 					<label xml:lang="el">Enable JVM</label>
 					<label xml:lang="nl">Enable JVM</label>
@@ -315,11 +323,12 @@
 					<label xml:lang="sv">Enable JVM</label>
 					<label xml:lang="pl">Enable JVM</label>
 					<label xml:lang="pt-BR">Enable JVM</label>
-					<label xml:lang="ja">Enable JVM</label>
+					<label xml:lang="ja">JVM の有効化</label>
 					<label xml:lang="ko">Enable JVM</label>
 					<label xml:lang="tr">Enable JVM</label>
 					<label xml:lang="th">Enable JVM</label>
 					<label xml:lang="hi-IN">Enable JVM</label>
+					<label xml:lang="x-comment">Enable JVM</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -347,11 +356,12 @@
 						<desc xml:lang="sv">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="pl">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="pt-BR">Determines if security checks are performed for applets.</desc>
-						<desc xml:lang="ja">Determines if security checks are performed for applets.</desc>
+						<desc xml:lang="ja">アプレットに対してセキュリティチェックを実行するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="tr">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="th">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="hi-IN">Determines if security checks are performed for applets.</desc>
+						<desc xml:lang="x-comment">Determines if security checks are performed for applets.</desc>
 					<label xml:lang="en-US">Enable security checks</label>
 					<label xml:lang="el">Enable security checks</label>
 					<label xml:lang="nl">Enable security checks</label>
@@ -371,11 +381,12 @@
 					<label xml:lang="sv">Enable security checks</label>
 					<label xml:lang="pl">Enable security checks</label>
 					<label xml:lang="pt-BR">Enable security checks</label>
-					<label xml:lang="ja">Enable security checks</label>
+					<label xml:lang="ja">セキュリティチェックを有効にします。</label>
 					<label xml:lang="ko">Enable security checks</label>
 					<label xml:lang="tr">Enable security checks</label>
 					<label xml:lang="th">Enable security checks</label>
 					<label xml:lang="hi-IN">Enable security checks</label>
+					<label xml:lang="x-comment">Enable security checks</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -403,11 +414,12 @@
 						<desc xml:lang="sv">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="pl">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="pt-BR">Determines if and to what extent Java applets are allowed to access the network.</desc>
-						<desc xml:lang="ja">Determines if and to what extent Java applets are allowed to access the network.</desc>
+						<desc xml:lang="ja">Java アプレットにネットワークへのアクセスを許可するかどうか、許可する場合はその範囲を指定します。</desc>
 						<desc xml:lang="ko">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="tr">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="th">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="hi-IN">Determines if and to what extent Java applets are allowed to access the network.</desc>
+						<desc xml:lang="x-comment">Determines if and to what extent Java applets are allowed to access the network.</desc>
 					<label xml:lang="en-US">Net access</label>
 					<label xml:lang="el">Net access</label>
 					<label xml:lang="nl">Net access</label>
@@ -427,11 +439,12 @@
 					<label xml:lang="sv">Net access</label>
 					<label xml:lang="pl">Net access</label>
 					<label xml:lang="pt-BR">Net access</label>
-					<label xml:lang="ja">Net access</label>
+					<label xml:lang="ja">ネットアクセス</label>
 					<label xml:lang="ko">Net access</label>
 					<label xml:lang="tr">Net access</label>
 					<label xml:lang="th">Net access</label>
 					<label xml:lang="hi-IN">Net access</label>
+					<label xml:lang="x-comment">Net access</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -443,7 +456,7 @@
 							<desc xml:lang="fi">Host - connect to origin</desc>
 							<desc xml:lang="cs">Host - connect to origin</desc>
 							<desc xml:lang="da">Host - connect to origin</desc>
-							<desc xml:lang="zh-CN">Host - connect to origin</desc>
+							<desc xml:lang="zh-CN">主机 - 连接到来源</desc>
 							<desc xml:lang="zh-TW">Host - connect to origin</desc>
 							<desc xml:lang="ar">Host - connect to origin</desc>
 							<desc xml:lang="he">Host - connect to origin</desc>
@@ -455,11 +468,12 @@
 							<desc xml:lang="sv">Host - connect to origin</desc>
 							<desc xml:lang="pl">Host - connect to origin</desc>
 							<desc xml:lang="pt-BR">Host - connect to origin</desc>
-							<desc xml:lang="ja">Host - connect to origin</desc>
+							<desc xml:lang="ja">ホスト - ホストに接続</desc>
 							<desc xml:lang="ko">Host - connect to origin</desc>
 							<desc xml:lang="tr">Host - connect to origin</desc>
 							<desc xml:lang="th">Host - connect to origin</desc>
 							<desc xml:lang="hi-IN">Host - connect to origin</desc>
+							<desc xml:lang="x-comment">Host - connect to origin</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -471,7 +485,7 @@
 							<desc xml:lang="fi">Unrestricted - connect to all</desc>
 							<desc xml:lang="cs">Unrestricted - connect to all</desc>
 							<desc xml:lang="da">Unrestricted - connect to all</desc>
-							<desc xml:lang="zh-CN">Unrestricted - connect to all</desc>
+							<desc xml:lang="zh-CN">不限制的 - 连接到全部的</desc>
 							<desc xml:lang="zh-TW">Unrestricted - connect to all</desc>
 							<desc xml:lang="ar">Unrestricted - connect to all</desc>
 							<desc xml:lang="he">Unrestricted - connect to all</desc>
@@ -483,11 +497,12 @@
 							<desc xml:lang="sv">Unrestricted - connect to all</desc>
 							<desc xml:lang="pl">Unrestricted - connect to all</desc>
 							<desc xml:lang="pt-BR">Unrestricted - connect to all</desc>
-							<desc xml:lang="ja">Unrestricted - connect to all</desc>
+							<desc xml:lang="ja">制限なし - すべてに接続</desc>
 							<desc xml:lang="ko">Unrestricted - connect to all</desc>
 							<desc xml:lang="tr">Unrestricted - connect to all</desc>
 							<desc xml:lang="th">Unrestricted - connect to all</desc>
 							<desc xml:lang="hi-IN">Unrestricted - connect to all</desc>
+							<desc xml:lang="x-comment">Unrestricted - connect to all</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -499,7 +514,7 @@
 							<desc xml:lang="fi">None - no connection alloed</desc>
 							<desc xml:lang="cs">None - no connection alloed</desc>
 							<desc xml:lang="da">None - no connection alloed</desc>
-							<desc xml:lang="zh-CN">None - no connection alloed</desc>
+							<desc xml:lang="zh-CN">无 - 不允许连接</desc>
 							<desc xml:lang="zh-TW">None - no connection alloed</desc>
 							<desc xml:lang="ar">None - no connection alloed</desc>
 							<desc xml:lang="he">None - no connection alloed</desc>
@@ -511,11 +526,12 @@
 							<desc xml:lang="sv">None - no connection alloed</desc>
 							<desc xml:lang="pl">None - no connection alloed</desc>
 							<desc xml:lang="pt-BR">None - no connection alloed</desc>
-							<desc xml:lang="ja">None - no connection alloed</desc>
+							<desc xml:lang="ja">接続しない - 接続を許可しない</desc>
 							<desc xml:lang="ko">None - no connection alloed</desc>
 							<desc xml:lang="tr">None - no connection alloed</desc>
 							<desc xml:lang="th">None - no connection alloed</desc>
 							<desc xml:lang="hi-IN">None - no connection alloed</desc>
+							<desc xml:lang="x-comment">None - no connection alloed</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -544,11 +560,12 @@
 						<desc xml:lang="sv">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="pl">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="pt-BR">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
-						<desc xml:lang="ja">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
+						<desc xml:lang="ja">JVM (java.class.path システムプロパティ) のクラスパスに含まれる追加 Java クラスまたは jars を指定します。</desc>
 						<desc xml:lang="ko">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="tr">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="th">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="hi-IN">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
+						<desc xml:lang="x-comment">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 					<label xml:lang="en-US">Classpath</label>
 					<label xml:lang="el">Classpath</label>
 					<label xml:lang="nl">Classpath</label>
@@ -568,11 +585,12 @@
 					<label xml:lang="sv">Classpath</label>
 					<label xml:lang="pl">Classpath</label>
 					<label xml:lang="pt-BR">Classpath</label>
-					<label xml:lang="ja">Classpath</label>
+					<label xml:lang="ja">クラスパス</label>
 					<label xml:lang="ko">Classpath</label>
 					<label xml:lang="tr">Classpath</label>
 					<label xml:lang="th">Classpath</label>
 					<label xml:lang="hi-IN">Classpath</label>
+					<label xml:lang="x-comment">Classpath</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -601,11 +619,12 @@
 					<desc xml:lang="sv"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="pl"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="pt-BR"> Indicates that JVM supports debugging.</desc>
-					<desc xml:lang="ja"> Indicates that JVM supports debugging.</desc>
+					<desc xml:lang="ja">JVM でデバッグ機能をサポートすることを示します。</desc>
 					<desc xml:lang="ko"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="tr"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="th"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="hi-IN"> Indicates that JVM supports debugging.</desc>
+					<desc xml:lang="x-comment"> Indicates that JVM supports debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DebugPort" oor:type="xs:int">
@@ -632,11 +651,12 @@
 					<desc xml:lang="sv">Determines the port for debugging.</desc>
 					<desc xml:lang="pl">Determines the port for debugging.</desc>
 					<desc xml:lang="pt-BR">Determines the port for debugging.</desc>
-					<desc xml:lang="ja">Determines the port for debugging.</desc>
+					<desc xml:lang="ja">デバッグ用のポートを指定します。</desc>
 					<desc xml:lang="ko">Determines the port for debugging.</desc>
 					<desc xml:lang="tr">Determines the port for debugging.</desc>
 					<desc xml:lang="th">Determines the port for debugging.</desc>
 					<desc xml:lang="hi-IN">Determines the port for debugging.</desc>
+					<desc xml:lang="x-comment">Determines the port for debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EnableVerboseGC" oor:type="xs:boolean">
@@ -663,11 +683,12 @@
 					<desc xml:lang="sv">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="pl">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="pt-BR">Turns on verbose garbage collection.</desc>
-					<desc xml:lang="ja">Turns on verbose garbage collection.</desc>
+					<desc xml:lang="ja">ガベージコレクションの詳細表示を有効にします。</desc>
 					<desc xml:lang="ko">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="tr">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="th">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="hi-IN">Turns on verbose garbage collection.</desc>
+					<desc xml:lang="x-comment">Turns on verbose garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Verbose" oor:type="xs:boolean">
@@ -694,11 +715,12 @@
 					<desc xml:lang="sv">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="pl">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="pt-BR">Turns on verbose mode for Java execution.</desc>
-					<desc xml:lang="ja">Turns on verbose mode for Java execution.</desc>
+					<desc xml:lang="ja">Java 実行の詳細表示モードを有効にします。</desc>
 					<desc xml:lang="ko">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="tr">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="th">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="hi-IN">Turns on verbose mode for Java execution.</desc>
+					<desc xml:lang="x-comment">Turns on verbose mode for Java execution.</desc>
 				</info>
 			</prop>
 			<prop oor:name="NativeStackSize" oor:type="xs:int">
@@ -725,11 +747,12 @@
 					<desc xml:lang="sv">Determines the native stack size.</desc>
 					<desc xml:lang="pl">Determines the native stack size.</desc>
 					<desc xml:lang="pt-BR">Determines the native stack size.</desc>
-					<desc xml:lang="ja">Determines the native stack size.</desc>
+					<desc xml:lang="ja">ネイティブなスタックサイズを指定します。</desc>
 					<desc xml:lang="ko">Determines the native stack size.</desc>
 					<desc xml:lang="tr">Determines the native stack size.</desc>
 					<desc xml:lang="th">Determines the native stack size.</desc>
 					<desc xml:lang="hi-IN">Determines the native stack size.</desc>
+					<desc xml:lang="x-comment">Determines the native stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="JavaStackSize" oor:type="xs:int">
@@ -756,11 +779,12 @@
 					<desc xml:lang="sv">Determines the Java stack size.</desc>
 					<desc xml:lang="pl">Determines the Java stack size.</desc>
 					<desc xml:lang="pt-BR">Determines the Java stack size.</desc>
-					<desc xml:lang="ja">Determines the Java stack size.</desc>
+					<desc xml:lang="ja">Java スタックサイズを指定します。</desc>
 					<desc xml:lang="ko">Determines the Java stack size.</desc>
 					<desc xml:lang="tr">Determines the Java stack size.</desc>
 					<desc xml:lang="th">Determines the Java stack size.</desc>
 					<desc xml:lang="hi-IN">Determines the Java stack size.</desc>
+					<desc xml:lang="x-comment">Determines the Java stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VerifyMode" oor:type="xs:int">
@@ -787,11 +811,12 @@
 					<desc xml:lang="sv">Determines the verify mode.</desc>
 					<desc xml:lang="pl">Determines the verify mode.</desc>
 					<desc xml:lang="pt-BR">Determines the verify mode.</desc>
-					<desc xml:lang="ja">Determines the verify mode.</desc>
+					<desc xml:lang="ja">確認モードを指定します。</desc>
 					<desc xml:lang="ko">Determines the verify mode.</desc>
 					<desc xml:lang="tr">Determines the verify mode.</desc>
 					<desc xml:lang="th">Determines the verify mode.</desc>
 					<desc xml:lang="hi-IN">Determines the verify mode.</desc>
+					<desc xml:lang="x-comment">Determines the verify mode.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -804,7 +829,7 @@
 							<desc xml:lang="fi">Verify mode 0</desc>
 							<desc xml:lang="cs">Verify mode 0</desc>
 							<desc xml:lang="da">Verify mode 0</desc>
-							<desc xml:lang="zh-CN">Verify mode 0</desc>
+							<desc xml:lang="zh-CN">检验模式 0</desc>
 							<desc xml:lang="zh-TW">Verify mode 0</desc>
 							<desc xml:lang="ar">Verify mode 0</desc>
 							<desc xml:lang="he">Verify mode 0</desc>
@@ -816,11 +841,12 @@
 							<desc xml:lang="sv">Verify mode 0</desc>
 							<desc xml:lang="pl">Verify mode 0</desc>
 							<desc xml:lang="pt-BR">Verify mode 0</desc>
-							<desc xml:lang="ja">Verify mode 0</desc>
+							<desc xml:lang="ja">確認モード 0</desc>
 							<desc xml:lang="ko">Verify mode 0</desc>
 							<desc xml:lang="tr">Verify mode 0</desc>
 							<desc xml:lang="th">Verify mode 0</desc>
 							<desc xml:lang="hi-IN">Verify mode 0</desc>
+							<desc xml:lang="x-comment">Verify mode 0</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -833,7 +859,7 @@
 							<desc xml:lang="fi">Verify mode 1</desc>
 							<desc xml:lang="cs">Verify mode 1</desc>
 							<desc xml:lang="da">Verify mode 1</desc>
-							<desc xml:lang="zh-CN">Verify mode 1</desc>
+							<desc xml:lang="zh-CN">检验模式 1</desc>
 							<desc xml:lang="zh-TW">Verify mode 1</desc>
 							<desc xml:lang="ar">Verify mode 1</desc>
 							<desc xml:lang="he">Verify mode 1</desc>
@@ -845,11 +871,12 @@
 							<desc xml:lang="sv">Verify mode 1</desc>
 							<desc xml:lang="pl">Verify mode 1</desc>
 							<desc xml:lang="pt-BR">Verify mode 1</desc>
-							<desc xml:lang="ja">Verify mode 1</desc>
+							<desc xml:lang="ja">確認モード 1</desc>
 							<desc xml:lang="ko">Verify mode 1</desc>
 							<desc xml:lang="tr">Verify mode 1</desc>
 							<desc xml:lang="th">Verify mode 1</desc>
 							<desc xml:lang="hi-IN">Verify mode 1</desc>
+							<desc xml:lang="x-comment">Verify mode 1</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -862,7 +889,7 @@
 							<desc xml:lang="fi">Verify mode 2</desc>
 							<desc xml:lang="cs">Verify mode 2</desc>
 							<desc xml:lang="da">Verify mode 2</desc>
-							<desc xml:lang="zh-CN">Verify mode 2</desc>
+							<desc xml:lang="zh-CN">检验模式 2</desc>
 							<desc xml:lang="zh-TW">Verify mode 2</desc>
 							<desc xml:lang="ar">Verify mode 2</desc>
 							<desc xml:lang="he">Verify mode 2</desc>
@@ -874,11 +901,12 @@
 							<desc xml:lang="sv">Verify mode 2</desc>
 							<desc xml:lang="pl">Verify mode 2</desc>
 							<desc xml:lang="pt-BR">Verify mode 2</desc>
-							<desc xml:lang="ja">Verify mode 2</desc>
+							<desc xml:lang="ja">確認モード 2</desc>
 							<desc xml:lang="ko">Verify mode 2</desc>
 							<desc xml:lang="tr">Verify mode 2</desc>
 							<desc xml:lang="th">Verify mode 2</desc>
 							<desc xml:lang="hi-IN">Verify mode 2</desc>
+							<desc xml:lang="x-comment">Verify mode 2</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -907,11 +935,12 @@
 					<desc xml:lang="sv">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="pl">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="pt-BR">Determines the minimum size of the heap.</desc>
-					<desc xml:lang="ja">Determines the minimum size of the heap.</desc>
+					<desc xml:lang="ja">ヒープの最小サイズを指定します。</desc>
 					<desc xml:lang="ko">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="tr">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="th">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="hi-IN">Determines the minimum size of the heap.</desc>
+					<desc xml:lang="x-comment">Determines the minimum size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="MaxHeapSize" oor:type="xs:int">
@@ -938,11 +967,12 @@
 					<desc xml:lang="sv">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="pl">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="pt-BR">Determines the maximum size of the heap.</desc>
-					<desc xml:lang="ja">Determines the maximum size of the heap.</desc>
+					<desc xml:lang="ja">ヒープの最大サイズを指定します。</desc>
 					<desc xml:lang="ko">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="tr">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="th">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="hi-IN">Determines the maximum size of the heap.</desc>
+					<desc xml:lang="x-comment">Determines the maximum size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
@@ -969,11 +999,12 @@
 					<desc xml:lang="sv">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="pl">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="pt-BR">Disables asynchronous garbage collection.</desc>
-					<desc xml:lang="ja">Disables asynchronous garbage collection.</desc>
+					<desc xml:lang="ja">非同期のガベージコレクションを無効にします。</desc>
 					<desc xml:lang="ko">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="tr">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="th">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="hi-IN">Disables asynchronous garbage collection.</desc>
+					<desc xml:lang="x-comment">Disables asynchronous garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EnableClassGC" oor:type="xs:boolean">
@@ -1000,11 +1031,12 @@
 					<desc xml:lang="sv">Enables garbage collection.</desc>
 					<desc xml:lang="pl">Enables garbage collection.</desc>
 					<desc xml:lang="pt-BR">Enables garbage collection.</desc>
-					<desc xml:lang="ja">Enables garbage collection.</desc>
+					<desc xml:lang="ja">ガベージコレクションを有効にします。</desc>
 					<desc xml:lang="ko">Enables garbage collection.</desc>
 					<desc xml:lang="tr">Enables garbage collection.</desc>
 					<desc xml:lang="th">Enables garbage collection.</desc>
 					<desc xml:lang="hi-IN">Enables garbage collection.</desc>
+					<desc xml:lang="x-comment">Enables garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VMType" oor:type="xs:string">
@@ -1031,11 +1063,12 @@
 					<desc xml:lang="sv">Specifies values for different VM types.</desc>
 					<desc xml:lang="pl">Specifies values for different VM types.</desc>
 					<desc xml:lang="pt-BR">Specifies values for different VM types.</desc>
-					<desc xml:lang="ja">Specifies values for different VM types.</desc>
+					<desc xml:lang="ja">各種 VM の値を指定します。</desc>
 					<desc xml:lang="ko">Specifies values for different VM types.</desc>
 					<desc xml:lang="tr">Specifies values for different VM types.</desc>
 					<desc xml:lang="th">Specifies values for different VM types.</desc>
 					<desc xml:lang="hi-IN">Specifies values for different VM types.</desc>
+					<desc xml:lang="x-comment">Specifies values for different VM types.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="Classic">
@@ -1047,7 +1080,7 @@
 							<desc xml:lang="fi">Classic VM</desc>
 							<desc xml:lang="cs">Classic VM</desc>
 							<desc xml:lang="da">Classic VM</desc>
-							<desc xml:lang="zh-CN">Classic VM</desc>
+							<desc xml:lang="zh-CN">传统式 VM</desc>
 							<desc xml:lang="zh-TW">Classic VM</desc>
 							<desc xml:lang="ar">Classic VM</desc>
 							<desc xml:lang="he">Classic VM</desc>
@@ -1059,11 +1092,12 @@
 							<desc xml:lang="sv">Classic VM</desc>
 							<desc xml:lang="pl">Classic VM</desc>
 							<desc xml:lang="pt-BR">Classic VM</desc>
-							<desc xml:lang="ja">Classic VM</desc>
+							<desc xml:lang="ja">従来の VM</desc>
 							<desc xml:lang="ko">Classic VM</desc>
 							<desc xml:lang="tr">Classic VM</desc>
 							<desc xml:lang="th">Classic VM</desc>
 							<desc xml:lang="hi-IN">Classic VM</desc>
+							<desc xml:lang="x-comment">Classic VM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="Hotspot">
@@ -1075,7 +1109,7 @@
 							<desc xml:lang="fi">Hotspot VM</desc>
 							<desc xml:lang="cs">Hotspot VM</desc>
 							<desc xml:lang="da">Hotspot VM</desc>
-							<desc xml:lang="zh-CN">Hotspot VM</desc>
+							<desc xml:lang="zh-CN">热点 VM</desc>
 							<desc xml:lang="zh-TW">Hotspot VM</desc>
 							<desc xml:lang="ar">Hotspot VM</desc>
 							<desc xml:lang="he">Hotspot VM</desc>
@@ -1087,11 +1121,12 @@
 							<desc xml:lang="sv">Hotspot VM</desc>
 							<desc xml:lang="pl">Hotspot VM</desc>
 							<desc xml:lang="pt-BR">Hotspot VM</desc>
-							<desc xml:lang="ja">Hotspot VM</desc>
+							<desc xml:lang="ja">ホットスポット VM</desc>
 							<desc xml:lang="ko">Hotspot VM</desc>
 							<desc xml:lang="tr">Hotspot VM</desc>
 							<desc xml:lang="th">Hotspot VM</desc>
 							<desc xml:lang="hi-IN">Hotspot VM</desc>
+							<desc xml:lang="x-comment">Hotspot VM</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1119,11 +1154,12 @@
 					<desc xml:lang="sv">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="pl">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="pt-BR">Indicates if a JRE or SDK is used.</desc>
-					<desc xml:lang="ja">Indicates if a JRE or SDK is used.</desc>
+					<desc xml:lang="ja">JRE または SDK を使用するかどうかを示します。</desc>
 					<desc xml:lang="ko">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="tr">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="th">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="hi-IN">Indicates if a JRE or SDK is used.</desc>
+					<desc xml:lang="x-comment">Indicates if a JRE or SDK is used.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="JDK">
@@ -1135,7 +1171,7 @@
 							<desc xml:lang="fi">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="cs">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="da">JDKxxx or j2sdkxxx</desc>
-							<desc xml:lang="zh-CN">JDKxxx or j2sdkxxx</desc>
+							<desc xml:lang="zh-CN">JDKxxx 或 j2sdkxxx</desc>
 							<desc xml:lang="zh-TW">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="ar">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="he">JDKxxx or j2sdkxxx</desc>
@@ -1147,11 +1183,12 @@
 							<desc xml:lang="sv">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="pl">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="pt-BR">JDKxxx or j2sdkxxx</desc>
-							<desc xml:lang="ja">JDKxxx or j2sdkxxx</desc>
+							<desc xml:lang="ja">JDKxxx または j2sdkxxx</desc>
 							<desc xml:lang="ko">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="tr">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="th">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="hi-IN">JDKxxx or j2sdkxxx</desc>
+							<desc xml:lang="x-comment">JDKxxx or j2sdkxxx</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="JRE">
@@ -1180,6 +1217,7 @@
 							<desc xml:lang="tr">JRExxx</desc>
 							<desc xml:lang="th">JRExxx</desc>
 							<desc xml:lang="hi-IN">JRExxx</desc>
+							<desc xml:lang="x-comment">JRExxx</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1208,11 +1246,12 @@
 					<desc xml:lang="sv">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="pl">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="pt-BR">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
-					<desc xml:lang="ja">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
+					<desc xml:lang="ja">Java 実行時ライブラリによって使用される共有ライブラリのディレクトリが含まれます。</desc>
 					<desc xml:lang="ko">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="tr">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="th">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="hi-IN">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
+					<desc xml:lang="x-comment">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1241,11 +1280,12 @@
 					<desc xml:lang="sv">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="pl">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="pt-BR">Specifies properties for use with the Java VM.</desc>
-					<desc xml:lang="ja">Specifies properties for use with the Java VM.</desc>
+					<desc xml:lang="ja">Java VM とともに使用するプロパティを指定します。</desc>
 					<desc xml:lang="ko">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="tr">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="th">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="hi-IN">Specifies properties for use with the Java VM.</desc>
+					<desc xml:lang="x-comment">Specifies properties for use with the Java VM.</desc>
 				</info>
 			</prop>
 		</group>
@@ -1270,11 +1310,12 @@
 				<desc xml:lang="sv">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="pl">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="pt-BR">Provides information which are used by jvmsetup. </desc>
-				<desc xml:lang="ja">Provides information which are used by jvmsetup. </desc>
+				<desc xml:lang="ja">jvmsetup によって使用される情報を提供します。 </desc>
 				<desc xml:lang="ko">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="tr">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="th">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="hi-IN">Provides information which are used by jvmsetup. </desc>
+				<desc xml:lang="x-comment">Provides information which are used by jvmsetup. </desc>
 			</info>
 			<prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -1299,11 +1340,12 @@
 					<desc xml:lang="sv">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="pl">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="pt-BR">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
-					<desc xml:lang="ja">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
+					<desc xml:lang="ja">JRE インストールを含むフォルダの名前を指定します (JRE パッケージに依存します)。</desc>
 					<desc xml:lang="ko">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="tr">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="th">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
+					<desc xml:lang="x-comment">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1331,11 +1373,12 @@
 					<desc xml:lang="sv">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="pl">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="pt-BR">Contains a space separated list of verified Java versions.</desc>
-					<desc xml:lang="ja">Contains a space separated list of verified Java versions.</desc>
+					<desc xml:lang="ja">確認済みの Java バージョンをスペースで区切ったリストが含まれます。</desc>
 					<desc xml:lang="ko">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="tr">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="th">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="hi-IN">Contains a space separated list of verified Java versions.</desc>
+					<desc xml:lang="x-comment">Contains a space separated list of verified Java versions.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1363,11 +1406,12 @@
 					<desc xml:lang="sv">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="pl">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="pt-BR">Specifies the version of the JRE which is provided by the setup.</desc>
-					<desc xml:lang="ja">Specifies the version of the JRE which is provided by the setup.</desc>
+					<desc xml:lang="ja">セットアップで提供される JRE のバージョンを指定します。</desc>
 					<desc xml:lang="ko">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="tr">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="th">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="hi-IN">Specifies the version of the JRE which is provided by the setup.</desc>
+					<desc xml:lang="x-comment">Specifies the version of the JRE which is provided by the setup.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1395,11 +1439,12 @@
 					<desc xml:lang="sv">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="pl">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="pt-BR">Specifies the vendor of the JRE package.</desc>
-					<desc xml:lang="ja">Specifies the vendor of the JRE package.</desc>
+					<desc xml:lang="ja">JRE パッケージのベンダーを指定します。</desc>
 					<desc xml:lang="ko">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="tr">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="th">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="hi-IN">Specifies the vendor of the JRE package.</desc>
+					<desc xml:lang="x-comment">Specifies the vendor of the JRE package.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1427,11 +1472,12 @@
 					<desc xml:lang="sv">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 					<desc xml:lang="pl">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 					<desc xml:lang="pt-BR">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
-					<desc xml:lang="ja">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
+					<desc xml:lang="ja">Java セットアップ (jvmsetup.exe) で、より低いバージョンの Java インストールをすべて無視するように指定します。</desc>
 					<desc xml:lang="ko">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 					<desc xml:lang="tr">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 					<desc xml:lang="th">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 					<desc xml:lang="hi-IN">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
+					<desc xml:lang="x-comment">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1459,11 +1505,12 @@
 					<desc xml:lang="sv">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="pl">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="pt-BR">Specifies the JRE package which can be installed during the Java setup.</desc>
-					<desc xml:lang="ja">Specifies the JRE package which can be installed during the Java setup.</desc>
+					<desc xml:lang="ja">Java セットアップ時にインストール可能な JRE パッケージを指定します。</desc>
 					<desc xml:lang="ko">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="tr">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="th">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="hi-IN">Specifies the JRE package which can be installed during the Java setup.</desc>
+					<desc xml:lang="x-comment">Specifies the JRE package which can be installed during the Java setup.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1491,11 +1538,12 @@
 					<desc xml:lang="sv">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="pl">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="pt-BR">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
-					<desc xml:lang="ja">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="ja">Java セットアップ (jvmsetup.exe) で無視する Java のバージョンをスペースで区切ったリストが含まれます。</desc>
 					<desc xml:lang="ko">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="tr">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="th">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="hi-IN">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="x-comment">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1524,11 +1572,12 @@
 					<desc xml:lang="sv">Locates resources.</desc>
 					<desc xml:lang="pl">Locates resources.</desc>
 					<desc xml:lang="pt-BR">Locates resources.</desc>
-					<desc xml:lang="ja">Locates resources.</desc>
+					<desc xml:lang="ja">リソースの特定</desc>
 					<desc xml:lang="ko">Locates resources.</desc>
 					<desc xml:lang="tr">Locates resources.</desc>
 					<desc xml:lang="th">Locates resources.</desc>
 					<desc xml:lang="hi-IN">Locates resources.</desc>
+					<desc xml:lang="x-comment">Locates resources.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1556,11 +1605,12 @@
 					<desc xml:lang="sv">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="pl">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="pt-BR">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
-					<desc xml:lang="ja">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
+					<desc xml:lang="ja">Office の jar ファイルが含まれます。Java セットアップが SystemClasspath を構築するために使用します。</desc>
 					<desc xml:lang="ko">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="tr">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="th">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="hi-IN">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
+					<desc xml:lang="x-comment">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1568,6 +1618,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
