@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:35:02 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
+
+#include <comcore.hrc>
 
 #ifdef PRODUCT
 
@@ -1791,13 +1793,15 @@ const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
     return pFnd;
 }
 
-
-BOOL lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
+// #111827#
+int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                             SwRedlineTbl& rArr, BOOL bCallDelete,
-                            const SwPaM& rPam )
+                            const SwPaM& rPam)
 {
     BOOL bRet = FALSE;
     USHORT n = 0;
+    int nCount = 0; // #111827#
+
     const SwPosition* pStt = rPam.Start(),
                     * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
                                                      : rPam.GetPoint();
@@ -1807,7 +1811,7 @@ BOOL lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
     {
         // dann nur die TeilSelektion aufheben
         if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStt, pEnd ))
-            bRet = TRUE;
+            nCount++; // #111827#
         ++n;
     }
 
@@ -1819,7 +1823,7 @@ BOOL lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
             if( *pTmp->End() <= *pEnd )
             {
                 if( (*fn_AcceptReject)( rArr, n, bCallDelete, 0, 0 ))
-                    bRet = TRUE;
+                    nCount++; // #111827#
             }
             else
             {
@@ -1827,13 +1831,13 @@ BOOL lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                 {
                     // dann nur in der TeilSelektion aufheben
                     if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStt, pEnd ))
-                        bRet = TRUE;
+                        nCount++; // #111827#
                 }
                 break;
             }
         }
     }
-    return bRet;
+    return nCount; // #111827#
 }
 
 void lcl_AdjustRedlineRange( SwPaM& rPam )
@@ -1886,7 +1890,13 @@ BOOL SwDoc::AcceptRedline( USHORT nPos, BOOL bCallDelete )
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if( DoesUndo() )
-            StartUndo( UNDO_ACCEPT_REDLINE );
+        {
+            // #111827#
+            SwRewriter aRewriter;
+
+            aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
+            StartUndo( UNDO_ACCEPT_REDLINE, &aRewriter);
+        }
 
         int nLoopCnt = 2;
         USHORT nSeqNo = pTmp->GetSeqNo();
@@ -1948,16 +1958,31 @@ BOOL SwDoc::AcceptRedline( const SwPaM& rPam, BOOL bCallDelete )
         AppendUndo( new SwUndoAcceptRedline( aPam ));
     }
 
-    BOOL bRet = lcl_AcceptRejectRedl( lcl_AcceptRedline, *pRedlineTbl,
-                                        bCallDelete, aPam );
-    if( bRet )
+    // #111827#
+    int nRet = lcl_AcceptRejectRedl( lcl_AcceptRedline, *pRedlineTbl,
+                                     bCallDelete, aPam );
+    if( nRet > 0 )
     {
         CompressRedlines();
         SetModified();
     }
     if( DoesUndo() )
-        EndUndo( UNDO_ACCEPT_REDLINE );
-    return bRet;
+    {
+        // #111827#
+        String aTmpStr;
+
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UNDO_ARG1, String::CreateFromInt32(nRet));
+            aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
+        }
+
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+
+        EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
+    }
+    return nRet;
 }
 
 BOOL SwDoc::RejectRedline( USHORT nPos, BOOL bCallDelete )
@@ -1973,7 +1998,13 @@ BOOL SwDoc::RejectRedline( USHORT nPos, BOOL bCallDelete )
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if( DoesUndo() )
+        {
+            // #111827#
+            SwRewriter aRewriter;
+
+            aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
             StartUndo( UNDO_REJECT_REDLINE );
+        }
 
         int nLoopCnt = 2;
         USHORT nSeqNo = pTmp->GetSeqNo();
@@ -2035,16 +2066,32 @@ BOOL SwDoc::RejectRedline( const SwPaM& rPam, BOOL bCallDelete )
         AppendUndo( new SwUndoRejectRedline( aPam ));
     }
 
-    BOOL bRet = lcl_AcceptRejectRedl( lcl_RejectRedline, *pRedlineTbl,
+    // #111827#
+    int nRet = lcl_AcceptRejectRedl( lcl_RejectRedline, *pRedlineTbl,
                                         bCallDelete, aPam );
-    if( bRet )
+    if( nRet > 0 )
     {
         CompressRedlines();
         SetModified();
     }
     if( DoesUndo() )
-        EndUndo( UNDO_REJECT_REDLINE );
-    return bRet;
+    {
+        // #111827#
+        String aTmpStr;
+
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UNDO_ARG1, String::CreateFromInt32(nRet));
+            aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
+        }
+
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+
+        EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
+    }
+
+    return nRet;
 }
 
 const SwRedline* SwDoc::SelNextRedline( SwPaM& rPam ) const
@@ -2810,6 +2857,16 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
         pExtraData = 0;
 }
 
+// #111827#
+String SwRedlineData::GetDescr() const
+{
+    String aResult;
+
+    aResult += String(SW_RES(STR_REDLINE_INSERT + GetType()));
+
+    return aResult;
+}
+
 /*  */
 
 SwRedline::SwRedline( SwRedlineType eTyp, const SwPaM& rPam )
@@ -3497,54 +3554,32 @@ USHORT SwRedline::GetStackCount() const
     return nRet;
 }
 
+// -> #111827#
 USHORT SwRedline::GetAuthor( USHORT nPos ) const
 {
-    SwRedlineData* pCur;
-
-    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
-        pCur = pCur->pNext;
-    ASSERT( !nPos, "Pos angabe ist zu gross" );
-    return pCur->nAuthor;
+    return GetRedlineData(nPos).nAuthor;
 }
 
 const String& SwRedline::GetAuthorString( USHORT nPos ) const
 {
-    SwRedlineData* pCur;
-
-    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
-        pCur = pCur->pNext;
-    ASSERT( !nPos, "Pos angabe ist zu gross" );
-    return SW_MOD()->GetRedlineAuthor(pCur->nAuthor);
+    return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).nAuthor);
 }
 
 const DateTime& SwRedline::GetTimeStamp( USHORT nPos ) const
 {
-    SwRedlineData* pCur;
-    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
-        pCur = pCur->pNext;
-    ASSERT( !nPos, "Pos angabe ist zu gross" );
-    return pCur->aStamp;
+    return GetRedlineData(nPos).aStamp;
 }
 
 SwRedlineType SwRedline::GetRealType( USHORT nPos ) const
 {
-    SwRedlineData* pCur;
-
-    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
-        pCur = pCur->pNext;
-    ASSERT( !nPos, "Pos angabe ist zu gross" );
-    return pCur->eType;
+    return GetRedlineData(nPos).eType;
 }
 
 const String& SwRedline::GetComment( USHORT nPos ) const
 {
-    SwRedlineData* pCur;
-
-    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
-        pCur = pCur->pNext;
-    ASSERT( !nPos, "Pos angabe ist zu gross" );
-    return pCur->sComment;
+    return GetRedlineData(nPos).sComment;
 }
+// <- #111827#
 
 int SwRedline::operator==( const SwRedline& rCmp ) const
 {
@@ -3563,3 +3598,61 @@ int SwRedline::operator<( const SwRedline& rCmp ) const
 
     return nResult;
 }
+
+// -> #111827#
+const SwRedlineData & SwRedline::GetRedlineData(USHORT nPos) const
+{
+    SwRedlineData * pCur = pRedlineData;
+
+    while (nPos > 0 && NULL != pCur->pNext)
+    {
+        pCur = pCur->pNext;
+
+        nPos--;
+    }
+
+    ASSERT( 0 == nPos, "Pos angabe ist zu gross" );
+
+    return *pCur;
+}
+
+String SwRedline::GetDescr(USHORT nPos) const
+{
+    String aResult;
+
+    // get description of redline data (e.g.: "insert $1")
+    aResult = GetRedlineData(nPos).GetDescr();
+
+    SwPaM * pPaM = NULL;
+    bool bDeletePaM = false;
+
+    // if this redline is visible the content is in this PaM
+    if (NULL == pCntntSect)
+    {
+        pPaM = this;
+    }
+    else // otherwise it is saved in pCntntSect
+    {
+        pPaM = new SwPaM(*pCntntSect,
+                         pCntntSect->GetNode().EndOfSectionIndex());
+        bDeletePaM = true;
+    }
+
+    // replace $1 in description by description of the redlines text
+    String aTmpStr;
+    aTmpStr += String(SW_RES(STR_START_QUOTE));
+    aTmpStr += ShortenString(pPaM->GetTxt(), nUndoStringLength,
+                             String(SW_RES(STR_LDOTS)));
+    aTmpStr += String(SW_RES(STR_END_QUOTE));
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+
+    aResult = aRewriter.Apply(aResult);
+
+    if (bDeletePaM)
+        delete pPaM;
+
+    return aResult;
+}
+// <- #111827#
