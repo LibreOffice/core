@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-24 20:47:39 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ TabPage TP_TOX_SELECT
     StringList [ chinese_simplified ] =
     {
             < "ÄÚÈİÄ¿Â¼" ;  TO_CONTENT      ;> ;
-        < "Ë÷Òı" ;  TO_INDEX        ;> ;
+        < "Ë÷ÒıÄ¿Â¼" ;  TO_INDEX        ;> ;
         < "²åÍ¼Ä¿Â¼" ; TO_ILLUSTRATION ;> ;
         < "±í¸ñÄ¿Â¼" ;  TO_TABLE        ;> ;
         < "Ê¹ÓÃÕß×Ô¶¨µÄ" ;  TO_USER         ;> ;
@@ -777,7 +777,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "Protegido contra modificaciones ~manuales";
         Text[ italian ] = "Prot~etto contro modifiche manuali";
         Text[ danish ] = "Beskyttet mod manuelle ændringer";
-        Text[ swedish ] = "Skyddad för manuella ändringar";
+        Text[ swedish ] = "Skyddad mot manuella ändringar";
         Text[ polish ] = "Chroniony przed rêcznymi zmianami";
         Text[ portuguese_brazilian ] = "Protected against manual changes";
         Text[ japanese ] = "”CˆÓ•ÏX‚©‚ç•ÛŒì";
@@ -1153,7 +1153,7 @@ TabPage TP_TOX_SELECT
         Text[ portuguese_brazilian ] = "Index entries";
         Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ì€–Ú(~X)";
         Text[ korean ] = "»öÀÎ ¸¶Å©(~X)";
-        Text[ chinese_simplified ] = "±ê¼ÇÄ¿Â¼ÌõÄ¿(~X)";
+        Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç(~X)";
         Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O(~X)";
         Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
         Text[ turkish ] = "Dizin ~işaretleri";
@@ -1887,7 +1887,7 @@ TabPage TP_TOX_SELECT
         Text[ portuguese_brazilian ] = "Options";
         Text[ japanese ] = "µÌß¼®İ";
         Text[ korean ] = "¿É¼Ç";
-        Text[ chinese_simplified ] = "ÆäËü";
+        Text[ chinese_simplified ] = "ÆäËû";
         Text[ chinese_traditional ] = "¨ä¥L";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ turkish ] = "Seçenekler";
@@ -4804,6 +4804,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
