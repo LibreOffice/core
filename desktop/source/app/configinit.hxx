@@ -46,10 +46,12 @@ com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
     public:
         typedef com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > InteractionHandler;
 
+        /// Constructor: Uses the default interaction handler
         ConfigurationErrorHandler()
-        : m_pContext(0), m_xHandler( getDefaultInteractionHandler())
+        : m_pContext(0), m_xHandler()
         {}
 
+        /// Constructor: Uses an externally provided interaction handler
         ConfigurationErrorHandler(const InteractionHandler & xHandler)
         : m_pContext(0), m_xHandler( xHandler )
         {}
