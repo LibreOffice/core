@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:44:54 $
+ *  last change: $Author: os $ $Date: 2000-11-08 11:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1108,7 +1108,7 @@ public:
 
         // ist der Name ein Pool-Vorlagen-Name, returne seine ID,
         // sonst USHRT_MAX
-    sal_uInt16 GetPoolId( const String& rName, SwGetPoolIdFromName ) const;
+    static sal_uInt16 GetPoolId( const String& rName, SwGetPoolIdFromName );
 
     const SvStringsDtor& GetTextNmArray() const
         { return pTextNmArray ? *pTextNmArray : *NewTextNmArray(); }
