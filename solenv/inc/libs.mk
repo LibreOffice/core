@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 11:31:39 $
+#   last change: $Author: vg $ $Date: 2003-07-02 13:43:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.65 $$"
+LIBSMKREV!:="$$Revision: 1.66 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -75,7 +75,9 @@ ICUINLIB=-licui18n
 ICULELIB=-licule
 ICUUCLIB=-licuuc
 I18NUTILLIB=-li18nutil$(COMID)
+.IF "$(WITH_GPC)"!="NO"
 GPC3RDLIB=-lgpc
+.ENDIF
 SALHELPERLIB=-lsalhelper$(COMID)
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
 .INCLUDE .IGNORE : comphelper$/version.mk
