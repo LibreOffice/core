@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-03-23 14:34:56 $
+ *  last change: $Author: ssa $ $Date: 2001-04-10 12:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,15 +492,15 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     Rectangle               aInRect = rRect;
     Color                   aColor = rStyleSettings.GetButtonTextColor();
     XubString               aText = PushButton::GetText(); // PushButton:: wegen MoreButton
-    USHORT                  nTextStyle = TEXT_DRAW_CLIP;
+    USHORT                  nTextStyle = 0;
     USHORT                  nStyle;
     BOOL                    bInvalidTextRect = FALSE;
 
     if( aInRect.nRight < aInRect.nLeft || aInRect.nBottom < aInRect.nTop )
         aInRect.SetEmpty();
 
-    Push( PUSH_CLIPREGION );
-    IntersectClipRegion( aInRect );
+    pDev->Push( PUSH_CLIPREGION );
+    pDev->IntersectClipRegion( aInRect );
 
     if ( nDrawFlags & WINDOW_DRAW_MONO )
         aColor = Color( COL_BLACK );
@@ -570,8 +570,9 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             {
                 // Die Groesse richtet sich nach dem Bildschirm, soll auf
                 // dem Drucker genau so aussehen...
-                aImageSize = PixelToLogic( aImageSize, MAP_100TH_MM );
-                aImageSize = pDev->LogicToPixel( aImageSize, MAP_100TH_MM );
+                MapMode aMap100thMM( MAP_100TH_MM );
+                aImageSize = PixelToLogic( aImageSize, aMap100thMM );
+                aImageSize = pDev->LogicToPixel( aImageSize, aMap100thMM );
             }
 
             aImagePos.X() = rRect.Left()+((aInRect.GetWidth() -aImageSize.Width()) /2);
@@ -614,7 +615,6 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             {
                 // Fuer die BitmapEx ueberlegt sich KA noch, wie man die disablete
                 // Darstellung hinbekommt...
-                aImageSize = pDev->PixelToLogic( aImageSize );
                 mpBitmapEx->Draw( pDev, aImagePos, aImageSize /*, nStyle*/ );
             }
             else
@@ -709,15 +709,15 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
 
             if( bClipSymbol )
             {
-                Push( PUSH_CLIPREGION );
-                IntersectClipRegion( aSymbolClipRect );
+                pDev->Push( PUSH_CLIPREGION );
+                pDev->IntersectClipRegion( aSymbolClipRect );
             }
 
             DecorationView aDecoView( pDev );
             aDecoView.DrawSymbol( aInRectSymbol, meSymbol, aColor, nStyle );
 
             if( bClipSymbol )
-                Pop();
+                pDev->Pop();
         }
 
         if( bInvalidTextRect )
@@ -752,7 +752,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     UserDrawEvent aUDEvt( this, aInRect, 0 );
     UserDraw( aUDEvt );
 
-    Pop();  // restore clipregion
+    pDev->Pop();  // restore clipregion
 }
 
 // -----------------------------------------------------------------------
