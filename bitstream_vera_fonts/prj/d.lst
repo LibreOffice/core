@@ -1,0 +1,3 @@
+
+..\%__SRC%\misc\build\ttf-bitstream-vera-1.10\*.ttf             %_DEST%\pck%_EXT%\*.tff
+

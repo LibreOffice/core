@@ -1,0 +1,3 @@
+bs	bitstream_vera_fonts : solenv NULL
+bs	bitstream_vera_fonts		usr1	-	all	bs_mkout NULL
+bs	bitstream_vera_fonts		nmake	-	all	bs_fonts NULL
