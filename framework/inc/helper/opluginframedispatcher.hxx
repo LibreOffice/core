@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opluginframedispatcher.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2000-10-18 12:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,13 +210,11 @@ typedef OMULTITYPEINTERFACECONTAINERHELPERVAR<  OUSTRING                  ,
                     XDispatchProvider
                     XDispatch
                     XPluginInstanceNotifySink
-                    [ XDebugging if ENABLE_SERVICEDEBUG is defined! ]
     @base           OWeakObject
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-//class OPlugInFrameDispatcher  :   DERIVE_FROM_XSPECIALDEBUGINTERFACE      // => These macro will expand to nothing, if no testmode is set in debug.h!
 class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
                                       public XDISPATCH                  ,
                                     public XPLUGININSTANCENOTIFYSINK    ,
@@ -254,7 +252,6 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XINTERFACE
-//      DECLARE_XSPECIALDEBUGINTERFACE  // => These macro will expand to nothing, if no testmode is set in debug.h!
 
         //---------------------------------------------------------------------------------------------------------
         //  XDispatchProvider
