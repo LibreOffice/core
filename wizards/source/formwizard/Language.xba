@@ -13,7 +13,7 @@ Public BasicLabelDiffHeight as Long
 
 Public WizardTitle(1 To 3) as String
 Public DlgFormDB as Object
-Public oDialogModel as Object
+Public DialogModel as Object
 
 Dim sMsgWizardName as String
 Dim sMsgErrMsg as String
@@ -57,17 +57,16 @@ Sub LoadLanguage ()
 	sTimeAppendix = GetResText(RID_FORM + 5)
 	
 	sReady = GetResText(RID_COMMON + 0)
-	SetDialogLanguage()
 End Sub
 
 
 Sub SetDialogLanguage ()
 	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
-	oDialogModel = DlgFormDB.Model
+	DialogModel = DlgFormDB.Model
 	
 	Dim FNameAddOn as String
 
-	With oDialogModel
+	With DialogModel
 		.cmdCancel.Label = GetResText(RID_COMMON + 1)
 		.cmdBack.Label = GetResText(RID_COMMON + 2)
 		.cmdHelp.Label = GetResText(RID_COMMON + 20)

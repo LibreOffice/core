@@ -66,7 +66,7 @@ Public Const cCurrencyBox 	= 7
 Public Const cGridControl	= 8
 Public Const cImageControl	= 9
 
-Public Styles(8, 50) as String
+Public Styles(50, 8) as String
 
 Public CurControlType as Integer
 Public CurFieldlength as Double
@@ -289,7 +289,7 @@ Dim oModel as Object
 				ToggleAlignGroup(CurArrangement = cColumnarLeft)
 				If CurArrangement = cColumnarTop Then
 					If CurAlignMode = com.sun.star.awt.TextAlign.RIGHT Then
-						oDialogModel.optAlign0.State = 1
+						DialogModel.optAlign0.State = 1
 						CurAlignMode = com.sun.star.awt.TextAlign.LEFT
 						OldAlignMode = com.sun.star.awt.TextAlign.RIGHT
 					End If
@@ -308,7 +308,7 @@ End Sub
 
 
 Sub	ToggleBorderGroup(bDoEnable as Boolean)
-	With oDialogModel
+	With DialogModel
 		.hlnBorderLayout.Enabled = bDoEnable
 		.optBorder0.Enabled = bDoEnable	 	&apos; 0: No border
 		.optBorder1.Enabled = bDoEnable		&apos; 1: 3D border
@@ -318,7 +318,7 @@ End Sub
 
 
 Sub	ToggleAlignGroup(ByVal bDoEnable as Boolean)
-	With oDialogModel
+	With DialogModel
 		If bDoEnable Then
 			bDoEnable = CurArrangement = cColumnarLeft
 		End If
@@ -330,12 +330,12 @@ End Sub
 
 
 Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
-	oDialogModel.Enabled = bDoEnable
+	DialogModel.Enabled = bDoEnable
 	If bDoEnable Then
 		If Not bDebug Then
 			oDocument.UnlockControllers()
 		End If
-		ToggleOptionButtons(oDialogModel,(bWithBackGraphic = True))
+		ToggleOptionButtons(DialogModel,(bWithBackGraphic = True))
 		ToggleAlignGroup(bDoEnable)
 		ToggleBorderGroup(bDoEnable)
 	Else

@@ -31,7 +31,7 @@ Dim i as Integer
 	nMaxRowY = 0
 	nSecMaxRowY = 0
 	If CurArrangement = cLeftJustified Or cTopJustified Then
-		oDialogModel.optAlign0.State = 1
+		DialogModel.optAlign0.State = 1
 	End If
 	For i = 0 To MaxIndex
 		GetCurrentMetaValues(i)
@@ -104,7 +104,6 @@ Dim i as Integer
 	aSize = GetSize(nMaxTCWidth, nTCHeight)
 	bIsFirstRun = True
 	For i = StartA To LastIndex
-		oLocTextShape.Size = aSize
 		If i = StartA Then
 			nXTCPos = oTCShapeList(i).Position.X
 			nXDBPos = nXTCPos + nMaxTCWidth  + cHoriDistance

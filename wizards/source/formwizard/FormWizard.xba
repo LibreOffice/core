@@ -9,7 +9,6 @@ Public WebWizardPath as String
 Public WorkPath as String
 Public TexturePath as String
 Public sQueryName as String
-Public NumberofStyles as Integer
 Public oDBConnection as Object
 Public bWithBackGraphic as Boolean
 Public bNeedFieldRefresh as Boolean
@@ -63,6 +62,8 @@ Sub MainWithDefault(Optional DatasourceName as String, Optional oConnection as O
 Dim i as Integer
 Dim SelCount as Integer
 Dim RetValue as Integer
+Dim SelList(0) as Integer
+	SelList(0) = 0
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
 	bDebug = False
@@ -91,11 +92,17 @@ Dim RetValue as Integer
 	oProgressBar.Value = 10
 	InitializeWidthList()
 	oProgressBar.Value = 20
-	LoadLanguage
-	InitializeLabelValues()
+	LoadLanguage()
 	oProgressBar.Value = 30
+	Styles() = getListBoxArrays(oUcb, &quot;/stl&quot;)
+	CurIndex = GetCurIndex(DialogModel, Styles(), 2)
+	oProgressBar.Value = 40
+	ConfigurePageStyle()
+	oProgressBar.Value = 50
+	InitializeLabelValues()
 	bNeedFieldRefresh = True
-	With oDialogModel
+	SetDialogLanguage()
+	With DialogModel
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = False
 		.lblTables.Enabled = False
@@ -103,6 +110,7 @@ Dim RetValue as Integer
 		.Step = 1
 		.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
 	End With
+	oProgressBar.Value = 60
 	If Not IsMissing(DataSourceName) Then
 		sDBName = DataSourceName
 		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
@@ -110,15 +118,15 @@ Dim RetValue as Integer
 			&apos; Scenario 3: a data source and a connection are given
 			Set oDBConnection = oConnection
 			oDataSource = oDBContext.GetByName(DataSourceName)
-			oDialogModel.lstTables.Enabled = True
-			oDialogModel.lblTables.Enabled = True
+			DialogModel.lstTables.Enabled = True
+			DialogModel.lblTables.Enabled = True
 			If GetDBMetaData() Then
-				oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+				DialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
 				iCommandTypes = CreateCommandTypeList()
 				If Not IsMissing(sContent) Then
 					&apos; Scenario 4: all parameters (data source name, connection, object type and object) are given
 					iCommandTypes() = CreateCommandTypeList()
-					SelCount = CountItemsInArray(oDialogModel.lstTables.StringItemList(), sContent)
+					SelCount = CountItemsInArray(DialogModel.lstTables.StringItemList(), sContent)
 					If SelCount = 1 Then
 						DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
 					Else
@@ -140,20 +148,18 @@ Dim RetValue as Integer
 		End If
 	Else
 		&apos; Scenario 1: No parameters are given
-		ToggleListboxControls(oDialogModel, False)
+		ToggleListboxControls(DialogModel, False)
 	End If
-	oProgressBar.Value = 50
-	DlgFormDB.Title = WizardTitle(1)
-	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, DlgFormDB, &quot;lstStyles&quot;, Styles())
-	oProgressBar.Value = 60
-	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
-	SetImportStyle()
-	oProgressBar.Value = 70
-	ConfigurePageStyle()
 	oProgressBar.Value = 80
+	bWithBackGraphic = LoadNewStyles(oDocument, DialogModel, CurIndex, Styles(CurIndex, 8), Styles(), TexturePath)
+	DlgFormDB.Title = WizardTitle(1)
+	DialogModel.lstStyles.StringItemList() = ArrayfromMultiArray(Styles, 1)
+	DialogModel.lstStyles.SelectedItems() = SelList()
+	ControlCaptionsToStandardLayout()
+	
 	oDocument.GetCurrentController().Frame.ComponentWindow.Enable = True
 	oProgressBar.Value = 90
-	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
+	DialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	ToggleDatabasePage(True)
 	oProgressBar.Value = 100
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
@@ -192,9 +198,9 @@ Dim QueryIndex as Integer
 	If Not bDebug Then
 		On Local Error GoTo NOFIELDS
 	End If
-	n = Ubound(oDialogModel.lstTables.SelectedItems())
+	n = Ubound(DialogModel.lstTables.SelectedItems())
 	If n &gt; -1 Then
-		SelIndex = oDialogModel.lstTables.SelectedItems(0)
+		SelIndex = DialogModel.lstTables.SelectedItems(0)
 		If bGetCommandType Then
 			CurCommandType = iCommandTypes(SelIndex)
 		End If
@@ -207,7 +213,7 @@ Dim QueryIndex as Integer
 			oColumns = oDBConnection.Tables.GetByName(Tablename).Columns
 		End If
 		If GetSpecificFieldNames() &lt;&gt; -1 Then
-			ToggleListboxControls(oDialogModel, True)			
+			ToggleListboxControls(DialogModel, True)			
 		Else
 			EmptyFieldsListboxes()
 		End If
@@ -225,7 +231,7 @@ Sub PreviousStep()
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-	With oDialogModel
+	With DialogModel
 		.Step = 1
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = True
@@ -247,9 +253,9 @@ Sub NextStep()
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-	Select Case oDialogModel.Step
+	Select Case DialogModel.Step
 		Case 1
-			bControlsAreCreated = Not (cBool(oDialogModel.lstSelFields.Tag))
+			bControlsAreCreated = Not (cBool(DialogModel.lstSelFields.Tag))
 			If Not bControlsAreCreated Then
 				GetTableMetaData()
 				CreateDBForm()
@@ -257,15 +263,15 @@ Sub NextStep()
 				InitializeLayoutSettings()
 				oDBForm.Load
 			End If
-			oDialogModel.cmdGoOn.Label = sReady
-			oDialogModel.cmdBack.Enabled = True
-			oDialogModel.Step = 2
+			DialogModel.cmdGoOn.Label = sReady
+			DialogModel.cmdBack.Enabled = True
+			DialogModel.Step = 2
 			bDisposeDoc = False
 		Case 2
 			StoreForm()
 	End Select
-	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
-	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
+	DialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;
+	DlgFormDB.Title = WizardTitle(DialogModel.Step)
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
@@ -289,10 +295,10 @@ End Sub
 
 
 Sub ToggleDatabasePage(bDoEnable as Boolean)
-	With oDialogModel
+	With DialogModel
 		.cmdBack.Enabled = False
 		.cmdHelp.Enabled = bDoEnable
-		.cmdGoOn.Enabled = Ubound(oDialogModel.lstSelFields.StringItemList()) &lt;&gt; -1
+		.cmdGoOn.Enabled = Ubound(DialogModel.lstSelFields.StringItemList()) &lt;&gt; -1
 		.hlnBinaries.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))
 		.optIgnoreBinaries.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))
 		.optBinariesasGraphics.Enabled = ((bDoEnable = True) And (bEnableBinaryOptionGroup = True))
@@ -346,9 +352,9 @@ End Sub
 
 Sub EmptyFieldsListboxes()
 Dim NullList() as String
-	ToggleListboxControls(oDialogModel, False)
-	oDialogModel.lstFields.StringItemList() = NullList()
-	oDialogModel.lstSelFields.StringItemList() = NullList()
+	ToggleListboxControls(DialogModel, False)
+	DialogModel.lstFields.StringItemList() = NullList()
+	DialogModel.lstSelFields.StringItemList() = NullList()
 	bEnableBinaryOptionGroup = False
 End Sub
 </script:module>

@@ -20,13 +20,13 @@ End Sub
 Sub GetSelectedDBMetaData()
 Dim OldsDBname as String
 Dim DBIndex as Integer
-	If Ubound(oDialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
+	If Ubound(DialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
 		ToggleDatabasePage(False)
-		DBIndex = oDialogModel.lstDatabases.SelectedItems(0)
+		DBIndex = DialogModel.lstDatabases.SelectedItems(0)
 		sDBName = sDatabaseList(DBIndex)
 		If GetConnection(sDBName) Then
 			If GetDBMetaData() Then
-				With oDialogModel
+				With DialogModel
 					.lstTables.Enabled = True
 					.lblTables.Enabled = True
 					.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
@@ -78,10 +78,10 @@ Dim Nulllist()
 		Loop Until bExitLoop
 		On Local Error Goto 0
 		If Not bGetConnection Then
-			oDialogModel.lstDatabases.SelectedItems() = Nulllist()
-			oDialogModel.lstTables.StringItemList() = NullList()
-			oDialogModel.lstFields.StringItemList() = NullList()
-			oDialogModel.lstSelFields.StringItemList() = NullList()
+			DialogModel.lstDatabases.SelectedItems() = Nulllist()
+			DialogModel.lstTables.StringItemList() = NullList()
+			DialogModel.lstFields.StringItemList() = NullList()
+			DialogModel.lstSelFields.StringItemList() = NullList()
 		End If
 		GetConnection() = bGetConnection
 	End If
@@ -109,9 +109,9 @@ Dim sFieldName as String
 Dim n as Integer
 Dim WidthIndex as Integer
 Dim oField as Object
-	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
+	MaxIndex = Ubound(DialogModel.lstSelFields.StringItemList())
 	Dim ColumnMap(MaxIndex)as Integer	
-	FieldNames() = oDialogModel.lstSelFields.StringItemList()
+	FieldNames() = DialogModel.lstSelFields.StringItemList()
 	&apos; Build a structure which maps the position of a selected field (within the selection) to the the column position within
 	&apos; the table. So we ensure that the controls are placed in the same order the according fields are selected.
 	For i = 0 To Ubound(FieldNames())
@@ -165,7 +165,7 @@ Dim iType as Integer
 Dim oField as Object
 Dim MaxIndex as Integer
 Dim EmptyList()
-	If Ubound(oDialogModel.lstTables.StringItemList()) &gt; -1 Then
+	If Ubound(DialogModel.lstTables.StringItemList()) &gt; -1 Then
 		FieldNames() = oColumns.GetElementNames()
 		MaxIndex = Ubound(FieldNames())
 		If MaxIndex &lt;&gt; -1 Then
@@ -193,8 +193,8 @@ Dim EmptyList()
 			Redim Preserve ResultFieldNames(m-1)
 			Redim Preserve FieldNames(m-1)
 			FieldNames() = ResultFieldNames()
-			oDialogModel.lstFields.StringItemList = FieldNames()
-			InitializeListboxProcedures(oDialogModel, oDialogModel.lstFields, oDialogModel.lstSelFields)
+			DialogModel.lstFields.StringItemList = FieldNames()
+			InitializeListboxProcedures(DialogModel, DialogModel.lstFields, DialogModel.lstSelFields)
 		End If
 		GetSpecificFieldNames = MaxIndex
 	Else
@@ -227,7 +227,7 @@ Dim m as Integer
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-	If oDialogModel.optBinariesasGraphics.State = 1 Then
+	If DialogModel.optBinariesasGraphics.State = 1 Then
 		OldMaxIndex = Ubound(WidthList(),1)
 		If OldMaxIndex = 15 Then
 			MaxIndex = Ubound(WidthList(),1) + Ubound(ImgWidthList(),1) + 1
@@ -239,13 +239,13 @@ Dim m as Integer
 				Next m
 				s = s + 1
 			Next n
-			MergeList(oDialogModel.lstFields, ImgFieldNames())
+			MergeList(DialogModel.lstFields, ImgFieldNames())
 		End If
 	Else
 		ReDim Preserve WidthList(15, 4)
-		RemoveListItems(oDialogModel.lstFields(), oDialogModel.lstSelFields(), ImgFieldNames())
+		RemoveListItems(DialogModel.lstFields(), DialogModel.lstSelFields(), ImgFieldNames())
 	End If
-	oDialogModel.lstSelFields.Tag = True
+	DialogModel.lstSelFields.Tag = True
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then	
 		Msgbox(sMsgErrMsg, 16, GetProductName())

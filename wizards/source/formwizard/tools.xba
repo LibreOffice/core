@@ -142,10 +142,13 @@ Dim OldIndex as Integer
 		On Local Error GoTo WIZARDERROR
 	End If
 	OldIndex = CurIndex
-	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
+	CurIndex = GetCurIndex(DialogModel.lstStyles, Styles(),8)
 	If CurIndex &lt;&gt; OldIndex Then	
 		ToggleLayoutPage(False)
-		SetImportStyle()
+		Dim sImportPath as String
+		sImportPath = Styles(CurIndex, 8)
+		bWithBackGraphic = LoadNewStyles(oDocument, DialogModel, CurIndex, sImportPath, Styles(), TexturePath)
+		ControlCaptionsToStandardLayout()
 		ToggleLayoutPage(True, &quot;lstStyles&quot;)	
 	End If
 WIZARDERROR:
@@ -156,13 +159,6 @@ WIZARDERROR:
 	End If
 End Sub
 
-
-Sub SetImportStyle()
-Dim sImportPath as String
-	sImportPath = Styles(8,CurIndex)
-	bWithBackGraphic = LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
-	ControlCaptionsToStandardLayout()
-End Sub
 
 
 Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Object	
