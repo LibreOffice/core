@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importmergehandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:15:13 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ namespace configmgr
             };
 
             explicit
-            ImportMergeHandler(Backend const & xTargetBackend, Mode mode, OUString const & aEntity = OUString());
+            ImportMergeHandler(Backend const & xTargetBackend, Mode mode,
+                OUString const & aEntity = OUString(), sal_Bool const & bNotify = sal_False);
 
         // XLayerHandler
         protected:
