@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-20 17:05:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
 {
     OUString aNodeName(aChange->getNodeName());
     m_aChanges.find(aNodeName);
-    OSL_ENSHURE(m_aChanges.end() == m_aChanges.find(aNodeName),
+    OSL_ENSURE(m_aChanges.end() == m_aChanges.find(aNodeName),
         "SubtreeChange::addChange : overwriting an existent change !");
     delete m_aChanges[aNodeName];
     m_aChanges[aNodeName] = aChange.release();
@@ -279,7 +279,7 @@ SubtreeChange::ChildIterator::ChildIterator(const SubtreeChange* _pTree, struct 
 //--------------------------------------------------------------------------
 Change const & SubtreeChange::ChildIterator::operator*() const
 {
-    OSL_ENSHURE(isValid(), "SubtreeChange::ChildIterator::operator* : invalid iterator !");
+    OSL_ENSURE(isValid(), "SubtreeChange::ChildIterator::operator* : invalid iterator !");
 
     if (!isValid())
         throw configuration::Exception("INTERNAL ERROR: Invalid SubtreeChange::ChildIterator dereferenced");
@@ -292,14 +292,14 @@ Change const * SubtreeChange::ChildIterator::operator->() const
 {
     if (isValid())
         return m_pTree->getChange(m_aNames[m_nPos]);
-    OSL_ENSHURE(sal_False, "SubtreeChange::ChildIterator::operator-> : invalid iterator !");
+    OSL_ENSURE(sal_False, "SubtreeChange::ChildIterator::operator-> : invalid iterator !");
     return NULL;
 }
 
 //--------------------------------------------------------------------------
 SubtreeChange::ChildIterator& SubtreeChange::ChildIterator::operator++()
 {
-    OSL_ENSHURE(m_nPos < m_aNames.getLength(), "SubtreeChange::ChildIterator : can't increment the end iterator !");
+    OSL_ENSURE(m_nPos < m_aNames.getLength(), "SubtreeChange::ChildIterator : can't increment the end iterator !");
     if (m_nPos < m_aNames.getLength())
         ++m_nPos;
     return *this;
@@ -308,7 +308,7 @@ SubtreeChange::ChildIterator& SubtreeChange::ChildIterator::operator++()
 //--------------------------------------------------------------------------
 SubtreeChange::ChildIterator& SubtreeChange::ChildIterator::operator--()
 {
-    OSL_ENSHURE(m_nPos > 0, "SubtreeChange::ChildIterator : can't decrement the begin iterator !");
+    OSL_ENSURE(m_nPos > 0, "SubtreeChange::ChildIterator : can't decrement the begin iterator !");
     if (m_nPos > 0)
         --m_nPos;
     return *this;
@@ -331,7 +331,7 @@ SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
     while (aSourceChildren != _rSource.end())
     {
         const Change* pChange = &*aSourceChildren;
-        OSL_ENSHURE(pChange, "SubtreeChangeReferrer::SubtreeChangeReferrer : invalid change !");
+        OSL_ENSURE(pChange, "SubtreeChangeReferrer::SubtreeChangeReferrer : invalid change !");
         if  (   pChange->isA(ValueChange::getStaticType())
             ||  pChange->isA(RemoveNode::getStaticType())
             ||  pChange->isA(AddNode::getStaticType())
@@ -344,7 +344,7 @@ SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
             SubtreeChange::addChange(::std::auto_ptr<Change>(new SubtreeChangeReferrer(*static_cast<const SubtreeChange*>(pChange))));
         }
         else
-            OSL_ENSHURE(sal_False, "SubtreeChangeReferrer::SubtreeChangeReferrer : unknown changes type !");
+            OSL_ENSURE(sal_False, "SubtreeChangeReferrer::SubtreeChangeReferrer : unknown changes type !");
 
         ++aSourceChildren;
     }
@@ -376,7 +376,7 @@ SubtreeChangeReferrer::~SubtreeChangeReferrer()
             // nothing to do
         }
         else
-            OSL_ENSHURE(sal_False, "SubtreeChangeReferrer::~SubtreeChangeReferrer : unknown changes type !");
+            OSL_ENSURE(sal_False, "SubtreeChangeReferrer::~SubtreeChangeReferrer : unknown changes type !");
     }
 
     // the base class will remove the remaining SubtreeChanges, which are SubtreeChangeReferrer's in real

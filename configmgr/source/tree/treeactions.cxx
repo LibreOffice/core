@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:10 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ void OMergeTreeAction::handle(ValueChange& _rChange)
     if (pChild)
     {
         const ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
-        OSL_ENSHURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
+        OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
 
         if (pValueNode && _rChange.getNewValue() != pValueNode->getValue())
         {
@@ -205,7 +205,7 @@ void OMergeTreeAction::handle(SubtreeChange& _rChange)
     if (pChild)
     {
         const ISubtree* pSubTree = pChild->asISubtree();
-        OSL_ENSHURE(pSubTree, "OMergeTreeAction::handle : node must be a inner node!");
+        OSL_ENSURE(pSubTree, "OMergeTreeAction::handle : node must be a inner node!");
 
         if (pSubTree)
         {
@@ -278,7 +278,7 @@ void OMergeTreeAction::handle(AddNode& _rChange)
         const ValueNode* pValueNode = pChild->asValueNode();
 
         std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
-        OSL_ENSHURE(pValueNode && aNewNode.get() && aNewNode.get()->asValueNode(), "OMergeTreeAction::handle : node must be a value node!");
+        OSL_ENSURE(pValueNode && aNewNode.get() && aNewNode.get()->asValueNode(), "OMergeTreeAction::handle : node must be a value node!");
         if (!pValueNode || !aNewNode.get() || !aNewNode.get()->asValueNode())
             return;
 
@@ -399,7 +399,7 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
         {
             ::rtl::OString aStr("TreeUpdate: Can't find value with name:=");
             aStr += rtl::OUStringToOString(aValueNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(pValue, aStr.getStr());
+            OSL_ENSURE(pValue, aStr.getStr());
             aLog.push_back(aStr);
         }
 #endif
@@ -415,7 +415,7 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
                 std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aAddNode.getNodeName());
 
 #ifdef DBUG
-                OSL_ENSHURE(aOldNode.get(), "TreeUpdate:AddNode: can't recover node being replaced");
+                OSL_ENSURE(aOldNode.get(), "TreeUpdate:AddNode: can't recover node being replaced");
                 if (aOldNode.get() == NULL)
                     aLog.push_back(OString("TreeUpdate: can't recover node being replaced (for AddNode)"));
 #endif
@@ -457,7 +457,7 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
             {
                 ::rtl::OString aStr("TreeUpdate: Can't remove child with name:=");
                 aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSHURE(bOk, aStr.getStr());
+                OSL_ENSURE(bOk, aStr.getStr());
                 aLog.push_back(aStr);
             }
 #endif
@@ -469,13 +469,13 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
     {
         // handle traversion
         ISubtree *pOldSubtree = m_pCurrentSubtree;
-        OSL_ENSHURE(m_pCurrentSubtree->getChild(aSubtree.getNodeName()), "TreeUpdate::handle : invalid subtree change ... this will crash !");
+        OSL_ENSURE(m_pCurrentSubtree->getChild(aSubtree.getNodeName()), "TreeUpdate::handle : invalid subtree change ... this will crash !");
         m_pCurrentSubtree = m_pCurrentSubtree->getChild(aSubtree.getNodeName())->asISubtree();
 
 #if DBUG
         ::rtl::OString aStr("TreeUpdate: there is no Subtree for name:=");
         aStr += rtl::OUStringToOString(aSubtree.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(m_pCurrentSubtree, aStr.getStr());
+        OSL_ENSURE(m_pCurrentSubtree, aStr.getStr());
         if (!m_pCurrentSubtree)
             aLog.push_back(aStr);
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:01:03 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,12 +243,12 @@ namespace configmgr
         {
             OUString aNodeName = _nNode.getName();
             ISubtree* pTree = m_pCacheNode->asISubtree();
-            OSL_ENSHURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
+            OSL_ENSURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
             if (pTree)
             {
                 INode* pChild = pTree->getChild(aNodeName);
                 ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
-                OSL_ENSHURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
+                OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
 
                 // if the values differ add a new change
                 if (pValueNode && _nNode.getValue() != pValueNode->getValue())
@@ -263,7 +263,7 @@ namespace configmgr
         {
             OUString aNodeName = _rSubtree.getName();
             ISubtree* pTree = m_pCacheNode->asISubtree();
-            OSL_ENSHURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
+            OSL_ENSURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
             if (pTree)
             {
                 INode* pChild = pTree->getChild(aNodeName);
@@ -272,7 +272,7 @@ namespace configmgr
                 if (pChild)
                 {
                     ISubtree* pSubTree = pChild->asISubtree();
-                    OSL_ENSHURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
+                    OSL_ENSURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
                     // generate a new change
 
                     SubtreeChange* pChange = new SubtreeChange(_rSubtree);

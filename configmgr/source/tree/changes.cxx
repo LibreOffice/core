@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ void ValueChange::applyTo(ValueNode& aValue)
         break;
 
     default:
-        OSL_ENSHURE(0, "Unknown mode found for ValueChange");
+        OSL_ENSURE(0, "Unknown mode found for ValueChange");
         break;
     }
 }
@@ -172,7 +172,7 @@ void ValueChange::applyTo(ValueNode& aValue)
         aRet = ::rtl::OUString::createFromAscii("changeDefault");
         break;
     default:
-        OSL_ENSHURE(0,"getModeAsString: Wrong mode!");
+        OSL_ENSURE(0,"getModeAsString: Wrong mode!");
     }
 
     return aRet;
@@ -186,7 +186,7 @@ void ValueChange::setModeAsString(const ::rtl::OUString& _rMode)
     else if(_rMode == ::rtl::OUString::createFromAscii("changeDefault"))m_eMode = changeDefault;
     else
     {
-        OSL_ENSHURE(0,"setModeAsString: Wrong mode!");
+        OSL_ENSURE(0,"setModeAsString: Wrong mode!");
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-20 17:05:05 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
 CommitHelper::CommitHelper(Tree const& aTree)
 {
     m_pTree = TreeImplHelper::impl(aTree);
-    OSL_ENSHURE(m_pTree, "INTERNAL ERROR: Unexpected NULL tree in commit helper");
+    OSL_ENSURE(m_pTree, "INTERNAL ERROR: Unexpected NULL tree in commit helper");
 }
 //-----------------------------------------------------------------------------
 
