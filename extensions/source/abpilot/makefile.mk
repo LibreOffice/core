@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:56:58 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:08:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,11 +97,11 @@ SLOFILES=	\
 
 
 
-
-SRCFILES=			abspilot.src
+SRS1NAME=$(TARGET)
+SRC1FILES=			abspilot.src
 
 RESLIB1NAME=abp
-RESLIB1SRSFILES= $(SRS)/abp.srs
+RESLIB1SRSFILES= $(SRS)$/abp.srs
 
 #IMGLST_SRS=$(SRS)$/abp.srs
 
