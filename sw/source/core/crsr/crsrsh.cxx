@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:17:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,8 +438,9 @@ FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
         return bLeft ? GoPrevCell() : GoNextCell();
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
-                                         ! IsOverwriteCrsr() );
+    BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
+    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed, bSkipHidden,
+                                         !IsOverwriteCrsr() );
     if( bRet )
         UpdateCrsr();
     return bRet;
@@ -1121,6 +1122,24 @@ void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
     }
 }
 
+// Try to set the cursor to the next visible content node.
+void lcl_CheckHiddenPara( SwPosition& rPos )
+{
+    SwNodeIndex aTmp( rPos.nNode );
+    SwTxtNode* pTxtNd = aTmp.GetNode().GetTxtNode();
+    while( pTxtNd && pTxtNd->HasHiddenCharAttribute( true ) )
+    {
+        SwCntntNode* pCntnt = aTmp.GetNodes().GoNext( &aTmp );
+        if ( pCntnt && pCntnt->IsTxtNode() )
+            pTxtNd = (SwTxtNode*)pCntnt;
+        else
+            pTxtNd = 0;
+    }
+
+    if ( pTxtNd )
+        rPos = SwPosition( aTmp, SwIndex( pTxtNd, 0 ) );
+}
+
 void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 {
     SET_CURR_SHELL( this );
@@ -1171,6 +1190,13 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         //              stehen, so mussen diese daraus verschoben werden
         ::lcl_CheckHiddenSection( pPos->nNode );
         ::lcl_CheckHiddenSection( pITmpCrsr->GetMark()->nNode );
+
+        // Move cursor out of hidden paragraphs
+        if ( !GetViewOptions()->IsShowHiddenChar() )
+        {
+            ::lcl_CheckHiddenPara( *pPos );
+            ::lcl_CheckHiddenPara( *pITmpCrsr->GetMark() );
+        }
 
         SwCntntFrm *pTblFrm = pPos->nNode.GetNode().GetCntntNode()->
                                                 GetFrm( &aTmpPt, pPos ),
@@ -2849,6 +2875,39 @@ FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
 }
 
 #endif
+
+//
+// If the current cursor position is inside a hidden range, the hidden range
+// is selected:
+//
+bool SwCrsrShell::SelectHiddenRange()
+{
+    bool bRet = false;
+    if ( !GetViewOptions()->IsShowHiddenChar() && !pCurCrsr->HasMark() )
+    {
+        SwPosition& rPt = *(SwPosition*)pCurCrsr->GetPoint();
+        const SwTxtNode* pNode = rPt.nNode.GetNode().GetTxtNode();
+        if ( pNode )
+        {
+            const xub_StrLen nPos = rPt.nContent.GetIndex();
+
+            // check if nPos is in hidden range
+            xub_StrLen nHiddenStart;
+            xub_StrLen nHiddenEnd;
+            SwScriptInfo::GetBoundsOfHiddenRange( *pNode, nPos, nHiddenStart, nHiddenEnd );
+            if ( STRING_LEN != nHiddenStart )
+            {
+                // make selection:
+                pCurCrsr->SetMark();
+                pCurCrsr->GetMark()->nContent = nHiddenEnd;
+                bRet = true;
+            }
+        }
+    }
+
+    return bRet;
+}
+
 
 /*  */
 
