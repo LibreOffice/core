@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Listbox" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Listbox" script:language="StarBasic">Option Explicit
 Dim OriginalList()
 Dim oDialogModel as Object
 
@@ -229,7 +229,7 @@ Sub ToggleListboxControls(oDialogModel as Object, bDoEnable as Boolean)
 	With oDialogModel
 		.lblFields.Enabled = bDoEnable
 		.lblSelFields.Enabled = bDoEnable
-		.lstTables.Enabled = bDoEnable
+&apos;		.lstTables.Enabled = bDoEnable
 		.lstFields.Enabled = bDoEnable
 		.lstSelFields.Enabled = bDoEnable
 		.cmdRemoveAll.Enabled = bDoEnable
