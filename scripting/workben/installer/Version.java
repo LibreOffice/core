@@ -111,13 +111,18 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
             }
         };
 
-        tableVersions.setPreferredSize(new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
-        tableVersions.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tableVersions.doLayout();
-        setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-        //JScrollPane scroll = new JScrollPane(tableVersions);
-        //versionPanel.add(scroll);
-        versionPanel.add(tableVersions);
+        JScrollPane scroll = new JScrollPane(tableVersions);
+
+        tableVersions.setPreferredSize(
+            new Dimension(InstallWizard.DEFWIDTH,InstallWizard.DEFHEIGHT));
+
+        tableVersions.setRowSelectionAllowed(false);
+        tableVersions.setColumnSelectionAllowed(false);
+        tableVersions.setCellSelectionEnabled(false);
+
+        initColumnSizes(tableVersions, tableModel);
+        versionPanel.add(scroll);
+
         JTextArea area = new JTextArea("Please select the Office version you wish to Update");
         area.setLineWrap(true);
         area.setEditable(false);
@@ -130,6 +135,65 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
 
     }// initComponents
 
+    private void initColumnSizes(JTable table, MyTableModel model) {
+        TableColumn column = null;
+        Component comp = null;
+        int headerWidth = 0;
+        int cellWidth = 0;
+        int preferredWidth = 0;
+        int totalWidth = 0;
+        Object[] longValues = model.longValues;
+
+        for (int i = 0; i < 3; i++) {
+            column = table.getColumnModel().getColumn(i);
+
+            try {
+                comp = column.getHeaderRenderer().
+                             getTableCellRendererComponent(
+                                 null, column.getHeaderValue(),
+                                 false, false, 0, 0);
+                headerWidth = comp.getPreferredSize().width;
+            } catch (NullPointerException e) {
+                // System.err.println("Null pointer exception!");
+                // System.err.println("  getHeaderRenderer returns null in 1.3.");
+                // System.err.println("  The replacement is getDefaultRenderer.");
+            }
+
+            // need to replace spaces in String before getting preferred width
+            if (longValues[i] instanceof String) {
+                longValues[i] = ((String)longValues[i]).replace(' ', '_');
+            }
+
+            System.out.println("longValues: " + longValues[i]);
+            comp = table.getDefaultRenderer(model.getColumnClass(i)).
+                         getTableCellRendererComponent(
+                             table, longValues[i],
+                             false, false, 0, i);
+            cellWidth = comp.getPreferredSize().width;
+
+            preferredWidth = Math.max(headerWidth, cellWidth);
+
+            if (false) {
+                System.out.println("Initializing width of column "
+                    + i + ". "
+                    + "preferredWidth = " + preferredWidth
+                    + "; totalWidth = " + totalWidth
+                    + "; leftWidth = " + (InstallWizard.DEFWIDTH - totalWidth));
+            }
+
+            //XXX: Before Swing 1.1 Beta 2, use setMinWidth instead.
+            if (i == 2) {
+                if (preferredWidth > InstallWizard.DEFWIDTH - totalWidth)
+                    column.setPreferredWidth(InstallWizard.DEFWIDTH - totalWidth);
+                else
+                    column.setPreferredWidth(preferredWidth);
+            }
+            else {
+                column.setMinWidth(preferredWidth);
+                totalWidth += preferredWidth;
+            }
+        }
+    }
 
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(320, 280);
@@ -173,9 +237,10 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
 
 class MyTableModel extends AbstractTableModel {
     ArrayList data;
-    String colNames[] = {"Install", "Name", "Location"};
+    String colNames[] = {"", "Name", "Location"};
+    Object[] longValues = new Object[] {Boolean.TRUE, "Name", "Location"};
 
-    MyTableModel(Properties properties, String [] validVersions) {
+    MyTableModel (Properties properties, String [] validVersions) {
         data = new ArrayList();
         //System.out.println(properties);
 
@@ -187,8 +252,17 @@ class MyTableModel extends AbstractTableModel {
             if ((path = properties.getProperty(key)) != null) {
                 ArrayList row = new ArrayList();
                 row.add(0, new Boolean(false));
+
                 row.add(1, key);
-                row.add(2, properties.getProperty(key));
+                if (key.length() > ((String)longValues[1]).length()) {
+                    longValues[1] = key;
+                }
+
+                row.add(2, path);
+                if (path.length() > ((String)longValues[2]).length()) {
+                    longValues[2] = path;
+                }
+
                 data.add(row);
             }
         }
@@ -207,6 +281,10 @@ class MyTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
+        if (row < 0 || row > getRowCount() ||
+            col < 0 || col > getColumnCount())
+            return null;
+
         ArrayList aRow = (ArrayList)data.get(row);
         return aRow.get(col);
     }
