@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:29:34 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:43:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,43 +105,30 @@ SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= isfx
 
 SHL1STDLIBS+=\
-                $(FWELIB) \
+        $(FWELIB) \
         $(BASICLIB) \
-        $(VOSLIB) \
-        $(SALLIB) \
-        $(SALHELPERLIB) \
-        $(CHANELLIB) \
-        $(SO2LIB) \
-        $(INETLIBSH) \
-        $(SVTOOLLIB) \
-        $(SVLLIB)	\
-        $(SVLIB) \
-        $(TOOLSLIB) \
-        $(HELPLIB) \
-        $(SVMEMLIB) \
-        $(GOODIESLIB) \
-        $(TKLIB) \
-        $(SOTLIB) \
-        $(RTLLIB) \
-        $(CPPULIB) \
-        $(CPPUHELPERLIB) \
-        $(UNOTOOLSLIB) \
-        $(UCBHELPERLIB) \
-        $(COMPHELPERLIB) \
         $(XMLOFFLIB) \
         $(XMLSCRIPTLIB) \
-        $(SYSSHELLLIB)
-
-# [ed] 6/17/02 Add in another library
-
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += $(INETLIB)
-.ENDIF
+        $(SO2LIB) \
+        $(SOTLIB) \
+        $(SVTOOLLIB) \
+        $(TKLIB) \
+        $(VCLLIB) \
+        $(SVLLIB)	\
+        $(UNOTOOLSLIB) \
+        $(TOOLSLIB) \
+        $(SYSSHELLLIB) \
+        $(COMPHELPERLIB) \
+        $(UCBHELPERLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(VOSLIB) \
+        $(SALLIB)
 
 .IF "$(SOLAR_JAVA)" != ""
 SHL1STDLIBS+=\
         $(SJLIB)
-.ENDIF
+.ENDIF # SOLAR_JAVA
 
 .IF "$(GUI)"=="WNT"
 
@@ -153,7 +140,7 @@ SHL1STDLIBS+=\
         ole32.lib \
         uuid.lib
 
-.ENDIF
+.ENDIF # WNT
 
 
 .IF "$(GUI)"!="MAC"
