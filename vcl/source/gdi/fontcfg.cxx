@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-29 07:55:13 $
+ *  last change: $Author: ssa $ $Date: 2002-09-11 16:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,7 @@ const OUString& DefaultFontConfigItem::getDefaultFont( int nLanguage, int nType 
 const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) const
 {
     #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
+    #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucida Bright;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
 
     if( nLanguage == LANGUAGE_SYSTEM )
         nLanguage = Application::GetSettings().GetUILanguage();
@@ -416,6 +417,34 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
     else
     {
         static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
+        static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
+        // optimize font list for some locales, as long as Andale Sans UI does not support them
+        switch( nLanguage )
+        {
+            case LANGUAGE_ARABIC:
+            case LANGUAGE_ARABIC_SAUDI_ARABIA:
+            case LANGUAGE_ARABIC_IRAQ:
+            case LANGUAGE_ARABIC_EGYPT:
+            case LANGUAGE_ARABIC_LIBYA:
+            case LANGUAGE_ARABIC_ALGERIA:
+            case LANGUAGE_ARABIC_MOROCCO:
+            case LANGUAGE_ARABIC_TUNISIA:
+            case LANGUAGE_ARABIC_OMAN:
+            case LANGUAGE_ARABIC_YEMEN:
+            case LANGUAGE_ARABIC_SYRIA:
+            case LANGUAGE_ARABIC_JORDAN:
+            case LANGUAGE_ARABIC_LEBANON:
+            case LANGUAGE_ARABIC_KUWAIT:
+            case LANGUAGE_ARABIC_UAE:
+            case LANGUAGE_ARABIC_BAHRAIN:
+            case LANGUAGE_ARABIC_QATAR:
+            case LANGUAGE_HEBREW:
+                return aFallBackArabic;
+                break;
+            default:
+                break;
+        }
+
         return aFallback;
     }
 }
