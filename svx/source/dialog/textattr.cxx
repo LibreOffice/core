@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 17:02:24 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
                 aTsbAutoGrowHeight ( this, ResId( TSB_AUTOGROW_HEIGHT ) ),
                 aTsbFitToSize   ( this, ResId( TSB_FIT_TO_SIZE ) ),
                 aTsbContour     ( this, ResId( TSB_CONTOUR ) ),
-
+                aTsbWordWrapText( this, ResId( TSB_WORDWRAP_TEXT ) ),
+                aTsbAutoGrowSize( this, ResId( TSB_AUTOGROW_SIZE ) ),
                 aFlDistance     ( this, ResId( FL_DISTANCE ) ),
                 aFtLeft         ( this, ResId( FT_LEFT ) ),
                 aMtrFldLeft     ( this, ResId( MTR_FLD_LEFT ) ),
@@ -305,6 +306,29 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     else
         aTsbAutoGrowWidth.SetState( STATE_DONTKNOW );
     aTsbAutoGrowWidth.SaveValue();
+
+    // autogrowsize
+    if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
+    {
+        aTsbAutoGrowSize.SetState( ( ( const SdrTextAutoGrowSizeItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWSIZE ) ).
+                        GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        aTsbAutoGrowSize.EnableTriState( FALSE );
+    }
+    else
+        aTsbAutoGrowSize.SetState( STATE_DONTKNOW );
+    aTsbAutoGrowSize.SaveValue();
+
+    // wordwrap text
+    if ( rAttrs.GetItemState( SDRATTR_TEXT_WORDWRAP ) != SFX_ITEM_DONTCARE )
+    {
+        aTsbWordWrapText.SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
+                        GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        aTsbWordWrapText.EnableTriState( FALSE );
+    }
+    else
+        aTsbWordWrapText.SetState( STATE_DONTKNOW );
+    aTsbWordWrapText.SaveValue();
+
 
     // #103516# Do the setup based on states of hor/ver adjust
     // Setup center field and FullWidth
@@ -460,6 +484,18 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         rAttrs.Put( SdrTextAutoGrowWidthItem( (BOOL) STATE_CHECK == eState ) );
     }
 
+    eState = aTsbAutoGrowSize.GetState();
+    if( eState != aTsbAutoGrowSize.GetSavedValue() )
+    {
+        rAttrs.Put( SdrTextAutoGrowSizeItem( (BOOL) STATE_CHECK == eState ) );
+    }
+
+    eState = aTsbWordWrapText.GetState();
+    if( eState != aTsbWordWrapText.GetSavedValue() )
+    {
+        rAttrs.Put( SdrTextWordWrapItem( (BOOL) STATE_CHECK == eState ) );
+    }
+
     // Konturfluss
     eState = aTsbContour.GetState();
     if( eState != aTsbContour.GetSavedValue() )
@@ -552,29 +588,52 @@ void SvxTextAttrPage::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    bContourEnabled = TRUE;
-    bAutoGrowSizeEnabled = FALSE;
+    bFitToSizeEnabled = bContourEnabled = TRUE;
+    bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = FALSE;
 
     const SdrMarkList& rMarkList = pView->GetMarkList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
         SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
-        if( pObj->GetObjInventor() == SdrInventor &&
-            ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT
-              || eKind==OBJ_CAPTION ) &&
-            ( (SdrTextObj*) pObj )->HasText() )
+        if( pObj->GetObjInventor() == SdrInventor )
         {
-            // Konturfluss ist NICHT bei reinen Textobjekten m”glich
-            bContourEnabled = FALSE;
+            switch( eKind )
+            {
+                case OBJ_TEXT :
+                case OBJ_TITLETEXT :
+                case OBJ_OUTLINETEXT :
+                case OBJ_CAPTION :
+                {
+                    if ( ((SdrTextObj*)pObj)->HasText() )
+                    {
+                        // Konturfluss ist NICHT bei reinen Textobjekten m”glich
+                        bContourEnabled = FALSE;
 
-            // Breite und Hoehe anpassen ist NUR bei reinen Textobjekten m”glich
-            bAutoGrowSizeEnabled = TRUE;
+                        // Breite und Hoehe anpassen ist NUR bei reinen Textobjekten m”glich
+                        bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = TRUE;
+                    }
+                }
+                break;
+                case OBJ_CUSTOMSHAPE :
+                {
+                    if ( ((SdrTextObj*)pObj)->HasText() )
+                    {
+                        bFitToSizeEnabled = bContourEnabled = FALSE;
+                        bAutoGrowSizeEnabled = TRUE;
+                        bWordWrapTextEnabled = TRUE;
+                    }
+                }
+                break;
+            }
         }
     }
-    aTsbAutoGrowHeight.Enable( bAutoGrowSizeEnabled );
-    aTsbAutoGrowWidth.Enable( bAutoGrowSizeEnabled );
+    aTsbAutoGrowHeight.Enable( bAutoGrowHeightEnabled );
+    aTsbAutoGrowWidth.Enable( bAutoGrowWidthEnabled );
+    aTsbFitToSize.Enable( bFitToSizeEnabled );
     aTsbContour.Enable( bContourEnabled );
+    aTsbAutoGrowSize.Enable( bAutoGrowSizeEnabled );
+    aTsbWordWrapText.Enable( bWordWrapTextEnabled );
 }
 
 /*************************************************************************
@@ -713,19 +772,20 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
     BOOL bContour        = aTsbContour.GetState() == STATE_CHECK;
 
     aTsbContour.Enable( !bFitToSize &&
-                        !( ( bAutoGrowWidth || bAutoGrowHeight ) && bAutoGrowSizeEnabled ) &&
+                        !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
                         bContourEnabled );
 
     aTsbAutoGrowWidth.Enable( !bFitToSize &&
                               !( bContour && bContourEnabled ) &&
-                              bAutoGrowSizeEnabled );
+                              bAutoGrowWidthEnabled );
 
     aTsbAutoGrowHeight.Enable( !bFitToSize &&
                                !( bContour && bContourEnabled ) &&
-                               bAutoGrowSizeEnabled );
+                               bAutoGrowHeightEnabled );
 
-    aTsbFitToSize.Enable( !( ( bAutoGrowWidth || bAutoGrowHeight ) && bAutoGrowSizeEnabled ) &&
-                          !( bContour && bContourEnabled ) );
+    aTsbFitToSize.Enable( !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
+                          !( bContour && bContourEnabled ) &&
+                          bFitToSizeEnabled );
 
     // #101901# enable/disable metric fields and decorations dependent of contour
     aMtrFldLeft.Enable(!bContour);
@@ -756,95 +816,6 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
     aTsbFullWidth.Enable(!bContour && !bHorAndVer);
     aFlPosition.Enable(!bContour && !bHorAndVer);
 
-/*
-    // Am Rahmen anpassen
-    if( bFitToSize )
-    {
-        aTsbAutoGrowWidth.Enable( FALSE );
-        aTsbAutoGrowHeight.Enable( FALSE );
-        aTsbContour.Enable( FALSE );
-    }
-    else
-    {
-        aTsbAutoGrowWidth.Enable( bAutoGrowSizeEnabled );
-        aTsbAutoGrowHeight.Enable( bAutoGrowSizeEnabled );
-        aTsbContour.Enable( bContourEnabled );
-    }
-
-    // An Hoehe oder Breite anpassen
-    if( ( bAutoGrowWidth || bAutoGrowHeight ) && bAutoGrowSizeEnabled )
-    {
-        aTsbFitToSize.Enable( FALSE );
-        aTsbContour.Enable( FALSE );
-    }
-    else
-    {
-        aTsbFitToSize.Enable( TRUE );
-        aTsbContour.Enable( bContourEnabled );
-    }
-
-    // Kontur
-    if( bContour && bContourEnabled )
-    {
-        aTsbAutoGrowWidth.Enable( FALSE );
-        aTsbAutoGrowHeight.Enable( FALSE );
-        aTsbFitToSize.Enable( FALSE );
-    }
-    else
-    {
-        aTsbAutoGrowWidth.Enable( bAutoGrowSizeEnabled && !bFitToSize );
-        aTsbAutoGrowHeight.Enable( bAutoGrowSizeEnabled && !bFitToSize );
-        aMtrFldLeft.Enable( TRUE );
-        aMtrFldRight.Enable( TRUE );
-        aMtrFldTop.Enable( TRUE );
-        aMtrFldBottom.Enable( TRUE );
-        aTsbFitToSize.Enable( TRUE );
-    }
-*/
-
-//////////
-    /*
-    if( p == &aTsbFitToSize ||
-        p == NULL )
-    {
-        if( aTsbFitToSize.GetState() == STATE_CHECK )
-        {
-            aTsbAutoGrowWidth.Enable( FALSE );
-            aTsbAutoGrowHeight.Enable( FALSE );
-        }
-        else if( bAutoGrowSizeEnabled )
-        {
-            aTsbAutoGrowWidth.Enable( TRUE );
-            aTsbAutoGrowHeight.Enable( TRUE );
-        }
-    }
-    if( p == &aTsbAutoGrowWidth ||
-        p == &aTsbAutoGrowHeight ||
-        p == NULL )
-    {
-        if( ( aTsbAutoGrowWidth.GetState() == STATE_CHECK && aTsbAutoGrowWidth.IsEnabled() ) ||
-            ( aTsbAutoGrowHeight.GetState() == STATE_CHECK && aTsbAutoGrowHeight.IsEnabled() ) )
-            aTsbFitToSize.Enable( FALSE );
-        else
-            aTsbFitToSize.Enable( TRUE );
-    }
-    if( p == &aTsbFitToSize ||
-        p == NULL )
-    {
-        BOOL bOff = aTsbFitToSize.GetState() == STATE_NOCHECK;
-        aTsbContour.Enable( bOff );
-    }
-    if( p == &aTsbContour ||
-        p == NULL )
-    {
-        BOOL bOff = aTsbContour.GetState() == STATE_NOCHECK;
-        aMtrFldLeft.Enable( bOff );
-        aMtrFldRight.Enable( bOff );
-        aMtrFldTop.Enable( bOff );
-        aMtrFldBottom.Enable( bOff );
-        aTsbFitToSize.Enable( bOff );
-    }
-    */
     return( 0L );
 }
 
