@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-06 16:53:44 $
+ *  last change: $Author: obo $ $Date: 2000-12-07 14:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,9 @@ class SdXMLExport : public SvXMLExport
     ImpXMLShapeStyleInfoList*   mpShapeStyleInfoList;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
-    ::std::vector<::rtl::OUString>      maDrawPagesAutoLayoutNames;
-    ::std::vector<::rtl::OUString>      maDrawPagesStyleNames;
-    ::std::vector<::rtl::OUString>      maMasterPagesStyleNames;
+    ::std::vector< ::rtl::OUString >        maDrawPagesAutoLayoutNames;
+    ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
+    ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
 
     XMLSdPropHdlFactory*                mpSdPropHdlFactory;
     XMLShapeExportPropertyMapper*       mpPropertySetMapper;
