@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:07:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,19 +207,20 @@
 
 #define STR_LABEL_FILEFORMAT                (RID_SFX_DOC_START+96)
 
+// some icons are commented out since they are removed
 #define BMP_SIGNATURE                       (RID_SFX_DOC_START+97)
-#define BMP_128X128_BASE_DOC                (RID_SFX_DOC_START+98)
+// #define BMP_128X128_BASE_DOC             (RID_SFX_DOC_START+98)
 #define BMP_128X128_CALC_DOC                (RID_SFX_DOC_START+99)
-#define BMP_128X128_CALC_TEMP               (RID_SFX_DOC_START+100)
+// #define BMP_128X128_CALC_TEMP                (RID_SFX_DOC_START+100)
 #define BMP_128X128_CHART_DOC               (RID_SFX_DOC_START+101)
 #define BMP_128X128_DRAW_DOC                (RID_SFX_DOC_START+102)
-#define BMP_128X128_DRAW_TEMP               (RID_SFX_DOC_START+103)
+// #define BMP_128X128_DRAW_TEMP                (RID_SFX_DOC_START+103)
 #define BMP_128X128_IMPRESS_DOC             (RID_SFX_DOC_START+104)
-#define BMP_128X128_IMPRESS_TEMP            (RID_SFX_DOC_START+105)
-#define BMP_128X128_MASTER_DOC              (RID_SFX_DOC_START+106)
+// #define BMP_128X128_IMPRESS_TEMP         (RID_SFX_DOC_START+105)
+// #define BMP_128X128_MASTER_DOC               (RID_SFX_DOC_START+106)
 #define BMP_128X128_MATH_DOC                (RID_SFX_DOC_START+107)
 #define BMP_128X128_WRITER_DOC              (RID_SFX_DOC_START+108)
-#define BMP_128X128_WRITER_TEMP             (RID_SFX_DOC_START+109)
+// #define BMP_128X128_WRITER_TEMP              (RID_SFX_DOC_START+109)
 
 #define STR_HIDDENINFO_CONTAINS             (RID_SFX_DOC_START+110)
 #define STR_HIDDENINFO_RECORDCHANGES        (RID_SFX_DOC_START+111)
