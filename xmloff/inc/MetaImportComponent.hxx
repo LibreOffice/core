@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:33:50 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,11 @@ private:
         ::com::sun::star::document::XDocumentInfo>  xDocInfo;
 
 public:
-    XMLMetaImportComponent() throw();
+    // #110680#
+    // XMLMetaImportComponent() throw();
+    XMLMetaImportComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+        ) throw();
 
     ~XMLMetaImportComponent() throw();
 
