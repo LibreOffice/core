@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2001-02-27 18:19:43 $
+#   last change: $Author: svesik $ $Date: 2001-05-02 00:28:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,10 +238,14 @@ SHL2OBJS= \
     $(OUT)$/slo$/swdll.obj 
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
-.IF "$(OS)"!="LINUX"
+.IF "$(OS)"!="LINUX" 
+.IF "$(OS)"!="FREEBSD" 
+.IF "$(OS)"!="NETBSD"
 SHL2OBJS+= \
             $(SLO)$/atrfrm.obj      \
             $(SLO)$/fmtatr2.obj
+.ENDIF
+.ENDIF
 .ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
