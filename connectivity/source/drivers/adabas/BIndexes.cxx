@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-14 14:30:47 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,7 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    connectivity::sdbcx::OIndex* pNew = new connectivity::sdbcx::OIndex(sal_True);
-    return pNew;
+    return new OAdabasIndex(m_pTable);
 }
 // -------------------------------------------------------------------------
 // XAppend
