@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 17:23:38 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 19:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
+#include <svx/unolingu.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <math.h>
@@ -811,6 +812,9 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
             pPattern->FillEditItemSet( pSet, pCondSet );
             pEngine->SetDefaults( pSet );
+
+            if ( ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+                pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
 
             Size aPaper = Size( 1000000, 1000000 );
             if (eOrient==SVX_ORIENTATION_STACKED)

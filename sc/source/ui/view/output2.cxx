@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-16 15:17:35 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 19:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/udlnitem.hxx>
+#include <svx/unolingu.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
@@ -1586,6 +1587,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
     ScFieldEditEngine* pEngine = NULL;
+    BOOL bHyphenatorSet = FALSE;
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
     const ScPatternAttr* pOldPattern = NULL;
@@ -1800,7 +1802,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
                             // Syntax-Modus wird hier ignoriert...
 
-                            if ( StringDiffer(pOldPattern,pPattern) || pCondSet != pOldCondSet )
+                            // StringDiffer doesn't look at hyphenate, language items
+                            if ( pPattern != pOldPattern || pCondSet != pOldCondSet )
                             {
                                 SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( pSet, pCondSet );
@@ -1815,6 +1818,13 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 else
                                     nControl &= ~EE_CNTRL_ONECHARPERLINE;
                                 pEngine->SetControlWord( nControl );
+
+                                if ( !bHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+                                {
+                                    //  set hyphenator the first time it is needed
+                                    pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
+                                    bHyphenatorSet = TRUE;
+                                }
                             }
 
                             //  horizontal alignment now may depend on cell content
@@ -2343,6 +2353,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
     ScFieldEditEngine* pEngine = NULL;
+    BOOL bHyphenatorSet = FALSE;
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
     const ScPatternAttr* pOldPattern = NULL;
@@ -2503,7 +2514,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
                             // Syntax-Modus wird hier ignoriert...
 
-                            if ( StringDiffer(pOldPattern,pPattern) || pCondSet != pOldCondSet )
+                            // StringDiffer doesn't look at hyphenate, language items
+                            if ( pPattern != pOldPattern || pCondSet != pOldCondSet )
                             {
                                 SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( pSet, pCondSet );
@@ -2525,6 +2537,13 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 else
                                     nControl &= ~EE_CNTRL_ONECHARPERLINE;
                                 pEngine->SetControlWord( nControl );
+
+                                if ( !bHyphenatorSet && ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
+                                {
+                                    //  set hyphenator the first time it is needed
+                                    pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
+                                    bHyphenatorSet = TRUE;
+                                }
                             }
 
                             //  Raender

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:13:59 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 19:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,10 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
 
         if ( bOnlineSpell )
             pEngine->SetSpeller( LinguMgr::GetSpellChecker() );
+
+        BOOL bHyphen = pLastPattern && ((const SfxBoolItem&)pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
+        if ( bHyphen )
+            pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-16 15:14:04 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 19:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     FontEmphasisMark eEmphasis;
     FontRelief      eRelief;
     LanguageType    eLang, eCjkLang, eCtlLang;
+    BOOL            bHyphenate;
 
     //! additional parameter to control if language is needed?
 
@@ -524,6 +525,10 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
         if ( pCondSet->GetItemState( ATTR_CTL_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_CTL_FONT_LANGUAGE );
         eCtlLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
+
+        if ( pCondSet->GetItemState( ATTR_HYPHENATE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_HYPHENATE );
+        bHyphenate = ((const SfxBoolItem*)pItem)->GetValue();
     }
     else        // alles direkt aus Pattern
     {
@@ -570,6 +575,8 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_CJK_FONT_LANGUAGE )).GetLanguage();
         eCtlLang = ((const SvxLanguageItem&)
                         rMySet.Get( ATTR_CTL_FONT_LANGUAGE )).GetLanguage();
+        bHyphenate = ((const SfxBoolItem&)
+                        rMySet.Get( ATTR_HYPHENATE )).GetValue();
     }
 
     // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72, und runden
@@ -604,6 +611,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxLanguageItem  ( eLang,        EE_CHAR_LANGUAGE ) );
     pEditSet->Put( SvxLanguageItem  ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
     pEditSet->Put( SvxLanguageItem  ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
+    pEditSet->Put( SfxBoolItem      ( EE_PARA_HYPHENATE, bHyphenate ) );
 }
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
