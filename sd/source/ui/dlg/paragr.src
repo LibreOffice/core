@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-11 05:19:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabDialog TAB_PARAGRAPH
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Par?grafo" ;
     Text [ portuguese ] = "Parágrafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -96,7 +96,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -199,7 +199,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ ENGLISH ] = "Paragraph (Tabs)" ;
                 Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Parágrafo (Tabs)" ;
+                Text [ portuguese_brazilian ] = "Par?grafo (Tabs)" ;
                 Text [ portuguese ] = "Tabulação" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
