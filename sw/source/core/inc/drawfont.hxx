@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:42:31 $
+ *  last change: $Author: fme $ $Date: 2001-07-06 10:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,12 +487,7 @@ public:
 #endif
     }
     void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
-    void ShiftX()
-    {
-        ASSERT( bPos, "DrawTextInfo: Undefined Position" );
-        ASSERT( bSize, "DrawTextInfo: Undefined Width" );
-        ((Point*)pPos)->X() += GetSize().Width();
-    }
+    void Shift();
 };
 
 #endif

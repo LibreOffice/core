@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-02 08:46:00 $
+ *  last change: $Author: fme $ $Date: 2001-07-06 10:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,4 +1553,23 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     return nTxtBreak;
 }
 
+// used during painting of small capitals
+void SwDrawTextInfo::Shift()
+{
+    ASSERT( bPos, "DrawTextInfo: Undefined Position" );
+    ASSERT( bSize, "DrawTextInfo: Undefined Width" );
 
+    switch ( pFnt->GetOrientation() )
+    {
+    case 0 :
+        ((Point*)pPos)->X() += GetSize().Width();
+        break;
+    case 900 :
+        ASSERT( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
+        ((Point*)pPos)->Y() -= GetSize().Width();
+        break;
+    case 2700 :
+        ((Point*)pPos)->Y() += GetSize().Width();
+        break;
+    }
+}
