@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:11:08 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 16:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm );
     void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC,
-                        FmXFormController* pParent = NULL,
-                        sal_Bool bCheck=sal_False );
+                        FmXFormController* pParent = NULL);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const;
     void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC );
