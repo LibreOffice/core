@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:39:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,11 +572,7 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
     if ( IsSynchronMode() )
     {
         UcbLockBytes* pThis = const_cast < UcbLockBytes* >( this );
-        if ( m_xHandler.Is() )
-            m_xHandler->Handle( UcbLockBytesHandler::BEFOREWAIT, pThis );
         pThis->m_aInitialized.wait();
-        if ( m_xHandler.Is() )
-            m_xHandler->Handle( UcbLockBytesHandler::AFTERWAIT, pThis );
     }
 
     Reference <XInputStream> xStream = getInputStream_Impl();
@@ -722,11 +718,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     if ( IsSynchronMode() )
     {
         UcbLockBytes* pThis = const_cast < UcbLockBytes* >( this );
-        if ( m_xHandler.Is() )
-            m_xHandler->Handle( UcbLockBytesHandler::BEFOREWAIT, pThis );
         pThis->m_aInitialized.wait();
-        if ( m_xHandler.Is() )
-            m_xHandler->Handle( UcbLockBytesHandler::AFTERWAIT, pThis );
     }
 
     if (!pStat)
