@@ -1,0 +1,10 @@
+(1) goto "./nativelib/<platform>" directory and build it
+(2) build this directory
+(3) expand your class path to include all jar files of an office installation
+	(means all files in path "<officeinst>/program/classes")
+(4) goto "api/<platform>/class"
+(5) copy from an existing java installation the runtime library "jawt" (e.g. jawt.dll for windows)
+	into this directory
+(6) copy "api/<platform>/bin/nativelib.dll" (for windows) to "api/<platform>/class"
+(7) start an office  : "soffice -accept=socket,host=localhost,port=8100;urp;"
+(8) goto "api/<platform>/class" and start java applet: "java -jar desktop.jar"
