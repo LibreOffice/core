@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-02 09:56:45 $
+#   last change: $Author: vg $ $Date: 2004-04-05 11:32:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.103 $ ';
+    $id_str = ' $Revision: 1.104 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -553,9 +553,9 @@ sub check_dmake {
     if (open(DMAKEVERSION, "dmake -V |")) {
         my @dmake_version = <DMAKEVERSION>;
         close DMAKEVERSION;
-        if ($dmake_version[0] =~ /^dmake\s\-\sCopyright\s\(c\)/) {
-            print " Using version $1\n" if ($dmake_version[0] =~ /Version\s(\d+\.*\d*)/);
-        };
+#       if ($dmake_version[0] =~ /^dmake\s\-\sCopyright\s\(c\)/) {
+#           print " Using version $1\n" if ($dmake_version[0] =~ /Version\s(\d+\.*\d*)/);
+#        };
         return;
     };
     &print_error('dmake - no such file or directory');
@@ -1833,13 +1833,15 @@ sub get_build_modes {
     if (defined $ENV{BUILD_TYPE}) {
         if ($ENV{BUILD_TYPE} =~ /\s+/o) {
             my @build_modes = split (/\s+/, $ENV{BUILD_TYPE});
-            $build_modes{$_}++ foreach (@build_modes)
+            $build_modes{$_}++ foreach (@build_modes);
         } else {
             $build_modes{$ENV{BUILD_TYPE}}++;
         };
         return;
     };
+    # Default build modes(for OpenOffice.org)
     $build_modes{'OOo'}++;
+    $build_modes{'EXT'}++;
 };
 
 #
