@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 09:33:00 $
+ *  last change: $Author: dbo $ $Date: 2001-10-26 07:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,10 @@
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 
-#include <uno/current_context.hxx>
 #include <uno/environment.h>
 #include <uno/mapping.hxx>
+
+#include <com/sun/star/uno/XCurrentContext.hpp>
 
 #include "current.hxx"
 
@@ -75,9 +76,7 @@
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::cppu;
-
 using namespace ::com::sun::star::uno;
-
 
 namespace cppu
 {
