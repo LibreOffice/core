@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:17:16 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,22 @@
 #include <comphelper/sequence.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_TEXTANIMATIONTYPE_HPP_
+#include <com/sun/star/presentation/TextAnimationType.hpp>
+#endif
+
 #include <algorithm>
 
 #ifndef _SD_CUSTOMANIMATIONEFFECT_HXX
@@ -174,9 +190,11 @@ using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::util::XCloneable;
+using ::com::sun::star::lang::Locale;
 
 namespace sd
 {
@@ -186,6 +204,7 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     mnPresetClass(-1),
     mfBegin(-1.0),
     mfDuration(-1.0),
+    mfAbsoluteDuration(-1.0),
     mnMasterRel(0),
     mbHasAfterEffect(false),
     mfIterateInterval(0.0),
@@ -310,13 +329,116 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
                         {
                             maTarget = xAnimate->getTarget();
                             mnTargetSubItem = xAnimate->getSubItem();
-                            checkForText();
                         }
                     }
                 }
             }
         }
     }
+
+    mfAbsoluteDuration = mfDuration;
+    checkForText();
+}
+
+// --------------------------------------------------------------------
+
+sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_Int16 nIterateType )
+{
+    sal_Int32 nSubItems = 0;
+
+    try
+    {
+        // first get target text
+        sal_Int32 nOnlyPara = -1;
+
+        Reference< XText > xShape;
+        aTarget >>= xShape;
+        if( !xShape.is() )
+        {
+            ParagraphTarget aParaTarget;
+            if( aTarget >>= aParaTarget )
+            {
+                xShape.query( aParaTarget.Shape );
+                nOnlyPara = aParaTarget.Paragraph;
+            }
+        }
+
+        // now use the break iterator to iterate over the given text
+        // and count the sub items
+
+        if( xShape.is() )
+        {
+            // TODO/LATER: Optimize this, don't create a break iterator each time
+            Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+            Reference < i18n::XBreakIterator > xBI( xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY );
+            DBG_ASSERT( xBI.is(), "sd::CustomAnimationEffect::getNumberOfSubitems(), could not create a 'com.sun.star.i18n.BreakIterator'!" );
+
+            if( xBI.is() )
+            {
+                Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY_THROW );
+                Locale aLocale;
+                const OUString aStrLocaleName( RTL_CONSTASCII_USTRINGPARAM("CharLocale") );
+                Reference< XTextRange > xParagraph;
+
+                sal_Int32 nPara = 0;
+                while( xEnumeration->hasMoreElements() )
+                {
+                    xEnumeration->nextElement() >>= xParagraph;
+
+                    // skip this if its not the only paragraph we want to count
+                    if( (nOnlyPara != -1) && (nOnlyPara != nPara ) )
+                        continue;
+
+                    if( nIterateType == TextAnimationType::BY_PARAGRAPH )
+                    {
+                        nSubItems++;
+                    }
+                    else
+                    {
+                        const OUString aText( xParagraph->getString() );
+                        Reference< XPropertySet > xSet( xParagraph, UNO_QUERY_THROW );
+                        xSet->getPropertyValue( aStrLocaleName ) >>= aLocale;
+
+                        sal_Int32 nPos;
+                        const sal_Int32 nEndPos = aText.getLength();
+
+                        if( nIterateType == TextAnimationType::BY_WORD )
+                        {
+                            for( nPos = 0; nPos < nEndPos; nPos++ )
+                            {
+                                nPos = xBI->getWordBoundary(aText, nPos, aLocale, i18n::WordType::ANY_WORD, sal_True).endPos;
+                                nSubItems++;
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            sal_Int32 nDone;
+                            for( nPos = 0; nPos < nEndPos; nPos++ )
+                            {
+                                nPos = xBI->nextCharacters(aText, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone);
+                                nSubItems++;
+                            }
+                        }
+                    }
+
+                    if( nPara == nOnlyPara )
+                        break;
+
+                    nPara++;
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        nSubItems = 0;
+        DBG_ERROR( "sd::CustomAnimationEffect::getNumberOfSubitems(), exception cought!" );
+    }
+
+    return nSubItems;
 }
 
 // --------------------------------------------------------------------
@@ -447,8 +569,13 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
 
 // --------------------------------------------------------------------
 
-void CustomAnimationEffect::checkForText()
+/** checks if the text for this effect has changed and updates internal flags.
+    returns true if something changed.
+*/
+bool CustomAnimationEffect::checkForText()
 {
+    bool bChange = false;
+
     Reference< XText > xText;
 
     if( maTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
@@ -468,7 +595,9 @@ void CustomAnimationEffect::checkForText()
                 Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_QUERY );
                 if( xEnumeration.is() )
                 {
-                    mbHasText = xEnumeration->hasMoreElements();
+                    sal_Bool bHasText = xEnumeration->hasMoreElements();
+                    bChange |= bHasText != mbHasText;
+                    mbHasText = bHasText;
 
                     sal_Int32 nPara = aParaTarget.Paragraph;
 
@@ -481,8 +610,11 @@ void CustomAnimationEffect::checkForText()
                         xEnumeration->nextElement() >>= xParaSet;
                         if( xParaSet.is() )
                         {
+                            sal_Int32 nParaDepth;
                             const OUString strNumberingLevel( RTL_CONSTASCII_USTRINGPARAM("NumberingLevel") );
-                            xParaSet->getPropertyValue( strNumberingLevel ) >>= mnParaDepth;
+                            xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
+                            bChange |= nParaDepth != mnParaDepth;
+                            mnParaDepth = nParaDepth;
                         }
                     }
                 }
@@ -492,9 +624,49 @@ void CustomAnimationEffect::checkForText()
     else
     {
         maTarget >>= xText;
-        mbHasText = xText.is() && xText->getString().getLength();
+        sal_Bool bHasText = xText.is() && xText->getString().getLength();
+        bChange |= bHasText != mbHasText;
+        mbHasText = bHasText;
     }
 
+    bChange |= calculateIterateDuration();
+    return bChange;
+}
+
+bool CustomAnimationEffect::calculateIterateDuration()
+{
+    bool bChange = false;
+
+    // if we have an iteration, we must also calculate the
+    // 'true' container duration, that is
+    // ( ( is form animated ) ? [contained effects duration] : 0 ) +
+    // ( [number of animated children] - 1 ) * [interval-delay] + [contained effects duration]
+    Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
+    if( xIter.is() )
+    {
+        double fDuration = mfDuration;
+        const double fSubEffectDuration = mfDuration;
+
+        if( mnTargetSubItem != ShapeAnimationSubType::ONLY_BACKGROUND ) // does not make sense for iterate container but better check
+        {
+            const sal_Int32 nSubItems = getNumberOfSubitems( maTarget, mnIterateType );
+            if( nSubItems )
+            {
+                const double f = (nSubItems-1) * mfIterateInterval;
+                fDuration += f;
+            }
+        }
+
+        // if we also animate the form first, we have to add the
+        // sub effect duration to the whole effect duration
+        if( mnTargetSubItem == ShapeAnimationSubType::AS_WHOLE )
+            fDuration += fSubEffectDuration;
+
+        bChange |= fDuration != mfAbsoluteDuration;
+        mfAbsoluteDuration = fDuration;
+    }
+
+    return bChange;
 }
 
 // --------------------------------------------------------------------
@@ -590,6 +762,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
     {
         double fScale = fDuration / mfDuration;
         mfDuration = fDuration;
+        mfAbsoluteDuration = mfDuration;
 
         // calculate effect duration and get target shape
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
@@ -623,6 +796,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
                 }
             }
         }
+        calculateIterateDuration();
     }
     catch( Exception& )
     {
@@ -939,6 +1113,8 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
             Reference< XIterateContainer > xIter( mxNode, UNO_QUERY_THROW );
             xIter->setIterateType( nIterateType );
         }
+
+        checkForText();
     }
     catch( Exception& e )
     {
@@ -961,6 +1137,8 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
             mfIterateInterval = fIterateInterval;
             xIter->setIterateInterval( fIterateInterval );
         }
+
+        calculateIterateDuration();
     }
 }
 
@@ -1720,7 +1898,7 @@ void EffectSequenceHelper::implRebuild()
                             aAfterEffects.push_back( a );
                         }
 
-                        double fTemp = pEffect->getBegin() + pEffect->getDuration();
+                        double fTemp = pEffect->getBegin() + pEffect->getAbsoluteDuration();
                         if( fTemp > fDuration )
                             fDuration = fTemp;
 
@@ -1965,6 +2143,8 @@ bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com:
 
 void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
+    bool bChanges = false;
+
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
         return;
@@ -1973,9 +2153,12 @@ void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTar
     while( aIter != maEffects.end() )
     {
         if( (*aIter)->getTargetShape() == aParaTarget.Shape )
-            (*aIter)->checkForText();
+            bChanges |= (*aIter)->checkForText();
         aIter++;
     }
+
+    if( bChanges )
+        rebuild();
 }
 
 // --------------------------------------------------------------------
@@ -2019,7 +2202,7 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
         }
         else if( (*aIter)->getTargetShape() == aParaTarget.Shape )
         {
-            (*aIter)->checkForText();
+            bChanges |= (*aIter)->checkForText();
         }
 
         if( bErased )
@@ -2774,8 +2957,44 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
+/*
+double EffectSequenceHelper::calculateIterateNodeDuration(
+{
+    Reference< i18n::XBreakIterator > xBI( ImplGetBreakIterator() );
 
+    sal_Int32 nDone;
+    sal_Int32 nNextCellBreak( xBI->nextCharacters(rTxt, nIdx, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone) );
+    i18n::Boundary nNextWordBoundary( xBI->getWordBoundary(rTxt, nIdx, rLocale, i18n::WordType::ANY_WORD, sal_True) );
+    sal_Int32 nNextSentenceBreak( xBI->endOfSentence(rTxt, nIdx, rLocale) );
 
+    const sal_Int32 nEndPos( nIdx + nLen );
+    sal_Int32 i, currOffset(0);
+    for( i=nIdx; i<nEndPos; ++i )
+    {
+        // TODO: Check whether position update is valid for CTL/BiDi
+        rOutDev.DrawText( rPos + Point(currOffset,0), rTxt, i, 1 );
+        currOffset = *pDXArray++;
+
+        // issue the comments at the respective break positions
+        if( i == nNextCellBreak )
+        {
+            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOC" ) );
+            nNextCellBreak = xBI->nextCharacters(rTxt, i, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        }
+        if( i == nNextWordBoundary.endPos )
+        {
+            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOW" ) );
+            nNextWordBoundary = xBI->getWordBoundary(rTxt, i+1, rLocale, i18n::WordType::ANY_WORD, sal_True);
+        }
+        if( i == nNextSentenceBreak )
+        {
+            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOS" ) );
+            nNextSentenceBreak = xBI->endOfSentence(rTxt, i+1, rLocale);
+        }
+    }
+}
+
+*/
 // ====================================================================
 
 MainSequence::MainSequence()
@@ -2963,6 +3182,37 @@ void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
     {
         (*aIter)->disposeTextRange( aTarget );
     }
+}
+
+// --------------------------------------------------------------------
+
+/** callback from the sd::View when an object just left text edit mode */
+void MainSequence::onTextChanged( const Reference< XShape >& xShape )
+{
+    EffectSequenceHelper::onTextChanged( xShape );
+
+    InteractiveSequenceList::iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    {
+        (*aIter)->onTextChanged( xShape );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
+{
+    bool bChanges = false;
+
+    EffectSequence::iterator aIter;
+    for( aIter = maEffects.begin(); aIter != maEffects.end(); aIter++ )
+    {
+        if( (*aIter)->getTargetShape() == xShape )
+            bChanges |= (*aIter)->checkForText();
+    }
+
+    if( bChanges )
+        EffectSequenceHelper::implRebuild();
 }
 
 // --------------------------------------------------------------------
