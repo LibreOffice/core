@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlRadioButtonModel.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:46:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,20 @@
 #ifndef __com_sun_star_awt_UnoControlRadioButtonModel_idl__
 #define __com_sun_star_awt_UnoControlRadioButtonModel_idl__
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
-#include <com/sun/star/awt/UnoControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
-#include <com/sun/star/util/Color.idl>
-#endif
-
 #ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
+#ifndef __com_sun_star_awt_UnoControlModel_idl__
+#include <com/sun/star/awt/UnoControlModel.idl>
+#endif
+
 #ifndef __com_sun_star_style_VerticalAlignment_idl__
 #include <com/sun/star/style/VerticalAlignment.idl>
+#endif
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 
@@ -89,6 +89,20 @@
 published service UnoControlRadioButtonModel
 {
     service com::sun::star::awt::UnoControlModel;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the horizontal alignment of the text in the control.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+
+        @since OOo 2.0.0
+     */
+    [optional, property] short Align;
 
     //-------------------------------------------------------------------------
 
@@ -156,6 +170,14 @@ published service UnoControlRadioButtonModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies that the text may be displayed on more than one line.
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean MultiLine;
+
+    //-------------------------------------------------------------------------
+
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
@@ -191,20 +213,25 @@ published service UnoControlRadioButtonModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies a visual effect to apply to the check box control
+    /** specifies the vertical alignment of the text in the control.
+
+        @since OOo 2.0.0
+     */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a visual effect to apply to the radio button control.
 
         <p>Possible values for this property are <type>VisualEffect</type>::FLAT and
         <type>VisualEffect</type>::LOOK3D.</p>
 
         @see com::sun::star::awt::VisualEffect
-    */
+
+        @since OOo 2.0.0
+     */
     [optional, property] short VisualEffect;
 
-    //-------------------------------------------------------------------------
-
-    /** specifies the vertical alignment of the text in the control
-    */
-    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
 //=============================================================================
