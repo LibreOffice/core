@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdboptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:28:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,10 +367,18 @@ sal_Bool RdbOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 OString RdbOptions::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program + " [-options] [file_1 ... file_n]\nOptions:\n";
-    help += "    [-R<regname>]= registry name specifies the registry used for bootstrapping\n"
-            "                   uno. If no registry is specified, the program use the\n"
-            "                   applicat.rdb finding near the executable.\n";
+    help += m_program + " [-options] (-R<regname> | file_1 [... file_n])\n";
+    help += "The rdbmaker supports 2 modes:\n";
+    help += " 1. using the internal UNO type description manager -> use -R<regname>\n"
+            "    where regname specifies the type library used by the UNO type description manager\n"
+            "    after UNO is bootstrapped. This option disables the use of any other type libraries.\n";
+            "    The tpye library must be a valid product type library which means that all types are\n";
+            "    stored under the global base node UCR (Uno Core Reflection data).\n";
+    help += " 2. using one or more type library files -> use file_1 ... file_n\n"
+            "    file_1 .. file_n specifies one or more valid type library files which are used to\n"
+            "    find the needed type information. The used type libraries have to support the same base\n"
+            "    node (-B option).\n";
+    help += "Options:\n";
     help += "    -O<filename> = filename specifies the name of the generated registry\n";
     help += "                   or text file.\n";
     help += "    -L           = specifies that only a text file is generated with the\n";
@@ -387,6 +395,7 @@ OString RdbOptions::prepareHelp()
     help += "                   this file nothing will be generated.\n";
     help += "    -B<name>     = name specifies the base node. All types are searched under\n";
     help += "                   this node. Default is the root '/' of the registry files.\n";
+    help += "                   This option takes effect using run mode 2 only.\n";
     help += "    -b<name>     = name specifies the base node of the output registry. All\n";
     help += "                   types will be generated under this node. Default is the\n";
     help += "                   root '/' of the registry file.\n";
