@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:57:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
 #define _TOOLKIT_AWT_VCLXMENU_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_XMENUBAR_HPP_
 #include <com/sun/star/awt/XMenuBar.hpp>
@@ -102,7 +105,7 @@ DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::st
 //  class VCLXMenu
 //  ----------------------------------------------------
 
-class VCLXMenu :    public ::com::sun::star::awt::XMenuBar,
+class TOOLKIT_DLLPUBLIC VCLXMenu :  public ::com::sun::star::awt::XMenuBar,
                     public ::com::sun::star::awt::XPopupMenu,
                     public ::com::sun::star::awt::XMenuExtended,
                     public ::com::sun::star::lang::XTypeProvider,
@@ -181,7 +184,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXMenuBar
 //  ----------------------------------------------------
-class VCLXMenuBar : public VCLXMenu
+class TOOLKIT_DLLPUBLIC VCLXMenuBar : public VCLXMenu
 {
 public:
         VCLXMenuBar();
@@ -191,7 +194,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXPopupMenu
 //  ----------------------------------------------------
-class VCLXPopupMenu : public VCLXMenu
+class TOOLKIT_DLLPUBLIC VCLXPopupMenu : public VCLXMenu
 {
 public:
         VCLXPopupMenu();
