@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GradientStyle.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:47:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** specify the style of color dispersion.
  */
-enum GradientStyle
+published enum GradientStyle
 {
     //-------------------------------------------------------------------------
 
