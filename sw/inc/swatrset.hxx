@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:24:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ class SwTextGridItem;
 class SwHeaderAndFooterEatSpacingItem;
 // OD 18.09.2003 #i18732#
 class SwFmtFollowTextFlow;
+// OD 2004-05-05 #i28701#
+class SwFmtWrapInfluenceOnObjPos;
 
 // Grafik-Attribute
 class SwMirrorGrf;
@@ -338,6 +340,8 @@ public:
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
     // OD 18.09.2003 #i18732#
     inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
+    // OD 2004-05-05 #i28701#
+    inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     INLINE const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
