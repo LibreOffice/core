@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessControlException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-11 11:06:55 $
+ *  last change: $Author: dbo $ $Date: 2001-12-11 16:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,15 +81,14 @@ module com {  module sun {  module star {  module security {
 */
 exception AccessControlException : com::sun::star::uno::SecurityException
 {
-    /** lacking permission: type
+    /** lacking permission; although this is most often a Permission struct,
+        this is extensible for future permissions keeping compatible.
+        <p>
+        Remember: code calling checkPermission() giving a permission
+        specification most often does not catch a coming AccessControlException!
+        </p>
     */
-    string PermissionType;
-    /** lacking permission: target
-    */
-    string PermissionTarget;
-    /** lacking permission: actions
-    */
-    string PermissionActions;
+    any LackingPermission;
 };
 
 //=============================================================================

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2001-12-11 10:59:07 $
+#   last change: $Author: dbo $ $Date: 2001-12-11 16:36:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,13 +78,12 @@ PACKAGE=com$/sun$/star$/security
 # ------------------------------------------------------------------------
 
 IDLFILES= \
-    AccessController.idl \
-    XAccessController.idl \
-    XAccessControlContext.idl \
-    XPrivilegedAction.idl \
+    AccessController.idl			\
+    XAccessController.idl			\
+    XAccessControlContext.idl		\
+    XPrivilegedAction.idl			\
+    Permission.idl				\
     AccessControlException.idl
-
-#	Permission.idl \
 
 # ------------------------------------------------------------------
 
