@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:28:47 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+// do not use Application Idle but AutoTimer instead
+#define TIMERIDLE
 
 #ifdef DEBUG
     #if defined(WNT) || defined(WNT)
@@ -709,6 +712,11 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
         // Schleift hier bis Befehl nicht zurückkommt,
         // Wird dann rekursiv über IdleHdl und PostUserEvent aufgerufen.
     {
+        m_bInsideExecutionLoop = TRUE;
+#ifdef TIMERIDLE
+        m_aIdleTimer.Stop();
+        m_aIdleTimer.Start();
+#endif
         StatementList *pC = StatementList::pFirst;
 
 //      MessBox MB( pMainWin, WB_DEF_OK|WB_OK, "Pause ...", "... und Weiter" );
@@ -756,6 +764,8 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
 
         for (int xx = 1;xx < 20;xx++)
             StatementList::NormalReschedule();
+
+        m_bInsideExecutionLoop = FALSE;
     }
 
     StatementList::nWindowWaitUId = 0;  // Warten rücksetzen, da handler sowieso verlassen wird
@@ -785,13 +795,18 @@ IMPL_LINK( ImplRemoteControl, QueCommandsEvent, CommunicationLink*, pCL )
 
 BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 {
-
 //    return TRUE;
     USHORT nId;
 
     if( !m_bIdleInserted )
     {
+#ifdef TIMERIDLE
+        m_aIdleTimer.SetTimeoutHdl( LINK( this, ImplRemoteControl, IdleHdl ) );
+        m_aIdleTimer.SetTimeout( 1000 );
+        m_aIdleTimer.Start();
+#else
         GetpApp()->InsertIdleHdl( LINK( this, ImplRemoteControl, IdleHdl ), 1 );
+#endif
         m_bIdleInserted = TRUE;
     }
 
@@ -862,7 +877,18 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
     m_pDbgWin->AddText( String::CreateFromInt64( nServiceId ) );
     m_pDbgWin->AddText( " :\n" );
 #endif
-    GetpApp()->PostUserEvent( LINK( this, ImplRemoteControl, CommandHdl ) );
+    if ( !m_bInsideExecutionLoop )
+    {
+#ifdef DEBUG
+        m_pDbgWin->AddText( "Posting Event for CommandHdl.\n" );
+#endif
+
+        GetpApp()->PostUserEvent( LINK( this, ImplRemoteControl, CommandHdl ) );
+    }
+#ifdef DEBUG
+    else
+        m_bInsideExecutionLoop = TRUE;
+#endif
     return TRUE;
 } // BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
@@ -881,6 +907,7 @@ void ImplRemoteControl::ExecuteURL( String &aURL )
 
 ImplRemoteControl::ImplRemoteControl()
 : m_bIdleInserted( FALSE )
+, m_bInsideExecutionLoop( FALSE )
 , pRetStream(NULL)
 #ifdef DEBUG
 , m_pDbgWin(NULL)
@@ -948,7 +975,11 @@ ImplRemoteControl::~ImplRemoteControl()
 #endif
     if( m_bIdleInserted )
     {
+#ifdef TIMERIDLE
+        m_aIdleTimer.Stop();
+#else
         GetpApp()->RemoveIdleHdl( LINK( this, ImplRemoteControl, IdleHdl ) );
+#endif
         m_bIdleInserted = FALSE;
     }
     delete pServiceMgr;
