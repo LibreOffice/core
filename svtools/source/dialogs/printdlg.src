@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:38:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ english_us ] = "Printer" ;
         Text [ portuguese_brazilian ] = "Impressora" ;
         Text [ swedish ] = "Skrivare" ;
-        Text [ danish ] = "Printer" ;
+        Text [ danish ] = "Printer " ;
         Text [ italian ] = "Stampante" ;
         Text [ spanish ] = "Impresora" ;
         Text [ french ] = "Imprimante" ;
@@ -111,6 +111,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Tiskárna";
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "मुद्रक";
+        Text[ slovak ] = "Tlačiareň";
     };
     FixedText FT_NAME
     {
@@ -143,6 +144,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮שם מדפסת‬";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     ListBox LB_NAMES
     {
@@ -183,6 +185,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Vlastnosti...";
         Text[ hebrew ] = "‮מאפינים...‬";
         Text[ hindi ] = "Propert~ies...";
+        Text[ slovak ] = "Vlastnost~i...";
     };
     FixedText FT_STATUS
     {
@@ -215,6 +218,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Stav";
         Text[ hebrew ] = "‮מצב‬";
         Text[ hindi ] = "वस्तुस्थिति";
+        Text[ slovak ] = "Stav";
     };
     FixedText FI_STATUS
     {
@@ -252,6 +256,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     FixedText FI_TYPE
     {
@@ -289,6 +294,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText FI_LOCATION
     {
@@ -326,6 +332,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Komentář";
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "Comment";
+        Text[ slovak ] = "Komentár";
     };
     FixedText FI_COMMENT
     {
@@ -362,6 +369,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Faxové číslo";
         Text[ hebrew ] = "‮מספר הפקס‬";
         Text[ hindi ] = "Fax number";
+        Text[ slovak ] = "Faxové číslo";
     };
     Edit EDT_FAXNO
     {
@@ -400,6 +408,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Tisk do souboru";
         Text[ hebrew ] = "‮הדפסה לקובץ‬";
         Text[ hindi ] = "Print to file";
+        Text[ slovak ] = "Tlač do súboru";
     };
     FixedText FI_PRINTFILE
     {
@@ -443,6 +452,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Rozsah tisku";
         Text[ hebrew ] = "‮טווח הדפסה‬";
         Text[ hindi ] = "Print range";
+        Text[ slovak ] = "Tlač oblasti";
     };
     RadioButton RBT_ALL
     {
@@ -475,6 +485,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Vše";
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "सब";
+        Text[ slovak ] = "Všetko";
     };
     RadioButton RBT_PAGES
     {
@@ -507,6 +518,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Stránky";
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "पृष्ठें";
+        Text[ slovak ] = "Stránky";
     };
     RadioButton RBT_SELECTION
     {
@@ -539,6 +551,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "Selection";
+        Text[ slovak ] = "Výber";
     };
     Edit EDT_PAGES
     {
@@ -588,6 +601,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Kopie";
         Text[ hebrew ] = "‮עותקים‬";
         Text[ hindi ] = "प्रतिलिपियाँ";
+        Text[ slovak ] = "Kópia";
     };
     FixedText FT_COPIES
     {
@@ -620,6 +634,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Počet kopií";
         Text[ hebrew ] = "‮מספר עותקים‬";
         Text[ hindi ] = "प्रतिलिपियों की संख्या";
+        Text[ slovak ] = "Počet kópií";
     };
     NumericField NUM_COPIES
     {
@@ -665,6 +680,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Seřadit";
         Text[ hebrew ] = "‮התאם‬";
         Text[ hindi ] = "Co~llate";
+        Text[ slovak ] = "Zora~diť";
     };
     FixedImage IMG_COLLATE
     {
@@ -712,6 +728,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "Volby...";
         Text[ hebrew ] = "‮אפשרויות...‬";
         Text[ hindi ] = "~विकल्प...";
+        Text[ slovak ] = "V~oľby...";
     };
     OKButton BTN_OK
     {
@@ -757,6 +774,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ czech ] = "<Vše>";
         Text[ hebrew ] = "‮<הכל>‬";
         Text[ hindi ] = "<सब>";
+        Text[ slovak ] = "<Všetko>";
     };
     Text[ chinese_simplified ] = "打印";
     Text[ russian ] = "������";
@@ -774,6 +792,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ czech ] = "Tisk";
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई";
+    Text[ slovak ] = "Tlač";
 };
 
 Image RID_IMG_PRNDLG_COLLATE
@@ -799,6 +818,8 @@ Image RID_IMG_PRNDLG_NOCOLLATE_HC
     ImageBitmap = Bitmap { File = "ncollate_h.bmp" ; };
     MaskColor = IMAGE_MAGENTA_MASK ;
 };
+
+
 
 
 
