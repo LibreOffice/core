@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:48:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ String STR_OVR_UNDO
     TEXT [ norwegian ] = "Skriv over" ;
     TEXT [ italian ] = "Sovrascrivi" ;
     TEXT [ portuguese_brazilian ] = "Gravar sobre" ;
-    TEXT [ portuguese ] = "Sobregravar" ;
+    TEXT [ portuguese ] = "Substituir" ;
     TEXT [ finnish ] = "Korvaa" ;
     TEXT [ danish ] = "Overskriv" ;
     TEXT [ french ] = "Écraser" ;
@@ -630,7 +630,7 @@ String STR_COPY_UNDO
     TEXT[ chinese_simplified ] = "¸´ÖÆ";
     TEXT[ russian ] = "Êîïèğîâàòü";
     TEXT[ polish ] = "Kopiuj";
-    TEXT[ japanese ] = "ºËß°‚·‚é";
+    TEXT[ japanese ] = "ºËß°";
     TEXT[ chinese_traditional ] = "½Æ»s";
     TEXT[ arabic ] = "äÓÎ";
     TEXT[ dutch ] = "Kopiëren";
@@ -694,7 +694,7 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT[ dutch ] = "Vast pagina-einde";
     TEXT[ chinese_simplified ] = "ÊÖ¹¤»»Ò³";
     TEXT[ greek ] = "¸íôïíç áëëáãŞ óåëßäáò";
-    TEXT[ korean ] = "°íÁ¤ ÂÊ³ª´©±â";
+    TEXT[ korean ] = "°íÁ¤ ÂÊ ³ª´©±â";
     TEXT[ turkish ] = "Sabit sayfa sonu";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Salto fijo de página";
@@ -1152,7 +1152,7 @@ String STR_CHANGESECTPASSWD
     Text[ dutch ] = "Wachtwoordbeveiliging wijzigen";
     Text[ chinese_simplified ] = "¸ü¸Ä±£»¤ÃÜÂë";
     Text[ greek ] = "ÁëëáãŞ ğñïóôáóßáò êùäéêïı ğñüóâáóçò";
-    Text[ korean ] = "ÆĞ½º¿öµåº¸È£ º¯°æ";
+    Text[ korean ] = "ÆĞ½º¿öµå º¸È£ º¯°æ";
     Text[ turkish ] = "Şifre korumasını değiştir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar contraseña";
@@ -1211,7 +1211,7 @@ String STR_OUTLINE_LR
     TEXT[ dutch ] = "Overzichtsniveaus bepalen";
     TEXT[ chinese_simplified ] = "·Ö¼¶´ó¸Ù";
     TEXT[ greek ] = "ÄéÜñèñùóç ìå åóï÷İò";
-    TEXT[ korean ] = "´Ù´Ü°è¡¡´Ü°è";
+    TEXT[ korean ] = "´Ù´Ü°è ¼öÁØ";
     TEXT[ turkish ] = "Anahatı değiştir";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Escalonar Esquema";
@@ -1299,7 +1299,7 @@ String STR_NUMUPDOWN
     TEXT[ dutch ] = "Nummering indelen";
     TEXT[ chinese_simplified ] = "·Ö¼¶±àºÅ";
     TEXT[ greek ] = "Áñßèìçóç ìå åóï÷İò";
-    TEXT[ korean ] = "¹øÈ£¸Å±â±â,  ´Ü°è";
+    TEXT[ korean ] = "¹øÈ£¸Å±â±â ´Ü°è";
     TEXT[ turkish ] = "Numaralamayı değiştir";
     TEXT[ catalan ] = "Graduar numeración";
 };
@@ -1409,7 +1409,7 @@ String STR_INC_LEFTMARGIN
     Text[ dutch ] = "Inspringing vergroten";
     Text[ chinese_simplified ] = "Ôö´óËõ½ø";
     Text[ greek ] = "Áıîçóç åóï÷Şò";
-    Text[ korean ] = "µé¿©¾²±â£¬´ÃÀÓ";
+    Text[ korean ] = "µé¿©¾²±â ´ÃÀÓ";
     Text[ turkish ] = "Girintiyi büyüt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aumentar sangría";
@@ -1437,7 +1437,7 @@ String STR_DEC_LEFTMARGIN
     Text[ dutch ] = "Inspringing verkleinen";
     Text[ chinese_simplified ] = "¼õÉÙËõ½ø";
     Text[ greek ] = "Ìåßùóç åóï÷Şò";
-    Text[ korean ] = "µé¿©¾²±â£¬ÁÙÀÓ";
+    Text[ korean ] = "µé¿©¾²±â ÁÙÀÓ";
     Text[ turkish ] = "Girintiyi küçült";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Disminuir sangría";
@@ -1694,7 +1694,7 @@ String STR_MERGE_TABLE
     Text[ dutch ] = "Tabel verbinden";
     Text[ chinese_simplified ] = "ºÏ²¢±í¸ñ";
     Text[ greek ] = "Óıíäåóç ğéíÜêùí";
-    Text[ korean ] = "Ç¥ ¿¬°á";
+    Text[ korean ] = "Å×ÀÌºí ¿¬°á";
     Text[ turkish ] = "Tabloyu birleştir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "unir tablas";
@@ -1718,7 +1718,7 @@ String STR_TRANSLITERATE
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
     TEXT[ japanese ] = "‘å•¶š/¬•¶š";
-    TEXT[ korean ] = "´ë/¼Ò¹®ÀÚ";
+    TEXT[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
     TEXT[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
     TEXT[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
     TEXT[ turkish ] = "Change case";
@@ -1834,7 +1834,7 @@ String STR_DRAWUNGROUP
     Text[ dutch ] = "Groepsobject opheffen";
     Text[ chinese_simplified ] = "È¡Ïû·Ö×é¶ÔÏó";
     Text[ greek ] = "ÊáôÜñãçóç ïìáäïğïßçóçò áíôéêåéìİíùí";
-    Text[ korean ] = "±×·ì °³Ã¼ ±×·ìÇØÁ¦";
+    Text[ korean ] = "±×·ì °³Ã¼ ÇØÃ¼";
     Text[ turkish ] = "Nesne grubunu çöz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Resolver objeto de grupo";
@@ -2505,7 +2505,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ polish ] = "OsadŸ znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
     Text[ japanese ] = "ÙËŞİ’è";
-    Text[ korean ] = "·çºñ";
+    Text[ korean ] = "ÀÚÀ½ ±âÈ£ ÁöÁ¤";
     Text[ chinese_simplified ] = "¼ÓÉÏÆ´Òô»ò×¢Òô·ûºÅ";
     Text[ chinese_traditional ] = "¥[¤Wµù­µ²Å¸¹";
     Text[ turkish ] = "Set phonetic Symbols";
@@ -2789,6 +2789,7 @@ String STR_DDEERROR_LINK2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no se puede establecer";
 };
+
 
 
 
