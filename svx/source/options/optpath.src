@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:28:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,96 +75,25 @@ TabPage RID_SFXPAGE_PATH
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Pfade" ;
-    Text [ English ] = "Paths" ;
-    Text [ norwegian ] = "Baner" ;
-    Text [ italian ] = "Percorsi" ;
-    Text [ portuguese_brazilian ] = "Caminhos" ;
-    Text [ portuguese ] = "Atalhos" ;
-    Text [ finnish ] = "Polut" ;
-    Text [ danish ] = "Stier" ;
-    Text [ french ] = "Chemins" ;
-    Text [ swedish ] = "Sökvägar" ;
-    Text [ dutch ] = "Paden" ;
-    Text [ spanish ] = "Rutas" ;
-    Text [ english_us ] = "Paths" ;
-    Text[ chinese_simplified ] = "è·¯å¾„";
-    Text[ russian ] = "Ïóòè";
-    Text[ polish ] = "Œcie¿ki";
-    Text[ japanese ] = "ãƒ‘ã‚¹";
+    Text [ de ] = "Pfade" ;
+    Text [ en-US ] = "Paths" ;
     FixedText FT_TYPE
     {
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Typ" ;
-        Text [ English ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Tyyppi" ;
-        Text [ danish ] = "Type" ;
-        Text [ french ] = "Type" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ dutch ] = "Type" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "ç±»å‹";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "ç¨®é¡";
-        Text[ chinese_traditional ] = "é¡å‹";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "ìœ í˜•";
-        Text[ turkish ] = "Tip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus";
-        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "Typ";
-        Text[ hungarian ] = "TÃ­pus";
-        Text[ slovenian ] = "Vrsta";
+        Text [ de ] = "Typ" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_PATH
     {
         Hide = TRUE;
         Pos = MAP_APPFONT ( 110 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Pfad" ;
-        Text [ English ] = "Path" ;
-        Text [ norwegian ] = "Bane" ;
-        Text [ italian ] = "Percorso" ;
-        Text [ portuguese_brazilian ] = "Caminho" ;
-        Text [ portuguese ] = "Atalho" ;
-        Text [ finnish ] = "Polku" ;
-        Text [ danish ] = "Sti" ;
-        Text [ french ] = "Chemin" ;
-        Text [ swedish ] = "Sökväg" ;
-        Text [ dutch ] = "Pad" ;
-        Text [ spanish ] = "Ruta" ;
-        Text [ english_us ] = "Path" ;
-        Text[ chinese_simplified ] = "è·¯å¾„";
-        Text[ russian ] = "Ïóòü";
-        Text[ polish ] = "Œcie¿ka";
-        Text[ japanese ] = "ãƒ‘ã‚¹";
-        Text[ chinese_traditional ] = "è·¯å¾‘";
-        Text[ arabic ] = "ÇáãÓÇÑ";
-        Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ korean ] = "ê²½ë¡œ";
-        Text[ turkish ] = "Veri yolu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Camí";
-        Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡";
-        Text[ czech ] = "Cesta";
-        Text[ hebrew ] = "â€®××¡×œ×•×œâ€¬";
-        Text[ hindi ] = "à¤®à¤¾à¤°à¥à¤—";
-        Text[ slovak ] = "Cesta";
-        Text[ hungarian ] = "Ãštvonal";
-        Text[ slovenian ] = "Pot";
+        Text [ de ] = "Pfad" ;
+        Text [ en-US ] = "Path" ;
+        Text [ x-comment ] = " ";
     };
     Control LB_PATH
     {
@@ -177,108 +106,25 @@ TabPage RID_SFXPAGE_PATH
     {
         Pos = MAP_APPFONT ( 183 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text = "~Bearbeiten..." ;
-        Text [ English ] = "~Edit..." ;
-        Text [ norwegian ] = "~Rediger..." ;
-        Text [ italian ] = "~Modifica..." ;
-        Text [ portuguese_brazilian ] = "~Editar..." ;
-        Text [ portuguese ] = "~Editar..." ;
-        Text [ finnish ] = "~Muokkaa..." ;
-        Text [ danish ] = "~Rediger..." ;
-        Text [ french ] = "~Éditer..." ;
-        Text [ swedish ] = "~Redigera..." ;
-        Text [ dutch ] = "Be~werken..." ;
-        Text [ spanish ] = "~Editar..." ;
-        Text [ english_us ] = "~Edit..." ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
-        Text[ russian ] = "Ïğàâêà...";
-        Text[ polish ] = "~Edytuj...";
-        Text[ japanese ] = "ç·¨é›†(~E)...";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)...";
-        Text[ arabic ] = "ÊÍÑíÑ...";
-        Text[ greek ] = "Åğå~îåñãáóßá...";
-        Text[ korean ] = "í¸ì§‘(~E)...";
-        Text[ turkish ] = "Düzenle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Edita...";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
-        Text[ czech ] = "Upravit...";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”...â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
-        Text[ slovak ] = "~UpraviÅ¥...";
-        Text[ hungarian ] = "S~zerkesztÃ©s...";
-        Text[ slovenian ] = "~Uredi...";
+        Text [ de ] = "~Bearbeiten..." ;
+        Text [ en-US ] = "~Edit..." ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_STANDARD
     {
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text = "~Standard" ;
-        Text [ English ] = "~Standard" ;
-        Text [ english_us ] = "~Default" ;
-        Text [ italian ] = "~Standard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par défaut" ;
-        Text [ dutch ] = "~Standaard" ;
-        Text [ swedish ] = "~Standard" ;
-        Text [ danish ] = "Standar~d" ;
-        Text [ portuguese_brazilian ] = "~Padrão" ;
-        Text [ portuguese ] = "~Padrão" ;
-        Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
-        Text[ russian ] = "~Ïî óìîë÷àíèş";
-        Text[ polish ] = "~Domyœlnie";
-        Text[ japanese ] = "æ¨™æº–(~D)";
-        Text[ chinese_traditional ] = "æ¨™æº–(~D)";
-        Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ greek ] = "Ğñïåğé~ëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
-        Text[ turkish ] = "Standart";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Per defecte";
-        Text[ finnish ] = "Oletus";
-        Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-        Text[ czech ] = "VÃ½chozÃ­";
-        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
-        Text[ hindi ] = "~à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-        Text[ slovak ] = "VÃ½cho~dzie";
-        Text[ hungarian ] = "~AlapÃ©rtelmezett";
-        Text[ slovenian ] = "~Privzeto";
+        Text [ de ] = "~Standard" ;
+        Text [ en-US ] = "~Default" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine GB_STD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Standard" ;
-        Text [ English ] = "Standard" ;
-        Text [ norwegian ] = "Standard" ;
-        Text [ italian ] = "Standard" ;
-        Text [ portuguese_brazilian ] = "Padrão" ;
-        Text [ portuguese ] = "Padrão" ;
-        Text [ finnish ] = "Oletus" ;
-        Text [ danish ] = "Standard" ;
-        Text [ french ] = "Liste des chemins" ;
-        Text [ swedish ] = "Standard" ;
-        Text [ dutch ] = "Standaard" ;
-        Text [ spanish ] = "Predeterminado" ;
-        Text [ english_us ] = "Default" ;
-        Text[ chinese_simplified ] = "æ ‡å‡†";
-        Text[ russian ] = "Ïî óìîë÷àíèş";
-        Text[ polish ] = "Domyœlnie";
-        Text[ japanese ] = "æ¨™æº–";
-        Text[ chinese_traditional ] = "æ¨™æº–";
-        Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ greek ] = "Ğ~ñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’";
-        Text[ turkish ] = "Öntanımlı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Per defecte";
-        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-        Text[ czech ] = "VÃ½chozÃ­";
-        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
-        Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
-        Text[ slovak ] = "VÃ½chodzie";
-        Text[ hungarian ] = "AlapÃ©rtelmezett";
-        Text[ slovenian ] = "Privzeto";
+        Text [ de ] = "Standard" ;
+        Text [ en-US ] = "Default" ;
+        Text [ x-comment ] = " ";
     };
     Image IMG_LOCK
     {
@@ -290,191 +136,36 @@ TabPage RID_SFXPAGE_PATH
         ImageBitmap = Bitmap { File = "lock_hc.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Text[ chinese_traditional ] = "è·¯å¾‘";
-    Text[ arabic ] = "ÇáãÓÇÑÇÊ";
-    Text[ greek ] = "Äéáäñïìİò";
-    Text[ korean ] = "ê²½ë¡œ";
-    Text[ turkish ] = "Veri yolları";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Camins";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡";
-    Text[ czech ] = "Cesty";
-    Text[ hebrew ] = "â€®××¡×œ×•×œ×™×â€¬";
-    Text[ hindi ] = "à¤®à¤¾à¤°à¥à¤—";
-    Text[ slovak ] = "Cesty";
-    Text[ hungarian ] = "Ãštvonal";
-    Text[ slovenian ] = "Poti";
+    Text [ x-comment ] = " ";
 };
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
-    Message [ English ] = "The paths of configuration and mail storages have to be different.\nPlease choose a new path." ;
-    Message [ english_us ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
-    Message [ portuguese_brazilian ] = "Os diretórios de configuração e de correio devem ser especificados como diretórios separados.\nEscolha um novo caminho." ;
-    Message [ swedish ] = "Katalogerna för konfigurationen och meddelandelagret\nmåste vara olika.\nVälj en ny sökväg." ;
-    Message [ danish ] = "Konfiguratation og mail må ikke lige i samme katalog.\nVælg venligst en ny sti." ;
-    Message [ italian ] = "La cartella della configurazione deve essere diversa da quella per il salvataggio \ndei messaggi.\nScegliere un nuovo percorso." ;
-    Message [ spanish ] = "La configuración y los directorios de correo electrónico\ndeben especificarse como directorios separados.\nPor favor elija una nueva ruta." ;
-    Message [ french ] = "Les répertoires pour la configuration et l'enregistrement des messages\ndoivent être différents.\nSélectionnez un nouveau chemin." ;
-    Message [ dutch ] = "De mappen voor de configuratie en voor het opslaan van berichten\nmogen niet hetzelfde zijn.\nSelecteer een nieuw pad." ;
-    Message [ portuguese ] = "Especifique os directórios de configuração e de correio como directórios separados.\nSeleccione um novo atalho." ;
-    Message[ chinese_simplified ] = "é…ç½®å’Œä¿å­˜é‚®ä»¶çš„ç›®å½•ä¸èƒ½ç›¸åŒã€‚\nè¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ–°çš„ç›®å½•ã€‚";
-    Message[ russian ] = "Êîíôèãóğàöèè è ïî÷òîâûå êàòàëîãè äîëæíû íàõîäèòüñÿ\nâ ğàçíûõ êàòàëîãàõ.\nÂûáåğèòå íîâûé ïóòü.";
-    Message[ polish ] = "Katalogi konfiguracyjny i pocztowy \nmusz¹ byæ katalogami osobnymi.\nWybierz now¹ œcie¿kê.";
-    Message[ japanese ] = "è¨­å®šç”¨ã¨ãƒ¡ãƒ¼ãƒ«ä¿å­˜ç”¨ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯\nåˆ¥ã€…ã§ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚\næ–°ã—ã„ãƒ‘ã‚¹ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
-    Message[ chinese_traditional ] = "é…ç½®å’Œå„²å­˜éƒµä»¶çš„ç›®éŒ„ä¸èƒ½ç›¸åŒã€‚\nè«‹æ‚¨é¸æ“‡ä¸€å€‹æ–°çš„ç›®éŒ„ã€‚";
-    Message[ arabic ] = "íÌÈ Ãä Êßæä ÏáÇÆá ÇáÊßæíä æÇáÈÑíÏ ãÎÊáİÉ.\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÓÇÑ ÌÏíÏ.";
-    Message[ greek ] = "Ïé êáôÜëïãïé ãéá ôçí äéáìüñöùóç êáé ôçí áğïèŞêåõóç ôùí ìçíõìÜôùí\nğñİğåé íá åßíáé äéáöïñåôéêïß.\nĞáñáêáëş åëİãîôå ìéá íİá äéáäñïìŞ.";
-    Message[ korean ] = "ì„¤ì •ìš© ë””ë ‰í† ë¦¬ì™€ ë©”ì¼ ì €ì¥ ë””ë ‰í† ë¦¬ëŠ” êµ¬ë¶„ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.\nìƒˆ ê²½ë¡œë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-    Message[ turkish ] = "Konfigürasyon ve ileti dizinlerinin ayrı dizinler olarak\nbelirlenmesi gerekir.\nLütfen yeni bir veri yolu seçin.";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La configuració i els directoris de correu electrònic\ns'han d'especificar com a directoris separats.\nEscolliu un nou camí.";
-    Message[ finnish ] = "Kokoonpano- ja postihakemistot on määritettävä eri hakemistoiksi.\nValitse uusi polku.";
-    Message[ thai ] = "à¸•à¹‰à¸­à¸‡à¸£à¸°à¸šà¸¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¹à¸¥à¸°à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¹€à¸¡à¸¥à¹Œà¹€à¸›à¹‡à¸™à¸ªà¸²à¸£à¸šà¸šà¸—à¸µà¹ˆà¹à¸¢à¸à¸­à¸­à¸à¸¡à¸²\nà¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¹ƒà¸«à¸¡à¹ˆ";
-    Message[ czech ] = "Konfigurace a adresÃ¡Å™ pro poÅ¡tu musejÃ­ bÃ½t urÄeny jako rozdÃ­lnÃ© adresÃ¡Å™e.\nProsÃ­m zadejte novou cestu.";
-    Message[ hebrew ] = "â€®×¡×¤×¨×™×ª ×”×ª×¦×•×¨×” ×•×¡×¤×¨×™×ª ×”×“×•××¨ ×—×™×™×‘×™× ×œ×”×™×•×ª × ×¤×¨×“×•×ª.\n× × ×œ×‘×—×•×¨ ××¡×œ×•×œ ×—×“×©.â€¬";
-    Message[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤”à¤° à¤®à¥‡à¤‡à¤²à¥ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤­à¤¿à¤¨à¥à¤¨ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¤¿à¤¯à¥‹à¤‚ à¤•à¥€ à¤¤à¤°à¤¹ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¿à¤ à¥¤\nà¤•à¥ƒà¤ªà¤¯à¤¾ à¤¨à¤¯à¤¾ à¤®à¤¾à¤°à¥à¤— à¤•à¥‹ à¤šà¥à¤¨à¤¿à¤ à¥¤";
-    Message[ slovak ] = "KonfiguraÄnÃ½ a poÅ¡tovÃ½ adresÃ¡r musia byÅ¥ urÄenÃ© ako rozdielne adresÃ¡re.\nProsÃ­m zadajte novÃº cestu.";
-    Message[ hungarian ] = "A konfigurÃ¡ciÃ³s Ã©s a leveleket tÃ¡rolÃ³ kÃ¶nyvtÃ¡r nem lehet azonos.\nVÃ¡lasszon egy mÃ¡sik kÃ¶nyvtÃ¡rat.";
-    Message[ slovenian ] = "Konfiguracijska in poÅ¡tna mapa morata biti loÄeni mapi.\nIzberite novo pot";
+    Message [ de ] = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
+    Message [ en-US ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
+    Message [ x-comment ] = " ";
 };
  // ******************************************************************* EOF
 String RID_SVXSTR_KEY_CONFIG_DIR
 {
-    Text = "Konfiguration" ;
-    Text [ English ] = "Configuration" ;
-    Text [ norwegian ] = "Konfigurasjoner" ;
-    Text [ italian ] = "Configurazione" ;
-    Text [ portuguese_brazilian ] = "Configuração" ;
-    Text [ portuguese ] = "Configuração" ;
-    Text [ finnish ] = "Kokoonpano" ;
-    Text [ danish ] = "Konfiguration" ;
-    Text [ french ] = "Configuration" ;
-    Text [ swedish ] = "Konfiguration" ;
-    Text [ dutch ] = "Configuratie" ;
-    Text [ spanish ] = "Configuración" ;
-    Text [ english_us ] = "Configuration" ;
-    Text[ chinese_simplified ] = "é…ç½®";
-    Text[ russian ] = "Íàñòğîéêà";
-    Text[ polish ] = "Konfiguracja";
-    Text[ japanese ] = "è¨­å®š";
-    Text[ chinese_traditional ] = "é…ç½®";
-    Text[ arabic ] = "Êßæíä";
-    Text[ dutch ] = "Configuratie";
-    Text[ chinese_simplified ] = "é…ç½®";
-    Text[ greek ] = "Äéáìüñöùóç";
-    Text[ korean ] = "ì„¤ì •";
-    Text[ turkish ] = "Yapılandırma";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configuració";
-    Text[ thai ] = "à¹‚à¸„à¸£à¸‡à¹à¸šà¸š";
-    Text[ czech ] = "Konfigurace";
-    Text[ hebrew ] = "â€®×ª×¦×•×¨×”â€¬";
-    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
-    Text[ slovak ] = "KonfigurÃ¡cia";
+    Text [ de ] = "Konfiguration" ;
+    Text [ en-US ] = "Configuration" ;
 };
 String RID_SVXSTR_KEY_WORK_PATH
 {
-    Text = "Arbeitsverzeichnis" ;
-    Text [ English ] = "Working path" ;
-    Text [ norwegian ] = "Arbeidsbane" ;
-    Text [ italian ] = "Cartella di lavoro" ;
-    Text [ portuguese_brazilian ] = "Meus documentos" ;
-    Text [ portuguese ] = "Pasta de trabalho" ;
-    Text [ finnish ] = "Omat asiakirjat" ;
-    Text [ danish ] = "Arbejdsmappe" ;
-    Text [ french ] = "Dossier de travail" ;
-    Text [ swedish ] = "Arbetskatalog" ;
-    Text [ dutch ] = "Werkmap" ;
-    Text [ spanish ] = "Mis documentos" ;
-    Text [ english_us ] = "My Documents" ;
-    Text[ chinese_simplified ] = "å·¥ä½œç›®å½•";
-    Text[ russian ] = "Ìîè äîêóìåíòû";
-    Text[ polish ] = "Moje dokumenty";
-    Text[ japanese ] = "ãƒ¯ãƒ¼ã‚­ãƒ³ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª";
-    Text[ chinese_traditional ] = "æˆ‘çš„æ–‡ä»¶å¤¾";
-    Text[ arabic ] = "ãÓÊäÏÇÊí";
-    Text[ dutch ] = "Werkmap";
-    Text[ chinese_simplified ] = "å·¥ä½œç›®å½•";
-    Text[ greek ] = "Ôá İããñáöÜ ìïõ";
-    Text[ korean ] = "ë‚´ ë¬¸ì„œ";
-    Text[ turkish ] = "Belgelerim";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Els meus documents";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¸­à¸‡à¸‰à¸±à¸™";
-    Text[ czech ] = "Moje dokumenty";
-    Text[ hebrew ] = "â€®×”××¡××›×™× ×©×œ×™â€¬";
-    Text[ hindi ] = "à¤®à¥‡à¤°à¤¾ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Moje dokumenty";
+    Text [ de ] = "Arbeitsverzeichnis" ;
+    Text [ en-US ] = "My Documents" ;
 };
 String RID_SVXSTR_KEY_GRAPHICS_PATH
 {
-    Text = "Grafiken" ;
-    Text [ English ] = "Grafics" ;
-    Text [ norwegian ] = "Grafikk" ;
-    Text [ italian ] = "Immagini" ;
-    Text [ portuguese_brazilian ] = "Figuras" ;
-    Text [ portuguese ] = "Imagens" ;
-    Text [ finnish ] = "Grafiikka" ;
-    Text [ danish ] = "Grafik" ;
-    Text [ french ] = "Images" ;
-    Text [ swedish ] = "Grafik" ;
-    Text [ dutch ] = "Afbeeldingen" ;
-    Text [ spanish ] = "Imágenes" ;
-    Text [ english_us ] = "Graphics" ;
-    Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Grafika";
-    Text[ japanese ] = "å›³";
-    Text[ chinese_traditional ] = "åœ–å½¢";
-    Text[ arabic ] = "ÕæÑ";
-    Text[ dutch ] = "Afbeeldingen";
-    Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ greek ] = "ÃñáöéêÜ";
-    Text[ korean ] = "ê·¸ë¦¼";
-    Text[ turkish ] = "Grafik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imatges";
-    Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "ObrÃ¡zky";
-    Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
-    Text[ slovak ] = "ObrÃ¡zky";
+    Text [ de ] = "Grafiken" ;
+    Text [ en-US ] = "Graphics" ;
 };
 String RID_SVXSTR_KEY_BITMAP_PATH
 {
-    Text = "Symbole" ;
-    Text [ English ] = "Symbols" ;
-    Text [ english_us ] = "Icons" ;
-    Text [ italian ] = "Simboli" ;
-    Text [ spanish ] = "Símbolos" ;
-    Text [ french ] = "Icônes" ;
-    Text [ dutch ] = "Pictogrammen" ;
-    Text [ swedish ] = "Ikoner" ;
-    Text [ danish ] = "Symboler" ;
-    Text [ portuguese ] = "Ícones" ;
-    Text [ portuguese_brazilian ] = "Ícones" ;
-    Text[ chinese_simplified ] = "å›¾æ ‡";
-    Text[ russian ] = "Çíà÷êè";
-    Text[ polish ] = "Ikony";
-    Text[ japanese ] = "ã‚·ãƒ³ãƒœãƒ«";
-    Text[ chinese_traditional ] = "åœ–ç¤º";
-    Text[ arabic ] = "ÑãæÒ";
-    Text[ dutch ] = "Pictogrammen";
-    Text[ chinese_simplified ] = "å›¾æ ‡";
-    Text[ greek ] = "Óıìâïëá";
-    Text[ korean ] = "ì•„ì´ì½˜";
-    Text[ language_user1 ] = "; BLG ; BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"";
-    Text[ turkish ] = "Simgeler";
-    Text[ catalan ] = "Icones";
-    Text[ finnish ] = "Kuvakkeet";
-    Text[ thai ] = "à¹„à¸­à¸„à¸­à¸™";
-    Text[ czech ] = "Ikony";
-    Text[ hebrew ] = "â€®×¡××œ×™×â€¬";
-    Text[ hindi ] = "à¤…à¤‡à¤•à¥‰à¤¨à¥à¤¸";
-    Text[ slovak ] = "Ikony";
+    Text [de ] = "Symbole" ;
+    Text [ en-US ] = "Icons" ;
 };
 String RID_SVXSTR_KEY_BASIC_PATH
 {
@@ -483,618 +174,93 @@ String RID_SVXSTR_KEY_BASIC_PATH
 
 String RID_SVXSTR_KEY_PALETTE_PATH
 {
-    Text = "Paletten" ;
-    Text [ English ] = "Pallets" ;
-    Text [ norwegian ] = "Palletter" ;
-    Text [ italian ] = "Tavolozze" ;
-    Text [ portuguese_brazilian ] = "Paletas" ;
-    Text [ portuguese ] = "Paletas" ;
-    Text [ finnish ] = "Paletit" ;
-    Text [ danish ] = "Paletter" ;
-    Text [ french ] = "Palettes" ;
-    Text [ swedish ] = "Paletter" ;
-    Text [ dutch ] = "Paletten" ;
-    Text [ spanish ] = "Paletas" ;
-    Text [ english_us ] = "Palettes" ;
-    Text[ chinese_simplified ] = "è°ƒè‰²æ¿";
-    Text[ russian ] = "Ïàëèòğà";
-    Text[ polish ] = "Paleta";
-    Text[ japanese ] = "ãƒ‘ãƒ¬ãƒƒãƒˆ";
-    Text[ chinese_traditional ] = "è‰²æ¿";
-    Text[ arabic ] = "áæÍÇÊ ÃáæÇä ÑÓã";
-    Text[ dutch ] = "Paletten";
-    Text[ chinese_simplified ] = "è°ƒè‰²æ¿";
-    Text[ greek ] = "Ğáëİôåò";
-    Text[ korean ] = "íŒ”ë ˆíŠ¸";
-    Text[ turkish ] = "Paletler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Paletes";
-    Text[ thai ] = "à¸ˆà¸²à¸™à¸ªà¸µ";
-    Text[ czech ] = "Palety";
-    Text[ hebrew ] = "â€®×œ×•×—×•×ª ×¦×‘×¢â€¬";
-    Text[ hindi ] = "à¤ªà¥‡à¤²à¤Ÿà¥à¤¸";
-    Text[ slovak ] = "Palety";
+    Text [ de ] = "Paletten" ;
+    Text [ en-US ] = "Palettes" ;
 };
 String RID_SVXSTR_KEY_BACKUP_PATH
 {
-    Text = "Sicherungskopien" ;
-    Text [ English ] = "Backup" ;
-    Text [ norwegian ] = "Sikkerhetskopi" ;
-    Text [ italian ] = "Backup" ;
-    Text [ portuguese_brazilian ] = "Backups" ;
-    Text [ portuguese ] = "Cópias de segurança" ;
-    Text [ finnish ] = "Varmistuskopiot" ;
-    Text [ danish ] = "Sikkerhedskopier" ;
-    Text [ french ] = "Copies de sauvegarde" ;
-    Text [ swedish ] = "Säkerhetskopior" ;
-    Text [ dutch ] = "Reservekopieën" ;
-    Text [ spanish ] = "Copias de seguridad" ;
-    Text [ english_us ] = "Backups" ;
-    Text[ chinese_simplified ] = "å®‰å…¨å¤‡ä»¶";
-    Text[ russian ] = "Ğåçåğâíûå êîïèè";
-    Text[ polish ] = "Kopie zapasowe";
-    Text[ japanese ] = "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚³ãƒ”ãƒ¼";
-    Text[ chinese_traditional ] = "å®‰å…¨å‚™ä»½";
-    Text[ arabic ] = "äÓÎ ÇÍÊíÇØíÉ";
-    Text[ dutch ] = "Reservekopieën";
-    Text[ chinese_simplified ] = "å®‰å…¨å¤‡ä»¶";
-    Text[ greek ] = "Áíôßãñáöá áóöáëåßáò";
-    Text[ korean ] = "ë°±ì—… ë³µì‚¬";
-    Text[ turkish ] = "Yedekler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Copies de seguretat";
-    Text[ thai ] = "à¸ªà¸³à¸£à¸­à¸‡";
-    Text[ czech ] = "ZÃ¡lohy";
-    Text[ hebrew ] = "â€®×’×™×‘×•×™×™×â€¬";
-    Text[ hindi ] = "à¤¬à¥ˆà¤•à¤ª";
-    Text[ slovak ] = "ZÃ¡lohy";
+    Text [ de ] = "Sicherungskopien" ;
+    Text [ en-US ] = "Backups" ;
 };
 String RID_SVXSTR_KEY_MODULES_PATH
 {
-    Text = "Module" ;
-    Text [ English ] = "Modules" ;
-    Text [ norwegian ] = "Moduler" ;
-    Text [ italian ] = "Moduli" ;
-    Text [ portuguese_brazilian ] = "Módulos" ;
-    Text [ portuguese ] = "Módulos" ;
-    Text [ finnish ] = "Moduulit" ;
-    Text [ danish ] = "Moduler" ;
-    Text [ french ] = "Modules" ;
-    Text [ swedish ] = "Moduler" ;
-    Text [ dutch ] = "Modules" ;
-    Text [ spanish ] = "Módulos" ;
-    Text [ english_us ] = "Modules" ;
-    Text[ chinese_simplified ] = "æ¨¡å—";
-    Text[ russian ] = "Ìîäóëè";
-    Text[ polish ] = "Modu³y";
-    Text[ japanese ] = "ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«";
-    Text[ chinese_traditional ] = "æ¨¡çµ„";
-    Text[ arabic ] = "æÍÏÇÊ äãØíÉ";
-    Text[ dutch ] = "Modules";
-    Text[ chinese_simplified ] = "æ¨¡å—";
-    Text[ greek ] = "Ëåéôïõñãéêİò ìïíÜäåò";
-    Text[ korean ] = "ëª¨ë“ˆ";
-    Text[ turkish ] = "Modüller";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mòduls";
-    Text[ thai ] = "à¹‚à¸¡à¸”à¸¹à¸¥";
-    Text[ czech ] = "Moduly";
-    Text[ hebrew ] = "â€®××•×“×•×œ×™×â€¬";
-    Text[ hindi ] = "à¤®à¥‹à¤¡à¥à¤¯à¥‚à¤²à¥‡à¤‚";
-    Text[ slovak ] = "Moduly";
+    Text [ de ] = "Module" ;
+    Text [ en-US ] = "Modules" ;
 };
 String RID_SVXSTR_KEY_TEMPLATE_PATH
 {
-    Text = "Dokumentvorlagen" ;
-    Text [ English ] = "Dokument templates" ;
-    Text [ norwegian ] = "Dokumentmaler" ;
-    Text [ italian ] = "Modelli" ;
-    Text [ portuguese_brazilian ] = "Modelos de documentos" ;
-    Text [ portuguese ] = "Modelos de documentos" ;
-    Text [ finnish ] = "Mallit" ;
-    Text [ danish ] = "Dokumentskabeloner" ;
-    Text [ french ] = "Modèles de document" ;
-    Text [ swedish ] = "Dokumentmallar" ;
-    Text [ dutch ] = "Sjablonen" ;
-    Text [ spanish ] = "Plantillas" ;
-    Text [ english_us ] = "Templates" ;
-    Text[ chinese_simplified ] = "æ–‡æ¡£æ ·å¼";
-    Text[ russian ] = "Øàáëîíû";
-    Text[ polish ] = "Szablony";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ chinese_traditional ] = "æ–‡ä»¶æ¨£å¼";
-    Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
-    Text[ dutch ] = "Sjablonen";
-    Text[ chinese_simplified ] = "æ–‡æ¡£æ ·å¼";
-    Text[ greek ] = "Ğñüôõğá åããñÜöïõ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼";
-    Text[ turkish ] = "Şablonlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantilles";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
-    Text[ czech ] = "Å ablony";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny";
+    Text [ de ] = "Dokumentvorlagen" ;
+    Text [ en-US ] = "Templates" ;
 };
 String RID_SVXSTR_KEY_GLOSSARY_PATH
 {
-    Text = "AutoText" ;
-    Text [ English ] = "AutoText";
-    Text[ english_us ] = "AutoText";
-    Text[ portuguese ] = "AutoTexto";
-    Text[ russian ] = "Àâòîòåêñò";
-    Text[ greek ] = "Áõôüìáôï Êåßìåíï";
-    Text[ dutch ] = "AutoTekst";
-    Text[ french ] = "AutoTexte";
-    Text[ spanish ] = "Texto automático";
-    Text[ italian ] = "Testo automatico";
-    Text[ danish ] = "AutoTekst";
-    Text[ swedish ] = "AutoText";
-    Text[ polish ] = "Autotekst";
-    Text[ portuguese_brazilian ] = "AutoTexto";
-    Text[ japanese ] = "å…¥åŠ›æ”¯æ´";
-    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†";
-    Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†";
-    Text[ turkish ] = "Otomatik metin";
-    Text[ arabic ] = "äÕ ÊáŞÇÆí";
-    Text[ catalan ] = "AutoText";
-    Text[ finnish ] = "Automaattinen teksti";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "AutomatickÃ½ text";
-    Text[ hebrew ] = "â€®×˜×§×¡×˜ ××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-    Text[ slovak ] = "AutomatickÃ½ text";
+    Text [ de ] = "AutoText" ;
+    Text [ en-US ] = "AutoText";
 };
 String RID_SVXSTR_KEY_DICTIONARY_PATH
 {
-    Text = "Wörterbücher" ;
-    Text [ English ] = "Dictionaries" ;
-    Text [ norwegian ] = "Ordlister" ;
-    Text [ italian ] = "Dizionari" ;
-    Text [ portuguese_brazilian ] = "Dicionários" ;
-    Text [ portuguese ] = "Dicionários" ;
-    Text [ french ] = "Dictionnaires" ;
-    Text [ dutch ] = "Woordenboeken" ;
-    Text [ spanish ] = "Diccionarios" ;
-    Text [ danish ] = "Ordbøger" ;
-    Text [ swedish ] = "Ordlistor" ;
-    Text [ finnish ] = "Sanakirjat" ;
-    Text [ english_us ] = "Dictionaries" ;
-    Text[ chinese_simplified ] = "å­—å…¸";
-    Text[ russian ] = "Ñëîâàğè";
-    Text[ polish ] = "S³owniki";
-    Text[ japanese ] = "è¾æ›¸";
-    Text[ chinese_traditional ] = "å­—å…¸";
-    Text[ arabic ] = "ÇáŞæÇãíÓ";
-    Text[ dutch ] = "Woordenboeken";
-    Text[ chinese_simplified ] = "å­—å…¸";
-    Text[ greek ] = "ËåîéêÜ";
-    Text[ korean ] = "ì‚¬ì „";
-    Text[ turkish ] = "Sözlükler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diccionaris";
-    Text[ thai ] = "à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡";
-    Text[ czech ] = "SlovnÃ­ky";
-    Text[ hebrew ] = "â€®××™×œ×•× ×™×â€¬";
-    Text[ hindi ] = "à¤¶à¤¬à¥à¤¦à¤•à¥‹à¤¶";
-    Text[ slovak ] = "SlovnÃ­ky";
+    Text [ de ] = "Wörterbücher" ;
+    Text [ en-US ] = "Dictionaries" ;
 };
 String RID_SVXSTR_KEY_HELP_DIR
 {
-    Text = "Hilfedateien" ;
-    Text [ English ] = "Helpfiles" ;
-    Text [ english_us ] = "Help" ;
-    Text [ italian ] = "File della Guida" ;
-    Text [ spanish ] = "Archivos de ayuda" ;
-    Text [ french ] = "Fichiers d'aide" ;
-    Text [ dutch ] = "Help-bestanden" ;
-    Text [ swedish ] = "Hjälpfiler" ;
-    Text [ danish ] = "Hjælp-filer" ;
-    Text [ portuguese ] = "Ficheiros de ajuda" ;
-    Text [ portuguese_brazilian ] = "Ajuda" ;
-    Text[ chinese_simplified ] = "å¸®åŠ©æ–‡ä»¶";
-    Text[ russian ] = "Ñïğàâêà";
-    Text[ polish ] = "Pomoc";
-    Text[ japanese ] = "ãƒ˜ãƒ«ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«";
-    Text[ chinese_traditional ] = "èªªæ˜æª”æ¡ˆ";
-    Text[ arabic ] = "ãáİÇÊ ÇáãÓÇÚÏÉ";
-    Text[ dutch ] = "Help-bestanden";
-    Text[ chinese_simplified ] = "å¸®åŠ©æ–‡ä»¶";
-    Text[ greek ] = "Áñ÷åßá âïŞèåéáò";
-    Text[ korean ] = "ë„ì›€ë§ íŒŒì¼";
-    Text[ turkish ] = "Yardım";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuda";
-    Text[ finnish ] = "Ohje";
-    Text[ thai ] = "à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
-    Text[ czech ] = "NÃ¡povÄ›da";
-    Text[ hebrew ] = "â€®×¢×–×¨×”â€¬";
-    Text[ hindi ] = "à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾";
-    Text[ slovak ] = "PomocnÃ­k";
+    Text [ de ] = "Hilfedateien" ;
+    Text [ en-US ] = "Help" ;
 };
 String RID_SVXSTR_KEY_GALLERY_DIR
 {
-    Text = "Gallery" ;
-    Text [ English ] = "Gallery" ;
-    Text [ dutch ] = "Gallery" ;
-    Text [ english_us ] = "Gallery" ;
-    Text [ italian ] = "Gallery" ;
-    Text [ spanish ] = "Gallery" ;
-    Text [ french ] = "Gallery" ;
-    Text [ swedish ] = "Gallery" ;
-    Text [ danish ] = "Gallery" ;
-    Text [ portuguese ] = "Gallery" ;
-    Text [ portuguese_brazilian ] = "Galeria" ;
-    Text[ chinese_simplified ] = "ç”»å»Š";
-    Text[ russian ] = "Ãàëåğåÿ";
-    Text[ polish ] = "Galeria";
-    Text[ japanese ] = "ã‚®ãƒ£ãƒ©ãƒª";
-    Text[ chinese_traditional ] = "ç•«å»Š";
-    Text[ arabic ] = "ÇáÌÇáíÑí";
-    Text[ dutch ] = "Gallery";
-    Text[ chinese_simplified ] = "ç”»å»Š";
-    Text[ greek ] = "ÓõëëïãŞ";
-    Text[ korean ] = "ê°¤ëŸ¬ë¦¬";
-    Text[ turkish ] = "Galeri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Galeria";
-    Text[ finnish ] = "Galleria";
-    Text[ thai ] = "à¸„à¸¥à¸±à¸‡à¸ à¸²à¸";
-    Text[ czech ] = "Galerie";
-    Text[ hebrew ] = "â€®×’×œ×¨×™×”â€¬";
-    Text[ hindi ] = "à¤—à¥‡à¤²à¤°à¥€";
-    Text[ slovak ] = "GalÃ©rie";
+    Text [ de ] = "Gallery" ;
+    Text [ en-US ] = "Gallery" ;
 };
 
 String RID_SVXSTR_KEY_STORAGE_DIR
 {
-    Text = "Nachrichtenspeicher" ;
-    Text [ English ] = "Mail Storages" ;
-    Text [ portuguese ] = "Memória de mensagens" ;
-    Text [ english_us ] = "Message Storage" ;
-    Text [ portuguese_brazilian ] = "Armazenamento de Mensagens" ;
-    Text [ swedish ] = "Meddelandelager" ;
-    Text [ danish ] = "Meddelelseslager" ;
-    Text [ italian ] = "Memoria messaggi" ;
-    Text [ spanish ] = "Memoria de mensajes" ;
-    Text [ french ] = "Mémoire pour messages" ;
-    Text [ dutch ] = "Geheugen voor berichten" ;
-    Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶/æ–°é—»å‚¨å­˜ä½“";
-    Text[ russian ] = "Õğàíèëèùå ñîîáùåíèé";
-    Text[ polish ] = "Magazyn wiadomoœci";
-    Text[ japanese ] = "ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”¨ãƒ¡ãƒ¢ãƒª";
-    Text[ chinese_traditional ] = "é›»å­éƒµä»¶/æ–°èå„²å­˜é«”";
-    Text[ arabic ] = "ÍİÙ ÇáÃÎÈÇÑ";
-    Text[ dutch ] = "Geheugen voor berichten";
-    Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶/æ–°é—»å‚¨å­˜ä½“";
-    Text[ greek ] = "ÌíŞìç ìçíõìÜôùí";
-    Text[ korean ] = "ë©”ì‹œì§€  ì €ì¥ì¥ì†Œ";
-    Text[ turkish ] = "Mesaj Deposu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Emmagatzematge de missatges";
-    Text[ finnish ] = "Viestivaranto";
-    Text[ thai ] = "à¹€à¸à¹‡à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "UmÃ­stÄ›nÃ­ zprÃ¡v";
-    Text[ hebrew ] = "â€®××™×—×¡×•×Ÿ ×”×•×“×¢×•×ªâ€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤¦à¥‡à¤¶ à¤¸à¤‚à¤—à¥à¤°à¤¹";
-    Text[ slovak ] = "Umiestnenie sprÃ¡v";
+    Text [ de ] = "Nachrichtenspeicher" ;
+    Text [ en-US ] = "Message Storage" ;
 };
 String RID_SVXSTR_KEY_TEMP_PATH
 {
-    Text = "Temporäre Dateien" ;
-    Text [ English ] = "Temporary Files" ;
-    Text[ english_us ] = "Temporary files";
-    Text[ portuguese ] = "Ficheiros temporários";
-    Text[ russian ] = "Âğåìåííûå ôàéëû";
-    Text[ greek ] = "ĞñïóùñéíÜ áñ÷åßá";
-    Text[ dutch ] = "Tijdelijke bestanden";
-    Text[ french ] = "Fichiers temporaires";
-    Text[ spanish ] = "Archivos temporales";
-    Text[ finnish ] = "Väliaikaiset tiedostot";
-    Text[ italian ] = "File temporanei";
-    Text[ danish ] = "Midlertidige filer";
-    Text[ swedish ] = "Temporära filer";
-    Text[ polish ] = "Pliki tymczasowe";
-    Text[ portuguese_brazilian ] = "Arquivos temporários";
-    Text[ japanese ] = "ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«";
-    Text[ korean ] = "ì„ì‹œ íŒŒì¼";
-    Text[ chinese_simplified ] = "ä¸´æ—¶æ–‡ä»¶";
-    Text[ chinese_traditional ] = "æš«å­˜æª”æ¡ˆ";
-    Text[ turkish ] = "Geçici dosyalar";
-    Text[ arabic ] = "Temporary base directory";
-    Text[ catalan ] = "Directori base temporal";
-    Text[ thai ] = "à¸à¸²à¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸Šà¸±à¹ˆà¸§à¸„à¸£à¸²à¸§";
-    Text[ czech ] = "DoÄasnÃ© soubory";
-    Text[ hebrew ] = "â€®×§×‘×¦×™× ×–×× ×™×™×â€¬";
-    Text[ hindi ] = "à¤…à¤¸à¥à¤¥à¤¾à¤¯à¥€ à¤«à¤¾à¤‡à¤²à¥‡à¤‚";
-    Text[ slovak ] = "DoÄasnÃ© sÃºbory";
+    Text [ de ] = "Temporäre Dateien" ;
+    Text [ en-US ] = "Temporary files";
 };
 String RID_SVXSTR_KEY_PLUGINS_PATH
 {
-    Text = "Plugins-Verzeichnis" ;
-    Text [ English ] = "Plugins directory" ;
-    Text[ english_us ] = "Plug-ins";
-    Text[ portuguese ] = "Directório de plug-ins";
-    Text[ russian ] = "Êàòàëîã ïîäêëş÷àåìûõ ìîäóëåé";
-    Text[ dutch ] = "Plugins-directory";
-    Text[ french ] = "Répertoire de Plug-ins";
-    Text[ spanish ] = "Directorio de Plug-ins";
-    Text[ italian ] = "Cartella plugin";
-    Text[ danish ] = "PlugIn-bibliotek";
-    Text[ swedish ] = "Plug-ins-katalog";
-    Text[ polish ] = "Wtyczki plug-in";
-    Text[ portuguese_brazilian ] = "Diretório de Plug-Ins";
-    Text[ japanese ] = "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª";
-    Text[ chinese_simplified ] = "Plug-In ç›®å½•";
-    Text[ chinese_traditional ] = "Plugins ç›®éŒ„";
-    Text[ arabic ] = "Ïáíá Plug-Ins";
-    Text[ dutch ] = "Plugins-directory";
-    Text[ chinese_simplified ] = "Plug-In ç›®å½•";
-    Text[ greek ] = "ÊáôÜëïãïò óõíäåüìåíùí õğïìïíÜäùí (Plug-Ins)";
-    Text[ korean ] = "í”ŒëŸ¬ê·¸ì¸ ë””ë ‰í† ë¦¬";
-    Text[ turkish ] = "Eklentiler";
-    Text[ catalan ] = "Connectors";
-    Text[ finnish ] = "Lisäosat";
-    Text[ thai ] = "à¸›à¸¥à¸±à¹Šà¸à¸­à¸´à¸™";
-    Text[ czech ] = "ZÃ¡suvnÃ© moduly";
-    Text[ hebrew ] = "â€®×ª×•×¡×¤×™× (Plug-ins)â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤²à¤—-à¤‡à¤¨";
-    Text[ slovak ] = "ZÃ¡suvnÃ© moduly";
+    Text [ de ] = "Plugins-Verzeichnis" ;
+    Text [ en-US ] = "Plug-ins";
 };
 String RID_SVXSTR_KEY_FAVORITES_DIR
 {
-    Text[ language_user1 ] = " ";
-    Text = "Ordner-Bookmarks" ;
-    Text [ English ] = "Folder Bookmarks" ;
-    Text[ english_us ] = "Folder Bookmarks";
-    Text[ portuguese ] = "Pastas correntes";
-    Text[ greek ] = "Óåëéäïäåßêôåò êáôáëüãùí";
-    Text[ dutch ] = "Bladwijzers voor mappen";
-    Text[ french ] = "Répertoires courants";
-    Text[ spanish ] = "Marcadores de carpetas";
-    Text[ swedish ] = "Mappbokmärken";
-    Text[ russian ] = "Çàêëàäêè ïàïêè";
-    Text[ italian ] = "Bookmark della cartella";
-    Text[ danish ] = "Mappe-bogmærker";
-    Text[ polish ] = "Zak³adki folderów";
-    Text[ portuguese_brazilian ] = "Marcadores de pastas";
-    Text[ japanese ] = "ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯";
-    Text[ korean ] = "í´ë” ì±…ê°ˆí”¼";
-    Text[ chinese_simplified ] = "æ–‡ä»¶å¤¹ä¹¦ç­¾";
-    Text[ chinese_traditional ] = "è³‡æ–™å¤¾æ›¸ç±¤";
-    Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ áãÌáÏÇÊ";
-    Text[ turkish ] = "Dizin Yer İmleri";
-    Text[ catalan ] = "Marcadors de carpetes";
-    Text[ finnish ] = "Kansion kirjanmerkit";
-    Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™à¹‚à¸Ÿà¸¥à¹€à¸”à¸­à¸£à¹Œ";
-    Text[ czech ] = "ZÃ¡loÅ¾ky pro sloÅ¾ku";
-    Text[ hebrew ] = "â€®×¡×™×× ×™×•×ª ×œ×ª×™×§×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤  à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤ ";
-    Text[ slovak ] = "ZÃ¡loÅ¾ky pre zloÅ¾ku";
+    Text [ de ] = "Ordner-Bookmarks" ;
+    Text [ en-US ] = "Folder Bookmarks";
 };
 String RID_SVXSTR_KEY_FILTER_PATH
 {
-    Text = "Filter" ;
-    Text [ English ] = "Filter" ;
-    Text[ english_us ] = "Filters";
-    Text[ portuguese ] = "Filtros";
-    Text[ greek ] = "Ößëôñï";
-    Text[ dutch ] = "Filters";
-    Text[ french ] = "Filtres";
-    Text[ spanish ] = "Filtros";
-    Text[ swedish ] = "Filter";
-    Text[ russian ] = "Ôèëüòğû";
-    Text[ italian ] = "Filtro";
-    Text[ danish ] = "Filter";
-    Text[ polish ] = "Filtry";
-    Text[ portuguese_brazilian ] = "Filtros";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿";
-    Text[ korean ] = "í•„í„°";
-    Text[ chinese_simplified ] = "ç­›é€‰";
-    Text[ chinese_traditional ] = "ç¯©é¸";
-    Text[ arabic ] = "İáÊÑ";
-    Text[ turkish ] = "Süzgeçler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filtres";
-    Text[ finnish ] = "Suodattimet";
-    Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
-    Text[ czech ] = "Filtry";
-    Text[ hebrew ] = "â€®××¡× × ×™×â€¬";
-    Text[ hindi ] = "à¤«à¤¿à¤²à¥à¤Ÿà¤°à¥‡à¤‚";
-    Text[ slovak ] = "Filtre";
+    Text [ de ] = "Filter" ;
+    Text [ en-US ] = "Filters";
 };
 String RID_SVXSTR_KEY_ADDINS_PATH
 {
-    Text = "AddIns" ;
-    Text [ English ] = "AddIns" ;
-    Text[ english_us ] = "Add-ins";
-    Text[ portuguese ] = "Add-Ins";
-    Text[ greek ] = "AddIns";
-    Text[ dutch ] = "AddIns";
-    Text[ french ] = "Add-ins";
-    Text[ spanish ] = "AddIns";
-    Text[ swedish ] = "Add-ins";
-    Text[ russian ] = "Ïîäêëş÷àåìûå ìîäóëè";
-    Text[ italian ] = "AddIn";
-    Text[ danish ] = "Add-Ins";
-    Text[ polish ] = "Dodatki add-in";
-    Text[ portuguese_brazilian ] = "Aditivos";
-    Text[ japanese ] = "ã‚¢ãƒ‰ã‚¤ãƒ³";
-    Text[ korean ] = "Add-ins";
-    Text[ chinese_simplified ] = "AddIns";
-    Text[ chinese_traditional ] = "AddIns";
-    Text[ arabic ] = "Add-Ins";
-    Text[ turkish ] = "Eklentiler";
-    Text[ catalan ] = "Inclusions";
-    Text[ finnish ] = "Lisäosat";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸à¸´à¹ˆà¸¡à¹ƒà¸™";
-    Text[ czech ] = "Moduly";
-    Text[ hebrew ] = "â€®×ª×•×›× ×™×•×ª × ×¡×¤×—×•×ªâ€¬";
-    Text[ hindi ] = "Add-ins";
-    Text[ slovak ] = "Moduly";
+    Text [ de ] = "AddIns" ;
+    Text [ en-US ] = "Add-ins";
 };
 String RID_SVXSTR_KEY_USERCONFIG_PATH
 {
-    Text = "Benutzer Konfiguration" ;
-    Text [ English ] = "User Settings" ;
-    Text[ english_us ] = "User Configuration";
-    Text[ portuguese ] = "Configuração personalizada";
-    Text[ greek ] = "Äéáìüñöùóç ÷ñŞóôç";
-    Text[ dutch ] = "Gebruikersconfiguratie";
-    Text[ french ] = "Configuration d'utilisateur";
-    Text[ spanish ] = "Configuración de usuario";
-    Text[ swedish ] = "Användarkonfiguration";
-    Text[ russian ] = "Êîíôèãóğàöèÿ ïîëüçîâàòåëÿ";
-    Text[ italian ] = "Configurazione utente";
-    Text[ danish ] = "Brugerkonfiguration";
-    Text[ polish ] = "Konfiguracja u¿ytkownika";
-    Text[ portuguese_brazilian ] = "Configuração do usuário";
-    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®š";
-    Text[ korean ] = "ì‚¬ìš©ì ì„¤ì •";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…é…ç½®";
-    Text[ chinese_traditional ] = "ä½¿ç”¨è€…é…ç½®";
-    Text[ arabic ] = "Êßæíä ÇáãÓÊÎÏã";
-    Text[ turkish ] = "Kullanıcı Yapılandırması";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configuració d'usuari";
-    Text[ finnish ] = "Käyttäjän määritykset";
-    Text[ thai ] = "à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
-    Text[ czech ] = "UÅ¾ivatelskÃ¡ konfigurace";
-    Text[ hebrew ] = "â€®×ª×¦×•×¨×ª ××©×ª××©×™×â€¬";
-    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
-    Text[ slovak ] = "UÅ¾Ã­vateÄ¾skÃ¡ konfigurÃ¡cia";
+    Text [ de ] = "Benutzer Konfiguration" ;
+    Text [ en-US ] = "User Configuration";
 };
 String RID_SVXSTR_KEY_USERDICTIONARY_DIR
 {
-    Text = "Benutzerwörterbücher" ;
-    Text [ English ] = "User Dictionaries" ;
-    Text[ english_us ] = "User-defined dictionaries";
-    Text[ portuguese ] = "Dicionários personalizados";
-    Text[ russian ] = "Ñëîâàğè ïîëüçîâàòåëÿ";
-    Text[ greek ] = "ËåîéêÜ ÷ñŞóôç";
-    Text[ dutch ] = "Gebruikerswoordenboeken";
-    Text[ french ] = "Dictionnaires de l'utilisateur";
-    Text[ spanish ] = "Diccionarios de usuario";
-    Text[ italian ] = "Dizionari utente";
-    Text[ danish ] = "Brugerordbøger";
-    Text[ swedish ] = "Användarordlistor";
-    Text[ polish ] = "S³owniki u¿ytkownika";
-    Text[ portuguese_brazilian ] = "Dicionários do usuário";
-    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼è¾æ›¸";
-    Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ì‚¬ì „";
-    Text[ chinese_simplified ] = "ä½¿ç”¨è€…å­—å…¸";
-    Text[ chinese_traditional ] = "è‡ªè¨‚å­—å…¸";
-    Text[ arabic ] = "ŞæÇãíÓ ÇáãÓÊÎÏã";
-    Text[ turkish ] = "Kullanıcı tanımlı sözlükler";
-    Text[ catalan ] = "Diccionaris de l'usuari";
-    Text[ finnish ] = "Omat sanakirjat";
-    Text[ thai ] = "à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
-    Text[ czech ] = "UÅ¾ivatelskÃ© slovnÃ­ky";
-    Text[ hebrew ] = "â€®××™×œ×•× ×™× ××•×’×“×¨×™× ×¢×œ ×™×“×™ ×”××©×ª××©â€¬";
-    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¶à¤¬à¥à¤¦à¤•à¥‹à¤¶";
-    Text[ slovak ] = "UÅ¾Ã­vateÄ¾skÃ© slovnÃ­ky";
+    Text [ de ] = "Benutzerwörterbücher" ;
+    Text [ en-US ] = "User-defined dictionaries";
 };
 String RID_SVXSTR_KEY_AUTOCORRECT_DIR
 {
-    Text = "AutoKorrektur" ;
-    Text [ English ] = "AutoCorrect" ;
-    Text[ english_us ] = "AutoCorrect";
-    Text[ portuguese ] = "AutoCorrecção";
-    Text[ russian ] = "Àâòîçàìåíà";
-    Text[ greek ] = "Áõôüìáôç Äéüñèùóç";
-    Text[ dutch ] = "AutoCorrectie";
-    Text[ french ] = "AutoCorrection";
-    Text[ spanish ] = "Corrección automática";
-    Text[ italian ] = "Correzione automatica";
-    Text[ danish ] = "AutoKorrektur";
-    Text[ swedish ] = "AutoKorrigering";
-    Text[ polish ] = "Autokorekta";
-    Text[ portuguese_brazilian ] = "AutoCorreção";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
-    Text[ korean ] = "ìë™ ìˆ˜ì • ";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
-    Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£";
-    Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
-    Text[ turkish ] = "Otomatik düzeltme";
-    Text[ catalan ] = "AutoCorrecció";
-    Text[ finnish ] = "Automaattinen korjaus";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "AutomatickÃ© opravy";
-    Text[ hebrew ] = "â€®×ª×™×§×•×Ÿ ××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤¯à¤‚ à¤ à¥€à¤• à¤•à¤°à¥‹";
-    Text[ slovak ] = "AutomatickÃ© opravy";
+    Text [ de ] = "AutoKorrektur" ;
+    Text [ en-US ] = "AutoCorrect";
 };
 String RID_SVXSTR_KEY_LINGUISTIC_DIR
 {
-    Text = "Linguistik" ;
-    Text [ English ] = "Linguistic" ;
-    Text[ english_us ] = "Writing aids";
-    Text[ portuguese ] = "Linguística";
-    Text[ russian ] = "Ëèíãâèñòèêà";
-    Text[ greek ] = "Ãëùóóïëïãßá";
-    Text[ dutch ] = "Linguïstiek";
-    Text[ french ] = "Linguistique";
-    Text[ spanish ] = "Lingüística";
-    Text[ italian ] = "Linguistica";
-    Text[ danish ] = "Lingvistik";
-    Text[ swedish ] = "Lingvistik";
-    Text[ polish ] = "Pisownia";
-    Text[ portuguese_brazilian ] = "Lingüística";
-    Text[ japanese ] = "æ–‡ç« æ ¡æ­£";
-    Text[ korean ] = "ë§ì¶¤ë²• êµì •";
-    Text[ chinese_simplified ] = "è¯­è¨€è§„åˆ™";
-    Text[ chinese_traditional ] = "èªè¨€è¦å‰‡";
-    Text[ arabic ] = "ÇááÛÉ";
-    Text[ turkish ] = "Yazım Yardımları";
-    Text[ catalan ] = "Ajudes a l'escriptura";
-    Text[ finnish ] = "Kirjoituksen aputyökalut";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸‚à¸µà¸¢à¸™";
-    Text[ czech ] = "PomÅ¯cky pro psanÃ­";
-    Text[ hebrew ] = "â€®×¢×–×¨×™ ×›×ª×™×‘×”â€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤¨ à¤¸à¤¹à¤¾à¤¯à¤•";
-    Text[ slovak ] = "PomÃ´cky na pÃ­sanie";
+    Text [ de ] = "Linguistik" ;
+    Text [ en-US ] = "Writing aids";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
