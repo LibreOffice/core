@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *  last change: $Author: pb $ $Date: 2002-05-17 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4621,6 +4621,15 @@
           <value>true</value>
           <info>
             <desc xml:lang="en-US">Specifies, wheter vertical call out objects are available (true) or not (false).</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CTL">
+        <prop oor:name="CTLFont" oor:type="xs:boolean">
+          <!-- UIHints: setup -->
+          <value>false</value>
+          <info>
+            <desc xml:lang="en-US">Specifies, wheter CTL font settings are available (true) or not (false).</desc>
           </info>
         </prop>
       </group>
