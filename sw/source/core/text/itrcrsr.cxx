@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-19 15:23:12 $
+ *  last change: $Author: ama $ $Date: 2001-01-29 12:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 nPorHeight = pPor->Height();
                 nPorAscent = pPor->GetAscent();
             }
-            while( pPor && aInf.GetIdx() < nOfst && !pPor->IsBreakPortion() )
+            while( pPor && !pPor->IsBreakPortion() && ( aInf.GetIdx() < nOfst ||
+                   ( bWidth && pPor->IsMultiPortion() ) ) )
             {
                 if( !pPor->IsMarginPortion() && !pPor->IsPostItsPortion() &&
                     (!pPor->InFldGrp() || pPor->GetAscent() ) )
@@ -487,11 +488,21 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     if( pPor->IsMultiPortion() )
                     {
                         nY += nTmpAscent - nPorAscent;
-                        if( ((SwMultiPortion*)pPor)->IsDouble() &&
-                            pCMS && pCMS->b2Lines )
+                        if( ( ((SwMultiPortion*)pPor)->IsDouble() ||
+                              ((SwMultiPortion*)pPor)->HasRotation() )
+                             && pCMS && pCMS->b2Lines )
                         {
                             pCMS->p2Lines = new Sw2LinesPos();
                             pCMS->p2Lines->aLine = SwRect(aCharPos, aCharSize);
+                            if( ((SwMultiPortion*)pPor)->HasRotation() )
+                            {
+                                if( ((SwMultiPortion*)pPor)->IsRevers() )
+                                    pCMS->p2Lines->nMultiType = 1;
+                                else
+                                    pCMS->p2Lines->nMultiType = 0;
+                            }
+                            else
+                                pCMS->p2Lines->nMultiType = 2;
                             SwTwips nTmpWidth = pPor->Width();
                             if( nSpaceAdd )
                                 nTmpWidth += pPor->CalcSpacing(nSpaceAdd, aInf);

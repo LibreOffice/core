@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-12 10:49:12 $
+ *  last change: $Author: ama $ $Date: 2001-01-29 12:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1912,11 +1912,13 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             {
                 SwRect aTmp( aStRect.Pos(),
                     Point( pSt2Pos->aPortion.Right(), aStRect.Bottom() ) );
-                if( pSt2Pos->aPortion.Top() == aStRect.Top() )
+                if( !pSt2Pos->nMultiType ||
+                    pSt2Pos->aPortion.Top() == aTmp.Top() )
                     aTmp.Top( pSt2Pos->aLine.Top() );
                 aTmp.Intersection( aStFrm );
                 Sub( aRegion, aTmp );
-                if( aStRect.Bottom() < pSt2Pos->aLine.Bottom() )
+                if( pSt2Pos->nMultiType &&
+                    aStRect.Bottom() < pSt2Pos->aLine.Bottom() )
                 {
                     aTmp.Top( aTmp.Bottom() );
                     aTmp.Bottom( pSt2Pos->aLine.Bottom() );
@@ -1933,11 +1935,13 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 SwRect aTmp( Point( pEnd2Pos->aPortion.Left(), aEndRect.Top() ),
                     Point( aEndRect.Left() + aEndRect.Width(),
                            aEndRect.Top() + aEndRect.Height() ) );
-                if( pEnd2Pos->aPortion.Bottom() == aEndRect.Bottom() )
+                if( !pEnd2Pos->nMultiType ||
+                    pEnd2Pos->aPortion.Bottom() == aEndRect.Bottom() )
                     aTmp.Bottom( pEnd2Pos->aLine.Bottom() );
                 aTmp.Intersection( aEndFrm );
                 Sub( aRegion, aTmp );
-                if( aEndRect.Top() > pEnd2Pos->aLine.Top() )
+                if( pEnd2Pos->nMultiType &&
+                    aEndRect.Top() > pEnd2Pos->aLine.Top() )
                 {
                     aTmp.Bottom( aTmp.Top() );
                     aTmp.Top( pEnd2Pos->aLine.Top() );
@@ -1972,56 +1976,70 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         else if( nTmp > aEndFrm.Right() )
             aEndRect.Right( aEndFrm.Right() );
 
-        //Fall 1: (Gleicher Frame und gleiche Zeile)
-        if( pStartFrm == pEndFrm && aStRect.Top() == aEndRect.Top() )
+        if( pStartFrm == pEndFrm )
         {
-            SwRect aTmp( aStRect.Pos(),
-                            Point( aEndRect.Left(), aEndRect.Bottom() ));
-            // Bug 34888: falls Inhalt selektiert ist, der keinen Platz
-            //            einnimmt (z.B. PostIts,RefMarks, TOXMarks),
-            //            dann mindestens die Breite des Crsr setzen.
-            if( 1 == aTmp.Width() && pStartPos->nContent.GetIndex() !=
-                pEndPos->nContent.GetIndex() )
+            sal_Bool bSameRotatedLine =
+                pSt2Pos && pEnd2Pos && 2 != pSt2Pos->nMultiType &&
+                pSt2Pos->aPortion == pEnd2Pos->aPortion;
+            //Fall 1: (Gleicher Frame und gleiche Zeile)
+            if( aStRect.Top() == aEndRect.Top() || bSameRotatedLine )
             {
-                OutputDevice* pOut = pSh->GetOut();
-                long nCrsrWidth = pOut->GetSettings().GetStyleSettings().
-                                    GetCursorSize();
-                aTmp.Width( pOut->PixelToLogic( Size( nCrsrWidth, 0 ) ).Width() );
+                Point aTmpSt( aStRect.Pos() );
+                Point aTmpEnd( aEndRect.Right(), aEndRect.Bottom() );
+                if( bSameRotatedLine && aTmpSt.Y() > aTmpEnd.Y() )
+                {
+                    long nTmpY = aTmpEnd.Y();
+                    aTmpEnd.Y() = aTmpSt.Y();
+                    aTmpSt.Y() = nTmpY;
+                }
+
+                SwRect aTmp = SwRect( aTmpSt, aTmpEnd );
+                // Bug 34888: falls Inhalt selektiert ist, der keinen Platz
+                //            einnimmt (z.B. PostIts,RefMarks, TOXMarks),
+                //            dann mindestens die Breite des Crsr setzen.
+                if( 1 == aTmp.Width() && pStartPos->nContent.GetIndex() !=
+                    pEndPos->nContent.GetIndex() )
+                {
+                    OutputDevice* pOut = pSh->GetOut();
+                    long nCrsrWidth = pOut->GetSettings().GetStyleSettings().
+                                        GetCursorSize();
+                    aTmp.Width( pOut->PixelToLogic( Size( nCrsrWidth, 0 ) ).Width() );
+                }
+                aTmp.Intersection( aStFrm );
+                Sub( aRegion, aTmp );
             }
-            aTmp.Intersection( aStFrm );
-            Sub( aRegion, aTmp );
-        }
-        //Fall 2: (Gleicher Frame ueber mehr als eine Zeile)
-        else if( pStartFrm == pEndFrm )
-        {
-            SwTwips lLeft, lRight;
-            if( pSt2Pos && pEnd2Pos && pSt2Pos->aPortion == pEnd2Pos->aPortion )
-            {
-                lLeft = pSt2Pos->aPortion.Left();
-                lRight = pSt2Pos->aPortion.Right();
-            }
+            //Fall 2: (Gleicher Frame ueber mehr als eine Zeile)
             else
             {
-                lLeft = pStartFrm->Frm().Left() + pStartFrm->Prt().Left();
-                lRight = pStartFrm->Frm().Left() + pStartFrm->Prt().Right();
+                SwTwips lLeft, lRight;
+                if( pSt2Pos && pEnd2Pos && pSt2Pos->aPortion == pEnd2Pos->aPortion )
+                {
+                    lLeft = pSt2Pos->aPortion.Left();
+                    lRight = pSt2Pos->aPortion.Right();
+                }
+                else
+                {
+                    lLeft = pStartFrm->Frm().Left() + pStartFrm->Prt().Left();
+                    lRight = pStartFrm->Frm().Left() + pStartFrm->Prt().Right();
+                }
+                if( lLeft < aStFrm.Left() )
+                    lLeft = aStFrm.Left();
+                if( lRight > aStFrm.Right() )
+                    lRight = aStFrm.Right();
+                //Erste Zeile
+                Sub( aRegion, SwRect( aStRect.Pos(),Point( lRight, aStRect.Bottom())));
+
+                //Wenn mindestens ein Twips zwischen Start- und Endzeile liegt,
+                //so wird halt alles dazwischenliegende mit aufgenommen.
+                if( (aStRect.Pos().Y()+aStRect.SSize().Height()) != aEndRect.Top() )
+                    Sub( aRegion, SwRect( Point( lLeft,
+                                       (aStRect.Pos().Y()+aStRect.SSize().Height()) ),
+                                       Point( lRight, aEndRect.Top()-1 )));
+
+                //und die letzte Zeile
+                Sub( aRegion, SwRect( Point( lLeft, aEndRect.Top() ),
+                                   Point( aEndRect.Left(), aEndRect.Bottom() )));
             }
-            if( lLeft < aStFrm.Left() )
-                lLeft = aStFrm.Left();
-            if( lRight > aStFrm.Right() )
-                lRight = aStFrm.Right();
-            //Erste Zeile
-            Sub( aRegion, SwRect( aStRect.Pos(),Point( lRight, aStRect.Bottom())));
-
-            //Wenn mindestens ein Twips zwischen Start- und Endzeile liegt,
-            //so wird halt alles dazwischenliegende mit aufgenommen.
-            if( (aStRect.Pos().Y()+aStRect.SSize().Height()) != aEndRect.Top() )
-                Sub( aRegion, SwRect( Point( lLeft,
-                                   (aStRect.Pos().Y()+aStRect.SSize().Height()) ),
-                                   Point( lRight, aEndRect.Top()-1 )));
-
-            //und die letzte Zeile
-            Sub( aRegion, SwRect( Point( lLeft, aEndRect.Top() ),
-                               Point( aEndRect.Left(), aEndRect.Bottom() )));
         }
         //Fall 3: (Unterschiedliche Frm's, moeglicherweise auch welche
         //         dazwischen)
