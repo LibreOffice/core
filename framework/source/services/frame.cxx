@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: as $ $Date: 2001-06-19 10:37:05 $
+ *  last change: $Author: rt $ $Date: 2001-06-22 10:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
