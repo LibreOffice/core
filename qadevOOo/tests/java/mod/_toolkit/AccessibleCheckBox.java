@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCheckBox.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Date: 2004-01-05 20:31:53 $
+ *  last change: $Date: 2004-11-02 12:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ public class AccessibleCheckBox extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
 
