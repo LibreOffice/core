@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:53:50 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ namespace dbaui
         sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
         sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
+        sal_Bool isTableFormat();
         void    implAdministrate( SvLBoxEntry* _pApplyTo );
         void    implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction );
         void    implRemoveQuery( SvLBoxEntry* _pApplyTo );
