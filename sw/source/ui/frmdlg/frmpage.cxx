@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 11:36:21 $
+ *  last change: $Author: os $ $Date: 2002-09-25 12:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,8 +595,8 @@ USHORT lcl_ChangeResIdToVerticalOrRTL(USHORT nResId, BOOL bVertical, BOOL bRTL)
     {
         {STR_LEFT,           STR_TOP},
         {STR_RIGHT,          STR_BOTTOM},
-        {STR_FROMTOP,        STR_FROMLEFT},
         {STR_CENTER_HORI,    STR_CENTER_VERT},
+        {STR_FROMTOP,        STR_FROMRIGHT},
         {STR_REL_PG_LEFT,    STR_REL_PG_TOP},
         {STR_REL_PG_RIGHT,   STR_REL_PG_BOTTOM} ,
         {STR_REL_FRM_LEFT,   STR_REL_FRM_TOP},
