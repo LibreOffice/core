@@ -42,7 +42,7 @@ TVFactory::~TVFactory()
 void SAL_CALL
 TVFactory::acquire(
     void )
-    throw( RuntimeException )
+    throw()
 {
   OWeakObject::acquire();
 }
@@ -51,7 +51,7 @@ TVFactory::acquire(
 void SAL_CALL
 TVFactory::release(
               void )
-  throw( RuntimeException )
+  throw()
 {
   OWeakObject::release();
 }

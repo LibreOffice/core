@@ -173,7 +173,7 @@ using namespace com::sun::star::container;
 void SAL_CALL
 TVBase::acquire(
     void )
-    throw( RuntimeException )
+    throw()
 {
   OWeakObject::acquire();
 }
@@ -182,7 +182,7 @@ TVBase::acquire(
 void SAL_CALL
 TVBase::release(
               void )
-  throw( RuntimeException )
+  throw()
 {
   OWeakObject::release();
 }
