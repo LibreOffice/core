@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-18 10:03:32 $
+ *  last change: $Author: cp $ $Date: 2002-05-31 07:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,9 @@ class SalXLib
     fd_set          *pReadFDS_;
     fd_set          *pExceptionFDS_;
     YieldEntry      *pYieldEntries_;
+
+    void            CheckTimeout();
+
 public:
     SalXLib();
     ~SalXLib();
