@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:02:36 $
+ *  last change: $Author: cl $ $Date: 2001-08-20 10:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class SvFactory;
 class SdTransferable;
 class SdDrawDocShell;
 class SvNumberFormatter;
+class SfxErrorHandler;
 
 // ----------------------
 // - SdOptionStreamMode -
@@ -126,6 +127,7 @@ protected:
     NavigatorDragType       eCurrentNavigatorDragType;
     BOOL                    bAutoSave;
     BOOL                    bWaterCan;
+    SfxErrorHandler*        mpErrorHdl;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
