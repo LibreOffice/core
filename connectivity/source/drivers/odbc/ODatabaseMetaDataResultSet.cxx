@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 12:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _CONNECTIVITY_DATABASEMETADATARESULTSETMETADATA_HXX_
+#include "FDatabaseMetaDataResultSetMetaData.hxx"
+#endif
 
 using namespace ::comphelper;
 
@@ -130,6 +133,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
                         ,m_nTextEncoding(_nTextEncoding)
                         ,m_bFreeHandle(sal_False)
                         ,m_pConnection(_pConnection)
+                        ,m_nDriverColumnCount(0)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
     osl_incrementInterlockedCount( &m_refCount );
@@ -216,11 +220,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
-#if SUPD > 630
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
-#else
-                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
-#endif
             break;
     return i;
 }
@@ -257,18 +257,21 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     columnIndex = mapColumn(columnIndex);
 
     sal_Bool bRet = sal_False;
-    sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
-    switch(nType)
+    if(columnIndex <= m_nDriverColumnCount)
     {
-        case DataType::BIT:
-            {
-                sal_Int8 nValue = 0;
-                OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nValue,sizeof nValue);
-                bRet = nValue != 0;
-            }
-            break;
-        default:
-            bRet = getInt(columnIndex) != 0;
+        sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
+        switch(nType)
+        {
+            case DataType::BIT:
+                {
+                    sal_Int8 nValue = 0;
+                    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nValue,sizeof nValue);
+                    bRet = nValue != 0;
+                }
+                break;
+            default:
+                bRet = getInt(columnIndex) != 0;
+        }
     }
     return bRet;
 }
@@ -283,10 +286,15 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
 
     columnIndex = mapColumn(columnIndex);
     sal_Int8  nVal = 0;
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nVal,sizeof nVal);
+    if(columnIndex <= m_nDriverColumnCount)
+    {
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nVal,sizeof nVal);
 
-    if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
+        if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+            return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
+    }
+    else
+        m_bWasNull = sal_True;
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -299,18 +307,24 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 
 
     columnIndex = mapColumn(columnIndex);
-    SWORD nType = getMetaData()->getColumnType(columnIndex);
-    switch(nType)
+    if(columnIndex <= m_nDriverColumnCount)
     {
-        case DataType::VARCHAR:
-        case DataType::LONGVARCHAR:
-            {
-                ::rtl::OUString aRet = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
-                return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
-            }
-            break;
+        SWORD nType = getMetaData()->getColumnType(columnIndex);
+        switch(nType)
+        {
+            case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
+                {
+                    ::rtl::OUString aRet = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
+                    return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
+                }
+                break;
+        }
+        return OTools::getBytesValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
     }
-    return OTools::getBytesValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
+    else
+        m_bWasNull = sal_True;
+    return Sequence<sal_Int8>();
 }
 // -------------------------------------------------------------------------
 
@@ -321,12 +335,18 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 
 
     columnIndex = mapColumn(columnIndex);
-    DATE_STRUCT aDate;
-    aDate.day = 0;
-    aDate.month = 0;
-    aDate.year = 0;
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
-    return Date(aDate.day,aDate.month,aDate.year);
+    if(columnIndex <= m_nDriverColumnCount)
+    {
+        DATE_STRUCT aDate;
+        aDate.day = 0;
+        aDate.month = 0;
+        aDate.year = 0;
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
+        return Date(aDate.day,aDate.month,aDate.year);
+    }
+    else
+        m_bWasNull = sal_True;
+    return Date();
 }
 // -------------------------------------------------------------------------
 
@@ -339,7 +359,10 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
 
     columnIndex = mapColumn(columnIndex);
     double nValue(0.0);
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nValue,sizeof nValue);
+    if(columnIndex <= m_nDriverColumnCount)
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nValue,sizeof nValue);
+    else
+        m_bWasNull = sal_True;
     return nValue;
 }
 // -------------------------------------------------------------------------
@@ -353,7 +376,10 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
 
     columnIndex = mapColumn(columnIndex);
     float nVal(0);
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
+    if(columnIndex <= m_nDriverColumnCount)
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
+    else
+        m_bWasNull = sal_True;
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -367,10 +393,15 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
     columnIndex = mapColumn(columnIndex);
     sal_Int32 nVal = 0;
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
+    if(columnIndex <= m_nDriverColumnCount)
+    {
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
 
-    if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (*m_aValueRangeIter).second[(sal_Int32)nVal];
+        if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+            return (*m_aValueRangeIter).second[(sal_Int32)nVal];
+    }
+    else
+        m_bWasNull = sal_True;
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -402,7 +433,7 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_xMetaData.is() ? m_xMetaData :  (m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle));
+    return m_xMetaData.is() ? m_xMetaData :  (m_xMetaData = new ::connectivity::ODatabaseMetaDataResultSetMetaData());
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -474,10 +505,15 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     sal_Int16 nVal = 0;
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
+    if(columnIndex <= m_nDriverColumnCount)
+    {
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
 
-    if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
+        if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+            return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
+    }
+    else
+        m_bWasNull = sal_True;
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -490,7 +526,11 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 
     columnIndex = mapColumn(columnIndex);
-    ::rtl::OUString aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+    ::rtl::OUString aVal;
+    if(columnIndex <= m_nDriverColumnCount)
+        aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+    else
+        m_bWasNull = sal_True;
 
     return aVal;
 }
@@ -507,7 +547,10 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     TIME_STRUCT aTime={0,0,0};
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
+    if(columnIndex <= m_nDriverColumnCount)
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
+    else
+        m_bWasNull = sal_True;
     return Time(0,aTime.second,aTime.minute,aTime.hour);
 }
 // -------------------------------------------------------------------------
@@ -522,7 +565,10 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
+    if(columnIndex <= m_nDriverColumnCount)
+        OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
+    else
+        m_bWasNull = sal_True;
     return DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
 }
 // -------------------------------------------------------------------------
@@ -928,6 +974,7 @@ void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeExcep
     m_aValueRange[2] = aMap;
 
     OTools::ThrowException(m_pConnection,N3SQLGetTypeInfo(m_aStatementHandle, SQL_ALL_TYPES),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 //-----------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -969,6 +1016,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, pCOL ? SQL_NTS : 0);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 
 }
 //-----------------------------------------------------------------------------
@@ -986,6 +1034,7 @@ void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeE
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(4);
     m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle,m_aColMapping);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeException)
@@ -1003,6 +1052,7 @@ void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeExcep
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(1);
     m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle,m_aColMapping);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeException)
@@ -1019,6 +1069,7 @@ void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeExcept
     m_aColMapping.push_back(-1);
     m_aColMapping.push_back(2);
     m_xMetaData = new OResultSetMetaData(m_pConnection,m_aStatementHandle,m_aColMapping);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, const ::rtl::OUString& schema,
@@ -1051,7 +1102,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
-
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             const ::rtl::OUString& schemaPattern,
@@ -1115,6 +1166,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
 
     m_aValueRange[5] = aMap;
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     const ::rtl::OUString& schemaPattern,
@@ -1146,6 +1198,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
 
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -1175,6 +1228,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any& catalog, const ::rtl::OUString& schema,
@@ -1205,6 +1259,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
                             (SQLSMALLINT)scope,
                             nullable ? SQL_NULLABLE : SQL_NO_NULLS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openVersionColumns(const Any& catalog, const ::rtl::OUString& schema,
@@ -1247,6 +1302,7 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
                             (SDB_ODBC_CHAR *) pFKN, SQL_NTS
                             );
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const ::rtl::OUString& schema,
@@ -1288,6 +1344,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const ::rtl::OUString& schemaPattern,
@@ -1316,6 +1373,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl::OUString& schema,
@@ -1347,8 +1405,16 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
                             unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
                             approximate);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    checkColumnCount();
 }
 // -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSet::checkColumnCount()
+{
+    sal_Int16 nNumResultCols=0;
+    OTools::ThrowException(m_pConnection,N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    m_nDriverColumnCount = nNumResultCols;
+}
+// -----------------------------------------------------------------------------
 
 
 

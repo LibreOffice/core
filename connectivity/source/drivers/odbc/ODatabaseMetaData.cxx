@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 12:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,15 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
                         ,m_aConnectionHandle(_pHandle)
                         ,m_pConnection(_pCon)
                         ,m_bUseCatalog(sal_True)
+                        ,m_bOdbc3(sal_True)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
     if(!m_pConnection->isCatalogUsed())
     {
         osl_incrementInterlockedCount( &m_refCount );
-        m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
+        m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
+        ::rtl::OUString sVersion = getDriverVersion();
+        m_bOdbc3        =  sVersion != ::rtl::OUString::createFromAscii("02.50") && sVersion != ::rtl::OUString::createFromAscii("02.00");
         osl_decrementInterlockedCount( &m_refCount );
     }
 }
@@ -1199,7 +1202,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,aValue,*this,m_pConnection->getTextEncoding());
@@ -1457,22 +1460,46 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-    return nValue == SQL_OIC_LEVEL2;
+    if(m_bOdbc3)
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
+        return nValue == SQL_OIC_LEVEL2;
+    }
+    else
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
+        return nValue == SQL_OAC_LEVEL2;
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-    return nValue == SQL_OIC_CORE;
+    if(m_bOdbc3)
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
+        return nValue == SQL_OIC_CORE;
+    }
+    else
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+        return nValue == SQL_OSC_CORE;
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-    return nValue == SQL_OIC_LEVEL1;
+    if(m_bOdbc3)
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
+        return nValue == SQL_OIC_LEVEL1;
+    }
+    else
+    {
+        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
+        return nValue == SQL_OAC_LEVEL1;
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)

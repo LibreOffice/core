@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 12:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace connectivity
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
+            sal_Int32                                   m_nDriverColumnCount;   // column count of the driver wich can sometimes be less than the metadata count
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
             sal_Bool                                    m_bEOF;                 // after last record
@@ -157,6 +158,8 @@ namespace connectivity
             sal_Bool                                    m_bFreeHandle;
             sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
 
+            // set the columncount of the driver
+            void checkColumnCount();
             sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
