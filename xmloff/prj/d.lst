@@ -91,4 +91,6 @@ hedabu: ..\inc\formlayerimport.hxx %_DEST%\inc%_EXT%\xmloff\formlayerimport.hxx
 hedabu: ..\inc\animexp.hxx %_DEST%\inc%_EXT%\xmloff\animexp.hxx
 hedabu: ..\inc\contextid.hxx %_DEST%\inc%_EXT%\xmloff\contextid.hxx
 hedabu: ..\inc\formsimp.hxx %_DEST%\inc%_EXT%\xmloff\formsimp.hxx
+hedabu: ..\inc\VisAreaExport.hxx %_DEST%\inc%_EXT%\xmloff\VisAreaExport.hxx
+hedabu: ..\inc\VisAreaContext.hxx %_DEST%\inc%_EXT%\xmloff\VisAreaContext.hxx
 
