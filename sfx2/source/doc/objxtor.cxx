@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:06:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ SfxObjectShell::~SfxObjectShell()
 //REMOVE            HandsOff();
 
     if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == GetStorage() )
-        pMedium->DontDisposeStorage_Impl();
+        pMedium->CanDisposeStorage_Impl( sal_False );
 
     DELETEX( pMedium );
 
