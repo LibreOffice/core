@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,8 @@
  ************************************************************************/
 
 #ifdef PROFILE
-#ifdef DEBUG
-#undef DEBUG
-#endif
-#ifdef _DEBUG
-#undef _DEBUG
-#endif
+#undef OSL_DEBUG_LEVEL
+#define OSL_DEBUG_LEVEL 0
 #endif /* PROFILE */
 
 #ifndef _SAL_TYPES_H_
@@ -281,9 +277,9 @@ struct __rtl_memory_global_st
     memory_type m_alloc_head;
     memory_type m_queue_head[__N__];
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
     memory_stat m_queue_stat[__N__];
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 };
 
 static struct __rtl_memory_global_st g_memory =
@@ -310,7 +306,7 @@ void SAL_CALL ___rtl_memory_fini (void);
  * rtl_memory (queue) internals.
  *
  *=========================================================================*/
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static size_t queue (size_t n)
 {
     /* k = n div 8 = n div __C__ */
@@ -343,7 +339,7 @@ static size_t queue (size_t n)
         (k) = m; \
     } \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 #define queue_start(entry) \
 { \
@@ -379,7 +375,7 @@ static size_t queue (size_t n)
  * rtl_memory (debug) internals.
  *
  *=========================================================================*/
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
 
 #define __dbg_memory_succ(entry, length) \
 (memory_type*)((char*)((entry)) + ((length) & 0x7fffffff))
@@ -636,8 +632,8 @@ static void __dbg_memory_usage (memory_stat * total)
     }
 }
 
-#endif /* DEBUG */
-#if defined(DEBUG) || defined(_DEBUG)
+#endif /* OSL_DEBUG_LEVEL */
+#if OSL_DEBUG_LEVEL > 0
 
 #define DBG_MEMORY_DEQUEUE(n) __dbg_memory_dequeue((size_t)(n) & 0x7fffffff)
 #define DBG_MEMORY_ENQUEUE(n) __dbg_memory_enqueue((size_t)(n) & 0x7fffffff)
@@ -650,11 +646,11 @@ static void __dbg_memory_usage (memory_stat * total)
 #define DBG_MEMORY_INSERT(entry) __dbg_memory_insert((entry))
 #define DBG_MEMORY_REMOVE(entry) __dbg_memory_remove((entry))
 
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 1)
-#else  /* _DEBUG */
+#else #if OSL_DEBUG_LEVEL > 0
 #define DBG_MEMORY_VERIFY(entry) __dbg_memory_verify((entry), 0)
-#endif /* _DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 #define DBG_MEMORY_VERIFY_CHAIN(entry) __dbg_memory_verify_chain((entry))
 #define DBG_MEMORY_VERIFY_QUEUE(entry) __dbg_memory_verify_queue((entry))
@@ -674,7 +670,7 @@ static void __dbg_memory_usage (memory_stat * total)
 #define DBG_MEMORY_VERIFY_CHAIN(entry)
 #define DBG_MEMORY_VERIFY_QUEUE(entry)
 
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 /*===========================================================================
  *
@@ -721,7 +717,7 @@ void SAL_CALL ___rtl_memory_init (void)
  */
 void SAL_CALL ___rtl_memory_fini (void)
 {
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
 
     memory_stat total;
 
@@ -735,13 +731,13 @@ void SAL_CALL ___rtl_memory_fini (void)
                   (sal_uInt32)(total.m_enqsize & 0xffffffff));
     }
 
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 }
 
 /*
  * __rtl_memory_merge.
  */
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static void __rtl_memory_merge (memory_type * prev, memory_type * next)
 {
     /* adjust length */
@@ -768,12 +764,12 @@ static void __rtl_memory_merge (memory_type * prev, memory_type * next)
     } \
     (prev)->m_offset |= __rtl_memory_last((next)); \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 /*
  * __rtl_memory_split.
  */
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static void __rtl_memory_split (memory_type * prev, memory_type * next)
 {
     /* adjust length */
@@ -803,12 +799,12 @@ static void __rtl_memory_split (memory_type * prev, memory_type * next)
     (next)->m_offset |= __rtl_memory_last((prev)); \
     (prev)->m_offset &= ~0x80000000; \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 /*
  * __rtl_memory_insert.
  */
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static void __rtl_memory_insert (memory_type * memory, size_t n)
 {
     /* obtain queue head */
@@ -828,12 +824,12 @@ static void __rtl_memory_insert (memory_type * memory, size_t n)
     queue(h, (n)); \
     queue_insert_tail (&(g_memory.m_queue_head[h]), (memory)); \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 /*
  * __rtl_memory_resize.
  */
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static void __rtl_memory_resize (memory_type * memory, size_t n)
 {
     register size_t k = (memory->m_length - n);
@@ -885,12 +881,12 @@ static void __rtl_memory_resize (memory_type * memory, size_t n)
         __rtl_memory_insert (remain, kn); \
     } \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 /*
  * __rtl_memory_dequeue.
  */
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static void __rtl_memory_dequeue (memory_type **ppMemory, size_t n)
 {
     register memory_type *head, *entry;
@@ -918,10 +914,10 @@ static void __rtl_memory_dequeue (memory_type **ppMemory, size_t n)
         }
     }
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
     /* adjust for DBG_MEMORY_INSERT() overhead */
     m += sizeof(memory_type);
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
     k = RTL_MEMORY_ALIGN((m > __M__) ? m : __M__, g_memory.m_align);
     if (!((entry = RTL_MEMORY_ALLOC(k)) == 0))
@@ -943,13 +939,13 @@ dequeue_leave:
         /* fill w/ 'uninitialized' pattern */
         DBG_MEMORY_DEQFILL (entry, __C__, entry->m_length - __C__);
     }
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
     if (!entry)
     {
         memory_stat total;
         __dbg_memory_usage (&total);
     }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 }
 #else  /* PRODUCT */
 #define __rtl_memory_dequeue(ppMemory, n, label) \
@@ -985,18 +981,18 @@ label: \
         *(ppMemory) = entry; \
     } \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 #define RTL_MEMORY_DEQUEUE(m, n, l) __rtl_memory_dequeue((m), (n))
 #else  /* PRODUCT */
 #define RTL_MEMORY_DEQUEUE(m, n, l) __rtl_memory_dequeue(m, n, l)
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 /*
  * __rtl_memory_enqueue.
  */
-#if defined(PROFILE) || defined(DEBUG) || defined(_DEBUG)
+#if defined(PROFILE) || (OSL_DEBUG_LEVEL > 0)
 static void __rtl_memory_enqueue (memory_type **ppMemory)
 {
     register memory_type *head = *ppMemory;
@@ -1102,7 +1098,7 @@ static void __rtl_memory_enqueue (memory_type **ppMemory)
 \
     *(ppMemory) = head; \
 }
-#endif /* DEBUG || PRODUCT */
+#endif /* OSL_DEBUG_LEVEL || PRODUCT */
 
 #define RTL_MEMORY_ENQUEUE(m) __rtl_memory_enqueue((m))
 
