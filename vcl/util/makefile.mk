@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:01:11 $
+#   last change: $Author: obo $ $Date: 2004-07-05 09:20:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -330,6 +330,7 @@ SHL3LIBS=  $(LIB3TARGET)
 # libs for dummy plugin
 SHL3STDLIBS=\
             $(VCLLIB)\
+            -lpsp$(VERSION)$(DLLPOSTFIX)\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
