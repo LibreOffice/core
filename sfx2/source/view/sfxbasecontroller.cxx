@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:08:49 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
+
+#include "event.hxx"
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
@@ -957,6 +959,17 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
 
             // Bei Reload hat die alte ViewShell keinen Frame!
             SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
+            SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);
+            while( pView )
+            {
+                if ( pView != pFrame )
+                    break;
+                pView = SfxViewFrame::GetNext( *pView, pDoc );
+            }
+
+            if ( !pView )
+                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, pDoc) );
+
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
             REFERENCE < ::com::sun::star::util::XCloseable > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
             if ( xModel.is() )
