@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-20 12:05:32 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,7 @@ namespace configmgr
                 NodeChanges aSelectedChanges;
                 if ( selectChanges(aSelectedChanges, aChanges, *itNodes))
                 {
-                    NodeLocalBroadcaster_Impl* pSelectedImpl = MultiChangeBroadcaster_Impl::create(rRootNotifier, *itNodes, aSelectedChanges);
+                    NodeLocalBroadcaster_Impl* pSelectedImpl = MultiChangeBroadcaster_Impl::create(rLocalNotifier, *itNodes, aSelectedChanges);
                     if (pSelectedImpl)
                         aNodecasters.push_back(pSelectedImpl);
                 }
