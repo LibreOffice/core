@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ ModalDialog DLG_COL_WIDTH
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÇáÚãæÏ";
         Text[ greek ] = "ÓôŞëç";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "´Ü";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -226,7 +226,7 @@ ModalDialog DLG_COL_WIDTH
     Text[ chinese_traditional ] = "Äæ¼e";
     Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
     Text[ greek ] = "ĞëÜôïò óôŞëçò";
-    Text[ korean ] = "¿­ ³Êºñ";
+    Text[ korean ] = "´Ü ³Êºñ";
     Text[ turkish ] = "Sütun genişliği";
     Text[ language_user1 ] = " ";
 };
