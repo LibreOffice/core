@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 16:37:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,59 +325,6 @@ BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USH
     return 0 != pPage;
 }
 
-#ifdef USED
-/*************************************************************************
-|*
-|*  SwFEShell::GetHeadFootFrmRect()
-|*
-|*  Ersterstellung      MA 08. Feb. 95
-|*  Letzte Aenderung    MA 08. Feb. 95
-|
-|*************************************************************************/
-
-//Das FrmRect von Header bzw. Footer wird relativ zur Seite ermittelt.
-//Der long ist 0 wenn der Crsr nicht in Header oder Footer steht.
-//Andernfalls markiert der long den maximalen bzw. minimalen Spielraum
-//fuer die Hoehe von Header bzw. Footer.
-
-long SwFEShell::GetHeadFootFrmRect( SwRect &rToFill ) const
-{
-    ASSERT( GetCurrFrm(), "Crsr geparkt?" );
-
-    long nRet = 0;
-    const SwFrm *pFrm = GetCurrFrm();
-    while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
-        pFrm = pFrm->GetUpper();
-
-    if ( pFrm )
-    {
-        const SwPageFrm *pPage = pFrm->FindPageFrm();
-        rToFill = pFrm->Frm();
-        rToFill.Pos() -= pPage->Frm().Pos();
-
-        //Wenn Kopf-/Fusszeilen vergroessert werden, sollte die Resthoehe der
-        //PrtArea der Seite wenigstens 2cm (lMinBorder) betragen.
-        const SwFrm *pBody = pPage->FindBodyCont();
-        nRet = pBody->Frm().Top();
-        if ( pFrm->IsHeaderFrm() )
-        {
-            nRet += pBody->Prt().Bottom();
-            nRet -= lMinBorder;
-            nRet -= pBody->Prt().Top();
-        }
-        else if ( pFrm->IsFooterFrm() )
-        {
-            nRet += pBody->Prt().Top();
-            nRet += lMinBorder;
-            nRet += pBody->Frm().Height() -
-                    (pBody->Prt().Height() + pBody->Prt().Top());
-        }
-        nRet -= pPage->Frm().Top();
-    }
-    return nRet;
-}
-#endif
-
 /*************************************************************************
 |*
 |*  SwFEShell::IsDirectlyInSection()
@@ -517,14 +464,6 @@ USHORT SwFEShell::GetPhyPageNum()
     SwFrm *pFrm = GetCurrFrm();
     if ( pFrm )
         return pFrm->GetPhyPageNum();
-    return 0;
-}
-
-USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
-{
-    SwFrm *pFrm = GetCurrFrm( bCalcFrm );
-    if ( pFrm )
-        return pFrm->GetVirtPageNum();
     return 0;
 }
 
