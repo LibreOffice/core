@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-13 11:28:17 $
+#   last change: $Author: hr $ $Date: 2003-08-07 15:21:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ CXXFILES = \
         ww8par5.cxx \
         ww8par6.cxx \
         ww8glsy.cxx \
+        tracer.cxx \
         ww8scan.cxx
 
 
@@ -115,11 +116,13 @@ SLOFILES =	\
         $(SLO)$/ww8par5.obj \
         $(SLO)$/ww8par6.obj \
         $(SLO)$/ww8glsy.obj \
+        $(SLO)$/tracer.obj \
         $(SLO)$/ww8scan.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/ww8par3.obj \
         $(SLO)$/ww8par5.obj \
+        $(SLO)$/tracer.obj \
         $(SLO)$/ww8graf2.obj
 
 
