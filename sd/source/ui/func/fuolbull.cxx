@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuolbull.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:04:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,13 @@ FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
             {
                 SfxItemSet aSet( *pDlg->GetOutputItemSet() );
 
-                if (pView->ISA(DrawViewShell)
-                    && pView->GetMarkedObjectList().GetMarkCount() == 0)
+                if (pView->ISA(DrawViewShell) )
                 {
-                    SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
-                    aSet.Put(aBulletState);
+                    if( pView->GetMarkedObjectList().GetMarkCount() == 0)
+                    {
+                        SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
+                        aSet.Put(aBulletState);
+                    }
                 }
 
                 rReq.Done( aSet );
