@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-22 10:53:09 $
+ *  last change: $Author: ab $ $Date: 2001-12-05 10:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,6 +1018,15 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ScriptLibraryContainer") );
 
+    // application script library container service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationScriptLibraryContainer") );
+
     // dialog library container service
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxDialogLibraryContainer::impl_getStaticImplementationName();
@@ -1026,6 +1035,15 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.DialogLibraryContainer") );
+
+    // application dialog library container service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationDialogLibraryContainer") );
 
 #if 0
     if (pRegistryKey)
@@ -1080,6 +1098,8 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
         IF_NAME_CREATECOMPONENTFACTORY( SfxScriptLibraryContainer )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDialogLibraryContainer )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationScriptLibraryContainer )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationDialogLibraryContainer )
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
