@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2000-10-31 11:30:01 $
+ *  last change: $Author: os $ $Date: 2000-11-01 11:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5708,6 +5708,178 @@ void lcl_ExportBookmark(
     }
 }
 //-----------------------------------------------------------------------------
+Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
+                                XTextRangeArr& rPortionArr,
+                                SwUnoCrsr* pUnoCrsr,
+                                Reference<XText> xParent,
+                                const xub_StrLen nCurrentIndex,
+                                SwTextPortionType& ePortionType,
+                                const xub_StrLen& nFirstFrameIndex,
+                                SwXBookmarkPortionArr& aBkmArr)
+{
+    Reference<XTextRange> xRef;
+    SwDoc* pDoc = pUnoCrsr->GetDoc();
+    sal_Bool bAttrFound = sal_False;
+    //search for special text attributes - first some ends
+    sal_uInt16 nEndIndex = 0;
+    sal_uInt16 nNextEnd = 0;
+    while(nEndIndex < pHints->GetEndCount() &&
+        (!pHints->GetEnd(nEndIndex)->GetEnd() ||
+        nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetEnd()))))
+    {
+        if(pHints->GetEnd(nEndIndex)->GetEnd())
+        {
+            SwTxtAttr* pAttr = pHints->GetEnd(nEndIndex);
+            USHORT nAttrWhich = pAttr->Which();
+            if(nNextEnd == nCurrentIndex &&
+                ( RES_TXTATR_TOXMARK == nAttrWhich ||
+                        RES_TXTATR_REFMARK == nAttrWhich))
+            {
+                switch( nAttrWhich )
+                {
+                    case RES_TXTATR_TOXMARK:
+                        lcl_InsertTOXMarkPortion(
+                            rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
+                        ePortionType = PORTION_TEXT;
+                        DBG_ERROR("ToxMark");
+                    break;
+                    case RES_TXTATR_REFMARK:
+                        lcl_InsertRefMarkPortion(
+                            rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
+                        ePortionType = PORTION_TEXT;
+                    break;
+
+                }
+            }
+        }
+        nEndIndex++;
+    }
+    //then som starts
+    sal_uInt16 nStartIndex = 0;
+    sal_uInt16 nNextStart = 0;
+    while(nStartIndex < pHints->GetStartCount() &&
+        nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
+    {
+        SwTxtAttr* pAttr = pHints->GetStart(nStartIndex);
+        USHORT nAttrWhich = pAttr->Which();
+        if(nNextStart == nCurrentIndex &&
+            (!pAttr->GetEnd() ||
+                RES_TXTATR_TOXMARK == nAttrWhich ||
+                    RES_TXTATR_REFMARK == nAttrWhich))
+        {
+            switch( nAttrWhich )
+            {
+                case RES_TXTATR_FIELD:
+                    pUnoCrsr->Right(1);
+                    bAttrFound = sal_True;
+                    ePortionType = PORTION_FIELD;
+                break;
+                case RES_TXTATR_FLYCNT   :
+                    pUnoCrsr->Right(1);
+                    pUnoCrsr->Exchange();
+                    bAttrFound = sal_True;
+                    ePortionType = PORTION_FRAME;
+                break;
+                case RES_TXTATR_FTN      :
+                {
+                    pUnoCrsr->Right(1);
+                    SwXTextPortion* pPortion;
+                    xRef =  pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_FOOTNOTE);
+                    Reference<XTextContent> xContent =
+                        Reference<XTextContent>(
+                        SwXFootnotes::GetObject(*pDoc, pAttr->SwTxtAttr::GetFtn()),
+                        UNO_QUERY);
+                    pPortion->SetFootnote(xContent);
+                    bAttrFound = sal_True;
+                    ePortionType = PORTION_TEXT;
+                }
+                break;
+                case RES_TXTATR_SOFTHYPH :
+                {
+                    SwXTextPortion* pPortion;
+                    rPortionArr.Insert(
+                        new Reference< XTextRange >(
+                            pPortion = new SwXTextPortion(
+                                *pUnoCrsr, xParent, PORTION_CONTROL_CHAR)),
+                        rPortionArr.Count());
+                    pPortion->SetControlChar(3);
+                    ePortionType = PORTION_TEXT;
+                }
+                break;
+                case RES_TXTATR_HARDBLANK:
+                {
+                    ePortionType = PORTION_CONTROL_CHAR;
+                    SwXTextPortion* pPortion;
+                    rPortionArr.Insert(
+                        new Reference< XTextRange >(
+                            pPortion = new SwXTextPortion(
+                                *pUnoCrsr, xParent, PORTION_CONTROL_CHAR)),
+                        rPortionArr.Count());
+                    const SwFmtHardBlank& rFmt = pAttr->GetHardBlank();
+                    if(rFmt.GetChar() == '-')
+                        pPortion->SetControlChar(2);//HARD_HYPHEN
+                    else
+                        pPortion->SetControlChar(4);//HARD_SPACE
+                    ePortionType = PORTION_TEXT;
+                }
+                break;
+                case RES_TXTATR_TOXMARK:
+                    lcl_InsertTOXMarkPortion(
+                        rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
+                    ePortionType = PORTION_TEXT;
+                    DBG_ERROR("ToxMark");
+                break;
+                case RES_TXTATR_REFMARK:
+                    lcl_InsertRefMarkPortion(
+                        rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
+                    ePortionType = PORTION_TEXT;
+                break;
+                default:
+                    DBG_ERROR("was fuer ein Attribut?");
+            }
+
+        }
+        nStartIndex++;
+    }
+
+    if(!bAttrFound)
+    {
+        // hier wird nach Uebergaengen zwischen Attributen gesucht, die nach der
+        // aktuellen Cursorposition liegen
+        // wenn dabei ein Rahmen 'ueberholt' wird, dann muss auch in der TextPortion unterbrochen werden
+
+        nStartIndex = 0;
+        nNextStart = 0;
+        while(nStartIndex < pHints->GetStartCount() &&
+            nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
+            nStartIndex++;
+
+        sal_uInt16 nEndIndex = 0;
+        sal_uInt16 nNextEnd = 0;
+        while(nEndIndex < pHints->GetEndCount() &&
+            nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetAnyEnd())))
+            nEndIndex++;
+        //nMovePos legt die neue EndPosition fest
+        sal_uInt16 nMovePos = nNextStart > nCurrentIndex && nNextStart < nNextEnd ? nNextStart : nNextEnd;
+
+        if(aBkmArr.Count() && aBkmArr.GetObject(0)->nIndex < nMovePos)
+        {
+            DBG_ASSERT(aBkmArr.GetObject(0)->nIndex > nCurrentIndex,
+                "forgotten bookmark(s)")
+            nMovePos = aBkmArr.GetObject(0)->nIndex;
+        }
+        // liegt die Endposition nach dem naechsten Rahmen, dann aufbrechen
+        if(nFirstFrameIndex != STRING_MAXLEN && nMovePos > nFirstFrameIndex)
+            nMovePos = nFirstFrameIndex;
+
+        if(nMovePos > nCurrentIndex)
+            pUnoCrsr->Right(nMovePos - nCurrentIndex);
+        else
+            pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
+    }
+    return xRef;
+}
+//-----------------------------------------------------------------------------
 void SwXTextPortionEnumeration::CreatePortions()
 {
     uno::Any aRet;
@@ -5838,164 +6010,15 @@ void SwXTextPortionEnumeration::CreatePortions()
                         lcl_ExportBookmark(aBkmArr, nCurrentIndex, pUnoCrsr, xParent, aPortionArr);
                         if(pHints)
                         {
-                            sal_Bool bAttrFound = sal_False;
-                            //search for special text attributes - first some ends
-                            sal_uInt16 nEndIndex = 0;
-                            sal_uInt16 nNextEnd = 0;
-                            while(nEndIndex < pHints->GetEndCount() &&
-                                (!pHints->GetEnd(nEndIndex)->GetEnd() ||
-                                nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetEnd()))))
-                            {
-                                if(pHints->GetEnd(nEndIndex)->GetEnd())
-                                {
-                                    SwTxtAttr* pAttr = pHints->GetEnd(nEndIndex);
-                                    USHORT nAttrWhich = pAttr->Which();
-                                    if(nNextEnd == nCurrentIndex &&
-                                        ( RES_TXTATR_TOXMARK == nAttrWhich ||
-                                                RES_TXTATR_REFMARK == nAttrWhich))
-                                    {
-                                        switch( nAttrWhich )
-                                        {
-                                            case RES_TXTATR_TOXMARK:
-                                                lcl_InsertTOXMarkPortion(
-                                                    aPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
-                                                ePortionType = PORTION_TEXT;
-                                                DBG_ERROR("ToxMark");
-                                            break;
-                                            case RES_TXTATR_REFMARK:
-                                                lcl_InsertRefMarkPortion(
-                                                    aPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
-                                                ePortionType = PORTION_TEXT;
-                                            break;
+                            xRef = lcl_ExportHints(pHints,
+                                aPortionArr,
+                                pUnoCrsr,
+                                xParent,
+                                nCurrentIndex,
+                                ePortionType,
+                                nFirstFrameIndex,
+                                aBkmArr);
 
-                                        }
-                                    }
-                                }
-                                nEndIndex++;
-                            }
-                            //then som starts
-                            sal_uInt16 nStartIndex = 0;
-                            sal_uInt16 nNextStart = 0;
-                            while(nStartIndex < pHints->GetStartCount() &&
-                                nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
-                            {
-                                SwTxtAttr* pAttr = pHints->GetStart(nStartIndex);
-                                USHORT nAttrWhich = pAttr->Which();
-                                if(nNextStart == nCurrentIndex &&
-                                    (!pAttr->GetEnd() ||
-                                        RES_TXTATR_TOXMARK == nAttrWhich ||
-                                            RES_TXTATR_REFMARK == nAttrWhich))
-                                {
-                                    switch( nAttrWhich )
-                                    {
-                                        case RES_TXTATR_FIELD:
-                                            pUnoCrsr->Right(1);
-                                            bAttrFound = sal_True;
-                                            ePortionType = PORTION_FIELD;
-                                        break;
-                                        case RES_TXTATR_FLYCNT   :
-                                            pUnoCrsr->Right(1);
-                                            pUnoCrsr->Exchange();
-                                            bAttrFound = sal_True;
-                                            ePortionType = PORTION_FRAME;
-                                        break;
-                                        case RES_TXTATR_FTN      :
-                                        {
-                                            pUnoCrsr->Right(1);
-                                            SwXTextPortion* pPortion;
-                                            xRef =  pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_FOOTNOTE);
-                                            Reference<XTextContent> xContent =
-                                                Reference<XTextContent>(
-                                                SwXFootnotes::GetObject(*pDoc, pAttr->SwTxtAttr::GetFtn()),
-                                                UNO_QUERY);
-                                            pPortion->SetFootnote(xContent);
-                                            bAttrFound = sal_True;
-                                            ePortionType = PORTION_TEXT;
-                                        }
-                                        break;
-                                        case RES_TXTATR_SOFTHYPH :
-                                        {
-                                            SwXTextPortion* pPortion;
-                                            aPortionArr.Insert(
-                                                new Reference< XTextRange >(
-                                                    pPortion = new SwXTextPortion(
-                                                        *pUnoCrsr, xParent, PORTION_CONTROL_CHAR)),
-                                                aPortionArr.Count());
-                                            pPortion->SetControlChar(3);
-                                            ePortionType = PORTION_TEXT;
-                                        }
-                                        break;
-                                        case RES_TXTATR_HARDBLANK:
-                                        {
-                                            ePortionType = PORTION_CONTROL_CHAR;
-                                            SwXTextPortion* pPortion;
-                                            aPortionArr.Insert(
-                                                new Reference< XTextRange >(
-                                                    pPortion = new SwXTextPortion(
-                                                        *pUnoCrsr, xParent, PORTION_CONTROL_CHAR)),
-                                                aPortionArr.Count());
-                                            const SwFmtHardBlank& rFmt = pAttr->GetHardBlank();
-                                            if(rFmt.GetChar() == '-')
-                                                pPortion->SetControlChar(2);//HARD_HYPHEN
-                                            else
-                                                pPortion->SetControlChar(4);//HARD_SPACE
-                                            ePortionType = PORTION_TEXT;
-                                        }
-                                        break;
-                                        case RES_TXTATR_TOXMARK:
-                                            lcl_InsertTOXMarkPortion(
-                                                aPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
-                                            ePortionType = PORTION_TEXT;
-                                            DBG_ERROR("ToxMark");
-                                        break;
-                                        case RES_TXTATR_REFMARK:
-                                            lcl_InsertRefMarkPortion(
-                                                aPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
-                                            ePortionType = PORTION_TEXT;
-                                        break;
-                                        default:
-                                            DBG_ERROR("was fuer ein Attribut?");
-                                    }
-
-                                }
-                                nStartIndex++;
-                            }
-
-                            if(!bAttrFound)
-                            {
-                                // hier wird nach Uebergaengen zwischen Attributen gesucht, die nach der
-                                // aktuellen Cursorposition liegen
-                                // wenn dabei ein Rahmen 'ueberholt' wird, dann muss auch in der TextPortion unterbrochen werden
-
-                                nStartIndex = 0;
-                                nNextStart = 0;
-                                while(nStartIndex < pHints->GetStartCount() &&
-                                    nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
-                                    nStartIndex++;
-
-                                sal_uInt16 nEndIndex = 0;
-                                sal_uInt16 nNextEnd = 0;
-                                while(nEndIndex < pHints->GetEndCount() &&
-                                    nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetAnyEnd())))
-                                    nEndIndex++;
-                                //nMovePos legt die neue EndPosition fest
-                                sal_uInt16 nMovePos = nNextStart > nCurrentIndex && nNextStart < nNextEnd ? nNextStart : nNextEnd;
-
-                                if(aBkmArr.Count() && aBkmArr.GetObject(0)->nIndex < nMovePos)
-                                {
-                                    DBG_ASSERT(aBkmArr.GetObject(0)->nIndex > nCurrentIndex,
-                                        "forgotten bookmark(s)")
-                                    nMovePos = aBkmArr.GetObject(0)->nIndex;
-                                }
-                                // liegt die Endposition nach dem naechsten Rahmen, dann aufbrechen
-                                if(nFirstFrameIndex != USHRT_MAX && nMovePos > nFirstFrameIndex)
-                                    nMovePos = nFirstFrameIndex;
-
-                                if(nMovePos > nCurrentIndex)
-                                    pUnoCrsr->Right(nMovePos - nCurrentIndex);
-                                else
-                                    pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
-                            }
                         }
                         else if(USHRT_MAX != nFirstFrameIndex)
                         {
@@ -6015,9 +6038,10 @@ void SwXTextPortionEnumeration::CreatePortions()
                             }
                         }
                     }
-                    if(!xRef.is())
+                    if(!xRef.is() && pUnoCrsr->HasMark() )
                         xRef = new SwXTextPortion(*pUnoCrsr, xParent, ePortionType);
-                    aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
+                    if(xRef.is())
+                        aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
                 }
                 else
                 {
@@ -6030,7 +6054,31 @@ void SwXTextPortionEnumeration::CreatePortions()
             // Absatzende ?
             if(pUnoCrsr->GetCntntNode() &&
                     pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len())
+            {
                 bAtEnd = sal_True;
+                lcl_ExportBookmark(aBkmArr, pUnoCrsr->GetCntntNode()->Len(),
+                                            pUnoCrsr, xParent, aPortionArr);
+                SwNode* pNode = pUnoCrsr->GetNode();
+                if(ND_TEXTNODE == pNode->GetNodeType())
+                {
+                    SwTxtNode* pTxtNode = (SwTxtNode*)pNode;
+                    SwpHints* pHints = pTxtNode->GetpSwpHints();
+                    if(pHints)
+                    {
+                        SwTextPortionType ePortionType = PORTION_TEXT;
+                        Reference<XTextRange> xRef = lcl_ExportHints(pHints,
+                            aPortionArr,
+                            pUnoCrsr,
+                            xParent,
+                            pUnoCrsr->GetCntntNode()->Len(),
+                            ePortionType,
+                            STRING_MAXLEN,
+                            aBkmArr);
+                        if(xRef.is())
+                            aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
+                    }
+                }
+            }
         }
     }
 }
