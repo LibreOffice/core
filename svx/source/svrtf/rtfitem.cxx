@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-08 12:52:43 $
+ *  last change: $Author: cmc $ $Date: 2002-10-29 14:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1965,6 +1965,29 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
                 CalcValue();
                 nValue = (short)nTokenValue;
             }
+#if 1
+            /*
+            cmc:
+             This stuff looks a little hairy indeed, this should be totally
+             unnecessary where default tabstops are understood. Just make one
+             tabstop and stick the value in there, the first one is all that
+             matters.
+
+             e.g.
+
+            SvxTabStopItem aNewTab(1, USHORT(nValue), SVX_TAB_ADJUST_DEFAULT,
+                PARDID->nTabStop);
+            ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
+
+
+             It must exist as a foul hack to support somebody that does not
+             have a true concept of default tabstops by making a tabsetting
+             result from the default tabstop, creating a lot of them all at
+             the default locations to give the effect of the first real
+             default tabstop being in use just in case the receiving
+             application doesn't do that for itself.
+             */
+#endif
 
             // Verhaeltnis der def. TabWidth / Tabs errechnen und
             // enstsprechend die neue Anzahl errechnen.
@@ -1972,6 +1995,12 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
  ?? wie kommt man auf die 13 ??
 --------------------------------------------------*/
             USHORT nAnzTabs = (SVX_TAB_DEFDIST * 13 ) / USHORT(nValue);
+            /*
+             cmc, make sure we have at least one, or all hell breaks loose in
+             everybodies exporters, #i8247#
+            */
+            if (nAnzTabs < 1)
+                nAnzTabs = 1;
 
             // wir wollen Defaulttabs
             SvxTabStopItem aNewTab( nAnzTabs, USHORT(nValue),
