@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:12:35 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_FIXED_CXX
-
 #ifndef _SV_DECOVIEW_HXX
 #include <decoview.hxx>
 #endif
@@ -74,7 +72,7 @@
 #include <controllayout.hxx>
 #endif
 
-#include <rc.h>
+#include <tools/rc.h>
 
 
 
