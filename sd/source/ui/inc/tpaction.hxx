@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-14 12:13:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 
 #include <vector>
 
-class SdView;
+class ::sd::View;
 class SdDrawDocument;
 
 /*************************************************************************
@@ -117,7 +117,7 @@ private:
 
 public:
 
-            SdActionDlg( Window* pParent, const SfxItemSet* pAttr, SdView* pView );
+            SdActionDlg( Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView );
             ~SdActionDlg() {};
 };
 
@@ -158,7 +158,7 @@ private:
     TriStateBox             aTsbPlayFull;
 
     const SfxItemSet&       rOutAttrs;
-    const SdView*           pView;
+    const ::sd::View*           pView;
     SdDrawDocument*         pDoc;
     XColorTable*            pColTab;
 
@@ -204,7 +204,7 @@ public:
 
     void    Construct();
 
-    void    SetView( const SdView* pSdView );
+    void    SetView( const ::sd::View* pSdView );
 };
 
 #endif      // _SD_TPACTION_HXX
