@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
+ *  last change: $Author: bm $ $Date: 2000-11-29 12:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@ private:
 
     rtl::OUString maMainTitle, maSubTitle;
     sal_Bool mbHasOwnTable;
-    rtl::OUString msAutoStyleName;
 
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
     rtl::OUString msCategoriesAddress;
