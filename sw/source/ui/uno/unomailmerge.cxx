@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // WeakImplHelper1
 #endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -160,7 +163,12 @@
 #ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 
 #ifndef _UNOMAILMERGE_HXX_
 #include <unomailmerge.hxx>
@@ -256,10 +264,18 @@ osl::Mutex &    GetMailMergeMutex()
 
 ////////////////////////////////////////////////////////////
 
- static void CloseModelAndDocSh(
-        Reference< frame::XModel > &rxModel,
-        SfxObjectShellRef &rxDocSh )
- {
+enum CloseResult
+{
+    eSuccess,       // successfully closed
+    eVetoed,        // vetoed, ownership transfered to the vetoing instance
+    eFailed         // failed for some unknown reason
+};
+static CloseResult CloseModelAndDocSh(
+       Reference< frame::XModel > &rxModel,
+       SfxObjectShellRef &rxDocSh )
+{
+    CloseResult eResult = eSuccess;
+
     rxDocSh = 0;
 
     //! models/documents should never be disposed (they may still be
@@ -274,8 +290,16 @@ osl::Mutex &    GetMailMergeMutex()
         }
         catch (util::CloseVetoException &)
         {
+            //! here we have the problem that the temporary file that is
+            //! currently being printed will never be deleted. :-(
+            eResult = eVetoed;
+        }
+        catch ( const uno::RuntimeException& )
+        {
+            eResult = eFailed;
         }
     }
+    return eResult;
 }
 
 ////////////////////////////////////////////////////////////
@@ -333,44 +357,201 @@ static BOOL LoadFromURL_impl(
     return bRes;
 }
 
+//==========================================================
+namespace
+{
+    class DelayedFileDeletion : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+    {
+    protected:
+        ::osl::Mutex                    m_aMutex;
+        Reference< util::XCloseable >   m_xDocument;
+        Timer                           m_aDeleteTimer;
+        String                          m_sTemporaryFile;
+        sal_Int32                       m_nPendingDeleteAttempts;
+
+    public:
+        DelayedFileDeletion( const Reference< XModel >& _rxModel,
+                             const String& _rTemporaryFile );
+
+    protected:
+        ~DelayedFileDeletion( );
+
+        // XCloseListener
+        virtual void SAL_CALL queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException);
+        virtual void SAL_CALL notifyClosing( const EventObject& _rSource ) throw (RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+
+    private:
+        void implTakeOwnership( );
+        DECL_LINK( OnTryDeleteFile, void* );
+
+    private:
+        DelayedFileDeletion( const DelayedFileDeletion& );                  // never implemented
+        DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
+    };
+
+    DBG_NAME( DelayedFileDeletion )
+    //------------------------------------------------------
+    DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const String& _rTemporaryFile )
+        :m_sTemporaryFile( _rTemporaryFile )
+        ,m_nPendingDeleteAttempts( 0 )
+        ,m_xDocument( _rxModel, UNO_QUERY )
+    {
+        DBG_CTOR( DelayedFileDeletion, NULL );
+
+        osl_incrementInterlockedCount( &m_refCount );
+        try
+        {
+            if ( m_xDocument.is() )
+            {
+                m_xDocument->addCloseListener( this );
+                // successfully added -> keep ourself alive
+                acquire();
+            }
+            else
+                DBG_ERROR( "DelayedFileDeletion::DelayedFileDeletion: model is no component!" );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "DelayedFileDeletion::DelayedFileDeletion: could not register as event listener at the model!" );
+        }
+        osl_decrementInterlockedCount( &m_refCount );
+    }
+
+    //--------------------------------------------------------------------
+    IMPL_LINK( DelayedFileDeletion, OnTryDeleteFile, void*, NOTINTERESTEDIN )
+    {
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+        sal_Bool bSuccess = sal_False;
+        try
+        {
+            sal_Bool bDeliverOwnership = ( 0 == m_nPendingDeleteAttempts );
+                // if this is our last attemt, then anybody which vetoes this has to take the consequences
+                // (means take the ownership)
+            m_xDocument->close( bDeliverOwnership );
+            bSuccess = sal_True;
+        }
+        catch( const util::CloseVetoException& )
+        {
+            // somebody vetoed -> next try
+            if ( m_nPendingDeleteAttempts )
+            {
+                // next attempt
+                --m_nPendingDeleteAttempts;
+                m_aDeleteTimer.Start();
+            }
+            else
+                bSuccess = sal_True;    // can't do anything here ...
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
+            bSuccess = sal_True;
+                // can't do anything here ...
+        }
+
+        if ( bSuccess )
+        {
+            SWUnoHelper::UCB_DeleteFile( m_sTemporaryFile );
+            aGuard.clear();
+            release();  // this should be our last reference, we should be dead after this
+        }
+        return 0L;
+    }
+
+    //--------------------------------------------------------------------
+    void DelayedFileDeletion::implTakeOwnership( )
+    {
+        // revoke ourself as listener
+        try
+        {
+            m_xDocument->removeCloseListener( this );
+        }
+        catch( const Exception & )
+        {
+            DBG_ERROR( "DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
+        }
+
+        m_aDeleteTimer.SetTimeout( 3000 );  // 3 seconds
+        m_aDeleteTimer.SetTimeoutHdl( LINK( this, DelayedFileDeletion, OnTryDeleteFile ) );
+        m_nPendingDeleteAttempts = 3;   // try 3 times at most
+        m_aDeleteTimer.Start( );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL DelayedFileDeletion::queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( _bGetsOwnership )
+            implTakeOwnership( );
+
+        // always veto: We want to take the ownership ourself, as this is the only chance to delete
+        // the temporary file which the model is based on
+        throw util::CloseVetoException( );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL DelayedFileDeletion::notifyClosing( const EventObject& _rSource ) throw (RuntimeException)
+    {
+        DBG_ERROR( "DelayedFileDeletion::notifyClosing: how this?" );
+        // this should not happen:
+        // Either, a foreign instance closes the document, then we should veto this, and take the ownership
+        // Or, we ourself close the document, then we should not be a listener anymore
+    }
+
+    //------------------------------------------------------
+    void SAL_CALL DelayedFileDeletion::disposing( const EventObject& Source ) throw (RuntimeException)
+    {
+        DBG_ERROR( "DelayedFileDeletion::disposing: how this?" );
+        // this should not happen:
+        // Either, a foreign instance closes the document, then we should veto this, and take the ownership
+        // Or, we ourself close the document, then we should not be a listener anymore
+    }
+
+    //------------------------------------------------------
+    DelayedFileDeletion::~DelayedFileDeletion( )
+    {
+        DBG_DTOR( DelayedFileDeletion, NULL );
+    }
+}
+
 ////////////////////////////////////////////////////////////
 
 static BOOL DeleteTmpFile_Impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
-        const String &rTmpFileURL,
-        BOOL bClose )
+        const String &rTmpFileURL )
 {
     BOOL bRes = FALSE;
     if (rTmpFileURL.Len())
     {
-        if (bClose)
+        BOOL bDelete = TRUE;
+        if ( eVetoed == CloseModelAndDocSh( rxModel, rxDocSh ) )
         {
-            rxDocSh = 0;
-
-            //! models/documents should never be disposed (they may still be
-            //! used for printing which is called asynchronously for example)
-            //! instead call close
-            Reference< util::XCloseable > xClose( rxModel, UNO_QUERY );
-            if (xClose.is())
-            {
-                try
-                {
-                    xClose->close( sal_True );
-                }
-                catch (util::CloseVetoException &)
-                {
-                    //! here we have the problem that the temporary file that is
-                    //! currently being printed will never be deleted. :-(
-                }
-            }
+            // somebody vetoed the closing, and took the ownership of the document
+            // -> ensure that the temporary file is deleted later on
+            Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
+                // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseeded by
+                // a better solution
+            bDelete = FALSE;
         }
 
         rxModel = 0;
         rxDocSh = 0; // destroy doc shell
 
-        bRes = SWUnoHelper::UCB_DeleteFile( rTmpFileURL );
-        DBG_ASSERT( bRes, "temp file not deleted" );
+        if ( bDelete )
+        {
+            if ( !SWUnoHelper::UCB_DeleteFile( rTmpFileURL ) )
+            {
+                Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
+                    // same not as above: as soon as #106931#, ...
+            }
+        }
+        else
+            bRes = TRUE;    // file will be deleted delayed
     }
     return bRes;
 }
@@ -405,7 +586,7 @@ SwXMailMerge::SwXMailMerge() :
 
 SwXMailMerge::~SwXMailMerge()
 {
-    DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName, TRUE );
+    DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
 }
 
 uno::Any SAL_CALL SwXMailMerge::execute(
@@ -494,6 +675,52 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
         if (!bOK)
             throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property type mismatch or property not set: " ) ) + rName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+    }
+
+    // need to translate the selection: the API here requires a sequence of bookmarks, but the MergeNew
+    // method we will call below requires a sequence of indicies.
+    if ( aCurSelection.getLength() )
+    {
+        Sequence< Any > aTranslated( aCurSelection.getLength() );
+
+        sal_Bool bValid = sal_False;
+        Reference< sdbcx::XRowLocate > xRowLocate( xCurResultSet, UNO_QUERY );
+        if ( xRowLocate.is() )
+        {
+
+            const Any* pBookmarks = aCurSelection.getConstArray();
+            const Any* pBookmarksEnd = pBookmarks + aCurSelection.getLength();
+            Any* pTranslated = aTranslated.getArray();
+
+            try
+            {
+                sal_Bool bEverythingsFine = sal_True;
+                for ( ; ( pBookmarks != pBookmarksEnd ) && bEverythingsFine; ++pBookmarks )
+                {
+                    if ( xRowLocate->moveToBookmark( *pBookmarks ) )
+                        *pTranslated <<= xCurResultSet->getRow();
+                    else
+                        bEverythingsFine = sal_False;
+                }
+                if ( bEverythingsFine )
+                    bValid = sal_True;
+            }
+            catch( const Exception& )
+            {
+                bValid = sal_False;
+            }
+        }
+
+        if ( !bValid )
+        {
+            throw IllegalArgumentException(
+                OUString ( RTL_CONSTASCII_USTRINGPARAM ( "The current 'Selection' does not describe a valid array of bookmarks, relative to the current 'ResultSet'." ) ),
+                static_cast < cppu::OWeakObject * > ( this ),
+                0
+            );
+        }
+
+        aCurSelection = aTranslated;
     }
 
     SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, 0, FALSE);
@@ -623,25 +850,29 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     // save document with temporary filename
-//    if (aTmpFileName.Len())
-//        xCurDocSh->DoSave();
-//    else
-    {
-        const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                String::CreateFromAscii( FILTER_XML ),
-                SwDocShell::Factory().GetFilterContainer() );
-        String aExtension( pSfxFlt->GetDefaultExtension() );
-        aExtension.EraseLeadingChars( '*' );
-        TempFile aTempFile( C2U("SwMM"), &aExtension );
-        aTmpFileName = aTempFile.GetName();
-        SfxMedium *pDstMed = new SfxMedium( aTmpFileName, STREAM_STD_READWRITE, TRUE );
-        pDstMed->SetFilter( pSfxFlt );
+    const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+            String::CreateFromAscii( FILTER_XML ),
+            SwDocShell::Factory().GetFilterContainer() );
+    String aExtension( pSfxFlt->GetDefaultExtension() );
+    aExtension.EraseLeadingChars( '*' );
+    TempFile aTempFile( C2U("SwMM"), &aExtension );
+    aTmpFileName = aTempFile.GetName();
 
-        xCurDocSh->DoSaveAs(*pDstMed);
-        xCurDocSh->DoSaveCompleted(pDstMed);
-        if (xCurDocSh->GetError())
-            throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to save temporary file." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    Reference< XStorable > xStorable( xCurModel, UNO_QUERY );
+    sal_Bool bStoredAsTemporary = sal_False;
+    if ( xStorable.is() )
+    {
+        try
+        {
+            xStorable->storeAsURL( aTmpFileName, Sequence< PropertyValue >() );
+            bStoredAsTemporary = sal_True;
+        }
+        catch( const Exception& )
+        {
+        }
     }
+    if ( !bStoredAsTemporary )
+        throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to save temporary file." ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
     pMgr->SetMergeSilent( TRUE );       // suppress dialogs, message boxes, etc.
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
@@ -650,14 +881,15 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     BOOL bSucc = pMgr->MergeNew( nMergeType, rSh, aDescriptor );
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
-    DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName, xCurModel != xModel );
-    //aTmpFileName.Erase();
-
-    if (xCurModel != xModel)    // temporary model and doc shell used?
-        CloseModelAndDocSh( xCurModel, xCurDocSh );
+    if ( xCurModel.get() != xModel.get() )
+    {   // in case it was a temporary model -> close it, and delete the file
+        DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName );
+        aTmpFileName.Erase();
+    }
+    // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
 
     if (!bSucc)
-        throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Mail merge failed." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw Exception( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Mail merge failed. Sorry, no further information available." ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
     return makeAny( sal_True );
 }
