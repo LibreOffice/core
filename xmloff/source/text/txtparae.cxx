@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-10 13:17:20 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 15:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,7 +1300,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_filter_name,
                                   sGrfFilter );
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_image, sal_False, sal_True );
 
     // svg:desc
