@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:14:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Number" ;
                 Text [ norwegian ] = "Number" ;
                 Text [ italian ] = "Numeri" ;
-                Text [ portuguese_brazilian ] = "Número" ;
+                Text [ portuguese_brazilian ] = "N?ero" ;
                 Text [ portuguese ] = "Números" ;
                 Text [ finnish ] = "Numerot" ;
                 Text [ danish ] = "Tal" ;
@@ -288,7 +288,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Protection" ;
                 Text [ norwegian ] = "Protection" ;
                 Text [ italian ] = "Protezione celle" ;
-                Text [ portuguese_brazilian ] = "Proteção" ;
+                Text [ portuguese_brazilian ] = "Prote??o" ;
                 Text [ portuguese ] = "Protecção de célula" ;
                 Text [ finnish ] = "Solujen suojaus" ;
                 Text [ danish ] = "Cellebeskyttelse" ;
@@ -332,7 +332,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text [ ENGLISH ] = "Page Style" ;
     Text [ norwegian ] = "Page Style" ;
     Text [ italian ] = "Modello di pagina" ;
-    Text [ portuguese_brazilian ] = "Estilo da Página" ;
+    Text [ portuguese_brazilian ] = "Estilo da P?gina" ;
     Text [ portuguese ] = "Estilo de página" ;
     Text [ finnish ] = "Sivun tyyli" ;
     Text [ danish ] = "Sidetypografi" ;
@@ -357,7 +357,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Page" ;
                 Text [ norwegian ] = "Page" ;
                 Text [ italian ] = "Pagina" ;
-                Text [ portuguese_brazilian ] = "Página" ;
+                Text [ portuguese_brazilian ] = "P?gina" ;
                 Text [ portuguese ] = "Página" ;
                 Text [ finnish ] = "Sivu " ;
                 Text [ danish ] = "Side" ;
@@ -441,7 +441,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Header" ;
                 Text [ norwegian ] = "Header" ;
                 Text [ italian ] = "Riga d'intestazione" ;
-                Text [ portuguese_brazilian ] = "Cabeçalho" ;
+                Text [ portuguese_brazilian ] = "Cabe?alho" ;
                 Text [ portuguese ] = "Cabeçalho" ;
                 Text [ finnish ] = "Yläotsikko" ;
                 Text [ danish ] = "Sidehoved" ;
@@ -469,7 +469,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Footer" ;
                 Text [ norwegian ] = "Footer" ;
                 Text [ italian ] = "Piè di pagina" ;
-                Text [ portuguese_brazilian ] = "Rodapé" ;
+                Text [ portuguese_brazilian ] = "Rodap?" ;
                 Text [ portuguese ] = "Rodapé" ;
                 Text [ finnish ] = "Alaselite" ;
                 Text [ danish ] = "Sidefod" ;
