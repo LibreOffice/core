@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,12 +624,12 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId,
                                 const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
-    pEventGB = new GroupBox(this, SfxResId(GB_EVENT) );
+    pEventGB = new FixedLine(this, SfxResId(GB_EVENT) );
     pEventLB = new SvTabListBox(this, SfxResId(LB_EVENT) );
     pAssignPB = new PushButton( this, SfxResId(PB_ASSIGN) );
     pDeletePB = new PushButton( this, SfxResId(PB_DELETE) );
     pScriptTypeLB = new ListBox(this, SfxResId(LB_SCRIPTTYPE) );
-    pMacroGB = new GroupBox( this, SfxResId(GB_MACRO) );
+    pMacroGB = new FixedLine( this, SfxResId(GB_MACRO) );
     pGroupLB = new SfxConfigGroupListBox_Impl( this, SfxResId(LB_GROUP) );
     pMacroLB = new SfxConfigFunctionListBox_Impl( this, SfxResId(LB_MACROS) );
     pMacroStr = new String( SfxResId(STR_MACROS) );
@@ -657,12 +657,12 @@ SfxSmallMacroTabPage::SfxSmallMacroTabPage( Window* pParent, const ResId& rResId
                                 const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
-    pEventGB = new GroupBox(this, SfxResId(GB_EVENT) );
+    pEventGB = new FixedLine(this, SfxResId(GB_EVENT) );
     pEventLB = new SvTabListBox(this, SfxResId(LB_EVENT) );
     pAssignPB = new PushButton( this, SfxResId(PB_ASSIGN) );
     pDeletePB = new PushButton( this, SfxResId(PB_DELETE) );
     pScriptTypeLB = new ListBox(this, SfxResId(LB_SCRIPTTYPE) );
-    pMacroGB = new GroupBox( this, SfxResId(GB_MACRO) );
+    pMacroGB = new FixedLine( this, SfxResId(GB_MACRO) );
     pGroupLB = new SfxConfigGroupListBox_Impl( this, SfxResId(LB_GROUP) );
     pMacroLB = new SfxConfigFunctionListBox_Impl( this, SfxResId(LB_MACROS) );
     pMacroStr = new String( SfxResId(STR_MACROS) );

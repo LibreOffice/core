@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,14 +117,14 @@ class SfxAcceleratorConfigDialog : public ModalDialog
     SfxAcceleratorConfigListBox aEntriesBox;
     FixedText          aDescriptionTextText;
     FixedText          aDescriptionInfoText;
-    GroupBox           aKeyboardGroup;
+    FixedLine          aKeyboardGroup;
     FixedText          aGroupText;
-    ListBox            aGroupBox;
+    ListBox            aGroupLBox;
     FixedText          aFunctionText;
     ListBox            aFunctionBox;
     FixedText          aKeyText;
     ListBox            aKeyBox;
-    GroupBox           aFunctionsGroup;
+    FixedLine          aFunctionsGroup;
 
     SfxAcceleratorManager *pMgr;
 

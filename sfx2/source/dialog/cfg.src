@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:03:29 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,7 @@
     Text[ korean ] = "ÀúÀå(~S)..."; \
     Text[ turkish ] = "~Kaydet..."; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Guardar...";    \
-    Text[ finnish ] = "~Tallenna";
+    Text[ catalan ] = "~Guardar...";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~ücksetzen" ; \
@@ -99,7 +98,7 @@
     Text [ french ] = "Re~staurer" ; \
     Text [ swedish ] = "~Återställ" ; \
     Text [ danish ] = "Nulstil" ; \
-    Text [ portuguese_brazilian ] = "~Zur?ksetzen" ; \
+    Text [ portuguese_brazilian ] = "~Zurücksetzen" ; \
     Text [ portuguese ] = "~Restaurar" ; \
     Text[ chinese_simplified ] = "ÖØÉè(~E)";    \
     Text[ russian ] = "Âîññòàíîâèòü";   \
@@ -111,8 +110,7 @@
     Text[ korean ] = "¿ø·¡´ë·Î(~E)";    \
     Text[ turkish ] = "Başa al";    \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Restablecer";   \
-    Text[ finnish ] = "P~alauta";
+    Text[ catalan ] = "~Restablecer";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -137,8 +135,7 @@
     Text[ korean ] = "·Îµå(~L)..."; \
     Text[ turkish ] = "Yükle...";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Cargar..."; \
-    Text[ finnish ] = "~Lataa";
+    Text[ catalan ] = "~Cargar...";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
@@ -175,7 +172,7 @@
     Text [ italian ] = "~Cambia" ; \
     Text [ portuguese_brazilian ] = "~Mudar" ; \
     Text [ portuguese ] = "~Modificar" ; \
-    Text [ finnish ] = "~Muokkaa" ; \
+    Text [ finnish ] = "~Muuta" ; \
     Text [ danish ] = "Modificer" ; \
     Text [ french ] = "~Modifier" ; \
     Text [ swedish ] = "~Ändra" ; \
@@ -227,7 +224,7 @@
     Text [ italian ] = "Area" ; \
     Text [ portuguese_brazilian ] = "~Agrupar" ; \
     Text [ portuguese ] = "~Categoria" ; \
-    Text [ finnish ] = "~Luokka" ; \
+    Text [ finnish ] = "~Ryhmitä" ; \
     Text [ danish ] = "Område" ; \
     Text [ french ] = "~Catégorie" ; \
     Text [ swedish ] = "~Kategori" ; \
@@ -251,9 +248,9 @@
     Text [ ENGLISH ] = "~Function" ; \
     Text [ norwegian ] = "~Function" ; \
     Text [ italian ] = "~Funzione" ; \
-    Text [ portuguese_brazilian ] = "~Fun??o" ; \
+    Text [ portuguese_brazilian ] = "~Função" ; \
     Text [ portuguese ] = "~Função" ; \
-    Text [ finnish ] = "Funktio" ; \
+    Text [ finnish ] = "~Funktio" ; \
     Text [ danish ] = "Funktion" ; \
     Text [ french ] = "~Fonction" ; \
     Text [ swedish ] = "~Funktion" ; \
@@ -277,7 +274,7 @@
     Text [ ENGLISH ] = "Functions" ; \
     Text [ norwegian ] = "Funksjoner" ; \
     Text [ italian ] = "Funzioni" ; \
-    Text [ portuguese_brazilian ] = "Fun??s" ; \
+    Text [ portuguese_brazilian ] = "Funções" ; \
     Text [ portuguese ] = "Funções" ; \
     Text [ finnish ] = "Toiminnot" ; \
     Text [ danish ] = "Funktioner" ; \
@@ -304,41 +301,24 @@ TabPage TP_CONFIG_MENU
     HelpId = HID_CONFIG_MENU ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 282 , 205 ) ;
+    FixedLine GRP_MN_MENU
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 214 , 8 ) ;
+        Text = "Menüeinträge" ;
+        Text [ ENGLISH ] = "Menu entries" ;
+    };
     PushButton BTN_MN_NEW
     {
         Pos = MAP_APPFONT ( 226 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         PUSHBUTTON_TEXT_NEW
-        Text [ english_us ] = "~New" ;
-        Text [ portuguese_brazilian ] = "~Novo" ;
-        Text = "~Neu" ;
-        Text [ swedish ] = "~Nytt" ;
-        Text [ danish ] = "Ny" ;
-        Text [ italian ] = "~Nuovo" ;
-        Text [ spanish ] = "~Nuevo" ;
-        Text [ french ] = "~Nouveau" ;
-        Text [ dutch ] = "~Nieuw" ;
-        Text [ portuguese ] = "~Novo" ;
-        Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
-        Text[ russian ] = "Ñîçä~àòü";
-        Text[ polish ] = "Nowy";
-        Text[ japanese ] = "V‹Kì¬(~N)";
-        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "»õ·Î(~N)";
-        Text[ turkish ] = "~Yeni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nuevo";
-        Text[ finnish ] = "~Uusi";
     };
     PushButton BTN_MN_NEWPOPUP
     {
         Pos = MAP_APPFONT ( 226 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Neues ~Menü : Neues ~Men³ */
-        /* ### ACHTUNG: Neuer Text in Resource? Neues ~Menü : Neues ~Men³ */
         Text = "Neues ~Menü" ;
         Text [ ENGLISH ] = "New ~menu" ;
         Text [ english_us ] = "New Men~u" ;
@@ -348,7 +328,7 @@ TabPage TP_CONFIG_MENU
         Text [ spanish ] = "Nue~vo menú" ;
         Text [ french ] = "Nouveau ~menu" ;
         Text [ dutch ] = "Nieuw ~menu" ;
-        Text [ portuguese_brazilian ] = "Neues ~Men" ;
+        Text [ portuguese_brazilian ] = "Neues ~Menü" ;
         Text [ portuguese ] = "Novo ~menu" ;
         Text[ chinese_simplified ] = "ĞÂ²Ëµ¥(~U)";
         Text[ russian ] = "Íîâîå ìåíş";
@@ -361,7 +341,6 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Yeni mönü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nue~vo menú";
-        Text[ finnish ] = "Uusi va~likko";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -369,30 +348,6 @@ TabPage TP_CONFIG_MENU
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         PUSHBUTTON_TEXT_CHANGE
-        Text [ english_us ] = "~Modify" ;
-        Text [ portuguese_brazilian ] = "~Mudar" ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
-        Text = "~Ändern" ;
-        Text [ swedish ] = "~Ändra" ;
-        Text [ danish ] = "Modificer" ;
-        Text [ italian ] = "Modifica" ;
-        Text [ spanish ] = "~Personalizar" ;
-        Text [ french ] = "~Personnaliser" ;
-        Text [ dutch ] = "Wij~zigen" ;
-        Text [ portuguese ] = "~Modificar" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
-        Text[ russian ] = "Èçìåíèòü";
-        Text[ polish ] = "Modyfikuj";
-        Text[ japanese ] = "•ÏX(~M)";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~M)";
-        Text[ arabic ] = "ÊÚÏíá";
-        Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "º¯°æ(~M)";
-        Text[ turkish ] = "Değiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Personalizar";
-        Text[ finnish ] = "~Muokkaa";
     };
     PushButton BTN_MN_REMOVE
     {
@@ -401,30 +356,6 @@ TabPage TP_CONFIG_MENU
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_REMOVE
-        Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~Remover" ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text = "~Löschen" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "Slet" ;
-        Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "Äéá~ãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
-        Text[ finnish ] = "~Poista";
     };
     ImageButton BTN_MN_UP
     {
@@ -447,31 +378,6 @@ TabPage TP_CONFIG_MENU
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_RESET
-        Text [ english_us ] = "R~eset" ;
-        Text [ portuguese_brazilian ] = "~Zur?ksetzen" ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : ~Zurücksetzen */
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
-        Text = "Zur~ücksetzen" ;
-        Text [ swedish ] = "~Återställ" ;
-        Text [ danish ] = "Nulstil" ;
-        Text [ italian ] = "Ri~pristina" ;
-        Text [ spanish ] = "Res~tablecer" ;
-        Text [ french ] = "Re~staurer" ;
-        Text [ dutch ] = "~Terugzetten" ;
-        Text [ portuguese ] = "~Restaurar" ;
-        Text[ chinese_simplified ] = "ÖØÉè(~E)";
-        Text[ russian ] = "Âîññòàíîâèòü";
-        Text[ polish ] = "Zr~esetuj";
-        Text[ japanese ] = "Ø¾¯Ä(~E)";
-        Text[ chinese_traditional ] = "­«³](~E)";
-        Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä";
-        Text[ greek ] = "Åğáíáö~ïñÜ";
-        Text[ korean ] = "¿ø·¡´ë·Î(~E)";
-        Text[ turkish ] = "Başa al";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Res~tablecer";
-        Text[ finnish ] = "P~alauta";
     };
     PushButton BTN_LOAD
     {
@@ -480,29 +386,6 @@ TabPage TP_CONFIG_MENU
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_LOAD
-        Text [ english_us ] = "~Load" ;
-        Text [ portuguese_brazilian ] = "~Laden..." ;
-        /* ### ACHTUNG: Neuer Text in Resource? L~aden... : ~Laden... */
-        Text = "L~aden..." ;
-        Text [ swedish ] = "L~adda..." ;
-        Text [ danish ] = "Indlæs..." ;
-        Text [ italian ] = "~Carica..." ;
-        Text [ spanish ] = "C~argar..." ;
-        Text [ french ] = "~Charger..." ;
-        Text [ dutch ] = "~Laden..." ;
-        Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°Èë(~L)...";
-        Text[ russian ] = "Çàãğóçèòü...";
-        Text[ polish ] = "£aduj...";
-        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
-        Text[ arabic ] = "ÊÍãíá...";
-        Text[ greek ] = "Öüñôùóç...";
-        Text[ korean ] = "·Îµå(~L)";
-        Text[ turkish ] = "Yükle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~argar...";
-        Text[ finnish ] = "~Lataa";
     };
     PushButton BTN_SAVE
     {
@@ -511,28 +394,6 @@ TabPage TP_CONFIG_MENU
         Pos = MAP_APPFONT ( 226 , 172 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         PUSHBUTTON_TEXT_SAVE
-        Text [ english_us ] = "~Save..." ;
-        Text [ portuguese_brazilian ] = "~Speichern..." ;
-        Text = "~Speichern..." ;
-        Text [ swedish ] = "~Spara..." ;
-        Text [ danish ] = "Gem..." ;
-        Text [ italian ] = "Salva..." ;
-        Text [ spanish ] = "~Guardar..." ;
-        Text [ french ] = "En~registrer..." ;
-        Text [ dutch ] = "O~pslaan..." ;
-        Text [ portuguese ] = "~Guardar..." ;
-        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
-        Text[ russian ] = "Ñîõğàíèòü...";
-        Text[ polish ] = "Zapi~sz...";
-        Text[ japanese ] = "•Û‘¶(~S)...";
-        Text[ chinese_traditional ] = "Àx¦s(~S)...";
-        Text[ arabic ] = "ÍİÙ...";
-        Text[ greek ] = "ÁğïèŞêåõ~óç...";
-        Text[ korean ] = "ÀúÀå(~S)...";
-        Text[ turkish ] = "Kaydet...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Guardar...";
-        Text[ finnish ] = "~Tallenna";
     };
     Control BOX_MN_ENTRIES
     {
@@ -542,41 +403,37 @@ TabPage TP_CONFIG_MENU
         TabStop = TRUE ;
         HelpId = HID_MENUCONFIG_LISTBOX ;
     };
-    GroupBox GRP_MN_MENU
+    FixedLine GRP_FUNCTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 214 , 107 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
-        /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
-        Text = "Menü" ;
-        Text [ ENGLISH ] = "Menu" ;
-        Text [ norwegian ] = "Meny" ;
-        Text [ italian ] = "Menu" ;
-        Text [ portuguese_brazilian ] = "Menu" ;
-        Text [ portuguese ] = "Menu" ;
-        Text [ finnish ] = "Valikko" ;
-        Text [ danish ] = "Menu" ;
-        Text [ french ] = "Menu" ;
-        Text [ swedish ] = "Meny" ;
-        Text [ dutch ] = "Menu" ;
-        Text [ spanish ] = "Menú" ;
-        Text [ english_us ] = "Menu" ;
+        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Size = MAP_APPFONT ( 214 , 8 ) ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "²Ëµ¥";
-        Text[ russian ] = "Ìåíş";
-        Text[ polish ] = "Menu";
-        Text[ japanese ] = "ÒÆ­°";
-        Text[ chinese_traditional ] = "¥\\¯àªí";
-        Text[ arabic ] = "ÇáŞÇÆãÉ";
-        Text[ greek ] = "Ìåíïı";
-        Text[ korean ] = "¸Ş´º";
-        Text[ turkish ] = "Mönü";
+        GROUPBOX_TEXT_FUNCTIONS
+        Text [ portuguese ] = "Funções" ;
+        Text [ english_us ] = "Functions" ;
+        Text [ portuguese_brazilian ] = "Funções" ;
+        Text = "Funktionen" ;
+        Text [ swedish ] = "Funktioner" ;
+        Text [ danish ] = "Funktioner" ;
+        Text [ italian ] = "Funzioni" ;
+        Text [ spanish ] = "Funciones" ;
+        Text [ french ] = "Ensemble de fonctions" ;
+        Text [ dutch ] = "Functies" ;
+        Text[ chinese_simplified ] = "¹¦ÄÜ";
+        Text[ russian ] = "Ôóíêöèè";
+        Text[ polish ] = "Funkcja";
+        Text[ japanese ] = "‹@”\\";
+        Text[ chinese_traditional ] = "¥\\¯à";
+        Text[ arabic ] = "ãåÇã";
+        Text[ greek ] = "Ëåéôïõñãßåò";
+        Text[ korean ] = "±â´Éµé";
+        Text[ turkish ] = "İşlevler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Menú";
+        Text[ catalan ] = "Funciones";
     };
     FixedText TXT_MN_GROUP
     {
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -602,81 +459,29 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Ka~tegori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
-        Text[ finnish ] = "L~uokka";
     };
     Control BOX_MN_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 135 ) ;
-        Size = MAP_APPFONT ( 93 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Size = MAP_APPFONT ( 93 , 64 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGGROUP_LISTBOX ;
     };
     FixedText TXT_MN_FUNCTION
     {
-        Pos = MAP_APPFONT ( 111 , 124 ) ;
+        Pos = MAP_APPFONT ( 111 , 121 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_FUNCTION
-        Text [ portuguese ] = "~Função" ;
-        Text [ english_us ] = "~Function" ;
-        Text [ portuguese_brazilian ] = "~Fun??o" ;
-        Text = "~Funktion" ;
-        Text [ swedish ] = "~Funktion" ;
-        Text [ danish ] = "Funktion" ;
-        Text [ italian ] = "~Funzione" ;
-        Text [ spanish ] = "~Función" ;
-        Text [ french ] = "~Fonction" ;
-        Text [ dutch ] = "~Functie" ;
-        Text[ chinese_simplified ] = "¹¦ÄÜ(~F)";
-        Text[ russian ] = "Ôóíêöèÿ";
-        Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "‹@”\\(~F)";
-        Text[ chinese_traditional ] = "¥\\¯à(~F)";
-        Text[ arabic ] = "ãåãÉ";
-        Text[ greek ] = "ÅíôïëŞ";
-        Text[ korean ] = "¸í·É(~F)";
-        Text[ turkish ] = "İşlev";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Función";
-        Text[ finnish ] = "~Toiminto";
     };
     Control BOX_MN_FUNCTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 135 ) ;
-        Size = MAP_APPFONT ( 103 , 60 ) ;
+        Pos = MAP_APPFONT ( 111 , 131 ) ;
+        Size = MAP_APPFONT ( 103 , 64 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGFUNCTION_LISTBOX ;
-    };
-    GroupBox GRP_FUNCTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
-        Size = MAP_APPFONT ( 214 , 87 ) ;
-        Group = TRUE ;
-        GROUPBOX_TEXT_FUNCTIONS
-        Text [ portuguese ] = "Funções" ;
-        Text [ english_us ] = "Functions" ;
-        Text [ portuguese_brazilian ] = "Fun??s" ;
-        Text = "Funktionen" ;
-        Text [ swedish ] = "Funktioner" ;
-        Text [ danish ] = "Funktioner" ;
-        Text [ italian ] = "Funzioni" ;
-        Text [ spanish ] = "Funciones" ;
-        Text [ french ] = "Ensemble de fonctions" ;
-        Text [ dutch ] = "Functies" ;
-        Text[ chinese_simplified ] = "¹¦ÄÜ";
-        Text[ russian ] = "Ôóíêöèè";
-        Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "‹@”\\";
-        Text[ chinese_traditional ] = "¥\\¯à";
-        Text[ arabic ] = "ãåÇã";
-        Text[ greek ] = "Ëåéôïõñãßåò";
-        Text[ korean ] = "±â´Éµé";
-        Text[ turkish ] = "İşlevler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Funciones";
-        Text[ finnish ] = "Toiminnot";
     };
 };
  // TP_CONFIG_ACCEL -------------------------------------------------------
@@ -691,30 +496,6 @@ TabPage TP_CONFIG_ACCEL
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         PUSHBUTTON_TEXT_CHANGE
-        Text [ portuguese ] = "~Modificar" ;
-        Text [ english_us ] = "Modify" ;
-        Text [ portuguese_brazilian ] = "~Mudar" ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
-        Text = "~Ändern" ;
-        Text [ swedish ] = "~Ändra" ;
-        Text [ danish ] = "Modificer" ;
-        Text [ italian ] = "~Cambia" ;
-        Text [ spanish ] = "~Modificar" ;
-        Text [ french ] = "~Modifier" ;
-        Text [ dutch ] = "Wij~zigen" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~A)";
-        Text[ russian ] = "Èçìåíèòü";
-        Text[ polish ] = "Modyfikuj";
-        Text[ japanese ] = "•ÏX(~A)";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~A)";
-        Text[ arabic ] = "ÊÚÏíá";
-        Text[ greek ] = "~ÁëëáãŞ";
-        Text[ korean ] = "º¯°æ(~A)";
-        Text[ turkish ] = "Değiştir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
-        Text[ finnish ] = "Muokkaa";
     };
     PushButton BTN_ACC_REMOVE
     {
@@ -723,30 +504,14 @@ TabPage TP_CONFIG_ACCEL
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_REMOVE
-        Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~Remover" ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text = "~Löschen" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "Slet" ;
-        Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
-        Text[ finnish ] = "~Poista";
+    };
+    FixedLine GRP_ACC_KEYBOARD
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 214 , 8 ) ;
+        Text = "Tastenkombinationen" ;
+        Text [ ENGLISH ] = "Keyboard shortcuts" ;
+        Group = TRUE ;
     };
     Control BOX_ACC_ENTRIES
     {
@@ -757,114 +522,47 @@ TabPage TP_CONFIG_ACCEL
         Group = TRUE ;
         HelpId = HID_ACCELCONFIG_LISTBOX ;
     };
-    GroupBox GRP_ACC_KEYBOARD
+    FixedLine GRP_ACC_FUNCTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 214 , 107 ) ;
-        Text = "Tastatur" ;
-        Text [ ENGLISH ] = "Keyboard" ;
-        Text [ norwegian ] = "Tastatur" ;
-        Text [ italian ] = "Tastiera" ;
-        Text [ portuguese_brazilian ] = "Teclado" ;
-        Text [ portuguese ] = "Teclado" ;
-        Text [ finnish ] = "Näppäimistö" ;
-        Text [ danish ] = "Tastatur" ;
-        Text [ french ] = "Clavier" ;
-        Text [ swedish ] = "Tangentbord" ;
-        Text [ dutch ] = "Toetsenbord" ;
-        Text [ spanish ] = "Teclado" ;
-        Text [ english_us ] = "Keyboard" ;
+        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Size = MAP_APPFONT ( 214 , 8 ) ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "¼ü";
-        Text[ russian ] = "Êëàâèàòóğà";
-        Text[ polish ] = "Klawiatura";
-        Text[ japanese ] = "·°ÎŞ°ÄŞ";
-        Text[ chinese_traditional ] = "Áä";
-        Text[ arabic ] = "áæÍÉ ÇáãİÇÊíÍ";
-        Text[ greek ] = "Ğëçêôñïëüãéï";
-        Text[ korean ] = "Å°º¸µå";
-        Text[ turkish ] = "Klavye";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Teclado";
+        GROUPBOX_TEXT_FUNCTIONS
     };
     FixedText TXT_ACC_GROUP
     {
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_GROUP
-        Text [ english_us ] = "~Category" ;
-        Text [ portuguese_brazilian ] = "~Agrupar" ;
-        Text = "~Bereich" ;
-        Text [ swedish ] = "~Kategori" ;
-        Text [ danish ] = "Område" ;
-        Text [ italian ] = "Area" ;
-        Text [ spanish ] = "~Área" ;
-        Text [ french ] = "~Catégorie" ;
-        Text [ dutch ] = "~Bereik" ;
-        Text [ portuguese ] = "~Categoria" ;
-        Text[ chinese_simplified ] = "·¶Î§(~C)";
-        Text[ russian ] = "Êàòåãîğèÿ";
-        Text[ polish ] = "Obszar";
-        Text[ japanese ] = "”ÍˆÍ(~C)";
-        Text[ chinese_traditional ] = "­S³ò(~C)";
-        Text[ arabic ] = "ÇáİÆÉ";
-        Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "¿µ¿ª(~C)";
-        Text[ turkish ] = "Ka~tegori";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Área";
-        Text[ finnish ] = "~Luokka";
     };
     Control BOX_ACC_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 135 ) ;
-        Size = MAP_APPFONT ( 65 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Size = MAP_APPFONT ( 65 , 64 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGGROUP_ACC_LISTBOX ;
     };
     FixedText TXT_ACC_FUNCTION
     {
-        Pos = MAP_APPFONT ( 83 , 124 ) ;
+        Pos = MAP_APPFONT ( 83 , 121 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
         Left = TRUE ;
         FIXEDTEXT_TEXT_FUNCTION
-        Text [ portuguese ] = "~Função" ;
-        Text [ english_us ] = "~Function" ;
-        Text [ portuguese_brazilian ] = "~Fun??o" ;
-        Text = "~Funktion" ;
-        Text [ swedish ] = "~Funktion" ;
-        Text [ danish ] = "Funktion" ;
-        Text [ italian ] = "~Funzione" ;
-        Text [ spanish ] = "~Función" ;
-        Text [ french ] = "~Fonction" ;
-        Text [ dutch ] = "~Functie" ;
-        Text[ chinese_simplified ] = "¹¦ÄÜ(~F)";
-        Text[ russian ] = "Ôóíêöèÿ";
-        Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "‹@”\\(~F)";
-        Text[ chinese_traditional ] = "¥\\¯à(~F)";
-        Text[ arabic ] = "ãåãÉ";
-        Text[ greek ] = "ÅíôïëŞ";
-        Text[ korean ] = "¸í·É(~F)";
-        Text[ turkish ] = "İşlev";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Función";
-        Text[ finnish ] = "~Toiminto";
     };
     Control BOX_ACC_FUNCTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 83 , 135 ) ;
-        Size = MAP_APPFONT ( 75 , 60 ) ;
+        Pos = MAP_APPFONT ( 83 , 131 ) ;
+        Size = MAP_APPFONT ( 75 , 64 ) ;
         TabStop = TRUE ;
         HelpId = HID_CONFIGFUNCTION_ACC_LISTBOX ;
     };
     FixedText TXT_ACC_KEY
     {
-        Pos = MAP_APPFONT ( 164 , 124 ) ;
+        Pos = MAP_APPFONT ( 164 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Tasten" ;
         Text [ ENGLISH ] = "~Keys" ;
@@ -895,38 +593,9 @@ TabPage TP_CONFIG_ACCEL
     ListBox BOX_ACC_KEY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 164 , 135 ) ;
-        Size = MAP_APPFONT ( 50 , 60 ) ;
+        Pos = MAP_APPFONT ( 164 , 131 ) ;
+        Size = MAP_APPFONT ( 50 , 64 ) ;
         TabStop = TRUE ;
-    };
-    GroupBox GRP_ACC_FUNCTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
-        Size = MAP_APPFONT ( 214 , 87 ) ;
-        Group = TRUE ;
-        GROUPBOX_TEXT_FUNCTIONS
-        Text [ english_us ] = "Functions" ;
-        Text [ portuguese_brazilian ] = "Fun??s" ;
-        Text = "Funktionen" ;
-        Text [ swedish ] = "Funktioner" ;
-        Text [ danish ] = "Funktioner" ;
-        Text [ italian ] = "Funzioni" ;
-        Text [ spanish ] = "Funciones" ;
-        Text [ french ] = "Ensemble de fonctions" ;
-        Text [ dutch ] = "Functies" ;
-        Text [ portuguese ] = "Funções" ;
-        Text[ chinese_simplified ] = "¹¦ÄÜ";
-        Text[ russian ] = "Ôóíêöèè";
-        Text[ polish ] = "Funkcje";
-        Text[ japanese ] = "‹@”\\";
-        Text[ chinese_traditional ] = "¥\\¯à";
-        Text[ arabic ] = "ãåÇã";
-        Text[ greek ] = "Ëåéôïõñãßåò";
-        Text[ korean ] = "±â´Éµé";
-        Text[ turkish ] = "İşlevler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Funciones";
-        Text[ finnish ] = "Toiminnot";
     };
     PushButton BTN_RESET
     {
@@ -935,31 +604,6 @@ TabPage TP_CONFIG_ACCEL
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_RESET
-        Text [ english_us ] = "R~eset" ;
-        Text [ portuguese_brazilian ] = "~Zur?ksetzen" ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : ~Zurücksetzen */
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
-        Text = "Zur~ücksetzen" ;
-        Text [ swedish ] = "~Återställ" ;
-        Text [ danish ] = "Nulstil" ;
-        Text [ italian ] = "Ri~pristina" ;
-        Text [ spanish ] = "~Restablecer" ;
-        Text [ french ] = "Re~staurer" ;
-        Text [ dutch ] = "~Terugzetten" ;
-        Text [ portuguese ] = "~Restaurar" ;
-        Text[ chinese_simplified ] = "ÖØÉè(~E)";
-        Text[ russian ] = "Âîññòàíîâèòü";
-        Text[ polish ] = "Zresetuj";
-        Text[ japanese ] = "Ø¾¯Ä(~E)";
-        Text[ chinese_traditional ] = "­«³](~E)";
-        Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä";
-        Text[ greek ] = "Åğáíáö~ïñÜ";
-        Text[ korean ] = "¿ø·¡´ë·Î(~E)";
-        Text[ turkish ] = "Başa al";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Restablecer";
-        Text[ finnish ] = "P~alauta";
     };
     PushButton BTN_LOAD
     {
@@ -968,29 +612,6 @@ TabPage TP_CONFIG_ACCEL
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_LOAD
-        Text [ english_us ] = "~Load..." ;
-        Text [ portuguese_brazilian ] = "~Laden..." ;
-        /* ### ACHTUNG: Neuer Text in Resource? L~aden... : ~Laden... */
-        Text = "L~aden..." ;
-        Text [ swedish ] = "L~adda..." ;
-        Text [ danish ] = "Indlæs..." ;
-        Text [ italian ] = "~Carica..." ;
-        Text [ spanish ] = "C~argar..." ;
-        Text [ french ] = "~Charger..." ;
-        Text [ dutch ] = "~Laden..." ;
-        Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°Èë(~L)...";
-        Text[ russian ] = "Çàãğóçèòü...";
-        Text[ polish ] = "£aduj...";
-        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
-        Text[ arabic ] = "ÊÍãíá...";
-        Text[ greek ] = "Öüñôùóç...";
-        Text[ korean ] = "·Îµå(~L)...";
-        Text[ turkish ] = "Yükle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~argar...";
-        Text[ finnish ] = "~Lataa";
     };
     PushButton BTN_SAVE
     {
@@ -999,28 +620,6 @@ TabPage TP_CONFIG_ACCEL
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_SAVE
-        Text [ english_us ] = "~Save..." ;
-        Text [ portuguese_brazilian ] = "~Speichern..." ;
-        Text = "~Speichern..." ;
-        Text [ swedish ] = "~Spara..." ;
-        Text [ danish ] = "Gem..." ;
-        Text [ italian ] = "Salva..." ;
-        Text [ spanish ] = "~Guardar..." ;
-        Text [ french ] = "~Enregistrer..." ;
-        Text [ dutch ] = "O~pslaan..." ;
-        Text [ portuguese ] = "~Guardar..." ;
-        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
-        Text[ russian ] = "Ñîõğàíèòü...";
-        Text[ polish ] = "Zapi~sz...";
-        Text[ japanese ] = "•Û‘¶(~S)...";
-        Text[ chinese_traditional ] = "Àx¦s(~S)...";
-        Text[ arabic ] = "ÍİÙ...";
-        Text[ greek ] = "ÁğïèŞêåõ~óç...";
-        Text[ korean ] = "ÀúÀå(~S)...";
-        Text[ turkish ] = "Kaydet...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Guardar...";
-        Text[ finnish ] = "~Tallenna";
     };
 };
  // TP_CONFIG_STATBAR -----------------------------------------------------
@@ -1029,20 +628,11 @@ TabPage TP_CONFIG_STATBAR
     HelpId = HID_CONFIG_STATBAR ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 282 , 205 ) ;
-    Control BOX_STATBAR_ENTRIES
-    {
-        Border = TRUE ;
-        ClipChildren = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 202 , 185 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_STATUSBARCONFIG_LISTBOX ;
-    };
-    GroupBox GRP_STATBAR
+    FixedLine GRP_STATBAR
     {
         Group = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 214 , 199 ) ;
+        Size = MAP_APPFONT ( 214 , 8 ) ;
         Text = "Statusleiste " ;
         Text [ ENGLISH ] = "Statusbar " ;
         Text [ norwegian ] = "Statuslinje" ;
@@ -1068,6 +658,15 @@ TabPage TP_CONFIG_STATBAR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Barra de estado  ";
     };
+    Control BOX_STATBAR_ENTRIES
+    {
+        Border = TRUE ;
+        ClipChildren = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 202 , 185 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_STATUSBARCONFIG_LISTBOX ;
+    };
     PushButton BTN_RESET
     {
         Pos = MAP_APPFONT ( 226 , 189 ) ;
@@ -1075,31 +674,6 @@ TabPage TP_CONFIG_STATBAR
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_RESET
-        Text [ english_us ] = "R~eset" ;
-        Text [ portuguese_brazilian ] = "~Zur?ksetzen" ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : ~Zurücksetzen */
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
-        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
-        Text = "Zur~ücksetzen" ;
-        Text [ swedish ] = "~Återställ" ;
-        Text [ danish ] = "Nulstil" ;
-        Text [ italian ] = "Ri~pristina" ;
-        Text [ spanish ] = "~Restablecer" ;
-        Text [ french ] = "Re~staurer" ;
-        Text [ dutch ] = "~Terugzetten" ;
-        Text [ portuguese ] = "~Restaurar" ;
-        Text[ chinese_simplified ] = "ÖØÉè(~E)";
-        Text[ russian ] = "Âîññòàíîâèòü";
-        Text[ polish ] = "Zresetuj";
-        Text[ japanese ] = "Ø¾¯Ä(~E)";
-        Text[ chinese_traditional ] = "­«³](~E)";
-        Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä";
-        Text[ greek ] = "Åğáíáö~ïñÜ";
-        Text[ korean ] = "¿ø·¡´ë·Î(~E)";
-        Text[ turkish ] = "Başa al";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Restablecer";
-        Text[ finnish ] = "P~alauta";
     };
     PushButton BTN_LOAD
     {
@@ -1108,29 +682,6 @@ TabPage TP_CONFIG_STATBAR
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_LOAD
-        Text [ english_us ] = "~Load..." ;
-        Text [ portuguese_brazilian ] = "~Laden..." ;
-        /* ### ACHTUNG: Neuer Text in Resource? L~aden... : ~Laden... */
-        Text = "L~aden..." ;
-        Text [ swedish ] = "L~adda..." ;
-        Text [ danish ] = "Indlæs..." ;
-        Text [ italian ] = "~Carica..." ;
-        Text [ spanish ] = "C~argar..." ;
-        Text [ french ] = "~Charger..." ;
-        Text [ dutch ] = "~Laden..." ;
-        Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°Èë(~L)...";
-        Text[ russian ] = "Çàãğóçèòü...";
-        Text[ polish ] = "£aduj...";
-        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
-        Text[ arabic ] = "ÊÍãíá...";
-        Text[ greek ] = "Öüñôùóç...";
-        Text[ korean ] = "·Îµå(~L)...";
-        Text[ turkish ] = "Yükle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C~argar...";
-        Text[ finnish ] = "~Lataa";
     };
     PushButton BTN_SAVE
     {
@@ -1139,28 +690,6 @@ TabPage TP_CONFIG_STATBAR
         TabStop = TRUE ;
         Group = TRUE ;
         PUSHBUTTON_TEXT_SAVE
-        Text [ english_us ] = "~Save..." ;
-        Text [ portuguese_brazilian ] = "~Speichern..." ;
-        Text = "~Speichern..." ;
-        Text [ swedish ] = "~Spara..." ;
-        Text [ danish ] = "Gem..." ;
-        Text [ italian ] = "Salva..." ;
-        Text [ spanish ] = "~Guardar..." ;
-        Text [ french ] = "~Enregistrer..." ;
-        Text [ dutch ] = "O~pslaan..." ;
-        Text [ portuguese ] = "~Guardar..." ;
-        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
-        Text[ russian ] = "Ñîõğàíèòü...";
-        Text[ polish ] = "Zapi~sz...";
-        Text[ japanese ] = "•Û‘¶(~S)...";
-        Text[ chinese_traditional ] = "Àx¦s(~S)...";
-        Text[ arabic ] = "ÍİÙ...";
-        Text[ greek ] = "ÁğïèŞêåõ~óç...";
-        Text[ korean ] = "ÀúÀå(~S)...";
-        Text[ turkish ] = "Kaydet...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Guardar...";
-        Text[ finnish ] = "~Tallenna";
     };
     Bitmap CHKBTN_UNCHECKED { File = "chkun.bmp" ; };
     Bitmap CHKBTN_CHECKED { File = "chkch.bmp" ; };
@@ -1177,9 +706,9 @@ TabDialog DLG_CONFIG
     Text [ English ] = "Configuration" ;
     Text [ norwegian ] = "Konfigurasjon" ;
     Text [ italian ] = "Configura" ;
-    Text [ portuguese_brazilian ] = "Configura??o" ;
+    Text [ portuguese_brazilian ] = "Configuração" ;
     Text [ portuguese ] = "Configuração" ;
-    Text [ finnish ] = "Kokoonpano" ;
+    Text [ finnish ] = "Asetukset" ;
     Text [ danish ] = "Tilpas" ;
     Text [ french ] = "Adaptation" ;
     Text [ swedish ] = "Anpassa" ;
@@ -1208,7 +737,7 @@ TabDialog DLG_CONFIG
                 Text [ french ] = "Menu" ;
                 Text [ swedish ] = "Meny" ;
                 Text [ danish ] = "Menu" ;
-                Text [ portuguese_brazilian ] = "Men" ;
+                Text [ portuguese_brazilian ] = "Menü" ;
                 Text [ portuguese ] = "Menu" ;
                 Text[ chinese_simplified ] = "²Ëµ¥";
                 Text[ russian ] = "Ìåíş";
@@ -1221,7 +750,6 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "Mönü";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Menú";
-                Text[ finnish ] = "Valikko";
             };
             PageItem
             {
@@ -1288,9 +816,9 @@ TabDialog DLG_CONFIG
                 Text [ ENGLISH ] = "Toolbox Options" ;
                 Text [ norwegian ] = "Verktøyalternativer" ;
                 Text [ italian ] = "Barre dei simboli" ;
-                Text [ portuguese_brazilian ] = "Op??s do Quadro de Ferramentas" ;
+                Text [ portuguese_brazilian ] = "Opções do Quadro de Ferramentas" ;
                 Text [ portuguese ] = "Barras de ferramentas" ;
-                Text [ finnish ] = "Työkalurivit" ;
+                Text [ finnish ] = "Työkalurivin määritykset" ;
                 Text [ danish ] = "Ikonlinjer" ;
                 Text [ french ] = "Barres d'outils" ;
                 Text [ swedish ] = "Symbollister" ;
@@ -1418,7 +946,7 @@ String STR_SAVE
     Text [ italian ] = "Salva" ;
     Text [ portuguese_brazilian ] = "Gravar" ;
     Text [ portuguese ] = "Guardar" ;
-    Text [ finnish ] = "Tallenna" ;
+    Text [ finnish ] = "Tallennus" ;
     Text [ danish ] = "Gem" ;
     Text [ french ] = "Enregistrer" ;
     Text [ swedish ] = "Spara" ;
@@ -1665,7 +1193,7 @@ String STR_FINDBACKWARD
     Text [ ENGLISH ] = "Find backward" ;
     Text [ norwegian ] = "Søk bakover" ;
     Text [ italian ] = "Cerca all'indietro" ;
-    Text [ portuguese_brazilian ] = "Procurar Para Tr?s" ;
+    Text [ portuguese_brazilian ] = "Procurar Para Trás" ;
     Text [ portuguese ] = "Localizar para trás" ;
     Text [ finnish ] = "Etsi taaksepäin" ;
     Text [ danish ] = "Søg baglæns" ;
@@ -1703,7 +1231,7 @@ String STR_PROPERTIES
     Text [ english_us ] = "Properties" ;
     Text[ chinese_simplified ] = "ÊôĞÔ";
     Text[ russian ] = "Ñâîéñòâà";
-    Text[ polish ] = "W³a?ciwo?ci";
+    Text[ polish ] = "W³aœciwoœci";
     Text[ japanese ] = "ÌßÛÊßÃ¨";
     Text[ chinese_traditional ] = "Äİ©Ê";
     Text[ arabic ] = "ÎÕÇÆÕ";
@@ -1721,7 +1249,7 @@ String STR_FRONT
     Text [ italian ] = "In avanti" ;
     Text [ portuguese_brazilian ] = "Primeiro plano" ;
     Text [ portuguese ] = "Para a frente" ;
-    Text [ finnish ] = "Eteen" ;
+    Text [ finnish ] = "Edustalle" ;
     Text [ danish ] = "Fremad" ;
     Text [ french ] = "Premier plan" ;
     Text [ swedish ] = "Framåt" ;
@@ -1751,9 +1279,9 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message [ ENGLISH ] = "There are still undefined functions (???).\n\nContinue anyway?" ;
     Message [ norwegian ] = "Det er fremdeles udefinerte funksjoner are still undefined functions (???).\n\nFortsett likevel?" ;
     Message [ italian ] = "Vi sono ancora funzioni non definite (???).\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Ainda existem Fun??s indefinidas (???).\n\nContinuar de qualquer forma?" ;
+    Message [ portuguese_brazilian ] = "Ainda existem Funções indefinidas (???).\n\nContinuar de qualquer forma?" ;
     Message [ portuguese ] = "Ainda existem funções indefinidas (???).\n\nDeseja continuar?" ;
-    Message [ finnish ] = "Osa toiminnoista on vielä määrittämättä (???).\n\nHyväksytäänkö kokoonpano?" ;
+    Message [ finnish ] = "Määrittämättömiä toimintoja on vieläkin (???).\n\nJatketaanko silti?" ;
     Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines fonctions n'ont pas été définies (???).\n\nPoursuivre malgré tout ?" ;
     Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill Du ändå överta den här konfigurationen?" ;
@@ -1782,9 +1310,9 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ ENGLISH ] = "There are still entries with functions that can only be assigned to popups.\n\nContinue anyway?" ;
     Message [ norwegian ] = "Det er fremdeles oppføringer med funksjoner som bare kan tilordnes tilleggsmenyenps.\n\nFortsett likevel?" ;
     Message [ italian ] = "Vi sono ancora voci con funzioni che possono essere assegnate solo a menu di scelta rapida.\n\nContinuare lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Existem entradas com Fun??s que s?podem ser atribuidas a popupps.\n\nContinuar de qualquer forma?" ;
+    Message [ portuguese_brazilian ] = "Existem entradas com Funções que só podem ser atribuidas a popupps.\n\nContinuar de qualquer forma?" ;
     Message [ portuguese ] = "Existem ainda entradas com funções que só podem ser atribuídas a janelas instantâneas.\n\nContinuar?" ;
-    Message [ finnish ] = "Osa merkintöjen toiminnoista voidaan yhä liittää vain ponnahdusobjekteihin.\n\nJatketaanko?" ;
+    Message [ finnish ] = "Luettelossa on vieläkin toimintoja, jotka voidaan liittää vain kohovalikoihin..\n\nJatketaanko silti?" ;
     Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
     Message [ french ] = "Certaines entrées sont encore associées à des fonctions réservées à des menus déroulants\n\nPoursuivre malgré tout ?" ;
     Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill Du ändå överta den här konfigurationen?" ;
@@ -1797,8 +1325,8 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ japanese ] = "‚Ü‚¾Îß¯Ìß±¯Ìß‚Ì‚İ‚ÉŠ„‚è“–‚Ä‚ç‚ê‚é‹@”\\‚Ì€–Ú‚ª‚ ‚è‚Ü‚·B\n\n‚±‚Ìİ’è‚ğ“K—p‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©?";
     Message[ chinese_traditional ] = "ÁÙ¦s¦b¤@¨Ç¥u¯àÅıµ¹§ÖÅã¥\\¯àªí°õ¦æªº¶µ¥Ø¡C\n±zÁÙ¬O­n±µ¨ü³o­Ó°t¸m¡H";
     Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ÅÏÎÇáÇÊ ÈåÇ ãåÇã áÇ íãßä ÊÚííäåÇ ÅáÇ áŞæÇÆã ÇäÈËÇŞíÉ İŞØ.\n\nåá ÊÑíÏ ŞÈæá ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
-    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç åããñáöİò ìå ëåéôïõñãßåò ôùí ïğïßùí ìğïñåß íá ãßíåé ìüíï áíôéóôïß÷éóç ìå áíáäõüìåíá ğáñÜèõñá.\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéá";
-    Message[ korean ] = "ÆË¾÷¸¸ ÇÒ´çµÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» °¡Áø Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç åããñáöİò ìå ëåéôïõñãßåò ôùí ïğïßùí ìğïñåß íá ãßíåé ìüíï áíôéóôïß÷éóç ìå áíáäõüìåíá ğáñÜèõñá.\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéáìüñöùóç áõôŞ;";
+    Message[ korean ] = "ÆË¾÷¿¡¸¸ ÁöÁ¤µÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» °¡Áø Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Yalnızca açılan mönülere atanabilen işlevleri olan girişler mevcut.\n\nBu konfigürasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?";
@@ -1809,9 +1337,9 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message [ ENGLISH ] = "Function is already included in this popup." ;
     Message [ norwegian ] = "Funksjon er allerede inkludert i denne tilleggsmenyen." ;
     Message [ italian ] = "Funzione già inclusa in questo elenco." ;
-    Message [ portuguese_brazilian ] = "A fun??o j? est? inclu?da neste popup." ;
+    Message [ portuguese_brazilian ] = "A função já está incluída neste popup." ;
     Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
-    Message [ finnish ] = "Toiminto on jo tässä valikossa." ;
+    Message [ finnish ] = "Toiminto on jo lisätty tähän kohovalikkoon." ;
     Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
     Message [ french ] = "Cette fonction est déjà incluse dans ce Pop-up." ;
     Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
@@ -1843,7 +1371,7 @@ String STR_LOADMENUCONFIG
     Text [ dutch ] = "Menuconfiguratie laden" ;
     Text [ swedish ] = "Ladda menykonfiguration" ;
     Text [ danish ] = "Indlæs menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Men?onfiguration laden" ;
+    Text [ portuguese_brazilian ] = "Menükonfiguration laden" ;
     Text [ portuguese ] = "Carregar configuração do menu" ;
     Text[ chinese_simplified ] = "×°Èë²Ëµ¥ÅäÖÃ";
     Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ìåíş";
@@ -1856,7 +1384,6 @@ String STR_LOADMENUCONFIG
     Text[ turkish ] = "Mönü konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración del menú";
-    Text[ finnish ] = "Lataa valikkomääritys";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1869,7 +1396,7 @@ String STR_SAVEMENUCONFIG
     Text [ dutch ] = "Menuconfiguratie opslaan" ;
     Text [ swedish ] = "Spara menykonfiguration" ;
     Text [ danish ] = "Gem menukonfiguration" ;
-    Text [ portuguese_brazilian ] = "Men?onfiguration speichern" ;
+    Text [ portuguese_brazilian ] = "Menükonfiguration speichern" ;
     Text [ portuguese ] = "Guardar configuração do menu" ;
     Text[ chinese_simplified ] = "´æÅÌ²Ëµ¥ÅäÖÃ";
     Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ìåíş";
@@ -1881,7 +1408,6 @@ String STR_SAVEMENUCONFIG
     Text[ korean ] = "¸Ş´º±¸¼º ÀúÀå";
     Text[ turkish ] = "Mönü konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración del menú";
-    Text[ finnish ] = "Tallenna valikkomääritys";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1907,7 +1433,6 @@ String STR_LOADACCELCONFIG
     Text[ turkish ] = "Klavye konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración del teclado";
-    Text[ finnish ] = "Lataa näppäimistömääritys";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1932,7 +1457,6 @@ String STR_SAVEACCELCONFIG
     Text[ korean ] = "Å°º¸µå±¸¼º ÀúÀå";
     Text[ turkish ] = "Klavye konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración del teclado";
-    Text[ finnish ] = "Tallenna näppäimistömääritys";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1958,7 +1482,6 @@ String STR_LOADSTATBARCONFIG
     Text[ turkish ] = "Durum çubuğu konfigürasyonunu yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuración de la barra de estado";
-    Text[ finnish ] = "Lataa tilarivimääritys";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1983,7 +1506,6 @@ String STR_SAVESTATBARCONFIG
     Text[ korean ] = "»óÅÂ¸ğÀ½ ±¸¼º ÀúÀå";
     Text[ turkish ] = "Durum çubuğu konfigürasyonunu kaydet";
     Text[ catalan ] = "Guardar configuración de la barra de estado";
-    Text[ finnish ] = "Tallenna tilarivin kokoonpanomääritykset";
 };
 String STR_MENU
 {
@@ -1996,7 +1518,7 @@ String STR_MENU
     Text [ spanish ] = "Menú" ;
     Text [ french ] = "Menu" ;
     Text [ dutch ] = "Menu" ;
-    Text [ portuguese_brazilian ] = "Men" ;
+    Text [ portuguese_brazilian ] = "Menü" ;
     Text [ portuguese ] = "Menu" ;
     Text[ chinese_simplified ] = "²Ëµ¥";
     Text[ russian ] = "Ìåíş";
@@ -2009,6 +1531,5 @@ String STR_MENU
     Text[ turkish ] = "Mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú";
-    Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF

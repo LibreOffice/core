@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 15:36:47 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ class SfxMenuConfigPage : public SfxTabPage
 {
 private:
     SfxMenuCfgTabListBox_Impl       aEntriesBox;
-    GroupBox                        aMenuGroup;
+    FixedLine                        aMenuGroup;
     PushButton                      aNewButton;
     PushButton                      aNewPopupButton;
     PushButton                      aChangeButton;
@@ -237,10 +237,10 @@ private:
     ImageButton                     aUpButton;
     ImageButton                     aDownButton;
     FixedText                       aGroupText;
-    SfxConfigGroupListBox_Impl      aGroupBox;
+    SfxConfigGroupListBox_Impl      aGroupLBox;
     FixedText                       aFunctionText;
     SfxConfigFunctionListBox_Impl   aFunctionBox;
-    GroupBox                        aFunctionsGroup;
+    FixedLine                       aFunctionsGroup;
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
@@ -306,16 +306,16 @@ class SfxAcceleratorConfigPage : public SfxTabPage
 {
 private:
     SfxAccCfgTabListBox_Impl        aEntriesBox;
-    GroupBox                        aKeyboardGroup;
+    FixedLine                       aKeyboardGroup;
     PushButton                      aChangeButton;
     PushButton                      aRemoveButton;
     FixedText                       aGroupText;
-    SfxConfigGroupListBox_Impl      aGroupBox;
+    SfxConfigGroupListBox_Impl      aGroupLBox;
     FixedText                       aFunctionText;
     SfxConfigFunctionListBox_Impl   aFunctionBox;
     FixedText                       aKeyText;
     ListBox                         aKeyBox;
-    GroupBox                        aFunctionsGroup;
+    FixedLine                       aFunctionsGroup;
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
@@ -404,7 +404,7 @@ class SfxStatusBarConfigPage : public SfxTabPage
 {
 private:
     SfxStatusBarConfigListBox   aEntriesBox;
-    GroupBox                    aStatusBarGroup;
+    FixedLine                   aStatusBarGroup;
     PushButton                  aLoadButton;
     PushButton                  aSaveButton;
     PushButton                  aResetButton;

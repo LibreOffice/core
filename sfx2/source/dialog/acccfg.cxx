@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-27 10:37:41 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aEntriesBox         ( this, ResId( BOX_ACC_ENTRIES         ) ),
     aKeyboardGroup      ( this, ResId( GRP_ACC_KEYBOARD        ) ),
     aGroupText          ( this, ResId( TXT_ACC_GROUP           ) ),
-    aGroupBox           ( this, ResId( BOX_ACC_GROUP ), SFX_SLOT_ACCELCONFIG ),
+    aGroupLBox          ( this, ResId( BOX_ACC_GROUP ), SFX_SLOT_ACCELCONFIG ),
     aFunctionText       ( this, ResId( TXT_ACC_FUNCTION        ) ),
     aFunctionBox        ( this, ResId( BOX_ACC_FUNCTION        ) ),
     aKeyText            ( this, ResId( TXT_ACC_KEY             ) ),
@@ -380,7 +380,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
       RemoveHdl ) );
     aEntriesBox  .SetSelectHdl( LINK( this, SfxAcceleratorConfigPage,
       SelectHdl ) );
-    aGroupBox    .SetSelectHdl( LINK( this, SfxAcceleratorConfigPage,
+    aGroupLBox    .SetSelectHdl( LINK( this, SfxAcceleratorConfigPage,
       SelectHdl ) );
     aFunctionBox .SetSelectHdl( LINK( this, SfxAcceleratorConfigPage,
       SelectHdl ) );
@@ -408,10 +408,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aEntriesBox.SetDragDropMode(0);
     Init();
 
-    aGroupBox.SetFunctionListBox( &aFunctionBox );
-    aGroupBox.Init();
+    aGroupLBox.SetFunctionListBox( &aFunctionBox );
+    aGroupLBox.Init();
     aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-    aGroupBox.Select( aGroupBox.GetEntry( 0, 0 ) );
+    aGroupLBox.Select( aGroupLBox.GetEntry( 0, 0 ) );
 }
 
 void SfxAcceleratorConfigPage::Init()
@@ -732,9 +732,9 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         aChangeButton.Enable( nPos >= ACC_FUNCTIONCOUNT && aAccelArr[ nPos ] != aFunctionBox.GetCurId() );
         aRemoveButton.Enable( nPos >= ACC_FUNCTIONCOUNT && aAccelArr[ nPos ] > 0 );
     }
-    else if ( pListBox == &aGroupBox )
+    else if ( pListBox == &aGroupLBox )
     {
-        aGroupBox.GroupSelected();
+        aGroupLBox.GroupSelected();
         if ( !aFunctionBox.FirstSelected() )
             aChangeButton.Enable( FALSE );
     }
@@ -846,7 +846,7 @@ String SfxAcceleratorConfigPage::GetFunctionName( KeyFuncType eType ) const
 
 void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 {
-    aGroupBox.SelectMacro( pItem );
+    aGroupLBox.SelectMacro( pItem );
 }
 
 BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )

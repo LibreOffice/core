@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:24:23 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ TabPage TP_MANAGE_STYLES
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
-        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -131,7 +130,6 @@ TabPage TP_MANAGE_STYLES
         Text[ turkish ] = "~Otomatik güncelleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar automáticamente";
-        Text[ finnish ] = "~Automaattinen päivitys";
     };
     FixedText FT_NEXT
     {
@@ -141,9 +139,9 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "~Next" ;
         Text [ norwegian ] = "~Neste" ;
         Text [ italian ] = "Modello ~successivo" ;
-        Text [ portuguese_brazilian ] = "~Pr?imo" ;
+        Text [ portuguese_brazilian ] = "~Próximo" ;
         Text [ portuguese ] = "~Estilo seguinte" ;
-        Text [ finnish ] = "Seu~raava tyyli" ;
+        Text [ finnish ] = "~Seuraava" ;
         Text [ danish ] = "Næste typografi" ;
         Text [ french ] = "~Style suivant" ;
         Text [ swedish ] = "Nästa ~formatmall" ;
@@ -182,7 +180,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "~Basato su" ;
         Text [ portuguese_brazilian ] = "~Baseado em" ;
         Text [ portuguese ] = "~Baseado em" ;
-        Text [ finnish ] = "~Perusta" ;
+        Text [ finnish ] = "~Perustuu" ;
         Text [ danish ] = "Kædet med" ;
         Text [ french ] = "~Lié à" ;
         Text [ swedish ] = "~Länkad med" ;
@@ -217,9 +215,9 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "~Region" ;
         Text [ norwegian ] = "~Område" ;
         Text [ italian ] = "~Area" ;
-        Text [ portuguese_brazilian ] = "~Regi?o" ;
+        Text [ portuguese_brazilian ] = "~Região" ;
         Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Luokka" ;
+        Text [ finnish ] = "~Alue" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Område" ;
@@ -258,17 +256,17 @@ TabPage TP_MANAGE_STYLES
         Size = MAP_APPFONT ( 236 , 85 ) ;
         ReadOnly = TRUE ;
     };
-    GroupBox GB_DESC
+    FixedLine GB_DESC
     {
         Pos = MAP_APPFONT ( 6 , 77  ) ;
-        Size = MAP_APPFONT ( 248 , 102 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Enthält" ;
         Text [ ENGLISH ] = "Contains" ;
         Text [ norwegian ] = "Inneholder" ;
         Text [ italian ] = "Contiene" ;
-        Text [ portuguese_brazilian ] = "Cont?m" ;
+        Text [ portuguese_brazilian ] = "Contém" ;
         Text [ portuguese ] = "Contém" ;
-        Text [ finnish ] = "Sisältö" ;
+        Text [ finnish ] = "Sisältää" ;
         Text [ danish ] = "Indeholder" ;
         Text [ french ] = "Contient" ;
         Text [ swedish ] = "Innehåller" ;

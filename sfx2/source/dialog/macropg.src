@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:35:25 $
+ *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,10 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text [ danish ] = "Tildel makro" ;
     Text [ portuguese_brazilian ] = "Makro zuweisen" ;
     Text [ portuguese ] = "Atribuir macro" ;
-    GroupBox GB_EVENT
+    FixedLine GB_EVENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 192 , 68 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
         Text = "Ereignis" ;
         Text [ ENGLISH ] = "Event" ;
         Group = TRUE ;
@@ -105,22 +105,21 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "¿Ã∫•∆Æ";
         Text[ turkish ] = "Olay";
         Text[ catalan ] = "Acontecimiento";
-        Text[ finnish ] = "Tapahtuma";
     };
     Control LB_EVENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 180 , 51 ) ;
+        Size = MAP_APPFONT ( 180 , 54 ) ;
         TabStop = TRUE ;
         ClipChildren = TRUE ;
         Disable = TRUE ;
         HelpID = HID_MACRO_LB_EVENT ;
     };
-    GroupBox GB_MACRO
+    FixedLine GB_MACRO
     {
         Pos = MAP_APPFONT ( 6 , 74  ) ;
-        Size = MAP_APPFONT ( 248 , 105 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
     };
     Control LB_GROUP
@@ -169,7 +168,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "¡ˆ¡§(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Asignar";
-        Text[ finnish ] = "~M‰‰rit‰";
     };
     PushButton PB_DELETE
     {
@@ -198,7 +196,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "«ÿ¡¶(~R)";
         Text[ turkish ] = "~Kald˝r";
         Text[ catalan ] = "~Eliminar";
-        Text[ finnish ] = "~Poista";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -232,7 +229,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "∏≈≈©∑Œ";
         Text[ turkish ] = "Makro";
         Text[ catalan ] = "Macros";
-        Text[ finnish ] = "Makrot";
     };
     Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
     Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
@@ -244,7 +240,6 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ turkish ] = "Makro ata";
     Text[ arabic ] = " ⁄ÌÌ‰ ÊÕœ… „«ﬂ—Ê";
     Text[ catalan ] = "Asignar macro";
-    Text[ finnish ] = "M‰‰rit‰ makro";
 #if SUPD<582
     String STR_JAVASCRIPT
     {
@@ -269,7 +264,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "JavaScript";
         Text[ turkish ] = "JavaScript";
         Text[ catalan ] = "JavaScript";
-        Text[ finnish ] = "JavaScript";
     };
     MultiLineEdit ED_JAVASCRIPT
     {
@@ -310,10 +304,10 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text [ danish ] = "Tildel makro" ;
     Text [ portuguese_brazilian ] = "Makro zuweisen" ;
     Text [ portuguese ] = "Atribuir macro" ;
-    GroupBox GB_EVENT
+    FixedLine GB_EVENT
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 192 , 63 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
         Text = "Ereignis" ;
         Text [ ENGLISH ] = "Event" ;
         Group = TRUE ;
@@ -336,7 +330,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "¿Ã∫•∆Æ";
         Text[ turkish ] = "Olay";
         Text[ catalan ] = "Acontecimiento";
-        Text[ finnish ] = "Tapahtuma";
     };
     Control LB_EVENT
     {
@@ -376,7 +369,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "¡ˆ¡§(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Asignar";
-        Text[ finnish ] = "~M‰‰rit‰";
     };
     PushButton PB_DELETE
     {
@@ -405,7 +397,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "«ÿ¡¶(~R)";
         Text[ turkish ] = "~Kald˝r";
         Text[ catalan ] = "~Eliminar";
-        Text[ finnish ] = "~Poista";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -416,10 +407,10 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Disable = FALSE ;
         DropDown = TRUE ;
     };
-    GroupBox GB_MACRO
+    FixedLine GB_MACRO
     {
         Pos = MAP_APPFONT ( 6 , 69  ) ;
-        Size = MAP_APPFONT ( 248 , 110 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
     };
     Control LB_GROUP
@@ -463,7 +454,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "∏≈≈©∑Œ";
         Text[ turkish ] = "Makro";
         Text[ catalan ] = "Macros";
-        Text[ finnish ] = "Makrot";
     };
     Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
     Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
@@ -475,7 +465,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text[ turkish ] = "Makro ata";
     Text[ arabic ] = " ⁄ÌÌ‰ ÊÕœ… „«ﬂ—Ê";
     Text[ catalan ] = "Asignar macro";
-    Text[ finnish ] = "M‰‰rit‰ makro";
 #if SUPD<582
     String STR_JAVASCRIPT
     {
@@ -500,7 +489,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
         Text[ korean ] = "JavaScript";
         Text[ turkish ] = "JavaScript";
         Text[ catalan ] = "JavaScript";
-        Text[ finnish ] = "JavaScript";
     };
     MultiLineEdit ED_JAVASCRIPT
     {
