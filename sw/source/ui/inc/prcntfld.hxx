@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:16:23 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,9 @@ class PercentField : public MetricField
 
     long        ImpPower10(USHORT n);
 
-    virtual void  SetValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 public:
+    virtual void  SetValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
     PercentField( Window* pWin, const ResId& rResId );
 
     void        SetPrcntValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
