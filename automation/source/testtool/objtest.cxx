@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:54:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,7 +1181,7 @@ void TestToolObj::WaitForAnswer ()
 {
     if ( bUseIPC )
     {
-    #ifdef DBG_UTIL
+    #ifdef DBG_UTILx
         USHORT nSysWinModeMemo = GetpApp()->GetSystemWindowMode();
         GetpApp()->SetSystemWindowMode( 0 );
         ModelessDialog aDlg(NULL);
