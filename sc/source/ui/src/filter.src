@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:02:12 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 21:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1437,7 +1437,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ portuguese ] = "Critérios de filtro";
         Text[ russian ] = "Êğèòåğèè ôèëüòğà";
         Text[ greek ] = "ÊñéôŞñéá ößëôñïõ";
-        Text[ dutch ] = "Filter criteria";
+        Text[ dutch ] = "Filtercriteria";
         Text[ french ] = "Critères de filtre";
         Text[ spanish ] = "Criterios de filtro";
         Text[ finnish ] = "Filter criteria";
@@ -3404,7 +3404,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ portuguese ] = "Critérios de filtro";
         Text[ russian ] = "Êğèòåğèè ôèëüòğà";
         Text[ greek ] = "ÊñéôŞñéá ößëôñïõ";
-        Text[ dutch ] = "Filter criteria";
+        Text[ dutch ] = "Filtercriteria";
         Text[ french ] = "Critères de filtre";
         Text[ spanish ] = "Criterios de filtro";
         Text[ finnish ] = "Filter criteria";
@@ -3646,5 +3646,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
