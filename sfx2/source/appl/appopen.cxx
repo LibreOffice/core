@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:27:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,9 @@
 
 #include <vos/mutex.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "app.hxx"
 #include "appdata.hxx"
@@ -796,12 +798,10 @@ const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
         Application::GetAppWindow()->EnterWait();
 */
     SfxObjectShellLock xDoc;
-    BOOL bNewView = TRUE;
 
     // Factory-RegNo kann per Parameter angegeben sein
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOCDIRECT);
-    const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxObjectFactory* pFactory = 0;
+    rReq.GetArgs(); // -Wall required??
     String aFactory;
     rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, TRUE ) );
     SFX_REQUEST_ARG( rReq, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
@@ -873,7 +873,6 @@ const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
         const SfxItemSet* pInternalArgs = rReq.GetInternalArgs_Impl();
         if( pInternalArgs )
             xDoc->GetMedium()->GetItemSet()->Put( *pInternalArgs );
-        BOOL bOwnsFrame = FALSE;
         SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE);
 
         SfxFrame* pFrame = NULL;
@@ -924,7 +923,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG(rReq, pTemplRegionNameItem, SfxStringItem, SID_TEMPLATE_REGIONNAME, FALSE);
 
     SfxObjectShellLock xDoc;
-    BOOL bNewView = TRUE;
 
     String  aTemplateRegion, aTemplateName, aTemplateFileName;
     BOOL    bDirect = FALSE; // "uber FileName anstelle Region/Template
