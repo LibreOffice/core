@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:55:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,15 +861,7 @@ namespace sw
             }
             return nRet;
         }
-
-        rtl_TextEncoding rtl_TextEncodingToWinCharsetAndBack(
-            rtl_TextEncoding eTextEncoding)
-        {
-            return rtl_getTextEncodingFromWindowsCharset(
-                    rtl_TextEncodingToWinCharset(eTextEncoding));
-        }
     }
-
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
