@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-23 15:20:50 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 08:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2072,10 +2072,14 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
     const uno::Any* pValues = aValues.getConstArray();
 
+
+    uno::Reference< beans::XPropertySet > xSet;
+    queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
+
     try
     {
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-            setPropertyValue( *pNames++, *pValues++ );
+            xSet->setPropertyValue( *pNames++, *pValues++ );
     }
     catch( beans::UnknownPropertyException& e )
     {
@@ -2094,11 +2098,14 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     uno::Sequence< uno::Any > aRet( nCount );
     uno::Any* pValue = aRet.getArray();;
 
+    uno::Reference< beans::XPropertySet > xSet;
+    queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
+
     for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
     {
         try
         {
-            *pValue = getPropertyValue( *pNames++ );
+            *pValue = xSet->getPropertyValue( *pNames++ );
         }
         catch( uno::Exception& e )
         {
