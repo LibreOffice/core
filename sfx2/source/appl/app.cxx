@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 08:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #include "app.hxx"
 #include "frame.hxx"
 
-#ifndef _UTL_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
-#endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -262,9 +259,6 @@ SfxApplication::SfxApplication()
     , pAppDispat( 0 )
     , bDispatcherLocked( sal_False )
     , pResMgr( 0 )
-#ifdef ENABLE_INIMANAGER//MUSTINI
-    , pAppIniMgr( 0 )
-#endif
     , pCfgMgr( 0 )
     , pSlotPool( 0 )
     , pInterfaces( 0 )
@@ -294,12 +288,6 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
-#if SUPD<613
-    pAppIniMgr = CreateIniManager();
-    pAppData_Impl = new SfxAppData_Impl( this );
-    pAppData_Impl->StartListening( *pAppIniMgr );
-    pAppData_Impl->UpdateApplicationSettings( pAppIniMgr->IsDontHideDisabledEntries() );
-#else
     International aOldInter( Application::GetAppInternational() );
     String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
     LanguageType eLanguage = sLanguage.ToInt32();
@@ -307,7 +295,6 @@ SfxApplication::SfxApplication()
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
-#endif
     pApp->PreInit();
 
     pAppData_Impl->pSaveOptions = new SvtSaveOptions;
@@ -341,10 +328,6 @@ SfxApplication::~SfxApplication()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     delete pImp;
     delete pAppData_Impl;
-#if SUPD<613
-    SfxIniManager::Close();
-#endif
-    utl::ConfigManager::RemoveConfigManager();
     pApp = 0;
 }
 
