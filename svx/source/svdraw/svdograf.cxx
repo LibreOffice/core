@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-15 14:50:16 $
+ *  last change: $Author: thb $ $Date: 2001-08-23 11:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,7 +1575,6 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
                 pModel->SetChanged( bIsChanged );
             }
 #else
-/*
             SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
 
             if( pIStm )
@@ -1591,7 +1590,6 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
                 delete pIStm;
             }
-*/
 #endif
         }
     }
