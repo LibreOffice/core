@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Number_Formats.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:32:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -246,7 +246,7 @@ public class Number_Formats
 
     // __________ private members and methods __________
 
-    private final String  msConnectString  = "socket,host=localhost,port=8100";
+    private final String  msConnectString  = "socket,host=localhost,port=2083";
 
     private final String  msDataSheetName  = "Data";
 
