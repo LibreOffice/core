@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:59:10 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ ModalDialog DLG_MACROQUERY
         Text[ arabic ] = "Κγ ΘΟΑ ΝΟΛ γυίζψδ Ϊανε γΗίΡζ. εα ΚΡνΟ ΚδένΠ εΠΗ ΗαγΗίΡζΏ";
         Text[ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?";
         Text[ chinese_simplified ] = "²ΩΧχΓόΑξΦ±½Σΐ΄ΧΤÒ»ΈφΊκ£¬ΔϊÒªΦ΄ΠΠΥβΈφΊκ£Ώ";
-        Text[ greek ] = "Εκτελέστηκε ένα γεγονός, πάνω στο οποίο ρυθμίστηκε μια μακροεντολή. Θέλετε να εκτελεστεί η μακροεντολή αυτή;";
+        Text[ greek ] = "Εκτελέστηκε ένα γεγονός, το οποίο συνδέεται με μια μακροεντολή. Θέλετε να εκτελεστεί η μακροεντολή αυτή;";
         Text[ korean ] = "ΈΕΕ©·Ξ°΅ ±ΈΌΊµΘ ΐΜΊ¥Ζ®°΅ ½ΓΗΰµΗΎϊ½ΐ΄Ο΄Ω. ΐΜ ΈΕΕ©·ΞΈ¦ ½ΗΗΰΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "Baώlatύlan olay ile ilgili bir yapύlandύrύlmύώ bir makro mevcut. Bu makroyu ηalύώtύrmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
