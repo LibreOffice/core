@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: sb $ $Date: 2000-10-16 06:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,11 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
    header = hname "=" hvalue
    hname = {RFC 822 <field-name> using *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")} / "BODY"
    hvalue = {RFC 822 <field-body> using *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "@" / "_" / "~")}
+
+
+   ; private (see RFC 1738, RFC 2396)
+   vnd-sun-star-webdav-url = "VND.SUN.STAR.WEBDAV://" hostport ["/" segment *("/" segment) ["?" *uric]]
+   segment = *(pchar / ";")
 
 
    ; private (see RFC 1738)
@@ -331,8 +336,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           true, false },
         { "mailto", "mailto:", 0, false, false, false, false, false,
           false, false, true },
-        { 0, 0, 0, false, false, false, false, false, false, false,
-          false },
+        { "vnd.sun.star.webdav", "vnd.sun.star.webdav://", 80, true, false,
+          false, false, true, true, true, true },
         { "news", "news:", 119, true, true, false, true, true, true,
           false, false },
         { "private", "private:", 0, false, false, false, false, false,
@@ -1830,7 +1835,9 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "staroffice:", "private:", INET_PROT_PRIV_SOFFICE,
               PrefixInfo::EXTERNAL },
             { "vim:", "staroffice.vim:", INET_PROT_VIM,
-              PrefixInfo::INTERNAL } };
+              PrefixInfo::INTERNAL },
+            { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
+              PrefixInfo::OFFICIAL } };
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
     PrefixInfo const * pMatch = 0;
@@ -2107,6 +2114,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             break;
 
         case INET_PROT_HTTP:
+        case INET_PROT_VND_SUN_STAR_WEBDAV:
         case INET_PROT_HTTPS:
             if (pPos < pEnd && *pPos != '/')
             {
