@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-23 09:08:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-03 08:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
@@ -315,107 +318,119 @@ void ORelationController::Execute(sal_uInt16 _nId)
 // -----------------------------------------------------------------------------
 void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
+    OGenericUnoController::initialize(aArguments);
+
+    //  m_pWindow->initialize(m_xCurrentFrame);
+
+    PropertyValue aValue;
+    const Any* pBegin   = aArguments.getConstArray();
+    const Any* pEnd     = pBegin + aArguments.getLength();
+
+    for(;pBegin != pEnd;++pBegin)
+    {
+        if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
+        {
+            aValue.Value >>= m_xConnection;
+            OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
+            // be notified when connection is in disposing
+            Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+            if (xComponent.is())
+            {
+                Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                xComponent->addEventListener(xEvtL);
+            }
+        }
+        else if(aValue.Name == PROPERTY_DATASOURCENAME)
+        {
+            aValue.Value >>= m_sDataSourceName;
+        }
+    }
+
+    if (!m_xConnection.is())
+    {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
+        createNewConnection(sal_False);
+    }
+    if(!m_xConnection.is()) // so what should otherwise
+    {
+        m_bEditable             = sal_False;
+        m_bRelationsPossible    = sal_False;
+        {
+            String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+            ODataView* pWindow = getView();
+            InfoBox(pWindow, aMessage).Execute();
+            Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
+            if(xTask.is())
+            {
+                xTask->close();
+                throw SQLException();
+            }
+        }
+    }
+    else if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
+    {// check if this database supports relations
+
+        m_bEditable             = sal_False;
+        m_bRelationsPossible    = sal_False;
+        {
+            OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
+            aDlg.Execute();
+        }
+        Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
+        if(xTask.is())
+        {
+            xTask->close();
+            throw SQLException();
+        }
+    }
+    if(!m_bRelationsPossible)
+        InvalidateAll();
+
+    // we need a datasource
+    if(m_xConnection.is())
+    {
+        Reference<XChild> xChild(m_xConnection,UNO_QUERY);
+        if(xChild.is())
+            m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
+    }
+    else
+    {
+        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
+        OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
+    }
+
+    Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
+    OSL_ENSURE(xSup.is(),"Connection isn't a XTablesSupplier!");
+    if(xSup.is())
+        m_xTables = xSup->getTables();
+    // load the layoutInformation
     try
     {
-        OGenericUnoController::initialize(aArguments);
-
-        //  m_pWindow->initialize(m_xCurrentFrame);
-
-        PropertyValue aValue;
-        const Any* pBegin   = aArguments.getConstArray();
-        const Any* pEnd     = pBegin + aArguments.getLength();
-
-        for(;pBegin != pEnd;++pBegin)
+        OSL_ENSURE(m_xDataSource.is(),"We need a datasource from our connection!");
+        if(m_xDataSource.is())
         {
-            if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
+            Sequence< sal_Int8 > aInputSequence;
+            if(m_xDataSource->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
             {
-                aValue.Value >>= m_xConnection;
-                OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
-                // be notified when connection is in disposing
-                Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-                if (xComponent.is())
+                m_xDataSource->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
                 {
-                    Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                    xComponent->addEventListener(xEvtL);
-                }
-            }
-            else if(aValue.Name == PROPERTY_DATASOURCENAME)
-            {
-                aValue.Value >>= m_sDataSourceName;
-            }
-        }
-
-        if (!m_xConnection.is())
-        {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-            createNewConnection(sal_False);
-        }
-        if(!m_xConnection.is()) // so what should otherwise
-        {
-            m_bEditable             = sal_False;
-            m_bRelationsPossible    = sal_False;
-            {
-                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-                ODataView* pWindow = getView();
-                InfoBox(pWindow, aMessage).Execute();
-            }
-        }
-        else if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
-        {// check if this database supports relations
-
-            m_bEditable             = sal_False;
-            m_bRelationsPossible    = sal_False;
-            {
-                OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
-                aDlg.Execute();
-            }
-        }
-        if(!m_bRelationsPossible)
-            InvalidateAll();
-
-        // we need a datasource
-        if(m_xConnection.is())
-        {
-            Reference<XChild> xChild(m_xConnection,UNO_QUERY);
-            if(xChild.is())
-                m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
-        }
-        else
-        {
-            Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-            xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
-            OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
-        }
-
-        Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
-        OSL_ENSURE(xSup.is(),"Connection isn't a XTablesSupplier!");
-        if(xSup.is())
-            m_xTables = xSup->getTables();
-        // load the layoutInformation
-        try
-        {
-            OSL_ENSURE(m_xDataSource.is(),"We need a datasource from our connection!");
-            if(m_xDataSource.is())
-            {
-                Sequence< sal_Int8 > aInputSequence;
-                if(m_xDataSource->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
-                {
-                    m_xDataSource->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
-                    {
-                        Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
-                        Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                        Reference< XInputStream> xMarkInStream = Reference< XInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
-                        Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
-                        Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
-                        OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
-                        xInDataSource->setInputStream(xMarkInStream);
-                        Load(xInStream);
-                    }
+                    Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
+                    Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
+                    Reference< XInputStream> xMarkInStream = Reference< XInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
+                    Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
+                    Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
+                    OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
+                    xInDataSource->setInputStream(xMarkInStream);
+                    Load(xInStream);
                 }
             }
         }
-        catch(Exception&)
-        {
-        }
+    }
+    catch(Exception&)
+    {
+    }
+    try
+    {
 
         loadData();
         getView()->initialize();    // show the windows and fill with our informations
