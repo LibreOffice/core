@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-25 12:19:03 $
+ *  last change: $Author: ssa $ $Date: 2002-05-08 11:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #include <window.hxx>
 #endif
 
+#define COMPILE_MULTIMON_STUBS
+#include <multimon.h>
+
 // =======================================================================
 
 // Wegen Fehler in Windows-Headerfiles
@@ -180,6 +183,70 @@ static void ImplSaveFrameState( SalFrame* pFrame )
             pFrame->maFrameData.mbRestoreMaximize = FALSE;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplSalGetWorkArea( HWND hWnd, RECT *pRect )
+{
+    static int winVerChecked = 0;
+    static int winVerOk = 0;
+
+    if( !winVerChecked )
+    {
+        winVerChecked = 1;
+        winVerOk = 1;
+
+        // multi monitor calls not available on Win95/NT
+        OSVERSIONINFO aVerInfo;
+        aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
+        if ( GetVersionEx( &aVerInfo ) )
+        {
+            if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
+            {
+                if ( aVerInfo.dwMajorVersion <= 4 )
+                    winVerOk = 0;   // NT
+            }
+            else if( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
+            {
+                if ( aVerInfo.dwMajorVersion == 4 && aVerInfo.dwMinorVersion == 0 )
+                    winVerOk = 0;   // Win95
+            }
+        }
+    }
+
+    // calculates the work area taking multiple monitors into account
+    if( winVerOk )
+    {
+        static int nMonitors = GetSystemMetrics( SM_CMONITORS );
+        if( nMonitors == 1 )
+            SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+        else
+        {
+            pRect->left = GetSystemMetrics( SM_XVIRTUALSCREEN );
+            pRect->top = GetSystemMetrics( SM_YVIRTUALSCREEN );
+            pRect->right = pRect->left + GetSystemMetrics( SM_CXVIRTUALSCREEN );
+            pRect->bottom = pRect->top + GetSystemMetrics( SM_CYVIRTUALSCREEN );
+
+            // virtualscreen does not take taskbar into account, so use the corresponding
+            // diffs between screen and workarea from the default screen
+            // however, this is still not perfect: the taskbar might not be on the primary screen
+
+            RECT wRect, scrRect;
+            SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
+            scrRect.left = 0;
+            scrRect.top = 0;
+            scrRect.right = GetSystemMetrics( SM_CXSCREEN );
+            scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
+
+            pRect->left += wRect.left;
+            pRect->top += wRect.top;
+            pRect->right -= scrRect.right - wRect.right;
+            pRect->bottom -= scrRect.bottom - wRect.bottom;
+        }
+    }
+    else
+        SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
 }
 
 // =======================================================================
@@ -360,7 +427,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         // #96084 set a useful internal window size because
         // the window will not be maximized (and the size updated) before show()
         RECT aRect;
-        SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+        ImplSalGetWorkArea( pFrame->maFrameData.mhWnd, &aRect );
         AdjustWindowRectEx( &aRect, GetWindowStyle( hWnd ),
                             FALSE,     GetWindowExStyle( hWnd ) );
         pFrame->maGeometry.nX = aRect.left;
@@ -1138,8 +1205,9 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     int     nScreenWidth;
     int     nScreenHeight;
 
+
     RECT aRect;
-    SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+    ImplSalGetWorkArea( maFrameData.mhWnd, &aRect );
     nScreenX        = aRect.left;
     nScreenY        = aRect.top;
     nScreenWidth    = aRect.right-aRect.left;
@@ -1318,7 +1386,7 @@ void SalFrame::SetParent( SalFrame* pNewParent )
 void SalFrame::GetWorkArea( Rectangle &rRect )
 {
     RECT aRect;
-    SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+    ImplSalGetWorkArea( maFrameData.mhWnd, &aRect );
     rRect.nLeft     = aRect.left;
     rRect.nRight    = aRect.right-1;
     rRect.nTop      = aRect.top;
@@ -1351,7 +1419,7 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     int     nScreenHeight;
 
     RECT aRect;
-    SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+    ImplSalGetWorkArea( maFrameData.mhWnd, &aRect );
     nScreenX        = aRect.left;
     nScreenY        = aRect.top;
     nScreenWidth    = aRect.right-aRect.left;
@@ -1455,7 +1523,7 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
             // #96084 set a useful internal window size because
             // the window will not be maximized (and the size updated) before show()
             RECT aRect;
-            SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+            ImplSalGetWorkArea( maFrameData.mhWnd, &aRect );
             AdjustWindowRectEx( &aRect, GetWindowStyle( maFrameData.mhWnd ),
                                 FALSE,     GetWindowExStyle( maFrameData.mhWnd ) );
             maGeometry.nX = aRect.left;
