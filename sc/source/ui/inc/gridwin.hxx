@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: nn $ $Date: 2000-12-19 16:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,19 @@ class SdrHdlList;
 #define SC_PD_RANGE_BR      (SC_PD_RANGE_B|SC_PD_RANGE_R)
 #define SC_PD_BREAK_H       16
 #define SC_PD_BREAK_V       32
+
+
+class ScHideTextCursor
+{
+private:
+    ScViewData* pViewData;
+    ScSplitPos  eWhich;
+
+public:
+            ScHideTextCursor( ScViewData* pData, ScSplitPos eW );
+            ~ScHideTextCursor();
+};
+
 
 class ScGridWindow : public Window
 {
