@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:38:09 $
+#  last change: $Author: hr $ $Date: 2004-03-09 10:10:33 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -108,11 +108,12 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(OUT_BIN)/%.zip : $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT)
+$(OUT_BIN)/%.zip : $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) TypeDetection.xcu
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && jar cvfM ../../bin/$(@F) $(PACKAGE_LIB_DIR)/$(<F)
+	$(COPY) TypeDetection.xcu $(subst /,$(PS),$(OUT_COMP_GEN)) 
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && jar cvfM ../../bin/$(@F) TypeDetection.xcu $(PACKAGE_LIB_DIR)/$(<F)
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
