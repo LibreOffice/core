@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-07 17:09:05 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 11:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mpContext       ( NULL ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
-        maDocFileURL    ( rImpGraphic.maDocFileURL ),
+        maDocFileURLStr ( rImpGraphic.maDocFileURLStr ),
         mnDocFilePos    ( rImpGraphic.mnDocFilePos ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
@@ -295,7 +295,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
         if( !mbSwapUnderway )
         {
-            maDocFileURL = rImpGraphic.maDocFileURL;
+            maDocFileURLStr = rImpGraphic.maDocFileURLStr;
             mnDocFilePos = rImpGraphic.mnDocFilePos;
             mbSwapOut = rImpGraphic.mbSwapOut;
             mpSwapFile = rImpGraphic.mpSwapFile;
@@ -420,7 +420,7 @@ void ImpGraphic::ImplClear()
 
     mbSwapOut = FALSE;
     mnDocFilePos = 0UL;
-    maDocFileURL = INetURLObject();
+    maDocFileURLStr.Erase();
 
     // cleanup
     ImplClearGraphics( FALSE );
@@ -860,17 +860,19 @@ void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 
 void ImpGraphic::ImplSetDocFileName( const String& rName, ULONG nFilePos )
 {
-    maDocFileURL = INetURLObject( rName );
-    mnDocFilePos = nFilePos;
+    const INetURLObject aURL( rName );
 
-    DBG_ASSERT( maDocFileURL.GetProtocol() != INET_PROT_NOT_VALID, "Graphic::SetDocFileName(...): invalid URL" );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Graphic::SetDocFileName(...): invalid URL" );
+
+    maDocFileURLStr = aURL.GetMainURL();
+    mnDocFilePos = nFilePos;
 }
 
 // ------------------------------------------------------------------------
 
 const String& ImpGraphic::ImplGetDocFileName() const
 {
-    return maDocFileURL.GetMainURL();
+    return maDocFileURLStr;
 }
 
 // ------------------------------------------------------------------------
@@ -896,12 +898,12 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
 
     if( !mbSwapUnderway )
     {
-        const INetURLObject aTempURL( maDocFileURL );
+        const String        aTempURLStr( maDocFileURLStr );
         const ULONG         nTempPos = mnDocFilePos;
 
         ImplClear();
 
-        maDocFileURL = aTempURL;
+        maDocFileURLStr = aTempURLStr;
         mnDocFilePos = nTempPos;
     }
 
@@ -979,7 +981,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
 
         if( bSwap )
         {
-            if( maDocFileURL.GetMainURL().Len() )
+            if( maDocFileURLStr.Len() )
             {
                 rIStm.Seek( nStartPos + nHeaderLen + nLen );
                 bRet = mbSwapOut = TRUE;
@@ -1186,7 +1188,7 @@ BOOL ImpGraphic::ImplSwapOut()
 
     if( !ImplIsSwapOut() )
     {
-        if( !maDocFileURL.GetMainURL().Len() )
+        if( !maDocFileURLStr.Len() )
         {
             ::utl::TempFile     aTempFile;
             const INetURLObject aTmpURL( aTempFile.GetURL() );
@@ -1280,11 +1282,16 @@ BOOL ImpGraphic::ImplSwapIn()
 
     if( ImplIsSwapOut() )
     {
-        const INetURLObject* pSwapURL = mpSwapFile ? &( mpSwapFile->aSwapURL ) : &maDocFileURL;
+        String aSwapURL;
 
-        if( pSwapURL->GetMainURL().Len() )
+        if( mpSwapFile )
+            aSwapURL = mpSwapFile->aSwapURL.GetMainURL();
+        else
+            aSwapURL = maDocFileURLStr;
+
+        if( aSwapURL.Len() )
         {
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( pSwapURL->GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
             if( pIStm )
             {
@@ -1305,7 +1312,7 @@ BOOL ImpGraphic::ImplSwapIn()
                     {
                         try
                         {
-                            ::ucb::Content aCnt( pSwapURL->GetMainURL(),
+                            ::ucb::Content aCnt( aSwapURL,
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
