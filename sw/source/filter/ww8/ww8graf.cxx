@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
+ *  last change: $Author: cmc $ $Date: 2002-02-19 09:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,16 @@
 
 #pragma hdrstop
 
-#include <math.h>
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_SHORTS
+#include <svtools/svstdarr.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -70,19 +79,8 @@
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
 #endif
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
-#endif
-#ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
-#endif
 #ifndef _SDTAITM_HXX
 #include <svx/sdtaitm.hxx>
-#endif
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_SHORTS
-#include <svtools/svstdarr.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
@@ -162,14 +160,8 @@
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
-#ifndef _TOOLS_URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
 #ifndef _SVX_IMPGRF_HXX
 #include <svx/impgrf.hxx>
-#endif
-#ifndef _MSDFFIMP_HXX
-#include <svx/msdffimp.hxx>
 #endif
 #ifndef _SVDOATTR_HXX
 #include <svx/svdoattr.hxx>
@@ -179,9 +171,6 @@
 #endif
 #ifndef _SVX_RECTENUM_HXX //autogen
 #include <svx/rectenum.hxx>
-#endif
-#ifndef _SVX_XFLTRIT_HXX
-#include <svx/xfltrit.hxx>
 #endif
 #ifndef _SVX_OPAQITEM_HXX //autogen
 #include <svx/opaqitem.hxx>
@@ -201,26 +190,10 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
-
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
+#ifndef _MSDFFIMP_HXX
+#include <svx/msdffimp.hxx>
 #endif
 
-#ifndef _WW8STRUC_HXX
-#include <ww8struc.hxx>
-#endif
-#ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>
-#endif
-#ifndef _WW8PAR_HXX
-#include <ww8par.hxx>           // class SwWWImplReader
-#endif
-#ifndef _WW8GRAF_HXX
-#include <ww8graf.hxx>
-#endif
-#ifndef _WW8PAR2_HXX
-#include <ww8par2.hxx>          // SwWW8StyInf
-#endif
 #ifndef _GRFATR_HXX
 #include <grfatr.hxx>           // class SwCropGrf
 #endif
@@ -254,14 +227,27 @@
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
 #endif
-#ifndef _FLTSHELL_HXX
-#include <fltshell.hxx>
-#endif
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
 #endif
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
+#endif
+
+#ifndef _WW8STRUC_HXX
+#include "ww8struc.hxx"
+#endif
+#ifndef _WW8SCAN_HXX
+#include "ww8scan.hxx"
+#endif
+#ifndef _WW8PAR_HXX
+#include "ww8par.hxx"           // class SwWWImplReader
+#endif
+#ifndef _WW8PAR2_HXX
+#include "ww8par2.hxx"          // SwWW8StyInf
+#endif
+#ifndef _WW8GRAF_HXX
+#include "ww8graf.hxx"
 #endif
 
 // Hilfsroutinen

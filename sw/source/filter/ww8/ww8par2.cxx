@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-19 09:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,8 @@ typedef WW8SelBoxInfo* WW8SelBoxInfoPtr;
 SV_DECL_PTRARR_DEL(WW8MergeGroups, WW8SelBoxInfoPtr, 16,16)
 SV_IMPL_PTRARR(WW8MergeGroups, WW8SelBoxInfoPtr)
 
-struct WW8TabBandDesc{
+struct WW8TabBandDesc
+{
     WW8TabBandDesc* pNextBand;
     short nGapHalf;
     short nLineHeight;
@@ -201,6 +202,7 @@ struct WW8TabBandDesc{
     BOOL bREmptyCol;    // SW: dito rechts
     WW8_TCell* pTCs;
     WW8_SHD* pSHDs;
+    WW8_BRC aDefBrcs[6];
 
 
     // nur fuer WW6-7: diese Zelle hat WW-Flag bMerged (horizontal) gesetzt
@@ -213,6 +215,7 @@ struct WW8TabBandDesc{
     WW8TabBandDesc() {  memset( this, 0, sizeof( *this ) ); };
     WW8TabBandDesc( WW8TabBandDesc& rBand );    // tief kopieren
     ~WW8TabBandDesc() { delete[] pTCs; delete[] pSHDs; };
+    static void setcelldefaults(WW8_TCell *pCells, short nCells);
     void ReadDef( BOOL bVer67, const BYTE* pS );
     void ProcessSprmTSetBRC( BOOL bVer67, const BYTE* pParamsTSetBRC );
     void ProcessSprmTDxaCol(const BYTE* pParamsTDxaCol);
@@ -223,8 +226,6 @@ struct WW8TabBandDesc{
 
 class WW8TabDesc
 {
-    WW8_BRC aDefBrcs[6];
-
     SvStringsDtor aNumRuleNames;
 
     SwWW8ImplReader* pIo;
@@ -255,7 +256,6 @@ class WW8TabDesc
 
     BOOL bOk;
     BOOL bHeader;
-    BOOL bBorderDefaults;
     BOOL bClaimLineFmt;
     SwHoriOrient eOri;
                                 // 2. allgemeine Verwaltungsinfo
@@ -285,7 +285,6 @@ class WW8TabDesc
     // (die Merge-Gruppen werden dann spaeter auf einen Schlag abgearbeitet)
     SwTableBox* UpdateTableMergeGroup(WW8_TCell& rCell,
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, USHORT nCol  );
-
     //No copying
     WW8TabDesc(const WW8TabDesc&);
     WW8TabDesc &operator=(const WW8TabDesc&);
@@ -907,22 +906,24 @@ static BOOL IsEqual( WW8TabBandDesc* p1, WW8TabBandDesc* p2 )
 WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
 {
     *this = rBand;
-    if( rBand.pTCs ){
+    if( rBand.pTCs )
+    {
         pTCs = new WW8_TCell[nWwCols];
         memcpy( pTCs, rBand.pTCs, nWwCols * sizeof( WW8_TCell ) );
     }
-    if( rBand.pSHDs ){
+    if( rBand.pSHDs )
+    {
         pSHDs = new WW8_SHD[nWwCols];
         memcpy( pSHDs, rBand.pSHDs, nWwCols * sizeof( WW8_SHD ) );
     }
+    memcpy(aDefBrcs, rBand.aDefBrcs, sizeof(aDefBrcs));
 }
 
 // ReadDef liest die Zellenpositionen und ggfs die Umrandungen eines Bandes ein
 void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
 {
-    int i;
-
-    if( !bVer67 ) pS++;
+    if (!bVer67)
+        pS++;
 
     short nLen = (INT16)SVBT16ToShort( pS - 2 ); // nicht schoen
     BYTE nCols = *pS;                       // Anzahl der Zellen
@@ -935,9 +936,9 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
 
     const BYTE* pT = &pS[1];
     nLen --;
-    for( i=0; i<=nCols; i++, pT+=2 ){
+    int i;
+    for(i=0; i<=nCols; i++, pT+=2 )
         nCenter[i] = (INT16)SVBT16ToShort( pT );    // X-Raender
-    }
     nLen -= 2 * ( nCols + 1 );
     if( nCols != nOldCols ) // andere Spaltenzahl
     {
@@ -947,14 +948,12 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
 
     short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // wirklich abgespeichert
 
-
     if( !pTCs )
     {
         // lege leere TCs an
         pTCs = new WW8_TCell[nCols];
-        memset( pTCs, 0, nCols * sizeof( WW8_TCell ) );
+        setcelldefaults(pTCs,nCols);
     }
-
 
     if( nFileCols )
     {
@@ -972,9 +971,8 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
         if( bVer67 )
         {
             WW8_TCellVer6* pTc = (WW8_TCellVer6*)pT;
-            for( i=0; i<nCols; i++, ++pAktTC )
+            for(i=0; i<nFileCols; i++, ++pAktTC,++pTc)
             {
-                memset( pAktTC, 0, sizeof( WW8_TCell ) );
                 if( i < nFileCols )
                 {               // TC aus File ?
                     BYTE aBits1 = SVBT8ToByte( pTc->aBits1Ver6 );
@@ -999,43 +997,32 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
                             // Hier darf bExist nicht auf FALSE gesetzt werden, da WW
                             // in den Textboxen diese Zellen nicht mitzaehlt....
                     }
-                    if( i+1 < nFileCols )
-                        pTc++;
                 }
             }
         }
         else
         {
             WW8_TCellVer8* pTc = (WW8_TCellVer8*)pT;
-            for( i=0; i<nCols; i++, ++pAktTC )
+            for(int i=0; i<nFileCols; i++, ++pAktTC, ++pTc )
             {
-                memset( pAktTC, 0, sizeof( WW8_TCell ) );
-                if( i < nFileCols )
-                {               // TC aus File ?
-                    UINT16 aBits1 = (UINT16)SVBT16ToShort( pTc->aBits1Ver8 );
-                    pAktTC->bFirstMerged    = ( ( aBits1 & 0x0001 ) != 0 );
-                    pAktTC->bMerged         = ( ( aBits1 & 0x0002 ) != 0 );
-                    pAktTC->bVertical       = ( ( aBits1 & 0x0004 ) != 0 );
-                    pAktTC->bBackward       = ( ( aBits1 & 0x0008 ) != 0 );
-                    pAktTC->bRotateFont     = ( ( aBits1 & 0x0010 ) != 0 );
-                    pAktTC->bVertMerge      = ( ( aBits1 & 0x0020 ) != 0 );
-                    pAktTC->bVertRestart    = ( ( aBits1 & 0x0040 ) != 0 );
-                    pAktTC->nVertAlign      = ( ( aBits1 & 0x0180 ) >> 7 );
-                    // am Rande: im aBits1 verstecken sich noch 7 Reserve-Bits,
-                    //           anschliessend folgen noch 16 weitere Reserve-Bits
+                UINT16 aBits1 = SVBT16ToShort( pTc->aBits1Ver8 );
+                pAktTC->bFirstMerged    = ( ( aBits1 & 0x0001 ) != 0 );
+                pAktTC->bMerged         = ( ( aBits1 & 0x0002 ) != 0 );
+                pAktTC->bVertical       = ( ( aBits1 & 0x0004 ) != 0 );
+                pAktTC->bBackward       = ( ( aBits1 & 0x0008 ) != 0 );
+                pAktTC->bRotateFont     = ( ( aBits1 & 0x0010 ) != 0 );
+                pAktTC->bVertMerge      = ( ( aBits1 & 0x0020 ) != 0 );
+                pAktTC->bVertRestart    = ( ( aBits1 & 0x0040 ) != 0 );
+                pAktTC->nVertAlign      = ( ( aBits1 & 0x0180 ) >> 7 );
+                // am Rande: im aBits1 verstecken sich noch 7 Reserve-Bits,
+                //           anschliessend folgen noch 16 weitere Reserve-Bits
 
-                    // In Version 8 koennen wir alle Bordercodes auf einmal kopieren!
-                    memcpy( pAktTC->rgbrc, pTc->rgbrcVer8, 4 * sizeof( WW8_BRC ) );
-                    // Zellen-Mergeinfo braucht hier nicht extra vermerkt zu werden,
-                    // da dies ab Ver8 ja ueber Merge-Gruppen verwaltet wird.
-                    if( i+1 < nFileCols )
-                        pTc++;
-                }
+                // In Version 8 koennen wir alle Bordercodes auf einmal kopieren!
+                memcpy( pAktTC->rgbrc, pTc->rgbrcVer8, 4 * sizeof( WW8_BRC ) );
             }
         }
     }
 }
-
 
 void WW8TabBandDesc::ProcessSprmTSetBRC( BOOL bVer67,
     const BYTE* pParamsTSetBRC )
@@ -1147,7 +1134,7 @@ void WW8TabBandDesc::ProcessSprmTInsert(const BYTE* pParamsTInsert)
             nNewWwCols = nWwCols+nctc;
 
         WW8_TCell *pTC2s = new WW8_TCell[nNewWwCols];
-        memset( pTC2s, 0, nNewWwCols * sizeof( WW8_TCell ) );
+        setcelldefaults(pTC2s, nNewWwCols);
 
         if (pTCs)
         {
@@ -1233,14 +1220,36 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
         pSHDs[i].SetWWValue( *pShd );
 }
 
+void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
+{
+    memset( pCells, 0, nCols * sizeof( WW8_TCell ) );
+#if 0
+    //Theres the possibility that it should be something like this
+    for (int i=0;i<nCols;++i)
+    {
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[0].aBits1);
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[0].aBits2);
+
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[1].aBits1);
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[1].aBits2);
+
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[2].aBits1);
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[2].aBits2);
+
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[3].aBits1);
+        ShortToSVBT16(0xFFFF,pCells[i].rgbrc[3].aBits2);
+    }
+#endif
+}
+
 WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     : pIo( pIoClass ), pFirstBand( 0 ), pActBand( 0 ), pTmpPos( 0 ),
     pTable( 0 ), pTblNd( 0 ), pTabLines( 0 ), pTabLine( 0 ), pTabBoxes( 0 ),
     pTabBox( 0 ), pMergeGroups( 0 ), pAktWWCell( 0 ), nRows( 0 ),
     nDefaultSwCols( 0 ), nBands( 0 ), nMinLeft( 0 ), nConvertedLeft(0),
     nMaxRight( 0 ), nSwWidth( 0 ), bOk( TRUE ), bHeader( FALSE ),
-    bBorderDefaults( FALSE ), bClaimLineFmt( FALSE ), eOri( HORI_NONE ),
-    nAktRow( 0 ), nAktBandRow( 0 ), nAktCol( 0 )
+    bClaimLineFmt( FALSE ), eOri( HORI_NONE ), nAktRow( 0 ),
+    nAktBandRow( 0 ), nAktCol( 0 )
 {
     pIo->bAktAND_fNumberAcross = FALSE;
 
@@ -1294,22 +1303,17 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                 {
                 case 187:
                 case 0xD605:
-                    if( !nRows )
+                    // sprmTTableBorders
+                    if( bVer67 )
                     {
-                        // sprmTTableBorders
-                        if( bVer67 )
-                            for( int i = 0; i < 6; ++i )
-                            {
-                                aDefBrcs[i].aBits1[0] = pParams[   2*i ];
-                                aDefBrcs[i].aBits1[1] = pParams[ 1+2*i ];
-                            }
-                        else
+                        for( int i = 0; i < 6; ++i )
                         {
-                            // aDefBrcs = *(BRC(*)[6])pS;
-                            memcpy( aDefBrcs, pParams, 24 );
+                            pNewBand->aDefBrcs[i].aBits1[0] = pParams[   2*i ];
+                            pNewBand->aDefBrcs[i].aBits1[1] = pParams[ 1+2*i ];
                         }
-                        bBorderDefaults = TRUE;
                     }
+                    else // aDefBrcs = *(BRC(*)[6])pS;
+                        memcpy( pNewBand->aDefBrcs, pParams, 24 );
                     break;
                 case 186:
                 case 0x3404:
@@ -1463,10 +1467,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         WW8PLCFxDesc aRes;
         aRes.pMemPos = 0;
         aRes.nStartPos = nStartCp;
-#if 0
-        pPap->SeekPos(aRes.nStartPos);
-        pPap->GetSprms(&aRes);
-#else
+
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
             aRes.nEndPos = LONG_MAX;
@@ -1474,7 +1475,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         }
         pPap->GetSprms(&aRes);
         pPap->SetDirty(FALSE);
-#endif
+
         nStartCp = aRes.nEndPos;
 
         if ( (pPap->Where() == LONG_MAX) || ( (!bVer67 || bComplex) &&
@@ -1585,94 +1586,91 @@ void WW8TabDesc::CalcDefaults()
 
         // 3. Durchlauf: Wo noetig die Umrandungen durch die Defaults ersetzen
     nConvertedLeft = nMinLeft;
-    if( bBorderDefaults )
+
+    short nLeftMaxThickness = 0, nRightMaxThickness=0;
+    for( pR = pFirstBand ; pR; pR = pR->pNextBand )
     {
-        short nLeftMaxThickness = 0, nRightMaxThickness=0;
-        for( pR = pFirstBand ; pR; pR = pR->pNextBand )
+        if( !pR->pTCs )
         {
-            if( !pR->pTCs )
+            pR->pTCs = new WW8_TCell[ pR->nWwCols ];
+            memset( pR->pTCs, 0, pR->nWwCols * sizeof( WW8_TCell ) );
+        }
+        for(int k = 0; k < pR->nWwCols; k++ )
+        {
+            register WW8_TCell* pT = &pR->pTCs[k];
+            int i, j;
+            for( i = 0; i < 4; i ++ )
             {
-                pR->pTCs = new WW8_TCell[ pR->nWwCols ];
-                memset( pR->pTCs, 0, pR->nWwCols * sizeof( WW8_TCell ) );
-            }
-            int k;
-            for( k = 0; k < pR->nWwCols; k++ )
-            {
-                register WW8_TCell* pT = &pR->pTCs[k];
-                int i, j;
-                for( i = 0; i < 4; i ++ )
+                if ( pIo->bVer67 ?
+                     ((SVBT16ToShort(pT->rgbrc[i].aBits1) >> 3 & 0x3) == 0)
+                   : ((SVBT16ToShort(pT->rgbrc[i].aBits1) & 0xFF00) == 0))
                 {
-                    if ( pIo->bVer67 ?
-                         ((SVBT16ToShort(pT->rgbrc[i].aBits1) >> 3 & 0x3) == 0)
-                       : ((SVBT16ToShort(pT->rgbrc[i].aBits1) & 0xFF00) == 0))
+                    // if shadow is set, its invalid
+                    j = i;
+                    switch( i )
                     {
-                        // if shadow is set, its invalid
-                        j = i;
-                        switch( i )
-                        {
-                        case 0:
-                            // Aussen oben  / Innen waagerecht
-                            j = (pR == pFirstBand) ? 0 : 4;
-                            break;
-                        case 1:
-                            // Aussen links / Innen senkrecht
-                            j = k ? 5 : 1;
-                            break;
-                        case 2:
-                            // Aussen unten / Innen waagerecht
-                            j = pR->pNextBand ? 4 : 2;
-                            break;
-                        case 3:
-                            // Aussen rechts/ Innen senkrecht
-                            j = (k == pR->nWwCols - 1) ? 3 : 5;
-                            break;
-                        }
-                        // mangel mit Defaults ueber
-                        pT->rgbrc[i] = aDefBrcs[j];
+                    case 0:
+                        // Aussen oben  / Innen waagerecht
+                        j = (pR == pFirstBand) ? 0 : 4;
+                        break;
+                    case 1:
+                        // Aussen links / Innen senkrecht
+                        j = k ? 5 : 1;
+                        break;
+                    case 2:
+                        // Aussen unten / Innen waagerecht
+                        j = pR->pNextBand ? 4 : 2;
+                        break;
+                    case 3:
+                        // Aussen rechts/ Innen senkrecht
+                        j = (k == pR->nWwCols - 1) ? 3 : 5;
+                        break;
                     }
+                    // mangel mit Defaults ueber
+                    pT->rgbrc[i] = pR->aDefBrcs[j];
                 }
             }
-            /*
-            Similiar to graphics and other elements word does not totally
-            factor the width of the border into its calculations of size, we
-            do so we must adjust out widths and other dimensions to fit.  It
-            appears that what occurs is that the last cell's right margin if
-            the margin width that is not calculated into winwords table
-            dimensions, so in that case increase the table to include the
-            extra width of the right margin.
-            */
-            if ( pIo->bVer67 ?
-             !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits1) & 0x20)
-           : !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits2) & 0x2000))
-            {
-                short nThickness = pR->pTCs[pR->nWwCols-1].rgbrc[3].
-                    DetermineBorderProperties(pIo->bVer67);
-                pR->nCenter[pR->nWwCols] += nThickness;
-                if (nThickness > nRightMaxThickness)
-                    nRightMaxThickness = nThickness;
-            }
-
-            /*
-            The left space of the table is in nMinLeft, but again this
-            does not consider the margin thickness to its left in the
-            placement value, so get the thickness of the left border,
-            half is placed to the left of the nominal left side, and
-            half to the right.
-            */
-            if ( pIo->bVer67 ?
-                  !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits1) & 0x20)
-                : !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits2) & 0x2000))
-            {
-                short nThickness = pR->pTCs[0].rgbrc[1].
-                    DetermineBorderProperties(pIo->bVer67);
-                if (nThickness > nLeftMaxThickness)
-                    nLeftMaxThickness = nThickness;
-            }
         }
-        nSwWidth += nRightMaxThickness;
-        nMaxRight += nRightMaxThickness;
-        nConvertedLeft = nMinLeft-(nLeftMaxThickness/2);
+        /*
+        Similiar to graphics and other elements word does not totally
+        factor the width of the border into its calculations of size, we
+        do so we must adjust out widths and other dimensions to fit.  It
+        appears that what occurs is that the last cell's right margin if
+        the margin width that is not calculated into winwords table
+        dimensions, so in that case increase the table to include the
+        extra width of the right margin.
+        */
+        if ( pIo->bVer67 ?
+         !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits1) & 0x20)
+       : !(SVBT16ToShort(pR->pTCs[pR->nWwCols-1].rgbrc[3].aBits2) & 0x2000))
+        {
+            short nThickness = pR->pTCs[pR->nWwCols-1].rgbrc[3].
+                DetermineBorderProperties(pIo->bVer67);
+            pR->nCenter[pR->nWwCols] += nThickness;
+            if (nThickness > nRightMaxThickness)
+                nRightMaxThickness = nThickness;
+        }
+
+        /*
+        The left space of the table is in nMinLeft, but again this
+        does not consider the margin thickness to its left in the
+        placement value, so get the thickness of the left border,
+        half is placed to the left of the nominal left side, and
+        half to the right.
+        */
+        if ( pIo->bVer67 ?
+              !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits1) & 0x20)
+            : !(SVBT16ToShort(pR->pTCs[0].rgbrc[1].aBits2) & 0x2000))
+        {
+            short nThickness = pR->pTCs[0].rgbrc[1].
+                DetermineBorderProperties(pIo->bVer67);
+            if (nThickness > nLeftMaxThickness)
+                nLeftMaxThickness = nThickness;
+        }
     }
+    nSwWidth += nRightMaxThickness;
+    nMaxRight += nRightMaxThickness;
+    nConvertedLeft = nMinLeft-(nLeftMaxThickness/2);
 
     for( pR = pFirstBand; pR; pR = pR->pNextBand )
     {
