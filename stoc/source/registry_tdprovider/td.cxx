@@ -2,9 +2,9 @@
  *
  *  $RCSfile: td.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:46 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,36 @@
  *
  ************************************************************************/
 
+#include "osl/doublecheckedlocking.h"
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
 #endif
 
 namespace stoc_rdbtdp
 {
+
+//------------------------------------------------------------------------------
+::osl::Mutex & getMutex()
+{
+    static ::osl::Mutex * s_pmutex = 0;
+    if (s_pmutex == 0)
+    {
+        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+        if (s_pmutex == 0)
+        {
+            static ::osl::Mutex s_mutex;
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            s_pmutex = &s_mutex;
+        }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+    return *s_pmutex;
+}
+
+
 TypeDescriptionImpl::~TypeDescriptionImpl()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
