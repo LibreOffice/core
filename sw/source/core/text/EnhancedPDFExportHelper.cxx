@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:10:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
 
 #ifndef _ENHANCEDPDFEXPORTHELPER_HXX
 #include <EnhancedPDFExportHelper.hxx>
@@ -989,10 +993,10 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( pOLENd )
                     {
                         SwOLEObj& aOLEObj = pOLENd->GetOLEObj();
-                        SvInPlaceObjectRef aRef = aOLEObj.GetOleRef();
-                        if ( aRef.Is() )
+                        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > aRef = aOLEObj.GetOleRef();
+                        if ( aRef.is() )
                         {
-                            bFormula = 0 != SotExchange::IsMath( *aRef->GetSvFactory() );
+                            bFormula = 0 != SotExchange::IsMath( SvGlobalName( aRef->getClassID() ) );
                         }
                     }
                     if ( bFormula )
