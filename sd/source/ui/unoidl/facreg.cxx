@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:23:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,13 @@ extern uno::Reference< uno::XInterface > SAL_CALL SdUnoModule_createInstance( co
 extern OUString SdUnoModule_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString > SAL_CALL SdUnoModule_getSupportedServiceNames() throw( uno::RuntimeException );
 
+namespace sd
+{
+extern uno::Reference< uno::XInterface > SAL_CALL RandomNode_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString RandomNode__getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( uno::RuntimeException );
+}
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -140,6 +147,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
             writeInfo( pKey, SdDrawingDocument_getImplementationName(), SdDrawingDocument_getSupportedServiceNames() );
             writeInfo( pKey, SdPresentationDocument_getImplementationName(), SdPresentationDocument_getSupportedServiceNames() );
             writeInfo( pKey, SdUnoModule_getImplementationName(), SdUnoModule_getSupportedServiceNames() );
+            writeInfo( pKey, sd::RandomNode__getImplementationName(), sd::RandomNode_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -191,7 +199,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 SdUnoModule_createInstance,
                 SdUnoModule_getSupportedServiceNames() );
         }
-
+        else if( sd::RandomNode__getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                sd::RandomNode__getImplementationName(),
+                sd::RandomNode_createInstance,
+                sd::RandomNode_getSupportedServiceNames() );
+        }
 
         if( xFactory.is())
         {
