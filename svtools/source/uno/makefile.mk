@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-08 03:43:42 $
+#   last change: $Author: fs $ $Date: 2000-11-24 12:36:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -237,6 +237,8 @@ SRC1FILES=  unoifac2.src
 .ENDIF
 
 SLOFILES=   \
+            $(SLO)$/addrtempuno.obj	\
+            $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
             $(SLO)$/unoifac3.obj	\
             $(SLO)$/unoifac2.obj	\
