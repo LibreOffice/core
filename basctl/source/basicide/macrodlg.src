@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "매크로 이름(~M)";
         Text[ turkish ] = "Makro ad�";
         Text[ catalan ] = "Nom de la ~macro";
+        Text[ thai ] = "ชื่อ~มาโคร";
     };
     FixedText RID_TXT_MACROFROM
     {
@@ -154,9 +155,10 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "巨集的來源(~F)";
         Text[ arabic ] = "����� ��";
         Text[ greek ] = "����������� ���";
-        Text[ korean ] = "매크로 위치(~F)";
+        Text[ korean ] = "매크로 출처(~F)";
         Text[ turkish ] = "Makro kayna��";
         Text[ catalan ] = "Macro ~des de";
+        Text[ thai ] = "มาโคร~จาก";
     };
     Edit RID_ED_MACRONAME
     {
@@ -193,6 +195,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "설명(~S)";
         Text[ turkish ] = "A��klama";
         Text[ catalan ] = "De~scripci�";
+        Text[ thai ] = "คำ~อธิบาย";
     };
     PushButton RID_PB_RUN
     {
@@ -224,6 +227,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "실행(~U)";
         Text[ turkish ] = "Y�r�t";
         Text[ catalan ] = "Exec~uta";
+        Text[ thai ] = "ใ~ช้งาน";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -252,6 +256,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ turkish ] = "Close";
         Text[ arabic ] = "Close";
         Text[ catalan ] = "Close";
+        Text[ thai ] = "ปิด";
     };
     PushButton RID_PB_ASSIGN
     {
@@ -281,6 +286,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "지정(~A)...";
         Text[ turkish ] = "Ata...";
         Text[ catalan ] = "~Assigna...";
+        Text[ thai ] = "~กำหนด...";
     };
     PushButton RID_PB_EDIT
     {
@@ -310,6 +316,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "편집(~E)";
         Text[ turkish ] = "D�zenle";
         Text[ catalan ] = "~Edita";
+        Text[ thai ] = "แ~ก้ไข";
     };
     PushButton RID_PB_DEL
     {
@@ -340,6 +347,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "삭제(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Suprimeix...";
+        Text[ thai ] = "~ลบ";
     };
     PushButton RID_PB_ORG
     {
@@ -368,6 +376,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ korean ] = "관리(~O)...";
         Text[ turkish ] = "Y�net...";
         Text[ catalan ] = "~Organitzador...";
+        Text[ thai ] = "~ตัวจัดระเบียบ...";
     };
     HelpButton RID_PB_HELP
     {
@@ -394,6 +403,7 @@ ModalDialog RID_MACROCHOOSER
     Text[ korean ] = "매크로";
     Text[ turkish ] = "Makro";
     Text[ catalan ] = "Macro";
+    Text[ thai ] = "มาโคร";
 };
 String RID_STR_STDMACRONAME
 {
@@ -420,6 +430,7 @@ String RID_STR_STDMACRONAME
     Text[ korean ] = "매크로";
     Text[ turkish ] = "Makro";
     Text[ catalan ] = "Macro";
+    Text[ thai ] = "มาโคร";
 };
 Bitmap RID_BMP_APPICON
 {
@@ -451,6 +462,7 @@ String RID_STR_BTNDEL
     Text[ korean ] = "제거(~D)...";
     Text[ turkish ] = "Sil...";
     Text[ catalan ] = "~Suprimeix...";
+    Text[ thai ] = "~ลบ";
 };
 String RID_STR_BTNNEW
 {
@@ -474,9 +486,10 @@ String RID_STR_BTNNEW
     Text[ chinese_traditional ] = "開啟新檔(~N)";
     Text[ arabic ] = "����";
     Text[ greek ] = "����������";
-    Text[ korean ] = "새로 만들기(~N)";
+    Text[ korean ] = "새로(~N)";
     Text[ turkish ] = "Yeni";
     Text[ catalan ] = "~Nou";
+    Text[ thai ] = "ใ~หม่";
 };
 String RID_STR_CLOSE
 {
@@ -504,6 +517,7 @@ String RID_STR_CLOSE
     Text[ korean ] = "닫기";
     Text[ turkish ] = "Kapat";
     Text[ catalan ] = "Tanca";
+    Text[ thai ] = "ปิด";
 };
 String RID_STR_CHOOSE
 {
@@ -531,6 +545,7 @@ String RID_STR_CHOOSE
     Text[ korean ] = "선택";
     Text[ turkish ] = "Se�";
     Text[ catalan ] = "Trieu";
+    Text[ thai ] = "เลือก";
 };
 String RID_STR_RUN
 {
@@ -558,6 +573,7 @@ String RID_STR_RUN
     Text[ korean ] = "실행";
     Text[ turkish ] = "Y�r�t";
     Text[ catalan ] = "Executar";
+    Text[ thai ] = "เรียกใช้งาน";
 };
 
 String RID_STR_RECORD
