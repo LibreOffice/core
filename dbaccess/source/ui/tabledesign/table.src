@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:06:04 $
+ *  last change: $Author: kz $ $Date: 2002-02-28 16:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,7 +1101,7 @@ String STR_DEFAULT_VALUE
     Text[ dutch ] = "~Standaardwaarde";
     Text[ chinese_simplified ] = "ι»θ®¤ε€Ό(~D)";
     Text[ greek ] = "Τιμή προεπιλογής";
-    Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
+    Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
     Text[ turkish ] = "~Standart deπer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor per ~defecte";
@@ -1325,7 +1325,7 @@ String STR_HELP_DEFAULT_VALUE
     Text[ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiλren celopmaak.";
     Text[ chinese_simplified ] = "θ―·ε¨ζ­¤δΈΊθΏ™δΈªε­—ζ®µθΎ“ε…¥δΈ€δΈªι»θ®¤ε€Όγ€‚\n\nε¦‚ζζ‚¨δ»¥εε¨θ΅¨ζ ΌδΈ­θΎ“ε…¥ζ•°ζ®οΌζ―δΈªζ–°η„ζ•°ζ®ζ΅η›®δΌι‡‡η”¨θΏ™δΈªζ•°ζ®ζ ΌεΌγ€‚θΏ™ζ ·η„θ®Ύε®ε―δ»¥ζ»΅θ¶³δ»¥δΈ‹η„ε•ε…ƒζ Όζ ΌεΌη„θ¦ζ±‚γ€‚";
     Text[ greek ] = "Εισάγετε μια τιμή προεπιλογής για το πεδίο.\n\nΑν θελήσετε αργότερα να εισάγετε δεδομένα στον πίνακα θα χρησιμοποιηθεί αυτή η τιμή για κάθε ? ";
-    Text[ korean ] = "μ΄ ν•„λ“λ¥Ό μ„ν• κΈ°λ³Έκ°’μ„ μ…λ ¥ν•μ‹­μ‹μ¤.\n\nλ‚μ¤‘μ— μ‹νΈμ— λ°μ΄ν„°λ¥Ό μ…λ ¥ν•κ² λλ©΄ λª¨λ“  μƒ λ μ½”λ“μ—μ„ ν™μ„±ν™”λ ν•„λ“μ— μ΄ λ¬Έμμ—΄μ΄ μ‚¬μ©λ  κ²ƒμ…λ‹λ‹¤. λ”°λΌμ„ μ΄ λ¬Έμμ—΄μ€ μ•„λμ— μ…λ ¥ν•  μ…€ μ„μ‹μ— μ ν•©ν•΄μ•Ό ν•©λ‹λ‹¤.";
+    Text[ korean ] = "μ΄ ν•„λ“λ¥Ό μ„ν• κΈ°λ³Έ κ°’μ„ μ…λ ¥ν•μ‹­μ‹μ¤.\n\nλ‚μ¤‘μ— μ‹νΈμ— λ°μ΄ν„°λ¥Ό μ…λ ¥ν•κ² λλ©΄ λª¨λ“  μƒ λ μ½”λ“μ—μ„ ν™μ„±ν™”λ ν•„λ“μ— μ΄ λ¬Έμμ—΄μ΄ μ‚¬μ©λ  κ²ƒμ…λ‹λ‹¤. λ”°λΌμ„ μ΄ λ¬Έμμ—΄μ€ μ•„λμ— μ…λ ¥ν•  μ…€ μ„μ‹μ— μ ν•©ν•΄μ•Ό ν•©λ‹λ‹¤.";
     Text[ turkish ] = "Alan iηin bir standart deπer girin.\n\nDaha sonra tabloya veri giriώi yaptύπύnύzda, her yeni veri kόmesinde, yόrόrlόkteki alan iηin bu dize kullanύlύr. Dize bu nedenle aώaπύda girilmesi gereken hόcre formatύna uygun olmalύdύr.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Introduοu un valor per defecte per a aquest camp.\n\nQuan introduοu les dades en la taula posteriorment, aquesta cadena s'utilitzarΰ en cada registre nou per al camp seleccionat. Hauria de correspondre's, doncs, amb el format de cel·la que cal introduir a sota.";
