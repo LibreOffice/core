@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-20 12:19:33 $
+ *  last change: $Author: th $ $Date: 2001-07-25 14:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6812,7 +6812,7 @@ Reference< XDropTarget > Window::GetDropTarget()
             if( ! mpFrameData->mxDropTargetListener.is() )
             {
                 OSL_TRACE( "adding droptarget listener" );
-                mpFrameData->mxDropTargetListener = new DNDEventDispatcher( this );
+                mpFrameData->mxDropTargetListener = new DNDEventDispatcher( mpFrameWindow );
                 mpFrameData->mxDropTarget->addDropTargetListener( mpFrameData->mxDropTargetListener );
             }
         }
