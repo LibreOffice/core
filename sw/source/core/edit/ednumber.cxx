@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:23:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
         SwNumRule aRule(*pCurNumRule);
         aRule.Indent(nIndent, nLevel, nReferenceLevel, FALSE);
 
-        GetDoc()->SetNumRule(aPaM, aRule, sal_False, sal_True);
+        GetDoc()->SetNumRule(aPaM, aRule, sal_False );
     }
 
     EndAllAction();
@@ -751,12 +751,12 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
             /* #109308# adapt to new signature of SetNumRule */
             GetDoc()->SetNumRule( aRangeArr.SetPam( n, aPam ), rRule,
-                                  sal_False, sal_True );
+                                  sal_False );
         GetDoc()->EndUndo( UNDO_END );
     }
     else
         /* #109308# adapt to new signature of SetNumRule */
-        GetDoc()->SetNumRule( *pCrsr, rRule, sal_False, sal_True );
+        GetDoc()->SetNumRule( *pCrsr, rRule, sal_False );
 
     EndAllAction();
 }
