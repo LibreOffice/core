@@ -2,9 +2,9 @@
  *
  *  $RCSfile: onefuncstarter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:46:16 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ rtl::OUString convertPath( rtl::OString const& sysPth )
     // PRE: String should contain a filename, relativ or absolut
     rtl::OUString sysPath( rtl::OUString::createFromAscii( sysPth.getStr() ) );
     rtl::OUString fURL;
-    if ( sysPth.indexOf("..") != -1 )
+    if ( sysPth.indexOf("..") == 0 )
     {
         // filepath contains '..' so it's a relative path make it absolut.
         rtl::OUString curDirPth;
