@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:17:27 $
+ *  last change: $Author: nn $ $Date: 2001-07-25 18:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ void ScDrawView::InvalidateAttribs()
     rBindings.Invalidate( SID_ANCHOR_CELL );
 
     rBindings.Invalidate( SID_OLE_OBJECT );
+    rBindings.Invalidate( SID_OPENDLG_MODCHART );
 
     rBindings.Invalidate( SID_HYPERLINK_GETLINK );
 

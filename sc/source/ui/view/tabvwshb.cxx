@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:57:51 $
+ *  last change: $Author: nn $ $Date: 2001-07-25 18:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,11 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
             case SID_INSERT_DIAGRAM:
             case SID_OPENDLG_CHART:
                 if ( bOle || bTabProt || !SvtModuleOptions().IsChart() )
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_OPENDLG_MODCHART:
+                if ( bTabProt || !GetSelectedChartName().Len() )
                     rSet.DisableItem( nWhich );
                 break;
 
