@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _UNIVERSALL_REFERENCE_HXX
 #include <xmloff/uniref.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 class SwPaM;
@@ -188,7 +191,7 @@ public:
 
     void setBlockMode();
 
-    virtual sal_uInt32 exportDoc( const sal_Char *pClass=0 );
+    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
 

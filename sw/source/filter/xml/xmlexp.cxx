@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 #endif
 
 SwXMLExport::SwXMLExport(sal_uInt16 nExportFlags) :
-    SvXMLExport( MAP_INCH, sXML_text, nExportFlags ),
+    SvXMLExport( MAP_INCH, XML_TEXT, nExportFlags ),
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -272,7 +272,7 @@ void SwXMLExport::setBlockMode()
 
 }
 
-sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
+sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
@@ -396,21 +396,21 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
             pModel->GetPage( 0 )->RecalcObjOrdNums();
     }
 
-    // adjust document class (pClass)
+    // adjust document class (eClass)
     if (pDoc->IsGlobalDoc())
     {
-        pClass = sXML_text_global;
+        eClass = XML_TEXT_GLOBAL;
 
         // additionally, we take care of the save-linked-sections-thingy
         bSaveLinkedSections = pDoc->IsGlblDocSaveLinks();
     }
     else if (pDoc->IsLabelDoc())
     {
-        pClass = sXML_label;
+        eClass = XML_LABEL;
     }
     // else: keep default pClass that we received
 
-     sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
+     sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
 
     DBG_ASSERT(! bRedlineModeSaved,
                "If Redline mode was changed + saved, it should have been restored by now!")

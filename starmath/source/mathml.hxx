@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-11 08:19:40 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #include <xmloff/DocumentSettingsContext.hxx>
 #endif
-
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 #ifndef NODE_HXX
 #include <node.hxx>
@@ -410,7 +412,7 @@ public:
     void _ExportAutoStyles() {}
     void _ExportMasterStyles() {}
     void _ExportContent();
-    sal_uInt32 exportDoc(const sal_Char *pClass);
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass);
 
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);

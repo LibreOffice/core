@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:23:40 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,15 +725,15 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     return bRet;
 }
 
-SmXMLExport::SmXMLExport(sal_uInt16 nExportFlags) : SvXMLExport(MAP_INCH,sXML_math, nExportFlags) , pTree(0) ,
+SmXMLExport::SmXMLExport(sal_uInt16 nExportFlags) : SvXMLExport(MAP_INCH, XML_MATH, nExportFlags) , pTree(0) ,
     bSuccess(sal_False),pText(0)
 {}
 
-sal_uInt32 SmXMLExport::exportDoc(const sal_Char *pClass)
+sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 {
     if( (getExportFlags() & EXPORT_CONTENT) == 0 )
     {
-        SvXMLExport::exportDoc( pClass );
+        SvXMLExport::exportDoc( eClass );
     }
     else
     {
