@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:52 $
+ *  last change:$Date: 2003-11-18 16:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,6 @@ public class XMLTools {
     */
     public static class XMLWriter implements XDocumentHandler {
         private PrintWriter _log = null ;
-        private XLocator loc = null;
         private String align = "" ;
 
         /**
@@ -472,7 +471,6 @@ public class XMLTools {
 
         public void characters(String ch) {
             super.characters(ch) ;
-            ch.trim() ;
 
             if (chars.containsKey(ch)) {
                 String outerTag = (String) chars.get(ch);
@@ -732,7 +730,6 @@ public class XMLTools {
 
         public void characters(String ch) {
             super.characters(ch) ;
-            ch.trim();
             for (int i = 0; i < chars.size(); i++) {
                 Object[] chr = (Object[]) chars.elementAt(i);
                 if (((String) chr[0]).equals(ch)) {
