@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@ static void callVirtualMethod(
     if (! pThis) dummy_can_throw_anything("xxx"); // address something
 
     volatile long edx = 0, eax = 0; // for register returns
+    void * stackptr;
     asm volatile (
+        "mov   %%esp, %6\n\t"
         // copy values
         "mov   %0, %%eax\n\t"
         "mov   %%eax, %%edx\n\t"
@@ -121,13 +123,11 @@ static void callVirtualMethod(
          "mov   %%eax, %4\n\t"
          "mov   %%edx, %5\n\t"
         // cleanup stack
-         "mov   %0, %%eax\n\t"
-         "shl   $2, %%eax\n\t"
-         "add   %%eax, %%esp\n\t"
+        "mov   %6, %%esp\n\t"
         :
-        : "m"(nStackLongs), "m"(pStackLongs), "m"(pThis), "m"(nVtableIndex), "m"(eax), "m"(edx)
+        : "m"(nStackLongs), "m"(pStackLongs), "m"(pThis), "m"(nVtableIndex),
+          "m"(eax), "m"(edx), "m"(stackptr)
         : "eax", "edx" );
-
     switch( eReturnType )
     {
         case typelib_TypeClass_HYPER:
