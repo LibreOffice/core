@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:12 $
+ *  last change: $Author: hro $ $Date: 2000-11-13 11:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,321 +82,6 @@ namespace osl
 {
 #endif
 
-
-/** The VolumeInfo class
-
-    @see Directory::getVolumeInfo
-*/
-
-#define VolumeInfoMask_Attributes     osl_VolumeInfo_Mask_Attributes
-#define VolumeInfoMask_TotalSpace     osl_VolumeInfo_Mask_TotalSpace
-#define VolumeInfoMask_UsedSpace      osl_VolumeInfo_Mask_UsedSpace
-#define VolumeInfoMask_FreeSpace      osl_VolumeInfo_Mask_FreeSpace
-#define VolumeInfoMask_MaxNameLength  osl_VolumeInfo_Mask_MaxNameLength
-#define VolumeInfoMask_MaxPathLength  osl_VolumeInfo_Mask_MaxPathLengt
-#define VolumeInfoMask_FileSystemName osl_VolumeInfo_Mask_FileSystemName
-
-class Directory;
-
-class VolumeInfo
-{
-    oslVolumeInfo   _aInfo;
-    sal_uInt32      _nMask;
-    rtl_uString     *_strFileSystemName;
-
-    /** define copy c'tor and assginment operator privat
-     */
-
-    VolumeInfo( VolumeInfo& );
-    VolumeInfo& operator = ( VolumeInfo& );
-
-public:
-
-    /** C'tor
-
-     @param nMask set of flaggs decribing the demanded information.
-    */
-
-    VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
-    {
-        _aInfo.uStructSize = sizeof( oslVolumeInfo );
-        rtl_fillMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ), 0 );
-        _strFileSystemName=NULL;
-        _aInfo.pstrFileSystemName = &_strFileSystemName;
-    }
-
-    /** D'tor
-     */
-
-    ~VolumeInfo()
-    {
-        if (_strFileSystemName!=NULL)
-            rtl_uString_release(_strFileSystemName);
-    }
-
-    /** check if specified fields are valid
-
-     @param set of flags for the fields to check
-     @return sal_True if all fields are valid, sal_False otherwise.
-    */
-
-    inline sal_Bool isValid( sal_uInt32 nMask ) const
-    {
-        return ( nMask & _aInfo.uValidFields ) == nMask;
-    }
-
-    /** @return sal_True if Attributes are valid and the volume is remote,
-     sal_False otherwise.
-    */
-
-    inline sal_Bool getRemoteFlag() const
-    {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
-    }
-
-    /** @return sal_True if attributes are valid and the volume is removable,
-     sal_False otherwise.
-    */
-
-    inline sal_Bool getRemoveableFlag() const
-    {
-        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
-    }
-
-    /** @return the total diskspace of this volume if this information is valid,
-     0 otherwise.
-      */
-
-    inline sal_uInt64 getTotalSpace() const
-    {
-        return _aInfo.uTotalSpace;
-    }
-
-    /** @return the free diskspace of this volume if this information is valid,
-     0 otherwise.
-      */
-
-    inline sal_uInt64 getFreeSpace() const
-    {
-        return _aInfo.uFreeSpace;
-    }
-
-    /** @return the used diskspace of this volume if this information is valid,
-     0 otherwise.
-      */
-
-    inline sal_uInt64 getUsedSpace() const
-    {
-        return _aInfo.uUsedSpace;
-    }
-
-    /** @return the maximal length of a file name if this information is valid,
-     0 otherwise.
-      */
-
-    inline sal_uInt32 getMaxNameLength() const
-    {
-        return _aInfo.uMaxNameLength;
-    }
-
-    /** @return the maximal length of a path if this information is valid,
-     0 otherwise.
-      */
-
-    inline sal_uInt32 getMaxPathLength() const
-    {
-        return _aInfo.uMaxPathLength;
-    }
-
-    /** @return the name of the volume's fielsystem if this information is valid,
-     otherwise an empty string.
-      */
-
-    inline ::rtl::OUString getFileSystemName() const
-    {
-        return _strFileSystemName;
-    }
-
-    friend class Directory;
-};
-
-// -----------------------------------------------------------------------------
-
-/** The FileStatus class
-
-    @see DirectoryItem::getFileStatus
-*/
-
-#define FileStatusMask_Type         osl_FileStatus_Mask_Type
-#define FileStatusMask_Attributes   osl_FileStatus_Mask_Attributes
-#define FileStatusMask_CreationTime osl_FileStatus_Mask_CreationTime
-#define FileStatusMask_AccessTime   osl_FileStatus_Mask_AccessTime
-#define FileStatusMask_ModifyTime   osl_FileStatus_Mask_ModifyTime
-#define FileStatusMask_FileSize     osl_FileStatus_Mask_FileSize
-#define FileStatusMask_FileName     osl_FileStatus_Mask_FileName
-#define FileStatusMask_FilePath     osl_FileStatus_Mask_FilePath
-#define FileStatusMask_NativePath   osl_FileStatus_Mask_NativePath
-#define FileStatusMask_All          osl_FileStatus_Mask_All
-#define FileStatusMask_Validate     osl_FileStatus_Mask_Validate
-
-#define Attribute_ReadOnly     osl_File_Attribute_ReadOnly
-#define Attribute_Hidden       osl_File_Attribute_Hidden
-#define Attribute_Executable   osl_File_Attribute_Executable
-#define Attribute_GrpWrite     osl_File_Attribute_GrpWrite
-#define Attribute_GrpRead      osl_File_Attribute_GrpRead
-#define Attribute_GrpExe       osl_File_Attribute_GrpExe
-#define Attribute_OwnWrite     osl_File_Attribute_OwnWrite
-#define Attribute_OwnRead      osl_File_Attribute_OwnRead
-#define Attribute_OwnExe       osl_File_Attribute_OwnExe
-#define Attribute_OthWrite     osl_File_Attribute_OthWrite
-#define Attribute_OthRead      osl_File_Attribute_OthRead
-#define Attribute_OthExe       osl_File_Attribute_OthExe
-
-class DirectoryItem;
-
-class FileStatus
-{
-    oslFileStatus   _aStatus;
-    sal_uInt32      _nMask;
-    rtl_uString     *_strNativePath;
-    rtl_uString     *_strFilePath;
-
-    /** define copy c'tor and assginment operator privat
-     */
-
-    FileStatus( FileStatus& );
-    FileStatus& operator = ( FileStatus& );
-
-public:
-
-    enum Type {
-        Directory = osl_File_Type_Directory,
-        Volume    = osl_File_Type_Volume,
-        Regular   = osl_File_Type_Regular,
-        Fifo      = osl_File_Type_Fifo,
-        Socket    = osl_File_Type_Socket,
-        Link      = osl_File_Type_Link,
-        Special   = osl_File_Type_Special,
-        Unknown   = osl_File_Type_Unknown
-    };
-
-    /** C'tor
-
-     @param nMask set of flaggs decribing the demanded information.
-    */
-
-    FileStatus( sal_uInt32 nMask ): _nMask( nMask ), _strNativePath( NULL ), _strFilePath( NULL )
-    {
-        _aStatus.uStructSize = sizeof( oslFileStatus );
-        rtl_fillMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ), 0 );
-        _aStatus.pstrNativePath = &_strNativePath;
-        _aStatus.pstrFilePath = &_strFilePath;
-    }
-
-    /** D'tor
-     */
-
-    ~FileStatus()
-    {
-        if ( _strFilePath )
-            rtl_uString_release( _strFilePath );
-        if ( _strNativePath )
-            rtl_uString_release( _strNativePath );
-        if ( _aStatus.strFileName )
-            rtl_uString_release( _aStatus.strFileName );
-    }
-
-    /** check if specified fields are valid
-
-     @param set of flags for the fields to check
-     @return sal_True if all fields are valid, sal_False otherwise.
-    */
-    inline sal_Bool isValid( sal_uInt32 nMask ) const
-    {
-        return ( nMask & _aStatus.uValidFields ) == nMask;
-    }
-
-    /** @return the file type if this information is valid,
-     Unknown otherwise.
-     */
-    inline Type getFileType() const
-    {
-        return (_aStatus.uValidFields & FileStatusMask_Type) ?  (Type) _aStatus.eType : Unknown;
-    }
-
-    /** @return the set of attribute flags of this file
-    */
-
-    inline sal_uInt64 getAttributes() const
-    {
-        return _aStatus.uAttributes;
-    }
-
-    /** @return the creation time if this information is valid,
-      an uninitialized TimeValue otherwise.
-    */
-
-    inline TimeValue getCreationTime() const
-    {
-        return _aStatus.aCreationTime;
-    }
-
-    /** @return the last access time if this information is valid,
-      an uninitialized TimeValue otherwise.
-    */
-
-    inline TimeValue getAccessTime() const
-    {
-        return _aStatus.aAccessTime;
-    }
-
-    /** @return the last modified time if this information is valid,
-      an uninitialized TimeValue otherwise.
-    */
-
-    inline TimeValue getModifyTime() const
-    {
-        return _aStatus.aModifyTime;
-    }
-
-    /** @return the actual file size if this information is valid,
-      0 otherwise.
-    */
-
-    inline sal_uInt64 getFileSize() const
-    {
-        return _aStatus.uFileSize;
-    }
-
-    /** @return the file name if this information is valid, an empty
-     string otherwise.
-    */
-
-    inline ::rtl::OUString getFileName() const
-    {
-        return _aStatus.strFileName ? ::rtl::OUString(_aStatus.strFileName) : ::rtl::OUString();
-    }
-
-    /** @return the file path in UNC notation if this information is valid,
-     an empty string otherwise.
-    */
-
-    inline ::rtl::OUString getFilePath() const
-    {
-        return _strFilePath ? ::rtl::OUString(_strFilePath) : ::rtl::OUString();
-    }
-
-    /** @return the file path in host notation if this information is valid,
-     an empty string otherwise.
-    */
-
-    inline ::rtl::OUString getNativePath() const
-    {
-        return _strNativePath ? ::rtl::OUString(_strNativePath) : ::rtl::OUString();
-    }
-
-    friend class DirectoryItem;
-};
 
 // -----------------------------------------------------------------------------
 
@@ -666,6 +351,335 @@ public:
     }
 
     friend class VolumeInfo;
+};
+
+// -----------------------------------------------------------------------------
+
+/** The VolumeInfo class
+
+    @see Directory::getVolumeInfo
+*/
+
+#define VolumeInfoMask_Attributes     osl_VolumeInfo_Mask_Attributes
+#define VolumeInfoMask_TotalSpace     osl_VolumeInfo_Mask_TotalSpace
+#define VolumeInfoMask_UsedSpace      osl_VolumeInfo_Mask_UsedSpace
+#define VolumeInfoMask_FreeSpace      osl_VolumeInfo_Mask_FreeSpace
+#define VolumeInfoMask_MaxNameLength  osl_VolumeInfo_Mask_MaxNameLength
+#define VolumeInfoMask_MaxPathLength  osl_VolumeInfo_Mask_MaxPathLengt
+#define VolumeInfoMask_FileSystemName osl_VolumeInfo_Mask_FileSystemName
+
+class Directory;
+
+class VolumeInfo
+{
+    oslVolumeInfo   _aInfo;
+    sal_uInt32      _nMask;
+    rtl_uString     *_strFileSystemName;
+    VolumeDevice    _aDevice;
+
+    /** define copy c'tor and assginment operator privat
+     */
+
+    VolumeInfo( VolumeInfo& );
+    VolumeInfo& operator = ( VolumeInfo& );
+
+public:
+
+    /** C'tor
+
+     @param nMask set of flaggs decribing the demanded information.
+    */
+
+    VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
+    {
+        _aInfo.uStructSize = sizeof( oslVolumeInfo );
+        rtl_fillMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ), 0 );
+        _strFileSystemName=NULL;
+        _aInfo.pstrFileSystemName = &_strFileSystemName;
+        _aInfo.pDeviceHandle = &_aDevice._aHandle;
+    }
+
+    /** D'tor
+     */
+
+    ~VolumeInfo()
+    {
+        if (_strFileSystemName!=NULL)
+            rtl_uString_release(_strFileSystemName);
+    }
+
+    /** check if specified fields are valid
+
+     @param set of flags for the fields to check
+     @return sal_True if all fields are valid, sal_False otherwise.
+    */
+
+    inline sal_Bool isValid( sal_uInt32 nMask ) const
+    {
+        return ( nMask & _aInfo.uValidFields ) == nMask;
+    }
+
+    /** @return sal_True if Attributes are valid and the volume is remote,
+     sal_False otherwise.
+    */
+
+    inline sal_Bool getRemoteFlag() const
+    {
+        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Remote);
+    }
+
+    /** @return sal_True if attributes are valid and the volume is removable,
+     sal_False otherwise.
+    */
+
+    inline sal_Bool getRemoveableFlag() const
+    {
+        return (sal_Bool) (_aInfo.uAttributes & osl_Volume_Attribute_Removeable);
+    }
+
+    /** @return the total diskspace of this volume if this information is valid,
+     0 otherwise.
+      */
+
+    inline sal_uInt64 getTotalSpace() const
+    {
+        return _aInfo.uTotalSpace;
+    }
+
+    /** @return the free diskspace of this volume if this information is valid,
+     0 otherwise.
+      */
+
+    inline sal_uInt64 getFreeSpace() const
+    {
+        return _aInfo.uFreeSpace;
+    }
+
+    /** @return the used diskspace of this volume if this information is valid,
+     0 otherwise.
+      */
+
+    inline sal_uInt64 getUsedSpace() const
+    {
+        return _aInfo.uUsedSpace;
+    }
+
+    /** @return the maximal length of a file name if this information is valid,
+     0 otherwise.
+      */
+
+    inline sal_uInt32 getMaxNameLength() const
+    {
+        return _aInfo.uMaxNameLength;
+    }
+
+    /** @return the maximal length of a path if this information is valid,
+     0 otherwise.
+      */
+
+    inline sal_uInt32 getMaxPathLength() const
+    {
+        return _aInfo.uMaxPathLength;
+    }
+
+    /** @return the name of the volume's fielsystem if this information is valid,
+     otherwise an empty string.
+      */
+
+    inline ::rtl::OUString getFileSystemName() const
+    {
+        return _strFileSystemName;
+    }
+
+
+    /** @return the device handle of the volume if this information is valid,
+     otherwise returns NULL;
+      */
+
+    inline VolumeDevice getDeviceHandle() const
+    {
+        return _aDevice;
+    }
+
+    friend class Directory;
+};
+
+// -----------------------------------------------------------------------------
+
+/** The FileStatus class
+
+    @see DirectoryItem::getFileStatus
+*/
+
+#define FileStatusMask_Type         osl_FileStatus_Mask_Type
+#define FileStatusMask_Attributes   osl_FileStatus_Mask_Attributes
+#define FileStatusMask_CreationTime osl_FileStatus_Mask_CreationTime
+#define FileStatusMask_AccessTime   osl_FileStatus_Mask_AccessTime
+#define FileStatusMask_ModifyTime   osl_FileStatus_Mask_ModifyTime
+#define FileStatusMask_FileSize     osl_FileStatus_Mask_FileSize
+#define FileStatusMask_FileName     osl_FileStatus_Mask_FileName
+#define FileStatusMask_FilePath     osl_FileStatus_Mask_FilePath
+#define FileStatusMask_NativePath   osl_FileStatus_Mask_NativePath
+#define FileStatusMask_All          osl_FileStatus_Mask_All
+#define FileStatusMask_Validate     osl_FileStatus_Mask_Validate
+
+#define Attribute_ReadOnly     osl_File_Attribute_ReadOnly
+#define Attribute_Hidden       osl_File_Attribute_Hidden
+#define Attribute_Executable   osl_File_Attribute_Executable
+#define Attribute_GrpWrite     osl_File_Attribute_GrpWrite
+#define Attribute_GrpRead      osl_File_Attribute_GrpRead
+#define Attribute_GrpExe       osl_File_Attribute_GrpExe
+#define Attribute_OwnWrite     osl_File_Attribute_OwnWrite
+#define Attribute_OwnRead      osl_File_Attribute_OwnRead
+#define Attribute_OwnExe       osl_File_Attribute_OwnExe
+#define Attribute_OthWrite     osl_File_Attribute_OthWrite
+#define Attribute_OthRead      osl_File_Attribute_OthRead
+#define Attribute_OthExe       osl_File_Attribute_OthExe
+
+class DirectoryItem;
+
+class FileStatus
+{
+    oslFileStatus   _aStatus;
+    sal_uInt32      _nMask;
+    rtl_uString     *_strNativePath;
+    rtl_uString     *_strFilePath;
+
+    /** define copy c'tor and assginment operator privat
+     */
+
+    FileStatus( FileStatus& );
+    FileStatus& operator = ( FileStatus& );
+
+public:
+
+    enum Type {
+        Directory = osl_File_Type_Directory,
+        Volume    = osl_File_Type_Volume,
+        Regular   = osl_File_Type_Regular,
+        Fifo      = osl_File_Type_Fifo,
+        Socket    = osl_File_Type_Socket,
+        Link      = osl_File_Type_Link,
+        Special   = osl_File_Type_Special,
+        Unknown   = osl_File_Type_Unknown
+    };
+
+    /** C'tor
+
+     @param nMask set of flaggs decribing the demanded information.
+    */
+
+    FileStatus( sal_uInt32 nMask ): _nMask( nMask ), _strNativePath( NULL ), _strFilePath( NULL )
+    {
+        _aStatus.uStructSize = sizeof( oslFileStatus );
+        rtl_fillMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ), 0 );
+        _aStatus.pstrNativePath = &_strNativePath;
+        _aStatus.pstrFilePath = &_strFilePath;
+    }
+
+    /** D'tor
+     */
+
+    ~FileStatus()
+    {
+        if ( _strFilePath )
+            rtl_uString_release( _strFilePath );
+        if ( _strNativePath )
+            rtl_uString_release( _strNativePath );
+        if ( _aStatus.strFileName )
+            rtl_uString_release( _aStatus.strFileName );
+    }
+
+    /** check if specified fields are valid
+
+     @param set of flags for the fields to check
+     @return sal_True if all fields are valid, sal_False otherwise.
+    */
+    inline sal_Bool isValid( sal_uInt32 nMask ) const
+    {
+        return ( nMask & _aStatus.uValidFields ) == nMask;
+    }
+
+    /** @return the file type if this information is valid,
+     Unknown otherwise.
+     */
+    inline Type getFileType() const
+    {
+        return (_aStatus.uValidFields & FileStatusMask_Type) ?  (Type) _aStatus.eType : Unknown;
+    }
+
+    /** @return the set of attribute flags of this file
+    */
+
+    inline sal_uInt64 getAttributes() const
+    {
+        return _aStatus.uAttributes;
+    }
+
+    /** @return the creation time if this information is valid,
+      an uninitialized TimeValue otherwise.
+    */
+
+    inline TimeValue getCreationTime() const
+    {
+        return _aStatus.aCreationTime;
+    }
+
+    /** @return the last access time if this information is valid,
+      an uninitialized TimeValue otherwise.
+    */
+
+    inline TimeValue getAccessTime() const
+    {
+        return _aStatus.aAccessTime;
+    }
+
+    /** @return the last modified time if this information is valid,
+      an uninitialized TimeValue otherwise.
+    */
+
+    inline TimeValue getModifyTime() const
+    {
+        return _aStatus.aModifyTime;
+    }
+
+    /** @return the actual file size if this information is valid,
+      0 otherwise.
+    */
+
+    inline sal_uInt64 getFileSize() const
+    {
+        return _aStatus.uFileSize;
+    }
+
+    /** @return the file name if this information is valid, an empty
+     string otherwise.
+    */
+
+    inline ::rtl::OUString getFileName() const
+    {
+        return _aStatus.strFileName ? ::rtl::OUString(_aStatus.strFileName) : ::rtl::OUString();
+    }
+
+    /** @return the file path in UNC notation if this information is valid,
+     an empty string otherwise.
+    */
+
+    inline ::rtl::OUString getFilePath() const
+    {
+        return _strFilePath ? ::rtl::OUString(_strFilePath) : ::rtl::OUString();
+    }
+
+    /** @return the file path in host notation if this information is valid,
+     an empty string otherwise.
+    */
+
+    inline ::rtl::OUString getNativePath() const
+    {
+        return _strNativePath ? ::rtl::OUString(_strNativePath) : ::rtl::OUString();
+    }
+
+    friend class DirectoryItem;
 };
 
 // -----------------------------------------------------------------------------
