@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 10:26:55 $
+ *  last change: $Author: dbo $ $Date: 2002-11-19 15:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ static void logPlugin( OUString const & path_ )
 {
     static FILE * s_file = 0;
     if (! s_file)
-        s_file = fopen( "f:\\plugins.log", "a+" );
+        s_file = fopen( "d:\\plugins.log", "a+" );
     OString path( OUStringToOString( path_, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( s_file, "%s\n", path.getStr() );
 }
@@ -393,27 +393,29 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
 
                     // count mime tokens
                     USHORT nToken = 0;
-                    sal_Int32 nIndex = 0, nIndex2 = 0;
-                    if (aExt.getLength())
+                    if (aMIME.getLength())
                     {
                         ++nToken;
-                        for ( ; nIndex < aExt.getLength(); ++nIndex )
+                        for ( sal_Int32 n = aMIME.getLength(); n--; )
                         {
-                            if (aExt[ nIndex ] == '|')
+                            if (aMIME[ n ] == '|')
                             {
                                 ++nToken;
                             }
                         }
                     }
-                    nIndex = 0;
+                    sal_Int32 nIndex = 0, nIndex2 = 0;
 
                     UINT32 nStart = s_aDescriptions.getLength();
                     s_aDescriptions.realloc( nStart + nToken );
                     PluginDescription* pDescriptions = s_aDescriptions.getArray();
                     // for every MIME Type
                     sal_Int32 nTok = 0;
-                    do
+                    while (true)
                     {
+                        if (nIndex < 0 || nIndex2 < 0)
+                            break;
+
                         PluginDescription & rDescr = pDescriptions[nStart+nTok];
 #ifdef UNICODE
                         rDescr.Mimetype = aMIME.getToken( 0, '|', nIndex );
@@ -430,7 +432,6 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                         OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
                         OUString aExtToken( aExtToken2.getStr(), aExtToken2.getLength(), RTL_TEXTENCODING_MS_1252 );
 #endif
-
                         rDescr.PluginName = aName;
                         rDescr.Description = aComment;
 
@@ -461,9 +462,7 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
 
                         ++nTok;
                     }
-                    while (nIndex >= 0);
 
-                    OSL_ASSERT( nToken == nTok );
                     if (nToken != nTok)
                     {
                         s_aDescriptions.realloc( nTok );
