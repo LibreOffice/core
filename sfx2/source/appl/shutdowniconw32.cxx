@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:58:48 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 11:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,90 +77,6 @@
 #include <io.h>
 #include <osl/thread.h>
 #include <osl/file.hxx>
-
-#include <systools/win32/user9x.h> // initializiation is performed below !
-#include <systools/win32/shell9x.h> // ""
-
-
-
-//
-// note: this code is copyied from SAL/systools
-//  it initializes the functionpointers for the unicodewrappers
-//
-
-#define SYSTOOLS_DLL_NAME   "w9xucwrp.dll"
-
-typedef BOOL ( WINAPI * InsertMenuItemW_Proc_T ) (
-    HMENU hMenu,            // handle to menu
-    UINT uItem,             // identifier or position
-    BOOL fByPosition,       // meaning of uItem
-    LPCMENUITEMINFOW lpmii  // menu item information
-);
-InsertMenuItemW_Proc_T lpfnInsertMenuItemW = NULL;
-
-typedef BOOL ( WINAPI * SHGetPathFromIDListW_Proc_T ) (
-    LPCITEMIDLIST pidl, LPWSTR pszPath );
-SHGetPathFromIDListW_Proc_T lpfnSHGetPathFromIDListW = NULL;
-
-
-typedef BOOL ( WINAPI * DrawStateW_Proc_T ) (
-  HDC hdc,                     // handle to device context
-  HBRUSH hbr,                  // handle to brush
-  DRAWSTATEPROC lpOutputFunc,  // callback function
-  LPARAM lData,                // image information
-  WPARAM wData,                // more image information
-  int x,                       // horizontal location
-  int y,                       // vertical location
-  int cx,                      // image width
-  int cy,                      // image height
-  UINT fuFlags                 // image type and state
-);
-DrawStateW_Proc_T           lpfnDrawStateW = NULL;
-
-static void WINAPI User9xInit( )
-{
-    if ( lpfnInsertMenuItemW && lpfnSHGetPathFromIDListW )
-        //nothing to do
-        return;
-
-    HMODULE         hModule;
-    OSVERSIONINFO   OSVerInfo;
-
-    OSVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
-    GetVersionEx( &OSVerInfo );
-
-    // if windows 95/98
-    if ( VER_PLATFORM_WIN32_WINDOWS == OSVerInfo.dwPlatformId )
-    {
-        hModule = LoadLibraryA( SYSTOOLS_DLL_NAME );
-        if ( NULL != hModule )
-        {
-            lpfnInsertMenuItemW = ( InsertMenuItemW_Proc_T )GetProcAddress(
-                hModule, "InsertMenuItemW_9x" );
-            lpfnSHGetPathFromIDListW = (SHGetPathFromIDListW_Proc_T)GetProcAddress(
-                hModule, "SHGetPathFromIDListW_9x" );
-            lpfnDrawStateW = (DrawStateW_Proc_T)GetProcAddress(
-                hModule, "DrawStateW_9x" );
-        }
-    }
-    else
-    {
-        hModule = LoadLibraryA( "user32.dll" );
-        if ( NULL != hModule )
-        {
-            lpfnInsertMenuItemW = ( InsertMenuItemW_Proc_T )GetProcAddress(
-                hModule, "InsertMenuItemW" );
-            lpfnDrawStateW = (DrawStateW_Proc_T)GetProcAddress(
-                hModule, "DrawStateW" );
-        }
-        hModule = LoadLibraryA( "Shell32.dll" );
-        if ( NULL != hModule )
-        {
-            lpfnSHGetPathFromIDListW = (SHGetPathFromIDListW_Proc_T)GetProcAddress(
-                                            hModule, "SHGetPathFromIDListW" );
-        }
-    }
-}
 
 
 using namespace ::rtl;
@@ -598,9 +514,6 @@ DWORD WINAPI SystrayThread( LPVOID lpParam )
 void ShutdownIcon::initSystray()
 {
 
-    // initialize unicode wrappers
-    User9xInit();
-
     WNDCLASSEXA listenerClass;
     listenerClass.cbSize        = sizeof(WNDCLASSEX);
     listenerClass.style         = 0;
@@ -889,9 +802,6 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 
 void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivate )
 {
-    // init wrapper if necessary
-    User9xInit();
-
     OUString aShortcut(SHGetAutostartFolderName());
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
@@ -936,9 +846,6 @@ void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivat
 
 bool ShutdownIcon::GetAutostartW32( const OUString& aShortcutName )
 {
-    // init wrapper if necessary
-    User9xInit();
-
     OUString aShortcut(SHGetAutostartFolderName());
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
