@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-31 23:56:13 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-01 00:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,21 +568,291 @@ static PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
 
 // ==================================================================
 
+static CTabHandle CopyPixMapCTab ( CTabHandle hPixMapCTab )
+{
+    CTabHandle  hPixMapCTabCopy = NULL;
+
+    if ( ( hPixMapCTab != NULL ) && ( *hPixMapCTab != NULL ) )
+    {
+        SInt8 nhPixMapCTabFlags = noErr;
+
+        nhPixMapCTabFlags = HGetState( (Handle)hPixMapCTabCopy );
+
+        if ( nhPixMapCTabFlags == noErr )
+        {
+            long  nPortPixMapCTabSize       = 0;
+            long  nPortPixMapCTabHandleSize = 0;
+
+            HLock( (Handle)hPixMapCTab );
+
+            nPortPixMapCTabSize = (**hPixMapCTab).ctSize + 1;
+
+            nPortPixMapCTabHandleSize =   (   nPortPixMapCTabSize
+                                            * sizeof( ColorSpec )
+                                          )
+                                        + (   sizeof( ColorTable )
+                                            - sizeof( CSpecArray )
+                                          );
+
+            hPixMapCTabCopy = (CTabHandle)NewHandleClear( nPortPixMapCTabHandleSize );
+
+            if ( ( hPixMapCTabCopy != NULL ) && ( *hPixMapCTabCopy != NULL ) )
+            {
+                SInt8  nPortPixMapCTabCopyFlags = noErr;
+
+                nPortPixMapCTabCopyFlags = HGetState( (Handle)hPixMapCTabCopy );
+
+                if ( nPortPixMapCTabCopyFlags == noErr )
+                {
+                    unsigned long  nPortPixMapCTabIndex;
+
+                    HLock( (Handle)hPixMapCTabCopy );
+
+                        (**hPixMapCTabCopy).ctSize  = (**hPixMapCTab).ctSize;
+                        (**hPixMapCTabCopy).ctFlags = (**hPixMapCTab).ctFlags;
+                        (**hPixMapCTabCopy).ctSeed  = GetCTSeed();
+
+                        for ( nPortPixMapCTabIndex = 0;
+                              nPortPixMapCTabIndex < nPortPixMapCTabSize;
+                              nPortPixMapCTabIndex++
+                            )
+                        {
+                            (**hPixMapCTabCopy).ctTable[nPortPixMapCTabIndex]
+                                = (**hPixMapCTab).ctTable[nPortPixMapCTabIndex];
+                        } // for
+
+                    HSetState( (Handle)hPixMapCTabCopy, nPortPixMapCTabCopyFlags );
+                } // if
+            } // if
+
+            HSetState( (Handle)hPixMapCTab, nhPixMapCTabFlags );
+        } // if
+    } // if
+    else
+    {
+        hPixMapCTabCopy = GetNewPixMapCTabCLUT( kEightBitColor );
+
+        if ( hPixMapCTabCopy == NULL )
+        {
+            hPixMapCTabCopy = CopyGDeviceCTab( );
+        } // if
+    } // else
+
+    return hPixMapCTabCopy;
+} // CopyPixMapCTab
+
+// ------------------------------------------------------------------
+
+static CTabHandle CopyPixMapCTabRGBDirect ( CTabHandle hPixMapCTab )
+{
+    CTabHandle  hPixMapCTabCopy = NULL;
+
+    if ( ( hPixMapCTab != NULL ) && ( *hPixMapCTab != NULL ) )
+    {
+        SInt8 nhPixMapCTabFlags = noErr;
+
+        nhPixMapCTabFlags = HGetState( (Handle)hPixMapCTabCopy );
+
+        if ( nhPixMapCTabFlags == noErr )
+        {
+            HLock( (Handle)hPixMapCTab );
+
+            hPixMapCTabCopy = (CTabHandle)NewHandleClear(   sizeof( ColorTable )
+                                                             - sizeof( CSpecArray )
+                                                           );
+
+            if ( ( hPixMapCTabCopy != NULL ) && ( *hPixMapCTabCopy != NULL ) )
+            {
+                SInt8  nPortPixMapCTabCopyFlags = noErr;
+
+                nPortPixMapCTabCopyFlags = HGetState( (Handle)hPixMapCTabCopy );
+
+                if ( nPortPixMapCTabCopyFlags == noErr )
+                {
+                    HLock( (Handle)hPixMapCTabCopy );
+
+                    (**hPixMapCTabCopy).ctSeed  = (**hPixMapCTab).ctSeed;
+                    (**hPixMapCTabCopy).ctFlags = (**hPixMapCTab).ctFlags;
+                    (**hPixMapCTabCopy).ctSize  = (**hPixMapCTab).ctSize;
+
+                    HSetState( (Handle)hPixMapCTabCopy, nPortPixMapCTabCopyFlags );
+                } // if
+            } // if
+
+            HSetState( (Handle)hPixMapCTab, nhPixMapCTabFlags );
+        } // if
+    } // if
+
+    return hPixMapCTabCopy;
+} // CopyPixMapCTabRGBDirect
+
+// ------------------------------------------------------------------
+
+static CTabHandle CopyPixMapCTabHandle ( PixMapHandle hPixMap )
+{
+    CTabHandle  hPixMapCTabCopy  = NULL;
+    short       nPixMapBitDepth = GetPixDepth( hPixMap );
+
+    if ( nPixMapBitDepth <= kEightBitColor )
+    {
+        hPixMapCTabCopy = CopyPixMapCTab( (**hPixMap).pmTable );
+    } // if
+    else
+    {
+        hPixMapCTabCopy = CopyPixMapCTabRGBDirect( (**hPixMap).pmTable );
+    } // else
+
+    return  hPixMapCTabCopy;
+} // CopyPixMapCTabHandle
+
+// ------------------------------------------------------------------
+
+static PixMapHandle CopyPixMap ( PixMapHandle  hPixMap )
+{
+    PixMapHandle  hPixMapCopy  = NULL;
+    GWorldFlags   nPixMapFlags = noErr;
+
+    nPixMapFlags = GetPixelsState( hPixMap );
+
+    if ( nPixMapFlags == noErr )
+    {
+        if ( LockPixels( hPixMap ) )
+        {
+            hPixMapCopy = NewPixMap();
+
+            if ( ( hPixMapCopy != NULL ) && ( *hPixMapCopy != NULL ) )
+            {
+                const Rect  aPixMapBoundsRect = (**hPixMap).bounds;
+                const long  nPixMapBitDepth   = (**hPixMap).pixelSize;
+                const long  nPixMapWidth      = aPixMapBoundsRect.right - aPixMapBoundsRect.left;
+                const long  nPixMapHeight     = aPixMapBoundsRect.bottom - aPixMapBoundsRect.top;
+                const long  nPixMapRowOffset  = GetNewPixMapOffset( nPixMapBitDepth, nPixMapWidth );
+                const long  nPixMapImageSize  = GetNewPixMapImageSize( nPixMapHeight, nPixMapRowOffset );
+                Ptr         pPixMapDataCopy   = NewPtrClear( nPixMapImageSize );
+
+                if ( pPixMapDataCopy != NULL )
+                {
+                    GWorldFlags  nPixMapCopyFlags = noErr;
+
+                    nPixMapCopyFlags = GetPixelsState( hPixMapCopy );
+
+                    if ( nPixMapCopyFlags == noErr )
+                    {
+                        if ( LockPixels( hPixMapCopy ) )
+                        {
+                            const Ptr pPixMapData = (**hPixMap).baseAddr;
+
+                            // Copy the data from the original port
+
+                            BlockMoveData( pPixMapData, pPixMapDataCopy, nPixMapImageSize );
+
+                            (**hPixMapCopy).rowBytes    = (**hPixMap).rowBytes;     // Offset to next line
+                            (**hPixMapCopy).bounds      = (**hPixMap).bounds;       // Bounding bitmap rectangle
+                            (**hPixMapCopy).pmVersion   = (**hPixMap).pmVersion;    // PixMap version number
+                            (**hPixMapCopy).packType    = (**hPixMap).packType;     // Defines packing format
+                            (**hPixMapCopy).packSize    = (**hPixMap).packSize;     // Length of pixel data
+                            (**hPixMapCopy).hRes        = (**hPixMap).hRes;         // Horizontal resolution (ppi)
+                            (**hPixMapCopy).vRes        = (**hPixMap).vRes;         // Vertical resolution (ppi)
+                            (**hPixMapCopy).pixelType   = (**hPixMap).pixelType;    // Defines pixel type
+                            (**hPixMapCopy).pixelSize   = (**hPixMap).pixelSize;    // Number of bits in a pixel
+                            (**hPixMapCopy).cmpCount    = (**hPixMap).cmpCount;     // Number of components in a pixel
+                            (**hPixMapCopy).cmpSize     = (**hPixMap).cmpSize;      // Number of bits per component
+                            (**hPixMapCopy).pixelFormat = (**hPixMap).pixelFormat;  // Four character code representation
+                            (**hPixMapCopy).pmExt       = (**hPixMap).pmExt;        // Handle to PixMap extension
+
+                            // Copy the color table from the original port
+
+                            (**hPixMapCopy).pmTable = CopyPixMapCTabHandle( hPixMap );
+
+                            SetPixelsState( hPixMapCopy, nPixMapCopyFlags );
+                        } // if
+                        else
+                        {
+                            DisposePtr( pPixMapDataCopy );
+                        } // else
+                    } // if
+                    else
+                    {
+                        DisposePtr( pPixMapDataCopy );
+                    } // else
+                } // if
+                else
+                {
+                    DisposePixMap( hPixMapCopy );
+
+                    hPixMapCopy = NULL;
+                } // else
+            } // if
+
+            SetPixelsState( hPixMap, nPixMapFlags );
+        } // if
+    } // if
+
+    return hPixMapCopy;
+} // CopyPixMap
+
+// ==================================================================
+
+// ==================================================================
+
 static PixMapHandle MallocPixMap ( const Size           &rPixMapSize,
                                    const USHORT          nPixMapBits,
                                    const BitmapPalette  &rBitmapPalette,
                                    const SalGraphics    *rSalGraphics
                                  )
 {
-    PixMapHandle hNewPixMap = GetPortPixMap( rSalGraphics->maGraphicsData.mpCGrafPort );
+    PixMapHandle hNewPixMap = GetGWorldPixMap( rSalGraphics->maGraphicsData.mpGWorld );
 
     if ( hNewPixMap == NULL )
     {
-        hNewPixMap = GetNewPixMap( rPixMapSize,
-                                   nPixMapBits,
-                                   rBitmapPalette,
-                                   rSalGraphics
-                                 );
+        GDHandle hGDevice = GetGDevice( );
+
+        if ( ( hGDevice != NULL ) && ( *hGDevice != NULL ) )
+        {
+            SInt8  nGDeviceFlags = noErr;
+
+            nGDeviceFlags = HGetState( (Handle)hGDevice );
+
+            if ( nGDeviceFlags == noErr )
+            {
+                PixMapHandle hPixMap = NULL;
+
+                HLock( (Handle)hGDevice );
+
+                    hPixMap = (**hGDevice).gdPMap;
+
+                    if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
+                    {
+                        hNewPixMap = CopyPixMap( hPixMap );
+                    } // if
+                    else
+                    {
+                        hNewPixMap = GetNewPixMap( rPixMapSize,
+                                                   nPixMapBits,
+                                                   rBitmapPalette,
+                                                   rSalGraphics
+                                                 );
+                    } // else
+
+                HSetState( (Handle)hGDevice, nGDeviceFlags );
+            } //if
+            else
+            {
+                hNewPixMap = GetNewPixMap( rPixMapSize,
+                                           nPixMapBits,
+                                           rBitmapPalette,
+                                           rSalGraphics
+                                         );
+            } // else
+        } // if
+        else
+        {
+            hNewPixMap = GetNewPixMap( rPixMapSize,
+                                       nPixMapBits,
+                                       rBitmapPalette,
+                                       rSalGraphics
+                                     );
+        } // else
     } // else
 
     return hNewPixMap;
