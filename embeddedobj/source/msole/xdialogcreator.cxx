@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdialogcreator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:03:38 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "platform.h"
 #include <confighelper.hxx>
 #include "xdialogcreator.hxx"
+#include "oleembobj.hxx"
 
 
 #ifdef WNT
@@ -166,15 +167,15 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
 uno::Sequence< ::rtl::OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.MSOLEDialogObjectCreator");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.MSOLEDialogObjectCreator");
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.MSOLEObjectSystemCreator");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MSOLEDialogObjectCreator::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.MSOLEDialogObjectCreator");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
 }
 
 //-------------------------------------------------------------------------
@@ -338,6 +339,59 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     else
         throw ucb::CommandAbortedException();
 
+#else
+    throw lang::NoSupportException(); // TODO:
+#endif
+
+    OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!\n" );
+    if ( !aObjectInfo.Object.is() )
+        throw uno::RuntimeException();
+
+    return aObjectInfo;
+}
+
+//-------------------------------------------------------------------------
+embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitFromClipboard(
+                const uno::Reference< embed::XStorage >& xStorage,
+                const ::rtl::OUString& sEntryName,
+                const uno::Sequence< beans::PropertyValue >& aObjectArgs )
+        throw ( lang::IllegalArgumentException,
+                io::IOException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    embed::InsertedObjectInfo aObjectInfo;
+
+#ifdef WNT
+
+    if ( !xStorage.is() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            1 );
+
+    if ( !sEntryName.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            2 );
+
+    uno::Reference< embed::XEmbeddedObject > xResult(
+                    static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory ) ),
+                    uno::UNO_QUERY );
+
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
+
+    if ( !xPersist.is() )
+        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
+
+    xPersist->setPersistentEntry( xStorage,
+                                    sEntryName,
+                                    embed::EntryInitModes::DEFAULT_INIT,
+                                    uno::Sequence< beans::PropertyValue >(),
+                                    aObjectArgs );
+
+    aObjectInfo.Object = xResult;
+
+    // TODO/LATER: in case of iconifie object the icon should be stored in aObjectInfo
 #else
     throw lang::NoSupportException(); // TODO:
 #endif
