@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,10 @@ class SfxImageManager
     void            SetSymbolSet_Impl( sal_Int16 );
     void            SetOutStyle_Impl( sal_Int16 );
     void            ExchangeItemImage_Impl( USHORT nId, const Image& rImage );
+
     DECL_LINK(      OptionsChanged_Impl, void* );
     DECL_LINK(      ConfigChanged_Impl, void* );
+    DECL_LINK(      SettingsChanged_Impl, void* );
 
 public:
     static BOOL         Import( SvStream& rInStream, SotStorage& rOutStorage );
@@ -100,6 +102,7 @@ public:
     static Image        GetGlobalImage( USHORT nId, BOOL bBig );
     static Image        GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast );
     static ImageList*   GetGlobalDefaultImageList( BOOL bBig, BOOL bHiContrast );
+    static sal_Int16    GetCurrentSymbolSet();
 
                     // each document may have its own imagemanager, but all documents without an own
                     // image configuration share the same instance
