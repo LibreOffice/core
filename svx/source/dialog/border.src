@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:37:45 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 08:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
  // RID_SVXPAGE_BORDER ---------------------------------------------------
 TabPage RID_SVXPAGE_BORDER
 {
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Helpid = HID_BORDER ;
     Hide = TRUE ;
     Text = "Umrandung" ;
@@ -84,348 +85,36 @@ TabPage RID_SVXPAGE_BORDER
     Text [ dutch ] = "Omranding" ;
     Text [ spanish ] = "Borde" ;
     Text [ english_us ] = "Borders" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text[ chinese_simplified ] = "±ﬂøÚ";
+    Text[ russian ] = "Œ·‡ÏÎÂÌËÂ";
+    Text[ polish ] = "Obramowanie";
+    Text[ japanese ] = "ògê¸";
+    Text[ chinese_traditional ] = "√‰Æÿ";
+    Text[ arabic ] = "«·ÕœÊœ";
+    Text[ greek ] = "–ÂÒﬂ„Ò·ÏÏ·";
+    Text[ korean ] = "≈◊µŒ∏Æ";
+    Text[ turkish ] = "Kenarl˝k";
+    Text[ language_user1 ] = " ";
+
     Control WIN_PRESETS
     {
         HelpId = HID_BORDER_CTL_PRESETS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 17 , 12 ) ;
+        Pos = MAP_APPFONT ( 7 , 14 ) ;
         Size = MAP_APPFONT ( 63 , 15 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_PRESETS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 86 , 30 ) ;
-        Text = "Vorgaben" ;
-        Text [ ENGLISH ] = "Presets" ;
-        Text [ norwegian ] = "Presets" ;
-        Text [ italian ] = "Predefiniti" ;
-        Text [ portuguese_brazilian ] = "Predefine" ;
-        Text [ portuguese ] = "PredefiniÁıes" ;
-        Text [ finnish ] = "M‰‰ritykset" ;
-        Text [ danish ] = "Forudindstillinger" ;
-        Text [ french ] = "Valeurs prÈdÈfinies" ;
-        Text [ swedish ] = "Fˆrinst‰llningar" ;
-        Text [ dutch ] = "Standaard" ;
-        Text [ spanish ] = "Predeterminados" ;
-        Text [ english_us ] = "Presets" ;
-        Text[ chinese_simplified ] = "‘§÷√";
-        Text[ russian ] = "«‡‰‡ÌÌ˚Â ÛÒÚ‡ÌÓ‚ÍË";
-        Text[ polish ] = "Ustawienia domyúlne";
-        Text[ japanese ] = "ÃﬂÿæØƒ";
-        Text[ chinese_traditional ] = "πw∏m";
-        Text[ arabic ] = "≈⁄œ«œ«  «› —«÷Ì…";
-        Text[ greek ] = "–ÒÔÂÈÎÔ„›Ú";
-        Text[ korean ] = "±‚∫ª º≥¡§";
-        Text[ turkish ] = "÷nayarlar";
-        Text[ language_user1 ] = " ";
-    };
     Window WIN_FRAMESEL
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 74 , 55 ) ;
+        Pos = MAP_APPFONT ( 7 , 31 ) ;
+        Size = MAP_APPFONT ( 63 , 55 ) ;
     };
-    PushButton PB_DISTANCE
+    FixedLine FL_BORDER
     {
-        Pos = MAP_APPFONT ( 24 , 112 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Hide = TRUE;
-        Text = "~Abst‰nde" ;
-        Text [ ENGLISH ] = "Distances" ;
-        Text[ english_us ] = "Sp~acing";
-        Text[ portuguese ] = "E~spaÁamento";
-        Text[ russian ] = "»ÌÚÂ‚‡Î˚";
-        Text[ greek ] = "AÔÛÙ‹ÛÂÈÚ";
-        Text[ dutch ] = "~Afstanden";
-        Text[ french ] = "…~carts";
-        Text[ spanish ] = "E~spacios";
-        Text[ italian ] = "Dis~tanze";
-        Text[ danish ] = "Afstand";
-        Text[ swedish ] = "AvstÂnd";
-        Text[ polish ] = "~OdstÍpy";
-        Text[ portuguese_brazilian ] = "Distances";
-        Text[ japanese ] = "ó]îí(~A)";
-        Text[ korean ] = "∞£∞›(~A)";
-        Text[ chinese_simplified ] = "º‰∏Ù";
-        Text[ chinese_traditional ] = "∂°πj";
-        Text[ arabic ] = "«· »«⁄œ« ";
-        Text[ turkish ] = "~Aral˝klar";
-        Text[ language_user1 ] = " ";
-    };
-    ModalDialog DLG_DISTANCE
-    {
-        Helpid = HID_BORDER_DISTANCE_DLG;
-        OutputSize = TRUE ;
-        SvLook = TRUE ;
-        Size = MAP_APPFONT ( 225 , 96 ) ;
-        Text = "Abst‰nde" ;
-        Text [ ENGLISH ] = "Distances" ;
-        Moveable = TRUE ;
-        FixedText FT_LEFT
-        {
-            Pos = MAP_APPFONT ( 12 , 15 ) ;
-            Size = MAP_APPFONT ( 38 , 10 ) ;
-            Text = "~Links" ;
-            Text [ ENGLISH ] = "Left" ;
-            Text[ english_us ] = "~Left";
-            Text[ portuguese ] = "Esque~rda";
-            Text[ russian ] = "—ÎÂ‚‡";
-            Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
-            Text[ dutch ] = "~Links";
-            Text[ french ] = "¿ ~gauche";
-            Text[ spanish ] = "~Izquierda";
-            Text[ italian ] = "~Sinistra";
-            Text[ danish ] = "Venstre";
-            Text[ swedish ] = "~V‰nster";
-            Text[ polish ] = "Z lewej";
-            Text[ portuguese_brazilian ] = "Left";
-            Text[ japanese ] = "ç∂(~L)";
-            Text[ korean ] = "øﬁ¬ (~L)";
-            Text[ chinese_simplified ] = "◊Û(~L)";
-            Text[ chinese_traditional ] = "•™(~L)";
-            Text[ arabic ] = "Ì”«—";
-            Text[ turkish ] = "~Sol";
-            Text[ language_user1 ] = " ";
-        };
-        MetricField MF_LEFT
-        {
-            Border = TRUE ;
-            Pos = MAP_APPFONT ( 53 , 15 ) ;
-            Size = MAP_APPFONT ( 40 , 12 ) ;
-            Spin = TRUE ;
-            Repeat = TRUE ;
-            SpinSize = 10 ;
-            First = 100 ;
-            Last = 5000 ;
-            Maximum = 5000 ;
-            Minimum = 0 ;
-            DecimalDigits = 2 ;
-            Unit = FUNIT_MM ;
-        };
-        FixedText FT_RIGHT
-        {
-            Pos = MAP_APPFONT ( 12 , 30 ) ;
-            Size = MAP_APPFONT ( 38 , 10 ) ;
-            Text = "R~echts" ;
-            Text [ ENGLISH ] = "Right" ;
-            Text[ english_us ] = "Right";
-            Text[ portuguese ] = "~Direita";
-            Text[ russian ] = "—Ô‡‚‡";
-            Text[ greek ] = "ƒÂÓÈ‹";
-            Text[ dutch ] = "~Rechts";
-            Text[ french ] = "¿ ~droite";
-            Text[ spanish ] = "~Derecha";
-            Text[ italian ] = "~Destra";
-            Text[ danish ] = "H¯jre";
-            Text[ swedish ] = "Hˆg~er";
-            Text[ polish ] = "Z prawej";
-            Text[ portuguese_brazilian ] = "Right";
-            Text[ japanese ] = "âE(~R)";
-            Text[ korean ] = "ø¿∏•¬ ";
-            Text[ chinese_simplified ] = "”“";
-            Text[ chinese_traditional ] = "•k";
-            Text[ arabic ] = "Ì„Ì‰";
-            Text[ turkish ] = "S~a";
-            Text[ language_user1 ] = " ";
-        };
-        MetricField MF_RIGHT
-        {
-            Border = TRUE ;
-            Pos = MAP_APPFONT ( 53 , 30 ) ;
-            Size = MAP_APPFONT ( 40 , 12 ) ;
-            Spin = TRUE ;
-            Repeat = TRUE ;
-            SpinSize = 10 ;
-            First = 100 ;
-            Last = 5000 ;
-            Maximum = 5000 ;
-            Minimum = 0 ;
-            DecimalDigits = 2 ;
-            Unit = FUNIT_MM ;
-        };
-        FixedText FT_TOP
-        {
-            Pos = MAP_APPFONT ( 12 , 45 ) ;
-            Size = MAP_APPFONT ( 38 , 10 ) ;
-            Text = "~Oben" ;
-            Text [ ENGLISH ] = "Top" ;
-            Text[ english_us ] = "~Top";
-            Text[ portuguese ] = "Em ~cima";
-            Text[ russian ] = "—‚ÂıÛ";
-            Text[ greek ] = "–‹Ì˘";
-            Text[ dutch ] = "~Boven";
-            Text[ french ] = "En ~haut";
-            Text[ spanish ] = "~Arriba";
-            Text[ italian ] = "~Alto";
-            Text[ danish ] = "Top";
-            Text[ swedish ] = "~Uppe";
-            Text[ polish ] = "W gÛrze";
-            Text[ portuguese_brazilian ] = "Top";
-            Text[ japanese ] = "è„(~T)";
-            Text[ korean ] = "¿ß(~T)";
-            Text[ chinese_simplified ] = "…œ(~T)";
-            Text[ chinese_traditional ] = "§W(~T)";
-            Text[ arabic ] = "√⁄·Ï";
-            Text[ turkish ] = "~‹st";
-            Text[ language_user1 ] = " ";
-        };
-        MetricField MF_TOP
-        {
-            Border = TRUE ;
-            Pos = MAP_APPFONT ( 53 , 45 ) ;
-            Size = MAP_APPFONT ( 40 , 12 ) ;
-            Spin = TRUE ;
-            Repeat = TRUE ;
-            SpinSize = 10 ;
-            First = 100 ;
-            Last = 5000 ;
-            Maximum = 5000 ;
-            Minimum = 0 ;
-            DecimalDigits = 2 ;
-            Unit = FUNIT_MM ;
-        };
-        FixedText FT_BOTTOM
-        {
-            Pos = MAP_APPFONT ( 12 , 60 ) ;
-            Size = MAP_APPFONT ( 38 , 10 ) ;
-            Text = "~Unten" ;
-            Text [ ENGLISH ] = "Bottom" ;
-            Text[ english_us ] = "~Bottom";
-            Text[ portuguese ] = "Em ~baixo";
-            Text[ russian ] = "—ÌËÁÛ";
-            Text[ greek ] = " ‹Ù˘";
-            Text[ dutch ] = "Be~neden";
-            Text[ french ] = "En ~bas";
-            Text[ spanish ] = "~Abajo";
-            Text[ italian ] = "~Basso";
-            Text[ danish ] = "Bund";
-            Text[ swedish ] = "~Nere";
-            Text[ polish ] = "W dole";
-            Text[ portuguese_brazilian ] = "Bottom";
-            Text[ japanese ] = "â∫(~B)";
-            Text[ korean ] = "æ∆∑°(~B)";
-            Text[ chinese_simplified ] = "œ¬(~B)";
-            Text[ chinese_traditional ] = "§U(~B)";
-            Text[ arabic ] = "√”›·";
-            Text[ turkish ] = "Al~t";
-        };
-        MetricField MF_BOTTOM
-        {
-            Border = TRUE ;
-            Pos = MAP_APPFONT ( 53 , 60 ) ;
-            Size = MAP_APPFONT ( 40 , 12 ) ;
-            Spin = TRUE ;
-            Repeat = TRUE ;
-            SpinSize = 10 ;
-            First = 100 ;
-            Last = 5000 ;
-            Maximum = 5000 ;
-            Minimum = 0 ;
-            DecimalDigits = 2 ;
-            Unit = FUNIT_MM ;
-        };
-        CheckBox CB_SYNC
-        {
-            Pos = MAP_APPFONT ( 12 , 75 ) ;
-            Size = MAP_APPFONT ( 120 , 12 ) ;
-            Text = "S~ynchronisieren" ;
-            Text [ ENGLISH ] = "Synchronize" ;
-            Text[ english_us ] = "Synchronize";
-            Text[ portuguese ] = "~Sincronizar";
-            Text[ russian ] = "—ËÌıÓÌËÁËÓ‚‡Ú¸";
-            Text[ greek ] = "”ı„˜ÒÔÌÈÛÏ¸Ú";
-            Text[ dutch ] = "S~ynchroniseren";
-            Text[ french ] = "~Synchroniser";
-            Text[ spanish ] = "~Sincronizar";
-            Text[ italian ] = "~Sicronizza";
-            Text[ danish ] = "Synkroniser";
-            Text[ swedish ] = "Synkronisera";
-            Text[ polish ] = "Synchronizuj";
-            Text[ portuguese_brazilian ] = "Synchronize";
-            Text[ japanese ] = "º›∏€";
-            Text[ korean ] = "µø±‚»≠";
-            Text[ chinese_simplified ] = "Õ¨≤ΩªØ";
-            Text[ chinese_traditional ] = "¶P®B§∆";
-            Text[ arabic ] = " “«„‰";
-            Text[ turkish ] = "~E˛itle";
-            Text[ language_user1 ] = " ";
-        };
-        Window WIN_EXAMPLE
-        {
-            Pos = MAP_APPFONT ( 106 , 15 ) ;
-            Size = MAP_APPFONT ( 57 , 57 ) ;
-            Border = TRUE;
-        };
-        GroupBox GB_DISTANCE
-        {
-            Pos = MAP_APPFONT ( 6 , 3 ) ;
-            Size = MAP_APPFONT ( 160 , 90 ) ;
-            Text = "Einstellungen" ;
-            Text [ ENGLISH ] = "Settings" ;
-            Text[ english_us ] = "Settings";
-            Text[ portuguese ] = "PredefiniÁıes";
-            Text[ russian ] = "Õ‡ÒÚÓÈÍË";
-            Text[ greek ] = "—ıËÏﬂÛÂÈÚ";
-            Text[ dutch ] = "Instellingen";
-            Text[ french ] = "ParamËtres";
-            Text[ spanish ] = "ConfiguraciÛn";
-            Text[ italian ] = "Impostazioni";
-            Text[ danish ] = "Indstillinger";
-            Text[ swedish ] = "Inst‰llningar";
-            Text[ polish ] = "Ustawienia";
-            Text[ portuguese_brazilian ] = "Settings";
-            Text[ japanese ] = "ê›íË";
-            Text[ korean ] = "º≥¡§";
-            Text[ chinese_simplified ] = "…Ë∂®";
-            Text[ chinese_traditional ] = "≥]©w";
-            Text[ arabic ] = "«·≈⁄œ«œ« ";
-            Text[ turkish ] = "Ayarlar";
-            Text[ language_user1 ] = " ";
-        };
-        OKButton PB_OK
-        {
-            Pos = MAP_APPFONT ( 172 , 6 ) ;
-            Size = MAP_APPFONT ( 50 , 14 ) ;
-            DefButton = TRUE;
-        };
-        CancelButton PB_CANCEL
-        {
-            Pos = MAP_APPFONT ( 172 , 23 ) ;
-            Size = MAP_APPFONT ( 50 , 14 ) ;
-        };
-        HelpButton PB_HELP
-        {
-            Pos = MAP_APPFONT ( 172 , 43 ) ;
-            Size = MAP_APPFONT ( 50 , 14 ) ;
-        };
-
-        Text[ english_us ] = "Spacing";
-        Text[ portuguese ] = "EspaÁamento";
-        Text[ russian ] = "»ÌÚÂ‚‡Î˚";
-        Text[ greek ] = "AÔÛÙ‹ÛÂÈÚ";
-        Text[ dutch ] = "Afstanden";
-        Text[ french ] = "…carts";
-        Text[ spanish ] = "Espacios";
-        Text[ italian ] = "Distanze";
-        Text[ danish ] = "Afstand";
-        Text[ swedish ] = "AvstÂnd";
-        Text[ polish ] = "OdstÍpy";
-        Text[ portuguese_brazilian ] = "Distances";
-        Text[ japanese ] = "ó]îí";
-        Text[ korean ] = "∞£∞›";
-        Text[ chinese_simplified ] = "º‰∏Ù";
-        Text[ chinese_traditional ] = "∂°πj";
-        Text[ arabic ] = "«· »«⁄œ« ";
-        Text[ turkish ] = "Aral˝klar";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GB_BORDER
-    {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 86 , 95 ) ;
-        Text = "Rahmen" ;
-        Text [ ENGLISH ] = "Border" ;
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Linienanordnung" ;
+        Text [ ENGLISH ] = "Line positions" ;
         Text [ norwegian ] = "Border" ;
         Text [ italian ] = "Cornice" ;
         Text [ portuguese_brazilian ] = "Borda" ;
@@ -448,74 +137,24 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "«erÁeve";
         Text[ language_user1 ] = " ";
     };
-    FixedText FT_LINESTYLE
+    ListBox LB_LINESTYLE
     {
-        Pos = MAP_APPFONT ( 104 , 14 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "~Stil" ;
-        Text [ ENGLISH ] = "~Style" ;
-        Text [ norwegian ] = "~Style" ;
-        Text [ italian ] = "Stile" ;
-        Text [ portuguese_brazilian ] = "~Estilo" ;
-        Text [ portuguese ] = "~Estilo" ;
-        Text [ finnish ] = "~Tyyli" ;
-        Text [ danish ] = "Type" ;
-        Text [ french ] = "~Style" ;
-        Text [ swedish ] = "~Stil" ;
-        Text [ dutch ] = "~Type" ;
-        Text [ spanish ] = "~Estilo" ;
-        Text [ english_us ] = "~Style" ;
-        Text[ chinese_simplified ] = " Ω—˘(~S)";
-        Text[ russian ] = "—ÚËÎ¸";
-        Text[ polish ] = "Styl";
-        Text[ japanese ] = "Ω¿≤Ÿ(~S)";
-        Text[ chinese_traditional ] = "ºÀ¶°(~S)";
-        Text[ arabic ] = "«·‰„ÿ";
-        Text[ greek ] = "”ÙıÎ";
-        Text[ korean ] = "«¸Ωƒ(~S)";
-        Text[ turkish ] = "~BiÁim";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FT_LINECOLOR
-    {
-        Pos = MAP_APPFONT ( 104 , 100 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "~Farbe" ;
-        Text [ ENGLISH ] = "~Color" ;
-        Text [ norwegian ] = "~Color" ;
-        Text [ italian ] = "~Colore" ;
-        Text [ portuguese_brazilian ] = "~Cor" ;
-        Text [ portuguese ] = "~Cor" ;
-        Text [ finnish ] = "~V‰ri" ;
-        Text [ danish ] = "Farve" ;
-        Text [ french ] = "~Couleur" ;
-        Text [ swedish ] = "~F‰rg" ;
-        Text [ dutch ] = "~Kleur" ;
-        Text [ spanish ] = "~Color" ;
-        Text [ english_us ] = "~Color" ;
-        Text[ chinese_simplified ] = "—’…´(~C)";
-        Text[ russian ] = "÷‚ÂÚ";
-        Text[ polish ] = "Kolor";
-        Text[ japanese ] = "êF(~C)";
-        Text[ chinese_traditional ] = "√C¶‚(~C)";
-        Text[ arabic ] = "«··Ê‰";
-        Text[ greek ] = "◊Ò˛Ï·";
-        Text[ korean ] = "ªˆ(~C)";
-        Text[ turkish ] = "~Renk";
-        Text[ language_user1 ] = " ";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 62 , 70 ) ;
     };
     ListBox LB_LINECOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 104 , 112 ) ;
+        Pos = MAP_APPFONT ( 88 , 88 ) ;
         Size = MAP_APPFONT ( 62 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
-    GroupBox GB_LINE
+    FixedLine FL_LINE
     {
-        Pos = MAP_APPFONT ( 98 , 3 ) ;
-        Size = MAP_APPFONT ( 75 , 126 ) ;
+        Pos = MAP_APPFONT ( 84 , 3 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Linie" ;
         Text [ ENGLISH ] = "Lines" ;
         Text [ norwegian ] = "Linjer" ;
@@ -540,10 +179,227 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "«izgi";
         Text[ language_user1 ] = " ";
     };
+
+    FixedText FT_LEFT
+    {
+        Pos = MAP_APPFONT ( 168 , 17 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "~Links" ;
+        Text [ ENGLISH ] = "Left" ;
+        Text[ english_us ] = "~Left";
+        Text[ portuguese ] = "Esque~rda";
+        Text[ russian ] = "—ÎÂ‚‡";
+        Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
+        Text[ dutch ] = "~Links";
+        Text[ french ] = "¿ ~gauche";
+        Text[ spanish ] = "~Izquierda";
+        Text[ italian ] = "~Sinistra";
+        Text[ danish ] = "Venstre";
+        Text[ swedish ] = "~V‰nster";
+        Text[ polish ] = "Z lewej";
+        Text[ portuguese_brazilian ] = "Left";
+        Text[ japanese ] = "ç∂(~L)";
+        Text[ korean ] = "øﬁ¬ (~L)";
+        Text[ chinese_simplified ] = "◊Û(~L)";
+        Text[ chinese_traditional ] = "•™(~L)";
+        Text[ arabic ] = "Ì”«—";
+        Text[ turkish ] = "~Sol";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MF_LEFT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 168 , 33 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "R~echts" ;
+        Text [ ENGLISH ] = "Right" ;
+        Text[ english_us ] = "Right";
+        Text[ portuguese ] = "~Direita";
+        Text[ russian ] = "—Ô‡‚‡";
+        Text[ greek ] = "ƒÂÓÈ‹";
+        Text[ dutch ] = "~Rechts";
+        Text[ french ] = "¿ ~droite";
+        Text[ spanish ] = "~Derecha";
+        Text[ italian ] = "~Destra";
+        Text[ danish ] = "H¯jre";
+        Text[ swedish ] = "Hˆg~er";
+        Text[ polish ] = "Z prawej";
+        Text[ portuguese_brazilian ] = "Right";
+        Text[ japanese ] = "âE(~R)";
+        Text[ korean ] = "ø¿∏•¬ ";
+        Text[ chinese_simplified ] = "”“";
+        Text[ chinese_traditional ] = "•k";
+        Text[ arabic ] = "Ì„Ì‰";
+        Text[ turkish ] = "S~a";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MF_RIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_TOP
+    {
+        Pos = MAP_APPFONT ( 168 , 49 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "~Oben" ;
+        Text [ ENGLISH ] = "Top" ;
+        Text[ english_us ] = "~Top";
+        Text[ portuguese ] = "Em ~cima";
+        Text[ russian ] = "—‚ÂıÛ";
+        Text[ greek ] = "–‹Ì˘";
+        Text[ dutch ] = "~Boven";
+        Text[ french ] = "En ~haut";
+        Text[ spanish ] = "~Arriba";
+        Text[ italian ] = "~Alto";
+        Text[ danish ] = "Top";
+        Text[ swedish ] = "~Uppe";
+        Text[ polish ] = "W gÛrze";
+        Text[ portuguese_brazilian ] = "Top";
+        Text[ japanese ] = "è„(~T)";
+        Text[ korean ] = "¿ß(~T)";
+        Text[ chinese_simplified ] = "…œ(~T)";
+        Text[ chinese_traditional ] = "§W(~T)";
+        Text[ arabic ] = "√⁄·Ï";
+        Text[ turkish ] = "~‹st";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MF_TOP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_BOTTOM
+    {
+        Pos = MAP_APPFONT ( 168 , 65 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "~Unten" ;
+        Text [ ENGLISH ] = "Bottom" ;
+        Text[ english_us ] = "~Bottom";
+        Text[ portuguese ] = "Em ~baixo";
+        Text[ russian ] = "—ÌËÁÛ";
+        Text[ greek ] = " ‹Ù˘";
+        Text[ dutch ] = "Be~neden";
+        Text[ french ] = "En ~bas";
+        Text[ spanish ] = "~Abajo";
+        Text[ italian ] = "~Basso";
+        Text[ danish ] = "Bund";
+        Text[ swedish ] = "~Nere";
+        Text[ polish ] = "W dole";
+        Text[ portuguese_brazilian ] = "Bottom";
+        Text[ japanese ] = "â∫(~B)";
+        Text[ korean ] = "æ∆∑°(~B)";
+        Text[ chinese_simplified ] = "œ¬(~B)";
+        Text[ chinese_traditional ] = "§U(~B)";
+        Text[ arabic ] = "√”›·";
+        Text[ turkish ] = "Al~t";
+    };
+    MetricField MF_BOTTOM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 62 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    CheckBox CB_SYNC
+    {
+        Pos = MAP_APPFONT ( 168 , 78 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Text = "S~ynchronisieren" ;
+        Text [ ENGLISH ] = "Synchronize" ;
+        Text[ english_us ] = "Synchronize";
+        Text[ portuguese ] = "~Sincronizar";
+        Text[ russian ] = "—ËÌıÓÌËÁËÓ‚‡Ú¸";
+        Text[ greek ] = "”ı„˜ÒÔÌÈÛÏ¸Ú";
+        Text[ dutch ] = "S~ynchroniseren";
+        Text[ french ] = "~Synchroniser";
+        Text[ spanish ] = "~Sincronizar";
+        Text[ italian ] = "~Sicronizza";
+        Text[ danish ] = "Synkroniser";
+        Text[ swedish ] = "Synkronisera";
+        Text[ polish ] = "Synchronizuj";
+        Text[ portuguese_brazilian ] = "Synchronize";
+        Text[ japanese ] = "º›∏€";
+        Text[ korean ] = "µø±‚»≠";
+        Text[ chinese_simplified ] = "Õ¨≤ΩªØ";
+        Text[ chinese_traditional ] = "¶P®B§∆";
+        Text[ arabic ] = " “«„‰";
+        Text[ turkish ] = "~E˛itle";
+        Text[ language_user1 ] = " ";
+    };
+    FixedLine FL_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 164 , 3 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
+        Text = "Abstand zum Inhalt" ;
+        Text [ ENGLISH ] = "Distance to Content" ;
+        Text[ english_us ] = "Settings";
+        Text[ portuguese ] = "PredefiniÁıes";
+        Text[ russian ] = "Õ‡ÒÚÓÈÍË";
+        Text[ greek ] = "—ıËÏﬂÛÂÈÚ";
+        Text[ dutch ] = "Instellingen";
+        Text[ french ] = "ParamËtres";
+        Text[ spanish ] = "ConfiguraciÛn";
+        Text[ italian ] = "Impostazioni";
+        Text[ danish ] = "Indstillinger";
+        Text[ swedish ] = "Inst‰llningar";
+        Text[ polish ] = "Ustawienia";
+        Text[ portuguese_brazilian ] = "Settings";
+        Text[ japanese ] = "ê›íË";
+        Text[ korean ] = "º≥¡§";
+        Text[ chinese_simplified ] = "…Ë∂®";
+        Text[ chinese_traditional ] = "≥]©w";
+        Text[ arabic ] = "«·≈⁄œ«œ« ";
+        Text[ turkish ] = "Ayarlar";
+        Text[ language_user1 ] = " ";
+    };
+
     FixedText FT_SHADOWPOS
     {
-        Pos = MAP_APPFONT ( 185 , 14 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 117 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Position" ;
         Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
@@ -572,52 +428,14 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpId = HID_BORDER_CTL_SHADOWS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 25 ) ;
+        Pos = MAP_APPFONT ( 57 , 116 ) ;
         Size = MAP_APPFONT ( 65 , 15 ) ;
         TabStop = TRUE ;
     };
-    FixedText FT_SHADOWCOLOR
-    {
-        Pos = MAP_APPFONT ( 185 , 72 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "Fa~rbe" ;
-        Text [ ENGLISH ] = "C~olor" ;
-        Text [ norwegian ] = "C~olor" ;
-        Text [ italian ] = "Colore" ;
-        Text [ portuguese_brazilian ] = "C~or" ;
-        Text [ portuguese ] = "C~or" ;
-        Text [ finnish ] = "V‰~ri" ;
-        Text [ danish ] = "Farve" ;
-        Text [ french ] = "~Couleur" ;
-        Text [ swedish ] = "F‰~rg" ;
-        Text [ dutch ] = "K~leur" ;
-        Text [ spanish ] = "C~olor" ;
-        Text [ english_us ] = "C~olor" ;
-        Text[ chinese_simplified ] = "—’…´(~O)";
-        Text[ russian ] = "÷‚ÂÚ";
-        Text[ polish ] = "Kolor";
-        Text[ japanese ] = "êF(~O)";
-        Text[ chinese_traditional ] = "√C¶‚(~O)";
-        Text[ arabic ] = "«··Ê‰";
-        Text[ greek ] = "◊Ò˛Ï·";
-        Text[ korean ] = "ªˆªÛ(~O)";
-        Text[ turkish ] = "Re~nk";
-        Text[ language_user1 ] = " ";
-    };
-    ListBox LB_SHADOWCOLOR
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 83 ) ;
-        Size = MAP_APPFONT ( 62 , 68 ) ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-    };
     FixedText FT_SHADOWSIZE
     {
-        Pos = MAP_APPFONT ( 185 , 43 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Grˆﬂe : ~Gr˜òe */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Grˆﬂe : ~Gr˜òe */
+        Pos = MAP_APPFONT ( 7 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Grˆﬂe" ;
         Text [ ENGLISH ] = "Si~ze" ;
         Text [ norwegian ] = "Si~ze" ;
@@ -645,7 +463,7 @@ TabPage RID_SVXPAGE_BORDER
     MetricField ED_SHADOWSIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 54 ) ;
+        Pos = MAP_APPFONT ( 57 , 130 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -657,10 +475,46 @@ TabPage RID_SVXPAGE_BORDER
         DecimalDigits = 2 ;
         Unit = FUNIT_MM ;
     };
-    GroupBox GB_SHADOW
+    FixedText FT_SHADOWCOLOR
     {
-        Pos = MAP_APPFONT ( 179 , 3 ) ;
-        Size = MAP_APPFONT ( 75 , 126 ) ;
+        Pos = MAP_APPFONT ( 7 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Fa~rbe" ;
+        Text [ ENGLISH ] = "C~olor" ;
+        Text [ norwegian ] = "C~olor" ;
+        Text [ italian ] = "Colore" ;
+        Text [ portuguese_brazilian ] = "C~or" ;
+        Text [ portuguese ] = "C~or" ;
+        Text [ finnish ] = "V‰~ri" ;
+        Text [ danish ] = "Farve" ;
+        Text [ french ] = "~Couleur" ;
+        Text [ swedish ] = "F‰~rg" ;
+        Text [ dutch ] = "K~leur" ;
+        Text [ spanish ] = "C~olor" ;
+        Text [ english_us ] = "C~olor" ;
+        Text[ chinese_simplified ] = "—’…´(~O)";
+        Text[ russian ] = "÷‚ÂÚ";
+        Text[ polish ] = "Kolor";
+        Text[ japanese ] = "êF(~O)";
+        Text[ chinese_traditional ] = "√C¶‚(~O)";
+        Text[ arabic ] = "«··Ê‰";
+        Text[ greek ] = "◊Ò˛Ï·";
+        Text[ korean ] = "ªˆªÛ(~O)";
+        Text[ turkish ] = "Re~nk";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_SHADOWCOLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 146 ) ;
+        Size = MAP_APPFONT ( 62 , 68 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedLine FL_SHADOW
+    {
+        Pos = MAP_APPFONT ( 4 , 103 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Schatten" ;
         Text [ ENGLISH ] = "Shadow" ;
         Text [ norwegian ] = "Shadow" ;
@@ -684,12 +538,6 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "¿Ωøµ";
         Text[ turkish ] = "Gˆlge";
         Text[ language_user1 ] = " ";
-    };
-    ListBox LB_LINESTYLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 104 , 25 ) ;
-        Size = MAP_APPFONT ( 62 , 70 ) ;
     };
     ImageList IL_PRE_BITMAPS
     {
@@ -723,16 +571,6 @@ TabPage RID_SVXPAGE_BORDER
         };
         IdCount = { 5 ; };
     };
-    Text[ chinese_simplified ] = "±ﬂøÚ";
-    Text[ russian ] = "Œ·‡ÏÎÂÌËÂ";
-    Text[ polish ] = "Obramowanie";
-    Text[ japanese ] = "ògê¸";
-    Text[ chinese_traditional ] = "√‰Æÿ";
-    Text[ arabic ] = "«·ÕœÊœ";
-    Text[ greek ] = "–ÂÒﬂ„Ò·ÏÏ·";
-    Text[ korean ] = "≈◊µŒ∏Æ";
-    Text[ turkish ] = "Kenarl˝k";
-    Text[ language_user1 ] = " ";
 };
  // **********************************************************************
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 08:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,15 @@
 // defines ------------------------------------------------------------------
 
 #define WIN_PRESETS             10
-#define GB_PRESETS              20
 
 #define WIN_FRAMESEL            30
 #define FT_XSPACE               31
 #define ED_XSPACE               32
-#define GB_BORDER               33
+#define FL_BORDER               33
 
-#define FT_LINESTYLE            40
 #define LB_LINESTYLE            41
-#define FT_LINECOLOR            42
 #define LB_LINECOLOR            43
-#define GB_LINE                 44
+#define FL_LINE                 44
 
 #define FT_SHADOWPOS            50
 #define WIN_SHADOWS             51
@@ -83,10 +80,9 @@
 #define ED_SHADOWSIZE           58
 #define FT_SHADOWCOLOR          59
 #define LB_SHADOWCOLOR          60
-#define GB_SHADOW               61
-#define PB_DISTANCE             62
-#define DLG_DISTANCE            63
-#define GB_DISTANCE             64
+#define FL_SHADOW               61
+
+#define FL_DISTANCE             64
 #define FT_LEFT                 65
 #define MF_LEFT                 66
 #define FT_RIGHT                67
@@ -95,11 +91,7 @@
 #define MF_TOP                  70
 #define FT_BOTTOM               71
 #define MF_BOTTOM               72
-#define PB_OK                   73
-#define PB_CANCEL               74
-#define PB_HELP                 75
 #define CB_SYNC                 76
-#define WIN_EXAMPLE             77
 
 // ImageListe fuer ValueSets:
 #define IL_PRE_BITMAPS          1

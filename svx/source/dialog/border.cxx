@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-01-15 09:02:05 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 08:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 
 #define _SVX_BORDER_CXX
 
+#ifdef _SVX_BORDER_CXX
+#include "frmsel.hxx"
+#endif
+
 #include "dialogs.hrc"
 #include "svxitems.hrc"
 #include "border.hrc"
@@ -99,239 +103,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-/* -----------------01.06.99 08:23-------------------
- *
- * --------------------------------------------------*/
-
-class BorderDistanceExample_Impl : public Window
-{
-    long        nLeft;
-    long        nRight;
-    long        nTop;
-    long        nBottom;
-    USHORT      nValid; //mit VALID_TOP, ...
-public:
-    BorderDistanceExample_Impl(Window* pParent, const ResId& rResId) :
-        Window(pParent, rResId),
-        nLeft(0),
-        nRight(0),
-        nTop(0),
-        nBottom(0),
-        nValid(VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT)
-        {}
-
-    virtual void        Paint( const Rectangle& rRect );
-
-    void    SetDistances(long nL, long nR, long nT, long nB)
-                {nLeft = nL; nRight = nR; nTop = nT; nBottom = nB;}
-    void    SetValid(USHORT nSet) {nValid = nSet;}
-};
-void BorderDistanceExample_Impl::Paint( const Rectangle& rRect )
-{
-//  Pen aSolidPen(PEN_SOLID);
-    Size aLogSize(PixelToLogic(GetOutputSizePixel()));
-    Point aTL( 0, 0 );
-    Rectangle aRect(aTL, aLogSize);
-
-    SetFillColor( Color( COL_WHITE ) );
-    SetLineColor( Color( COL_BLACK ) );
-    DrawRect(aRect);
-
-    SetFillColor( Color( COL_GRAY ) );
-    SetLineColor( Color( COL_BLACK ) );
-
-    aTL = Point( aLogSize.Width() / 10, aLogSize.Height() / 10 );
-    Rectangle aBorderRect(aTL, Size(aLogSize.Width() * 8 / 10, aLogSize.Height() * 8 /10));
-
-    if(VALID_LEFT&nValid)
-        DrawLine(aBorderRect.TopLeft(), aBorderRect.BottomLeft());
-    if(VALID_RIGHT&nValid)
-        DrawLine(aBorderRect.TopRight(), aBorderRect.BottomRight());
-    if(VALID_TOP&nValid)
-        DrawLine(aBorderRect.TopLeft(), aBorderRect.TopRight());
-    if(VALID_BOTTOM&nValid)
-        DrawLine(aBorderRect.BottomLeft(), aBorderRect.BottomRight());
-
-    Rectangle aContentRect(aBorderRect);
-
-    long nL = nLeft / 10;
-    long nR = nRight/ 10;
-    long nT = nTop / 10;
-    long nB = nBottom / 10;
-    if((nL + nR) > aContentRect.GetWidth())
-    {
-        nL = aContentRect.GetWidth() * 100 / (nL + nR) * nL / 100;
-        nR = aContentRect.GetWidth() - nL;
-    }
-    aContentRect.Left() += nL;
-    aContentRect.Right()-= nR;
-    if((nT + nB) > aContentRect.GetHeight())
-    {
-        nT = aContentRect.GetHeight() * 100 / (nT + nB) * nT / 100;
-        nB = aContentRect.GetHeight() - nT;
-    }
-    aContentRect.Top() += nT;
-    aContentRect.Bottom()-= nB;
-
-    DrawRect(aContentRect);
-}
-
-class SvxDistanceDlg_Impl : public ModalDialog
-{
-    friend class SvxBorderTabPage;
-    GroupBox                    aDistanceGB;
-    FixedText                   aLeftFT;
-    MetricField                 aLeftMF;
-    FixedText                   aRightFT;
-    MetricField                 aRightMF;
-    FixedText                   aTopFT;
-    MetricField                 aTopMF;
-    FixedText                   aBottomFT;
-    MetricField                 aBottomMF;
-    CheckBox                    aSynchronizeCB;
-    BorderDistanceExample_Impl  aExampleWIN;
-
-    OKButton                    aOK;
-    CancelButton                aCancel;
-    HelpButton                  aHelp;
-
-    USHORT                      nValid;
-
-    static BOOL                 bSync;
-    DECL_LINK(ModifyHdl, MetricField*);
-    DECL_LINK(SyncHdl, CheckBox*);
-
-public:
-    SvxDistanceDlg_Impl(Window* pParent, const ResId& rResId);
-    virtual     short Execute();
-
-    void    SetFldUnit(FieldUnit eUnit)
-                {
-                    SetFieldUnit(aLeftMF, eUnit);
-                    SetFieldUnit(aRightMF, eUnit);
-                    SetFieldUnit(aTopMF, eUnit);
-                    SetFieldUnit(aBottomMF, eUnit);
-                    if(eUnit == FUNIT_MM)
-                    {
-                        aLeftMF.SetDecimalDigits(1);
-                        aRightMF.SetDecimalDigits(1);
-                        aTopMF.SetDecimalDigits(1);
-                        aBottomMF.SetDecimalDigits(1);
-                    }
-                }
-    void    UpdateExample();
-    void    SetValid(USHORT nSet)
-        {   nValid = nSet;
-            aExampleWIN.SetValid(nValid);
-            aLeftFT.Enable(0 != (nValid&VALID_LEFT));
-            aRightFT.Enable(0 != (nValid&VALID_RIGHT));
-            aTopFT.Enable(0 != (nValid&VALID_TOP));
-            aBottomFT.Enable(0 != (nValid&VALID_BOTTOM));
-            aLeftMF.Enable(0 != (nValid&VALID_LEFT));
-            aRightMF.Enable(0 != (nValid&VALID_RIGHT));
-            aTopMF.Enable(0 != (nValid&VALID_TOP));
-            aBottomMF.Enable(0 != (nValid&VALID_BOTTOM));
-        }
-
-};
-/* -----------------01.06.99 08:28-------------------
- *
- * --------------------------------------------------*/
-BOOL SvxDistanceDlg_Impl::bSync = TRUE;
-SvxDistanceDlg_Impl::SvxDistanceDlg_Impl(Window* pParent, const ResId& rResId) :
-        ModalDialog(pParent, rResId),
-        aOK(            this, ResId(PB_OK)),
-        aCancel(        this, ResId(PB_CANCEL)),
-        aHelp(          this, ResId(PB_HELP)),
-        aDistanceGB(    this, ResId(GB_DISTANCE)),
-        aLeftFT(        this, ResId(FT_LEFT)),
-        aLeftMF(        this, ResId(MF_LEFT)),
-        aRightFT(       this, ResId(FT_RIGHT)),
-        aRightMF(       this, ResId(MF_RIGHT)),
-        aTopFT(         this, ResId(FT_TOP)),
-        aTopMF(         this, ResId(MF_TOP)),
-        aBottomFT(      this, ResId(FT_BOTTOM)),
-        aBottomMF(      this, ResId(MF_BOTTOM)),
-        aSynchronizeCB( this, ResId(CB_SYNC     )),
-        aExampleWIN(    this, ResId(WIN_EXAMPLE )),
-        nValid(VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT)
-{
-    FreeResource();
-    aSynchronizeCB.Check(bSync);
-    aSynchronizeCB.SetClickHdl(LINK(this, SvxDistanceDlg_Impl, SyncHdl));
-    aLeftMF.SetModifyHdl(LINK(this, SvxDistanceDlg_Impl, ModifyHdl));
-    aRightMF.SetModifyHdl(LINK(this, SvxDistanceDlg_Impl, ModifyHdl));
-    aTopMF.SetModifyHdl(LINK(this, SvxDistanceDlg_Impl, ModifyHdl));
-    aBottomMF.SetModifyHdl(LINK(this, SvxDistanceDlg_Impl, ModifyHdl));
-
-    aHelp           .SetHelpId(HID_BORDER_DISTANCE_DLG_HELP_PB);
-    aLeftMF         .SetHelpId(HID_BORDER_DISTANCE_DLG_LEFT);
-    aRightMF        .SetHelpId(HID_BORDER_DISTANCE_DLG_RIGHT     );
-    aTopMF          .SetHelpId(HID_BORDER_DISTANCE_DLG_TOP        );
-    aBottomMF       .SetHelpId(HID_BORDER_DISTANCE_DLG_BOTTOM     );
-    aSynchronizeCB  .SetHelpId(HID_BORDER_DISTANCE_DLG_SYNC_CB);
-    aExampleWIN     .SetHelpId(HID_BORDER_DISTANCE_DLG_EXAMPLE);
-}
-/* -----------------01.07.99 15:03-------------------
-
- --------------------------------------------------*/
-short SvxDistanceDlg_Impl::Execute()
-{
-        long nLeft      = aLeftMF.GetValue();
-        long nRight     = aRightMF.GetValue();
-        long nTop       = aTopMF.GetValue();
-        long nBottom    = aBottomMF.GetValue();
-
-    // save all values
-    short nRet = ModalDialog::Execute();
-    if(RET_CANCEL == nRet)
-    {
-        //restore values
-        aLeftMF.SetValue(   nLeft   );
-        aRightMF.SetValue(  nRight );
-        aTopMF.SetValue(    nTop     );
-        aBottomMF.SetValue( nBottom);
-        UpdateExample();
-    }
-    return nRet;
-}
-
-/* -----------------07.06.99 15:58-------------------
- *
- * --------------------------------------------------*/
-IMPL_LINK(SvxDistanceDlg_Impl, ModifyHdl, MetricField*, pField)
-{
-    if(bSync)
-    {
-        long nVal = pField->GetValue();
-        aLeftMF.SetValue(nVal);
-        aRightMF.SetValue(nVal);
-        aTopMF.SetValue(nVal);
-        aBottomMF.SetValue(nVal);
-    }
-    UpdateExample();
-    return 0;
-}
-
-/* -----------------07.06.99 15:58-------------------
- *
- * --------------------------------------------------*/
-IMPL_LINK(SvxDistanceDlg_Impl, SyncHdl, CheckBox*, pBox)
-{
-    bSync = pBox->IsChecked();
-    return 0;
-}
-/* -----------------07.06.99 15:58-------------------
- *
- * --------------------------------------------------*/
-void    SvxDistanceDlg_Impl::UpdateExample()
-{
-    aExampleWIN.SetDistances(
-        aLeftMF.GetValue(), aRightMF.GetValue(),
-        aTopMF.GetValue(), aBottomMF.GetValue());
-    aExampleWIN.Invalidate();
-}
-
 // -----------------------------------------------------------------------
 
 /*
@@ -356,6 +127,9 @@ static USHORT pRanges[] =
     SID_ATTR_BORDER_SHADOW,
     0
 };
+
+BOOL SvxBorderTabPage::bSync = TRUE;
+
 
 //------------------------------------------------------------------------
 
@@ -452,17 +226,23 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     :   SfxTabPage( pParent, ResId( RID_SVXPAGE_BORDER, DIALOG_MGR() ), rCoreAttrs ),
 
         aWndPresets     ( this, ResId( WIN_PRESETS ) ),
-        aGbPresets      ( this, ResId( GB_PRESETS ) ),
-
         aWndFrameSel    ( this, ResId( WIN_FRAMESEL ) ),
-        aDistancePB     ( this, ResId( PB_DISTANCE ) ),
-        aGbBorder       ( this, ResId( GB_BORDER ) ),
+        aFlBorder       ( this, ResId( FL_BORDER ) ),
 
-        aFtLineStyle    ( this, ResId( FT_LINESTYLE ) ),
         aLbLineStyle    ( this, ResId( LB_LINESTYLE ) ),
-        aFtLineColor    ( this, ResId( FT_LINECOLOR ) ),
         aLbLineColor    ( this, ResId( LB_LINECOLOR ) ),
-        aGbLine         ( this, ResId( GB_LINE ) ),
+        aFlLine         ( this, ResId( FL_LINE ) ),
+
+        aDistanceFL(    this, ResId(FL_DISTANCE)),
+        aLeftFT(        this, ResId(FT_LEFT)),
+        aLeftMF(        this, ResId(MF_LEFT)),
+        aRightFT(       this, ResId(FT_RIGHT)),
+        aRightMF(       this, ResId(MF_RIGHT)),
+        aTopFT(         this, ResId(FT_TOP)),
+        aTopMF(         this, ResId(MF_TOP)),
+        aBottomFT(      this, ResId(FT_BOTTOM)),
+        aBottomMF(      this, ResId(MF_BOTTOM)),
+        aSynchronizeCB( this, ResId(CB_SYNC     )),
 
         aFtShadowPos    ( this, ResId( FT_SHADOWPOS ) ),
         aWndShadows     ( this, ResId( WIN_SHADOWS ) ),
@@ -470,8 +250,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aEdShadowSize   ( this, ResId( ED_SHADOWSIZE ) ),
         aFtShadowColor  ( this, ResId( FT_SHADOWCOLOR ) ),
         aLbShadowColor  ( this, ResId( LB_SHADOWCOLOR ) ),
-        aGbShadow       ( this, ResId( GB_SHADOW ) ),
-        pDistDlg(0),
+        aFlShadow       ( this, ResId( FL_SHADOW ) ),
         nMinValue(0),
         bIsTableBorder  ( FALSE ),
         nSWMode(0)
@@ -504,25 +283,38 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
         if(pBoxInfo->IsDist())
         {
-            aDistancePB.Show();
-            pDistDlg = new SvxDistanceDlg_Impl(this, ResId(DLG_DISTANCE));
-            SetFieldUnit(pDistDlg->aLeftMF   , eFUnit);
-            SetFieldUnit(pDistDlg->aRightMF  , eFUnit);
-            SetFieldUnit(pDistDlg->aTopMF    , eFUnit);
-            SetFieldUnit(pDistDlg->aBottomMF , eFUnit);
-            pDistDlg->UpdateExample();
+            SetFieldUnit(aLeftMF, eFUnit);
+            SetFieldUnit(aRightMF, eFUnit);
+            SetFieldUnit(aTopMF, eFUnit);
+            SetFieldUnit(aBottomMF, eFUnit);
+            aSynchronizeCB.Check(bSync);
+            aSynchronizeCB.SetClickHdl(LINK(this, SvxBorderTabPage, SyncHdl_Impl));
+            aLeftMF.SetModifyHdl(LINK(this, SvxBorderTabPage, ModifyDistanceHdl_Impl));
+            aRightMF.SetModifyHdl(LINK(this, SvxBorderTabPage, ModifyDistanceHdl_Impl));
+            aTopMF.SetModifyHdl(LINK(this, SvxBorderTabPage, ModifyDistanceHdl_Impl));
+            aBottomMF.SetModifyHdl(LINK(this, SvxBorderTabPage, ModifyDistanceHdl_Impl));
+        }
+        else
+        {
+            aDistanceFL.Hide();
+            aLeftFT.Hide();
+            aLeftMF.Hide();
+            aRightFT.Hide();
+            aRightMF.Hide();
+            aTopFT.Hide();
+            aTopMF.Hide();
+            aBottomFT.Hide();
+            aBottomMF.Hide();
+            aSynchronizeCB.Hide();
         }
         bIsDontCare = !pBoxInfo->IsValid( VALID_DISABLE );
     }
     if(eFUnit == FUNIT_MM && SFX_MAPUNIT_TWIP == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
-        if(pDistDlg)
-        {
-            pDistDlg->aLeftMF.SetDecimalDigits(1);
-            pDistDlg->aRightMF.SetDecimalDigits(1);
-            pDistDlg->aTopMF.SetDecimalDigits(1);
-            pDistDlg->aBottomMF.SetDecimalDigits(1);
-        }
+        aLeftMF.SetDecimalDigits(1);
+        aRightMF.SetDecimalDigits(1);
+        aTopMF.SetDecimalDigits(1);
+        aBottomMF.SetDecimalDigits(1);
         aEdShadowSize.SetDecimalDigits(1);
     }
 
@@ -533,33 +325,11 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
                                       bIsDontCare );
 
     pFrameSel->SetSelectLink(LINK(this, SvxBorderTabPage, LinesChanged_Impl));
-    if ( bIsTableBorder ||
-                !pDistDlg)
-    {
-        long nDeltaY = 0;
-
-        if(pDistDlg)
-            nDeltaY = aGbBorder.GetPosPixel().Y() +
-                      aGbBorder.GetSizePixel().Height() -
-                      aDistancePB.GetPosPixel().Y() - 6/*GroupBox-Offset*/;
-
-        // Anpassung des FrameSelectors an StarCalc:
-        long nXdiff = (  aGbBorder.GetSizePixel().Width()
-                       - aWndFrameSel.GetSizePixel().Width()) / 2;
-        long nYdiff = (  aGbBorder.GetSizePixel().Height() - nDeltaY
-                       - aWndFrameSel.GetSizePixel().Height()) / 2;
-
-
-        aWndFrameSel.SetPosPixel( aGbBorder.GetPosPixel() +
-                                     Point( nXdiff, nYdiff ) );
-    }
-
     aLbLineStyle.SetSelectHdl( LINK( this, SvxBorderTabPage, SelStyleHdl_Impl ) );
     aLbLineColor.SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     aLbShadowColor.SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     aWndPresets.SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
     aWndShadows.SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
-    aDistancePB.SetClickHdl( LINK( this, SvxBorderTabPage, DistanceHdl_Impl ) );
 
     FillValueSets_Impl();
     FillLineListBox_Impl();
@@ -597,8 +367,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
 SvxBorderTabPage::~SvxBorderTabPage()
 {
-    delete pFrameSel, pFrameSel=NULL;
-    delete pDistDlg;
+    delete pFrameSel;
 }
 
 // -----------------------------------------------------------------------
@@ -697,25 +466,21 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
         //-------------------
         // Abstand nach innen
         //-------------------
-        if(pDistDlg)
+        if ( aLeftMF.IsVisible() )
         {
-            SetMetricValue( pDistDlg->aLeftMF,
-                            pBoxInfoItem->GetDefDist(), eCoreUnit );
-            SetMetricValue( pDistDlg->aRightMF,
-                            pBoxInfoItem->GetDefDist(), eCoreUnit );
-            SetMetricValue( pDistDlg->aTopMF,
-                            pBoxInfoItem->GetDefDist(), eCoreUnit );
-            SetMetricValue( pDistDlg->aBottomMF,
-                            pBoxInfoItem->GetDefDist(), eCoreUnit );
+            SetMetricValue( aLeftMF,    pBoxInfoItem->GetDefDist(), eCoreUnit );
+            SetMetricValue( aRightMF,   pBoxInfoItem->GetDefDist(), eCoreUnit );
+            SetMetricValue( aTopMF,     pBoxInfoItem->GetDefDist(), eCoreUnit );
+            SetMetricValue( aBottomMF,  pBoxInfoItem->GetDefDist(), eCoreUnit );
 
-            nMinValue = pDistDlg->aLeftMF.GetValue();
+            nMinValue = aLeftMF.GetValue();
 
             if ( pBoxInfoItem->IsMinDist() )
             {
-                pDistDlg->aLeftMF.SetFirst( nMinValue );
-                pDistDlg->aRightMF.SetFirst( nMinValue );
-                pDistDlg->aTopMF.SetFirst( nMinValue );
-                pDistDlg->aBottomMF.SetFirst( nMinValue );
+                aLeftMF.SetFirst( nMinValue );
+                aRightMF.SetFirst( nMinValue );
+                aTopMF.SetFirst( nMinValue );
+                aBottomMF.SetFirst( nMinValue );
             }
 
             if ( pBoxInfoItem->IsDist() )
@@ -725,27 +490,23 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                 {
                     if( !pFrameSel->IsAnyLineSet() )
                     {
-                        pDistDlg->aLeftMF.SetMin( 0 );
-                        pDistDlg->aLeftMF.SetFirst( 0 );
-                        pDistDlg->aRightMF.SetMin( 0 );
-                        pDistDlg->aRightMF.SetFirst( 0 );
-                        pDistDlg->aTopMF.SetMin( 0 );
-                        pDistDlg->aTopMF.SetFirst( 0 );
-                        pDistDlg->aBottomMF.SetMin( 0 );
-                        pDistDlg->aBottomMF.SetFirst( 0 );
+                        aLeftMF.SetMin( 0 );
+                        aLeftMF.SetFirst( 0 );
+                        aRightMF.SetMin( 0 );
+                        aRightMF.SetFirst( 0 );
+                        aTopMF.SetMin( 0 );
+                        aTopMF.SetFirst( 0 );
+                        aBottomMF.SetMin( 0 );
+                        aBottomMF.SetFirst( 0 );
                     }
                     long nLeftDist = pBoxItem->GetDistance( BOX_LINE_LEFT);
-                    SetMetricValue( pDistDlg->aLeftMF,
-                                    nLeftDist, eCoreUnit );
+                    SetMetricValue( aLeftMF, nLeftDist, eCoreUnit );
                     long nRightDist = pBoxItem->GetDistance( BOX_LINE_RIGHT);
-                    SetMetricValue( pDistDlg->aRightMF,
-                                    nRightDist, eCoreUnit );
+                    SetMetricValue( aRightMF, nRightDist, eCoreUnit );
                     long nTopDist = pBoxItem->GetDistance( BOX_LINE_TOP);
-                    SetMetricValue( pDistDlg->aTopMF,
-                                    nTopDist, eCoreUnit );
+                    SetMetricValue( aTopMF, nTopDist, eCoreUnit );
                     long nBottomDist = pBoxItem->GetDistance( BOX_LINE_BOTTOM);
-                    SetMetricValue( pDistDlg->aBottomMF,
-                                    nBottomDist, eCoreUnit );
+                    SetMetricValue( aBottomMF, nBottomDist, eCoreUnit );
 
                     // ist der Abstand auf nicht-default gesetzt,
                     // dann soll der Wert auch nicht
@@ -758,30 +519,24 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                                 nDefDist != nTopDist   ||
                                 nDefDist != nBottomDist) )
                     {
-                        pDistDlg->aLeftMF.SetModifyFlag();
-                        pDistDlg->aRightMF.SetModifyFlag();
-                        pDistDlg->aTopMF.SetModifyFlag();
-                        pDistDlg->aBottomMF.SetModifyFlag();
+                        aLeftMF.SetModifyFlag();
+                        aRightMF.SetModifyFlag();
+                        aTopMF.SetModifyFlag();
+                        aBottomMF.SetModifyFlag();
                     }
                 }
                 else
                 {
-                    SetMetricValue( pDistDlg->aLeftMF,
-                                    pBoxInfoItem->GetDefDist(), eCoreUnit );
-                    SetMetricValue( pDistDlg->aRightMF,
-                                    pBoxInfoItem->GetDefDist(), eCoreUnit );
-                    SetMetricValue( pDistDlg->aTopMF,
-                                    pBoxInfoItem->GetDefDist(), eCoreUnit );
-                    SetMetricValue( pDistDlg->aBottomMF,
-                                    pBoxInfoItem->GetDefDist(), eCoreUnit );
-
+                    SetMetricValue( aLeftMF,    pBoxInfoItem->GetDefDist(), eCoreUnit );
+                    SetMetricValue( aRightMF,   pBoxInfoItem->GetDefDist(), eCoreUnit );
+                    SetMetricValue( aTopMF,     pBoxInfoItem->GetDefDist(), eCoreUnit );
+                    SetMetricValue( aBottomMF,  pBoxInfoItem->GetDefDist(), eCoreUnit );
                 }
             }
-            pDistDlg->aLeftMF.SaveValue();
-            pDistDlg->aRightMF.SaveValue();
-            pDistDlg->aTopMF.SaveValue();
-            pDistDlg->aBottomMF.SaveValue();
-            pDistDlg->UpdateExample();
+            aLeftMF.SaveValue();
+            aRightMF.SaveValue();
+            aTopMF.SaveValue();
+            aBottomMF.SaveValue();
         }
 
         //----------------
@@ -1085,7 +840,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
             aEdShadowSize .Enable(FALSE);
             aFtShadowColor.Enable(FALSE);
             aLbShadowColor.Enable(FALSE);
-            aGbShadow     .Enable(FALSE);
+            aFlShadow     .Enable(FALSE);
 
             USHORT nLBCount = aLbLineStyle.GetEntryCount();
             // ist es ein Absatzdialog, dann alle Linien fuer
@@ -1099,7 +854,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
             if(!bIsTableBorder)
             {
-                aGbBorder   .Enable(FALSE);
+                aFlBorder   .Enable(FALSE);
                 aWndFrameSel.Enable(FALSE);
                 aWndPresets.RemoveItem(3);
                 aWndPresets.RemoveItem(4);
@@ -1203,13 +958,13 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //-------------------
     // Abstand nach Innen
     //-------------------
-    if( pDistDlg )
+    if( aLeftMF.IsVisible() )
     {
         aBoxInfoItem.SetDist( TRUE );
 
         if ( ((bIsTableBorder || (nSWMode & SW_BORDER_MODE_TABLE)) &&
-                (pDistDlg->aLeftMF.IsModified()||pDistDlg->aRightMF.IsModified()||
-                    pDistDlg->aTopMF.IsModified()||pDistDlg->aBottomMF.IsModified()) )||
+                (aLeftMF.IsModified()||aRightMF.IsModified()||
+                    aTopMF.IsModified()||aBottomMF.IsModified()) )||
              pFrameSel->GetTop()   .GetState() != SVX_FRMLINESTATE_HIDE
              || pFrameSel->GetBottom().GetState() != SVX_FRMLINESTATE_HIDE
              || pFrameSel->GetLeft()  .GetState() != SVX_FRMLINESTATE_HIDE
@@ -1218,28 +973,23 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             SvxBoxInfoItem* pOldBoxInfoItem = (SvxBoxInfoItem*)GetOldItem(
                                                 rCoreAttrs, SID_ATTR_BORDER_INNER );
             if(!pOldBoxItem ||
-            pDistDlg->aLeftMF  .GetText() != pDistDlg->aLeftMF  .GetSavedValue() ||
-            pDistDlg->aRightMF .GetText() != pDistDlg->aRightMF .GetSavedValue() ||
-            pDistDlg->aTopMF   .GetText() != pDistDlg->aTopMF   .GetSavedValue() ||
-            pDistDlg->aBottomMF.GetText() != pDistDlg->aBottomMF.GetSavedValue() ||
-            nMinValue == pDistDlg->aLeftMF  .GetValue() ||
-            nMinValue == pDistDlg->aRightMF .GetValue() ||
-            nMinValue == pDistDlg->aTopMF   .GetValue() ||
-            nMinValue == pDistDlg->aBottomMF.GetValue() ||
+            aLeftMF  .GetText() != aLeftMF  .GetSavedValue() ||
+            aRightMF .GetText() != aRightMF .GetSavedValue() ||
+            aTopMF   .GetText() != aTopMF   .GetSavedValue() ||
+            aBottomMF.GetText() != aBottomMF.GetSavedValue() ||
+            nMinValue == aLeftMF  .GetValue() ||
+            nMinValue == aRightMF .GetValue() ||
+            nMinValue == aTopMF   .GetValue() ||
+            nMinValue == aBottomMF.GetValue() ||
                 pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE))
             {
-                aBoxItem.SetDistance(
-                    (USHORT)GetCoreValue( pDistDlg->aLeftMF   , eCoreUnit ), BOX_LINE_LEFT  );
-                aBoxItem.SetDistance(
-                    (USHORT)GetCoreValue( pDistDlg->aRightMF  , eCoreUnit ), BOX_LINE_RIGHT );
-                aBoxItem.SetDistance(
-                    (USHORT)GetCoreValue( pDistDlg->aTopMF    , eCoreUnit ), BOX_LINE_TOP   );
-                aBoxItem.SetDistance(
-                    (USHORT)GetCoreValue( pDistDlg->aBottomMF , eCoreUnit ), BOX_LINE_BOTTOM);
+                aBoxItem.SetDistance( (USHORT)GetCoreValue( aLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
+                aBoxItem.SetDistance( (USHORT)GetCoreValue( aRightMF, eCoreUnit ), BOX_LINE_RIGHT );
+                aBoxItem.SetDistance( (USHORT)GetCoreValue( aTopMF, eCoreUnit ), BOX_LINE_TOP   );
+                aBoxItem.SetDistance( (USHORT)GetCoreValue( aBottomMF, eCoreUnit ), BOX_LINE_BOTTOM);
             }
             else
             {
-//              aBoxItem.SetDistance(pOldBoxItem->GetDistance());
                 aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_LEFT ), BOX_LINE_LEFT);
                 aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_RIGHT),  BOX_LINE_RIGHT);
                 aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_TOP  ), BOX_LINE_TOP);
@@ -1386,7 +1136,7 @@ void SvxBorderTabPage::HideShadowControls()
     aEdShadowSize.Hide();
     aFtShadowColor.Hide();
     aLbShadowColor.Hide();
-    aGbShadow.Hide();
+    aFlShadow.Hide();
 }
 
 // -----------------------------------------------------------------------
@@ -1596,30 +1346,16 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox *, pLb )
 
 void SvxBorderTabPage::FillValueSets_Impl()
 {
-    ImageList   aIlPre( ResId( IL_PRE_BITMAPS ) );
-    ImageList   aIlSdw( ResId( IL_SDW_BITMAPS ) );
-    Size        aItemSize = aIlPre.GetImage(IID_PRENONE).GetSizePixel();
-    Size        aGbSize( aGbPresets.GetSizePixel() );
-    Size        aSize;
-    long        nXpos = aGbPresets.GetPosPixel().X();
-    long        nYpos = aGbPresets.GetPosPixel().Y();
-
-    // Presets:
-    aGbSize.Height() -= 12;
+    //Initialize presets window
     aWndPresets.SetColCount( 5 );
     aWndPresets.SetStyle( aWndPresets.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
 
-    aSize = aWndPresets.CalcWindowSizePixel( aItemSize );
+    ImageList   aIlPre( ResId( IL_PRE_BITMAPS ) );
 
-    nXpos += ( aGbSize.Width() > aSize.Width()+4 )
-                ? ((aGbSize.Width()-aSize.Width())/2)
-                : 2;
-
-    nYpos += ( aGbSize.Height() > aSize.Height()+4 )
-                ? ((aGbSize.Height()-aSize.Height())/2)
-                : 2;
-
-    aWndPresets.SetPosSizePixel( Point( nXpos, nYpos+12 ), aSize );
+    Point aWndPosSize( aWndPresets.GetPosPixel() );
+    aWndPresets.SetPosSizePixel(
+                    Point( aWndPosSize.X() + pFrameSel->GetPosPixel().X(), aWndPosSize.Y() ),
+                    aWndPresets.CalcWindowSizePixel( aIlPre.GetImage(IID_PRENONE).GetSizePixel() ) );
 
     aWndPresets.InsertItem( 1, aIlPre.GetImage(IID_PRENONE) );
     if ( bIsTableBorder )
@@ -1639,15 +1375,13 @@ void SvxBorderTabPage::FillValueSets_Impl()
     aWndPresets.SetNoSelection();
     aWndPresets.Show();
 
-    // Schatten: ---------------------------------------------------------
+    // Initialize shadow window
+    ImageList   aIlSdw( ResId( IL_SDW_BITMAPS ) );
 
     aWndShadows.SetColCount( 5 );
     aWndShadows.SetStyle(  aWndShadows.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    aSize = aWndShadows.CalcWindowSizePixel( aItemSize );
-    nXpos = aFtShadowPos.GetPosPixel().X();
-    nYpos = aFtShadowPos.GetPosPixel().Y() + aFtShadowPos.GetSizePixel().Height() + 3;
-    aWndShadows.SetPosSizePixel( Point( nXpos, nYpos ), aSize );
-    aWndShadows.SetColCount( 5 );
+    aWndShadows.SetPosSizePixel( aWndShadows.GetPosPixel(),
+                    aWndShadows.CalcWindowSizePixel( aIlSdw.GetImage(IID_SHADOWNONE).GetSizePixel() ) );
     aWndShadows.InsertItem( 1, aIlSdw.GetImage(IID_SHADOWNONE) );
     aWndShadows.InsertItem( 2, aIlSdw.GetImage(IID_SHADOW_BOT_RIGHT) );
     aWndShadows.InsertItem( 3, aIlSdw.GetImage(IID_SHADOW_TOP_RIGHT) );
@@ -1692,74 +1426,96 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 // -----------------------------------------------------------------------
 IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
 {
-    if(pDistDlg)
+    if(aLeftMF.IsVisible())
     {
         BOOL bLineSet = pFrameSel->IsAnyLineSet();
         BOOL bMinAllowed = nSWMode & SW_BORDER_MODE_FRAME;
-        BOOL bSpaceModified =   pDistDlg->aLeftMF  .IsModified()||
-                                pDistDlg->aRightMF .IsModified()||
-                                pDistDlg->aTopMF   .IsModified()||
-                                pDistDlg->aBottomMF.IsModified();
+        BOOL bSpaceModified =   aLeftMF  .IsModified()||
+                                aRightMF .IsModified()||
+                                aTopMF   .IsModified()||
+                                aBottomMF.IsModified();
 
         if(bLineSet)
         {
             if(!bMinAllowed)
             {
-                pDistDlg->aLeftMF  .SetFirst(nMinValue);
-                pDistDlg->aRightMF .SetFirst(nMinValue);
-                pDistDlg->aTopMF   .SetFirst(nMinValue);
-                pDistDlg->aBottomMF.SetFirst(nMinValue);
+                aLeftMF  .SetFirst(nMinValue);
+                aRightMF .SetFirst(nMinValue);
+                aTopMF   .SetFirst(nMinValue);
+                aBottomMF.SetFirst(nMinValue);
             }
             if(!bSpaceModified)
             {
-                pDistDlg->aLeftMF  .SetValue(nMinValue);
-                pDistDlg->aRightMF .SetValue(nMinValue);
-                pDistDlg->aTopMF   .SetValue(nMinValue);
-                pDistDlg->aBottomMF.SetValue(nMinValue);
+                aLeftMF  .SetValue(nMinValue);
+                aRightMF .SetValue(nMinValue);
+                aTopMF   .SetValue(nMinValue);
+                aBottomMF.SetValue(nMinValue);
             }
         }
         else
         {
-            pDistDlg->aLeftMF  .SetMin(0);
-            pDistDlg->aRightMF .SetMin(0);
-            pDistDlg->aTopMF   .SetMin(0);
-            pDistDlg->aBottomMF.SetMin(0);
-            pDistDlg->aLeftMF  .SetFirst(0);
-            pDistDlg->aRightMF .SetFirst(0);
-            pDistDlg->aTopMF   .SetFirst(0);
-            pDistDlg->aBottomMF.SetFirst(0);
+            aLeftMF  .SetMin(0);
+            aRightMF .SetMin(0);
+            aTopMF   .SetMin(0);
+            aBottomMF.SetMin(0);
+            aLeftMF  .SetFirst(0);
+            aRightMF .SetFirst(0);
+            aTopMF   .SetFirst(0);
+            aBottomMF.SetFirst(0);
             if(!bSpaceModified)
             {
-                pDistDlg->aLeftMF  .SetValue(0);
-                pDistDlg->aRightMF .SetValue(0);
-                pDistDlg->aTopMF   .SetValue(0);
-                pDistDlg->aBottomMF.SetValue(0);
+                aLeftMF  .SetValue(0);
+                aRightMF .SetValue(0);
+                aTopMF   .SetValue(0);
+                aBottomMF.SetValue(0);
             }
         }
         //fuer Tabellen ist alles erlaubt
         USHORT nValid = VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT;
+
         //fuer Rahmen und  Absatz wird das Edit disabled, wenn keine Border gesetzt ist
         if(nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_PARA))
         {
-            aDistancePB.Enable(bLineSet);
             nValid = pFrameSel->GetTop().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_TOP : 0;
             nValid |= pFrameSel->GetBottom().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_BOTTOM : 0;
             nValid |= pFrameSel->GetLeft().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_LEFT : 0;
             nValid |= pFrameSel->GetRight().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_RIGHT : 0;
         }
-        pDistDlg->SetValid(nValid);
+        aLeftFT.Enable(bLineSet && 0 != (nValid&VALID_LEFT));
+        aRightFT.Enable(bLineSet && 0 != (nValid&VALID_RIGHT));
+        aTopFT.Enable(bLineSet && 0 != (nValid&VALID_TOP));
+        aBottomFT.Enable(bLineSet && 0 != (nValid&VALID_BOTTOM));
+        aLeftMF.Enable(bLineSet && 0 != (nValid&VALID_LEFT));
+        aRightMF.Enable(bLineSet && 0 != (nValid&VALID_RIGHT));
+        aTopMF.Enable(bLineSet && 0 != (nValid&VALID_TOP));
+        aBottomMF.Enable(bLineSet && 0 != (nValid&VALID_BOTTOM));
+        aSynchronizeCB.Enable( aRightMF.IsEnabled() && aTopMF.IsEnabled() &&
+                               aBottomMF.IsEnabled()&& aLeftMF.IsEnabled() );
     }
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxBorderTabPage, DistanceHdl_Impl, PushButton*, pBtn )
+IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
 {
-    pDistDlg->Execute();
+    if ( bSync )
+    {
+        long nVal = pField->GetValue();
+        aLeftMF.SetValue(nVal);
+        aRightMF.SetValue(nVal);
+        aTopMF.SetValue(nVal);
+        aBottomMF.SetValue(nVal);
+    }
     return 0;
 }
-// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
+{
+    bSync = pBox->IsChecked();
+    return 0;
+}
+
 
 void    SvxBorderTabPage::SetSWMode(BYTE nSet)
 {
