@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleTreeListBoxEntry.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:02:32 $ 
+'*  last change:$Date: 2003-06-11 16:29:11 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -78,7 +78,7 @@ Global multiSelection As Boolean
 
 ' Required for XAccessibleText
 Global accText As String
-
+Global readOnly as Boolean
 
 Sub CreateObj()
 
@@ -109,11 +109,14 @@ On Error Goto ErrHndl
     oWin = createUnoService("com.sun.star.awt.Toolkit").getActiveTopWindow()
 
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 22, "Bibliography")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+               com.sun.star.accessibility.AccessibleRole.LABEL , "Bibliography")
     Out.log(oObj.getImplementationName)
 
     multiSelection = false
     accText = "Bibliography"
+    readOnly = true
+    
 Exit Sub
 ErrHndl:
     Test.Exception()
