@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-06 12:24:38 $
+ *  last change: $Author: jsc $ $Date: 2001-04-06 14:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2490,11 +2490,13 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
         }
     }
 
+    bFileExists = sal_False;
+    bFileCheck = sal_False;
     OString hxxFileName = createFileNameFromType(outPath, tmpName, ".hpp");
 
     if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
     {
-        bFileExists = fileExists( hFileName );
+        bFileExists = fileExists( hxxFileName );
         ret = sal_True;
     }
 
@@ -2526,7 +2528,7 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
         hxxFile.closeFile();
         if (ret && bFileCheck)
         {
-            ret = checkFileContent(hFileName, tmpFileName);
+            ret = checkFileContent(hxxFileName, tmpFileName);
         }
     }
 
@@ -2697,11 +2699,13 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
         }
     }
 
+    bFileExists = sal_False;
+    bFileCheck = sal_False;
     OString hxxFileName = createFileNameFromType(outPath, m_typeName, ".hpp");
 
     if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
     {
-        bFileExists = fileExists( hFileName );
+        bFileExists = fileExists( hxxFileName );
         ret = sal_True;
     }
 
@@ -2732,7 +2736,7 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
         hxxFile.closeFile();
         if (ret && bFileCheck)
         {
-            ret = checkFileContent(hFileName, tmpFileName);
+            ret = checkFileContent(hxxFileName, tmpFileName);
         }
     }
 
