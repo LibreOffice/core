@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 15:01:57 $
+ *  last change: $Author: jb $ $Date: 2001-04-10 14:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace configmgr
     namespace uno  = css::uno;
     namespace script = css::script;
 
+    namespace localehelper { void getAnyLocale(OUString& _rsString); }
     /**
        class OOptions is created one time per Configuration[update]Access
        all important options should stored in this class.
@@ -135,6 +136,8 @@ namespace configmgr
         void setDefaultUser(const rtl::OUString& _rUser) {m_sDefaultUser = _rUser;}
         void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
         void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
+        void setMultiLocaleMode() { localehelper::getAnyLocale(m_sLocale);}
+        void setMultiLocaleDefault() {  localehelper::getAnyLocale(m_sDefaultLocale);}
         void setLazyWrite(bool _bLazyWrite = false) {m_bLazyWrite = _bLazyWrite;}
         bool getLazyWrite() {return m_bLazyWrite;}
 
