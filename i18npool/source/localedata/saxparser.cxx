@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:08:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-22 16:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#include <vos/dynload.hxx>
 #include <vos/diagnose.hxx>
 
 #include <tools/string.hxx>
