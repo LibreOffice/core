@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-27 13:26:53 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 08:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,15 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_I18N_BREAKTYPE_HPP_
 #include <com/sun/star/i18n/BreakType.hpp>
@@ -175,15 +184,19 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     KSHORT nItalic = 0;
     if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
     {
-#ifdef DEBUG
-        static MSHORT nDiv = 12;
-        nItalic = nPorHeight / nDiv;
-#else
+        sal_Bool bAddItalic = sal_True;
+
+        // do not add extra italic value if we have an active character grid
+        if ( rInf.SnapToGrid() )
+        {
+            GETGRID( rInf.GetTxtFrm()->FindPageFrm() )
+            bAddItalic = ! pGrid || GRID_LINES_CHARS != pGrid->GetGridType();
+        }
+
 #ifdef MAC
-        nItalic = nPorHeight / 4;
+        nItalic = bAddItalic ? nPorHeight / 4 : 0;
 #else
-        nItalic = nPorHeight / 12;
-#endif
+        nItalic = bAddItalic ? nPorHeight / 12 : 0;
 #endif
         if( nItalic >= nLineWidth )
         {
