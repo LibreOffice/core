@@ -27,7 +27,6 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.document.ExtendedTypeDetection </supported-service>
         <supported-service> com.sun.star.frame.SynchronousFrameLoader </supported-service>
     </component-description>
 
