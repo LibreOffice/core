@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 11:34:35 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALINST_CXX
 
 #include <stdio.h>
 
@@ -308,11 +306,7 @@ SalInstance::~SalInstance()
 
 // -----------------------------------------------------------------------
 
-#ifdef _VOS_NO_NAMESPACE
-IMutex* SalInstance::GetYieldMutex()
-#else
 vos::IMutex* SalInstance::GetYieldMutex()
-#endif
 {
     return maInstData.mpSalYieldMutex;
 }
@@ -516,8 +510,6 @@ void SalInstance::DestroySystem( SalSystem* pSystem )
 
 // -----------------------------------------------------------------------
 
-#if SUPD > 618
-
 void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
 {
 }
@@ -536,5 +528,3 @@ void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedT
     rReturnedType   = AsciiCString;
     return "";
 }
-
-#endif // SUPD > 618
