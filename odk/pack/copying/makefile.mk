@@ -56,7 +56,7 @@ EXAMPLESLIST= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/manifest		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/README		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SdrawDemo.java	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
 
 
