@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:08:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 09:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,11 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
 
             if ( !pSlot || !pSlot->pUnoName )
+            {
+                bSlotDirty = sal_False;
+                bCtrlDirty = sal_True;
                 return aSlotServ.GetSlot()? &aSlotServ: 0;
+            }
 
             // create the dispatch name from the slot data
             ::com::sun::star::util::URL aURL;
@@ -520,7 +524,7 @@ void SfxStateCache::SetState_Impl
         }
 
         if ( pInternalController )
-            pInternalController->StateChanged( nId, eState, pState );
+            ((SfxDispatchController_Impl *)pInternalController)->StateChanged( nId, eState, pState, &aSlotServ );
 
         // neuen Wert merken
         if ( !IsInvalidItem(pLastItem) )
@@ -564,7 +568,7 @@ void SfxStateCache::SetCachedState( BOOL bAlways )
         }
 
         if ( pInternalController )
-            pInternalController->StateChanged( nId, eLastState, pLastItem );
+            ((SfxDispatchController_Impl *)pInternalController)->StateChanged( nId, eLastState, pLastItem, &aSlotServ );
 
         // Controller sind jetzt ok
         bCtrlDirty = sal_True;
