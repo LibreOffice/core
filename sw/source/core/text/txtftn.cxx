@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-20 16:15:40 $
+ *  last change: $Author: fme $ $Date: 2001-11-22 15:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,10 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
 
 void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::ConnectFtn with swapped frame" );
+#endif
 
     bFtn = sal_True;
     bInFtnConnect = sal_True;   //Bloss zuruecksetzen!
@@ -727,7 +731,15 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         {
             SwFrm *pCont = pFtnFrm->GetUpper();
 
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN ( pCont )
+            long nDiff = (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
+                                             nDeadLine );
+
+            if( nDiff >= 0 )
+#else
             if( pCont->Frm().Top() >= nDeadLine )//Ref und Ftn passen auf die Seite
+#endif
             {
                 //Wenn die Fussnote bei einem Follow angemeldet ist, so ist
                 //es jetzt an der Zeit sie umzumelden.
@@ -735,14 +747,26 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                     pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
                 //Es steht Platz zur Verfuegung, also kann die Fussnote evtl.
                 //wachsen.
+#ifdef VERTICAL_LAYOUT
+                if ( pFtnFrm->GetFollow() && nDiff > 0 )
+#else
                 if ( pFtnFrm->GetFollow() && pCont->Frm().Top() > nDeadLine )
+#endif
                 {
+#ifdef VERTICAL_LAYOUT
+                    SwTwips nHeight = (pCont->Frm().*fnRect->fnGetHeight)();
+#else
                     SwTwips nHeight = pCont->Frm().Height();
+#endif
                     pBoss->RearrangeFtns( nDeadLine, sal_False, pFtn );
                     ValidateBodyFrm();
                     ValidateFrm();
                     ViewShell *pSh = GetShell();
+#ifdef VERTICAL_LAYOUT
+                    if ( pSh && nHeight == (pCont->Frm().*fnRect->fnGetHeight)() )
+#else
                     if ( pSh && nHeight == pCont->Frm().Height() )
+#endif
                         //Damit uns nix durch die Lappen geht.
                         pSh->InvalidateWindows( pCont->Frm() );
                 }
@@ -858,24 +882,41 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     }
 
     SwTwips nLower = Y() + nReal;
+
+
 #ifdef VERTICAL_LAYOUT
-    SwTwips nAdd;
     SWRECTFN( pFrm )
+
+    if( bVert )
+    {
+        Point aTmp( 0, nLower );
+        pFrm->SwitchHorizontalToVertical( aTmp );
+        nLower = aTmp.X();
+    }
+
+    SwTwips nAdd;
 #else
     SwFrm* pPrtFrm;
 #endif
+
     if( pFrm->IsInTab() && (!pFrm->IsInSct() || pFrm->FindSctFrm()->IsInTab()) )
     {
         SwFrm *pRow = pFrm;
         while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
             pRow = pRow->GetUpper();
+
+#ifdef VERTICAL_LAYOUT
+        const SwTwips nMin = (pRow->Frm().*fnRect->fnGetBottom)();
+
+        if( ( ! bVert && nMin > nLower ) || ( bVert && nMin < nLower ) )
+            nLower = nMin;
+
+        nAdd = (pRow->GetUpper()->*fnRect->fnGetBottomMargin)();
+#else
         SwTwips nMin = pRow->Frm().Top() + pRow->Frm().Height();
         if( nMin > nLower )
             nLower = nMin;
 
-#ifdef VERTICAL_LAYOUT
-        nAdd = (pRow->GetUpper()->*fnRect->fnGetBottomMargin)();
-#else
         pPrtFrm = pRow->GetUpper();
 #endif
     }
@@ -886,21 +927,23 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         pPrtFrm = pFrm;
 #endif
 
-#ifndef VERTICAL_LAYOUT
+#ifdef VERTICAL_LAYOUT
+    if( nAdd > 0 )
+    {
+        if ( bVert )
+        {
+            ASSERT( nLower >= nAdd, "nLower a nAdd!" );
+            nLower -= nAdd;
+        }
+        else
+            nLower += nAdd;
+    }
+#else
     SwTwips nAdd =
         pPrtFrm->Frm().Height() -pPrtFrm->Prt().Height() -pPrtFrm->Prt().Top();
-#endif
 
     if( nAdd > 0 )
         nLower += nAdd;
-
-#ifdef VERTICAL_LAYOUT
-    if( bVert )
-    {
-        Point aTmp( 0, nLower );
-        pFrm->SwitchHorizontalToVertical( aTmp );
-        nLower = aTmp.X();
-    }
 #endif
 
         //6995: Wir frischen nur auf. Das Connect tut fuer diesen Fall nix
