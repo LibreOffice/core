@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,12 @@ void SdXMLStylesContext::EndElement()
 {
     if(mbIsAutoStyle)
     {
+        // AutoStyles for text import
+        GetImport().GetTextImport()->SetAutoStyles( this );
+
+        // AutoStyles for chart
+        GetImport().GetChartImport()->SetAutoStylesContext( this );
+
         // associate AutoStyles with styles in preparation to setting Styles on shapes
         for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
         {
@@ -901,6 +907,8 @@ void SdXMLStylesContext::EndElement()
             if(pStyle && pStyle->ISA(XMLShapeStyleContext))
             {
                 XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
+                pDocStyle->Filter();
+
                 pStyle = GetSdImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(
                     pStyle->GetFamily(), pStyle->GetParent());
 
@@ -914,12 +922,6 @@ void SdXMLStylesContext::EndElement()
                 }
             }
         }
-
-        // AutoStyles for text import
-        GetImport().GetTextImport()->SetAutoStyles( this );
-
-        // AutoStyles for chart
-        GetImport().GetChartImport()->SetAutoStylesContext( this );
     }
     else
     {

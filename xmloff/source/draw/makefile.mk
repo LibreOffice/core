@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: aw $ $Date: 2000-11-24 16:58:29 $
+#   last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/numithdl.obj\
         $(SLO)$/sdxmlimp.obj \
         $(SLO)$/sdxmlexp.obj \
         $(SLO)$/ximpstyl.obj \

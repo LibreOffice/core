@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,6 @@ SdXMLExport::SdXMLExport(
     mpDrawPageInfoList(new ImpXMLDrawPageInfoList(4, 8, 8)),
     mpShapeStyleInfoList(new ImpXMLShapeStyleInfoList(16, 64, 64)),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
-    mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mnDocMasterPageCount(0L),
@@ -655,7 +654,7 @@ SdXMLExport::SdXMLExport(
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
 {
     // prepare factory parts
-    mpSdPropHdlFactory = new XMLSdPropHdlFactory;
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( rMod );
     if(mpSdPropHdlFactory)
     {
         // set lock to avoid deletion
@@ -665,9 +664,8 @@ SdXMLExport::SdXMLExport(
         const UniReference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
 
         // construct PropertySetMapper
-        UniReference < XMLPropertySetMapper > xMapper =
-            new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDProperties, aFactoryRef);
-        mpPropertySetMapper = new ImpPresPageDrawStylePropMapper( xMapper );
+        UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef);
+        mpPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&GetTextParagraphExport()->GetListAutoStylePool(), *this );
         if(mpPropertySetMapper)
         {
             // set lock to avoid deletion
@@ -675,8 +673,7 @@ SdXMLExport::SdXMLExport(
         }
 
         // construct PresPagePropsMapper
-        xMapper =
-            new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
+        xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
 
         mpPresPagePropsMapper = new ImpPresPageDrawStylePropMapper( xMapper );
         if(mpPresPagePropsMapper)
@@ -2678,6 +2675,11 @@ void SdXMLExport::ImpExportConnectorShape(SvXMLExport& rExp,
 
     // write connector shape. Add Export later.
     SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_connector, sal_True, sal_True);
+
+    // export text
+    uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
+    if( xText.is() )
+        rExp.GetTextParagraphExport()->exportText( xText );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2731,6 +2733,11 @@ void SdXMLExport::ImpExportMeasureShape(SvXMLExport& rExp,
 
     // write measure shape. Add Export later.
     SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_measure, sal_True, sal_True);
+
+    // export text
+    uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
+    if( xText.is() )
+        rExp.GetTextParagraphExport()->exportText( xText );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2798,6 +2805,11 @@ void SdXMLExport::ImpExportCaptionShape(SvXMLExport& rExp,
 {
     // write Caption shape. Add export later.
     SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_caption, sal_True, sal_True);
+
+    // export text
+    uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
+    if( xText.is() )
+        rExp.GetTextParagraphExport()->exportText( xText );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -3676,6 +3688,8 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfo(uno::Reference< drawing::XShape >&
         ImpXMLShapeStyleInfo* pInfo = new ImpXMLShapeStyleInfo(aNewName, nFamily);
         mpShapeStyleInfoList->Insert(pInfo, LIST_APPEND);
 
+        const OUString aShapeType( xShape->getShapeType() );
+
         // prep text styles
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
         if(xText.is())
@@ -3692,14 +3706,28 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfo(uno::Reference< drawing::XShape >&
 
             if(!bIsEmptyPresObj)
             {
-                GetTextParagraphExport()->collectTextAutoStyles( xText );
+                if( !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.ChartShape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.GraphicObjectShape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject")) &&
+                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PageShape")) )
+                {
+                    GetTextParagraphExport()->collectTextAutoStyles( xText );
+                }
             }
         }
 
         // check for calc ole
-        const OUString aShapeType( xShape->getShapeType() );
         if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.OLE2Shape" )) ||
-            aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.CalcShape" )) )
+            aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.ChartShape" )) )
         {
             uno::Reference< chart::XChartDocument > xChartDoc;
             uno::Any aAny( xPropSet->getPropertyValue( msModel ) );
@@ -3761,6 +3789,8 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfos(uno::Reference< container::XIndex
 
 void SdXMLExport::_ExportStyles(BOOL bUsed)
 {
+    GetPropertySetMapper()->SetAutoStyles( sal_False );
+
     // export fill styles
     SvXMLExport::_ExportStyles( bUsed );
 
@@ -3793,6 +3823,8 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
 
 void SdXMLExport::_ExportAutoStyles()
 {
+    GetPropertySetMapper()->SetAutoStyles( sal_True );
+
     // create auto style infos for objects on master pages
     for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
     {

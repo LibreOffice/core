@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
 :   mxModel(rModel),
-    mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mpStylesContext(0L),
@@ -144,40 +143,32 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mp3DLightAttrTokenMap(0L),
     mpSortContext(0L)
 {
-    // prepare factory parts
-    mpSdPropHdlFactory = new XMLSdPropHdlFactory;
-    if(mpSdPropHdlFactory)
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel );
+
+    // set lock to avoid deletion
+    mpSdPropHdlFactory->acquire();
+
+    // construct PropertySetMapper
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory);
+    mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper );
+    if(mpPropertySetMapper)
     {
         // set lock to avoid deletion
-        mpSdPropHdlFactory->acquire();
-
-        // build one ref
-        const UniReference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
-
-        // construct PropertySetMapper
-        UniReference < XMLPropertySetMapper > xMapper =
-               new XMLPropertySetMapper( (XMLPropertyMapEntry*)aXMLSDProperties,
-                                        aFactoryRef);
-        mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper );
-        if(mpPropertySetMapper)
+        mpPropertySetMapper->acquire();
+        if( pExtMapper )
         {
-            // set lock to avoid deletion
-            mpPropertySetMapper->acquire();
-            if( pExtMapper )
-            {
-                UniReference < SvXMLImportPropertyMapper > xExtMapper( pExtMapper );
-                mpPropertySetMapper->ChainImportMapper( xExtMapper );
-            }
+            UniReference < SvXMLImportPropertyMapper > xExtMapper( pExtMapper );
+            mpPropertySetMapper->ChainImportMapper( xExtMapper );
         }
+    }
 
-        // construct PresPagePropsMapper
-        xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
-        mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper );
-        if(mpPresPagePropsMapper)
-        {
-            // set lock to avoid deletion
-            mpPresPagePropsMapper->acquire();
-        }
+    // construct PresPagePropsMapper
+    xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory);
+    mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper );
+    if(mpPresPagePropsMapper)
+    {
+        // set lock to avoid deletion
+        mpPresPagePropsMapper->acquire();
     }
 }
 

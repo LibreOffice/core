@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:41:43 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,14 @@
 #ifndef _SDPROPLS_HXX
 #define _SDPROPLS_HXX
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
+#ifndef _XMLOFF_XMLNUME_HXX
+#include "xmlnume.hxx"
+#endif
+
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
 #include "maptype.hxx"
 #endif
@@ -76,6 +84,18 @@
 
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
 #include <prhdlfac.hxx>
+#endif
+
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include "xmlprmap.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
+#include "XMLTextListAutoStylePool.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEXPPR_HXX
+#include "xmlexppr.hxx"
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -109,15 +129,33 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_SHADOW                          (XML_SD_TYPES_START + 14 )
 #define XML_SD_TYPE_COLORMODE                       (XML_SD_TYPES_START + 15 )
 #define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 16 )
+#define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 17 )
 
 // 3D property types
-#define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 17 )
-#define XML_SD_TYPE_NORMALS_KIND                    (XML_SD_TYPES_START + 18 )
-#define XML_SD_TYPE_NORMALS_DIRECTION               (XML_SD_TYPES_START + 19 )
-#define XML_SD_TYPE_TEX_GENERATION_MODE_X           (XML_SD_TYPES_START + 20 )
-#define XML_SD_TYPE_TEX_GENERATION_MODE_Y           (XML_SD_TYPES_START + 21 )
-#define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 22 )
-#define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 23 )
+#define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 18 )
+#define XML_SD_TYPE_NORMALS_KIND                    (XML_SD_TYPES_START + 19 )
+#define XML_SD_TYPE_NORMALS_DIRECTION               (XML_SD_TYPES_START + 20 )
+#define XML_SD_TYPE_TEX_GENERATION_MODE_X           (XML_SD_TYPES_START + 21 )
+#define XML_SD_TYPE_TEX_GENERATION_MODE_Y           (XML_SD_TYPES_START + 22 )
+#define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 23 )
+#define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 24 )
+
+//////////////////////////////////////////////////////////////////////////////
+
+#define CTF_CHARHEIGHT               1
+#define CTF_CHARHEIGHT_REL           2
+#define CTF_PARALEFTMARGIN           3
+#define CTF_PARALEFTMARGIN_REL       4
+#define CTF_PARARIGHTMARGIN          5
+#define CTF_PARARIGHTMARGIN_REL      6
+#define CTF_PARAFIRSTLINE            7
+#define CTF_PARAFIRSTLINE_REL        8
+#define CTF_PARATOPMARGIN            9
+#define CTF_PARATOPMARGIN_REL       10
+#define CTF_PARABOTTOMMARGIN        11
+#define CTF_PARABOTTOMMARGIN_REL    12
+#define CTF_NUMBERINGRULES          13
+#define CTF_NUMBERINGRULES_NAME     14
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
@@ -129,10 +167,54 @@ extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
 
 class XMLSdPropHdlFactory : public XMLPropertyHandlerFactory
 {
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+
 public:
+    XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > );
     virtual ~XMLSdPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
 };
 
+class XMLShapePropertySetMapper : public XMLPropertySetMapper
+{
+public:
+    XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef);
+    ~XMLShapePropertySetMapper();
+};
+
+class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper
+{
+private:
+    XMLTextListAutoStylePool *mpListAutoPool;
+    SvXMLExport& mrExport;
+    SvxXMLNumRuleExport maNumRuleExp;
+    sal_Bool mbIsInAutoStyles;
+
+    const rtl::OUString msCDATA;
+    const rtl::OUString msTrue;
+    const rtl::OUString msFalse;
+
+protected:
+    virtual void ContextFilter(
+        ::std::vector< XMLPropertyState >& rProperties,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > rPropSet ) const;
+public:
+    XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport );
+    virtual ~XMLShapeExportPropertyMapper();
+
+    virtual void        handleElementItem(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                            const XMLPropertyState& rProperty,
+                            const SvXMLUnitConverter& rUnitConverter,
+                            const SvXMLNamespaceMap& rNamespaceMap,
+                            sal_uInt16 nFlags,
+                            const ::std::vector< XMLPropertyState >* pProperties = 0,
+                            sal_uInt32 nIdx = 0
+                            ) const;
+
+    void SetAutoStyles( sal_Bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
+};
 
 #endif  //  _SDPROPLS_HXX
