@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:32:47 $
+#   last change: $Author: vg $ $Date: 2005-02-24 14:47:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,12 @@ TARGET=so_stlport
 $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
         @echo "You choose to build without stlport, so some headers will be used to bring the sgi extensions into the std namespace"
         +-$(MKDIR) $(INCCOM)$/stlport
-       +$(COPY) systemstl/* $(INCCOM)$/stlport
+        +$(COPY) systemstl/functional $(INCCOM)$/stlport
+        +$(COPY) systemstl/hash_map $(INCCOM)$/stlport
+        +$(COPY) systemstl/hash_set $(INCCOM)$/stlport
+        +$(COPY) systemstl/slist $(INCCOM)$/stlport
+        +$(COPY) systemstl/rope $(INCCOM)$/stlport
+        +$(COPY) systemstl/vector $(INCCOM)$/stlport
 .ENDIF
 
 
