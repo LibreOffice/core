@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-29 10:56:09 $
+ *  last change: $Author: cmc $ $Date: 2002-05-30 11:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2653,32 +2653,32 @@ void SwRTFParser::ReadPrtData()
     SkipToken( -1 );        // schliessende Klammer wieder zurueck!!
 }
 
-static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, BOOL bCheck )
+static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 {
-    SwFrmFmt* pTmp = pHdFtFmt;
-    pHdFtFmt = bCheck ? (SwFrmFmt*)pHdFtFmt->GetHeader().GetHeaderFmt() : 0;
-    if( !pHdFtFmt )
+    ASSERT(pHdFtFmt, "Impossible, no header");
+    const SwFrmFmt* pExisting = bReuseOld ?
+        pHdFtFmt->GetHeader().GetHeaderFmt() : 0;
+    if (!pExisting)
     {
-        // noch keine Header, dann erzeuge einen. Ob die Kopf/Fuss-
-        // zeilen angezeigt werden, bestimmen \header? \footer? ...
-        pTmp->SetAttr( SwFmtHeader( TRUE ));
-        pHdFtFmt = (SwFrmFmt*)pTmp->GetHeader().GetHeaderFmt();
+        //No existing header, create a new one
+        pHdFtFmt->SetAttr(SwFmtHeader(TRUE));
+        pExisting = pHdFtFmt->GetHeader().GetHeaderFmt();
     }
-    return  pHdFtFmt->GetCntnt().GetCntntIdx();
+    return pExisting->GetCntnt().GetCntntIdx();
 }
 
-static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, BOOL bCheck)
+static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 {
-    SwFrmFmt* pTmp = pHdFtFmt;
-    pHdFtFmt = bCheck ? (SwFrmFmt*)pHdFtFmt->GetFooter().GetFooterFmt() : 0;
-    if( !pHdFtFmt )
+    ASSERT(pHdFtFmt, "Impossible, no footer");
+    const SwFrmFmt* pExisting = bReuseOld ?
+        pHdFtFmt->GetFooter().GetFooterFmt() : 0;
+    if (!pExisting)
     {
-        // noch keine Header, dann erzeuge einen. Ob die Kopf/Fuss-
-        // zeilen angezeigt werden, bestimmen \header? \footer? ...
-        pTmp->SetAttr( SwFmtFooter( TRUE ));
-        pHdFtFmt = (SwFrmFmt*)pTmp->GetFooter().GetFooterFmt();
+        //No exist footer, create a new one
+        pHdFtFmt->SetAttr(SwFmtFooter(TRUE));
+        pExisting = pHdFtFmt->GetFooter().GetFooterFmt();
     }
-    return pHdFtFmt->GetCntnt().GetCntntIdx();
+    return pExisting->GetCntnt().GetCntntIdx();
 }
 
 
@@ -2774,16 +2774,16 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         break;
 
     case RTF_HEADERL:
-        // wir koennen keine linken oder rechten haben, immer beide
-        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() & ~PD_HEADERSHARE) );
+        // we cannot have left or right, must have always both
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_HEADERSHARE) | PD_ALL));
         SetHeader( pPageDesc->GetRightFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetLeftFmt();
         pSttIdx = SetHeader(pHdFtFmt, FALSE );
         break;
 
     case RTF_HEADERR:
-        // wir koennen keine linken oder rechten haben, immer beide
-        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() & ~PD_HEADERSHARE) );
+        // we cannot have left or right, must have always both
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_HEADERSHARE) | PD_ALL));
         SetHeader( pPageDesc->GetLeftFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetRightFmt();
         pSttIdx = SetHeader(pHdFtFmt, FALSE );
@@ -2797,16 +2797,16 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         break;
 
     case RTF_FOOTERL:
-        // wir koennen keine linken oder rechten haben, immer beide
-        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() & ~PD_FOOTERSHARE) );
+        // we cannot have left or right, must have always both
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_FOOTERSHARE) | PD_ALL));
         SetFooter( pPageDesc->GetRightFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetLeftFmt();
         pSttIdx = SetFooter(pHdFtFmt, FALSE );
         break;
 
     case RTF_FOOTERR:
-        // wir koennen keine linken oder rechten haben, immer beide
-        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() & ~PD_FOOTERSHARE) );
+        // we cannot have left or right, must have always both
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_FOOTERSHARE) | PD_ALL));
         SetFooter( pPageDesc->GetLeftFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetRightFmt();
         pSttIdx = SetFooter(pHdFtFmt, FALSE );
