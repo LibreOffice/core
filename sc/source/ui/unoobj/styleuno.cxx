@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:34:16 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
+#include <svx/boxitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/pageitem.hxx>
@@ -1532,6 +1533,14 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault() throw (uno::RuntimeExcepti
         }
         else
         {
+            // #i22448# apply the default BoxInfoItem for page styles again
+            // (same content as in ScStyleSheet::GetItemSet, to control the dialog)
+            SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
+            aBoxInfoItem.SetTable( FALSE );
+            aBoxInfoItem.SetDist( TRUE );
+            aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
+            rSet.Put( aBoxInfoItem );
+
             pDocShell->PageStyleModified( aStyleName, sal_True );
         }
     }
