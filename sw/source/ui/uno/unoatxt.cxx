@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-04-02 16:40:17 $
+ *  last change: $Author: obo $ $Date: 2003-04-02 16:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,7 +1482,7 @@ void SwGlossaries::InvalidateUNOOjects()
         if ( xGroup.is() )
             static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
     }
-    UnoAutoTextGroups aTmpg() = UnoAutoTextGroups();
+    UnoAutoTextGroups aTmpg = UnoAutoTextGroups();
     aGlossaryGroups.swap( aTmpg );
 
     // invalidate all the AutoTextEntry-objects
