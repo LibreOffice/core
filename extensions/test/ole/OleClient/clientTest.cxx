@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clientTest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:57:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,26 +66,45 @@ CComModule _Module;
 #include <comdef.h>
 
 #include "axhost.hxx"
-#include <com/sun/star/bridge/ModelDependent.hpp>
-#include <com/sun/star/bridge/XBridgeSupplier2.hpp>
+
+#include <stdio.h>
+#include "typelib/typedescription.hxx"
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
+#include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/Decimal.hpp>
+#include <com/sun/star/bridge/oleautomation/SCode.hpp>
+#include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
+#include <com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <oletest/XCallback.hpp>
-#include <rtl/process.h>
+//#include <oletest/XCallback.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>
 
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::bridge::ModelDependent;
+using namespace com::sun::star::bridge::oleautomation;
 using namespace cppu;
 using namespace rtl;
+
+
+
+Reference<XInvocation> convertComObject( IUnknown* pUnk);
+Reference<XInvocation> getComObject( OUString progId);
+bool checkOutArgs(const Sequence<Any> & outArgs,
+                  const Sequence<sal_Int16> & indices, const Sequence<Any> & values);
+
+bool doSimpleTest(const Reference<XInvocation> & inv);
+bool doSimpleSequenceTest(const Reference<XInvocation> & inv);
+bool doParameterTest(const Reference<XInvocation> & inv);
+bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv);
+bool equalSequences(const Any& orig, const Any& returned);
 HRESULT doTest();
 HRESULT doTest2( Reference<XInvocation> &);
 Reference<XInvocation> getComObject(OUString& );
@@ -95,11 +114,7 @@ void printResultVariantArray( VARIANT & var);
 void printVariant( VARIANT & var);
 void printSequence( Sequence<Any>& val);
 
-
-Reference< XMultiServiceFactory > objectFactory;// OleObjectFactory;
-
-
-int __cdecl main( int argc, char * argv[] )
+extern "C" int __cdecl main( int argc, char * argv[] )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))
@@ -117,62 +132,972 @@ int __cdecl main( int argc, char * argv[] )
         const TCHAR * errMsg= err.ErrorMessage();
         MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
+    else
+    {
+        MessageBox( NULL,NULL , "Test succeeded", MB_ICONINFORMATION);
+    }
 
 
     _Module.Term();
     CoUninitialize();
     return 0;
 }
+//Also supports named args
 
-Reference<XMultiServiceFactory> getMultiServiceFactory()
+bool doParameterTest(const Reference<XInvocation> & inv)
 {
-    static Reference< XMultiServiceFactory > factory;
-    if( ! objectFactory.is() )
-    {
-        Reference<XInterface> xint= createRegistryServiceFactory( OUString(L"applicat.rdb"));
-        factory= Reference<XMultiServiceFactory>( xint, UNO_QUERY);
-    }
-    return factory;
+    Sequence< sal_Int16> seqIndices;
+    Sequence<Any> seqOut;
+
+    Any arArgs[2];
+    Any arValue[2];
+    Any arArgs1[4];
+
+    NamedArgument arg1(OUString(L"val1"), makeAny((sal_Int32) 123));
+    NamedArgument arg2(OUString(L"val2"), makeAny((sal_Int32) 456));
+    NamedArgument arg3(OUString(L"val3"), makeAny((sal_Int32) 0xff));
+    NamedArgument arg4(OUString(L"val4"), makeAny((sal_Int32) 0xffff));
+
+    NamedArgument argOut1(OUString(L"val1"), Any());
+    NamedArgument argOut2(OUString(L"val2"), Any());
+    Sequence<Any> seqNoArgs;
+    arArgs[0] <<= (sal_Int32) 0;
+    arArgs[1] <<= (sal_Int32) 0;
+    Sequence<Any> seqPositional0(arArgs, 2);
+
+
+    arArgs[0] <<= arg1;
+    arArgs[1] <<= arg2;
+    Sequence<Any> seqNamed(arArgs, 2);
+    arArgs[0] <<= arg2;
+    arArgs[1] <<= arg1;
+    Sequence<Any> seqNamed2(arArgs, 2);
+    arArgs[0] <<= argOut1;
+    arArgs[1] <<= argOut2;
+    Sequence<Any> seqNamed3(arArgs, 2);
+    arArgs[0] <<= argOut2;
+    arArgs[1] <<= argOut1;
+    Sequence<Any> seqNamed4(arArgs, 2);
+
+    arArgs[0] <<= arg1;
+    Sequence<Any> seqNamed5(arArgs, 1);
+    arArgs[0] <<= arg2;
+    Sequence<Any> seqNamed6(arArgs, 1);
+
+    arArgs[0] <<= (sal_Int32) 123;
+    arArgs[1] <<= (sal_Int32) 456;
+    Sequence<Any> seqPositional(arArgs, 2);
+    arArgs[0] <<= (sal_Int32) 123;
+    Sequence<Any> seqPositional2(arArgs, 1);
+
+    arArgs[0] <<= Any();
+    arArgs[1] <<= Any();
+    Sequence<Any> seqPositional3(arArgs, 2);
+
+    arArgs[0] <<= (sal_Int32) 123;
+    arArgs[1] <<= SCode(DISP_E_PARAMNOTFOUND);
+    Sequence<Any> seqOutOpt1(arArgs, 2);
+
+    arArgs[0] <<= SCode(DISP_E_PARAMNOTFOUND);
+    arArgs[1] <<= SCode(DISP_E_PARAMNOTFOUND);
+    Sequence<Any> seqOutOpt2(arArgs, 2);
+
+    arArgs[0] <<= SCode(DISP_E_PARAMNOTFOUND);
+    arArgs[1] <<= (sal_Int32) 456;
+    Sequence<Any> seqOutOpt3(arArgs, 2);
+
+    arArgs1[0] <<= (sal_Int32) 0;
+    arArgs1[1] <<= (sal_Int32) 0;
+    arArgs1[2] <<= (sal_Int32) 0;
+    arArgs1[3] <<= (sal_Int32) 0;
+    Sequence<Any> seqMix0(arArgs1, 4);
+
+    arArgs1[0] <<= (sal_Int32) 123;
+    arArgs1[1] <<= (sal_Int32) 456;
+    arArgs1[2] <<= arg3;
+    arArgs1[3] <<= arg4;
+    Sequence<Any> seqMix(arArgs1, 4);
+
+    arArgs1[0] <<= Any();
+    arArgs1[1] <<= (sal_Int32) 456;
+    arArgs1[2] <<= arg4;
+    Sequence<Any> seqMix2(arArgs1, 3);
+
+    arArgs1[0] <<= SCode(DISP_E_PARAMNOTFOUND);
+    arArgs1[1] <<= (sal_Int32) 456;
+    arArgs1[2] <<= SCode(DISP_E_PARAMNOTFOUND);
+    arArgs1[3] <<= arg4.Value;
+    Sequence<Any> seqMixOut(arArgs1, 4);
+
+    arArgs1[0] <<= SCode(DISP_E_PARAMNOTFOUND);
+    arArgs1[1] <<= Any();
+    arArgs1[2] <<= arg4;
+    Sequence<Any> seqMix2Out(arArgs1, 3);
+
+
+
+    //in args + out, optional, positional-----------------------------------------
+    //first general test
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqPositional))
+        return false;
+
+    //2 optional args, 1 provided
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional2, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt1))
+        return false;
+
+    //2 optional args, 0 provided
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNoArgs, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional3, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt2))
+        return false;
+
+    //named args --------------------------------------------
+
+    // 2 named args, correct position
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNamed, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional0, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqPositional))
+        return false;
+
+    // 2named args, position differs
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNamed2, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqPositional))
+        return false;
+
+    //named out args, 2 named args with correct position
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNamed, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqIndices.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqNamed3, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqNamed ))
+        return false;
+
+    //named out args, 2 named args with different position
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNamed, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqIndices.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqNamed4, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqNamed2 ))
+        return false;
+
+
+    //2 args, 1 provided (correct order)
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNamed5, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt1))
+        return false;
+    //2 args, 1 provided (incorrect order)
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqPositional0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional3"), seqNamed6, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional5"), seqPositional, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqOutOpt3))
+        return false;
+
+    //2position + 2 2named args, correct order
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional6"), seqMix0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional6"), seqMix, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional7"), seqMix, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqMix))
+         return false;
+
+    // 4 in args, 1 positional, 1 named, 1 positional omitted
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional6"), seqMix0, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional6"), seqMix2, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional7"), seqMix0, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqMixOut))
+         return false;
+
+    // 4 out args, 1 positional, 1 named, 1 positional omitted
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional6"), seqMix2, seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"optional7"), seqMix2Out, seqIndices, seqOut);
+    if ( ! checkOutArgs(seqOut, seqIndices, seqMix2Out))
+         return false;
+
+
+    return true;
+}
+bool doPropertyTest(const Reference<XInvocation> & inv)
+{
+    Sequence< sal_Int16> seqIndices;
+    Sequence<Any> seqOut;
+
+    Any inBool, outBool;
+    Any inByte, outByte;
+    Any inShort, outShort;
+    Any inLong,  outLong;
+    Any inString,  outString;
+    Any inFloat, outFloat;
+    Any inDouble, outDouble;
+    Any inVariant, outVariant;
+    Any inObject, outObject;
+    Any inUnknown, outUnknown;
+    Any inCY, outCY;
+    Any inDate, outDate;
+    Any inDecimal, outDecimal;
+    Any inSCode, outSCode;
+    Any inrefLong, outrefLong;
+    Any inrefVariant, outrefVariant;
+    Any inrefDecimal, outrefDecimal;
+    Any inParamsLong, outParamsLong;
+    Reference<XInterface> xintUnknown = getComObject(L"AxTestComponents.Foo");
+
+    inBool <<= (sal_Bool) sal_True;
+    inv->setValue(OUString(L"prpBool"), inBool);
+    outBool = inv->getValue(OUString(L"prpBool"));
+
+    inByte <<= (sal_Int8) 100;
+    inv->setValue(OUString(L"prpByte"), inByte);
+    outByte = inv->getValue(OUString(L"prpByte"));
+
+    inShort <<= ( sal_Int16) 0xffff;
+    inv->setValue(OUString(L"prpShort"), inShort);
+    outShort = inv->getValue(OUString(L"prpShort"));
+
+    inLong <<= ( sal_Int32) 1234567;
+    inv->setValue(OUString(L"prpLong"), inLong  // TODO: Add your implementation code here
+);
+    outLong = inv->getValue(OUString(L"prpLong"));
+
+    inString <<= OUString(L" this is clientTest.exe");
+    inv->setValue(OUString(L"prpString"), inString);
+    outString = inv->getValue(OUString(L"prpString"));
+
+    inFloat <<=  3.14f;
+    inv->setValue(OUString(L"prpFloat"), inFloat);
+    outFloat = inv->getValue(OUString(L"prpFloat"));
+
+    inDouble <<= ( double) 3.145;
+    inv->setValue(OUString(L"prpDouble"), inDouble);
+    outDouble = inv->getValue(OUString(L"prpDouble"));
+
+    inVariant <<= OUString(L"A string in an any");
+    inv->setValue(OUString(L"prpVariant"), inVariant);
+    outVariant = inv->getValue(OUString(L"prpVariant"));
+
+    inObject <<= inv;
+    inv->setValue(OUString(L"prpObject"), inObject);
+    outObject = inv->getValue(OUString(L"prpObject"));
+
+    inUnknown <<= xintUnknown;
+    inv->setValue(OUString(L"prpUnknown"), inUnknown);
+    outUnknown = inv->getValue(OUString(L"prpUnknown"));
+
+    Currency cur(99999);
+    inCY <<= cur;
+    inv->setValue(OUString(L"prpCurrency"), inCY);
+    outCY = inv->getValue(OUString(L"prpCurrency"));
+
+    Date d(37889.0);
+    inDate <<= d;
+    inv->setValue(OUString(L"prpDate"), inDate);
+    outDate = inv->getValue(OUString(L"prpDate"));
+
+    Decimal dec(20, 0, 0xffffffff, 0xffffffff, 0x0fffffff);
+    inDecimal <<= dec;
+    inv->setValue(OUString(L"prpDecimal"), inDecimal);
+    outDecimal = inv->getValue(OUString(L"prpDecimal"));
+
+    SCode code(DISP_E_BADVARTYPE);
+    inSCode <<= code;
+    inv->setValue(OUString(L"prpSCode"), inSCode);
+    outSCode = inv->getValue(OUString(L"prpSCode"));
+
+    inrefLong <<= (sal_Int32) 123456;
+    inv->setValue(OUString(L"prprefLong"), inrefLong);
+    outrefLong = inv->getValue(OUString(L"prprefLong"));
+
+    inrefVariant <<= OUString(L"A string in an any");
+    inv->setValue(OUString(L"prprefVariant"), inrefVariant);
+    outrefVariant = inv->getValue(OUString(L"prprefVariant"));
+
+    Decimal decref(20, 0, 0xffffffff, 0xffffffff, 0x0fffffff);
+    inrefDecimal <<= decref;
+    inv->setValue(OUString(L"prprefDecimal"), inrefDecimal);
+    outrefDecimal = inv->getValue(OUString(L"prprefDecimal"));
+
+    if (inBool != outBool || inByte != outByte || inShort != outShort || inLong != outLong
+         || inFloat != outFloat || inDouble != outDouble || inString != outString
+         || inVariant != outVariant || inObject != outObject
+        || inUnknown != outUnknown || inCY != outCY
+        || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode
+        || inrefLong != outrefLong ||inrefVariant != outrefVariant
+        || inrefDecimal != outrefDecimal)
+        return false;
+    return true;
 }
 
-Reference<XInvocation> getComObject( OUString progId)
+bool doPropertyWithArgumentTest(const Reference<XInvocation> & inv)
 {
-    HRESULT hr= S_OK;
-    Reference< XInvocation > ret;
-//  Reference<XMultiServiceFactory> fac;
-    if(  ! objectFactory.is())
-    {   Reference<XMultiServiceFactory> mgr= getMultiServiceFactory();
-        Reference< XInterface > xInt= mgr->createInstance( OUString(L"com.sun.star.bridge.OleObjectFactory"));
-        objectFactory= Reference<XMultiServiceFactory>::query(  xInt);
+    Sequence< sal_Int16> seqIndices;
+    Sequence<Any> seqOut;
+
+    Any arMultiArgs[3];
+    arMultiArgs[0] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[1] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[2] <<= PropertyPutArgument(makeAny((sal_Int32) 0));
+    Sequence<Any> seqMultiArgPut0(arMultiArgs, 3);
+
+    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
+    arMultiArgs[1] <<= makeAny((sal_Int32) 2);
+    arMultiArgs[2] <<= PropertyPutArgument(makeAny((sal_Int32) 3));
+    Sequence<Any> seqMultiArgPut1(arMultiArgs, 3);
+
+    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
+    arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 3));
+    Sequence<Any> seqMultiArgPut2(arMultiArgs, 2);
+
+    arMultiArgs[0] <<= NamedArgument(OUString(L"val2"), makeAny((sal_Int32) 1));
+    arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 3));
+    Sequence<Any> seqMultiArgPut3(arMultiArgs, 2);
+
+    arMultiArgs[0] <<= NamedArgument(OUString(L"val2"), makeAny((sal_Int32) 1));
+    arMultiArgs[1] <<= NamedArgument(OUString(L"val3"), makeAny((sal_Int32) 3));
+    Sequence<Any> seqMultiArgPut4(arMultiArgs, 2);
+
+    arMultiArgs[0] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[1] <<= makeAny((sal_Int32) 0);
+    Sequence<Any> seqMultiArgGet0(arMultiArgs, 2);
+
+    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
+    arMultiArgs[1] <<= makeAny((sal_Int32) 2);
+    Sequence<Any> seqMultiArgGet1(arMultiArgs, 2);
+    Sequence<Any> seqMultiArgGet2(arMultiArgs, 1);
+
+
+    arMultiArgs[0] <<= makeAny((sal_Int32) 0);
+    arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 0));
+    Sequence<Any> seqMultiArgPut5(arMultiArgs, 2);
+
+    arMultiArgs[0] <<= makeAny((sal_Int32) 1);
+    arMultiArgs[1] <<= PropertyPutArgument(makeAny((sal_Int32) 2));
+    Sequence<Any> seqMultiArgPut6(arMultiArgs, 2);
+
+    arMultiArgs[0] <<= Any();
+    arMultiArgs[1] <<= Any();
+    Sequence<Any> seqMultiVoid(arMultiArgs, 2);
+
+    arMultiArgs[0] = makeAny((sal_Int32) 0);
+    arMultiArgs[1] = makeAny((sal_Int32) 0);
+    Sequence<Any> seqMultiVoid2(arMultiArgs, 2);
+
+    //[propput, ...] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [in] VARIANT* newVal);
+    //[propget, ...] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [out, optional, retval] VARIANT* pVal);
+    seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut0, seqIndices, seqOut);
+     seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut1, seqIndices, seqOut);
+    //check in/out args
+       seqIndices.realloc( 0);
+    seqOut.realloc(0);
+     Any anyRet = inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgGet0,
+                             seqIndices, seqOut);
+
+    if (anyRet != ((PropertyPutArgument const *)seqMultiArgPut1[2].getValue())->Value
+        || ! checkOutArgs(seqOut, seqIndices, Sequence<Any>(seqMultiArgPut1.getArray(), 2)))
+    {
+       return false;
+    }
+    // test optional (one arg omitted
+    seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut0, seqIndices, seqOut);
+     seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut2, seqIndices, seqOut);
+       seqIndices.realloc( 0);
+    seqOut.realloc(0);
+     anyRet = inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgGet0,
+                             seqIndices, seqOut);
+
+    arMultiArgs[0] = makeAny((sal_Int32) 1);
+    arMultiArgs[1] = makeAny((SCode(DISP_E_PARAMNOTFOUND)));
+
+    if (anyRet != ((PropertyPutArgument const *) seqMultiArgPut2[1].getValue())->Value
+        || ! checkOutArgs(seqOut, seqIndices, Sequence<Any>(arMultiArgs, 2)))
+    {
+       return false;
     }
 
-    if( objectFactory.is())
+    //test one named arg and one omitted
+    seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut0, seqIndices, seqOut);
+     seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgPut3, seqIndices, seqOut);
+       seqIndices.realloc( 0);
+    seqOut.realloc(0);
+     anyRet = inv->invoke(OUString(L"prpMultiArg1"), seqMultiArgGet0,
+                             seqIndices, seqOut);
+
+    arMultiArgs[0] = makeAny((SCode(DISP_E_PARAMNOTFOUND)));
+    arMultiArgs[1] = ((NamedArgument const*) seqMultiArgPut3[0].getValue())->Value;
+    if (anyRet !=  ((PropertyPutArgument const*) seqMultiArgPut3[1].getValue())->Value
+        || ! checkOutArgs(seqOut, seqIndices, Sequence<Any>(arMultiArgs, 2)))
     {
-        Reference<XInterface> xIntAx= objectFactory->createInstance( progId.getStr());
-        if( xIntAx.is() )
-        {
-            Reference< XInvocation > xInv( xIntAx, UNO_QUERY);
-            ret= xInv;
-        }
+       return false;
     }
-    return ret;
+
+//    [propget,...] HRESULT prpMultiArg2([in] VARIANT val1, [out, retval] VARIANT* pVal);
+//    [propput,...] HRESULT prpMultiArg2([in] VARIANT val1, [in] VARIANT newVal);
+    seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg2"), seqMultiArgPut5, seqIndices, seqOut);
+     seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg2GetValues"), seqMultiVoid, seqIndices, seqOut);
+
+    if ( ! checkOutArgs(seqOut, seqIndices, seqMultiVoid2))
+        return false;
+       seqIndices.realloc( 0);
+    seqOut.realloc(0);
+     anyRet = inv->invoke(OUString(L"prpMultiArg2"), seqMultiArgPut6,
+                             seqIndices, seqOut);
+       seqIndices.realloc( 0);
+    seqOut.realloc(0);
+     anyRet = inv->invoke(OUString(L"prpMultiArg2GetValues"), seqMultiVoid,
+                             seqIndices, seqOut);
+
+// [propget,...] HRESULT prpMultiArg3([in,out] LONG* val1, [out, retval] LONG* pVal);
+// [propput,...] HRESULT prpMultiArg3([in,out] LONG* val1, [in] LONG newVal);
+
+    if ( ! checkOutArgs(seqOut, seqIndices, seqMultiArgGet1 ))
+         return false;
+    seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg3"), seqMultiArgPut5, seqIndices, seqOut);
+     seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    inv->invoke(OUString(L"prpMultiArg3"), seqMultiArgPut6, seqIndices, seqOut);
+     seqIndices.realloc( 0);
+     seqOut.realloc(0);
+    anyRet = inv->invoke(OUString(L"prpMultiArg3"), seqMultiArgGet2, seqIndices, seqOut);
+
+    if ( anyRet !=  ((PropertyPutArgument const*) seqMultiArgPut6[1].getValue())->Value
+         || !checkOutArgs(seqOut, seqIndices, seqMultiArgGet2))
+        return false;
+
+
+    //hasProperty, hasMethod
+    if (inv->hasProperty(OUSTR("prpMultiArg1")))
+        return false;
+    if ( ! inv->hasMethod(OUSTR("prpMultiArg1")))
+        return false;
+    if ( ! inv->hasProperty(OUSTR("prprefLong")))
+        return false;
+    if (inv->hasMethod(OUSTR("prprefLong")))
+        return false;
+    if ( ! inv->hasMethod(OUSTR("inLong")))
+        return false;
+
+    return true;
+}
+bool doSimpleTest(const Reference<XInvocation> & inv)
+{
+    Sequence< sal_Int16> seqIndices;
+    Sequence<Any> seqOut;
+
+    Any inBool, outBool;
+    Any inByte, outByte;
+    Any inShort, outShort;
+    Any inLong,  outLong;
+    Any inString,  outString;
+    Any inFloat, outFloat;
+    Any inDouble, outDouble;
+    Any inVariant, outVariant;
+    Any inObject, outObject;
+    Any inUnknown, outUnknown;
+    Any inCY, outCY;
+    Any inDate, outDate;
+    Any inDecimal, outDecimal;
+    Any inSCode, outSCode;
+    Any inrefLong, outrefLong;
+    Any inrefVariant, outrefVariant;
+    Any inrefDecimal, outrefDecimal;
+
+    Reference<XInterface> xIntFoo = getComObject(L"AxTestComponents.Foo");
+    //###################################################################################
+    //  in and out parameter
+    //###################################################################################
+    sal_Bool aBool = sal_True;
+    inBool.setValue(&aBool, getCppuBooleanType());
+    inv->invoke(OUString(L"inBool"), Sequence< Any > ( &inBool, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outBool"), Sequence< Any > ( & outBool, 1), seqIndices, seqOut);
+    outBool <<= seqOut[0];
+
+    inByte <<= (sal_Int8) 127;
+    inv->invoke(OUString(L"inByte"), Sequence< Any > ( & inByte, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outByte"), Sequence< Any > ( & outByte, 1), seqIndices, seqOut);
+    outByte <<= seqOut[0];
+
+    inShort <<= ( sal_Int16) 0xffff;
+    inv->invoke(OUString(L"inShort"), Sequence< Any > ( & inShort, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outShort"), Sequence< Any > ( & outShort, 1), seqIndices, seqOut);
+    outShort <<= seqOut[0];
+
+    inLong <<= ( sal_Int32) 1234567;
+    inv->invoke(OUString(L"inLong"), Sequence< Any > ( & inLong, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outLong"), Sequence< Any > ( & outLong, 1 ), seqIndices, seqOut);
+    outLong <<= seqOut[0];
+
+    inString <<= OUString(L" this is clientTest.exe");
+    inv->invoke(OUString(L"inString"), Sequence< Any > ( & inString, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outString"), Sequence< Any > ( & outString, 1 ), seqIndices, seqOut);
+    outString <<= seqOut[0];
+
+    inFloat <<=  3.14f;
+    inv->invoke(OUString(L"inFloat"), Sequence< Any > ( & inFloat, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outFloat"), Sequence< Any > ( & outFloat, 1 ), seqIndices, seqOut);
+    outFloat <<= seqOut[0];
+
+    inDouble <<= ( double) 3.145;
+    inv->invoke(OUString(L"inDouble"), Sequence< Any > ( & inDouble, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outDouble"), Sequence< Any > ( & outDouble, 1 ), seqIndices, seqOut);
+    outDouble <<= seqOut[0];
+
+    inVariant <<= OUString(L" A string in an any");
+    inv->invoke(OUString(L"inVariant"), Sequence< Any > ( & inVariant, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outVariant"), Sequence< Any > (&outVariant, 1), seqIndices, seqOut);
+    outVariant <<= seqOut[0];
+
+    inObject <<= inv;
+    inv->invoke(OUString(L"inObject"), Sequence< Any > ( & inObject, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outObject"), Sequence< Any > (& outObject, 1), seqIndices, seqOut);
+    outObject <<= seqOut[0];
+
+    inUnknown <<= xIntFoo;
+    inv->invoke(OUString(L"inUnknown"), Sequence< Any > ( & inUnknown, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outUnknown"), Sequence< Any > (& outUnknown, 1), seqIndices, seqOut);
+    outUnknown <<= seqOut[0];
+
+    Currency cur(999999);
+    inCY <<= cur;
+    inv->invoke(OUString(L"inCurrency"), Sequence<Any>( & inCY, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outCurrency"), Sequence< Any > (& outCY, 1), seqIndices, seqOut);
+    outCY <<= seqOut[0];
+
+    Date dDate(37889.0);
+    inDate <<= dDate;
+    inv->invoke(OUString(L"inDate"), Sequence<Any>( & inDate, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outDate"), Sequence< Any > (& outDate, 1), seqIndices, seqOut);
+    outDate <<= seqOut[0];
+
+    Decimal dec(3, 0, 0xffffffff, 0xffffffff, 0xfffffff0);
+    inDecimal <<= dec;
+    inv->invoke(OUString(L"inDecimal"), Sequence<Any>( & inDecimal, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outDecimal"), Sequence< Any > (& outDecimal, 1), seqIndices, seqOut);
+    outDecimal <<= seqOut[0];
+
+    SCode code(DISP_E_BADVARTYPE);
+    inSCode <<= code;
+    inv->invoke(OUString(L"inSCode"), Sequence<Any>( & inSCode, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSCode"), Sequence< Any > (& outSCode, 1), seqIndices, seqOut);
+    outSCode <<= seqOut[0];
+
+    if (inBool != outBool || inByte != outByte || inShort != outShort || inLong != outLong
+        || inFloat != outFloat || inDouble != outDouble || inString != outString
+        || inVariant != outVariant || inObject != outObject || inUnknown != outUnknown
+        || inCY != outCY
+        || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode)
+        return false;
+    //###################################################################################
+    //  in/out parameter
+    //###################################################################################
+    outBool = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutBool"), Sequence< Any > ( & inBool, 1), seqIndices, seqOut);
+    outBool <<= seqOut[0];
+
+    outByte = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutByte"), Sequence< Any > ( & inByte, 1), seqIndices, seqOut);
+    outByte <<= seqOut[0];
+
+    outShort = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutShort"), Sequence< Any > ( & inShort, 1), seqIndices, seqOut);
+    outShort <<= seqOut[0];
+
+    outLong = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutLong"), Sequence< Any > ( & inLong, 1), seqIndices, seqOut);
+    outLong <<= seqOut[0];
+
+    outString = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutString"), Sequence< Any > ( & inString, 1), seqIndices, seqOut);
+    outString <<= seqOut[0];
+
+    outFloat = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutFloat"), Sequence< Any > ( & inFloat, 1), seqIndices, seqOut);
+    outFloat <<= seqOut[0];
+
+    outDouble = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutDouble"), Sequence< Any > ( &inDouble, 1), seqIndices, seqOut);
+    outDouble <<= seqOut[0];
+
+    outVariant = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutVariant"), Sequence< Any > ( & inVariant, 1), seqIndices, seqOut);
+    outVariant <<= seqOut[0];
+
+    outObject = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutObject"), Sequence< Any > ( & inObject, 1), seqIndices, seqOut);
+    outObject <<= seqOut[0];
+
+    outCY = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutCurrency"), Sequence< Any > ( & inCY, 1), seqIndices, seqOut);
+    outCY <<= seqOut[0];
+
+    outDate = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutDate"), Sequence< Any > ( & inDate, 1), seqIndices, seqOut);
+    outDate <<= seqOut[0];
+
+    outDecimal = Any();
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutDecimal"), Sequence< Any > (& inDecimal, 1), seqIndices, seqOut);
+    outDecimal <<= seqOut[0];
+
+    outSCode = Any();
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutSCode"), Sequence< Any > (& inSCode, 1), seqIndices, seqOut);
+    outSCode <<= seqOut[0];
+
+    if (inBool != outBool || inByte != outByte || inShort != outShort || inLong != outLong
+        || inFloat != outFloat || inDouble != outDouble || inString != outString
+        || inVariant != outVariant || inObject != outObject || inCY != outCY
+        || inDate != outDate || inDecimal != outDecimal || inSCode != outSCode)
+        return false;
+
+    //###################################################################################
+    //  in byref parameters
+    //###################################################################################
+
+    inrefLong <<= (sal_Int32) 1234;
+    inv->invoke(OUString(L"inrefLong"), Sequence<Any>( & inrefLong, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outLong"), Sequence< Any > (& outrefLong, 1), seqIndices, seqOut);
+    outrefLong <<= seqOut[0];
+
+    inrefVariant <<= OUString(L" A string in an any");
+    inv->invoke(OUString(L"inrefVariant"), Sequence< Any > ( & inrefVariant, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outVariant"), Sequence< Any > (&outrefVariant, 1), seqIndices, seqOut);
+    outrefVariant <<= seqOut[0];
+
+    Decimal refdec(5, 1, 0xffff, 0xff, 0x1);
+    inrefDecimal <<= refdec;
+    inv->invoke(OUString(L"inrefDecimal"), Sequence< Any > ( & inrefDecimal, 1), seqIndices, seqOut);
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outDecimal"), Sequence< Any > (&outrefDecimal, 1), seqIndices, seqOut);
+    outrefDecimal <<= seqOut[0];
+
+    if (inrefLong != outrefLong || inrefVariant != outrefVariant
+        || inrefDecimal != outrefDecimal)
+        return false;
+
+
+    //###################################################################################
+    //  mixed parameter
+    //###################################################################################
+    // mixed1
+    seqIndices.realloc( 0);
+    seqOut.realloc(0);
+    Any param[3];
+    param[0] = inByte;
+    param[1] = inFloat;
+    param[2] = inVariant;
+    inv->invoke(OUString(L"mixed1"), Sequence< Any >(param, 3), seqIndices, seqOut);
+
+    if (seqOut.getLength() != 3 || inByte != seqOut[0] || inFloat != seqOut[1]
+        || inVariant != seqOut[2])
+            return false;
+    return true;
 }
 
-Reference<XInvocation> convertComObject( IUnknown* pUnk)
+bool doSimpleSequenceTest(const Reference<XInvocation> & inv)
 {
-    Reference< XMultiServiceFactory > mgr= getMultiServiceFactory();
-    Reference< XInterface > xIntSupplier= mgr->createInstance(OUString(L"com.sun.star.bridge.OleBridgeSupplier2"));
-    Reference< XBridgeSupplier2 > xSuppl( xIntSupplier, UNO_QUERY);
+    bool ret = true;
+    Sequence<sal_Int16> seqIndices;
+    Sequence<Any> seqOut;
+    Any voidAny;
+    Any inArAny;
+    Any outArray;
+    Any inArBool, outArBool;
+    Any inArByte, outArByte;
+    Any inArShort, outArShort;
+    Any inArLong, outArLong;
+    Any inArString, outArString;
+    Any inArFloat, outArFloat;
+    Any inArDouble, outArDouble;
+    Any inArObject, outArObject;
+    Any outVariant;
 
-    Any any;
-    CComVariant var( pUnk);
-    any <<= ( sal_uInt32)&var;
-    sal_uInt8 arId[16];
-    rtl_getGlobalProcessId( arId);
-    Any target= xSuppl->createBridge( any, Sequence<sal_Int8>( (sal_Int8*)arId, 16), OLE, UNO );
+    //Initialize arrays
+    OUString arStr[]= {L"string0", L"string1", L"string2"};
+    Sequence<OUString> seq( arStr, 3);
+    inArString <<= seq;
 
-    Reference<XInvocation> ret;
-    target>>= ret;
+    Any arAnyStrTmp[3];
+    arAnyStrTmp[0]<<= arStr[0];
+    arAnyStrTmp[1]<<= arStr[1];
+    arAnyStrTmp[2]<<= arStr[2];
+    Sequence<Any> seq_1( arAnyStrTmp, 3);
+    inArAny <<= seq_1;
+    //###################################################################################
+    //  in, out Sequences
+    //###################################################################################
+    //Test sequence containing Anys of Strings
+    inv->invoke(OUString(L"inArray"), Sequence< Any > ( & inArAny, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outArray"), Sequence<Any>( & voidAny, 1), seqIndices, seqOut);
+    if (inArAny != seqOut[0])
+        return false;
+
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inArray"), Sequence< Any >( & inArString, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"outArray"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArray <<= seqOut[0];
+
+    sal_Int8 arByte[]={1,2,3};
+    Sequence<sal_Int8> seqByte(arByte, 3);
+    inArByte <<= seqByte;
+    inv->invoke(OUString(L"inSequenceByte"),Sequence<Any>( & inArByte, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceByte"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArByte <<= seqOut[0];
+
+    sal_Int16 arShort[]={4,5,6};
+    Sequence<sal_Int16> seqShort(arShort, 3);
+    inArShort<<= seqShort;
+    inv->invoke(OUString(L"inSequenceShort"),Sequence< Any >( & inArShort, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceShort"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArShort <<= seqOut[0];
+
+    sal_Int32 arLong[] = {7,8,9};
+    Sequence<sal_Int32> seqLong(arLong, 3);
+    inArLong <<= seqLong;
+    inv->invoke(OUString(L"inSequenceLong"),Sequence< Any > ( & inArLong, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceLong"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArLong <<= seqOut[0];
+
+    inv->invoke(OUString(L"inSequenceLong"),Sequence< Any > ( & inArLong, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceLong"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArLong <<= seqOut[0];
+
+    inv->invoke( OUString(L"inSequenceString"),Sequence< Any > ( & inArString, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceString"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArString <<= seqOut[0];
+
+    float arFloat[]={3.14f, 31.4f, 314.f};
+    Sequence<float> seqFloat( arFloat, 3);
+    inArFloat <<= seqFloat;
+    inv->invoke( OUString(L"inSequenceFloat"),Sequence< Any > ( & inArFloat, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceFloat"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArFloat <<= seqOut[0];
+
+    double arDouble[]={3.145, 31.45, 3145.};
+    Sequence<double> seqDouble( arDouble, 3);
+    inArDouble <<= seqDouble;
+    inv->invoke(OUString(L"inSequenceDouble"),Sequence< Any >( & inArDouble, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceDouble"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArDouble <<= seqOut[0];
+
+    Sequence<Reference<XInvocation> > seqObj(2);
+    seqObj[0]=  getComObject(L"AxTestComponents.Basic");
+    seqObj[1]=  getComObject(L"AxTestComponents.Basic");
+    inArObject <<= seqObj;
+    inv->invoke(OUString(L"inSequenceObject"),Sequence< Any >( & inArObject, 1), seqIndices, seqOut);
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"outSequenceObject"), Sequence< Any >( & voidAny, 1), seqIndices, seqOut);
+    outArObject <<= seqOut[0];
+
+    if ( ! equalSequences(inArByte, outArByte) || ! equalSequences(inArShort, outArShort)
+        || ! equalSequences(inArLong, outArLong) || ! equalSequences(inArString, outArray)
+        || ! equalSequences(inArFloat, outArFloat) || ! equalSequences(inArDouble, outArDouble)
+        || ! equalSequences(inArString, outArString)  || ! equalSequences(inArObject, outArObject))
+        return false;
+
+    //###################################################################################
+    //  in/out Sequences
+    //###################################################################################
+    seqIndices.realloc(0);
+    seqOut.realloc(0);
+    inv->invoke(OUString(L"inoutArray"), Sequence< Any >( & inArString, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutArray"), Sequence< Any >( & inArString, 1), seqIndices, seqOut);
+    outArray <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceByte"), Sequence<Any>( & inArByte, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceByte"), Sequence<Any>( & inArByte, 1), seqIndices, seqOut);
+    outArByte <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceShort"), Sequence<Any>( & inArShort, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceShort"), Sequence<Any>( & inArShort, 1), seqIndices, seqOut);
+    outArShort <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceLong"), Sequence<Any>( & inArLong, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceLong"), Sequence< Any >( & inArLong, 1), seqIndices, seqOut);
+    outArLong <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceString"), Sequence<Any>( & inArString, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceString"), Sequence<Any>( & inArString, 1), seqIndices, seqOut);
+    outArString <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceFloat"), Sequence<Any>( & inArFloat, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceFloat"), Sequence<Any>( & inArFloat, 1), seqIndices, seqOut);
+    outArFloat <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceDouble"), Sequence<Any>( & inArDouble, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceDouble"), Sequence<Any>( & inArDouble, 1), seqIndices, seqOut);
+    outArDouble <<= seqOut[0];
+
+    inv->invoke(OUString(L"inoutSequenceObject"), Sequence<Any>( & inArObject, 1), seqIndices, seqOut);
+    inv->invoke(OUString(L"inoutSequenceObject"), Sequence<Any>( & inArObject, 1), seqIndices, seqOut);
+    outArObject <<= seqOut[0];
+
+    if ( ! equalSequences(inArByte, outArByte) || ! equalSequences(inArShort, outArShort)
+        || ! equalSequences(inArLong, outArLong) || ! equalSequences(inArString, outArray)
+        || ! equalSequences(inArFloat, outArFloat) || ! equalSequences(inArDouble, outArDouble)
+        || ! equalSequences(inArString, outArString)  || ! equalSequences(inArObject, outArObject))
+        return false;
+
     return ret;
 }
 
@@ -194,547 +1119,40 @@ HRESULT doTest()
     char buff[1024];
     Any seqAny;
 
-    //###################################################################################
-    //  in parameter
-    //###################################################################################
-    aAny <<= ( sal_Int8) 127;
-    inv->invoke( OUString(L"inByte"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    aAny <<= ( sal_Int16) 0xffff;
-    inv->invoke( OUString(L"inShort"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-//
-    aAny <<= ( sal_Int32) 1234567;
-    inv->invoke( OUString(L"inLong"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    aAny <<= OUString(L" this is clientTest.exe");
-    inv->invoke( OUString(L"inString"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    aAny <<= ( float) 3.14;
-    inv->invoke( OUString(L"inFloat"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    aAny <<= ( double) 3.145;
-    inv->invoke( OUString(L"inDouble"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    aAny <<= OUString( L" A string in an any");
-    inv->invoke( OUString(L"inVariant"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    OUString arStr[]= {L"string0", L"string1", L"string2"};
-    Sequence<OUString> seq( arStr, 3);
-    Any arAny[1];
-    arAny[0] <<= seq;
-    inv->invoke( OUString(L"inArray"), Sequence< Any > ( arAny, 1), seqIndices, seqOut);
-
-    // same again but this time Sequence<Any> with the Anys containing strings.
-    OUString arStr1[]= {L"string0", L"string1", L"string2"};
-    Any arAnyStr1[3];
-    arAnyStr1[0]<<= arStr1[0];
-    arAnyStr1[1]<<= arStr1[1];
-    arAnyStr1[2]<<= arStr1[2];
-    Sequence<Any> seq_1( arAnyStr1, 3);
-    Any arAny_1[1];
-    arAny_1[0] <<= seq_1;
-    inv->invoke( OUString(L"inArray"), Sequence< Any > ( arAny_1, 1), seqIndices, seqOut);
-//
-    Reference < XInvocation > inv2= getComObject(L"AxTestComponents.Basic");
-    Any anyVal;
-    anyVal <<= OUString(L"this is the value of prpString");
-    inv2->setValue( OUString(L"prpString"), anyVal);
-    aAny <<= inv2;
-    inv->invoke( OUString(L"inObject"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    //###################################################################################
-    //  out parameter
-    //###################################################################################
-//  // outByte
-    aAny= Any();
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outByte"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " out Byte: %d", *( char*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // outShort
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outShort"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " out Short: %d", *( sal_Int16*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // outLong
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outLong"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " out Long: %d", *( sal_Int32*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // outString
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outString"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " out String: %S", (*( OUString*)anyOut.getValue()).getStr());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // outFloat
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outFloat"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " out float: %f", *( float*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // outDouble
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outDouble"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " out double: %g", *( double*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-//
-//  // outVariant
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outVariant"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    if( anyOut.getValueTypeClass() == TypeClass_STRING)
+    if (! doSimpleTest(inv))
     {
-        OUString s;
-        anyOut >>= s;
-        sprintf( buff, " out string ( variant): %S", s.getStr());
-        MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
+        fprintf(stdout, "### Test failed!\n");
+        return E_FAIL;
     }
 
-    // outArray
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outArray"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    Sequence<Any> seqOutValue;
-    anyOut >>= seqOutValue;
-
-    // we assume that the Sequence contains Anys of strings
-    OUString usMessage;
-    for( int i=0; i < seqOutValue.getLength(); i++)
+    if (! doPropertyTest(inv))
     {
-        OUString stemp;
-        if( seqOutValue[i] >>= stemp)
-        {
-            usMessage += OUString(L"\n");
-            usMessage += stemp;
-        }
-    }
-    MessageBox( NULL, W2T( usMessage.getStr()), _T("Test Program"), MB_OK);
-
-    // outObject
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    inv->invoke(  OUString(L"outObject"), Sequence< Any > ( &aAny, 1 ), seqIndices, seqOut);
-    Reference<XInvocation> invOut;
-    if( seqOut[0]>>=invOut)
-    {
-        Any val=    invOut->getValue( L"prpString");
-
-        if( val.getValueTypeClass() == TypeClass_STRING)
-        {
-            OUString s;
-            val>>=s;
-            MessageBox( NULL,W2T( s.getStr()), _T("Test Program"), MB_OK);
-        }
-    }
-//
-    //###################################################################################
-    //  in/out parameter
-    //###################################################################################
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= ( sal_Int8) 127;
-    inv->invoke( OUString(L"inoutByte"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " in out Byte: %d", *( char*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-//
-//  // in out short
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= ( sal_Int16) 1111;
-    inv->invoke( OUString(L"inoutShort"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " in out Short: %d", *( sal_Int16*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    //in out long
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= ( sal_Int32) 111111;
-    inv->invoke( OUString(L"inoutLong"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, "inout Long: %d", *( sal_Int32*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    //in out string
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= OUString(L" this is clientTest.exe");
-    inv->invoke( OUString(L"inoutString"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " inout String: %S", (*( OUString*)anyOut.getValue()).getStr());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    //in out float
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= ( float) 3.14;
-    inv->invoke( OUString(L"inoutFloat"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " inout float: %f", *( float*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // in out double
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= ( double) 3.145;
-    inv->invoke( OUString(L"inoutDouble"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    sprintf( buff, " inout double: %g", *( double*)anyOut.getValue());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    // in out VARIANT
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    aAny <<= OUString( L" A string in an any");
-    inv->invoke( OUString(L"inoutVariant"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    anyOut <<= seqOut[0];
-    if( anyOut.getValueTypeClass() == TypeClass_STRING)
-    {
-        OUString s;
-        anyOut >>= s;
-        sprintf( buff, " in out string ( variant): %S", s.getStr());
-        MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-    }
-//
-    // in out Array
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    OUString arStr2[]= {L"string0", L"string1", L"string2"};
-    Sequence<OUString> seq2( arStr2, 3);
-    Any arAny2[1];
-    arAny2[0] <<= seq2;
-    inv->invoke( OUString(L"inoutArray"), Sequence< Any > ( arAny2, 1), seqIndices, seqOut);
-    Sequence<Any> seqOutValue2;
-    seqOut[0]>>= seqOutValue2;
-
-    // we assume that the Sequence contains Anys of strings
-    OUString usMessage2;
-    for(int  i2=0; i2 < seqOutValue2.getLength(); i2++)
-    {
-        OUString stemp;
-        if( seqOutValue2[i2] >>= stemp)
-        {
-            usMessage2 += OUString(L"\n");
-            usMessage2 += stemp;
-        }
-    }
-    MessageBox( NULL, W2T( usMessage2.getStr()), _T("Test Program"), MB_OK);
-//
-
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    Reference < XInvocation > inv3= getComObject(L"AxTestComponents.Basic");
-    Any anyVal2;
-    anyVal2 <<= OUString(L"this is the value of prpString");
-    inv3->setValue( OUString(L"prpString"), anyVal2);
-    aAny <<= inv3;
-    inv->invoke( OUString(L"inoutObject"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-    Reference<XInvocation> invOut2;
-    if( seqOut[0]>>=invOut2)
-    {
-        Any val=    invOut2->getValue( L"prpString");
-
-        if( val.getValueTypeClass() == TypeClass_STRING)
-        {
-            OUString s;
-            val>>=s;
-            MessageBox( NULL,W2T( s.getStr()), _T("Test Program"), MB_OK);
-        }
-    }
-//
-//  //###################################################################################
-//  //  mixed parameter
-//  //###################################################################################
-    // mixed1
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    Sequence< Any > params(12);
-    sal_Int8 aByte=111;
-    OUString aString(L" a string in a VARIANT");
-    Any param[12];
-    param[0] <<= aByte;
-    param[2] <<= aByte; //in out
-    param[3] <<= aString; // in String
-    param[5] <<= aString; // in out string
-
-    OUString arStr3[]= {L"string0", L"string1", L"string2"};
-    Sequence<OUString> seq3( arStr3,3);
-    param[6] <<= seq3;  // in Array
-    param[8] <<= seq3;  // in ou Array
-
-    Reference < XInvocation > inv4= getComObject(L"AxTestComponents.Basic");
-    Any anyVal3;
-    anyVal3 <<= OUString(L"this is the value of prpString");
-    inv4->setValue( OUString(L"prpString"), anyVal3);
-    param[9] <<= inv4; // in dispatch
-    param[11] <<= inv4;
-    inv->invoke( OUString(L"mixed1"), Sequence< Any > ( param, 12),seqIndices, seqOut);
-
-    for( int i3=0; i3<seqOut.getLength();i3++)
-    {
-        Any any;
-        any <<= seqOut[i3];
-
-    }
-    sal_Int8 outChar= *( char*)seqOut[0].getValue();
-    sal_Int8 inoutChar= *( char*)seqOut[1].getValue();
-    sprintf( buff, " out Byte: %d \n in out Byte %d", outChar, inoutChar );
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    OUString outString( *(OUString*)seqOut[2].getValue());
-    OUString inoutString( *(OUString*)seqOut[3].getValue());
-    sprintf( buff, "out string: %S \n in out string: %S", outString.getStr(), inoutString.getStr());
-    MessageBox( NULL, A2T( buff), _T("Test Program"), MB_OK);
-
-    Sequence< Any > outSeq;
-    seqOut[4] >>= outSeq;
-    OUString usMessage3;
-    for(int  i4=0; i4 < outSeq.getLength(); i4++)
-    {
-        OUString stemp;
-        if( outSeq[i4] >>= stemp)
-        {
-            usMessage3 += OUString(L"\n");
-            usMessage3 += stemp;
-        }
-    }
-    MessageBox( NULL, W2T( usMessage3.getStr()), _T("Test Program. out Sequence"), MB_OK);
-
-    seqOut[5] >>= outSeq;
-    OUString usMessage4;
-    for(int  i5=0; i5 < outSeq.getLength(); i5++)
-    {
-        OUString stemp;
-        if( outSeq[i5] >>= stemp)
-        {
-            usMessage4 += OUString(L"\n");
-            usMessage4 += stemp;
-        }
-    }
-    MessageBox( NULL, W2T( usMessage3.getStr()), _T("Test Program. in out Sequence"), MB_OK);
-
-    Reference<XInvocation> invOut3;
-    seqOut[6] >>= invOut3;
-    if( seqOut[0]>>=invOut3)
-    {
-        Any val=    invOut3->getValue( L"prpString");
-
-        if( val.getValueTypeClass() == TypeClass_STRING)
-        {
-            OUString s;
-            val>>=s;
-            MessageBox( NULL,W2T( s.getStr()), _T("Test Program, out object"), MB_OK);
-        }
+        fprintf(stdout, "### Test failed!\n");
+        return E_FAIL;
     }
 
-    Reference<XInvocation> invOut4;
-    seqOut[6] >>= invOut4;
-    if( seqOut[0]>>=invOut4)
+    if ( ! doSimpleSequenceTest(inv))
     {
-        Any val=    invOut4->getValue( L"prpString");
-
-        if( val.getValueTypeClass() == TypeClass_STRING)
-        {
-            OUString s;
-            val>>=s;
-            MessageBox( NULL,W2T( s.getStr()), _T("Test Program, in out object"), MB_OK);
-        }
+        fprintf(stdout, "### Test failed! \n");
+        return E_FAIL;
     }
-//
-//  //###################################################################################
-//  //  in Sequences
-//  //###################################################################################
-//  // inSequenceLong
-    seqIndices.realloc( 0);
-    seqOut.realloc(0);
-    sal_Int32 arLong[]={ 1,2,3};
-    Sequence< sal_Int32 > seqLong( arLong, 3);
 
-    //  seqLongAny <<= seqLong; // 1 dimension
-    //      seqLongAny<<= seq; // 2 dimensions
-    //  seqLongAny<<= seq1;
-    //  seqLongAny<<= Sequence<sal_Int32>( arLong, 3);
+    if ( ! doParameterTest(inv))
+    {
+        fprintf(stdout, "### Test failed! \n");
+        return E_FAIL;
+    }
 
-    seqAny<<= seqLong;
-    inv->invoke( OUString(L"inSequenceLong"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//  // inSequenceShort
-    sal_Int16 arShort[]={1,2,3};
-    Sequence<sal_Int16> seqShort(arShort, 3);
-    seqAny<<= seqShort;
-    inv->invoke( OUString(L"inSequenceShort"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//  // inSequenceByte
-    sal_Int8 arByte[]={1,2,3};
-    Sequence<sal_Int8> seqByte(arByte, 3);
-    seqAny<<= seqByte;
-    inv->invoke( OUString(L"inSequenceByte"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//  // inSequenceString
-    OUString arString[]={L"string one", L"string two", L"string three"};
-    Sequence<OUString> seqString( arString, 3);
-    seqAny<<= seqString;
-    inv->invoke( OUString(L"inSequenceString"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//  // inSequenceFloat
-    float arFloat[]={3.14, 31.4, 314.};
-    Sequence<float> seqFloat( arFloat, 3);
-    seqAny<<=seqFloat;
-    inv->invoke( OUString(L"inSequenceFloat"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//  // inSequenceDouble
-    double arDouble[]={3.14, 31.4, 314.};
-    Sequence<double> seqDouble( arDouble, 3);
-    seqAny<<=seqDouble;
-    inv->invoke( OUString(L"inSequenceDouble"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//
-//  // inSequenceObject
-    Any anyVala;
-    OUString sVal;
-    Sequence<Reference<XInvocation> > seqObj(3);
-    seqObj[0]=  getComObject(L"AxTestComponents.Basic");
-    sVal= L"this is the property value of prpString (1)";
-    anyVala<<= sVal;
-    seqObj[0]->setValue( OUString( L"prpString"), anyVala);
-
-    seqObj[1]=  getComObject(L"AxTestComponents.Basic");
-    sVal= L"this is the property valuef of prpString (2)";
-    anyVala<<= sVal;
-    seqObj[1]->setValue( OUString( L"prpString"), anyVala);
-
-    seqObj[2]=  getComObject(L"AxTestComponents.Basic");
-    sVal= L"this is the property value of prpString (3)";
-    anyVala<<= sVal;
-    seqObj[2]->setValue( OUString( L"prpString"), anyVala);
-
-    seqAny<<=seqObj;
-    inv->invoke( OUString(L"inSequenceObject"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-//
-//  //###################################################################################
-//  //  out Sequences
-//  //###################################################################################
-//
-//  // outSequenceByte
-//
-    inv->invoke( OUString(L"outSequenceByte"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
+    if ( ! doPropertyWithArgumentTest(inv))
+    {
+        fprintf(stdout, "### Test failed! \n");
+        return E_FAIL;
+    }
 
 
-    // outSequenceShort
-    inv->invoke( OUString(L"outSequenceShort"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence(*(Sequence<Any>*)seqOut[0].getValue());
 
 
-    // outSequenceLong
-    inv->invoke( OUString(L"outSequenceLong"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence(*(Sequence<Any>*)seqOut[0].getValue());
 
-    // outSequenceString
-    inv->invoke( OUString(L"outSequenceString"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence(*(Sequence<Any>*)seqOut[0].getValue());
-
-    // outSequenceFloat
-    inv->invoke( OUString(L"outSequenceFloat"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence(  *(Sequence<Any>*)seqOut[0].getValue());
-
-
-    //outSequenceDouble
-    inv->invoke( OUString(L"outSequenceDouble"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence(*(Sequence<Any>*)seqOut[0].getValue());
-//
-//  //outSequenceObject
-    inv->invoke( OUString(L"outSequenceObject"),Sequence< Any > (), seqIndices, seqOut);
-    printSequence(  *(Sequence<Any>*)seqOut[0].getValue());
-//
-//  // outSequenceVariant (see outArray)
-//  //###################################################################################
-//  //  in out Sequences
-//  //###################################################################################
-//  // inoutSequenceByte
-    sal_Int8 arByte1[]={1,2,3};
-    Sequence<sal_Int8> seqByteIO(arByte1, 3);
-    seqAny<<= seqByteIO;
-    inv->invoke( OUString(L"inoutSequenceByte"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
-
-    // inoutSequenceShort
-    sal_Int16 arShort1[]={1,2,3};
-    Sequence<sal_Int16> seqShortIO(arShort1, 3);
-    seqAny<<= seqShortIO;
-    inv->invoke( OUString(L"inoutSequenceShort"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
-
-
-    // inoutSequenceLong
-    sal_Int32 arLong1[]={ 1,2,3};
-    Sequence< sal_Int32 > seqLongIO( arLong1, 3);
-    seqAny<<= seqLongIO;
-    inv->invoke( OUString(L"inoutSequenceLong"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
-
-    // inoutSequenceString
-    OUString arString1[]={L"string one", L"string two", L"string three"};
-    Sequence<OUString> seqStringIO( arString1, 3);
-    seqAny<<= seqStringIO;
-    inv->invoke( OUString(L"inoutSequenceString"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
-
-    // inoutSequenceFloat
-    float arFloat1[]={3.14, 31.4, 314.};
-    Sequence<float> seqFloatIO( arFloat1, 3);
-    seqAny<<=seqFloatIO;
-    inv->invoke( OUString(L"inoutSequenceFloat"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
-
-    // inoutSequenceDouble
-    double arDouble1[]={3.14, 31.4, 314.};
-    Sequence<double> seqDoubleIO( arDouble1, 3);
-    seqAny<<=seqDoubleIO;
-    inv->invoke( OUString(L"inoutSequenceDouble"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
-//
-//
-//  // inoutSequenceObject
-    Any anyValb;
-    OUString sVala;
-    Sequence<Reference<XInvocation> > seqObjIO(3);
-    seqObjIO[0]=    getComObject(L"AxTestComponents.Basic");
-    sVala= L"this is the property value of prpString (1)";
-    anyValb<<= sVala;
-    seqObjIO[0]->setValue( OUString( L"prpString"), anyValb);
-
-    seqObjIO[1]=    getComObject(L"AxTestComponents.Basic");
-    sVala= L"this is the property valuef of prpString (2)";
-    anyValb<<= sVala;
-    seqObjIO[1]->setValue( OUString( L"prpString"), anyValb);
-
-    seqObjIO[2]=    getComObject(L"AxTestComponents.Basic");
-    sVala= L"this is the property value of prpString (3)";
-    anyValb<<= sVala;
-    seqObjIO[2]->setValue( OUString( L"prpString"), anyValb);
-
-    seqAny<<=seqObjIO;
-    inv->invoke( OUString(L"inoutSequenceObject"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
-    printSequence( *(Sequence<Any>*)seqOut[0].getValue());
 //
 //  //###################################################################################
 //  //  in multi Sequences
@@ -816,18 +1234,7 @@ HRESULT doTest()
     inv->invoke( OUString(L"inMulDimArrayByte2"),Sequence< Any > ( &seqAny, 1), seqIndices, seqOut);
 
 
-    // prpByte
-    Any prpAny;
-    sal_Int8 aByte1= 111;
-    prpAny<<= aByte1;
-    inv->setValue(OUString(L"prpByte"), prpAny);
-    prpAny= Any();
-    aByte1=0;
-    prpAny= inv->getValue(OUString(L"prpByte"));
-    prpAny>>= aByte1;
-    // prpShort
 
-    // prpLong
     //###################################################################################
     //###################################################################################
     //###################################################################################
@@ -840,7 +1247,8 @@ HRESULT doTest()
     // unsigned char is not supported by MFC
     //  aAny <<= ( sal_Int8) 127;
     //  invMfc->invoke( OUString(L"inByte"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
+    if ( ! invMfc.is())
+        return hr;
     aAny <<= ( sal_Int16) 0xffff;
     aAny= invMfc->invoke( OUString(L"inShort"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
 
@@ -942,64 +1350,7 @@ HRESULT doTest()
 }
 
 
-void printSequence( Sequence<Any>& val)
-{
 
-//  typelib_TypeDescription* desc;
-//  val.getValueTypeDescription( &desc);
-//  typelib_typedescription_release( desc);
-
-    USES_CONVERSION;
-    char buff[1024];
-    buff[0]=0;
-    char tmpBuf[1024];
-    tmpBuf[0]=0;
-    sal_Int32 i;
-
-    for( i=0; i< val.getLength(); i++)
-    {
-        Any& elem= val[i];
-        switch ( elem.getValueTypeClass())
-        {
-        case TypeClass_BYTE:
-             sprintf( tmpBuf, "sal_Int8 %d \n", *(sal_Int8*)elem.getValue());
-             break;
-        case TypeClass_SHORT:
-             sprintf( tmpBuf, "sal_Int16 %d \n", *(sal_Int16*)elem.getValue());
-             break;
-        case TypeClass_LONG:
-             sprintf( tmpBuf, "sal_Int32 %d \n", *(sal_Int32*)elem.getValue());
-             break;
-        case TypeClass_DOUBLE:
-             sprintf( tmpBuf, "double %f \n", *(double*)elem.getValue());
-             break;
-        case TypeClass_FLOAT:
-             sprintf( tmpBuf, "float %f \n", *(float*)elem.getValue());
-             break;
-        case TypeClass_STRING:
-             sprintf( tmpBuf, "%S \n", (*(OUString*)elem.getValue()).getStr());
-             break;
-        case TypeClass_INTERFACE:
-            {
-            // we assume that the interface is XInvocation of a AxTestControls.Basic component.
-            Reference<XInvocation> inv;
-            elem>>= inv;
-            if( inv.is())
-            {
-                Any prpVal= inv->getValue( OUString( L"prpString"));
-                sprintf( tmpBuf, "Property prpString: %S \n", (*(OUString*)prpVal.getValue()).getStr());
-            }
-            break;
-            }
-        default:break;
-        }
-        strcat( buff, tmpBuf);
-
-    }
-
-    MessageBox( NULL, A2T(buff), _T("clientTest: printing Sequence elements"), MB_OK);
-}
-
-//VARIANT VT_UI1
+//VARIANT_TRUE VT_UI1
 
 
