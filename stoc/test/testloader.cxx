@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 10:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 #include <stdio.h>
 
-#ifndef _VOS_MODULE_HXX_
-#include <vos/module.hxx>
+#ifndef _OSL_MODULE_H_
+#include <osl/module.hxx>
 #endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -77,10 +78,6 @@
 #include <cppuhelper/factory.hxx>
 #endif
 
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
-#endif
-
 #if defined ( UNX ) || defined ( MAC )
 #include <limits.h>
 #define _MAX_PATH PATH_MAX
@@ -89,7 +86,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
-using namespace vos;
+using namespace osl;
 using namespace rtl;
 
 #ifdef _DEBUG
@@ -106,7 +103,7 @@ int _cdecl main( int argc, char * argv[] )
 {
     Reference<XInterface> xIFace;
 
-    OModule* pModule = new OModule(OUString());
+    Module* pModule = new Module(OUString());
 
 #ifdef SAL_W32
     OUString dllName( OUString::createFromAscii("cpld.dll") );
