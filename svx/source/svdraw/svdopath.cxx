@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-21 15:12:14 $
+ *  last change: $Author: aw $ $Date: 2002-10-22 13:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2232,9 +2232,15 @@ void SdrPathObj::RecalcSnapRect()
 void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
 {
     Rectangle aOld(GetSnapRect());
-    long nMulX = rRect.Right()  - rRect.Left();
+
+    // #95736# Take RECT_EMPTY into account when calculating scale factors
+    long nMulX = (RECT_EMPTY == rRect.Right()) ? 0 : rRect.Right()  - rRect.Left();
+
     long nDivX = aOld.Right()   - aOld.Left();
-    long nMulY = rRect.Bottom() - rRect.Top();
+
+    // #95736# Take RECT_EMPTY into account when calculating scale factors
+    long nMulY = (RECT_EMPTY == rRect.Bottom()) ? 0 : rRect.Bottom() - rRect.Top();
+
     long nDivY = aOld.Bottom()  - aOld.Top();
     if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
