@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScanError.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:30 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 16:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ enum ScanError
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanInProgress,
-    /** ScanInProgress: a scan is already in action on this device that has
+    /** ScanInProgress: a scan is already in progress on this device that has
         to end before a new one can be started
     */
     ScanInProgress,
