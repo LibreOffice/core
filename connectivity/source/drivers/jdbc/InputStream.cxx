@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-18 14:21:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ jclass java_io_InputStream::getMyClass()
 
 void java_io_InputStream::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==NULL  )
+    if( pClass==NULL  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
