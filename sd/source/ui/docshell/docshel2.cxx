@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:10:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawDocShell.hxx"
+
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -75,20 +77,35 @@
 #pragma hdrstop
 
 #include "helpids.h"
-#include "docshell.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "frmview.hxx"
+#endif
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "sdview.hxx"
-#include "clview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_CLIENT_VIEW_HXX
+#include "ClientView.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include "strmname.h"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -96,7 +113,7 @@
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
+void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
                                    USHORT nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
@@ -106,7 +123,7 @@ void SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
         **********************************************************************/
     }
 
-    SdClientView* pView = new SdClientView(this, pOut, NULL);
+    ClientView* pView = new ClientView(this, pOut, NULL);
 
     pView->SetHlplVisible(FALSE);
     pView->SetGridVisible(FALSE);
@@ -205,7 +222,7 @@ void SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
 |*
 \************************************************************************/
 
-void SdDrawDocShell::SetVisArea(const Rectangle& rRect)
+void DrawDocShell::SetVisArea(const Rectangle& rRect)
 {
 //    SfxInPlaceObject::SetVisArea(rRect);
 
@@ -226,7 +243,7 @@ void SdDrawDocShell::SetVisArea(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-Rectangle SdDrawDocShell::GetVisArea(USHORT nAspect) const
+Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
 {
     Rectangle aVisArea;
 
@@ -261,22 +278,22 @@ Rectangle SdDrawDocShell::GetVisArea(USHORT nAspect) const
 
 /*************************************************************************
 |*
-|* SdViewShell anmelden
+|* ViewShell anmelden
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Connect(SdViewShell* pViewSh)
+void DrawDocShell::Connect(ViewShell* pViewSh)
 {
     pViewShell = pViewSh;
 }
 
 /*************************************************************************
 |*
-|* SdViewShell abmelden
+|* ViewShell abmelden
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Disconnect(SdViewShell* pViewSh)
+void DrawDocShell::Disconnect(ViewShell* pViewSh)
 {
     if (pViewShell == pViewSh)
     {
@@ -290,7 +307,7 @@ void SdDrawDocShell::Disconnect(SdViewShell* pViewSh)
 |*
 \************************************************************************/
 
-FrameView* SdDrawDocShell::GetFrameView()
+FrameView* DrawDocShell::GetFrameView()
 {
     FrameView* pFrameView = NULL;
 
@@ -308,7 +325,7 @@ FrameView* SdDrawDocShell::GetFrameView()
 |*
 \************************************************************************/
 
-Size SdDrawDocShell::GetFirstPageSize()
+Size DrawDocShell::GetFirstPageSize()
 {
     return SfxObjectShell::GetFirstPageSize();
 }
@@ -319,7 +336,7 @@ Size SdDrawDocShell::GetFirstPageSize()
 |*
 \************************************************************************/
 
-void SdDrawDocShell::UIActivate( BOOL bActive )
+void DrawDocShell::UIActivate( BOOL bActive )
 {
     bUIActive = bActive;
     SfxInPlaceObject::UIActivate( bActive );
@@ -331,7 +348,7 @@ void SdDrawDocShell::UIActivate( BOOL bActive )
 |*
 \************************************************************************/
 
-Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
+Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 {
     MapMode         aMapMode( MAP_100TH_MM );
     const Size      aSize( pPage->GetSize() );
@@ -355,7 +372,7 @@ Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
     aMapMode.SetScaleY( aFrac );
     aVDev.SetMapMode( aMapMode );
 
-    SdClientView*   pView = new SdClientView( this, &aVDev, NULL );
+    ClientView* pView = new ClientView( this, &aVDev, NULL );
     FrameView*      pFrameView = GetFrameView();
 
     pView->ShowPage( pPage, aNullPt );
@@ -432,7 +449,7 @@ Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
+BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
 {
     const String aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -444,7 +461,7 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
         aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
         if( pViewShell )
-            aNameDlg.SetCheckNameHdl( LINK( this, SdDrawDocShell, RenameSlideHdl ) );
+            aNameDlg.SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
 
         FuPoor* pFunc = pViewShell->GetActualFunction();
         if( pFunc )
@@ -460,7 +477,7 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
     return ( bIsNameValid ? TRUE : FALSE );
 }
 
-bool SdDrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
+bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
 {
     bool bCanUseNewName = false;
 
@@ -561,7 +578,7 @@ bool SdDrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStr
     return bCanUseNewName;
 }
 
-IMPL_LINK( SdDrawDocShell, RenameSlideHdl, SvxNameDialog*, pDialog )
+IMPL_LINK( DrawDocShell, RenameSlideHdl, SvxNameDialog*, pDialog )
 {
     if( ! pDialog )
         return 0;
@@ -571,3 +588,4 @@ IMPL_LINK( SdDrawDocShell, RenameSlideHdl, SvxNameDialog*, pDialog )
 
     return IsNewPageNameValid( aNewName );
 }
+} // end of namespace sd
