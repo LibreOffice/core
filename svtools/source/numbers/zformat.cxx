@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:23:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <stdlib.h>
 
 #ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+//#include <tools/intn.hxx>
 #endif
 #ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
