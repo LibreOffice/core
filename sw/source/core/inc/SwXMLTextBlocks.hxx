@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 11:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 19:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ public:
     virtual ULONG Delete( USHORT );
     virtual ULONG Rename( USHORT, const String&, const String& );
     virtual ULONG CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
+    virtual void  ClearDoc();
     virtual ULONG GetDoc( USHORT );
     virtual ULONG BeginPutDoc( const String&, const String& );
     virtual ULONG PutDoc();
