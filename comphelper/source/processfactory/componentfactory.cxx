@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentfactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: cp $ $Date: 2001-02-15 15:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,8 @@ Reference< XInterface > getComponentInstance(
         Reference< XSingleServiceFactory > xSSF =
             loadLibComponentFactory( rLibraryName, rImplementationName,
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
-        xI = xSSF->createInstance();
+        if (xSSF.is())
+            xI = xSSF->createInstance();
     }
     return xI;
 }
