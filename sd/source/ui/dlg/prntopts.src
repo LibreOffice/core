@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabPage TP_PRINT_OPTIONS
     Text [ ENGLISH ] = "Options" ;
     Text [ norwegian ] = "Options" ;
     Text [ italian ] = "Opzioni" ;
-    Text [ portuguese_brazilian ] = "Op??s" ;
+    Text [ portuguese_brazilian ] = "Opções" ;
     Text [ portuguese ] = "Opções" ;
     Text [ french ] = "Options" ;
     Text [ dutch ] = "Opties" ;
@@ -88,7 +88,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
         Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Conte?o" ;
+        Text [ portuguese_brazilian ] = "Conteúdo" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indhold" ;
@@ -105,10 +105,13 @@ TabPage TP_PRINT_OPTIONS
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğåñéå÷üìåíá";
         Text[ korean ] = "ë‚´ìš©";
-        Text[ turkish ] = "İçerik";
+        Text[ turkish ] = "İçerikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contingut";
         Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+        Text[ czech ] = "Obsah";
+        Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¤¸à¥‚à¤šà¥€";
     };
     CheckBox CBX_DRAW
     {
@@ -125,10 +128,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "T~eckning" ;
         Text [ danish ] = "Te~gning" ;
         Text [ portuguese ] = "~Desenho" ;
-        Text [ portuguese_brazilian ] = "Ze~ichnung" ;
+        Text [ portuguese_brazilian ] = "~Desenho" ;
         Text [ chinese_simplified ] = "ç»˜å›¾(~D)";
         Text [ russian ] = "Ğèñ~óíîê";
-        Text [ polish ] = "Rysun~ek";
+        Text [ polish ] = "~Rysunek";
         Text [ chinese_traditional ] = "ç¹ªåœ–(~D)";
         Text [ arabic ] = "ÑÓã";
         Text [ japanese ] = "å›³å½¢æç”»(~D)";
@@ -139,6 +142,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Piirros";
         Text[ catalan ] = "~Dibuix";
         Text[ thai ] = "~à¸§à¸²à¸”à¸£à¸¹à¸›";
+        Text[ czech ] = "Kresba";
+        Text[ hebrew ] = "â€®×¦×™×•×¨â€¬";
+        Text[ hindi ] = "~à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°";
     };
     CheckBox CBX_NOTES
     {
@@ -155,10 +161,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "Ante~ckningar" ;
         Text [ danish ] = "Not~er" ;
         Text [ portuguese ] = "A~notações" ;
-        Text [ portuguese_brazilian ] = "No~tizen" ;
+        Text [ portuguese_brazilian ] = "A~notações" ;
         Text[ chinese_simplified ] = "å¤‡æ³¨(~N)";
         Text[ russian ] = "Ïğèìå÷àíèÿ";
-        Text[ polish ] = "Notatki";
+        Text[ polish ] = "~Notatki";
         Text[ japanese ] = "ãƒãƒ¼ãƒˆ(~N)";
         Text[ chinese_traditional ] = "å‚™è¨»(~N)";
         Text[ arabic ] = "ÇáãáÇÍÙÇÊ";
@@ -169,6 +175,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Huomautukset";
         Text[ catalan ] = "~Notes";
         Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
+        Text[ czech ] = "KomentÃ¡Å™e";
+        Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
+        Text[ hindi ] = "~à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€";
     };
     CheckBox CBX_HANDOUTS
     {
@@ -185,10 +194,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "Fl~ygblad" ;
         Text [ danish ] = "Uddelingskopier" ;
         Text [ portuguese ] = "~Folheto" ;
-        Text [ portuguese_brazilian ] = "Handzette~l" ;
+        Text [ portuguese_brazilian ] = "~Folhetos" ;
         Text[ chinese_simplified ] = "è®²ä¹‰(~U)";
         Text[ russian ] = "Òåçèñû";
-        Text[ polish ] = "Materia³y";
+        Text[ polish ] = "Materia³y in~formacyjne";
         Text[ japanese ] = "ãƒãƒ³ãƒ‰ã‚¢ã‚¦ãƒˆ(~U)";
         Text[ chinese_traditional ] = "è¬›ç¾©(~U)";
         Text[ arabic ] = "äÔÑÇÊ";
@@ -199,6 +208,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Esitteet";
         Text[ catalan ] = "Pros~pectes";
         Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£~à¸›à¸£à¸°à¸à¸­à¸šà¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢";
+        Text[ czech ] = "Teze";
+        Text[ hebrew ] = "Handzette~l";
+        Text[ hindi ] = "~à¤¹à¤¾à¤¨à¥à¤¡à¥Œà¤Ÿà¥à¤¸";
     };
     CheckBox CBX_OUTLINE
     {
@@ -215,20 +227,23 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "~Disposition" ;
         Text [ danish ] = "Disposition" ;
         Text [ portuguese ] = "~Esquema" ;
-        Text [ portuguese_brazilian ] = "~Gliederung" ;
+        Text [ portuguese_brazilian ] = "Estrutura de ~Tópicos" ;
         Text[ chinese_simplified ] = "å¤§çº²(~L)";
         Text[ russian ] = "Ñòğóêòóğà";
-        Text[ polish ] = "Konspekt";
+        Text[ polish ] = "~Konspekt";
         Text[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³(~L)";
         Text[ chinese_traditional ] = "å¤§ç¶±(~L)";
         Text[ arabic ] = "ÇáÊŞÓíã";
         Text[ greek ] = "ÄéÜñèñùóç";
-        Text[ korean ] = "ì•„ì›ƒíŠ¸ë¼ì¸(~L)";
+        Text[ korean ] = "ê°œìš”(~L)";
         Text[ turkish ] = "Anahat";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Jäsennys";
         Text[ catalan ] = "Con~torn";
         Text[ thai ] = "à¹€à¸„à¹‰à¸²~à¸£à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Osnova";
+        Text[ hebrew ] = "~Gliederung";
+        Text[ hindi ] = "~à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -243,7 +258,7 @@ TabPage TP_PRINT_OPTIONS
         Text = "Ausgabequalität" ;
         Text [ ENGLISH ] = "Output quality" ;
         Text [ english_us ] = "Quality" ;
-        Text [ portuguese_brazilian ] = "Ausgabequalit?t" ;
+        Text [ portuguese_brazilian ] = "Qualidade" ;
         Text [ swedish ] = "Utmatningskvalitet" ;
         Text [ danish ] = "Outputkvalitet" ;
         Text [ italian ] = "Qualità stampa" ;
@@ -259,11 +274,14 @@ TabPage TP_PRINT_OPTIONS
         Text[ arabic ] = "ÇáäæÚíÉ";
         Text[ greek ] = "Ğïéüôçôá åîáãùãŞò";
         Text[ korean ] = "ì¸ì‡„ í’ˆì§ˆ";
-        Text[ turkish ] = "Çıktı kalitesi";
+        Text[ turkish ] = "Kalite";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Laatu";
         Text[ catalan ] = "Qualitat";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ à¸²à¸";
+        Text[ czech ] = "Kvalita";
+        Text[ hebrew ] = "AusgabequalitÃ¤t";
+        Text[ hindi ] = "à¤—à¥à¤£";
     };
     RadioButton RBT_COLOR
     {
@@ -273,7 +291,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "~Default" ;
         Text [ english_us ] = "Default" ;
         TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Standard" ;
+        Text [ portuguese_brazilian ] = "Padrão" ;
         Text [ swedish ] = "Standa~rd" ;
         Text [ danish ] = "Standa~rd" ;
         Text [ italian ] = "Standard" ;
@@ -283,17 +301,20 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Pa~drão" ;
         Text[ chinese_simplified ] = "æ ‡å‡†";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domyœ~lnie";
         Text[ japanese ] = "æ¨™æº–";
         Text[ chinese_traditional ] = "æ¨™æº–";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "Ğñïåğéëï~ãŞ";
         Text[ korean ] = "ê¸°ë³¸ê°’";
-        Text[ turkish ] = "Standart";
+        Text[ turkish ] = "Öntanımlı";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Oletus";
         Text[ catalan ] = "Per defecte";
         Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+        Text[ czech ] = "VÃ½chozÃ­";
+        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+        Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
     };
     RadioButton RBT_GRAYSCALE
     {
@@ -303,7 +324,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Gra~yscale" ;
         Text [ english_us ] = "Gra~yscale" ;
         TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Graustufen" ;
+        Text [ portuguese_brazilian ] = "Tons de Cin~za" ;
         Text [ swedish ] = "~Gråskalor" ;
         Text [ danish ] = "Gr~åtoner" ;
         Text [ italian ] = "Toni di grigio" ;
@@ -313,17 +334,20 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Tons de ~cinzento" ;
         Text[ chinese_simplified ] = "ç°åº¦(~Y)";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaroœci";
+        Text[ polish ] = "Odcienie ~szaroœci";
         Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«(~Y)";
         Text[ chinese_traditional ] = "ç°éš(~Y)";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
         Text[ greek ] = "ÄéáâÜ~èìéóç ôïõ ãêñé";
         Text[ korean ] = "íšŒìƒ‰ì¡°(~Y)";
-        Text[ turkish ] = "Gri tonları";
+        Text[ turkish ] = "Gri ölçeği";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Harmaasävy";
         Text[ catalan ] = "Escala de grisos";
         Text[ thai ] = "à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€~à¸—à¸²";
+        Text[ czech ] = "StupnÄ› Å¡edi";
+        Text[ hebrew ] = "Graustu~fen";
+        Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¸à¥à¤•à¥‡à¤²";
     };
     RadioButton RBT_BLACKWHITE
     {
@@ -333,7 +357,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Black & ~white" ;
         Text [ english_us ] = "Black & ~white" ;
         TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Schwarzwei?" ;
+        Text [ portuguese_brazilian ] = "Preto e ~branco" ;
         Text [ swedish ] = "Svart~vitt" ;
         Text [ danish ] = "Sort-h~vid" ;
         Text [ italian ] = "Bianco e nero" ;
@@ -343,17 +367,20 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Preto e ~branco" ;
         Text[ chinese_simplified ] = "é»‘ç™½(~W)";
         Text[ russian ] = "×åğíî-áåëîå";
-        Text[ polish ] = "Czarno-bia~³y";
+        Text[ polish ] = "~Czarno-bia³y";
         Text[ japanese ] = "ç™½é»’(~W)";
         Text[ chinese_traditional ] = "é»‘ç™½(~W)";
         Text[ arabic ] = "ÃÈíÖ æÃÓæÏ";
         Text[ greek ] = "Áóğñüìá~õñï";
         Text[ korean ] = "í‘ë°±(~W)";
-        Text[ turkish ] = "Siyah-beyaz";
+        Text[ turkish ] = "Siyah-~beyaz";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Mustavalkoinen";
         Text[ catalan ] = "Blanc i negre";
         Text[ thai ] = "à¸”à¸³à¹à¸¥à¸°~à¸‚à¸²à¸§";
+        Text[ czech ] = "ÄŒernÃ¡ a bÃ­lÃ¡";
+        Text[ hebrew ] = "Schwarz~weiÃŸ";
+        Text[ hindi ] = "à¤•à¤¾à¤²à¤¾ à¤”à¤° à¤¸à¤«à¥‡à¤¦";
     };
     FixedLine GRP_PRINT_EXT
     {
@@ -384,6 +411,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimeix";
         Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
+        Text[ czech ] = "Tisk";
+        Text[ hebrew ] = "â€®×”×“×¤×¡×”â€¬";
+        Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ";
     };
     CheckBox CBX_PAGENAME
     {
@@ -393,7 +423,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "~Page name" ;
         Text [ norwegian ] = "Side~navn" ;
         Text [ italian ] = "Nome pagina" ;
-        Text [ portuguese_brazilian ] = "Nome da ~p?gina" ;
+        Text [ portuguese_brazilian ] = "Nome da ~página" ;
         Text [ portuguese ] = "Nome da ~página" ;
         Text [ finnish ] = "Sivun nimi" ;
         Text [ danish ] = "Sidenavn" ;
@@ -405,7 +435,7 @@ TabPage TP_PRINT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é¡µé¢åç§°(~P)";
         Text[ russian ] = "Èìÿ ñòğàíèöû";
-        Text[ polish ] = "Nazwa strony";
+        Text[ polish ] = "Na~zwa strony";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸å(~P)";
         Text[ chinese_traditional ] = "é é¢åç¨±(~P)";
         Text[ arabic ] = "ÇÓã ÇáÕİÍÉ";
@@ -415,6 +445,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No~m de pàgina";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "NÃ¡zev strÃ¡nky";
+        Text[ hebrew ] = "Seiten~name";
+        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤  à¤•à¤¾ à¤¨à¤¾à¤®";
     };
     CheckBox CBX_DATE
     {
@@ -436,7 +469,7 @@ TabPage TP_PRINT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ—¥æœŸ(~A)";
         Text[ russian ] = "Äàòà";
-        Text[ polish ] = "Data";
+        Text[ polish ] = "Da~ta";
         Text[ japanese ] = "æ—¥ä»˜(~A)";
         Text[ chinese_traditional ] = "æ—¥æœŸ(~A)";
         Text[ arabic ] = "ÇáÊÇÑíÎ";
@@ -446,6 +479,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D~ata";
         Text[ thai ] = "à¸§à¸±~à¸™à¸—à¸µà¹ˆ";
+        Text[ czech ] = "Datum";
+        Text[ hebrew ] = "Dat~um";
+        Text[ hindi ] = "~à¤¦à¤¿à¤¨à¤¾à¤‚à¤•";
     };
     CheckBox CBX_TIME
     {
@@ -467,7 +503,7 @@ TabPage TP_PRINT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ—¶é—´(~M)";
         Text[ russian ] = "Âğåìÿ";
-        Text[ polish ] = "Czas";
+        Text[ polish ] = "Cz~as";
         Text[ japanese ] = "æ™‚åˆ»(~M)";
         Text[ chinese_traditional ] = "æ™‚é–“(~M)";
         Text[ arabic ] = "ÇáæŞÊ";
@@ -477,6 +513,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "H~ora";
         Text[ thai ] = "à¹€à¸§~à¸¥à¸²";
+        Text[ czech ] = "ÄŒas";
+        Text[ hebrew ] = "Z~eit";
+        Text[ hindi ] = "~à¤¸à¤®à¤¯";
     };
     CheckBox CBX_HIDDEN_PAGES
     {
@@ -494,10 +533,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "Do~lda sidor" ;
         Text [ danish ] = "Skjulte sider" ;
         Text [ portuguese ] = "Páginas ~ocultas" ;
-        Text [ portuguese_brazilian ] = "Ausge~blendeten Seiten" ;
+        Text [ portuguese_brazilian ] = "Páginas ~ocultas" ;
         Text[ chinese_simplified ] = "éšå…¥çš„é¡µé¢(~I)";
         Text[ russian ] = "Ñêğûòûå ñòğàíèöû";
-        Text[ polish ] = "Ukryte strony";
+        Text[ polish ] = "Ukryte str~ony";
         Text[ japanese ] = "éè¡¨ç¤ºã®ãƒšãƒ¼ã‚¸(~I)";
         Text[ chinese_traditional ] = "éš±å…¥çš„é é¢(~I)";
         Text[ arabic ] = "ÇáÕİÍÇÊ ÇáãÎİíÉ";
@@ -508,6 +547,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Piilosivut";
         Text[ catalan ] = "Pàgines ~ocultes";
         Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆà¸‹à¹ˆ~à¸­à¸™";
+        Text[ czech ] = "SkrytÃ© strÃ¡nky";
+        Text[ hebrew ] = "Ausge~blendeten Seiten";
+        Text[ hindi ] = "~à¤›à¤¿à¤ªà¤¾ à¤¹à¥à¤† à¤ªà¥ƒà¤·à¥à¤ ";
     };
     FixedLine FL_SEPARATOR2
     {
@@ -523,7 +565,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Page options" ;
         Text [ norwegian ] = "Side valg" ;
         Text [ italian ] = "Opzioni pagina" ;
-        Text [ portuguese_brazilian ] = "Op??s da p?gina" ;
+        Text [ portuguese_brazilian ] = "Opções da página" ;
         Text [ portuguese ] = "Opções da página" ;
         Text [ finnish ] = "Sivuasetukset" ;
         Text [ danish ] = "Sideindstillinger" ;
@@ -540,10 +582,13 @@ TabPage TP_PRINT_OPTIONS
         Text[ arabic ] = "ÎíÇÑÇÊ ÇáÕİÍÉ";
         Text[ greek ] = "Åğéëïãİò óåëßäáò";
         Text[ korean ] = "í˜ì´ì§€ ì˜µì…˜";
-        Text[ turkish ] = "Sayfa seçenekleri";
+        Text[ turkish ] = "Sayfa özellikleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions de pàgina";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Volby strÃ¡nky";
+        Text[ hebrew ] = "Seitenoptionen";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¤¾ à¤µà¤¿à¤•à¤²à¥à¤ª";
     };
     RadioButton RBT_DEFAULT
     {
@@ -560,20 +605,23 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "St~andard" ;
         Text [ danish ] = "Sta~ndard" ;
         Text [ portuguese ] = "~Padrão" ;
-        Text [ portuguese_brazilian ] = "St~andard" ;
+        Text [ portuguese_brazilian ] = "Padrão" ;
         Text[ chinese_simplified ] = "æ ‡å‡†";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy~œlnie";
+        Text[ polish ] = "Domyœln~ie";
         Text[ japanese ] = "æ—¢å®š";
         Text[ chinese_traditional ] = "æ¨™æº–";
         Text[ arabic ] = "ŞíÇÓí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ korean ] = "ê¸°ë³¸ê°’";
-        Text[ turkish ] = "Standart";
+        Text[ turkish ] = "Öntanımlı";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Oletus";
         Text[ catalan ] = "~Predeterminat";
         Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+        Text[ czech ] = "VÃ½chozÃ­";
+        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××’×“×œâ€¬";
+        Text[ hindi ] = "~à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤°à¥à¤¡";
     };
     RadioButton RBT_PAGESIZE
     {
@@ -583,7 +631,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "~Fit to page size" ;
         Text [ norwegian ] = "~Tilpass sidestørrelse" ;
         Text [ italian ] = "Dimensione pagina" ;
-        Text [ portuguese_brazilian ] = "~Encaixar no tamanho da p?gina" ;
+        Text [ portuguese_brazilian ] = "~Ajustar à página" ;
         Text [ portuguese ] = "~Adaptar ao tamanho da página" ;
         Text [ finnish ] = "Sovita sivulle" ;
         Text [ danish ] = "Tilpas til siden" ;
@@ -595,7 +643,7 @@ TabPage TP_PRINT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è°ƒæ•´æˆé¡µé¢å¤§å°(~F)";
         Text[ russian ] = "Ñîãëàñîâàòü ñ ğàçìåğîì ñòğàíèöû";
-        Text[ polish ] = "Dopasuj do rozmiaru stron~y";
+        Text[ polish ] = "~Dopasuj do strony";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚µã‚¤ã‚ºã«åˆã‚ã›ã‚‹(~F)";
         Text[ chinese_traditional ] = "èª¿æ•´æˆé é¢å¤§å°(~F)";
         Text[ arabic ] = "ãáÇÁãÉ áÍÌã ÇáÕİÍÉ";
@@ -605,6 +653,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aj~usta a la mida de la pàgina";
         Text[ thai ] = "à¸ˆà¸±à¸”~à¸à¸­à¸”à¸µà¸à¸±à¸šà¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "PÅ™izpÅ¯sobit rozmÄ›ru strÃ¡nky";
+        Text[ hebrew ] = "An ~SeitengrÃ¶ÃŸe anpassen";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ~à¤•à¥‡à¤²à¤¿à¤ à¤¯à¥‹à¤—à¥à¤¯";
     };
     RadioButton RBT_PAGETILE
     {
@@ -621,10 +672,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "Sid~or sida vid sida" ;
         Text [ danish ] = "Sider side om side" ;
         Text [ portuguese ] = "Páginas em ~mosaico" ;
-        Text [ portuguese_brazilian ] = "Seiten ~kacheln" ;
+        Text [ portuguese_brazilian ] = "Páginas ~lado a lado" ;
         Text[ chinese_simplified ] = "å¹³é“ºé¡µé¢(~T)";
         Text[ russian ] = "Ñòğàíèöû âñå ğÿäîì";
-        Text[ polish ] = "Ustaw strony obo~k siebie";
+        Text[ polish ] = "Strony s¹siadu~j¹co";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã«ã‚¿ã‚¤ãƒ«çŠ¶é…ç½®(~T)";
         Text[ chinese_traditional ] = "å¹³é‹ªé é¢(~T)";
         Text[ arabic ] = "ÕİÍÇÊ ÈáÇØ";
@@ -635,6 +686,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Sivut vierekkäin";
         Text[ catalan ] = "Pàgines en mo~saic";
         Text[ thai ] = "à¸«à¸™à¹‰à¸²à¹à¸šà¸š~à¸à¸£à¸°à¹€à¸šà¸·à¹‰à¸­à¸‡";
+        Text[ czech ] = "StrÃ¡nky jako dlaÅ¾dice";
+        Text[ hebrew ] = "Seiten ~kacheln";
+        Text[ hindi ] = "~à¤Ÿà¤‡à¤² à¤ªà¥ƒà¤·à¥à¤ ";
     };
     RadioButton RBT_BOOKLET
     {
@@ -651,10 +705,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "~Prospekt" ;
         Text [ danish ] = "Brochure" ;
         Text [ portuguese ] = "~Prospecto" ;
-        Text [ portuguese_brazilian ] = "~Prospekt" ;
+        Text [ portuguese_brazilian ] = "B~rochura" ;
         Text[ chinese_simplified ] = "æ‰‹å†Œ(~R)";
         Text[ russian ] = "~Áğîøşğà";
-        Text[ polish ] = "Broszura";
+        Text[ polish ] = "~Broszura";
         Text[ japanese ] = "ãƒ‘ãƒ³ãƒ•ãƒ¬ãƒƒãƒˆ(~R)";
         Text[ chinese_traditional ] = "æ‰‹å†Š(~R)";
         Text[ arabic ] = "äÔÑÉ";
@@ -665,6 +719,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Esite";
         Text[ catalan ] = "F~ullet";
         Text[ thai ] = "à¹‚à¸šà¸£~à¸Šà¸±à¸§à¸£à¹Œ";
+        Text[ czech ] = "PÅ™Ã­ruÄka";
+        Text[ hebrew ] = "~Prospekt";
+        Text[ hindi ] = "~à¤›à¥‹à¤Ÿà¥€ à¤ªà¥à¤¸à¥à¤¤à¤•";
     };
     CheckBox CBX_FRONT
     {
@@ -681,10 +738,10 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "~Framsida" ;
         Text [ danish ] = "Forside" ;
         Text [ portuguese ] = "~Verso" ;
-        Text [ portuguese_brazilian ] = "~Vorderseite" ;
+        Text [ portuguese_brazilian ] = "~Frente" ;
         Text[ chinese_simplified ] = "æ­£é¢(~O)";
         Text[ russian ] = "Ëèöåâàÿ ñòîğîíà";
-        Text[ polish ] = "Przednia st~rona";
+        Text[ polish ] = "~Przód";
         Text[ japanese ] = "ãŠã‚‚ã¦(~O)";
         Text[ chinese_traditional ] = "æ­£é¢(~O)";
         Text[ arabic ] = "ÇáÕİÍÉ ÇáÃãÇãíÉ";
@@ -695,6 +752,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Etuosa";
         Text[ catalan ] = "Cara davan~tera";
         Text[ thai ] = "à¸«~à¸™à¹‰à¸²";
+        Text[ czech ] = "PopÅ™edÃ­";
+        Text[ hebrew ] = "~Vorderseite";
+        Text[ hindi ] = "~à¤¸à¤¾à¤®à¤¨à¥‡ à¤•à¤¾ à¤­à¤¾à¤—";
     };
     CheckBox CBX_BACK
     {
@@ -711,20 +771,23 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "~Baksida" ;
         Text [ danish ] = "B~agside" ;
         Text [ portuguese ] = "~Verso" ;
-        Text [ portuguese_brazilian ] = "~R?kseite" ;
+        Text [ portuguese_brazilian ] = "~Verso" ;
         Text[ chinese_simplified ] = "åé¢(~C)";
         Text[ russian ] = "Îáîğîò";
-        Text[ polish ] = "Odwrotna strona";
+        Text[ polish ] = "T~y³";
         Text[ japanese ] = "ã†ã‚‰(~C)";
         Text[ chinese_traditional ] = "åé¢(~C)";
         Text[ arabic ] = "ÇáÕİÍÉ ÇáÎáİíÉ";
         Text[ greek ] = "Ğßóù ğë~åõñÜ";
         Text[ korean ] = "ë’·ë©´(~C)";
-        Text[ turkish ] = "Arka sayfa";
+        Text[ turkish ] = "~Geri";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Takaosa";
         Text[ catalan ] = "~Cara posterior";
         Text[ thai ] = "à¸à¸¥à¸±~à¸š";
+        Text[ czech ] = "PozadÃ­";
+        Text[ hebrew ] = "â€®×”×§×•×“×â€¬";
+        Text[ hindi ] = "~à¤ªà¤¿à¤›à¤²à¥€ à¤“à¤°";
     };
     CheckBox CBX_PAPERBIN
     {
@@ -733,7 +796,7 @@ TabPage TP_PRINT_OPTIONS
         Text = "Papierschacht aus ~Druckereinstellung" ;
         Text [ ENGLISH ] = "Paperbin from printer s~ettings" ;
         Text [ english_us ] = "Paper tray from printer s~ettings" ;
-        Text [ portuguese_brazilian ] = "Aus ~Druckereinstellung" ;
+        Text [ portuguese_brazilian ] = "Bandeja de papel, conforme as configurações da impre~ssora" ;
         Text [ swedish ] = "Pappersfack från s~krivarinställning" ;
         Text [ danish ] = "Papirba~kke fra udskriftsindstillingerne" ;
         Text [ italian ] = "Cassetto da i~mpostazione stampante" ;
@@ -743,7 +806,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Da ~configuração da impressora" ;
         Text[ chinese_simplified ] = "é‡‡ç”¨æ‰“å°æœºè®¾å®šçš„çº¸å¼ æ¥æº(~E)";
         Text[ russian ] = "Ïîäà÷à áóìàãè ~èç íàñòğîåê ïğèíòåğà";
-        Text[ polish ] = "Zasobnik z ustawie~ñ drukarki";
+        Text[ polish ] = "Zasobnik z ustawi~eñ drukarki";
         Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿è¨­å®šã®ç”¨ç´™ãƒˆãƒ¬ã‚¤ã‚’ä½¿ç”¨ã™ã‚‹(~E)";
         Text[ chinese_traditional ] = "æ¡ç”¨å°è¡¨æ©Ÿè¨­å®šçš„ç´™å¼µä¾†æº(~E)";
         Text[ arabic ] = "ÏÑÌ ÇáæÑŞ ÍÓÈ ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
@@ -754,6 +817,9 @@ TabPage TP_PRINT_OPTIONS
         Text[ finnish ] = "Tulostinasetusten paperilokero";
         Text[ catalan ] = "Quant a la configuiració de la ~impressora";
         Text[ thai ] = "à¸–à¸²à¸”à¸à¸£à¸°à¸”à¸²à¸©à¸ˆà¸²à¸à¸à¸²à¸£à¸•à¸±à¹‰~à¸‡à¸„à¹ˆà¸²à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
+        Text[ czech ] = "PodavaÄ papÃ­ru dle nastavenÃ­ tiskÃ¡rny";
+        Text[ hebrew ] = "Papierschacht aus ~Druckereinstellung";
+        Text[ hindi ] = "à¤®à¥à¤¦à¥à¤°~à¤• à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£ à¤¸à¥‡ à¤•à¤¾à¤—à¤œà¤¼ à¤Ÿà¥à¤°à¥‡";
     };
     Text[ chinese_simplified ] = "é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû";
@@ -767,7 +833,19 @@ TabPage TP_PRINT_OPTIONS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions";
     Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+    Text[ czech ] = "Volby";
+    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+    Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
 };
+
+
+
+
+
+
+
+
+
 
 
 
