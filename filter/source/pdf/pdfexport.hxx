@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:00:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ private:
 
     sal_Bool                mbUseLosslessCompression;
     sal_Bool                mbReduceImageResolution;
+    sal_Bool                mbSkipEmptyPages;
     sal_Int32               mnMaxImageResolution;
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
