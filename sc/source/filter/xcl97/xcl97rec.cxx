@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-02 13:38:37 $
+ *  last change: $Author: gt $ $Date: 2001-02-05 07:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,8 +2118,8 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     }
 
     ScTokenArray*   pScTokArry1 = r.CreateTokenArry( 0 );
-    EC_Codetype     eDummy;
-    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, eDummy, NULL, TRUE );
+//  EC_Codetype     eDummy;
+    ExcUPN*         pForm1      = new ExcUPN( &rRD, *pScTokArry1, /*eDummy, */NULL, TRUE );
     nFormLen1 = pForm1->GetLen();
 
     ScTokenArray*   pScTokArry2 = NULL;
@@ -2129,7 +2129,7 @@ XclCf::XclCf( const ScCondFormatEntry& r, RootData& rRD ) :
     else
     {
         pScTokArry2 = r.CreateTokenArry( 1 );
-        pForm2 = new ExcUPN( &rRD, *pScTokArry2, eDummy, NULL, TRUE );
+        pForm2 = new ExcUPN( &rRD, *pScTokArry2, /*eDummy, */NULL, TRUE );
         nFormLen2 = pForm2->GetLen();
     }
 
