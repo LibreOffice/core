@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:54:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text[ chinese_traditional ] = "¦b¥kÃä±z¯à°÷¬İ¨ìªí³æ¸ê®Æ·½ªº©Ò¦³¸ê®Æªí®æ¡C\n\n\n½Ğ¿ï¾Ü¤@¨Ç¥Î©ó²Õ¦¨²M³æ¤º®eªº°ò¥»¸ê®Æªºªí®æ¡G";
         Text[ turkish ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
         Text[ arabic ] = "İí ÇáÕİÍÉ Çáíãäì¡ Óæİ ÊÑì ßÇİÉ ÌÏÇæá ãÕÏÑ ÈíÇäÇÊ ÇáÇÓÊãÇÑÉ.\n\n\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÌÏæá ÇáĞí Óæİ ÊÔßá ÈíÇäÇÊå ÇáŞÇÚÏÉ áãÍÊæíÇÊ ÇáŞÇÆãÉ:";
+        Text[ catalan ] = "En la parte derecha puede ver todas las tablas de la base de datos del formulario.\n\n\nSeleccione la tabla de la que deban tomarse los datos para el contenido de la lista:";
     };
     ListBox LB_SELECTTABLE
     {
@@ -137,6 +138,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Sort = FALSE;
         DropDown = FALSE;
     };
+    Text[ catalan ] = "Selección de tabla";
 };
 
 TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
@@ -201,6 +203,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ greek ] = "ÕğÜñ÷ïíôá ğåäßá";
         Text [ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
         Text [ turkish ] = "~Mevcut alanlar";
+        Text[ catalan ] = "~Campos existentes";
     };
     ListBox LB_SELECTFIELD
     {
@@ -237,6 +240,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ greek ] = "Ğåäßï ğñïâïëŞò";
         Text [ korean ] = "³ªÅ¸³»´Â¡¡ÇÊµå";
         Text [ turkish ] = "~Görüntü alanı";
+        Text[ catalan ] = "~Campo de visualización";
     };
     Edit ET_DISPLAYEDFIELD
     {
@@ -276,6 +280,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ greek ] = "Ôï ğåñéå÷üìåíï ôïõ åğéëåãìİíïõ ğåäßïõ åìöáíßæåôáé óôçí ëßóôá ôïõ ğåäßïõ óõíäõáóìïı.";
         Text [ korean ] = "¼±ÅÃµÈ ÇÊµåÀÇ ³»¿ëÀÌ ÄŞº¸¹Ú½ºÀÇ ¸ñ·Ï¿¡ Ç¥½ÃµË´Ï´Ù.";
         Text [ turkish ] = "Seçilen alanın içeriği, kombinasyon alanı listesinde görüntülenecek.";
+        Text[ catalan ] = "El contenido del campo seleccionado se mostrará en la lista del campo combinado.";
     };
 
     String STR_FIELDINFO_LISTBOX
@@ -300,7 +305,9 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text[ chinese_traditional ] = "¦pªG³sµ²ªºÄæ¦ì¬Û²Å¡A©Ò¿ï¾ÜªºÄæ¦ì¤º®e´N·|Åã¥Ü¦b²M³æ¤è¶ô¤§¤¤¡C";
         Text[ turkish ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
         Text[ arabic ] = "Óæİ ÊÙåÑ ãÍÊæíÇÊ ÇáÍŞá ÇáãõÍÏÏ İí ãÑÈÚ ÇáŞÇÆãÉ İí ÍÇáÉ ÊØÇÈŞ ÇáÍŞæá ÇáãÑÊÈØÉ";
+        Text[ catalan ] = "El contenido del campo seleccionado se mostrará en el listado si coinciden los campos vinculados.";
     };
+    Text[ catalan ] = "Selección de campo";
 };
 
 TabPage RID_PAGE_LCW_FIELDLINK
@@ -337,24 +344,25 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 16 ) ;
         Text = "Wählen Sie hier die Felder aus, deren Inhalt übereinstimmen muss, damit der Wert aus dem Anzeigefeld angezeigt wird.";
         Text [ english ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
-        Text [ english_us ] = "The contents of the fields you select here must match so that the value from the display field will be shown.";
+        Text [ english_us ] = "This is where you select fields with matching contents so that the value from the display field will be shown.";
         Text[ portuguese ] = "Os conteúdos dos campos que seleccionar aqui terão que coincidir de forma a poder ver os respectivos valores no campo de visualização.";
         Text[ russian ] = "Äëÿ òîãî, ÷òîáû çíà÷åíèå â ïîëå ïîêàçà îòîáğàæàëîñü, âûáåğèòå ïîëÿ, ñîäåğæèìîå êîòîğûõ äîëæíî ñîâïàäàòü.";
         Text[ greek ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
-        Text[ dutch ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
-        Text[ french ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ dutch ] = "Kies hier de velden waarvan de inhoud overeen moet stemmen, zodat de waarde uit het weergaveveld kan worden weergegeven.";
+        Text[ french ] = "Sélectionnez les champs dont le contenu doit coïncider afin d'afficher la valeur du champ de visualisation.";
         Text[ spanish ] = "Seleccione los campos cuyo contenido debe coincidir para que se muestre el valor en el campo de visualización.";
         Text[ italian ] = "Selezionate il campo con il contenuto corrispondente per visualizzare il valore dal campo di visualizzazione.";
         Text[ danish ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
-        Text[ swedish ] = "Välj här fälten vars innehåll måste stämma överens för att värdet från visningsfältet ska visas.";
-        Text[ polish ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ swedish ] = "Markera fälten vars innehåll måste stämma överens för att värdet från visningsfältet ska visas.";
+        Text[ polish ] = "Aby wyœwietlona zosta³a wartoœæ z pola wyœwietlania, nale¿y w tym miejscu wybraæ pola o tej samej zawartoœci.";
         Text[ portuguese_brazilian ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
-        Text[ japanese ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ japanese ] = "‚±‚±‚ÅA•\\¦Ì¨°ÙÄŞ‚©‚ç•\\¦‚·‚é”’l‚Æˆê’v‚·‚é“à—e‚ÌÌ¨°ÙÄŞ‚ğ‘I‘ğ‚µ‚Ü‚·B";
         Text[ korean ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ chinese_simplified ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ chinese_traditional ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ turkish ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ arabic ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ catalan ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
     };
     FixedLine FL_FRAME
     {
@@ -388,6 +396,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ greek ] = "Ğåäßï áğü ôïí ğßíáêá ôéìşí";
         Text [ korean ] = "°ªÇ¥·Î ºÎÅÍÀÇ ÇÊµå(~V)";
         Text [ turkish ] = "Değer tablosu alanı";
+        Text[ catalan ] = "Campo de la tabla de ~valores";
     };
     ComboBox CMB_VALUELISTFIELD
     {
@@ -426,6 +435,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ greek ] = "Ğåäßï áğü ôïí ğßíáêá ëßóôáò";
         Text [ korean ] = "¸ñ·Ï Ç¥·ÎºÎÅÍÀÇ ÇÊµå(~L)";
         Text [ turkish ] = "Liste tablosu alanı";
+        Text[ catalan ] = "Campo del list&ado";
     };
     ComboBox CMB_TABLEFIELD
     {
@@ -437,6 +447,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Sort = FALSE;
         AutoHScroll = TRUE;
     };
+    Text[ catalan ] = "Vínculo de campo";
 };
 
 String RID_STR_COMBOWIZ_DBFIELD
@@ -454,7 +465,7 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ swedish ] = "Du kan antingen spara kombinationsfältets värde i ett databasfält eller bara använda det för visning.";
     Text [ polish ] = "Wartoœæ pola kombi mo¿na zapisaæ w polu bazy danych lub u¿yæ jej tylko do wyœwietlenia.";
     Text [ portuguese_brazilian ] = "Yes, in the following database:";
-    Text [ japanese ] = "ºİÎŞÎŞ¯¸½‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚Í•\\¦—p‚¾‚¯‚Ég—p‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B";
+    Text [ japanese ] = "ºİÎŞÎŞ¯¸½‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚·‚é‚©A‚ ‚é‚¢‚Í•\\¦—p‚Å‚µ‚©g—p‚Å‚«‚Ü‚¹‚ñB";
     Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿â×Ö¶ÎÄÚ»òÓÃÓÚÏÔÊ¾¡£";
     Text [ chinese_traditional ] = "±z¯à°÷±N²Õ¦XÄæ¦ìªº¼Æ­È¦s¤J¤@­Ó¸ê®Æ®wÄæ¦ì©Î¥Î©óÅã¥Ü¡C";
     Text [ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¡ Ãæ ÇÓÊÎÏÇãåÇ ááÚÑÖ İŞØ.";
@@ -463,11 +474,15 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ greek ] = "Ìğïñåßôå íá áğïèçêåıóåôå ôçí ôéìŞ ôïõ ğåäßïõ óõíäõáóìïı óå İíá ğåäßï ôçò âÜóçò äåäïìİíùí Ş íá ôï ÷ñçóéìïğïéŞóåôå ìüíï ãéá ôçí åìöÜíéóŞ ôïõ.";
     Text [ korean ] = "ÄŞº¸¹Ú½ºÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ³ªÅ¸³»±â¿¡¸¸ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text [ turkish ] = "Kombinasyon alanının değerini bir veritabanı alanında kaydedebilir ya da yalnızca görüntüleme için kullanabilirsiniz.";
+    Text[ catalan ] = "Puede guardar el valor del campo combinado en un campo de base de datos o usarlo solo para mostrarlo.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/26 19:54:16  kz
+ *  Merge SRC630: 26.04.01 - 21:53:44 (NoBranch)
+ *
  *  Revision 1.7  2001/03/30 13:15:43  fs
  *  added a description to the laste page of the list box wizard
  *
