@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:14:55 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,21 @@ public:
 
 //*******************************************************************************************************************************
 
+struct ScMatrixRange
+{
+    rtl::OUString sFormula;
+    com::sun::star::table::CellRangeAddress aRange;
+    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula) :
+        aRange(rRange),
+        sFormula(rFormula)
+    {
+    }
+};
+
 class ScMyTables
 {
 private:
-    typedef std::list<com::sun::star::table::CellRangeAddress>          ScMyMatrixRangeList;
+    typedef std::list<ScMatrixRange>    ScMyMatrixRangeList;
 
     ScXMLImport&                        rImport;
 
@@ -217,8 +228,9 @@ public:
                                                 com::sun::star::table::CellAddress& rEndAddress,
                                                 sal_Int32 nEndX, sal_Int32 nEndY);
 
-    void                                AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow);
+    void                                AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula);
     sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
+    void                                SetMatrix(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula);
 };
 
 #endif
