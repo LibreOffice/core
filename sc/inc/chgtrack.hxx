@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 14:01:57 $
+ *  last change: $Author: er $ $Date: 2001-02-09 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,9 @@ protected:
             void                RejectRestoreContents( ScChangeTrack*,
                                     short nDx, short nDy );
 
+                                // used in Reject() instead of IsRejectable()
+            BOOL                IsInternalRejectable() const;
+
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
     virtual BOOL                StoreLinks( SvStream& ) const;
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
@@ -782,6 +785,16 @@ public:
 
 // --- ScChangeActionContent ------------------------------------------------
 
+enum ScChangeActionContentCellType
+{
+    SC_CACCT_NONE = 0,
+    SC_CACCT_NORMAL,
+    SC_CACCT_MATORG,
+    SC_CACCT_MATREF
+};
+
+class Stack;
+
 class ScChangeActionContent : public ScChangeAction
 {
     friend class ScChangeTrack;
@@ -847,8 +860,6 @@ class ScChangeActionContent : public ScChangeAction
     static  void                SetCell( String& rStr, ScBaseCell* pCell,
                                     ULONG nFormat, const ScDocument* pDoc );
 
-    static  BOOL                IsContentCellType( const ScBaseCell* );
-
     static  BOOL                NeedsNumberFormat( const ScBaseCell* );
 
             void                SetValueString( String& rValue,
@@ -870,7 +881,11 @@ class ScChangeActionContent : public ScChangeAction
                                     INT32 nDx, INT32 nDy, INT32 nDz );
 
     virtual BOOL                Reject( ScDocument* );
-            BOOL                Select( ScDocument*, ScChangeTrack*, BOOL bOldest );
+
+                                // pRejectActions!=NULL: reject actions get
+                                // stacked, no SetNewValue, no Append
+            BOOL                Select( ScDocument*, ScChangeTrack*,
+                                    BOOL bOldest, Stack* pRejectActions );
 
             void                PutValueToDoc( ScBaseCell*, const String&,
                                     ScDocument*, short nDx, short nDy ) const;
@@ -958,15 +973,43 @@ public:
                                     BOOL bSplitRange = FALSE ) const;
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
+
+    static  ScChangeActionContentCellType   GetContentCellType( const ScBaseCell* );
+
+                                // NewCell
+            BOOL                IsMatrixOrigin() const
+                                    {
+                                        return GetContentCellType( GetNewCell() )
+                                            == SC_CACCT_MATORG;
+                                    }
+            BOOL                IsMatrixReference() const
+                                    {
+                                        return GetContentCellType( GetNewCell() )
+                                            == SC_CACCT_MATREF;
+                                    }
+                                // OldCell
+            BOOL                IsOldMatrixOrigin() const
+                                    {
+                                        return GetContentCellType( GetOldCell() )
+                                            == SC_CACCT_MATORG;
+                                    }
+            BOOL                IsOldMatrixReference() const
+                                    {
+                                        return GetContentCellType( GetOldCell() )
+                                            == SC_CACCT_MATREF;
+                                    }
+
 };
 
 
 // --- ScChangeActionReject -------------------------------------------------
 
+class Stack;
+
 class ScChangeActionReject : public ScChangeAction
 {
     friend class ScChangeTrack;
-    friend BOOL ScChangeActionContent::Select( ScDocument*, ScChangeTrack*, BOOL );
+    friend BOOL ScChangeActionContent::Select( ScDocument*, ScChangeTrack*, BOOL, Stack* );
 
                                 ScChangeActionReject( ULONG nReject )
                                     : ScChangeAction( SC_CAT_REJECT, ScRange() )
@@ -1092,6 +1135,13 @@ class ScChangeTrack : public SfxListener
 
 #ifdef SC_CHGTRACK_CXX
     static  USHORT              InitContentRowsPerSlot();
+
+                                // TRUE if one is MM_FORMULA and the other is
+                                // not, or if both are and range differs
+    static  BOOL                IsMatrixFormulaRangeDifferent(
+                                    const ScBaseCell* pOldCell,
+                                    const ScBaseCell* pNewCell );
+
     virtual void                Notify( SfxBroadcaster&, const SfxHint& );
             void                Init();
             void                DtorClear();
@@ -1165,6 +1215,7 @@ class ScChangeTrack : public SfxListener
                                 // bRecursion == Aufruf aus Reject mit Table
             BOOL                Reject( ScChangeAction*,
                                     ScChangeActionTable*, BOOL bRecursion );
+
 #endif  // SC_CHGTRACK_CXX
 
             void                ClearMsgQueue();
@@ -1342,7 +1393,8 @@ public:
                                 // und geloeschte im ToRange bzw. Inserts in
                                 // FromRange oder ToRange,
                                 // bei Delete eine Liste der geloeschten,
-                                // bei Content andere Contents an gleicher Pos.
+                                // bei Content andere Contents an gleicher
+                                // Position oder MatrixReferences zu MatrixOrigin.
                                 // Mit bListMasterDelete werden unter einem
                                 // MasterDelete alle zu diesem Delete gehoerenden
                                 // Deletes einer Reihe gelistet.
