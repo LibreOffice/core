@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:56:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String STR_RECOVER_QUERY
     Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
     Text[ polish ] = "Odtworzyæ plik \"$1\"?";
     Text[ japanese ] = "Ì§²Ù \"$1\" ‚ğ•œŒ³‚µ‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "±z­nÁÙ­ìÀÉ®× $1 ?";
+    Text[ chinese_traditional ] = "­n­×´_ÀÉ®× \"$1\"¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
     Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
@@ -147,6 +147,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ catalan ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa.";
     Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehkä palauttaa, kun käynnistät ohjelman uudelleen.";
 };
+
 
 
 
