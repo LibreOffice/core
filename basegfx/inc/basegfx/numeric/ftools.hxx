@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-15 14:26:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,37 +62,41 @@
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #define _BGFX_NUMERIC_FTOOLS_HXX
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
+#ifndef  _USE_MATH_DEFINES
+#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
+#endif
+#include <math.h>           // M_PI definition
+
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
-#ifndef _INC_MATH
-#include <math.h>
-#endif
+#include <algorithm> // for min/max
+
 
 //////////////////////////////////////////////////////////////////////////////
 // standard PI defines from solar.h, but we do not want to link against tools
 
 #ifndef F_PI
-#define F_PI        3.14159265358979323846
+#define F_PI        M_PI
 #endif
 #ifndef F_PI2
-#define F_PI2       1.57079632679489661923
+#define F_PI2       (M_PI/2.0)
 #endif
 #ifndef F_PI4
-#define F_PI4       0.785398163397448309616
+#define F_PI4       (M_PI/4.0)
 #endif
 #ifndef F_PI180
-#define F_PI180     0.01745329251994
+#define F_PI180     (M_PI/180.0)
 #endif
 #ifndef F_PI1800
-#define F_PI1800    0.001745329251994
+#define F_PI1800    (M_PI/1800.0)
 #endif
 #ifndef F_PI18000
-#define F_PI18000   0.0001745329251994
+#define F_PI18000   (M_PI/18000.0)
 #endif
 #ifndef F_2PI
-#define F_2PI       6.28318530717958647694
+#define F_2PI       (2.0*M_PI)
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -102,7 +106,7 @@ namespace basegfx
 {
     /** Round double to nearest integer
 
-    @return the nearest integer
+        @return the nearest integer
     */
     inline sal_Int32 fround( double fVal )
     {
@@ -111,27 +115,50 @@ namespace basegfx
 
     /** Round double to nearest integer
 
-    @return the nearest 64 bit integer
+        @return the nearest 64 bit integer
     */
     inline sal_Int64 fround64( double fVal )
     {
         return fVal > 0.0 ? static_cast<sal_Int64>( fVal + .5 ) : -static_cast<sal_Int64>( -fVal + .5 );
     }
 
+    /** Prune a small epsilon range around zero.
+
+        Use this method e.g. for calculating scale values. There, it
+        is usually advisable not to set a scaling to 0.0, because that
+        yields singular transformation matrices.
+
+        @param fVal
+        An arbitrary, but finite and valid number
+
+        @return either fVal, or a small value slightly above (when
+        fVal>0) or below (when fVal<0) zero.
+     */
+    inline double pruneScaleValue( double fVal )
+    {
+        return fVal < 0.0 ?
+            (::std::min(fVal,-0.00001)) :
+            (::std::max(fVal,0.00001));
+    }
+
     class fTools
     {
+        /// Threshold value for equalZero()
         static double                                   mfSmallValue;
 
     public:
+        /// Get threshold value for equalZero and friends
         static double getSmallValue() { return mfSmallValue; }
+        /// Set threshold value for equalZero and friends
         static void setSmallValue(const double& rfNew) { mfSmallValue = rfNew; }
 
-
+        /// Compare against small value
         static bool equalZero(const double& rfVal)
         {
             return (fabs(rfVal) <= getSmallValue());
         }
 
+        /// Compare against given small value
         static bool equalZero(const double& rfVal, const double& rfSmallValue)
         {
             return (fabs(rfVal) <= rfSmallValue);
