@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-24 20:28:34 $
+ *  last change: $Author: obo $ $Date: 2001-10-25 20:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13808,7 +13808,7 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ portuguese_brazilian ] = "Ticker start inside";
     Text[ japanese ] = "枠内でﾃｷｽﾄ ｱﾆﾒｰｼｮﾝの始まり";
     Text[ chinese_simplified ] = "活动文字开始在文字框内";
-    Text[ chinese_traditional ] = "移動文字開始在文字方塊内";
+    Text[ chinese_traditional ] = "移動文字開始在文字方塊內";
     Text[ arabic ] = "��� ������� �������� �������";
     Text[ dutch ] = "Tekstanimatie vanaf midden";
     Text[ chinese_simplified ] = "活动文字开始在文字框内";
@@ -13836,7 +13836,7 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ portuguese_brazilian ] = "Ticker stop inside";
     Text[ japanese ] = "枠内でﾃｷｽﾄ ｱﾆﾒｰｼｮﾝの終わり";
     Text[ chinese_simplified ] = "活动文字停留在文字框内";
-    Text[ chinese_traditional ] = "移動文字停留在文字方塊内";
+    Text[ chinese_traditional ] = "移動文字停留在文字方塊內";
     Text[ arabic ] = "����� ������� ������� �������";
     Text[ dutch ] = "Tekstanimatie stoppen vanaf midden";
     Text[ chinese_simplified ] = "活动文字停留在文字框内";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
