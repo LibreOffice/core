@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:15:38 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 11:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     break;
                                 case util::NumberFormat::DATETIME:
                                     {
-                                        if (rXMLImport.GetMM100UnitConverter().setNullDate(rXMLImport.GetModel()))
+                                        if (rXMLImport.SetNullDateOnUnitConverter())
                                         {
                                             rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sOUDateValue);
                                             double fTempValue = SolarMath::ApproxFloor(fValue);
