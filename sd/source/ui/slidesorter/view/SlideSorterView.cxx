@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:02:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "view/SlideSorterView.hxx"
 
+#include "ViewShellBase.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "ViewShell.hxx"
 #include "view/SlsLayouter.hxx"
@@ -506,15 +507,21 @@ void SlideSorterView::CompleteRedraw (
         // Update the page visibilities when they have been invalidated.
         if ( ! mbPageObjectVisibilitiesValid)
             DeterminePageObjectVisibilities ();
-    }
 
-    // Call the base class InitRedraw even when re-drawing is locked to let
-    // it remember the request for a redraw.  The overlay is hidden during
-    // this call and restored afterwards so that its XOR painting works
-    // properly.
-    GetOverlay().HideAndSave(ViewOverlay::OPT_PAINT);
-    View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
-    GetOverlay().Restore();
+        // Call the base class InitRedraw even when re-drawing is locked to
+        // let it remember the request for a redraw.  The overlay is hidden
+        // during this call and restored afterwards so that its XOR painting
+        // works properly.
+        GetOverlay().HideAndSave(ViewOverlay::OPT_PAINT);
+        View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
+        GetOverlay().Restore();
+    }
+    else
+    {
+        // In sd::View::CompleteRedraw() this call is recorded and given
+        // region is painted when the view is unlocked.
+        View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
+    }
 }
 
 
