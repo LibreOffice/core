@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:02:48 $
+ *  last change: $Author: tl $ $Date: 2000-11-27 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,314 @@ ImageList RID_ITEMLIST_LINGU
     IdList = { TID_NEW ; TID_EDIT ; TID_DELETE ; };
     IdCount = { 3 ; };
 };
- // RID_SFXPAGE_LINGU --------------------------------------------------------
+
+// RID_SFXPAGE_LINGU --------------------------------------------------------
+
+ModalDialog RID_SVXDLG_EDIT_MODULES
+{
+    HelpID = HID_LNGDLG_NUM_PREBREAK ;
+    HelpID = HID_EDIT_MODULES ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 299 , 175/*135*/ ) ;
+    Text = "Module bearbeiten" ;
+    Text [ ENGLISH ] = "Edit modules" ;
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 246 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Schließen" ;
+        Text [ English ] = "Close" ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 246, 26 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    GroupBox GB_EDIT_MODULES_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 237 , 95 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+    };
+    FixedText FT_EDIT_MODULES_LANGUAGE
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 10 , 13 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Sprache" ;
+        Text [ English ] = "Language" ;
+    };
+    ListBox LB_EDIT_MODULES_LANGUAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 13 ) ;
+        Size = MAP_APPFONT ( 95 , 35 ) ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    Control CLB_EDIT_MODULES_MODULES
+    {
+        Pos = MAP_APPFONT ( 10 , 30 ) ;
+        Size = MAP_APPFONT ( 175 , 60 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_EDIT_MODULES_PRIO_UP
+    {
+        Pos = MAP_APPFONT ( 190 , 30 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Prio +" ;
+        Text [ English ] = "Prio +" ;
+    };
+    PushButton PB_EDIT_MODULES_PRIO_DOWN
+    {
+        Pos = MAP_APPFONT ( 190 , 47 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Prio -" ;
+        Text [ English ] = "Prio -" ;
+    };
+    PushButton PB_EDIT_MODULES_PRIO_BACK
+    {
+        Pos = MAP_APPFONT ( 190 , 64 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Zurück" ;
+        Text [ English ] = "Back" ;
+    };
+
+    GroupBox GB_EDIT_MODULES_DICS
+    {
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MAP_APPFONT ( 237 , 70 ) ;
+        Text = "Benutzerwörterbücher" ;
+        Text [ ENGLISH ] = "Personal dictionaries" ;
+    };
+    Control CLB_EDIT_MODULES_DICS
+    {
+        Pos = MAP_APPFONT ( 10 , 110 ) ;
+        Size = MAP_APPFONT ( 175 , 55 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_EDIT_MODULES_NEW_DIC
+    {
+        Pos = MAP_APPFONT ( 190 , 110 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Neu" ;
+        Text [ English ] = "New" ;
+    };
+    PushButton PB_EDIT_MODULES_PRIO_EDIT_DIC
+    {
+        Pos = MAP_APPFONT ( 190 , 127 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Bearbeiten" ;
+        Text [ English ] = "Edit" ;
+    };
+    PushButton PB_EDIT_MODULES_PRIO_DEL_DIC
+    {
+        Pos = MAP_APPFONT ( 190 , 144 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "Löschen" ;
+        Text [ English ] = "Delete" ;
+    };
+
+    Bitmap BMP_CHKBUT_UNCHECKED
+    {
+        File = "chkun.bmp" ;
+    };
+    Bitmap BMP_CHKBUT_CHECKED
+    {
+        File = "chkch.bmp" ;
+    };
+};
+
+// RID_SVXDLG_LNG_ED_NUM_PREBREAK -------------------------------------------
+
+ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
+{
+    HelpID = HID_LNGDLG_NUM_PREBREAK ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 155 , 43 ) ;
+    Text = "Silbentrennung" ;
+    Text [ ENGLISH ] = "Hyphenation" ;
+    GroupBox GB_NUMVAL_PREBREAK
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 87 , 34 ) ;
+    };
+    OKButton BT_OK_PREBREAK
+    {
+        Pos = MAP_APPFONT ( 99 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL_PREBREAK
+    {
+        Pos = MAP_APPFONT ( 99 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    NumericField ED_PREBREAK
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 14 ) ;
+        Size = MAP_APPFONT ( 31 , 12 ) ;
+        Left = TRUE ;
+        Minimum = 2 ;
+        Maximum = 9 ;
+        Last = 9 ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1;
+    };
+};
+
+// RID_SFXPAGE_LINGU --------------------------------------------------------
+
+TabPage RID_SFXPAGE_LINGU
+{
+    HelpId = HID_OPTIONS_LINGU ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    GroupBox GB_LINGUISTIC
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 130 ) ;
+        Text = "Linguistik" ;
+        Text [ ENGLISH ] = "Linguistic" ;
+    };
+    FixedText FT_LINGU_MODULES
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 10 , 13 ) ;
+        Size = MAP_APPFONT ( 175 , 8 ) ;
+        Text = "Verfügbare Sprachmodule:" ;
+        Text [ English ] = "Available language modules:" ;
+    };
+    Control CLB_LINGU_MODULES
+    {
+        Pos = MAP_APPFONT ( 10 , 23 ) ;
+        Size = MAP_APPFONT ( 175 , 35 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_LINGU_MODULES_EDIT
+    {
+        Pos = MAP_APPFONT ( 190 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Bearbeiten..." ;
+        Text [ English ] = "~Edit..." ;
+    };
+    FixedText FT_LINGU_OPTIONS
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 10 , 60 ) ;
+        Size = MAP_APPFONT ( 175 , 8 ) ;
+        Text = "Optionen:" ;
+        Text [ English ] = "Options:" ;
+    };
+    Control CLB_LINGU_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 10 , 70 ) ;
+        Size = MAP_APPFONT ( 175 , 55 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_LINGU_OPTIONS_EDIT
+    {
+        Pos = MAP_APPFONT ( 190 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "B~earbeiten..." ;
+        Text [ English ] = "E~dit..." ;
+    };
+
+    String STR_CAPITAL_WORDS
+    {
+        Text = "Großgeschriebene Wörter prüfen" ;
+        Text[ ENGLISH ] = "Check uppercase words" ;
+    };
+    String STR_WORDS_WITH_DIGITS
+    {
+        Text = "Wörter mit Ziffern prüfen" ;
+        Text[ ENGLISH ] = "Check words with numbers " ;
+    };
+    String STR_CAPITALIZATION
+    {
+        Text = "Groß- Kleinschreibung prüfen" ;
+        Text[ ENGLISH ] = "Check capitalization words" ;
+    };
+    String STR_SPELL_SPECIAL
+    {
+        Text = "Sonderbereiche prüfen" ;
+        Text[ English ] = "Proof special regions" ;
+    };
+    String STR_ALL_LANGUAGES
+    {
+        Text = "In alle Sprachen prüfen" ;
+        Text[ English ] = "Spell in all languages" ;
+    };
+    String STR_SPELL_AUTO
+    {
+        Text = "Automatische Prüfung" ;
+        Text[ English ] = "Online Checking" ;
+    };
+    String STR_HIDE_MARKINGS
+    {
+        Text = "Kennung ausblenden" ;
+        Text[ English ] = "Hide the marking" ;
+    };
+    String STR_OLD_GERMAN
+    {
+        Text = "Alte deutsche Rechtschreibung" ;
+        Text[ English ] = "Pre reform german spelling" ;
+    };
+    String STR_NUM_PRE_BREAK
+    {
+        Text = "Zeichen vor Umbruch" ;
+        Text[ ENGLISH ] = "Characters before hyphenation" ;
+    };
+    String STR_NUM_POST_BREAK
+    {
+        Text = "Zeichen nach Umbruch" ;
+        Text[ ENGLISH ] = "Characters behind hyphenation" ;
+    };
+    String STR_HYPH_AUTO
+    {
+        Text = "Trennen ohne Nachfrage" ;
+        Text[ ENGLISH ] = "Hyphenation without interaction" ;
+    };
+    String STR_HYPH_SPECIAL
+    {
+        Text = "Sonderbereiche trennen" ;
+        Text[ ENGLISH ] = "Hyphenate special regions" ;
+    };
+
+    Bitmap BMP_CHKBUT_UNCHECKED
+    {
+        File = "chkun.bmp" ;
+    };
+    Bitmap BMP_CHKBUT_CHECKED
+    {
+        File = "chkch.bmp" ;
+    };
+};
+
+
+#ifdef NEVER
 TabPage RID_SFXPAGE_LINGU
 {
     HelpId = HID_OPTIONS_LINGU ;
@@ -82,490 +389,6 @@ TabPage RID_SFXPAGE_LINGU
     SVLook = TRUE ;
     Hide = TRUE ;
     Text = "Linguistik" ;
-    Text [ ENGLISH ] = "Linguistic" ;
-    Text [ norwegian ] = "Linguistisk" ;
-    Text [ italian ] = "Linguistica" ;
-    Text [ english_us ] = "Language" ;
-    Text [ spanish ] = "Lingüística" ;
-    Text [ french ] = "Linguistique" ;
-    Text [ dutch ] = "Linguïstiek" ;
-    Text [ swedish ] = "Lingvistik" ;
-    Text [ danish ] = "Lingvistik" ;
-    Text [ portuguese_brazilian ] = "Linguistik" ;
-    Text [ portuguese ] = "Linguística" ;
-    CheckBox BTN_CAPS
-    {
-        Pos = MAP_APPFONT ( 12 , 11 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
-        Text = "~Großgeschriebene Wörter" ;
-        Text [ ENGLISH ] = "~Capital words" ;
-        Text [ norwegian ] = "~Ord med store bokstaver" ;
-        Text [ italian ] = "~Parole maiuscole" ;
-        Text [ portuguese_brazilian ] = "~Palavras em maiúsculas" ;
-        Text [ portuguese ] = "~Palavras maiúsculas" ;
-        Text [ english_us ] = "~All caps" ;
-        Text [ spanish ] = "~Palabras en mayúsculas" ;
-        Text [ french ] = "les ~mots écrits en majuscules" ;
-        Text [ dutch ] = "~Woorden met hoofdletters" ;
-        Text [ swedish ] = "Or~d med stora bokstäver" ;
-        Text [ danish ] = "Ord med store bogstaver" ;
-        Text[ chinese_simplified ] = "´óĞ´µÄµ¥´Ê(~P)";
-        Text[ russian ] = "Ñëîâà èç ïğîïèñíûõ áóêâ";
-        Text[ polish ] = "S³owa pisane wielkimi literami";
-        Text[ japanese ] = "‚·‚×‚Ä‘å•¶š‚Ì’PŒê(~A)";
-        Text[ chinese_traditional ] = "¤j¼g³æ¦r(~P)";
-        Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
-        Text[ greek ] = "Ëİîåéò ìå êåöáëáßá ãñÜììáôá";
-        Text[ korean ] = "¸ğµÎ ´ë¹®ÀÚ(~A)";
-        Text[ turkish ] = "Büyük harfli sözcükler";
-    };
-    CheckBox BTN_NUMS
-    {
-        Pos = MAP_APPFONT ( 12 , 21 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern : ~W÷rter mit Ziffern */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern : ~W÷rter mit Ziffern */
-        Text = "~Wörter mit Ziffern" ;
-        Text [ ENGLISH ] = "~Words with numbers " ;
-        Text [ norwegian ] = "~Ord med tall " ;
-        Text [ italian ] = "Par~ole con numeri" ;
-        Text [ portuguese_brazilian ] = "~Palavras com números" ;
-        Text [ portuguese ] = "~Palavras com números" ;
-        Text [ english_us ] = "~Words with numbers" ;
-        Text [ spanish ] = "Pala~bras con cifras" ;
-        Text [ french ] = "les mots comportant des ~chiffres" ;
-        Text [ dutch ] = "~Woorden met cijfers" ;
-        Text [ swedish ] = "Ord ~med siffror" ;
-        Text [ danish ] = "Ord med tal" ;
-        Text[ chinese_simplified ] = "º¬ÓĞÊı×ÖµÄ´Ê(~W)";
-        Text[ russian ] = "Ñëîâà ñ öèôğàìè";
-        Text[ polish ] = "S³owa z cy~frami";
-        Text[ japanese ] = "”š‚ğŠÜ‚Ş’PŒê(~W)";
-        Text[ chinese_traditional ] = "§t¦³¼Æ¦rªºµü(~W)";
-        Text[ arabic ] = "ÇáßáãÇÊ ÇáÊí ÊÍÊæí Úáì ÃÑŞÇã";
-        Text[ greek ] = "Ëİîåéò ìå áñéèìïıò";
-        Text[ korean ] = "¼ö¸¦ Æ÷ÇÔÇÑ ´Ü¾î(~W)";
-        Text[ turkish ] = "Rakamlı sözcükler";
-    };
-    CheckBox BTN_UPLOW
-    {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? G~roß- und Kleinschreibung : G~ro˜- und Kleinschreibung */
-        /* ### ACHTUNG: Neuer Text in Resource? G~roß- und Kleinschreibung : G~ro˜- und Kleinschreibung */
-        Text = "G~roß- und Kleinschreibung" ;
-        Text [ ENGLISH ] = "~Upper and lower case " ;
-        Text [ norwegian ] = "~Stor og liten skrift " ;
-        Text [ italian ] = "M~aiuscole e minuscole" ;
-        Text [ portuguese_brazilian ] = "~Caixa alta e baixa" ;
-        Text [ portuguese ] = "~Maiúsculas & Minúsculas" ;
-        Text [ english_us ] = "~Case sensitive" ;
-        Text [ spanish ] = "Ma~yúsculas/minúsculas" ;
-        Text [ french ] = "la ~casse" ;
-        Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
-        Text [ swedish ] = "Ve~rsalkänslig" ;
-        Text [ danish ] = "Store og små bogstaver" ;
-        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´(~C)";
-        Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Wielkie i ma³e litery";
-        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C)";
-        Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g(~C)";
-        Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
-        Text[ greek ] = "ĞåæÜ-Êåöáëáßá";
-        Text[ korean ] = "´ë¹®ÀÚ¿Í ¼Ò¹®ÀÚ(~C)";
-        Text[ turkish ] = "Büyük/küçük yazım";
-    };
-    CheckBox BTN_SPELL_SPECIAL
-    {
-        Pos = MAP_APPFONT ( 12 , 41 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-         // ### ACHTUNG: Neuer Text in Resource? So~nderbereiche prüfen : Sonderbereiche prüfen
-        /* ### ACHTUNG: Neuer Text in Resource? So~nderbereiche prüfen : So~nderbereiche pr³fen */
-        /* ### ACHTUNG: Neuer Text in Resource? So~nderbereiche prüfen : So~nderbereiche pr³fen */
-        Text = "So~nderbereiche prüfen" ;
-        Text [ English ] = "P~roof special regions" ;
-        Text [ dutch ] = "Speciale bereiken ~controleren" ;
-        Text [ english_us ] = "Check ~special regions" ;
-        Text [ italian ] = "Controlla aree ~speciali" ;
-        Text [ spanish ] = "Re~visar áreas especiales" ;
-        Text [ french ] = "les z~ones spéciales" ;
-        Text [ swedish ] = "Spe~cialområden" ;
-        Text [ danish ] = "Kontroller særområder" ;
-        Text [ portuguese_brazilian ] = "Verificar regiões especiais" ;
-        Text [ portuguese ] = "Verificar áreas e~speciais" ;
-        Text[ chinese_simplified ] = "¼ì²éÌØÊâµÄÇøÓò(~S)";
-        Text[ russian ] = "Ïğîâåğêà ñïåö. îáëàñòåé";
-        Text[ polish ] = "SprawdŸ obszary specjalne";
-        Text[ japanese ] = "“Á•Ê”ÍˆÍ‚Ì½ÍßÙÁª¯¸(~S)";
-        Text[ chinese_traditional ] = "ÀË¬d¯S®íªº°Ï°ì(~S)";
-        Text[ arabic ] = "ÇáãäÇØŞ ÇáÎÇÕÉ";
-        Text[ greek ] = "¸ëåã÷ïò åéäéêş~í ğåñéï÷şí";
-        Text[ korean ] = "Æ¯º°¿µ¿ª °Ë»ç(~S)";
-        Text[ turkish ] = "Özel bölümleri denetle";
-    };
-    CheckBox BTN_ALL_LANG
-    {
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        Text = "A~lle Sprachen" ;
-        Text [ English ] = "All languages" ;
-        Text [ english_us ] = "All la~nguages" ;
-        Text [ portuguese_brazilian ] = "A~lle Sprachen" ;
-        Text [ swedish ] = "Alla s~pråk" ;
-        Text [ danish ] = "Alle sprog" ;
-        Text [ italian ] = "~Tutte le lingue" ;
-        Text [ spanish ] = "~Todos los idiomas" ;
-        Text [ french ] = "t~outes les langues" ;
-        Text [ dutch ] = "A~lle talen" ;
-        Text [ portuguese ] = "~Todas as línguas" ;
-        Text[ chinese_simplified ] = "È«²¿ÓïÑÔ(~N)";
-        Text[ russian ] = "Âñå ÿçûêè";
-        Text[ polish ] = "Wszystkie jêzyki";
-        Text[ japanese ] = "‚·‚×‚Ä‚ÌŒ¾Œê(~A)";
-        Text[ chinese_traditional ] = "©Ò¦³ªº»y¨¥(~A)";
-        Text[ arabic ] = "ßá ÇááÛÇÊ";
-        Text[ greek ] = "¼ëåò ôéò ãëşóóåò";
-        Text[ korean ] = "¸ğµç ¾ğ¾î(~N)";
-        Text[ turkish ] = "Tüm diller";
-    };
-    GroupBox GB_AUDIT
-    {
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 109 , 61 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
-        /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
-        Text = "Prüfen" ;
-        Text [ ENGLISH ] = "Check" ;
-        Text [ norwegian ] = "Kontroller" ;
-        Text [ italian ] = "Verifica" ;
-        Text [ portuguese_brazilian ] = "Verificar" ;
-        Text [ portuguese ] = "Verificar" ;
-        Text [ english_us ] = "Check spelling" ;
-        Text [ spanish ] = "Revisar" ;
-        Text [ french ] = "Vérifier" ;
-        Text [ dutch ] = "Controleren" ;
-        Text [ swedish ] = "Kontrollera" ;
-        Text [ danish ] = "Kontroller" ;
-        Text[ chinese_simplified ] = "¼ì²éÆ´Ğ´";
-        Text[ russian ] = "Ïğîâåğÿòü";
-        Text[ polish ] = "SprawdŸ";
-        Text[ japanese ] = "½ÍßÙÁª¯¸";
-        Text[ chinese_traditional ] = "ÀË¬d«÷¦r";
-        Text[ arabic ] = "ÊØÈíŞ ÇáÊÏŞíŞ ÇáÅãáÇÆí Úáì";
-        Text[ greek ] = "¸ëåã÷ïò";
-        Text[ korean ] = "¸ÂÃã¹ı °Ë»ç";
-        Text[ turkish ] = "Yazım denetimi";
-    };
-    Control LB_DICTS
-    {
-        HelpId = HID_OPTLINGU_CTL_DICTS ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 126 , 11 ) ;
-        Size = MAP_APPFONT ( 105 , 42 ) ;
-        ClipChildren = TRUE ;
-    };
-    ToolBox TB_DICTS
-    {
-        HelpId = HID_OPTLINGU_TOOLBOX ;
-        Align = BOXALIGN_LEFT ;
-        Pos = MAP_APPFONT ( 235 , 11 ) ;
-        ItemImageList = RID_ITEMLIST_LINGU ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                HelpId = HID_OPTIONS_DICT_NEW ;
-                Identifier = TID_NEW ;
-                Text = "Neu" ;
-                Text [ English ] = "New" ;
-                Text [ english_us ] = "New" ;
-                Text [ dutch ] = "Nieuw" ;
-                Text [ italian ] = "Nuovo" ;
-                Text [ spanish ] = "Nuevo" ;
-                Text [ french ] = "Nouveau" ;
-                Text [ swedish ] = "Nytt" ;
-                Text [ danish ] = "Ny" ;
-                Text [ portuguese ] = "Novo" ;
-                Text [ portuguese_brazilian ] = "Novo" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Neues Wörterbuch anlegen. : Neues W÷rterbuch anlegen. */
-                Text[ chinese_simplified ] = "ĞÂÔö";
-                Text[ russian ] = "Ñîçäàòü";
-                Text[ polish ] = "Nowy";
-                Text[ japanese ] = "V‹Kì¬";
-                Text[ chinese_traditional ] = "·s¼W";
-                Text[ arabic ] = "ÌÏíÏ";
-                Text[ greek ] = "Äçìéïõñãßá";
-                Text[ korean ] = "»õ·Î ¸¸µé±â";
-                Text[ turkish ] = "Yeni";
-            };
-            ToolBoxItem
-            {
-                HelpId = HID_OPTIONS_DICT_EDIT ;
-                Identifier = TID_EDIT ;
-                Text = "Bearbeiten" ;
-                Text [ English ] = "Edit" ;
-                Text [ english_us ] = "Edit" ;
-                Text [ dutch ] = "Bewerken" ;
-                Text [ italian ] = "Modifica" ;
-                Text [ spanish ] = "Editar" ;
-                Text [ french ] = "Edition" ;
-                Text [ swedish ] = "Redigera" ;
-                Text [ danish ] = "Rediger" ;
-                Text [ portuguese ] = "Editar" ;
-                Text [ portuguese_brazilian ] = "Bearbeiten" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch bearbeiten. : W÷rterbuch bearbeiten. */
-                Text[ chinese_simplified ] = "±à¼­";
-                Text[ russian ] = "Ïğàâêà";
-                Text[ polish ] = "Edytuj";
-                Text[ japanese ] = "•ÒW";
-                Text[ chinese_traditional ] = "½s¿è";
-                Text[ arabic ] = "ÊÍÑíÑ";
-                Text[ greek ] = "Åğåîåñãáóßá";
-                Text[ korean ] = "ÆíÁı";
-                Text[ turkish ] = "Düzenle";
-            };
-            ToolBoxItem
-            {
-                HelpId = HID_OPTIONS_DICT_DELETE ;
-                Identifier = TID_DELETE ;
-                /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-                /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-                Text = "Löschen" ;
-                Text [ English ] = "Delete" ;
-                Text [ english_us ] = "Delete" ;
-                Text [ dutch ] = "Wissen" ;
-                Text [ italian ] = "Elimina" ;
-                Text [ spanish ] = "Eliminar" ;
-                Text [ french ] = "Suppression" ;
-                Text [ swedish ] = "Radera" ;
-                Text [ danish ] = "Slet" ;
-                Text [ portuguese ] = "Eliminar" ;
-                Text [ portuguese_brazilian ] = "Löschen" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch löschen. : W÷rterbuch l÷schen. */
-                Text[ chinese_simplified ] = "É¾³ı";
-                Text[ russian ] = "Óäàëèòü";
-                Text[ polish ] = "Usuñ";
-                Text[ japanese ] = "íœ";
-                Text[ chinese_traditional ] = "§R°£";
-                Text[ arabic ] = "ÍĞİ";
-                Text[ greek ] = "ÄéáãñáöŞ";
-                Text[ korean ] = "»èÁ¦";
-                Text[ turkish ] = "Sil";
-            };
-        };
-    };
-    GroupBox GB_DICTS
-    {
-        Pos = MAP_APPFONT ( 121 , 2 ) ;
-        Size = MAP_APPFONT ( 133 , 55 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbücher : Benutzerw÷rterb³cher */
-        /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbücher : Benutzerw÷rterb³cher */
-        Text = "Benutzerwörterbücher" ;
-        Text [ ENGLISH ] = "Personal Dictionaries" ;
-        Text [ english_us ] = "Custom dictionaries" ;
-        Text [ dutch ] = "Gebruikerswoordenboek" ;
-        Text [ italian ] = "Dizionari utente" ;
-        Text [ spanish ] = "Diccionarios de usuario" ;
-        Text [ french ] = "Dictionnaires de l'utilisateur" ;
-        Text [ swedish ] = "Användarordböcker" ;
-        Text [ danish ] = "Brugerordbøger" ;
-        Text [ portuguese_brazilian ] = "Benutzerwörterbücher" ;
-        Text [ portuguese ] = "Dicionário do utilizador" ;
-        Text[ chinese_simplified ] = "ÓÃ»§´Êµä";
-        Text[ russian ] = "Ñëîâàğè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "W³asne s³owniki";
-        Text[ japanese ] = "Õ°»Ş°«‘";
-        Text[ chinese_traditional ] = "¦Û­qµü¨å";
-        Text[ arabic ] = "ŞæÇãíÓ ÇáãÓÊÎÏã";
-        Text[ greek ] = "ËåîéêÜ ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚÁ¤ÀÇ »çÀü";
-        Text[ turkish ] = "Kullanıcı sözlükleri";
-    };
-    CheckBox BTN_AUTO_SPELLING
-    {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Automatische Prüfung : ~Automatische Pr³fung */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Automatische Prüfung : ~Automatische Pr³fung */
-        Text = "~Automatische Prüfung" ;
-        Text [ English ] = "~Online Checking" ;
-        Hide = TRUE ;
-        Text [ english_us ] = "Check spelling as yo~u type" ;
-        Text [ italian ] = "Controllo automatico" ;
-        Text [ spanish ] = "Rev~isión automática" ;
-        Text [ french ] = "~Vérification automatique" ;
-        Text [ dutch ] = "~Automatische controle" ;
-        Text [ swedish ] = "~Automatisk kontroll" ;
-        Text [ danish ] = "Automatisk kontrol" ;
-        Text [ portuguese_brazilian ] = "~Automatische Prüfung" ;
-        Text [ portuguese ] = "~Correcção automática" ;
-        Text[ chinese_simplified ] = "×Ô¶¯¼ì²éÆ´Ğ´(~U)";
-        Text[ russian ] = "Àâòîïğîâåğêà";
-        Text[ polish ] = "Au~tom. sprawdzanie pisowni";
-        Text[ japanese ] = "©“®½ÍßÙÁª¯¸(~C)";
-        Text[ chinese_traditional ] = "¦Û°ÊÀË¬d«÷¦r(~C)";
-        Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí ÃËäÇÁ ÇáßÊÇÈÉ";
-        Text[ greek ] = "Áõôüìáôïò İëåã÷ïò";
-        Text[ korean ] = "ÀÚµ¿ ¸ÂÃã¹ı °Ë»ç(~U)";
-        Text[ turkish ] = "Otomatik kontrol";
-    };
-    CheckBox BTN_MARK_OFF
-    {
-        Pos = MAP_APPFONT ( 12 , 84 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        Text = "~Kennung ausblenden" ;
-        Text [ English ] = "Fade out the marking" ;
-        Hide = TRUE ;
-        Text [ english_us ] = "Don't mark ~errors" ;
-        Text [ italian ] = "Nascondi sottolineatura errori" ;
-        Text [ spanish ] = "~No marcar errores" ;
-        Text [ french ] = "Masquer le soulignage des ~fautes " ;
-        Text [ dutch ] = "~Fouten niet markeren" ;
-        Text [ swedish ] = "Dölj felmar~kering" ;
-        Text [ danish ] = "Skjul fejlmarkering" ;
-        Text [ portuguese ] = "~Não marcar erros" ;
-        Text [ portuguese_brazilian ] = "~Kennung ausblenden" ;
-        Text[ chinese_simplified ] = "ÒşÈëºìÉ«ÍäÇúÏß(~E)";
-        Text[ russian ] = "Íå ïîìå÷àòü îøèáêè";
-        Text[ polish ] = "Ukryj identyfikator";
-        Text[ japanese ] = "”gü‚ğ•\\¦‚µ‚È‚¢(~E)";
-        Text[ chinese_traditional ] = "Áô¤J¬õ¦âÅs¦±½u(~E)";
-        Text[ arabic ] = "ÚÏã ÊÍÏíÏ ÇáÃÎØÇÁ";
-        Text[ greek ] = "×~ùñßò óŞìáíóç óöáëìÜôùí";
-        Text[ korean ] = "¿À·ù ¼û±â±â(~E)";
-        Text[ turkish ] = "Hataları işaretleme";
-    };
-    GroupBox GB_AUTO_SPELLING
-    {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
-        Size = MAP_APPFONT ( 109 , 32 ) ;
-        Text = "Autom. Rechtschreibung" ;
-        Text [ English ] = "Online Spellchecking" ;
-        Hide = TRUE ;
-        Text [ english_us ] = "AutoSpellcheck" ;
-        Text [ italian ] = "Controllo ortografico automatico" ;
-        Text [ spanish ] = "Ortografía automática" ;
-        Text [ french ] = "Orthographe" ;
-        Text [ dutch ] = "Autom. spellingcontrole" ;
-        Text [ swedish ] = "Automatisk rättstavning" ;
-        Text [ danish ] = "Automatisk stavekontrol" ;
-        Text [ portuguese_brazilian ] = "Autom. Rechtschreibung" ;
-        Text [ portuguese ] = "Verificação automática da ortografia" ;
-        Text[ chinese_simplified ] = "×Ô¶¯¼ì²éÆ´Ğ´";
-        Text[ russian ] = "Àâòîïğîâåğêà îğôîãğàôèè";
-        Text[ polish ] = "Autom. sprawdzanie pisowni";
-        Text[ japanese ] = "©“®•¶ÍZ³";
-        Text[ chinese_traditional ] = "¦Û°ÊÀË¬d«÷¦r";
-        Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôïò İëåã÷ïò ïñèïãñáößáò";
-        Text[ korean ] = "ÀÚµ¿ ¸ÂÃã¹ı";
-        Text[ turkish ] = "Otomatik yazım kılavuzu";
-        Text[ language_user1 ] = "Auf Dt. sollte Rechtschreibprüfung stehen";
-    };
-    CheckBox BTN_GERMAN_PRE_REFORM
-    {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
-        Size = MAP_APPFONT ( 99 , 10 ) ;
-        Text = "Alte Rechtschrei~bung" ;
-        Text [ English ] = "Pre Reform" ;
-        Text[ english_us ] = "~German spelling - old";
-        Text[ portuguese ] = "Antiga ~ortografia alemã";
-        Text[ russian ] = "Ïğåæíèå ïğàâèëà îğôîãğàôèè";
-        Text[ greek ] = "ĞáëéÜ ïñèïãñá~ößá";
-        Text[ dutch ] = "~Oude spelling";
-        Text[ french ] = "~Ancienne orthographe";
-        Text[ spanish ] = "~Antigua ortografía";
-        Text[ italian ] = "Ortografia tedesca pre-riforma";
-        Text[ danish ] = "Gammel tysk retskrivning";
-        Text[ swedish ] = "Gammal rättstavning";
-        Text[ polish ] = "Stara pisownia";
-        Text[ portuguese_brazilian ] = "Pre Reform";
-        Text[ japanese ] = "‹ŒÄŞ²ÂŒê³‘–@i~Gj";
-        Text[ korean ] = "ÀÌÀü ¸ÂÃã¹ı(~G)";
-        Text[ chinese_simplified ] = "¾ÉÊ½Æ´Ğ´¼ì²é(~G)";
-        Text[ chinese_traditional ] = "ÂÂ¥¿¦rªk(¼w»y)";
-        Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí ÃáãÇäí ŞÏíã";
-        Text[ turkish ] = "Eski yazım kuralları (Almanca)";
-    };
-    GroupBox GB_GERMAN_SPELLING
-    {
-        Pos = MAP_APPFONT ( 6 , 97 ) ;
-        Size = MAP_APPFONT ( 109 , 20 ) ;
-        Text = "Deutsche Rechtschreibung" ;
-        Text [ English ] = "German Spelling" ;
-        Text[ english_us ] = "German spelling";
-        Text[ portuguese ] = "Ortografia alemã";
-        Text[ russian ] = "Îğôîãğàôèÿ íåìåöêîãî ÿçûêà";
-        Text[ greek ] = "ÃåñìáíéêŞ ïñèïãñáößá";
-        Text[ dutch ] = "Duitse spelling";
-        Text[ french ] = "Orthographe allemande";
-        Text[ spanish ] = "~Ortografía alemana";
-        Text[ italian ] = "Controllo ortografico tedesco";
-        Text[ danish ] = "Tysk retskrivning";
-        Text[ swedish ] = "Tysk rättstavning";
-        Text[ polish ] = "Niemiecka pisownia";
-        Text[ portuguese_brazilian ] = "German Spelling";
-        Text[ japanese ] = "ÄŞ²ÂŒê³‘–@";
-        Text[ korean ] = "µ¶ÀÏ¾î ¸ÂÃã¹ı";
-        Text[ chinese_simplified ] = "µÂÓïÆ´Ğ´¼ì²é";
-        Text[ chinese_traditional ] = "¼w»y¥¿¦rªk";
-        Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí ÃáãÇäí";
-        Text[ turkish ] = "Yeni yazım kuralları (Almanca)";
-    };
-    PushButton PB_EXT_LINGU
-    {
-        Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "E~xtern..." ;
-        Text [ English ] = "E~xternal..." ;
-        Hide = TRUE ;
-        Text [ english_us ] = "E~xternal..." ;
-        Text [ portuguese_brazilian ] = "E~xtern..." ;
-        Text [ swedish ] = "E~xtern..." ;
-        Text [ danish ] = "Ekstern..." ;
-        Text [ italian ] = "E~sterno..." ;
-        Text [ spanish ] = "E~xterno..." ;
-        Text [ french ] = "E~xterne..." ;
-        Text [ dutch ] = "E~xtern..." ;
-        Text [ portuguese ] = "E~xterno..." ;
-        Text[ chinese_simplified ] = "ÍâÀ´(~X)...";
-        Text[ russian ] = "Âíåøíèé...";
-        Text[ polish ] = "Zewnêtrzny...";
-        Text[ japanese ] = "ŠO•”(~X)...";
-        Text[ chinese_traditional ] = "¥~³¡(~X)...";
-        Text[ arabic ] = "ÎÇÑÌí...";
-        Text[ greek ] = "Å~îùôåñéêÜ...";
-        Text[ korean ] = "¿ÜºÎ(~X)...";
-        Text[ turkish ] = "Harici...";
-    };
-    FixedText FT_EXT_LINGU
-    {
-        Pos = MAP_APPFONT ( 65 , 105 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Standard" ;
-        Text [ English ] = "Standard" ;
-        Hide = TRUE ;
-        Text [ english_us ] = "Standard" ;
-        Text [ portuguese_brazilian ] = "Standard" ;
-        Text [ swedish ] = "Standard" ;
-        Text [ danish ] = "Standard" ;
-        Text [ italian ] = "Standard" ;
-        Text [ spanish ] = "Predeterminado" ;
-        Text [ french ] = "Standard" ;
-        Text [ dutch ] = "Standaard" ;
-        Text [ portuguese ] = "Padrão" ;
-        Text[ chinese_simplified ] = "±ê×¼";
-        Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Standard";
-        Text[ japanese ] = "•W€";
-        Text[ chinese_traditional ] = "¼Ğ·Ç";
-        Text[ arabic ] = "ŞíÇÓí";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "Ç¥ÁØ";
-        Text[ turkish ] = "Standart";
-    };
     NumericField ED_PREBREAK
     {
         Border = TRUE ;
@@ -576,32 +399,6 @@ TabPage RID_SFXPAGE_LINGU
         Maximum = 9 ;
         Last = 9 ;
         SpinSize = 1 ;
-    };
-    FixedText FT_PREBREAK
-    {
-        Pos = MAP_APPFONT ( 138 , 69 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
-         // ### ACHTUNG: Neuer Text in Resource? Z~eichen vor Umbruch : Z~eichen pro Silbe vor Umbruch
-        Text = "Z~eichen vor Umbruch" ;
-        Text [ ENGLISH ] = "Characters be~fore hyphenation" ;
-        Text [ portuguese_brazilian ] = "Caracteres por sílaba an~tes da hifenização" ;
-        Text [ portuguese ] = "Caracteres an~tes da divisão silábica" ;
-        Text [ english_us ] = "Characters ~before line break" ;
-        Text [ dutch ] = "Tekens ~voor afbreking" ;
-        Text [ italian ] = "Caratteri prima della sillabazione" ;
-        Text [ spanish ] = "~Carácter antes de salto" ;
-        Text [ french ] = "~caractères avant le saut" ;
-        Text [ swedish ] = "t~ecken per stavelse före avstavning" ;
-        Text [ danish ] = "Tegn før skift" ;
-        Text[ chinese_simplified ] = "Á¬×ÖºÅÖ®Ç°µÄ×ÖÄ¸ÊıÄ¿(~B)";
-        Text[ russian ] = "×èñëî çíàêîâ â ñëîãå ïåğåä ïåğåíîñîì";
-        Text[ polish ] = "Znaki przed dzieleniem wyrazów na sylaby";
-        Text[ japanese ] = "•¶š(‰üs‘O)(~B)";
-        Text[ chinese_traditional ] = "³s¦r¸¹¤§«eªº¦r¥À¼Æ¥Ø(~B)";
-        Text[ arabic ] = "ÃÍÑİ ŞÈá ÇáİÇÕá";
-        Text[ greek ] = "×áñáêôŞñáò ~ğñéí áğü áëëáãŞ";
-        Text[ korean ] = "ÇÏÀÌÇÂ ¾Õ ¹®ÀÚ(~B)";
-        Text[ turkish ] = "karakter satır sonunda olmalı (asgari).";
     };
     NumericField ED_AFTERBREAK
     {
@@ -614,184 +411,15 @@ TabPage RID_SFXPAGE_LINGU
         Last = 9 ;
         SpinSize = 1 ;
     };
-    FixedText FT_AFTERBREAK
-    {
-        Pos = MAP_APPFONT ( 138 , 82 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
-         // ### ACHTUNG: Neuer Text in Resource? Ze~ichen nach Umbruch : Ze~ichen pro Silbe nach Umbruch
-        Text = "Ze~ichen nach Umbruch" ;
-        Text [ ENGLISH ] = "~Characters behind hyphenation" ;
-        Text [ portuguese_brazilian ] = "~Caracteres por sílaba antes da hifenização" ;
-        Text [ portuguese ] = "~Caracteres depois da separação silábica" ;
-        Text [ english_us ] = "Characters af~ter line break" ;
-        Text [ dutch ] = "Tekens ~na afbreking" ;
-        Text [ italian ] = "Caratteri dopo la sillabazione" ;
-        Text [ spanish ] = "Carácter ~después de salto" ;
-        Text [ french ] = "ca~ractères après le saut" ;
-        Text [ swedish ] = "tecken per stavelse efter avstavn~ing" ;
-        Text [ danish ] = "Tegn efter skift" ;
-        Text[ chinese_simplified ] = "Á¬×ÖºÅÖ®ºóµÄ×ÖÄ¸ÊıÄ¿(~T)";
-        Text[ russian ] = "×èñëî çíàêîâ â ñëîãå ïîñëå ïåğåíîñà";
-        Text[ polish ] = "Znaki po dzieleniu wyrazów na sylaby";
-        Text[ japanese ] = "•¶š(‰üsŒã)(~T)";
-        Text[ chinese_traditional ] = "³s¦r¸¹¤§«áªº¦r¥À¼Æ¥Ø(~T)";
-        Text[ arabic ] = "ÃÍÑİ ÈÚÏ ÇáİÇÕá";
-        Text[ greek ] = "×áñáêôŞñáò ~ìåôÜ áğü áëëáãŞ";
-        Text[ korean ] = "ÇÏÀÌÇÂ ´ÙÀ½ ¹®ÀÚ(~T)";
-        Text[ turkish ] = "karakter satır başında olmalı (asgari).";
-    };
-    CheckBox BTN_AUTO
-    {
-        Pos = MAP_APPFONT ( 126 , 94 ) ;
-        Size = MAP_APPFONT ( 124 , 10 ) ;
-        Text = "~Trennen ohne Nachfrage" ;
-        Text [ ENGLISH ] = "Hyphenation ~without interaction" ;
-        Text [ portuguese_brazilian ] = "Hifenação ~sem interação" ;
-        Text [ portuguese ] = "~Divisão silábica automática" ;
-        Text [ english_us ] = "Aut~omatic hyphenation" ;
-        Text [ italian ] = "Sillabazione senza conferma" ;
-        Text [ spanish ] = "Separac~ión automática" ;
-        Text [ french ] = "~Coupure automatique" ;
-        Text [ dutch ] = "A~utomatisch afbreken" ;
-        Text [ swedish ] = "Automatisk avs~tavning" ;
-        Text [ danish ] = "Automatisk orddeling" ;
-        Text[ chinese_simplified ] = "×Ô¶¯·Ö¿ª(~A)";
-        Text[ russian ] = "Àâòîìàòè÷åñêàÿ ğàññòàíîâêà ïåğåíîñîâ";
-        Text[ polish ] = "Automatyczny podzia³ wyrazów";
-        Text[ japanese ] = "Šm”F‚È‚µ‚ÌÊ²ÌÈ°¼®İ(~O)";
-        Text[ chinese_traditional ] = "¦Û°Ê¤À¶}(~A)";
-        Text[ arabic ] = "İÕá ÇáãŞÇØÚ ÈÏæä ÇÓÊİÓÇÑ";
-        Text[ greek ] = "Áõôüìáôïò óõëëáâéóìüò";
-        Text[ korean ] = "ÀÚµ¿À¸·Î ÇÏÀÌÇÂ ³Ö±â(~O)";
-        Text[ turkish ] = "Otomatik heceleme";
-    };
-    CheckBox BTN_SPECIAL
-    {
-        Pos = MAP_APPFONT ( 126 , 104 ) ;
-        Size = MAP_APPFONT ( 124 , 10 ) ;
-         // ### ACHTUNG: Neuer Text in Resource? S~onderbereiche trennen : S~onderbereiche prüfen
-        Text = "S~onderbereiche trennen" ;
-        Text [ ENGLISH ] = "Hy~phenation special regions" ;
-        Text [ portuguese_brazilian ] = "~Verificar regiões especiais" ;
-        Text [ portuguese ] = "~Divisão silábica nas áreas especiais" ;
-        Text [ english_us ] = "H~yphenate special regions" ;
-        Text [ italian ] = "Sillabazione aree speciali" ;
-        Text [ spanish ] = "~Separar áreas especiales" ;
-        Text [ french ] = "Coupure des ~zones spéciales" ;
-        Text [ dutch ] = "Speciale ~bereiken scheiden" ;
-        Text [ swedish ] = "Avstava special~områden" ;
-        Text [ danish ] = "Del særområder" ;
-        Text[ chinese_simplified ] = "ÊÊÓÃ×¢½Å£¬Ò³Ã¼Ò³½ÅµÈÇøÓò(~H)";
-        Text[ russian ] = "Ğàçäåëèòü ñïåöèàëüíûå îáëàñòè";
-        Text[ polish ] = "Rozdziel obszary specjalne";
-        Text[ japanese ] = "“Á•Ê”ÍˆÍ‚ÌÊ²ÌÈ°¼®İ(~H)";
-        Text[ chinese_traditional ] = "Óì¥Î©óª`¸}¡A­¶­º­¶§Àµ¥°Ï°ì(~H)";
-        Text[ arabic ] = "İÕá ÇáãäÇØŞ ÇáÎÇÕÉ";
-        Text[ greek ] = "Äéá÷ùñéóìüò åéäéêşí ğåñé~ï÷şí";
-        Text[ korean ] = "Æ¯º°¿µ¿ª¿¡ ÇÏÀÌÇÂ ³Ö±â(~Y)";
-        Text[ turkish ] = "Özel bölümlerde otomatik heceleme";
-    };
-    GroupBox GB_RULES
-    {
-        Pos = MAP_APPFONT ( 121 , 58 ) ;
-        Size = MAP_APPFONT ( 133 , 59 ) ;
-        Text = "Trennregeln" ;
-        Text [ ENGLISH ] = "Hyphenation rules" ;
-        Text [ portuguese_brazilian ] = "Regras de hifenação" ;
-        Text [ portuguese ] = "Regras da divisão silábica" ;
-        Text [ english_us ] = "Hyphenation rules" ;
-        Text [ italian ] = "Regole di sillabazione" ;
-        Text [ spanish ] = "Reglas de separación silábica" ;
-        Text [ french ] = "Coupure de mots" ;
-        Text [ dutch ] = "Afbrekingsregels" ;
-        Text [ swedish ] = "Avstavningsregler" ;
-        Text [ danish ] = "Orddelingsregler" ;
-        Text[ chinese_simplified ] = "Á¬×ÖºÅ¹æÔò";
-        Text[ russian ] = "Ïğàâèëà ïåğåíîñà";
-        Text[ polish ] = "Regu³y podzia³u wyrazów";
-        Text[ japanese ] = "Ê²ÌÈ°¼®İ‚ğs‚¤";
-        Text[ chinese_traditional ] = "³s¦r¸¹³W«h";
-        Text[ arabic ] = "ŞæÇÚÏ İÕá ÇáãŞÇØÚ";
-        Text[ greek ] = "Êáíüíåò óõëëáâéóìïı";
-        Text[ korean ] = "ÇÏÀÌÇÂ ±ÔÄ¢";
-        Text[ turkish ] = "Heceleme kuralları";
-    };
-    Text[ russian ] = "Ëèíãâèñòèêà";
-    Text[ greek ] = "Ãëşóóá";
-    Text[ polish ] = "Lingwistyka";
-    Text[ japanese ] = "Œ¾Œê";
-    Text[ korean ] = "¾ğ¾î";
-    Text[ chinese_simplified ] = "×Öµä";
-    Text[ chinese_traditional ] = "¦r¨å";
-    Text[ arabic ] = "ÇááÛÉ";
-    Text[ turkish ] = "Dil";
-    FixedText FT_LANGUAGE
-    {
-        Pos = MAP_APPFONT ( 122 , 122 +2 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "~Standardsprache" ;
-        Text [ ENGLISH ] = "~Default language" ;
-        Text [ english_us ] = "~Default language" ;
-        Text [ dutch ] = "~Standaardtaal" ;
-        Text [ italian ] = "Linguaggio standard" ;
-        Text [ spanish ] = "~Idioma estándar" ;
-        Text [ french ] = "~Langue par défaut" ;
-        Text [ swedish ] = "~Standardspråk" ;
-        Text [ danish ] = "Standardsprog" ;
-        Text [ portuguese_brazilian ] = "~Standardsprache" ;
-        Text [ portuguese ] = "~Língua padrão" ;
-        Text[ chinese_simplified ] = "±ê×¼ÓïÑÔ(~D)";
-        Text[ russian ] = "ßçûê ïî óìîë÷àíèş";
-        Text[ polish ] = "Jêzyk standardowy";
-        Text[ japanese ] = "•W€Œ¾Œê(~D)";
-        Text[ chinese_traditional ] = "¼Ğ·Ç»y¨¥(~D)";
-        Text[ arabic ] = "ÇááÛÉ ÇáÇİÊÑÇÖíÉ";
-        Text[ greek ] = "Ğñïåğéëåãìİíç ãëşóóá";
-        Text[ korean ] = "±âº» ¾ğ¾î(~D)";
-        Text[ turkish ] = "~Standart dil";
-    };
-    ListBox LB_LANGUAGE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 121 +2 ) ;
-        Size = MAP_APPFONT ( 69 , 66 ) ;
-        DropDown = TRUE ;
-        Sort = TRUE ;
-    };
-
     String STR_WARNING
     {
         Text = "Sie können nicht mehr als 20 Wörterbücher auswählen." ;
         Text [ ENGLISH ] = "Sorry, but you could not select more than 20 dictionarys." ;
-        Text[ english_us ] = "You cannot select more than 20 dictionarys.";
-        Text[ portuguese ] = "É impossível seleccionar mais do que 20 dicionários";
-        Text[ russian ] = "Âû ìîæåòå âûáğàòü íå áîëüøå 20 ñëîâàğåé";
-        Text[ dutch ] = "U kunt niet meer dan 20 woordenboeken selecteren.";
-        Text[ french ] = "Impossible de sélectionner plus de 20 dictionnaires.";
-        Text[ spanish ] = "No es posible seleccionar más de 20 diccionarios";
-        Text[ italian ] = "Impossibile selezionare più di 20 dizionari.";
-        Text[ danish ] = "Du kan ikke vælge mere end 20 ordbøger.";
-        Text[ swedish ] = "Du kan tyvärr inte välja ut mer än 20 ordböcker/lexikon.";
-        Text[ polish ] = "Nie mo¿esz wybraæ wiêcej ni¿ 20 s³owników.";
-        Text[ portuguese_brazilian ] = "Sorry, but you could not select more than 20 dictionarys.";
-        Text[ japanese ] = "20ˆÈã‚Ì«‘‚Í‘I‘ğ‚Å‚«‚Ü‚¹‚ñB";
-        Text[ chinese_simplified ] = "ºÜ±§Ç¸£¬ÄúµÄÑ¡Ôñ²»µÃ³¬¹ı 20 ¸ö×Öµä¡£";
-        Text[ chinese_traditional ] = "«Ü©êºp¡M±zªº¿ï¾Ü¤£¯à°÷¶W¹L 20 ­Ó¦r¨å¡C";
-        Text[ arabic ] = "áÇ íãßäß ÊÍÏíÏ ÃßËÑ ãä 20 ŞÇãæÓÇğ.";
-        Text[ greek ] = "¸÷åôå ôçí äõíáôüôçôá íá åğéëİîåôå İùò êáé 20 ëåîéêÜ.";
-        Text[ korean ] = "»çÀüÀ» 20°³±îÁö¸¸ ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.";
-        Text[ turkish ] = "20'den fazla sözlük seçilemez.";
     };
-
-    Text[ chinese_simplified ] = "×Öµä";
-    Text[ russian ] = "Ëèíãâèñòèêà";
-    Text[ polish ] = "Lingwistyka";
-    Text[ japanese ] = "Œ¾Œê";
-    Text[ chinese_traditional ] = "¦r¨å";
-    Text[ arabic ] = "ÇááÛÉ";
-    Text[ greek ] = "Ãëşóóá";
-    Text[ korean ] = "¾ğ¾î";
 };
+#endif //OLD_IMPL
+// end: TabPage RID_SFXPAGE_LINGU
+
  // RID_SFXQB_DELDICT --------------------------------------------------------
 QueryBox RID_SFXQB_DELDICT
 {

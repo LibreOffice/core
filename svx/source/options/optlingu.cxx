@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:31:03 $
+ *  last change: $Author: tl $ $Date: 2000-11-27 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,24 @@
 #pragma hdrstop
 // include ---------------------------------------------------------------
 
+#define _SVSTDARR_STRINGSDTOR
+#define _SVSTDARR_USHORTS
+#ifndef _SVSTDARR_HXX
+#include <svtools/svstdarr.hxx>
+#endif
+
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_FIELD_HXX
+#include <vcl/field.hxx>
 #endif
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef _SVARRAY_HXX //autogen
+#include <svtools/svarray.hxx>
 #endif
 
 #ifndef _UNO_LINGU_HXX
@@ -76,8 +88,14 @@
 #ifndef _SVX_DLGUTIL_HXX
 #include <dlgutil.hxx>
 #endif
+#ifndef _LINGU_LNGPROPS_HHX_
+#include <lingu/lngprops.hxx>
+#endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
@@ -87,6 +105,24 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEDISPLAYNAME_HPP_
+#include <com/sun/star/lang/XServiceDisplayName.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYLISTEVENTFLAGS_HPP_
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
@@ -109,11 +145,9 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
-#define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-
-#include <comphelper/processfactory.hxx>
-
+#ifndef _SVLBOX_HXX
+#include <svtools/svlbox.hxx>
+#endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -141,12 +175,20 @@
 using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define SVX_MAX_USERDICTS 20
+#define CBCOL_FIRST     0
+#define CBCOL_SECOND    1
+#define CBCOL_BOTH      2
+
+static const sal_Char cSpell[] = "com.sun.star.linguistic2.SpellChecker";
+static const sal_Char cHyph[] = "com.sun.star.linguistic2.Hyphenator";
+static const sal_Char cThes[] = "com.sun.star.linguistic2.Thesaurus";
 // static ----------------------------------------------------------------
 
 static const sal_uInt16 nNameLen = 8;
@@ -179,44 +221,889 @@ sal_Bool KillFile_Impl( const String& rURL )
 
     return bRet;
 }
-
-/*-----------------02.06.97 07:38-------------------
-    Ext. Linguistik auswaehlen
+/*--------------------------------------------------
 --------------------------------------------------*/
 
+
+class DicUserData
+{
+    ULONG   nVal;
+
+public:
+    DicUserData( ULONG nUserData ) : nVal( nUserData ) {}
+    DicUserData( USHORT nEID,
+                 BOOL bChecked, BOOL bEditable, BOOL bDeletable );
+
+    ULONG   GetUserData() const         { return nVal; }
+    USHORT  GetEntryId() const          { return (USHORT)(nVal >> 16); }
+    BOOL    IsChecked() const           { return (BOOL)(nVal >>  8) & 0x01; }
+    BOOL    IsEditable() const          { return (BOOL)(nVal >>  9) & 0x01; }
+    BOOL    IsDeletable() const         { return (BOOL)(nVal >> 10) & 0x01; }
+
+    void    SetChecked( BOOL bVal );
+};
+
+
+DicUserData::DicUserData(
+        USHORT nEID,
+        BOOL bChecked, BOOL bEditable, BOOL bDeletable )
+{
+    DBG_ASSERT( nEID < 65000, "Entry Id out of range" );
+    nVal =  ((ULONG)(0xFFFF & nEID)         << 16) |
+            ((ULONG)(bChecked ? 1 : 0)      <<  8) |
+            ((ULONG)(bEditable ? 1 : 0)     <<  9) |
+            ((ULONG)(bDeletable ? 1 : 0)    << 10);
+}
+
+
+void DicUserData::SetChecked( BOOL bVal )
+{
+    nVal &= ~(1UL << 8);
+    nVal |=  (ULONG)(bVal ? 1 : 0) << 8;
+}
+
+
+// class BrwString_Impl -------------------------------------------------
+
+void lcl_SetCheckButton( SvLBoxEntry* pEntry, BOOL bCheck )
+{
+    SvLBoxButton* pItem = (SvLBoxButton*)pEntry->GetItem( 1 );
+
+    DBG_ASSERT(pItem,"SetCheckButton:Item not found")
+    if (((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON)
+    {
+        if (bCheck)
+            pItem->SetStateChecked();
+        else
+            pItem->SetStateUnchecked();
+        //InvalidateEntry( pEntry );
+    }
+}
+
+
+class BrwStringDic_Impl : public SvLBoxString
+{
+public:
+
+    BrwStringDic_Impl( SvLBoxEntry* pEntry, USHORT nFlags,
+        const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+                                            SvLBoxEntry* pEntry);
+};
+
+void BrwStringDic_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+    SvLBoxEntry* pEntry )
+{
+    Point aPos(rPos);
+    aPos.X() += 20;
+    rDev.DrawText( aPos, GetText() );
+}
+
+/*--------------------------------------------------
+--------------------------------------------------*/
+
+SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent) :
+        ModalDialog(pParent, ResId(RID_SVXDLG_EDIT_MODULES, DIALOG_MGR() )),
+        aClosePB    ( this, ResId( PB_OK ) ),
+        aHelpPB     ( this, ResId( PB_HELP ) ),
+        aModulesGB  ( this, ResId( GB_EDIT_MODULES_OPTIONS ) ),
+        aLanguageFT ( this, ResId( FT_EDIT_MODULES_LANGUAGE ) ),
+        aLanguageLB ( this, ResId( LB_EDIT_MODULES_LANGUAGE ) ),
+        aModulesCLB ( this, ResId( CLB_EDIT_MODULES_MODULES ) ),
+        aPrioUpPB   ( this, ResId( PB_EDIT_MODULES_PRIO_UP ) ),
+        aPrioDownPB ( this, ResId( PB_EDIT_MODULES_PRIO_DOWN ) ),
+        aBackPB     ( this, ResId( PB_EDIT_MODULES_PRIO_BACK ) ),
+        aDicsGB     ( this, ResId( GB_EDIT_MODULES_DICS ) ),
+        aDicsCLB    ( this, ResId( CLB_EDIT_MODULES_DICS ) ),
+        aNewPB      ( this, ResId( PB_EDIT_MODULES_NEW_DIC ) ),
+        aEditPB     ( this, ResId( PB_EDIT_MODULES_PRIO_EDIT_DIC ) ),
+        aDeletePB   ( this, ResId( PB_EDIT_MODULES_PRIO_DEL_DIC ) ),
+        aChkunBmp   ( ResId( BMP_CHKBUT_UNCHECKED ) ),
+        aChkchBmp   ( ResId( BMP_CHKBUT_CHECKED ) )
+{
+    pCheckButtonData = NULL;
+    FreeResource();
+    aModulesCLB.SetHighlightRange();
+    aDicsCLB.SetHighlightRange();
+    aModulesCLB.SetHelpId(HID_CLB_EDIT_MODULES_MODULES );
+    aDicsCLB.SetHelpId(HID_CLB_EDIT_MODULES_DICS );
+
+    aModulesCLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
+    aDicsCLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
+    aNewPB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
+    aEditPB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
+    aDeletePB.SetClickHdl( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));
+    aLanguageLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdlLB_Impl ));
+
+    xDicList = Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
+    if (xDicList.is())
+    {
+        UpdateDicBox_Impl();
+    }
+    else
+    {
+        aDicsGB.Disable();
+        aDicsCLB.Disable();
+        aNewPB.Disable();
+        aEditPB.Disable();
+        aDeletePB.Disable();
+    }
+}
+
+
+SvxEditModulesDlg::~SvxEditModulesDlg()
+{
+}
+
+
+BOOL SvxEditModulesDlg::Close()
+{
+    BOOL bAllowClose = TRUE;
+
+    ULONG nEntries = aDicsCLB.GetEntryCount();
+    for (ULONG i = 0;  i < nEntries;  ++i)
+    {
+        INT32 nDics = aDics.getLength();
+        const Reference< XDictionary > *pDic = aDics.getConstArray();
+
+        SvLBoxEntry *pEntry = aDicsCLB.GetEntry( i );
+        if (pEntry)
+        {
+            DicUserData aData( (ULONG)pEntry->GetUserData() );
+            if (aData.GetEntryId() < nDics)
+            {
+                BOOL bChecked = aDicsCLB.IsChecked( i );
+                Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
+                if (xDic.is())
+                {
+                    String aDicName( xDic->getName() );
+                    xDic->setActive( bChecked );
+                }
+            }
+        }
+    }
+
+    return bAllowClose;
+}
+
+
+SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
+{
+    SvLBoxEntry* pEntry = new SvLBoxEntry;
+
+    if( !pCheckButtonData )
+    {
+        pCheckButtonData = new SvLBoxButtonData;
+        pCheckButtonData->aBmps[SV_BMP_UNCHECKED] = aChkunBmp;
+        pCheckButtonData->aBmps[SV_BMP_CHECKED]   = aChkchBmp;
+    }
+
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+
+    String sEmpty;
+    if (CBCOL_FIRST == nCol)
+        pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+    if (CBCOL_SECOND == nCol)
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+    pEntry->AddItem( new BrwStringDic_Impl( pEntry, 0, rTxt ) );
+
+    return pEntry;
+}
+
+void SvxEditModulesDlg::UpdateDicBox_Impl()
+{
+    aDicsCLB.SetUpdateMode(FALSE);
+    aDicsCLB.Clear();
+
+    SvLBoxTreeList *pModel = aDicsCLB.GetModel();
+    SvLBoxEntry* pEntry = NULL;
+
+    aDics = xDicList->getDictionaries();
+    INT32 nDics  = aDics.getLength();
+    const Reference< XDictionary > *pDic = aDics.getConstArray();
+    for (INT32 i = 0;  i < nDics;  ++i)
+    {
+        const Reference< XDictionary > &rDic = pDic[i];
+        if (rDic.is())
+        {
+            Reference< frame::XStorable > xStor( rDic, UNO_QUERY );
+
+            ULONG nUserData = 0;
+            BOOL bChecked = rDic->isActive();
+            BOOL bEditable = !xStor.is() || !xStor->isReadonly();
+            BOOL bDeletable = bEditable;
+            BOOL bNegativ = rDic->getDictionaryType() == DictionaryType_NEGATIVE;
+            String aTxt( ::GetDicInfoStr( rDic->getName(),
+                                SvxLocaleToLanguage( rDic->getLocale() ),
+                                bNegativ ) );
+
+            pEntry = CreateEntry( aTxt, CBCOL_FIRST );
+            nUserData = DicUserData( (USHORT)i,
+                    bChecked, bEditable, bDeletable ).GetUserData();
+            pEntry->SetUserData( (void *)nUserData );
+            pModel->Insert( pEntry );
+            lcl_SetCheckButton( pEntry, bChecked );
+        }
+    }
+
+    aDicsCLB.SetUpdateMode(TRUE);
+}
+
+IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
+{
+    if (&aModulesCLB == pBox)
+    {
+    }
+    else if (&aDicsCLB == pBox)
+    {
+        SvLBoxEntry *pEntry = pBox->GetCurEntry();
+        if (pEntry)
+        {
+            DicUserData aData( (ULONG) pEntry->GetUserData() );
+            aEditPB  .Enable( aData.IsEditable() );
+            aDeletePB.Enable( aData.IsDeletable() );
+        }
+    }
+    else
+    {
+        DBG_ERROR( "pBox unexpected value" );
+    }
+
+    return 0;
+}
+
+
+IMPL_LINK( SvxEditModulesDlg, SelectHdlLB_Impl, ListBox *, pBox )
+{
+    if (&aLanguageLB == pBox)
+    {
+    }
+    else
+    {
+        DBG_ERROR( "pBox unexpected value" );
+    }
+
+    return 0;
+}
+
+
+IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
+{
+    if (&aNewPB == pBtn)
+    {
+        SvxNewDictionaryDialog aDlg( this, Reference< XSpellChecker1 >() );
+
+        Reference< XDictionary1 >  xNewDic;
+        if ( aDlg.Execute() == RET_OK )
+            xNewDic = aDlg.GetNewDictionary();
+
+        if ( xNewDic.is() )
+        {
+            UpdateDicBox_Impl();
+        }
+    }
+    else if (&aEditPB == pBtn)
+    {
+        SvLBoxEntry *pEntry = aDicsCLB.GetCurEntry();
+        if (pEntry)
+        {
+            DicUserData aData( (ULONG) pEntry->GetUserData() );
+            USHORT nDicPos = aData.GetEntryId();
+            INT32 nDics = aDics.getLength();
+            if (nDicPos < nDics)
+            {
+                Reference< XDictionary > xDic;
+                xDic = aDics.getConstArray()[ nDicPos ];
+                if (xDic.is())
+                {
+                    SvxEditDictionaryDialog aDlg( this,
+                            xDic->getName(), Reference< XSpellChecker1 >() );
+                    aDlg.Execute();
+
+                    USHORT nOldPos = aDicsCLB.GetSelectEntryPos();
+                    UpdateDicBox_Impl();
+                    aDicsCLB.SelectEntryPos( nOldPos );
+                }
+            }
+        }
+    }
+    else if (&aDeletePB == pBtn)
+    {
+        if ( RET_NO ==
+             QueryBox( this, ResId( RID_SFXQB_DELDICT, DIALOG_MGR() ) ).Execute() )
+            return 0;
+
+        SvLBoxEntry *pEntry = aDicsCLB.GetCurEntry();
+        if (pEntry)
+        {
+            DicUserData aData( (ULONG) pEntry->GetUserData() );
+            USHORT nDicPos = aData.GetEntryId();
+            INT32 nDics = aDics.getLength();
+            if (nDicPos < nDics)
+            {
+                Reference< XDictionary > xDic;
+                xDic = aDics.getConstArray()[ nDicPos ];
+                if (xDic.is())
+                {
+                    if (SvxGetIgnoreAllList() == xDic)
+                        xDic->clear();
+                    else
+                    {
+                        if (xDicList.is())
+                            xDicList->removeDictionary( xDic );
+
+                        Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
+                        if ( xStor->hasLocation() && !xStor->isReadonly() )
+                        {
+                            String sURL = xStor->getLocation();
+                            INetURLObject aObj(sURL);
+                            DBG_ASSERT( aObj.GetProtocol() == INET_PROT_FILE,
+                                    "non-file URLs cannot be deleted" );
+                            if ( aObj.GetProtocol() == INET_PROT_FILE )
+                            {
+                                KillFile_Impl( aObj.GetMainURL() );
+                            }
+                        }
+                        UpdateDicBox_Impl();
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        DBG_ERROR( "pBtn unexpected value" );
+    }
+
+    return 0;
+}
+
+/*--------------------------------------------------
+--------------------------------------------------*/
+
+class OptionsBreakSet : public ModalDialog
+{
+    OKButton        aOKPB;
+    CancelButton    aCancelPB;
+    GroupBox        aValGB;
+    NumericField    aValNF;
+
+public:
+    OptionsBreakSet(Window* pParent, const String& rGroupBoxTitle) :
+            ModalDialog(pParent, ResId(RID_SVXDLG_LNG_ED_NUM_PREBREAK, DIALOG_MGR() )),
+            aOKPB       (this, ResId(BT_OK_PREBREAK)),
+            aCancelPB   (this, ResId(BT_CANCEL_PREBREAK)),
+            aValGB      (this, ResId(GB_NUMVAL_PREBREAK)),
+            aValNF      (this, ResId(ED_PREBREAK))
+    {
+        FreeResource();
+        aValGB.SetText(rGroupBoxTitle);
+    }
+
+    NumericField&   GetNumericFld() { return aValNF; }
+};
+
+
+/*--------------------------------------------------
+    Entry IDs for options listbox of dialog
+--------------------------------------------------*/
+
+enum EID_OPTIONS
+{
+    EID_CAPITAL_WORDS,
+    EID_WORDS_WITH_DIGITS,
+    EID_CAPITALIZATION,
+    EID_SPELL_SPECIAL,
+    EID_ALL_LANGUAGES,
+    EID_SPELL_AUTO,
+    EID_HIDE_MARKINGS,
+    EID_OLD_GERMAN,
+    EID_NUM_PRE_BREAK,
+    EID_NUM_POST_BREAK,
+    EID_HYPH_AUTO,
+    EID_HYPH_SPECIAL
+};
+
+// class OptionsUserData -------------------------------------------------
+
+class OptionsUserData
+{
+    ULONG   nVal;
+
+public:
+    OptionsUserData( ULONG nUserData ) : nVal( nUserData ) {}
+    OptionsUserData( USHORT nEID,
+                     BOOL bHasNV, USHORT nNumVal,
+                     BOOL bCheckable, BOOL bChecked );
+
+    ULONG   GetUserData() const         { return nVal; }
+    USHORT  GetEntryId() const          { return (USHORT)(nVal >> 16); }
+    BOOL    HasNumericValue() const     { return (BOOL)(nVal >> 10) & 0x01; }
+    USHORT  GetNumericValue() const     { return (USHORT)(nVal & 0xFF); }
+    BOOL    IsChecked() const           { return (BOOL)(nVal >> 8) & 0x01; }
+    BOOL    IsCheckable() const         { return (BOOL)(nVal >> 9) & 0x01; }
+
+    void    SetChecked( BOOL bVal );
+    void    SetNumericValue( BYTE nNumVal );
+};
+
+OptionsUserData::OptionsUserData( USHORT nEID,
+        BOOL bHasNV, USHORT nNumVal,
+        BOOL bCheckable, BOOL bChecked )
+{
+    DBG_ASSERT( nEID < 65000, "Entry Id out of range" );
+    DBG_ASSERT( nNumVal < 256, "value out of range" );
+    nVal =  ((ULONG)(0xFFFF & nEID)         << 16) |
+            ((ULONG)(bHasNV ? 1 : 0)        << 10) |
+            ((ULONG)(bCheckable ? 1 : 0)    <<  9) |
+            ((ULONG)(bChecked ? 1 : 0)      <<  8) |
+            ((ULONG)(0xFF & nNumVal));
+}
+
+void OptionsUserData::SetChecked( BOOL bVal )
+{
+    if (IsCheckable())
+    {
+        nVal &= ~(1UL << 8);
+        nVal |=  (ULONG)(bVal ? 1 : 0) << 8;
+    }
+}
+
+void OptionsUserData::SetNumericValue( BYTE nNumVal )
+{
+    DBG_ASSERT( nNumVal < 256, "value out of range" );
+    if (HasNumericValue())
+    {
+        nVal &= 0xffffff00;
+        nVal |= (nNumVal);
+    }
+}
+
+// class BrwString_Impl -------------------------------------------------
+
+class BrwString_Impl : public SvLBoxString
+{
+public:
+
+    BrwString_Impl( SvLBoxEntry* pEntry, USHORT nFlags,
+        const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+                                            SvLBoxEntry* pEntry);
+};
+
+void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+    SvLBoxEntry* pEntry )
+{
+    Point aPos(rPos);
+    aPos.X() += 20;
+    rDev.DrawText( aPos, GetText() );
+    if(pEntry->GetUserData())
+    {
+        Point aNewPos(aPos);
+        aNewPos.X() += rDev.GetTextWidth(GetText());
+        Font aOldFont( rDev.GetFont());
+        Font aFont( aOldFont );
+        aFont.SetWeight( WEIGHT_BOLD );
+
+        BOOL bFett = TRUE;
+        USHORT nPos = 0;
+        //??? das untere byte aus dem user data in string wandeln
+        OptionsUserData aData( (ULONG) pEntry->GetUserData() );
+        if(aData.HasNumericValue())
+        {
+            String sTxt( ' ' );
+            sTxt +=  String::CreateFromInt32( aData.GetNumericValue() );
+            rDev.SetFont( aFont );
+            rDev.DrawText( aNewPos, sTxt );
+        }
+
+//          if( STRING_NOTFOUND != nPos )
+//              aNewPos.X() += rDev.GetTextWidth( sTxt );
+
+        rDev.SetFont( aOldFont );
+    }
+}
+
+// SvxLinguData_Impl ----------------------------------------------------
+
+struct ServiceInfo_Impl
+{
+    OUString                    sImplName;
+    OUString                    sDisplayName;
+    Sequence <Locale>           aSuppLocales;
+    Reference <XSpellChecker>   xSpell;
+    Reference <XHyphenator>     xHyph;
+    Reference <XThesaurus>      xThes;
+};
+SV_DECL_PTRARR_DEL(ServiceInfoArr, ServiceInfo_Impl*, 2, 2);
+SV_IMPL_PTRARR(ServiceInfoArr, ServiceInfo_Impl*);
+
+class SvxLinguData_Impl
+{
+    Reference< XMultiServiceFactory >   xMSF;
+    Reference<XLinguServiceManager>     xLinguSrvcMgr;
+    ServiceInfoArr                      aAvailSpellInfoArr;
+    ServiceInfoArr                      aAvailHyphInfoArr;
+    ServiceInfoArr                      aAvailThesInfoArr;
+
+    Sequence<OUString>                  aAvailSrvcDisplayNames;
+    Sequence<OUString>                  aAvailSrvcNames;
+    Sequence<sal_Bool>                  aAvailSrvcConfigured;
+
+    Sequence<Locale>                    aAllServiceLocales;
+
+public:
+    SvxLinguData_Impl();
+    ~SvxLinguData_Impl();
+
+    Reference<XLinguServiceManager>&    GetManager() {return xLinguSrvcMgr;}
+
+    void AddServiceName(const ServiceInfo_Impl*);
+    void SetChecked(const Sequence<OUString>& rConfiguredServices);
+    void Reconfigure(const Sequence<OUString>& aRemove, const Sequence<OUString>& aInsert);
+
+    const Sequence<OUString>&           GetAvailSrvcDisplayNames(){return  aAvailSrvcDisplayNames;}
+    const Sequence<OUString>&           GetAvailSrvcNames()     {return    aAvailSrvcNames;}
+    const Sequence<sal_Bool>&           GetAvailSrvcConfigured(){return    aAvailSrvcConfigured;}
+
+};
+//-----------------------------------------------------------------------------
+void lcl_MergeLocales(Sequence<Locale>& aAllLocales, const Sequence<Locale>& rAdd)
+{
+    const Locale* pAdd = rAdd.getConstArray();
+    Sequence<Locale> aLocToAdd(rAdd.getLength());
+    const Locale* pAllLocales = aAllLocales.getConstArray();
+    Locale* pLocToAdd = aLocToAdd.getArray();
+    sal_Int32 nFound = 0;
+    sal_Int32 i;
+    for(i = 0; i < rAdd.getLength(); i++)
+    {
+        sal_Bool bFound = sal_False;
+        for(sal_Int32 j = 0; j < aAllLocales.getLength() && !bFound; j++)
+        {
+            bFound = pAdd[i].Language == pAllLocales[j].Language &&
+                pAdd[i].Country == pAllLocales[j].Country;
+        }
+        if(!bFound)
+        {
+            pLocToAdd[nFound++] = pAdd[i];
+        }
+    }
+    sal_Int32 nLength = aAllLocales.getLength();
+    aAllLocales.realloc( nLength + nFound);
+    Locale* pAllLocales2 = aAllLocales.getArray();
+    for(i = 0; i < nFound; i++)
+        pAllLocales2[nLength++] = pLocToAdd[i];
+}
+
+/* -----------------------------26.11.00 18:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxLinguData_Impl::SvxLinguData_Impl()
+{
+    xMSF = ::comphelper::getProcessServiceFactory();
+    Reference < XInterface > xI = xMSF->createInstance(
+        C2U( "com.sun.star.linguistic2.LinguServiceManager" ) );
+    xLinguSrvcMgr = Reference<XLinguServiceManager>(xI, UNO_QUERY);
+    DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!")
+    if(xLinguSrvcMgr.is())
+    {
+        Locale aCurrentLocale;
+        LanguageType eLang = Application::GetAppInternational().GetLanguage();
+        if(LANGUAGE_SYSTEM == eLang)
+        {
+            eLang = GetSystemLanguage();
+        }
+        SvxLanguageToLocale(aCurrentLocale, eLang);
+        Sequence<Any> aArgs(2);//second arguments has to be empty!
+        aArgs.getArray()[0] <<= SvxGetLinguPropertySet();
+
+        //read spell checker
+        Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
+                        C2U(cSpell),    Locale() );
+        const OUString* pSpellNames = aSpellNames.getConstArray();
+
+        sal_Int32 nIdx;
+        for(nIdx = 0; nIdx < aSpellNames.getLength(); nIdx++)
+        {
+            ServiceInfo_Impl* pInfo = new ServiceInfo_Impl;
+            pInfo->sImplName = pSpellNames[nIdx];
+            pInfo->xSpell = Reference<XSpellChecker>(
+                            xMSF->createInstanceWithArguments(pInfo->sImplName, aArgs), UNO_QUERY);
+            Reference<XServiceDisplayName> xDispName(pInfo->xSpell, UNO_QUERY);
+            if(xDispName.is())
+            {
+                pInfo->sDisplayName = xDispName->getServiceDisplayName(
+                        aCurrentLocale );
+                pInfo->aSuppLocales = pInfo->xSpell->getLocales();
+                lcl_MergeLocales(aAllServiceLocales, pInfo->aSuppLocales);
+            }
+
+            aAvailSpellInfoArr.Insert(pInfo, aAvailSpellInfoArr.Count());
+
+            AddServiceName(pInfo);
+        }
+
+        //read hyphenator
+        Sequence< OUString > aHyphNames = xLinguSrvcMgr->getAvailableServices(
+                        C2U(cHyph), Locale() );
+        const OUString* pHyphNames = aHyphNames.getConstArray();
+        for(nIdx = 0; nIdx < aHyphNames.getLength(); nIdx++)
+        {
+            ServiceInfo_Impl* pInfo = new ServiceInfo_Impl;
+            pInfo->sImplName = pHyphNames[nIdx];
+            pInfo->xHyph = Reference<XHyphenator>(
+                            xMSF->createInstanceWithArguments(pInfo->sImplName, aArgs), UNO_QUERY);
+            Reference<XServiceDisplayName> xDispName(pInfo->xHyph, UNO_QUERY);
+            if(xDispName.is())
+            {
+                pInfo->sDisplayName = xDispName->getServiceDisplayName(
+                        aCurrentLocale );
+                pInfo->aSuppLocales = pInfo->xHyph->getLocales();
+                lcl_MergeLocales(aAllServiceLocales, pInfo->aSuppLocales);
+            }
+
+            aAvailHyphInfoArr.Insert(pInfo, aAvailHyphInfoArr.Count());
+            AddServiceName(pInfo);
+        }
+
+        //read thesauri
+        Sequence< OUString > aThesNames = xLinguSrvcMgr->getAvailableServices(
+                        C2U(cThes),     Locale() );
+        const OUString* pThesNames = aThesNames.getConstArray();
+        for(nIdx = 0; nIdx < aThesNames.getLength(); nIdx++)
+        {
+            ServiceInfo_Impl* pInfo = new ServiceInfo_Impl;
+            pInfo->sImplName = pThesNames[nIdx];
+            pInfo->xThes = Reference<XThesaurus>(
+                            xMSF->createInstanceWithArguments(pInfo->sImplName, aArgs), UNO_QUERY);
+            Reference<XServiceDisplayName> xDispName(pInfo->xThes, UNO_QUERY);
+            if(xDispName.is())
+            {
+                pInfo->sDisplayName = xDispName->getServiceDisplayName(
+                        aCurrentLocale );
+                pInfo->aSuppLocales = pInfo->xThes->getLocales();
+                //collect all supported locales
+                lcl_MergeLocales(aAllServiceLocales, pInfo->aSuppLocales);
+            }
+
+            aAvailThesInfoArr.Insert(pInfo, aAvailThesInfoArr.Count());
+            AddServiceName(pInfo);
+        }
+
+        const Locale* pAllLocales = aAllServiceLocales.getConstArray();
+        for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
+        {
+            SetChecked(xLinguSrvcMgr->getConfiguredServices(C2U(cSpell), pAllLocales[nLocale]));
+            SetChecked(xLinguSrvcMgr->getConfiguredServices(C2U(cHyph), pAllLocales[nLocale]));
+            SetChecked(xLinguSrvcMgr->getConfiguredServices(C2U(cThes), pAllLocales[nLocale]));
+        }
+    }
+}
+/* -----------------------------26.11.00 18:08--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxLinguData_Impl::~SvxLinguData_Impl()
+{
+}
+/* -----------------------------26.11.00 20:19--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxLinguData_Impl::AddServiceName(const ServiceInfo_Impl* pInfo)
+{
+    const OUString* pAvailSrvcDisplayNames = aAvailSrvcDisplayNames.getConstArray();
+    sal_Bool bFound = sal_False;
+    for(sal_Int32 nAll = 0; nAll < aAvailSrvcDisplayNames.getLength() && !bFound; nAll++)
+    {
+        bFound = pAvailSrvcDisplayNames[nAll] == pInfo->sImplName;
+    }
+    if(!bFound)
+    {
+        aAvailSrvcNames.realloc(aAvailSrvcNames.getLength() + 1);
+        aAvailSrvcDisplayNames.realloc(aAvailSrvcDisplayNames.getLength() + 1);
+        OUString* pAvailSrvcNames = aAvailSrvcNames.getArray();
+        OUString* pAvailSrvcDisplayNames = aAvailSrvcDisplayNames.getArray();
+        pAvailSrvcNames[aAvailSrvcNames.getLength() - 1] = pInfo->sImplName;
+        pAvailSrvcDisplayNames[aAvailSrvcDisplayNames.getLength() - 1] = pInfo->sDisplayName;
+    }
+}
+/* -----------------------------26.11.00 19:42--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)
+{
+    if(aAvailSrvcConfigured.getLength() != aAvailSrvcNames.getLength())
+    {
+        aAvailSrvcConfigured.realloc(aAvailSrvcDisplayNames.getLength());
+        sal_Bool* pBool = aAvailSrvcConfigured.getArray();
+        for(sal_Int32 nInit = 0; nInit < aAvailSrvcDisplayNames.getLength(); nInit++)
+            pBool[nInit] = sal_False;
+    }
+    const OUString* pAvailSrvcNames = aAvailSrvcNames.getConstArray();
+    sal_Bool* pIsConfigured = aAvailSrvcConfigured.getArray();
+    const OUString* pConfiguredServices = rConfiguredServices.getConstArray();
+    for(sal_Int32 n = 0; n < aAvailSrvcNames.getLength(); n++)
+    {
+        if(!pIsConfigured[n])
+        {
+            for(sal_Int32 nFind = 0; nFind < rConfiguredServices.getLength(); nFind++)
+            {
+                if(pConfiguredServices[nFind] == pAvailSrvcNames[n])
+                {
+                    pIsConfigured[n] = sal_True;
+                    break;
+                }
+            }
+        }
+    }
+}
+/* -----------------------------26.11.00 20:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool lcl_AddRemove(Sequence<OUString>& rConfigured,
+    const OUString* pRemove, const sal_Int32 nRemove,
+    const OUString* pInsert, const sal_Int32 nInsert)
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nConfigured = rConfigured.getLength();
+    rConfigured.realloc(rConfigured.getLength() + nInsert);
+    OUString* pConfigured = rConfigured.getArray();
+    sal_Int32 i, j;
+    for(j = 0; j < nConfigured; j++)
+    {
+        for(i = 0; i < nRemove; i++)
+        {
+            if(pConfigured[j] == pRemove[i])
+            {
+                pConfigured[j] = OUString();
+                bRet = sal_True;
+                break;
+            }
+        }
+    }
+    sal_Int32 nAppend = nConfigured;
+    for(i = 0; i < nInsert; i++)
+    {
+        sal_Bool bFound = sal_False;
+        for(j = 0; j < nConfigured && !bFound; j++)
+        {
+            if(pConfigured[j] == pInsert[i])
+                bFound = sal_True;
+        }
+        if(!bFound)
+        {
+            pConfigured[nAppend++] = pInsert[i];
+            bRet = sal_True;
+        }
+    }
+    sal_Int32 nRealloc = 0;
+    for(i = 0; i < nInsert; i++)
+        if(pConfigured[i].getLength())
+            pConfigured[nRealloc++] = pConfigured[i];
+    rConfigured.realloc(nRealloc);
+    return bRet;
+}
+
+void SvxLinguData_Impl::Reconfigure(
+            const Sequence<OUString>& aRemove, const Sequence<OUString>& aInsert)
+{
+    const OUString* pRemove = aRemove.getConstArray();
+    const nRemove = aRemove.getLength();
+    const OUString* pInsert = aInsert.getConstArray();
+    const nInsert = aInsert.getLength();
+
+    const Locale* pAllLocales = aAllServiceLocales.getConstArray();
+    for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
+    {
+        Sequence<OUString> aConfigured = xLinguSrvcMgr->getConfiguredServices(C2U(cSpell), pAllLocales[nLocale]);
+        if(lcl_AddRemove(aConfigured, pRemove, nRemove, pInsert, nInsert))
+            xLinguSrvcMgr->setConfiguredServices(C2U(cSpell), pAllLocales[nLocale], aConfigured);
+
+        aConfigured = xLinguSrvcMgr->getConfiguredServices(C2U(cHyph), pAllLocales[nLocale]);
+        if(lcl_AddRemove(aConfigured, pRemove, nRemove, pInsert, nInsert))
+            xLinguSrvcMgr->setConfiguredServices(C2U(cSpell), pAllLocales[nLocale], aConfigured);
+
+        aConfigured = xLinguSrvcMgr->getConfiguredServices(C2U(cThes), pAllLocales[nLocale]);
+        if(lcl_AddRemove(aConfigured, pRemove, nRemove, pInsert, nInsert))
+            xLinguSrvcMgr->setConfiguredServices(C2U(cSpell), pAllLocales[nLocale], aConfigured);
+    }
+}
+// SvxModulesData_Impl ---------------------------------------------------
+struct SvxModulesData_Impl
+{
+    OUString    sServiceImplName;
+    sal_Bool    bIsConfigured;
+    SvxModulesData_Impl(const OUString& rSrvc, sal_Bool bSet) :
+        sServiceImplName(rSrvc),
+        bIsConfigured(bSet){}
+};
+
 // class SvxLinguTabPage -------------------------------------------------
+
+#define CBCOL_FIRST     0
+#define CBCOL_SECOND    1
+#define CBCOL_BOTH      2
 
 SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
                                   const SfxItemSet& rSet ):
 
     SfxTabPage( pParent, ResId( RID_SFXPAGE_LINGU, DIALOG_MGR() ), rSet ),
 
-    aCapsBtn            ( this, ResId( BTN_CAPS ) ),
-    aNumsBtn            ( this, ResId( BTN_NUMS ) ),
-    aUpLowBtn           ( this, ResId( BTN_UPLOW ) ),
-    aSpellSpecialBtn    ( this, ResId( BTN_SPELL_SPECIAL ) ),
-    aAllLangBtn         ( this, ResId( BTN_ALL_LANG ) ),
-    aAuditBox           ( this, ResId( GB_AUDIT ) ),
-    aDictsLB            ( this, ResId( LB_DICTS ) ),
-    aDictsTbx           ( this, ResId( TB_DICTS ) ),
-    aDictsBox           ( this, ResId( GB_DICTS ) ),
-    aAutoCheckBtn       ( this, ResId( BTN_AUTO_SPELLING ) ),
-    aMarkOffBtn         ( this, ResId( BTN_MARK_OFF ) ),
-    aAutoSpellBox       ( this, ResId( GB_AUTO_SPELLING ) ),
-    aGermanSpellBox     ( this, ResId( GB_GERMAN_SPELLING ) ),
-    aGermanPreReformBtn ( this, ResId( BTN_GERMAN_PRE_REFORM) ),
-    aPreBreakText       ( this, ResId( FT_PREBREAK ) ),
-    aPreBreakEdit       ( this, ResId( ED_PREBREAK ) ),
-    aAfterBreakText     ( this, ResId( FT_AFTERBREAK ) ),
-    aAfterBreakEdit     ( this, ResId( ED_AFTERBREAK ) ),
-    aAutoBtn            ( this, ResId( BTN_AUTO ) ),
-    aSpecialBtn         ( this, ResId( BTN_SPECIAL ) ),
-    aRulesBox           ( this, ResId( GB_RULES ) ),
-    aLanguageText       ( this, ResId( FT_LANGUAGE ) ),
-    aLanguageLB         ( this, ResId( LB_LANGUAGE ) ),
-    aMaxWarning(ResId(STR_WARNING))
+    aLinguisticGB       ( this, ResId( GB_LINGUISTIC ) ),
+    aLinguModulesFT     ( this, ResId( FT_LINGU_MODULES ) ),
+    aLinguModulesCLB    ( this, ResId( CLB_LINGU_MODULES ) ),
+    aLinguModulesEditPB ( this, ResId( PB_LINGU_MODULES_EDIT ) ),
+    aLinguOptionsFT     ( this, ResId( FT_LINGU_OPTIONS ) ),
+    aLinguOptionsCLB    ( this, ResId( CLB_LINGU_OPTIONS ) ),
+    aLinguOptionsEditPB ( this, ResId( PB_LINGU_OPTIONS_EDIT ) ),
+    sCapitalWords       ( ResId( STR_CAPITAL_WORDS ) ),
+    sWordsWithDigits    ( ResId( STR_WORDS_WITH_DIGITS ) ),
+    sCapitalization     ( ResId( STR_CAPITALIZATION ) ),
+    sSpellSpecial       ( ResId( STR_SPELL_SPECIAL ) ),
+    sAllLanguages       ( ResId( STR_ALL_LANGUAGES ) ),
+    sSpellAuto          ( ResId( STR_SPELL_AUTO ) ),
+    sHideMarkings       ( ResId( STR_HIDE_MARKINGS ) ),
+    sOldGerman          ( ResId( STR_OLD_GERMAN ) ),
+    sNumPreBreak        ( ResId( STR_NUM_PRE_BREAK ) ),
+    sNumPostBreak       ( ResId( STR_NUM_POST_BREAK ) ),
+    sHyphAuto           ( ResId( STR_HYPH_AUTO ) ),
+    sHyphSpecial        ( ResId( STR_HYPH_SPECIAL ) ),
 
+    aChkunBmp           ( ResId( BMP_CHKBUT_UNCHECKED ) ),
+    aChkchBmp           ( ResId( BMP_CHKBUT_CHECKED ) ),
+    pLinguData          (new SvxLinguData_Impl)
+
+#ifdef NEVER
+    aPreBreakEdit       ( this, ResId( ED_PREBREAK ) ),
+    aAfterBreakEdit     ( this, ResId( ED_AFTERBREAK ) ),
+#endif
 {
+    pCheckButtonData = NULL;
+    aLinguModulesCLB.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
+                            WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aLinguModulesCLB.SetHighlightRange();
+    aLinguOptionsCLB.SetHighlightRange();
+    aLinguModulesCLB.SetHelpId(HID_CLB_LINGU_MODULES );
+    aLinguOptionsCLB.SetHelpId(HID_CLB_LINGU_OPTIONS );
+
+    xProp = Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
+    if (!xProp.is())
+    {
+        aLinguOptionsFT.Disable();
+        aLinguOptionsCLB.Disable();
+        aLinguOptionsEditPB.Disable();
+    }
+
+    aLinguModulesCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
+    aLinguOptionsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
+    aLinguModulesEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
+    aLinguOptionsEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
+    aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, DoubleClickHdl_Impl));
+    aLinguModulesCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, DoubleClickHdl_Impl));
+
+#ifdef NEVER
     Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
         aDics = xDicList->getDictionaries();
@@ -262,6 +1149,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
         aDictsTbx.Enable( sal_False );
         aDictsBox.Enable( sal_False );
     }
+#endif
 
     FreeResource();
 }
@@ -270,12 +1158,20 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
+    delete pLinguData;
+    for(sal_uInt16 nEntry = 0; nEntry < aLinguModulesCLB.GetEntryCount(); nEntry++)
+    {
+        SvxModulesData_Impl* pData = (SvxModulesData_Impl*)aLinguModulesCLB.GetEntry(nEntry)->GetUserData();
+        delete pData;
+    }
 }
 
 //------------------------------------------------------------------------
 
+//nicht überladen wegschmeissen
 sal_uInt16* SvxLinguTabPage::GetRanges()
 {
+    //TL???
     return pRanges;
 }
 
@@ -301,9 +1197,39 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bModified = sal_True; // !!!!
 
+    SvStringsDtor aToRemove;
+    SvStringsDtor aToInsert;
+    for(sal_uInt16 i = 0; i < aLinguModulesCLB.GetEntryCount(); i++)
+    {
+        SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
+        SvxModulesData_Impl* pData = (SvxModulesData_Impl*) pEntry->GetUserData();
+        if(pData->bIsConfigured != aLinguModulesCLB.IsChecked( i ))
+        {
+            if(pData->bIsConfigured)
+                aToRemove.Insert(new String(pData->sServiceImplName), aToRemove.Count());
+            else if(!pData->bIsConfigured)
+                aToInsert.Insert(new String(pData->sServiceImplName), aToInsert.Count());
+        }
+    }
+    if(aToRemove.Count() || aToInsert.Count())
+    {
+        Sequence<OUString> aRemove(aToRemove.Count());
+        OUString* pRemove = aRemove.getArray();
+        USHORT i;
+        for(i = 0; i < aToRemove.Count(); i++)
+            pRemove[i] = OUString(*aToRemove[i]);
+        Sequence<OUString> aInsert(aToInsert.Count());
+        OUString* pInsert = aInsert.getArray();
+        for(i = 0; i < aToInsert.Count(); i++)
+            pInsert[i] = OUString(*aToInsert[i]);
+
+        pLinguData->Reconfigure(aRemove, aInsert);
+    }
+
     if (!SvxGetLinguPropertySet().is())
         return sal_False;
 
+#ifdef NEVER
     //
     // build list of active dictionaries
     // (There has to be at least one active positive dictionary
@@ -349,6 +1275,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if (xDic != SvxGetIgnoreAllList())
             xDic->setActive( bActivate );
     }
+#endif
 
     // force new spelling and flushing of spell caches
     //! current implementation is a workaround until the correct
@@ -362,6 +1289,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if (bOk)
             xDic->remove( aTmp );
     }
+
 #ifdef NOT_YET_IMPLEMENTED
     //!!! functionality needs to be implemented via XPropertySet listeners!
 
@@ -399,6 +1327,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     pSpell->SetSpellAllAgain( bSpellAllAgain );
 #endif //NOT_YET_IMPLEMENTED
 
+#ifdef NEVER
     Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
     if (xProp.is())
     {
@@ -468,6 +1397,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
                                    aMarkOffBtn.IsChecked() ) );
         bModified |= sal_True;
     }
+#endif
 
     return bModified;
 }
@@ -476,11 +1406,13 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 {
+    // nur Initialisierung
     UpdateBox_Impl();
 
+#ifdef NEVER
     // #44483#
     // form::component::CheckBox f"ur die Benutzerw"orterb"ucher
-    // anhand der Vorgaben des SpellChecker setzen
+    // setzen
     Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
 
     const sal_uInt16 nCount = aDics.getLength();
@@ -530,7 +1462,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
         const SfxHyphenRegionItem& rHyp =
             (const SfxHyphenRegionItem&)rSet.Get( nWhich );
         aPreBreakEdit.SetValue(
-            aPreBreakEdit.Normalize( rHyp.GetMinLead() ) );
+            aPreBreakEdit.Normalize( rHyp.GetMinLead() ) ); //TL???
         aAfterBreakEdit.SetValue(
             aAfterBreakEdit.Normalize( rHyp.GetMinTrail() ) );
     }
@@ -580,10 +1512,12 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     aPreBreakEdit.SaveValue();
     aAfterBreakEdit.SaveValue();
     aLanguageLB.SaveValue();
+#endif
 }
 
 // -----------------------------------------------------------------------
 
+#ifdef NEVER
 IMPL_LINK( SvxLinguTabPage, NewHdl_Impl, Button *, EMPTYARG )
 {
     SvxNewDictionaryDialog* pDlg = new SvxNewDictionaryDialog( this, xSpell );
@@ -614,9 +1548,10 @@ IMPL_LINK( SvxLinguTabPage, NewHdl_Impl, Button *, EMPTYARG )
     }
     return 1;
 }
-
+#endif
 // -----------------------------------------------------------------------
 
+#ifdef NEVER
 IMPL_LINK( SvxLinguTabPage, EditHdl_Impl, Button *, EMPTYARG )
 {
     String sName;
@@ -637,8 +1572,10 @@ IMPL_LINK( SvxLinguTabPage, EditHdl_Impl, Button *, EMPTYARG )
     delete pDlg;
     return 1;
 }
+#endif
 
 // -----------------------------------------------------------------------
+#ifdef NEVER
 void lcl_SequenceRemoveElementAt(
     Sequence<Reference<XDictionary > >& rEntries, int nPos )
 {
@@ -658,92 +1595,10 @@ void lcl_SequenceRemoveElementAt(
 
     rEntries = aTmp;
 }
-
-IMPL_LINK( SvxLinguTabPage, DeleteHdl_Impl, Button *, EMPTYARG )
-{
-    if ( RET_NO ==
-         QueryBox( this, ResId( RID_SFXQB_DELDICT, DIALOG_MGR() ) ).Execute() )
-        return 0;
-
-    //Eintrag aus der Listbox loeschen und am SpellCheck abmelden
-    sal_uInt16 nId = aDictsLB.GetSelectEntryPos();
-
-    if ( nId != LISTBOX_ENTRY_NOTFOUND )
-    {
-        String aDicName( aDics.getConstArray()[ nId ]->getName() );
-
-        Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
-        Reference< XDictionary >  xDic;
-        if (xDicList.is())
-        {
-            xDic = xDicList->getDictionaryByName( aDicName);
-        }
-
-        if (xDic.is())
-        {
-            if (xDic == SvxGetIgnoreAllList())
-            {
-                xDic->clear();
-            }
-            else
-            {
-                xDicList->removeDictionary( xDic );
-
-                // remove Dictionary from snapshot list
-                lcl_SequenceRemoveElementAt( aDics, nId);
-
-                Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
-                if ( xStor->hasLocation() && !xStor->isReadonly() )
-                {
-                    String sURL = xStor->getLocation();
-                    INetURLObject aObj(sURL);
-                    DBG_ASSERT( aObj.GetProtocol() == INET_PROT_FILE, "non-file URLs cannot be deleted" );
-                    if ( aObj.GetProtocol() == INET_PROT_FILE )
-                    {
-                        KillFile_Impl( aObj.GetMainURL() );
-                    }
-
-//                  CntAnchorRef xAnchor =
-//                          new CntAnchor( NULL, U2S( xStor->getLocation() ) );
-//                  xAnchor->Put( SfxBoolItem(WID_DELETE, sal_False) );
-                }
-            }
-        }
-
-
-        if (xDic.is()  &&  xDic != SvxGetIgnoreAllList())
-            aDictsLB.RemoveEntry( nId );
-    }
-
-    if ( aDictsLB.GetEntryCount() > 0 )
-    {
-        sal_uInt16 nNewId = Min( nId, (sal_uInt16)( aDictsLB.GetEntryCount() - 1 ) );
-        aDictsLB.SelectEntryPos( nNewId );
-    }
-    else
-    {
-        aDictsTbx.EnableItem( TID_EDIT, sal_False );
-        aDictsTbx.EnableItem( TID_DELETE, sal_False );
-    }
-    return 1;
-}
-
+#endif
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxLinguTabPage, EraseHdl_Impl, Button *, EMPTYARG )
-{
-    if ( RET_YES ==
-         QueryBox( this, SVX_RES( RID_SFXQB_DEL_IGNORELIST ) ).Execute() )
-    {
-        if (SvxGetIgnoreAllList().is())
-            SvxGetIgnoreAllList()->clear();
-    }
-    return 1;
-}
-IMPL_LINK_INLINE_END( SvxLinguTabPage, EraseHdl_Impl, Button *, EMPTYARG )
-
-// -----------------------------------------------------------------------
-
+#ifdef NEVER
 IMPL_LINK( SvxLinguTabPage, CheckHdl_Impl, CheckBox *, EMPTYARG )
 {
     if ( !aAutoCheckBtn.IsChecked() )
@@ -752,8 +1607,11 @@ IMPL_LINK( SvxLinguTabPage, CheckHdl_Impl, CheckBox *, EMPTYARG )
         aMarkOffBtn.Enable();
     return 1;
 }
+#endif
 
 // -----------------------------------------------------------------------
+
+#ifdef NEVER
 IMPL_LINK( SvxLinguTabPage, CheckDicHdl_Impl, SvxCheckListBox *, EMPTYARG )
 {
     sal_uInt16 nMax=0;
@@ -787,36 +1645,85 @@ IMPL_LINK( SvxLinguTabPage, CheckDicHdl_Impl, SvxCheckListBox *, EMPTYARG )
 
     return 0;
 }
+#endif
 
 // -----------------------------------------------------------------------
-IMPL_LINK( SvxLinguTabPage, SelectDicHdl_Impl, SvxCheckListBox *, pBox )
+
+IMPL_LINK( SvxLinguTabPage, DoubleClickHdl_Impl, SvxCheckListBox *, pBox )
 {
-    DBG_ASSERT( pBox == &aDictsLB, "svx : unexpected argument" );
+    if(pBox == &aLinguOptionsCLB)
+        ClickHdl_Impl(&aLinguOptionsEditPB);
+    else
+        ClickHdl_Impl(&aLinguModulesEditPB);
+    return 0;
+}
 
-    BOOL bEnableDelete = TRUE;
+// -----------------------------------------------------------------------
 
-    sal_uInt16 nId = aDictsLB.GetSelectEntryPos();
-    if ( nId != LISTBOX_ENTRY_NOTFOUND )
+IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
+{
+    if (&aLinguModulesEditPB == pBtn)
     {
-        Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
-        if (xDicList.is())
+        SvxEditModulesDlg aDlg( this );
+        aDlg.Execute();
+    }
+    else if (&aLinguOptionsEditPB == pBtn)
+    {
+        SvLBoxEntry *pEntry = aLinguOptionsCLB.GetCurEntry();
+        DBG_ASSERT( pEntry, "no entry selected" );
+        if (pEntry)
         {
-            String aDicName( aDics.getConstArray()[ nId ]->getName() );
-
-            Reference< frame::XStorable >  xStor(
-                    xDicList->getDictionaryByName( aDicName ), UNO_QUERY );
-            if (xStor.is() && xStor->isReadonly())
-                bEnableDelete = FALSE;
+            long nVal = -1;
+            OptionsUserData aData( (ULONG)pEntry->GetUserData() );
+            if(aData.HasNumericValue())
+            {
+                OptionsBreakSet aDlg( this, aData.GetEntryId() == EID_NUM_PRE_BREAK ? sNumPreBreak : sNumPostBreak);
+                aDlg.Execute();
+                nVal = aDlg.GetNumericFld().GetValue();
+                if (-1 != nVal)
+                {
+                    aData.SetNumericValue( (BYTE)nVal );
+                    pEntry->SetUserData( (void *) aData.GetUserData() );
+                    aLinguOptionsCLB.Invalidate();
+                }
+            }
         }
     }
-
-    aDictsTbx.EnableItem( TID_DELETE, bEnableDelete);
+    else
+    {
+        DBG_ERROR( "pBtn unexpected value" );
+    }
 
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
+{
+    if (&aLinguModulesCLB == pBox)
+    {
+    }
+    else if (&aLinguOptionsCLB == pBox)
+    {
+        SvLBoxEntry *pEntry = pBox->GetCurEntry();
+        if (pEntry)
+        {
+            OptionsUserData aData( (ULONG) pEntry->GetUserData() );
+            aLinguOptionsEditPB.Enable( aData.HasNumericValue() );
+        }
+    }
+    else
+    {
+        DBG_ERROR( "pBox unexpected value" );
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+#ifdef NEVER
 IMPL_LINK( SvxLinguTabPage, BoxSelectHdl_Impl, ToolBox *, pBox )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
@@ -829,10 +1736,150 @@ IMPL_LINK( SvxLinguTabPage, BoxSelectHdl_Impl, ToolBox *, pBox )
         DeleteHdl_Impl( 0 );
     return 1;
 }
+#endif
+
+// ----------------------------------------------------------------------
+
+SvLBoxEntry* SvxLinguTabPage::CreateEntry(String& rTxt, USHORT nCol)
+{
+    SvLBoxEntry* pEntry = new SvLBoxEntry;
+
+    if( !pCheckButtonData )
+    {
+        pCheckButtonData = new SvLBoxButtonData;
+        pCheckButtonData->aBmps[SV_BMP_UNCHECKED] = aChkunBmp;
+        pCheckButtonData->aBmps[SV_BMP_CHECKED]   = aChkchBmp;
+    }
+
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+
+    String sEmpty;
+    if (CBCOL_FIRST == nCol)
+        pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+    if (CBCOL_SECOND == nCol)
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+    pEntry->AddItem( new BrwString_Impl( pEntry, 0, rTxt ) );
+
+    return pEntry;
+}
+
 // ----------------------------------------------------------------------
 
 void SvxLinguTabPage::UpdateBox_Impl()
 {
+    const Sequence<OUString>&  rAllNames      = pLinguData->GetAvailSrvcNames();
+    const OUString* pNames = rAllNames.getConstArray();
+    const Sequence<OUString>&  rAllDispNames  = pLinguData->GetAvailSrvcDisplayNames();
+    const OUString* pDispNames = rAllDispNames.getConstArray();
+    const Sequence<sal_Bool>&  rAllConfigured = pLinguData->GetAvailSrvcConfigured();
+    const sal_Bool* pConfigured = rAllConfigured.getConstArray();
+    for(sal_uInt16 i = 0; i < rAllNames.getLength(); i++)
+    {
+        aLinguModulesCLB.InsertEntry(pDispNames[i]);
+        SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
+        pEntry->SetUserData(new SvxModulesData_Impl(pNames[i], pConfigured[i]));
+        aLinguModulesCLB.CheckEntryPos( i, pConfigured[i] );
+    }
+    aLinguModulesEditPB.Enable(rAllNames.getLength() > 0);
+
+    if (xProp.is())
+    {
+        aLinguOptionsCLB.SetUpdateMode(FALSE);
+        aLinguOptionsCLB.Clear();
+
+        SvLBoxTreeList *pModel = aLinguOptionsCLB.GetModel();
+        SvLBoxEntry* pEntry = NULL;
+
+        INT16 nVal = 0;
+        BOOL  bVal  = FALSE;
+        ULONG nUserData = 0;
+
+        pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_UPPER_CASE) ) >>= bVal;
+        nUserData = OptionsUserData( EID_CAPITAL_WORDS, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sWordsWithDigits, CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_WITH_DIGITS) ) >>= bVal;
+        nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sCapitalization,  CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_CAPITALIZATION) ) >>= bVal;
+        nUserData = OptionsUserData( EID_CAPITALIZATION, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sSpellSpecial,    CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_SPECIAL) ) >>= bVal;
+        nUserData = OptionsUserData( EID_SPELL_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sAllLanguages,    CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES) ) >>= bVal;
+        nUserData = OptionsUserData( EID_ALL_LANGUAGES, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_AUTO) ) >>= bVal;
+        nUserData = OptionsUserData( EID_SPELL_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sHideMarkings,    CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_SPELL_HIDE) ) >>= bVal;
+        nUserData = OptionsUserData( EID_HIDE_MARKINGS, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sOldGerman,       CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_GERMAN_PRE_REFORM) ) >>= bVal;
+        nUserData = OptionsUserData( EID_OLD_GERMAN, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
+        xProp->getPropertyValue( C2U(UPN_HYPH_MIN_LEADING) ) >>= nVal;
+        nUserData = OptionsUserData( EID_NUM_PRE_BREAK, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+
+        pEntry = CreateEntry( sNumPostBreak,    CBCOL_SECOND );
+        xProp->getPropertyValue( C2U(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
+        nUserData = OptionsUserData( EID_NUM_POST_BREAK, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+
+        pEntry = CreateEntry( sHyphAuto,        CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_HYPH_AUTO) ) >>= bVal;
+        nUserData = OptionsUserData( EID_HYPH_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        pEntry = CreateEntry( sHyphSpecial,     CBCOL_FIRST );
+        xProp->getPropertyValue( C2U(UPN_IS_HYPH_SPECIAL) ) >>= bVal;
+        nUserData = OptionsUserData( EID_HYPH_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
+        pEntry->SetUserData( (void *)nUserData );
+        pModel->Insert( pEntry );
+        lcl_SetCheckButton( pEntry, bVal );
+
+        aLinguOptionsCLB.SetUpdateMode(TRUE);
+    }
+
+#ifdef NEVER
     // gecheckte Eintr"age merken
     SvUShorts aArr;
 
@@ -886,12 +1933,14 @@ void SvxLinguTabPage::UpdateBox_Impl()
 
     aDictsLB.SetHighlightRange();
     aDictsLB.SelectEntryPos( 0 );   //! may implicitly change TID_DELETE
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
 {
+#ifdef NEVER
     if ( 0 != ( GROUP_SPELLING & nGrp ) )
     {
         aCapsBtn.Hide();
@@ -917,13 +1966,15 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aLanguageText.Hide();
         aLanguageLB.Hide();
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 void SvxLinguTabPage::HideSpellCheckSpecial()
 {
-    aSpellSpecialBtn.Hide();
+    //TL???
+    //aSpellSpecialBtn.Hide();
 }
 
 /* -----------------------------27.01.00 12:14--------------------------------
@@ -931,9 +1982,11 @@ void SvxLinguTabPage::HideSpellCheckSpecial()
  ---------------------------------------------------------------------------*/
 void SvxLinguTabPage::EnableAutoSpelling()
 {
+#ifdef NEVER
     aAutoCheckBtn.Show();
     aMarkOffBtn.Show();
     aAutoSpellBox.Show();
+#endif
 }
 
 /*-- 27.01.00 12:17:13---------------------------------------------------

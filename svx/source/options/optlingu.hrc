@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: tl $ $Date: 2000-11-27 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,54 @@
 
 // defines ---------------------------------------------------------------
 
+#define GB_LINGUISTIC           101
+
+#define FT_LINGU_MODULES        111
+#define CLB_LINGU_MODULES       112
+#define PB_LINGU_MODULES_EDIT   113
+
+#define FT_LINGU_OPTIONS        121
+#define CLB_LINGU_OPTIONS       122
+#define PB_LINGU_OPTIONS_EDIT   123
+
+#define STR_CAPITAL_WORDS       201
+#define STR_WORDS_WITH_DIGITS   202
+#define STR_CAPITALIZATION      203
+#define STR_SPELL_SPECIAL       204
+#define STR_ALL_LANGUAGES       205
+#define STR_SPELL_AUTO          206
+#define STR_HIDE_MARKINGS       207
+#define STR_OLD_GERMAN          208
+#define STR_NUM_PRE_BREAK       209
+#define STR_NUM_POST_BREAK      210
+#define STR_HYPH_AUTO           211
+#define STR_HYPH_SPECIAL        212
+
+#define STR_WARNING             63
+
+#define BMP_CHKBUT_UNCHECKED    301
+#define BMP_CHKBUT_CHECKED      302
+
+#define GB_NUMVAL_PREBREAK      305
+#define BT_OK_PREBREAK          306
+#define BT_CANCEL_PREBREAK      307
+#define ED_PREBREAK             308
+#define PB_EDIT_MODULES_PRIO_UP     309
+#define PB_EDIT_MODULES_PRIO_DOWN   310
+#define PB_EDIT_MODULES_PRIO_BACK           311
+#define PB_EDIT_MODULES_NEW_DIC             312
+#define PB_EDIT_MODULES_PRIO_EDIT_DIC       313
+#define PB_EDIT_MODULES_PRIO_DEL_DIC        314
+#define GB_EDIT_MODULES_OPTIONS             315
+#define FT_EDIT_MODULES_LANGUAGE            316
+#define LB_EDIT_MODULES_LANGUAGE            317
+#define CLB_EDIT_MODULES_MODULES            318
+#define GB_EDIT_MODULES_DICS                319
+#define CLB_EDIT_MODULES_DICS               320
+
+
+//////////////////////////////////////////////////////////////////////
+
 #define BTN_CAPS                10
 #define BTN_NUMS                11
 #define BTN_UPLOW               12
@@ -82,7 +130,7 @@
 #define FT_EXT_LINGU            34
 
 #define FT_PREBREAK             40
-#define ED_PREBREAK             41
+//#define ED_PREBREAK           41
 #define FT_AFTERBREAK           42
 #define ED_AFTERBREAK           43
 #define BTN_AUTO                44
@@ -95,7 +143,6 @@
 #define TID_NEW                 60
 #define TID_EDIT                61
 #define TID_DELETE              62
-#define STR_WARNING             63
 
 #define PB_OK                   70
 #define PB_CANCEL               71
