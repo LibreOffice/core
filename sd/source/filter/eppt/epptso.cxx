@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-18 17:21:58 $
+ *  last change: $Author: sj $ $Date: 2002-03-28 11:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,7 +1713,20 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nPropertyFlags & 0x40 )
             rOut << (sal_Int16)nBuRealSize;
         if ( nPropertyFlags & 0x20 )
-            rOut << pPara->nBulletColor;
+        {
+            sal_uInt32 nBulletColor = pPara->nBulletColor;
+            if ( nBulletColor == COL_AUTO )
+            {
+                sal_Bool bIsDark = sal_False;
+                ::com::sun::star::uno::Any aAny;
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
+                    aAny >>= bIsDark;
+                nBulletColor = bIsDark ? 0xffffff : 0x000000;
+            }
+            nBulletColor &= 0xffffff;
+            nBulletColor |= 0xfe000000;
+            rOut << nBulletColor;
+        }
         if ( nPropertyFlags & 0x00000800 )
             rOut << (sal_uInt16)( pPara->mnTextAdjust );
         if ( nPropertyFlags & 0x00001000 )
@@ -1739,7 +1752,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 {
     sal_uInt32  nPropertyFlags, i = 0;
-    int     nInstance = rTextObj.GetInstance();
+    int nInstance = rTextObj.GetInstance();
 
     for ( ParagraphObj* pPara = rTextObj.First(); pPara; pPara = rTextObj.Next(), i++ )
     {
@@ -1747,10 +1760,20 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
         {
             nPropertyFlags = 0;
             sal_uInt32 nCharAttr = pPortion->mnCharAttr;
+            sal_uInt32 nCharColor = pPortion->mnCharColor;
 
-            if (pPortion->mnCharColor & 0xffffff)       // #97884# the fact that Ppt is displaying embossed text always using
+            if ( nCharColor == COL_AUTO )   // nCharColor depends to the background color
+            {
+                sal_Bool bIsDark = sal_False;
+                ::com::sun::star::uno::Any aAny;
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
+                    aAny >>= bIsDark;
+                nCharColor = bIsDark ? 0xffffff : 0x000000;
+            }
+            nCharColor &= 0xffffff;
+            if ( nCharColor )                           // #97884# the fact that Ppt is displaying embossed text always using
                 nCharAttr &=~ 0x200;                    // a black color, we can't export this attribute for all other colors,
-
+            nCharColor |= 0xfe000000;
             if ( nInstance == 4 )                       // special handling for normal textobjects:
                 nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
             else
@@ -1789,7 +1812,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontHeight, pPortion->mnCharHeight ) ) )
                 nPropertyFlags |= 0x00020000;
             if ( ( pPortion->meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontColor, pPortion->mnCharColor ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontColor, nCharColor & 0xffffff ) ) )
                 nPropertyFlags |= 0x00040000;
             if ( ( pPortion->meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Escapement, pPortion->mnCharEscapement ) ) )
@@ -1809,7 +1832,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             if ( nPropertyFlags & 0x00020000 )
                 rOut << (sal_uInt16)( pPortion->mnCharHeight );
             if ( nPropertyFlags & 0x00040000 )
-                rOut << (sal_uInt32)pPortion->mnCharColor;
+                rOut << (sal_uInt32)nCharColor;
             if ( nPropertyFlags & 0x00080000 )
                 rOut << pPortion->mnCharEscapement;
         }
@@ -2157,9 +2180,9 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ), bGetPropStateValue ) )
     {
         sal_uInt32 nSOColor = *( (sal_uInt32*)mAny.getValue() );
-        mnCharColor = nSOColor & 0xff00;                                // green
-        mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   // red
-        mnCharColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000;      // blue
+        mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
+        mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   // red and blue is switched
+        mnCharColor |= (sal_uInt8)( nSOColor >> 16 );
     }
     meCharColor = ePropState;
 
@@ -2534,9 +2557,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletColor" ) ) )
                         {
                             sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
-                            nBulletColor = nSOColor & 0xff00;                           // GRUEN
-                            nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // ROT
-                            nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // BLAU
+                            nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
+                            nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
+                            nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
                         }
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletRelSize" ) ) )
                         {

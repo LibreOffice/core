@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-31 14:54:30 $
+ *  last change: $Author: sj $ $Date: 2002-03-28 11:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,8 @@ struct PPTExCharSheet
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
 
 };
 
@@ -560,15 +561,18 @@ struct PPTExParaSheet
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
 };
 
 class PPTExStyleSheet
 {
-    PPTExCharSheet*     mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
-    PPTExParaSheet*     mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
 
     public :
+
+                PPTExCharSheet*     mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
+                PPTExParaSheet*     mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
+
                 PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider& rBuProv );
                 ~PPTExStyleSheet();
 
@@ -578,7 +582,6 @@ class PPTExStyleSheet
                 void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );
                 sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
-                void            Write( SvStream& rSt, PptEscherEx* pEx );
 
                 sal_uInt32      SizeOfTxCFStyleAtom() const;
                 void            WriteTxCFStyleAtom( SvStream& rSt );

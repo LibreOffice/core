@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-18 17:15:23 $
+ *  last change: $Author: sj $ $Date: 2002-03-28 11:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,7 +1191,40 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 6 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0xff9933 << (sal_uInt32)0xccff99 << (sal_uInt32)0xcc00cc << (sal_uInt32)0xb2b2b2;
 
-    mpStyleSheet->Write( *mpStrm ,mpPptEscherEx );
+    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
+    {
+        if ( nInstance == EPP_TEXTTYPE_notUsed )
+            continue;
+
+        // the auto color is dependent to the page background,so we have to set a page that is in the right context
+        if ( nInstance == EPP_TEXTTYPE_Notes )
+            ImplGetPageByIndex( 0, NOTICE );
+        else
+            ImplGetPageByIndex( 0, MASTER );
+
+        mpPptEscherEx->BeginAtom();
+
+        sal_Bool bFirst = TRUE;
+        sal_Bool bSimpleText = FALSE;
+
+        *mpStrm << (sal_uInt16)5;                           // paragraph count
+
+        for ( sal_uInt16 nLev = 0; nLev < 5; nLev++ )
+        {
+            if ( nInstance >= EPP_TEXTTYPE_CenterBody )
+            {
+                bFirst = FALSE;
+                bSimpleText = TRUE;
+                *mpStrm << nLev;
+            }
+            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
+            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
+            bFirst = FALSE;
+        }
+        mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
+    }
+
+
 
     EscherSolverContainer aSolverContainer;
 
@@ -2068,7 +2101,7 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
         rLev.mnFont = 0;
         rLev.mnAsianOrComplexFont = 0xffff;
         rLev.mnFontHeight = nFontHeight;
-        rLev.mnFontColor = 0xfe000000;
+        rLev.mnFontColor = 0;
         rLev.mnEscapement = 0;
     }
 }
@@ -2094,7 +2127,8 @@ void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     rLev.mnFlags = aPortionObj.mnCharAttr;
 }
 
-void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText )
+void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExCharLevel& rLev = maCharLevel[ nLev ];
 
@@ -2106,10 +2140,21 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sa
         << rLev.mnFlags
         << rLev.mnFont;
 
+    sal_uInt32 nFontColor = rLev.mnFontColor;
+    if ( nFontColor == COL_AUTO )
+    {
+        sal_Bool bIsDark = sal_False;
+        ::com::sun::star::uno::Any aAny;
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
+            aAny >>= bIsDark;
+        nFontColor = bIsDark ? 0xffffff : 0x000000;
+    }
+    nFontColor &= 0xffffff;
+    nFontColor |= 0xfe000000;
     if ( bSimpleText )
     {
         rSt << rLev.mnFontHeight
-            << rLev.mnFontColor;
+            << nFontColor;
     }
     else
     {
@@ -2117,7 +2162,7 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sa
             << (sal_uInt16)0xffff       // unbekannt
             << (sal_uInt16)0xffff       // unbekannt
             << rLev.mnFontHeight
-            << rLev.mnFontColor
+            << nFontColor
             << rLev.mnEscapement;
     }
 }
@@ -2201,7 +2246,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
         rLev.mnBulletChar = nBulletChar;
         rLev.mnBulletFont = 0;
         rLev.mnBulletHeight = 100;
-        rLev.mnBulletColor = 0xfe000000;
+        rLev.mnBulletColor = 0;
         rLev.mnAdjust = 0;
         rLev.mnLineFeed = 100;
         rLev.mnLowerDist = 0;
@@ -2301,7 +2346,8 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
     }
 }
 
-void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText )
+void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExParaLevel& rLev = maParaLevel[ nLev ];
 
@@ -2331,13 +2377,23 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sa
 
     if ( nLev || bSimpleText )
         nParaFlags &= 0x7fff;
-
+    sal_uInt32 nBulletColor = rLev.mnBulletColor;
+    if ( nBulletColor == COL_AUTO )
+    {
+        sal_Bool bIsDark = sal_False;
+        ::com::sun::star::uno::Any aAny;
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
+            aAny >>= bIsDark;
+        nBulletColor = bIsDark ? 0xffffff : 0x000000;
+    }
+    nBulletColor &= 0xffffff;
+    nBulletColor |= 0xfe000000;
     rSt << nParaFlags
         << nBulletFlags
         << rLev.mnBulletChar
         << rLev.mnBulletFont
         << rLev.mnBulletHeight
-        << rLev.mnBulletColor
+        << nBulletColor
         << rLev.mnAdjust
         << rLev.mnLineFeed
         << rLev.mnUpperDist
@@ -2382,7 +2438,6 @@ void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::c
 {
     if ( nInstance == EPP_TEXTTYPE_notUsed )
         return;
-
     mpCharSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel );
     mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel, mpCharSheet[ nInstance ]->maCharLevel[ nLevel ] );
 }
@@ -2432,36 +2487,6 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
             return ( ( nValue & nFlag ) != 0 );
     }
     return TRUE;
-}
-
-void PPTExStyleSheet::Write( SvStream& rSt, PptEscherEx* pEx )
-{
-    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
-    {
-        if ( nInstance == EPP_TEXTTYPE_notUsed )
-            continue;
-
-        pEx->BeginAtom();
-
-        sal_Bool bFirst = TRUE;
-        sal_Bool bSimpleText = FALSE;
-
-        rSt << (sal_uInt16)5;                           // paragraph count
-
-        for ( sal_uInt16 nLev = 0; nLev < 5; nLev++ )
-        {
-            if ( nInstance >= EPP_TEXTTYPE_CenterBody )
-            {
-                bFirst = FALSE;
-                bSimpleText = TRUE;
-                rSt << nLev;
-            }
-            mpParaSheet[ nInstance ]->Write( rSt, pEx, nLev, bFirst, bSimpleText );
-            mpCharSheet[ nInstance ]->Write( rSt, pEx, nLev, bFirst, bSimpleText );
-            bFirst = FALSE;
-        }
-        pEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
-    }
 }
 
 sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const
