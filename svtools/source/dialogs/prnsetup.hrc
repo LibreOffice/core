@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: pl $ $Date: 2001-06-12 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 #include <svtools.hrc>
 
-#define GRP_PRINTER             1
+#define FL_PRINTER          1
 #define LB_NAMES                2
 #define BTN_PROPERTIES          3
 #define FT_NAME                 4
@@ -76,3 +76,5 @@
 #define BTN_OK                  13
 #define BTN_CANCEL              14
 #define BTN_HELP                15
+
+#define FL_SEPBUTTON            16

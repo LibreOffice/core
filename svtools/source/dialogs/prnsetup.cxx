@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: pl $ $Date: 2001-06-12 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 
 PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
     ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRNSETUPDLG ) ),
-    maGrpPrinter    ( this, SvtResId( GRP_PRINTER ) ),
+    maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
     maFtName        ( this, SvtResId( FT_NAME ) ),
     maLbName        ( this, SvtResId( LB_NAMES ) ),
     maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
@@ -310,7 +310,8 @@ PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
     maFiComment     ( this, SvtResId( FI_COMMENT ) ),
     maBtnOK         ( this, SvtResId( BTN_OK ) ),
     maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, SvtResId( BTN_HELP ) )
+    maBtnHelp       ( this, SvtResId( BTN_HELP ) ),
+    maFlSepButton   ( this, SvtResId( FL_SEPBUTTON ) )
 {
     FreeResource();
 
