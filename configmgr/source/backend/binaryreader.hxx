@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreader.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:04:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #ifndef _COM_SUN_STAR_IO_XDATAINPUTSTREAM_HPP_
 #include <com/sun/star/io/XDataInputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
-#include <com/sun/star/io/XMarkableStream.hpp>
-#endif
 
 namespace configmgr
 {
@@ -117,7 +114,7 @@ namespace configmgr
             void reopen()   SAL_THROW( (io::IOException, uno::RuntimeException) );
             void close()    SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            typedef uno::Sequence< sal_uInt8 > Binary;
+            typedef uno::Sequence< sal_Int8 > Binary;
 
             void read(sal_Bool &_nValue)    SAL_THROW( (io::IOException, uno::RuntimeException) );
             void read(sal_Int8 &_nValue)    SAL_THROW( (io::IOException, uno::RuntimeException) );
