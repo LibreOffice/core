@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 14:58:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,6 +646,27 @@
 				<value>10000</value>
 			</prop>
 		</group>
+ 		<group oor:name="ObjectNames">
+ 			<info>
+				<deprecated>Replaced by org.openoffice.Office.Embedding/ObjectName.</deprecated>
+ 				<author>MAV</author>
+ 				<desc>Deprecated</desc>
+ 			</info>
+ 			<prop oor:name="Name" oor:type="xs:string" oor:localized="true">
+ 				<info>
+					<deprecated/>
+ 					<author>MAV</author>
+ 					<desc>Deprecated</desc>
+ 				</info>
+ 			</prop>
+ 			<prop oor:name="Key" oor:type="xs:string">
+ 				<info>
+					<deprecated/>
+ 					<author>MAV</author>
+ 					<desc>Deprecated</desc>
+ 				</info>
+ 			</prop>
+ 		</group>
 		<group oor:name="RecoveryEntry">
 			<info>
 				<author>AS</author>
@@ -5279,6 +5300,13 @@
 				<value>false</value>
 			</prop>
 		</group>
+ 		<set oor:name="OfficeObjects" oor:node-type="ObjectNames">
+ 			<info>
+				<deprecated>Replaced by org.openoffice.Office.Embedding/ObjectNames.</deprecated>
+ 				<author>MAV</author>
+ 				<desc>Deprecated</desc>
+ 			</info>
+ 		</set>
 		<group oor:name="ExternalApps" oor:extensible="true">
 			<info>
 				<deprecated>Without replacement.</deprecated>
