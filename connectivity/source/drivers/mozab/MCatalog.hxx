@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MCatalog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace connectivity
             virtual void refreshViews() ;
             virtual void refreshGroups();
             virtual void refreshUsers() ;
-
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
         public:
             OCatalog(OConnection* _pCon);
 
