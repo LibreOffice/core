@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@ String STR_MENU_CFGITEM
     TEXT [ dutch ] = "Menu" ;
     TEXT [ spanish ] = "Menú" ;
     TEXT [ english_us ] = "Configuration Menu" ;
-    TEXT[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+    TEXT[ chinese_simplified ] = "²Ëµ¥";
     TEXT[ russian ] = "Ìåíş";
     TEXT[ polish ] = "Menu";
     TEXT[ japanese ] = "ÒÆ­°";
     TEXT[ chinese_traditional ] = "¥\\¯àªí";
     TEXT[ arabic ] = "ÇáŞÇÆãÉ";
     TEXT[ dutch ] = "Menu";
-    TEXT[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+    TEXT[ chinese_simplified ] = "²Ëµ¥";
     TEXT[ greek ] = "Ìåíïı";
     TEXT[ korean ] = "¸Ş´º";
     TEXT[ turkish ] = "Mönü";
