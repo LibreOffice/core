@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:56:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
         case( META_REFPOINT_ACTION ): pAction = new MetaRefPointAction; break;
         case( META_COMMENT_ACTION ): pAction = new MetaCommentAction; break;
         case( META_LAYOUTMODE_ACTION ): pAction = new MetaLayoutModeAction; break;
+        case( META_TEXTLANGUAGE_ACTION ): pAction = new MetaTextLanguageAction; break;
 
         default:
         {
@@ -4078,6 +4079,57 @@ void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     rIStm >> mnLayoutMode;
+}
+
+// ========================================================================
+
+IMPL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )
+
+// ------------------------------------------------------------------------
+
+MetaTextLanguageAction::MetaTextLanguageAction( LanguageType eTextLanguage ) :
+    MetaAction  ( META_TEXTLANGUAGE_ACTION ),
+    meTextLanguage( eTextLanguage )
+{
+}
+
+// ------------------------------------------------------------------------
+
+void MetaTextLanguageAction::Execute( OutputDevice* pOut )
+{
+    pOut->SetDigitLanguage( meTextLanguage );
+}
+
+// ------------------------------------------------------------------------
+
+MetaAction* MetaTextLanguageAction::Clone()
+{
+    MetaAction* pClone = (MetaAction*) new MetaTextLanguageAction( *this );
+    pClone->ResetRefCount();
+    return pClone;
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool MetaTextLanguageAction::Compare( const MetaAction& rMetaAction ) const
+{
+    return meTextLanguage == ((MetaTextLanguageAction&)rMetaAction).meTextLanguage;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
+{
+    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    rOStm << meTextLanguage;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
+{
+    COMPAT( rIStm );
+    rIStm >> meTextLanguage;
 }
 
 // ========================================================================
