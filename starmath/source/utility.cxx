@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:27 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 09:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,13 +253,10 @@ const ByteString ExportString(const String& rString)
     for (xub_StrLen i = 0; i < rString.Len(); i++)
     {
         sal_Unicode ch = rString.GetChar(i);
-
-        sal_Char cChar = ByteString::ConvertFromUnicode( ch, eEnc );
         if ((ch != '\r') && (ch != '\n') && (ch != '\t'))
         {
-//          ch = String::Convert(rString[i], eSet, CHARSET_ANSI);
-
-            if (ch == 0)
+            sal_Char cChar = ByteString::ConvertFromUnicode( ch, eEnc );
+            if (cChar == 0)
                 aString += ConvertUnknownCharacter(ch);
             else
                 aString += cChar;
