@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-12 17:11:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include <vector>
@@ -984,11 +987,10 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace { struct DefaultPolygon: public rtl::Static<ImplB2DPolygon, DefaultPolygon> {}; }
+
 namespace basegfx
 {
-    // init static default Polygon
-    static ImplB2DPolygon maStaticDefaultPolygon;
-
     void B2DPolygon::implForceUniqueCopy()
     {
         if(mpPolygon->getRefCount())
@@ -999,7 +1001,7 @@ namespace basegfx
     }
 
     B2DPolygon::B2DPolygon()
-    :   mpPolygon(&maStaticDefaultPolygon)
+    :   mpPolygon(&DefaultPolygon::get())
     {
         mpPolygon->incRefCount();
     }
@@ -1273,7 +1275,7 @@ namespace basegfx
             delete mpPolygon;
         }
 
-        mpPolygon = &maStaticDefaultPolygon;
+        mpPolygon = &DefaultPolygon::get();
         mpPolygon->incRefCount();
     }
 
