@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-11-25 10:07:08 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "copydlg.hxx"
+
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
 #endif
@@ -89,12 +91,15 @@
 
 #include "sdattr.hxx"
 
-#include "copydlg.hxx"
 #include "copydlg.hrc"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "res_bmp.hrc"
+
+namespace sd {
 
 #define TOKEN (sal_Unicode(';'))
 
@@ -104,38 +109,41 @@
 |*
 \************************************************************************/
 
-SdCopyDlg::SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
-                      XColorTable* pColTab, SdView* pInView ) :
-                SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
-                aFtCopies           ( this, SdResId( FT_COPIES ) ),
-                aNumFldCopies       ( this, SdResId( NUM_FLD_COPIES ) ),
-                aFtMoveX            ( this, SdResId( FT_MOVE_X ) ),
-                aMtrFldMoveX        ( this, SdResId( MTR_FLD_MOVE_X ) ),
-                aFtMoveY            ( this, SdResId( FT_MOVE_Y ) ),
-                aMtrFldMoveY        ( this, SdResId( MTR_FLD_MOVE_Y ) ),
-                aFtAngle            ( this, SdResId( FT_ANGLE ) ),
-                aMtrFldAngle        ( this, SdResId( MTR_FLD_ANGLE ) ),
-                aGrpMovement        ( this, SdResId( GRP_MOVEMENT ) ),
-                aFtWidth            ( this, SdResId( FT_WIDTH ) ),
-                aMtrFldWidth        ( this, SdResId( MTR_FLD_WIDTH ) ),
-                aFtHeight           ( this, SdResId( FT_HEIGHT ) ),
-                aMtrFldHeight       ( this, SdResId( MTR_FLD_HEIGHT ) ),
-                aGrpEnlargement     ( this, SdResId( GRP_ENLARGEMENT ) ),
-                aFtStartColor       ( this, SdResId( FT_START_COLOR ) ),
-                aLbStartColor       ( this, SdResId( LB_START_COLOR ) ),
-                aFtEndColor         ( this, SdResId( FT_END_COLOR ) ),
-                aLbEndColor         ( this, SdResId( LB_END_COLOR ) ),
-                aGrpColor           ( this, SdResId( GRP_COLOR ) ),
-                aBtnOK              ( this, SdResId( BTN_OK ) ),
-                aBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, SdResId( BTN_HELP ) ),
-                aBtnSetViewData     ( this, SdResId( BTN_SET_VIEWDATA ) ),
-                aBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
-                rOutAttrs           ( rInAttrs ),
-                pColorTab           ( pColTab ),
-                pView               ( pInView ),
-                eUIUnit(pInView->GetDoc()->GetUIUnit()),
-                aUIScale(pInView->GetDoc()->GetUIScale())
+CopyDlg::CopyDlg(
+    ::Window* pWindow,
+    const SfxItemSet& rInAttrs,
+    XColorTable* pColTab,
+    ::sd::View* pInView )
+    : SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
+      aFtCopies           ( this, SdResId( FT_COPIES ) ),
+      aNumFldCopies       ( this, SdResId( NUM_FLD_COPIES ) ),
+      aFtMoveX            ( this, SdResId( FT_MOVE_X ) ),
+      aMtrFldMoveX        ( this, SdResId( MTR_FLD_MOVE_X ) ),
+      aFtMoveY            ( this, SdResId( FT_MOVE_Y ) ),
+      aMtrFldMoveY        ( this, SdResId( MTR_FLD_MOVE_Y ) ),
+      aFtAngle            ( this, SdResId( FT_ANGLE ) ),
+      aMtrFldAngle        ( this, SdResId( MTR_FLD_ANGLE ) ),
+      aGrpMovement        ( this, SdResId( GRP_MOVEMENT ) ),
+      aFtWidth            ( this, SdResId( FT_WIDTH ) ),
+      aMtrFldWidth        ( this, SdResId( MTR_FLD_WIDTH ) ),
+      aFtHeight           ( this, SdResId( FT_HEIGHT ) ),
+      aMtrFldHeight       ( this, SdResId( MTR_FLD_HEIGHT ) ),
+      aGrpEnlargement     ( this, SdResId( GRP_ENLARGEMENT ) ),
+      aFtStartColor       ( this, SdResId( FT_START_COLOR ) ),
+      aLbStartColor       ( this, SdResId( LB_START_COLOR ) ),
+      aFtEndColor         ( this, SdResId( FT_END_COLOR ) ),
+      aLbEndColor         ( this, SdResId( LB_END_COLOR ) ),
+      aGrpColor           ( this, SdResId( GRP_COLOR ) ),
+      aBtnOK              ( this, SdResId( BTN_OK ) ),
+      aBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
+      aBtnHelp            ( this, SdResId( BTN_HELP ) ),
+      aBtnSetViewData     ( this, SdResId( BTN_SET_VIEWDATA ) ),
+      aBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
+      rOutAttrs         ( rInAttrs ),
+      pColorTab         ( pColTab ),
+      pView             ( pInView ),
+      eUIUnit(pInView->GetDoc()->GetUIUnit()),
+      aUIScale(pInView->GetDoc()->GetUIScale())
 {
     FreeResource();
 
@@ -148,9 +156,9 @@ SdCopyDlg::SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
     aLbStartColor.Fill( pColorTab );
     aLbEndColor.CopyEntries( aLbStartColor );
 
-    aLbStartColor.SetSelectHdl( LINK( this, SdCopyDlg, SelectColorHdl ) );
-    aBtnSetViewData.SetClickHdl( LINK( this, SdCopyDlg, SetViewData ) );
-    aBtnSetDefault.SetClickHdl( LINK( this, SdCopyDlg, SetDefault ) );
+    aLbStartColor.SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
+    aBtnSetViewData.SetClickHdl( LINK( this, CopyDlg, SetViewData ) );
+    aBtnSetDefault.SetClickHdl( LINK( this, CopyDlg, SetDefault ) );
 
 
     FieldUnit eFUnit( GetModuleFieldUnit() );
@@ -169,7 +177,7 @@ SdCopyDlg::SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
 |*
 \************************************************************************/
 
-SdCopyDlg::~SdCopyDlg()
+CopyDlg::~CopyDlg()
 {
     String& rStr = GetExtraData();
 
@@ -203,7 +211,7 @@ SdCopyDlg::~SdCopyDlg()
 |*
 \************************************************************************/
 
-IMPL_LINK( SdCopyDlg, Reset, void*, p )
+IMPL_LINK( CopyDlg, Reset, void*, p )
 {
     const SfxPoolItem* pPoolItem = NULL;
     String aStr( GetExtraData() );
@@ -291,7 +299,7 @@ IMPL_LINK( SdCopyDlg, Reset, void*, p )
 |*
 \************************************************************************/
 
-void SdCopyDlg::GetAttr( SfxItemSet& rOutAttrs )
+void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
     long nMoveX = Fraction( GetCoreValue( aMtrFldMoveX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
     long nMoveY = Fraction( GetCoreValue( aMtrFldMoveY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
@@ -325,7 +333,7 @@ void SdCopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdCopyDlg, SelectColorHdl, void *, p )
+IMPL_LINK( CopyDlg, SelectColorHdl, void *, p )
 {
     USHORT nPos = aLbStartColor.GetSelectEntryPos();
 
@@ -343,7 +351,7 @@ IMPL_LINK( SdCopyDlg, SelectColorHdl, void *, p )
 |* Setzt Werte der Selektion
 \************************************************************************/
 
-IMPL_LINK( SdCopyDlg, SetViewData, void*, EMPTYARG )
+IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
 {
     Rectangle aRect = pView->GetAllMarkedRect();
 
@@ -367,7 +375,7 @@ IMPL_LINK( SdCopyDlg, SetViewData, void*, EMPTYARG )
 |* Setzt Werte auf Standard
 \************************************************************************/
 
-IMPL_LINK( SdCopyDlg, SetDefault, void*, EMPTYARG )
+IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
 {
     aNumFldCopies.SetValue( 1L );
 
@@ -393,3 +401,4 @@ IMPL_LINK( SdCopyDlg, SetDefault, void*, EMPTYARG )
 }
 
 
+} // end of namespace sd
