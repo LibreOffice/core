@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:32:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 10:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3277,7 +3277,7 @@ sal_Bool ExceptionType::dumpHFile(
 sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
-    o << "\nclass " << m_name;
+    o << "\nclass CPPU_GCC_DLLPUBLIC_EXPORT " << m_name;
 
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -3289,7 +3289,8 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
 
     o << "\n{\npublic:\n";
     inc();
-    o << indent() << "inline " << m_name << "() SAL_THROW( () );\n\n";
+    o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name
+      << "() SAL_THROW( () );\n\n";
 
     sal_uInt16      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -3299,7 +3300,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
 
     if (fieldCount > 0 || getInheritedMemberCount() > 0)
     {
-        o << indent() << "inline " << m_name << "(";
+        o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name << "(";
 
         sal_Bool superHasMember = dumpSuperMember(o, superType, sal_True);
 
@@ -3326,6 +3327,11 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
         }
         o << ") SAL_THROW( () );\n\n";
     }
+    o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name << "(" << m_name
+      << " const &);\n\n"
+      << indent() << "inline CPPU_GCC_DLLPRIVATE ~" << m_name << "();\n\n"
+      << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name << " & operator =("
+      << m_name << " const &);\n\n";
 
     for (i=0; i < fieldCount; i++)
     {
@@ -3500,6 +3506,41 @@ sal_Bool ExceptionType::dumpHxxFile(
             o << "{ }\n\n";
         }
     }
+    o << indent() << m_name << "::" << m_name << "(" << m_name
+      << " const & the_other)";
+    first = true;
+    if (superType.getLength() > 0) {
+        o << ": " << scopedName(m_typeName, superType) << "(the_other)";
+        first = false;
+    }
+    for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+        rtl::OString name(
+            rtl::OUStringToOString(
+                m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8));
+        o << (first ? ": " : ", ") << name << "(the_other." << name << ")";
+        first = false;
+    }
+    o << indent() << " {}\n\n"
+      << indent() << m_name << "::~" << m_name << "() {}\n\n"
+      << indent() << m_name << " & " << m_name << "::operator =(" << m_name
+      << " const & the_other) {\n";
+    inc();
+    o << indent()
+      << ("//TODO: Just like its implicitly-defined counterpart, this function"
+          " definition is not exception-safe\n");
+    if (superType.getLength() > 0) {
+        o << indent() << scopedName(m_typeName, superType)
+          << "::operator =(the_other);\n";
+    }
+    for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+        rtl::OString name(
+            rtl::OUStringToOString(
+                m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8));
+        o << indent() << name << " = the_other." << name << ";\n";
+    }
+    o << indent() << "return *this;\n";
+    dec();
+    o << indent() << "}\n\n";
 
     if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
         o << "\n";
