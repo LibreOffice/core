@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:55:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,6 @@ void OGridColumn::clearAggregateProperties(Sequence<Property>& seqProps, sal_Boo
     RemoveProperty(seqProps, PROPERTY_HSCROLL);
     RemoveProperty(seqProps, PROPERTY_LABEL);
     RemoveProperty(seqProps, PROPERTY_LINECOLOR);
-    RemoveProperty(seqProps, PROPERTY_MULTI);
     RemoveProperty(seqProps, PROPERTY_MULTILINE);
     RemoveProperty(seqProps, PROPERTY_MULTISELECTION);
     RemoveProperty(seqProps, PROPERTY_PRINTABLE);
