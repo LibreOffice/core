@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:15:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::container::XNameAccess;
 using ::xmloff::token::GetXMLToken;
-using ::xmloff::token::XML_EVENTS;
+using ::xmloff::token::XML_EVENT_LISTENERS;
 
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp,
@@ -151,7 +151,7 @@ void XMLEventExport::AddTranslationTable(
             pTrans++)
         {
             aNameTranslationMap[OUString::createFromAscii(pTrans->sAPIName)] =
-                OUString::createFromAscii(pTrans->sXMLName);
+                XMLEventName(pTrans->nPrefix, pTrans->sXMLName);
         }
     }
     // else? ignore!
@@ -196,7 +196,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
         NameMap::iterator aIter = aNameTranslationMap.find(aNames[i]);
         if (aIter != aNameTranslationMap.end())
         {
-            OUString& rXmlName = aIter->second;
+            const XMLEventName& rXmlName = aIter->second;
 
             // get PropertyValues for this event
             Any aAny = rAccess->getByName( aNames[i] );
@@ -223,14 +223,14 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
 /// export a singular event and wirte <office:events> container
 void XMLEventExport::ExportSingleEvent(
     Sequence<PropertyValue>& rEventValues,
-    const OUString& rEventName,
+    const OUString& rApiEventName,
     sal_Bool bUseWhitespace )
 {
     // translate the name
-    NameMap::iterator aIter = aNameTranslationMap.find(rEventName);
+    NameMap::iterator aIter = aNameTranslationMap.find(rApiEventName);
     if (aIter != aNameTranslationMap.end())
     {
-        OUString& rXmlName = aIter->second;
+        const XMLEventName& rXmlName = aIter->second;
 
         // export the event ...
         sal_Bool bStarted = sal_False;
@@ -253,7 +253,7 @@ void XMLEventExport::ExportSingleEvent(
 /// export a single event
 void XMLEventExport::ExportEvent(
     Sequence<PropertyValue>& rEventValues,
-    const OUString& rXmlName,
+    const XMLEventName& rXmlEventName,
     sal_Bool bUseWhitespace,
     sal_Bool& rExported )
 {
@@ -279,8 +279,12 @@ void XMLEventExport::ExportEvent(
                     StartElement(bUseWhitespace);
                 }
 
+                OUString aEventQName(
+                    rExport.GetNamespaceMap().GetQNameByKey(
+                            rXmlEventName.m_nPrefix, rXmlEventName.m_aName ) );
+
                 // delegate to proper ExportEventHandler
-                aHandlerMap[sType]->Export(rExport, rXmlName,
+                aHandlerMap[sType]->Export(rExport, aEventQName,
                                            rEventValues, bUseWhitespace);
             }
             else
@@ -307,12 +311,13 @@ void XMLEventExport::StartElement(sal_Bool bWhitespace)
     {
         rExport.IgnorableWhitespace();
     }
-    rExport.StartElement( XML_NAMESPACE_OFFICE, XML_EVENTS, bWhitespace);
+    rExport.StartElement( XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,
+                          bWhitespace);
 }
 
 void XMLEventExport::EndElement(sal_Bool bWhitespace)
 {
-    rExport.EndElement(XML_NAMESPACE_OFFICE, XML_EVENTS, bWhitespace);
+    rExport.EndElement(XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, bWhitespace);
     if (bWhitespace)
     {
         rExport.IgnorableWhitespace();
@@ -323,44 +328,45 @@ void XMLEventExport::EndElement(sal_Bool bWhitespace)
 // implement aStandardEventTable (defined in xmlevent.hxx)
 const XMLEventNameTranslation aStandardEventTable[] =
 {
-    { "OnSelect",           "on-select" },
-    { "OnInsertStart",      "on-insert-start" },
-    { "OnInsertDone",       "on-insert-done" },
-    { "OnMailMerge",        "on-mail-merge" },
-    { "OnAlphaCharInput",   "on-alpha-char-input" },
-    { "OnNonAlphaCharInput",    "on-non-alpha-char-input" },
-    { "OnResize",           "on-resize" },
-    { "OnMove",             "on-move" },
-    { "OnPageCountChange",  "page-count-change" },
-    { "OnMouseOver",        "on-mouse-over" },
-    { "OnClick",            "on-click" },
-    { "OnMouseOut",         "on-mouse-out" },
-    { "OnLoadError",        "on-load-error" },
-    { "OnLoadCancel",       "on-load-cancel" },
-    { "OnLoadDone",         "on-load-done" },
-    { "OnLoad",             "on-load" },
-    { "OnUnload",           "on-unload" },
-    { "OnStartApp",         "on-start-app" },
-    { "OnCloseApp",         "on-close-app" },
-    { "OnNew",              "on-new" },
-    { "OnSave",             "on-save" },
-    { "OnSaveAs",           "on-save-as" },
-    { "OnFocus",            "on-focus" },
-    { "OnUnfocus",          "on-unfocus" },
-    { "OnPrint",            "on-print" },
-    { "OnError",            "on-error" },
-    { "OnLoadFinished",     "on-load-finished" },
-    { "OnSaveFinished",     "on-save-finished" },
-    { "OnModifyChanged",    "on-modify-changed" },
-    { "OnPrepareUnload",    "on-prepare-unload" },
-    { "OnNewMail",          "on-new-mail" },
-    { "OnToggleFullscreen", "on-toggle-fullscreen" },
-    { "OnSaveDone",         "on-save-done" },
-    { "OnSaveAsDone",       "on-save-as-done" },
-    { "OnCopyTo",           "on-copy-to" },
-    { "OnCopyToDone",       "on-copy-to-done" },
-    { "OnViewCreated",      "on-view-created" },
-    { "OnPrepareViewClosing", "on-prepare-view-closing" },
-    { "OnViewClosed",       "on-view-close" },
+    { "OnSelect",           XML_NAMESPACE_DOM, "select" }, // "on-select"
+    { "OnInsertStart",      XML_NAMESPACE_OFFICE, "insert-start" }, // "on-insert-start"
+    { "OnInsertDone",       XML_NAMESPACE_OFFICE, "insert-done" }, // "on-insert-done"
+    { "OnMailMerge",        XML_NAMESPACE_OFFICE, "mail-merge" }, // "on-mail-merge"
+    { "OnAlphaCharInput",   XML_NAMESPACE_OFFICE, "alpha-char-input" }, // "on-alpha-char-input"
+    { "OnNonAlphaCharInput",    XML_NAMESPACE_OFFICE, "non-alpha-char-input" }, // "on-non-alpha-char-input"
+    { "OnResize",           XML_NAMESPACE_DOM, "resize" }, // "on-resize"
+    { "OnMove",             XML_NAMESPACE_OFFICE, "move" }, // "on-move"
+    { "OnPageCountChange",  XML_NAMESPACE_OFFICE, "page-count-change" }, // "on-page-count-change"
+    { "OnMouseOver",        XML_NAMESPACE_DOM, "mouseover" }, // "on-mouse-over"
+    { "OnClick",            XML_NAMESPACE_DOM, "click" }, // "on-click"
+    { "OnMouseOut",         XML_NAMESPACE_DOM, "mouseout" }, // "on-mouse-out"
+    { "OnLoadError",        XML_NAMESPACE_OFFICE, "load-error" }, // "on-load-error"
+    { "OnLoadCancel",       XML_NAMESPACE_OFFICE, "load-cancel" }, // "on-load-cancel"
+    { "OnLoadDone",         XML_NAMESPACE_OFFICE, "load-done" }, // "on-load-done"
+    { "OnLoad",             XML_NAMESPACE_DOM, "load" }, // "on-load"
+    { "OnUnload",           XML_NAMESPACE_DOM, "unload" }, // "on-unload"
+    { "OnStartApp",         XML_NAMESPACE_OFFICE, "start-app" }, // "on-start-app"
+    { "OnCloseApp",         XML_NAMESPACE_OFFICE, "close-app" }, // "on-close-app"
+    { "OnNew",              XML_NAMESPACE_OFFICE, "new" }, // "on-new"
+    { "OnSave",             XML_NAMESPACE_OFFICE, "save" }, // "on-save"
+    { "OnSaveAs",           XML_NAMESPACE_OFFICE, "save-as" }, // "on-save-as"
+    { "OnFocus",            XML_NAMESPACE_DOM, "DOMFocusIn" }, // "on-focus"
+    { "OnUnfocus",          XML_NAMESPACE_DOM, "DOMFocusOut" }, // "on-unfocus"
+    { "OnPrint",            XML_NAMESPACE_OFFICE, "print" }, // "on-print"
+    { "OnError",            XML_NAMESPACE_DOM, "error" }, // "on-error"
+    { "OnLoadFinished",     XML_NAMESPACE_OFFICE, "load-finished" }, // "on-load-finished"
+    { "OnSaveFinished",     XML_NAMESPACE_OFFICE, "save-finished" }, // "on-save-finished"
+    { "OnModifyChanged",    XML_NAMESPACE_OFFICE, "modify-changed" }, // "on-modify-changed"
+    { "OnPrepareUnload",    XML_NAMESPACE_OFFICE, "prepare-unload" }, // "on-prepare-unload"
+    { "OnNewMail",          XML_NAMESPACE_OFFICE, "new-mail" }, // "on-new-mail"
+    { "OnToggleFullscreen", XML_NAMESPACE_OFFICE, "toggle-fullscreen" }, // "on-toggle-fullscreen"
+    { "OnSaveDone",         XML_NAMESPACE_OFFICE, "save-done" }, // "on-save-done"
+    { "OnSaveAsDone",       XML_NAMESPACE_OFFICE, "save-as-done" }, // "on-save-as-done"
+    { "OnCopyTo",           XML_NAMESPACE_OFFICE, "copy-to" },
+    { "OnCopyToDone",       XML_NAMESPACE_OFFICE, "copy-to-done" },
+    { "OnViewCreated",      XML_NAMESPACE_OFFICE, "view-created" },
+    { "OnPrepareViewClosing", XML_NAMESPACE_OFFICE, "prepare-view-closing" },
+    { "OnViewClosed",       XML_NAMESPACE_OFFICE, "view-close" },
+
     { NULL, NULL }
 };
