@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1228,7 +1228,7 @@ public:
                                     {
                                         if ( nRow < 0 || nRow > MAXROW )
                                             return nContentSlots - 1;
-                                        return nRow / nContentRowsPerSlot;
+                                        return static_cast< USHORT >( nRow / nContentRowsPerSlot );
                                     }
 
                                 ScChangeTrack( ScDocument* );
