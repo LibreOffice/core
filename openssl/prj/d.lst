@@ -5,5 +5,5 @@ mkdir: %_DEST%\inc%_EXT%\openssl
 ..\%__SRC%\lib\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
 ..\%__SRC%\lib\libssl.a %_DEST%\lib%_EXT%\libssl.a
 
-..\%__SRC%\lib\out32dll\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
-..\%__SRC%\lib\out32dll\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
+..\%__SRC%\lib\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
+..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
