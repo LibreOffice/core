@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:40:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
 // ============================================================================
 
 #ifndef SC_FTOOLS_HXX
@@ -101,7 +95,6 @@
 #ifndef SC_COMPILER_HXX
 #include "compiler.hxx"
 #endif
-
 
 // ============================================================================
 // ScFilterTools::ReadLongDouble()
@@ -181,7 +174,6 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 }
 #endif
 
-
 // *** common methods *** -----------------------------------------------------
 
 CharSet ScfTools::GetSystemCharSet()
@@ -215,7 +207,6 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt1
         GetMixedColorComp( rFore.GetBlue(), rBack.GetBlue(), nTrans ) );
 }
 
-
 // *** conversion of names *** ------------------------------------------------
 
 void ScfTools::ConvertToScSheetName( String& rName )
@@ -239,25 +230,40 @@ void ScfTools::ConvertToScDefinedName( String& rName )
             rName.SetChar( nPos, '_' );
 }
 
-
 // *** streams and storages *** -----------------------------------------------
 
-const SvStorageStreamRef ScfTools::OpenStorageStreamRead( SvStorage* pStorage, const String& rStrmName )
+SvStorageRef ScfTools::OpenStorageRead( SvStorage* pStrg, const String& rStrgName )
+{
+    SvStorageRef xSubStrg;
+    if( pStrg && pStrg->IsContained( rStrgName ) )
+        xSubStrg = pStrg->OpenStorage( rStrgName, STREAM_STD_READ );
+    return xSubStrg;
+}
+
+SvStorageRef ScfTools::OpenStorageWrite( SvStorage* pStrg, const String& rStrgName )
+{
+    SvStorageRef xSubStrg;
+    if( pStrg )
+        xSubStrg = pStrg->OpenStorage( rStrgName, STREAM_STD_WRITE );
+    return xSubStrg;
+}
+
+SvStorageStreamRef ScfTools::OpenStorageStreamRead( SvStorage* pStrg, const String& rStrmName )
 {
     SvStorageStreamRef xStrm;
-    if( pStorage && pStorage->IsContained( rStrmName ) && pStorage->IsStream( rStrmName ) )
-        xStrm = pStorage->OpenStream( rStrmName, STREAM_READ | STREAM_SHARE_DENYALL );
+    if( pStrg && pStrg->IsContained( rStrmName ) && pStrg->IsStream( rStrmName ) )
+        xStrm = pStrg->OpenStream( rStrmName, STREAM_STD_READ );
     return xStrm;
 }
 
-const SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStorage, const String& rStrmName )
+SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStrg, const String& rStrmName )
 {
+    DBG_ASSERT( !pStrg || !pStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
     SvStorageStreamRef xStrm;
-    if( pStorage )
-        xStrm = pStorage->OpenStream( rStrmName/*, STREAM_READWRITE | STREAM_TRUNC*/ );
+    if( pStrg )
+        xStrm = pStrg->OpenStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
     return xStrm;
 }
-
 
 // *** item handling *** ------------------------------------------------------
 
@@ -276,7 +282,6 @@ void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSk
 {
     PutItem( rItemSet, rItem, rItem.Which(), bSkipPoolDef );
 }
-
 
 // *** style sheet handling *** -----------------------------------------------
 
@@ -317,7 +322,6 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const Strin
 {
     return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PAGE, bForceName );
 }
-
 
 // *** byte string import operations *** --------------------------------------
 
@@ -370,7 +374,6 @@ void ScfTools::AppendCString( SvStream& rStrm, String& rString, CharSet eSrc )
     AppendCString( rStrm, aByteString );
     rString += String( aByteString, eSrc );
 }
-
 
 // *** HTML table names <-> named range names *** -----------------------------
 
@@ -439,7 +442,6 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
     }
     return rName.Len() > 0;
 }
-
 
 // ============================================================================
 
