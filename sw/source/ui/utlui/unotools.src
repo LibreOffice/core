@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:27:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ czech ] = "Nový název";
         Text[ hebrew ] = "Neuer Name";
         Text[ hindi ] = "नया नाम";
+        Text[ slovak ] = "Nový názov";
     };
     Edit ED_NEW_NAME
     {
@@ -141,6 +142,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ czech ] = "Změnit název";
         Text[ hebrew ] = "Name ändern";
         Text[ hindi ] = "नाम बदलो";
+        Text[ slovak ] = "Zmeniť názov";
     };
     OKButton PB_OK
     {
@@ -189,6 +191,7 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ czech ] = "Přejmenovat objekt:";
     Text[ hebrew ] = "Objekt umbenennen:";
     Text[ hindi ] = "वस्तु को पुनः नाम दो: ";
+    Text[ slovak ] = "Premenovať objekt:";
 };
 String STR_SERVICE_UNAVAILABLE
 {
@@ -219,6 +222,7 @@ String STR_SERVICE_UNAVAILABLE
     Text[ czech ] = "Tato služba není dostupná: ";
     Text[ hebrew ] = "Der folgende Service ist nicht verfügbar:";
     Text[ hindi ] = "निम्नलिखित सेवा उपलब्ध नहीं है: ";
+    Text[ slovak ] = "Táto služba nie je dostupná: ";
 };
 Resource RES_FRMEX_MENU
 {
@@ -386,8 +390,16 @@ Resource RES_FRMEX_MENU
         < "~ऊपर की ओर" ;  ST_MENU_UP;     > ;
         < "~नीचे की ओर" ;   ST_MENU_DOWN; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "~Zväčšenie" ;        ST_MENU_ZOOM; > ;
+        < "~Hore" ;     ST_MENU_UP;     > ;
+        < "~Dole" ;     ST_MENU_DOWN; > ;
+    };
     };
 };
+
+
 
 
 
