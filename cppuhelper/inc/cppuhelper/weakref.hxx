@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakref.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: hr $ $Date: 2001-11-14 12:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public:
 
         @param rWeakRef another weak ref
     */
-    inline WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
+    WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
 
     /** Releases this reference and takes over hard reference xInt. If the implementation behind
         xInt does not support XWeak or XInt is null, than this reference is null.
