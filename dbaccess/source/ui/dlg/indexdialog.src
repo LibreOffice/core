@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:09:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zmieñ nazwê bie¿¹cego indeksu";
                 Text[ portuguese_brazilian ] = "rename current index";
                 Text[ japanese ] = "Œ»İ‚Ì²İÃŞ¯¸½‚Ì–¼‘O‚ğ•ÏX";
-                Text[ korean ] = "ÇöÀçÀÇ »öÀÎ Àç¸í¸í";
+                Text[ korean ] = "ÇöÀçÀÇ »öÀÎ ÀÌ¸§ ¹Ù²Ù±â";
                 Text[ chinese_simplified ] = "ÖØÃüÃûµ±Ç°µÄË÷Òı";
                 Text[ chinese_traditional ] = "­«·s©R¦W·í«eªº¯Á¤Ş";
                 Text[ turkish ] = "rename current index";
@@ -323,10 +323,10 @@ ModalDialog DLG_INDEXDESIGN
         Text[ swedish ] = "~Entydig";
         Text[ polish ] = "Unikatowy";
         Text[ portuguese_brazilian ] = "Unique";
-        Text[ japanese ] = "ŒÅ—L";
-        Text[ korean ] = "Unique";
-        Text[ chinese_simplified ] = "Ã÷È·µÄ";
-        Text[ chinese_traditional ] = "©ú½Tªº";
+        Text[ japanese ] = "ŒÅ—L(~U)";
+        Text[ korean ] = "´ÜÀÏ(~U)";
+        Text[ chinese_simplified ] = "Ã÷È·µÄ(~U)";
+        Text[ chinese_traditional ] = "©ú½Tªº(~U)";
         Text[ turkish ] = "Unique";
         Text[ arabic ] = "æÇÖÍ";
         Text[ catalan ] = "Unique";
@@ -388,7 +388,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "~Close";
         Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ korean ] = "´İ±â";
+        Text[ korean ] = "´İ±â(~C)";
         Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
         Text[ chinese_traditional ] = "Ãö³¬(~C)";
         Text[ turkish ] = "~Close";
@@ -558,6 +558,27 @@ String STR_CONFIRM_DROP_INDEX
 String STR_LOGICAL_INDEX_NAME
 {
     Text = "index";
+    Text[ language_user1 ] = "This is a logical name only. It should be the word for 'Index' (in a database sense), but written in lower case (if appliable to your language :).";
+    Text[ english_us ] = "index";
+    Text[ portuguese ] = "índice";
+    Text[ russian ] = "èíäåêñ";
+    Text[ greek ] = "åõñåôŞñéï";
+    Text[ dutch ] = "index";
+    Text[ french ] = "index";
+    Text[ spanish ] = "Índice";
+    Text[ finnish ] = "Hakemisto";
+    Text[ italian ] = "indice";
+    Text[ danish ] = "INDEKS";
+    Text[ swedish ] = "index";
+    Text[ polish ] = "indeks";
+    Text[ portuguese_brazilian ] = "index";
+    Text[ japanese ] = "??????";
+    Text[ korean ] = "»öÀÎ";
+    Text[ chinese_simplified ] = "Ë÷Òı";
+    Text[ chinese_traditional ] = "¯Á¤Ş";
+    Text[ turkish ] = "İndis";
+    Text[ arabic ] = "İåÑÓ";
+    Text[ catalan ] = "index";
 };
 
 Image IMG_PKEYICON
@@ -570,7 +591,7 @@ ErrorBox ERR_NEED_INDEX_FIELDS
 {
     Title = "Index speichern";
     Title [ english ] = "Save Index";
-    Title [ english_us ] = "Save Index!";
+    Title [ english_us ] = "Save Index";
 
     Message = "Der Index muss mindestens ein Feld enthalten.";
     Message [ english ] = "The index must contain at least one field.";
@@ -594,23 +615,23 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Message[ chinese_traditional ] = "¯Á¤Ş¥²¶·¦Ü¤Ö§t¦³¤@­ÓÄæ¦ì¡C";
     Message[ turkish ] = "Der Index muß mindestens ein Feld enthalten.";
     Message[ arabic ] = "íÌÈ Ãä íÍÊæí ÇáİåÑÓ Úáì ÍŞá æÇÍÏ Úáì ÇáÃŞá.";
-    Title[ portuguese ] = "Guardar índice!";
-    Title[ russian ] = "Ñîõğàíèòü èíäåêñ!";
-    Title[ greek ] = "ÁğïèŞêåõóç åõñåôçñßïõ!";
-    Title[ dutch ] = "Index opslaan!";
-    Title[ french ] = "Enregistrer l'index!";
-    Title[ spanish ] = "Guardar índice!";
-    Title[ italian ] = "Save Index!";
+    Title[ portuguese ] = "Guardar índice";
+    Title[ russian ] = "Ñîõğàíèòü èíäåêñ";
+    Title[ greek ] = "ÁğïèŞêåõóç åõñåôçñßïõ";
+    Title[ dutch ] = "Index opslaan";
+    Title[ french ] = "Enregistrer l'index";
+    Title[ spanish ] = "Guardar índice";
+    Title[ italian ] = "Save Index";
     Title[ danish ] = "Save Index";
-    Title[ swedish ] = "Spara index!";
-    Title[ polish ] = "Zapisz indeks!";
+    Title[ swedish ] = "Spara index";
+    Title[ polish ] = "Zapisz indeks";
     Title[ portuguese_brazilian ] = "Save Index";
-    Title[ japanese ] = "²İÃŞ¯¸½‚Ì•Û‘¶!";
+    Title[ japanese ] = "²İÃŞ¯¸½‚Ì•Û‘¶";
     Title[ korean ] = "»öÀÎ ÀúÀå!";
-    Title[ chinese_simplified ] = "´æÅÌË÷Òı!";
-    Title[ chinese_traditional ] = "Àx¦s¯Á¤Ş!";
+    Title[ chinese_simplified ] = "´æÅÌË÷Òı";
+    Title[ chinese_traditional ] = "Àx¦s¯Á¤Ş";
     Title[ turkish ] = "Save Index";
-    Title[ arabic ] = "ÍİÙ ÇáİåÑÓ!";
+    Title[ arabic ] = "ÍİÙ ÇáİåÑÓ";
     Message[ catalan ] = "Der Index muß mindestens ein Feld enthalten.";
     Title[ catalan ] = "Save Index";
     Message[ finnish ] = "Der Index muss mindestens ein Feld enthalten.";
@@ -621,7 +642,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
 {
     Title = "Index-Entwurf verlassen";
     Title [ english ] = "close index design";
-    Title [ english_us ] = "Exit Index Design!";
+    Title [ english_us ] = "Exit Index Design";
 
     Message = "Wollen Sie die Änderungen am aktuellen Index noch speichern?";
     Message [ english ] = "Do you want to save the changes made on the current index?";
@@ -646,23 +667,23 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Message[ chinese_traditional ] = "­nÀx¦s·í«e¯Á¤ŞªºÅÜ§ó¤º®e¡H";
     Message[ turkish ] = "Do you want to save the changes made on the current index?";
     Message[ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ ÇáÍÇÏËÉ İí ÇáİåÑÓ ÇáÍÇáí¿";
-    Title[ portuguese ] = "Fechar esboço do índice!";
-    Title[ russian ] = "Âûõîä èç ïğîåêòà èíäåêñà!";
-    Title[ greek ] = "¸îïäïò áğü ôïí ó÷åäéáóìü ôïõ åõñåôçñßïõ!";
-    Title[ dutch ] = "index-ontwerp verlaten!";
-    Title[ french ] = "Quitter l'ébauche d'index!";
-    Title[ spanish ] = "Cerrar diseño de índice!";
-    Title[ italian ] = "close index design!";
+    Title[ portuguese ] = "Fechar esboço do índice";
+    Title[ russian ] = "Âûõîä èç ïğîåêòà èíäåêñà";
+    Title[ greek ] = "¸îïäïò áğü ôïí ó÷åäéáóìü ôïõ åõñåôçñßïõ";
+    Title[ dutch ] = "index-ontwerp verlaten";
+    Title[ french ] = "Quitter l'ébauche d'index";
+    Title[ spanish ] = "Cerrar diseño de índice";
+    Title[ italian ] = "close index design";
     Title[ danish ] = "close index design";
-    Title[ swedish ] = "Lämna indexutkast!";
-    Title[ polish ] = "Opuœæ projekt indeksu!";
+    Title[ swedish ] = "Lämna indexutkast";
+    Title[ polish ] = "Opuœæ projekt indeksu";
     Title[ portuguese_brazilian ] = "close index design";
-    Title[ japanese ] = "²İÃŞ¯¸½‚ÌÃŞ»Ş²İ‚ğ•Â‚¶‚é!";
-    Title[ korean ] = "»öÀÎ µğÀÚÀÎ ´İ±â!";
-    Title[ chinese_simplified ] = "¹Ø±ÕË÷ÒıÉè¼Æ!";
-    Title[ chinese_traditional ] = "Ãö³¬¯Á¤Ş³]­p!";
+    Title[ japanese ] = "²İÃŞ¯¸½‚ÌÃŞ»Ş²İ‚ğ•Â‚¶‚é";
+    Title[ korean ] = "ÀÎµ¦½º µğÀÚÀÎ ´İ±â!";
+    Title[ chinese_simplified ] = "¹Ø±ÕË÷ÒıÉè¼Æ";
+    Title[ chinese_traditional ] = "Ãö³¬¯Á¤Ş³]­p";
     Title[ turkish ] = "close index design";
-    Title[ arabic ] = "ÅÛáÇŞ ÊÕãíã ÇáİåÑÓ!";
+    Title[ arabic ] = "ÅÛáÇŞ ÊÕãíã ÇáİåÑÓ";
     Message[ catalan ] = "Do you want to save the changes made on the current index?";
     Title[ catalan ] = "close index design";
     Message[ finnish ] = "Wollen Sie die Änderungen am aktuellen Index noch speichern?";
@@ -686,7 +707,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ polish ] = "Istnieje ju¿ inny indeks o nazwie \"$name$\".";
     Text[ portuguese_brazilian ] = "There's already another index named \"$name$\".";
     Text[ japanese ] = "\"$name$\" ‚Ì²İÃŞ¯¸½–¼‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B";
-    Text[ korean ] = "There's already another index named \"$name$\".";
+    Text[ korean ] = "ÀÌ¹Ì \"$name$\"¶ó´Â ´Ù¸¥ »öÀÎ ÀÌ¸§ÀÌ Á¸ÀçÇÕ´Ï´Ù";
     Text[ chinese_simplified ] = "There's already another index named \"$name$\".";
     Text[ chinese_traditional ] = "¤w¸g¦s¦b¤@­Ó¯Á¤Ş \"$name$\"¡C";
     Text[ turkish ] = "There's already another index named \"$name$\".";
@@ -713,7 +734,7 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ polish ] = "U¿y³eœ dwa razy kolumny \"$name$\" - uwzglêdnij, ¿e pojedyncze kolumny tabeli wystêpowaæ mog¹ w definicji indeksu tylko raz!";
     Text[ portuguese_brazilian ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ japanese ] = "²İÃŞ¯¸½‚Ì’è‹`‚Å‚ÍAÃ°ÌŞÙ‚Ì—ñ‚ÌŒ©o‚µ‚ÍŠeˆê‰ñ‚¸‚Â‚µ‚©g‚¦‚Ü‚¹‚ñB—ñ‚ÌŒ©o‚µ \"$name$\" ‚ÍA“ñ‰ñ–Ú‚Ì“ü—Í‚Å‚·B";
-    Text[ korean ] = "»öÀÎ Á¤ÀÇ¿¡¼­, °¢ µµÇ¥ ¿­Àº ÃÖ´ë ÇÑ¹ø ÀÔ·ÂÇÒ ¼ö ÀÖÁö¸¸, »ç¿ëÀÚ´Â ¿­ \"$name$\" (À»)¸¦ µÎ¹ø ÀÔ·ÂÇÏ¿´½À´Ï´Ù.";
+    Text[ korean ] = "»öÀÎ Á¤ÀÇ¿¡¼­, °¢ µµÇ¥ ¿­Àº ÃÖ´ë ÇÑ¹ø ÀÔ·ÂÇÒ ¼ö ÀÖÁö¸¸, »ç¿ëÀÚ´Â ¿­ \"$name$\"(À»)¸¦ µÎ¹ø ÀÔ·ÂÇÏ¿´½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚÒ»¸öË÷Òı¶¨ÒåÖ®ÖĞ½öÔÊĞíÒ»´ÎÊ¹ÓÃÒ»¸öÁĞÃû³Æ¡£µ«ÊÇÄúµÚ¶ş´ÎÊ¹ÓÃÁĞÃû³Æ \"$name$\" ¡£";
     Text[ chinese_traditional ] = "¦b¤@­Ó¯Á¤Ş©w¸q¤§¤¤¶È¤¹³\\³Ì¦h¤@¦¸¨Ï¥Î¤@­ÓÄæ¦WºÙ¡C¦ı¬O±z²Ä¤G¦¸¨Ï¥ÎÄæ¦WºÙ \"$name$\" ¡C";
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
@@ -725,6 +746,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/08 22:09:10  rt
+ *  Merge SRC633: 09.06.01 - 00:09:32
+ *
  *  Revision 1.13  2001/05/30 19:54:04  kz
  *  Merge SRC633: 30.05.01 - 21:53:08
  *
@@ -767,5 +791,6 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
 
 
