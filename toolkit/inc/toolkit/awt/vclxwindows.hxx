@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:20:48 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,10 @@ public:
     sal_Int32 SAL_CALL getVisibleSize(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int32 SAL_CALL getOrientation(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // why isn't this part of the XScrollbar?
+    void SAL_CALL setMinimum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL getMinimum(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
