@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-12 13:51:03 $
+ *  last change: $Author: ka $ $Date: 2002-04-17 16:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             if( xServiceManager.is() )
             {
                 Reference< XNameAccess > xFilterCFG(
-                            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.dun.star.document.FilterFactory" ) ),
+                            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
                             UNO_QUERY );
 
                 if( xFilterCFG.is() )
@@ -581,7 +581,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                 {
                                     ::rtl::OUString aServiceName;
                                     aProps[nProperty].Value >>= aServiceName;
-                                    Reference< XDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
+                                    Reference< XExecutableDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
                                     Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
 
                                     if( xFilterDialog.is() && xFilterProperties.is() )
@@ -589,7 +589,12 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                         bDialogUsed = sal_True;
 
                                         Sequence< PropertyValue > aPropsForDialog;
+
                                         TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
+
+                                        aPropsForDialog.realloc( aPropsForDialog.getLength() + 1 );
+                                        aPropsForDialog[ aPropsForDialog.getLength() - 1 ].Name = DEFINE_CONST_UNICODE( "FilterName" );
+                                        aPropsForDialog[ aPropsForDialog.getLength() - 1 ].Value <<= ::rtl::OUString( aFilterName );
                                         xFilterProperties->setPropertyValues( aPropsForDialog ); //???
 
                                         xFilterDialog->execute();
