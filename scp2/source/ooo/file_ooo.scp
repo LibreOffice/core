@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.24 $
+*  $Revision: 1.25 $
 *
-*  last change: $Author: obo $ $Date: 2004-07-06 12:28:46 $
+*  last change: $Author: obo $ $Date: 2004-07-06 17:13:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -929,6 +929,27 @@ File gid_File_Oo_Office_Ui_Basicidecommands_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/BasicIDECommands.xcu";
 End
 
+File gid_File_Oo_Office_Ui_Windowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Basicidewindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/BasicIDEWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Basicidewindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/BasicIDEWindowState.xcu";
+End
+
 File gid_File_Oo_Office_Ui_Bibliographycommands_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -943,6 +964,21 @@ File gid_File_Oo_Office_Ui_Bibliographycommands_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/BibliographyCommands.xcu";
 End
 
+File gid_File_Oo_Office_Ui_Bibliographywindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/BibliographyWindowState.xcs";
+End
+
+/*
+File gid_File_Oo_Office_Ui_Bibliographywindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/BibliographyWindowState.xcu";
+End
+*/
 File gid_File_Oo_Office_Calc_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -978,6 +1014,20 @@ File gid_File_Oo_Office_Ui_Chartcommands_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/ChartCommands.xcu";
 End
 
+File gid_File_Oo_Office_Ui_Chartwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/ChartWindowState.xcs";
+End
+/*
+File gid_File_Oo_Office_Ui_Chartwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/ChartWindowState.xcu";
+End
+*/
 File gid_File_Oo_Office_Commands_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1062,11 +1112,60 @@ File gid_File_Oo_Office_Ui_Dbucommands_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/DbuCommands.xcu";
 End
 
+File gid_File_Oo_Office_Ui_Dbtablewindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DbTableWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Dbquerywindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DbQueryWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Dbrelationwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DbRelationWindowState.xcs";
+End
+/*
+File gid_File_Oo_Office_Ui_Dbtablewindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DbTableWindowState.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Dbquerywindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DbQueryWindowState.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Dbrelationwindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DbRelationWindowState.xcu";
+End
+*/
 File gid_File_Oo_Office_Draw_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Draw.xcs";
+End
+
+File gid_File_Oo_Office_Events_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Events.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Factories_Xcs
@@ -1242,6 +1341,20 @@ File gid_File_Oo_Office_Ui_Startmodulecommands_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/StartModuleCommands.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/StartModuleWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/StartModuleWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Substitution_Xcs
@@ -1601,12 +1714,21 @@ File gid_File_Scripts_Javascript
 End
 
 // new user interface configuration files
+File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg;
+    Name = "uiconfig.zip";
+End
+
+/*
 File gid_File_Share_Config_Sofficecfg_Basicide_Menubar_Xml
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Basicide_Menubar;
     Name = "/uiconfig/basicide/menubar/menubar.xml";
 End
+
 
 File gid_File_Share_Config_Sofficecfg_Bibliography_Menubar_Xml
     TXT_FILE_BODY;
@@ -1649,7 +1771,7 @@ File gid_File_Share_Config_Sofficecfg_Chart_Menubar_Xml
     Dir = gid_Dir_Share_Config_Sofficecfg_Schart_Menubar;
     Name = "/uiconfig/schart/menubar/menubar.xml";
 End
-
+*/
 #ifdef UNX
 
 File gid_File_Share_Psprint_Fontmetric_Builtincache_Delete_Only
