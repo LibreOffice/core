@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _RESARY_HXX //autogen
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
