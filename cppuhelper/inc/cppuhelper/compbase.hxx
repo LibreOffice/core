@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2001-12-13 17:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@
 #include <cppuhelper/implbase.hxx>
 #endif
 
-/* @deprecated
-   This header should not be used anymore.  compbase1-N.hxx use implbase_ex.hxx except
+/* This header should not be used anymore.  compbase1-N.hxx use implbase_ex.hxx except
    for MACOSX.
+   @deprecated
 */
 
 //==================================================================================================

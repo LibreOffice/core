@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2001-12-13 17:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@
 namespace cppu
 {
 
-/** @deprecated
-    Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
+/** Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
 
     This bootstraps an initial service factory working on a registry. If the first or both
     parameters contain a value then the service factory is initialized with a simple registry
@@ -95,6 +94,7 @@ namespace cppu
     specifies a path where the bootstrap components could be find. If this
     parameter is an empty string the compoents will be searched in the system
     path.
+    @deprecated
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
@@ -105,8 +105,7 @@ createRegistryServiceFactory(
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-/** @deprecated
-    Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
+/** Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
 
     This bootstraps an initial service factory working on a registry file.
 
@@ -121,6 +120,7 @@ createRegistryServiceFactory(
     specifies a path where the bootstrap components could be find. If this
     parameter is an empty string the compoents will be searched in the system
     path.
+    @deprecated
 */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
@@ -133,8 +133,7 @@ createRegistryServiceFactory(
         rRegistryFile, ::rtl::OUString(), bReadOnly, rBootstrapPath );
 }
 
-/** @deprecated
-    Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
+/** Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
 
     This bootstraps a service factory without initialize a registry.
 
@@ -142,6 +141,7 @@ createRegistryServiceFactory(
     specifies a path where the bootstrap components could be find. If this
     parameter is an empty string the compoents will be searched in the system
     path.
+    @deprecated
 */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createServiceFactory(

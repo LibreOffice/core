@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2001-12-13 17:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-/* @deprecated
-   This header should not be used anymore.  implbase1-N.hxx use implbase_ex.hxx except
+/* This header should not be used anymore.  implbase1-N.hxx use implbase_ex.hxx except
    for MACOSX.
+   @deprecated
 */
 
 namespace cppu

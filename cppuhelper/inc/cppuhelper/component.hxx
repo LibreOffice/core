@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: dbo $ $Date: 2001-12-13 17:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@
 namespace cppu
 {
 
-/** @deprecated
-    Helper for implementing ::com::sun::star::lang::XComponent.
+/** Deprecated.  Helper for implementing ::com::sun::star::lang::XComponent.
     Upon disposing objects of this class, sub-classes receive a disposing() call.  Objects of
     this class can be held weakly, i.e. by a ::com::sun::star::uno::WeakReference.  Object of
     this class can be aggregated, i.e. incoming queryInterface() calls are delegated.
 
     @attention
     The life-cycle of the passed mutex reference has to be longer than objects of this class.
+    @deprecated
 */
 class OComponentHelper
     : public ::cppu::OWeakAggObject
