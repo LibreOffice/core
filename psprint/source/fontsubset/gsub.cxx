@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-30 12:21:20 $
+ *  last change: $Author: pl $ $Date: 2002-05-29 08:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,17 +101,21 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
     if( !pGsubBase )
         return -1;
 
-    typedef std::vector<ULONG> ReqFeatureTagList;
-    ReqFeatureTagList aReqFeatureTagList;
-
-    aReqFeatureTagList.push_back( MKTAG("vert") );
-
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
     const ULONG nVersion            = NEXT_Long( pGsubHeader );
     const USHORT nOfsScriptList     = NEXT_UShort( pGsubHeader );
     const USHORT nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
     const USHORT nOfsLookupList     = NEXT_UShort( pGsubHeader );
+
+    // sanity check
+    if( nVersion != 0x00010000 )
+        return -1; // unknown format or broken
+
+    typedef std::vector<ULONG> ReqFeatureTagList;
+    ReqFeatureTagList aReqFeatureTagList;
+
+    aReqFeatureTagList.push_back( MKTAG("vert") );
 
     typedef std::vector<USHORT> UshortList;
     UshortList aFeatureIndexList;
