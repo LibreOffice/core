@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:56:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ void View::LockRedraw(BOOL bLock)
                     }
                 }
 
-                InitRedraw(pCurrentOut, Region(aBoundRect));
+                CompleteRedraw(pCurrentOut, Region(aBoundRect));
             }
             delete pLockedRedraws;
             pLockedRedraws = NULL;
