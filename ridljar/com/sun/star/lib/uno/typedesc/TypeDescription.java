@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-09 09:57:54 $
+ *  last change: $Author: kr $ $Date: 2001-02-21 12:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2001-02-09 09:57:54 $
+ * @version     $Revision: 1.5 $ $ $Date: 2001-02-21 12:10:25 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -481,6 +481,7 @@ public class TypeDescription {
             }
         }
 
+
         return typeDescription;
     }
 
@@ -537,8 +538,8 @@ public class TypeDescription {
             Class interfaces[] = _class.getInterfaces();
             if(interfaces.length > 0)
                 _superType = getTypeDescription(interfaces[0]); // uno only supports single inheritance
-
-            _initMethodTypeInfos();
+            else
+                _superType = getTypeDescription(com.sun.star.uno.XInterface.class);
         }
         else if(zClass.isArray()) {
             _typeClass = TypeClass.SEQUENCE;
@@ -590,24 +591,24 @@ public class TypeDescription {
     }
 
     private TypeDescription(String typeName) throws ClassNotFoundException {
-        __cyclicTypes.put(typeName, this);
 
         _typeName = typeName;
 
         if(typeName.startsWith("[]")) {
+            __cyclicTypes.put(typeName, this);
             _typeClass = TypeClass.SEQUENCE;
 
             _componentType = getTypeDescription(typeName.substring(2));
             _class = Class.forName(_componentType._arrayTypeName);
             _arrayTypeName = "[" + _componentType._arrayTypeName;
+
+            __cyclicTypes.remove(typeName);
         }
         else {
             initByClass(Class.forName(typeName));
         }
 
-          __cyclicTypes.remove(typeName);
     }
-
 
     private void _initFields() {
         Field fields[] = _class.getFields();
@@ -625,9 +626,12 @@ public class TypeDescription {
     }
 
     private void _initMethodTypeInfos() {
+        if(_methodDescriptionsByName != null)
+            return;
+
         _methodDescriptionsByName = new Hashtable();
 
-        int superOffset = (_superType != null) ? _superType._offset : 0;
+        int superOffset = 0;
 
         if(_class == com.sun.star.uno.XInterface.class) { // take special care for xinterface
             MethodDescription queryInterface = new MethodDescription("queryInterface", 0, TypeInfo.ANY);
@@ -647,6 +651,10 @@ public class TypeDescription {
             _offset = 3;
         }
         else {
+            _superType._initMethodTypeInfos();
+
+            superOffset = _superType._offset;
+
             TypeInfo typeInfos[] = __getTypeInfos(_class);
             Method methods[] = _class.getMethods();
 
@@ -725,6 +733,8 @@ public class TypeDescription {
     }
 
     public MethodDescription []getMethodDescriptions() {
+        _initMethodTypeInfos();
+
         MethodDescription methodDescriptions[] = null;
 
         if(_methodDescriptionsByIndex != null) {
@@ -737,6 +747,8 @@ public class TypeDescription {
     }
 
     public MethodDescription getMethodDescription(int methodId) {
+        _initMethodTypeInfos();
+
         MethodDescription methodDescription = null;
 
         int relMethodId = methodId - (_offset - _methodDescriptionsByIndex.length);
@@ -750,6 +762,8 @@ public class TypeDescription {
     }
 
     public MethodDescription getMethodDescription(String name) {
+        _initMethodTypeInfos();
+
         MethodDescription methodDescription = (MethodDescription)_methodDescriptionsByName.get(name);
         if(methodDescription == null && _superType != null)
             methodDescription = _superType.getMethodDescription(name);
