@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 19:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,9 @@
 #define STR_UNDO_EDITCELLSTYLE      378
 #define STR_UNDO_EDITPAGESTYLE      379
 
-#define STR_COUNT                   379
+#define STR_DATAPILOT_SUBTOTAL      380
+
+#define STR_COUNT                   380
 
 
 

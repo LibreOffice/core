@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:34:15 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 19:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3282,6 +3282,11 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ñÇ¥ ¿µ¿ªÀÌ ºñ¾îÀÖÁö ¾Ê½À´Ï´Ù. ±âÁ¸ÀÇ ³»¿ë¿¡ µ¤¾î¾²½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Hedef aralýðý boþ deðil. Mevcut içeriðin üzerine yazýlsýn mý?";
         Text[ language_user1 ] = " ";
+    };
+    String STR_DATAPILOT_SUBTOTAL
+    {
+        Text = "Der Quellbereich enthält Teilergebnisse, die das Ergebnis verfälschen können. Soll er trotzdem verwendet werden?";
+        Text [ ENGLISH ] = "The source range contains subtotals which may distort the results. Use it anyway?";
     };
     String STR_PIVOT_PROGRESS
     {
