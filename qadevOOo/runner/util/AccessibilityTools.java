@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-02-04 11:23:24 $
+ *  last change:$Date: 2004-03-19 15:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,102 +58,158 @@
  *
  *
  ************************************************************************/
-
 package util;
 
-import java.io.PrintWriter;
-
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.UnoRuntime;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleRelationSet;
+import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
-
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleRelationSet;
-import com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
 
 public class AccessibilityTools {
+    public static XAccessibleContext SearchedContext = null;
+    public static XAccessible SearchedAccessible = null;
 
     public AccessibilityTools() {
         //done = false;
         SearchedContext = null;
     }
 
-    public static XAccessible getAccessibleObject (XInterface xObject)
-    {
+    public static XAccessible getAccessibleObject(XInterface xObject) {
         XAccessible xAccessible = null;
-        try
-        {
+
+        try {
             xAccessible = (XAccessible) UnoRuntime.queryInterface(
-                XAccessible.class, xObject);
-        }
-        catch (Exception e)
-        {
-            System.out.println (
-                "caught exception while getting accessible object" + e);
+                                  XAccessible.class, xObject);
+        } catch (Exception e) {
+            System.out.println(
+                    "caught exception while getting accessible object" + e);
             e.printStackTrace();
         }
+
         return xAccessible;
     }
 
-    public static XWindow getCurrentWindow (XMultiServiceFactory msf,XModel xModel)
-    {
+    public static XWindow getCurrentWindow(XMultiServiceFactory msf,
+                                           XModel xModel) {
         XWindow xWindow = null;
-        try
-        {
-            if (xModel == null)
-                System.out.println ("invalid model (==null)");
+
+        try {
+            if (xModel == null) {
+                System.out.println("invalid model (==null)");
+            }
+
             XController xController = xModel.getCurrentController();
-            if (xController == null)
-                System.out.println ("can't get controller from model");
+
+            if (xController == null) {
+                System.out.println("can't get controller from model");
+            }
+
             XFrame xFrame = xController.getFrame();
-            if (xFrame == null)
-                System.out.println ("can't get frame from controller");
-            xWindow = xFrame.getComponentWindow ();
-            if (xWindow == null)
-                System.out.println ("can't get window from frame");
-        }
-        catch (Exception e)
-        {
-            System.out.println ("caught exception while getting current window" + e);
+
+            if (xFrame == null) {
+                System.out.println("can't get frame from controller");
+            }
+
+            xWindow = xFrame.getComponentWindow();
+
+            if (xWindow == null) {
+                System.out.println("can't get window from frame");
+            }
+        } catch (Exception e) {
+            System.out.println("caught exception while getting current window" + e);
         }
 
         return xWindow;
     }
 
-    public static XAccessibleContext SearchedContext = null;
-    public static XAccessible SearchedAccessible = null;
-
-    public static XAccessibleContext getAccessibleObjectForRole
-            (XAccessible xacc,short role) {
+    public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
+                                                                short role) {
         SearchedContext = null;
         SearchedAccessible = null;
-        getAccessibleObjectForRole_(xacc, role) ;
+        getAccessibleObjectForRole_(xacc, role);
+
         return SearchedContext;
     }
 
-    public static void getAccessibleObjectForRole_(XAccessible xacc,short role) {
+    public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
+                                                                short role,
+                                                                boolean ignoreShowing) {
+        SearchedContext = null;
+        SearchedAccessible = null;
+
+        if (ignoreShowing) {
+            getAccessibleObjectForRoleIgnoreShowing_(xacc, role);
+        } else {
+            getAccessibleObjectForRole_(xacc, role);
+        }
+
+        return SearchedContext;
+    }
+
+    public static void getAccessibleObjectForRoleIgnoreShowing_(XAccessible xacc,
+                                                                short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        boolean isShowing = ac.getAccessibleStateSet().contains(
-                com.sun.star.accessibility.AccessibleStateType.SHOWING);
-        if (ac.getAccessibleRole()==role && isShowing) {
+
+        if (ac.getAccessibleRole() == role) {
             SearchedContext = ac;
             SearchedAccessible = xacc;
         } else {
             int k = ac.getAccessibleChildCount();
+
             if (ac.getAccessibleChildCount() > 100) {
-                k = 50 ;
+                k = 50;
             }
-            for (int i=0;i<k;i++) {
+
+            for (int i = 0; i < k; i++) {
                 try {
-                    getAccessibleObjectForRole_(ac.getAccessibleChild(i),role);
-                    if (SearchedContext != null) return ;
+                    getAccessibleObjectForRoleIgnoreShowing_(
+                            ac.getAccessibleChild(i), role);
+
+                    if (SearchedContext != null) {
+                        return;
+                    }
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    System.out.println("Couldn't get Child");
+                }
+            }
+        }
+    }
+
+    public static void getAccessibleObjectForRole_(XAccessible xacc,
+                                                   short role) {
+        XAccessibleContext ac = xacc.getAccessibleContext();
+        boolean isShowing = ac.getAccessibleStateSet()
+                              .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+
+        if ((ac.getAccessibleRole() == role) && isShowing) {
+            SearchedContext = ac;
+            SearchedAccessible = xacc;
+        } else {
+            int k = ac.getAccessibleChildCount();
+
+            if (ac.getAccessibleChildCount() > 100) {
+                k = 50;
+            }
+
+            for (int i = 0; i < k; i++) {
+                try {
+                    getAccessibleObjectForRole_(ac.getAccessibleChild(i), role);
+
+                    if (SearchedContext != null) {
+                        return;
+                    }
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                     System.out.println("Couldn't get Child");
                 }
@@ -162,88 +218,157 @@ public class AccessibilityTools {
     }
 
     public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
-            short role, String name) {
+                                                                short role,
+                                                                String name) {
         return getAccessibleObjectForRole(xacc, role, name, "");
     }
 
     public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
-        short role, String name, String implName) {
+                                                                short role,
+                                                                String name,
+                                                                boolean ignoreShowing) {
+        if (ignoreShowing) {
+            return getAccessibleObjectForRoleIgnoreShowing(xacc, role, name,
+                                                           "");
+        } else {
+            return getAccessibleObjectForRole(xacc, role, name, "");
+        }
+    }
 
+    public static XAccessibleContext getAccessibleObjectForRoleIgnoreShowing(XAccessible xacc,
+                                                                             short role,
+                                                                             String name,
+                                                                             String implName) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        boolean isShowing = ac.getAccessibleStateSet().contains(
-                com.sun.star.accessibility.AccessibleStateType.SHOWING);
-        if (ac.getAccessibleRole()==role
-            && ac.getAccessibleName().indexOf(name) > -1
-            && utils.getImplName(ac).indexOf(implName) > -1
-            && isShowing) {
 
+        if ((ac.getAccessibleRole() == role) &&
+                (ac.getAccessibleName().indexOf(name) > -1) &&
+                (utils.getImplName(ac).indexOf(implName) > -1)) {
             SearchedAccessible = xacc;
+
             //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
         } else {
             int k = ac.getAccessibleChildCount();
+
             if (ac.getAccessibleChildCount() > 100) {
-                k = 50 ;
+                k = 50;
             }
-            for (int i=0;i<k;i++) {
+
+            for (int i = 0; i < k; i++) {
                 try {
-                    XAccessibleContext ac1 = getAccessibleObjectForRole
-                        (ac.getAccessibleChild(i), role, name, implName);
-                    if (ac1 != null) return ac1;
+                    XAccessibleContext ac1 = getAccessibleObjectForRoleIgnoreShowing(
+                                                     ac.getAccessibleChild(i),
+                                                     role, name, implName);
+
+                    if (ac1 != null) {
+                        return ac1;
+                    }
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                     System.out.println("Couldn't get Child");
                 }
             }
         }
 
-        return null ;
+        return null;
+    }
+
+    public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
+                                                                short role,
+                                                                String name,
+                                                                String implName) {
+        XAccessibleContext ac = xacc.getAccessibleContext();
+        boolean isShowing = ac.getAccessibleStateSet()
+                              .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+
+        if ((ac.getAccessibleRole() == role) &&
+                (ac.getAccessibleName().indexOf(name) > -1) &&
+                (utils.getImplName(ac).indexOf(implName) > -1) &&
+                isShowing) {
+            SearchedAccessible = xacc;
+
+            //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
+            return ac;
+        } else {
+            int k = ac.getAccessibleChildCount();
+
+            if (ac.getAccessibleChildCount() > 100) {
+                k = 50;
+            }
+
+            for (int i = 0; i < k; i++) {
+                try {
+                    XAccessibleContext ac1 = getAccessibleObjectForRole(
+                                                     ac.getAccessibleChild(i),
+                                                     role, name, implName);
+
+                    if (ac1 != null) {
+                        return ac1;
+                    }
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    System.out.println("Couldn't get Child");
+                }
+            }
+        }
+
+        return null;
     }
 
     public static void printAccessibleTree(PrintWriter log, XAccessible xacc) {
         printAccessibleTree(log, xacc, "");
     }
 
-    protected static void printAccessibleTree(PrintWriter log, XAccessible xacc,
-        String indent) {
-
+    protected static void printAccessibleTree(PrintWriter log,
+                                              XAccessible xacc, String indent) {
         XAccessibleContext ac = xacc.getAccessibleContext();
 
         log.println(indent + ac.getAccessibleRole() + "," +
-            ac.getAccessibleName() + "(" + ac.getAccessibleDescription() + "):"
-            + utils.getImplName(ac));
+                    ac.getAccessibleName() + "(" +
+                    ac.getAccessibleDescription() + "):" +
+                    utils.getImplName(ac));
 
-        XAccessibleComponent aComp = (XAccessibleComponent)
-                UnoRuntime.queryInterface(XAccessibleComponent.class,xacc);
+        XAccessibleComponent aComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                             XAccessibleComponent.class, xacc);
+
         if (aComp != null) {
-            String bounds = "(" + aComp.getBounds().X+","+aComp.getBounds().Y+")"
-                            + " (" + aComp.getBounds().Width+","+aComp.getBounds().Height+")";
-            bounds = "The boundary Rectangle is "+bounds;
-            log.println(indent+indent+bounds);
+            String bounds = "(" + aComp.getBounds().X + "," +
+                            aComp.getBounds().Y + ")" + " (" +
+                            aComp.getBounds().Width + "," +
+                            aComp.getBounds().Height + ")";
+            bounds = "The boundary Rectangle is " + bounds;
+            log.println(indent + indent + bounds);
         }
 
-        boolean isShowing = ac.getAccessibleStateSet().contains(
-                com.sun.star.accessibility.AccessibleStateType.SHOWING);
-        log.println(indent+indent+"StateType contains SHOWING: "+isShowing);
+        boolean isShowing = ac.getAccessibleStateSet()
+                              .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        log.println(indent + indent + "StateType contains SHOWING: " +
+                    isShowing);
 
         int k = ac.getAccessibleChildCount();
 
         if (ac.getAccessibleChildCount() > 100) {
-            k = 50 ;
+            k = 50;
         }
-        for (int i=0;i<k;i++) {
+
+        for (int i = 0; i < k; i++) {
             try {
-                printAccessibleTree(log, ac.getAccessibleChild(i), indent + "  ");
+                printAccessibleTree(log, ac.getAccessibleChild(i),
+                                    indent + "  ");
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                 System.out.println("Couldn't get Child");
             }
         }
+
         if (ac.getAccessibleChildCount() > 100) {
-            k = ac.getAccessibleChildCount() ;
+            k = ac.getAccessibleChildCount();
+
             int st = ac.getAccessibleChildCount() - 50;
             log.println(indent + "  " + " ...... [skipped] ......");
-            for (int i=st;i<k;i++) {
+
+            for (int i = st; i < k; i++) {
                 try {
-                    printAccessibleTree(log, ac.getAccessibleChild(i), indent + "  ");
+                    printAccessibleTree(log, ac.getAccessibleChild(i),
+                                        indent + "  ");
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                     System.out.println("Couldn't get Child");
                 }
@@ -252,37 +377,60 @@ public class AccessibilityTools {
     }
 
     public static String accessibleToString(Object AC) {
-        XAccessibleContext xAC = (XAccessibleContext)
-            UnoRuntime.queryInterface(XAccessibleContext.class, AC);
+        XAccessibleContext xAC = (XAccessibleContext) UnoRuntime.queryInterface(
+                                         XAccessibleContext.class, AC);
+
         if (xAC != null) {
-            return "" + xAC.getAccessibleRole() + "," + xAC.getAccessibleName()
-                + "(" + xAC.getAccessibleDescription() + "):";
+            return "" + xAC.getAccessibleRole() + "," +
+                   xAC.getAccessibleName() + "(" +
+                   xAC.getAccessibleDescription() + "):";
         }
 
-        XAccessible xA = (XAccessible)
-            UnoRuntime.queryInterface(XAccessible.class, AC);
-        if (xA == null) return "(Not supported)" ;
+        XAccessible xA = (XAccessible) UnoRuntime.queryInterface(
+                                 XAccessible.class, AC);
+
+        if (xA == null) {
+            return "(Not supported)";
+        }
+
         xAC = xA.getAccessibleContext();
-        return "" + xAC.getAccessibleRole() + "," + xAC.getAccessibleName()
-            + "(" + xAC.getAccessibleDescription() + ")";
+
+        return "" + xAC.getAccessibleRole() + "," + xAC.getAccessibleName() +
+               "(" + xAC.getAccessibleDescription() + ")";
     }
 
     public static boolean equals(XAccessible c1, XAccessible c2) {
-        if (c1 == null || c2 == null) return c1 == c2;
+        if ((c1 == null) || (c2 == null)) {
+            return c1 == c2;
+        }
+
         return AccessibilityTools.equals(c1.getAccessibleContext(),
-            c2.getAccessibleContext()) ;
+                                         c2.getAccessibleContext());
     }
 
     public static boolean equals(XAccessibleContext c1, XAccessibleContext c2) {
-        if (c1 == null || c2 == null) return c1 == c2;
+        if ((c1 == null) || (c2 == null)) {
+            return c1 == c2;
+        }
 
-        if (c1.getAccessibleRole() != c2.getAccessibleRole()) return false;
-        if (!c1.getAccessibleName().equals(c2.getAccessibleName())) return false;
-        if (!c1.getAccessibleDescription().equals(c2.getAccessibleDescription())) return false;
-        if (c1.getAccessibleChildCount() != c2.getAccessibleChildCount()) return false;
+        if (c1.getAccessibleRole() != c2.getAccessibleRole()) {
+            return false;
+        }
 
-        return AccessibilityTools.equals
-            (c1.getAccessibleParent(), c2.getAccessibleParent());
+        if (!c1.getAccessibleName().equals(c2.getAccessibleName())) {
+            return false;
+        }
+
+        if (!c1.getAccessibleDescription()
+               .equals(c2.getAccessibleDescription())) {
+            return false;
+        }
+
+        if (c1.getAccessibleChildCount() != c2.getAccessibleChildCount()) {
+            return false;
+        }
+
+        return AccessibilityTools.equals(c1.getAccessibleParent(),
+                                         c2.getAccessibleParent());
     }
-
 }
