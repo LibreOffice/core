@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:56:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ FloatingWindow SID_RECORDING_FLOATWINDOW
     Text[ portuguese_brazilian ] = "Record Macro";
     Text[ thai ] = "Record Macro";
     Text[ hindi ] = "Record Macro";
+    Text[ slovak ] = "Nahrať Makro";
 };
 
 ToolBox SID_RECORDING_FLOATWINDOW
@@ -127,7 +128,7 @@ String STR_MACRO_LOSS
     Text[ finnish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ italian ] = "Volete davvero annullate la registrazione? Tutte le fasi registrate fino a questo punto andranno perse.";
     Text[ danish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ swedish ] = "Vill du verkligen avbryta registreringen? Alla steg som har registrerats hittills kommer att g� f�rlorade.";
+    Text[ swedish ] = "Vill du verkligen avbryta inspelningen? Alla steg som har spelats in hittills kommer att g� f�rlorade.";
     Text[ polish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ japanese ] = "記録をキャンセルしますか。記録されたステップは、この時点ですべて失われます。";
     Text[ korean ] = "기록을 정말로 취소하시겠습니까? 지금까지 기록된 모든 작업 진행 내용을 잃을 수 있습니다.";
@@ -141,6 +142,7 @@ String STR_MACRO_LOSS
     Text[ portuguese_brazilian ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ thai ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ hindi ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ slovak ] = "Určite chcete zrušiť nahrávanie? Všetky nahrané kroky budú stratené.";
 };
 
 String STR_CANCEL_RECORDING
@@ -157,7 +159,7 @@ String STR_CANCEL_RECORDING
     Text[ finnish ] = "Cancel Recording";
     Text[ italian ] = "Annulla la registrazione";
     Text[ danish ] = "Cancel Recording";
-    Text[ swedish ] = "Avbryt registrering";
+    Text[ swedish ] = "Avbryt inspelning";
     Text[ polish ] = "Cancel Recording";
     Text[ japanese ] = "記録をキャンセルする";
     Text[ korean ] = "기록 취소";
@@ -171,7 +173,12 @@ String STR_CANCEL_RECORDING
     Text[ portuguese_brazilian ] = "Cancel Recording";
     Text[ thai ] = "Cancel Recording";
     Text[ hindi ] = "Cancel Recording";
+    Text[ slovak ] = "Zrušiť nahrávanie";
 };
+
+
+
+
 
 
 
