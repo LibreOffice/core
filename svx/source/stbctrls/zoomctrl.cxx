@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-12 12:02:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include "dialogs.hrc"
 
 #include "zoomctrl.hxx"
-#include "zoom.hxx"
+//CHINA001 #include "zoom.hxx"
 #include "zoomitem.hxx"
 #include "stbctrls.h"
 #include "dialmgr.hxx"
