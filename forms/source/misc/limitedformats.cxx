@@ -2,9 +2,9 @@
  *
  *  $RCSfile: limitedformats.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-23 08:32:20 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 10:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,16 @@ namespace frm
                                 ::rtl::OUString::createFromAscii(pLoopFormats->pDescription),
                                 getLocale(pLoopFormats->eLocale)
                             );
+#ifdef DBG_UTIL
+                            try
+                            {
+                                xStandardFormats->getByKey(pLoopFormats->nKey);
+                            }
+                            catch(const Exception&)
+                            {
+                                OSL_ENSURE(sal_False, "OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
+                            }
+#endif
                         }
 
                         // next
@@ -243,6 +253,19 @@ namespace frm
                     }
                 }
             }
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OLimitedFormats::clearTable(const sal_Int16 _nTableId)
+    {
+        ::osl::MutexGuard aGuard(s_aMutex);
+        const FormatEntry* pFormats = lcl_getFormatTable(_nTableId);
+        FormatEntry* pResetLoop = const_cast<FormatEntry*>(pFormats);
+        while (pResetLoop->pDescription)
+        {
+            pResetLoop->nKey = -1;
+            ++pResetLoop;
         }
     }
 
@@ -409,6 +432,9 @@ namespace frm
         {
             ::comphelper::disposeComponent(s_xStandardFormats);
             s_xStandardFormats = NULL;
+
+            clearTable(FormComponentType::TIMEFIELD);
+            clearTable(FormComponentType::DATEFIELD);
         }
     }
 
@@ -419,6 +445,9 @@ namespace frm
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/05/23 08:32:20  rt
+ *  #65293# GCC does not like 'Locale ident(String(), String(), String())'
+ *
  *  Revision 1.1  2001/05/18 14:48:05  fs
  *  initial checkin - helper for control models with limited formatting capabilities
  *
