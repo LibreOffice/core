@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:48:24 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ TabPage TP_FLD_DOKINF
         Text[ chinese_simplified ] = "ÓĞ¹Ø";
         Text[ russian ] = "Èíôîğìàöèÿ";
         Text[ polish ] = "Informacja";
-        Text[ japanese ] = "²İÌ«Ò°¼®İ";
+        Text[ japanese ] = "î•ñ";
         Text[ chinese_traditional ] = "Ãö©ó";
         Text[ arabic ] = "ãÚáæãÇÊ";
         Text[ greek ] = "Ğëçñïöïñßåò";
