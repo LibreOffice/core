@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:58:59 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/fontwork.hxx>
 
 #include "app.hrc"
 #ifndef _AEITEM_HXX //autogen
@@ -149,6 +150,9 @@
 #include <svx/writingmodeitem.hxx>
 #endif
 
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
+#endif
 #include "sdresid.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
@@ -290,34 +294,41 @@ BOOL FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
-        pWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-
-        if (pView->GetCurrentObjIdentifier() == OBJ_CAPTION)
+        if( (nSlotId == SID_DRAW_FONTWORK) || (nSlotId == SID_DRAW_FONTWORK_VERTICAL) )
         {
-            Size aCaptionSize(846, 846);    // (4x2)cm
-            bReturn = pView->BegCreateCaptionObj(aPnt, aCaptionSize,
-                                                 (OutputDevice*) NULL, nDrgLog);
+            svx::FontworkBar::execute( pView, nSlotId );
         }
         else
         {
-            pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
-        }
+            Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        SdrObject* pObj = pView->GetCreateObj();
+            pWindow->CaptureMouse();
+            USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if (pObj)
-        {
-            SfxItemSet aAttr(pDoc->GetPool());
-            SetStyleSheet(aAttr, pObj);
-            SetAttributes(aAttr, pObj);
-            SetLineEnds(aAttr, pObj);
-            pObj->SetMergedItemSet(aAttr);
+            if (pView->GetCurrentObjIdentifier() == OBJ_CAPTION)
+            {
+                Size aCaptionSize(846, 846);    // (4x2)cm
+                bReturn = pView->BegCreateCaptionObj(aPnt, aCaptionSize,
+                                                    (OutputDevice*) NULL, nDrgLog);
+            }
+            else
+            {
+                pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+            }
 
-            if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
-                ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
+            SdrObject* pObj = pView->GetCreateObj();
+
+            if (pObj)
+            {
+                SfxItemSet aAttr(pDoc->GetPool());
+                SetStyleSheet(aAttr, pObj);
+                SetAttributes(aAttr, pObj);
+                SetLineEnds(aAttr, pObj);
+                pObj->SetMergedItemSet(aAttr);
+
+                if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
+                    ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
+            }
         }
     }
 
@@ -661,6 +672,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         String aStr(SdResId(STR_LAYER_MEASURELINES));
         pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
     }
+    else if (nSlotId == OBJ_CUSTOMSHAPE )
+    {
+    }
 }
 
 
@@ -880,6 +894,8 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 // #97016#
 SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
+    DBG_ASSERT( (nID != SID_DRAW_FONTWORK) && (nID != SID_DRAW_FONTWORK_VERTICAL ), "FuConstRectangle::CreateDefaultObject can not create Fontwork shapes!" );
+
     // case SID_DRAW_LINE:
     // case SID_DRAW_XLINE:
     // case SID_DRAW_MEASURELINE:
@@ -1075,6 +1091,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
                 break;
             }
+
             default:
             {
                 pObj->SetLogicRect(aRect);
