@@ -25,6 +25,13 @@ hi-IN = "%PRODUCTNAME Drucker Verwaltung"
 sk = "Spr√°va tlaƒçiarn√≠ %PRODUCTNAME"
 pt = "%PRODUCTNAME Drucker Verwaltung"
 ru = "%PRODUCTNAME Drucker Verwaltung"
+el = "%PRODUCTNAME ?????????? ?????????"
+nl = "%PRODUCTNAME printerbeheer"
+hu = "%PRODUCTNAME Nyomtat√≥kezel√©s"
+cs = "Administrace tisk√°ren %PRODUCTNAME"
+sk = "Spr√°va tlaƒçiarn√≠ %PRODUCTNAME"
+da = "%PRODUCTNAME-printeradministration"
+sl = "%PRODUCTNAME nastavitve tiskalnika"
 
 [template]
 en = "%PRODUCTNAME From Template"
@@ -54,6 +61,15 @@ th = "%PRODUCTNAME Aus Vorlage"
 hi-IN = "%PRODUCTNAME Aus Vorlage"
 sk = "Zo ≈°abl√≥ny %PRODUCTNAME"
 pt = "%PRODUCTNAME Aus Vorlage"
+el = "%PRODUCTNAME ¡¸ Ò¸ÙıÔ"
+nl = "%PRODUCTNAME Uit sjabloon"
+hu = "%PRODUCTNAME sablonb√≥l"
+cs = "Ze ≈°ablony %PRODUCTNAME"
+sk = "Zo ≈°abl√≥ny %PRODUCTNAME"
+da = "%PRODUCTNAME Fra skabelon"
+sl = "%PRODUCTNAME iz predloge"
+
+
 
 
 
