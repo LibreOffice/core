@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:28:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -231,7 +234,11 @@ void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster& rBC, const SfxHint&
 
 SvNumberFormatterRegistry_Impl* SvNumberFormatter::pFormatterRegistry = NULL;
 BOOL SvNumberFormatter::bCurrencyTableInitialized = FALSE;
-NfCurrencyTable SvNumberFormatter::theCurrencyTable;
+namespace
+{
+    struct theCurrencyTable :
+        public rtl::Static< NfCurrencyTable, theCurrencyTable > {};
+}
 USHORT SvNumberFormatter::nSystemCurrencyPosition = 0;
 SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
 SV_IMPL_PTRARR( NfWSStringsDtor, String* );
@@ -2974,7 +2981,7 @@ const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
     ::osl::MutexGuard aGuard( GetMutex() );
     while ( !bCurrencyTableInitialized )
         ImpInitCurrencyTable();
-    return theCurrencyTable;
+    return theCurrencyTable::get();
 }
 
 
@@ -3501,7 +3508,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 
     // first entry is SYSTEM
     pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
-    theCurrencyTable.Insert( pEntry, 0 );
+    theCurrencyTable::get().Insert( pEntry, 0 );
     USHORT nCurrencyPos = 1;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
@@ -3509,6 +3516,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     sal_Int32 nLocaleCount = xLoc.getLength();
     RTL_LOGFILE_CONTEXT_TRACE1( aTimeLog, "number of locales: %ld", nLocaleCount );
     Locale const * const pLocales = xLoc.getConstArray();
+    NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
         LanguageType eLang = ConvertIsoNamesToLanguage(
@@ -3540,7 +3548,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 #ifndef PRODUCT
         lcl_CheckCurrencySymbolPosition( *pEntry );
 #endif
-        theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+        rCurrencyTable.Insert( pEntry, nCurrencyPos++ );
         if ( !nSystemCurrencyPosition && (aConfiguredCurrencyAbbrev.Len() ?
                 pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
                 pEntry->GetLanguage() == eConfiguredCurrencyLanguage : FALSE) )
@@ -3560,8 +3568,8 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                     pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
                     // no dupes
                     BOOL bInsert = TRUE;
-                    NfCurrencyEntry const * const * pData = theCurrencyTable.GetData();
-                    USHORT n = theCurrencyTable.Count();
+                    NfCurrencyEntry const * const * pData = rCurrencyTable.GetData();
+                    USHORT n = rCurrencyTable.Count();
                     pData++;        // skip first SYSTEM entry
                     for ( USHORT j=1; j<n; j++ )
                     {
@@ -3575,7 +3583,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                         delete pEntry;
                     else
                     {
-                        theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+                        rCurrencyTable.Insert( pEntry, nCurrencyPos++ );
                         if ( !nSecondarySystemCurrencyPosition &&
                                 (aConfiguredCurrencyAbbrev.Len() ?
                                 pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
