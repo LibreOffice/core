@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:54 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2475,7 +2475,8 @@ void SwFEShell::UnGroupSelection()
         StartUndo( UNDO_START );
 
         GetDoc()->UnGroupSelection( *Imp()->GetDrawView() );
-        ChgAnchor( 0, TRUE );
+        // --> OD 2004-06-15 #i30010# - change of anchor no longer needed
+        //ChgAnchor( 0, TRUE );
 
         EndUndo( UNDO_END );
         EndAllAction();
