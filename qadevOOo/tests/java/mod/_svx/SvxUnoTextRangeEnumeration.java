@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextRangeEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:03 $
+ *  last change:$Date: 2003-02-10 09:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import lib.TestParameters;
 import util.DrawTools;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class SvxUnoTextRangeEnumeration extends TestCase {
 
     XComponent xDrawDoc;
@@ -131,9 +134,7 @@ public class SvxUnoTextRangeEnumeration extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    public TestEnvironment createTestEnvironment( TestParameters tParam,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
         // create testobject here
@@ -163,8 +164,8 @@ public class SvxUnoTextRangeEnumeration extends TestCase {
             xEA = (XEnumerationAccess) UnoRuntime.queryInterface
                 (XEnumerationAccess.class, text) ;
 
-            XInterface oTextContent = (XInterface)
-                xEA.createEnumeration().nextElement() ;
+            XInterface oTextContent = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),xEA.createEnumeration().nextElement());
 
             xEA = (XEnumerationAccess) UnoRuntime.queryInterface
                 (XEnumerationAccess.class, oTextContent) ;
