@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:38:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _UTL_CONFIGMGR_HXX_
+#ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
@@ -255,6 +255,9 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -278,7 +281,7 @@
 #endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-#define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
+#define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 using namespace vos;
 using namespace rtl;
@@ -295,7 +298,7 @@ using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
-ResMgr*                 desktop::Desktop::pResMgr = 0;
+ResMgr*                    desktop::Desktop::pResMgr = 0;
 sal_Bool                desktop::Desktop::bSuppressOpenDefault = sal_False;
 
 namespace desktop
@@ -354,7 +357,7 @@ OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
 
 OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
 {
-    OUStringBuffer  aDiagnosticMessage( 100 );
+    OUStringBuffer    aDiagnosticMessage( 100 );
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
@@ -408,7 +411,7 @@ void FatalErrorExit(OUString const & aMessage)
             ::vos::OStartupInfo aInfo;
             aInfo.getExecutableFile( aProductKey );
 
-            sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+            sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
             if ( lastIndex > 0 )
                 aProductKey = aProductKey.copy( lastIndex+1 );
         }
@@ -437,7 +440,7 @@ void FatalError(OUString const & aMessage)
             ::vos::OStartupInfo aInfo;
             aInfo.getExecutableFile( aProductKey );
 
-            sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+            sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
             if ( lastIndex > 0 )
                 aProductKey = aProductKey.copy( lastIndex+1 );
         }
@@ -659,27 +662,27 @@ void Desktop::StartSetup( const OUString& aParameters )
     ::vos::OStartupInfo aInfo;
     aInfo.getExecutableFile( aProgName );
 
-    sal_uInt32  lastIndex = aProgName.lastIndexOf('/');
+    sal_uInt32     lastIndex = aProgName.lastIndexOf('/');
     if ( lastIndex > 0 )
     {
-        aProgName   = aProgName.copy( 0, lastIndex+1 );
+        aProgName    = aProgName.copy( 0, lastIndex+1 );
         aDir        = aProgName;
 
-        aProgName   += OUString( RTL_CONSTASCII_USTRINGPARAM( "setup" ));
+        aProgName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "setup" ));
 #ifdef WNT
-        aProgName   += OUString( RTL_CONSTASCII_USTRINGPARAM( ".exe" ));
+        aProgName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".exe" ));
 #endif
     }
 
     OUString                aArgListArray[1];
     ::vos::OSecurity        aSecurity;
-    ::vos::OEnvironment     aEnv;
+    ::vos::OEnvironment        aEnv;
     ::vos::OArgumentList    aArgList;
 
     aArgListArray[0] = aParameters;
     OArgumentList aArgumentList( aArgListArray, 1 );
 
-    ::vos::OProcess aProcess( aProgName, aDir );
+    ::vos::OProcess    aProcess( aProgName, aDir );
     ::vos::OProcess::TProcessError aProcessError =
         aProcess.execute( OProcess::TOption_Detached,
                           aSecurity,
@@ -702,14 +705,14 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
     if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
     {
         sal_Bool            bWorkstationInstallation = sal_False;
-        ::rtl::OUString     aBaseInstallURL;
-        ::rtl::OUString     aUserInstallURL;
-        ::rtl::OUString     aProductKey;
-        ::rtl::OUString     aTemp;
+        ::rtl::OUString        aBaseInstallURL;
+        ::rtl::OUString        aUserInstallURL;
+        ::rtl::OUString        aProductKey;
+        ::rtl::OUString        aTemp;
         ::vos::OStartupInfo aInfo;
 
         aInfo.getExecutableFile( aProductKey );
-        sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+        sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
         if ( lastIndex > 0 )
             aProductKey = aProductKey.copy( lastIndex+1 );
 
@@ -721,7 +724,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         ::utl::Bootstrap::PathStatus aUserInstallStatus = ::utl::Bootstrap::locateUserInstallation( aUserInstallURL );
 
         if (( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS &&
-              aUserInstallStatus == ::utl::Bootstrap::PATH_EXISTS       ))
+              aUserInstallStatus == ::utl::Bootstrap::PATH_EXISTS        ))
         {
             if ( aBaseInstallURL != aUserInstallURL )
                 bWorkstationInstallation = sal_True;
@@ -735,7 +738,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         else
         {
             OUString        aMessage;
-            OUStringBuffer  aBuffer( 100 );
+            OUStringBuffer    aBuffer( 100 );
             aBuffer.append( aDiagnosticMessage );
 
             aBuffer.appendAscii( "\n" );
@@ -773,7 +776,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
                 }
             }
             else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
-                     ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
+                     ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )     )
             {
                 OUString aAskSetupRepairStr( GetMsgString(
                     STR_ASK_START_SETUP_REPAIR,
@@ -799,7 +802,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 }
 
 // Create a error message depending on bootstrap failure code and an optional file url
-::rtl::OUString Desktop::CreateErrorMsgString(
+::rtl::OUString    Desktop::CreateErrorMsgString(
     utl::Bootstrap::FailureCode nFailureCode,
     const ::rtl::OUString& aFileURL )
 {
@@ -889,8 +892,8 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
     {
         OUString                    aErrorMsg;
         OUString                    aBuffer;
-        utl::Bootstrap::Status      aBootstrapStatus;
-        utl::Bootstrap::FailureCode nFailureCode;
+        utl::Bootstrap::Status        aBootstrapStatus;
+        utl::Bootstrap::FailureCode    nFailureCode;
 
         aBootstrapStatus = ::utl::Bootstrap::checkBootstrapStatus( aBuffer, nFailureCode );
         if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
@@ -969,7 +972,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         {
             // First sentence. We cannot bootstrap office further!
             OUString            aMessage;
-            OUStringBuffer      aDiagnosticMessage( 100 );
+            OUStringBuffer        aDiagnosticMessage( 100 );
 
             OUString aErrorMsg;
 
@@ -1295,8 +1298,8 @@ void Desktop::Main()
     //  Initialise Single Signon
     if ( !InitSSO() ) return;
 
-    //  The only step that should be done if terminate flag was specified
-    //  Typically called by the plugin only
+    //    The only step that should be done if terminate flag was specified
+    //    Typically called by the plugin only
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
     InitializeInstallation( Application::GetAppFileName() );
     if( pCmdLineArgs->IsTerminateAfterInit() ) return;
@@ -1639,7 +1642,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
-//  OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
+//    OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
 }
 
 // ========================================================================
@@ -1729,6 +1732,48 @@ void Desktop::OpenClients()
         Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
     }
 
+    if (!pArgs->IsQuickstart()) {
+        sal_Bool bShowHelp = sal_False;
+        ::rtl::OUStringBuffer aHelpURLBuffer;
+        if (pArgs->IsHelpWriter()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
+        } else if (pArgs->IsHelpCalc()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
+        } else if (pArgs->IsHelpDraw()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
+        } else if (pArgs->IsHelpImpress()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+        } else if (pArgs->IsHelpBasic()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
+        } else if (pArgs->IsHelpMath()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
+        }
+        if (bShowHelp) {
+            Help *pHelp = Application::GetHelp();
+
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+            rtl::OUString aTmp;
+            aRet >>= aTmp;
+            aHelpURLBuffer.appendAscii("?Language=");
+            aHelpURLBuffer.append(aTmp);
+#if defined UNX
+            aHelpURLBuffer.appendAscii("&System=UNX");
+#elif defined WNT
+            aHelpURLBuffer.appendAscii("&System=WIN");
+#elif defined MAC
+            aHelpURLBuffer.appendAscii("&System=MAC");
+#endif
+            pHelp->Start(aHelpURLBuffer.makeStringAndClear(), NULL);
+            return;
+        }
+    }
+
     if ( !pArgs->IsServer() && !pArgs->IsNoRestore() && !aInternalOptions.IsRecoveryListEmpty() )
     {
         // crash recovery
@@ -1755,6 +1800,8 @@ void Desktop::OpenClients()
         // mark it as a user request
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
 
+        // handle the recovery list
+        // and ask user for restauration if saved items
         while(  !aInternalOptions.IsRecoveryListEmpty() && !bUserCancel )
         {
             // Read and delete top recovery item from list
@@ -1906,7 +1953,7 @@ void Desktop::OpenDefault()
 
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
-    ::rtl::OUString     aName;
+    ::rtl::OUString        aName;
     SvtModuleOptions    aOpt;
 
     CommandLineArgs* pArgs = GetCommandLineArgs();
@@ -2204,6 +2251,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         SaveTasks(DESKTOP_SAVETASKS_ALL);
         // SaveTasks(DESKTOP_SAVETASKS_MOD);
     }
+    else if ( rAppEvent.GetEvent() == "OPENHELPURL" )
+    {
+        // start help for a specific URL
+        OUString aHelpURL(rAppEvent.GetData().GetBuffer());
+        Help *pHelp = Application::GetHelp();
+        pHelp->Start(aHelpURL, NULL);
+    }
 #ifndef UNX
     else if ( rAppEvent.GetEvent() == "HELP" )
     {
@@ -2215,7 +2269,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::OpenSplashScreen()
 {
-       ::rtl::OUString      aTmpString;
+       ::rtl::OUString        aTmpString;
     CommandLineArgs*    pCmdLine = GetCommandLineArgs();
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
