@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
+ *  last change: $Author: cmc $ $Date: 2000-11-14 10:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,9 @@ void SvXMLExport::_InitCtor()
                                sXML_n_table, XML_NAMESPACE_TABLE );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER, sXML_np_number,
                                   sXML_n_number, XML_NAMESPACE_NUMBER );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH, sXML_np_math,
+                                  sXML_n_math, XML_NAMESPACE_MATH );
+
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
 }

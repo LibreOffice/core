@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
+ *  last change: $Author: cmc $ $Date: 2000-11-14 10:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ sal_Char __READONLY_DATA sXML_np__meta[] = "_meta";
 sal_Char __READONLY_DATA sXML_np__number[] = "_number";
 sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
 sal_Char __READONLY_DATA sXML_np__chart[] = "_chart";
+sal_Char __READONLY_DATA sXML_np__math[] = "_chart";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
@@ -173,6 +174,9 @@ void SvXMLImport::_InitCtor()
                                sXML_n_svg, XML_NAMESPACE_SVG );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART_IDX, sXML_np__chart,
                                sXML_n_chart, XML_NAMESPACE_CHART );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH_IDX, sXML_np__math,
+                               sXML_n_math, XML_NAMESPACE_MATH );
+
 
     // namespaces used in the technical preview (SO 5.2)
     pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_FO_IDX, sXML_np__fo_old,
