@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comcore.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:49:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 #define STR_GRAPHIC                         (RC_COMCORE_BEGIN + 44)
 #define STR_DRAWING_OBJECTS                 (RC_COMCORE_BEGIN + 45)
 #define STR_TABLE_NAME                      (RC_COMCORE_BEGIN + 46)
+#define STR_PARAGRAPH_UNDO                  (RC_COMCORE_BEGIN + 47)
 // <- #115575#
 
 // defines fuer die Autoformat Redline Kommentare
