@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:07:51 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 06:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ dutch ] = "Geselecteerde velden";
         Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î";
         Text [ greek ] = "ÅðéëåãìÝíá ðåäßá";
-        Text [ korean ] = "ÇÊµå ¼±ÅÃ";
+        Text [ korean ] = "¼±ÅÃµÈ ÇÊµå";
         Text [ turkish ] = "Seçilmiþ alanlar";
         Text[ catalan ] = "Campos seleccionados";
         Text[ finnish ] = "Ausgewählte Felder";
@@ -228,7 +228,7 @@ String RID_STR_DATEPOSTFIX
     Text [ turkish ] = "(Tarih)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
     Text[ catalan ] = "(Fecha)";
-    Text[ finnish ] = " (Datum)";
+    Text[ finnish ] = "(Päivämäärä)";
 };
 
 String RID_STR_TIMEPOSTFIX
@@ -256,12 +256,15 @@ String RID_STR_TIMEPOSTFIX
     Text [ turkish ] = " (Saat)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
     Text[ catalan ] = "(Hora)";
-    Text[ finnish ] = " (Zeit)";
+    Text[ finnish ] = "(Aika)";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/10 06:07:51  kz
+ *  Merge SRC631: 05/10/01 - 08:08:06 (NoBranch)
+ *
  *  Revision 1.4  2001/05/04 20:14:05  kz
  *  Merge SRC630: 05/04/01 - 22:14:07 (NoBranch)
  *
