@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,26 @@ ModalDialog WIZ_RTFCOPYTABLE
         Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
         Text                = "~Hilfe" ;
         Text [ ENGLISH ]    = "Help" ;
+        Text[ english_us ] = "~Help";
+        Text[ portuguese ] = "~Ajuda";
+        Text[ russian ] = "Help";
+        Text[ greek ] = "Help";
+        Text[ dutch ] = "~Help";
+        Text[ french ] = "Help";
+        Text[ spanish ] = "Ay~uda";
+        Text[ finnish ] = "Help";
+        Text[ italian ] = "~?";
+        Text[ danish ] = "Help";
+        Text[ swedish ] = "~Hjälp";
+        Text[ polish ] = "Po~moc";
+        Text[ portuguese_brazilian ] = "Help";
+        Text[ japanese ] = "ÍÙÌß";
+        Text[ korean ] = "Help";
+        Text[ chinese_simplified ] = "°ïÖú";
+        Text[ chinese_traditional ] = "»¡©ú";
+        Text[ turkish ] = "Help";
+        Text[ arabic ] = "Help";
+        Text[ catalan ] = "Help";
     };
     CancelButton PB_CANCEL
     {
@@ -411,9 +431,9 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ dutch ] = "Bestaande kolommen";
         Text[ french ] = "Colonnes disponibles";
         Text[ spanish ] = "Columnas existentes";
-        Text[ italian ] = "Colonne:";
+        Text[ italian ] = "Colonne disponibili";
         Text[ danish ] = "Eksisterende kolonner";
-        Text[ swedish ] = "Existerande kolumner:";
+        Text[ swedish ] = "Existerande kolumner";
         Text[ polish ] = "Istniej¹ce kolumny";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "Šù‘¶‚Ì—ñ";
@@ -571,7 +591,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ swedish ] = "Kolumninformation";
         Text[ polish ] = "Informacja o kolumnnach:";
         Text[ portuguese_brazilian ] = "Tablename:";
-        Text[ japanese ] = "—ñ‚Ìî•ñ:";
+        Text[ japanese ] = "—ñ‚Ìî•ñ";
         Text[ korean ] = "¿­ Á¤º¸";
         Text[ chinese_simplified ] = "ÁĞµÄĞÅÏ¢";
         Text[ chinese_traditional ] = "Äæ¸ê°T";
@@ -607,7 +627,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ swedish ] = "Autom. typigenkänning";
         Text[ polish ] = "Automat. identyfikacja typu";
         Text[ portuguese_brazilian ] = "Tablename:";
-        Text[ japanese ] = "À²Ìß‚Ì©“®”F¯";
+        Text[ japanese ] = "í—Ş‚Ì©“®”F¯";
         Text[ korean ] = "ÀÚµ¿ Å¸ÀÔÀÎ½Ä";
         Text[ chinese_simplified ] = "×Ô¶¯Ê¶±ğÀàĞÍ";
         Text[ chinese_traditional ] = "¦Û°ÊÃÑ§OÃş«¬";
@@ -623,6 +643,26 @@ TabPage TAB_WIZ_TYPE_SELECT
         Size                = MAP_APPFONT ( 40 , 8 ) ;
         Text                = "(max.) ~Zeilen" ;
         Text [ English ]    = "Lines (ma~x)" ;
+        Text[ english_us ] = "Lines (ma~x)";
+        Text[ portuguese ] = "Linhas (max.)";
+        Text[ russian ] = "(ìàêñ.) ñòğîê:";
+        Text[ greek ] = "Ãñáììİò (ìåã.):";
+        Text[ dutch ] = "(max.) ~regels";
+        Text[ french ] = "~Lignes (max.) :";
+        Text[ spanish ] = "~Líneas (máx.)";
+        Text[ finnish ] = "(max.) ~Zeilen:";
+        Text[ italian ] = "~Righe (max)";
+        Text[ danish ] = "(Maks.) rækker:";
+        Text[ swedish ] = "(ma~x) rader";
+        Text[ polish ] = "Wiersze (maks.)";
+        Text[ portuguese_brazilian ] = "Tablename:";
+        Text[ japanese ] = "Å‘ås”(~X)";
+        Text[ korean ] = "(ÃÖ´ë)~ÁÙ:";
+        Text[ chinese_simplified ] = "(×î¶àµÄ)ĞĞ(~X)";
+        Text[ chinese_traditional ] = "(³Ì¦hªº)¦C(~X)";
+        Text[ turkish ] = "Satırlar (azami):";
+        Text[ arabic ] = "(ÇáÍÏ ÇáÃŞÕì) ááÕİæİ:";
+        Text[ catalan ] = "~Líneas (máx.):";
     };
 
     NumericField ET_AUTO
@@ -693,6 +733,26 @@ TabPage TAB_WIZ_NAME_MATCHING
         Size                = MAP_APPFONT ( 75 , 20) ;
         Text                = "Quelltabelle: \n" ;
         Text [ ENGLISH ]    = "Source table: \n" ;
+        Text[ english_us ] = "Source table: \n";
+        Text[ portuguese ] = "Tabela fonte: \n";
+        Text[ russian ] = "Èñõîäíàÿ òàáëèöà: \n";
+        Text[ greek ] = "Ğßíáêáò ğñïİëåõóçò: \n";
+        Text[ dutch ] = "Brontabel: \n";
+        Text[ french ] = "Table source : \n";
+        Text[ spanish ] = "Tabla fuente: \n";
+        Text[ finnish ] = "Quelltabelle: \n";
+        Text[ italian ] = "Tabella sorgente: \n";
+        Text[ danish ] = "Kildetabel: \n";
+        Text[ swedish ] = "Källtabell: \n";
+        Text[ polish ] = "Tabela Ÿród³owa: \n";
+        Text[ portuguese_brazilian ] = "Source table: \n";
+        Text[ japanese ] = "¿°½Ã°ÌŞÙ: \n";
+        Text[ korean ] = "¼Ò½º Å×ÀÌºí: \n";
+        Text[ chinese_simplified ] = "Ô´±í¸ñ£º\n";
+        Text[ chinese_traditional ] = "·½ªí®æ¡G\n";
+        Text[ turkish ] = "Kaynak tablo: \n";
+        Text[ arabic ] = "ÌÏæá ÇáãÕÏÑ: \n";
+        Text[ catalan ] = "Tabla fuente: \n";
     };
 
     FixedText FT_TABLE_RIGHT
@@ -701,6 +761,26 @@ TabPage TAB_WIZ_NAME_MATCHING
         Size                = MAP_APPFONT ( 75 , 20) ;
         Text                = "Zieltabelle: \n" ;
         Text [ ENGLISH ]    = "Destination table: \n" ;
+        Text[ english_us ] = "Destination table: \n";
+        Text[ portuguese ] = "Tabela de destino: \n";
+        Text[ russian ] = "Öåëåâàÿ òàáëèöà: \n";
+        Text[ greek ] = "Ğßíáêáò ğñïïñéóìïı: \n";
+        Text[ dutch ] = "Doeltabel: \n";
+        Text[ french ] = "Table cible : \n";
+        Text[ spanish ] = "Tabla destino: \n";
+        Text[ finnish ] = "Zieltabelle: \n";
+        Text[ italian ] = "Tabella destinazione: \n";
+        Text[ danish ] = "Måltabel: \n";
+        Text[ swedish ] = "Måltabell: \n";
+        Text[ polish ] = "Tabela docelowa: \n";
+        Text[ portuguese_brazilian ] = "Destination table: \n";
+        Text[ japanese ] = "À°¹Ş¯ÄÃ°ÌŞÙ: \n";
+        Text[ korean ] = "¸ñÇ¥ Å×ÀÌºí: \n";
+        Text[ chinese_simplified ] = "Ä¿±ê±í¸ñ£º\n";
+        Text[ chinese_traditional ] = "¥Ø¼Ğªí®æ¡G\n";
+        Text[ turkish ] = "Hedef tablo: \n";
+        Text[ arabic ] = "ÌÏæá ÇáæÌåÉ: \n";
+        Text[ catalan ] = "Tabla destino: \n";
     };
 
     Control CTRL_LEFT
@@ -874,6 +954,26 @@ TabPage TAB_WIZ_COPYTABLE
         Size                = MAP_APPFONT ( 60 , 8 ) ;
         Text                = "~Tabellenname" ;
         Text [ English ]    = "Tablename" ;
+        Text[ english_us ] = "Ta~ble name";
+        Text[ portuguese ] = "Nome da ta~bela";
+        Text[ russian ] = "Èìÿ òàáëèöû:";
+        Text[ greek ] = "¼íïìá ğßíáêá:";
+        Text[ dutch ] = "~Tabelnaam";
+        Text[ french ] = "Nom de la ~table :";
+        Text[ spanish ] = "Nombre de la ta~bla";
+        Text[ finnish ] = "~Tabellenname:";
+        Text[ italian ] = "Nome ~tabella";
+        Text[ danish ] = "Tabelnavn:";
+        Text[ swedish ] = "~Tabellnamn";
+        Text[ polish ] = "Nazwa tabeli";
+        Text[ portuguese_brazilian ] = "Tabellenname:";
+        Text[ japanese ] = "Ã°ÌŞÙ–¼(~B)";
+        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~B):";
+        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~B)";
+        Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~B)";
+        Text[ turkish ] = "Tablo adı:";
+        Text[ arabic ] = "ÇÓã ÇáÌÏæá:";
+        Text[ catalan ] = "Nombre de la ta~bla:";
     };
 
     Edit ET_TABLENAME
@@ -1056,6 +1156,26 @@ TabPage TAB_WIZ_COPYTABLE
         Size                = MAP_APPFONT ( 39 , 8 ) ;
         Text                = "Name";
         Text[ENGLISH]       = "Name";
+        Text[ english_us ] = "Name";
+        Text[ portuguese ] = "Nome";
+        Text[ russian ] = "Èìÿ:";
+        Text[ greek ] = "¼íïìá:";
+        Text[ dutch ] = "Naam";
+        Text[ french ] = "Nom :";
+        Text[ spanish ] = "Nombre";
+        Text[ finnish ] = "Nimi:";
+        Text[ italian ] = "Nome";
+        Text[ danish ] = "Navn:";
+        Text[ swedish ] = "Namn";
+        Text[ polish ] = "Nazwa";
+        Text[ portuguese_brazilian ] = "Name:";
+        Text[ japanese ] = "–¼‘O";
+        Text[ korean ] = "ÀÌ¸§:";
+        Text[ chinese_simplified ] = "Ãû³Æ";
+        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ turkish ] = "Ad:";
+        Text[ arabic ] = "ÇáÇÓã:";
+        Text[ catalan ] = "Nombre:";
     };
 
     Edit ET_KEYNAME
@@ -1221,6 +1341,7 @@ String STR_ERR_DUPL_TABLENAME
     Text[ catalan ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente.";
     Text[ finnish ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen.";
 };
+
 
 
 
