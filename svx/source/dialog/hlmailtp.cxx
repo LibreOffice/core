@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-07-16 12:49:33 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,12 @@ int SvxHyperlinkMailTp::DeactivatePage( SfxItemSet* pSet )
     USHORT nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
-    SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
-    pSet->Put (aItem);
+    if( pSet )
+    {
+        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
+                                aStrIntName, eMode, nEvents, pTable );
+        pSet->Put( aItem );
+    }
 
     return( LEAVE_PAGE );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 10:22:42 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,8 @@ void SvxAngleTabPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxAngleTabPage::DeactivatePage( SfxItemSet* pSet )
 {
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return( LEAVE_PAGE );
 }
@@ -742,7 +743,8 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxSlantTabPage::DeactivatePage( SfxItemSet* pSet )
 {
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return( LEAVE_PAGE );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 10:44:47 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,8 @@ int SvxHatchTabPage::DeactivatePage( SfxItemSet* pSet )
     if ( CheckChanges_Impl() == -1L )
         return KEEP_PAGE;
 
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return LEAVE_PAGE;
 }

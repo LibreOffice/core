@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: af $ $Date: 2002-07-16 12:41:59 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,17 +406,20 @@ void SvxHyperlinkNewDocTp::ActivatePage( const SfxItemSet& rItemSet )
 
 int SvxHyperlinkNewDocTp::DeactivatePage( SfxItemSet* pSet )
 {
+    // #101547: not sure, if GetCurentItemData(), GetMacroEvents() and GetMacroTable() don't change this
     String aStrURL, aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 
-    GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
+    GetCurentItemData( aStrURL, aStrName, aStrIntName, aStrFrame, eMode );
 
     USHORT nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
-    SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
-    pSet->Put (aItem);
+    if( pSet )
+    {
+        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame, aStrIntName, eMode, nEvents, pTable );
+        pSet->Put( aItem );
+    }
 
     return( LEAVE_PAGE );
 }

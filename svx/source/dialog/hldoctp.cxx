@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-07-16 12:44:07 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,9 +342,12 @@ int SvxHyperlinkDocTp::DeactivatePage( SfxItemSet* pSet )
     USHORT nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
-    SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
-    pSet->Put (aItem);
+    if( pSet )
+    {
+        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
+                                aStrIntName, eMode, nEvents, pTable );
+        pSet->Put (aItem);
+    }
 
     return( LEAVE_PAGE );
 }

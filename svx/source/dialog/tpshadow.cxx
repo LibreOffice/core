@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,8 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxShadowTabPage::DeactivatePage( SfxItemSet* pSet )
 {
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return( LEAVE_PAGE );
 }

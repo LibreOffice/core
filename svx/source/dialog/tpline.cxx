@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 12:30:30 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,8 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* pSet )
         *pPosLineEndLb = nPos;
     }
 
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return( LEAVE_PAGE );
 }

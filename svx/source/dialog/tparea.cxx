@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-23 12:14:05 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,8 @@ void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
 
 int SvxTransparenceTabPage::DeactivatePage(SfxItemSet* pSet)
 {
-    FillItemSet(*pSet);
+    if( pSet )
+        FillItemSet( *pSet );
     return(LEAVE_PAGE);
 }
 
@@ -988,7 +989,8 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* pSet )
         }
     }
 
-    FillItemSet( *pSet );
+    if( pSet )
+        FillItemSet( *pSet );
 
     return( LEAVE_PAGE );
 }
