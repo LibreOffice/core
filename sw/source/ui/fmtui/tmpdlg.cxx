@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-05 08:55:35 $
+ *  last change: $Author: os $ $Date: 2001-04-19 09:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
-
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 #ifndef _NUMPARA_HXX
 #include <numpara.hxx>
 #endif
@@ -243,8 +245,11 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                         SvxCharTwoLinesPage::GetRanges );
             AddTabPage(TP_BACKGROUND,   SvxBackgroundTabPage::Create,
                                         SvxBackgroundTabPage::GetRanges );
-            break;
+            SvtCJKOptions aCJKOptions;
+            if(nHtmlMode & HTMLMODE_ON || !aCJKOptions.IsDoubleLinesEnabled())
+                RemoveTabPage(TP_CHAR_TWOLN);
         }
+        break;
         // Absatzvorlagen
         case SFX_STYLE_FAMILY_PARA:
         {
@@ -287,6 +292,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             || nHtmlMode & HTMLMODE_ON )
                 RemoveTabPage(TP_CONDCOLL);
 
+            SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
                 OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
@@ -303,6 +309,13 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 }
                 if(!(nHtmlMode & HTMLMODE_PARA_BORDER))
                     RemoveTabPage(TP_BORDER);
+            }
+            else
+            {
+                if(!aCJKOptions.IsAsianTypographyEnabled())
+                    RemoveTabPage(TP_PARA_ASIAN);
+                if(!aCJKOptions.IsDoubleLinesEnabled())
+                    RemoveTabPage(TP_CHAR_TWOLN);
             }
         }
         break;
@@ -600,6 +613,9 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/05 08:55:35  os
+    #80346# enable negative mode
+
     Revision 1.3  2000/11/29 17:26:27  os
     #80913# forbidden rules
 
