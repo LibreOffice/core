@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-01 12:54:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
+#include <rtl/ustring.hxx>
+
 #pragma hdrstop
 
 #include "dialogs.hrc"
@@ -97,6 +99,12 @@
 #include "dialmgr.hxx"
 #include "helpid.hrc"
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+
 SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 
 /*************************************************************************
@@ -105,14 +113,8 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 |*
 \************************************************************************/
 
-SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-
-    SfxToolBoxControl( nId, rTbx, rBind ),
-
-    aColorForwarder     ( SID_ATTR_FILL_COLOR, *this ),
-    aGradientForwarder  ( SID_ATTR_FILL_GRADIENT, *this ),
-    aHatchForwarder     ( SID_ATTR_FILL_HATCH, *this ),
-    aBitmapForwarder    ( SID_ATTR_FILL_BITMAP, *this ),
+SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
 
     pStyleItem      ( NULL ),
     pColorItem      ( NULL ),
@@ -122,11 +124,17 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBind
     pFillControl    ( NULL ),
     pFillAttrLB     ( NULL ),
     pFillTypeLB     ( NULL ),
-
     bUpdate         ( FALSE ),
     eLastXFS        ( XFILL_NONE )
 {
-    StartListening( rBind );
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillHatch" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillBitmap" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GradientListState" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:HatchListState" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BitmapListState" )));
 }
 
 //========================================================================
@@ -148,7 +156,6 @@ void SvxFillToolBoxControl::StateChanged(
 
 {
     FASTBOOL bEnableControls = FALSE;
-
 
     if( eState == SFX_ITEM_DISABLED )
     {
@@ -221,6 +228,8 @@ void SvxFillToolBoxControl::StateChanged(
 
                 bUpdate = TRUE;
             }
+
+            Update( pState );
         }
         else
         {
@@ -253,16 +262,9 @@ void SvxFillToolBoxControl::StateChanged(
 
 //========================================================================
 
-void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
-                                    const TypeId& rBCType,
-                                    const SfxHint& rHint,
-                                    const TypeId& rHintType )
+void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 {
-    const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-
-    if( pStyleItem && pSimpleHint &&
-      ( pSimpleHint->GetId() == SFX_HINT_UPDATEDONE ) &&
-        bUpdate )
+    if ( pStyleItem && pState && bUpdate )
     {
         bUpdate = FALSE;
 
@@ -483,43 +485,41 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
         }
     }
 
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-
-    if( pPoolItemHint && pStyleItem )
+    if( pState && pStyleItem )
     {
         XFillStyle eXFS = (XFillStyle) pStyleItem->GetValue();
 
         // Die Listen haben sich geaendert ?
-        if( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) &&
+        if( pState->ISA( SvxColorTableItem ) &&
             eXFS == XFILL_SOLID )
         {
             Color aTmpColor( pFillAttrLB->GetSelectEntryColor() );
             pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable() );
+            pFillAttrLB->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
             pFillAttrLB->SelectEntry( aTmpColor );
         }
-        if( pPoolItemHint->GetObject()->ISA( SvxGradientListItem ) &&
+        if( pState->ISA( SvxGradientListItem ) &&
             eXFS == XFILL_GRADIENT )
         {
             String aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxGradientListItem*) pPoolItemHint->GetObject() )->GetGradientList() );
+            pFillAttrLB->Fill( ( (SvxGradientListItem*)pState )->GetGradientList() );
             pFillAttrLB->SelectEntry( aString );
         }
-        if( pPoolItemHint->GetObject()->ISA( SvxHatchListItem ) &&
+        if( pState->ISA( SvxHatchListItem ) &&
             eXFS == XFILL_HATCH )
         {
             String aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxHatchListItem*) pPoolItemHint->GetObject() )->GetHatchList() );
+            pFillAttrLB->Fill( ( (SvxHatchListItem*)pState )->GetHatchList() );
             pFillAttrLB->SelectEntry( aString );
         }
-        if( pPoolItemHint->GetObject()->ISA( SvxBitmapListItem ) &&
+        if( pState->ISA( SvxBitmapListItem ) &&
             eXFS == XFILL_BITMAP )
         {
             String aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxBitmapListItem*) pPoolItemHint->GetObject() )->GetBitmapList() );
+            pFillAttrLB->Fill( ( (SvxBitmapListItem*)pState )->GetBitmapList() );
             pFillAttrLB->SelectEntry( aString );
         }
     }
@@ -529,7 +529,7 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
 
 Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 {
-    if ( GetId() == SID_ATTR_FILL_STYLE )
+    if ( GetSlotId() == SID_ATTR_FILL_STYLE )
     {
         pFillControl = new FillControl( pParent );
         // Damit dem FillControl das SvxFillToolBoxControl bekannt ist
@@ -593,7 +593,8 @@ FillControl::~FillControl()
 IMPL_LINK_INLINE_START( FillControl, DelayHdl, Timer *, pTimer )
 {
     SelectFillTypeHdl( NULL );
-    ( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
+    ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )));
+//  ( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
     return 0;
 }
 IMPL_LINK_INLINE_END( FillControl, DelayHdl, Timer *, pTimer )
@@ -614,9 +615,9 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
         // Damit wir in folgendem Fall einen Status anzeigen koennen:
         // Ein Typ wurde ausgewaehlt aber kein Attribut.
         // Die Selektion hat genau die gleichen Attribute wie die vorherige.
-        SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
-        if( pControlerItem )
-            pControlerItem->ClearCache();
+//      SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
+//      if( pControlerItem ) CD
+//          pControlerItem->ClearCache(); CD
 
         pLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -708,15 +709,25 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
     XFillStyle eXFS = (XFillStyle)pLbFillType->GetSelectEntryPos();
     XFillStyleItem aXFillStyleItem( eXFS );
     BOOL bAction = pBox && !pLbFillAttr->IsTravelSelect();
+
     SfxObjectShell* pSh = SfxObjectShell::Current();
-    SfxDispatcher* pDisp = ( (SvxFillToolBoxControl*)GetData() )->GetBindings().GetDispatcher();
-    DBG_ASSERT( pDisp, "invalid Dispatcher" );
-    if(bAction)
+//  SfxDispatcher* pDisp = ( (SvxFillToolBoxControl*)GetData() )->GetBindings().GetDispatcher();
+//  DBG_ASSERT( pDisp, "invalid Dispatcher" );
+    if ( bAction )
     {
         switch( eXFS )
         {
             case XFILL_NONE:
-                pDisp->Execute( SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
+            {
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
+                aXFillStyleItem.QueryValue( a );
+                aArgs[0].Value = a;
+                ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )),
+                                                                aArgs );
+//                pDisp->Execute( SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
+            }
             break;
 
             case XFILL_SOLID:
@@ -731,9 +742,17 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                 }
 
                 XFillColorItem aXFillColorItem( aTmpStr, pLbFillAttr->GetSelectEntryColor() );
+
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ));
+                aXFillColorItem.QueryValue( a );
+                aArgs[0].Value = a;
+                ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )),
+                                                               aArgs );
                 // NEU
-                pDisp->Execute(
-                    SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
+//                pDisp->Execute(
+//                    SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
             }
             break;
             case XFILL_GRADIENT:
@@ -749,8 +768,16 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     {
                         XGradient aGradient = aItem.GetGradientList()->Get( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
-                        pDisp->Execute( SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD,
-                                        &aXFillGradientItem, &aXFillStyleItem, 0L );
+
+                        Any a;
+                        Sequence< PropertyValue > aArgs( 1 );
+                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
+                        aXFillGradientItem.QueryValue( a );
+                        aArgs[0].Value = a;
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )),
+                                                                       aArgs );
+//                        pDisp->Execute( SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD,
+//                                        &aXFillGradientItem, &aXFillStyleItem, 0L );
                     }
                 }
             }
@@ -768,8 +795,16 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     {
                         XHatch aHatch = aItem.GetHatchList()->Get( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
-                        pDisp->Execute( SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD,
-                                        &aXFillHatchItem, &aXFillStyleItem, 0L );
+
+                        Any a;
+                        Sequence< PropertyValue > aArgs( 1 );
+                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
+                        aXFillHatchItem.QueryValue( a );
+                        aArgs[0].Value = a;
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillHatch" )),
+                                                                       aArgs );
+//                        pDisp->Execute( SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD,
+//                                        &aXFillHatchItem, &aXFillStyleItem, 0L );
                     }
                 }
             }
@@ -788,8 +823,16 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     {
                         XOBitmap aXOBitmap = aItem.GetBitmapList()->Get( nPos )->GetXBitmap();
                         XFillBitmapItem aXFillBitmapItem( pLbFillAttr->GetSelectEntry(), aXOBitmap );
-                        pDisp->Execute( SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD,
-                                        &aXFillBitmapItem, &aXFillStyleItem, 0L );
+
+                        Any a;
+                        Sequence< PropertyValue > aArgs( 1 );
+                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ));
+                        aXFillBitmapItem.QueryValue( a );
+                        aArgs[0].Value = a;
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillBitmap" )),
+                                                                       aArgs );
+//                        pDisp->Execute( SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD,
+//                                        &aXFillBitmapItem, &aXFillStyleItem, 0L );
                     }
                 }
             }
