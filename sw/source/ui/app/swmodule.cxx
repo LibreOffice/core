@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:23:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
