@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:21:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-31 13:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #ifndef _COM_SUN_STAR_AWT_STYLE_HPP_
 #include <com/sun/star/awt/Style.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_DOCKINGEVENT_HPP_
