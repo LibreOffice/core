@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:39:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ arabic ] = "Œ’«∆’";
         Text[ turkish ] = "÷zellikler";
         Text[ catalan ] = "Propiedades";
+        Text[ finnish ] = "Ominaisuudet";
     };
     FixedText FT_CHARSET
     {
@@ -123,6 +124,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "Karakter k¸mesi";
         Text[ arabic ] = "„Ã„Ê⁄… √Õ—›";
         Text[ catalan ] = "~Caracteres";
+        Text[ finnish ] = "~Fontti";
     };
     ListBox LB_CHARSET
     {
@@ -157,6 +159,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "Standart yaz˝tipi";
         Text[ arabic ] = "«·Œÿ «·ﬁÌ«”Ì";
         Text[ catalan ] = "~Fuente est·ndar";
+        Text[ finnish ] = "Oletusfontit";
     };
     ListBox LB_FONT
     {
@@ -192,6 +195,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "~Dil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Idio~ma";
+        Text[ finnish ] = "K~ieli";
     };
     ListBox LB_LANGUAGE
     {
@@ -227,6 +231,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "Paragraf sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salt~o de p·rrafo";
+        Text[ finnish ] = "~Kappalevaihto";
     };
     RadioButton RB_CRLF
     {
@@ -256,6 +261,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "~CR & LF";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "CR & LF";
+        Text[ finnish ] = "~CR & LF";
     };
     RadioButton RB_CR
     {
@@ -284,6 +290,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "C~R";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~R";
+        Text[ finnish ] = "C~R";
     };
     RadioButton RB_LF
     {
@@ -312,6 +319,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "~LF";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~LF";
+        Text[ finnish ] = "~LF";
     };
 
     OKButton PB_OK
@@ -357,6 +365,7 @@ ModalDialog DLG_ASCII_FILTER
         Text[ turkish ] = "Sistem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sistema";
+        Text[ finnish ] = "J‰rjestelm‰";
     };
     Text[ english_us ] = "ASCII Filter Options";
     Text[ portuguese ] = "OpÁıes de filtro ASCII";
@@ -378,6 +387,7 @@ ModalDialog DLG_ASCII_FILTER
     Text[ turkish ] = "ASCII filtre seÁenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones de filtro ASCII";
+    Text[ finnish ] = "ASCII-suodatusasetukset";
 };
 
 
