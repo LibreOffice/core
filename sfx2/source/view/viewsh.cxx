@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:59:24 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,42 +1654,20 @@ void SfxViewShell::ReleaseMenuBar_Impl()
 
 SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
 {
-    // F"ur das Menu wird auch ein Accelerator gebraucht
+    // get the accelerators
     GetAccMgr_Impl();
-    SfxBindings& rBindings = GetViewFrame()->GetBindings();
-
-    // Wenn keine eigenen Bindings, dann kann MenuBarManager der Factory
-    // verwendet werden, der an den AppBindings h"angt
-//    SfxMenuBarManager *pMgr = GetObjectShell()->GetFactory().GetMenuBar_Impl();
-//    if ( pMgr && &rBindings == &pMgr->GetBindings() )
-//        return pMgr;
-
     if ( !pImp->pMenu )
-    {
-        sal_Bool bCheckPlugin = SfxApplication::IsPlugin();
-        if ( !pImp->pMenuBarResId )
-        {
-            const ResId* pId = bCheckPlugin ? GetObjectShell()->GetFactory().GetPluginMenuBarId()
-                                       : GetObjectShell()->GetFactory().GetMenuBarId();
-            if ( pId )
-                pImp->pMenuBarResId = new ResId( pId->GetId(), pId->GetResMgr() );
-        }
-
-        if ( pImp->pMenuBarResId && pImp->pMenuBarResId->GetId() )
-            pImp->pMenu = new SfxMenuBarManager( *pImp->pMenuBarResId, rBindings );
-        else
-            pImp->pMenu = new SfxMenuBarManager( rBindings, bCheckPlugin );
-        pImp->pMenu->Initialize( GetViewFrame()->ISA( SfxInPlaceFrame ) );
-    }
-
+        pImp->pMenu = GetObjectShell()->CreateMenuBarManager_Impl( GetViewFrame() );
     return pImp->pMenu;
 }
 
 SfxAcceleratorManager* SfxViewShell::GetAccMgr_Impl()
 {
+    // all views of a document share the accelerators
     return GetObjectShell()->GetFactory().GetAccMgr_Impl();
 }
 
+/*
 void SfxViewShell::SetMenuBar_Impl( const ResId& rId )
 {
     if ( !pImp->pMenuBarResId ||
@@ -1721,6 +1699,7 @@ void SfxViewShell::SetMenuBar_Impl( const ResId& rId )
             pImp->pMenuBarResId = new ResId(rId);
     }
 }
+*/
 
 void SfxViewShell::SetController( SfxBaseController* pController )
 {

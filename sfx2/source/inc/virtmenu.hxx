@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-25 18:12:18 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ private:
     BOOL            bHelpInitialized : 1;
     BOOL            bIsActive : 1;
     BOOL            bControllersUnBound : 1;
-    BOOL            bRemoveDisabledEntries: 1;
 
 private:
     void            Construct_Impl();
@@ -135,14 +134,17 @@ public:
     USHORT          GetItemCount() const;
     Menu*           GetSVMenu() const;
     SfxMenuControl& operator[]( USHORT nPos ) const;
+
     USHORT          GetItemId( USHORT nPos ) const;
     SfxVirtualMenu* GetPopupMenu( USHORT nId ) const;
+    String          GetItemText( USHORT nId ) const;
+    String          GetItemHelpText( USHORT nId ) const;
+
+    void            InvalidateKeyCodes();
+
     SfxVirtualMenu* GetParentMenu() const { return pParent; }
     void            SetParentMenu( SfxVirtualMenu* pNewParent )
                     { pParent = pNewParent; }
-    String          GetItemText( USHORT nId ) const;
-    String          GetItemHelpText( USHORT nId ) const;
-    void            InvalidateKeyCodes();
 
     void            SetPopupMenu( USHORT nId, PopupMenu *pMenu );
     BOOL            IsFromResource() const
@@ -152,8 +154,6 @@ public:
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
     void            SetHelpIds( ResMgr* );
-    void            RemoveDisabledEntries();
-    void            SetRemoveDisabledEntries();
 
     DECL_LINK( Select, Menu * );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 15:27:20 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,9 @@
 #include "doctempl.hxx"
 #include "doc.hrc"
 #include "appdata.hxx"
-#include <sfxbasemodel.hxx>
+#include "sfxbasemodel.hxx"
+#include "accmgr.hxx"
+#include "mnumgr.hxx"
 
 //====================================================================
 
@@ -1768,3 +1770,86 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
     return pImp->pEventConfig;
 }
 
+SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName, BOOL bCreate )
+{
+    SotStorageStreamRef xStream;
+    SotStorageRef xStorage = GetStorage()->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
+            bCreate ? STREAM_STD_READWRITE : STREAM_STD_READ );
+    if ( xStorage.Is() && !xStorage->GetError() )
+    {
+        xStream = xStorage->OpenSotStream( rName,
+            bCreate ? STREAM_STD_READWRITE|STREAM_TRUNC : STREAM_STD_READ );
+        if ( xStream.Is() && xStream->GetError() )
+            xStream.Clear();
+    }
+
+    return xStream;
+}
+
+SfxAcceleratorManager* SfxObjectShell::GetAccMgr_Impl()
+{
+    // get the typId ( = ResourceId )
+    const ResId* pResId = GetFactory().GetAccelId();
+    if ( !pResId )
+        return NULL;
+
+    SfxAcceleratorManager* pMgr = new SfxAcceleratorManager( *pResId );
+    SotStorageStreamRef xStream = GetConfigurationStream(SfxAcceleratorManager::GetStreamName());
+    if ( xStream.Is() )
+    {
+        // document has configuration in XML format
+        if ( pMgr->LoadFromStream( *xStream ) )
+            return pMgr;
+    }
+
+    SvStream* pStream = SfxAcceleratorManager::GetDefaultStream( STREAM_STD_READ );
+    if ( pStream )
+    {
+        if ( pMgr->LoadFromStream( *pStream ) )
+            return pMgr;
+    }
+
+    if ( pImp->pCfgMgr && pImp->pCfgMgr->HasConfigItem( pResId->GetId() ) )
+    {
+        // document has configuration in binary format
+        pMgr->SfxConfigItem::Initialize();
+        return pMgr;
+    }
+
+    // document has no configuration; get accelerator for module
+    delete pMgr;
+    return GetFactory().GetAccMgr_Impl();
+}
+
+SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pViewFrame )
+{
+    SfxBindings& rBindings = pViewFrame->GetBindings();
+    sal_Bool bCheckPlugin = SfxApplication::IsPlugin();
+    const ResId* pId = bCheckPlugin ? GetFactory().GetPluginMenuBarId() : GetFactory().GetMenuBarId();
+    DBG_ASSERT( pId && pId->GetId(), "Component must have own window!" );
+    if ( !pId )
+        return NULL;
+
+    SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings );
+    SotStorageStreamRef xStream = GetConfigurationStream(SfxMenuBarManager::GetStreamName());
+    if ( xStream.Is() )
+    {
+        // document has configuration in XML format
+        if ( pMgr->LoadMenuBar( *xStream, pViewFrame->ISA( SfxInPlaceFrame ) ) )
+            return pMgr;
+    }
+
+    SvStream* pStream = SfxMenuBarManager::GetDefaultStream( STREAM_STD_READ );
+    if ( pStream )
+    {
+        if ( pMgr->LoadMenuBar( *pStream, pViewFrame->ISA( SfxInPlaceFrame ) ) )
+            return pMgr;
+    }
+
+    // better connect MenuBar directly to its ConfigMgr!
+    //else if ( pImp->pCfgMgr && pImp->pCfgMgr->HasConfigItem( pId->GetId() ) )
+    //{
+        pMgr->SfxConfigItem::Initialize();
+        return pMgr;
+    //}
+}

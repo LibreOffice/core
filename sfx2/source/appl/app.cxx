@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-19 10:11:35 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1664,13 +1664,6 @@ sal_Bool SfxApplication::IsPlugin()
         }
     }
     return bReturn;
-}
-
-//--------------------------------------------------------------------
-
-const Accelerator& SfxApplication::GetAccelerator_Impl() const
-{
-    return *GetAcceleratorManager()->GetAccel();
 }
 
 //--------------------------------------------------------------------

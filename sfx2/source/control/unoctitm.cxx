@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-09 15:39:06 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
         pDispatcher = GetBindings().GetDispatcher_Impl();
     SfxItemState eState = pDispatcher->QueryState( GetId(), pItem );
     ::com::sun::star::uno::Any aState;
-    if ( pItem )
+    if ( pItem && !pItem->ISA(SfxVoidItem) )
         pItem->QueryValue( aState );
 
     ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -556,7 +556,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( bNotify && pContnr )
     {
         ::com::sun::star::uno::Any aState;
-        if ( pState )
+        if ( pState && !pState->ISA(SfxVoidItem) )
             pState->QueryValue( aState );
 
         ::com::sun::star::frame::FeatureStateEvent aEvent;

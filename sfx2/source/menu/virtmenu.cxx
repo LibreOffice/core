@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-11 10:51:25 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,14 @@
  *
  ************************************************************************/
 
+#ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
+#include <framework/menuconfiguration.hxx>
+#endif
+
 #include <sot/factory.hxx>
 #include <vcl/system.hxx>
 #include <svtools/menuoptions.hxx>
+
 #pragma hdrstop
 
 #include "virtmenu.hxx"
@@ -143,17 +148,10 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
     pBindings(&rBindings),
     pResMgr(0),
     nLocks(0), pAutoDeactivate(0), bHelpInitialized( bWithHelp )
-    , bRemoveDisabledEntries( FALSE )
 {
     DBG_MEMTEST();
     DBG_CTOR(SfxVirtualMenu, 0);
     pSVMenu = &rMenu;
-
-#ifdef UNX
-    USHORT nPos = pSVMenu->GetItemPos( SID_DESKTOPMODE );
-    if ( nPos != MENU_ITEM_NOTFOUND )
-        pSVMenu->RemoveItem( nPos );
-#endif
 
     bResCtor = bRes;
     bOLE = bOLEServer;
@@ -176,16 +174,9 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
     pBindings(&rBindings),
     pResMgr(0),
     nLocks(0), pAutoDeactivate(0),  bHelpInitialized( bWithHelp )
-    , bRemoveDisabledEntries( FALSE )
 {
     DBG_MEMTEST();
     DBG_CTOR(SfxVirtualMenu, 0);
-
-#ifdef UNX
-    USHORT nPos = pStarViewMenu->GetItemPos( SID_DESKTOPMODE );
-    if ( nPos != MENU_ITEM_NOTFOUND )
-        pStarViewMenu->RemoveItem( nPos );
-#endif
 
     pSVMenu = pStarViewMenu;
 
@@ -293,6 +284,13 @@ void SfxVirtualMenu::CreateFromSVMenu()
     {
         USHORT nId = pSVMenu->GetItemId(nSVPos);
         PopupMenu* pPopup = pSVMenu->GetPopupMenu(nId);
+        if( pPopup && nId >= SID_OBJECTMENU0 && nId <= SID_OBJECTMENU_LAST )
+        {
+            // artefact in XML menuconfig: every entry in root menu must have a popup!
+            pSVMenu->SetPopupMenu( nId, NULL );
+            DELETEZ( pPopup );
+        }
+
         if ( pPopup )
         {
             DBG_ASSERT( SfxMenuManager::IsPopupFunction(nId) ||
@@ -335,7 +333,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     pSVMenu->SetPopupMenu( nId, pPopup );
                 }
 */
-
                 pSVMenu->SetHelpId( nId, 0L );
                 pMnuCtrl = pItems+nPos;
 
@@ -359,6 +356,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     SfxMenuControl *pMnuCtrl;
                     String aCmd( pSVMenu->GetItemCommand( nId ) );
+                    if ( aCmd.CompareToAscii("slot:", 5) == 0 )
+                    {
+                        pSVMenu->SetItemCommand( nId, String() );
+                        aCmd.Erase();
+                    }
+
                     if ( aCmd.Len() )
                     {
                         pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId,
@@ -546,8 +549,6 @@ void SfxVirtualMenu::UnbindControllers()
 
 // called on activation of the SV-Menu
 
-#define ITEMID_MDIWINDOW    SHRT_MAX    // all values greater than maximum value for slotids
-
 IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 {
     DBG_MEMTEST();
@@ -561,12 +562,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
     if ( pMenu )
     {
-#if SUPD<613//MUSTINI
-        sal_Bool bDontHide = (sal_Bool)(sal_uInt16)
-            SFX_INIMANAGER()->Get( SFX_KEY_DONTHIDE_DISABLEDENTRIES ).ToInt32();
-#else
         sal_Bool bDontHide = SvtMenuOptions().IsEntryHidingEnabled();
-#endif
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
             nFlag &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
@@ -593,7 +589,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( pParent && pSVMenu == pParent->pWindowMenu )
         {
             PopupMenu* pWindowMenu = pParent->pWindowMenu;
-            sal_uInt16 nPos = pWindowMenu->GetItemPos( ITEMID_MDIWINDOW );
+            sal_uInt16 nPos = pWindowMenu->GetItemPos( START_ITEMID_WINDOWLIST );
             for ( sal_uInt16 n=nPos; n<pWindowMenu->GetItemCount(); )
                 pWindowMenu->RemoveItem( n );
             if ( pWindowMenu->GetItemType( pWindowMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
@@ -609,16 +605,16 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                  pWindowMenu->GetItemType( pWindowMenu->GetItemCount()-1 ) != MENUITEM_SEPARATOR )
                 pWindowMenu->InsertSeparator();
             sal_uInt16 nNo;
-            sal_uInt16 nAllowedMenuSize = USHRT_MAX - ITEMID_MDIWINDOW;
+            sal_uInt16 nAllowedMenuSize = END_ITEMID_WINDOWLIST - START_ITEMID_WINDOWLIST;
             for ( nNo = 0, nPos = 0; ( nPos < nAllowedMenuSize ) && ( nNo < rArr.Count() ); ++nNo )
             {
                 SfxFrame *pFrame = rArr[nNo];
                 if ( pFrame->GetCurrentViewFrame() && pFrame->GetCurrentViewFrame()->IsVisible() )
                 {
-                    pWindowMenu->InsertItem( ITEMID_MDIWINDOW + nNo,
+                    pWindowMenu->InsertItem( START_ITEMID_WINDOWLIST + nNo,
                                              pFrame->GetWindow().GetText(), MIB_RADIOCHECK );
                     if ( pFrame == pActive )
-                        pWindowMenu->CheckItem( ITEMID_MDIWINDOW + nNo, sal_True );
+                        pWindowMenu->CheckItem( START_ITEMID_WINDOWLIST + nNo, sal_True );
                     nPos++;
                 }
             }
@@ -634,12 +630,9 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         for ( USHORT nPos = 0; nPos < nCount; ++nPos )
         {
             USHORT nId = (pItems+nPos)->GetId();
-            if ( nId && nId < ITEMID_MDIWINDOW )
+            if ( nId && nId < START_ITEMID_WINDOWLIST )
                 pBindings->Update(nId);
         }
-
-        if ( bRemoveDisabledEntries )
-            RemoveDisabledEntries();
 
         // HelpText on-demand
         if ( !bHelpInitialized )
@@ -719,10 +712,10 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
         }
     }
 
-    if ( nId >= ITEMID_MDIWINDOW )
+    if ( nId >= START_ITEMID_WINDOWLIST && nId <= END_ITEMID_WINDOWLIST )
     {
         SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-        sal_uInt16 nWindowId = nId - ITEMID_MDIWINDOW;
+        sal_uInt16 nWindowId = nId - START_ITEMID_WINDOWLIST;
         if ( nWindowId < rArr.Count() )
         {
             SfxFrame *pFrame = rArr[ nWindowId ];
@@ -731,11 +724,28 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
             return sal_True;
         }
     }
+    else if ( nId >= START_ITEMID_PICKLIST && nId <= END_ITEMID_PICKLIST )
+    {
+        SfxPickList_Impl::Get()->ExecuteMenuEntry( nId );
+    }
 
     pBindings->Execute( nId );
 
     return TRUE;
 }
+
+//--------------------------------------------------------------------
+
+// returns the associated StarView-menu
+
+Menu* SfxVirtualMenu::GetSVMenu() const
+{
+    DBG_MEMTEST();
+    DBG_CHKTHIS(SfxVirtualMenu, 0);
+
+    return pSVMenu;
+}
+
 //--------------------------------------------------------------------
 
 // return the position of the specified item
@@ -749,17 +759,6 @@ USHORT SfxVirtualMenu::GetItemPos( USHORT nItemId ) const
         if ( (pItems+nPos)->GetId() == nItemId )
             return nPos;
     return MENU_ITEM_NOTFOUND;
-}
-//--------------------------------------------------------------------
-
-// returns the associated StarView-menu
-
-Menu* SfxVirtualMenu::GetSVMenu() const
-{
-    DBG_MEMTEST();
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    return pSVMenu;
 }
 
 //--------------------------------------------------------------------
@@ -952,48 +951,4 @@ void SfxVirtualMenu::SetHelpIds( ResMgr *pRes )
 {
     pResMgr = pRes;
 }
-
-void SfxVirtualMenu::SetRemoveDisabledEntries()
-{
-    bRemoveDisabledEntries = TRUE;
-}
-
-void SfxVirtualMenu::RemoveDisabledEntries()
-{
-    pBindings->ENTERREGISTRATIONS();
-
-    // Zuerst die Spezial-Controller
-    SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
-    USHORT nPos;
-    for ( nPos=0; nPos<rCtrlArr.Count(); nPos++ )
-    {
-        SfxMenuControl* pCtrl = rCtrlArr[nPos];
-        USHORT nId = pCtrl->GetId();
-        if ( !pSVMenu->IsItemEnabled( nId ) && pCtrl->IsBound() )
-            pCtrl->UnBind();
-    }
-
-    for ( nPos = 0; nPos<nCount; ++nPos )
-    {
-        SfxMenuControl &rCtrl = pItems[nPos];
-        USHORT nId = rCtrl.GetId();
-        if ( nId && !pSVMenu->IsItemEnabled( nId ) && rCtrl.IsBound() )
-            rCtrl.UnBind();
-
-        SfxVirtualMenu *pPopup = rCtrl.GetPopupMenu();
-        if ( pPopup )
-        {
-            pPopup->RemoveDisabledEntries();
-            if ( !pPopup->pSVMenu->GetItemCount() )
-            {
-                rCtrl.RemovePopup();
-                pSVMenu->RemoveItem( pSVMenu->GetItemPos( nId ) );
-            }
-        }
-    }
-
-    pSVMenu->RemoveDisabledEntries( FALSE, FALSE );
-    pBindings->LEAVEREGISTRATIONS();
-}
-
 

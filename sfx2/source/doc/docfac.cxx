@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-19 09:22:29 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,13 @@
 #endif
 
 #include <vcl/config.hxx>
+#include <svtools/pathoptions.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+
 #pragma hdrstop
 
 #include "sfx.hrc"
-
 #include "docfilt.hxx"
 #include "docfac.hxx"
 #include "viewfac.hxx"
@@ -88,9 +91,6 @@
 #include "module.hxx"
 #include "mnumgr.hxx"
 #include "accmgr.hxx"
-#if SUPD<613//MUSTINI
-#include <inimgr.hxx>
-#endif
 #include <sfxresid.hxx>
 #include <sfxuno.hxx>
 #include "doc.hrc"
@@ -451,7 +451,7 @@ SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
 {
     if ( !pImpl->pAccMgr && pImpl->pAccelResId )
     {
-        // Checken, ob der Accel schon von einer anderen Factory angeboten wird
+        // factories in the same module may share their accelerators
         SfxApplication *pApp = SFX_APP();
         SfxObjectFactoryArr_Impl& rArr = GetObjFacArray_Impl();
         sal_uInt32 nCount = rArr.Count();
@@ -471,9 +471,24 @@ SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
             }
         }
 
-        pImpl->pAccMgr =
-            new SfxAcceleratorManager( rMyId );
-        pImpl->pAccMgr->Initialize();
+        // create accelerator manager
+        pImpl->pAccMgr = new SfxAcceleratorManager( rMyId );
+/*
+        // read configuration as XML format
+        String aUserConfig = SvtPathOptions().GetUserConfigPath();
+        INetURLObject aObj( aUserConfig );
+        String aName( GetFilterContainer()->GetName() );
+        aName += String::CreateFromAscii("KeyBindings.xml");
+        aObj.insertName( aName );
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
+        if ( pStream )
+        {
+            pImpl->pAccMgr->Initialize( *pStream );
+            delete pStream;
+        }
+        else
+ */
+            pImpl->pAccMgr->UseDefault();
         pImpl->bOwnsAccel = sal_True;
     }
 

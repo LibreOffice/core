@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-07 16:55:25 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 08:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2744,4 +2744,19 @@ SystemWindow* SfxBindings::GetSystemWindow() const
         pFrame = pFrame->GetParentViewFrame_Impl();
     SfxTopViewFrame* pTop = PTR_CAST( SfxTopViewFrame, pFrame->GetTopViewFrame() );
     return pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+}
+
+BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
+{
+    ::com::sun::star::util::URL aURL;
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    xTrans->parseStrict( aURL );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+    if ( xDisp.is() )
+    {
+        xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+        return TRUE;
+    }
+
+    return FALSE;
 }
