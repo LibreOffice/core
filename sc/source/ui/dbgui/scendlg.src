@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:43:46 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ japanese ] = "˜g‚ğ•\\¦";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "Åã¥ÜÃä®Ø";
-        Text[ arabic ] = "ÅÙåÇÑ ÇáÅØÇÑ ÈÇááæä";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáßÇÏÑ ÈÇááæä";
         Text[ greek ] = "ÅìöÜíéóç ğëáéóßïõ óôï";
         Text[ korean ] = "°æ°è¼± Ç¥½Ã";
         Text[ turkish ] = "Çerçeve rengi";
@@ -171,7 +171,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ japanese ] = "˜g‚Ìˆóü";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¦C¦LÃä®Ø";
-        Text[ arabic ] = "ØÈÇÚÉ ÅØÇÑ";
+        Text[ arabic ] = "ØÈÇÚÉ ßÇÏÑ";
         Text[ greek ] = "Åêôığùóç ğëáéóßïõ";
         Text[ korean ] = "°æ°è¼± ÀÎ¼â";
         Text[ turkish ] = "Çerçeveyi yazdır";
