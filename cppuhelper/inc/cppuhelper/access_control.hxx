@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-11 17:17:22 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 13:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,37 +65,168 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
 
+#define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
+
 
 namespace cppu
 {
+
 //==================================================================================================
-inline void SAL_CALL checkPermission(
-    ::com::sun::star::security::Permission const & perm,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
+class AccessControl
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::security::XAccessController > m_xController;
+
+#ifdef SAL_W32
+#pragma pack(push, 8)
+#endif
+    // binary comp. version of Permission
+    struct __permission
+    {
+        rtl_uString * m_permType;
+        rtl_uString * m_permTarget;
+        rtl_uString * m_permActions;
+    };
+#ifdef SAL_W32
+#pragma pack(pop)
+#endif
+
+public:
+    inline AccessControl(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAccessController > const & xController )
+        SAL_THROW( () );
+    inline AccessControl(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > const & xContext )
+        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+
+    // checkPermission()
+    inline void SAL_CALL checkPermission(
+        ::com::sun::star::security::Permission const & perm )
+        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    inline void SAL_CALL checkPermission(
+        ::rtl::OUString const & permType,
+        ::rtl::OUString const & permTarget,
+        ::rtl::OUString const & permActions )
+        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+
+    inline void SAL_CALL checkFilePermission(
+        ::rtl::OUString const & permTarget,
+        ::rtl::OUString const & permActions )
+        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+
+    // doRestricted()
+    inline ::com::sun::star::uno::Any SAL_CALL doRestricted(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XAction > const & xAction,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XAccessControlContext > const & xRestriction )
+        SAL_THROW( (::com::sun::star::uno::Exception) );
+    // doPrivileged()
+    inline ::com::sun::star::uno::Any SAL_CALL doPrivileged(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XAction > const & xAction,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XAccessControlContext > const & xRestriction )
+        SAL_THROW( (::com::sun::star::uno::Exception) );
+    // getContext()
+    inline ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAccessControlContext > SAL_CALL getContext()
+        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+};
+//__________________________________________________________________________________________________
+inline AccessControl::AccessControl(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAccessController > const & xController )
+    SAL_THROW( () )
+    : m_xController( xController )
+{
+}
+//__________________________________________________________________________________________________
+inline AccessControl::AccessControl(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::security::XAccessController > xACC;
-    if (xContext->getValueByName(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.security.theAccessController") ) ) >>= xACC)
+    xContext->getValueByName(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(AC_SINGLETON) ) ) >>= m_xController;
+}
+//__________________________________________________________________________________________________
+inline void AccessControl::checkPermission(
+    ::com::sun::star::security::Permission const & perm )
+    SAL_THROW( (::com::sun::star::uno::RuntimeException) )
+{
+    if (m_xController.is())
     {
-        xACC->checkPermission( perm );
+        m_xController->checkPermission( perm );
+    }
+}
+//__________________________________________________________________________________________________
+inline void AccessControl::checkPermission(
+    ::rtl::OUString const & permType,
+    ::rtl::OUString const & permTarget,
+    ::rtl::OUString const & permActions )
+    SAL_THROW( (::com::sun::star::uno::RuntimeException) )
+{
+    __permission perm;
+    perm.m_permType = permType.pData;
+    perm.m_permTarget = permTarget.pData;
+    perm.m_permActions = permActions.pData;
+    checkPermission(
+        *reinterpret_cast< ::com::sun::star::security::Permission const * >( &perm ) );
+}
+//__________________________________________________________________________________________________
+inline void AccessControl::checkFilePermission(
+    ::rtl::OUString const & permTarget,
+    ::rtl::OUString const & permActions )
+    SAL_THROW( (::com::sun::star::uno::RuntimeException) )
+{
+    ::rtl::OUString permType( RTL_CONSTASCII_USTRINGPARAM("java.io.FilePermission") );
+    checkPermission( permType, permTarget, permActions );
+}
+
+//__________________________________________________________________________________________________
+inline ::com::sun::star::uno::Any AccessControl::doRestricted(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAction > const & xAction,
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAccessControlContext > const & xRestriction )
+    SAL_THROW( (::com::sun::star::uno::Exception) )
+{
+    if (m_xController.is())
+    {
+        m_xController->doRestricted( xAction, xRestriction );
+    }
+}
+//__________________________________________________________________________________________________
+inline ::com::sun::star::uno::Any AccessControl::doPrivileged(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAction > const & xAction,
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::security::XAccessControlContext > const & xRestriction )
+    SAL_THROW( (::com::sun::star::uno::Exception) )
+{
+    if (m_xController.is())
+    {
+        m_xController->doPrivileged( xAction, xRestriction );
+    }
+}
+//__________________________________________________________________________________________________
+inline ::com::sun::star::uno::Reference<
+    ::com::sun::star::security::XAccessControlContext > AccessControl::getContext()
+    SAL_THROW( (::com::sun::star::uno::RuntimeException) )
+{
+    if (m_xController.is())
+    {
+        return m_xController->getContext();
     }
     else
     {
-        OSL_ENSURE( 0, "### missing access controller in context!" );
+        return ::com::sun::star::uno::Reference<
+            ::com::sun::star::security::XAccessControlContext >();
     }
 }
-//==================================================================================================
-inline void SAL_CALL checkPermission(
-    ::rtl::OUString const & permType,
-    ::rtl::OUString const & permTarget,
-    ::rtl::OUString const & permActions,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) )
-{
-    checkPermission( ::com::sun::star::security::Permission(
-        permType, permTarget, permActions ) );
-}
+
 }
 
 #endif
