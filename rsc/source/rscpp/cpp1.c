@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:55:59 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ FILE *pCppOut = NULL;
 FILE *pCppIn  = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-FILE *pDefOut = stdout;     /* ER  evtl. #define's dump */
+FILE *pDefOut = NULL;       /* ER  evtl. #define's dump */
 #endif
 
 #ifdef B200
