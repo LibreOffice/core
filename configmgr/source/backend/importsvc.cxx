@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:07 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #ifndef CONFIGMGR_BACKEND_IMPORTMERGEHANDLER_HXX
 #include "importmergehandler.hxx"
 #endif
+
 #ifndef CONFIGMGR_BACKENDFACTORY_HXX_
 #include "backendfactory.hxx"
 #endif
@@ -72,6 +73,9 @@
 #include "confapifactory.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -84,42 +88,116 @@ namespace configmgr
         namespace lang  = ::com::sun::star::lang;
         namespace backenduno = drafts::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-AsciiServiceName const aImportMergerServices[] =
+AsciiServiceName const aMergeImporterServices[] =
 {
     "com.sun.star.configuration.backend.MergeImporter",
     "com.sun.star.configuration.backend.Importer",
     0
 };
-const ServiceInfo aImportMergerSI =
+const ServiceInfo aMergeImporterSI =
 {
     "com.sun.star.comp.configuration.backend.MergeImporter",
-    aImportMergerServices
+    aMergeImporterServices
 };
 // -----------------------------------------------------------------------------
 
-const ServiceInfo* getImportMergerServiceInfo()
-{ return & aImportMergerSI; }
+const ServiceInfo* getMergeImportServiceInfo()
+{ return & aMergeImporterSI; }
 // -----------------------------------------------------------------------------
 
-inline
-ServiceInfoHelper ImportService::getServiceInfo()
+MergeImportService::MergeImportService(CreationArg _xServiceFactory)
+: ImportService(_xServiceFactory, &aMergeImporterSI)
 {
-    return & aImportMergerSI;
 }
 // -----------------------------------------------------------------------------
 
-uno::Reference< uno::XInterface > SAL_CALL instantiateImportMerger
+uno::Reference< uno::XInterface > SAL_CALL instantiateMergeImporter
 ( CreationContext const& rServiceManager )
 {
-    return * new ImportService( rServiceManager );
+    return * new MergeImportService( rServiceManager );
 }
 // -----------------------------------------------------------------------------
 
-ImportService::ImportService(CreationArg _xServiceFactory)
+MergeImportService::InputHandler MergeImportService::createImportHandler(Backend const & xBackend, OUString const & aEntity)
+{
+    if (!xBackend.is())
+    {
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
+        throw lang::NullPointerException(sMessage,*this);
+    }
+
+    InputHandler aHandler( new ImportMergeHandler(xBackend, ImportMergeHandler::merge, aEntity) );
+
+    return aHandler;
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+AsciiServiceName const aCopyImporterServices[] =
+{
+    "com.sun.star.configuration.backend.CopyImporter",
+    "com.sun.star.configuration.backend.Importer",
+    0
+};
+const ServiceInfo aCopyImporterSI =
+{
+    "com.sun.star.comp.configuration.backend.CopyImporter",
+    aCopyImporterServices
+};
+// -----------------------------------------------------------------------------
+
+const ServiceInfo* getCopyImportServiceInfo()
+{ return & aCopyImporterSI; }
+// -----------------------------------------------------------------------------
+
+CopyImportService::CopyImportService(CreationArg _xServiceFactory)
+: ImportService(_xServiceFactory, &aCopyImporterSI)
+{
+}
+// -----------------------------------------------------------------------------
+
+uno::Reference< uno::XInterface > SAL_CALL instantiateCopyImporter
+( CreationContext const& rServiceManager )
+{
+    return * new CopyImportService( rServiceManager );
+}
+// -----------------------------------------------------------------------------
+
+CopyImportService::InputHandler CopyImportService::createImportHandler(Backend const & xBackend, OUString const & aEntity)
+{
+    if (!xBackend.is())
+    {
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
+        throw lang::NullPointerException(sMessage,*this);
+    }
+
+    ImportMergeHandler::Mode aMode = m_bOverwrite ? ImportMergeHandler::copy : ImportMergeHandler::no_overwrite;
+    InputHandler aHandler( new ImportMergeHandler(xBackend,aMode,aEntity) );
+
+    return aHandler;
+}
+// -----------------------------------------------------------------------------
+
+sal_Bool CopyImportService::setImplementationProperty(OUString const & aName, uno::Any const & aValue)
+{
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Overwrite")))
+    {
+        return (aValue >>= m_bOverwrite);
+    }
+
+    return ImportService::setImplementationProperty(aName,aValue);
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+ImportService::ImportService(CreationArg _xServiceFactory, ServiceInfoHelper const & aSvcInfo )
 : m_aMutex()
 , m_xServiceFactory(_xServiceFactory)
 , m_xDestinationBackend()
+, m_aServiceInfo(aSvcInfo)
 {
     if (!m_xServiceFactory.is())
     {
@@ -133,24 +211,48 @@ ImportService::~ImportService()
 {}
 // -----------------------------------------------------------------------------
 
-ImportService::InputHandler ImportService::createImportHandler(Backend const & xBackend, OUString const & aEntity)
-{
-    if (!xBackend.is())
-    {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("configmgr::backend::ImportService: Trying to import without a backend. No default backend could be created") );
-        throw lang::NullPointerException(sMessage,*this);
-    }
-
-    InputHandler aHandler( new ImportMergeHandler(xBackend,aEntity) );
-
-    return aHandler;
-}
-// -----------------------------------------------------------------------------
-
 ImportService::Backend ImportService::createDefaultBackend() const
 {
     return BackendFactory::createDefaultUnoBackend( m_xServiceFactory );
 }
+// -----------------------------------------------------------------------------
+
+sal_Bool ImportService::setImplementationProperty(OUString const & , uno::Any const & )
+{
+    return false;
+}
+// -----------------------------------------------------------------------------
+
+// XInitialize
+
+void SAL_CALL
+    ImportService::initialize( const uno::Sequence< uno::Any >& aArguments )
+        throw (uno::Exception, uno::RuntimeException)
+{
+    sal_Int16 const nCount = static_cast<sal_Int16>(aArguments.getLength());
+
+    if (sal_Int32(nCount) != aArguments.getLength())
+    {
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Too many arguments to initialize a Configuration Importer"));
+        throw lang::IllegalArgumentException(sMessage,*this,0);
+    }
+
+    for (sal_Int16 i = 0; i < nCount; ++i)
+    {
+        beans::NamedValue aExtraArg;
+        if (aArguments[i] >>= aExtraArg)
+        {
+            OSL_VERIFY( setImplementationProperty(aExtraArg.Name, aExtraArg.Value) );
+
+            continue;
+        }
+
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Importer"
+                                                        "- NamedValue expected"));
+        throw lang::IllegalArgumentException(sMessage,*this,i+1);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // XImportLayer

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importmergehandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:06 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,15 @@ namespace configmgr
         class ImportMergeHandler : public BasicImportHandler
         {
         public:
+            enum Mode
+            {
+                merge,          // merge as update into existing data
+                copy,           // reset existing data first -> copy imported data
+                no_overwrite     // copy/merge only if no data is in the layer
+            };
+
             explicit
-            ImportMergeHandler(Backend const & xTargetBackend, OUString const & aEntity = OUString());
+            ImportMergeHandler(Backend const & xTargetBackend, Mode mode, OUString const & aEntity = OUString());
 
         // XLayerHandler
         protected:
@@ -154,7 +161,8 @@ namespace configmgr
 
             OutputHandler createOutputHandler();
         private:
-            OutputHandler m_xOutputHandler;
+            OutputHandler   m_xOutputHandler;
+            Mode            m_mode;
         };
 // -----------------------------------------------------------------------------
     } // namespace xml

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:42:16 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,10 +248,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         RegisterService(configmgr::xml::getLayerParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerWriterServiceInfo(), xKey);
         // backends
-        RegisterService(configmgr::localbe::getLocalBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::backend::getSingleBackendAdapterServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalBackendServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalDataImportServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalHierarchyBrowserServiceInfo(), xKey) ;
         // im/export
-        RegisterService(configmgr::backend::getImportMergerServiceInfo(), xKey);
+        RegisterService(configmgr::backend::getMergeImportServiceInfo(), xKey);
+        RegisterService(configmgr::backend::getCopyImportServiceInfo(), xKey);
 
         return sal_True;
     }
@@ -320,19 +323,34 @@ extern "C" void* SAL_CALL component_getFactory(
         ||
         // backends
         aReq.CreateService(
+                configmgr::backend::getSingleBackendAdapterServiceInfo(),
+                configmgr::backend::instantiateSingleBackendAdapter,
+                cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
                 configmgr::localbe::getLocalBackendServiceInfo(),
                 configmgr::localbe::instantiateLocalBackend,
                 cppu::createSingleFactory)
         ||
         aReq.CreateService(
-                configmgr::backend::getSingleBackendAdapterServiceInfo(),
-                configmgr::backend::instantiateSingleBackendAdapter,
+                configmgr::localbe::getLocalDataImportServiceInfo(),
+                configmgr::localbe::instantiateLocalDataImporter,
+                cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+                configmgr::localbe::getLocalHierarchyBrowserServiceInfo(),
+                configmgr::localbe::instantiateLocalDataImporter,
                 cppu::createSingleFactory)
         ||
         // im/export
         aReq.CreateService(
-            configmgr::backend::getImportMergerServiceInfo(),
-            &configmgr::backend::instantiateImportMerger,
+            configmgr::backend::getMergeImportServiceInfo(),
+            &configmgr::backend::instantiateMergeImporter,
+            ::cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+            configmgr::backend::getCopyImportServiceInfo(),
+            &configmgr::backend::instantiateCopyImporter,
             ::cppu::createSingleFactory)
         ||
         false;

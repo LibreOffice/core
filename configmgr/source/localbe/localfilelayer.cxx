@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-29 11:09:04 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,19 +88,48 @@ namespace configmgr { namespace localbe {
 
 //------------------------------------------------------------------------------
 
+BasicLocalFileLayer::BasicLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aComponentFile)
+: mFactory(xFactory)
+, mFileUrl(aComponentFile)
+{
+    static const rtl::OUString kXMLLayerParser(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.backend.xml.LayerParser")) ;
+
+    mLayerReader = uno::Reference<backend::XLayer>::query(
+                                    mFactory->createInstance(kXMLLayerParser)) ;
+
+}
+//------------------------------------------------------------------------------
+
+SimpleLocalFileLayer::SimpleLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aComponentFile)
+: BasicLocalFileLayer(xFactory,aComponentFile)
+{
+}
+//------------------------------------------------------------------------------
+
+SimpleLocalFileLayer::SimpleLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aBaseDir,
+        const rtl::OUString& aComponent)
+: BasicLocalFileLayer(xFactory,aBaseDir + aComponent)
+{
+}
+//------------------------------------------------------------------------------
+
 LocalFileLayer::LocalFileLayer(
         const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aBaseDir,
         const rtl::OUString& aComponent,
         const rtl::OUString& aResDir)
-: mFactory(xFactory), mFileUrl(aBaseDir + aComponent) {
-    static const rtl::OUString kXMLLayerParser(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.backend.xml.LayerParser")) ;
+: BasicLocalFileLayer(xFactory,aBaseDir + aComponent)
+{
     static const rtl::OUString kXMLLayerWriter(RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.configuration.backend.xml.LayerWriter")) ;
 
-    mLayerReader = uno::Reference<backend::XLayer>::query(
-                                    mFactory->createInstance(kXMLLayerParser)) ;
     mLayerWriter = uno::Reference<backend::XLayerHandler>::query(
                                     mFactory->createInstance(kXMLLayerWriter)) ;
     if (aResDir.getLength() != 0) {
@@ -109,14 +138,28 @@ LocalFileLayer::LocalFileLayer(
 }
 //------------------------------------------------------------------------------
 
-LocalFileLayer::~LocalFileLayer(void) {}
+BasicLocalFileLayer::~BasicLocalFileLayer() {}
+//------------------------------------------------------------------------------
+
+SimpleLocalFileLayer::~SimpleLocalFileLayer() {}
+//------------------------------------------------------------------------------
+
+LocalFileLayer::~LocalFileLayer() {}
+//------------------------------------------------------------------------------
+
+void SAL_CALL SimpleLocalFileLayer::readData(
+        const uno::Reference<backend::XLayerHandler>& xHandler)
+    throw (lang::WrappedTargetException, uno::RuntimeException)
+{
+    BasicLocalFileLayer::readData(this,xHandler, mFileUrl) ;
+}
 //------------------------------------------------------------------------------
 
 void SAL_CALL LocalFileLayer::readData(
         const uno::Reference<backend::XLayerHandler>& xHandler)
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
-    readData(xHandler, mFileUrl) ;
+    BasicLocalFileLayer::readData(static_cast<backend::XCompositeLayer*>(this),xHandler, mFileUrl) ;
 }
 //------------------------------------------------------------------------------
 
@@ -182,7 +225,7 @@ void SAL_CALL LocalFileLayer::readSubLayerData(
         throw lang::IllegalArgumentException(message.makeStringAndClear(),
                                              *this, 1) ;
     }
-    readData(xHandler, mSubLayerFiles [i]) ;
+    BasicLocalFileLayer::readData(static_cast<backend::XCompositeLayer*>(this),xHandler, mSubLayerFiles [i]) ;
 }
 //------------------------------------------------------------------------------
 
@@ -260,7 +303,8 @@ void LocalFileLayer::fillSubLayerList(const rtl::OUString& aResDir,
 }
 //------------------------------------------------------------------------------
 
-void LocalFileLayer::readData(
+void BasicLocalFileLayer::readData(
+        backend::XLayer * pContext,
         const uno::Reference<backend::XLayerHandler>& xHandler,
         const rtl::OUString& aFileUrl)
     throw (lang::WrappedTargetException, uno::RuntimeException)
@@ -283,7 +327,7 @@ void LocalFileLayer::readData(
             {
                 rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("LocalFileLayer - Missing interface: XActiveDataSink not supported by LayerReader"));
 
-                throw uno::RuntimeException(sMsg,*this);
+                throw uno::RuntimeException(sMsg,pContext);
             }
 
             uno::Reference<io::XInputStream> xStream( new OSLInputStreamWrapper(blobFile) );
@@ -307,10 +351,10 @@ void LocalFileLayer::readData(
             sMsg.appendAscii("\" : ");
             sMsg.append(FileHelper::createOSLErrorString(errorCode));
 
-            io::IOException ioe(sMsg.makeStringAndClear(),*this);
+            io::IOException ioe(sMsg.makeStringAndClear(),pContext);
 
             sMsg.appendAscii("LocalFileLayer - Cannot readData: ").append(ioe.Message);
-            throw lang::WrappedTargetException(sMsg.makeStringAndClear(),*this,uno::makeAny(ioe));
+            throw lang::WrappedTargetException(sMsg.makeStringAndClear(),pContext,uno::makeAny(ioe));
         }
         break;
 

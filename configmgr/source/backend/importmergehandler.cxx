@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importmergehandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:06 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -77,9 +83,10 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-ImportMergeHandler::ImportMergeHandler( Backend const & xTargetBackend, OUString const & aEntity )
+ImportMergeHandler::ImportMergeHandler( Backend const & xTargetBackend, Mode mode, OUString const & aEntity )
 : BasicImportHandler(xTargetBackend,aEntity)
 , m_xOutputHandler()
+, m_mode(mode)
 {
 }
 // -----------------------------------------------------------------------------
@@ -110,6 +117,36 @@ inline ImportMergeHandler::OutputHandler ImportMergeHandler::getOutputHandler()
 }
 // -----------------------------------------------------------------------------
 
+static
+bool setHandlerProperty(uno::Reference< uno::XInterface > const & xHandler, char const * property, sal_Bool value)
+{
+    OSL_ASSERT(property);
+    uno::Reference< lang::XInitialization > xInitHandler( xHandler, uno::UNO_QUERY );
+    if (xHandler.is())
+    try
+    {
+        uno::Sequence< uno::Any > aArgs(1);
+        aArgs[0] <<= beans::NamedValue( OUString::createFromAscii(property), uno::makeAny(value) );
+        xInitHandler->initialize(aArgs);
+        return true;
+    }
+    catch (uno::Exception & e)
+    {
+        OSL_TRACE("Configuration Import Handler - Could not set output handler property '%s': %s\n",
+                    property,rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
+
+        OSL_ENSURE(false, "Output Handler does not support expected property" );
+    }
+    else
+    {
+        OSL_TRACE("Configuration Import Handler - Could not set output handler property '%s': %s\n",
+                    property,"Object does not support expected interface");
+
+        OSL_ENSURE(false, "Output Handler does not support expected interface" );
+    }
+    return false;
+}
+// -----------------------------------------------------------------------------
 ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
 {
     using rtl::OUStringBuffer;
@@ -141,6 +178,15 @@ ImportMergeHandler::OutputHandler ImportMergeHandler::createOutputHandler()
                 .append(aComponentName).append( sal_Unicode('.') );
 
         throw lang::IllegalArgumentException(sMessage.makeStringAndClear(), *this, 1);
+    }
+
+    switch (m_mode)
+    {
+    case merge: break;
+    case copy:          setHandlerProperty(xOutputHandler,"Truncate", sal_True);  break;
+    case no_overwrite:  setHandlerProperty(xOutputHandler,"Overwrite",sal_False); break;
+
+    default: OSL_ASSERT(false); break;
     }
 
     return xOutputHandler;
@@ -178,7 +224,8 @@ void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16
         (m_xOutputHandler = createOutputHandler())->startUpdate( OUString() );
     }
 
-    getOutputHandler()->modifyNode(aName,aAttributes,aAttributes,false);
+    bool bReset = (m_mode != merge); // is not relevant for no_overwrite,but might be cheaper there
+    getOutputHandler()->modifyNode(aName,aAttributes,aAttributes,m_mode);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-08 12:42:45 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,27 @@ class LocalSingleBackend : public SingleBackendBase {
           */
         static uno::Sequence<rtl::OUString> SAL_CALL getServices(void) ;
 
-    protected :
+    public: // helpers for other implementation that need to use the same data
+        /**
+          Locates the main layer data and localized data directories in a layer directory hierarchy
+          */
+        static void LocalSingleBackend::getLayerSubDirectories(rtl::OUString const & aLayerBaseUrl,
+                                     rtl::OUString& aMainLayerUrl,
+                                     rtl::OUString& aSubLayerUrl);
+        /**
+          Creates a simple readonly non-composite layer for a component in a base directory
+          */
+        static uno::Reference<backend::XLayer>
+            createSimpleLayer(const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+                              rtl::OUString const & aLayerBaseUrl,
+                              rtl::OUString const & aComponent);
+
+        /**
+          Creates a simple readonly non-composite layer for a component in a given file
+          */
+        static uno::Reference<backend::XLayer>
+            createSimpleLayer(const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+                              rtl::OUString const & aComponentUrl);
     private :
         /** Service factory */
         const uno::Reference<lang::XMultiServiceFactory>& mFactory ;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ssmith $ $Date: 2002-11-08 14:41:38 $
+#   last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ SLOFILES=\
     $(SLO)$/basicimporthandler.obj \
     $(SLO)$/importmergehandler.obj \
     $(SLO)$/layerdefaultremover.obj \
+    $(SLO)$/emptylayer.obj \
 
 # --- Targets ---
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:42:15 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,17 +163,29 @@ namespace configmgr
             instantiateSingleBackendAdapter(const CreationContext& aServiceManager) ;
 
         uno::Reference< uno::XInterface > SAL_CALL
-            instantiateImportMerger( CreationContext const& rServiceManager );
+            instantiateMergeImporter( CreationContext const& rServiceManager );
+
+        uno::Reference< uno::XInterface > SAL_CALL
+            instantiateCopyImporter( CreationContext const& rServiceManager );
 
         const ServiceInfo * getUpdateMergerServiceInfo();
         const ServiceInfo * getSingleBackendAdapterServiceInfo() ;
-        const ServiceInfo * getImportMergerServiceInfo();
+        const ServiceInfo * getMergeImportServiceInfo();
+        const ServiceInfo * getCopyImportServiceInfo();
     }
     namespace localbe {
         uno::Reference<uno::XInterface> SAL_CALL
             instantiateLocalBackend(const CreationContext& aServiceManager) ;
 
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalDataImporter(const CreationContext& aServiceManager) ;
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalHierarchyBrowser(const CreationContext& aServiceManager) ;
+
         const ServiceInfo * getLocalBackendServiceInfo() ;
+        const ServiceInfo * getLocalDataImportServiceInfo() ;
+        const ServiceInfo * getLocalHierarchyBrowserServiceInfo() ;
     } // localbe
 } //  namespace configmgr
 

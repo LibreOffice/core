@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:07 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "serviceinfohelper.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -97,8 +97,9 @@ namespace configmgr
         namespace backenduno = drafts::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
-        class ImportService : public ::cppu::WeakImplHelper2<
+        class ImportService : public ::cppu::WeakImplHelper3<
                                             backenduno::XImportLayer,
+                                            lang::XInitialization,
                                             lang::XServiceInfo
                                         >
         {
@@ -106,8 +107,13 @@ namespace configmgr
             typedef uno::Reference< lang::XMultiServiceFactory > const & CreationArg;
 
             explicit
-            ImportService(CreationArg _xServiceFactory);
+            ImportService(CreationArg _xServiceFactory, ServiceInfoHelper const & aSvcInfo);
             ~ImportService();
+
+            // XInitialization
+            virtual void SAL_CALL
+                initialize( const uno::Sequence< uno::Any >& aArguments )
+                    throw (uno::Exception, uno::RuntimeException);
 
             // XServiceInfo
             virtual OUString SAL_CALL
@@ -145,20 +151,45 @@ namespace configmgr
             typedef uno::Reference< backenduno::XBackend >          Backend;
             typedef uno::Reference< backenduno::XLayerHandler >     InputHandler;
 
-            // can be made pure virtual to allow different import services
-            InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity = OUString());
-
             Backend createDefaultBackend() const;
 
             ServiceFactory getServiceFactory() const
             { return m_xServiceFactory; }
+
+            virtual sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);
+        private:
+            // is pure virtual to allow different import services
+            virtual InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity = OUString()) = 0;
 
         private:
             osl::Mutex      m_aMutex;
             ServiceFactory  m_xServiceFactory;
             Backend         m_xDestinationBackend;
 
-            static ServiceInfoHelper getServiceInfo();
+            ServiceInfoHelper m_aServiceInfo;
+
+            ServiceInfoHelper const & getServiceInfo() const { return m_aServiceInfo; }
+        };
+// -----------------------------------------------------------------------------
+
+        class MergeImportService : public ImportService
+        {
+        public:
+            explicit MergeImportService(CreationArg _xServiceFactory);
+        private:
+            InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity);
+        };
+// -----------------------------------------------------------------------------
+
+        class CopyImportService : public ImportService
+        {
+        public:
+            explicit CopyImportService(CreationArg _xServiceFactory);
+        private:
+            InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity);
+            sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);
+        private:
+            sal_Bool m_bOverwrite;
         };
 // -----------------------------------------------------------------------------
     } // namespace xml

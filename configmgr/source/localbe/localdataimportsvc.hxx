@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: updatesvc.hxx,v $
+ *  $RCSfile: localdataimportsvc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:13 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,96 +59,80 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_BACKEND_UPDATESVC_HXX
-#define CONFIGMGR_BACKEND_UPDATESVC_HXX
+#ifndef CONFIGMGR_LOCALBE_IMPORTSVC_HXX
+#define CONFIGMGR_LOCALBE_IMPORTSVC_HXX
 
 #ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
 #include "serviceinfohelper.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
+#include <com/sun/star/task/XJob.hpp>
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XUpdateHandler.hpp>
-
-// -----------------------------------------------------------------------------
-namespace drafts {
-namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
-    class XLayerHandler;
-    class XLayer;
-} } } } }
-}
 // -----------------------------------------------------------------------------
 
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
-    namespace backend
+    namespace localbe
     {
 // -----------------------------------------------------------------------------
         using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace task  = ::com::sun::star::task;
+        namespace beans = ::com::sun::star::beans;
 // -----------------------------------------------------------------------------
 
-        class UpdateService : public ::cppu::WeakImplHelper3<
-                                            lang::XInitialization,
-                                            lang::XServiceInfo,
-                                            backenduno::XUpdateHandler
+        class LocalDataImportService : public ::cppu::WeakImplHelper2<
+                                            task::XJob,
+                                            lang::XServiceInfo
                                         >
         {
         public:
             typedef uno::Reference< lang::XMultiServiceFactory > const & CreationArg;
 
             explicit
-            UpdateService(CreationArg _xServiceFactory);
-
-            // XInitialization
-            virtual void SAL_CALL
-                initialize( const uno::Sequence< uno::Any >& aArguments )
-                    throw (uno::Exception, uno::RuntimeException);
+            LocalDataImportService(CreationArg _xServiceFactory);
+            ~LocalDataImportService();
 
             // XServiceInfo
-            virtual ::rtl::OUString SAL_CALL
+            virtual OUString SAL_CALL
                 getImplementationName(  )
                     throw (uno::RuntimeException);
 
             virtual sal_Bool SAL_CALL
-                supportsService( const ::rtl::OUString& ServiceName )
+                supportsService( const OUString& ServiceName )
                     throw (uno::RuntimeException);
 
-            virtual uno::Sequence< ::rtl::OUString > SAL_CALL
+            virtual uno::Sequence< OUString > SAL_CALL
                 getSupportedServiceNames(  )
                     throw (uno::RuntimeException);
 
+            // XJob
+            virtual uno::Any SAL_CALL
+                execute( const uno::Sequence< beans::NamedValue >& Arguments )
+                    throw (lang::IllegalArgumentException, uno::Exception, uno::RuntimeException);
+
         protected:
             typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
-            typedef uno::Reference< backenduno::XLayer >            Layer;
 
             ServiceFactory getServiceFactory() const
             { return m_xServiceFactory; }
 
-            Layer getSourceLayer() const;
-
-            void writeUpdatedLayer(Layer const & _xLayer);
-
-            virtual sal_Bool setImplementationProperty(OUString const & aName, uno::Any const & aValue);
         private:
-            typedef uno::Reference< backenduno::XLayerHandler >     LayerWriter;
-
             ServiceFactory  m_xServiceFactory;
-            Layer           m_xSourceLayer;
-            LayerWriter     m_xLayerWriter;
-            enum { merge, truncate, protect } m_aSourceMode;
 
             static ServiceInfoHelper getServiceInfo();
         };

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: cyrillem $ $Date: 2002-05-27 17:09:50 $
+#   last change: $Author: jb $ $Date: 2002-11-28 09:05:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ SLOFILES=\
         $(SLO)$/localsinglebackend.obj \
         $(SLO)$/localfilelayer.obj \
         $(SLO)$/localoutputstream.obj \
+        $(SLO)$/localdataimportsvc.obj \
+        $(SLO)$/localhierarchybrowsersvc.obj \
 
 # --- Targets ----------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-16 08:24:28 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,58 @@ uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
 }
 //------------------------------------------------------------------------------
 
+static
+inline
+void impl_getLayerSubDirectories(rtl::OUString const & aLayerBaseUrl,
+                             rtl::OUString& aMainLayerUrl,
+                             rtl::OUString& aSubLayerUrl)
+{
+    aMainLayerUrl   = aLayerBaseUrl + kDataSubPath ;
+    aSubLayerUrl    = aLayerBaseUrl + kLocalisedDataSubPath ;
+}
+//------------------------------------------------------------------------------
+
+void LocalSingleBackend::getLayerSubDirectories(rtl::OUString const & aLayerBaseUrl,
+                             rtl::OUString& aMainLayerUrl,
+                             rtl::OUString& aSubLayerUrl)
+{
+    impl_getLayerSubDirectories(aLayerBaseUrl,aMainLayerUrl,aSubLayerUrl);
+}
+//------------------------------------------------------------------------------
+
+void LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
+                                             rtl::OUString& aLayerUrl,
+                                             rtl::OUString& aSubLayerUrl)
+{
+    OUString aLayerBaseUrl = (aLayerIndex == -1 ? mUserDataUrl : mDefaultDataUrl [aLayerIndex]) ;
+
+    impl_getLayerSubDirectories(aLayerBaseUrl,aLayerUrl,aSubLayerUrl);
+}
+//------------------------------------------------------------------------------
+
+uno::Reference<backend::XLayer> LocalSingleBackend::createSimpleLayer(
+                                                  const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+                                                  rtl::OUString const & aComponentUrl)
+{
+    SimpleLocalFileLayer * pLayer = new SimpleLocalFileLayer(xFactory, aComponentUrl);
+    return pLayer;
+}
+//------------------------------------------------------------------------------
+
+uno::Reference<backend::XLayer> LocalSingleBackend::createSimpleLayer(
+                                                  const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+                                                  rtl::OUString const & aLayerBaseUrl,
+                                                  rtl::OUString const & aComponent)
+{
+    rtl::OUString aLayerUrl, aSubLayerUrl;
+    impl_getLayerSubDirectories(aLayerBaseUrl,aLayerUrl,aSubLayerUrl);
+
+    SimpleLocalFileLayer * pLayer = new SimpleLocalFileLayer(xFactory, aLayerUrl, componentToPath(aComponent));
+    return pLayer;
+}
+//------------------------------------------------------------------------------
+
+
 LocalFileLayer *LocalSingleBackend::getFileLayer(const rtl::OUString& aLayerId)
     throw (lang::IllegalArgumentException)
 {
@@ -461,17 +513,6 @@ LocalFileLayer *LocalSingleBackend::getFileLayer(
 
     getLayerDirectories(aLayerIndex, layerPath, subLayerPath) ;
     return new LocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
-}
-//------------------------------------------------------------------------------
-
-void LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
-                                             rtl::OUString& aLayerUrl,
-                                             rtl::OUString& aSubLayerUrl)
-{
-    OUString const & aLayerBaseUrl = (aLayerIndex == -1 ? mUserDataUrl : mDefaultDataUrl [aLayerIndex]) ;
-
-    aLayerUrl       = aLayerBaseUrl + kDataSubPath ;
-    aSubLayerUrl    = aLayerBaseUrl + kLocalisedDataSubPath ;
 }
 //------------------------------------------------------------------------------
 

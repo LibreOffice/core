@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-11-28 09:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,14 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
 #endif
+#ifndef CONFIGMGR_BACKEND_EMPTYLAYER_HXX
+#include "emptylayer.hxx"
+#endif
 
 #include <drafts/com/sun/star/configuration/backend/XUpdatableLayer.hpp>
 #include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 // -----------------------------------------------------------------------------
 
@@ -79,6 +83,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
+        namespace beans = ::com::sun::star::beans;
         namespace backenduno = drafts::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
@@ -150,12 +155,72 @@ void SAL_CALL
         if (aArguments[i] >>= m_xLayerWriter)
             continue;
 
+        beans::NamedValue aExtraArg;
+        if (aArguments[i] >>= aExtraArg)
+        {
+            OSL_VERIFY( setImplementationProperty(aExtraArg.Name, aExtraArg.Value) );
+
+            continue;
+        }
+
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot use argument to initialize a Configuration Update Merger"
                                                         "- XLayer, XLayerHandler or XUpdatableLayer expected"));
         throw lang::IllegalArgumentException(sMessage,*this,i);
     }
 }
 
+// -----------------------------------------------------------------------------
+
+sal_Bool UpdateService::setImplementationProperty(OUString const & aName, uno::Any const & aValue)
+{
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Overwrite")))
+    {
+        sal_Bool bOverwrite;
+        if (aValue >>= bOverwrite)
+        {
+            if (!bOverwrite)
+                m_aSourceMode = protect;
+
+            else if (protect == m_aSourceMode)
+                m_aSourceMode = merge;
+
+            return true;
+        }
+    }
+
+    else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Truncate")))
+    {
+        sal_Bool bTruncate;
+        if (aValue >>= bTruncate)
+        {
+            if (!bTruncate)
+                m_aSourceMode = merge;
+
+            else if (merge == m_aSourceMode)
+                m_aSourceMode = truncate;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+// -----------------------------------------------------------------------------
+
+UpdateService::Layer UpdateService::getSourceLayer() const
+{
+    switch (m_aSourceMode)
+    {
+    case merge:     return m_xSourceLayer;
+
+    case protect:   if (!checkEmptyLayer(m_xSourceLayer)) break;;
+                    // else fall through
+    case truncate:  return createEmptyLayer();
+
+    default:        OSL_ASSERT(false); break;
+    }
+    return Layer();
+}
 // -----------------------------------------------------------------------------
 
 void UpdateService::writeUpdatedLayer(Layer const & _xLayer)
