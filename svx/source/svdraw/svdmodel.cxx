@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
+ *  last change: $Author: thb $ $Date: 2001-04-27 14:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,7 @@ void SdrModel::ImpReformatAllTextObjects()
     }
 }
 
-SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
+SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
     return NULL;
 }
