@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_caseignore.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:07:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,9 @@
 // prevent internal compiler error with MSVC6SP3
 #include <stl/utility>
 
-#include "oneToOneMapping.hxx"
+#include <i18nutil/oneToOneMapping.hxx>
+#include <i18nutil/casefolding.hxx>
 #include "transliteration_caseignore.hxx"
-#include "casefolding.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
