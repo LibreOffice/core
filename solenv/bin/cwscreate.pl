@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 14:06:33 $
+#   last change: $Author: hr $ $Date: 2004-10-22 13:47:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.8 $ ';
+my $id_str = ' $Revision: 1.9 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -417,7 +417,7 @@ sub copy_workspace
     my $dir_candidate = "";
 
     # hardcoded list of files which do not belong to any module delivery
-    my @xtra_files = ( "*.mk", "*.flg", "libCrun*", "libgcc*", "libstdc*", "OOoRunner.jar" );
+    my @xtra_files = ( "*.mk", "*.flg", "libCrun*", "libCstd*", "libgcc*", "libstdc*", "OOoRunner.jar" );
 
     # find location of master
     if ( "$wslocation" eq "" )
