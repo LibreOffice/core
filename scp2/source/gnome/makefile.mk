@@ -70,12 +70,9 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
-ULFFILES= module_gnome.ulf
-
-.IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_GNOMEVFS)" != ""
 PARFILES =                   \
         module_gnome.par     \
-        directory_gnome.par  \
         file_gnome.par
 .ENDIF
 
