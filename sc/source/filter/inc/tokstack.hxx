@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 15:42:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ struct TokenId
     inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
     inline  TokenId&    operator =( UINT16 n ) { nId = n; return *this; }
     inline              operator UINT16&() { return nId; }
-    inline              operator UINT16() const { return nId; }
+    inline              operator const UINT16&() const { return nId; }
     inline  BOOL        operator <( UINT16 n ) const { return nId < n; }
     inline  BOOL        operator >( UINT16 n ) const { return nId > n; }
     inline  BOOL        operator <=( UINT16 n ) const { return nId <= n; }
@@ -192,28 +192,28 @@ class TokenPool
         inline TokenPool&           operator <<( TokenStack& rStack );
         void                        operator >>( TokenId& rId );
         inline void                 operator >>( TokenStack& rStack );
-        inline TokenId              Store( void );
-        TokenId                     Store( const double& rDouble );
+        inline const TokenId        Store( void );
+        const TokenId               Store( const double& rDouble );
 
                                     // nur fuer Range-Names
-        TokenId                     Store( const UINT16 nIndex );
-        inline TokenId              Store( const INT16 nWert );
-        TokenId                     Store( const String& rString );
-        TokenId                     Store( const SingleRefData& rTr );
-        TokenId                     Store( const ComplRefData& rTr );
+        const TokenId               Store( const UINT16 nIndex );
+        inline const TokenId        Store( const INT16 nWert );
+        const TokenId               Store( const String& rString );
+        const TokenId               Store( const SingleRefData& rTr );
+        const TokenId               Store( const ComplRefData& rTr );
 
-        TokenId                     Store( const DefTokenId eId, const String& rName );
+        const TokenId               Store( const DefTokenId eId, const String& rName );
                                         // 4 externals (e.g. AddIns, Makros...)
-        TokenId                     StoreNlf( const SingleRefData& rTr );
-        inline TokenId              LastId( void ) const;
+        const TokenId               StoreNlf( const SingleRefData& rTr );
+        inline const TokenId        LastId( void ) const;
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );
-        inline E_TYPE               GetType( TokenId nId ) const;
-        inline const SingleRefData* GetSRD( TokenId nId ) const;
-        BOOL                        IsSingleOp( TokenId nId, const DefTokenId eId ) const;
-        BOOL                        IsExternal( TokenId nId ) const;
+        inline E_TYPE               GetType( const TokenId& nId ) const;
+        inline const SingleRefData* GetSRD( const TokenId& nId ) const;
+        BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
+        BOOL                        IsExternal( const TokenId& nId ) const;
 
-        const String*               GetString( TokenId nId ) const;
+        const String*               GetString( const TokenId& nId ) const;
 };
 
 
@@ -235,13 +235,13 @@ class TokenStack
 
         inline void                 Reset( void );
 
-        inline TokenId              Get( void );
+        inline const TokenId        Get( void );
 };
 
 
 
 
-inline TokenId TokenStack::Get( void )
+inline const TokenId TokenStack::Get( void )
 {
     DBG_ASSERT( nPos > 0,
         "*TokenStack::Get(): Leer ist leer, ist leer, ist leer, ist..." );
@@ -346,7 +346,7 @@ inline void TokenPool::operator >>( TokenStack& rStack )
 }
 
 
-inline TokenId TokenPool::Store( void )
+inline const TokenId TokenPool::Store( void )
 {
     register TokenId nId;
     *this >> nId;
@@ -354,13 +354,13 @@ inline TokenId TokenPool::Store( void )
 }
 
 
-inline TokenId TokenPool::Store( const INT16 nWert )
+inline const TokenId TokenPool::Store( const INT16 nWert )
 {
     return Store( ( double ) nWert );
 }
 
 
-inline TokenId TokenPool::LastId( void ) const
+inline const TokenId TokenPool::LastId( void ) const
 {
     return ( TokenId ) nElementAkt; // stimmt, da Ausgabe mit Offset 1!
 }
@@ -382,14 +382,14 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 }
 
 
-inline E_TYPE TokenPool::GetType( TokenId nId ) const
+inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 {
     register E_TYPE nRet;
 
-    nId--;
+    UINT16 nId = (UINT16) rId - 1;
 
     if( nId < nElementAkt )
-        nRet = pType[ ( UINT16 ) nId ] ;
+        nRet = pType[ nId ] ;
     else
         nRet = T_Error;
 
@@ -397,14 +397,14 @@ inline E_TYPE TokenPool::GetType( TokenId nId ) const
 }
 
 
-inline const SingleRefData* TokenPool::GetSRD( TokenId nId ) const
+inline const SingleRefData* TokenPool::GetSRD( const TokenId& rId ) const
 {
     register SingleRefData* pRet;
 
-    nId--;
+    UINT16 nId = (UINT16) rId - 1;
 
-    if( nId < nElementAkt && pType[ ( UINT16 ) nId ] == T_RefC )
-        pRet = ppP_RefTr[ pElement[ ( UINT16 ) nId ] ];
+    if( nId < nElementAkt && pType[ nId ] == T_RefC )
+        pRet = ppP_RefTr[ pElement[ nId ] ];
     else
         pRet = NULL;
 
