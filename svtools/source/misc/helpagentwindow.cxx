@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:13 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace svt
         // -----------------
         // the closer button
         Bitmap aCloserBitmap(SvtResId(BMP_HELP_AGENT_CLOSER));
-        Image aCloserImage( aCloserBitmap );
+        Image aCloserImage( aCloserBitmap, Color(COL_LIGHTMAGENTA) );
         m_pCloser = new CloserButton_Impl( this, WB_NOTABSTOP | WB_NOPOINTERFOCUS );
         static_cast<CloserButton_Impl*>(m_pCloser)->SetImage( aCloserImage );
         static_cast<CloserButton_Impl*>(m_pCloser)->SetClickHdl( LINK(this, HelpAgentWindow, OnButtonClicked) );
