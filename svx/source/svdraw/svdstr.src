@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:40:05 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4028,7 +4028,7 @@ String STR_EditRevOrder
     Text[ dutch ] = "Volgorde van %0 omkeren";
     Text[ chinese_simplified ] = "%O Ë³ĞòÏà·´";
     Text[ greek ] = "ÁíôéóôñïöŞ äéÜôáîçò ôïõ %O";
-    Text[ korean ] = "%OÀÇ ¼ø¼­¸¦ °Å²Ù·Î";
+    Text[ korean ] = "%OÀÇ ¼ø¼­¸¦ ¹İ´ë·Î";
     Text[ turkish ] = "Sırasını değiştir: %O";
     Text[ language_user1 ] = " ";
 };
@@ -8425,7 +8425,7 @@ String STR_ItemNam_SHADOWCOLOR
     Text[ dutch ] = "Schaduwkleur";
     Text[ chinese_simplified ] = "ÒõÓ°ÑÕÉ«";
     Text[ greek ] = "×ñşìá óêéÜò";
-    Text[ korean ] = "À½¿µ »ö";
+    Text[ korean ] = "À½¿µ »ö»ó";
     Text[ turkish ] = "Gölge rengi";
     Text[ language_user1 ] = " ";
 };
@@ -9245,7 +9245,7 @@ String STR_ItemNam_TEXT_HORZADJUST
     Text[ chinese_simplified ] = "Ë®Æ½·½ÏòÎÄ×ÖËø¶¨";
     Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïğèâÿçêà òåêñòà";
     Text[ polish ] = "Poziome zakotwiczenie tekstu";
-    Text[ japanese ] = "…•½‚ÉÃ·½Ä‚Ì±İ¶°";
+    Text[ japanese ] = "‰¡ˆÊ’u‚ÉÃ·½Ä‚Ì±İ¶°";
     Text[ chinese_traditional ] = "¤ô¥­¤è¦V¤å¦rÂê©w";
     Text[ arabic ] = "ÅÑÓÇÁ ÇáäÕ ÃİŞíÇğ";
     Text[ dutch ] = "Horizontale tekstverankering";
@@ -10444,7 +10444,7 @@ String SIP_XA_FILLCOLOR
     Text[ dutch ] = "Vulllingskleur";
     Text[ chinese_simplified ] = "³äÌîµÄÑÕÉ«";
     Text[ greek ] = "Ãİìéóìá ìå ÷ñşìá";
-    Text[ korean ] = "Ã¤¿ì±â »ö";
+    Text[ korean ] = "Ã¤¿ì±â »ö»ó";
     Text[ turkish ] = "Dolgu rengi";
     Text[ language_user1 ] = " ";
 };
@@ -11386,7 +11386,7 @@ String SIP_XA_FORMTXTSHDWCOLOR
     Text[ dutch ] = "Fontwork schaduwkleur";
     Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌåÒõÓ°ÑÕÉ«";
     Text[ greek ] = "×ñşìá óêéÜò Fontwork";
-    Text[ korean ] = "Fontwork À½¿µ»ö";
+    Text[ korean ] = "Fontwork À½¿µ »ö»ó";
     Text[ turkish ] = "Fontwork gölge rengi";
 };
 
@@ -11726,7 +11726,7 @@ String SIP_SA_SHADOWCOLOR
     Text[ dutch ] = "Schaduwkleur";
     Text[ chinese_simplified ] = "ÒõÓ°ÑÕÉ«";
     Text[ greek ] = "×ñşìá óêéÜò";
-    Text[ korean ] = "À½¿µ »ö";
+    Text[ korean ] = "À½¿µ »ö»ó";
     Text[ turkish ] = "Gölge rengi";
     Text[ language_user1 ] = " ";
 };
@@ -16219,7 +16219,7 @@ String SIP_EE_FEATURE_LINEBR
     Text[ dutch ] = "Zachte woordafbreking";
     Text[ chinese_simplified ] = "ÈíĞÔ»»ĞĞ·û";
     Text[ greek ] = "ÁğáëŞ áëëáãŞ ãñáììŞò";
-    Text[ korean ] = "ÀÓÀÇ ÁöÁ¤ ÁÙ ¹Ù²Ù±â";
+    Text[ korean ] = "ÀÓÀÇÀÇ °³Çà";
     Text[ turkish ] = "Satır sonu";
 };
 
