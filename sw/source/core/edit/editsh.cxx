@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 11:29:08 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 14:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,6 +1046,13 @@ void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
         const SwPosition& rPos = *GetCrsr()->GetPoint();
         pDel = GetDoc()->GetExtTextInput( rPos.nNode.GetNode(),
                                           rPos.nContent.GetIndex() );
+        if( !pDel )
+        {
+            //JP 25.10.2001: under UNIX the cursor is moved before the Input-
+            //              Engine event comes in. So take any - normally there
+            //              exist only one at the time. -- Task 92016
+            pDel = GetDoc()->GetExtTextInput();
+        }
     }
 
     if( pDel )
@@ -1059,12 +1066,14 @@ void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     }
 }
 
+#ifdef USED
 SwExtTextInput* SwEditShell::GetExtTextInput() const
 {
     const SwPosition& rPos = *GetCrsr()->GetPoint();
     return GetDoc()->GetExtTextInput( rPos.nNode.GetNode(),
                                          rPos.nContent.GetIndex() );
 }
+#endif
 
 void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 {
