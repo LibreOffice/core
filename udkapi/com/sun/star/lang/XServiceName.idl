@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceName.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** identifies the object with a service name which can be used to create
     such an object by a factory.
  */
-interface XServiceName: com::sun::star::uno::XInterface
+published interface XServiceName: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
