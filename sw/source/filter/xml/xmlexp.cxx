@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,12 +595,10 @@ void SwXMLExport::_ExportContent()
             Reference<XFormsSupplier> xFormSupp(xPage, UNO_QUERY);
             if (xFormSupp->getForms()->hasElements())
             {
-#if 0
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
 
                 GetFormExport()->seekPage(xPage);
                 GetFormExport()->exportForms(xPage);
-#endif
             }
         }
     }
