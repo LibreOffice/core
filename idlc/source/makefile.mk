@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
+#   last change: $Author: obo $ $Date: 2003-10-20 13:07:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,6 +135,12 @@ APP1STDLIBS=\
 
 # --- Targets ------------------------------------------------------
 
+#.IF "$(debug)" == ""
+#YACCFLAGS+=-l
+#.ELSE
+#YACCFLAGS+=-v
+#.ENDIF
+    
 .INCLUDE :  target.mk
 
 $(MISC)$/stripped_scanner.ll : scanner.ll
@@ -147,7 +153,4 @@ $(MISC)$/stripped_scanner.ll : scanner.ll
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
     +flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll
 
-# JSC: Please do not remove this lines !!
-#$(MISC)$/parser.cxx: parser.y
-#	+bison -v -d -o$(MISC)$/parser.cxx parser.y
-#	+$(COPY) $(MISC)$/parser.cxx.h $(OUT)$/inc$/parser.hxx
+
