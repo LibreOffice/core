@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-03 13:21:15 $
+ *  last change: $Author: hr $ $Date: 2002-04-04 10:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bModified;
             if ( aReturn.bEnabled )
             {
-                ::std::vector<OTableRow*>::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
+                ::std::vector<OTableRow*>::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
                 aReturn.bEnabled = aIter != m_vRowList.end();
             }
             break;
@@ -337,7 +337,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled |= isConnected();
             if ( aReturn.bEnabled )
             {
-                ::std::vector<OTableRow*>::iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
+                ::std::vector<OTableRow*>::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),::std::mem_fun(&OTableRow::isValid));
                 aReturn.bEnabled = aIter != m_vRowList.end();
             }
             break;
@@ -561,7 +561,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
     catch(const ElementExistException& )
     {
-        String sText( String(ModuleRes(STR_OBJECT_ALREADY_EXISTS)) );
+        String sText( ModuleRes(STR_OBJECT_ALREADY_EXISTS)) ;
         sText.SearchAndReplaceAscii( "#" , m_sName);
         OSQLMessageBox aDlg(getView(), String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), sText, WB_OK, OSQLMessageBox::Error);
 
