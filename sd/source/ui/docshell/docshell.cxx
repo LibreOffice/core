@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-27 14:30:19 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,9 +500,9 @@ void SdDrawDocShell::ApplySlotFilter() const
 |*
 \************************************************************************/
 
-SvStream* SdDrawDocShell::GetDocumentStream(FASTBOOL& rbDeleteAfterUse)
+SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
 {
-    rbDeleteAfterUse = FALSE;
+    rStreamInfo.mbDeleteAfterUse = FALSE;
     SvStorage* pStor = GetStorage();
 
     if (pStor && !pDocStor)

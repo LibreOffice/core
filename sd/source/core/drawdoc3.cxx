@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,13 +1245,13 @@ List* SdDrawDocument::GetCustomShowList(BOOL bCreate)
 |*
 \************************************************************************/
 
-SvStream* SdDrawDocument::GetDocumentStream(FASTBOOL& rbDeleteAfterUse) const
+SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
     SvStream* pStream = NULL;
 
     if (pDocSh)
     {
-        pStream = ((SdDrawDocShell*) pDocSh)->GetDocumentStream(rbDeleteAfterUse);
+        pStream = ((SdDrawDocShell*) pDocSh)->GetDocumentStream(rStreamInfo);
     }
 
     return pStream;

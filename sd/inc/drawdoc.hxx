@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 09:06:55 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ public:
     virtual void SetPrinter( Printer* pPrntr ) { pPrinter = pPrntr; }
     virtual Printer* GetPrinter( BOOL bCreate ) { if( pPrinter == NULL && bCreate ) pPrinter = new Printer(); return pPrinter; }
 
-    virtual SvStream* GetDocumentStream(FASTBOOL& rbDeleteAfterUse) const { return pStream; }
+    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const { return pStream; }
 };
 
 #endif
@@ -372,7 +372,7 @@ public:
 
     virtual void SetChanged(FASTBOOL bFlag = TRUE);
     virtual void NbcSetChanged(FASTBOOL bFlag = TRUE) { bChanged = bFlag; }
-    virtual SvStream* GetDocumentStream(FASTBOOL& rbDeleteAfterUse) const;
+    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
     void SetTextDefaults() const;
 
