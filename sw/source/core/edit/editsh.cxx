@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:27:37 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,4 +1198,3 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
 
     EndAllAction();
 }
-
