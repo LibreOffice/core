@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:11:49 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #pragma hdrstop
 
-#ifndef NOOLDSV //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _EEITEMID_HXX //autogen
 #include <svx/eeitemid.hxx>
 #endif
