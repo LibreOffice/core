@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GetDiskFreeSpaceExA.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-26 12:56:02 $
+ *  last change: $Author: hro $ $Date: 2002-08-26 13:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
