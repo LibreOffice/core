@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.6 2001-10-02 07:52:33 dr Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/datefunc/makefile.mk,v 1.7 2002-06-11 15:16:43 hjs Exp $
 #
-#     $Date: 2001-10-02 07:52:33 $
-#     $Author: dr $
-#     $Revision: 1.6 $
+#     $Date: 2002-06-11 15:16:43 $
+#     $Author: hjs $
+#     $Revision: 1.7 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -146,8 +146,8 @@ RESLIB1SRSFILES=\
 .INCLUDE : target.mk
 
 $(BIN)$/dateadd.rdb: $(ALLIDLFILES)
-    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    +$(IDLC) -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+    +$(REGMERGE) $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
 
