@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-06 08:52:49 $
+ *  last change: $Author: hdu $ $Date: 2000-11-16 14:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1359,7 +1359,7 @@ void Application::SetResourcePath( const XubString& rPath )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Falls er noch nicht existiert, dann anlegen
+    // if it doesn't exist create a new one
     if ( !pSVData->maAppData.mpResPath )
         pSVData->maAppData.mpResPath = new XubString( rPath );
     else
@@ -1375,6 +1375,35 @@ const XubString& Application::GetResourcePath()
         return *(pSVData->maAppData.mpResPath);
     else
         return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------
+
+const String& Application::GetFontPath()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( !pSVData->maAppData.mpFontPath )
+    {
+        if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
+            pSVData->maAppData.mpFontPath = new String( String::CreateFromAscii( pFontPath ) );
+    }
+
+    if( pSVData->maAppData.mpFontPath )
+        return *(pSVData->maAppData.mpFontPath);
+    return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------
+
+void Application::SetFontPath( const String& rPath )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // if it doesn't exist create a new one
+    if( !pSVData->maAppData.mpFontPath )
+        pSVData->maAppData.mpFontPath = new String( rPath );
+    else
+        *(pSVData->maAppData.mpFontPath) = rPath;
 }
 
 // -----------------------------------------------------------------------
