@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:33:24 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,9 @@ namespace dbaui
         struct DBTreeListUserData
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        xObject;
+                                            xObject;
             SbaTableQueryBrowser::EntryType eType;
+            String                          sAccessor;
 
             DBTreeListUserData();
             ~DBTreeListUserData();
