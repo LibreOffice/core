@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-30 11:27:42 $
+ *  last change: $Author: sj $ $Date: 2002-11-01 16:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,11 +242,14 @@ static const mso_AutoShape msoRectangle =
 static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =  // adjustment1 : 0 - 10800
 {
     { 0x2001, DFF_Prop_adjustValue, 1, 3 },
-    { 0x8000, 21600, 0, 0x400 }
+    { 0xa000, DFF_Prop_geoRight, 0, 0x400},
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x400},
+    { 0x6000, DFF_Prop_geoLeft, 0x400, 0 },
+    { 0x6000, DFF_Prop_geoTop, 0x400, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptRoundRectangleTextRect[] =
 {
-    { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I } }
+    { { 3 MSO_I, 4 MSO_I }, { 1 MSO_I, 2 MSO_I } }
 };
 static const mso_AutoShape msoRoundRectangle =
 {
