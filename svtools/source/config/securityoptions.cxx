@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-12-03 10:43:21 $
+ *  last change: $Author: os $ $Date: 2001-12-03 10:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,13 +684,13 @@ void SvtSecurityOptions::SetWarningEnabled( sal_Bool bSet )
 sal_Bool SvtSecurityOptions::IsConfirmationEnabled() const
 {
     MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->IsWarningEnabled();
+    return m_pDataContainer->IsConfirmationEnabled();
 }
 
 void SvtSecurityOptions::SetConfirmationEnabled( sal_Bool bSet )
 {
     MutexGuard aGuard( GetInitMutex() );
-    m_pDataContainer->SetWarningEnabled( bSet );
+    m_pDataContainer->SetConfirmationEnabled( bSet );
 }
 
 //*****************************************************************************************************************
