@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-06 12:03:21 $
+#   last change: $Author: obo $ $Date: 2004-08-12 09:07:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,8 @@ SHL4STDLIBS= \
             $(VOSLIB) \
             $(SALLIB) \
             $(JVMFWKLIB) \
-            $(ICUUCLIB)
+            $(ICUUCLIB)	\
+            $(AVMEDIALIB)	
 
 # --- Svx - DLL ----------
 
@@ -138,7 +139,8 @@ SHL1STDLIBS= \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
-            $(ICUUCLIB)
+            $(ICUUCLIB) \
+            $(AVMEDIALIB)	
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
@@ -191,7 +193,8 @@ SHL2STDLIBS= \
             $(CPPUHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
-            $(COMPHELPERLIB)
+            $(COMPHELPERLIB) \
+            $(AVMEDIALIB)	
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+=\
