@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTimeHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 #ifndef _WEBDAV_DATETIME_HELPER_HXX
 #define _WEBDAV_DATETIME_HELPER_HXX
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
+namespace com { namespace sun { namespace star { namespace util {
+    struct DateTime;
+} } } }
+
+namespace rtl {
+    class OUString;
+}
 
 namespace webdav_ucp
 {

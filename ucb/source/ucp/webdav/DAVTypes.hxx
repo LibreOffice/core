@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVTypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,19 @@
  *
  *
  ************************************************************************/
+
 #ifndef _DAVTYPES_HXX_
 #define _DAVTYPES_HXX_
 
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
 
 namespace webdav_ucp
 {
-
-enum Depth { ZERO = 0, ONE = 1, INFINITY = -1 };
-
 /* RFC 2518
 
 15.1 Class 1
@@ -96,32 +97,27 @@ struct DAVCapabilities
 {
     bool class1;
     bool class2;
-    bool executable;
+    bool executable; // supports "executable" property (introduced by mod_dav)
 
     DAVCapabilities() : class1( false ), class2( false ), executable( false ) {}
 };
 
-// Note: Uncomment the following if locking support is required
-/*
-enum LockScope { EXCLUSIVE = 0, SHARED };
+enum Depth { ZERO = 0, ONE = 1, INFINITY = -1 };
 
-enum LockType { WRITE = 0 };
+enum ProppatchOperation { PROPSET = 0, PROPREMOVE = 1 };
 
-struct LockEntry
+struct ProppatchValue
 {
-    LockScope scope;
-    LockType    type;
-};
+    ProppatchOperation       operation;
+    rtl::OUString            name;
+    com::sun::star::uno::Any value;
 
-struct Lock : public LockEntry
-{
-    rtl::OUString   uri;
-    Depth           depth;
-    rtl::OUString   owner;
-    long            timeout;
-    com::sun::star::uno::Sequence< rtl::OUString >  locktoken;
+    ProppatchValue( const ProppatchOperation o,
+                    const rtl::OUString & n,
+                    const com::sun::star::uno::Any & v )
+    : operation( o ), name( n ), value( v ) {}
 };
-*/
 
 }; // namespace webdav_ucp
+
 #endif // _DAVTYPES_HXX_

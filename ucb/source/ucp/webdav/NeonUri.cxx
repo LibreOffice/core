@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-20 15:06:26 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,8 @@ static rtl::OUString decode(sal_Unicode const * pBegin,
 
 }
 
-uri NeonUri::sUriDefaults = { "http", NULL, DEFAULT_HTTP_PORT, NULL };
+uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL };
+uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL };
 
 // -------------------------------------------------------------------
 // Constructor
@@ -621,11 +622,17 @@ NeonUri::NeonUri( const OUString & inUri )
     if ( inUri.getLength() <= 0 )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
-    OString theInputUri (
-        inUri.getStr(), inUri.getLength(), RTL_TEXTENCODING_UTF8);
+    OString theInputUri(
+        inUri.getStr(), inUri.getLength(), RTL_TEXTENCODING_UTF8 );
+
+    OString aProtocol
+        = theInputUri.copy( 0, RTL_CONSTASCII_LENGTH( "https:" ) );
 
     uri theUri;
-    if ( uri_parse( theInputUri.getStr(), &theUri, &sUriDefaults ) != 0 )
+    uri* pUriDefs = aProtocol.equalsIgnoreCase( "https:" )
+                  ? &sUriDefaultsHTTPS : &sUriDefaultsHTTP;
+
+    if ( uri_parse( theInputUri.getStr(), &theUri, pUriDefs ) != 0 )
     {
         uri_free( &theUri );
         throw DAVException( DAVException::DAV_INVALID_ARG );
@@ -676,12 +683,7 @@ void NeonUri::calculateURI ()
 
 ::rtl::OUString NeonUri::GetPathBaseNameUnescaped () const
 {
-    OUString aName = GetPathBaseName();
-    return webdav_ucp_impl::decode( aName.getStr(),
-                                    aName.getStr() + aName.getLength(),
-                                    '%',
-                                    webdav_ucp_impl::DECODE_WITH_CHARSET,
-                                    RTL_TEXTENCODING_UTF8 );
+    return unescape( GetPathBaseName() );
 }
 
 ::rtl::OUString NeonUri::GetPathDirName () const
@@ -718,5 +720,15 @@ OUString NeonUri::escapeSegment( const OUString& segment )
                                         webdav_ucp_impl::ENCODE_ALL,
                                         RTL_TEXTENCODING_UTF8,
                                           false);
+}
+
+// static
+OUString NeonUri::unescape( const OUString& string )
+{
+    return webdav_ucp_impl::decode( string.getStr(),
+                                    string.getStr() + string.getLength(),
+                                    '%',
+                                    webdav_ucp_impl::DECODE_WITH_CHARSET,
+                                    RTL_TEXTENCODING_UTF8 );
 }
 

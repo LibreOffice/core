@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:57:53 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,25 +58,42 @@
  *
  *
  ************************************************************************/
+
 #ifndef _DAVRESOURCE_HXX_
 #define _DAVRESOURCE_HXX_
 
 #include <vector>
+
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
 
 namespace webdav_ucp
 {
 
-class DAVResource
+struct DAVResource
 {
-    public:
-        ::rtl::OUString uri;
-        std::vector < com::sun::star::beans::PropertyValue > properties;
+    ::rtl::OUString uri;
+    std::vector < com::sun::star::beans::PropertyValue > properties;
 
-    public:
-        DAVResource(const ::rtl::OUString & inUri );
+    DAVResource( const ::rtl::OUString & inUri ) : uri( inUri ) {}
+};
+
+struct DAVResourceInfo
+{
+    ::rtl::OUString uri;
+    std::vector < ::rtl::OUString > properties;
+
+    DAVResourceInfo( const ::rtl::OUString & inUri ) : uri( inUri ) {}
 };
 
 }; // namespace webdav_ucp
+
 #endif // _DAVRESOURCE_HXX_

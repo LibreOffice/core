@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef _WEBDAV_UCP_PROVIDER_HXX
 #define _WEBDAV_UCP_PROVIDER_HXX
 
+#include <hash_set>
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+
 #ifndef _DAVSESSIONFACTORY_HXX_
 #include "DAVSessionFactory.hxx"
 #endif
@@ -70,7 +76,9 @@
 #include <ucbhelper/providerhelper.hxx>
 #endif
 
-#define HTTP_SUPPORTED
+#ifndef _WEBDAV_UCP_PROPERTYMAP_HXX
+#include "PropertyMap.hxx"
+#endif
 
 namespace webdav_ucp {
 
@@ -98,13 +106,7 @@ namespace webdav_ucp {
 #define HTTP_CONTENT_TYPE \
                 "application/" HTTP_URL_SCHEME "-content"
 
-#ifdef HTTP_SUPPORTED
-#define WEBDAV_CONTENT_TYPE     HTTP_CONTENT_TYPE
-#else
-#define WEBDAV_CONTENT_TYPE \
-                "application/" WEBDAV_URL_SCHEME "-content"
-#endif
-
+#define WEBDAV_CONTENT_TYPE    HTTP_CONTENT_TYPE
 #define WEBDAV_COLLECTION_TYPE \
                 "application/" WEBDAV_URL_SCHEME "-collection"
 
@@ -112,7 +114,8 @@ namespace webdav_ucp {
 
 class ContentProvider : public ::ucb::ContentProviderImplHelper
 {
-    DAVSessionFactory m_aDAVSessionFactory;
+    DAVSessionFactory   m_aDAVSessionFactory;
+    PropertyMap *       m_pProps;
 
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
@@ -143,6 +146,12 @@ public:
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.
     //////////////////////////////////////////////////////////////////////
+
+    DAVSessionFactory* getDAVSessionFactory() { return &m_aDAVSessionFactory; }
+
+    bool getProperty( const ::rtl::OUString & rPropName,
+                      ::com::sun::star::beans::Property & rProp,
+                      bool bStrict = false );
 };
 
 }

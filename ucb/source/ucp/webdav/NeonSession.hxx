@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-16 08:14:51 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,22 @@
  *
  *
  ************************************************************************/
+
 #ifndef _NEONSESSION_HXX_
 #define _NEONSESSION_HXX_
 
-#include "DAVSession.hxx"
-#include "NeonTypes.hxx"
-#include <osl/mutex.hxx>
 #include <vector>
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+#ifndef _DAVSESSION_HXX_
+#include "DAVSession.hxx"
+#endif
+#ifndef _NEONTYPES_HXX_
+#include "NeonTypes.hxx"
+#endif
 
 namespace webdav_ucp
 {
@@ -73,6 +82,7 @@ namespace webdav_ucp
 // NeonSession
 // A DAVSession implementation using the neon/expat library
 // -------------------------------------------------------------------
+
 class NeonSession : public DAVSession
 {
     private:
@@ -82,24 +92,24 @@ class NeonSession : public DAVSession
         sal_Int32               mPort;
         sal_Int32               mProxyPort;
         HttpSession *           mHttpSession;
-
-        // Authentication stuff
         DAVAuthListener *       mListener;
         com::sun::star::uno::Reference<
          com::sun::star::ucb::XCommandEnvironment > mEnv;
-
         DAVSessionFactory *     m_pSessionFactory;
-
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *    mNeonLockSession;
 
         static sal_Bool         sSockInited;
 
+        rtl::OUString mPrevUserName;
+        rtl::OUString mPrevPassWord;
+
     public:
         NeonSession( DAVSessionFactory* psessionFactory,
                      const rtl::OUString& inUri,
-                     const ProxyConfig& rProxyCfg );
-        virtual ~NeonSession( );
+                     const ProxyConfig& rProxyCfg )
+            throw ( DAVException );
+        virtual ~NeonSession();
 
 
         // DAVSession methods
@@ -108,87 +118,107 @@ class NeonSession : public DAVSession
         virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener);
         virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener);
 
-        virtual void OPTIONS( const ::rtl::OUString &  inUri,
+        virtual void OPTIONS( const ::rtl::OUString &  inPath,
                               DAVCapabilities & outCapabilities,
                               const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                                 throw( DAVException );
+            throw ( DAVException );
 
-        virtual void PROPFIND( const ::rtl::OUString &              inUri,
-                                  const Depth                           inDepth,
-                                  const std::vector< ::rtl::OUString >& inPropNames,
-                                  std::vector< DAVResource > &          ioResources,
+        // allprop & named
+        virtual void PROPFIND( const ::rtl::OUString &                inPath,
+                                  const Depth                             inDepth,
+                                  const std::vector< ::rtl::OUString > & inPropNames,
+                                  std::vector< DAVResource > &            ioResources,
                                const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                                 throw( DAVException );
+            throw ( DAVException );
+
+        // propnames
+        virtual void PROPFIND( const ::rtl::OUString &         inPath,
+                               const Depth                     inDepth,
+                               std::vector< DAVResourceInfo >& ioResInfo,
+                               const com::sun::star::uno::Reference<
+                                 com::sun::star::ucb::XCommandEnvironment >& inEnv )
+            throw ( DAVException );
+
+        virtual void PROPPATCH( const ::rtl::OUString &               inPath,
+                                 const std::vector< ProppatchValue > & inValues,
+                                   const com::sun::star::uno::Reference<
+                                     com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        throw( DAVException );
 
         virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-                        GET( const ::rtl::OUString & inUri,
+                        GET( const ::rtl::OUString & inPath,
                              const com::sun::star::uno::Reference<
                               com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                                throw( DAVException );
+            throw ( DAVException );
 
-        virtual void GET( const ::rtl::OUString &               inUri,
+        virtual void GET( const ::rtl::OUString &               inPath,
                          com::sun::star::uno::Reference<
                           com::sun::star::io::XOutputStream > & ioOutputStream,
                          const com::sun::star::uno::Reference<
                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                                throw( DAVException );
+            throw ( DAVException );
 
 
-        virtual void PUT( const ::rtl::OUString &               inUri,
-                          com::sun::star::uno::Reference<
+        virtual void PUT( const ::rtl::OUString &               inPath,
+                          const com::sun::star::uno::Reference<
                          com::sun::star::io::XInputStream > &   inInputStream,
                         const com::sun::star::uno::Reference<
                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                                throw( DAVException );
+            throw ( DAVException );
 
-        virtual void MKCOL( const ::rtl::OUString & inUri,
+        virtual void MKCOL( const ::rtl::OUString & inPath,
                             const com::sun::star::uno::Reference<
                              com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                              throw( DAVException );
+            throw ( DAVException );
 
-        virtual void COPY( const ::rtl::OUString &  inSource,
-                              const ::rtl::OUString &   inDestination,
+        virtual void COPY( const ::rtl::OUString &  inSourceURL,
+                              const ::rtl::OUString &   inDestinationURL,
                            const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment >& inEnv,
                               sal_Bool                  inOverWrite )
-                                throw( DAVException );
+            throw ( DAVException );
 
-        virtual void MOVE( const ::rtl::OUString &  inSource,
-                              const ::rtl::OUString &   inDestination,
+        virtual void MOVE( const ::rtl::OUString &  inSourceURL,
+                              const ::rtl::OUString &   inDestinationURL,
                            const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment >& inEnv,
                               sal_Bool                  inOverWrite )
-                                throw( DAVException );
+            throw ( DAVException );
 
-        virtual void DESTROY( const ::rtl::OUString & inUri,
+        virtual void DESTROY( const ::rtl::OUString & inPath,
                               const com::sun::star::uno::Reference<
                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                                throw( DAVException );
+            throw ( DAVException );
 
         // Note: Uncomment the following if locking support is required
         /*
         virtual void LOCK (const Lock & inLock,
                            const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                             throw ( DAVException );
+            throw ( DAVException );
 
         virtual void UNLOCK (const Lock & inLock,
                              const com::sun::star::uno::Reference<
                               com::sun::star::ucb::XCommandEnvironment >& inEnv )
-                               throw ( DAVException );
+            throw ( DAVException );
         */
 
     private:
         // Initialise "Neon sockets"
-        void            Init( void );
+        void Init( void )
+            throw ( DAVException );
+
+        void HandleError( int nError )
+            throw ( DAVException );
 
         // Create a Neon session for server at supplied host & port
         HttpSession *   CreateSession( const ::rtl::OString & inHostName,
                                        int inPort,
                                         const ::rtl::OString & inProxyName,
-                                       int inProxyPort );
+                                       int inProxyPort )
+            throw( DAVException );
 
         // A simple Neon http_block_reader for use with a http GET method
         // in conjunction with an XInputStream
@@ -203,11 +233,12 @@ class NeonSession : public DAVSession
                                    size_t       inLen );
 
         // Note: Uncomment the following if locking support is required
-        // void         Lockit( const Lock & inLock, bool inLockit );
+        // void         Lockit( const Lock & inLock, bool inLockit )
+        //  throw ( DAVException );
 
+        // Authentication callback.
         static int      NeonAuth( void *        inUserData,
                                   const char *  inRealm,
-                                  const char *  inHostName,
                                   char **       inUserName,
                                   char **       inPassWord );
 
@@ -221,4 +252,5 @@ class NeonSession : public DAVSession
 };
 
 }; // namespace_ucp
+
 #endif // _NEONSESSION_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:12:33 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,23 +65,36 @@
 
  *************************************************************************/
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
-#include <com/sun/star/beans/XPropertyAccess.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFOCHANGE_HPP_
+#include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFOCHANGEEVENT_HPP_
+#include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -89,34 +102,16 @@
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
-#include <com/sun/star/ucb/NameClash.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
-#include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_UCB_XPERSISTENTPROPERTYSET_HPP_
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
 #endif
@@ -133,17 +128,14 @@
 #ifndef _WEBDAV_UCP_RESULTSET_HXX
 #include "webdavresultset.hxx"
 #endif
-
-#ifndef _WEBDAV_SESSION_HXX
-#include "DAVSession.hxx"
+#ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
+#include "ContentProperties.hxx"
 #endif
-
-#include "DateTimeHelper.hxx"
-
+#ifndef _NEONURI_HXX_
 #include "NeonUri.hxx"
-
-#ifndef _WEBDAV_UCP_AUTHINTERACTION_HXX
-#include "authinteraction.hxx"
+#endif
+#ifndef _UCBDEADPROPERTYVALUE_HXX_
+#include "UCBDeadPropertyValue.hxx"
 #endif
 
 using namespace com::sun::star::container;
@@ -151,7 +143,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -161,135 +152,6 @@ using namespace rtl;
 using namespace webdav_ucp;
 
 //=========================================================================
-
-class AuthListener : public DAVAuthListener
-{
-  virtual int authenticate(const ::rtl::OUString & inRealm,
-               const ::rtl::OUString & inHostName,
-               ::rtl::OUStringBuffer & inUserName,
-               ::rtl::OUStringBuffer & inPassWord,
-               const com::sun::star::uno::Reference<
-                   com::sun::star::ucb::XCommandEnvironment >& Environment);
-};
-
-//=========================================================================
-// virtual
-int AuthListener::authenticate( const ::rtl::OUString & inRealm,
-                                const ::rtl::OUString & inHostName,
-                                ::rtl::OUStringBuffer & inUserName,
-                                ::rtl::OUStringBuffer & inPassWord,
-                                const com::sun::star::uno::Reference<
-                                    com::sun::star::ucb::XCommandEnvironment >&
-                                        Environment )
-{
-    if ( Environment.is() )
-    {
-        Reference< com::sun::star::task::XInteractionHandler > xIH
-            = Environment->getInteractionHandler();
-        if ( xIH.is() )
-        {
-            vos::ORef< InteractionRequest_Impl > xRequest
-                = new InteractionRequest_Impl( inHostName,
-                                               inRealm,
-                                               inUserName,
-                                               inPassWord );
-
-            xIH->handle( xRequest.getBodyPtr() );
-
-            vos::ORef< InteractionContinuation_Impl > xSelection
-                = xRequest->getSelection();
-
-            if ( xSelection.isValid() )
-            {
-                Reference< XInteractionAbort > xAbort(
-                                        xSelection.getBodyPtr(), UNO_QUERY );
-                if ( !xAbort.is() )
-                {
-                    // okay.
-                    return 0;
-                }
-            }
-        }
-    }
-    // abort.
-    return -1;
-}
-
-AuthListener webdavAuthListener;
-
-//=========================================================================
-
-void ContentProperties::setValues(DAVResource& resource)
-{
-  // title
-  NeonUri aURI( resource.uri );
-  aTitle = aURI.GetPathBaseNameUnescaped();
-  aEscapedTitle = aURI.GetPathBaseName();
-
-  // other required properties (default values)
-  bIsDocument  =  sal_True;
-  bIsFolder  =  sal_False;
-
-  std::vector< com::sun::star::beans::PropertyValue >::iterator it;
-  for ( it=resource.properties.begin(); it!=resource.properties.end(); ++it) {
-//    if ( (*it) == 0 ) {
-//      continue;
-//    }
-
-    if ( (*it).Name.equals(DAVProperties::CREATIONDATE) )  {
-      (*it).Value >>= creationdate;
-
-      // Map the DAV:creationdate to UCP:DateCreated
-      //
-      DateTimeHelper::convert (creationdate, dateCreated);
-    }
-    else if ( (*it).Name.equals(DAVProperties::DISPLAYNAME) ) {
-      (*it).Value >>= displayname;
-    }
-    else if ( (*it).Name.equals(DAVProperties::GETCONTENTLANGUAGE) ) {
-      (*it).Value >>= getcontentlanguage;
-    }
-    else if ( (*it).Name.equals(DAVProperties::GETCONTENTLENGTH) ) {
-      (*it).Value >>= getcontentlength;
-
-      // Map the DAV:getcontentlength to UCP:Size
-      //
-      size = getcontentlength.toInt64 ();
-    }
-    else if ( (*it).Name.equals(DAVProperties::GETCONTENTTYPE) ) {
-      (*it).Value >>= getcontenttype;
-    }
-    else if ( (*it).Name.equals(DAVProperties::GETETAG) ) {
-      (*it).Value >>= getetag;
-    }
-    else if ( (*it).Name.equals(DAVProperties::GETLASTMODIFIED) ) {
-      (*it).Value >>= getlastmodified;
-
-      // Map the DAV:getlastmodified to UCP:DateModified
-      //
-      DateTimeHelper::convert (getlastmodified, dateModified);
-    }
-    else if ( (*it).Name.equals(DAVProperties::LOCKDISCOVERY) ) {
-      (*it).Value >>= lockdiscovery;
-    }
-    else if ( (*it).Name.equals(DAVProperties::RESOURCETYPE) ) {
-      (*it).Value >>= resourcetype;
-      if (resourcetype.getLength()>0) {
-        bIsDocument =  sal_False;
-        bIsFolder   =  sal_True;
-      }
-    }
-    else if ( (*it).Name.equals(DAVProperties::SOURCE) ) {
-      (*it).Value >>= source;
-    }
-    else if ( (*it).Name.equals(DAVProperties::SUPPORTEDLOCK) ) {
-      (*it).Value >>= supportedlock;
-    }
-  }
-}
-
-
-//=========================================================================
 //=========================================================================
 //
 // Content Implementation.
@@ -297,80 +159,56 @@ void ContentProperties::setValues(DAVResource& resource)
 //=========================================================================
 //=========================================================================
 
-
 //=========================================================================
 // ctr for content on an existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-                  ::ucb::ContentProviderImplHelper* pProvider,
-                  const Reference< XContentIdentifier >& Identifier,
+                    ContentProvider* pProvider,
+                    const Reference< XContentIdentifier >& Identifier,
                   DAVSessionFactory* pSessionFactory )
   throw ( ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
-  _transient( sal_False ),
-  _upToDate( sal_False ),
-#ifdef HTTP_SUPPORTED
-  _davResource( sal_False )
-#else
-  _davResource( sal_True )
-#endif
+  m_pProvider( pProvider ),
+  m_bTransient( sal_False ),
+  m_bCollection( sal_False )
 {
-    if ( !initpath() )
-    {
-        VOS_ENSURE( sal_False, "invalid URL" );
-        throw ContentCreationException();
-    }
-
     try
     {
-        // set the webdav session
-        _pWebdavSession = pSessionFactory->createDAVSession(
-                                Identifier->getContentIdentifier(), rxSMgr );
-        _pWebdavSession->setServerAuthListener( &webdavAuthListener );
+        m_aResAccess = DAVResourceAccess(
+            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() );
     }
-    catch ( DAVException & )
+    catch ( DAVException const & )
     {
-        VOS_ENSURE( sal_False, "createDAVSession : DAVException" );
-        throw ContentCreationException();
+          throw ContentCreationException();
     }
-}
 
+    NeonUri aURI( Identifier->getContentIdentifier() );
+       m_aEscapedTitle = aURI.GetPathBaseName();
+}
 
 //=========================================================================
 // ctr for content on an non-existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-                  ::ucb::ContentProviderImplHelper* pProvider,
-                  const Reference< XContentIdentifier >& Identifier,
-                  ::vos::ORef< DAVSession > pSession,
-                  sal_Bool isCollection )
+                    ContentProvider* pProvider,
+                    const Reference< XContentIdentifier >& Identifier,
+                  DAVSessionFactory* pSessionFactory,
+                    sal_Bool isCollection )
   throw ( ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
-  _transient( sal_True ),
-  _upToDate( sal_False ),
-#ifdef HTTP_SUPPORTED
-  _davResource( sal_False ),
-#else
-  _davResource( sal_True ),
-#endif
-  _pWebdavSession( pSession )
+  m_pProvider( pProvider ),
+  m_bTransient( sal_True ),
+  m_bCollection( isCollection )
 {
-    if ( !initpath() )
+    try
     {
-        VOS_ENSURE( sal_False, "invalid URL" );
-        throw ContentCreationException();
+        m_aResAccess = DAVResourceAccess(
+            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() );
+    }
+    catch ( DAVException const & )
+    {
+          throw ContentCreationException();
     }
 
-    // this is not an existing Content, let's set some props anyway ...
-
-    if ( isCollection )
-    {
-        m_aProps.bIsDocument = sal_False;
-        m_aProps.bIsFolder   = sal_True;
-    }
-    else
-    {
-        m_aProps.bIsDocument = sal_True;
-        m_aProps.bIsFolder   = sal_False;
-    }
+    // Do not set m_aEscapedTitle here! Content::insert relays on this!!!
 }
 
 //=========================================================================
@@ -405,16 +243,15 @@ void SAL_CALL Content::release()
 Any SAL_CALL Content::queryInterface( const Type & rType )
     throw ( RuntimeException )
 {
-    // Note: isFolder ma yrequire network activities! So call it only
+    // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
-    Any aRet = cppu::queryInterface( rType,
-                                     static_cast< XContentCreator * >( this ) );
+      Any aRet = cppu::queryInterface( rType,
+                                      static_cast< XContentCreator * >( this ) );
     if ( aRet.hasValue() )
         return isFolder( Reference< XCommandEnvironment >() ) ? aRet : Any();
 
-    return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
+      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
-
 
 //=========================================================================
 //
@@ -429,48 +266,47 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 Sequence< Type > SAL_CALL Content::getTypes()
     throw( RuntimeException )
 {
-  static OTypeCollection* pCollection = NULL;
+      static OTypeCollection* pCollection = NULL;
 
-  if ( !pCollection )
-    {
-      osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
       if ( !pCollection )
     {
-      if ( isFolder( Reference< XCommandEnvironment >() ) )
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+          if ( !pCollection )
         {
-          static OTypeCollection aCollection(
-                         CPPU_TYPE_REF( XTypeProvider ),
-                         CPPU_TYPE_REF( XServiceInfo ),
-                         CPPU_TYPE_REF( XComponent ),
-                         CPPU_TYPE_REF( XContent ),
-                         CPPU_TYPE_REF( XCommandProcessor ),
-                         CPPU_TYPE_REF( XPropertiesChangeNotifier ),
-                         CPPU_TYPE_REF( XCommandInfoChangeNotifier ),
-                         CPPU_TYPE_REF( XPropertyContainer ),
-                         CPPU_TYPE_REF( XPropertySetInfoChangeNotifier ),
-                         CPPU_TYPE_REF( XChild ),
-                         CPPU_TYPE_REF( XContentCreator ) );    // !!
-          pCollection = &aCollection;
-        }
-      else
-        {
-          static OTypeCollection aCollection(
-                         CPPU_TYPE_REF( XTypeProvider ),
-                         CPPU_TYPE_REF( XServiceInfo ),
-                         CPPU_TYPE_REF( XComponent ),
-                         CPPU_TYPE_REF( XContent ),
-                         CPPU_TYPE_REF( XCommandProcessor ),
-                         CPPU_TYPE_REF( XPropertiesChangeNotifier ),
-                         CPPU_TYPE_REF( XCommandInfoChangeNotifier ),
-                         CPPU_TYPE_REF( XPropertyContainer ),
-                         CPPU_TYPE_REF( XPropertySetInfoChangeNotifier ),
-                         CPPU_TYPE_REF( XChild ) );
-          pCollection = &aCollection;
+              if ( isFolder( Reference< XCommandEnvironment >() ) )
+            {
+                  static OTypeCollection aCollection(
+                                 CPPU_TYPE_REF( XTypeProvider ),
+                                 CPPU_TYPE_REF( XServiceInfo ),
+                                 CPPU_TYPE_REF( XComponent ),
+                                 CPPU_TYPE_REF( XContent ),
+                                 CPPU_TYPE_REF( XCommandProcessor ),
+                                 CPPU_TYPE_REF( XPropertiesChangeNotifier ),
+                                 CPPU_TYPE_REF( XCommandInfoChangeNotifier ),
+                                 CPPU_TYPE_REF( XPropertyContainer ),
+                                 CPPU_TYPE_REF( XPropertySetInfoChangeNotifier ),
+                                 CPPU_TYPE_REF( XChild ),
+                                 CPPU_TYPE_REF( XContentCreator ) );    // !!
+                  pCollection = &aCollection;
+            }
+              else
+            {
+                  static OTypeCollection aCollection(
+                                 CPPU_TYPE_REF( XTypeProvider ),
+                                 CPPU_TYPE_REF( XServiceInfo ),
+                                 CPPU_TYPE_REF( XComponent ),
+                                 CPPU_TYPE_REF( XContent ),
+                                 CPPU_TYPE_REF( XCommandProcessor ),
+                                 CPPU_TYPE_REF( XPropertiesChangeNotifier ),
+                                 CPPU_TYPE_REF( XCommandInfoChangeNotifier ),
+                                 CPPU_TYPE_REF( XPropertyContainer ),
+                                 CPPU_TYPE_REF( XPropertySetInfoChangeNotifier ),
+                                 CPPU_TYPE_REF( XChild ) );
+                  pCollection = &aCollection;
+            }
         }
     }
-    }
-
-  return (*pCollection).getTypes();
+      return (*pCollection).getTypes();
 }
 
 //=========================================================================
@@ -507,8 +343,7 @@ Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 OUString SAL_CALL Content::getContentType()
     throw( RuntimeException )
 {
-//  if ( isFolder( Reference< XCommandEnvironment >() ) )
-    if ( m_aProps.bIsFolder )
+    if ( isFolder( Reference< XCommandEnvironment >() ) )
         return OUString::createFromAscii( WEBDAV_COLLECTION_TYPE );
 
     return OUString::createFromAscii( WEBDAV_CONTENT_TYPE );
@@ -527,77 +362,83 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                    XCommandEnvironment >& Environment )
     throw( Exception, CommandAbortedException, RuntimeException )
 {
-    Any aRet;
+      Any aRet;
 
-    if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
+    if ( aCommand.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( "getPropertyValues" ) ) )
     {
-        //////////////////////////////////////////////////////////////////
-        // getPropertyValues
-        //////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////
+          // getPropertyValues
+          //////////////////////////////////////////////////////////////////
 
-        Sequence< Property > Properties;
-        if ( !( aCommand.Argument >>= Properties ) )
+          Sequence< Property > Properties;
+          if ( !( aCommand.Argument >>= Properties ) )
         {
-            VOS_ENSURE( sal_False, "Wrong argument type!" );
-            return Any();
+              OSL_ENSURE( sal_False, "Wrong argument type!" );
+              return Any();
         }
 
-        aRet <<= getPropertyValues( Properties, Environment );
+          aRet <<= getPropertyValues( Properties, Environment );
     }
-    else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
+      else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "setPropertyValues" ) ) )
     {
-        //////////////////////////////////////////////////////////////////
-        // setPropertyValues
-        //////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////
+          // setPropertyValues
+          //////////////////////////////////////////////////////////////////
 
-        Sequence< PropertyValue > aProperties;
-        if ( !( aCommand.Argument >>= aProperties ) )
+          Sequence< PropertyValue > aProperties;
+          if ( !( aCommand.Argument >>= aProperties ) )
         {
-            VOS_ENSURE( sal_False, "Wrong argument type!" );
-            return Any();
+              OSL_ENSURE( sal_False, "Wrong argument type!" );
+              return Any();
         }
 
-        if ( !aProperties.getLength() )
+          if ( !aProperties.getLength() )
         {
-            VOS_ENSURE( sal_False, "No properties!" );
-            return Any();
+              OSL_ENSURE( sal_False, "No properties!" );
+              return Any();
         }
 
-        setPropertyValues( aProperties, Environment );
+          setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
+      else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
+       {
+          //////////////////////////////////////////////////////////////////
+          // getPropertySetInfo
+          //////////////////////////////////////////////////////////////////
+
+          // Note: Implemented by base class.
+          aRet <<= getPropertySetInfo( Environment,
+                                     sal_False /* don't cache data */ );
+       }
+      else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "getCommandInfo" ) ) )
+       {
+          //////////////////////////////////////////////////////////////////
+          // getCommandInfo
+          //////////////////////////////////////////////////////////////////
+
+          // Note: Implemented by base class.
+          aRet <<= getCommandInfo( Environment, sal_False );
+       }
+    else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "open" ) ) )
     {
         //////////////////////////////////////////////////////////////////
-        // getPropertySetInfo
-        //////////////////////////////////////////////////////////////////
+          // open
+          //////////////////////////////////////////////////////////////////
 
-        // Note: Implemented by base class.
-        aRet <<= getPropertySetInfo( Environment, sal_False );
-    }
-    else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
-    {
-        //////////////////////////////////////////////////////////////////
-        // getCommandInfo
-        //////////////////////////////////////////////////////////////////
-
-        // Note: Implemented by base class.
-        aRet <<= getCommandInfo( Environment, sal_False );
-    }
-    else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
-    {
-        //////////////////////////////////////////////////////////////////
-        // open command
-        //////////////////////////////////////////////////////////////////
-
-        OpenCommandArgument2 aOpenCommand;
-        if ( aCommand.Argument >>= aOpenCommand )
+          OpenCommandArgument2 aOpenCommand;
+          if ( aCommand.Argument >>= aOpenCommand )
         {
             sal_Bool bOpenFolder =
                         ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
-                          ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
-                          ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
+                            ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
+                            ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
 
-            if ( bOpenFolder && isFolder( Environment ) )
+              if ( bOpenFolder && isFolder( Environment ) )
             {
                 // Open collection.
 
@@ -607,7 +448,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                         aOpenCommand,
                                                         Environment );
                 aRet <<= xSet;
-            }
+              }
 
             if ( aOpenCommand.Sink.is() )
             {
@@ -616,215 +457,177 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                 if ( ( aOpenCommand.Mode
                             == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
                      ( aOpenCommand.Mode
-                            == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+                             == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
                 {
                     // Currently(?) unsupported.
-                    throw CommandAbortedException();
+                      throw CommandAbortedException();
                 }
 
                 OUString aURL = m_xIdentifier->getContentIdentifier();
                 Reference< XOutputStream > xOut
-                    = Reference< XOutputStream >(aOpenCommand.Sink, UNO_QUERY );
+                      = Reference< XOutputStream >(aOpenCommand.Sink, UNO_QUERY );
                 if ( xOut.is() )
-                {
+                  {
                     // PUSH: write data
                     try
                     {
-                        _pWebdavSession->GET( _path, xOut, Environment );
+                          m_aResAccess.GET( xOut, Environment );
                     }
-                    catch ( DAVException & )
+                    catch ( DAVException const & )
                     {
-                        VOS_ENSURE( sal_False, "GET : DAVException" );
-                        throw CommandAbortedException();
+//                      OSL_ENSURE( sal_False, "GET : DAVException" );
+                          throw CommandAbortedException();
                     }
-                }
+                  }
                 else
-                {
+                  {
                     Reference< XActiveDataSink > xDataSink
-                        = Reference< XActiveDataSink >(
+                          = Reference< XActiveDataSink >(
                                                 aOpenCommand.Sink, UNO_QUERY );
-                    if ( xDataSink.is() )
+                      if ( xDataSink.is() )
                     {
-                        // PULL: wait for client read
-                        try
+                          // PULL: wait for client read
+                          try
                         {
                             Reference< XInputStream > xIn
-                                = _pWebdavSession->GET( _path, Environment );
+                                = m_aResAccess.GET( Environment );
                             xDataSink->setInputStream( xIn );
-                        }
+                          }
                         catch ( DAVException &)
                         {
-                            VOS_ENSURE( sal_False, "GET : DAVException" );
+//                          OSL_ENSURE( sal_False, "GET : DAVException" );
                             throw CommandAbortedException();
-                        }
+                          }
                     }
-                    else
+                      else
                     {
                         // Note: aOpenCommand.Sink may contain an XStream
                         //       implementation. Support for this type of
                         //       sink is optional...
-                        throw CommandAbortedException();
+                          throw CommandAbortedException();
                     }
-                }
-            }
+                  }
+              }
         }
-        else
+          else
         {
-            VOS_ENSURE( sal_False, "Content::execute - invalid parameter!" );
-            throw CommandAbortedException();
+              OSL_ENSURE( sal_False, "Content::execute - invalid parameter!" );
+              throw CommandAbortedException();
         }
     }
-  else if ( aCommand.Name.compareToAscii( "insert" ) == 0 )
+      else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
     {
-      //////////////////////////////////////////////////////////////////
-      // insert
-      //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+          // insert
+          //////////////////////////////////////////////////////////////////
 
-      InsertCommandArgument arg;
-      aCommand.Argument >>= arg;
-      insert(arg.Data,arg.ReplaceExisting, Environment);
+          InsertCommandArgument arg;
+          if ( !( aCommand.Argument >>= arg ) )
+        {
+              OSL_ENSURE( sal_False, "Wrong argument type!" );
+              return Any();
+        }
+
+          insert( arg.Data, arg.ReplaceExisting, Environment );
     }
-  else if (
-       ( aCommand.Name.compareToAscii( "delete" ) == 0 )
-       || ( aCommand.Name.compareToAscii( "DELETE" ) == 0 )
-       )
+      else if ( aCommand.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
     {
-      //////////////////////////////////////////////////////////////////
-      // delete
-      //////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////
+          // delete
+          //////////////////////////////////////////////////////////////////
 
-      sal_Bool bDeletePhysical = sal_False;
-      aCommand.Argument >>= bDeletePhysical;
+          sal_Bool bDeletePhysical = sal_False;
+          aCommand.Argument >>= bDeletePhysical;
 
 //  KSO: Ignore parameter and destroy the content, if you don't support
 //       putting objects into trashcan. ( Since we do not have a trash can
-//       service yet (src603), you actually have no other coice. )
-//      if (bDeletePhysical){
-    try {
-      _pWebdavSession->DESTROY (_path, Environment);
-    } catch (DAVException e) {
-      VOS_ENSURE( sal_False, "DELETE : DAVException" );
-      throw CommandAbortedException();
-    }
+//       service yet (src603), you actually have no other choice. )
+//      if ( bDeletePhysical )
+//      {
+            try
+            {
+                  m_aResAccess.DESTROY( Environment );
+            }
+            catch ( DAVException & )
+            {
+                  OSL_ENSURE( sal_False, "DESTROY : DAVException" );
+                  throw CommandAbortedException();
+            }
 //      }
-      destroy( bDeletePhysical );
 
-      // Remove own and all children's Additional Core Properties.
-      removeAdditionalPropertySet( sal_True );
+        // Propagate destruction.
+        destroy( bDeletePhysical );
+
+// DAV resources store all additional props on server!
+//      // Remove own and all children's Additional Core Properties.
+//      removeAdditionalPropertySet( sal_True );
     }
-  else if (aCommand.Name.compareToAscii( "transfer" ) == 0)
-    {
-        // This command transfers (copies/moves) an object from one location
-        // to another. It must be executed at the folder content representing
-        // the destination of the transfer operation.
-
-        // This is opposite of the WebDAV COPY/MOVE methods
-        // They operate on the source not the target
-        //
-        //  COPY /container/index.html HTTP/1.1
-        //  Host: www.foo.bar
-        //  Desitnation: http://www.foo.bar/othercontainer
-        //  Depth: Infinity
-        //
-        // @@@@ Does the TransferInfo::SourceURL have
-        //      the same scheme as this content
-        //
-        // @@@@ Does the TransferInfo::SourceURL have
-        //      the same host
-        //
-        // If the latter is true we can use the same
-        // DAV session. If not we either have to create
-        // a temporary new DAV session for the host source
-        // in question or obtain content for the source
-        //
-
-        // DELETE, COPY and MOVE are not atomic operations,
-        // unless the 'overwrite' option is set to false.
-        // Thus a WebDAV server will return a multi-status
-        // for the method in question saying what resource
-        // failed to be deleted, copied or moved.
-        // It is assumed that the operation is completely
-        // successful since the DAVSession interface does
-        // not yet return multi-status responses to these
-        // commands
-        //
+    else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "transfer" ) ) )
+      {
+        TransferInfo transferArgs;
+        if ( !( aCommand.Argument >>= transferArgs ) )
+            throw CommandAbortedException();
 
         if ( !isFolder( Environment ) )
-        {
-            throw CommandAbortedException();
-        }
-
-        TransferInfo transferArgs;
-        aCommand.Argument >>= transferArgs;
-
-        if (transferArgs.NameClash == NameClash::KEEP ||
-            transferArgs.NameClash == NameClash::RENAME )
-        {
             throw CommandAbortedException();
 
+        if ( transferArgs.NameClash == NameClash::KEEP ||
+             transferArgs.NameClash == NameClash::RENAME )
+        {
             // @@@ RENAME and KEEP are not directly implemented
-            // by WebDAV methods
+            // by WebDAV methods. KEEP is deprecated and it
+            // is okay to abort in this case.
+
+            throw CommandAbortedException();
         }
-
-        // @@@ This implementation of 'transfer' only works
-        //     if the source and target are the same scheme
-        //     and the same host
-        //
-        //     In addition just like 'delete' it assumes that
-        //     if the DAV method succeeded then all resources
-        //     were deleted, which is not the case with a
-        //     multi-status response
-        //
-        //     Overwrite is always set to false regardless of
-        //     NameClass value
-
 
         try
         {
-            NeonUri sourceURI (transferArgs.SourceURL);
-            NeonUri targetURI (m_xIdentifier->getContentIdentifier());
+            NeonUri sourceURI( transferArgs.SourceURL );
+            NeonUri targetURI( m_xIdentifier->getContentIdentifier() );
 
-#ifdef HTTP_SUPPORTED
             // Check scheme
             //
+            const OUString aHttpScheme
+                    = OUString::createFromAscii( HTTP_URL_SCHEME );
+            const OUString aDavScheme
+                    = OUString::createFromAscii( WEBDAV_URL_SCHEME );
+
             const OUString aScheme = sourceURI.GetScheme();
-            if ( !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
-                                                 WEBDAV_URL_SCHEME ) ) &&
-                 !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
-                                                 HTTP_URL_SCHEME ) ) &&
-                 !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
-                                                 HTTPS_URL_SCHEME ) ) )
-                throw InteractiveBadTransferURLException();
-#else
-            // Check scheme
-            //
-            const OUString aScheme = sourceURI.GetScheme();
-            if ( !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
-                                                 WEBDAV_URL_SCHEME ) ) )
-                throw InteractiveBadTransferURLException();
-#endif
-            sourceURI.SetScheme (OUString::createFromAscii ("http"));
-            targetURI.SetScheme (OUString::createFromAscii ("http"));
+            if ( aScheme.equalsIgnoreCase( aDavScheme ) )
+                sourceURI.SetScheme( aHttpScheme );
+            else
+            {
+                if ( !aScheme.equalsIgnoreCase( aHttpScheme ) &&
+                       !aScheme.equalsIgnoreCase(
+                        OUString::createFromAscii( HTTPS_URL_SCHEME ) ) )
+                    throw InteractiveBadTransferURLException();
+            }
+
+            if ( targetURI.GetScheme().equalsIgnoreCase( aDavScheme ) )
+                targetURI.SetScheme( aHttpScheme );
+
+            // @@@ This implementation of 'transfer' only works
+            //     if the source and target are located at same host.
+            //     (Neon does not support cross-server copy/move)
 
             // Check for same host
             //
-            if (sourceURI.GetHost ().getLength () &&
-                sourceURI.GetHost () != targetURI.GetHost ())
-            {
+            if ( sourceURI.GetHost().getLength() &&
+                 sourceURI.GetHost() != targetURI.GetHost() )
                 throw InteractiveBadTransferURLException();
-            }
 
-            if (!transferArgs.NewTitle.getLength ())
-            {
+            if ( !transferArgs.NewTitle.getLength() )
                 transferArgs.NewTitle = sourceURI.GetPathBaseNameUnescaped();
-            }
 
-            if (transferArgs.NewTitle.compareToAscii ("/") == 0)
-            {
+            if ( transferArgs.NewTitle.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "/" ) ) )
                 throw CommandAbortedException();
-            }
 
-            targetURI.AppendPath (transferArgs.NewTitle);
+            targetURI.AppendPath( transferArgs.NewTitle );
 
             OUString aTargetURL = m_xIdentifier->getContentIdentifier();
             if ( ( aTargetURL.lastIndexOf( '/' ) + 1 ) != aTargetURL.getLength() )
@@ -839,50 +642,49 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                 = new ::ucb::ContentIdentifier( m_xSMgr,
                                                 transferArgs.SourceURL );
 
-            if (transferArgs.MoveData == sal_True)
+            DAVResourceAccess aSourceAccess( m_xSMgr,
+                                             m_aResAccess.getSessionFactory(),
+                                             sourceURI.GetURI() );
+
+            if ( transferArgs.MoveData == sal_True )
             {
-                    // Note: The static cast is okay here, because its sure that
+                // Note: The static cast is okay here, because its sure that
                 //       m_xProvider is always the WebDAVContentProvider.
                 vos::ORef< Content > xSource
                     = static_cast< Content * >(
                         m_xProvider->queryContent( xId ).get() );
 
-                _pWebdavSession->MOVE (sourceURI.GetPath (), targetURI.GetURI (), Environment);
-                // @@@ Should check for resources that could not be moved
-                //     (due to source access or target overwrite) and send
-                //     this information through the interaction handler.
-
-                // @@@ Existing content should be checked to see if it needs
-                //     to be deleted at the source
-
-                // @@@ Existing content should be checked to see if it has
-                //     been overwritten at the target
+                aSourceAccess.MOVE( sourceURI.GetPath(),
+                                       targetURI.GetURI(),
+                                       transferArgs.NameClash
+                                           == NameClash::OVERWRITE,
+                                       Environment );
 
                 if ( xSource.isValid() )
                 {
-                    // Destroy source content
+                    // Propagate destruction to listeners.
                     xSource->destroy( sal_True );
                 }
 
-                // Rename own and all children's Additional Core Properties.
-                renameAdditionalPropertySet( xId->getContentIdentifier(),
-                                             xTargetId->getContentIdentifier(),
-                                             sal_True );
+// DAV resources store all additional props on server!
+//              // Rename own and all children's Additional Core Properties.
+//              renameAdditionalPropertySet( xId->getContentIdentifier(),
+//                                           xTargetId->getContentIdentifier(),
+//                                           sal_True );
             }
             else
             {
-                _pWebdavSession->COPY (sourceURI.GetPath (), targetURI.GetURI (), Environment);
-                // @@@ Should check for resources that could not be copied
-                //     (due to source access or target overwrite) and send
-                //     this information through the interaction handler
+                aSourceAccess.COPY( sourceURI.GetPath(),
+                                       targetURI.GetURI(),
+                                       transferArgs.NameClash
+                                           == NameClash::OVERWRITE,
+                                       Environment );
 
-                // @@@ Existing content should be checked to see if it has
-                //     been overwritten at the target
-
-                // Copy own and all children's Additional Core Properties.
-                copyAdditionalPropertySet( xId->getContentIdentifier(),
-                                           xTargetId->getContentIdentifier(),
-                                           sal_True );
+// DAV resources store all additional props on server!
+//              // Copy own and all children's Additional Core Properties.
+//              copyAdditionalPropertySet( xId->getContentIdentifier(),
+//                                         xTargetId->getContentIdentifier(),
+//                                         sal_True );
             }
 
             // Note: The static cast is okay here, because its sure that
@@ -891,62 +693,25 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                 = static_cast< Content * >(
                         m_xProvider->queryContent( xTargetId ).get() );
 
-            if ( xTarget.isValid() )
-            {
-                // Announce transfered content in its new folder.
-                xTarget->inserted();
-            }
+            // Announce transfered content in its new folder.
+            xTarget->inserted();
         }
-        catch (DAVException&)
+        catch ( DAVException const & )
         {
             throw CommandAbortedException();
         }
     }
-    /*
-  else if ( aCommand.Name.compareToAscii( "COPY" ) == 0 )
+      else
     {
-      //////////////////////////////////////////////////////////////////
-      // COPY
-      //////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////
+          // Unsupported command
+          //////////////////////////////////////////////////////////////////
 
-      OUString destination;
-      aCommand.Argument >>= destination;
-      try {
-    _pWebdavSession->COPY (_path, destination, Environment);
-      } catch (DAVException e) {
-    VOS_ENSURE( sal_False, "COPY : DAVException" );
-    throw CommandAbortedException();
-      }
-      // synchronize destination ?
-    }
-  else if ( aCommand.Name.compareToAscii( "MOVE" ) == 0 )
-    {
-      //////////////////////////////////////////////////////////////////
-      // MOVE
-      //////////////////////////////////////////////////////////////////
-
-      OUString destination;
-      aCommand.Argument >>= destination;
-      try {
-    _pWebdavSession->MOVE (_path, destination, Environment);
-      } catch (DAVException e) {
-    VOS_ENSURE( sal_False, "MOVE : DAVException" );
-    throw CommandAbortedException();
-      }
-      // synchronize destination ?
-    }
-    */
-  else
-    {
-      //////////////////////////////////////////////////////////////////
-      // Unsupported command
-      //////////////////////////////////////////////////////////////////
-
-      VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
-      throw CommandAbortedException();
+          OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
+          throw CommandAbortedException();
     }
 
-  return aRet;
+    return aRet;
 }
 
 //=========================================================================
@@ -958,6 +723,186 @@ void SAL_CALL Content::abort( sal_Int32 CommandId )
     //     sense for your content.
 }
 
+//=========================================================================
+//
+// XPropertyContainer methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL Content::addProperty(
+        const OUString& Name, sal_Int16 Attributes, const Any& DefaultValue )
+    throw( PropertyExistException,
+           IllegalTypeException,
+           IllegalArgumentException,
+           RuntimeException )
+{
+//  if ( m_bTransient )
+//      @@@ ???
+
+//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    if ( !Name.getLength() )
+        throw IllegalArgumentException();
+
+    // Check property type.
+    if ( !UCBDeadPropertyValue::supportsType( DefaultValue.getValueType() ) )
+    {
+        OSL_ENSURE( sal_False, "Content::addProperty - "
+                               "Unsupported property type!" );
+        throw IllegalTypeException();
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // Make sure a property with the requested name does not already
+    // exist in dynamic and static(!) properties.
+    //////////////////////////////////////////////////////////////////////
+
+    // @@@ Need real command environment here, but where to get it from?
+    //     XPropertyContainer interface should be replaced by
+    //     XCommandProcessor commands!
+    Reference< XCommandEnvironment > xEnv;
+
+    // Note: This requires network access!
+    if ( getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
+            ->hasPropertyByName( Name ) )
+    {
+        // Property does already exist.
+        throw PropertyExistException();
+    }
+
+    //////////////////////////////////////////////////////////////////////
+    // Add a new dynamic property.
+    //////////////////////////////////////////////////////////////////////
+
+    ProppatchValue aValue( PROPSET, Name, DefaultValue );
+
+    std::vector< ProppatchValue > aProppatchValues;
+    aProppatchValues.push_back( aValue );
+
+    try
+    {
+        // Set property value at server.
+        m_aResAccess.PROPPATCH( aProppatchValues, xEnv );
+
+        // Notify propertyset info change listeners.
+        PropertySetInfoChangeEvent evt(
+                            static_cast< OWeakObject * >( this ),
+                            Name,
+                            -1, // No handle available
+                            PropertySetInfoChange::PROPERTY_INSERTED );
+        notifyPropertySetInfoChange( evt );
+    }
+    catch ( DAVException const & )
+    {
+        try
+        {
+            DAVCapabilities caps;
+               m_aResAccess.OPTIONS( caps, xEnv );
+
+            if ( caps.class1 )
+            {
+                // DAV resource!
+                throw IllegalArgumentException();
+            }
+            else
+            {
+                // HTTP resource!
+
+                // Store property locally.
+                ContentImplHelper::addProperty(
+                                        Name, Attributes, DefaultValue );
+            }
+        }
+        catch ( DAVException const & )
+        {
+            throw IllegalArgumentException();
+          }
+    }
+}
+
+//=========================================================================
+// virtual
+void SAL_CALL Content::removeProperty( const OUString& Name )
+    throw( UnknownPropertyException,
+           NotRemoveableException,
+           RuntimeException )
+{
+//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    // @@@ Need real command environment here, but where to get it from?
+    //     XPropertyContainer interface should be replaced by
+    //     XCommandProcessor commands!
+    Reference< XCommandEnvironment > xEnv;
+
+#if 0
+    // @@@ REMOVEABLE z.Z. nicht richtig and der PropSetInfo gesetzt!!!
+    try
+    {
+        Property aProp = getPropertySetInfo( xEnv,
+                                             sal_False /* don't cache data */ )
+                                ->getPropertyByName( Name );
+
+        if ( !( aProp.Attributes & PropertyAttribute::REMOVEABLE ) )
+        {
+            // Not removeable!
+            throw NotRemoveableException();
+        }
+    }
+    catch ( UnknownPropertyException const & )
+    {
+//      OSL_ENSURE( sal_False, "removeProperty - Unknown property!" );
+        throw;
+    }
+#endif
+
+    //////////////////////////////////////////////////////////////////////
+    // Try to remove property from server.
+    //////////////////////////////////////////////////////////////////////
+
+    try
+    {
+        std::vector< ProppatchValue > aProppatchValues;
+        ProppatchValue aValue( PROPREMOVE, Name, Any() );
+        aProppatchValues.push_back( aValue );
+
+        // Remove property value from server.
+        m_aResAccess.PROPPATCH( aProppatchValues, xEnv );
+
+        // Notify propertyset info change listeners.
+        PropertySetInfoChangeEvent evt(
+                            static_cast< OWeakObject * >( this ),
+                            Name,
+                            -1, // No handle available
+                            PropertySetInfoChange::PROPERTY_REMOVED );
+        notifyPropertySetInfoChange( evt );
+    }
+    catch ( DAVException const & )
+    {
+        try
+        {
+            DAVCapabilities caps;
+               m_aResAccess.OPTIONS( caps, xEnv );
+
+            if ( caps.class1 )
+            {
+                // DAV resource!
+                throw UnknownPropertyException();
+            }
+            else
+            {
+                // HTTP resource!
+
+                // Try to remove property from local store.
+                ContentImplHelper::removeProperty( Name );
+            }
+        }
+        catch ( DAVException const & )
+        {
+            throw UnknownPropertyException();
+          }
+    }
+}
 
 //=========================================================================
 //
@@ -983,13 +928,12 @@ Content::queryCreatableContentsInfo()
             = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
               | ContentInfoAttribute::KIND_DOCUMENT;
 
+        Property aProp;
+        m_pProvider->getProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
+
         Sequence< Property > aDocProps( 1 );
-        aDocProps.getArray()[ 0 ] = Property(
-                            OUString::createFromAscii( "Title" ),
-                            -1,
-                            getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-                            PropertyAttribute::MAYBEVOID
-                            | PropertyAttribute::BOUND );
+        aDocProps.getArray()[ 0 ] = aProp;
         aSeq.getArray()[ 0 ].Properties = aDocProps;
 
         // folder.
@@ -998,19 +942,14 @@ Content::queryCreatableContentsInfo()
         aSeq.getArray()[ 1 ].Attributes = ContentInfoAttribute::KIND_FOLDER;
 
         Sequence< Property > aFolderProps( 1 );
-        aFolderProps.getArray()[ 0 ] = Property(
-                            OUString::createFromAscii( "Title" ),
-                            -1,
-                            getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-                            PropertyAttribute::MAYBEVOID
-                            | PropertyAttribute::BOUND );
+        aFolderProps.getArray()[ 0 ] = aProp;
         aSeq.getArray()[ 1 ].Properties = aFolderProps;
         return aSeq;
     }
 /*
     else
     {
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "queryCreatableContentsInfo called on non-folder object!" );
 
         return Sequence< ContentInfo >( 0 );
@@ -1025,54 +964,61 @@ Reference< XContent > SAL_CALL Content::createNewContent( const ContentInfo& Inf
 {
 //  if ( isFolder() )
     {
-      osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-      if ( !Info.Type.getLength() )
-        return Reference< XContent >();
+          if ( !Info.Type.getLength() )
+            return Reference< XContent >();
 
-      if ( ( Info.Type.compareToAscii( WEBDAV_COLLECTION_TYPE ) != 0 )
-       &&
-       ( Info.Type.compareToAscii( WEBDAV_CONTENT_TYPE ) != 0 ) )
-        return Reference< XContent >();
+          if ( ( !Info.Type.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
+                &&
+                ( !Info.Type.equalsAsciiL(
+                     RTL_CONSTASCII_STRINGPARAM( WEBDAV_CONTENT_TYPE ) ) ) )
+            return Reference< XContent >();
 
+          OUString aURL = m_xIdentifier->getContentIdentifier();
 
-      OUString aURL = m_xIdentifier->getContentIdentifier();
+          OSL_ENSURE( aURL.getLength() > 0,
+                      "WebdavContent::createNewContent - empty identifier!" );
 
-      VOS_ENSURE( aURL.getLength() > 0,
-          "WebdavContent::createNewContent - empty identifier!" );
+        if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
+              aURL += OUString::createFromAscii( "/" );
 
-      if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-        aURL += OUString::createFromAscii( "/" );
+          sal_Bool isCollection;
+          if ( Info.Type.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
+        {
+            aURL += OUString::createFromAscii( "[New_Collection]" );
+            isCollection = sal_True;
+          }
+          else
+        {
+            aURL += OUString::createFromAscii( "[New_Content]" );
+            isCollection = sal_False;
+          }
 
-      sal_Bool isCollection;
-      if ( Info.Type.compareToAscii( WEBDAV_COLLECTION_TYPE ) == 0 ) {
-        aURL += OUString::createFromAscii( "New_Collection" );
-        isCollection = sal_True;
-      }
-      else {
-        aURL += OUString::createFromAscii( "New_Content" );
-        isCollection = sal_False;
-      }
+          Reference< XContentIdentifier > xId(
+                          new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
 
-      Reference< XContentIdentifier > xId( new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
-
-      // create the local content
-      try {
-        return new ::webdav_ucp::Content( m_xSMgr,
-                                          m_xProvider.getBodyPtr(),
-                                          xId,
-                                          _pWebdavSession,
-                                          isCollection);
-      }
-      catch (ContentCreationException e ) {
-        return Reference< XContent >();
-      }
+          // create the local content
+          try
+        {
+            return new ::webdav_ucp::Content( m_xSMgr,
+                                              m_pProvider,
+                                                xId,
+                                                m_aResAccess.getSessionFactory(),
+                                                isCollection );
+        }
+        catch ( ContentCreationException & )
+          {
+              return Reference< XContent >();
+          }
     }
 /*
-  else
+      else
     {
-      VOS_ENSURE( sal_False, "createNewContent called on non-folder object!" );
-      return Reference< XContent >();
+        OSL_ENSURE( sal_False, "createNewContent called on non-folder object!" );
+          return Reference< XContent >();
     }
 */
 }
@@ -1114,274 +1060,366 @@ Reference< XRow > Content::getPropertyValues(
                 const vos::ORef< ucb::ContentProviderImplHelper >& rProvider,
                 const OUString& rContentId )
 {
-  // Note: Empty sequence means "get values of all supported properties".
+      // Note: Empty sequence means "get values of all supported properties".
 
-  vos::ORef< ::ucb::PropertyValueSet > xRow
-    = new ::ucb::PropertyValueSet( rSMgr );
+      vos::ORef< ::ucb::PropertyValueSet > xRow
+        = new ::ucb::PropertyValueSet( rSMgr );
 
-  sal_Int32 nCount = rProperties.getLength();
-  if ( nCount )
+      sal_Int32 nCount = rProperties.getLength();
+      if ( nCount )
     {
-      Reference< XPropertySet > xAdditionalPropSet;
-      sal_Bool bTriedToGetAdditonalPropSet = sal_False;
+        Reference< XPropertySet > xAdditionalPropSet;
+          sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
-      const Property* pProps = rProperties.getConstArray();
-      for ( sal_Int32 n = 0; n < nCount; ++n )
-    {
-      const Property& rProp = pProps[ n ];
+          const Property* pProps = rProperties.getConstArray();
+          for ( sal_Int32 n = 0; n < nCount; ++n )
+        {
+              const Property& rProp = pProps[ n ];
 
-      // Process Core properties.
+              // Process Core properties.
 
-      if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
-       {
-            if ( rData.bIsFolder )
-                xRow->appendString( rProp, OUString::createFromAscii(
-                                                    WEBDAV_COLLECTION_TYPE ) );
-            else
-                xRow->appendString( rProp, OUString::createFromAscii(
-                                                    WEBDAV_CONTENT_TYPE ) );
-        }
-      else if ( rProp.Name.compareToAscii( "Title" ) == 0 )
-        {
-          xRow->appendString ( rProp, rData.aTitle );
-        }
-      else if ( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
-        {
-          xRow->appendBoolean( rProp, rData.bIsDocument );
-        }
-      else if ( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
-        {
-          xRow->appendBoolean( rProp, rData.bIsFolder );
-        }
-      else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
-        {
-          xRow->appendLong( rProp, rData.size );
-        }
-      else if ( rProp.Name.compareToAscii( "DateCreated" ) == 0 )
-        {
-          xRow->appendTimestamp( rProp, rData.dateCreated );
-        }
-      else if ( rProp.Name.compareToAscii( "DateModified" ) == 0 )
-        {
-          xRow->appendTimestamp( rProp, rData.dateModified );
-        }
-      else if ( rProp.Name.compareToAscii( "MediaType" ) == 0 ) {
-          xRow->appendString( rProp, rData.getcontenttype );
-        }
-      else if ( rProp.Name.equals(DAVProperties::CREATIONDATE) ) {
-        xRow->appendString( rProp, rData.creationdate );
-      }
-      else if ( rProp.Name.equals(DAVProperties::DISPLAYNAME) ) {
-        xRow->appendString( rProp, rData.displayname );
-      }
-      else if ( rProp.Name.equals(DAVProperties::GETCONTENTLANGUAGE) ) {
-        xRow->appendString( rProp, rData.getcontentlanguage );
-      }
-      else if ( rProp.Name.equals(DAVProperties::GETCONTENTLENGTH) ) {
-        xRow->appendString( rProp, rData.getcontentlength );
-      }
-      else if ( rProp.Name.equals(DAVProperties::GETCONTENTTYPE) ) {
-        xRow->appendString( rProp, rData.getcontenttype );
-      }
-      else if ( rProp.Name.equals(DAVProperties::GETETAG) ) {
-        xRow->appendString( rProp, rData.getetag );
-      }
-      else if ( rProp.Name.equals(DAVProperties::GETLASTMODIFIED) ) {
-        xRow->appendString( rProp, rData.getlastmodified );
-      }
-      else if ( rProp.Name.equals(DAVProperties::LOCKDISCOVERY) ) {
-        xRow->appendString( rProp, rData.lockdiscovery );
-      }
-      else if ( rProp.Name.equals(DAVProperties::RESOURCETYPE) ) {
-        xRow->appendString( rProp, rData.resourcetype );
-      }
-      else if ( rProp.Name.equals(DAVProperties::SOURCE) ) {
-        xRow->appendString( rProp, rData.source );
-      }
-      else if ( rProp.Name.equals(DAVProperties::SUPPORTEDLOCK) ) {
-        xRow->appendString( rProp, rData.supportedlock );
-      }
-      else
-        {
-                // @@@ Note: If your data source supports adding/removing
-                //     properties, you should implement the interface
-                //     XPropertyContainer by yourself and supply your own
-                //     logic here. The base class uses the service
-                //     "com.sun.star.ucb.Store" to maintain Additional Core
-                //     properties. But using server functionality is preferred!
-
-                // Not a Core Property! Maybe it's an Additional Core Property?!
-
-          if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
-        {
-          xAdditionalPropSet
-            = Reference< XPropertySet >(
-                        rProvider->getAdditionalPropertySet( rContentId,
-                                             sal_False ),
-                        UNO_QUERY );
-          bTriedToGetAdditonalPropSet = sal_True;
-        }
-
-          if ( xAdditionalPropSet.is() )
-        {
-          if ( !xRow->appendPropertySetValue(
-                             xAdditionalPropSet,
-                             rProp ) )
+              if ( rProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+               {
+                if ( rData.pIsFolder && *rData.pIsFolder )
+                      xRow->appendString( rProp, OUString::createFromAscii(
+                                                      WEBDAV_COLLECTION_TYPE ) );
+                else
+                      xRow->appendString( rProp, OUString::createFromAscii(
+                                                      WEBDAV_CONTENT_TYPE ) );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
             {
-              // Append empty entry.
-              xRow->appendVoid( rProp );
+                  xRow->appendString ( rProp, rData.aTitle );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            {
+                if ( rData.pIsDocument )
+                      xRow->appendBoolean( rProp, *rData.pIsDocument );
+                else
+                      xRow->appendBoolean( rProp, sal_True );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            {
+                if ( rData.pIsFolder )
+                      xRow->appendBoolean( rProp, *rData.pIsFolder );
+                else
+                      xRow->appendBoolean( rProp, sal_False );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+              {
+                if ( rData.pSize )
+                      xRow->appendLong( rProp, *rData.pSize );
+                else
+                    xRow->appendVoid( rProp );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+              {
+                if ( rData.pDateCreated )
+                      xRow->appendTimestamp( rProp, *rData.pDateCreated );
+                else
+                    xRow->appendVoid( rProp );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+              {
+                if ( rData.pDateModified )
+                      xRow->appendTimestamp( rProp, *rData.pDateModified );
+                else
+                    xRow->appendVoid( rProp );
+
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+            {
+                if ( rData.pgetcontenttype )
+                      xRow->appendString( rProp, *rData.pgetcontenttype );
+                else
+                    xRow->appendVoid( rProp );
+            }
+              else if ( rProp.Name.equals( DAVProperties::CREATIONDATE ) )
+            {
+                if ( rData.pcreationdate )
+                    xRow->appendString( rProp, *rData.pcreationdate );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::DISPLAYNAME ) )
+            {
+                if ( rData.pdisplayname )
+                    xRow->appendString( rProp, *rData.pdisplayname );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::GETCONTENTLANGUAGE ) )
+            {
+                if ( rData.pgetcontentlanguage )
+                    xRow->appendString( rProp, *rData.pgetcontentlanguage );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::GETCONTENTLENGTH ) )
+            {
+                if ( rData.pgetcontentlength )
+                    xRow->appendString( rProp, *rData.pgetcontentlength );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
+            {
+                if ( rData.pgetcontenttype )
+                    xRow->appendString( rProp, *rData.pgetcontenttype );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::GETETAG ) )
+            {
+                if ( rData.pgetetag )
+                    xRow->appendString( rProp, *rData.pgetetag );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::GETLASTMODIFIED ) )
+            {
+                if ( rData.pgetlastmodified )
+                    xRow->appendString( rProp, *rData.pgetlastmodified );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
+            {
+                if ( rData.plockdiscovery )
+                    xRow->appendObject( rProp,
+                                        makeAny( *rData.plockdiscovery ) );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::RESOURCETYPE ) )
+            {
+                if ( rData.presourcetype )
+                    xRow->appendObject( rProp,
+                                        makeAny( *rData.presourcetype ) );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::SOURCE ) )
+            {
+                if ( rData.psource )
+                    xRow->appendObject( rProp, makeAny( *rData.psource ) );
+                else
+                    xRow->appendVoid( rProp );
+              }
+              else if ( rProp.Name.equals( DAVProperties::SUPPORTEDLOCK ) )
+            {
+                if ( rData.psupportedlock )
+                    xRow->appendObject( rProp,
+                                        makeAny( *rData.psupportedlock ) );
+                else
+                    xRow->appendVoid( rProp );
+              }
+            else
+            {
+                sal_Bool bAppened = sal_False;
+
+                if ( rData.pOtherProps )
+                {
+                    // Process additional properties (DAV "dead" properties).
+                    const PropertyValueMap::const_iterator it
+                        = rData.pOtherProps->find( rProp.Name );
+                    if ( it != rData.pOtherProps->end() )
+                    {
+                        xRow->appendObject( rProp, (*it).second );
+                        bAppened = sal_True;
+                    }
+                }
+
+                if ( !bAppened )
+                {
+                    // Process local additional properties.
+                      if ( !bTriedToGetAdditonalPropSet
+                           && !xAdditionalPropSet.is() )
+                    {
+                          xAdditionalPropSet
+                            = Reference< XPropertySet >(
+                                rProvider->getAdditionalPropertySet(
+                                    rContentId, sal_False ),
+                                UNO_QUERY );
+                          bTriedToGetAdditonalPropSet = sal_True;
+                    }
+
+                      if ( xAdditionalPropSet.is() )
+                    {
+                          if ( xRow->appendPropertySetValue(
+                                         xAdditionalPropSet, rProp ) )
+                            bAppened = sal_True;
+                    }
+                }
+
+                if ( !bAppened )
+                {
+                      // Append empty entry.
+                      xRow->appendVoid( rProp );
+                }
             }
         }
-          else
-        {
-          // Append empty entry.
-          xRow->appendVoid( rProp );
-        }
-        }
     }
-    }
-  else
+    else
     {
-      // Append all Core Properties.
-      xRow->appendString (
-              Property( OUString::createFromAscii( "ContentType" ),
-                    -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.bIsFolder ? OUString::createFromAscii(
-                                                WEBDAV_COLLECTION_TYPE )
-                              : OUString::createFromAscii(
-                                                WEBDAV_CONTENT_TYPE ) );
-      xRow->appendString (
-              Property( OUString::createFromAscii( "Title" ),
-                    -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
-                    PropertyAttribute::BOUND ),
-              rData.aTitle );
-      xRow->appendBoolean(
-              Property( OUString::createFromAscii( "IsDocument" ),
-                    -1,
-                    getCppuBooleanType(),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.bIsDocument );
-      xRow->appendBoolean(
-              Property( OUString::createFromAscii( "IsFolder" ),
-                    -1,
-                    getCppuBooleanType(),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.bIsFolder );
-      xRow->appendLong(
-              Property( OUString::createFromAscii( "Size" ),
-                    -1,
-                    getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.size );
-      xRow->appendTimestamp(
-              Property( OUString::createFromAscii( "DateCreated" ),
-                    -1,
-                    getCppuType( static_cast< const DateTime * >( 0 ) ),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.dateCreated );
-      xRow->appendTimestamp(
-              Property( OUString::createFromAscii( "DateModified" ),
-                    -1,
-                    getCppuType( static_cast< const DateTime * >( 0 ) ),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.dateModified );
-      xRow->appendString (
-              Property( OUString::createFromAscii( "MediaType" ),
-                    -1,
-                    getCppuType( static_cast< const OUString * >( 0 ) ),
-                    PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.getcontenttype );
-      xRow->appendString (
-              Property(  DAVProperties::CREATIONDATE ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.creationdate );
-      xRow->appendString (
-              Property(  DAVProperties::DISPLAYNAME ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.displayname );
-      xRow->appendString (
-              Property(  DAVProperties::GETCONTENTLANGUAGE ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.getcontentlanguage );
-      xRow->appendString (
-              Property(  DAVProperties::GETCONTENTLENGTH ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.getcontentlength );
-      xRow->appendString (
-              Property(  DAVProperties::GETCONTENTTYPE ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.getcontenttype );
-      xRow->appendString (
-              Property(  DAVProperties::GETETAG ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.getetag );
-      xRow->appendString (
-              Property(  DAVProperties::GETLASTMODIFIED ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.getlastmodified );
-      xRow->appendString (
-              Property(  DAVProperties::LOCKDISCOVERY ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.lockdiscovery );
-      xRow->appendString (
-              Property(  DAVProperties::RESOURCETYPE ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.resourcetype );
-      xRow->appendString (
-              Property(  DAVProperties::SOURCE ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.source );
-      xRow->appendString (
-              Property(  DAVProperties::SUPPORTEDLOCK ,
-                     -1,
-                     getCppuType( static_cast< const OUString * >( 0 ) ),
-                     PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-              rData.supportedlock );
+        // Append all Core Properties.
+        ContentProvider * pProvider
+            = static_cast< ContentProvider * >( rProvider.getBodyPtr() );
+        Property aProp;
 
+        pProvider->getProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
+        if ( rData.pIsFolder && *rData.pIsFolder )
+              xRow->appendString(   aProp, OUString::createFromAscii(
+                                                    WEBDAV_COLLECTION_TYPE ) );
+        else
+              xRow->appendString(   aProp, OUString::createFromAscii(
+                                                      WEBDAV_CONTENT_TYPE ) );
+        pProvider->getProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
+          xRow->appendString( aProp, rData.aTitle );
 
+        pProvider->getProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ), aProp );
+        if ( rData.pIsDocument )
+              xRow->appendBoolean( aProp, *rData.pIsDocument );
+        else
+              xRow->appendBoolean( aProp, sal_True );
 
+        pProvider->getProperty(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ), aProp );
+        if ( rData.pIsFolder )
+              xRow->appendBoolean( aProp,   *rData.pIsFolder );
+        else
+              xRow->appendBoolean( aProp, sal_False );
 
-      // @@@ Append other properties supported directly.
+        if ( rData.pSize )
+        {
+            pProvider->getProperty(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ), aProp );
+              xRow->appendLong( aProp, *rData.pSize );
+        }
 
-      // @@@ Note: If your data source supports adding/removing
-      //     properties, you should implement the interface
-      //     XPropertyContainer by yourself and supply your own
-      //     logic here. The base class uses the service
-      //     "com.sun.star.ucb.Store" to maintain Additional Core
-      //     properties. But using server functionality is preferred!
+        if ( rData.pDateCreated )
+        {
+            pProvider->getProperty(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
+                aProp );
+              xRow->appendTimestamp( aProp, *rData.pDateCreated );
+        }
 
-      // Append all Additional Core Properties.
+        if ( rData.pDateModified )
+        {
+            pProvider->getProperty(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
+                aProp );
+              xRow->appendTimestamp( aProp, *rData.pDateModified );
+        }
 
-      Reference< XPropertySet > xSet(
-                     rProvider->getAdditionalPropertySet( rContentId, sal_False ),
-                     UNO_QUERY );
-      xRow->appendPropertySet( xSet );
+        if ( rData.pgetcontenttype )
+        {
+            pProvider->getProperty(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aProp );
+              xRow->appendString( aProp, *rData.pgetcontenttype );
+        }
+
+        if ( rData.pcreationdate )
+        {
+            pProvider->getProperty( DAVProperties::CREATIONDATE, aProp );
+              xRow->appendString( aProp, *rData.pcreationdate );
+        }
+
+        if ( rData.pdisplayname )
+        {
+            pProvider->getProperty( DAVProperties::DISPLAYNAME, aProp );
+              xRow->appendString( aProp, *rData.pdisplayname );
+        }
+
+        if ( rData.pgetcontentlanguage )
+        {
+            pProvider->getProperty( DAVProperties::GETCONTENTLANGUAGE, aProp );
+              xRow->appendString( aProp, *rData.pgetcontentlanguage );
+        }
+
+        if ( rData.pgetcontentlength )
+        {
+            pProvider->getProperty( DAVProperties::GETCONTENTLENGTH, aProp );
+              xRow->appendString( aProp, *rData.pgetcontentlength );
+        }
+
+        if ( rData.pgetcontenttype )
+        {
+            pProvider->getProperty( DAVProperties::GETCONTENTTYPE, aProp );
+              xRow->appendString( aProp, *rData.pgetcontenttype );
+        }
+
+        if ( rData.pgetetag )
+        {
+            pProvider->getProperty( DAVProperties::GETETAG, aProp );
+              xRow->appendString( aProp, *rData.pgetetag );
+        }
+
+        if ( rData.pgetlastmodified )
+        {
+            pProvider->getProperty( DAVProperties::GETLASTMODIFIED, aProp );
+              xRow->appendString( aProp, *rData.pgetlastmodified );
+        }
+
+        if ( rData.plockdiscovery )
+        {
+            pProvider->getProperty( DAVProperties::LOCKDISCOVERY, aProp );
+              xRow->appendObject( aProp, makeAny( *rData.plockdiscovery ) );
+        }
+
+        if ( rData.presourcetype )
+        {
+            pProvider->getProperty( DAVProperties::RESOURCETYPE, aProp );
+              xRow->appendString( aProp, *rData.presourcetype );
+        }
+
+        if ( rData.psource )
+        {
+            pProvider->getProperty( DAVProperties::SOURCE, aProp );
+              xRow->appendObject( aProp, makeAny( *rData.psource ) );
+        }
+
+        if ( rData.psupportedlock )
+        {
+            pProvider->getProperty( DAVProperties::SUPPORTEDLOCK, aProp );
+              xRow->appendObject( aProp, makeAny( *rData.psupportedlock ) );
+        }
+
+        // Process additional properties (DAV "dead" properties).
+        if ( rData.pOtherProps )
+        {
+            PropertyValueMap::const_iterator it  = rData.pOtherProps->begin();
+            PropertyValueMap::const_iterator end = rData.pOtherProps->end();
+
+            Property aProp;
+            while ( it != end )
+            {
+                pProvider->getProperty( (*it).first, aProp );
+                xRow->appendObject( aProp, (*it).second );
+                it++;
+            }
+        }
+
+        // Append all local Additional Core Properties.
+          Reference< XPropertySet > xSet(
+                 rProvider->getAdditionalPropertySet( rContentId, sal_False ),
+                 UNO_QUERY );
+          xRow->appendPropertySet( xSet );
     }
 
-  return Reference< XRow >( xRow.getBodyPtr() );
+      return Reference< XRow >( xRow.getBodyPtr() );
 }
 
 //=========================================================================
@@ -1391,194 +1429,371 @@ Reference< XRow > Content::getPropertyValues(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( update( rProperties, xEnv ) )
+    if ( m_bTransient )
+    {
+        // No PROPFIND, but minimal local props.
         return getPropertyValues( m_xSMgr,
-                                  rProperties,
-                                  m_aProps,
-                                  m_xProvider,
-                                  m_xIdentifier->getContentIdentifier() );
-    return Reference< XRow >();
+                                      rProperties,
+                                        ContentProperties(
+                                      NeonUri::unescape( m_aEscapedTitle ),
+                                         m_bCollection ),
+                                        m_xProvider,
+                                        m_xIdentifier->getContentIdentifier() );
+    }
+
+    // Only title requested? No PROPFIND necessary.
+    if ( ( rProperties.getLength() == 1 )
+         &&
+         rProperties[ 0 ].Name.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+    {
+        return getPropertyValues( m_xSMgr,
+                                      rProperties,
+                                        ContentProperties(
+                                      NeonUri::unescape( m_aEscapedTitle ),
+                                         m_bCollection ),
+                                        m_xProvider,
+                                        m_xIdentifier->getContentIdentifier() );
+    }
+
+    bool bSuccess = true;
+    std::vector< OUString > aPropNames;
+    ContentProperties::UCBNamesToDAVNames( rProperties, aPropNames );
+
+    std::vector< DAVResource > resources;
+    if ( aPropNames.size() > 0 )
+    {
+        try
+        {
+            m_aResAccess.PROPFIND( ZERO, aPropNames, resources, xEnv );
+        }
+        catch ( DAVException & )
+        {
+//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
+              bSuccess = false;
+        }
+    }
+
+    bSuccess &= ( resources.size() == 1 );
+
+    if ( bSuccess )
+    {
+        return getPropertyValues( m_xSMgr,
+                                      rProperties,
+                                        ContentProperties( resources[ 0 ] ),
+                                        m_xProvider,
+                                        m_xIdentifier->getContentIdentifier() );
+    }
+    else
+    {
+        // PROPFIND failed, but minimal local props "available".
+        return getPropertyValues( m_xSMgr,
+                                      rProperties,
+                                        ContentProperties(
+                                      NeonUri::unescape( m_aEscapedTitle ),
+                                         sal_False /* no collection */ ),
+                                        m_xProvider,
+                                        m_xIdentifier->getContentIdentifier() );
+    }
 }
 
 //=========================================================================
 void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
-                                 const Reference< XCommandEnvironment >& xEnv )
+                                    const Reference< XCommandEnvironment >& xEnv )
 {
-  osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+      osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-  Sequence< PropertyChangeEvent > aChanges( rValues.getLength() );
-  sal_Int32 nChanged = 0;
+      Sequence< PropertyChangeEvent > aChanges( rValues.getLength() );
+      sal_Int32 nChanged = 0;
 
-  PropertyChangeEvent aEvent;
-  aEvent.Source           = static_cast< OWeakObject * >( this );
-  aEvent.Further          = sal_False;
-  //    aEvent.PropertyName   =
-  aEvent.PropertyHandle = -1;
-  //    aEvent.OldValue       =
-  //    aEvent.NewValue       =
+      PropertyChangeEvent aEvent;
+      aEvent.Source           = static_cast< OWeakObject * >( this );
+      aEvent.Further          = sal_False;
+      // aEvent.PropertyName =
+      aEvent.PropertyHandle = -1;
+      // aEvent.OldValue     =
+      // aEvent.NewValue   =
 
-  const PropertyValue* pValues = rValues.getConstArray();
-  sal_Int32 nCount = rValues.getLength();
+    sal_Bool bCheckedForDAV = sal_False;
+    sal_Bool bDAV = sal_False;
 
-  Reference< XPersistentPropertySet > xAdditionalPropSet;
-  sal_Bool bTriedToGetAdditonalPropSet = sal_False;
+    std::vector< ProppatchValue > aProppatchValues;
 
-  sal_Bool bExchange = sal_False;
+    Reference< XPersistentPropertySet > xAdditionalPropSet;
+      sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
-  for ( sal_Int32 n = 0; n < nCount; ++n )
-  {
-      const PropertyValue& rValue = pValues[ n ];
+      sal_Bool bExchange = sal_False;
+    OUString aNewTitle;
+    OUString aOldTitle;
 
-      if ( rValue.Name.compareToAscii( "ContentType" ) == 0 )
-    {
-      // Read-only property!
-    }
-      else if ( rValue.Name.compareToAscii( "IsDocument" ) == 0 )
-    {
-      // Read-only property!
-    }
-      else if ( rValue.Name.compareToAscii( "IsFolder" ) == 0 )
-    {
-      // Read-only property!
-    }
-      else if ( rValue.Name.compareToAscii( "Title" ) == 0 )
-    {
-        OUString aNewValue;
-        if ( rValue.Value >>= aNewValue )
+    Reference< XPropertySetInfo > xInfo;
+
+      const PropertyValue* pValues = rValues.getConstArray();
+      sal_Int32 nCount = rValues.getLength();
+      for ( sal_Int32 n = 0; n < nCount; ++n )
+      {
+        const PropertyValue& rValue = pValues[ n ];
+
+        Property aTmpProp;
+        m_pProvider->getProperty( rValue.Name, aTmpProp );
+
+        if ( aTmpProp.Attributes & PropertyAttribute::READONLY )
         {
-            // No empty titles!
-            if ( aNewValue.getLength() > 0 )
-            {
-                if ( aNewValue != m_aProps.aTitle )
+              // Read-only property!
+            continue;
+        }
+
+        if ( !xInfo.is() )
+            xInfo
+                = getPropertySetInfo( xEnv, sal_False /* don't cache data */ );
+
+        if ( !xInfo->hasPropertyByName( rValue.Name ) )
+        {
+            // Check, whether property exists. Abort otherwise.
+            // PROPPATCH::set would add the property automatically, which
+            // is not allowed for "setPropertyValues" command!
+            continue;
+        }
+
+//      if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+//      {
+//          // Read-only property!
+//      }
+//      else if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+//      {
+//          // Read-only property!
+//      }
+//      else if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+//      {
+//          // Read-only property!
+//      }
+          /*else*/ if ( rValue.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        {
+            OUString aNewValue;
+            if ( rValue.Value >>= aNewValue )
+              {
+                // No empty titles!
+                if ( aNewValue.getLength() > 0 )
                 {
-                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                    NeonUri aURI( m_xIdentifier->getContentIdentifier() );
+                       aOldTitle = aURI.GetPathBaseNameUnescaped();
 
-                    // modified title -> modified URL -> exchange !
-                    if ( !_transient )
-                        bExchange = sal_True;
+                    if ( aNewValue != aOldTitle )
+                      {
+                        // modified title -> modified URL -> exchange !
+                        if ( !m_bTransient )
+                            bExchange = sal_True;
 
-                    aEvent.PropertyName = rValue.Name;
-                    aEvent.OldValue     = makeAny( m_aProps.aTitle );
-                    aEvent.NewValue     = makeAny( aNewValue );
-
-                    aChanges.getArray()[ nChanged ] = aEvent;
-
-                    m_aProps.aTitle = aNewValue;
-                    m_aProps.aEscapedTitle
-                        = NeonUri::escapeSegment( aNewValue );
-                    nChanged++;
+                        // new value will be set later...
+                        aNewTitle = aNewValue;
+                      }
                 }
             }
         }
-    }
-      else if ( rValue.Name.compareToAscii( "MediaType" ) == 0 )
-    {
-      // Read-only property!
-    }
-    else
-    {
-        // Not a Core Property! Maybe it's an Additional Core Property?!
-
-        if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
+//      else if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+//      {
+//          // Read-only property!
+//      }
+//      else if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+//      {
+//          // Read-only property!
+//      }
+//      else if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+//      {
+//          // Read-only property!
+//      }
+//      else if ( rValue.Name.equalsAsciiL(
+//                      RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+//      {
+//          // Read-only property!
+//          // (but could be writable, if 'getcontenttype' would be)
+//      }
+        else
         {
-            xAdditionalPropSet = getAdditionalPropertySet( sal_False );
-            bTriedToGetAdditonalPropSet = sal_True;
-        }
-
-        if ( xAdditionalPropSet.is() )
-        {
-            try
+            if ( !bCheckedForDAV )
             {
-                Any aOldValue = xAdditionalPropSet->getPropertyValue(
-                                                            rValue.Name );
-                if ( aOldValue != rValue.Value )
+                bCheckedForDAV = sal_True;
+
+                try
                 {
-                    xAdditionalPropSet->setPropertyValue(
-                                            rValue.Name, rValue.Value );
+                    DAVCapabilities caps;
+                       m_aResAccess.OPTIONS( caps, xEnv );
+                    bDAV = caps.class1;
+                }
+                catch ( DAVException const & )
+                {
+                    bDAV = sal_False;
+                  }
+            }
 
-                    aEvent.PropertyName = rValue.Name;
-                    aEvent.OldValue     = aOldValue;
-                    aEvent.NewValue     = rValue.Value;
+            if ( bDAV )
+            {
+                // Property value will be set on server.
+                ProppatchValue aValue( PROPSET, rValue.Name, rValue.Value );
+                aProppatchValues.push_back( aValue );
+            }
+            else
+            {
+                // Property value will be stored in local property store.
+                if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
+                {
+                    xAdditionalPropSet = getAdditionalPropertySet( sal_False );
+                    bTriedToGetAdditonalPropSet = sal_True;
+                }
 
-                    aChanges.getArray()[ nChanged ] = aEvent;
-                    nChanged++;
+                if ( xAdditionalPropSet.is() )
+                {
+                    try
+                    {
+                        Any aOldValue
+                                = xAdditionalPropSet->getPropertyValue(
+                                                                rValue.Name );
+                        if ( aOldValue != rValue.Value )
+                        {
+                            xAdditionalPropSet->setPropertyValue(
+                                                    rValue.Name, rValue.Value );
+
+                            aEvent.PropertyName = rValue.Name;
+                            aEvent.OldValue     = aOldValue;
+                            aEvent.NewValue     = rValue.Value;
+
+                            aChanges.getArray()[ nChanged ] = aEvent;
+                            nChanged++;
+                        }
+                    }
+                    catch ( UnknownPropertyException )
+                    {
+                    }
+                    catch ( WrappedTargetException )
+                    {
+                    }
+                    catch ( PropertyVetoException )
+                    {
+                    }
+                    catch ( IllegalArgumentException )
+                    {
+                    }
                 }
             }
-            catch ( UnknownPropertyException )
+        }
+      }
+
+    if ( !m_bTransient && aProppatchValues.size() )
+    {
+        try
+        {
+            // Set property values at server.
+            m_aResAccess.PROPPATCH( aProppatchValues, xEnv );
+
+            std::vector< ProppatchValue >::const_iterator it
+                = aProppatchValues.begin();
+            std::vector< ProppatchValue >::const_iterator end
+                = aProppatchValues.end();
+
+            while ( it != end )
             {
-            }
-            catch ( WrappedTargetException )
-            {
-            }
-            catch ( PropertyVetoException )
-            {
-            }
-            catch ( IllegalArgumentException )
-            {
+                aEvent.PropertyName = (*it).name;
+                aEvent.OldValue     = Any(); // @@@ to expensive to obtain...!
+                aEvent.NewValue     = (*it).value;
+
+                aChanges.getArray()[ nChanged ] = aEvent;
+                nChanged++;
+
+                ++it;
             }
         }
+        catch ( DAVException const & )
+        {
+              OSL_ENSURE( sal_False,
+                        "Content::setPropertyValues - PROPPATCH failed!" );
+        }
     }
-  }
 
-  // @@@ What, if exchange fails??? Rollback of Title prop? Old title is
-  //     contained in aChanges...
-  if ( bExchange )
-  {
-    // Assemble new content identifier...
+      if ( bExchange )
+      {
+        // Assemble new content identifier...
 
-    OUString aNewURL = getParentURL();
-    if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
-        aNewURL += OUString::createFromAscii( "/" );
+          OUString aNewURL = getParentURL();
+          if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
+            aNewURL += OUString::createFromAscii( "/" );
 
-    aNewURL += m_aProps.aEscapedTitle;
+          aNewURL += NeonUri::escapeSegment( aNewTitle );
 
-    Reference< XContentIdentifier > xNewId
-                        = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
-    Reference< XContentIdentifier > xOldId = m_xIdentifier;
+        Reference< XContentIdentifier > xNewId
+                            = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
+          Reference< XContentIdentifier > xOldId = m_xIdentifier;
 
-    try
+        try
+        {
+            NeonUri sourceURI( xOldId->getContentIdentifier() );
+            NeonUri targetURI( xNewId->getContentIdentifier() );
+            targetURI.SetScheme( OUString::createFromAscii( "http" ) );
+
+            m_aResAccess.MOVE(
+                sourceURI.GetPath(), targetURI.GetURI(), sal_False, xEnv );
+            // @@@ Should check for resources that could not be moved
+            //     (due to source access or target overwrite) and send
+            //     this information through the interaction handler.
+
+            // @@@ Existing content should be checked to see if it needs
+            //     to be deleted at the source
+
+            // @@@ Existing content should be checked to see if it has
+            //     been overwritten at the target
+
+            aGuard.clear();
+            if ( exchangeIdentity( xNewId ) )
+            {
+                m_aResAccess.setURL( aNewURL );
+
+// DAV resources store all additional props on server!
+//              // Adapt Additional Core Properties.
+//              renameAdditionalPropertySet( xOldId->getContentIdentifier(),
+//                                           xNewId->getContentIdentifier(),
+//                                           sal_True );
+            }
+            else
+            {
+                // Do not set new title!
+                aNewTitle = OUString();
+            }
+        }
+        catch ( DAVException const & )
+        {
+            // Do not set new title!
+            aNewTitle = OUString();
+        }
+      }
+
+    if ( aNewTitle.getLength() )
     {
-        NeonUri sourceURI (xOldId->getContentIdentifier());
-        NeonUri targetURI (xNewId->getContentIdentifier());
-        targetURI.SetScheme (OUString::createFromAscii ("http"));
+        aEvent.PropertyName = OUString::createFromAscii( "Title" );
+        aEvent.OldValue     = makeAny( aOldTitle );
+        aEvent.NewValue     = makeAny( aNewTitle );
 
-        _pWebdavSession->MOVE (sourceURI.GetPath (), targetURI.GetURI (), xEnv);
-        // @@@ Should check for resources that could not be moved
-        //     (due to source access or target overwrite) and send
-        //     this information through the interaction handler.
+        m_aEscapedTitle = NeonUri::escapeSegment( aNewTitle );
 
-        // @@@ Existing content should be checked to see if it needs
-        //     to be deleted at the source
+        aChanges.getArray()[ nChanged ] = aEvent;
+        nChanged++;
+    }
 
-        // @@@ Existing content should be checked to see if it has
-        //     been overwritten at the target
-
+    if ( nChanged > 0 )
+    {
         aGuard.clear();
-        if ( exchangeIdentity( xNewId ) )
-        {
-            // Adapt Additional Core Properties.
-            renameAdditionalPropertySet( xOldId->getContentIdentifier(),
-                                        xNewId->getContentIdentifier(),
-                                        sal_True );
-            initpath();
-        }
-    }
-    catch (DAVException&)
-    {
-      VOS_ENSURE( sal_False, "Content::setPropertyValues - MOVE failed!" );
-    }
-  }
-
-  if ( nChanged > 0 )
-    {
-      aGuard.clear();
-      aChanges.realloc( nChanged );
-      notifyPropertiesChange( aChanges );
+          aChanges.realloc( nChanged );
+          notifyPropertiesChange( aChanges );
     }
 }
 
 //=========================================================================
-void Content::queryChildren(ContentRefList& rChildren )
+void Content::queryChildren( ContentRefList& rChildren )
 {
     // Obtain a list with a snapshot of all currently instanciated contents
     // from provider and extract the contents which are direct children
@@ -1628,62 +1843,80 @@ void Content::queryChildren(ContentRefList& rChildren )
 }
 
 //=========================================================================
-void Content::insert(Reference<XInputStream> xInputStream,
-             sal_Bool bReplaceExisting,
-             const Reference< XCommandEnvironment >& Environment)
+void Content::insert( const Reference< XInputStream > & xInputStream,
+                       sal_Bool bReplaceExisting,
+                       const Reference< XCommandEnvironment >& Environment )
     throw( CommandAbortedException )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    // Check, if all required properties were set.
-    // aTitle
-    // IsFolder
-
-    if ( m_aProps.aTitle.getLength() == 0 )
+    if ( m_bTransient )
     {
-        VOS_ENSURE( sal_False, "Content::insert - property value missing!" );
-        throw CommandAbortedException();
-    }
+        // Check, if all required properties are present.
 
-    // Assemble new content identifier...
-
-    OUString aURL = getParentURL();
-    if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
-        aURL += OUString::createFromAscii( "/" );
-
-    aURL += m_aProps.aEscapedTitle;
-    m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
-
-    if ( !initpath() )
-        throw CommandAbortedException();
-
-    try
-    {
-        if ( isFolder( Environment ) )
+        if ( m_aEscapedTitle.getLength() == 0 )
         {
-            _pWebdavSession->MKCOL(_path, Environment);
-        }
-        else
-        {
-            _pWebdavSession->PUT(_path, xInputStream, Environment);
+               OSL_ENSURE( sal_False, "Content::insert - Title missing!" );
+               throw CommandAbortedException();
         }
 
+        // Assemble new content identifier...
+        OUString aURL = getParentURL();
+        if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
+            aURL += OUString::createFromAscii( "/" );
+
+        aURL += m_aEscapedTitle;
+
+        try
+        {
+            m_aResAccess.setURL( aURL );
+
+            if ( m_bCollection )
+                m_aResAccess.MKCOL( Environment );
+            else
+                  m_aResAccess.PUT( xInputStream, Environment );
+          }
+        catch ( DAVException const & )
+        {
+//          OSL_ENSURE( sal_False, "MKCOL/PUT: DAVException" );
+            throw CommandAbortedException();
+          }
+
+        m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+
+        aGuard.clear();
+          inserted();
+          m_bTransient = sal_False;
     }
-    catch ( DAVException& )
+    else
     {
+        if ( !xInputStream.is() )
+        {
+               OSL_ENSURE( sal_False,
+                "Content::insert - Persistent, but no new data stream!" );
+            throw CommandAbortedException();
+          }
+/*
+    Just try a PUT! (isFolder requires network access)
+
         if ( isFolder( Environment ) )
-            VOS_ENSURE( sal_False, "MKCOL : DAVException\n" );
-        else
-            VOS_ENSURE( sal_False, "PUT : DAVException\n" );
-        throw CommandAbortedException();
+        {
+               OSL_ENSURE( sal_False,
+                        "Content::insert - Data stream + folder!" );
+            throw CommandAbortedException();
+        }
+*/
+        try
+        {
+            m_aResAccess.PUT( xInputStream, Environment );
+          }
+        catch ( DAVException const & )
+        {
+//          OSL_ENSURE( sal_False, "Content::insert - PUT: DAVException" );
+            throw CommandAbortedException();
+          }
+
     }
-
-//  if ( ! update(Environment) )
-//    throw CommandAbortedException();
-
-    aGuard.clear();
-    inserted();
-    _transient = sal_False;
 }
 
 //=========================================================================
@@ -1726,9 +1959,9 @@ sal_Bool Content::exchangeIdentity(
     Reference< XContent > xThis = this;
 
     // Already persistent?
-    if ( _transient )
+    if ( m_bTransient )
     {
-        VOS_ENSURE( sal_False, "Content::exchangeIdentity - Not persistent!" );
+        OSL_ENSURE( sal_False, "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
@@ -1775,163 +2008,40 @@ sal_Bool Content::exchangeIdentity(
         }
     }
 
-    VOS_ENSURE( sal_False,
+    OSL_ENSURE( sal_False,
                 "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }
 
 //=========================================================================
-// init dav server and path
-sal_Bool Content::initpath()
+sal_Bool Content::isFolder( const Reference< XCommandEnvironment >& xEnv )
 {
-    const OUString aURL = m_xIdentifier->getContentIdentifier();
-
-    // scheme://user@host:port/path
-    sal_Int32 nPos = aURL.indexOf( '/' );
-    if ( nPos == -1 )
+    if ( m_bTransient )
     {
-        VOS_ENSURE( sal_False, "No '/' in URL " );
-        return sal_False;
+        return m_bCollection;
     }
-
-    nPos = aURL.indexOf( '/', nPos + 1 );
-    if ( nPos == -1 )
-    {
-        VOS_ENSURE( sal_False, "No second '/' in URL " );
-        return sal_False;
-    }
-
-    nPos = aURL.indexOf( '/', nPos + 1 );
-    if ( nPos == -1 )
-        _path = OUString::createFromAscii( "/" );
     else
-        _path = aURL.copy( nPos );
-
-    nPos = aURL.lastIndexOf( '/' );
-    sal_Int32 nEnd = aURL.getLength();
-
-    if ( nPos == nEnd - 1 )
     {
-        // Trailing slash found. Skip.
-        nPos = aURL.lastIndexOf( '/', nPos );
-        nEnd--;
-    }
+        std::vector< OUString > aPropNames;
+        aPropNames.push_back( DAVProperties::RESOURCETYPE );
 
-    if ( nPos == -1 )
-    {
-        VOS_ENSURE( sal_False, "Invalid URL " );
-        return sal_False;
-    }
-
-    NeonUri aURI( aURL );
-    m_aProps.aTitle = aURI.GetPathBaseNameUnescaped();
-    m_aProps.aEscapedTitle = aURI.GetPathBaseName();
-
-    return sal_True;
-}
-
-//=========================================================================
-sal_Bool Content::update( const Sequence< Property >& rProperties,
-                          const Reference< XCommandEnvironment >& Environment )
-{
-    if ( !_upToDate && !_transient )
-    {
-        // Require requested resources network access???
-
-        sal_Bool bDoIt = sal_False;
-        sal_Int32 nCount = rProperties.getLength();
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        std::vector< DAVResource > resources;
+        try
         {
-            const OUString& rPropName = rProperties[ n ].Name;
-
-            if ( ( rPropName == DAVProperties::CREATIONDATE ) ||
-                 ( rPropName == DAVProperties::DISPLAYNAME ) ||
-                 ( rPropName == DAVProperties::GETCONTENTLANGUAGE ) ||
-                 ( rPropName == DAVProperties::GETCONTENTLENGTH ) ||
-                 ( rPropName == DAVProperties::GETCONTENTTYPE ) ||
-                 ( rPropName == DAVProperties::GETETAG ) ||
-                 ( rPropName == DAVProperties::GETLASTMODIFIED ) ||
-                 ( rPropName == DAVProperties::LOCKDISCOVERY ) ||
-                 ( rPropName == DAVProperties::RESOURCETYPE ) ||
-                 ( rPropName == DAVProperties::SOURCE ) ||
-//               ( rPropName == DAVProperties::SUPPORTEDLOCK ) ||
-                 ( rPropName.compareToAscii( "ContentType" ) == 0 ) ||
-                 ( rPropName.compareToAscii( "IsDocument" ) == 0 ) ||
-                 ( rPropName.compareToAscii( "IsFolder" ) == 0 ) ||
-                 ( rPropName.compareToAscii( "Size" ) == 0 ) ||
-                 ( rPropName.compareToAscii( "DateCreated" ) == 0 ) ||
-                 ( rPropName.compareToAscii( "DateModified" ) == 0 ) ||
-                 ( rPropName.compareToAscii( "MediaType" ) == 0 ) )
-            {
-                bDoIt = sal_True;
-                break;
-            }
+            m_aResAccess.PROPFIND( ZERO, aPropNames, resources, xEnv );
         }
-
-        if ( bDoIt )
+        catch ( DAVException & )
         {
-            try
-            {
-                DAVCapabilities caps;
-                _pWebdavSession->OPTIONS( _path, caps, Environment );
-                _davResource = caps.class1;
-            }
-            catch ( DAVException & )
-            {
-//              VOS_ENSURE( sal_False, "OPTIONS : DAVException" );
-                _davResource = sal_False;
-            }
+//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
+            return sal_False;
+          }
 
-            if ( _davResource )
-            {
-                std::vector< DAVResource > resources;
-                try
-                {
-                    // properties initialization
-                    std::vector< OUString > propertyNames;
-                    propertyNames.push_back( DAVProperties::CREATIONDATE );
-                    propertyNames.push_back( DAVProperties::DISPLAYNAME );
-                    propertyNames.push_back( DAVProperties::GETCONTENTLANGUAGE );
-                    propertyNames.push_back( DAVProperties::GETCONTENTLENGTH );
-                    propertyNames.push_back( DAVProperties::GETCONTENTTYPE );
-                    propertyNames.push_back( DAVProperties::GETETAG );
-                    propertyNames.push_back( DAVProperties::GETLASTMODIFIED );
-                    propertyNames.push_back( DAVProperties::LOCKDISCOVERY );
-                    propertyNames.push_back( DAVProperties::RESOURCETYPE );
-                    propertyNames.push_back( DAVProperties::SOURCE );
-                    //   propertyNames.push_back( DAVProperties::SUPPORTEDLOCK );
+        if ( resources.size() != 1 )
+            return sal_False;
 
-                    _pWebdavSession->PROPFIND(
-                            _path, ZERO, propertyNames, resources, Environment );
-                }
-                catch ( DAVException & )
-                {
-    //              VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
-                    return sal_False;
-                }
-
-                if ( resources.size() != 1 )
-                    return sal_False;
-
-                m_aProps.setValues( resources[ 0 ] );
-            }
-            _upToDate = sal_True;
-        }
+        ContentProperties aContentProperties( resources[ 0 ] );
+        return ( aContentProperties.pIsFolder
+                    && *aContentProperties.pIsFolder );
     }
-    return sal_True;
-}
-
-//=========================================================================
-sal_Bool Content::isFolder(
-                const Reference< XCommandEnvironment >& Environment )
-{
-    if ( !_upToDate && !_transient )
-    {
-        // We need network access to obtain whether we are a folder.
-        Sequence< Property > aProps( 1 );
-        aProps[ 0 ].Name = OUString::createFromAscii( "IsFolder" );
-        update( aProps, Environment );
-    }
-    return m_aProps.bIsFolder;
 }

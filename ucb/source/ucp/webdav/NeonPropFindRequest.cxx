@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-20 16:20:44 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,321 +58,275 @@
  *
  *
  ************************************************************************/
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+#ifndef _NEONTYPES_HXX_
 #include "NeonTypes.hxx"
-#include "NeonPropFindRequest.hxx"
+#endif
+#ifndef _DAVEXCEPTION_HXX_
 #include "DAVException.hxx"
-
-#define ELM_creationdate        (1000)
-#define ELM_displayname         (1001)
-#define ELM_getcontentlanguage  (1002)
-#define ELM_getcontentlength    (1003)
-#define ELM_getcontenttype      (1004)
-#define ELM_getetag             (1005)
-#define ELM_getlastmodified     (1006)
-#define ELM_lockdiscovery       (1007)
-#define ELM_resourcetype        (1008)
-#define ELM_source              (1009)
-#define ELM_supportedlock       (1010)
-#define ELM_collection          (1011)
-
-#define GetPropName( s ) OUStringToOString( s, RTL_TEXTENCODING_DONTKNOW )
+#endif
+#ifndef _DAVPROPERTIES_HXX_
+#include "DAVProperties.hxx"
+#endif
+#ifndef _NEONPROPFINDREQUEST_HXX_
+#include "NeonPropFindRequest.hxx"
+#endif
+#ifndef _LINKSEQUENCE_HXX_
+#include "LinkSequence.hxx"
+#endif
+#ifndef _LOCKSEQUENCE_HXX_
+#include "LockSequence.hxx"
+#endif
+#ifndef _LOCKENTRYSEQUENCE_HXX_
+#include "LockEntrySequence.hxx"
+#endif
+#ifndef _UCBDEADPROPERTYVALUE_HXX_
+#include "UCBDeadPropertyValue.hxx"
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::ucb;
 using namespace std;
 using namespace webdav_ucp;
-
-
-
-const NeonPropFindXmlElem NeonPropFindRequest::sXmlElems[] =
-{
-    { "DAV:", "creationdate",
-       ELM_creationdate, HIP_XML_CDATA },
-    { "DAV:", "displayname",
-       ELM_displayname, HIP_XML_CDATA },
-    { "DAV:", "getcontentlanguage",
-       ELM_getcontentlanguage, HIP_XML_CDATA },
-    { "DAV:", "getcontentlength",
-       ELM_getcontentlength, HIP_XML_CDATA },
-    { "DAV:", "getcontenttype",
-       ELM_getcontenttype, HIP_XML_CDATA },
-    { "DAV:", "getetag",
-       ELM_getetag, HIP_XML_CDATA },
-    { "DAV:", "getlastmodified",
-       ELM_getlastmodified, HIP_XML_CDATA },
-    { "DAV:", "lockdiscovery",
-       ELM_lockdiscovery, HIP_XML_CDATA },
-    { "DAV:", "resourcetype",
-       ELM_resourcetype, 0 },
-    { "DAV:", "source",
-       ELM_source, HIP_XML_CDATA },
-    { "DAV:", "supportedlock",
-       ELM_supportedlock, HIP_XML_CDATA },
-    { "DAV:", "collection",
-       ELM_collection, 0 },
-    { NULL }
-};
 
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
 
-#ifdef OLD_NEON_PROPFIND_INTERFACE
-
-NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
-                                          const char *              inPath,
-                                          const Depth               inDepth,
-                                          const vector<OUString>    inPropNames,
-                                          vector< DAVResource > &   ioResources)
+NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
+                                          const char* inPath,
+                                          const Depth inDepth,
+                                          const vector< OUString >& inPropNames,
+                                          vector< DAVResource >& ioResources,
+                                          int & nError )
 {
-    // Create a propfind handler
-    if ( ( mPropFindHandler = dav_propfind_create( inSession,
-                                                   inPath,
-                                                   inDepth ) ) == NULL )
-        throw DAVException( DAVException::DAV_REQUEST_CREATE );
-
-    // Setup the Begin and End resource handlers
-    dav_propfind_set_resource_handlers( mPropFindHandler,
-                                        StartResource,
-                                        EndResource );
-
-    // Setup the CheckContext and End element handlers
-    hip_xml_add_handler( dav_propfind_get_parser( mPropFindHandler ),
-                         sXmlElems,
-                         CheckContext,
-                         NULL,
-                         EndElement,
-                         mPropFindHandler );
-
     // Generate the list of properties we're looking for
     int thePropCount = inPropNames.size();
-    int theRetVal;
     if ( thePropCount > 0 )
     {
-        NeonPropName * thePropNames = new NeonPropName[ thePropCount + 1 ];
+        NeonPropName* thePropNames = new NeonPropName[ thePropCount + 1 ];
         for ( int theIndex = 0; theIndex < thePropCount; theIndex ++ )
         {
-            thePropNames[ theIndex ].nspace = "DAV:";
-            // Warning: Why am I doing a strdup here?
-            thePropNames[ theIndex ].name =
-                        strdup( GetPropName( inPropNames[ theIndex ] ) );
+            // Split fullname into namespace and name!
+            DAVProperties::createNeonPropName(
+                             inPropNames[ theIndex ], thePropNames[ theIndex ] );
         }
         thePropNames[ theIndex ].nspace = NULL;
-        thePropNames[ theIndex ].name = NULL;
+        thePropNames[ theIndex ].name   = NULL;
 
-        // Send the request
-        theRetVal = dav_propfind_named( mPropFindHandler,
-                                        thePropNames,
-                                        &ioResources );
+           nError = dav_simple_propfind( inSession,
+                                          inPath,
+                                          inDepth,
+                                          thePropNames,
+                                          propfind_results,
+                                          &ioResources );
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
             free( (void *)thePropNames[ theIndex ].name );
-        delete thePropNames;
+
+        delete [] thePropNames;
     }
     else
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-
-    if ( theRetVal != HTTP_OK )
     {
-        if ( theRetVal == HTTP_AUTH )
-            throw DAVException( DAVException::DAV_HTTP_AUTH );
-        else
-            throw DAVException( DAVException::DAV_HTTP_ERROR );
+        // ALLPROP
+           nError = dav_simple_propfind( inSession,
+                                          inPath,
+                                          inDepth,
+                                          NULL, // 0 == allprop
+                                          propfind_results,
+                                          &ioResources );
     }
 }
 
-#else
+// -------------------------------------------------------------------
+// Constructor
+// - obtains property names
+// -------------------------------------------------------------------
 
-NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
-                                          const char *              inPath,
-                                          const Depth               inDepth,
-                                          const vector<OUString>    inPropNames,
-                                          vector< DAVResource > &   ioResources)
+NeonPropFindRequest::NeonPropFindRequest(
+                            HttpSession* inSession,
+                            const char* inPath,
+                                const Depth inDepth,
+                            std::vector< DAVResourceInfo > & ioResInfo,
+                            int & nError )
 {
-    // Create a propfind handler
-    if ( ( mPropFindHandler = dav_propfind_create( inSession,
-                                                   inPath,
-                                                   inDepth ) ) == NULL )
-        throw DAVException( DAVException::DAV_REQUEST_CREATE );
-
-    // Generate the list of properties we're looking for
-    int thePropCount = inPropNames.size();
-    int theRetVal;
-    if ( thePropCount > 0 )
-    {
-        NeonPropName * thePropNames = new NeonPropName[ thePropCount + 1 ];
-        for ( int theIndex = 0; theIndex < thePropCount; theIndex ++ )
-        {
-            thePropNames[ theIndex ].nspace = "DAV:";
-            // Warning: Why am I doing a strdup here?
-            thePropNames[ theIndex ].name =
-                        strdup( GetPropName( inPropNames[ theIndex ] ) );
-        }
-        thePropNames[ theIndex ].nspace = NULL;
-        thePropNames[ theIndex ].name = NULL;
-
-        dav_propfind_set_complex( mPropFindHandler,
-                                    thePropNames,
-                                    CreatePrivate,
-                                    &ioResources );
-
-        // Setup the CheckContext and End element handlers
-        hip_xml_push_handler( dav_propfind_get_parser( mPropFindHandler ),
-                                sXmlElems,
-                                CheckContext,
-                                NULL,
-                                EndElement,
-                                mPropFindHandler );
-
-        // Send the request
-        theRetVal = dav_propfind_named( mPropFindHandler,
-                                        DiscoverResults,
-                                        &ioResources );
-
-        for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
-            free( (void *)thePropNames[ theIndex ].name );
-        delete thePropNames;
-    }
-    else
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-
-    if ( theRetVal != HTTP_OK )
-    {
-        if ( theRetVal == HTTP_AUTH )
-            throw DAVException( DAVException::DAV_HTTP_AUTH );
-        else
-            throw DAVException( DAVException::DAV_HTTP_ERROR );
-    }
+    nError = dav_propnames( inSession,
+                            inPath,
+                            inDepth,
+                            propnames_results,
+                            &ioResInfo );
 }
-
-#endif
 
 // -------------------------------------------------------------------
 // Destructor
 // -------------------------------------------------------------------
 NeonPropFindRequest::~NeonPropFindRequest( )
 {
-    dav_propfind_destroy( mPropFindHandler );
-}
-
-#ifdef OLD_NEON_PROPFIND_INTERFACE
-
-// -------------------------------------------------------------------
-// StartResource
-// Marks the start of a resource in the server response.
-// Adds a DAVResource to the vector supplied at instantiation.
-// -------------------------------------------------------------------
-void * NeonPropFindRequest::StartResource( void *       inUserData,
-                                           const char * inHref )
-{
-    DAVResource theResource(
-                    OStringToOUString( inHref, RTL_TEXTENCODING_UTF8 ) );
-    //theResource->uri = OStringToOUString( inHref, RTL_TEXTENCODING_UTF8 );
-    vector< DAVResource > * theResources = (vector< DAVResource > * )inUserData;
-    theResources->push_back( theResource );
-    return theResources;
 }
 
 // -------------------------------------------------------------------
-// EndResource
-// Warning: Do we need this?
-// -------------------------------------------------------------------
-void NeonPropFindRequest::EndResource( void *               inUserData,
-                                       void *               inResource,
-                                       const char *         inStatusLine,
-                                       const HttpStatus *   inHttpStatus,
-                                       const char *         inDescription )
-{
-}
-
-#else
-
-// -------------------------------------------------------------------
-// CreatePrivate
-
 // static
-void * NeonPropFindRequest::CreatePrivate( void *       userdata,
-                                           const char * uri )
+void NeonPropFindRequest::propfind_results( void* userdata,
+                                            const char* href,
+                                             const NeonPropFindResultSet* set )
 {
+    // @@@ href is not the uri! DAVResource ctor wants uri!
+
     DAVResource theResource(
-                    OStringToOUString( uri, RTL_TEXTENCODING_UTF8 ) );
-    vector< DAVResource > * theResources = (vector< DAVResource > * )userdata;
+                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+
+    dav_propset_iterate( set, propfind_iter, &theResource );
+
+    // Add entry to resources list.
+    vector< DAVResource > * theResources
+        = static_cast< vector< DAVResource > * >( userdata );
     theResources->push_back( theResource );
-    return theResources;
 }
 
 // -------------------------------------------------------------------
-// DiscoverResults
-
 // static
-void NeonPropFindRequest::DiscoverResults( void * userdata,
-                                           const char * href,
-                                            const NeonPropFindResultSet * set )
+int NeonPropFindRequest::propfind_iter( void* userdata,
+                                        const NeonPropName* pname,
+                                        const char* value,
+                                        const HttpStatus* status )
 {
-}
+    /*
+        HTTP Response Status Classes:
 
-#endif
+          - 1: Informational - Request received, continuing process
 
-// -------------------------------------------------------------------
-// EndElement
-// Marks the end of the current XML element in the server response
-// Creates and adds a new PropertyValue to the DAVResource created in
-// StartResource.
-// -------------------------------------------------------------------
-int NeonPropFindRequest::EndElement( void *                         inUserData,
-                                     const NeonPropFindXmlElem *    inXmlElem,
-                                     const char *                   inCdata )
-{
-    if ( inXmlElem->id != ELM_resourcetype )
+          - 2: Success - The action was successfully received,
+          understood, and accepted
+
+        - 3: Redirection - Further action must be taken in order to
+          complete the request
+
+        - 4: Client Error - The request contains bad syntax or cannot
+          be fulfilled
+
+        - 5: Server Error - The server failed to fulfill an apparently
+          valid request
+    */
+
+    if ( status->klass > 2 )
+        return 0; // Error getting this property. Go on.
+
+    // Create & set the PropertyValue
+    PropertyValue thePropertyValue;
+    thePropertyValue.Handle = -1;
+    thePropertyValue.State = PropertyState_DIRECT_VALUE;
+
+    DAVProperties::createUCBPropName( pname->nspace,
+                                        pname->name,
+                                        thePropertyValue.Name );
+    bool bHasValue = false;
+    if ( DAVProperties::isUCBDeadProperty( *pname ) )
     {
-        // Create & set the PropertyValue
-        PropertyValue thePropertyValue;
-        // Warning: What should Handle be?
-        thePropertyValue.Handle = -1;
-        thePropertyValue.State = PropertyState_DIRECT_VALUE;
+        // DAV dead property added by WebDAV UCP?
+        if ( UCBDeadPropertyValue::createFromXML(
+                                        value, thePropertyValue.Value ) )
+            OSL_ENSURE( thePropertyValue.Value.hasValue(),
+                        "NeonPropFindRequest::propfind_iter - No value!" );
+            bHasValue = true;
+    }
 
-        if ( inXmlElem->id == ELM_collection )
+    if ( !bHasValue )
+    {
+        if ( rtl_str_equalsIgnoreCase( pname->name, "resourcetype" ) )
         {
-            thePropertyValue.Name   = OStringToOUString( "resourcetype",
-                                                RTL_TEXTENCODING_UTF8 );
-            thePropertyValue.Value <<= OStringToOUString( "collection",
-                                                RTL_TEXTENCODING_UTF8 );
+            OString aValue( value );
+            if ( aValue.getLength() )
+            {
+                aValue = aValue.toLowerCase();
+                if ( aValue.compareTo(
+                        RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
+                {
+                    thePropertyValue.Value
+                        <<= OUString::createFromAscii( "collection" );
+                }
+                else
+                {
+                    thePropertyValue.Value
+                        <<= OUString::createFromAscii( value );
+                }
+            }
+            else
+            {
+                thePropertyValue.Value <<= OUString();
+            }
+        }
+        else if ( rtl_str_equalsIgnoreCase( pname->name, "supportedlock" ) )
+        {
+            Sequence< LockEntry > aEntries;
+            LockEntrySequence::createFromXML( value, aEntries );
+            thePropertyValue.Value <<= aEntries;
+        }
+        else if ( rtl_str_equalsIgnoreCase( pname->name, "lockdiscovery" ) )
+        {
+            Sequence< Lock > aLocks;
+            LockSequence::createFromXML( value, aLocks );
+            thePropertyValue.Value <<= aLocks;
+        }
+        else if ( rtl_str_equalsIgnoreCase( pname->name, "source" ) )
+        {
+            Sequence< Link > aLinks;
+            LinkSequence::createFromXML( value, aLinks );
+            thePropertyValue.Value <<= aLinks;
         }
         else
         {
-            thePropertyValue.Name  = OStringToOUString( inXmlElem->name,
-                                                RTL_TEXTENCODING_UTF8 );
-            thePropertyValue.Value  <<= OStringToOUString( inCdata,
-                                                RTL_TEXTENCODING_UTF8 );
+            thePropertyValue.Value
+                <<= OStringToOUString( value, RTL_TEXTENCODING_UTF8 );
         }
-
-
-        // Get hold of the current DAVResource
-#ifdef OLD_NEON_PROPFIND_INTERFACE
-        vector< DAVResource > * theResources =
-         (vector< DAVResource > * )dav_propfind_get_current_resource(
-                                        ( NeonPropFindHandler *)inUserData );
-#else
-        vector< DAVResource > * theResources =
-         (vector< DAVResource > * )dav_propfind_current_private(
-                                        ( NeonPropFindHandler *)inUserData );
-#endif
-        // Add the newly created PropertyValue
-        vector< DAVResource >::iterator theIterator = theResources->end();
-        theIterator--;
-        theIterator->properties.push_back( thePropertyValue );
     }
-    return 0;
+
+    // Add the newly created PropertyValue
+    DAVResource* theResource = static_cast< DAVResource * >( userdata );
+    theResource->properties.push_back( thePropertyValue );
+
+    return 0; // Go on.
 }
 
 // -------------------------------------------------------------------
-// CheckContext
-// Verify that the current child element is valid given the current
-// parent element
-// -------------------------------------------------------------------
-int NeonPropFindRequest::CheckContext( NeonPropFindXmlId    inChild,
-                                       NeonPropFindXmlId    inParent )
+// static
+void NeonPropFindRequest::propnames_results(
+                                      void* userdata,
+                                      const char* href,
+                                         const NeonPropFindResultSet* results )
 {
-    //Warning: This should be filled in
+    // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
+
+    // Create entry for the resource.
+    DAVResourceInfo theResource(
+                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+    // Fill entry.
+    dav_propset_iterate( results, propnames_iter, &theResource );
+
+    // Add entry to resources list.
+    vector< DAVResourceInfo > * theResources
+        = static_cast< vector< DAVResourceInfo > * >( userdata );
+    theResources->push_back( theResource );
+}
+
+// -------------------------------------------------------------------
+// static
+int NeonPropFindRequest::propnames_iter( void* userdata,
+                                         const NeonPropName* pname,
+                                         const char* value,
+                                         const HttpStatus* status )
+{
+    OUString aFullName;
+    DAVProperties::createUCBPropName( pname->nspace,
+                                      pname->name,
+                                      aFullName );
+
+    DAVResourceInfo* theResource = static_cast< DAVResourceInfo * >( userdata );
+    theResource->properties.push_back( aFullName );
     return 0;
 }

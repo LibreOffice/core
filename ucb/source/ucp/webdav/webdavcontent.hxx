@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:09:27 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,8 @@
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #define _WEBDAV_UCP_CONTENT_HXX
 
-#ifndef _NEONTYPES_HXX_
-#include "NeonTypes.hxx"
-#endif
-#ifndef _DAVSESSION_HXX_
-#include "DAVSession.hxx"
-#endif
-
-#include <vector>
 #include <list>
+
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
@@ -81,20 +74,25 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
 
 #ifndef _UCBHELPER_CONTENTHELPER_HXX
 #include <ucbhelper/contenthelper.hxx>
 #endif
 
+#ifndef _DAVRESOURCEACCESS_HXX_
+#include "DAVResourceAccess.hxx"
+#endif
+#ifndef _WEBDAV_UCP_PROPERTYMAP_HXX
+#include "PropertyMap.hxx"
+#endif
+
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
     struct PropertyValue;
+} } } }
+
+namespace com { namespace sun { namespace star { namespace io {
+    class XInputStream;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace sdbc {
@@ -111,183 +109,161 @@ namespace webdav_ucp
 
 //=========================================================================
 
-class DAVResource;
-
-struct ContentProperties
-{
-  ::rtl::OUString aTitle;           // Title
-  ::rtl::OUString aEscapedTitle;    // escaped Title (taken from URI of DAVResource)
-  ::rtl::OUString getcontenttype;   // ContentType
-  sal_Bool        bIsDocument;      // IsDocument
-  sal_Bool        bIsFolder;        // IsFolder
-  sal_Int64       size;             // Size
-  ::com::sun::star::util::DateTime dateCreated;     // DateCreated
-  ::com::sun::star::util::DateTime dateModified;    // DateModified
-
-  ::rtl::OUString creationdate;
-  ::rtl::OUString displayname;
-  ::rtl::OUString getcontentlanguage;
-  ::rtl::OUString getcontentlength;
-  ::rtl::OUString getetag;
-  ::rtl::OUString getlastmodified;
-  //@@@   ::com::sun::star::uno::Sequence<::com::sun::star::dav::lock> lockdiscovery;
-  ::rtl::OUString lockdiscovery;
-  ::rtl::OUString resourcetype;
-  //@@@   ::com::sun::star::uno::Any source;
-  ::rtl::OUString source;
-  //@@@   ::com::sun::star::uno::Sequence<::com::sun::star::dav::lock> supportedlock;
-  ::rtl::OUString supportedlock;
-
-  ContentProperties()
-    : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
-
-  void setValues(DAVResource& res);
-};
-
-//=========================================================================
+class ContentProvider;
+class ContentProperties;
 
 class Content : public ::ucb::ContentImplHelper,
-        public com::sun::star::ucb::XContentCreator
+                public com::sun::star::ucb::XContentCreator
 {
-  ContentProperties m_aProps;
-  ::vos::ORef< DAVSession > _pWebdavSession;
-  ::rtl::OUString _path;
-  sal_Bool _transient;
-  sal_Bool _upToDate;
-  sal_Bool _davResource;
+      DAVResourceAccess m_aResAccess;
+    rtl::OUString     m_aEscapedTitle;
+    ContentProvider*  m_pProvider; // No need for a ref, base class holds object
+      sal_Bool        m_bTransient;
+    sal_Bool          m_bCollection;
 
 private:
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
+    getProperties( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv );
+    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
+    getCommands( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv );
+      virtual ::rtl::OUString getParentURL();
 
-  sal_Bool update( const ::com::sun::star::uno::Sequence<
+      sal_Bool isFolder( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+
+    void getProperties( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
+                        PropertyMap & rProps );
+
+      ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+      getPropertyValues( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
-                     const ::com::sun::star::uno::Reference<
-                          com::sun::star::ucb::XCommandEnvironment >& Environment);
-  sal_Bool initpath();
-
-  virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-  getProperties( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv );
-  virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
-  getCommands( const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv );
-  virtual ::rtl::OUString getParentURL();
-
-  sal_Bool isFolder( const ::com::sun::star::uno::Reference<
+                          const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
-
-  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-  getPropertyValues( const ::com::sun::star::uno::Sequence<
-                         ::com::sun::star::beans::Property >& rProperties,
+      void setPropertyValues(
+                     const ::com::sun::star::uno::Sequence<
+                         ::com::sun::star::beans::PropertyValue >& rValues,
                         const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
-  void setPropertyValues(
-             const ::com::sun::star::uno::Sequence<
-             ::com::sun::star::beans::PropertyValue >& rValues,
-                const ::com::sun::star::uno::Reference<
-                ::com::sun::star::ucb::XCommandEnvironment >& Environment );
+                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-  typedef vos::ORef< Content > ContentRef;
-  typedef std::list< ContentRef > ContentRefList;
-  void queryChildren( ContentRefList& rChildren);
+      typedef vos::ORef< Content > ContentRef;
+      typedef std::list< ContentRef > ContentRefList;
+      void queryChildren( ContentRefList& rChildren);
 
-  sal_Bool exchangeIdentity(
+      sal_Bool exchangeIdentity(
                 const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
-  // Command "insert"
-  void insert(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
-          sal_Bool bReplaceExisting,
-          const com::sun::star::uno::Reference<
-          com::sun::star::ucb::XCommandEnvironment >& Environment )
-    throw( ::com::sun::star::ucb::CommandAbortedException );
+      // Command "insert"
+      void insert( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::io::XInputStream > & xInputStream,
+                   sal_Bool bReplaceExisting,
+                   const com::sun::star::uno::Reference<
+                      com::sun::star::ucb::XCommandEnvironment >& Environment )
+        throw( ::com::sun::star::ucb::CommandAbortedException );
 
-  // Command "delete"
-  void destroy( sal_Bool bDeletePhysical )
-    throw( ::com::sun::star::ucb::CommandAbortedException );
+    // Command "delete"
+      void destroy( sal_Bool bDeletePhysical )
+        throw( ::com::sun::star::ucb::CommandAbortedException );
 
 public:
-  Content( const ::com::sun::star::uno::Reference<
-       ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-       ::ucb::ContentProviderImplHelper* pProvider,
-       const ::com::sun::star::uno::Reference<
-       ::com::sun::star::ucb::XContentIdentifier >& Identifier,
-       DAVSessionFactory* pSessionFactory )
-    throw ( ::com::sun::star::ucb::ContentCreationException );
-  Content( const ::com::sun::star::uno::Reference<
-       ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-       ::ucb::ContentProviderImplHelper* pProvider,
-       const ::com::sun::star::uno::Reference<
-       ::com::sun::star::ucb::XContentIdentifier >& Identifier,
-       ::vos::ORef< DAVSession> pSession,
-       sal_Bool isCollection)
-    throw ( ::com::sun::star::ucb::ContentCreationException );
-  virtual ~Content();
+      Content( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                ContentProvider* pProvider,
+                const ::com::sun::star::uno::Reference<
+                ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+                DAVSessionFactory* pSessionFactory )
+        throw ( ::com::sun::star::ucb::ContentCreationException );
+      Content( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                ContentProvider* pProvider,
+                const ::com::sun::star::uno::Reference<
+                ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+             DAVSessionFactory* pSessionFactory,
+                sal_Bool isCollection )
+        throw ( ::com::sun::star::ucb::ContentCreationException );
+      virtual ~Content();
 
-  // XInterface
-  XINTERFACE_DECL()
+      // XInterface
+      XINTERFACE_DECL()
 
     // XTypeProvider
     XTYPEPROVIDER_DECL()
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL
-  getImplementationName()
-    throw( ::com::sun::star::uno::RuntimeException );
-  virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-  getSupportedServiceNames()
-    throw( ::com::sun::star::uno::RuntimeException );
+      getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
+      virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+      getSupportedServiceNames()
+        throw( ::com::sun::star::uno::RuntimeException );
 
-  // XContent
-  virtual rtl::OUString SAL_CALL
-  getContentType()
-    throw( com::sun::star::uno::RuntimeException );
+      // XContent
+      virtual rtl::OUString SAL_CALL
+      getContentType()
+        throw( com::sun::star::uno::RuntimeException );
 
-  // XCommandProcessor
-  virtual com::sun::star::uno::Any SAL_CALL
-  execute( const com::sun::star::ucb::Command& aCommand,
-       sal_Int32 CommandId,
-       const com::sun::star::uno::Reference<
-       com::sun::star::ucb::XCommandEnvironment >& Environment )
-    throw( com::sun::star::uno::Exception,
-       com::sun::star::ucb::CommandAbortedException,
-       com::sun::star::uno::RuntimeException );
-  virtual void SAL_CALL
-  abort( sal_Int32 CommandId )
-    throw( com::sun::star::uno::RuntimeException );
+      // XCommandProcessor
+      virtual com::sun::star::uno::Any SAL_CALL
+      execute( const com::sun::star::ucb::Command& aCommand,
+                sal_Int32 CommandId,
+                const com::sun::star::uno::Reference<
+                   com::sun::star::ucb::XCommandEnvironment >& Environment )
+        throw( com::sun::star::uno::Exception,
+                  com::sun::star::ucb::CommandAbortedException,
+                  com::sun::star::uno::RuntimeException );
+      virtual void SAL_CALL
+      abort( sal_Int32 CommandId )
+        throw( com::sun::star::uno::RuntimeException );
 
-  //////////////////////////////////////////////////////////////////////
-  // Additional interfaces
-  //////////////////////////////////////////////////////////////////////
+      // XPropertyContainer
+    virtual void SAL_CALL
+    addProperty( const rtl::OUString& Name,
+                 sal_Int16 Attributes,
+                 const com::sun::star::uno::Any& DefaultValue )
+        throw( com::sun::star::beans::PropertyExistException,
+               com::sun::star::beans::IllegalTypeException,
+               com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::uno::RuntimeException );
 
-  // Add additional interfaces ( like com::sun:.star::ucb::XContentCreator ).
-  // XContentCreator
-  virtual com::sun::star::uno::Sequence<
-  com::sun::star::ucb::ContentInfo > SAL_CALL
-  queryCreatableContentsInfo()
-    throw( com::sun::star::uno::RuntimeException );
-  virtual com::sun::star::uno::Reference<
-  com::sun::star::ucb::XContent > SAL_CALL
-  createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-    throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL
+    removeProperty( const rtl::OUString& Name )
+        throw( com::sun::star::beans::UnknownPropertyException,
+               com::sun::star::beans::NotRemoveableException,
+               com::sun::star::uno::RuntimeException );
 
+      //////////////////////////////////////////////////////////////////////
+      // Additional interfaces
+      //////////////////////////////////////////////////////////////////////
 
-  //////////////////////////////////////////////////////////////////////
-  // Non-interface methods.
-  //////////////////////////////////////////////////////////////////////
+      // XContentCreator
+    virtual com::sun::star::uno::Sequence<
+        com::sun::star::ucb::ContentInfo > SAL_CALL
+      queryCreatableContentsInfo()
+        throw( com::sun::star::uno::RuntimeException );
+      virtual com::sun::star::uno::Reference<
+          com::sun::star::ucb::XContent > SAL_CALL
+      createNewContent( const com::sun::star::ucb::ContentInfo& Info )
+        throw( com::sun::star::uno::RuntimeException );
 
-  ::vos::ORef< DAVSession > getSession() { return _pWebdavSession; }
-  const ::rtl::OUString& getPath() const { return _path; }
+      //////////////////////////////////////////////////////////////////////
+      // Non-interface methods.
+      //////////////////////////////////////////////////////////////////////
 
-  // Called from resultset data supplier.
-  static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-  getPropertyValues( const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
-                     const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::Property >& rProperties,
-                        const ContentProperties& rData,
-                        const ::vos::ORef<
-                         ::ucb::ContentProviderImplHelper >&    rProvider,
-                        const ::rtl::OUString& rContentId );
+    DAVResourceAccess & getResourceAccess() { return m_aResAccess; }
+
+      // Called from resultset data supplier.
+      static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+      getPropertyValues( const ::com::sun::star::uno::Reference<
+                              ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                       const ::com::sun::star::uno::Sequence<
+                              ::com::sun::star::beans::Property >& rProperties,
+                          const ContentProperties& rData,
+                          const ::vos::ORef<
+                           ::ucb::ContentProviderImplHelper >&  rProvider,
+                          const ::rtl::OUString& rContentId );
 };
 
 };

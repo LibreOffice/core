@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVProperties.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,40 @@
 #ifndef _DAVPROPERTIES_HXX_
 #define _DAVPROPERTIES_HXX_
 
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _NEONTYPES_HXX_
+#include "NeonTypes.hxx"
+#endif
 
 namespace webdav_ucp
 {
 
-class DAVProperties
+struct DAVProperties
 {
-    public:
-        static const ::rtl::OUString CREATIONDATE;
-        static const ::rtl::OUString DISPLAYNAME;
-        static const ::rtl::OUString GETCONTENTLANGUAGE;
-        static const ::rtl::OUString GETCONTENTLENGTH;
-        static const ::rtl::OUString GETCONTENTTYPE;
-        static const ::rtl::OUString GETETAG;
-        static const ::rtl::OUString GETLASTMODIFIED;
-        static const ::rtl::OUString LOCKDISCOVERY;
-        static const ::rtl::OUString RESOURCETYPE;
-        static const ::rtl::OUString SOURCE;
-        static const ::rtl::OUString SUPPORTEDLOCK;
+    static const ::rtl::OUString CREATIONDATE;
+    static const ::rtl::OUString DISPLAYNAME;
+    static const ::rtl::OUString GETCONTENTLANGUAGE;
+    static const ::rtl::OUString GETCONTENTLENGTH;
+    static const ::rtl::OUString GETCONTENTTYPE;
+    static const ::rtl::OUString GETETAG;
+    static const ::rtl::OUString GETLASTMODIFIED;
+    static const ::rtl::OUString LOCKDISCOVERY;
+    static const ::rtl::OUString RESOURCETYPE;
+    static const ::rtl::OUString SOURCE;
+    static const ::rtl::OUString SUPPORTEDLOCK;
+    static const ::rtl::OUString EXECUTABLE;
+
+    static void createNeonPropName( const rtl::OUString & rFullName,
+                                    NeonPropName & rName );
+    static void createUCBPropName ( const char * nspace,
+                                    const char * name,
+                                    rtl::OUString & rFullName );
+
+    static bool isUCBDeadProperty( const NeonPropName & rName );
 };
 
 }; // namespace webdav_ucp
+
 #endif // _DAVPROPERTIES_HXX_

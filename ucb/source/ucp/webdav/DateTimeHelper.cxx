@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTimeHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-09 15:59:39 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,16 @@
  *
  *
  ************************************************************************/
+
 #include <stdio.h>
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
 
+#ifndef _WEBDAV_DATETIME_HELPER_HXX
 #include "DateTimeHelper.hxx"
+#endif
 
 using namespace com::sun::star::util;
 using namespace rtl;
@@ -76,23 +79,22 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
 {
     OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
-    sal_Int32 year;
-    sal_Int32 month;
-    sal_Int32 day;
-    sal_Int32 hours;
-    sal_Int32 minutes;
-    sal_Int32 seconds;
+    int year;
+    int month;
+    int day;
+    int hours;
+    int minutes;
+    int seconds;
 
-    sal_Int32 i = sscanf (aDT.getStr(), "%4d-%2d-%2dT%2d:%2d:%2d",
-        &year, &month, &day,
-        &hours, &minutes, &seconds);
+    int i = sscanf( aDT.getStr(), "%4d-%2d-%2dT%2d:%2d:%2d",
+                    &year, &month, &day, &hours, &minutes, &seconds );
     if (i != 6)
         return false;
 
-    dateTime.Year = year;
-    dateTime.Month = month;
-    dateTime.Day = day;
-    dateTime.Hours = hours;
+    dateTime.Year    = year;
+    dateTime.Month   = month;
+    dateTime.Day     = day;
+    dateTime.Hours   = hours;
     dateTime.Minutes = minutes;
     dateTime.Seconds = seconds;
 
@@ -132,12 +134,12 @@ sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& day)
 bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     DateTime& dateTime)
 {
-    sal_Int32 year;
-    sal_Int32 month;
-    sal_Int32 day;
-    sal_Int32 hours;
-    sal_Int32 minutes;
-    sal_Int32 seconds;
+    int year;
+    int month;
+    int day;
+    int hours;
+    int minutes;
+    int seconds;
     sal_Char string_month[3 + 1];
 
     sal_Int32 found = s.indexOf (',');
@@ -149,14 +151,12 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
 
         // RFC 1123
         found = sscanf (__s, ", %2d %3s %4d %2d:%2d:%2d GMT",
-            &day, string_month, &year,
-            &hours, &minutes, &seconds);
+                        &day, string_month, &year, &hours, &minutes, &seconds);
         if (found != 6)
         {
             // RFC 1036
             found = sscanf (__s, ", %2d-%3s-%2d %2d:%2d:%2d GMT",
-                &day, &string_month, &year,
-                &hours, &minutes, &seconds);
+                            &day, &string_month, &year, &hours, &minutes, &seconds);
         }
         found = (found == 6) ? 1 : 0;
     }
@@ -168,10 +168,8 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
 
         // ANSI C's asctime () format
         found = sscanf (aDT.getStr(), "%3s %3s %d %2d:%2d:%2d %4d",
-            string_day, string_month,
-            &day,
-            &hours, &minutes, &seconds,
-            &year);
+                        string_day, string_month,
+                        &day, &hours, &minutes, &seconds, &year);
         found = (found == 7) ? 1 : 0;
     }
 
@@ -180,10 +178,10 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
         month = DateTimeHelper::convertMonthToInt (OUString::createFromAscii (string_month));
         if (month)
         {
-            dateTime.Year = year;
-            dateTime.Month = month;
-            dateTime.Day = day;
-            dateTime.Hours = hours;
+            dateTime.Year    = year;
+            dateTime.Month   = month;
+            dateTime.Day     = day;
+            dateTime.Hours   = hours;
             dateTime.Minutes = minutes;
             dateTime.Seconds = seconds;
         }

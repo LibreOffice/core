@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 10:00:03 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@ namespace webdav_ucp {
 
 struct DataSupplier_Impl;
 class Content;
-class DAVResource;
-struct ContentProperties;
+struct DAVResource;
+class ContentProperties;
 
 class DataSupplier : public ucb::ResultSetDataSupplier
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVException.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,13 @@
  *
  *
  ************************************************************************/
+
 #ifndef _DAVEXCEPTION_HXX_
 #define _DAVEXCEPTION_HXX_
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 namespace webdav_ucp
 {
@@ -70,6 +75,7 @@ class DAVException
         enum ExceptionCode { DAV_HTTP_LOOKUP = 0,
                              DAV_HTTP_ERROR,
                              DAV_HTTP_AUTH,
+                             DAV_HTTP_REDIRECT,
                              DAV_SESSION_CREATE,
                              DAV_REQUEST_CREATE,
                              DAV_INVALID_ARG,
@@ -77,13 +83,22 @@ class DAVException
                              DAV_FILE_WRITE,
                              DAV_UNKNOWN };
 
+    private:
         ExceptionCode   mExceptionCode;
+        rtl::OUString   mData;
 
     public:
          DAVException( ExceptionCode inExceptionCode ) :
             mExceptionCode( inExceptionCode ) {};
+         DAVException( ExceptionCode inExceptionCode,
+                       const rtl::OUString & rData ) :
+            mExceptionCode( inExceptionCode ), mData( rData ) {};
         ~DAVException( ) {};
+
+    const ExceptionCode & getError() const { return mExceptionCode; }
+    const rtl::OUString & getData() const  { return mData; }
 };
 
 }; // namespace webdav_ucp
+
 #endif // _DAVEXCEPTION_HXX_

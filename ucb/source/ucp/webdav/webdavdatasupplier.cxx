@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 11:11:45 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
  *************************************************************************/
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
@@ -82,7 +86,9 @@
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #include "webdavcontent.hxx"
 #endif
-
+#ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
+#include "ContentProperties.hxx"
+#endif
 #ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
 #endif
@@ -394,60 +400,67 @@ sal_Bool DataSupplier::getData()
 
     if ( !m_pImpl->m_bCountFinal )
     {
-//      const Sequence< Property > & rProps = getResultSet()->getProperties();
+        std::vector< OUString > propertyNames;
+        ContentProperties::UCBNamesToDAVNames(
+                        getResultSet()->getProperties(), propertyNames );
+
+        // Append "resourcetype", if not already present. It's value is
+        // needed to get a valid ContentProperties::pIsFolder value, which
+        // is needed for OpenMode handling.
+
+        std::vector< OUString >::const_iterator it  = propertyNames.begin();
+        std::vector< OUString >::const_iterator end = propertyNames.end();
+
+        while ( it != end )
+        {
+            if ( (*it).equals( DAVProperties::RESOURCETYPE ) )
+                break;
+
+            it++;
+        }
+
+        if ( it == end )
+            propertyNames.push_back( DAVProperties::RESOURCETYPE );
+
         std::vector< DAVResource > resources;
         try
         {
-            // @@@ limit to resources really necessaray according to rProps
-
-               std::vector< OUString > propertyNames;
-               propertyNames.push_back( DAVProperties::CREATIONDATE );
-               propertyNames.push_back( DAVProperties::DISPLAYNAME );
-               propertyNames.push_back( DAVProperties::GETCONTENTLANGUAGE );
-               propertyNames.push_back( DAVProperties::GETCONTENTLENGTH );
-               propertyNames.push_back( DAVProperties::GETCONTENTTYPE );
-               propertyNames.push_back( DAVProperties::GETETAG );
-               propertyNames.push_back( DAVProperties::GETLASTMODIFIED );
-               propertyNames.push_back( DAVProperties::LOCKDISCOVERY );
-               propertyNames.push_back( DAVProperties::RESOURCETYPE );
-               propertyNames.push_back( DAVProperties::SOURCE );
-               //   propertyNames.push_back( DAVProperties::SUPPORTEDLOCK );
-
             // propfind depth 1, get property values for each child
-            vos::ORef< DAVSession > xSession = m_pImpl->m_xContent->getSession();
-            xSession->PROPFIND( m_pImpl->m_xContent->getPath(),
-                                ONE,
-                                propertyNames,
-                                resources,
-                                getResultSet()->getEnvironment() );
+            m_pImpl->m_xContent->getResourceAccess()
+                .PROPFIND( ONE,
+                           propertyNames,
+                           resources,
+                           getResultSet()->getEnvironment() );
           }
           catch ( DAVException & )
         {
-            VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
+//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
             return sal_False;
           }
 
         // Note: Last elem of resources contains data for the folder itself.
-        for ( sal_Int32 n = 0; n < resources.size() - 1 ; ++n )
+        for ( sal_uInt32 n = 0; n < resources.size() - 1 ; ++n )
         {
-            ContentProperties* pContentProperty = new ContentProperties;
-            pContentProperty->setValues( resources[ n ] );
+            ContentProperties* pContentProperties
+                = new ContentProperties( resources[ n ] );
 
             // Check resource against open mode.
             switch ( m_pImpl->m_nOpenMode )
             {
                 case OpenMode::FOLDERS:
-                    if ( !pContentProperty->bIsFolder )
+                    if ( !( pContentProperties->pIsFolder
+                                && *pContentProperties->pIsFolder ) )
                     {
-                        // Entry is a document.
+                        // Entry is not a folder.
                         continue;
                     }
                     break;
 
                 case OpenMode::DOCUMENTS:
-                    if ( !pContentProperty->bIsDocument )
+                    if ( !( pContentProperties->pIsDocument
+                                && *pContentProperties->pIsDocument ) )
                     {
-                        // Entry is a folder.
+                        // Entry is not a document.
                         continue;
                     }
                     break;
@@ -458,12 +471,12 @@ sal_Bool DataSupplier::getData()
             }
 
               m_pImpl->m_aResults.push_back(
-                                new ResultListEntry( pContentProperty ) );
+                                new ResultListEntry( pContentProperties ) );
         }
 
           m_pImpl->m_bCountFinal = sal_True;
 
-        // Callback possible, bacause listeners may be informed!
+        // Callback possible, because listeners may be informed!
         aGuard.clear();
         getResultSet()->rowCountFinal();
     }

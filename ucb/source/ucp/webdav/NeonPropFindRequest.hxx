@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:59:12 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,56 +58,69 @@
  *
  *
  ************************************************************************/
+
 #ifndef _NEONPROPFINDREQUEST_HXX_
 #define _NEONPROPFINDREQUEST_HXX_
 
-#include "NeonTypes.hxx"
-#include "DAVTypes.hxx"
-#include "DAVResource.hxx"
-#include <rtl/ustring.hxx>
 #include <vector>
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+#ifndef _NEONTYPES_HXX_
+#include "NeonTypes.hxx"
+#endif
+#ifndef _DAVTYPES_HXX_
+#include "DAVTypes.hxx"
+#endif
+#ifndef _DAVRESOURCE_HXX_
+#include "DAVResource.hxx"
+#endif
 
 namespace webdav_ucp
 {
 
 class NeonPropFindRequest
 {
-    private:
-        NeonPropFindHandler *               mPropFindHandler;
-        static const NeonPropFindXmlElem    sXmlElems[];
+public:
+    // named / allprop
+    NeonPropFindRequest( HttpSession* inSession,
+                         const char*  inPath,
+                         const Depth  inDepth,
+                         const std::vector< ::rtl::OUString > & inPropNames,
+                         std::vector< DAVResource > & ioResources,
+                         int & nError );
+    // propnames
+    NeonPropFindRequest( HttpSession* inSession,
+                         const char*  inPath,
+                         const Depth  inDepth,
+                         std::vector< DAVResourceInfo > & ioResInfo,
+                         int & nError );
 
-    public:
-        NeonPropFindRequest( HttpSession *                  inSession,
-                             const char *                   inPath,
-                             const Depth                    inDepth,
-                             const std::vector< ::rtl::OUString >   inPropNames,
-                             std::vector< DAVResource > &   ioResources );
+    ~NeonPropFindRequest();
 
-        ~NeonPropFindRequest( );
+private:
+    // Neon callback functions
+    static void  propfind_results( void* userdata,
+                                   const char* href,
+                                    const NeonPropFindResultSet* set );
 
-    private:
-#ifdef OLD_NEON_PROPFIND_INTERFACE
-        static void *   StartResource( void * inUserData, const char * inHref );
-        static void     EndResource( void *             inUserData,
-                                     void *             inResource,
-                                     const char *       inStatusLine,
-                                     const HttpStatus * inHttpStatus,
-                                     const char *       inDescription );
-#else
-        static void *  CreatePrivate( void *        userdata,
-                                      const char *  uri );
-        static void    DiscoverResults( void * userdata,
-                                        const char * href,
-                                         const NeonPropFindResultSet * set);
-#endif
-        static int      EndElement( void *                      inUserData,
-                                    const NeonPropFindXmlElem * inXmlElem,
-                                    const char *                inCdata );
+    static int   propfind_iter( void* userdata,
+                                const NeonPropName* pname,
+                                const char* value,
+                                const HttpStatus* status );
 
-        static int      CheckContext( NeonPropFindXmlId inChild,
-                                      NeonPropFindXmlId inParent );
+    static void  propnames_results( void* userdata,
+                                    const char* href,
+                                    const NeonPropFindResultSet* results );
 
+    static int   propnames_iter( void* userdata,
+                                 const NeonPropName* pname,
+                                 const char* value,
+                                 const HttpStatus* status );
 };
 
 }; // namespace webdav_ucp
+
 #endif // _NEONPROPFINDREQUEST_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVAuthListener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class DAVAuthListener
                                  const com::sun::star::uno::Reference<
                                  com::sun::star::ucb::XCommandEnvironment >& inEnv)
                                                                 = 0;
+        virtual ~DAVAuthListener() {}
 };
 
 }; // namespace webdav_ucp

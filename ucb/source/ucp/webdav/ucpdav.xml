@@ -80,6 +80,8 @@
     <type> com.sun.star.ucb.ContentInfoAttribute               </type>
     <type> com.sun.star.ucb.InsertCommandArgument              </type>
     <type> com.sun.star.ucb.InteractiveBadTransferURLException </type>
+    <type> com.sun.star.ucb.Link                   </type>
+    <type> com.sun.star.ucb.Lock                   </type>
     <type> com.sun.star.ucb.NameClash                          </type>
     <type> com.sun.star.ucb.OpenCommandArgument2               </type>
     <type> com.sun.star.ucb.OpenMode                           </type>

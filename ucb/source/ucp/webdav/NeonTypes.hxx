@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-19 10:07:55 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,19 @@
  *
  *
  ************************************************************************/
+
 #ifndef _NEONTYPES_HXX_
 #define _NEONTYPES_HXX_
 
-// Activate after switching to neon > v0.11.0
-#define OLD_NEON_PROPFIND_INTERFACE
-
+#ifndef HTTP_BASIC_H
 #include <http_basic.h>
+#endif
+#ifndef HTTP_REQUEST_H
 #include <http_request.h>
+#endif
+#ifndef DAV_PROPS_H
 #include <dav_props.h>
+#endif
 
 typedef http_session                HttpSession;
 typedef http_req                    HttpRequest;
@@ -77,9 +81,6 @@ typedef dav_propfind_handler        NeonPropFindHandler;
 typedef dav_propname                NeonPropName;
 typedef struct hip_xml_elm          NeonPropFindXmlElem;
 typedef hip_xml_elmid               NeonPropFindXmlId;
-
-#ifndef OLD_NEON_PROPFIND_INTERFACE
 typedef dav_prop_result_set         NeonPropFindResultSet;
-#endif
 
 #endif _NEONTYPES_HXX_

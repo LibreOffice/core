@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-07 08:18:55 $
+#   last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR)
 
 # --- General -----------------------------------------------------
 
-# @@@ Add own files here.
 SLOFILES=\
     $(SLO)$/webdavservices.obj    	\
     $(SLO)$/webdavprovider.obj    	\
@@ -97,20 +96,22 @@ SLOFILES=\
     $(SLO)$/webdavcontentcaps.obj	\
     $(SLO)$/webdavresultset.obj     \
     $(SLO)$/webdavdatasupplier.obj	\
+    $(SLO)$/ContentProperties.obj	\
     $(SLO)$/DAVProperties.obj	\
-    $(SLO)$/DAVResource.obj		\
     $(SLO)$/DAVSessionFactory.obj	\
+    $(SLO)$/DAVResourceAccess.obj	\
     $(SLO)$/NeonUri.obj		\
     $(SLO)$/NeonInputStream.obj	\
     $(SLO)$/NeonPropFindRequest.obj	\
     $(SLO)$/NeonPUTFile.obj		\
     $(SLO)$/NeonSession.obj 	\
     $(SLO)$/authinteraction.obj 	\
-    $(SLO)$/DateTimeHelper.obj
-
-.IF "$(UPD)">="619"
-SLOFILES+=$(SLO)$/proxyconfig.obj
-.ENDIF
+    $(SLO)$/DateTimeHelper.obj	\
+    $(SLO)$/proxyconfig.obj		\
+    $(SLO)$/LinkSequence.obj	\
+    $(SLO)$/LockSequence.obj	\
+    $(SLO)$/LockEntrySequence.obj	\
+    $(SLO)$/UCBDeadPropertyValue.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -123,22 +124,6 @@ SHL1IMPLIB=i$(TARGET)
 .ELSE
 SHL1VERSIONMAP=exports.map
 .ENDIF
-
-# @@@ Add additional libs here.
-
-# EXPATASCII3RDLIB is first available in src599c...
-
-.IF "$(EXPATASCII3RDLIB)" == ""
-
-.IF "$(GUI)" == "UNX"
-EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
-.ENDIF # unx
-
-.IF "$(GUI)" == "WNT"
-EXPATASCII3RDLIB=ascii_expat_xmlparse.lib expat_xmltok.lib
-.ENDIF # wnt
-
-.ENDIF # EXPATASCII3RDLIB
 
 SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
