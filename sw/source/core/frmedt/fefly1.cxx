@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 16:38:12 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,11 +369,12 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
         if( rFrm.IsFlyInCntFrm() && rFrm.GetAnchorFrm() )
              rFrm.GetAnchorFrm()->SetCompletePaint();
 
-        //Hier wurde immer kalkuliert. Leider ist der Sonderfall Fly in Fly mit
-        //Spalten u.U. sehr kritisch wenn der innenliegende zuerst formatiert
-        //wird. Um kein Risiko einzugehen entschaerfen wir nur diesen Sonderfall.
-        if( !rFrm.GetAnchorFrm()->IsInFly() )
-            rFrm.Calc();
+        // --> OD 2004-06-11 #i28701# - no format at all.
+//        //Hier wurde immer kalkuliert. Leider ist der Sonderfall Fly in Fly mit
+//        //Spalten u.U. sehr kritisch wenn der innenliegende zuerst formatiert
+//        //wird. Um kein Risiko einzugehen entschaerfen wir nur diesen Sonderfall.
+//        if( !rFrm.GetAnchorFrm()->IsInFly() )
+//            rFrm.Calc();
 
         if( pImp->GetDrawView()->AreObjectsMarked() )
             pImp->GetDrawView()->UnmarkAll();
@@ -509,9 +510,10 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
         ((SwFlyAtCntFrm*)pFly)->SetAbsPos( rAbsPos );
     else
     {
-        const SwFrm *pAnch = pFly->GetAnchorFrm();
-        pAnch->Calc();
-        Point aOrient( pAnch->Frm().Pos() );
+            const SwFrm *pAnch = pFly->GetAnchorFrm();
+            // --> OD 2004-06-11 #i28701# - no format here
+//          pAnch->Calc();
+            Point aOrient( pAnch->Frm().Pos() );
 
         if ( pFly->IsFlyInCntFrm() )
             aOrient.X() = rAbsPos.X();
@@ -521,7 +523,8 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
         aOrient.Y() = rAbsPos.Y() - aOrient.Y();
         pFly->ChgRelPos( aOrient );
     }
-    pFly->Calc();
+    // --> OD 2004-06-11 #i28701# - no format here
+//    pFly->Calc();
     CallChgLnk();       // rufe das AttrChangeNotify auf der UI-Seite.
 }
 
@@ -549,16 +552,17 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         return aRet;
 
     SdrObject* pObj = rMrkList.GetMark( 0 )->GetObj();
-    SwFmt* pFmt = ::FindFrmFmt( pObj );
-    SwFmtAnchor aAnch( pFmt->GetAnchor() );
-    RndStdIds nAnchorId = aAnch.GetAnchorId();
+    // --> OD 2004-07-16 #i28701#
+    SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+    SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+    RndStdIds nAnchorId = rFmt.GetAnchor().GetAnchorId();
 
     if ( FLY_IN_CNTNT == nAnchorId )
         return aRet;
 
     sal_Bool bFlyFrame = pObj->ISA(SwVirtFlyDrawObj);
 
-    SwFlyFrm* pFly;
+    SwFlyFrm* pFly = 0L;
     const SwFrm* pOldAnch;
     const SwFrm* pFooterOrHeader = NULL;
 
@@ -636,7 +640,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
 
             if( bMoveIt || nAnchorId == FLY_AUTO_CNTNT )
             {
-                SwFmtAnchor aAnch( pFmt->GetAnchor() );
+                SwFmtAnchor aAnch( rFmt.GetAnchor() );
                 switch ( nAnchorId )
                 {
                     case FLY_AT_CNTNT:
@@ -680,13 +684,21 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 if( bMoveIt )
                 {
                     StartAllAction();
-                    pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
-                    if ( nAnchorId == FLY_AUTO_CNTNT &&
-                         bFlyFrame && pFly->IsFlyAtCntFrm() )
-                    {
-                        // OD 11.11.2003 #i22341#
-                        static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
-                    }
+                    rFmt.GetDoc()->SetAttr(aAnch, rFmt );
+                    // --> OD 2004-06-24 #i28701# - no call of method
+                    // <CheckCharRectAndTopOfLine()> for to-character anchored
+                    // Writer fly frame needed. This method call can cause a
+                    // format of the anchor frame, which is no longer intended.
+                    // Instead clear the anchor character rectangle and
+                    // the top of line values for all to-character anchored objects.
+//                    if ( nAnchorId == FLY_AUTO_CNTNT &&
+//                         bFlyFrame && pFly->IsFlyAtCntFrm() )
+//                    {
+//                        // OD 11.11.2003 #i22341#
+//                        static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
+//                    }
+                    pAnchoredObj->ClearCharRectAndTopOfLine();
+                    // <--
                     EndAllAction();
                 }
             }
