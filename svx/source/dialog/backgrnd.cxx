@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 06:49:15 $
+ *  last change: $Author: os $ $Date: 2001-05-04 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,11 +305,9 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
 /*  [Beschreibung]
 
 */
-
 {
-    SetLineColor();
+    SetLineColor(COL_BLACK);
     DrawRect( aDrawRect );
-
     if ( bIsBmp )
     {
         if ( pBitmap )
