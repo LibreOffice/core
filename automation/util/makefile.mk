@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2002-11-18 16:00:33 $
+#   last change: $Author: gh $ $Date: 2002-11-20 11:27:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,12 +187,17 @@ APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/svcommstream.obj
 
 # --- TESTTOOL MINIAPP ------------------------------------------------------
+# ressources are linked here
 
-SRS3FILES= $(SRS)$/miniapp.srs
-RES3TARGET=miniapp
+RESLIB1NAME=tma
+RESLIB1SRSFILES= \
+                $(SRS)$/miniapp.srs
 
 APP3TARGET=miniapp
 APP3STDLIBS= \
+            $(CPPUHELPERLIB) \
+             $(UCBHELPERLIB) \
+            $(COMPHELPERLIB) \
             $(AUTOMATIONLIB) \
             $(SALLIB) \
             $(TOOLSLIB) \
