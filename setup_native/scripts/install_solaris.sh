@@ -131,7 +131,7 @@ fi
 # the tail of the script contains a shared object for overloading the getuid() call
 #
 
-GETUID_SO=/tmp/libgetuid.so.$$
+GETUID_SO=/tmp/getuid.so.$$
 linenum=???
 tail +$linenum $0 > $GETUID_SO
 if [ ! -r $GETUID_SO ]
