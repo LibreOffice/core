@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:20:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,3 +92,50 @@ PrintMonitor::PrintMonitor( Window *pParent, BOOL bEMail )
     FreeResource();
 }
 
+/*---------------------------------------------------------------------
+    Progress Indicator for Creation of personalized Mail Merge documents:
+---------------------------------------------------------------------*/
+
+CreateMonitor::CreateMonitor( Window *pParent )
+:   ModelessDialog( pParent, SW_RES(DLG_MM_CREATIONMONITOR) ),
+    m_aStatus           (this, SW_RES( FT_STATUS )),
+    m_aProgress         (this, SW_RES( FT_PROGRESS )),
+    m_aCreateDocuments  (this, SW_RES( FT_CREATEDOCUMENTS )),
+    m_aCounting         (this, SW_RES( FT_COUNTING )),
+    m_aCancelButton     (this, SW_RES( PB_CANCELPRNMON  )),
+    m_sCountingPattern(),
+    m_sVariable_Total( String::CreateFromAscii("%Y") ),
+    m_sVariable_Position( String::CreateFromAscii("%X") ),
+    m_nTotalCount(0),
+    m_nCurrentPosition(0)
+{
+    FreeResource();
+
+    m_sCountingPattern = m_aCounting.GetText();
+    m_aCounting.SetText(String::CreateFromAscii("..."));
+}
+
+void CreateMonitor::UpdateCountingText()
+{
+    String sText(m_sCountingPattern);
+    sText.SearchAndReplaceAll( m_sVariable_Total, String::CreateFromInt32( m_nTotalCount ) );
+    sText.SearchAndReplaceAll( m_sVariable_Position, String::CreateFromInt32( m_nCurrentPosition ) );
+    m_aCounting.SetText(sText);
+}
+
+void CreateMonitor::SetTotalCount( sal_Int32 nTotal )
+{
+    m_nTotalCount = nTotal;
+    UpdateCountingText();
+}
+
+void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
+{
+    m_nCurrentPosition = nCurrent;
+    UpdateCountingText();
+}
+
+void CreateMonitor::SetCancelHdl( const Link& rLink )
+{
+    m_aCancelButton.SetClickHdl( rLink );
+}
