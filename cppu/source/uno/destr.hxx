@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:27 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,11 +181,9 @@ inline void _destructAny(
         ::uno_any_destruct( (uno_Any *)pAny->pData, release );
         ::rtl_freeMemory( pAny->pData );
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -217,7 +215,7 @@ inline void _destructAny(
         break;
     }
     case typelib_TypeClass_INTERFACE:
-        _releaseRef( &pAny->pReserved, release );
+        _release( pAny->pReserved, release );
         break;
     }
 #ifdef _DEBUG
@@ -284,11 +282,9 @@ inline sal_Int32 _destructElements(
     }
     case typelib_TypeClass_ENUM:
         return sizeof(sal_Int32);
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -337,11 +333,9 @@ inline sal_Int32 _destructElements(
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         return sizeof(uno_Sequence *);
     }
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_ARRAY:
-        OSL_ENSURE( sal_False, "### unexpected array!" );
+        OSL_ENSURE( 0, "### unexpected array!" );
         break;
-#endif
     case typelib_TypeClass_INTERFACE:
     {
         if (release)
@@ -420,11 +414,9 @@ inline void _destructData(
     case typelib_TypeClass_ANY:
         _destructAny( (uno_Any *)pValue, release );
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
@@ -467,7 +459,7 @@ inline void _destructData(
         _destructSequence( *(uno_Sequence **)pValue, pType, pTypeDescr, release );
         break;
     case typelib_TypeClass_INTERFACE:
-        _releaseRef( (void **)pValue, release );
+        _release( *(void **)pValue, release );
         break;
     }
 }
