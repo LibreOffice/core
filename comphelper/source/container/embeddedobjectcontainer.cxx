@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:16:12 $
+ *  last change: $Author: mav $ $Date: 2005-02-02 16:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,29 +138,34 @@ struct EmbedImpl
     EmbeddedObjectContainerNameMap maObjectContainer;
     uno::Reference < embed::XStorage > mxStorage;
     EmbeddedObjectContainer* mpTempObjectContainer;
+    uno::Reference < embed::XStorage > mxImageStorage;
     //EmbeddedObjectContainerNameMap maTempObjectContainer;
     //uno::Reference < embed::XStorage > mxTempStorage;
     sal_Bool bOwnsStorage;
 
-    const uno::Reference < embed::XStorage > GetReplacements();
+    const uno::Reference < embed::XStorage >& GetReplacements();
 };
 
-const uno::Reference < embed::XStorage > EmbedImpl::GetReplacements()
+const uno::Reference < embed::XStorage >& EmbedImpl::GetReplacements()
 {
-    uno::Reference < embed::XStorage > xImageStorage;
-    try
+    if ( !mxImageStorage.is() )
     {
-        xImageStorage = mxStorage->openStorageElement( ::rtl::OUString::createFromAscii( "ObjectReplacements" ), embed::ElementModes::READWRITE );
-    }
-    catch ( uno::Exception& )
-    {
-        xImageStorage = mxStorage->openStorageElement( ::rtl::OUString::createFromAscii( "ObjectReplacements" ), embed::ElementModes::READ );
+        try
+        {
+            mxImageStorage = mxStorage->openStorageElement(
+                ::rtl::OUString::createFromAscii( "ObjectReplacements" ), embed::ElementModes::READWRITE );
+        }
+        catch ( uno::Exception& )
+        {
+            mxImageStorage = mxStorage->openStorageElement(
+                ::rtl::OUString::createFromAscii( "ObjectReplacements" ), embed::ElementModes::READ );
+        }
     }
 
-    if ( !xImageStorage.is() )
+    if ( !mxImageStorage.is() )
         throw io::IOException();
 
-    return xImageStorage;
+    return mxImageStorage;
 }
 
 EmbeddedObjectContainer::EmbeddedObjectContainer()
@@ -181,7 +186,8 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
 
 void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::XStorage >& rStor )
 {
-    // the image storage will be disposed automatically when the parent is disposed
+    ReleaseImageSubStorage();
+
     if ( pImpl->bOwnsStorage )
         pImpl->mxStorage->dispose();
 
@@ -189,8 +195,26 @@ void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::X
     pImpl->bOwnsStorage = sal_False;
 }
 
+void EmbeddedObjectContainer::ReleaseImageSubStorage()
+{
+    if ( pImpl->mxImageStorage.is() )
+    {
+        try
+        {
+            pImpl->mxImageStorage->dispose();
+            pImpl->mxImageStorage = uno::Reference< embed::XStorage >();
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ASSERT( "Problems releasing image substorage!\n" );
+        }
+    }
+}
+
 EmbeddedObjectContainer::~EmbeddedObjectContainer()
 {
+    ReleaseImageSubStorage();
+
     if ( pImpl->bOwnsStorage )
         pImpl->mxStorage->dispose();
 
