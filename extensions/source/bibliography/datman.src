@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 10:16:25 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 21:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: os $ $Date: 2001-06-26 10:16:25 $ $Revision: 1.14 $
+// $Author: obo $ $Date: 2001-06-29 21:55:10 $ $Revision: 1.15 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -1349,5 +1349,6 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ catalan ] = "Selección de la fuente de datos";
     Text[ finnish ] = "Valitse tietolähde";
 };
+
 
 
