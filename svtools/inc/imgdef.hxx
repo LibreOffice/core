@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgdef.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-25 12:56:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,8 @@
 enum SfxSymbolSet
 {
     SFX_SYMBOLS_SMALL,
-    SFX_SYMBOLS_LARGE
+    SFX_SYMBOLS_LARGE,
+    SFX_SYMBOLS_AUTO
 };
 
 #define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001
