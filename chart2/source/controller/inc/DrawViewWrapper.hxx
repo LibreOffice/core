@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 16:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public:
     //fill list of selection handles 'aHdl'
     virtual void SetMarkHandles();
 
-    //SdrPageView*    GetPageView() { return m_pWrappedDLPageView; };
+    SdrPageView*    GetPageView() { return m_pWrappedDLPageView; };
 
     SdrObject* getHitObject( const Point& rPnt ) const;
     //BOOL PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, ULONG nOptions, SdrObject** ppRootObj, ULONG* pnMarkNum=NULL, USHORT* pnPassNum=NULL) const;
@@ -109,9 +109,14 @@ public:
 
     void InitRedraw( OutputDevice* pOut, const Region& rReg );
 
+    SdrObject*   getTextEditObject() const;
+    SdrOutliner* getOutliner() const;
+
 private:
     mutable SdrPageView*            m_pWrappedDLPageView;
     mutable MarkHandleProvider*     m_pMarkHandleProvider;
+
+    ::std::auto_ptr< SdrOutliner >  m_apOutliner;
 };
 
 //.............................................................................
