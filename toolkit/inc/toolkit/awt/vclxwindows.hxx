@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:54:13 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,11 +295,51 @@ static double ImplCalcDoubleValue( double nValue, sal_uInt16 nDigits )
 }
 
 //  ----------------------------------------------------
+//  class VCLXImageConsumer
+//    deriving from VCLXWindow and XImageConsumer
+//  ----------------------------------------------------
+
+
+class VCLXImageConsumer :public ::com::sun::star::awt::XImageConsumer
+                        ,public VCLXWindow
+{
+private:
+    ImageConsumer               maImageConsumer;
+    BitmapEx                    maBitmap;
+
+protected:
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw();
+    void                                        SAL_CALL release() throw();
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XImageConsumer
+    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::VclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+protected:
+    void            ImplUpdateImage( sal_Bool bGetNewImage );
+
+protected:
+    VCLXImageConsumer() : VCLXWindow() { }
+};
+
+//  ----------------------------------------------------
 //  class VCLXButton
 //  ----------------------------------------------------
-class VCLXButton :  public ::com::sun::star::awt::XImageConsumer,
-                    public ::com::sun::star::awt::XButton,
-                    public VCLXWindow
+class VCLXButton :  public VCLXImageConsumer,
+                    public ::com::sun::star::awt::XButton
 {
 private:
     ::rtl::OUString             maActionCommand;
@@ -308,7 +348,6 @@ private:
     ActionListenerMultiplexer   maActionListeners;
 
 protected:
-    void            ImplUpdateImage( sal_Bool bGetNewImage );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
@@ -332,13 +371,6 @@ public:
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XImageConsumer
-    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -400,12 +432,12 @@ public:
 //  ----------------------------------------------------
 class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
                         public ::com::sun::star::awt::XButton,
-                        public VCLXWindow
+                        public VCLXImageConsumer
 {
 private:
-    ItemListenerMultiplexer     maItemListeners;
     ActionListenerMultiplexer   maActionListeners;
     ::rtl::OUString             maActionCommand;
+    ItemListenerMultiplexer     maItemListeners;
 
 protected:
     void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
@@ -455,7 +487,7 @@ public:
 //  ----------------------------------------------------
 class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
                         public ::com::sun::star::awt::XButton,
-                        public VCLXWindow
+                        public VCLXImageConsumer
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
