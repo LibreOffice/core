@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-02 07:53:32 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:05:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -255,3 +255,18 @@ EVOAB_CPP=1
 
 EVOAB=$(EVOAB_TARGET_TARGET)_$(CMPEXT)
 
+# ----------------------------HSQLDB settings-----------------------------------#
+# target
+HSQLDB_TARGET=hsqldb
+
+# the major 
+HSQLDB_MAJOR=2
+# the minor 
+HSQLDB_MINOR=0
+# the micro 
+HSQLDB_MICRO=0
+
+# this is a c++ compatible library 
+HSQLDB_CPP=1
+
+HSQLDB=$(HSQLDB_TARGET_TARGET)_$(CMPEXT)
