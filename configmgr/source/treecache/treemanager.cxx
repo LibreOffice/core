@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:52:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,15 +535,10 @@ void TreeManager::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccesso
     {
         CFG_TRACE_INFO("TreeManager: committing an Update to the cache controller");
         RequestOptions aOptions = aChangeTree.getOptions();;
-        //Modify RequestOptions
+        //Modify RequestOptions - suppress async commit, if disabled
         if(!m_bEnableAsync)
-        {
             aOptions.enableAsync(false);
-        }
-        else
-        {
-            aOptions.enableAsync(true);
-        }
+
         backend::UpdateRequest anUpdate(
                                 & aChangeTree.root,
                                 aChangeTree.getRootNodePath(),
@@ -613,16 +608,14 @@ void TreeManager::refreshAll() CFG_UNO_THROW_ALL(  )
 {
     //Find what components are in cache and that have client references and reload
     //such components.
-     BackendCacheRef aCacheLoaderRef = getCacheLoader();
-     OSL_ENSURE(aCacheLoaderRef.is(), "TreeManager::refreshAll : No backend available");
-     aCacheLoaderRef->refreshAllComponents();
+     BackendCacheRef aCacheRef = maybeGetBackendCache();
+     if (aCacheRef.is()) aCacheRef->refreshAllComponents();
 }
 // ----------------------------------------------------------------------------
 void TreeManager::flushAll()CFG_NOTHROW()
 {
-     BackendCacheRef aCacheLoaderRef = getCacheLoader();
-     OSL_ENSURE(aCacheLoaderRef.is(), "TreeManager::flushAll : No backend available");
-     aCacheLoaderRef->flushPendingUpdates();
+     BackendCacheRef aCacheRef = maybeGetBackendCache();
+     if (aCacheRef.is()) aCacheRef->flushPendingUpdates();
 }
 //-----------------------------------------------------------------------------
 void TreeManager::enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW()
