@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:21:33 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 #endif
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
+
+#if OSL_DEBUG_LEVEL > 1
+void MyOutputDebugString( char *s) { OutputDebugString( s ); }
+#endif
 
 // misssing prototypes and constants for LayeredWindows
 extern "C" {
@@ -812,6 +816,7 @@ static void ImplSalCalcBorder( const WinSalFrame* pFrame,
                                int& rLeft, int& rTop, int& rRight, int& rBottom )
 {
     // set window to screen size
+
     int nFrameX;
     int nFrameY;
     int nCaptionY;
@@ -1521,6 +1526,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
 
     // save hwnd, will be overwritten in WM_CREATE during createwindow
     HWND hWndOld = pThis->mhWnd;
+    HWND hWndOldParent = ::GetParent( hWndOld );
     BOOL bNeedGraphics = pThis->mbGraphics;
     HFONT   hFont   = NULL;
     HPEN    hPen    = NULL;
@@ -1554,8 +1560,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
                                         (WPARAM) hWndParent, (LPARAM)pThis->mhWnd );
 
     // succeeded ?
-    hWndParent = ::GetParent( hWnd );
-    DBG_ASSERT( hWndParent == hNewParentWnd, "WinSalFrame::SetParent not successful");
+    DBG_ASSERT( IsWindow( hWnd ), "WinSalFrame::SetParent not successful");
 
     // recreate DCs
     if( bNeedGraphics )
@@ -2962,23 +2967,29 @@ void WinSalFrame::Beep( SoundType eSoundType )
 
 // -----------------------------------------------------------------------
 
-ULONG WinSalFrame::GetCurrentModButtons()
+SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
-    ULONG nMod = 0;
+    SalPointerState aState;
+    aState.mnState = 0;
 
     if ( GetKeyState( VK_LBUTTON ) & 0x8000 )
-        nMod |= MOUSE_LEFT;
+        aState.mnState |= MOUSE_LEFT;
     if ( GetKeyState( VK_MBUTTON ) & 0x8000 )
-        nMod |= MOUSE_MIDDLE;
+        aState.mnState |= MOUSE_MIDDLE;
     if ( GetKeyState( VK_RBUTTON ) & 0x8000 )
-        nMod |= MOUSE_RIGHT;
+        aState.mnState |= MOUSE_RIGHT;
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
-        nMod |= KEY_SHIFT;
+        aState.mnState |= KEY_SHIFT;
     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
-        nMod |= KEY_MOD1;
+        aState.mnState |= KEY_MOD1;
     if ( GetKeyState( VK_MENU ) & 0x8000 )
-        nMod |= KEY_MOD2;
-    return nMod;
+        aState.mnState |= KEY_MOD2;
+
+    POINT pt;
+    GetCursorPos( &pt );
+
+    aState.maPos = Point( pt.x - maGeometry.nX, pt.y - maGeometry.nY );
+    return aState;
 }
 
 // -----------------------------------------------------------------------
@@ -4366,13 +4377,28 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
             {
                 int nMinWidth   = pFrame->mnMinWidth;
                 int nMinHeight  = pFrame->mnMinHeight;
+
+                /*
                 int nLeft;
                 int nTop;
                 int nRight;
                 int nBottom;
-                ImplSalCalcBorder( pFrame, nLeft, nTop, nRight, nBottom );
+
+                ImplSalCalcBorder( pFrame, nLeft, nTop, nRight, nBottom );  // does not honor tool window sizes
                 nMinWidth  += nLeft+nRight;
                 nMinHeight += nTop+nBottom;
+                */
+
+                RECT    aWinRect;
+                aWinRect.left   = 0;
+                aWinRect.right  = pFrame->mnMinWidth-1;
+                aWinRect.top    = 0;
+                aWinRect.bottom = pFrame->mnMinHeight-1;
+                AdjustWindowRectEx( &aWinRect, GetWindowStyle( pFrame->mhWnd ),
+                                    FALSE,     GetWindowExStyle( pFrame->mhWnd ) );
+                nMinWidth  = aWinRect.right - aWinRect.left + 1;
+                nMinHeight = aWinRect.bottom - aWinRect.top + 1;
+
                 if ( pMinMax->ptMinTrackSize.x < nMinWidth )
                      pMinMax->ptMinTrackSize.x = nMinWidth;
                 if (  pMinMax->ptMinTrackSize.y < nMinHeight )
