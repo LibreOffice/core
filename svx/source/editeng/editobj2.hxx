@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
+ *  last change: $Author: mt $ $Date: 2001-07-24 15:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,13 @@ inline BOOL XEditAttribute::IsFeature()
 }
 
 typedef XEditAttribute* XEditAttributePtr;
-SV_DECL_PTRARR( XEditAttributeList, XEditAttributePtr, 0, 4 );
+SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0, 4 );
+
+class XEditAttributeList : public XEditAttributeListImpl
+{
+public:
+    XEditAttribute* FindAttrib( USHORT nWhich, USHORT nChar ) const;
+};
 
 struct XParaPortion
 {
@@ -143,7 +149,16 @@ public:
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
 };
 
+struct LoadStoreTempInfos
+{
+    String              aOrgString;
+    SfxPoolItem*        pOrgParaAttrib;
+    XEditAttributeList  aOrgAttribs;
+    XEditAttributeList  aTmpNewAttribs;
 
+                        LoadStoreTempInfos( const String& rText );
+                        ~LoadStoreTempInfos();
+};
 
 class ContentInfo
 {
@@ -157,14 +172,16 @@ private:
     SfxItemSet          aParaAttribs;
     WrongList*          pWrongs;
 
+    LoadStoreTempInfos* pTempLoadStoreInfos;
+
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
 
 public:
                         ~ContentInfo();
 
-    String              GetText()           const   { return aText; }
-    String              GetStyle()          const   { return aStyle; }
+    const String&       GetText()           const   { return aText; }
+    const String&       GetStyle()          const   { return aStyle; }
     const XEditAttributeList& GetAttribs()  const   { return aAttribs; }
     const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
     SfxStyleFamily      GetFamily()         const   { return eFamily; }
@@ -177,6 +194,12 @@ public:
 
     WrongList*          GetWrongList() const            { return pWrongs; }
     void                SetWrongList( WrongList* p )    { pWrongs = p; }
+
+    LoadStoreTempInfos* GetLoadStoreTempInfos() const   { return pTempLoadStoreInfos; }
+    void                CreateLoadStoreTempInfos( BOOL bSaveCharAttribs );
+    void                DestroyLoadStoreTempInfos();
+
+
 };
 
 typedef ContentInfo* ContentInfoPtr;
