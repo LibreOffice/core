@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:48:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ ModalDialog DLG_VERSIONS
         Text[ russian ] = "Κξμμενςΰπθι";
         Text[ polish ] = "Komentarz";
         Text[ japanese ] = "ΊÒέΔ";
-        Text[ chinese_traditional ] = "ª`ΈΡ";
+        Text[ chinese_traditional ] = "µωΈΡ";
         Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
         Text[ korean ] = "ΑΦΌ®";
@@ -548,7 +548,7 @@ ModalDialog DLG_COMMENTS
     Text[ russian ] = "Ββερςθ κξμμενςΰπθι κ βεπρθθ";
     Text[ polish ] = "Wprowad komentarz do wersji";
     Text[ japanese ] = "Κή°Όή®έΊÒέΔ‚Μ“ό—Ν";
-    Text[ chinese_traditional ] = "Αδ¤Jª©¥»ª`ΈΡ";
+    Text[ chinese_traditional ] = "Ώι¤Jª©¥»µωΈΡ";
     Text[ arabic ] = "ΕΟΡΗΜ ΚΪανή ΗαΕΥΟΗΡ";
     Text[ greek ] = "Εισαγωγή σχολίου έκδοσης";
     Text[ korean ] = "Ήφΐό-ΑΦΌ® ΐΤ·Β";
@@ -572,7 +572,7 @@ String DLG_COMMENTS
     Text[ russian ] = "Κξμμενςΰπθι κ βεπρθθ";
     Text[ polish ] = "Komentarz do wersji";
     Text[ japanese ] = "Κή°Όή®έΊÒέΔ";
-    Text[ chinese_traditional ] = "ª©¥»ª`ΈΡ";
+    Text[ chinese_traditional ] = "ª©¥»µωΈΡ";
     Text[ arabic ] = "ΚΪανή ΗαΕΥΟΗΡ";
     Text[ greek ] = "Σχόλιο έκδοσης";
     Text[ korean ] = "Ήφΐό ΑΦΌ®";
