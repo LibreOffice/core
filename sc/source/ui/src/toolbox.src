@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-31 12:36:11 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: sab $ $Date: 2002-10-31 12:36:11 $ $Revision: 1.46 $
+ // $Author: kz $ $Date: 2002-11-27 16:37:24 $ $Revision: 1.47 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -137,7 +137,7 @@ String SCSTR_QHELP_POSWND
     Text [ italian ] = "Area tabella" ;
     Text [ portuguese_brazilian ] = "?rea da Tabela" ;
     Text [ portuguese ] = "Área da folha" ;
-    Text [ finnish ] = "Lomakealue" ;
+    Text [ finnish ] = "Taulukkoalue" ;
     Text [ danish ] = "Regnearksområde" ;
     Text [ french ] = "Plage de la feuille" ;
     Text [ swedish ] = "Tabellområde" ;
@@ -195,7 +195,7 @@ String SCSTR_QHELP_BTNCALC
     Text [ italian ] = "Pilota automatico di funzione" ;
     Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico" ;
     Text [ portuguese ] = "Função AutoPiloto" ;
-    Text [ finnish ] = "Automaattinen ohjaus: Toiminnot" ;
+    Text [ finnish ] = "Ohjattu toiminto: Funktiot" ;
     Text [ danish ] = "FunktionsAutoPilot" ;
     Text [ french ] = "AutoPilote de fonctions" ;
     Text [ swedish ] = "Funktionsautopilot" ;
@@ -203,7 +203,7 @@ String SCSTR_QHELP_BTNCALC
     Text [ spanish ] = "AutoPiloto de funciones" ;
     Text [ english_us ] = "AutoPilot: Functions" ;
     Text[ chinese_simplified ] = "å‡½æ•°è‡ªåŠ¨åŠ©ç†";
-    Text[ russian ] = "Àâòîïèëîò ôóíêöèé";
+    Text[ russian ] = "Ìàñòåğ: Ôóíêöèè";
     Text[ polish ] = "AutoPilot funkcji";
     Text[ japanese ] = "é–¢æ•°ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆ";
     Text[ chinese_traditional ] = "å‡½æ•¸è‡ªå‹•åŠ©ç†";
@@ -262,7 +262,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text [ spanish ] = "Rechazar" ;
     Text [ english_us ] = "Cancel" ;
     Text[ chinese_simplified ] = "èˆå¼ƒ";
-    Text[ russian ] = "Îòìåíà";
+    Text[ russian ] = "Îòìåíèòü";
     Text[ polish ] = "Odrzuæ";
     Text[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«";
     Text[ chinese_traditional ] = "æ¨æ£„";
@@ -283,7 +283,7 @@ String SCSTR_QHELP_BTNSUM
     Text [ italian ] = "Somma" ;
     Text [ portuguese_brazilian ] = "Soma" ;
     Text [ portuguese ] = "Soma" ;
-    Text [ finnish ] = "Sum" ;
+    Text [ finnish ] = "Summa" ;
     Text [ danish ] = "Sum" ;
     Text [ french ] = "Somme" ;
     Text [ swedish ] = "Summa" ;
@@ -345,7 +345,7 @@ String RID_OBJECTBAR_APP
     Text [ italian ] = "Barra delle funzioni" ;
     Text [ portuguese_brazilian ] = "Barra de Fun??s" ;
     Text [ portuguese ] = "Barra de funções" ;
-    Text [ finnish ] = "Toimintopalkki" ;
+    Text [ finnish ] = "Toimintorivi" ;
     Text [ danish ] = "Funktionslinje" ;
     Text [ french ] = "Barre de fonctions" ;
     Text [ swedish ] = "Funktionslist" ;
@@ -529,7 +529,7 @@ String RID_PLUGINTOOLBOX
     /* ### ACHTUNG: Neuer Text in Resource? Funktionsleiste für PlugIns : Funktionsleiste f³r PlugIns */
     Text = "Funktionsleiste für PlugIns" ;
     Text [ english ] = "PlugIn Function Bar" ;
-    Text [ dutch ] = "Functiebalk voor PlugIns" ;
+    Text [ dutch ] = "Werkbalk voor plugins" ;
     Text [ english_us ] = "Function Bar for Plug-ins" ;
     Text [ italian ] = "Barra delle funzioni per PlugIn" ;
     Text [ spanish ] = "Barra de funciones para Plug-ins" ;
@@ -539,7 +539,7 @@ String RID_PLUGINTOOLBOX
     Text [ portuguese ] = "Barra para Plugins" ;
     Text [ portuguese_brazilian ] = "Funktionsleiste f? PlugIns" ;
     Text[ chinese_simplified ] = "ç”¨äº Plug-ins çš„åŠŸèƒ½æ ";
-    Text[ russian ] = "Ïàíåëü ôóíêöèé äëÿ Plug-Ins";
+    Text[ russian ] = "Ïàíåëü ôóíêöèé ïîäêëş÷àåìûõ ìîäóëåé";
     Text[ polish ] = "Pasek funkcji wtyczek plug-in";
     Text[ japanese ] = "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ¼";
     Text[ chinese_traditional ] = "é©ç”¨æ–¼ Plug-ins çš„å·¥å…·åˆ—";
@@ -548,7 +548,7 @@ String RID_PLUGINTOOLBOX
     Text[ korean ] = "í”ŒëŸ¬ê·¸ì¸ì˜ ê¸°ëŠ¥ ëª¨ìŒ";
     Text[ turkish ] = "PlugIn işlev çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lisäosien toimintopalkki";
+    Text[ finnish ] = "Lisäosien toimintorivi";
     Text[ catalan ] = "Barra de funcions per als connectors";
     Text[ thai ] = "à¹à¸–à¸šà¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¸›à¸¥à¸±à¹Šà¸à¸­à¸´à¸™";
 };
@@ -714,10 +714,10 @@ String RID_OBJECTBAR_FORMAT
     Text [ spanish ] = "Barra de objetos para tablas" ;
     Text [ danish ] = "Regnearksobjektlinje" ;
     Text [ swedish ] = "Tabellobjektlist" ;
-    Text [ finnish ] = "Laskentataulukon objektipalkki" ;
+    Text [ finnish ] = "Laskentataulukon muotoilurivi" ;
     Text [ english_us ] = "Spreadsheet Object Bar" ;
     Text[ chinese_simplified ] = "å·¥ä½œè¡¨å¯¹è±¡æ ";
-    Text[ russian ] = "Ïàíåëü îáúåêòà ëèñòà";
+    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü ıëåêòğîííîé òàáëèöû";
     Text[ polish ] = "Pasek obiektów arkusza kalkulacyjnego.";
     Text[ japanese ] = "è¡¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
     Text[ chinese_traditional ] = "å·¥ä½œè¡¨ç‰©ä»¶åˆ—";
@@ -1004,7 +1004,7 @@ String RID_OBJECTBAR_PREVIEW
     Text [ italian ] = "Barra degli oggetti dell'anteprima stampa" ;
     Text [ portuguese_brazilian ] = "Examinar P?gina" ;
     Text [ portuguese ] = "Previsualização" ;
-    Text [ finnish ] = "Sivunäkymän objektirivipalkki" ;
+    Text [ finnish ] = "Sivunäkymän muotoilurivi" ;
     Text [ danish ] = "Sidevisningobjektlinje" ;
     Text [ french ] = "Barre d'objets d'aperçu" ;
     Text [ swedish ] = "Förhandsgranskningobjektlist" ;
@@ -1012,7 +1012,7 @@ String RID_OBJECTBAR_PREVIEW
     Text [ spanish ] = "Barra de vista preliminar" ;
     Text [ english_us ] = "Page View Object Bar" ;
     Text[ chinese_simplified ] = "é¡µé¢å¯¹è±¡æ ";
-    Text[ russian ] = "Ïàíåëü îáúåêòîâ ïğîñìîòğà ñòğàíèöû";
+    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü âèäà ñòğàíèöû";
     Text[ polish ] = "Pasek obiektów podgl¹du strony";
     Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
     Text[ chinese_traditional ] = "é é¢æª¢è¦–ç‰©ä»¶åˆ—";
@@ -1128,7 +1128,7 @@ String RID_OBJECTBAR_TOOLS
     Text [ portuguese ] = "Barra de ferramentas" ;
     Text [ portuguese_brazilian ] = "Werkzeugleiste" ;
     Text[ chinese_simplified ] = "ä¸»å·¥å…·æ ";
-    Text[ russian ] = "Ïàíåëü èíñòğóìåíòîâ";
+    Text[ russian ] = "Ãëàâíàÿ ïàíåëü èíñòğóìåíòîâ";
     Text[ polish ] = "Pasek narzêdziowy";
     Text[ japanese ] = "æ¨™æº–ãƒ„ãƒ¼ãƒ«ãƒãƒ¼";
     Text[ chinese_traditional ] = "ä¸»å·¥å…·åˆ—";
