@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
+ *  last change: $Author: nn $ $Date: 2001-01-25 19:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1226,6 +1226,9 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
             SFX_APP()->LockDispatcher( FALSE );
             SwitchToDocument();
+
+            Hide();     // in case the Execute call shows a QueryBox
+
             GetBindings().GetDispatcher()->Execute( SID_PIVOT_TABLE,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                       &aOutItem, 0L, 0L );
