@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:31:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,9 +167,6 @@
 #endif
 #ifndef _FMSEARCH_HXX
 #include <svx/fmsearch.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -590,17 +587,6 @@ void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun
     // and log on to the new frame
     if (m_xCurrentFrame.is() && xAggListener.is())
         m_xCurrentFrame->addFrameActionListener(xAggListener);
-
-    // for task frames, we have our own cut/copy/paste functionality
-    // 22.05.2002 - 99030 - fs@openoffice.org
-    if ( m_xCurrentFrame.is() && getView() && getView()->getToolBox() )
-    {
-        sal_Bool bToplevelFrame = m_xCurrentFrame->isTop();
-
-        getView()->getToolBox()->ShowItem( SID_CUT, bToplevelFrame );
-        getView()->getToolBox()->ShowItem( SID_COPY, bToplevelFrame );
-        getView()->getToolBox()->ShowItem( SID_PASTE, bToplevelFrame );
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -641,8 +627,21 @@ void SbaXDataBrowserController::initFormatter()
 void SbaXDataBrowserController::AddSupportedFeatures()
 {
     OGenericUnoController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")] = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord")] = ID_BROWSER_SAVERECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/undoRecord"))]    = ID_BROWSER_UNDORECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormController/undoRecord"))]   = ID_BROWSER_UNDORECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecUndo"))]                 = ID_BROWSER_UNDORECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/saveRecord"))]    = ID_BROWSER_SAVERECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormController/saveRecord"))]   = ID_BROWSER_SAVERECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecSave"))]                 = ID_BROWSER_SAVERECORD;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecSearch"))]               = SID_FM_SEARCH;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:AutoFilter"))]              = SID_FM_AUTOFILTER;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Refresh"))]                 = SID_FM_REFRESH;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:OrderCrit"))]               = SID_FM_ORDERCRIT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RemoveFilterSort"))]        = SID_FM_REMOVE_FILTER_SORT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormFiltered"))]            = SID_FM_FORM_FILTERED;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FilterCrit"))]              = SID_FM_FILTERCRIT;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Sortup"))]                  = ID_BROWSER_SORTUP;
+    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SortDown"))]                = ID_BROWSER_SORTDOWN;
 }
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
@@ -1595,6 +1594,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 }
             }
             break;
+            default:
+                return OGenericUnoController::GetState(nId);
         }
     }
     catch(Exception& e)
@@ -1823,7 +1824,7 @@ void SbaXDataBrowserController::ExecuteSearch()
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::Execute(sal_uInt16 nId)
+void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& aArgs)
 {
     sal_Bool bSortUp = sal_True;
 
@@ -1853,7 +1854,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
                 // maybe the user wanted to reject the modified record ?
                 if (GetState(ID_BROWSER_UNDORECORD).bEnabled)
-                    Execute(ID_BROWSER_UNDORECORD);
+                    Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());
 
                 getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_READONLY);
             }
@@ -2066,7 +2067,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
         switch (aQry.Execute())
         {
             case RET_NO:
-                Execute(ID_BROWSER_UNDORECORD);
+                Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());
                 return sal_True;
             case RET_CANCEL:
                 return sal_False;
@@ -2904,6 +2905,23 @@ void SbaXDataBrowserController::AfterDrop()
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
         xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+}
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+{
+    OGenericUnoController::loadSubToolbar(_xLayoutManager);
+    // for task frames, we have our own cut/copy/paste functionality
+    // 22.05.2002 - 99030 - fs@openoffice.org
+    if ( m_xCurrentFrame.is() )
+    {
+        if ( m_xCurrentFrame->isTop() )
+        {
+            _xLayoutManager->lock();
+            _xLayoutManager->createElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/copyobjectbar")) );
+            _xLayoutManager->unlock();
+            _xLayoutManager->doLayout();
+        }
+    }
 }
 //..................................................................
 }   // namespace dbaui
