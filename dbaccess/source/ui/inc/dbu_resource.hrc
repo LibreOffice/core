@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:20:09 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@
 #define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
 #define TABLE_QUERY_CONNECTION_LOST     RID_QUERYBOX_START +  6
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
+#define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 
 //========================================================================
 // warning boxes
@@ -358,6 +359,7 @@
 #define STR_CONFIRM_DROP_INDEX              RID_STRING_START + 134
 #define STR_LOGICAL_INDEX_NAME              RID_STRING_START + 135
 #define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STRING_START + 136
+#define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STRING_START + 137
 
 //========================================================================
 // untyped resources
@@ -372,6 +374,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/03/16 16:20:09  fs
+ *  new ids for the index design dialog and friends
+ *
  *  Revision 1.30  2001/03/14 10:35:10  oj
  *  #84840# check if connection is null and show extra button
  *
