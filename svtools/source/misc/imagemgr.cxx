@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 10:10:07 $
+ *  last change: $Author: mba $ $Date: 2001-07-03 14:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,19 +297,22 @@ String GetImageExtensionByFactory_Impl( const String& rURL )
     ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
     ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
-    xAccess->getByName( aInternalType ) >>= aTypeProps;
-    sal_Int32 nProps = aTypeProps.getLength();
-    for ( sal_Int32 i = 0; i < nProps; ++i )
+    if ( xAccess->hasByName( aInternalType ) )
     {
-        const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
-        if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
+        xAccess->getByName( aInternalType ) >>= aTypeProps;
+        sal_Int32 nProps = aTypeProps.getLength();
+        for ( sal_Int32 i = 0; i < nProps; ++i )
         {
-            ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
-            if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
+            const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
+            if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
             {
-                const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
-                aExtension = String( pExtensions[0] );
-                break;
+                ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
+                if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
+                {
+                    const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
+                    aExtension = String( pExtensions[0] );
+                    break;
+                }
             }
         }
     }
