@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-12 10:40:50 $
+ *  last change: $Author: bc $ $Date: 2002-06-14 10:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,12 +377,12 @@ public class ReportWizard {
     try{
             int iKey  =  getControlKey(EventObject.Source);
             switch (iKey) {
-        case SOTXTFIRSTSAVEPATH:
-            UNODialogs.toggleGoOnButton(xSaveTextBox[0], xDlgNameAccess, CurReportDocument.xSimpleFileAccess, "cmdGoOn");
-            break;
-        case SOTXTSECSAVEPATH:
-            UNODialogs.toggleGoOnButton(xSaveTextBox[1], xDlgNameAccess, CurReportDocument.xSimpleFileAccess, "cmdGoOn");
-            break;
+//      case SOTXTFIRSTSAVEPATH:
+//          UNODialogs.toggleGoOnButton(xSaveTextBox[0], xDlgNameAccess, CurReportDocument.xSimpleFileAccess, "cmdGoOn");
+//          break;
+//      case SOTXTSECSAVEPATH:
+//          UNODialogs.toggleGoOnButton(xSaveTextBox[1], xDlgNameAccess, CurReportDocument.xSimpleFileAccess, "cmdGoOn");
+//          break;
         case SOTXTTITLE:
             String TitleName = xTitleTextBox.getText();
             ReportDocument.updateReportTitle(CurReportDocument, xTitleTextBox);
@@ -480,7 +480,6 @@ public class ReportWizard {
 
     static class ActionListenerImpl implements com.sun.star.awt.XActionListener {
 
-        // XEventListener
         public void disposing(EventObject eventObject) {
         }
         public void actionPerformed(ActionEvent actionEvent) {
@@ -577,14 +576,7 @@ public class ReportWizard {
         int PageCount = 5;
         int iPage = ((Integer) tools.getUNOPropertyValue(oDialogModel, "Step")).intValue();
         switch (iPage){
-            case 1: //CurReportDocument.oComponent
-//      java.awt.Frame oFrame = new java.awt.Frame();
-//      java.awt.Frame[] oFrames = oFrame.getFrames();
-//      java.awt.Frame oLastFrame = oFrames[oFrames.length].
-//      oFrame.show();
-//      oFrame.toFront();
-//      java.awt.Component oComponent = oFrame.get.getFocusOwner();
-//      javax.swing.JOptionPane.showMessageDialog(oLastFrame, "Message", "StarOffice", javax.swing.JOptionPane.ERROR_MESSAGE);
+            case 1:
                 updateSecondStep();
 //      oFrame.dispose();
                 break;
@@ -595,7 +587,7 @@ public class ReportWizard {
                 setUpSortList();
         CurDBMetaData.RecordFieldNames = DBMetaData.setRecordFieldNames(CurDBMetaData);
                 CurDBMetaData.ResultSet = DBMetaData.combineSelectStatement(CurDBMetaData.DBConnection, xDBMetaData, TableName, CurDBMetaData);
-        ReportDocument.setupRecordSection(CurReportDocument, CurReportDocument.ReportFolderName + "/cnt-Default.stw", CurDBMetaData);
+        ReportDocument.setupRecordSection(CurReportDocument, CurReportDocument.ReportFolderName + "/cnt-default.stw", CurDBMetaData);
         //TODO: A message box should pop up when a single sorting criteria has been selected more than once
         break;
         case 4:
@@ -1107,13 +1099,11 @@ public class ReportWizard {
     try {
             xGlobalMSF = connect(ConnectStr);
         if(xGlobalMSF != null)  System.out.println("Connected to "+ ConnectStr);
-        Object objectToolkit = xGlobalMSF.createInstance("com.sun.star.awt.ExtToolkit");
         startReportWizard(xGlobalMSF);
     }
         catch(Exception exception) {
             exception.printStackTrace(System.out);
         }
-
         System.exit(0);
     }
 
