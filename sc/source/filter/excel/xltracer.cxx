@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:40:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef _MS_FILTERTRACER_HXX
 #include <svx/msfiltertracer.hxx>
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 using ::rtl::OUString;
@@ -175,10 +179,10 @@ void XclTracer::TraceLog( XclTracerId eProblem, sal_Int32 nValue )
         switch (eProblem)
         {
            case eRowLimitExceeded:
-               Context(eProblem,static_cast<sal_uInt16>(nValue));
+               Context(eProblem,static_cast<SCTAB>(nValue));
                break;
            case eTabLimitExceeded:
-               Context(eProblem,static_cast<sal_uInt16>(nValue));
+               Context(eProblem,static_cast<SCTAB>(nValue));
                break;
            default:
                Context(eProblem);
@@ -188,7 +192,7 @@ void XclTracer::TraceLog( XclTracerId eProblem, sal_Int32 nValue )
     }
 }
 
-void XclTracer::Context( XclTracerId eProblem, sal_uInt16 nTab )
+void XclTracer::Context( XclTracerId eProblem, SCTAB nTab )
 {
     OUString sContext = rtl::OUString ::createFromAscii(pTracerDetails[eProblem].mpContext);
     OUString sDetail  = rtl::OUString ::createFromAscii(pTracerDetails[eProblem].mpDetail);
@@ -205,7 +209,7 @@ void XclTracer::Context( XclTracerId eProblem, sal_uInt16 nTab )
     AddAttribute(sContext, sDetail);
 }
 
-void XclTracer::ProcessTraceOnce(XclTracerId eProblem, sal_uInt16 nTab)
+void XclTracer::ProcessTraceOnce(XclTracerId eProblem, SCTAB nTab)
 {
     if( mbEnabled && maFirstTimes[eProblem])
     {
@@ -220,13 +224,13 @@ void XclTracer::TraceInvalidAddress( const ScAddress& rPos, const ScAddress& rMa
     TraceInvalidTab(rPos.Tab(), rMaxPos.Tab());
 }
 
-void XclTracer::TraceInvalidRow( sal_uInt16 nTab, sal_uInt32 nRow, sal_uInt32 nMaxRow )
+void XclTracer::TraceInvalidRow( SCTAB nTab, sal_uInt32 nRow, sal_uInt32 nMaxRow )
 {
     if(nRow > nMaxRow)
         ProcessTraceOnce(eRowLimitExceeded, nTab);
 }
 
-void XclTracer::TraceInvalidTab( sal_uInt16 nTab, sal_uInt16 nMaxTab )
+void XclTracer::TraceInvalidTab( SCTAB nTab, SCTAB nMaxTab )
 {
     if(nTab > nMaxTab)
         ProcessTraceOnce(eTabLimitExceeded, nTab);
