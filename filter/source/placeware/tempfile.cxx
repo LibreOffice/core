@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-23 19:30:43 $
+ *  last change: $Author: cl $ $Date: 2002-10-25 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@ OUString TempFile::createTempFileURL()
     {
         u %= (nRadix*nRadix*nRadix);
         OUString aTmp( aTempDirURL );
+        if( aTmp.getStr()[ aTmp.getLength() - 1 ] != sal_Unicode( '/' ) )
+            aTmp += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
         aTmp += OUString::valueOf( (sal_Int32) (unsigned) u, nRadix );
         aTmp += OUString::createFromAscii( ".tmp" );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-23 19:30:32 $
+ *  last change: $Author: cl $ $Date: 2002-10-25 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,8 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
 
 sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream, const rtl::OUString& rURL, Reference < XInterface > xHandler )
 {
+    sal_Bool bRet = sal_False;
+
     mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ) );
 
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
@@ -431,17 +433,23 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
         encodeFile( aTempFile, xOutputStream );
 
+        bRet = sal_True;
     }
     catch ( RuntimeException const & )
     {
-        return sal_False;
     }
     catch ( Exception const & )
     {
-        return sal_False;
     }
 
-    return sal_True;
+    vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
+    vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
+    while( aIter != aEnd )
+    {
+        delete (*aIter++);
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------

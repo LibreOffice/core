@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2002-10-23 19:30:36 $
+#   last change: $Author: cl $ $Date: 2002-10-25 14:03:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ SLOFILES=	$(SLO)$/zip.obj									\
 
 # --- Library -----------------------------------
 
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
     
 SHL1STDLIBS= \
         $(CPPULIB)		\
