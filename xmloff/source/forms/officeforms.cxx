@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:07:05 $
+ *  last change: $Author: fs $ $Date: 2002-04-10 07:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,13 +148,16 @@ namespace xmloff
         try
         {
             Reference< XPropertySet > xDocProperties(GetImport().GetModel(), UNO_QUERY);
-            OSL_ENSURE(xDocProperties.is(), "OFormsRootImport::StartElement: invalid document model!");
-            Reference< XPropertySetInfo > xDocPropInfo;
-            if (xDocProperties.is())
-                xDocPropInfo = xDocProperties->getPropertySetInfo();
+            if ( xDocProperties.is() )
+            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
+                // this is done via streaming the controls as XML.
+                Reference< XPropertySetInfo > xDocPropInfo;
+                if (xDocProperties.is())
+                    xDocPropInfo = xDocProperties->getPropertySetInfo();
 
-            implImportBool(_rxAttrList, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, sal_False);
-            implImportBool(_rxAttrList, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, sal_True);
+                implImportBool(_rxAttrList, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, sal_False);
+                implImportBool(_rxAttrList, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, sal_True);
+            }
         }
         catch(Exception&)
         {
@@ -207,13 +210,16 @@ namespace xmloff
         try
         {
             Reference< XPropertySet > xDocProperties(_rExp.GetModel(), UNO_QUERY);
-            OSL_ENSURE(xDocProperties.is(), "OFormsRootExport::addModelAttributes: invalid document model!");
-            Reference< XPropertySetInfo > xDocPropInfo;
-            if (xDocProperties.is())
-                xDocPropInfo = xDocProperties->getPropertySetInfo();
+            if ( xDocProperties.is() )
+            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
+                // this is done via streaming the controls as XML.
+                Reference< XPropertySetInfo > xDocPropInfo;
+                if (xDocProperties.is())
+                    xDocPropInfo = xDocProperties->getPropertySetInfo();
 
-            implExportBool(_rExp, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, sal_False);
-            implExportBool(_rExp, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, sal_True);
+                implExportBool(_rExp, ofaAutomaticFocus, xDocProperties, xDocPropInfo, PROPERTY_AUTOCONTROLFOCUS, sal_False);
+                implExportBool(_rExp, ofaApplyDesignMode, xDocProperties, xDocPropInfo, PROPERTY_APPLYDESIGNMODE, sal_True);
+            }
         }
         catch(Exception&)
         {
@@ -228,6 +234,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/07/10 17:07:05  mtg
+ *  updated namespace handling
+ *
  *  Revision 1.2  2001/06/29 21:07:14  dvo
  *  #86004# changes sXML_* strings to XML_* tokens
  *
