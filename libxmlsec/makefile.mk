@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-29 11:44:27 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:39:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,11 @@ TARGET=so_xmlsec1
 
 .INCLUDE :	settings.mk
 
+.IF "$(WITH_MOZILLA)" == "NO"
+@all:
+    @echo "Mozilla disabled -> no nss -> no libxmlsec...."
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 XMLSEC1VERSION=1.2.6
@@ -106,7 +111,19 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --enable-pkgconfig=no
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no
+# system-mozilla needs pkgconfig to get the information about nss
+# FIXME: This also will enable pkg-config usage for libxml2. It *seems*
+# that the internal headers still are used when they are there but....
+# (and that pkg-config is allowed to fail...)
+# I have no real good idea how to get mozilla (nss) pkg-config'ed and libxml2
+# not... We need mozilla-nss pkg-config'ed since we can *not* just use
+# --with-nss or parse -pkg-config --libs / cflags mozilla-nss since
+# the lib may a) be in /usr/lib (Debian) and be not in $with_nss/include
+# $with_nss/lib.
+.IF "$(SYSTEM_MOZILLA)" != "YES"
+CONFIGURE_FLAGS+=--enable-pkgconfig=no
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
