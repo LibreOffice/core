@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 12:40:23 $
+ *  last change: $Author: ama $ $Date: 2000-10-17 10:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,17 +530,24 @@ const SwFldPortion* SwTxtFrm::GetRestPortion()
     aLine.Bottom();
     SwFldPortion* pRet = NULL;
     const SwLinePortion* pLine = aLine.GetCurr();
+    const SwMultiPortion *pMulti = NULL;
     while( pLine )
     {
         if( pLine->InFldGrp() )
+        {
+            pMulti = NULL;
             pRet = (SwFldPortion*)pLine;
-        else if( pLine->IsMultiPortion() && !pLine->GetPortion() )
-        {   // If the last portion is a multi-portion, we enter it
-            // and look for a field portion inside.
-            pLine = ((SwMultiPortion*)pLine)->GetRoot().GetNext();
-            continue;
+        }
+        else if( pLine->IsMultiPortion() )
+        {
+            pRet = NULL;
+            pMulti = (SwMultiPortion*)pLine;
         }
         pLine = pLine->GetPortion();
+        // If the last portion is a multi-portion, we enter it
+        // and look for a field portion inside.
+        if( !pLine && pMulti )
+            pLine = pMulti->GetRoot().GetNext();
     }
     if( pRet && !pRet->HasFollow() )
         pRet = NULL;
