@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:24:06 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 xForm = xParent;
             else
             {
-                Reference< XForm >  xTemp = ((FmFormPage*)pObj->GetPage())->GetImpl()->SetDefaults(xContent);
+                Reference< XForm >  xTemp = ((FmFormPage*)pObj->GetPage())->GetImpl()->placeInFormComponentHierarchy(xContent);
                 xForm = Reference< XIndexContainer > (xTemp, UNO_QUERY);
             }
 
