@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-16 11:02:26 $
+ *  last change: $Author: sj $ $Date: 2002-08-26 09:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
+#include <svtools/graphictools.hxx>
 #include "strings.hrc"
 #include "dlgeps.hrc"
 #include "dlgeps.hxx"
@@ -129,6 +130,12 @@ struct StackMember
     Region      bClipRegion;
     TextAlign   eTextAlign;
     Region      aClipReg;
+
+    double                      fLineWidth;
+    double                      fMiterLimit;
+    SvtGraphicStroke::CapType   eLineCap;
+    SvtGraphicStroke::JoinType  eJoinType;
+    SvtGraphicStroke::DashArray aDashArray;
 };
 
 struct PSLZWCTreeNode
@@ -183,7 +190,13 @@ private:
     Color               aBackgroundColor;   //
     BOOL                bRegionChanged;
     Region              aClipRegion;
-    TextAlign           eTextAlign;
+    TextAlign           eTextAlign;         //
+
+    double                      fLineWidth;
+    double                      fMiterLimit;
+    SvtGraphicStroke::CapType   eLineCap;
+    SvtGraphicStroke::JoinType  eJoinType;
+    SvtGraphicStroke::DashArray aDashArray;
 
     Font                maFont;
     Font                maLastFont;
@@ -203,7 +216,7 @@ private:
 
     void                MayCallback( ULONG nPercent );
 
-        void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
+    void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
     void                ImplWriteEpilog();
     void                ImplWriteActions( const GDIMetaFile& rMtf);
 
@@ -241,10 +254,13 @@ private:
 
     void                ImplWriteLine( const Polygon & rPolygon );
     void                ImplAddPath( const Polygon & rPolygon );
+    void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
+                                    SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray& rDashArray );
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const Rectangle & rRectangle );
     void                ImplRectFill ( const Rectangle & rRectangle );
     void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, sal_Bool bTextOutline = sal_False );
+    void                ImplPolyLine( const Polygon & rPolygon );
 
     void                ImplSetClipRegion();
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
@@ -257,7 +273,7 @@ private:
     void                ImplDefineFont( char*, char* );
 
     void                ImplClosePathDraw( ULONG nMode = PS_RET );
-    void                ImplPathDraw( ULONG nMode = PS_RET );
+    void                ImplPathDraw();
 
     inline void         ImplWriteLineColor( ULONG nMode = PS_RET );
     inline void         ImplWriteFillColor( ULONG nMode = PS_RET );
@@ -424,6 +440,10 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     aLineColor = Color( COL_BLACK );
     bFillColor = TRUE;
     aFillColor = Color( COL_WHITE );
+    fLineWidth = 1;
+    fMiterLimit = 10;
+    eLineCap = SvtGraphicStroke::capButt;
+    eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = Color( COL_WHITE );
     bRegionChanged = FALSE;
     aClipRegion.SetEmpty();
@@ -571,9 +591,10 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
         ImplWriteLine( "/c {setrgbcolor} bdef" );
     ImplWriteLine( "/l {neg lineto} bdef" );
     ImplWriteLine( "/rl {neg rlineto} bdef" );
-    ImplWriteLine( "/cl {currentlinewidth currentdash currentlinecap 2 setlinecap} bdef" );
     ImplWriteLine( "/lc {setlinecap} bdef" );
+    ImplWriteLine( "/lj {setlinejoin} bdef" );
     ImplWriteLine( "/lw {setlinewidth} bdef" );
+    ImplWriteLine( "/ml {setmiterlimit} bdef" );
     ImplWriteLine( "/ld {setdash} bdef" );
     ImplWriteLine( "/m {neg moveto} bdef" );
     ImplWriteLine( "/ct {6 2 roll neg 6 2 roll neg 6 2 roll neg curveto} bdef" );
@@ -662,9 +683,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             case META_LINE_ACTION :
             {
                 const LineInfo& rLineInfo = ( ( const MetaLineAction*)pMA )->GetLineInfo();
-                if ( !rLineInfo.IsDefault() )
-                    ImplWriteLineInfo( rLineInfo );
-
+                ImplWriteLineInfo( rLineInfo );
                 if ( bLineColor )
                 {
                     ImplWriteLineColor( PS_SPACE );
@@ -672,8 +691,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     ImplLineTo( ( (const MetaLineAction*) pMA )->GetEndPoint() );
                     ImplPathDraw();
                 }
-                if ( !rLineInfo.IsDefault() )
-                    ImplWriteLine( "lc ld lw" ); // LineWidth, LineDash, LineCap zuruecksetzen
             }
             break;
 
@@ -726,40 +743,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_POLYLINE_ACTION :
             {
-                if ( bLineColor )
-                {
-                    Polygon aPoly( ( (const MetaPolyLineAction*) pMA )->GetPolygon() );
-                    sal_uInt16 i, nPointCount = aPoly.GetSize();
-                    if ( nPointCount )
-                    {
-                        const LineInfo& rLineInfo = ( ( const MetaPolyLineAction*)pMA )->GetLineInfo();
-                        ImplWriteLineColor( PS_SPACE );
-                        if ( !rLineInfo.IsDefault() )
-                            ImplWriteLineInfo( rLineInfo );
-
-                        if ( nPointCount > 1 )
-                        {
-                            ImplMoveTo( aPoly.GetPoint( 0 ) );
-                            i = 1;
-                            while ( i < nPointCount )
-                            {
-                                if ( ( aPoly.GetFlags( i ) == POLY_CONTROL )
-                                        && ( ( i + 2 ) < nPointCount )
-                                            && ( aPoly.GetFlags( i + 1 ) == POLY_CONTROL )
-                                                && ( aPoly.GetFlags( i + 2 ) == POLY_NORMAL ) )
-                                {
-                                    ImplCurveTo( aPoly[ i ], aPoly[ i + 1 ], aPoly[ i + 2 ], PS_WRAP );
-                                    i += 3;
-                                }
-                                else
-                                    ImplLineTo( aPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
-                            }
-                        }
-                        ImplPathDraw();
-                        if ( !rLineInfo.IsDefault() )
-                            ImplWriteLine( "lc ld lw" ); // LineWidth, LineDash, LineCap zuruecksetzen
-                    }
-                }
+                Polygon aPoly( ( (const MetaPolyLineAction*) pMA )->GetPolygon() );
+                const LineInfo& rLineInfo = ( ( const MetaPolyLineAction*)pMA )->GetLineInfo();
+                ImplWriteLineInfo( rLineInfo );
+                ImplPolyLine( aPoly );
             }
             break;
 
@@ -1084,6 +1071,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 StackMember* pGS = new StackMember;
                 pGS->pSucc = pGDIStack;
                 pGDIStack = pGS;
+                pGS->aDashArray = aDashArray;
+                pGS->eJoinType = eJoinType;
+                pGS->eLineCap = eLineCap;
+                pGS->fLineWidth = fLineWidth;
+                pGS->fMiterLimit = fMiterLimit;
                 pGS->eTextAlign = eTextAlign;
                 pGS->aGlobalCol = aColor;
                 pGS->bLineCol = bLineColor;
@@ -1118,6 +1110,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                         aMapMode = pGS->aMapMode;
                         ImplGetMapMode( aMapMode );
                     }
+                    aDashArray = pGS->aDashArray;
+                    eJoinType = pGS->eJoinType;
+                    eLineCap = pGS->eLineCap;
+                    fLineWidth = pGS->fLineWidth;
+                    fMiterLimit = pGS->fMiterLimit;
                     eTextAlign = pGS->eTextAlign;
                     aColor = pGS->aGlobalCol;
                     bLineColor = pGS->bLineCol;
@@ -1140,10 +1137,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     fYScaling = pGS->fYScale;
                     delete pGS;
                     UINT32 nCurrentPos = mpPS->Tell();
-                    if ( nCurrentPos - 6 == mnLatestPush )
+                    if ( nCurrentPos - 3 == mnLatestPush )
                     {
                         mpPS->Seek( mnLatestPush );
-                        ImplWriteLine( "     " );
+                        ImplWriteLine( "  " );
                         mpPS->Seek( mnLatestPush );
                     }
                     else
@@ -1236,6 +1233,103 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     aTmpMtf.Move( nMoveX, nMoveY );
 
                 ImplWriteActions( aTmpMtf );
+            }
+            break;
+
+            case META_COMMENT_ACTION:
+            {
+                const MetaCommentAction* pA = (const MetaCommentAction*) pMA;
+                const BYTE* pData = pA->GetData();
+                if ( pData )
+                {
+                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                    sal_Bool        bSkipSequence = sal_False;
+                    ByteString      sSeqEnd;
+
+                    if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
+                    {
+                        sSeqEnd = ByteString( "XPATHSTROKE_SEQ_END" );
+                        SvtGraphicStroke aStroke;
+                        aMemStm >> aStroke;
+
+                        Polygon aPath;
+                        aStroke.getPath( aPath );
+
+                        PolyPolygon aStartArrow;
+                        PolyPolygon aEndArrow;
+                        double fTransparency( aStroke.getTransparency() );
+                        double fStrokeWidth( aStroke.getStrokeWidth() );
+                        SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
+                        SvtGraphicStroke::DashArray aDashArray;
+
+                        aStroke.getStartArrow( aStartArrow );
+                        aStroke.getEndArrow( aEndArrow );
+                        aStroke.getDashArray( aDashArray );
+
+                        bSkipSequence = sal_True;
+                        if ( aDashArray.size() > 11 )   // ps dasharray limit is 11
+                            bSkipSequence = sal_False;
+                        if ( aStartArrow.Count() || aEndArrow.Count() )
+                            bSkipSequence = sal_False;
+                        if ( (sal_uInt32)eJT > 2 )
+                            bSkipSequence = sal_False;
+
+                        if ( bSkipSequence )
+                        {
+                            fStrokeWidth *= fXScaling > fYScaling ? fXScaling : fYScaling;
+                            sal_uInt32 j, i = aDashArray.size();
+                            for ( j = 0; j < i; j++ )
+                                aDashArray[ j ] *= fXScaling > fYScaling ? fXScaling : fYScaling;
+                            ImplWriteLineInfo( fStrokeWidth, aStroke.getMiterLimit(),
+                                                aStroke.getCapType(), eJT, aDashArray );
+                            ImplPolyLine( aPath );
+                        }
+                    }
+                    else if( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
+                    {
+                        sSeqEnd = ByteString( "XPATHFILL_SEQ_END" );
+                        SvtGraphicFill aFill;
+                        aMemStm >> aFill;
+                        if ( aFill.getFillType() == SvtGraphicFill::fillSolid )
+                        {
+                            bSkipSequence = sal_True;
+                            PolyPolygon aPolyPoly;
+                            aFill.getPath( aPolyPoly );
+                            sal_uInt16 i, nPolyCount = aPolyPoly.Count();
+                            if ( nPolyCount )
+                            {
+                                aFillColor = aFill.getFillColor();
+                                ImplWriteFillColor( PS_SPACE );
+                                for ( i = 0; i < nPolyCount; )
+                                {
+                                    ImplAddPath( aPolyPoly.GetObject( i ) );
+                                    if ( ++i < nPolyCount )
+                                    {
+                                        *mpPS << "p";
+                                        mnCursorPos += 2;
+                                        ImplExecMode( PS_RET );
+                                    }
+                                }
+                                *mpPS << "p ef";
+                                mnCursorPos += 4;
+                                ImplExecMode( PS_RET );
+                            }
+                        }
+                    }
+                    if ( bSkipSequence )
+                    {
+                        while( ++nCurAction < nCount )
+                        {
+                            pMA = rMtf.GetAction( nCurAction );
+                            if ( pMA->GetType() == META_COMMENT_ACTION )
+                            {
+                                ByteString sComment( ((MetaCommentAction*)pMA)->GetComment() );
+                                if ( sComment.Equals( sSeqEnd ) )
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
             break;
         }
@@ -1344,7 +1438,7 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
     ImplWriteDouble( nHeight );
     *mpPS << "rl ";
     ImplWriteDouble( nWidth );
-    *mpPS << "neg 0 rl ef";
+    *mpPS << "neg 0 rl ef ";
     *mpPS << "p ef";
     mnCursorPos += 2;
     ImplExecMode( PS_RET );
@@ -1364,7 +1458,7 @@ void PSWriter::ImplAddPath( const Polygon & rPolygon )
             if ( ( rPolygon.GetFlags( i ) == POLY_CONTROL )
                     && ( ( i + 2 ) < nPointCount )
                         && ( rPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
-                            && ( rPolygon.GetFlags( i + 2 ) == POLY_NORMAL ) )
+                            && ( rPolygon.GetFlags( i + 2 ) != POLY_CONTROL ) )
             {
                 ImplCurveTo( rPolygon[ i ], rPolygon[ i + 1 ], rPolygon[ i + 2 ], PS_WRAP );
                 i += 3;
@@ -1408,6 +1502,39 @@ void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutlin
             for ( i = 0; i < nPolyCount; i++ )
                 ImplAddPath( rPolyPoly.GetObject( i ) );
             ImplClosePathDraw( PS_RET );
+        }
+    }
+}
+
+//---------------------------------------------------------------------------------
+
+void PSWriter::ImplPolyLine( const Polygon & rPoly )
+{
+    if ( bLineColor )
+    {
+        ImplWriteLineColor( PS_SPACE );
+        sal_uInt16 i, nPointCount = rPoly.GetSize();
+        if ( nPointCount )
+        {
+            if ( nPointCount > 1 )
+            {
+                ImplMoveTo( rPoly.GetPoint( 0 ) );
+                i = 1;
+                while ( i < nPointCount )
+                {
+                    if ( ( rPoly.GetFlags( i ) == POLY_CONTROL )
+                            && ( ( i + 2 ) < nPointCount )
+                                && ( rPoly.GetFlags( i + 1 ) == POLY_CONTROL )
+                                    && ( rPoly.GetFlags( i + 2 ) != POLY_CONTROL ) )
+                    {
+                        ImplCurveTo( rPoly[ i ], rPoly[ i + 1 ], rPoly[ i + 2 ], PS_WRAP );
+                        i += 3;
+                    }
+                    else
+                        ImplLineTo( rPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
+                }
+            }
+            ImplPathDraw();
         }
     }
 }
@@ -1845,7 +1972,7 @@ void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution,
 
 void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth )
 {
-    sal_uInt16 i, nLen = rUniString.Len();
+    sal_uInt16 nLen = rUniString.Len();
     if ( !nLen )
         return;
     sal_Bool bGlyph = sal_False;
@@ -1871,6 +1998,8 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
             aPolyDummy.Rotate( rPos, nRotation );
             aPos = aPolyDummy.GetPoint( 0 );
         }
+        sal_Bool bOldLineColor = bLineColor;
+        bLineColor = sal_False;
         std::vector<PolyPolygon> aPolyPolyVec;
         if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString ) )
         {
@@ -1887,6 +2016,7 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
                 ImplPolyPoly( *aIter++, sal_True );
             ImplWriteLine( "pom" );
         }
+        bLineColor = bOldLineColor;
 //      else
 //          ImplGenerateBitmap( nChar, 300, aVirDev, aPos, aSize, nWidth );
     }
@@ -1978,11 +2108,11 @@ void PSWriter::ImplClosePathDraw( ULONG nMode )
     ImplExecMode( nMode );
 }
 
-void PSWriter::ImplPathDraw( ULONG nMode )
+void PSWriter::ImplPathDraw()
 {
     *mpPS << "ps";
     mnCursorPos += 2;
-    ImplExecMode( nMode );
+    ImplExecMode( PS_RET );
 }
 
 //---------------------------------------------------------------------------------
@@ -2134,16 +2264,58 @@ inline void PSWriter::ImplWriteLine( char pString[], ULONG nMode )
 
 //---------------------------------------------------------------------------------
 
+void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
+                                    SvtGraphicStroke::CapType eLCap,
+                                        SvtGraphicStroke::JoinType eJoin,
+                                            SvtGraphicStroke::DashArray& rLDash )
+{
+    if ( fLineWidth != fLWidth )
+    {
+        fLineWidth = fLWidth;
+        ImplWriteDouble( fLineWidth );
+        ImplWriteLine( "lw", PS_SPACE );
+    }
+    if ( eLineCap != eLCap )
+    {
+        eLineCap = eLCap;
+        ImplWriteLong( (sal_Int32)eLineCap, PS_SPACE );
+        ImplWriteLine( "lc", PS_SPACE );
+    }
+    if ( eJoinType != eJoin )
+    {
+        eJoinType = eJoin;
+        ImplWriteLong( (sal_Int32)eJoinType, PS_SPACE );
+        ImplWriteLine( "lj", PS_SPACE );
+    }
+    if ( eJoinType == SvtGraphicStroke::joinMiter )
+    {
+        if ( fMiterLimit != fMLimit )
+        {
+            fMiterLimit = fMLimit;
+            ImplWriteDouble( fMiterLimit );
+            ImplWriteLine( "ml", PS_SPACE );
+        }
+    }
+    if ( aDashArray != rLDash )
+    {
+        aDashArray = rLDash;
+        sal_uInt32 j, i = aDashArray.size();
+        ImplWriteLine( "[", PS_SPACE );
+        for ( j = 0; j < i; j++ )
+            ImplWriteDouble( aDashArray[ j ] );
+        ImplWriteLine( "] 0 ld" );
+    }
+}
+
+//---------------------------------------------------------------------------------
+
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
-    double fLineWidth = ( ( rLineInfo.GetWidth() + 1 ) * fXScaling + ( rLineInfo.GetWidth() + 1 ) * fYScaling ) * 0.5;
-    ImplWriteLine( "cl", PS_SPACE );    // currentLineWidth & currentDash auf den Stack
-    ImplWriteDouble( fLineWidth );
-    ImplWriteLine( " lw", PS_SPACE );
+    SvtGraphicStroke::DashArray aDashArray;
     if ( rLineInfo.GetStyle() == LINE_DASH )
-    {
-        ImplWriteLine( "[ 2 ] 1 ld" );
-    }
+        aDashArray.push_back( 2 );
+    double fLWidth = ( ( rLineInfo.GetWidth() + 1 ) * fXScaling + ( rLineInfo.GetWidth() + 1 ) * fYScaling ) * 0.5;
+    ImplWriteLineInfo( fLWidth, 10.0, SvtGraphicStroke::capButt, SvtGraphicStroke::joinMiter, aDashArray );
 }
 
 //---------------------------------------------------------------------------------
