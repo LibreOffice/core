@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:00:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,12 +1123,6 @@ void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
     sUniqueId.Erase();
     if( eLang != nLang )
         loadDefaultCalendar( SvxCreateLocale( nLang = eLang ));
-}
-
-void SwCalendarWrapper::LoadCalendar( USHORT eLang, const String& rUniqueId )
-{
-    if( eLang != nLang || sUniqueId != rUniqueId )
-        loadCalendar( sUniqueId = rUniqueId,SvxCreateLocale( nLang = eLang ));
 }
 
 ULONG GetAppLanguage()
