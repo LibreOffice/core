@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:01:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1384,7 +1384,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
             Text [ swedish ] = "Grafikobjektmallar" ;
             Text [ danish ] = "Grafikobjekttypografier" ;
-            Text [ portuguese_brazilian ] = "Estilos de Objetos Gr?ficos" ;
+            Text [ portuguese_brazilian ] = "Estilos de objetos Gráficos" ;
             Text [ portuguese ] = "Estilos de objectos gráficos" ;
             Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ·å¼";
             Text[ russian ] = "Ãğàôè÷åñêèå ñòèëè";
@@ -1415,7 +1415,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ dutch ] = "Opmaakprofielen voor presentatieobjecten" ;
             Text [ swedish ] = "Presentationsobjektmallar" ;
             Text [ danish ] = "Præsentationsobjekttypografier" ;
-            Text [ portuguese_brazilian ] = "Pr?sentationsobjektvorlagen" ;
+            Text [ portuguese_brazilian ] = "Estilos de objetos de apresentação" ;
             Text [ portuguese ] = "Estilos de objectos de apresentação" ;
             Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿å¯¹è±¡æ ·å¼";
             Text[ russian ] = "Ñòèëè ïğåçåíòàöèè";
@@ -1506,6 +1506,7 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
 
 
 
