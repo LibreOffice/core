@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:25:54 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,18 @@ struct GalDragParams
 
 class Gallery;
 class GalleryProgress;
+namespace unogallery
+{
+    class GalleryTheme;
+    class GalleryItem;
+}
 
 class GalleryTheme : public SfxBroadcaster
 {
     friend class Gallery;
     friend class GalleryThemeCacheEntry;
+    friend class ::unogallery::GalleryTheme;
+    friend class ::unogallery::GalleryItem;
 
 private:
 
@@ -132,6 +139,8 @@ private:
     void                        ImplRead();
     void                        ImplWrite();
     const GalleryObject*        ImplGetGalleryObject( ULONG nPos ) const { return aObjectList.GetObject( nPos ); }
+    const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
+    ULONG                       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
     INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFormat = CVT_UNKNOWN );
     void                        ImplSetModified( BOOL bModified ) { pThm->SetModified( bModified ); }
