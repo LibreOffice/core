@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:37:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,17 @@
 #include    <unistd.h>
 #endif
 
+#ifdef MACOSX
+// Get the store.hxx inlines non-inline, solves crashes in cppumaker
+#define inline
+#endif
+
 #include    "regimpl.hxx"
+
+#ifdef MACOSX
+// Get the store.hxx inlines non-inline, solves crashes in cppumaker
+#undef inline
+#endif
 
 #ifndef __REGISTRY_REFLREAD_HXX__
 #include    <registry/reflread.hxx>
@@ -519,7 +529,6 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
             m_file = rRegFile;
             m_name = regName;
             m_isOpen = sal_True;
-
 
             m_openKeyTable[ROOT] = new ORegKey(ROOT, rStoreDir, this);
             return REG_NO_ERROR;
