@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-01 19:54:51 $
+ *  last change: $Author: pl $ $Date: 2000-12-07 17:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
             nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
         {
             w = pDisplay_->GetScreenSize().Width()*2/3;
-            h = pDisplay_->GetScreenSize().Height()*3/4;
+            h = pDisplay_->GetScreenSize().Height()*2/3;
         }
 
         Arg aArgs[10];
@@ -430,6 +430,40 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         Hints.flags        |= WindowGroupHint;
         Hints.window_group  = mpParent ? mpParent->maFrameData.GetShellWindow() : pDisplay_->GetShellWindow();
 
+        // find the last document window (if any)
+        SalFrame* pFrame = pNextFrame_;
+        while( pFrame &&
+               ( pFrame->maFrameData.mpParent ||
+                 ! ( pFrame->maFrameData.nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+                 )
+               )
+            pFrame = pFrame->maFrameData.pNextFrame_;
+        if( mpParent || ! pFrame )
+        {
+            SetSize( Size( w, h ) );
+        }
+        else
+        {
+            // set a document position and size
+            // the first frame gets positioned by the window manager
+            int x = pFrame->maFrameData.aPosSize_.Left();
+            int y = pFrame->maFrameData.aPosSize_.Top();
+            w = pFrame->maFrameData.aPosSize_.GetWidth();
+            h = pFrame->maFrameData.aPosSize_.GetHeight();
+            if( x+w+40 <= pDisplay_->GetScreenSize().Width() &&
+                y+h+40 <= pDisplay_->GetScreenSize().Height()
+                )
+            {
+                y += 40;
+                x += 40;
+            }
+            else
+            {
+                x = 0;
+                y = 20; // leave some space for dcoration
+            }
+            SetPosSize( Rectangle( Point( x, y ), Size( w, h ) ) );
+        }
     }
 
     if( hShell_ )
