@@ -14,6 +14,7 @@ mkdir: %_DEST%\ucr%_EXT%\vcl
 ..\%__SRC%\bin\vcl?????.dll %_DEST%\bin%_EXT%\vcl?????.dll
 ..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
 ..\%__SRC%\bin\getstyle-gnome %_DEST%\bin%_EXT%\getstyle-gnome
+..\%__SRC%\bin\msgbox-gnome %_DEST%\bin%_EXT%\msgbox-gnome
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so

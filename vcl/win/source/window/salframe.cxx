@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-16 09:01:34 $
+ *  last change: $Author: pl $ $Date: 2002-07-30 17:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4906,3 +4906,9 @@ bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
 
 // -----------------------------------------------------------------------
 
+int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
+{
+    return -1;
+}
+
+// -----------------------------------------------------------------------
