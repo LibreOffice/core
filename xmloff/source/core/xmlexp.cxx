@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-12 14:27:58 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 16:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,8 +801,8 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
         nPos = pNamespaceMap->GetNextIndex( nPos );
     }
 
-    // office:class = ...
-    if( pClass )
+    // office:class = ... (only for stream containing the content)
+    if( (pClass != NULL) && ((mnExportFlags & EXPORT_CONTENT) != 0) )
         AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_class, pClass );
 
     // office:version = ...
