@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:05:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,6 +840,15 @@ void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
     SetPageULSpaceItems(rFmt, aULData);
 
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
+
+    UseOnPage ePage = rPage.ReadUseOn();
+    if(ePage & PD_ALL)
+    {
+        SwFrmFmt &rFmtLeft = rPage.GetLeft();
+        SetPageULSpaceItems(rFmtLeft, aULData);
+        SetPage(rPage, rFmtLeft, rSection, bIgnoreCols);
+    }
+
 }
 
 void rtfSections::CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest)
@@ -1310,7 +1319,12 @@ void SwRTFParser::NextToken( int nToken )
         break;
 #endif
     case RTF_TROWD:                 ReadTable( nToken );        break;
-    case RTF_PGDSCTBL:              ReadPageDescTbl();          break;
+    case RTF_PGDSCTBL:
+        if( !IsNewDoc() )
+            SkipPageDescTbl();
+        else
+            ReadPageDescTbl();
+        break;
     case RTF_LISTTABLE:             ReadListTable();            break;
     case RTF_LISTOVERRIDETABLE:     ReadListOverrideTable();    break;
 
@@ -1645,14 +1659,11 @@ SETCHDATEFIELD:
             ReadFly( nToken );
             break;
 
-        /* #i28983# table handling in rtf is simply wrong this catch all case here
-           creates more problems than it solves
         case RTF_BRDRDEF | RTF_TABLEDEF:
         case RTF_SHADINGDEF | RTF_TABLEDEF:
         case RTF_TABLEDEF:
             ReadTable( nToken );
             break;
-        */
 
         case RTF_INFO:
             ReadInfo();
@@ -2782,15 +2793,35 @@ void SwRTFParser::LeaveEnvironment()
     }
 }
 
+void SwRTFParser::SkipPageDescTbl()
+{
+    // M.M. #117907# I have to use this glorified SkipGroup because the
+    // SvParser SkipGroup uses nNextCh which is not set correctly <groan>
+    int nOpenBrakets = 1;
+
+    while( nOpenBrakets && IsParserWorking() )
+    {
+        switch( GetNextToken() )
+        {
+        case '}':
+            {
+                --nOpenBrakets;
+            }
+            break;
+
+        case '{':
+            {
+                nOpenBrakets++;
+            }
+            break;
+        }
+    }
+
+    SkipToken( -1 );
+}
 
 void SwRTFParser::ReadPageDescTbl()
 {
-    if( !IsNewDoc() )
-    {
-        SkipGroup();
-        return;
-    }
-
     // dann erzeuge aus der SvxStyle-Tabelle die Swg-Collections, damit
     // diese auch in den Headers/Footer benutzt werden koennen!
     MakeStyleTab();
