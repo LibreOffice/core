@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:47:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include "connectivity/sdbcx/VCollection.hxx"
-#endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
@@ -99,60 +96,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 
 static ::rtl::OUString aEmptyString;
-
-class OPrivateColumns : public sdbcx::OCollection
-{
-    OSQLColumns m_aColumns;
-protected:
-    virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
-    virtual void impl_refresh() throw(RuntimeException) {}
-    virtual Reference< XPropertySet > createEmptyObject()
-    {
-        return NULL;
-    }
-public:
-    OPrivateColumns(const OSQLColumns& _rColumns,
-                    ::cppu::OWeakObject& _rParent,
-                    ::osl::Mutex& _rMutex,
-                    const ::std::vector< ::rtl::OUString> &_rVector
-                    ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
-                    ,m_aColumns(_rColumns)
-    {}
-    ~OPrivateColumns()
-    {
-        disposing();
-    }
-};
-// -------------------------------------------------------------------------
-Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
-{
-    return Reference< XNamed >(*find(m_aColumns.begin(),m_aColumns.end(),_rName,isCaseSensitive()),UNO_QUERY);
-}
-// -------------------------------------------------------------------------
-class OPrivateTables : public sdbcx::OCollection
-{
-    OSQLTables  m_aTables;
-protected:
-    virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
-    virtual void impl_refresh() throw(RuntimeException) {}
-    virtual Reference< XPropertySet > createEmptyObject()
-    {
-        return NULL;
-    }
-public:
-    OPrivateTables(const OSQLTables& _rColumns,
-                    ::cppu::OWeakObject& _rParent,
-                    ::osl::Mutex& _rMutex,
-                    const ::std::vector< ::rtl::OUString> &_rVector
-                    ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
-                    ,m_aTables(_rColumns)
-    {}
-};
-// -------------------------------------------------------------------------
-Reference< XNamed > OPrivateTables::createObject(const ::rtl::OUString& _rName)
-{
-    return Reference< XNamed >(m_aTables.find(_rName)->second,UNO_QUERY);
-}
 
 //-----------------------------------------------------------------------------
 OSQLParseTreeIterator::OSQLParseTreeIterator()
@@ -188,26 +131,13 @@ OSQLParseTreeIterator::~OSQLParseTreeIterator()
 {
     m_aTables.clear();
 }
-// -------------------------------------------------------------------------
-Reference< XNameAccess > OSQLParseTreeIterator::getSelectAsNameAccess(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) const
+// -----------------------------------------------------------------------------
+void OSQLParseTreeIterator::dispose()
 {
-    ::std::vector< ::rtl::OUString> aNames;
-    for(OSQLColumns::const_iterator aIter = m_aSelectColumns->begin(); aIter != m_aSelectColumns->end();++aIter)
-        aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-    OPrivateColumns* pCols = new OPrivateColumns(*m_aSelectColumns,_rParent,_rMutex,aNames);
-    return pCols;
-}
-// -------------------------------------------------------------------------
-Reference< XNameAccess > OSQLParseTreeIterator::getTablesAsNameAccess(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) const
-{
-    ::std::vector< ::rtl::OUString> aNames;
-    for(OSQLTables::const_iterator aIter = m_aTables.begin(); aIter != m_aTables.end();++aIter)
-    {
-        Reference<XNamed> xName(aIter->second,UNO_QUERY);
-        aNames.push_back(xName->getName());
-    }
-    OPrivateTables* pTabs = new OPrivateTables(m_aTables,_rParent,_rMutex,aNames);
-    return pTabs;
+    m_aTables.clear();
+    m_aSelectColumns->clear();
+    m_xTables           = NULL;
+    m_xDatabaseMetaData = NULL;
 }
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)

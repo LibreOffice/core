@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:47:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,4 +133,6 @@ void OParseColumn::construct()
     registerProperty(PROPERTY_DBASEPRECISIONCHANGED,    PROPERTY_ID_DBASEPRECISIONCHANGED,          nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
 
 }
+// -----------------------------------------------------------------------------
+
 
