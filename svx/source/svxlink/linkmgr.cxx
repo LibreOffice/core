@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 09:43:37 $
+ *  last change: $Author: jp $ $Date: 2001-02-07 12:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,14 +273,17 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
 {
     String sTopic, sItem, sReferer;
     if( rLink.GetLinkManager() &&
-        rLink.GetLinkManager()->GetDisplayNames( rLink, 0, &sTopic, &sItem ) )
+        rLink.GetLinkManager()->GetDisplayNames( rLink, 0, &sTopic, &sItem )
+        && sTopic.Len() )
     {
         // erstmal nur ueber die DocumentShells laufen und die mit dem
         // Namen heraussuchen:
 
         CharClass aCC( SvxCreateLocale( LANGUAGE_SYSTEM ));
-        String sNm( sTopic ), sTmp;
+        String sNm( sTopic ), sNmURL( URIHelper::SmartRelToAbs( sTopic ) ),
+               sTmp;
         aCC.toLower( sNm );
+        aCC.toLower( sNmURL );
 
         TypeId aType( TYPE(SfxObjectShell) );
 
@@ -314,7 +317,7 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
                 sTmp = pShell->GetTitle( SFX_TITLE_FULLNAME );
 
             aCC.toLower( sTmp );
-            if( sTmp == sNm )       // die wollen wir haben
+            if( sTmp == sNm || sTmp == sNmURL )     // die wollen wir haben
             {
                 SvPseudoObject* pNewObj = pShell->DdeCreateHotLink( sItem );
                 if( pNewObj )
@@ -339,6 +342,10 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
             sTmp.Erase();
         }
     }
+
+    // empty topics are not allowed - which document is it
+    if( !sTopic.Len() )
+        return FALSE;
 
     // dann versuche die Datei zu laden:
     INetURLObject aURL( sTopic );
