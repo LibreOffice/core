@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: mt $ $Date: 2002-09-11 14:44:20 $
+#   last change: $Author: mt $ $Date: 2002-11-15 11:45:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,6 +143,7 @@ IDLFILES=\
     UnoControlDateField.idl\
     UnoControlDateFieldModel.idl\
     UnoControlDialog.idl\
+    UnoControlDialogElement.idl\
     UnoControlDialogModel.idl\
     UnoControlEdit.idl\
     UnoControlEditModel.idl\
