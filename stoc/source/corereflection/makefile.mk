@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 15:41:59 $
+#   last change: $Author: obo $ $Date: 2002-02-05 10:18:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,12 @@ SLOFILES=	\
         $(SLO)$/crcomp.obj	\
         $(SLO)$/criface.obj	\
         $(SLO)$/crenum.obj
+
+# internal compiler error with Forte 6 update 1 (x86)
+# to be reconsidered after compiler upgrade
+.IF "$(OS)$(CPU)"=="SOLARISI"
+NOOPTFILES += $(SLO)$/criface.obj
+.ENDIF
 
 SHL1TARGET=	$(TARGET)
 SHL1VERSIONMAP=	$(TARGET).map
