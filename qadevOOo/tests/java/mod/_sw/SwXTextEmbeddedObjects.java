@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextEmbeddedObjects.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:17:27 $
+ *  last change:$Date: 2004-11-02 12:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._sw;
 
+import com.sun.star.beans.XPropertySet;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -71,6 +72,8 @@ import util.SOfficeFactory;
 import util.utils;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextEmbeddedObjectsSupplier;
 import com.sun.star.uno.UnoRuntime;
@@ -96,14 +99,11 @@ public class SwXTextEmbeddedObjects extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
-            log.println( "creating a textdocument" );
-            oDoc = (XTextDocument) UnoRuntime.queryInterface
-                (XTextDocument.class, SOF.loadDocument
-                (utils.getFullTestURL("SwXTextEmbeddedObject.sdw")));
+            oDoc = SOF.createTextDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn?t create document", e );
         }
     }
 
@@ -139,7 +139,24 @@ public class SwXTextEmbeddedObjects extends TestCase {
                   PrintWriter log ) throws StatusException {
 
         XInterface oObj = null;
+
         // create testobject here
+        XTextCursor xCursor = oDoc.getText().createTextCursor();
+        try {
+            XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory)
+                UnoRuntime.queryInterface(XMultiServiceFactory.class, oDoc);
+            Object o = xMultiServiceFactory.createInstance("com.sun.star.text.TextEmbeddedObject" );
+            XTextContent xTextContent = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, o);
+            String sChartClassID = "12dcae26-281f-416f-a234-c3086127382e";
+            XPropertySet xPropertySet = (XPropertySet)
+                UnoRuntime.queryInterface(XPropertySet.class, xTextContent);
+            xPropertySet.setPropertyValue( "CLSID", sChartClassID );
+
+            oDoc.getText().insertTextContent( xCursor, xTextContent, false );
+        }
+        catch(com.sun.star.uno.Exception e) {
+            e.printStackTrace((java.io.PrintWriter)log);
+        }
 
         XTextEmbeddedObjectsSupplier oTEOS = (XTextEmbeddedObjectsSupplier)
             UnoRuntime.queryInterface(XTextEmbeddedObjectsSupplier.class, oDoc);
