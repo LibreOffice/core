@@ -13076,3 +13076,7 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?setCaretPosition@AccessibleListBoxEntry@svt@@UAAEJ@Z
 ?setSelection@AccessibleListBoxEntry@svt@@UAAEJJ@Z
 ?isHiContrast@?%O:\SRX643\src\svtools\source\brwbox\editbrowsebox.cxx208837247@svt@@YAEPAVWindow@@@Z
+?checkIndex_Impl@?%O:\SRX643\src\svtools\source\Accessibility\AccessibleBrowseBoxTableCell.cxx404523221@svt@@YAXJABVOUString@rtl@@@Z
+?getRectangle@?%O:\SRX643\src\svtools\source\Accessibility\AccessibleBrowseBoxHeaderCell.cxx238917802@svt@@YA?AVRectangle@@PAVBrowseBox@@JEE@Z
+?checkActionIndex_Impl@?%O:\SRX643\src\svtools\source\Accessibility\accessiblelistboxentry.cxx1594320768@@YAXJ@Z
+?isHiContrast@?%O:\SRX643\src\svtools\source\brwbox\editbrowsebox.cxx2636524134@svt@@YAEPAVWindow@@@Z
