@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-08 09:24:49 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 17:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,12 @@ BOOL SmDocShell::SetData( SvData *pData )
         }
     }
     return SfxInPlaceObject::SetData( pData );
+}
+
+BOOL SmDocShell::SetData( const String& rData )
+{
+    SetText( rData );
+    return TRUE;
 }
 
 void SmDocShell::Convert40To50Txt()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-08 09:19:35 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 17:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-class SmDocShell : public SfxObjectShell, public SfxInPlaceObject, public SfxListener
+class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
+                    public SfxListener
 {
     friend class SmPrinterAccess;
 
@@ -197,6 +198,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject, public SfxLis
     virtual const       SvDataTypeList& GetTypeList() const;
     virtual BOOL        GetData(SvData *pData);
     virtual BOOL        SetData(SvData *pData);
+    virtual BOOL        SetData( const String& rData );
     virtual ULONG       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
     virtual BOOL        InitNew(SvStorage *);
