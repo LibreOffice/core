@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 15:06:38 $
+ *  last change: $Author: jp $ $Date: 2001-05-17 17:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,8 +1316,14 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                         ++nEnd;
 
                     // Grossbuchstabe am Satz-Anfang ??
-                    if( FnCptlSttSntnc( rDoc, *pPara, FALSE, nCapLttrPos, nEnd, eLang ) )
+                    if( IsAutoCorrFlag( CptlSttSntnc ) &&
+                        FnCptlSttSntnc( rDoc, *pPara, FALSE,
+                                                nCapLttrPos, nEnd, eLang ) )
                         nRet |= CptlSttSntnc;
+
+                    if( IsAutoCorrFlag( ChgToEnEmDash ) &&
+                        FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nEnd, eLang ) )
+                        nRet |= ChgToEnEmDash;
                 }
                 break;
             }
@@ -1327,8 +1333,6 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 FnChgFractionSymbol( rDoc, rTxt, nCapLttrPos, nInsPos ) ) ||
             ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
-            ( IsAutoCorrFlag( nRet = ChgToEnEmDash ) &&
-                FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
                 FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )
@@ -1345,7 +1349,12 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             if( IsAutoCorrFlag( CptlSttWrd ) &&
                 FnCptlSttWrd( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
                 nRet |= CptlSttWrd;
+
+            if( IsAutoCorrFlag( ChgToEnEmDash ) &&
+                FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
+                nRet |= ChgToEnEmDash;
         }
+
     } while( FALSE );
 
     return nRet;
