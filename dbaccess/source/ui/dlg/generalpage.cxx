@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 16:12:30 $
+ *  last change: $Author: fs $ $Date: 2001-09-11 07:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,6 +826,8 @@ namespace dbaui
         INetURLObject aParser;
         aParser.SetURL(_rPathURL);
 
+        INetProtocol eProtocol = aParser.GetProtocol();
+
         ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
 
         // search a level which exists
@@ -847,7 +849,17 @@ namespace dbaui
             Reference< XCommandEnvironment > xEmptyEnv;
             ::ucb::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv);
 
-            const ::rtl::OUString sDirectoryContentType = ::rtl::OUString::createFromAscii("application/vnd.sun.staroffice.fsys-folder");
+            ::rtl::OUString sContentType;
+            if ( INET_PROT_FILE == eProtocol )
+            {
+                sContentType = ::rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" );
+                // the file UCP currently does not support the ContentType property
+            }
+            else
+            {
+                Any aContentType = aParent.getPropertyValue( ::rtl::OUString::createFromAscii( "ContentType" ) );
+                aContentType >>= sContentType;
+            }
 
             // the properties which need to be set on the new content
             Sequence< ::rtl::OUString > aNewDirectoryProperties(1);
@@ -863,12 +875,14 @@ namespace dbaui
                 )
             {
                 aNewDirectoryAttributes[0] <<= *aLocalName;
-                if (!aParent.insertNewContent(sDirectoryContentType, aNewDirectoryProperties, aNewDirectoryAttributes, aParent))
+                if (!aParent.insertNewContent(sContentType, aNewDirectoryProperties, aNewDirectoryAttributes, aParent))
                     return sal_False;
             }
         }
-        catch (const Exception&)
+        catch (const Exception& e)
         {
+            OSL_ENSURE( sal_False, "" );
+            e; // make compiler happy
             return sal_False;
         }
 
@@ -908,7 +922,7 @@ namespace dbaui
         if (!directoryExists(_rURL))
         {
             String sQuery(ModuleRes(STR_ASK_FOR_DIRECTORY_CREATION));
-            OFileNotation aTransformer(_rURL, OFileNotation::N_URL);
+            OFileNotation aTransformer(_rURL);
             sQuery.SearchAndReplaceAscii("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = sal_False;
@@ -965,7 +979,7 @@ namespace dbaui
             {   // the text changed since entering the control
 
                 // the path may be in system notation ....
-                OFileNotation aTransformer(sURL, OFileNotation::N_DETECT);
+                OFileNotation aTransformer(sURL);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 
                 if(DST_CALC == m_eCurrentSelection)
@@ -1383,6 +1397,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/08/30 16:12:30  fs
+ *  #88427# check for a valid name in implInitControls
+ *
  *  Revision 1.24  2001/08/27 06:57:23  oj
  *  #90015# some speedup's
  *
