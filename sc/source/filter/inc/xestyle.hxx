@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:41:22 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,7 @@ struct XclExpCellBorder : public XclCellBorder
     sal_uInt32                  mnRightColorId;     /// Color ID for right line.
     sal_uInt32                  mnTopColorId;       /// Color ID for top line.
     sal_uInt32                  mnBottomColorId;    /// Color ID for bottom line.
+    sal_uInt32                  mnDiagColorId;      /// Color ID for diagonal line(s).
 
     explicit                    XclExpCellBorder();
 
