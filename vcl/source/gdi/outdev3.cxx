@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-06 15:39:45 $
+ *  last change: $Author: sb $ $Date: 2002-08-15 11:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@
 #elif defined SOLARIS
 #include <alloca.h>
 #endif
+
+#include <memory>
 
 // =======================================================================
 
@@ -6756,20 +6758,31 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
         // TODO: avoid use of outline for bounding rect calculation
         // TODO: consider rotation
-        PolyPolygon aPolyPoly;
-        bRet = mpGraphics->GetLayoutOutline( *pSalLayout, aPolyPoly );
+        PolyPolyVector aVector;
+        bRet = pSalLayout->GetOutline( *mpGraphics, aVector );
         pSalLayout->Release();
 
         if( bRet )
         {
+            Rectangle aPixelRect;
+            for (PolyPolyVector::iterator aIt(aVector.begin());
+                 aIt != aVector.end(); ++aIt)
+                aPixelRect.Union(aIt->GetBoundRect());
+
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
-                aPolyPoly.Scale( fFactor, fFactor );
+                aPixelRect.Left()
+                    = static_cast< long >(aPixelRect.Left() * fFactor);
+                aPixelRect.Right()
+                    = static_cast< long >(aPixelRect.Right() * fFactor);
+                aPixelRect.Top()
+                    = static_cast< long >(aPixelRect.Top() * fFactor);
+                aPixelRect.Bottom()
+                    = static_cast< long >(aPixelRect.Bottom() * fFactor);
                 nXOffset /= nWidthFactor;
             }
 
-            Rectangle aPixelRect = aPolyPoly.GetBoundRect();
             aPixelRect += Point( mnTextOffX + nXOffset, mnTextOffY );
             aPixelRect += aPos;
             rRect = ImplDevicePixelToLogic( aPixelRect );
@@ -6890,8 +6903,27 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
     BOOL bOptimize ) const
 {
-    BOOL bRet = FALSE;
     rPolyPoly.Clear();
+    PolyPolyVector aVector;
+    if (!GetTextOutlines(aVector, rStr, nBase, nIndex, nLen, bOptimize))
+        return false;
+    for (PolyPolyVector::iterator aIt(aVector.begin()); aIt != aVector.end();
+         ++aIt)
+        for (USHORT i = 0; i < aIt->Count(); ++i)
+            rPolyPoly.Insert((*aIt)[i]);
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
+    xub_StrLen nLen, BOOL bOptimize ) const
+{
+    // FIXME  Do not include any empty polygons in the vector.
+
+    BOOL bRet = FALSE;
+    rVector.clear();
 
     // we want to get the Rectangle in logical units, so to
     // avoid rounding errors we just size the font in logical units
@@ -6926,7 +6958,7 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     {
         int nWidthFactor = pSalLayout->GetUnitsPerPixel();
         // Point aPos = pSalLayout->GetDrawPosition();
-        bRet = mpGraphics->GetLayoutOutline( *pSalLayout, rPolyPoly );
+        bRet = pSalLayout->GetOutline( *mpGraphics, rVector );
         pSalLayout->Release();
 
         if( bRet )
@@ -6934,12 +6966,16 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
-                rPolyPoly.Scale( fFactor, fFactor );
+                for (PolyPolyVector::iterator aIt(rVector.begin());
+                     aIt != rVector.end(); ++aIt)
+                    aIt->Scale( fFactor, fFactor );
                 nXOffset /= nWidthFactor;
             }
 
             Size aOffset = PixelToLogic( Size( mnTextOffX, mnTextOffY ) );
-            rPolyPoly.Move( aOffset.Width() + nXOffset, aOffset.Height() );
+            for (PolyPolyVector::iterator aIt(rVector.begin());
+                 aIt != rVector.end(); ++aIt)
+                aIt->Move( aOffset.Width() + nXOffset, aOffset.Height() );
         }
     }
 
@@ -6953,92 +6989,101 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     if( bRet || (OUTDEV_PRINTER == meOutDevType) )
         return bRet;
 
-    // fall back to bitmap measurement method
-    Font            aFont( GetFont() );
-    VirtualDevice*  pVDev = new VirtualDevice( 1 );
-    const Size      aFontSize( pVDev->LogicToPixel( Size( 0, GLYPH_FONT_HEIGHT ), MAP_POINT ) );
+    // fall back to bitmap measurement method ----------------------------------
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
-    if( !pSalLayout )
-        return FALSE;
+    // Here, we can savely assume that the mapping between characters and glyphs
+    // is one-to-one.
 
-    const long nOrgWidth = ImplGetTextWidth( *pSalLayout );
-    const long nOrgHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+    pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0));
+    if (pSalLayout == 0)
+        return false;
+    long nOrgWidth = ImplGetTextWidth(*pSalLayout);
+    long nOrgHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent
+        + mnEmphasisDescent;
     pSalLayout->Release();
 
-    aFont.SetShadow( FALSE );
-    aFont.SetOutline( FALSE );
-    aFont.SetRelief( RELIEF_NONE );
-    aFont.SetOrientation( 0 );
-    aFont.SetSize( aFontSize );
-    pVDev->SetFont( aFont );
-    pVDev->SetTextAlign( ALIGN_TOP );
-    pVDev->SetTextColor( Color( COL_BLACK ) );
-    pVDev->SetTextFillColor();
+    std::auto_ptr< VirtualDevice > xVDev(new VirtualDevice(1));
 
-    pSalLayout = pVDev->ImplLayout( rStr, nIndex, nLen, Point(0,0) );
-    if( !pSalLayout )
-        return FALSE;
+    Font aFont(GetFont());
+    aFont.SetShadow(false);
+    aFont.SetOutline(false);
+    aFont.SetRelief(RELIEF_NONE);
+    aFont.SetOrientation(0);
+    aFont.SetSize(xVDev->LogicToPixel(Size(0, GLYPH_FONT_HEIGHT), MAP_POINT));
+    xVDev->SetFont(aFont);
+    xVDev->SetTextAlign(ALIGN_TOP);
+    xVDev->SetTextColor(Color(COL_BLACK));
+    xVDev->SetTextFillColor();
 
-    const long      nWidth = pVDev->ImplGetTextWidth( *pSalLayout );
-    const long      nHeight = pVDev->mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
+    pSalLayout = xVDev->ImplLayout(rStr, nIndex, nLen, Point(0, 0));
+    if (pSalLayout == 0)
+        return false;
+    long nWidth = xVDev->ImplGetTextWidth(*pSalLayout);
+    long nHeight = xVDev->mpFontEntry->mnLineHeight + mnEmphasisAscent
+        + mnEmphasisDescent;
     pSalLayout->Release();
 
-    const Point     aOffset( nWidth >> 1, 8 );
-    const Size      aSize( nWidth + ( aOffset.X() << 1 ), nHeight + ( aOffset.Y() << 1 ) );
-    const double    fScaleX = ( nOrgWidth && nWidth )  ? ( (double) nOrgWidth / nWidth ) : 0.0;
-    const double    fScaleY = ( nOrgHeight && nHeight ) ?  ( (double) nOrgHeight / nHeight ) : 0.0;
+    double fScaleX
+        = nWidth == 0 ? 0.0 : static_cast< double >(nOrgWidth) / nWidth;
+    double fScaleY
+        = nHeight == 0 ? 0.0 : static_cast< double >(nOrgHeight) / nHeight;
 
-    if ( pVDev->SetOutputSizePixel( aSize ) )
+    for (xub_StrLen i = nIndex; i < nIndex + nLen; ++i)
     {
-        pSalLayout->SetDrawPosition( aOffset - Point( mnTextOffX, mnTextOffY ) );
-        pVDev->ImplDrawText( *pSalLayout );
+        xVDev.reset(new VirtualDevice(1));
+        xVDev->SetFont(aFont);
+        xVDev->SetTextAlign(ALIGN_TOP);
+        xVDev->SetTextColor(Color(COL_BLACK));
+        xVDev->SetTextFillColor();
 
-        Bitmap aBmp = pVDev->GetBitmap( Point(0,0), aSize );
+        pSalLayout = xVDev->ImplLayout(rStr, i, 1, Point(0, 0));
+        if (pSalLayout == 0)
+            return false;
+        long nCharWidth = xVDev->ImplGetTextWidth(*pSalLayout);
+        pSalLayout->Release();
 
-        if( aBmp.Vectorize( rPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES ) )
+        Point aOffset(nCharWidth / 2, 8);
+        Size aSize(nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y());
+
+        if (!xVDev->SetOutputSizePixel(aSize))
+            return false;
+
+        pSalLayout->SetDrawPosition(aOffset - Point(mnTextOffX, mnTextOffY));
+        xVDev->ImplDrawText(*pSalLayout);
+
+        Bitmap aBmp(xVDev->GetBitmap(Point(0, 0), aSize));
+
+        PolyPolygon aPolyPoly;
+        if (!aBmp.Vectorize(aPolyPoly,
+                            BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES))
+            return false;
+
+        for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
         {
-            const long nOffX = aOffset.X(), nOffY = aOffset.Y();
-
-            for( USHORT i = 0UL, nCount = rPolyPoly.Count(); i < nCount; i++ )
+            Polygon & rPoly = aPolyPoly[j];
+            for (USHORT k = 0; k < rPoly.GetSize(); ++k)
             {
-                Polygon& rPoly = rPolyPoly[ i ];
-
-                for( USHORT n = 0, nSize = rPoly.GetSize(); n < nSize; n++ )
-                {
-                    Point& rPt = rPoly[ n ];
-                    rPt.X() = FRound( ImplDevicePixelToLogicWidth( rPt.X() - nOffX  ) * fScaleX );
-                    rPt.Y() = FRound( ImplDevicePixelToLogicHeight( rPt.Y() - nOffY ) * fScaleY );
-                }
+                Point & rPt = rPoly[k];
+                rPt.X() = FRound(ImplDevicePixelToLogicWidth(rPt.X()
+                                                             - aOffset.X())
+                                 * fScaleX);
+                rPt.Y() = FRound(ImplDevicePixelToLogicHeight(rPt.Y()
+                                                              - aOffset.Y())
+                                 * fScaleY);
             }
-
-            bRet = TRUE;
         }
+
+        // FIXME  Move and rotate.
+/*
+        // #83068#
+        if( GetFont().GetOrientation() )
+            aPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
+*/
+
+        rVector.push_back(aPolyPoly);
     }
 
-    delete pVDev;
-
-    // #83068#
-    if( GetFont().GetOrientation() )
-        rPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rPPVector,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, BOOL bOptimize ) const
-{
-    // TODO: fix dummy implementation
-    BOOL bRet = FALSE;
-    rPPVector.clear();
-    PolyPolygon aPolyPoly;
-    bRet = GetTextOutline( aPolyPoly, rStr, nBase, nIndex, nLen, bOptimize );
-    if( bRet )
-        rPPVector.push_back( aPolyPoly );
-    return bRet;
+    return true;
 }
 
 // -----------------------------------------------------------------------
