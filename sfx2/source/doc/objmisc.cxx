@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-04 08:57:25 $
+ *  last change: $Author: mba $ $Date: 2002-09-11 10:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1466,7 +1466,16 @@ sal_Bool SfxObjectShell::IsSecure()
         // empty new or embedded document
         return sal_True;
 
-    if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
+        SvtSecurityOptions aOpt;
+
+    if( aOpt.GetBasicMode() == eALWAYS_EXECUTE )
+        return sal_True;
+
+    if( aOpt.GetBasicMode() == eNEVER_EXECUTE )
+        return sal_False;
+
+    if ( aOpt.IsSecureURL( aURL.GetMainURL(), aReferer ) )
+    //if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
     {
         if ( GetMedium()->GetContent().is() )
         {
@@ -1567,7 +1576,26 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
             // ask one time and store result for all future calls
             sal_Bool bWarn = aOpt.IsWarningEnabled();
             sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-            sal_Bool bSecure = pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE || IsSecure();
+
+            // test against list of secure URLs
+            INetURLObject aURL( "macro:" );
+
+            // get referer from medium name
+            String aReferer;
+            aReferer = GetMedium()->GetName();
+            if ( !aReferer.Len() )
+            {
+                // for documents made from a template: get the name of the template
+                String aTempl( GetDocInfo().GetTemplateFileName() );
+                if ( aTempl.Len() )
+                    aReferer = INetURLObject( aTempl ).GetMainURL();
+            }
+
+            // no referer means OLE object or new document not from template
+            sal_Bool bIsSecureByList = !aReferer.Len() || aOpt.IsSecureURL( aURL.GetMainURL(), aReferer );
+            sal_Bool bSecure = pImp->nMacroMode == eALWAYS_EXECUTE || bIsSecureByList;
+            //sal_Bool bSecure = pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE || IsSecure();
+
             if ( bSecure && bWarn || !bSecure && bConfirm )
             {
                 if ( !nAutoConformation )
@@ -1588,7 +1616,33 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                     }
 
                     aBox.SetMessText( aText );
+
+                    if ( !bIsSecureByList )
+                    {
+                        INetURLObject aObj( aReferer );
+                        if ( aObj.GetProtocol() == INET_PROT_FILE )
+                        {
+                            // for file URLs: possible add directory to list of secure URLs
+                            SfxResId aResId( RID_SVXSTR_SECURITY_ADDPATH );
+                            aObj.removeSegment();
+                            String aText( aResId );
+                            aText += aObj.PathToFileName();
+                            aBox.SetCheckBoxText( aText );
+                        }
+                    }
+
                     bSecure = ( aBox.Execute() == RET_OK );
+
+                    if ( aBox.GetCheckBoxState() )
+                    {
+                        ::com::sun::star::uno::Sequence< ::rtl::OUString > aURLs = aOpt.GetSecureURLs();
+                        sal_Int32 nLength = aURLs.getLength();
+                        aURLs.realloc( nLength+1 );
+                        INetURLObject aObj( aReferer );
+                        aObj.removeSegment();
+                        aURLs[nLength] = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                        aOpt.SetSecureURLs( aURLs );
+                    }
                 }
                 else
                     bSecure = ( nAutoConformation > 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:38:34 $
+ *  last change: $Author: mba $ $Date: 2002-09-11 10:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,5 +197,7 @@
 #define STR_EXPORTASPDF_TITLE               (RID_SFX_DOC_START+92)
 #define STR_EXPORTBUTTON                    (RID_SFX_DOC_START+93)
 #define STR_EXPORTWITHCFGBUTTON             (RID_SFX_DOC_START+94)
+
+#define RID_SVXSTR_SECURITY_ADDPATH         (RID_SFX_DOC_START+95)
 
 #endif
