@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: mtg $ $Date: 2001-07-27 09:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,24 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
     {
         case uno::TypeClass_VOID:
         {
-            DBG_ERROR("no type");
+            /*
+             * This assertion pops up when exporting values which are set to:
+             * PropertyAttribute::MAYBEVOID, and thus are _supposed_ to have
+             * a VOID value...so I'm removing it ...mtg
+             * DBG_ERROR("no type");
+             */
         }
         break;
         case uno::TypeClass_BOOLEAN:
         {
             exportBool(::cppu::any2bool(rAny), rName);
+        }
+        break;
+        case uno::TypeClass_BYTE:
+        {
+            sal_Int8 nInt8;
+            rAny >>= nInt8;
+            exportByte(nInt8, rName);
         }
         break;
         case uno::TypeClass_SHORT:
@@ -242,6 +254,16 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
     rExport.GetDocHandler()->characters(sValue);
 }
 
+void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
+{
+    DBG_ASSERT(rName.getLength(), "no name");
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_NAME, rName);
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, XML_TYPE, XML_BYTE);
+    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, XML_CONFIG_ITEM, sal_True, sal_False);
+    rtl::OUStringBuffer sBuffer;
+    SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
+    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
+}
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
     DBG_ASSERT(rName.getLength(), "no name");
