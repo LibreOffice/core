@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-02 18:31:39 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 10:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2214,11 +2214,23 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
     if ( bCompBorder )
     {
         aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
+        aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
         aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
         aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
         aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
+        if ( aSalShlData.mbWXP )
+        {
+            // only xp supports a different menu bar color
+            bool bFlatMenues = false;
+            SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
+            if( bFlatMenues )
+            {
+                aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
+                aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+            }
+        }
     }
     // Bei hellgrau geben wir die Farbe vor, damit es besser aussieht
     if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
@@ -4213,6 +4225,14 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case SAL_MSG_MOUSELEAVE:
             ImplSalYieldMutexAcquireWithWait();
             rDef = !ImplHandleMouseMsg( hWnd, nMsg, wParam, lParam );
+            ImplSalYieldMutexRelease();
+            break;
+
+        case WM_NCLBUTTONDOWN:
+        case WM_NCMBUTTONDOWN:
+        case WM_NCRBUTTONDOWN:
+            ImplSalYieldMutexAcquireWithWait();
+            ImplCallMoveHdl( hWnd );   // close popups...
             ImplSalYieldMutexRelease();
             break;
 
