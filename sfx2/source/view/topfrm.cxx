@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:47:13 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,21 +665,7 @@ void SfxTopFrame::LockResize_Impl( BOOL bLock )
 
 void SfxTopFrame::SetMenuBar_Impl( MenuBar *pMenu )
 {
-/*
-    if ( pMenu && !pImp->bMenuBarOn )
-        return;
-
-    SystemWindow *pWin = GetTopWindow_Impl();
-    if ( pWin && pWin->GetMenuBar() != pMenu )
-    {
-        pWin->SetMenuBar( pMenu );
-        if ( pMenu )
-        {
-            CheckMenuCloser_Impl( pMenu );
-            pMenu->SetCloserHdl( LINK( pWindow, SfxTopWindow_Impl, CloserHdl ) );
-        }
-    }
-*/
+    // obsolete
 }
 
 IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
@@ -695,9 +681,7 @@ IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
 void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
 {
     pImp->bMenuBarOn = bOn;
-/*    if ( !bOn )
-        SetMenuBar_Impl( 0 );
-*/
+
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
@@ -745,10 +729,7 @@ BOOL SfxTopFrame::IsMenuBarVisible_Impl() const
 
 MenuBar* SfxTopFrame::GetMenuBar_Impl() const
 {
-/*
-    SystemWindow *pWin = GetTopWindow_Impl();
-    return pWin ? pWin->GetMenuBar() : NULL;
-*/
+    // obsolete
     return NULL;
 }
 
