@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:20:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,12 +599,12 @@ void Svx3DWin::Reset()
 
 bool Svx3DWin::GetUILightState( ImageButton& aBtn ) const
 {
-    return (aBtn.GetImage() == aImgLightOn) || (aBtn.GetImage() == mpImpl->maImgLightOnH);
+    return (aBtn.GetModeImage() == aImgLightOn) || (aBtn.GetModeImage() == mpImpl->maImgLightOnH);
 }
 
 void Svx3DWin::SetUILightState( ImageButton& aBtn, bool bState )
 {
-    aBtn.SetImage( bState ? aImgLightOn : aImgLightOff );
+    aBtn.SetModeImage( bState ? aImgLightOn : aImgLightOff );
     aBtn.SetModeImage( bState ? mpImpl->maImgLightOnH : mpImpl->maImgLightOffH, BMP_COLOR_HIGHCONTRAST );
 }
 
