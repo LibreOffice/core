@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-04 13:17:06 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 14:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,13 +227,13 @@ public:
     SfxPSStringProperty_Impl( UINT32 nIdP, const String& aStr ) :
         aString(aStr), SfxPSProperty_Impl( nIdP, VT_LPSTR ), bIsUniCode(FALSE)
     {
-        nEncoding = osl_getThreadTextEncoding();
+        nEncoding = RTL_TEXTENCODING_UTF8;
     }
 
     SfxPSStringProperty_Impl( UINT32 nIdP ) :
         SfxPSProperty_Impl( nIdP, VT_LPSTR ), bIsUniCode(FALSE)
     {
-        nEncoding = osl_getThreadTextEncoding();
+        nEncoding = RTL_TEXTENCODING_UTF8;
     }
 
     void SetCodePage( UINT16 nCodePage );
@@ -312,7 +312,9 @@ ULONG SfxPSStringProperty_Impl::Save( SvStream& rStream )
     // Now we always write property strings with UTF8 encoding, so we
     // can ensure full unicode compatibility. The code page attribute is
     // written with UTF8 set!
+    // Force nEncoding set to UTF8!
     ByteString aTemp( aString, RTL_TEXTENCODING_UTF8 );
+    nEncoding = RTL_TEXTENCODING_UTF8;
     UINT32 nLen = aTemp.Len();
     rStream << (UINT32)( nLen + 1 );
     rStream.Write( aTemp.GetBuffer(), nLen );
@@ -357,6 +359,7 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
     }
     else
         aString.Erase();
+
     return rStream.GetErrorCode();
 }
 
@@ -364,7 +367,13 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
 
 ULONG SfxPSStringProperty_Impl::Len()
 {
-    return aString.Len() + 5;
+    if ( bIsUniCode )
+        return aString.Len() + 5;
+    else
+    {
+        // Non-unicode strings are always stored with UTF8 encoding
+        return ByteString( aString, RTL_TEXTENCODING_UTF8 ).Len() + 5;
+    }
 }
 
 //=========================================================================
