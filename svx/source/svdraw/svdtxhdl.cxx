@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-01 14:53:16 $
+ *  last change: $Author: aw $ $Date: 2002-08-15 12:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,81 +533,20 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         aAttrSet.Put(XFillStyleItem(XFILL_SOLID));
     }
 
-    //// #100318# convert in a single step
-    //PolyPolygon aPolyPoly;
-    //if(aVDev.GetTextOutline(aPolyPoly, pInfo->rText, pInfo->nTextStart, pInfo->nTextStart, pInfo->nTextLen)
-    //  && aPolyPoly.Count())
-    //{
-    //XPolyPolygon aXPP(aPolyPoly);
-    //
-    //  // rotate 270 degree if vertical since result is unrotated
-    //  if(bIsVertical)
-    //      aXPP.Rotate(Point(), 2700);
-    //
-    //  // result is baseline oriented, thus move one line height, too
-    //  if(bIsVertical)
-    //      aXPP.Move(-aFontMetric.GetAscent(), 0);
-    //  else
-    //      aXPP.Move(0, aFontMetric.GetAscent());
-    //
-    //  // move to output coordinates
-    //  aXPP.Move(aPos.X(), aPos.Y());
-    //  SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
-    //
-    //  pObj->SetItemSet(aAttrSet);
-    //  pGroup->GetSubList()->InsertObject(pObj);
-    //  nLineLen = pInfo->pDXArray[pInfo->nTextLen - 1];
-    //}
+    // #100318# convert in a single step
+    // #101499# Use GetTextOutlines and a PolyPolyVector now
+    PolyPolyVector aPolyPolyVector;
 
+    if(aVDev.GetTextOutlines(aPolyPolyVector, pInfo->rText, pInfo->nTextStart, pInfo->nTextStart, pInfo->nTextLen)
+        && aPolyPolyVector.size())
     {
-        // #101499# While waiting for #101700# do the old solution. It
-        // makes no big difference since for every glyph a DRawObject
-        // needs to be created anyhow.
-        xub_StrLen nStartIndex(pInfo->nTextStart);
-        const xub_StrLen nEndIndex(pInfo->nTextStart + pInfo->nTextLen);
-        sal_Bool bUseBreakIterator(sal_False);
-
-        // correct font
-        if(bIsVertical)
+        for(sal_uInt32 a(0); a < aPolyPolyVector.size(); a++)
         {
-            Font aNewFont(aVDev.GetFont());
-            aNewFont.SetOrientation(0);
-            aVDev.SetFont(aNewFont);
-        }
+            PolyPolygon aPolyPoly(aPolyPolyVector[a]);
 
-        // initialize BreakIterator
-        Reference < com::sun::star::i18n::XBreakIterator > xBreak;
-        Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"));
-        ::com::sun::star::lang::Locale aFontLocale = SvxCreateLocale(pInfo->rFont.GetLanguage());
-
-        if(xInterface.is())
-        {
-            Any x = xInterface->queryInterface(::getCppuType((const Reference< XBreakIterator >*)0));
-            x >>= xBreak;
-        }
-
-        if(xBreak.is())
-        {
-            bUseBreakIterator = sal_True;
-        }
-
-        while(nStartIndex < nEndIndex)
-        {
-            xub_StrLen nNextGlyphLen(1);
-
-            if(bUseBreakIterator)
+            if(aPolyPoly.Count() > 0 && aPolyPoly[0].GetSize() > 0)
             {
-                sal_Int32 nDone(0L);
-                nNextGlyphLen = (xub_StrLen)xBreak->nextCharacters( pInfo->rText, nStartIndex, aFontLocale,
-                    CharacterIteratorMode::SKIPCELL, 1, nDone) - (nStartIndex);
-            }
 
-            PolyPolygon aPolyPoly;
-
-            if(aVDev.GetTextOutline(aPolyPoly, pInfo->rText, pInfo->nTextStart, nStartIndex, nNextGlyphLen)
-                && aPolyPoly.Count())
-            {
                 XPolyPolygon aXPP(aPolyPoly);
 
                 // rotate 270 degree if vertical since result is unrotated
@@ -622,18 +561,14 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
 
                 // move to output coordinates
                 aXPP.Move(aPos.X(), aPos.Y());
-
                 SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
 
                 pObj->SetItemSet(aAttrSet);
                 pGroup->GetSubList()->InsertObject(pObj);
             }
-
-            // next glyph
-            nStartIndex += nNextGlyphLen;
         }
 
-        nLineLen = aVDev.GetTextArray(pInfo->rText, (long*)pInfo->pDXArray, pInfo->nTextStart, pInfo->nTextLen);
+        nLineLen = pInfo->pDXArray[pInfo->nTextLen - 1];
     }
 
     FontUnderline eUndl=pInfo->rFont.GetUnderline();
