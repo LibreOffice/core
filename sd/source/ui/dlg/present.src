@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-12 09:38:30 $
+ *  last change: $Author: sj $ $Date: 2002-07-24 11:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "Kapsam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Volum";
+        Text[ thai ] = "ช่วง";
     };
     RadioButton RBT_ALL
     {
@@ -168,6 +169,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "T�m slaytlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Totes les ~diapositives";
+        Text[ thai ] = "~ภาพนิ่งทั้งหมด";
     };
     RadioButton RBT_AT_DIA
     {
@@ -198,6 +200,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "Ba�lang��:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Des de:";
+        Text[ thai ] = "~จาก:";
     };
     ListBox LB_DIAS
     {
@@ -236,6 +239,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Presentaci� personalitzada";
         Text[ finnish ] = "~Mukautettu diaesitys";
+        Text[ thai ] = "แสดงภาพนิ่งแบบ~กำหนดเอง";
     };
     ListBox LB_CUSTOMSHOW
     {
@@ -273,6 +277,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
+        Text[ thai ] = "ชนิด";
     };
     RadioButton RBT_STANDARD
     {
@@ -302,6 +307,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Per defecte";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     RadioButton RBT_WINDOW
     {
@@ -331,6 +337,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Finestra";
         Text[ finnish ] = "~Ikkuna";
+        Text[ thai ] = "~หน้าต่าง";
     };
     RadioButton RBT_AUTO
     {
@@ -360,6 +367,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Auto";
         Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "อั~ตโนมัติ";
     };
 /*
     FixedText FT_PAUSE
@@ -418,6 +426,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ turkish ] = "Pausendauer";
         QuickHelpText[ catalan ] = "Duraci�n de pausa";
         QuickHelpText[ finnish ] = "Katkon pituus";
+        QuickHelpText[ thai ] = "Duration of pause";
     };
     CheckBox CBX_AUTOLOGO
     {
@@ -447,6 +456,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostra el ~logotip";
         Text[ finnish ] = "~N�yt� logo";
+        Text[ thai ] = "แสดงโ~ลโก้";
     };
 
     FixedLine GRP_OPTIONS
@@ -477,6 +487,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "Se�enekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
+        Text[ thai ] = "ตัวเลือก";
     };
     CheckBox CBX_MANUEL
     {
@@ -507,6 +518,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "Man�el slayt ge�i�i";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Canvia les diapositives manualment";
+        Text[ thai ] = "เ~ปลี่ยนภาพนิ่งด้วยตนเอง";
     };
     CheckBox CBX_MOUSEPOINTER
     {
@@ -537,11 +549,12 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "Fare okunu g�r�nt�le";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Punter del ratol� vi~sible";
+        Text[ thai ] = "~มองเห็นจุดชี้เม้าส์";
     };
     CheckBox CBX_PEN
     {
-        Pos = MAP_APPFONT ( 108, 108 ) ;
-        Size = MAP_APPFONT ( 139, 12 ) ;
+        Pos = MAP_APPFONT ( 116, 108 ) ;
+        Size = MAP_APPFONT ( 131, 12 ) ;
         Text = "Mauszeiger als ~Stift" ;
         Text [ ENGLISH ] = "Mousepointer ~Pen" ;
         Text [ norwegian ] = "Musepeker ~Penn" ;
@@ -567,6 +580,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ turkish ] = "Kalem bi�iminde fare oku";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Punter del ratol� com a p~luma";
+        Text[ thai ] = "จุดชี้เม้าส์เป็น~ปากกา";
     };
     CheckBox CBX_NAVIGATOR
     {
@@ -596,6 +610,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Navegador visible";
         Text[ finnish ] = "~Navigaattori n�kyviss�";
+        Text[ thai ] = "มองเห็น~ตัวนำทาง";
     };
     CheckBox CBX_ANIMATION_ALLOWED
     {
@@ -625,6 +640,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es permeten les ~animacions";
         Text[ finnish ] = "~Animaatiot sallittu";
+        Text[ thai ] = "ให้มีการเ~คลื่อนไหว";
     };
     CheckBox CBX_CHANGE_PAGE
     {
@@ -654,6 +670,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = "RB: bitte auf die L�nge des Textes achten. Der Text soll nicht die L�nge des deutschen Textes �berschreiten.";
         Text[ catalan ] = "Canvia les diapositives fent ~clic al fons";
         Text[ finnish ] = "Vaihda diakuvia taustaa ~napsauttamalla";
+        Text[ thai ] = "เปลี่ยนภาพนิ่งโดยการค~ลิ๊กบนพื้นหลัง";
     };
     CheckBox CBX_ALWAYS_ON_TOP
     {
@@ -684,6 +701,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Prese~ntaci� sempre en primer pla";
         Text[ finnish ] = "Esitys aina ~p��llimm�isen�";
+        Text[ thai ] = "การนำเสนออยู่ด้าน~บนเสมอ";
     };
     Text[ chinese_traditional ] = "放映簡報投影片";
     Text[ arabic ] = "����� ��� ������";
@@ -692,6 +710,7 @@ ModalDialog DLG_START_PRESENTATION
     Text[ turkish ] = "Ekran sunusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inicia la presentaci�";
+    Text[ thai ] = "แสดงภาพนิ่ง";
 };
 
 
