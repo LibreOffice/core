@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-25 14:32:41 $
+ *  last change: $Author: mt $ $Date: 2001-08-02 08:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <vcl/graph.hxx>
 #include <svtools/intitem.hxx>
 #include <vcl/fontcvt.hxx>
+
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 DBG_NAME( EE_EditTextObject );
 DBG_NAME( XEditAttribute );
@@ -1106,8 +1110,8 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
     }
 
     // Aktuelle Zeichensatz speichern...
-    // GetStoreCharSet: Dateiformat fuer West-Europaeische Versionen kompatibel halten.
-    rtl_TextEncoding eEncoding = GetStoreCharSet( gsl_getSystemTextEncoding(), (USHORT) rOStream.GetVersion() );
+    // #90477# GetSOStoreTextEncoding: Bug in 5.2, when default char set is multi byte text encoding
+    rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( gsl_getSystemTextEncoding(), (USHORT) rOStream.GetVersion() );
     rOStream << (USHORT) eEncoding;
 
     // Die Anzahl der Absaetze...
@@ -1295,7 +1299,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
     USHORT nCharSet;
     rIStream >> nCharSet;
 
-    rtl_TextEncoding eSrcEncoding = (rtl_TextEncoding)nCharSet;
+    rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet, (USHORT)rIStream.GetVersion() );
 
     // Die Anzahl der Absaetze...
     USHORT nParagraphs;
