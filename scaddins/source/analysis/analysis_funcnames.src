@@ -1,0 +1,534 @@
+/*************************************************************************
+ *
+ *  $RCSfile: analysis_funcnames.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: gt $ $Date: 2001-06-01 16:09:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "analysis.hrc"
+
+
+Resource RID_ANALYSIS_FUNCTION_NAMES
+{
+
+    String ANALYSIS_FUNCNAME_Workday
+    {
+        Text = "ARBEITSTAG";
+    };
+
+    String ANALYSIS_FUNCNAME_Yearfrac
+    {
+        Text = "BRTEILJAHRE";
+    };
+
+    String ANALYSIS_FUNCNAME_Edate
+    {
+        Text = "EDATUM";
+    };
+
+    String ANALYSIS_FUNCNAME_Weeknum
+    {
+        Text = "KALENDERWOCHE";
+    };
+
+    String ANALYSIS_FUNCNAME_Eomonth
+    {
+        Text = "MONATSENDE";
+    };
+
+    String ANALYSIS_FUNCNAME_Networkdays
+    {
+        Text = "NETTOARBEITSTAGE";
+    };
+
+    String ANALYSIS_FUNCNAME_Amordegrc
+    {
+        Text = "AMORDEGRK";
+    };
+
+    String ANALYSIS_FUNCNAME_Amorlinc
+    {
+        Text = "AMORLINEARK";
+    };
+
+    String ANALYSIS_FUNCNAME_Accrint
+    {
+        Text = "AUFGELZINS";
+    };
+
+    String ANALYSIS_FUNCNAME_Accrintm
+    {
+        Text = "AUFGELZINSF";
+    };
+
+    String ANALYSIS_FUNCNAME_Received
+    {
+        Text = "AUSZAHLUNG";
+    };
+
+    String ANALYSIS_FUNCNAME_Disc
+    {
+        Text = "DISAGIO";
+    };
+
+    String ANALYSIS_FUNCNAME_Duration
+    {
+        Text = "DURATION";
+    };
+
+    String ANALYSIS_FUNCNAME_Effect
+    {
+        Text = "EFFEKTIV";
+    };
+
+    String ANALYSIS_FUNCNAME_Cumprinc
+    {
+        Text = "KUMKAPITAL";
+    };
+
+    String ANALYSIS_FUNCNAME_Cumipmt
+    {
+        Text = "KUMZINSZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Price
+    {
+        Text = "KURS";
+    };
+
+    String ANALYSIS_FUNCNAME_Pricedisc
+    {
+        Text = "KURSDISAGIO";
+    };
+
+    String ANALYSIS_FUNCNAME_Pricemat
+    {
+        Text = "KURSFÄLLIG";
+    };
+
+    String ANALYSIS_FUNCNAME_Mduration
+    {
+        Text = "MDURATION";
+    };
+
+    String ANALYSIS_FUNCNAME_Nominal
+    {
+        Text = "NOMINAL";
+    };
+
+    String ANALYSIS_FUNCNAME_Dollarfr
+    {
+        Text = "NOTIERUNGBRU";
+    };
+
+    String ANALYSIS_FUNCNAME_Dollarde
+    {
+        Text = "NOTIERUNGDEZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Yield
+    {
+        Text = "RENDITE";
+    };
+
+    String ANALYSIS_FUNCNAME_Yielddisc
+    {
+        Text = "RENDITEDIS";
+    };
+
+    String ANALYSIS_FUNCNAME_Yieldmat
+    {
+        Text = "RENDITEFÄLL";
+    };
+
+    String ANALYSIS_FUNCNAME_Tbilleq
+    {
+        Text = "TBILLÄQUIV";
+    };
+
+    String ANALYSIS_FUNCNAME_Tbillprice
+    {
+        Text = "TBILLKURS";
+    };
+
+    String ANALYSIS_FUNCNAME_Tbillyield
+    {
+        Text = "TBILLRENDITE";
+    };
+
+    String ANALYSIS_FUNCNAME_Oddfprice
+    {
+        Text = "UNREGER.KURS";
+    };
+
+    String ANALYSIS_FUNCNAME_Oddfyield
+    {
+        Text = "UNREGER.REND";
+    };
+
+    String ANALYSIS_FUNCNAME_Oddlprice
+    {
+        Text = "UNREGLE.KURS";
+    };
+
+    String ANALYSIS_FUNCNAME_Oddlyield
+    {
+        Text = "UNREGLE.REND";
+    };
+
+    String ANALYSIS_FUNCNAME_Xirr
+    {
+        Text = "XINTZINSFUSS";
+    };
+
+    String ANALYSIS_FUNCNAME_Xnpv
+    {
+        Text = "XKAPITALWERT";
+    };
+
+    String ANALYSIS_FUNCNAME_Intrate
+    {
+        Text = "ZINSSATZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Coupncd
+    {
+        Text = "ZINSTERMNZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Coupdays
+    {
+        Text = "ZINSTERMTAGE";
+    };
+
+    String ANALYSIS_FUNCNAME_Coupdaysnc
+    {
+        Text = "ZINSTERMTAGNZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Coupdaybs
+    {
+        Text = "ZINSTERMTAGVA";
+    };
+
+    String ANALYSIS_FUNCNAME_Couppcd
+    {
+        Text = "ZINSTERMVZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Coupnum
+    {
+        Text = "ZINSTERMZAHL";
+    };
+
+    String ANALYSIS_FUNCNAME_Fvschedule
+    {
+        Text = "ZW2";
+    };
+
+    String ANALYSIS_FUNCNAME_Iseven
+    {
+        Text = "ISTGERADE";
+    };
+
+    String ANALYSIS_FUNCNAME_Isodd
+    {
+        Text = "ISTUNGERADE";
+    };
+
+    String ANALYSIS_FUNCNAME_Gcd
+    {
+        Text = "GGT";
+    };
+
+    String ANALYSIS_FUNCNAME_Lcm
+    {
+        Text = "KGV";
+    };
+
+    String ANALYSIS_FUNCNAME_Multinomial
+    {
+        Text = "POLYNOMIAL";
+    };
+
+    String ANALYSIS_FUNCNAME_Seriessum
+    {
+        Text = "POTENZREIHE";
+    };
+
+    String ANALYSIS_FUNCNAME_Quotient
+    {
+        Text = "QUOTIENT";
+    };
+
+    String ANALYSIS_FUNCNAME_Mround
+    {
+        Text = "VRUNDEN";
+    };
+
+    String ANALYSIS_FUNCNAME_Sqrtpi
+    {
+        Text = "WURZELPI";
+    };
+
+    String ANALYSIS_FUNCNAME_Randbetween
+    {
+        Text = "ZUFALLSBEREICH";
+    };
+
+    String ANALYSIS_FUNCNAME_Besseli
+    {
+        Text = "BESSELI";
+    };
+
+    String ANALYSIS_FUNCNAME_Besselj
+    {
+        Text = "BESSELJ";
+    };
+
+    String ANALYSIS_FUNCNAME_Besselk
+    {
+        Text = "BESSELK";
+    };
+
+    String ANALYSIS_FUNCNAME_Bessely
+    {
+        Text = "BESSELY";
+    };
+
+    String ANALYSIS_FUNCNAME_Bin2Dec
+    {
+        Text = "BININDEZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Bin2Hex
+    {
+        Text = "BININHEX";
+    };
+
+    String ANALYSIS_FUNCNAME_Bin2Oct
+    {
+        Text = "BININOKT";
+    };
+
+    String ANALYSIS_FUNCNAME_Delta
+    {
+        Text = "DELTA";
+    };
+
+    String ANALYSIS_FUNCNAME_Dec2Bin
+    {
+        Text = "DEZINBIN";
+    };
+
+    String ANALYSIS_FUNCNAME_Dec2Hex
+    {
+        Text = "DEZINHEX";
+    };
+
+    String ANALYSIS_FUNCNAME_Dec2Oct
+    {
+        Text = "DEZINOKT";
+    };
+
+    String ANALYSIS_FUNCNAME_Erf
+    {
+        Text = "GAUSSFEHLER";
+    };
+
+    String ANALYSIS_FUNCNAME_Erfc
+    {
+        Text = "GAUSSFKOMPL";
+    };
+
+    String ANALYSIS_FUNCNAME_Gestep
+    {
+        Text = "GGANZZAHL";
+    };
+
+    String ANALYSIS_FUNCNAME_Hex2Bin
+    {
+        Text = "HEXINBIN";
+    };
+
+    String ANALYSIS_FUNCNAME_Hex2Dec
+    {
+        Text = "HEXINDEZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Hex2Oct
+    {
+        Text = "HEXINOKT";
+    };
+
+    String ANALYSIS_FUNCNAME_Imabs
+    {
+        Text = "IMABS";
+    };
+
+    String ANALYSIS_FUNCNAME_Imaginary
+    {
+        Text = "IMAGINÄRTEIL";
+    };
+
+    String ANALYSIS_FUNCNAME_Impower
+    {
+        Text = "IMAPOTENZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Imargument
+    {
+        Text = "IMARGUMENT";
+    };
+
+    String ANALYSIS_FUNCNAME_Imcos
+    {
+        Text = "IMCOS";
+    };
+
+    String ANALYSIS_FUNCNAME_Imdiv
+    {
+        Text = "IMDIV";
+    };
+
+    String ANALYSIS_FUNCNAME_Imexp
+    {
+        Text = "IMEXP";
+    };
+
+    String ANALYSIS_FUNCNAME_Imconjugate
+    {
+        Text = "IMKONJUGIERTE";
+    };
+
+    String ANALYSIS_FUNCNAME_Imln
+    {
+        Text = "IMLN";
+    };
+
+    String ANALYSIS_FUNCNAME_Imlog10
+    {
+        Text = "IMLOG10";
+    };
+
+    String ANALYSIS_FUNCNAME_Imlog2
+    {
+        Text = "IMLOG2";
+    };
+
+    String ANALYSIS_FUNCNAME_Improduct
+    {
+        Text = "IMPRODUKT";
+    };
+
+    String ANALYSIS_FUNCNAME_Imreal
+    {
+        Text = "IMREALTEIL";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsin
+    {
+        Text = "IMSIN";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsub
+    {
+        Text = "IMSUB";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsum
+    {
+        Text = "IMSUMME";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsqrt
+    {
+        Text = "IMWURZEL";
+    };
+
+    String ANALYSIS_FUNCNAME_Complex
+    {
+        Text = "KOMPLEXE";
+    };
+
+    String ANALYSIS_FUNCNAME_Oct2Bin
+    {
+        Text = "OKTINBIN";
+    };
+
+    String ANALYSIS_FUNCNAME_Oct2Dez
+    {
+        Text = "OKTINDEZ";
+    };
+
+    String ANALYSIS_FUNCNAME_Oct2Hex
+    {
+        Text = "OKTINHEX";
+    };
+
+    String ANALYSIS_FUNCNAME_Convert
+    {
+        Text = "UMWANDELN";
+    };
+
+    String ANALYSIS_FUNCNAME_Factdouble
+    {
+        Text = "ZWEIFAKULTÄT";
+    };
+
+};
