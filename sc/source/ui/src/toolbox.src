@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 15:09:35 $
+ *  last change: $Author: os $ $Date: 2002-04-05 08:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: dr $ $Date: 2002-04-03 15:09:35 $ $Revision: 1.35 $
+ // $Author: os $ $Date: 2002-04-05 08:18:04 $ $Revision: 1.36 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1761,6 +1761,61 @@ ImageList RID_DEFAULTIMAGELIST_LC
     DEFAULT_IDLIST
 };
 
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch_out.bmp" ;
+        File [ english ] = "sch_out01.bmp" ;
+        File [ english_us ] = "sch_out01.bmp" ;
+        File [ dutch ] = "sch_out31.bmp" ;
+        File [ french ] = "sch_out33.bmp" ;
+        File [ spanish ] = "sch_out34.bmp" ;
+        File [ italian ] = "sch_out39.bmp" ;
+        File [ swedish ] = "sch_out46.bmp" ;
+        File [ danish ] = "sch_out45.bmp" ;
+        File [ russian ] = "sch_out07.bmp" ;
+        File [ polish ] = "sch_out48.bmp" ;
+        File [ greek ] = "sch_out30.bmp" ;
+        File [ japanese ] = "sch_out81.bmp" ;
+        File [ portuguese ] = "sch_out03.bmp" ;
+        File [ turkish ] = "sch_out90.bmp" ;
+        File [ chinese_simplified ] = "sch_out86.bmp" ;
+        File [ chinese_traditional ] = "sch_out88.bmp" ;
+        File [ japanese ] = "sch_out81.bmp" ;
+        File [ korean ] = "sch_out82.bmp" ;
+    };
+    MaskColor = STD_MASKCOLOR ;
+    DEFAULT_IDLIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lch_out.bmp" ;
+        File [ english ] = "lch_out01.bmp" ;
+        File [ english_us ] = "lch_out01.bmp" ;
+        File [ dutch ] = "lch_out31.bmp" ;
+        File [ french ] = "lch_out33.bmp" ;
+        File [ spanish ] = "lch_out34.bmp" ;
+        File [ italian ] = "lch_out39.bmp" ;
+        File [ swedish ] = "lch_out46.bmp" ;
+        File [ danish ] = "lch_out45.bmp" ;
+        File [ russian ] = "lch_out07.bmp" ;
+        File [ polish ] = "lch_out48.bmp" ;
+        File [ greek ] = "lch_out30.bmp" ;
+        File [ japanese ] = "lch_out81.bmp" ;
+        File [ portuguese ] = "lch_out03.bmp" ;
+        File [ turkish ] = "lch_out90.bmp" ;
+        File [ chinese_simplified ] = "lch_out86.bmp" ;
+        File [ chinese_traditional ] = "lch_out88.bmp" ;
+        File [ japanese ] = "lch_out81.bmp" ;
+        File [ korean ] = "lch_out82.bmp" ;
+    };
+    MaskColor = STD_MASKCOLOR ;
+    DEFAULT_IDLIST
+};
 ImageList RID_OFFICEIMAGELIST_SC
 {
     ImageBitmap = Bitmap { File = "sc_off.bmp" ; };
@@ -1771,6 +1826,20 @@ ImageList RID_OFFICEIMAGELIST_SC
 ImageList RID_OFFICEIMAGELIST_LC
 {
     ImageBitmap = Bitmap { File = "lc_off.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+    OFFICE_IDLIST
+};
+
+ImageList RID_OFFICEIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap { File = "sch_off.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+    OFFICE_IDLIST
+};
+
+ImageList RID_OFFICEIMAGELIST_LCH
+{
+    ImageBitmap = Bitmap { File = "lch_off.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
