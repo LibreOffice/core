@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,14 @@ void ScDocShell::PostPaint( USHORT nStartCol, USHORT nStartRow, USHORT nStartTab
 
     if ( nStartCol != 0 || nEndCol != MAXCOL )
     {
-        //  If rotated text is involved, repaint the entire rows.
-        //  #i9731# If there's right-to-left text to the left of the area,
-        //  the displacement for clipping of that text may change.
-        if ( aDocument.HasAttrib( 0,nStartRow,nStartTab,
-                                    MAXCOL,nEndRow,nEndTab, HASATTR_ROTATE | HASATTR_RTL ) )
+        //  Extend to whole rows if SC_PF_WHOLEROWS is set, or rotated or non-left
+        //  aligned cells are contained (see UpdatePaintExt).
+        //  Special handling for RTL text (#i9731#) is unnecessary now with full
+        //  support of right-aligned text.
+
+        if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
+             aDocument.HasAttrib( nStartCol,nStartRow,nStartTab,
+                                  MAXCOL,nEndRow,nEndTab, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
         {
             nStartCol = 0;
             nEndCol = MAXCOL;
@@ -214,6 +217,36 @@ void ScDocShell::PostPaintCell( USHORT nCol, USHORT nRow, USHORT nTab )
 void ScDocShell::PostPaintExtras()
 {
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS );
+}
+
+void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange )
+{
+    if ( ( rExtFlags & SC_PF_LINES ) == 0 && aDocument.HasAttrib( rRange, HASATTR_PAINTEXT ) )
+    {
+        //  If the range contains lines, shadow or conditional formats,
+        //  set SC_PF_LINES to include one extra cell in all directions.
+
+        rExtFlags |= SC_PF_LINES;
+    }
+
+    if ( ( rExtFlags & SC_PF_WHOLEROWS ) == 0 &&
+         ( rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL ) &&
+         aDocument.HasAttrib( rRange, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
+    {
+        //  If the range contains (logically) right- or center-aligned cells,
+        //  or rotated cells, set SC_PF_WHOLEROWS to paint the whole rows.
+        //  This test isn't needed after the cell changes, because it's also
+        //  tested in PostPaint. UpdatePaintExt may later be changed to do this
+        //  only if called before the changes.
+
+        rExtFlags |= SC_PF_WHOLEROWS;
+    }
+}
+
+void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
+                                                   USHORT nEndCol, USHORT nEndRow, USHORT nEndTab )
+{
+    UpdatePaintExt( rExtFlags, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
 }
 
 //------------------------------------------------------------------
