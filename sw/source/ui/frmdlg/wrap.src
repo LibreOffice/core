@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:49:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Κανένα";
         Text[ korean ] = "Ύψΐ½(~N)";
         Text[ turkish ] = "~Yok";
+        Text[ catalan ] = "~Ninguno";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -133,6 +134,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Αριστερά";
         Text[ korean ] = "ΏήΒΚ(~L)";
         Text[ turkish ] = "So~l";
+        Text[ catalan ] = "Iz~quierda";
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -159,6 +161,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Δεξιά";
         Text[ korean ] = "ΏΐΈ¥ΒΚ(~I)";
         Text[ turkish ] = "Sa~π";
+        Text[ catalan ] = "~Derecha";
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -185,6 +188,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Παράλληλα";
         Text[ korean ] = "ΖςΗΰ(~P)";
         Text[ turkish ] = "~Paralel";
+        Text[ catalan ] = "~Paralelo";
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
@@ -213,6 +217,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Δια μέσου";
         Text[ korean ] = "Ή®ΐεΘεΈ£±β(~U)";
         Text[ turkish ] = "~Metin arkasύna gφnder";
+        Text[ catalan ] = "~Continuo";
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
@@ -239,6 +244,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Δυναμικά";
         Text[ korean ] = "ΓΦΐϋΐΗ(~O)";
         Text[ turkish ] = "D~inamik";
+        Text[ catalan ] = "Dinα~mico";
     };
     CheckBox CB_ANCHOR_ONLY
     {
@@ -264,6 +270,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Πρώτη παράγραφο~ς";
         Text[ korean ] = "ΓΉ ΄ά¶τ(~F)";
         Text[ turkish ] = "έlk paragraf";
+        Text[ catalan ] = "Primer pαrra~fo";
     };
     CheckBox CB_TRANSPARENT
     {
@@ -289,6 +296,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Σε φόντο";
         Text[ korean ] = "Ήθ°ζΏ΅(~K)";
         Text[ turkish ] = "Arta~landa";
+        Text[ catalan ] = "En el f~ondo";
     };
     CheckBox CB_OUTLINE
     {
@@ -315,6 +323,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Περίγραμμα";
         Text[ korean ] = "ΐ±°ϋ(~C)";
         Text[ turkish ] = "Kontu~r";
+        Text[ catalan ] = "Conto~rno";
     };
     CheckBox CB_ONLYOUTSIDE
     {
@@ -341,6 +350,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Μό~νο εξωτερικά";
         Text[ korean ] = "ΉΩ±ωΒΚΈΈ";
         Text[ turkish ] = "Yalnύzca dύώarύda";
+        Text[ catalan ] = "Solo en el exterior";
     };
     GroupBox GB_OPTION
     {
@@ -366,6 +376,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Επιλογές";
         Text[ korean ] = "ΏΙΌΗ";
         Text[ turkish ] = "Seηenekler";
+        Text[ catalan ] = "Opciones";
     };
     FixedText FT_LEFT_MARGIN
     {
@@ -394,6 +405,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Αριστερά";
         Text[ korean ] = "ΏήΒΚ(~E)";
         Text[ turkish ] = "S~ol";
+        Text[ catalan ] = "I~zquierda";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -437,6 +449,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Δεξιά";
         Text[ korean ] = "ΏΐΈ¥ΒΚ(~H)";
         Text[ turkish ] = "S~aπ";
+        Text[ catalan ] = "D~erecha";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -480,6 +493,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Πάνω";
         Text[ korean ] = "ΐ§(~T)";
         Text[ turkish ] = "άs~t";
+        Text[ catalan ] = "~Arriba";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -523,6 +537,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Κάτω";
         Text[ korean ] = "ΎΖ·΅(~B)";
         Text[ turkish ] = "A~lt";
+        Text[ catalan ] = "~Abajo";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -565,6 +580,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Aποστάσεις";
         Text[ korean ] = "°£°έ";
         Text[ turkish ] = "Aralύk";
+        Text[ catalan ] = "Distancias";
     };
                                                                                                                                                         #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
     ImageList IL_WRAP
