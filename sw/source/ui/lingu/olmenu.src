@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:49:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Menu MN_SPELL_POPUP
             Text[ dutch ] = "~Spellingcontrole";
             Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
             Text[ greek ] = "Ïñèïã~ñáößá";
-            Text[ korean ] = "¸ÂÃã¹ı";
+            Text[ korean ] = "¸ÂÃã¹ı(~S)";
             Text[ turkish ] = "~Yazım kılavuzu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ortogra~fía";
@@ -115,16 +115,16 @@ Menu MN_SPELL_POPUP
             Text [ danish ] = "Tilføj" ;
             Text [ portuguese ] = "~Adicionar" ;
             Text [ portuguese_brazilian ] = "~Aufnehmen" ;
-            Text[ chinese_simplified ] = "½ÓÊÜ(~A)";
+            Text[ chinese_simplified ] = "¼ÓÈë(~A)";
             Text[ russian ] = "Äîáàâèòü";
             Text[ polish ] = "Dodaj";
             Text[ japanese ] = "’Ç‰Á(~A)";
             Text[ chinese_traditional ] = "¥[¤J(~A)";
             Text[ arabic ] = "ÅÖÇİÉ";
             Text[ dutch ] = "~Toevoegen";
-            Text[ chinese_simplified ] = "½ÓÊÜ(~A)";
+            Text[ chinese_simplified ] = "¼ÓÈë(~A)";
             Text[ greek ] = "Ğñ~ïóèŞêç";
-            Text[ korean ] = "Ãß°¡";
+            Text[ korean ] = "Ãß°¡(~A)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Incluir";
@@ -311,6 +311,7 @@ String STR_HYP_OK
     Text[ catalan ] = "La separación silábica ha finalizado";
     Text[ finnish ] = "Tavutus valmis";
 };
+
 
 
 
