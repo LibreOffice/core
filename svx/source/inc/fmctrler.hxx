@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:59:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_FOCUSEVENT_HPP_
-#include <com/sun/star/awt/FocusEvent.hpp>
+#ifndef _COM_SUN_STAR_AWT_XMOUSELISTENER_HPP_
+#include <com/sun/star/awt/XMouseListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XCONFIRMDELETEBROADCASTER_HPP_
 #include <com/sun/star/form/XConfirmDeleteBroadcaster.hpp>
@@ -269,9 +269,13 @@ typedef vector< FmFilterRow > FmFilterRows;
 typedef vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > > FmFormControllers;
 
 struct FmFieldInfo;
-class FmXFormController;
 class FmFormView;
 class Window;
+
+namespace svxform
+{
+    class ControlBorderManager;
+}
 
 typedef ::cppu::WeakAggComponentImplHelper12<   ::com::sun::star::form::XFormController
                                             ,   ::com::sun::star::container::XChild
@@ -287,7 +291,7 @@ typedef ::cppu::WeakAggComponentImplHelper12<   ::com::sun::star::form::XFormCon
                                             ,   ::com::sun::star::util::XModifyBroadcaster
                                             >   FmXFormController_BASE1;
 
-typedef ::cppu::ImplHelper12<               ::com::sun::star::util::XModeSelector
+typedef ::cppu::ImplHelper12<   ::com::sun::star::util::XModeSelector
                             ,   ::com::sun::star::form::XConfirmDeleteListener
                             ,   ::com::sun::star::form::XConfirmDeleteBroadcaster
                             ,   ::com::sun::star::sdb::XSQLErrorListener
@@ -296,14 +300,15 @@ typedef ::cppu::ImplHelper12<               ::com::sun::star::util::XModeSelecto
                             ,   ::com::sun::star::sdb::XRowSetApproveListener
                             ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
                             ,   ::com::sun::star::form::XDatabaseParameterListener
-                            ,   ::com::sun::star::form::XDatabaseParameterBroadcaster2
+                            ,   ::com::sun::star::form::XDatabaseParameterBroadcaster
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::form::XResetListener
                             >   FmXFormController_BASE2;
 
-typedef ::cppu::ImplHelper2<    ::com::sun::star::lang::XUnoTunnel
-                                            ,   ::com::sun::star::frame::XDispatch
-                                            >   FmXFormController_BASE3;
+typedef ::cppu::ImplHelper3<    ::com::sun::star::lang::XUnoTunnel
+                           ,    ::com::sun::star::frame::XDispatch
+                           ,    ::com::sun::star::awt::XMouseListener
+                           >    FmXFormController_BASE3;
 
 //==================================================================
 // FmXFormController
@@ -352,6 +357,8 @@ class FmXFormController     :public ::comphelper::OBaseMutex
 
     FmFormView*                 m_pView;
     Window*                     m_pWindow;
+    ::svxform::ControlBorderManager*
+                                m_pControlBorderManager;
 
     ::svx::ControllerFeatures   m_aControllerFeatures;
     DispatcherContainer         m_aFeatureDispatchers;
@@ -467,6 +474,12 @@ public:
 // XFocusListener
     virtual void SAL_CALL focusGained(const  ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL focusLost(const  ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
+
+// XMouseListener
+    virtual void SAL_CALL mousePressed( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseEntered( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mouseExited( const ::com::sun::star::awt::MouseEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertyChangeListener -> aenderung der stati
     virtual void SAL_CALL propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
