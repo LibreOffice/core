@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-13 14:13:35 $
+ *  last change: $Author: obo $ $Date: 2001-01-16 13:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1823,7 +1823,8 @@ void SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
             else
                 aSize = OutputDevice::LogicToLogic( aSize, aGraphic.GetPrefMapMode(), aMap100mm );
 
-            Rectangle aRect( Point(), aSize );
+            Point aEmptyPoint = Point();
+            Rectangle aRect( aEmptyPoint, aSize );
 
             sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId, aRect, NULL );
             if ( nBlibId )
@@ -2094,7 +2095,8 @@ void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, EscherPropertyContaine
                     else
                         aSize = OutputDevice::LogicToLogic( aSize, aGraphic.GetPrefMapMode(), aMap100mm );
 
-                    Rectangle aRect( Point(), aSize );
+                    Point aEmptyPoint = Point();
+                    Rectangle aRect( aEmptyPoint, aSize );
 
                     sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId, aRect, NULL );
                     if ( nBlibId )
@@ -2297,11 +2299,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.6 2000-12-13 14:13:35 sj Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.7 2001-01-16 13:01:59 obo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/13 14:13:35  sj
+      AddWmf, AddGraphic had been removed from EscherEx, UniqueId from GraphicObject is now used to get the GraphicId
+
       Revision 1.5  2000/12/11 14:31:03  sj
       now using EscherPropertyContainer to create the ESCHER_OPT atom
 
