@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,4 +341,212 @@ void SvXMLExportHelper::AddPercentage( long nValue, OUStringBuffer& rOut )
 {
     rOut.append( nValue );
     rOut.append( sal_Unicode('%' ) );
+}
+
+double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
+    const MapUnit eCoreUnit, const MapUnit eDestUnit)
+{
+    double fRetval(1.0);
+    rUnit.setLength(0L);
+
+    if(eCoreUnit != eDestUnit)
+    {
+        const sal_Char *pUnit = NULL;
+
+        switch(eCoreUnit)
+        {
+            case MAP_TWIP:
+            {
+                switch(eDestUnit)
+                {
+                    case MAP_100TH_MM:
+                    case MAP_10TH_MM:
+                    {
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for twip values");
+                    }
+                    case MAP_MM:
+                    {
+                        // 0.01mm = 0.57twip (exactly)
+                        fRetval = ((25400.0 / 1440.0) / 1000.0);
+                        pUnit = sXML_unit_mm;
+                        break;
+                    }
+                    case MAP_CM:
+                    {
+                        // 0.001cm = 0.57twip (exactly)
+                        fRetval = ((25400.0 / 1440.0) / 10000.0);
+                        pUnit = sXML_unit_cm;
+                        break;
+                    }
+                    case MAP_POINT:
+                    {
+                        // 0.01pt = 0.2twip (exactly)
+                        fRetval = ((1000.0 / 20.0) / 1000.0);
+                        pUnit = sXML_unit_pt;
+                        break;
+                    }
+                    case MAP_INCH:
+                    default:
+                    {
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for twip values");
+                        // 0.0001in = 0.144twip (exactly)
+                        fRetval = ((100000.0 / 1440.0) / 100000.0);
+                        pUnit = sXML_unit_inch;
+                        break;
+                    }
+                }
+                break;
+            }
+            case MAP_POINT:
+            {
+                // 1pt = 1pt (exactly)
+                DBG_ASSERT(MAP_POINT == eDestUnit, "output unit not supported for pt values");
+                fRetval = ((10.0 / 1.0) / 10.0);
+                pUnit = sXML_unit_pt;
+                break;
+            }
+            case MAP_100TH_MM:
+            {
+                switch(eDestUnit)
+                {
+                    case MAP_100TH_MM:
+                    case MAP_10TH_MM:
+                    {
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for 1/100mm values");
+                    }
+                    case MAP_MM:
+                    {
+                        // 0.01mm = 1 mm/100 (exactly)
+                        fRetval = ((10.0 / 1.0) / 1000.0);
+                        pUnit = sXML_unit_mm;
+                        break;
+                    }
+                    case MAP_CM:
+                    {
+                        // 0.001mm = 1 mm/100 (exactly)
+                        fRetval = ((10.0 / 1.0) / 10000.0);
+                        pUnit = sXML_unit_cm;
+                        break;
+                    }
+                    case MAP_POINT:
+                    {
+                        // 0.01pt = 0.35 mm/100 (exactly)
+                        fRetval = ((72000.0 / 2540.0) / 1000.0);
+                        pUnit = sXML_unit_pt;
+                        break;
+                    }
+                    case MAP_INCH:
+                    default:
+                    {
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for 1/100mm values");
+                        // 0.0001in = 0.254 mm/100 (exactly)
+                        fRetval = ((100000.0 / 2540.0) / 100000.0);
+                        pUnit = sXML_unit_inch;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        if(pUnit)
+            rUnit.appendAscii(pUnit);
+    }
+
+    return fRetval;
+}
+
+MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, MapUnit eDefaultUnit)
+{
+    sal_Int32 nPos = 0L;
+    sal_Int32 nLen = rString.getLength();
+    MapUnit eRetUnit = eDefaultUnit;
+
+    // skip white space
+    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+        nPos++;
+
+    // skip negative
+    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+        nPos++;
+
+    // skip number
+    while( nPos < nLen && sal_Unicode('0') <= rString[nPos] && sal_Unicode('9') >= rString[nPos] )
+        nPos++;
+
+    if( nPos < nLen && sal_Unicode('.') == rString[nPos] )
+    {
+        nPos++;
+        while( nPos < nLen && sal_Unicode('0') <= rString[nPos] && sal_Unicode('9') >= rString[nPos] )
+            nPos++;
+    }
+
+    // skip white space
+    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+        nPos++;
+
+    if( nPos < nLen )
+    {
+        switch(rString[nPos])
+        {
+            case sal_Unicode('%') :
+            {
+                eRetUnit = MAP_RELATIVE;
+                break;
+            }
+            case sal_Unicode('c'):
+            case sal_Unicode('C'):
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m')
+                    || rString[nPos+1] == sal_Unicode('M')))
+                    eRetUnit = MAP_CM;
+                break;
+            }
+            case sal_Unicode('e'):
+            case sal_Unicode('E'):
+            {
+                // CSS1_EMS or CSS1_EMX later
+                break;
+            }
+            case sal_Unicode('i'):
+            case sal_Unicode('I'):
+            {
+                if(nPos+3 < nLen)
+                {
+                    if(rString[nPos+1] == sal_Unicode('n') || rString[nPos+1] == sal_Unicode('N'))
+                    {
+                        if(rString[nPos+2] == sal_Unicode('c') || rString[nPos+2] == sal_Unicode('C'))
+                        {
+                            if(rString[nPos+3] == sal_Unicode('h') || rString[nPos+3] == sal_Unicode('H'))
+                            {
+                                eRetUnit = MAP_INCH;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            case sal_Unicode('m'):
+            case sal_Unicode('M'):
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m')
+                    || rString[nPos+1] == sal_Unicode('M')))
+                    eRetUnit = MAP_MM;
+                break;
+            }
+            case sal_Unicode('p'):
+            case sal_Unicode('P'):
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('t')
+                    || rString[nPos+1] == sal_Unicode('T')))
+                    eRetUnit = MAP_MM;
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('c')
+                    || rString[nPos+1] == sal_Unicode('C')))
+                    eRetUnit = MAP_TWIP;
+                break;
+            }
+        }
+    }
+
+    return eRetUnit;
 }
