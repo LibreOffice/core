@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:28:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ private:
     void setOldDimHide( const com::sun::star::uno::Any& aValue );
     void setOldDimPrevious( const com::sun::star::uno::Any& aValue );
     void setOldPresOrder( const com::sun::star::uno::Any& aValue );
+    void updateOldSoundEffect( SdAnimationInfo* pInfo );
 
 
 };
