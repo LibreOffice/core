@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-22 07:01:31 $
+ *  last change: $Author: tbe $ $Date: 2002-09-23 10:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,12 @@ namespace comphelper
         :OMutexGuard( _pContext->getExternalLock( OAccessibleContextHelper::OAccessControl() ) )
         ,OContextEntryGuard( _pContext )
     {
+        // #102438#
+        // Only lock the external mutex,
+        // release the ::osl::Mutex of the OAccessibleContextHelper instance.
+        // If you call into another UNO object with locked ::osl::Mutex,
+        // this may lead to dead locks.
+        clear();
     }
 
     //.....................................................................
@@ -411,6 +417,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/07/22 07:01:31  sb
+ *  #100004# Added second NotifyAccessibleEvent with AccessibleEventBuffer.
+ *
  *  Revision 1.5  2002/05/08 15:37:22  fs
  *  #99218# allow abstract external locks in addition to the own mutex
  *
