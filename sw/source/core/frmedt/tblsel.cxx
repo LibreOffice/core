@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-24 10:53:37 $
+ *  last change: $Author: fme $ $Date: 2002-09-25 13:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,16 +216,16 @@ struct _CmpLPt
 {
     Point aPos;
     const SwTableBox* pSelBox;
-    BOOL bVertical;
+    BOOL bVert;
 
-    _CmpLPt( const Point& rPt, const SwTableBox* pBox, BOOL bVert );
+    _CmpLPt( const Point& rPt, const SwTableBox* pBox, BOOL bVertical );
 
     BOOL operator==( const _CmpLPt& rCmp ) const
     {   return X() == rCmp.X() && Y() == rCmp.Y() ? TRUE : FALSE; }
 
     BOOL operator<( const _CmpLPt& rCmp ) const
     {
-        if ( bVertical )
+        if ( bVert )
             return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() )
                     ? TRUE : FALSE;
         else
@@ -248,18 +248,30 @@ SV_IMPL_PTRARR( _FndLines, _FndLine* )
 struct _Sort_CellFrm
 {
     const SwCellFrm* pFrm;
-    _Sort_CellFrm( const SwCellFrm& rCFrm ) : pFrm( &rCFrm ) {}
+    BOOL bVert;
+
+    _Sort_CellFrm( const SwCellFrm& rCFrm, BOOL bVertical )
+        : pFrm( &rCFrm ), bVert( bVertical ) {}
 
     int operator< ( const _Sort_CellFrm& rCmp ) const
     {
-        return pFrm->Frm().Top() < rCmp.pFrm->Frm().Top() ||
-                ( pFrm->Frm().Top() == rCmp.pFrm->Frm().Top() &&
-                  pFrm->Frm().Left() < rCmp.pFrm->Frm().Left() );
+        if ( bVert )
+            return pFrm->Frm().Right() > rCmp.pFrm->Frm().Right() ||
+                    ( pFrm->Frm().Right() == rCmp.pFrm->Frm().Right() &&
+                      pFrm->Frm().Top() < rCmp.pFrm->Frm().Top() );
+        else
+            return pFrm->Frm().Top() < rCmp.pFrm->Frm().Top() ||
+                    ( pFrm->Frm().Top() == rCmp.pFrm->Frm().Top() &&
+                      pFrm->Frm().Left() < rCmp.pFrm->Frm().Left() );
     }
     int operator==( const _Sort_CellFrm& rCmp ) const
     {
-        return pFrm->Frm().Top() == rCmp.pFrm->Frm().Top() &&
-               pFrm->Frm().Left() == rCmp.pFrm->Frm().Left();
+        if ( bVert )
+            return pFrm->Frm().Right() == rCmp.pFrm->Frm().Right() &&
+                   pFrm->Frm().Top() == rCmp.pFrm->Frm().Top();
+        else
+            return pFrm->Frm().Top() == rCmp.pFrm->Frm().Top() &&
+                   pFrm->Frm().Left() == rCmp.pFrm->Frm().Left();
     }
 };
 
@@ -540,6 +552,8 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             SwSelUnion *pUnion = aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
 
+            SWRECTFN( pTable )
+
             if( !pTable->IsValid() && nLoopMax  )
             {
                 bTblIsValid = FALSE;
@@ -586,25 +600,31 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
                         // liegt das FrmRect ausserhalb der Union, kann es
                         // ignoriert werden.
-                        if( !(  rUnion.Top() > nFrmBottom ||
-                                nUnionBottom < rFrmRect.Top() ||
-                                rUnion.Left() + 20 > nFrmRight ||
-                                nUnionRight < rFrmRect.Left() + 20 ))
+
+                        const long nXFuzzy = bVert ? 0 : 20;
+                        const long nYFuzzy = bVert ? 20 : 0;
+
+                        if( !(  rUnion.Top()  + nYFuzzy > nFrmBottom ||
+                                nUnionBottom < rFrmRect.Top() + nYFuzzy ||
+                                rUnion.Left() + nXFuzzy > nFrmRight ||
+                                nUnionRight < rFrmRect.Left() + nXFuzzy ))
                         {
+                            // ok, rUnion is _not_ completely outside of rFrmRect
+
                             // wenn es aber nicht komplett in der Union liegt,
                             // dann ist es fuers Chart eine ungueltige
                             // Selektion.
-                            if( rUnion.Left()   <= rFrmRect.Left() + 20 &&
+                            if( rUnion.Left()   <= rFrmRect.Left() + nXFuzzy &&
                                 rFrmRect.Left() <= nUnionRight &&
                                 rUnion.Left()   <= nFrmRight &&
-                                nFrmRight       <= nUnionRight + 20 &&
-                                rUnion.Top()    <= rFrmRect.Top() &&
+                                nFrmRight       <= nUnionRight + nXFuzzy &&
+                                rUnion.Top()    <= rFrmRect.Top() + nYFuzzy &&
                                 rFrmRect.Top()  <= nUnionBottom &&
                                 rUnion.Top()    <= nFrmBottom &&
-                                nFrmBottom      <= nUnionBottom )
+                                nFrmBottom      <= nUnionBottom+ nYFuzzy )
 
                                 aCellFrms.Insert(
-                                        _Sort_CellFrm( *(SwCellFrm*)pCell ),
+                                        _Sort_CellFrm( *(SwCellFrm*)pCell, bVert ),
                                         aCellFrms.Count() );
                             else
                             {
@@ -636,7 +656,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             for( n = 0, nEnd = aCellFrms.Count(); n < nEnd; ++n )
             {
                 const _Sort_CellFrm& rCF = aCellFrms[ n ];
-                if( rCF.pFrm->Frm().Top() != nYPos )
+                if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
                 {
                     // neue Zeile
                     if( n )
@@ -650,14 +670,14 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                         }
                     }
                     nCellCnt = 1;
-                    nYPos = rCF.pFrm->Frm().Top();
-                    nHeight = rCF.pFrm->Frm().Height();
-                    nXPos = rCF.pFrm->Frm().Left() + rCF.pFrm->Frm().Width();
+                    nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
+                    nHeight = (rCF.pFrm->Frm().*fnRect->fnGetHeight)();
+                    nXPos = (rCF.pFrm->Frm().*fnRect->fnGetRight)();
                 }
-                else if( nXPos == rCF.pFrm->Frm().Left() &&
-                         nHeight == rCF.pFrm->Frm().Height() )
+                else if( nXPos == (rCF.pFrm->Frm().*fnRect->fnGetLeft)() &&
+                         nHeight == (rCF.pFrm->Frm().*fnRect->fnGetHeight)() )
                 {
-                    nXPos += rCF.pFrm->Frm().Width();
+                    nXPos += (rCF.pFrm->Frm().*fnRect->fnGetWidth)();
                     ++nCellCnt;
                 }
                 else
@@ -681,12 +701,12 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                 for( n = 0, nEnd = aCellFrms.Count(); n < nEnd; ++n )
                 {
                     const _Sort_CellFrm& rCF = aCellFrms[ n ];
-                    if( rCF.pFrm->Frm().Top() != nYPos )
+                    if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
                     {
                         pBoxes = new SwChartBoxes( 255 < nRowCells
                                                     ? 255 : (BYTE)nRowCells);
                         pGetCLines->C40_INSERT( SwChartBoxes, pBoxes, pGetCLines->Count() );
-                        nYPos = rCF.pFrm->Frm().Top();
+                        nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
                     }
                     SwTableBoxPtr pBox = (SwTableBox*)rCF.pFrm->GetTabBox();
                     pBoxes->Insert( pBox, pBoxes->Count() );
@@ -921,8 +941,8 @@ BOOL HasProtectedCells( const SwSelBoxes& rBoxes )
 }
 
 
-_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, BOOL bVert )
-    : aPos( rPt ), pSelBox( pBox ), bVertical( bVert )
+_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, BOOL bVertical )
+    : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
 {}
 
 void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
@@ -1019,6 +1039,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     for ( USHORT i = 0; i < aUnions.Count(); ++i )
     {
         const SwTabFrm *pTabFrm = aUnions[i]->GetTable();
+
         SwRect &rUnion = aUnions[i]->GetUnion();
         const SwLayoutFrm *pRow = (const SwLayoutFrm*)pTabFrm->Lower();
         if ( pRow && pTabFrm->IsFollow() && pTable->IsHeadlineRepeat() )
@@ -1717,6 +1738,9 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         return;
     const SwTabFrm *pOrg = rpStart->FindTabFrm();
     const SwTabFrm *pTab = pOrg;
+
+    SWRECTFN( pTab )
+
     const long nWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
     while ( pTab->IsFollow() )
     {
@@ -1725,29 +1749,34 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         pTab = (const SwTabFrm*)pTmp;
     }
 
-    const SwTwips nSX = ::lcl_CalcWish( rpStart, nWish, pTab->Prt().Width() ) +
-                        (pTab->Frm().Left() + pTab->Prt().Left());
+    SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+    const SwTwips nSX = ::lcl_CalcWish( rpStart, nWish, nPrtWidth )
+                        + (pTab->*fnRect->fnGetPrtLeft)();
+
     const SwTwips nSX2= nSX + (rpStart->GetFmt()->GetFrmSize().GetWidth() *
-                                            pTab->Prt().Width() / nWish);
+                                            nPrtWidth / nWish);
 
     const SwLayoutFrm *pTmp = pTab->FirstCell();
     while ( pTmp &&
             (!pTmp->IsCellFrm() ||
-             (pTmp->Frm().Left() < nSX &&
-              pTmp->Frm().Right()< nSX2)))
+             ( (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
+               (pTmp->Frm().*fnRect->fnGetRight)()< nSX2)))
         pTmp = pTmp->GetNextLayoutLeaf();
+
     if ( pTmp )
         rpStart = pTmp;
 
     pTab = pOrg;
     while ( pTab->GetFollow() )
         pTab = pTab->GetFollow();
-    const SwTwips nEX = ::lcl_CalcWish( rpEnd, nWish, pTab->Prt().Width() ) +
-                        (pTab->Frm().Left() + pTab->Prt().Left());
+
+    nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+    const SwTwips nEX = ::lcl_CalcWish( rpEnd, nWish, nPrtWidth ) +
+                          (pTab->*fnRect->fnGetPrtLeft)();
     rpEnd = pTab->FindLastCntnt()->GetUpper();
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
-    while ( rpEnd->Frm().Left() > nEX )
+    while ( (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX )
     {
         const SwLayoutFrm* pTmp = rpEnd->GetPrevLayoutLeaf();
         if( !pTmp || !pTab->IsAnLower( pTmp ) )
@@ -1764,18 +1793,18 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     {
         const SwLayoutFrm *pTmp = rpStart;
         pTmp = pTmp->GetNextLayoutLeaf();
-        while ( pTmp && pTmp->Frm().Left() > nEX )//erstmal die Zeile ueberspr.
+        while ( pTmp && (pTmp->Frm().*fnRect->fnGetLeft)() > nEX )//erstmal die Zeile ueberspr.
             pTmp = pTmp->GetNextLayoutLeaf();
-        while ( pTmp && pTmp->Frm().Left() < nSX &&
-                        pTmp->Frm().Right()< nSX2 )
+        while ( pTmp && (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
+                        (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 )
             pTmp = pTmp->GetNextLayoutLeaf();
         const SwTabFrm *pTab = rpStart->FindTabFrm();
         if ( !pTab->IsAnLower( pTmp ) )
         {
             pTab = pTab->GetFollow();
             rpStart = pTab->FirstCell();
-            while ( rpStart->Frm().Left() < nSX &&
-                    rpStart->Frm().Right()< nSX2 )
+            while ( (rpStart->Frm().*fnRect->fnGetLeft)() < nSX &&
+                    (rpStart->Frm().*fnRect->fnGetRight)()< nSX2 )
                 rpStart = rpStart->GetNextLayoutLeaf();
         }
         else
@@ -1785,9 +1814,9 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     {
         const SwLayoutFrm *pTmp = rpEnd;
         pTmp = pTmp->GetPrevLayoutLeaf();
-        while ( pTmp && pTmp->Frm().Left() < nEX )//erstmal die Zeile ueberspr.
+        while ( pTmp && (pTmp->Frm().*fnRect->fnGetLeft)() < nEX )//erstmal die Zeile ueberspr.
             pTmp = pTmp->GetPrevLayoutLeaf();
-        while ( pTmp && pTmp->Frm().Left() > nEX )
+        while ( pTmp && (pTmp->Frm().*fnRect->fnGetLeft)() > nEX )
             pTmp = pTmp->GetPrevLayoutLeaf();
         const SwTabFrm *pTab = rpEnd->FindTabFrm();
         if ( !pTmp || !pTab->IsAnLower( pTmp ) )
@@ -1797,7 +1826,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
             rpEnd = pTab->FindLastCntnt()->GetUpper();
             while( !rpEnd->IsCellFrm() )
                 rpEnd = rpEnd->GetUpper();
-            while ( rpEnd->Frm().Left() > nEX )
+            while ( (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX )
                 rpEnd = rpEnd->GetPrevLayoutLeaf();
         }
         else
@@ -1987,7 +2016,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                 aUnion.Width( 0 );
         }
 
-        if( aUnion.Width() )
+        if( (aUnion.*fnRect->fnGetWidth)() )
         {
             SwSelUnion *pTmp = new SwSelUnion( aUnion, (SwTabFrm*)pTable );
             rUnions.C40_INSERT( SwSelUnion, pTmp, rUnions.Count() );
@@ -2033,6 +2062,8 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
                       *pEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm(
                                 &aMkPos )->GetUpper();
 
+    SWRECTFN( pStart )
+
     //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
     SwSelUnions aUnions;
 
@@ -2064,7 +2095,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
                     ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
                     if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                     {
-                        if( pCell->Frm().Width() < nMinValue )
+                        if( (pCell->Frm().*fnRect->fnGetWidth)() < nMinValue )
                             return FALSE;
                     }
 
