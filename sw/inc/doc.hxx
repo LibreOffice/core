@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-11 08:41:31 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 18:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,6 +1793,7 @@ public:
     void ClearForbiddenCharacters( USHORT nLang );
     const vos::ORef<SvxForbiddenCharactersTable>& GetForbiddenCharacterTbl() const
             { return xForbiddenCharsTable; }
+    vos::ORef<SvxForbiddenCharactersTable>& GetForbiddenCharacterTbl();
 
     // Interface for the list of Ruby - texts/attributes
     USHORT FillRubyList( const SwPaM& rPam, SwRubyList& rList,
