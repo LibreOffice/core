@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:47:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 15:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ SwPaM::SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing )
 
 SwPaM::SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
                 long nMkOffset, long nPtOffset, SwPaM* pRing )
-    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ), IsInFrontOfLabel(FALSE)
+    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE)
 {
     if( nMkOffset )
         aBound1.nNode += nMkOffset;
