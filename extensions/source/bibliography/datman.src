@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: hr $ $Date: 2000-09-18 16:16:44 $ $Revision: 1.1.1.1 $
+// $Author: nf $ $Date: 2000-09-27 20:26:44 $ $Revision: 1.2 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -138,7 +138,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Initialer";
         Text[ polish ] = "Inicja³y";
         Text[ portuguese_brazilian ] = "Identifier";
-        Text[ japanese ] = "È—ª–¼";
+        Text[ japanese ] = "’˜‘ID";
         Text[ korean ] = "ÀÌ´Ï¼È";
         Text[ chinese_simplified ] = "±êÊ¶";
         Text[ chinese_traditional ] = "ÁY¼g";
@@ -455,7 +455,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Utgivare";
         Text[ polish ] = "Wydawca";
         Text[ portuguese_brazilian ] = "Editor";
-        Text[ japanese ] = "•ÒWÒ";
+        Text[ japanese ] = "•ÒWÒ–¼";
         Text[ korean ] = "¹ßÇàÀÎ";
         Text[ chinese_simplified ] = "·¢ĞĞÈË";
         Text[ chinese_traditional ] = "¥Xª©°Ó";
@@ -518,7 +518,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Institution";
         Text[ polish ] = "Instytucja";
         Text[ portuguese_brazilian ] = "Institution";
-        Text[ japanese ] = "‹@ŠÖ";
+        Text[ japanese ] = "Œ¤‹†Š–¼";
         Text[ korean ] = "ÇùÈ¸";
         Text[ chinese_simplified ] = "»ú¹¹";
         Text[ chinese_traditional ] = "ÉóÌÛ";
@@ -550,7 +550,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Tidskrift";
         Text[ polish ] = "Czasopismo";
         Text[ portuguese_brazilian ] = "Journal";
-        Text[ japanese ] = "G";
+        Text[ japanese ] = "G–¼";
         Text[ korean ] = "ÀâÁö";
         Text[ chinese_simplified ] = "ÔÓÖ¾";
         Text[ chinese_traditional ] = "Âø»x";
@@ -613,7 +613,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Anmärkning";
         Text[ polish ] = "Adnotacja";
         Text[ portuguese_brazilian ] = "Annotation";
-        Text[ japanese ] = "ºÒİÄ";
+        Text[ japanese ] = "’ß";
         Text[ korean ] = "ÁÖ¼®";
         Text[ chinese_simplified ] = "ËµÃ÷";
         Text[ chinese_traditional ] = "³Æª`";
@@ -676,7 +676,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Organisation";
         Text[ polish ] = "Organizacja";
         Text[ portuguese_brazilian ] = "Organization";
-        Text[ japanese ] = "‘gD’c‘Ì";
+        Text[ japanese ] = "‘gD’c‘Ì–¼";
         Text[ korean ] = "´ÜÃ¼";
         Text[ chinese_simplified ] = "×éÖ¯";
         Text[ chinese_traditional ] = "²ÕÂ´";
@@ -707,7 +707,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Sida(-or)";
         Text[ polish ] = "Strona(y)";
         Text[ portuguese_brazilian ] = "Page(s)";
-        Text[ japanese ] = "Íß°¼Ş";
+        Text[ japanese ] = "Íß°¼Ş”";
         Text[ korean ] = "ÆäÀÌÁö ¼ö";
         Text[ chinese_simplified ] = "Ò³";
         Text[ chinese_traditional ] = "­¶";
@@ -739,7 +739,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Förlag";
         Text[ polish ] = "Wydawnictwo";
         Text[ portuguese_brazilian ] = "Publisher";
-        Text[ japanese ] = "”­sŠ";
+        Text[ japanese ] = "”­sŠ–¼";
         Text[ korean ] = "ÃâÆÇ»ç";
         Text[ chinese_simplified ] = "³ö°æÉç";
         Text[ chinese_traditional ] = "¥Xª©ªÀ";
@@ -802,7 +802,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Högskola";
         Text[ polish ] = "Szko³a wy¿sza";
         Text[ portuguese_brazilian ] = "School";
-        Text[ japanese ] = "‹³ˆç‹@ŠÖ";
+        Text[ japanese ] = "‹³ˆç‹@ŠÖ–¼";
         Text[ korean ] = "ÇĞ±³";
         Text[ chinese_simplified ] = "´óÑ§";
         Text[ chinese_traditional ] = "°ªµ¥°|®Õ";
@@ -1135,7 +1135,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ swedish ] = "Kolumntilldelning för tabell %1";
     Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
     Text[ portuguese_brazilian ] = "Column assignment for table %1";
-    Text[ japanese ] = "Ã°ÌŞÙ%1—p‚Ì—ñ‚Ì•ª—Ş";
+    Text[ japanese ] = "%1 Ã°ÌŞÙ‚Ì—ñ•ª—Ş";
     Text[ korean ] = "Å×ÀÌºí¿ë ¿­ ·¹ÀÌ¾Æ¿ô %1";
     Text[ chinese_simplified ] = "Îª±í¸ñ %1 ±àÅÅÉè¼ÆÁĞ";
     Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
