@@ -113,6 +113,9 @@ public class XmlUpdater extends Thread {
 
     String scriptsPath=installPath;
     scriptsPath= scriptsPath.concat(File.separator+"user"+File.separator+"Scripts"+File.separator+"java"+File.separator);
+        String bshScriptsPath = installPath + File.separator + "user" +
+            File.separator + "beanshell" + File.separator;
+
     //System.out.println( " Office Scripts Path: " + scriptsPath );
 
         // Get the NetBeans installation
@@ -155,7 +158,7 @@ public class XmlUpdater extends Thread {
         File scriptsDir = new File( scriptsPath );
     File highlightDir = new File( scriptsPath+"Highlight" );
     File memoryDir = new File( scriptsPath+"MemoryUsage" );
-    File bshDir = new File( scriptsPath+"InteractiveBeanShell" );
+    File bshDir = new File( bshScriptsPath +"InteractiveBeanShell" );
         if( !highlightDir.mkdirs() ) {
             System.out.println( "Highlight script directory failed");
         }
@@ -259,14 +262,14 @@ public class XmlUpdater extends Thread {
         System.out.println( "MemoryUsage script already deployed" );
         }
 
-    File script = new File( scriptsPath+File.separator+"InteractiveBeanShell"+File.separator+"interactive.bsh" );
+    File script = new File( bshScriptsPath+File.separator+"InteractiveBeanShell"+File.separator+"interactive.bsh" );
     if( !script.exists() ) {
-        if (!zd.extractEntry("examples/InteractiveBeanShell/interactive.bsh",scriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
+        if (!zd.extractEntry("examples/InteractiveBeanShell/interactive.bsh",bshScriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
         {
             onInstallComplete();
             return;
         }
-        if (!zd.extractEntry("examples/InteractiveBeanShell/parcel-descriptor.xml",scriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
+        if (!zd.extractEntry("examples/InteractiveBeanShell/parcel-descriptor.xml",bshScriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
         {
             onInstallComplete();
             return;
