@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 15:40:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-30 09:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3058,7 +3058,7 @@ SwNodeNum * SwTxtNode::_GetOutlineNum() const
     if (IsOutline())
         pResult = GetNum();
 
-    return pResult;
+    return (SwNodeNum *) pResult;
 }
 
 const SwNodeNum * SwTxtNode::GetOutlineNum() const
