@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:08:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,6 @@
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
-
-struct SingleRefData;
-struct ScExtTabOptions;
-
-//___________________________________________________________________
 
 // --- class XclMsodrawing_Base --------------------------------------
 
@@ -400,72 +395,6 @@ public:
                                 ExcBundlesheet8( const String& rString );
 
     virtual ULONG               GetLen() const;
-};
-
-
-// ============================================================================
-
-/** Represents the WINDOW1 record containing workbook global view settings. */
-class XclExpWindow1 : public XclExpRecord
-{
-public:
-    explicit                XclExpWindow1( const XclExpRoot& rRoot );
-
-private:
-    /** Writes the contents of the WINDOW1 record. */
-    virtual void            WriteBody( XclExpStream& rStrm );
-
-private:
-    sal_uInt16              mnActiveTab;        /// Index to active (visible) sheet.
-    sal_uInt16              mnFirstVisTab;      /// Index to first visible sheet.
-    sal_uInt16              mnSelectedTabs;     /// Number of selected sheets.
-};
-
-
-// ============================================================================
-// --- class ExcPane8 ------------------------------------------------
-
-class ExcPane8 : public ExcRecord
-{
-private:
-    UINT16                      nSplitX;
-    UINT16                      nSplitY;
-    UINT16                      nLeftCol;
-    UINT16                      nTopRow;
-    UINT16                      nActivePane;
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                ExcPane8( const ScExtTabOptions& rTabOptions );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-};
-
-
-// --- class ExcWindow28 ---------------------------------------------
-
-class XclExpWindow28 : public XclExpRecord, protected XclExpRoot
-{
-private:
-    ExcPane8*                   pPaneRec;
-    UINT32                      nGridColorSer;
-    UINT16                      nFlags;
-    UINT16                      nLeftCol;
-    UINT16                      nTopRow;
-    UINT16                      nActiveCol;
-    UINT16                      nActiveRow;
-    BOOL                        bHorSplit       : 1;
-    BOOL                        bVertSplit      : 1;
-
-    virtual void                WriteBody( XclExpStream& rStrm );
-
-public:
-                                XclExpWindow28( const XclExpRoot& rRoot, SCTAB nScTab );
-    virtual                     ~XclExpWindow28();
-
-    virtual void                Save( XclExpStream& rStrm );
 };
 
 
