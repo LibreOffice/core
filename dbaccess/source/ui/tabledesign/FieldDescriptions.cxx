@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
     ,m_sTypeName(rDescr.m_sTypeName)
     ,m_sDescription(rDescr.m_sDescription)
     ,m_sDefaultValue(rDescr.m_sDefaultValue)
+    ,m_sAutoIncrementValue(rDescr.m_sAutoIncrementValue)
     ,m_pType(rDescr.m_pType)
     ,m_nPrecision(rDescr.m_nPrecision)
     ,m_nScale(rDescr.m_nScale)
@@ -126,6 +127,38 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
     ,m_nType(DataType::VARCHAR)
 {
     DBG_CTOR(OFieldDescription,NULL);
+}
+// -----------------------------------------------------------------------------
+OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
+                    const ::rtl::OUString&  _sTypeName,
+                    const ::rtl::OUString&  _sDescription,
+                    const ::rtl::OUString&  _sDefaultValue,
+                    const ::rtl::OUString&  _sAutoIncrementValue,
+                    const OTypeInfo*        _pType,
+                    sal_Int32               _nPrecision,
+                    sal_Int32               _nScale,
+                    sal_Int32               _nIsNullable,
+                    sal_Int32               _nFormatKey,
+                    SvxCellHorJustify       _eHorJustify,
+                    sal_Bool                _bIsAutoIncrement,
+                    sal_Bool                _bIsPrimaryKey,
+                    sal_Bool                _bIsCurrency)    :
+ m_sName(_sName)
+,m_sTypeName(_sTypeName)
+,m_sDescription(_sDescription)
+,m_sDefaultValue(_sDefaultValue)
+,m_sAutoIncrementValue(_sAutoIncrementValue)
+,m_pType(_pType)
+,m_nPrecision(_nPrecision)
+,m_nScale(_nScale)
+,m_nIsNullable(_nIsNullable)
+,m_nFormatKey(_nFormatKey)
+,m_eHorJustify(_eHorJustify)
+,m_bIsAutoIncrement(_bIsAutoIncrement)
+,m_bIsPrimaryKey(_bIsPrimaryKey)
+,m_bIsCurrency(_bIsCurrency)
+{
+     DBG_DTOR(OFieldDescription,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -157,6 +190,8 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
             SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
             SetDefaultValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTVALUE))
+            SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTVALUE)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
             SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))

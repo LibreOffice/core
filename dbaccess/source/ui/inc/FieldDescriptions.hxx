@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 09:59:19 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 namespace dbaui
 {
     class OFieldDescription
+
     {
     private:
         const OTypeInfo*    m_pType;
@@ -88,6 +89,7 @@ namespace dbaui
         ::rtl::OUString     m_sTypeName;
         ::rtl::OUString     m_sDescription;
         ::rtl::OUString     m_sDefaultValue;
+        ::rtl::OUString     m_sAutoIncrementValue;
         sal_Int32           m_nType;    // only used when m_pType is null
         sal_Int32           m_nPrecision;
         sal_Int32           m_nScale;
@@ -105,6 +107,7 @@ namespace dbaui
                             const ::rtl::OUString&  _sTypeName,
                             const ::rtl::OUString&  _sDescription,
                             const ::rtl::OUString&  _sDefaultValue,
+                            const ::rtl::OUString&  _sAutoIncrementValue,
                             const OTypeInfo*        _pType,
                             sal_Int32               _nPrecision,
                             sal_Int32               _nScale,
@@ -113,55 +116,41 @@ namespace dbaui
                             SvxCellHorJustify       _eHorJustify,
                             sal_Bool                _bIsAutoIncrement,
                             sal_Bool                _bIsPrimaryKey,
-                            sal_Bool                _bIsCurrency)    :
-         m_sName(_sName)
-        ,m_sTypeName(_sTypeName)
-        ,m_sDescription(_sDescription)
-        ,m_sDefaultValue(_sDefaultValue)
-        ,m_pType(_pType)
-        ,m_nPrecision(_nPrecision)
-        ,m_nScale(_nScale)
-        ,m_nIsNullable(_nIsNullable)
-        ,m_nFormatKey(_nFormatKey)
-        ,m_eHorJustify(_eHorJustify)
-        ,m_bIsAutoIncrement(_bIsAutoIncrement)
-        ,m_bIsPrimaryKey(_bIsPrimaryKey)
-        ,m_bIsCurrency(_bIsCurrency)
-        {
-        }
+                            sal_Bool                _bIsCurrency);
         OFieldDescription( const OFieldDescription& rDescr );
-        virtual ~OFieldDescription();
+        ~OFieldDescription();
 
-        void SetName(const ::rtl::OUString& _rName)                 { m_sName = _rName; }
-        //  void SetTypeName(const ::rtl::OUString& _rTypeName)         { m_sTypeName = _rTypeName; }
-        void SetDescription(const ::rtl::OUString& _rDescription)   { m_sDescription = _rDescription; }
-        void SetDefaultValue(const ::rtl::OUString& _rDefaultValue) { m_sDefaultValue = _rDefaultValue; }
-        void SetType(const OTypeInfo* _pType)                       { m_pType = _pType; if (m_pType) m_nType = m_pType->nType; }
-        void SetTypeValue(sal_Int32 _nType)                         { m_nType = _nType; OSL_ENSURE(!m_pType,"Invalid call here!");}
-        void SetPrecision(const sal_Int32& _rPrecision)             { m_nPrecision = _rPrecision; }
-        void SetScale(const sal_Int32& _rScale)                     { m_nScale = _rScale; }
-        void SetIsNullable(const sal_Int32& _rIsNullable)           { m_nIsNullable = _rIsNullable; }
-        void SetFormatKey(const sal_Int32& _rFormatKey)             { m_nFormatKey = _rFormatKey; }
-        void SetHorJustify(const SvxCellHorJustify& _rHorJustify)   { m_eHorJustify = _rHorJustify; }
-        void SetAutoIncrement(sal_Bool _bAuto)                      { m_bIsAutoIncrement = _bAuto; }
-        void SetPrimaryKey(sal_Bool _bPKey)                         { m_bIsPrimaryKey = _bPKey; }
-        void SetCurrency(sal_Bool _bIsCurrency)                     { m_bIsCurrency = _bIsCurrency; }
+        void SetName(const ::rtl::OUString& _rName)                         { m_sName = _rName; }
+        //  void SetTypeName(const ::rtl::OUString& _rTypeName)                 { m_sTypeName = _rTypeName; }
+        void SetDescription(const ::rtl::OUString& _rDescription)           { m_sDescription = _rDescription; }
+        void SetDefaultValue(const ::rtl::OUString& _rDefaultValue)         { m_sDefaultValue = _rDefaultValue; }
+        void SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue)   { m_sAutoIncrementValue = _sAutoIncValue; }
+        void SetType(const OTypeInfo* _pType)                               { m_pType = _pType; if (m_pType) m_nType = m_pType->nType; }
+        void SetTypeValue(sal_Int32 _nType)                                 { m_nType = _nType; OSL_ENSURE(!m_pType,"Invalid call here!");}
+        void SetPrecision(const sal_Int32& _rPrecision)                     { m_nPrecision = _rPrecision; }
+        void SetScale(const sal_Int32& _rScale)                             { m_nScale = _rScale; }
+        void SetIsNullable(const sal_Int32& _rIsNullable)                   { m_nIsNullable = _rIsNullable; }
+        void SetFormatKey(const sal_Int32& _rFormatKey)                     { m_nFormatKey = _rFormatKey; }
+        void SetHorJustify(const SvxCellHorJustify& _rHorJustify)           { m_eHorJustify = _rHorJustify; }
+        void SetAutoIncrement(sal_Bool _bAuto)                              { m_bIsAutoIncrement = _bAuto; }
+        void SetPrimaryKey(sal_Bool _bPKey)                                 { m_bIsPrimaryKey = _bPKey; }
+        void SetCurrency(sal_Bool _bIsCurrency)                             { m_bIsCurrency = _bIsCurrency; }
 
-        ::rtl::OUString     GetName()           const { return m_sName; }
-        //  ::rtl::OUString     GetTypeName()       const { return m_sTypeName; }
-        ::rtl::OUString     GetDescription()    const { return m_sDescription; }
-        ::rtl::OUString     GetDefaultValue()   const { return m_sDefaultValue; }
-        sal_Int32           GetType()           const { return m_pType ? m_pType->nType : m_nType; }
-        sal_Int32           GetPrecision()      const { return m_nPrecision; }
-        sal_Int32           GetScale()          const { return m_nScale; }
-        sal_Int32           GetIsNullable()     const { return m_nIsNullable; }
-        sal_Int32           GetFormatKey()      const { return m_nFormatKey; }
-        SvxCellHorJustify   GetHorJustify()     const { return m_eHorJustify; }
-        const OTypeInfo*    getTypeInfo()       const { return m_pType; }
-        sal_Bool            IsAutoIncrement()   const { return m_bIsAutoIncrement; }
-        sal_Bool            IsPrimaryKey()      const { return m_bIsPrimaryKey; }
-        sal_Bool            IsCurrency()        const { return m_bIsCurrency; }
-        sal_Bool            IsNullable()        const { return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE; }
+        ::rtl::OUString     GetName()               const { return m_sName; }
+        ::rtl::OUString     GetDescription()        const { return m_sDescription; }
+        ::rtl::OUString     GetDefaultValue()       const { return m_sDefaultValue; }
+        ::rtl::OUString     GetAutoIncrementValue() const { return m_sAutoIncrementValue; }
+        sal_Int32           GetType()               const { return m_pType ? m_pType->nType : m_nType; }
+        sal_Int32           GetPrecision()          const { return m_nPrecision; }
+        sal_Int32           GetScale()              const { return m_nScale; }
+        sal_Int32           GetIsNullable()         const { return m_nIsNullable; }
+        sal_Int32           GetFormatKey()          const { return m_nFormatKey; }
+        SvxCellHorJustify   GetHorJustify()         const { return m_eHorJustify; }
+        const OTypeInfo*    getTypeInfo()           const { return m_pType; }
+        sal_Bool            IsAutoIncrement()       const { return m_bIsAutoIncrement; }
+        sal_Bool            IsPrimaryKey()          const { return m_bIsPrimaryKey; }
+        sal_Bool            IsCurrency()            const { return m_bIsCurrency; }
+        sal_Bool            IsNullable()            const { return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE; }
     };
 }
 #endif // DBAUI_FIELDDESCRIPTIONS_HXX
