@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-09 14:35:47 $
+#   last change: $Author: vg $ $Date: 2002-12-09 17:13:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.74 $ ';
+$id_str = ' $Revision: 1.75 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -271,7 +271,7 @@ sub BuildAll {
             my $module_type = &module_classify($Prj);
 
             &print_annonce($Prj) if ($module_type eq 'lnk');
-            &print_annonce($Prj . '.incomp') if ($module_type eq 'ing');
+            &print_annonce($Prj . '.incomp') if ($module_type eq 'img');
             if ($module_type eq 'mod') {
                 &print_annonce($Prj);
                 $PrjDir = &CorrectPath($StandDir.$Prj);
