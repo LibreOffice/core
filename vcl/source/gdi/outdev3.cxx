@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-20 15:44:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,10 +401,10 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
 
 // =======================================================================
 
-struct ImplLocaliziedFontName
+struct ImplLocalizedFontName
 {
     const char*         mpEnglishName;
-    const sal_Unicode*  mpLocaliziedNames;
+    const sal_Unicode*  mpLocalizedNames;
 };
 
 static sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0, 0 };
@@ -440,10 +440,16 @@ static sal_Unicode const aKai[] = { 0x6B61, 0, 0 };
 static sal_Unicode const aMing[] = { 0x6D69, 0x6E67, 0, 0 };
 static sal_Unicode const aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 static sal_Unicode const aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-static sal_Unicode const aMSMincho[] = { 0xFF2D, 0xFF33, ' ', 0x660E, 0x671D, 0, 0 };
-static sal_Unicode const aMSPMincho[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x660E, 0x671D, 0, 0 };
+static sal_Unicode const aMSMincho[] = { 0xFF2D, 0xFF33, ' ', 0x660E, 0x671D, 0 };
+static sal_Unicode const aMSPMincho[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x660E, 0x671D, 0 };
 static sal_Unicode const aHGMinchoL[] = { 'h', 'g', 0x660E, 0x671D, 'l', 0, 0 };
-static sal_Unicode const aHGGothicB[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0, 0 };
+static sal_Unicode const aHGGothicB[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
+static sal_Unicode const aHGPMinchoL[] = { 'h', 'g', 'p', 0x660E, 0x671D, 'l', 0 };
+static sal_Unicode const aHGPGothicB[] = { 'h', 'g', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
+static sal_Unicode const aHGMinchoLSun[] = { 'h','g', 0x660E, 0x671D, 'l', 's', 'u', 'n', 0 };
+static sal_Unicode const aHGPMinchoLSun[] = { 'h','g','p', 0x660E, 0x671D, 'l', 's', 'u', 'n', 0 };
+static sal_Unicode const aHGGothicBSun[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 's', 'u', 'n', 0 };
+static sal_Unicode const aHGPGothicBSun[] = { 'h', 'g', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 's', 'u', 'n', 0 };
 static sal_Unicode const aHGHeiseiMin[] = { 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x671D, 0x4F53, 0, 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x671D, 0x4F53, 'w', '3', 'x', '1', '2', 0, 0 };
 static sal_Unicode const aSunDotum[] = { 0xC36C, 0xB3CB, 0xC6C0, 0, 0 };
 static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0, 0 };
@@ -476,8 +482,6 @@ static sal_Unicode const aHYPost[]                  = { 'h', 'y', 0xC5FD, 0xC11C
 static sal_Unicode const aMagicR[]                  = { 0xD734, 0xBA3C, 0xB9E4, 0xC9C1, 0xCCB4, 0, 0 };
 static sal_Unicode const aSunCrystal[]              = { 0xC36C, 0xD06C, 0xB9AC, 0xC2A4, 0xD0C8, 0, 0 };
 static sal_Unicode const aSunSaemmul[]              = { 0xC36C, 0xC0D8, 0xBB3C, 0, 0 };
-static sal_Unicode const aHYShortSamulMedium[]      = { 'h', 'y', 0xC595, 0xC740, 0xC0D8, 0xBB3C, 'm', 0, 0 };
-static sal_Unicode const aHYShortSamul[]            = { 'h', 'y', 0xC595, 0xC740, 0xC0D8, 0xBB3C, 0, 0 };
 static sal_Unicode const aHaansoftBatang[]          = { 0xD55C, 0xCEF4, 0xBC14, 0xD0D5, 0, 0 };
 static sal_Unicode const aHaansoftDotum[]           = { 0xD55C, 0xCEF4, 0xB3CB, 0xC6C0, 0, 0 };
 static sal_Unicode const aHyhaeseo[]                = { 0xD55C, 0xC591, 0xD574, 0xC11C, 0, 0 };
@@ -486,11 +490,49 @@ static sal_Unicode const aMDGaesung[]               = { 'm', 'd', 0xAC1C, 0xC131
 static sal_Unicode const aMDArt[]                   = { 'm', 'd', 0xC544, 0xD2B8, 0xCCB4, 0, 0 };
 static sal_Unicode const aMDAlong[]                 = { 'm', 'd', 0xC544, 0xB871, 0xCCB4, 0, 0 };
 static sal_Unicode const aMDEasop[]                 = { 'm', 'd', 0xC774, 0xC19D, 0xCCB4, 0, 0 };
-static sal_Unicode const HYShortSamulMedium[]       = { 'h', 'y', 0xC595, 0xC740, 0xC0D8, 0xBB3C, 'm', 0, 0 };
-static sal_Unicode const HYShortSamul[]             = { 'h', 'y', 0xC595, 0xC740, 0xC0D8, 0xBB3C, 0, 0 };
+static sal_Unicode const aHYShortSamulMedium[]      = { 'h', 'y', 0xC595, 0xC740, 0xC0D8, 0xBB3C, 'm', 0 };
+static sal_Unicode const aHYShortSamul[]            = { 'h', 'y', 0xC595, 0xC740, 0xC0D8, 0xBB3C, 0 };
+static sal_Unicode const aHGGothicE[]               = { 'h','g', 0xFF7A, 0xFF9E, 0xFF7C, 0xFF6F, 0xFF78, 'e', 0 };
+static sal_Unicode const aHGPGothicE[]              = { 'h','g','p', 0xFF7A, 0xFF9E, 0xFF7C, 0xFF6F, 0xFF78, 'e', 0 };
+static sal_Unicode const aHGSGothicE[]              = { 'h','g','s', 0xFF7A, 0xFF9E, 0xFF7C, 0xFF6F, 0xFF78, 'e', 0 };
+static sal_Unicode const aHGGothicM[]               = { 'h','g', 0xFF7A, 0xFF9E, 0xFF7C, 0xFF6F, 0xFF78, 'm', 0 };
+static sal_Unicode const aHGPGothicM[]              = { 'h','g','p', 0xFF7A, 0xFF9E, 0xFF7C, 0xFF6F, 0xFF78, 'm', 0 };
+static sal_Unicode const aHGSGothicM[]              = { 'h','g','s', 0xFF7A, 0xFF9E, 0xFF7C, 0xFF6F, 0xFF78, 'm', 0 };
+static sal_Unicode const aHGGyoshotai[]             = { 'h','g', 0x884C, 0x66F8, 0x4F53, 0 };
+static sal_Unicode const aHGPGyoshotai[]            = { 'h','g','p', 0x884C, 0x66F8, 0x4F53, 0 };
+static sal_Unicode const aHGSGyoshotai[]            = { 'h','g','s', 0x884C, 0x66F8, 0x4F53, 0 };
+static sal_Unicode const aHGKyokashotai[]           = { 'h','g', 0x6559, 0x79D1, 0x66F8, 0x4F53, 0 };
+static sal_Unicode const aHGPKyokashotai[]          = { 'h','g','p', 0x6559, 0x79D1, 0x66F8, 0x4F53, 0 };
+static sal_Unicode const aHGSKyokashotai[]          = { 'h','g','s', 0x6559, 0x79D1, 0x66F8, 0x4F53, 0 };
+static sal_Unicode const aHGMinchoB[]               = { 'h','g', 0x660E, 0x671D, 'b', 0 };
+static sal_Unicode const aHGPMinchoB[]              = { 'h','g','p', 0x660E, 0x671D, 'b', 0 };
+static sal_Unicode const aHGSMinchoB[]              = { 'h','g','s', 0x660E, 0x671D, 'b', 0 };
+static sal_Unicode const aHGMinchoE[]               = { 'h','g', 0x660E, 0x671D, 'e', 0 };
+static sal_Unicode const aHGPMinchoE[]              = { 'h','g','p', 0x660E, 0x671D, 'e', 0 };
+static sal_Unicode const aHGSMinchoE[]              = { 'h','g','s', 0x660E, 0x671D, 'e', 0 };
+static sal_Unicode const aHGSoeiKakupoptai[]        = { 'h','g', 0x5275,0x82F1,0x89D2,0xFF8E,
+                            0xFF9F,0xFF6F,0xFF8C,0xFF9F,0x4F53,0};
+static sal_Unicode const aHGPSoeiKakupoptai[]       = { 'h','g', 'p', 0x5275,0x82F1,0x89D2,0xFF8E,
+                            0xFF9F,0xFF6F,0xFF8C,0xFF9F,0x4F53,0};
+static sal_Unicode const aHGSSoeiKakupoptai[]       = { 'h','g', 's', 0x5275,0x82F1,0x89D2,0xFF8E,
+                            0xFF9F,0xFF6F,0xFF8C,0xFF9F,0x4F53,0};
+static sal_Unicode const aHGSoeiPresenceEB[]        = { 'h','g', 0x5275,0x82F1,0xFF8C,0xFF9F,
+                            0xFF9A,0xFF7E,0xFF9E,0xFF9D,0xFF7D, 'e','b',0};
+static sal_Unicode const aHGPSoeiPresenceEB[]       = { 'h','g','p', 0x5275,0x82F1,0xFF8C,0xFF9F,
+                            0xFF9A,0xFF7E,0xFF9E,0xFF9D,0xFF7D, 'e','b',0};
+static sal_Unicode const aHGSSoeiPresenceEB[]       = { 'h','g','s', 0x5275,0x82F1,0xFF8C,0xFF9F,
+                            0xFF9A,0xFF7E,0xFF9E,0xFF9D,0xFF7D, 'e','b',0};
+static sal_Unicode const aHGSoeiKakugothicUB[]      = { 'h','g', 0x5275,0x82F1,0x89D2,0xFF7A,
+                            0xFF9E,0xFF7C,0xFF6F,0xFF78,'u','b',0};
+static sal_Unicode const aHGPSoeiKakugothicUB[]     = { 'h','g','p', 0x5275,0x82F1,0x89D2,0xFF7A,
+                            0xFF9E,0xFF7C,0xFF6F,0xFF78,'u','b',0};
+static sal_Unicode const aHGSSoeiKakugothicUB[]     = { 'h','g','s', 0x5275,0x82F1,0x89D2,0xFF7A,
+                            0xFF9E,0xFF7C,0xFF6F,0xFF78,'u','b',0};
+static sal_Unicode const aHGSeikaishotaiPRO[]       = { 'h','g', 0x6B63,0x6977,0x66F8,0x4F53, '-','p','r','o',0};
+static sal_Unicode const aHGMaruGothicMPRO[]        = { 'h','g', 0x4E38,0xFF7A,0xFF9E,0xFF7C,0xFF6F,0xFF78, '-','p','r','o',0};
 
 
-static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
+static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {
 {   "batang",               aBatang },
 {   "batangche",            aBatangChe },
@@ -527,6 +569,12 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {   "mspmincho",            aMSPMincho },
 {   "hgminchol",            aHGMinchoL },
 {   "hggothicb",            aHGGothicB },
+{   "hgpminchol",           aHGPMinchoL },
+{   "hgpgothicb",           aHGPGothicB },
+{   "hgmincholsun",         aHGMinchoLSun },
+{   "hggothicbsun",         aHGGothicBSun },
+{   "hgpmincholsun",        aHGPMinchoLSun },
+{   "hgpgothicbsun",        aHGPGothicBSun },
 {   "hgheiseimin",          aHGHeiseiMin },
 {   "sundotum",             aSunDotum },
 {   "sungulim",             aSunGulim },
@@ -569,8 +617,35 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {   "mdart",                aMDArt },
 {   "mdalong",              aMDAlong },
 {   "mdeasop",              aMDEasop },
-{   "hyshortsamulmedium",   HYShortSamulMedium },
-{   "hyshortsamul",         HYShortSamul },
+{   "hggothice",            aHGGothicE },
+{   "hgpgothice",           aHGPGothicE },
+{   "hgpothice",            aHGSGothicE },
+{   "hggothicm",            aHGGothicM },
+{   "hgpgothicm",           aHGPGothicM },
+{   "hgpgothicm",           aHGSGothicM },
+{   "hggyoshotai",          aHGGyoshotai },
+{   "hgpgyoshotai",         aHGPGyoshotai },
+{   "hgsgyoshotai",         aHGSGyoshotai },
+{   "hgkyokashotai",        aHGKyokashotai },
+{   "hgpkyokashotai",       aHGPKyokashotai },
+{   "hgskyokashotai",       aHGSKyokashotai },
+{   "hgminchob",            aHGMinchoB },
+{   "hgpminchob",           aHGPMinchoB },
+{   "hgsminchob",           aHGSMinchoB },
+{   "hgminchoe",            aHGMinchoE },
+{   "hgpminchoe",           aHGPMinchoE },
+{   "hgsminchoe",           aHGSMinchoE },
+{   "hgsoeikakupoptai",     aHGSoeiKakupoptai },
+{   "hgpsoeikakupopta",     aHGPSoeiKakupoptai },
+{   "hgssoeikakupopta",     aHGSSoeiKakupoptai },
+{   "hgsoeipresenceeb",     aHGSoeiPresenceEB },
+{   "hgpsoeipresenceeb",    aHGPSoeiPresenceEB },
+{   "hgssoeipresenceeb",    aHGSSoeiPresenceEB },
+{   "hgsoeikakugothicub",   aHGSoeiKakugothicUB },
+{   "hgpsoeikakugothicub",  aHGPSoeiKakugothicUB },
+{   "hgssoeikakugothicub",  aHGSSoeiKakugothicUB },
+{   "hgseikaishotaipro",    aHGSeikaishotaiPRO },
+{   "hgmarugothicmpro",     aHGMaruGothicMPRO },
 {   NULL,                   NULL },
 };
 
@@ -662,24 +737,16 @@ void ImplGetEnglishSearchFontName( String& rName )
         i++;
     }
 
-    // Translate localizied name to English ASCII name
-    const ImplLocaliziedFontName* pTranslateNames = aImplLocaliziedNamesList;
+    // Translate localized name to English ASCII name
+    // TODO: replace the O(n) search!
+    const ImplLocalizedFontName* pTranslateNames = aImplLocalizedNamesList;
     while ( bTranslate && pTranslateNames->mpEnglishName )
     {
-        const sal_Unicode* pLocaliziedName = pTranslateNames->mpLocaliziedNames;
-        while ( *pLocaliziedName )
+        const sal_Unicode* pLocalizedName = pTranslateNames->mpLocalizedNames;
+        if ( rName.Equals( pLocalizedName ) )
         {
-            if ( rName.Equals( pLocaliziedName ) )
-            {
-                rName.AssignAscii( pTranslateNames->mpEnglishName );
-                bTranslate = FALSE;
-                break;
-            }
-
-            // Run to the end of the Token (\0\0 is the end mark)
-            while ( *pLocaliziedName )
-                pLocaliziedName++;
-            pLocaliziedName++;
+            rName.AssignAscii( pTranslateNames->mpEnglishName );
+            break;
         }
 
         pTranslateNames++;
@@ -997,6 +1064,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     if( aDefault.Len() )
         aSearch = aDefault;
 
+    int nDefaultHeight = 12;
     Font aFont;
     switch ( nType )
     {
@@ -1046,7 +1114,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
 
     if ( aSearch.Len() )
     {
-        aFont.SetSize( Size( 0, 12 ) );
+        aFont.SetHeight( nDefaultHeight );
         aFont.SetWeight( WEIGHT_NORMAL );
         if ( aFont.GetPitch() == PITCH_DONTKNOW )
             aFont.SetPitch ( PITCH_VARIABLE );
@@ -1100,7 +1168,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                     if ( !aSize.Height() )
                     {
                         // use default pixel height only when logical height is zero
-                        if ( aFont.GetSize().Height() )
+                        if ( aFont.GetHeight() )
                             aSize.Height() = 1;
                         else
                             aSize.Height() = (12*pOutDev->mnDPIY)/72;
@@ -1921,6 +1989,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const vcl::FontNa
     {
         String aSearchName( *it );
         ImplGetEnglishSearchFontName( aSearchName );
+
         pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
             break;
@@ -2671,6 +2740,25 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         aSearchName = rFSD.maTargetName;
         ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2, pDevSpecific );
+        // #114999# special emboldening for Ricoh fonts
+        // workaround until all platforms support artificial styles
+        // TODO: smarter check for special cases
+        if( (rFSD.meWeight > WEIGHT_MEDIUM)
+        &&  aSearchName.EqualsAscii( "hg", 0, 2) )
+        {
+            if( aSearchName.EqualsAscii( "hggothicb", 0, 9) )
+                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hggothice"));
+            else if( aSearchName.EqualsAscii( "hgpgothicb", 0, 10) )
+                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpgothice"));
+            else if( aSearchName.EqualsAscii( "hgminchol", 0, 9) )
+                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchob"));
+            else if( aSearchName.EqualsAscii( "hgpminchol", 0, 10) )
+                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchob"));
+            else if( aSearchName.EqualsAscii( "hgminchob" ) )
+                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgminchoe"));
+            else if( aSearchName.EqualsAscii( "hgpminchob" ) )
+                aSearchName = String(RTL_CONSTASCII_USTRINGPARAM("hgpminchoe"));
+        }
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
