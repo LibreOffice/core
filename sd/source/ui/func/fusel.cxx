@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:07:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,7 +1429,10 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_PROGRAM:
                 {
-                   INetURLObject aURL( ::URIHelper::SmartRelToAbs( pInfo->aBookmark, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
+                   String aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
+                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->aBookmark,
+                                                URIHelper::GetMaybeFileHdl(), true, false,
+                                                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
                    if( INET_PROT_FILE == aURL.GetProtocol() )
                    {
