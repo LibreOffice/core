@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:34:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,22 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
+// #115824: Factory class to create class objects (type command)
+// Implementation: sb.cxx
+class SbClassFactory : public SbxFactory
+{
+    SbxObjectRef    xClassModules;
+
+public:
+    SbClassFactory( void );
+
+    void AddClassModule( SbModule* pClassModule );
+    void RemoveClassModule( SbModule* pClassModule );
+
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxObject* CreateObject( const String& );
+};
+
 // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
 class SbErrorStackEntry
 {
@@ -103,6 +119,7 @@ struct SbiGlobals
     SbiFactory*     pSbFac;         // StarBASIC-Factory
     SbUnoFactory*   pUnoFac;        // Factory fuer Uno-Structs bei DIM AS NEW
     SbTypeFactory*  pTypeFac;       // Factory for user defined types
+    SbClassFactory* pClassFac;      // Factory for user defined classes (based on class modules)
     SbOLEFactory*   pOLEFac;        // Factory for OLE types
     SbModule*       pMod;           // aktuell aktives Modul
     SbModule*       pCompMod;       // aktuell compiliertes Modul
@@ -135,6 +152,7 @@ SbiGlobals* GetSbData();
 #define pSBFAC      GetSbData()->pSbFac
 #define pUNOFAC     GetSbData()->pUnoFac
 #define pTYPEFAC    GetSbData()->pTypeFac
+#define pCLASSFAC   GetSbData()->pClassFac
 #define pOLEFAC     GetSbData()->pOLEFac
 
 #endif
