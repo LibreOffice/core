@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:13:43 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 16:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ namespace configmgr
                 if (pNode)
                     pSubtree = pNode->asISubtree();
                 else
-                    throw container::NoSuchElementException();
+                    pSubtree = 0;
             }
             else
                 break;
@@ -731,8 +731,8 @@ namespace configmgr
         bCompleteForRequest = pSubtree && (ALL_LEVELS == pSubtree->getLevel() ||
                                           (ALL_LEVELS != nLevel && nLevel <= pSubtree->getLevel()));
 
-        if (!pSubtree || !bCompleteForRequest)
-            throw container::NoSuchElementException();
+        if (!bCompleteForRequest)
+            pSubtree = 0;
 
         return pSubtree;
     }
@@ -936,21 +936,28 @@ namespace configmgr
         }
         catch(container::NoSuchElementException&e)
         {
-            lang::WrappedTargetException aError;
-            aError.TargetException <<= e;
-            throw lang::WrappedTargetException(aError);
-        }
+            ::rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("Tree: there is no Subtree for name:="));
 
-#ifdef DEBUG
-        ::rtl::OString aStr("Tree: there is no Subtree for name:=");
-        aStr += rtl::OUStringToOString(aSubtreeName.fullName(),RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(pSubtree, aStr.getStr());
-#endif
+            aStr += aSubtreeName.fullName();
+
+            lang::WrappedTargetException aError;
+            aError.Message = aStr;
+            aError.TargetException <<= e;
+            throw aError;
+        }
 
         if (pSubtree)
         {
             TreeUpdate aTreeUpdate(pSubtree);
             aTree.root.forEachChange(aTreeUpdate);
+        }
+        else
+        {
+            ::rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("Tree: there is no Subtree for name:="));
+
+            aStr += aSubtreeName.fullName();
+
+            throw uno::RuntimeException(aStr,0);
         }
         // Better:
         // ISubtree *pCloneTree = m_pRoot->clone();
