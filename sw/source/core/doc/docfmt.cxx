@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:41:12 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,15 +242,13 @@ struct ParaRstFmt
 
     ParaRstFmt( const SwPosition* pStt, const SwPosition* pEnd,
             SwHistory* pHst, USHORT nWhch = 0, const SfxItemSet* pSet = 0 )
-        : pSttNd( pStt ), pEndNd( pEnd ), pHistory( pHst ), nWhich( nWhch ),
-            pDelSet( pSet ), bResetAll( TRUE ), pFmtColl( 0 ),
-            bInclRefToxMark( FALSE )
+        : pFmtColl(0), pHistory(pHst), pSttNd(pStt), pEndNd(pEnd),
+        pDelSet(pSet), nWhich(nWhch), bResetAll(TRUE), bInclRefToxMark(FALSE)
     {}
 
     ParaRstFmt( SwHistory* pHst )
-        : pSttNd( 0 ), pEndNd( 0 ), pHistory( pHst ), nWhich( 0 ),
-        pDelSet( 0 ), bResetAll( TRUE ), pFmtColl( 0 ),
-        bInclRefToxMark( FALSE )
+        : pFmtColl(0), pHistory(pHst), pSttNd(0), pEndNd(0), pDelSet(0),
+        nWhich(0), bResetAll(TRUE), bInclRefToxMark(FALSE)
     {}
 };
 
@@ -398,7 +396,6 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
                         const SvUShortsSort* pAttrs )
 {
     SwPaM* pPam = (SwPaM*)&rRg;
-    BOOL bStopAttr = FALSE;
     if( !bTxtAttr && pAttrs && pAttrs->Count() &&
         RES_TXTATR_END > (*pAttrs)[ 0 ] )
         bTxtAttr = TRUE;
@@ -413,7 +410,6 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
 
         SwIndex& rSt = pPam->GetPoint()->nContent;
         USHORT nMkPos, nPtPos = rSt.GetIndex();
-        const String& rStr = pTxtNd->GetTxt();
 
         // JP 22.08.96: Sonderfall: steht der Crsr in einem URL-Attribut
         //              dann wird dessen Bereich genommen
