@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:03:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace dbaui
         */
         virtual sal_Bool isEditable() const;
     public:
-        OConnectionLineAccess(const OTableConnection* _pLine);
+        OConnectionLineAccess(OTableConnection* _pLine);
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
