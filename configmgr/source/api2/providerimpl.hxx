@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:23:25 $
+ *  last change: $Author: jb $ $Date: 2002-10-28 14:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ namespace configmgr
                                         vos::ORef<OOptions> /* [in/out] */ xOptions
                                    ) CFG_THROW1(lang::IllegalArgumentException);
 
-            static bool extractOneArgument( beans::PropertyValue const& aCurrent,
+            static bool extractOneArgument( OUString const& aName, uno::Any const& aValue,
                                             OUString&   /* [out] */ _rNodeAccessor,
                                             sal_Int32&  /* [out] */ _nLevels,
                                             vos::ORef<OOptions> /* [in/out] */ _xOptions

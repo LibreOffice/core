@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-14 14:19:23 $
+ *  last change: $Author: jb $ $Date: 2002-10-28 14:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,13 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -712,18 +718,32 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------------
 
-    bool OProviderImpl::FactoryArguments::extractOneArgument(beans::PropertyValue const& aCurrent,
+    static OUString makeLocaleString(lang::Locale const & aLocale)
+    {
+        const sal_Unicode sep = '-';
+
+        rtl::OUStringBuffer aBuf(aLocale.Language);
+
+        if (aLocale.Country.getLength())
+            aBuf.append(sep). append(aLocale.Country);
+
+        return aBuf.makeStringAndClear();
+    }
+
+    //-----------------------------------------------------------------------------------
+    bool OProviderImpl::FactoryArguments::extractOneArgument(
+                            OUString const& aName, uno::Any const& aValue,
                             OUString&   /* [out] */ _rNodeAccessor,
                             sal_Int32&  /* [out] */ _nLevels,
                             vos::ORef<OOptions> /* [in/out] */ _xOptions )
         CFG_NOTHROW()
     {
-        switch ( lookupArgument(aCurrent.Name) )
+        switch ( lookupArgument(aName) )
         {
         case ARG_NODEPATH:
             {
                 OUString sStringVal;
-                if (aCurrent.Value >>= sStringVal)
+                if (aValue >>= sStringVal)
                     _rNodeAccessor = sStringVal;
                 else
                     return false;
@@ -733,7 +753,7 @@ namespace configmgr
         case ARG_DEPTH:
             {
                 sal_Int32 nIntVal;
-                if (aCurrent.Value >>= nIntVal)
+                if (aValue >>= nIntVal)
                     _nLevels = nIntVal;
                 else
                     return false;
@@ -743,7 +763,7 @@ namespace configmgr
         case ARG_USER:
             {
                 OUString sStringVal;
-                if (aCurrent.Value >>= sStringVal)
+                if (aValue >>= sStringVal)
                     _xOptions->setUser(sStringVal);
                 else
                     return false;
@@ -753,19 +773,18 @@ namespace configmgr
         case ARG_LOCALE:
             {
                 OUString    sStringVal;
-                if (aCurrent.Value >>= sStringVal)
+                if (aValue >>= sStringVal)
                 {
                     _xOptions->setLocale(sStringVal);
                     break;
                 }
-                #if 0
+
                 lang::Locale aLocale;
-                if (aCurrent.Value >>= aLocale)
+                if (aValue >>= aLocale)
                 {
-                    _xOptions->setLocale(aLocale);
+                    _xOptions->setLocale(makeLocaleString(aLocale));
                     break;
                 }
-                #endif
 
                 return false;
             }
@@ -774,7 +793,7 @@ namespace configmgr
         case ARG_NOCACHE:
             {
                 sal_Bool bBoolVal;
-                if (aCurrent.Value >>= bBoolVal)
+                if (aValue >>= bBoolVal)
                     _xOptions->setNoCache(!!bBoolVal);
                 else
                     return false;
@@ -784,7 +803,7 @@ namespace configmgr
         case ARG_ASYNC:
             {
                 sal_Bool bBoolVal;
-                if (aCurrent.Value >>= bBoolVal)
+                if (aValue >>= bBoolVal)
                     _xOptions->setLazyWrite(!!bBoolVal);
                 else
                     return false;
@@ -794,7 +813,7 @@ namespace configmgr
         case ARG_NOT_FOUND:
                 {
                     rtl::OString sMessage(RTL_CONSTASCII_STRINGPARAM("Unknown argument \""));
-                    sMessage += rtl::OUStringToOString(aCurrent.Name, RTL_TEXTENCODING_ASCII_US);
+                    sMessage += rtl::OUStringToOString(aName, RTL_TEXTENCODING_ASCII_US);
                     sMessage += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\" !\n- Parameter will be ignored -\n"));
                     CFG_TRACE_WARNING( "provider: %s", sMessage.getStr() );
             #ifdef DBG_UTIL
@@ -813,15 +832,37 @@ namespace configmgr
 
      //-----------------------------------------------------------------------------------
     static
-    void failIllegal(sal_Int32 _nArg = -1)
+    void failInvalidArg(uno::Any const & aArg, sal_Int32 _nArg = -1)
         CFG_THROW1 (lang::IllegalArgumentException)
     {
         OSL_ENSURE( sal_Int16(_nArg) == _nArg, "Argument number out of range. Raising imprecise exception.");
-         throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Arguments must be PropertyValues.")),
-                    uno::Reference<uno::XInterface>(),
-                    sal_Int16(_nArg)
-                );
+
+        rtl::OUStringBuffer sMessage;
+        sMessage.appendAscii("Configuration Provider: An argument");
+        sMessage.appendAscii(" has the wrong type.");
+        sMessage.appendAscii("\n- Expected a NamedValue or PropertyValue");
+        sMessage.appendAscii("\n- Found type ").append( aArg.getValueType().getTypeName() );
+
+        throw lang::IllegalArgumentException(   sMessage.makeStringAndClear(),
+                                                uno::Reference<uno::XInterface>(),
+                                                sal_Int16(_nArg+1));
+   }
+
+     //-----------------------------------------------------------------------------------
+    static
+    void failInvalidArgValue(OUString const & aName, uno::Any const & aValue, sal_Int32 _nArg = -1)
+        CFG_THROW1 (lang::IllegalArgumentException)
+    {
+        OSL_ENSURE( sal_Int16(_nArg) == _nArg, "Argument number out of range. Raising imprecise exception.");
+
+        rtl::OUStringBuffer sMessage;
+        sMessage.appendAscii("Configuration Provider: The argument ").append(aName);
+        sMessage.appendAscii(" has the wrong type.");
+        sMessage.appendAscii("\n- Found type ").append( aValue.getValueType().getTypeName() );
+
+        throw lang::IllegalArgumentException(   sMessage.makeStringAndClear(),
+                                                uno::Reference<uno::XInterface>(),
+                                                sal_Int16(_nArg+1));
    }
 
      //-----------------------------------------------------------------------------------
@@ -831,26 +872,53 @@ namespace configmgr
                                     sal_Int32&  /* [out] */ _nLevels )
         CFG_NOTHROW()
     {
-          // compatibility : formerly, you could specify the node path as first arg and the (optional) depth
-            // as second arg
-            switch (_rArgs.getLength() )
-            {
-            default:
-                return false;
+        OSL_ASSERT( _rArgs.getLength() != 0 );
 
-            case 2:
-                if (! (_rArgs[1] >>= _nLevels) )
-                    return false;
+        // compatibility : formerly, you could specify the node path as first arg and the (optional) depth
+        // as second arg
+        if (! (_rArgs[0] >>= _rNodeAccessor) )
+            return false;
 
-                // fall thru
-            case 1:
-                if (! (_rArgs[0] >>= _rNodeAccessor) )
-                    return false;
+        switch (_rArgs.getLength() )
+        {
+        case 1:
+            // valid single argument
+            return true;
 
-                // fall thru
-            case 0:
+        case 2:
+            // valid second argument
+            if (_rArgs[1] >>= _nLevels)
                 return true;
+
+            break;
+
+        default:
+            if (_rArgs[1] >>= _nLevels)
+            {
+                // valid second argument, but too many arguments altogether
+                 throw lang::IllegalArgumentException(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Configuration Provider: Too many arguments. "
+                                "Additional arguments are not supported when passing the node path as string (deprecated convention).")),
+                            uno::Reference<uno::XInterface>(),
+                            sal_Int16(3)
+                );
             }
+
+            break;
+
+        }
+        // here we have an invalid second argument
+
+        if (_rArgs[1].getValueTypeClass() != uno::TypeClass_STRUCT)
+        {
+            // completely invalid second argument
+            failInvalidArgValue(OUString::createFromAscii("<depth>"),_rArgs[1],1);
+        }
+
+        // Assume PropertyValue or NamedValue,
+        // which should be handled consistently by caller
+        return false;
     }
 
     //-----------------------------------------------------------------------------------
@@ -865,19 +933,19 @@ namespace configmgr
         // the args have to be a sequence of property values
         bool bLegacyFormat = false;
 
+        beans::NamedValue    aNV;
+        beans::PropertyValue aPV;
         for (sal_Int32 i=0; i<_rArgs.getLength(); ++i)
         {
-            beans::PropertyValue aCurrent;
-            if (_rArgs[i] >>= aCurrent)
+            if (_rArgs[i] >>= aPV)
             {
-                if ( !extractOneArgument(aCurrent,_rNodeAccessor,_nLevels,_xOptions) )
-                {
-                    OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("The argument "));
-                    sMessage += aCurrent.Name;
-                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(" has the wrong type.\n- Found type "));
-                    sMessage += aCurrent.Value.getValueType().getTypeName();
-                    throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),sal_Int16(i));
-                }
+                if ( !extractOneArgument(aPV.Name,aPV.Value,_rNodeAccessor,_nLevels,_xOptions) )
+                    failInvalidArgValue(aPV.Name,aPV.Value,i);
+            }
+            else if (_rArgs[i] >>= aNV)
+            {
+                if ( !extractOneArgument(aPV.Name,aPV.Value,_rNodeAccessor,_nLevels,_xOptions) )
+                    failInvalidArgValue(aNV.Name,aNV.Value,i);
             }
             else
             {
@@ -885,7 +953,7 @@ namespace configmgr
                     if ( extractLegacyArguments(_rArgs,_rNodeAccessor,_nLevels))
                         break;
 
-                failIllegal(i);
+                failInvalidArg(_rArgs[i],i);
                 OSL_ASSERT(false);
             }
         }
@@ -893,7 +961,7 @@ namespace configmgr
         if (_rNodeAccessor.getLength() == 0)
         {
             OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Missing argument: no nodepath was provided"));
-            throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),-1);
+            throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),0);
         }
     }
 
