@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #define BTN_SAVE 41
 #define BTN_MN_UP 42
 #define BTN_MN_DOWN 43
+#define RB_OFFICE 44
+#define RB_MODULE 45
 
 #define CHKBTN_UNCHECKED   30001
 #define CHKBTN_CHECKED     30002

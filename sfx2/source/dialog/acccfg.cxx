@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:26:24 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
 #include "request.hxx"
+#include "docfac.hxx"
 
 //static const char __FAR_DATA pUnknownStr[]    = "???";
 static USHORT __FAR_DATA aCodeArr[] =
@@ -337,6 +338,12 @@ void SfxAccCfgTabListBox_Impl::KeyInput( const KeyEvent &rKEvt )
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
+    if ( pModule && pModule->pChanged )
+        delete pModule->pChanged;
+    if ( pGlobal && pGlobal->pChanged )
+        delete pGlobal->pChanged;
+    delete pGlobal;
+    delete pModule;
 }
 
 // SfxAcceleratorConfigPage::Ctor() ************************************************
@@ -359,9 +366,11 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aLoadButton         ( this, ResId( BTN_LOAD ) ),
     aSaveButton         ( this, ResId( BTN_SAVE ) ),
     aResetButton        ( this, ResId( BTN_RESET   ) ),
-    pMgr( 0 ),
-    bModified( FALSE ),
-    bDefault( TRUE )
+    aOfficeButton       ( this, ResId( RB_OFFICE   ) ),
+    aModuleButton       ( this, ResId( RB_MODULE   ) ),
+    pAct( 0 ),
+    pModule( 0 ),
+    pGlobal( 0 )
 {
     FreeResource();
 
@@ -384,6 +393,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
       Save      ) );
     aResetButton .SetClickHdl ( LINK( this, SfxAcceleratorConfigPage,
       Default      ) );
+
+    Link aLink = LINK( this, SfxAcceleratorConfigPage, RadioHdl );
+    aOfficeButton.SetClickHdl( aLink );
+    aModuleButton.SetClickHdl( aLink );
 
     // initializing aAccelArr and aAccelConfigArr
     for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
@@ -409,7 +422,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aGroupLBox.SetFunctionListBox( &aFunctionBox );
 }
 
-void SfxAcceleratorConfigPage::Init()
+void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
 {
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
@@ -423,11 +436,8 @@ void SfxAcceleratorConfigPage::Init()
         pLBEntry->SetUserData( pEntry );
     }
 
-#ifdef MBA_PUT_ITEMS
-    SvFileStream aFile( "c:\\accel.log", STREAM_STD_WRITE );
-#endif
-
-    const SfxAcceleratorItemList& rItems = pMgr->GetItems();
+    SfxSlotPool* pSlotPool = &( pAct == pModule ? SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ) : SFX_APP()->GetAppSlotPool_Impl() );
+    const SfxAcceleratorItemList& rItems = pAccMgr->GetItems();
     std::vector< SfxAcceleratorConfigItem>::const_iterator p;
     for ( p = rItems.begin(); p != rItems.end(); p++ )
     {
@@ -446,18 +456,12 @@ void SfxAcceleratorConfigPage::Init()
         {
             USHORT nCol = aEntriesBox.TabCount() - 1;
             String aText ('[');
-            aText += SFX_SLOTPOOL().GetSlotName_Impl( nId );
+            aText += pSlotPool->GetSlotName_Impl( nId );
             aText += ']';
             aEntriesBox.SetEntryText( aText, nPos, nCol );
             SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
             pEntry->SetId( nId );
             aConfigAccelArr[ nPos ] = nId;
-
-#ifdef MBA_PUT_ITEMS
-            KeyCode aCode = pMgr->GetKeyCode();
-            String aName( aCode.GetName() );
-            aFile << aText.GetStr() << '\t' << aName.GetStr() << '\n';
-#endif
         }
     }
 }
@@ -492,7 +496,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
             ++nCount;
     }
 
-    const SfxAcceleratorItemList& rItems = pMgr->GetItems();
+    const SfxAcceleratorItemList& rItems = pAccMgr->GetItems();
     std::vector< SfxAcceleratorConfigItem>::const_iterator p;
     for ( p = rItems.begin(); p != rItems.end(); p++ )
     {
@@ -575,20 +579,17 @@ IMPL_LINK( SfxAcceleratorConfigPage, Load, Button *, pButton )
         {
             // create new AcceleratorManager and read configuration
             // constructing with a SfxConfigManager reads in configuration
-            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
+            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pAct->pMgr, pCfgMgr );
 
             // put new configuration into TabPage
-            SfxAcceleratorManager* pOld = pMgr;
-            pMgr = pAccMgr;
             aEntriesBox.SetUpdateMode( FALSE );
             ResetConfig();
-            Init();
+            Init( pAccMgr );
             aEntriesBox.SetUpdateMode( TRUE );
             aEntriesBox.Invalidate();
             aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-            bDefault = FALSE;
-            bModified = TRUE;
-            pMgr = pOld;
+            pAct->bDefault = FALSE;
+            pAct->bModified = TRUE;
 
             delete pAccMgr;
             if ( bCreated )
@@ -643,7 +644,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
         if ( pCfgMgr )
         {
             // create new AcceleratorManager and apply changes
-            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
+            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pAct->pMgr, pCfgMgr );
             Apply( pAccMgr, FALSE );
             pCfgMgr->StoreConfigItem( *pAccMgr );
             if ( bLoadedDocument )
@@ -657,7 +658,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
             if ( bCreated )
                 delete pCfgMgr;
             else
-                pCfgMgr->ReInitialize( pMgr->GetType() );
+                pCfgMgr->ReInitialize( pAct->pMgr->GetType() );
 
             // perhaps the document must get a new accelerator manager ! This will automatically be created
             // when GetAccMgr_Impl() is called on a document that has a configuration in its storage
@@ -666,7 +667,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
                 if ( xDoc->GetAccMgr_Impl()->GetConfigManager() != pCfgMgr )
                     // config item has global configuration until now, must be changed
                     // is impossible in the current implementation !
-                    xDoc->GetAccMgr_Impl()->GetConfigManager()->ReConnect( pMgr->GetType(), pCfgMgr );
+                    xDoc->GetAccMgr_Impl()->GetConfigManager()->ReConnect( pAct->pMgr->GetType(), pCfgMgr );
             }
         }
 
@@ -679,27 +680,22 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
 IMPL_LINK( SfxAcceleratorConfigPage, Default, PushButton *, pPushButton )
 {
     // creating a ConfigItem without ConfigManager forces it to use its default
-    SfxAcceleratorManager aMgr( *pMgr, NULL );
-
-    SfxAcceleratorManager* pOld = pMgr;
-    pMgr = &aMgr;
-    bDefault = TRUE;
-    bModified = !pOld->IsDefault();
+    SfxAcceleratorManager aMgr( *pAct->pMgr, NULL );
+    pAct->bDefault = TRUE;
+    pAct->bModified = !pAct->pMgr->IsDefault();
     aEntriesBox.SetUpdateMode(FALSE);
     ResetConfig();
-    Init();
+    Init( &aMgr );
     aEntriesBox.SetUpdateMode(TRUE);
     aEntriesBox.Invalidate();
     aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-    pMgr = pOld;
-
     return 0;
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button *, pButton )
 {
-    bDefault = FALSE;
-    bModified = TRUE;
+    pAct->bDefault = FALSE;
+    pAct->bModified = TRUE;
 
     // Selektierter Eintrag und selektierte Funktion
     USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
@@ -714,7 +710,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button *, pButton )
     else
     {
         // Eine normale Funktion ist selektiert
-        aStr = SFX_SLOTPOOL().GetSlotName_Impl( nId );
+        SfxSlotPool* pSlotPool = &( pAct == pModule ? SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ) : SFX_APP()->GetAppSlotPool_Impl() );
+        aStr = pSlotPool->GetSlotName_Impl( nId );
     }
 
     // Hilfetext setzen
@@ -742,8 +739,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button *, pButton )
 
 IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, pButton )
 {
-    bDefault = FALSE;
-    bModified = TRUE;
+    pAct->bDefault = FALSE;
+    pAct->bModified = TRUE;
 
     // Selektierter Eintrag
     USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
@@ -902,28 +899,113 @@ void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 
 BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
-    if ( bModified )
+    BOOL bRet = FALSE;
+    AccelInfo_Impl* pOther = pAct == pGlobal ? pModule : pGlobal;
+    if ( pAct->bModified )
     {
-        Apply( pMgr, bDefault );
-        bModified = FALSE;
-        pMgr->StoreConfig();
-        return TRUE;
+        Apply( pAct->pMgr, pAct->bDefault );
+        pAct->bModified = FALSE;
+        pAct->pMgr->StoreConfig();
+        DELETEZ( pAct->pChanged );
+        bRet = TRUE;
     }
-    return FALSE;
+
+    if ( pOther && pOther->pChanged )
+    {
+        aEntriesBox.SetUpdateMode( FALSE );
+        ResetConfig();
+        Init( pOther->pChanged );
+        Apply( pOther->pMgr, pOther->bDefault );
+        pOther->bModified = FALSE;
+        pOther->pMgr->StoreConfig();
+        DELETEZ( pOther->pChanged );
+        bRet = TRUE;
+        ResetConfig();
+        Init( pAct->pMgr );
+        aEntriesBox.SetUpdateMode( TRUE );
+    }
+
+    return bRet;
 }
 
 void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
 {
-    if ( !pMgr )
+    String aModName = GetTabDialog()->GetViewFrame()->GetObjectShell()->GetFactory().GetModuleName();
+    String aText = aModuleButton.GetText();
+    aText.SearchAndReplace(String::CreateFromAscii("$(MODULE)"), aModName );
+    aModuleButton.SetText( aText );
+    if ( !pAct )
     {
-        pMgr = GetTabDialog()->GetViewFrame()->GetViewShell()->GetAccMgr_Impl();
-        if ( !pMgr )
-            pMgr = SFX_APP()->GetAppAccel_Impl();
+        SfxAcceleratorManager* pAppMgr = SFX_APP()->GetAppAccel_Impl();
+        if ( pAppMgr )
+        {
+            pGlobal = new AccelInfo_Impl;
+            pGlobal->pMgr = pAppMgr;
+            pGlobal->pChanged = NULL;
+            pGlobal->bDefault = pAppMgr->IsDefault();
+            pGlobal->bModified = FALSE;
+        }
 
-        bDefault = pMgr->IsDefault();
-        Init();
-        aGroupLBox.Init();
-        aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-        aGroupLBox.Select( aGroupLBox.GetEntry( 0, 0 ) );
+        SfxAcceleratorManager* pMgr = GetTabDialog()->GetViewFrame()->GetViewShell()->GetAccMgr_Impl();
+        if ( pMgr && pMgr != pAppMgr )
+        {
+            pModule = new AccelInfo_Impl;
+            pModule->pMgr = pMgr;
+            pModule->pChanged = NULL;
+            pModule->bDefault = pMgr->IsDefault();
+            pModule->bModified = FALSE;
+        }
+
+        if ( pModule )
+            aModuleButton.Check();
+        else
+        {
+            aModuleButton.Hide();
+            aOfficeButton.Check();
+        }
+
+        RadioHdl(0);
     }
 }
+
+IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )
+{
+    AccelInfo_Impl *pOld = pAct;
+    if ( aOfficeButton.IsChecked() && pAct != pGlobal )
+    {
+        pAct = pGlobal;
+    }
+    else if ( aModuleButton.IsChecked() && pAct != pModule )
+    {
+        pAct = pModule;
+    }
+    else
+        return 0;
+
+    if ( pOld )
+    {
+        if ( pOld->bModified )
+        {
+            if ( !pOld->pChanged )
+                pOld->pChanged = new SfxAcceleratorManager ( *pOld->pMgr, NULL );
+            Apply( pOld->pChanged, pOld->bDefault );
+        }
+    }
+
+    aEntriesBox.SetUpdateMode( FALSE );
+    ResetConfig();
+    if ( pAct->pChanged )
+        Init( pAct->pChanged );
+    else
+        Init( pAct->pMgr );
+    aEntriesBox.SetUpdateMode( TRUE );
+    aEntriesBox.Invalidate();
+
+    SfxSlotPool* pPool = &( pAct == pModule ? SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ) : SFX_APP()->GetAppSlotPool_Impl() );
+     aGroupLBox.Init( NULL, pPool );
+    aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
+    aGroupLBox.Select( aGroupLBox.GetEntry( 0, 0 ) );
+    ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
+    return 1L;
+}
+

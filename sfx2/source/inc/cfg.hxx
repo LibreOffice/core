@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 07:57:42 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,12 +137,14 @@ public:
     void                            FunctionSelected();
 };
 
+class SfxSlotPool;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;
     String                          aScriptType;
+    SfxSlotPool*                    pSlotPool;
 
 protected:
     virtual void                    RequestingChilds( SvLBoxEntry *pEntry);
@@ -155,7 +157,7 @@ public:
                                         const ResId&, ULONG nConfigMode = 0 );
                                     ~SfxConfigGroupListBox_Impl();
 
-    void                            Init( SvStringsDtor *pArr = 0 );
+    void                            Init( SvStringsDtor *pArr = 0, SfxSlotPool* pSlotPool = 0 );
     void                            SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                                     { pFunctionListBox = pBox; }
     void                            Open( SvLBoxEntry*, BOOL );
@@ -310,6 +312,13 @@ public:
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
+struct AccelInfo_Impl
+{
+    SfxAcceleratorManager*      pMgr;
+    SfxAcceleratorManager*      pChanged;
+    BOOL                        bDefault;
+    BOOL                        bModified;
+};
 
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
@@ -329,15 +338,17 @@ private:
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
+    RadioButton                     aOfficeButton;
+    RadioButton                     aModuleButton;
 
-    SfxAcceleratorManager*      pMgr;
-
-    USHORTArr                   aConfigAccelArr;
     USHORTArr                   aConfigCodeArr;
+    USHORTArr                   aConfigAccelArr;
     USHORTArr                   aAccelArr;
     USHORTArr                   aKeyArr;
-    BOOL                        bModified;
-    BOOL                        bDefault;
+
+    AccelInfo_Impl*             pGlobal;
+    AccelInfo_Impl*             pModule;
+    AccelInfo_Impl*             pAct;
 
     DECL_LINK(                  ChangeHdl, Button * );
     DECL_LINK(                  RemoveHdl, Button * );
@@ -345,6 +356,7 @@ private:
     DECL_LINK(                  Save, Button * );
     DECL_LINK(                  Load, Button * );
     DECL_LINK(                  Default, PushButton * );
+    DECL_LINK(                  RadioHdl, RadioButton* );
 
     KeyCode                     PosToKeyCode_Config( USHORT nPos ) const;
     USHORT                      KeyCodeToPos_Config( const KeyCode &rCode ) const;
@@ -354,7 +366,7 @@ private:
 
     String                      GetFunctionName( KeyFuncType eType )    const;
 
-    void                        Init();
+    void                        Init( SfxAcceleratorManager* pAccMgr );
     void                        ResetConfig();
 
 public:

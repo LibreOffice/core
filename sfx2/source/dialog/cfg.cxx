@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:26:24 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ String SfxConfigGroupListBox_Impl::GetGroup()
     return String();
 }
 
-void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
+void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
 /*  Beschreibung
     Die Groupbox wird mit allen Funktionsgruppen und allen Basics gef"ullt
 */
@@ -434,11 +434,12 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
     // Verwendet wird der aktuelle Slotpool
     if ( nMode )
     {
-        for ( USHORT i=1; i<SFX_SLOTPOOL().GetGroupCount(); i++ )
+        pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
+        for ( USHORT i=1; i<pSlotPool->GetGroupCount(); i++ )
         {
             // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-            String aName = pSfxApp->GetSlotPool().SeekGroup( i );
-            const SfxSlot *pSfxSlot = SFX_SLOTPOOL().FirstSlot();
+            String aName = pSlotPool->SeekGroup( i );
+            const SfxSlot *pSfxSlot = pSlotPool->FirstSlot();
             if ( pSfxSlot )
             {
                 // Check if all entries are not useable. Don't
@@ -457,7 +458,7 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
                         break;
                     }
 
-                    pSfxSlot = SFX_SLOTPOOL().NextSlot();
+                    pSfxSlot = pSlotPool->NextSlot();
                 }
 
                 if ( bActiveEntries )
@@ -575,10 +576,10 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
         case SFX_CFGGROUP_FUNCTION :
         {
             USHORT nGroup = pInfo->nOrd;
-            String aSelectedGroup = SFX_SLOTPOOL().SeekGroup( nGroup );
+            String aSelectedGroup = pSlotPool->SeekGroup( nGroup );
             if ( aSelectedGroup != String() )
             {
-                const SfxSlot *pSfxSlot = SFX_SLOTPOOL().FirstSlot();
+                const SfxSlot *pSfxSlot = pSlotPool->FirstSlot();
                 while ( pSfxSlot )
                 {
                     USHORT nId = pSfxSlot->GetSlotId();
@@ -588,7 +589,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                     if ( pSfxSlot->GetMode() & nMode )
 #endif
                     {
-                        String aName = SFX_SLOTPOOL().GetSlotName_Impl( *pSfxSlot );
+                        String aName = pSlotPool->GetSlotName_Impl( *pSfxSlot );
                         if ( aName.Len() && !pFunctionListBox->GetEntry_Impl( nId ) )
                         {
 #ifdef DBG_UTIL
@@ -604,7 +605,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                         }
                     }
 
-                    pSfxSlot = SFX_SLOTPOOL().NextSlot();
+                    pSfxSlot = pSlotPool->NextSlot();
                 }
             }
 
