@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-14 08:42:00 $
+ *  last change: $Author: kso $ $Date: 2001-03-01 08:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,19 @@ SortedDynamicResultSet::connectToCache(
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
     if( xTarget.is() && mxSMgr.is() )
     {
-        Reference< XCachedDynamicResultSetStubFactory > xStubFactory(
-            mxSMgr->createInstance( OUString::createFromAscii(
-                    "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ), UNO_QUERY );
+        Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
+        try
+        {
+            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
+                mxSMgr->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                UNO_QUERY );
+        }
+        catch ( Exception const & )
+        {
+        }
+
         if( xStubFactory.is() )
         {
             xStubFactory->connectToCache(

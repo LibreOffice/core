@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
+ *  last change: $Author: kso $ $Date: 2001-03-01 08:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,9 +470,20 @@ void SAL_CALL DynamicResultSetWrapper
     if( xTarget.is() && m_xSMgr.is() )
     {
         //@todo m_aSourceSet.wait();?
-        Reference< XCachedDynamicResultSetStubFactory > xStubFactory(
-            m_xSMgr->createInstance( OUString::createFromAscii(
-                    "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ), UNO_QUERY );
+
+        Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
+        try
+        {
+            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
+                m_xSMgr->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                UNO_QUERY );
+        }
+        catch ( Exception const & )
+        {
+        }
+
         if( xStubFactory.is() )
         {
             xStubFactory->connectToCache(

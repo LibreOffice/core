@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-01-23 09:13:32 $
+ *  last change: $Author: kso $ $Date: 2001-03-01 08:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,8 +851,8 @@ XResultSet_impl::connectToCache(
            ServiceNotFoundException,
            uno::RuntimeException )
 {
-    //@todo check this implementation; get XMultiServiceFactory
-    uno::Reference< lang::XMultiServiceFactory > mxSMgr = m_pMyShell->m_xMultiServiceFactory;
+    uno::Reference< lang::XMultiServiceFactory > mxSMgr
+        = m_pMyShell->m_xMultiServiceFactory;
 
     if( m_xListener.is() )
         throw ListenerAlreadySetException();
@@ -862,9 +862,19 @@ XResultSet_impl::connectToCache(
     uno::Reference< XSourceInitialization > xTarget( xCache, uno::UNO_QUERY );
     if( xTarget.is() && mxSMgr.is() )
     {
-        uno::Reference< XCachedDynamicResultSetStubFactory > xStubFactory(
-            mxSMgr->createInstance( rtl::OUString::createFromAscii(
-                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ), uno::UNO_QUERY );
+        uno::Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
+        try
+        {
+            xStubFactory = uno::Reference< XCachedDynamicResultSetStubFactory >(
+                mxSMgr->createInstance(
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                uno::UNO_QUERY );
+        }
+        catch ( uno::Exception const & )
+        {
+        }
+
         if( xStubFactory.is() )
         {
             xStubFactory->connectToCache(
