@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:30:12 $
+ *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #endif
 #ifndef CONNECTIVITY_MYSQL_CATALOG_HXX
 #include "mysql/YCatalog.hxx"
-#endif
-#ifndef CONNECTIVITY_MYSQL_CONNECTION_HXX
-#include "mysql/YConnection.hxx"
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>

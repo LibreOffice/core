@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YUsers.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:30:41 $
+ *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
-#endif
-#ifndef CONNECTIVITY_MYSQL_CONNECTION_HXX
-#include "mysql/YConnection.hxx"
 #endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:30:02 $
+ *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,12 @@
 #ifndef CONNECTIVITY_MYSQL_TABLES_HXX
 #include "mysql/YTables.hxx"
 #endif
+#ifndef _CONNECTIVITY_MYSQL_VIEWS_HXX_
 #include "mysql/YViews.hxx"
+#endif
+#ifndef CONNECTIVITY_MYSQL_TABLE_HXX
 #include "mysql/YTable.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -81,9 +85,6 @@
 #endif
 #ifndef CONNECTIVITY_MYSQL_CATALOG_HXX
 #include "mysql/YCatalog.hxx"
-#endif
-#ifndef CONNECTIVITY_MYSQL_CONNECTION_HXX
-#include "mysql/YConnection.hxx"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>

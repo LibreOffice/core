@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YUser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:30:32 $
+ *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,11 @@
 #ifndef _CONNECTIVITY_MYSQL_USER_HXX_
 #include "mysql/YUser.hxx"
 #endif
-#ifndef _CONNECTIVITY_MYSQL_GROUPS_HXX_
-#include "mysql/YGroups.hxx"
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _CONNECTIVITY_MYSQL_BCONNECTION_HXX_
-#include "mysql/YConnection.hxx"
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
