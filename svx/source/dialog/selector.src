@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:02:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,13 @@
 #include "selector.hrc"
 
 #define FIXEDTEXT_DIALOG_DESCRIPTION \
-Text [ de ] = "WÃ¤hlen Sie zuerst die Bibliothek, die das gewÃ¼nschte Makro enthÃ¤lt. Dann wÃ¤hlen Sie das Makro unter 'Name des Makros'." ; \
+Text [ de ]  = "Wählen Sie zuerst die Bibliothek, die das gewünschte Makro enthält. Dann wählen Sie das Makro unter 'Name des Makros'." ; \
 Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;
 
 String STR_SELECTOR_ADD_COMMANDS
 {
-  Text [ de ] = "Befehle hinzufÃ¼gen" ;
-  Text [ en-US ] = "Add Commands" ;
+  TEXT [ de ]  = "Befehle hinzufügen" ;
+  TEXT [ en-US ] = "Add Commands" ;
 };
 
 String STR_SELECTOR_MACROS
@@ -92,21 +92,28 @@ String STR_SELECTOR_COMMANDS
 
 String STR_SELECTOR_ADD
 {
-  Text [ de ] = "HinzufÃ¼gen" ;
-  Text [ en-US ] = "Add" ;
+  TEXT [ de ]  = "Hinzufügen" ;
+  TEXT [ en-US ] = "Add" ;
 };
 
 String STR_SELECTOR_RUN
 {
-  Text [ de ] = "AusfÃ¼hren" ;
-  Text [ en-US ] = "Run" ;
+  TEXT [ de ]  = "Ausführen" ;
+  TEXT [ en-US ] = "Run" ;
+
+};
+
+String STR_SELECTOR_CLOSE
+{
+  TEXT [ de ]  = "Schließen" ;
+  TEXT [ en-US ] = "Close" ;
 
 };
 
 String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
 {
-  Text [ de ] = "Um Befehle einer Symbolleiste hinzuzufÃ¼gen, wÃ¤hlen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gewÃ¼nschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
-  Text [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
+  TEXT[ de ] = "Um Befehle einer Symbolleiste hinzuzufügen, wählen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gewünschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
+  TEXT [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
 };
 
 String STR_BASICMACROS
@@ -121,6 +128,7 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
   Size = MAP_APPFONT ( 256 , 233 ) ;
   Text [ de ] = "Makro-Selektor" ;
   Text [ en-US ] = "Macro Selector" ;
+  HelpId = HID_SELECTOR_DIALOG;
   SvLook = TRUE ;
   Moveable = TRUE ;
   Hide = TRUE;
