@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 06:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
     ::rtl::OUString aSql;
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     if(m_pColumns->hasByName(aName))
     {
         Reference<XPropertySet> xColumn;
@@ -745,7 +745,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     // filter anhaengen
     // select ohne where und order by aufbauen
     ::rtl::OUString aSql(m_aWorkSql);
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     if(m_pColumns->hasByName(aName))
     {
         Reference<XPropertySet> xColumn;
