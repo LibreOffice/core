@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:29:12 $
+ *  last change: $Author: mtg $ $Date: 2001-03-22 15:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,29 +1381,40 @@ typedef sequence ::com::sun::star::style::TabStop> TabSTopSequence;
 
 sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_uInt16 nCount = Count();
-    uno::Sequence< style::TabStop> aSeq(nCount);
-    style::TabStop* pArr = aSeq.getArray();
-    for(sal_uInt16 i = 0; i < nCount; i++)
+    switch (nMemberId & ~CONVERT_TWIPS)
     {
-        const SvxTabStop& rTab = *(GetStart() + i);
-        pArr[i].Position        = nMemberId&CONVERT_TWIPS ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
-        switch(rTab.GetAdjustment())
+        case MID_TABSTOPS:
         {
-        case  SVX_TAB_ADJUST_LEFT   : pArr[i].Alignment = style::TabAlign_LEFT; break;
-        case  SVX_TAB_ADJUST_RIGHT  : pArr[i].Alignment = style::TabAlign_RIGHT; break;
-        case  SVX_TAB_ADJUST_DECIMAL: pArr[i].Alignment = style::TabAlign_DECIMAL; break;
-        case  SVX_TAB_ADJUST_CENTER : pArr[i].Alignment = style::TabAlign_CENTER; break;
-            default: //SVX_TAB_ADJUST_DEFAULT
-                pArr[i].Alignment = style::TabAlign_DEFAULT;
+            sal_uInt16 nCount = Count();
+            uno::Sequence< style::TabStop> aSeq(nCount);
+            style::TabStop* pArr = aSeq.getArray();
+            for(sal_uInt16 i = 0; i < nCount; i++)
+            {
+                const SvxTabStop& rTab = *(GetStart() + i);
+                pArr[i].Position        = nMemberId&CONVERT_TWIPS ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
+                switch(rTab.GetAdjustment())
+                {
+                case  SVX_TAB_ADJUST_LEFT   : pArr[i].Alignment = style::TabAlign_LEFT; break;
+                case  SVX_TAB_ADJUST_RIGHT  : pArr[i].Alignment = style::TabAlign_RIGHT; break;
+                case  SVX_TAB_ADJUST_DECIMAL: pArr[i].Alignment = style::TabAlign_DECIMAL; break;
+                case  SVX_TAB_ADJUST_CENTER : pArr[i].Alignment = style::TabAlign_CENTER; break;
+                    default: //SVX_TAB_ADJUST_DEFAULT
+                        pArr[i].Alignment = style::TabAlign_DEFAULT;
 
+                }
+                pArr[i].DecimalChar     = rTab.GetDecimal();
+                pArr[i].FillChar        = rTab.GetFill();
+            }
+            rVal <<= aSeq;
+            break;
         }
-        pArr[i].DecimalChar     = rTab.GetDecimal();
-        pArr[i].FillChar        = rTab.GetFill();
+        case MID_STD_TAB:
+        {
+            const SvxTabStop &rTab = *(GetStart());
+            rVal <<= nMemberId & CONVERT_TWIPS ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
+            break;
+        }
     }
-
-    rVal <<= aSeq;
-
     return sal_True;
 }
 /*-----------------19.03.98 08:50-------------------
@@ -1412,31 +1423,50 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    uno::Sequence< style::TabStop> aSeq;
-    if(!(rVal >>= aSeq))
-        return sal_False;
-
-    SvxTabStopArr::Remove( 0, Count() );
-    const style::TabStop* pArr = aSeq.getConstArray();
-    const sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
-    for(sal_uInt16 i = 0; i < nCount ; i++)
+    switch ( nMemberId )
     {
-        SvxTabAdjust eAdjust = SVX_TAB_ADJUST_DEFAULT;
-        switch(pArr[i].Alignment)
+        case MID_TABSTOPS:
         {
-        case style::TabAlign_LEFT   : eAdjust = SVX_TAB_ADJUST_LEFT; break;
-        case style::TabAlign_CENTER : eAdjust = SVX_TAB_ADJUST_CENTER; break;
-        case style::TabAlign_RIGHT  : eAdjust = SVX_TAB_ADJUST_RIGHT; break;
-        case style::TabAlign_DECIMAL: eAdjust = SVX_TAB_ADJUST_DECIMAL; break;
-        }
-        sal_Unicode cFill = pArr[i].FillChar;
-        sal_Unicode cDecimal = pArr[i].DecimalChar;
+            uno::Sequence< style::TabStop> aSeq;
+            if(!(rVal >>= aSeq))
+                return sal_False;
 
-        SvxTabStop aTab( nMemberId&CONVERT_TWIPS ? MM100_TO_TWIP(pArr[i].Position) : pArr[i].Position,
-                            eAdjust,
-                            cDecimal,
-                            cFill );
-        Insert(aTab);
+            SvxTabStopArr::Remove( 0, Count() );
+            const style::TabStop* pArr = aSeq.getConstArray();
+            const sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
+            for(sal_uInt16 i = 0; i < nCount ; i++)
+            {
+                SvxTabAdjust eAdjust = SVX_TAB_ADJUST_DEFAULT;
+                switch(pArr[i].Alignment)
+                {
+                case style::TabAlign_LEFT   : eAdjust = SVX_TAB_ADJUST_LEFT; break;
+                case style::TabAlign_CENTER : eAdjust = SVX_TAB_ADJUST_CENTER; break;
+                case style::TabAlign_RIGHT  : eAdjust = SVX_TAB_ADJUST_RIGHT; break;
+                case style::TabAlign_DECIMAL: eAdjust = SVX_TAB_ADJUST_DECIMAL; break;
+                }
+                sal_Unicode cFill = pArr[i].FillChar;
+                sal_Unicode cDecimal = pArr[i].DecimalChar;
+;
+                SvxTabStop aTab( nMemberId&CONVERT_TWIPS ? MM100_TO_TWIP(pArr[i].Position) : pArr[i].Position,
+                                    eAdjust,
+                                    cDecimal,
+                                    cFill );
+                Insert(aTab);
+            }
+            break;
+        }
+        case MID_STD_TAB:
+        {
+            sal_Int32 nNewPos;
+            if (!(rVal >>= nNewPos) )
+                return sal_False;
+            const SvxTabStop& rTab = *(GetStart());
+            SvxTabStop aNewTab ( nMemberId&CONVERT_TWIPS ? MM100_TO_TWIP ( nNewPos ) : nNewPos,
+                                 rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
+            Remove ( 0 );
+            Insert( aNewTab );
+            break;
+        }
     }
     return sal_True;
 }
