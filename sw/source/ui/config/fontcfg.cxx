@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 15:19:50 $
+ *  last change: $Author: os $ $Date: 2001-06-28 06:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,14 +121,8 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
 {
-    LanguageType eLang = ::GetSystemLanguage();
-    String sDefFont(OutputDevice::GetDefaultFont(DEFAULTFONT_SERIF, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
-
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
-        sDefaultFonts[i] = sDefFont;
-
-    sDefaultFonts[FONT_OUTLINE] = GetDefaultFor(FONT_OUTLINE);
-    sDefaultFonts[FONT_OUTLINE_CJK] = GetDefaultFor(FONT_OUTLINE_CJK);
+        sDefaultFonts[i] = GetDefaultFor(i);
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -175,17 +169,23 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
     LanguageType eLang = ::GetSystemLanguage();
-    String sDefFont(OutputDevice::GetDefaultFont(DEFAULTFONT_SERIF, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
+    String sDefFont(OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
+    String sDefFontCJK(OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
     switch( nFontType )
     {
         case FONT_STANDARD:
-        case FONT_STANDARD_CJK:
             bSame = sDefaultFonts[nFontType] == sDefFont;
         break;
+        case FONT_STANDARD_CJK:
+            bSame = sDefaultFonts[nFontType] == sDefFontCJK;
+        break;
         case FONT_OUTLINE :
+            bSame = sDefaultFonts[nFontType] ==
+                OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+        break;
         case FONT_OUTLINE_CJK :
             bSame = sDefaultFonts[nFontType] ==
-                OutputDevice::GetDefaultFont(DEFAULTFONT_SANS_UNICODE, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+                OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
         break;
         case FONT_LIST    :
         case FONT_CAPTION :
@@ -197,8 +197,8 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
         {
-            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFont;
-            bSame = b1 && sDefaultFonts[nFontType] == sDefFont;
+            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
+            bSame = b1 && sDefaultFonts[nFontType] == sDefFontCJK;
         }
         break;
     }
@@ -210,26 +210,27 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
  * --------------------------------------------------*/
 String  SwStdFontConfig::GetDefaultFor(USHORT nFontType)
 {
-#if defined(UNX)
-    String sRet(C2S("times"));
-#else
-    String sRet(C2S("Times New Roman"));
-#endif
+    LanguageType eLang = ::GetSystemLanguage();
+    String sRet;
     switch( nFontType )
     {
         case FONT_OUTLINE :
+            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+        break;
         case FONT_OUTLINE_CJK :
-#if defined(UNX)
-            sRet = C2S("helvetica");
-#elif defined(WNT) || defined(WIN)
-            sRet = C2S("Arial");
-#elif defined(MAC)
-            sRet = C2S("Helvetica");
-#elif defined(PM20)
-            sRet = C2S("Helvetica");
-#else
-#error Defaultfont fuer diese Plattform?
-#endif
+            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_HEADING, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+        break;
+        case FONT_STANDARD:
+        case FONT_LIST    :
+        case FONT_CAPTION :
+        case FONT_INDEX   :
+            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
+        break;
+        case FONT_STANDARD_CJK:
+        case FONT_LIST_CJK    :
+        case FONT_CAPTION_CJK :
+        case FONT_INDEX_CJK   :
+            sRet = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
         break;
     }
     return sRet;
