@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
@@ -183,7 +183,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "contains row headers" ;
         Text [ english_us ] = "Contains ~row headers" ;
         Text [ dutch ] = "~bevat rijkoppen" ;
-        Text [ swedish ] = "innehÂller ~radhuvuden" ;
+        Text [ swedish ] = "innehÂller r~adhuvuden" ;
         Text [ danish ] = "indeholder rÊkkeoverskrifter" ;
         Text [ italian ] = "Include intestazioni righe" ;
         Text [ spanish ] = "contiene tÌtulos de ~filas" ;
@@ -211,7 +211,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ ENGLISH ] = "~for data range" ;
         Text [ english_us ] = "For data range" ;
         Text [ portuguese_brazilian ] = "f? Datenbereich" ;
-        Text [ swedish ] = "fˆr dataomrÂde" ;
+        Text [ swedish ] = "fˆr ~dataomrÂde" ;
         Text [ danish ] = "for dataomrÂde" ;
         Text [ italian ] = "Per l'area dati" ;
         Text [ spanish ] = "para el ·rea de datos" ;
@@ -255,7 +255,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
