@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxeventkeeperimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,12 +356,12 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
     /* XSAXEventKeeperStatusChangeBroadcaster */
-    virtual void SAL_CALL addXSAXEventKeeperStatusChangeListener(
+    virtual void SAL_CALL addSAXEventKeeperStatusChangeListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >&
             listener )
         throw (com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeXSAXEventKeeperStatusChangeListener(
+    virtual void SAL_CALL removeSAXEventKeeperStatusChangeListener(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >&
             listener )
