@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace dbaccess
         OCacheSet(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet
                     )
             : m_xDriverSet(_xDriverSet)
-            ,m_xDriverRow(m_xDriverSet,::com::sun::star::uno::UNO_QUERY)
+            ,m_xDriverRow(_xDriverSet,::com::sun::star::uno::UNO_QUERY)
             ,m_xSetMetaData(
                     ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier>(_xDriverSet,::com::sun::star::uno::UNO_QUERY)->getMetaData())
@@ -352,6 +352,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/14 13:28:20  oj
+    change for rowset when getRow returns 0
+
     Revision 1.4  2000/11/03 14:32:31  oj
     some problems with refcount resolved
 

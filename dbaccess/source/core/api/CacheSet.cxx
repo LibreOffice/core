@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 12:35:21 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,21 @@ using namespace ::osl;
 // -------------------------------------------------------------------------
 OCacheSet::~OCacheSet()
 {
-    m_xDriverSet = NULL;
-    m_xDriverRow = NULL;
-    m_xSetMetaData = NULL;
-    m_xConnection = NULL;
+    try
+    {
+        m_xDriverSet = NULL;
+        m_xDriverRow = NULL;
+        m_xSetMetaData = NULL;
+        m_xConnection = NULL;
+    }
+    catch(Exception&)
+    {
+        OSL_ENSHURE(0,"Exception occured");
+    }
+    catch(...)
+    {
+        OSL_ENSHURE(0,"Unknown Exception occured");
+    }
 }
 // -----------------------------------------------------------------------------
 void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQLException, RuntimeException)
@@ -535,6 +546,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2000/12/07 12:35:21  oj
+    #81424# valueof(bool) has no opposite conversion
+
     Revision 1.11  2000/12/06 09:48:48  oj
     #80219# check wasNull()
 
