@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,20 +80,20 @@
 #include <svx/numinf.hxx>
 #endif
 
-#ifndef _SVX_CHARDLG_HXX //autogen
-#include <svx/chardlg.hxx>
-#endif
+//CHINA001 #ifndef _SVX_CHARDLG_HXX //autogen
+//CHINA001 #include <svx/chardlg.hxx>
+//CHINA001 #endif
 
-#ifndef _SVX_NUMFMT_HXX //autogen
-#include <svx/numfmt.hxx>
-#endif
+//CHINA001 #ifndef _SVX_NUMFMT_HXX //autogen
+//CHINA001 #include <svx/numfmt.hxx>
+//CHINA001 #endif
 #ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
 #endif
 
-#ifndef _SVX_ALIGN_HXX //autogen
-#include <svx/align.hxx>
-#endif
+//CHINA001 #ifndef _SVX_ALIGN_HXX //autogen
+//CHINA001 #include <svx/align.hxx>
+//CHINA001 #endif
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -112,6 +112,11 @@
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
+#include <svx/svxids.hrc> //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
 
 using namespace dbaui;
 
@@ -128,9 +133,9 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
 //        AddTabPage( RID_SVXPAGE_CHAR_STD,String(ResId(TP_ATTR_CHAR)),SvxCharStdPage::Create,            0 );
         DBG_ERROR( "found flag TP_ATTR_CHAR" );
     if( nFlags & TP_ATTR_NUMBER )
-        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create,  0 );
+        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)) ); //CHINA001 AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create, 0 );
     if( nFlags & TP_ATTR_ALIGN )
-        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ResId(TP_ATTR_ALIGN)),SvxAlignmentTabPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ResId(TP_ATTR_ALIGN)) );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ResId(TP_ATTR_ALIGN)),SvxAlignmentTabPage::Create, 0 );
     FreeResource();
 }
 
@@ -143,12 +148,15 @@ SbaSbAttrDlg::~SbaSbAttrDlg()
 // -----------------------------------------------------------------------
 void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch ( nPageId )
     {
         case RID_SVXPAGE_NUMBERFORMAT:
         {
-            ((SvxNumberFormatTabPage&)rTabPage).
-                SetNumberFormatList( *pNumberInfoItem );
+            //CHINA001 ((SvxNumberFormatTabPage&)rTabPage).
+                //CHINA001 SetNumberFormatList( *pNumberInfoItem );
+            aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
+            rTabPage.PageCreated(aSet);
         }
         break;
 
@@ -160,7 +168,9 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
         case RID_SVXPAGE_ALIGNMENT:
         {
-            ((SvxAlignmentTabPage&)rTabPage).SetFlags(WBA_NO_ORIENTATION|WBA_NO_LINEBREAK|WBA_NO_GRIDLINES|WBA_NO_VERTICAL|WBA_NO_LEFTINDENT);
+            //CHINA001 ((SvxAlignmentTabPage&)rTabPage).SetFlags(WBA_NO_ORIENTATION|WBA_NO_LINEBREAK|WBA_NO_GRIDLINES|WBA_NO_VERTICAL|WBA_NO_LEFTINDENT);
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, WBA_NO_ORIENTATION|WBA_NO_LINEBREAK|WBA_NO_GRIDLINES|WBA_NO_VERTICAL|WBA_NO_LEFTINDENT));
+            rTabPage.PageCreated(aSet);
         }
         break;
 
