@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@ class SfxItemSet;
 class SwNodeIndex;
 class XMLTextImportHelper;
 
+// define, how many steps ( = paragraphs ) the progress bar should advance
+// for styles, autostyles and settings + meta
+#define PROGRESS_BAR_STEP 20
+
 class SwXMLImport: public SvXMLImport
 {
     SwNodeIndex             *pSttNdIdx;
@@ -103,8 +107,6 @@ class SwXMLImport: public SvXMLImport
     SvStorageRef            xPackage;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
-    sal_Int32               nProgress;
-    sal_Int32               nProgressRef;
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
     sal_Bool                bInsert : 1;    // Insert mode. If styles are
                                             // loaded only sal_False means that
@@ -112,16 +114,12 @@ class SwXMLImport: public SvXMLImport
                                             // overwritten.
     sal_Bool                bBlock : 1;     // Load text block
     sal_Bool                bAutoStylesValid : 1;
-    sal_Bool                bProgressValid : 1;
     sal_Bool                bShowProgress : 1;
     sal_Bool                bOrganizerMode : 1;
     sal_Bool                bPreserveRedlineMode;
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
-
-    void ShowProgress( sal_Int32 nPercent );
-    void SetProgressRef( sal_Int32 nParagraphs );
 
 protected:
 
@@ -219,6 +217,8 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
     SvStorage *GetPackage() { return &xPackage; }
+
+    void SetProgressValue( sal_Int32 nValue );
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
@@ -229,6 +229,12 @@ inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
 inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
 {
     return *pTableItemMapper;
+}
+
+inline void SwXMLImport::SetProgressValue( sal_Int32 nValue )
+{
+    if ( bShowProgress )
+        GetProgressBarHelper()->SetValue(nValue);
 }
 
 #endif  //  _XMLIMP_HXX

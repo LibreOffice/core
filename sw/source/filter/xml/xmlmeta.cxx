@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
+ *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,10 +268,19 @@ void SwXMLImport::SetStatisticAttributes(
         aDocStat.bModified = sal_False;
     if( nTokens )
         pDoc->SetDocStat( aDocStat );
+
+    // set progress bar reference to #paragraphs. If not available,
+    // use #pages*10, or guesstimate 250 paragraphs. Additionally
+    // guesstimate PROGRESS_BAR_STEPS each for meta+settings, styles,
+    // and autostyles.
+    sal_Int32 nProgressReference = 250;
     if( nTokens & XML_TOK_META_STAT_PARA )
-        SetProgressRef( (sal_Int32)aDocStat.nPara );
+        nProgressReference = (sal_Int32)aDocStat.nPara;
     else if ( nTokens & XML_TOK_META_STAT_PAGE )
-        SetProgressRef( (sal_Int32)aDocStat.nPage * 10 );
+        nProgressReference = 10 * (sal_Int32)aDocStat.nPage;
+    ProgressBarHelper* pProgress = GetProgressBarHelper();
+    pProgress->SetReference( nProgressReference + 3*PROGRESS_BAR_STEP );
+    pProgress->SetValue( 0 );
 }
 
 // ---------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-04 13:41:04 $
+ *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,10 +276,15 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
                                                              xAttrList );
         break;
     case XML_TOK_DOC_STYLES:
+        GetSwImport().SetProgressValue( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_False );
         break;
     case XML_TOK_DOC_AUTOSTYLES:
+        // don't use the autostyles from the styles-document for the progress
+        if ( ! GetLocalName().equalsAsciiL(sXML_document_styles,
+                                           sizeof(sXML_document_styles)-1) )
+            GetSwImport().SetProgressValue( 2 * PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_True );
         break;
@@ -298,6 +303,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         pContext = GetSwImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
+        GetSwImport().SetProgressValue( 3 * PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateBodyContext( rLocalName );
         break;
     case XML_TOK_DOC_SETTINGS:
@@ -354,10 +360,8 @@ SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
     pTableElemTokenMap( 0 ),
     pTableItemMapper( 0 ),
     pSttNdIdx( 0 ),
-    bProgressValid( sal_False ),
     bShowProgress( sal_True ),
-    bPreserveRedlineMode( sal_True ),
-    nProgress( 0 )
+    bPreserveRedlineMode( sal_True )
 {
     _InitItemImport();
 
@@ -380,10 +384,8 @@ SwXMLImport::SwXMLImport(
     pTableElemTokenMap( 0 ),
     pTableItemMapper( 0 ),
     pSttNdIdx( 0 ),
-    bProgressValid( sal_False ),
     bShowProgress( sal_True ),
     bPreserveRedlineMode( sal_True ),
-    nProgress( 0 ),
     xPackage( pPkg )
 {
     _InitItemImport();
@@ -928,41 +930,6 @@ void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue >
     }
 }
 
-void SwXMLImport::SetProgressRef( sal_Int32 nParagraphs )
-{
-    if( bShowProgress && !bProgressValid )
-    {
-        if( !nParagraphs )
-            nParagraphs = 250;  // We assume 250 paragarphs here
-
-        // We assume that
-        // - 5% are taken reading meta information and fonts
-        // - 5% are taken reading styles
-        // - 5% are taken reading automatic styles
-        // - 85% are taken reading the rest of the document
-        // The 85% correspond exactly to the number of paragarphs
-        // contained in the document
-        nProgressRef = (nParagraphs *100) / 85;
-        ProgressBarHelper *pProgress = GetProgressBarHelper();
-        if( pProgress )
-            pProgress->SetReference( nProgressRef );
-        bProgressValid = sal_True;
-    }
-}
-
-void SwXMLImport::ShowProgress( sal_Int32 nPercent )
-{
-    if( bShowProgress)
-    {
-        if( !bProgressValid )
-            SetProgressRef( 0 );
-
-        nProgress = nPercent * nProgressRef / 100;
-        ProgressBarHelper *pProgress = GetProgressBarHelper();
-        if( pProgress )
-            pProgress->SetValue( nProgress );
-    }
-}
 
 void SwXMLImport::initialize(
     const Sequence<Any>& aArguments )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-04 14:56:07 $
+ *  last change: $Author: dvo $ $Date: 2001-05-04 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,8 +1125,6 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
     else
         SetStyles( pContext );
 
-    ShowProgress( bAuto ? 10 : 5 );
-
     return pContext;
 }
 
@@ -1138,9 +1136,6 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
         new SwXMLMasterStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
                                           xAttrList );
     SetMasterStyles( pContext );
-
-    ShowProgress( 15 );
-    GetTextImport()->SetProgressValue( nProgress );
 
     return pContext;
 }
