@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-06 11:36:30 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _VCL_FONTCFG_HXX
+#include <fontcfg.hxx>
+#endif
 #define private public
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
