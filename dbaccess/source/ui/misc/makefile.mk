@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-26 12:08:48 $
+#   last change: $Author: fs $ $Date: 2001-05-10 12:18:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/datasourceconnector.obj		\
         $(SLO)$/documentautolinker.obj		\
         $(SLO)$/linkeddocuments.obj			\
         $(SLO)$/filenotation.obj			\
