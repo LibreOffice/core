@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: mba $ $Date: 2000-11-03 12:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <vcl/sound.hxx>
 #endif
 
+#include <vos/mutex.hxx>
+
+static ::vos::OMutex aMutex;
+
 //=========================================================================
 
 SfxCancelManager::SfxCancelManager( SfxCancelManager *pParent )
@@ -98,6 +102,7 @@ BOOL SfxCancelManager::CanCancel() const
 */
 
 {
+    ::vos::OGuard aGuard( aMutex );
     return _aJobs.Count() > 0 || ( _pParent && _pParent->CanCancel() );
 }
 
@@ -112,6 +117,7 @@ void SfxCancelManager::Cancel( BOOL bDeep )
 */
 
 {
+    ::vos::OGuard aGuard( aMutex );
     SfxCancelManagerWeak xWeak( this );
     for ( USHORT n = _aJobs.Count(); n-- && xWeak.Is(); )
         if ( n < _aJobs.Count() )
@@ -140,7 +146,10 @@ void SfxCancelManager::SFX_INSERT_CANCELLABLE( SfxCancellable *pJob )
     }
 #endif
 
+    ::vos::OClearableGuard aGuard( aMutex );
     _aJobs.C40_INSERT( SfxCancellable, pJob, _aJobs.Count() );
+
+    aGuard.clear();
     Broadcast( SfxSimpleHint( SFX_HINT_CANCELLABLE ) );
 }
 
@@ -158,18 +167,25 @@ void SfxCancelManager::SFX_REMOVE_CANCELLABLE( SfxCancellable *pJob )
 */
 
 {
+    ::vos::OClearableGuard aGuard( aMutex );
     const SfxCancellable *pTmp = pJob;
-    _aJobs.Remove( _aJobs.GetPos( pTmp ), 1 );
-    Broadcast( SfxSimpleHint( SFX_HINT_CANCELLABLE ) );
-    Broadcast( SfxCancelHint( pJob, SFXCANCELHINT_REMOVED ) );
+    USHORT nPos = _aJobs.GetPos( pTmp );
+    if ( nPos != 0xFFFF )
+    {
+        _aJobs.Remove( nPos , 1 );
+        aGuard.clear();
+        Broadcast( SfxSimpleHint( SFX_HINT_CANCELLABLE ) );
+        Broadcast( SfxCancelHint( pJob, SFXCANCELHINT_REMOVED ) );
+    }
 }
 
 //-------------------------------------------------------------------------
 
 SfxCancellable::~SfxCancellable()
 {
-    if ( _pMgr )
-        _pMgr->SFX_REMOVE_CANCELLABLE( this );
+    SfxCancelManager* pMgr = _pMgr;
+    if ( pMgr )
+        pMgr->SFX_REMOVE_CANCELLABLE( this );
 }
 
 //-------------------------------------------------------------------------
@@ -201,11 +217,12 @@ void SfxCancellable::Cancel()
 
 void SfxCancellable::SetManager( SfxCancelManager *pMgr )
 {
-    if ( _pMgr )
-        _pMgr->SFX_REMOVE_CANCELLABLE( this );
+    SfxCancelManager* pTmp = _pMgr;
+    if ( pTmp )
+        pTmp->SFX_REMOVE_CANCELLABLE( this );
     _pMgr = pMgr;
-    if ( _pMgr )
-        _pMgr->SFX_INSERT_CANCELLABLE( this );
+    if ( pMgr )
+        pMgr->SFX_INSERT_CANCELLABLE( this );
 }
 
 //-------------------------------------------------------------------------
