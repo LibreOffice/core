@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:38:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,7 @@ Resource RID_SW_ERRHDL
         TEXT[ dutch ] = "Dit is geen WinWord97 bestand";
         TEXT[ french ] = "Il ne s'agit pas d'un fichier WinWord97 !";
         TEXT[ spanish ] = "El archivo no es de WinWord97";
-        TEXT[ italian ] = "This isn't a WinWord97 file";
+        TEXT[ italian ] = "Il file non è nel formato WinWord97";
         TEXT[ danish ] = "Filen er ingen WinWord97-fil";
         TEXT[ swedish ] = "Filen är inte en WinWord97-fil";
         TEXT[ polish ] = "To nie jest plik WinWord97";
