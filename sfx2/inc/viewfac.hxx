@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfac.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:19:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef _VIEWFAC_HXX
 #define _VIEWFAC_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -77,7 +84,7 @@ typedef SfxViewShell* (*SfxViewCtor)(SfxViewFrame*, SfxViewShell*);
 typedef void (*SfxViewInit)();
 
 // CLASS -----------------------------------------------------------------
-class SfxViewFactory
+class SFX2_DLLPUBLIC SfxViewFactory
 {
 public:
     SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
