@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:32:28 $
+ *  last change: $Author: fs $ $Date: 2002-06-05 08:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
 #ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
 #endif
@@ -81,7 +84,6 @@ namespace dbaui
     class OTableBorderWindow : public Window
     {
         Splitter                            m_aHorzSplitter;
-        OTableController*                   m_pController;
         OTableFieldDescWin*                 m_pFieldDescWin;
         OTableEditorCtrl*                   m_pEditorCtrl;
 
@@ -113,6 +115,8 @@ namespace dbaui
         ::com::sun::star::lang::Locale      m_aLocale;
         OTableBorderWindow*                 m_pWin;
         OTableController*                   m_pController;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                                            m_xController;  // keep the target of m_pController alive
         ChildFocusState                     m_eChildFocus;
 
     protected:
@@ -131,8 +135,8 @@ namespace dbaui
         virtual long            PreNotify( NotifyEvent& rNEvt );
         virtual void            GetFocus();
 
-        OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin->GetEditorCtrl(); }
-        OTableFieldDescWin*     GetDescWin()    const { return m_pWin->GetDescWin(); }
+        OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
+        OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
         OTableController*       getController() const { return m_pController; }
 
         ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
