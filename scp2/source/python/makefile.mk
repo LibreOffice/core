@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:25:36 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:19:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ PARFILES=\
         module_python.par              \
         procedure_python.par           \
         profileitem_python.par         \
-        configurationitem_python.par   \
         starregistryitem_python.par    \
         file_python.par
 
