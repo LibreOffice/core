@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:00:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,20 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
 class Fraction;
 class OutputDevice;
 class Rectangle;
 class SfxBroadcaster;
 class SfxItemPoolCache;
 class SfxItemSet;
-class SfxListener;
+class SvtListener;
 class SfxPoolItem;
 class SfxStyleSheetBase;
 class SvxBorderLine;
@@ -93,7 +100,7 @@ class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 class ScPatternAttr;
 class ScStyleSheet;
-class ScBroadcasterList;
+class SvtBroadcaster;
 class TypedStrCollection;
 class ScProgress;
 struct ScFunctionData;
@@ -123,7 +130,7 @@ struct ScNeededSizeOptions
 
 struct ColEntry
 {
-    USHORT      nRow;
+    SCROW       nRow;
     ScBaseCell* pCell;
 };
 
@@ -133,11 +140,11 @@ class ScIndexMap;
 class ScColumn
 {
 private:
-    USHORT          nCol;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCTAB           nTab;
 
-    USHORT          nCount;
-    USHORT          nLimit;
+    SCSIZE          nCount;
+    SCSIZE          nLimit;
     ColEntry*       pItems;
 
     ScAttrArray*    pAttrArray;
@@ -161,27 +168,27 @@ public:
                 ScColumn();
                 ~ScColumn();
 
-    void        Init(USHORT nNewCol, USHORT nNewTab, ScDocument* pDoc);
+    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc);
 
-    BOOL        Search( USHORT nRow, USHORT& nIndex ) const;
-    ScBaseCell* GetCell( USHORT nRow ) const;
-    void        Insert( USHORT nRow, ScBaseCell* pCell );
-    void        Insert( USHORT nRow, ULONG nFormatIndex, ScBaseCell* pCell );
-    void        Append( USHORT nRow, ScBaseCell* pCell );
-    void        Delete( USHORT nRow );
-    void        DeleteAtIndex( USHORT nIndex );
+    BOOL        Search( SCROW nRow, SCSIZE& nIndex ) const;
+    ScBaseCell* GetCell( SCROW nRow ) const;
+    void        Insert( SCROW nRow, ScBaseCell* pCell );
+    void        Insert( SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell );
+    void        Append( SCROW nRow, ScBaseCell* pCell );
+    void        Delete( SCROW nRow );
+    void        DeleteAtIndex( SCSIZE nIndex );
     void        FreeAll();
-    void        Resize( USHORT nSize );
-    void        SetNewRow( USHORT nRow1, USHORT nRow2 );
-    void        SwapRow( USHORT nRow1, USHORT nRow2 );
-    void        SwapCell( USHORT nRow, ScColumn& rCol);
+    void        Resize( SCSIZE nSize );
+    void        SetNewRow( SCROW nRow1, SCROW nRow2 );
+    void        SwapRow( SCROW nRow1, SCROW nRow2 );
+    void        SwapCell( SCROW nRow, ScColumn& rCol);
 
-    BOOL        HasLines( USHORT nRow1, USHORT nRow2, Rectangle& rSizes,
+    BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                             BOOL bLeft, BOOL bRight ) const;
-    BOOL        HasAttrib( USHORT nRow1, USHORT nRow2, USHORT nMask ) const;
+    BOOL        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
-    BOOL        ExtendMerge( USHORT nThisCol, USHORT nStartRow, USHORT nEndRow,
-                                USHORT& rPaintCol, USHORT& rPaintRow,
+    BOOL        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
+                                SCCOL& rPaintCol, SCROW& rPaintRow,
                                 BOOL bRefresh, BOOL bAttrs );
 
     BOOL        IsEmptyVisData(BOOL bNotes) const;      // ohne Broadcaster
@@ -190,74 +197,74 @@ public:
     BOOL        IsEmpty() const;
 
                 // nur Daten:
-    BOOL        IsEmptyBlock(USHORT nStartRow, USHORT nEndRow) const;
-    USHORT      GetEmptyLinesInBlock( USHORT nStartRow, USHORT nEndRow, ScDirection eDir ) const;
-    BOOL        HasDataAt(USHORT nRow) const;
-    BOOL        HasVisibleDataAt(USHORT nRow) const;
-    USHORT      GetFirstDataPos() const;
-    USHORT      GetLastDataPos() const;
-    USHORT      GetLastVisDataPos(BOOL bNotes) const;               // ohne Broadcaster
-    USHORT      GetFirstVisDataPos(BOOL bNotes) const;
-    BOOL        GetPrevDataPos(USHORT& rRow) const;
-    BOOL        GetNextDataPos(USHORT& rRow) const;
-    void        FindDataAreaPos(USHORT& rRow, short nMovY) const;   // (ohne Broadcaster)
-    void        FindUsed( USHORT nStartRow, USHORT nEndRow, BOOL* pUsed ) const;
+    BOOL        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+    SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
+    BOOL        HasDataAt(SCROW nRow) const;
+    BOOL        HasVisibleDataAt(SCROW nRow) const;
+    SCROW       GetFirstDataPos() const;
+    SCROW       GetLastDataPos() const;
+    SCROW       GetLastVisDataPos(BOOL bNotes) const;               // ohne Broadcaster
+    SCROW       GetFirstVisDataPos(BOOL bNotes) const;
+    BOOL        GetPrevDataPos(SCROW& rRow) const;
+    BOOL        GetNextDataPos(SCROW& rRow) const;
+    void        FindDataAreaPos(SCROW& rRow, long nMovY) const; // (ohne Broadcaster)
+    void        FindUsed( SCROW nStartRow, SCROW nEndRow, BOOL* pUsed ) const;
 
-    USHORT      VisibleCount( USHORT nStartRow, USHORT nEndRow ) const;
+    SCSIZE      VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
 
-    USHORT      GetBlockMatrixEdges( USHORT nRow1, USHORT nRow2, USHORT nMask ) const;
+    USHORT      GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasSelectionMatrixFragment(const ScMarkData& rMark) const;
 
                 // Daten oder Attribute:
-    USHORT      GetFirstEntryPos() const;
-    USHORT      GetLastEntryPos() const;
+    SCROW       GetFirstEntryPos() const;
+    SCROW       GetLastEntryPos() const;
 
                 // nur Attribute:
-    USHORT      GetLastAttrPos() const;
-    BOOL        HasVisibleAttr( USHORT& rFirstRow, USHORT& rLastRow, BOOL bSkipFirst ) const;
-    BOOL        HasVisibleAttrIn( USHORT nStartRow, USHORT nEndRow ) const;
-    BOOL        IsVisibleAttrEqual( const ScColumn& rCol, USHORT nStartRow = 0,
-                                    USHORT nEndRow = MAXROW ) const;
-    BOOL        IsAllAttrEqual( const ScColumn& rCol, USHORT nStartRow, USHORT nEndRow ) const;
+    SCROW       GetLastAttrPos() const;
+    BOOL        HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const;
+    BOOL        HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
+    BOOL        IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow = 0,
+                                    SCROW nEndRow = MAXROW ) const;
+    BOOL        IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const;
 
-    BOOL        TestInsertCol( USHORT nStartRow, USHORT nEndRow) const;
-    BOOL        TestInsertRow( USHORT nSize ) const;
-    void        InsertRow( USHORT nStartRow, USHORT nSize );
-    void        DeleteRow( USHORT nStartRow, USHORT nSize );
-    void        DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFlag );
-    void        DeleteArea(USHORT nStartRow, USHORT nEndRow, USHORT nDelFlag );
-    void        CopyToClip(USHORT nRow1, USHORT nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags);
-    void        CopyFromClip(USHORT nRow1, USHORT nRow2, short nDy,
+    BOOL        TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
+    BOOL        TestInsertRow( SCSIZE nSize ) const;
+    void        InsertRow( SCROW nStartRow, SCSIZE nSize );
+    void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
+    void        DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFlag );
+    void        DeleteArea(SCROW nStartRow, SCROW nEndRow, USHORT nDelFlag );
+    void        CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags);
+    void        CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                                 USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScColumn& rColumn);
-    void        StartListeningInArea( USHORT nRow1, USHORT nRow2 );
-    void        BroadcastInArea( USHORT nRow1, USHORT nRow2 );
+    void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
+    void        BroadcastInArea( SCROW nRow1, SCROW nRow2 );
 
-    void        RemoveEditAttribs( USHORT nStartRow, USHORT nEndRow );
+    void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
 
                 //  Markierung von diesem Dokument
     void        MixMarked( const ScMarkData& rMark, USHORT nFunction,
                             BOOL bSkipEmpty, ScColumn& rSrcCol );
-    void        MixData( USHORT nRow1, USHORT nRow2, USHORT nFunction, BOOL bSkipEmpty,
+    void        MixData( SCROW nRow1, SCROW nRow2, USHORT nFunction, BOOL bSkipEmpty,
                             ScColumn& rSrcCol );
 
     ScFormulaCell*  CreateRefCell( ScDocument* pDestDoc, const ScAddress& rDestPos,
-                                    USHORT nIndex, USHORT nFlags ) const;
+                                    SCSIZE nIndex, USHORT nFlags ) const;
 
-    ScAttrIterator* CreateAttrIterator( USHORT nStartRow, USHORT nEndRow ) const;
+    ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
-    USHORT      GetCol() const { return nCol; }
+    SCCOL       GetCol() const { return nCol; }
 
                 //  UpdateSelectionFunction: Mehrfachselektion
     void        UpdateSelectionFunction( const ScMarkData& rMark,
                                     ScFunctionData& rData, const BYTE* pRowFlags,
-                                    BOOL bDoExclude, USHORT nExStartRow, USHORT nExEndRow );
+                                    BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow );
     void        UpdateAreaFunction( ScFunctionData& rData, BYTE* pRowFlags,
-                                    USHORT nStartRow, USHORT nEndRow );
+                                    SCROW nStartRow, SCROW nEndRow );
 
-    void        CopyToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMarked,
+    void        CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarked,
                                 ScColumn& rColumn, const ScMarkData* pMarkData = NULL,
                                 BOOL bAsLink = FALSE );
-    void        UndoToColumn(USHORT nRow1, USHORT nRow2, USHORT nFlags, BOOL bMarked,
+    void        UndoToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarked,
                                 ScColumn& rColumn, const ScMarkData* pMarkData = NULL );
 
     void        CopyScenarioFrom( const ScColumn& rSrcCol );
@@ -268,32 +275,32 @@ public:
     void        CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const;
 
     void        SwapCol(ScColumn& rCol);
-    void        MoveTo(USHORT nStartRow, USHORT nEndRow, ScColumn& rCol);
+    void        MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol);
 
-    BOOL        HasEditCells(USHORT nStartRow, USHORT nEndRow, USHORT& rFirst) const;
+    BOOL        HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const;
 
                 //  TRUE = Zahlformat gesetzt
-    BOOL        SetString( USHORT nRow, USHORT nTab, const String& rString );
-    void        SetValue( USHORT nRow, const double& rVal);
-    void        SetNote( USHORT nRow, const ScPostIt& rNote );
-    void        SetError( USHORT nRow, const USHORT nError);
+    BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString );
+    void        SetValue( SCROW nRow, const double& rVal);
+    void        SetNote( SCROW nRow, const ScPostIt& rNote );
+    void        SetError( SCROW nRow, const USHORT nError);
 
-    void        GetString( USHORT nRow, String& rString ) const;
-    void        GetInputString( USHORT nRow, String& rString ) const;
-    double      GetValue( USHORT nRow ) const;
-    void        GetFormula( USHORT nRow, String& rFormula,
+    void        GetString( SCROW nRow, String& rString ) const;
+    void        GetInputString( SCROW nRow, String& rString ) const;
+    double      GetValue( SCROW nRow ) const;
+    void        GetFormula( SCROW nRow, String& rFormula,
                             BOOL bAsciiExport = FALSE ) const;
-    BOOL        GetNote( USHORT nRow, ScPostIt& rNote ) const;
-    CellType    GetCellType( USHORT nRow ) const;
-    USHORT      GetCellCount() const { return nCount; }
-    long        GetWeightedCount() const;
+    BOOL        GetNote( SCROW nRow, ScPostIt& rNote ) const;
+    CellType    GetCellType( SCROW nRow ) const;
+    SCSIZE      GetCellCount() const { return nCount; }
+    ULONG       GetWeightedCount() const;
     ULONG       GetCodeCount() const;       // RPN-Code in Formeln
-    USHORT      GetErrCode( USHORT nRow ) const;
+    USHORT      GetErrCode( SCROW nRow ) const;
 
-    BOOL        HasStringData( USHORT nRow ) const;
-    BOOL        HasValueData( USHORT nRow ) const;
-    USHORT      GetErrorData(USHORT nCol) const;
-    BOOL        HasStringCells( USHORT nStartRow, USHORT nEndRow ) const;
+    BOOL        HasStringData( SCROW nRow ) const;
+    BOOL        HasValueData( SCROW nRow ) const;
+    USHORT      GetErrorData( SCROW nRow) const;
+    BOOL        HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
     void        SetDirty();
     void        SetDirty( const ScRange& );
@@ -305,77 +312,78 @@ public:
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
 
-    void        ResetChanged( USHORT nStartRow, USHORT nEndRow );
+    void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
-    void        UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                     USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                     short nDx, short nDy, short nDz,
+    void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                      ScDocument* pUndoDoc = NULL );
-    void        UpdateInsertTab( USHORT nTable);
-    void        UpdateInsertTabOnlyCells( USHORT nTable);
-    void        UpdateDeleteTab( USHORT nTable, BOOL bIsMove, ScColumn* pRefUndo = NULL );
-    void        UpdateMoveTab(USHORT nOldPos, USHORT nNewPos, USHORT nTabNo);
+    void        UpdateInsertTab( SCTAB nTable);
+    void        UpdateInsertTabOnlyCells( SCTAB nTable);
+    void        UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScColumn* pRefUndo = NULL );
+    void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void        UpdateCompile( BOOL bForceIfNameInUse = FALSE );
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc );
-    void        UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY );
+    void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void        SetTabNo(USHORT nNewTab);
-    BOOL        IsRangeNameInUse(USHORT nRow1, USHORT nRow2, USHORT nIndex) const;
-    void        ReplaceRangeNamesInUse( USHORT nRow1, USHORT nRow2, const ScIndexMap& rMap );
+    void        SetTabNo(SCTAB nNewTab);
+    BOOL        IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const;
+    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScIndexMap& rMap );
 
-    const SfxPoolItem*      GetAttr( USHORT nRow, USHORT nWhich ) const;
-    const ScPatternAttr*    GetPattern( USHORT nRow ) const;
-    ULONG       GetNumberFormat( USHORT nRow ) const;
+    const SfxPoolItem*      GetAttr( SCROW nRow, USHORT nWhich ) const;
+    const ScPatternAttr*    GetPattern( SCROW nRow ) const;
+    ULONG       GetNumberFormat( SCROW nRow ) const;
 
     void        MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMark, BOOL bDeep ) const;
-    void        MergePatternArea( SfxItemSet** ppSet, USHORT nRow1, USHORT nRow2, BOOL bDeep ) const;
+    void        MergePatternArea( SfxItemSet** ppSet, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const;
     void        MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                             ScLineFlags& rFlags,
-                            USHORT nStartRow, USHORT nEndRow, BOOL bLeft, USHORT nDistRight ) const;
+                            SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight ) const;
     void        ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            USHORT nStartRow, USHORT nEndRow, BOOL bLeft, USHORT nDistRight );
+                            SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight );
 
-    void        ApplyAttr( USHORT nRow, const SfxPoolItem& rAttr );
-    void        ApplyPattern( USHORT nRow, const ScPatternAttr& rPatAttr );
-    void        ApplyPatternArea( USHORT nStartRow, USHORT nEndRow, const ScPatternAttr& rPatAttr );
-    void        SetPattern( USHORT nRow, const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );
-    void        SetPatternArea( USHORT nStartRow, USHORT nEndRow,
+    void        ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr );
+    void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
+    void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr );
+    void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );
+    void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, BOOL bPutToPool = FALSE );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
 
-    void        ApplyStyle( USHORT nRow, const ScStyleSheet& rStyle );
-    void        ApplyStyleArea( USHORT nStartRow, USHORT nEndRow, const ScStyleSheet& rStyle );
+    void        ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle );
+    void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
                                     const SvxBorderLine* pLine, BOOL bColorOnly );
 
-    const ScStyleSheet* GetStyle( USHORT nRow ) const;
+    const ScStyleSheet* GetStyle( SCROW nRow ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, BOOL& rFound ) const;
-    const ScStyleSheet* GetAreaStyle( BOOL& rFound, USHORT nRow1, USHORT nRow2 ) const;
+    const ScStyleSheet* GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRow2 ) const;
 
     void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
     BOOL        IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
-    short       SearchStyle( short nRow, const ScStyleSheet* pSearchStyle,
+                /// May return -1 if not found
+    SCsROW      SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
                                 BOOL bUp, BOOL bInSelection, const ScMarkData& rMark );
-    BOOL        SearchStyleRange( short& rRow, short& rEndRow, const ScStyleSheet* pSearchStyle,
+    BOOL        SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
                                     BOOL bUp, BOOL bInSelection, const ScMarkData& rMark );
 
-    BOOL        ApplyFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags );
-    BOOL        RemoveFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags );
-    void        ClearItems( USHORT nStartRow, USHORT nEndRow, const USHORT* pWhich );
+    BOOL        ApplyFlags( SCROW nStartRow, SCROW nEndRow, INT16 nFlags );
+    BOOL        RemoveFlags( SCROW nStartRow, SCROW nEndRow, INT16 nFlags );
+    void        ClearItems( SCROW nStartRow, SCROW nEndRow, const USHORT* pWhich );
 
-    void        RemoveProtected( USHORT nStartRow, USHORT nEndRow );
+    void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    short       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark );
+    SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark );
     void        DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark );
 
     void        ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( BOOL bIncrement, const ScMarkData& rMark );
 
-    long        GetNeededSize( USHORT nRow, OutputDevice* pDev,
+    long        GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
                                     BOOL bWidth, const ScNeededSizeOptions& rOptions );
@@ -384,22 +392,23 @@ public:
                                     BOOL bFormula, USHORT nOldWidth,
                                     const ScMarkData* pMarkData,
                                     BOOL bSimpleTextImport );
-    void        GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeight,
+    void        GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    BOOL bShrink, USHORT nMinHeight, USHORT nMinStart );
+                                    BOOL bShrink, USHORT nMinHeight, SCROW nMinStart );
 private:
-    long        GetSimpleTextNeededSize( USHORT nIndex, OutputDevice* pDev,
+    long        GetSimpleTextNeededSize( SCSIZE nIndex, OutputDevice* pDev,
                                     BOOL bWidth );
 public:
 
-    short       GetNextUnprotected( short nRow, BOOL bUp ) const;   // inkl. aktuelle
+                /// Including current, may return -1
+    SCsROW      GetNextUnprotected( SCROW nRow, BOOL bUp ) const;
 
-    void        GetFilterEntries(USHORT nStartRow, USHORT nEndRow, TypedStrCollection& rStrings);
-    BOOL        GetDataEntries(USHORT nRow, TypedStrCollection& rStrings, BOOL bLimit);
+    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollection& rStrings);
+    BOOL        GetDataEntries(SCROW nRow, TypedStrCollection& rStrings, BOOL bLimit);
 
-    USHORT      NoteCount( USHORT nMaxRow = MAXROW ) const;
+    SCROW       NoteCount( SCROW nMaxRow = MAXROW ) const;
 
     void        LoadData( SvStream& rStream );
     void        SaveData( SvStream& rStream ) const;
@@ -409,15 +418,15 @@ public:
 
     BOOL        Load( SvStream& rStream, ScMultipleReadHeader& rHdr );
     BOOL        Save( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
-    void        UpdateInsertTabAbs(USHORT nNewPos);
-    BOOL        TestTabRefAbs(USHORT nTable);
-    BOOL        GetNextSpellingCell(USHORT& nRow, BOOL bInSel, const ScMarkData& rData) const;
+    void        UpdateInsertTabAbs(SCTAB nNewPos);
+    BOOL        TestTabRefAbs(SCTAB nTable);
+    BOOL        GetNextSpellingCell(SCROW& nRow, BOOL bInSel, const ScMarkData& rData) const;
 
     void        RemoveAutoSpellObj();
 
-    void        StartListening( SfxListener& rLst, USHORT nRow );
-    void        EndListening( SfxListener& rLst, USHORT nRow );
-    void        MoveListeners( ScBroadcasterList& rSource, USHORT nDestRow );
+    void        StartListening( SvtListener& rLst, SCROW nRow );
+    void        EndListening( SvtListener& rLst, SCROW nRow );
+    void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();
     void        StartNameListeners( BOOL bOnlyRelNames );
     void        SetRelNameDirty();
@@ -428,12 +437,12 @@ public:
     void        CompileColRowNameFormula();
 
     // maximale Stringlaengen einer Column, fuer z.B. dBase Export
-    xub_StrLen  GetMaxStringLen( USHORT nRowStart, USHORT nRowEnd ) const;
+    xub_StrLen  GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd ) const;
     xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
-                                    USHORT nRowStart, USHORT nRowEnd ) const;
+                                    SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
-    ScBaseCell* CloneCell(USHORT nIndex, USHORT nFlags,
+    ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags,
                             ScDocument* pDestDoc, const ScAddress& rDestPos);
     void        CorrectSymbolCells( CharSet eStreamCharSet );
 };
@@ -442,25 +451,25 @@ private:
 class ScColumnIterator                  // alle Daten eines Bereichs durchgehen
 {
     const ScColumn*     pColumn;
-    USHORT              nPos;
-    USHORT              nTop;
-    USHORT              nBottom;
+    SCSIZE              nPos;
+    SCROW               nTop;
+    SCROW               nBottom;
 public:
-                ScColumnIterator( const ScColumn* pCol, USHORT nStart=0, USHORT nEnd=MAXROW );
+                ScColumnIterator( const ScColumn* pCol, SCROW nStart=0, SCROW nEnd=MAXROW );
                 ~ScColumnIterator();
 
-    BOOL        Next( USHORT& rRow, ScBaseCell*& rpCell );
-    USHORT      GetIndex() const;
+    BOOL        Next( SCROW& rRow, ScBaseCell*& rpCell );
+    SCSIZE      GetIndex() const;
 };
 
 
 class ScMarkedDataIter                  // Daten in selektierten Bereichen durchgehen
 {
     const ScColumn*     pColumn;
-    USHORT              nPos;
+    SCSIZE              nPos;
     ScMarkArrayIter*    pMarkIter;
-    USHORT              nTop;
-    USHORT              nBottom;
+    SCROW               nTop;
+    SCROW               nBottom;
     BOOL                bNext;
     BOOL                bAll;
 
@@ -469,7 +478,7 @@ public:
                                     BOOL bAllIfNone = FALSE );
                 ~ScMarkedDataIter();
 
-    BOOL        Next( USHORT& rIndex );
+    BOOL        Next( SCSIZE& rIndex );
 };
 
 
