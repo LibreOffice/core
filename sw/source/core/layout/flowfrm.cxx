@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,54 +1478,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 {
     // OD 2004-03-10 #i11860# - use new method <GetPrevFrmForUpperSpaceCalc(..)>
     const SwFrm* pPrevFrm = _GetPrevFrmForUpperSpaceCalc( pPr );
-//    const SwFrm *pPre = pPr ? pPr : rThis.GetPrev();
-//    BOOL bInFtn = rThis.IsInFtn();
-//    do {
-//        while( pPre && ( (pPre->IsTxtFrm() && ((SwTxtFrm*)pPre)->IsHiddenNow())
-//               || ( pPre->IsSctFrm() && !((SwSectionFrm*)pPre)->GetSection() ) ) )
-//            pPre = pPre->GetPrev();
-//        if( !pPre && bInFtn )
-//        {
-//            bInFtn = FALSE;
-//            if( !rThis.IsInSct() || rThis.IsSctFrm() ||
-//                !rThis.FindSctFrm()->IsInFtn() )
-//                pPre = rThis.FindFtnFrm()->GetPrev();
-//            if( pPre )
-//            {
-//                pPre = ((SwFtnFrm*)pPre)->Lower();
-//                if( pPre )
-//                    while( pPre->GetNext() )
-//                        pPre = pPre->GetNext();
-//                continue;
-//            }
-//        }
-//        if( pPre && pPre->IsSctFrm() )
-//        {
-//            SwSectionFrm* pSect = (SwSectionFrm*)pPre;
-//            pPre = pSect->FindLastCntnt();
-//            // If the last content is in a table _inside_ the section,
-//            // take the table herself.
-//            // OD 2004-02-18 #106629# - correction:
-//            // Check directly, if table is inside table, instead of indirectly
-//            // by checking, if section isn't inside a table
-//            if ( pPre && pPre->IsInTab() )
-//            {
-//                const SwTabFrm* pTableFrm = pPre->FindTabFrm();
-//                if ( pSect->IsAnLower( pTableFrm ) )
-//                {
-//                    pPre = pTableFrm;
-//                }
-//            }
-//            // OD 2004-02-18 #106629# correction: skip hidden text frames
-//            while ( pPre &&
-//                    pPre->IsTxtFrm() &&
-//                    static_cast<const SwTxtFrm*>(pPre)->IsHiddenNow() )
-//            {
-//                pPre = pPre->GetPrev();
-//            }
-//        }
-//        break;
-//    } while( pPre );
 
     SwBorderAttrAccess *pAccess;
     SwFrm* pOwn;
@@ -1644,38 +1596,6 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     {
         nUpper += _GetUpperSpaceAmountConsideredForPageGrid( nUpper );
     }
-//    if ( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
-//    {
-//        const SwPageFrm* pPg = rThis.FindPageFrm();
-//        GETGRID( pPg )
-//        if( pGrid )
-//        {
-//            const SwFrm* pBody = pPg->FindBodyCont();
-//            if( pBody )
-//            {
-//                long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
-//                SWRECTFN( (&rThis) )
-//                SwTwips nOrig = (pBody->*fnRect->fnGetPrtTop)();
-//                SwTwips nTop = (rThis.Frm().*fnRect->fnGetTop)();
-//                if( bVert )
-//                {
-//                    nTop -= nUpper;
-//                    SwTwips nY = nOrig - nSum *( ( nOrig - nTop ) / nSum );
-//                    if( nY > nTop )
-//                        nY -= nSum;
-//                    nUpper = nTop + nUpper - nY;
-//                }
-//                else
-//                {
-//                    nTop += nUpper;
-//                    SwTwips nY = nOrig + nSum *( ( nTop - nOrig ) / nSum );
-//                    if( nY < nTop )
-//                        nY += nSum;
-//                    nUpper = nY - rThis.Frm().Top();
-//                }
-//            }
-//        }
-//    }
 
     delete pAccess;
     return nUpper;
@@ -1821,15 +1741,64 @@ SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
                   _pAttrs->GetBottomLine( rThis ) :
                   _pAttrs->CalcBottomLine();
 
-    if ( rThis.GetShell()->GetDoc()->IsAddParaSpacingToTableCells() &&
-         rThis.IsInTab() && !rThis.GetIndNext() )
+    // --> OD 2004-07-16 #i26250#
+    // - correct consideration of table frames
+    // - use new method <CalcAddLowerSpaceAsLastInTableCell(..)>
+    if ( ( ( rThis.IsTabFrm() && rThis.GetUpper()->IsInTab() ) ||
+           rThis.IsInTab() ) &&
+         !rThis.GetIndNext() )
     {
-        nLowerSpace += _pAttrs->GetULSpace().GetLower();
+        nLowerSpace += CalcAddLowerSpaceAsLastInTableCell( _pAttrs );
     }
+    // <--
 
     delete pAttrAccess;
 
     return nLowerSpace;
+}
+
+/** calculation of the additional space to be considered, if flow frame
+    is the last inside a table cell
+
+    OD 2004-07-16 #i26250#
+
+    @author OD
+*/
+SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
+                                            const SwBorderAttrs* _pAttrs ) const
+{
+    SwTwips nAdditionalLowerSpace = 0;
+
+    if ( rThis.GetShell()->GetDoc()->IsAddParaSpacingToTableCells() )
+    {
+        const SwFrm* pFrm = &rThis;
+        if ( pFrm->IsSctFrm() )
+        {
+            const SwSectionFrm* pSectFrm = static_cast<const SwSectionFrm*>(pFrm);
+            pFrm = pSectFrm->FindLastCntnt();
+            if ( pFrm && pFrm->IsInTab() )
+            {
+                const SwTabFrm* pTableFrm = pFrm->FindTabFrm();
+                if ( pSectFrm->IsAnLower( pTableFrm ) )
+                {
+                    pFrm = pTableFrm;
+                }
+            }
+        }
+
+        SwBorderAttrAccess* pAttrAccess = 0L;
+        if ( !_pAttrs || pFrm != &rThis )
+        {
+            pAttrAccess = new SwBorderAttrAccess( SwFrm::GetCache(), pFrm );
+            _pAttrs = pAttrAccess->Get();
+        }
+
+        nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+
+        delete pAttrAccess;
+    }
+
+    return nAdditionalLowerSpace;
 }
 
 /*************************************************************************
@@ -2018,8 +1987,21 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
 
         // First, we move the footnotes.
         BOOL bFtnMoved = FALSE;
-        // #i27145#
+
+        // --> FME 2004-04-19 #i27145#
         const bool bOldUpperValid = rThis.GetUpper()->IsValid();
+        // <--
+
+        // --> FME 2004-07-15 #i26831#
+        // If pSect has just been created, the printing area of pSect has
+        // been calculated based on the first content of its follow.
+        // In this case we prefer to call a SimpleFormat for this new
+        // section after we inserted the contents. Otherwise the section
+        // frame will invalidate its lowers, if its printing area changes
+        // in SwSectionFrm::Format, which can cause loops.
+        const bool bForceSimpleFormat = pSect && pSect->HasFollow() &&
+                                       !pSect->ContainsAny();
+        // <--
 
         if ( pNewBoss != pOldBoss )
         {
@@ -2045,26 +2027,38 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         // MoveSubTree bzw. PasteTree ist auf so etwas nicht vorbereitet.
         if( pNewUpper != rThis.GetUpper() )
         {
-            // #i27145#
+            // --> FME 2004-04-19 #i27145#
             SwSectionFrm* pOldSct = 0;
-            if ( rThis.GetUpper()->IsSctFrm() &&
-                 bOldUpperValid && !rThis.GetUpper()->IsValid() )
+            if ( rThis.GetUpper()->IsSctFrm() )
             {
-                pOldSct = (SwSectionFrm*)rThis.GetUpper();
+                pOldSct = static_cast<SwSectionFrm*>(rThis.GetUpper());
             }
+            // <--
 
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
 
-            if ( pOldSct )
+            // --> FME 2004-04-19 #i27145#
+            if ( pOldSct && pOldSct->GetSection() )
             {
-                // #i27145# Prevent loops by setting the new height at
+                // Prevent loops by setting the new height at
                 // the section frame if footnotes have been moved.
                 // Otherwise the call of SwLayNotify::~SwLayNotify() for
                 // the (invalid) section frame will invalidate the first
                 // lower of its follow, because it grows due to the removed
                 // footnotes.
+                // Note: If pOldSct has become empty during MoveSubTree, it
+                // has already been scheduled for removal. No SimpleFormat
+                // for these.
                 pOldSct->SimpleFormat();
             }
+            // <--
+
+            // --> FME 2004-07-15 #i26831#
+            if ( bForceSimpleFormat )
+            {
+                pSect->SimpleFormat();
+            }
+            // <--
 
             if ( bFtnMoved && !bSamePage )
             {
@@ -2332,7 +2326,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             }
             pIndNext = pIndNext->GetIndNext();
         }
-        ASSERT( pIndNext->ISA(SwTxtFrm) || pIndNext->ISA(SwTabFrm),
+        ASSERT( !pIndNext || pIndNext->ISA(SwTxtFrm) || pIndNext->ISA(SwTabFrm),
                 "<SwFlowFrm::MovedBwd(..)> - incorrect next found." );
         if ( pIndNext && pIndNext->IsFlowFrm() &&
              SwFlowFrm::CastFlowFrm(pIndNext)->IsJoinLocked() )
