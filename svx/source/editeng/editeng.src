@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:20:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ chinese_traditional ] = "è®ŠåŒ–å­—æ¯å’Œå­—å‹æ ¼å¼";
     TEXT[ turkish ] = "Koşul/Karakterler";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
-    TEXT[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
+    TEXT[ language_user1 ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
     TEXT[ catalan ] = "Majúscules/minúscules";
     TEXT[ finnish ] = "Muuta kirjainkoko";
     TEXT[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œ/à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
@@ -377,10 +377,10 @@ Menu RID_MENU_SPELL
             Text = "~Rechtschreibprüfung..." ;
             Text [ English ] = "~Spelling..." ;
             Text [ english_us ] = "~Spellcheck..." ;
-            Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
+            Text[ language_user1 ] = "; triple dots (...) are required now at the end of the text";
             Text[ portuguese ] = "Or~tografia";
             Text[ russian ] = "~Ïğîâåğêà îğôîãğàôèè";
-            Text[ greek ] = "Ï~ñèïãñáößá";
+            Text[ greek ] = "Ïñèïãñáöéêüò İëåã÷ïò";
             Text[ dutch ] = "~Spellingcontrole";
             Text[ french ] = "~Vérification orthographique...";
             Text[ spanish ] = "~Revisión ortográfica...";
@@ -501,7 +501,7 @@ Menu RID_MENU_SPELL
             Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
             Text[ dutch ] = "~AutoCorrectie";
             Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
-            Text[ greek ] = "Áõôï~Äéüñèùóç";
+            Text[ greek ] = "Áõôüìáôç ~Äéüñèùóç";
             Text[ korean ] = "ìë™ ìˆ˜ì •";
             Text[ turkish ] = "Otomatik düzeltme";
             Text[ catalan ] = "Auto~correcció";
@@ -532,7 +532,7 @@ String RID_STR_WORD
     Text[ danish ] = "Word is %x";
     Text[ swedish ] = "Ordet är %x";
     Text[ polish ] = "Word is %x";
-    Text[ portuguese_brazilian ] = "Word is %x";
+    Text[ portuguese_brazilian ] = "Palavra %x";
     Text[ japanese ] = "å˜èªã¯ %x";
     Text[ korean ] = "ë‹¨ì–´ëŠ” %x";
     Text[ chinese_simplified ] = "å•è¯æ˜¯ %x";
@@ -563,7 +563,7 @@ String RID_STR_PARAGRAPH
     Text[ danish ] = "Paragraph is %x";
     Text[ swedish ] = "Stycket är %x";
     Text[ polish ] = "Paragraph is %x";
-    Text[ portuguese_brazilian ] = "Paragraph is %x";
+    Text[ portuguese_brazilian ] = "Parágrafo %x";
     Text[ japanese ] = "æ®µè½ã¯ %x";
     Text[ korean ] = "ë‹¨ë½ì€ %x";
     Text[ chinese_simplified ] = "æ®µè½æ˜¯ %x";
@@ -577,6 +577,7 @@ String RID_STR_PARAGRAPH
     Text[ hindi ] = "Paragraph is %x";
     Text[ slovak ] = "Odstavec je %x";
 };
+
 
 
 
