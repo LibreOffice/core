@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:44:04 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,16 @@
 #ifndef _COM_SUN_STAR_EMBED_EMBEDUPDATEMODES_HPP_
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XINPLACECLIENT_HPP_
+#include <com/sun/star/embed/XInplaceClient.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
 #include <cppuhelper/typeprovider.hxx>
@@ -86,11 +93,13 @@
 
 using namespace ::com::sun::star;
 
+
+uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
+                                                            sal_Bool bCanUseDocumentBaseURL );
+
 //------------------------------------------------------
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
-                                                const uno::Sequence< sal_Int8 >& aClassID,
-                                                const ::rtl::OUString& aClassName,
-                                                const ::rtl::OUString& aDocServiceName )
+                                                const uno::Sequence< beans::NamedValue >& aObjProps )
 : m_pDocHolder( NULL )
 , m_pInterfaceContainer( NULL )
 , m_bReadOnly( sal_False )
@@ -99,25 +108,19 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_nObjectState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
-, m_aClassID( aClassID )
-, m_aClassName( aClassName )
-, m_aDocServiceName( aDocServiceName )
-, m_aAcceptedStates( NUM_SUPPORTED_STATES )
-, m_aVerbTable( NUM_SUPPORTED_VERBS )
+, m_nMiscStatus( 0 )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_False )
 {
-    CommonInit_Impl();
+    CommonInit_Impl( aObjProps );
 }
 
 //------------------------------------------------------
 OCommonEmbeddedObject::OCommonEmbeddedObject(
         const uno::Reference< lang::XMultiServiceFactory >& xFactory,
-        const uno::Sequence< sal_Int8 >& aClassID,
-        const ::rtl::OUString& aClassName,
-        const ::rtl::OUString& aDocServiceName,
-        const ::rtl::OUString& aLinkFilterName,
-        const ::rtl::OUString& aLinkURL )
+        const uno::Sequence< beans::NamedValue >& aObjProps,
+        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const uno::Sequence< beans::PropertyValue >& aObjectDescr )
 : m_pDocHolder( NULL )
 , m_pInterfaceContainer( NULL )
 , m_bReadOnly( sal_False )
@@ -126,24 +129,16 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_nObjectState( embed::EmbedStates::LOADED )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
-, m_aClassID( aClassID )
-, m_aClassName( aClassName )
-, m_aDocServiceName( aDocServiceName )
-, m_aAcceptedStates( NUM_SUPPORTED_STATES )
-, m_aVerbTable( NUM_SUPPORTED_VERBS )
+, m_nMiscStatus( 0 )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_True )
-, m_aLinkFilterName( aLinkFilterName )
-, m_aLinkURL( aLinkURL )
 {
-    OSL_ENSURE( m_aLinkURL.getLength(), "The link for linked object must not be empty!\n" );
-
-    // linked object has no persistence so it is in loaded state starting from creation
-    CommonInit_Impl();
+    // linked object has no own persistence so it is in loaded state starting from creation
+    LinkInit_Impl( aObjProps, aMediaDescr, aObjectDescr );
 }
 
 //------------------------------------------------------
-void OCommonEmbeddedObject::CommonInit_Impl()
+void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedValue >& aObjectProps )
 {
     OSL_ENSURE( m_xFactory.is(), "No ServiceFactory is provided!\n" );
     if ( !m_xFactory.is() )
@@ -152,30 +147,149 @@ void OCommonEmbeddedObject::CommonInit_Impl()
     m_pDocHolder = new DocumentHolder( m_xFactory, this );
     m_pDocHolder->acquire();
 
+    // parse configuration entries
+    // TODO/LATER: in future UI names can be also provided here
+    for ( sal_Int32 nInd = 0; nInd < aObjectProps.getLength(); nInd++ )
+    {
+        if ( aObjectProps[nInd].Name.equalsAscii( "ClassID" ) )
+            aObjectProps[nInd].Value >>= m_aClassID;
+        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentServiceName" ) )
+            aObjectProps[nInd].Value >>= m_aDocServiceName;
+        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectMiscStatus" ) )
+            aObjectProps[nInd].Value >>= m_nMiscStatus;
+        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectVerbs" ) )
+            aObjectProps[nInd].Value >>= m_aObjectVerbs;
+    }
+
+    if ( m_aClassID.getLength() != 16 || !m_aDocServiceName.getLength() )
+        throw uno::RuntimeException(); // something goes really wrong
+
     // accepted states
+    m_aAcceptedStates.realloc( NUM_SUPPORTED_STATES );
+
     m_aAcceptedStates[0] = embed::EmbedStates::LOADED;
     m_aAcceptedStates[1] = embed::EmbedStates::RUNNING;
-    m_aAcceptedStates[2] = embed::EmbedStates::ACTIVE;
+    m_aAcceptedStates[2] = embed::EmbedStates::INPLACE_ACTIVE;
+    m_aAcceptedStates[3] = embed::EmbedStates::UI_ACTIVE;
+    m_aAcceptedStates[4] = embed::EmbedStates::ACTIVE;
+
 
     // intermediate states
+    // In the following table the first index points to starting state,
+    // the second one to the target state, and the sequence referenced by
+    // first two indexes contains intermediate states, that should be
+    // passed by object to reach the target state.
+    // If the sequence is empty that means that indirect switch from start
+    // state to the target state is forbidden, only if direct switch is possible
+    // the state can be reached.
+
     m_pIntermediateStatesSeqs[0][2].realloc( 1 );
     m_pIntermediateStatesSeqs[0][2][0] = embed::EmbedStates::RUNNING;
+
+    m_pIntermediateStatesSeqs[0][3].realloc( 2 );
+    m_pIntermediateStatesSeqs[0][3][0] = embed::EmbedStates::RUNNING;
+    m_pIntermediateStatesSeqs[0][3][1] = embed::EmbedStates::INPLACE_ACTIVE;
+
+    m_pIntermediateStatesSeqs[0][4].realloc( 1 );
+    m_pIntermediateStatesSeqs[0][4][0] = embed::EmbedStates::RUNNING;
+
+    m_pIntermediateStatesSeqs[1][3].realloc( 1 );
+    m_pIntermediateStatesSeqs[1][3][0] = embed::EmbedStates::INPLACE_ACTIVE;
 
     m_pIntermediateStatesSeqs[2][0].realloc( 1 );
     m_pIntermediateStatesSeqs[2][0][0] = embed::EmbedStates::RUNNING;
 
+    m_pIntermediateStatesSeqs[3][0].realloc( 2 );
+    m_pIntermediateStatesSeqs[3][0][0] = embed::EmbedStates::INPLACE_ACTIVE;
+    m_pIntermediateStatesSeqs[3][0][1] = embed::EmbedStates::RUNNING;
+
+    m_pIntermediateStatesSeqs[3][1].realloc( 1 );
+    m_pIntermediateStatesSeqs[3][1][0] = embed::EmbedStates::INPLACE_ACTIVE;
+
+    m_pIntermediateStatesSeqs[4][0].realloc( 1 );
+    m_pIntermediateStatesSeqs[4][0][0] = embed::EmbedStates::RUNNING;
+
     // verbs table
-    m_aVerbTable[0].realloc( 2 );
-    m_aVerbTable[0][0] = embed::EmbedVerbs::MS_OLEVERB_PRIMARY;
-    m_aVerbTable[0][1] = embed::EmbedStates::ACTIVE;
+    sal_Int32 nVerbTableSize = 0;
+    for ( sal_Int32 nVerbInd = 0; nVerbInd < m_aObjectVerbs.getLength(); nVerbInd++ )
+    {
+        if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_PRIMARY )
+        {
+            m_aVerbTable.realloc( ++nVerbTableSize );
+            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
+            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
+            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::UI_ACTIVE;
+        }
+        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_SHOW )
+        {
+            m_aVerbTable.realloc( ++nVerbTableSize );
+            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
+            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
+            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::UI_ACTIVE;
+        }
+        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
+        {
+            m_aVerbTable.realloc( ++nVerbTableSize );
+            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
+            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
+            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::ACTIVE;
+        }
+        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_IPACTIVATE )
+        {
+            m_aVerbTable.realloc( ++nVerbTableSize );
+            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
+            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
+            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::INPLACE_ACTIVE;
+        }
+        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_UIACTIVATE )
+        {
+            m_aVerbTable.realloc( ++nVerbTableSize );
+            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
+            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
+            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::UI_ACTIVE;
+        }
+        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_HIDE )
+        {
+            m_aVerbTable.realloc( ++nVerbTableSize );
+            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
+            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
+            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::RUNNING;
+        }
+    }
+}
 
-    m_aVerbTable[1].realloc( 2 );
-    m_aVerbTable[1][0] = embed::EmbedVerbs::MS_OLEVERB_SHOW;
-    m_aVerbTable[1][1] = embed::EmbedStates::ACTIVE;
+//------------------------------------------------------
+void OCommonEmbeddedObject::LinkInit_Impl(
+                                const uno::Sequence< beans::NamedValue >& aObjectProps,
+                                const uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                const uno::Sequence< beans::PropertyValue >& aObjectDescr )
+{
+    // setPersistance has no effect on own links, so the complete initialization must be done here
 
-    m_aVerbTable[2].realloc( 2 );
-    m_aVerbTable[2][0] = embed::EmbedVerbs::MS_OLEVERB_OPEN;
-    m_aVerbTable[2][1] = embed::EmbedStates::ACTIVE;
+    sal_Bool bIsIFrame = sal_False;
+
+    for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
+        if ( aMediaDescr[nInd].Name.equalsAscii( "URL" ) )
+            aMediaDescr[nInd].Value >>= m_aLinkURL;
+        else if ( aMediaDescr[nInd].Name.equalsAscii( "FilterName" ) )
+            aMediaDescr[nInd].Value >>= m_aLinkFilterName;
+
+    OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!\n" );
+
+    m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, sal_False );
+
+    uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
+    for ( sal_Int32 nObjInd = 0; nObjInd < aObjectDescr.getLength(); nObjInd++ )
+        if ( aObjectDescr[nObjInd].Name.equalsAscii( "OutplaceDispatchInterceptor" ) )
+        {
+            aObjectDescr[nObjInd].Value >>= xDispatchInterceptor;
+            break;
+        }
+
+    CommonInit_Impl( aObjectProps );
+
+    if ( xDispatchInterceptor.is() )
+        m_pDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
 }
 
 //------------------------------------------------------
@@ -215,7 +329,32 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
 }
 
 //------------------------------------------------------
-void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
+void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
+{
+    // the method is called in case object is inplace active and the object window was resized
+
+    OSL_ENSURE( m_xClientSite.is(), "The client site must be set for inplace active object!\n" );
+    if ( m_xClientSite.is() )
+    {
+        uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
+
+        OSL_ENSURE( xInplaceClient.is(), "The client site must support XInplaceClient to allow inplace activation!\n" );
+        if ( xInplaceClient.is() )
+        {
+            try {
+                xInplaceClient->changedPlacement( aRect );
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Exception on request to resize!\n" );
+            }
+        }
+    }
+}
+
+//------------------------------------------------------
+void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
+                                            const uno::Reference< uno::XInterface >& xSource )
 {
     if ( m_pInterfaceContainer )
     {
@@ -223,7 +362,12 @@ void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
                                             ::getCppuType((const uno::Reference< document::XEventListener >*)0) );
         if( pIC )
         {
-            document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
+            document::EventObject aEvent;
+            aEvent.EventName = aEventName;
+            aEvent.Source = uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) );
+            // For now all the events are sent as object events
+            // aEvent.Source = ( xSource.is() ? xSource
+            //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
             ::cppu::OInterfaceIteratorHelper aIt( *pIC );
             while( aIt.hasMoreElements() )
             {
@@ -246,16 +390,18 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
 {
     uno::Any aReturn;
 
-    aReturn <<= ::cppu::queryInterface( rType,
-                                        static_cast< embed::XEmbeddedObject* >( this ),
-                                        static_cast< embed::XStateChangeBroadcaster* >( this ),
-                                        static_cast< embed::XVisualObject* >( this ),
-                                        static_cast< embed::XEmbedPersist* >( this ),
-                                        static_cast< embed::XLinkageSupport* >( this ),
-                                        static_cast< embed::XClassifiedObject* >( this ),
-                                        static_cast< embed::XComponentSupplier* >( this ),
-                                        static_cast< util::XCloseable* >( this ),
-                                        static_cast< document::XEventBroadcaster* >( this ) );
+    aReturn <<= ::cppu::queryInterface(
+                    rType,
+                    static_cast< embed::XEmbeddedObject* >( this ),
+                    static_cast< embed::XInplaceObject* >( this ),
+                    static_cast< embed::XVisualObject* >( this ),
+                    static_cast< embed::XCommonEmbedPersist* >( static_cast< embed::XEmbedPersist* >( this ) ),
+                    static_cast< embed::XEmbedPersist* >( this ),
+                    static_cast< embed::XLinkageSupport* >( this ),
+                    static_cast< embed::XClassifiedObject* >( this ),
+                    static_cast< embed::XComponentSupplier* >( this ),
+                    static_cast< util::XCloseable* >( this ),
+                    static_cast< document::XEventBroadcaster* >( this ) );
 
     if ( aReturn.hasValue() )
         return aReturn;
@@ -289,18 +435,28 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pTypeCollection )
         {
-            static ::cppu::OTypeCollection aTypeCollection(
-                                        ::getCppuType( (const uno::Reference< lang::XTypeProvider >*)NULL ),
-                                        ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
-                                        // ::getCppuType( (const uno::Reference< embed::XVisualObject >*)NULL ),
-                                        ::getCppuType( (const uno::Reference< embed::XEmbedPersist >*)NULL ),
-                                        ::getCppuType( (const uno::Reference< embed::XLinkageSupport >*)NULL ) );
-                                        // ::getCppuType( (const uno::Reference< embed::XClassifiedObject >*)NULL ),
-                                        // ::getCppuType( (const uno::Reference< embed::XComponentSupplier >*)NULL ),
-                                        // ::getCppuType( (const uno::Reference< util::XCloseable >*)NULL ),
-                                        // ::getCppuType( (const uno::Reference< document::XEventBroadcaster >*)NULL ) );
+            if ( m_bIsLink )
+            {
+                static ::cppu::OTypeCollection aTypeCollection(
+                                            ::getCppuType( (const uno::Reference< lang::XTypeProvider >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XCommonEmbedPersist >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XLinkageSupport >*)NULL ) );
 
-            pTypeCollection = &aTypeCollection ;
+                pTypeCollection = &aTypeCollection ;
+            }
+            else
+            {
+                   static ::cppu::OTypeCollection aTypeCollection(
+                                            ::getCppuType( (const uno::Reference< lang::XTypeProvider >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XCommonEmbedPersist >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< embed::XEmbedPersist >*)NULL ) );
+
+                pTypeCollection = &aTypeCollection ;
+            }
         }
     }
 
@@ -380,7 +536,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    return uno::Reference< util::XCloseable >( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    return uno::Reference< util::XCloseable >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
 }
 
 //----------------------------------------------
