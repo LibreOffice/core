@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:41:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "O valor da cÈlula È" ; Default ; > ;
-            < "A fÛrmula È" ; Default ; > ;
+            < "O valor È" ; Default ; > ;
+            < "A formula È" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -298,13 +298,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         stringlist [ portuguese_brazilian ] =
         {
             < "igual a" ; Default ; > ;
-            < "menor do que" ; Default ; > ;
-            < "maior do que" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "maior que" ; Default ; > ;
             < "menor ou igual a" ; Default ; > ;
             < "maior ou igual a" ; Default ; > ;
-            < "diferente de" ; Default ; > ;
+            < "diferente" ; Default ; > ;
             < "entre" ; Default ; > ;
-            < "n„o est· entre" ; Default ; > ;
+            < "n„o incluso em" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -703,7 +703,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ greek ] = "”Ù~ıÎ ÍÂÎÈÔ˝";
         Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº(~C)";
         Text[ turkish ] = "~H¸cre BiÁemi";
-        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estil de la cel.la";
         Text[ finnish ] = "Solun tyyli";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
@@ -789,8 +789,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "O valor da cÈlula È" ; Default ; > ;
-            < "A fÛrmula È" ; Default ; > ;
+            < "O valor È" ; Default ; > ;
+            < "A formula È" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -953,13 +953,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         stringlist [ portuguese_brazilian ] =
         {
             < "igual a" ; Default ; > ;
-            < "menor do que" ; Default ; > ;
-            < "maior do que" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "maior que" ; Default ; > ;
             < "menor ou igual a" ; Default ; > ;
             < "maior ou igual a" ; Default ; > ;
-            < "diferente de" ; Default ; > ;
+            < "diferente" ; Default ; > ;
             < "entre" ; Default ; > ;
-            < "n„o est· entre" ; Default ; > ;
+            < "n„o incluso em" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -1358,7 +1358,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ greek ] = "”ÙıÎ Í~ÂÎÈÔ˝";
         Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº(~E)";
         Text[ turkish ] = "H¸cre BiÁemi";
-        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estil de la cel.la";
         Text[ finnish ] = "Solun tyyli";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
@@ -1444,8 +1444,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "O valor da cÈlula È" ; Default ; > ;
-            < "A fÛrmula È" ; Default ; > ;
+            < "O valor È" ; Default ; > ;
+            < "A formula È" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -1608,13 +1608,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         stringlist [ portuguese_brazilian ] =
         {
             < "igual a" ; Default ; > ;
-            < "menor do que" ; Default ; > ;
-            < "maior do que" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "maior que" ; Default ; > ;
             < "menor ou igual a" ; Default ; > ;
             < "maior ou igual a" ; Default ; > ;
-            < "diferente de" ; Default ; > ;
+            < "diferente" ; Default ; > ;
             < "entre" ; Default ; > ;
-            < "n„o est· entre" ; Default ; > ;
+            < "n„o incluso em" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -2013,7 +2013,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ greek ] = "”ÙıÎ ÍÂ~ÎÈÔ˝";
         Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº(~L)";
         Text[ turkish ] = "H¸cre BiÁemi";
-        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estil de la cel.la";
         Text[ finnish ] = "Solun tyyli";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
@@ -2077,6 +2077,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ hindi ] = "‡§∂‡§∞‡•ç‡§§ ‡§ï‡•á ‡§Ö‡§®‡•ç‡§§‡§∞‡•ç‡§ó‡§§ ‡§∞‡§ö‡§®‡§æ";
     Text[ slovak ] = "Podmienen√© form√°tovanie";
 };
+
 
 
 
