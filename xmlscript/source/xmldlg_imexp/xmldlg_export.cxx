@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:11:27 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,17 +1005,25 @@ void ElementDescriptor::readEvents()
                                 descr.AddListenerParam );
                         }
                     }
-
-                    // separate optional location
-                    sal_Int32 nIndex = descr.ScriptCode.indexOf( (sal_Unicode)':' );
-                    if (nIndex >= 0)
+                    if ( descr.ScriptType.equals( OUString(  RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ) ) )
                     {
-                        pElem->addAttribute(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":location") ),
-                            descr.ScriptCode.copy( 0, nIndex ) );
-                        pElem->addAttribute(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":macro-name") ),
-                            descr.ScriptCode.copy( nIndex +1 ) );
+                        // separate optional location
+                        sal_Int32 nIndex = descr.ScriptCode.indexOf( (sal_Unicode)':' );
+                        if (nIndex >= 0)
+                        {
+                            pElem->addAttribute(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":location") ),
+                                descr.ScriptCode.copy( 0, nIndex ) );
+                            pElem->addAttribute(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":macro-name") ),
+                                descr.ScriptCode.copy( nIndex +1 ) );
+                        }
+                        else
+                        {
+                            pElem->addAttribute(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":macro-name") ),
+                                descr.ScriptCode );
+                        }
                     }
                     else
                     {
