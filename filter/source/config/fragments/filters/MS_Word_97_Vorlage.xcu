@@ -1,15 +1,10 @@
     <node oor:name="MS Word 97 Vorlage" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CWW8</value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_Word_97_Vorlage</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>CWW8</value></prop>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value xml:lang="de">Microsoft Word 97/2000/XP Vorlage</value>
-            <value xml:lang="en-US">Microsoft Word 97/2000/XP Template</value>
-            <value xml:lang="x-translate">Microsoft Word 97/2000/XP Template</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
     </node>
