@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:33:11 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <stdlib.h>
 
@@ -525,7 +526,7 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
         return NF_KEY_GENERAL;
     //! MUST be a reverse search to find longer strings first
     short i = NF_KEYWORD_ENTRIES_COUNT-1;
-    BOOL bFound;
+    BOOL bFound = FALSE;
     while ( i > NF_KEY_LASTKEYWORD_SO5 && !(bFound = (sString.Search(pKeyword[i]) == 0)) )
         i--;
     // new keywords take precedence over old keywords
@@ -606,7 +607,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
         InitKeywords();
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const xub_StrLen nStart = nPos;
-    short eType;
+    short eType = 0;
     ScanState eState = SsStart;
     sSymbol.Erase();
     while ( nPos < rStr.Len() && eState != SsStop )
