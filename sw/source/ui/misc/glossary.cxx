@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:38:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,15 +96,12 @@
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
-#ifndef _SVX_MULTIPAT_HXX //autogen
-#include <svx/multipat.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
+//CHINA001 #ifndef _SVX_MULTIPAT_HXX //autogen
+//CHINA001 #include <svx/multipat.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+#include <svx/acorrcfg.hxx>
 
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
@@ -386,7 +383,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aNameED.SetMaxTextLen(LONG_LENGTH);
     FreeResource();
 
-    const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
 
     aShowExampleCB.Check( pCfg->IsAutoTextPreview());
     ShowPreviewHdl(&aShowExampleCB);
@@ -411,7 +408,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
-    OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
     pCfg->SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
 
     aCategoryBox.Clear();
@@ -967,7 +964,7 @@ void SwGlossaryDlg::Init()
     aCategoryBox.SetUpdateMode( sal_True );
     aCategoryBox.Update();
 
-    const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
     aFileRelCB.Check( pCfg->IsSaveRelFile() );
     aFileRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
     aNetRelCB.Check( pCfg->IsSaveRelNet() );
@@ -1044,7 +1041,7 @@ IMPL_LINK( SwNewGlosNameDlg, Rename, Button *, EMPTYARG )
 
 IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 {
-    OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
     sal_Bool bCheck = pBox->IsChecked();
     if( pBox == &aInsertTipCB )
         pCfg->SetAutoTextTip(bCheck);
@@ -1304,21 +1301,27 @@ String SwGlossaryDlg::GetCurrGrpName() const
 --------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
 {
-    SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pBtn);
-    SvtPathOptions aPathOpt;
-    String sGlosPath( aPathOpt.GetAutoTextPath() );
-    pDlg->SetPath(sGlosPath);
-    if(RET_OK == pDlg->Execute())
+    //CHINA001 SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pBtn);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
     {
-        String sTmp(pDlg->GetPath());
-        if(sTmp != sGlosPath)
+        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, ResId(RID_SVXDLG_MULTIPATH) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        SvtPathOptions aPathOpt;
+        String sGlosPath( aPathOpt.GetAutoTextPath() );
+        pDlg->SetPath(sGlosPath);
+        if(RET_OK == pDlg->Execute())
         {
-            aPathOpt.SetAutoTextPath( sTmp );
-            ::GetGlossaries()->UpdateGlosPath( sal_True );
-            Init();
+            String sTmp(pDlg->GetPath());
+            if(sTmp != sGlosPath)
+            {
+                aPathOpt.SetAutoTextPath( sTmp );
+                ::GetGlossaries()->UpdateGlosPath( sal_True );
+                Init();
+            }
         }
+        delete pDlg;
     }
-    delete pDlg;
     return 0;
 }
 /* -----------------28.07.99 13:48-------------------
