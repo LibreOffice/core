@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-09-19 14:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -154,10 +154,6 @@
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
 #endif
 
 #ifndef _SFX_OBJSH_HXX //autogen
@@ -644,7 +640,7 @@ void FmFormShell::SetDesignMode(sal_Bool bDesign)
         UIFeatureChanged();
     }
 
-    SFX_BINDINGS().Invalidate(ControllerSlotMap);
+    GetViewShell()->GetViewFrame()->GetBindings().Invalidate(ControllerSlotMap);
 }
 
 //------------------------------------------------------------------------
@@ -709,7 +705,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_PATTERNFIELD:
         case SID_FM_FORMATTEDFIELD:
             m_nLastSlot = nSlot;
-            SFX_BINDINGS().Invalidate( SID_FM_CONFIG );
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             break;
         case SID_FM_DESIGN_MODE:    // gibt es was zu tun?
         {
@@ -722,7 +718,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if (!pDesignItem || pDesignItem->GetValue() != m_bDesignMode)
             {
                 m_nLastSlot = nSlot;
-                SFX_BINDINGS().Invalidate( SID_FM_CONFIG );
+                GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             }
             else
             {
@@ -855,7 +851,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_LEAVE_CREATE:
             m_nLastSlot = 0;
-            SFX_BINDINGS().Invalidate( SID_FM_CONFIG );
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_FM_CONFIG );
             rReq.Done();
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
@@ -947,13 +943,13 @@ void FmFormShell::Execute(SfxRequest &rReq)
             DBG_ASSERT(pModel, "FmFormShell::Execute : ungueltiger Aufruf !");
                 // der Slot sollte in GetState disabled worden sein, wenn ich kein FormModel habe
             pModel->SetOpenInDesignMode( !pModel->GetOpenInDesignMode() );
-            SFX_BINDINGS().Invalidate(SID_FM_OPEN_READONLY);
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
         }
         break;
         case SID_FM_USE_WIZARDS:
         {
             GetImpl()->SetWizardUsing(!GetImpl()->GetWizardUsing());
-            SFX_BINDINGS().Invalidate(SID_FM_USE_WIZARDS);
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_USE_WIZARDS);
         }
         break;
         case SID_FM_SEARCH:
@@ -1174,7 +1170,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DO_SAFE( xUpdateCursor->moveToInsertRow(); );
 
             GetImpl()->m_bActiveModified = sal_False;
-            SFX_BINDINGS().Invalidate(DatabaseSlotMap);
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
             rReq.Done();
         }   break;
         case SID_FM_REMOVE_FILTER_SORT:
