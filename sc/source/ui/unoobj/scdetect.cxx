@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:15:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         String aFilterName;
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
