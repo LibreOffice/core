@@ -119,3 +119,6 @@ sc.ScHeaderFooterTextObj::com::sun::star::text::XTextRangeMover
 sc.ScAutoFormatsObj::com::sun::star::container::XNameReplace
 sc.ScStyleFamilyObj::com::sun::star::container::XNameReplace
 sc.ScTableSheetsObj::com::sun::star::container::XNameReplace
+
+### i26072 ###
+sc.ScAccessibleDocument::com::sun::star::accessibility::XAccessibleSelection
