@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:10:26 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 12:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3271,12 +3271,13 @@ String STR_ACC_CSVRULER_NAME
 String STR_ACC_CSVRULER_DESCR
 {
     Text = "Dieses Lineal verwaltet Objekte an festen Positionen.";
+    Text[ english ] = "Ruler which manages objects at fixed positions.";
 };
 
 String STR_ACC_CSVGRID_NAME
 {
-    Text = "Vorschautabelle";
-    Text[ english ] = "Preview table";
+    Text = "Vorschau";
+    Text[ english ] = "Preview";
     Text[ english_us ] = "Preview";
     Text[ portuguese ] = "Preview table";
     Text[ russian ] = "Preview table";
@@ -3303,6 +3304,7 @@ String STR_ACC_CSVGRID_NAME
 String STR_ACC_CSVGRID_DESCR
 {
     Text = "Diese Tabelle zeigt die Anordnung der Daten, wie sie im Dokument erscheinen.";
+    Text[ english ] = "This sheet shows, how the data will be arranged in the document.";
 };
 
 String STR_ACC_DOC_NAME
@@ -3340,7 +3342,7 @@ String STR_ACC_DOC_DESCR
 String STR_ACC_TABLE_NAME
 {
     Text = "Tabelle %1";
-    Text[ english ] = "Table %1";
+    Text[ english ] = "Sheet %1";
     Text[ english_us ] = "Sheet %1";
     Text[ portuguese ] = "Table %1";
     Text[ russian ] = "Table %1";
@@ -3366,7 +3368,7 @@ String STR_ACC_TABLE_NAME
 
 String STR_ACC_TABLE_DESCR
 {
-    Text = "Tabelle %1 Seite %2";
+    Text = "";
 };
 
 String STR_ACC_CELL_NAME
@@ -3541,33 +3543,6 @@ String STR_ACC_RIGHTAREA_DESCR
 
 String STR_ACC_HEADER_NAME
 {
-    Text = "Kopfzeile";
-    Text[ english ] = "Header";
-    Text[ english_us ] = "Header";
-    Text[ portuguese ] = "Header";
-    Text[ russian ] = "Header";
-    Text[ greek ] = "Header";
-    Text[ dutch ] = "Header";
-    Text[ french ] = "En-t�te";
-    Text[ spanish ] = "Encabezamiento";
-    Text[ finnish ] = "Header";
-    Text[ italian ] = "Riga d'intestazione";
-    Text[ danish ] = "Header";
-    Text[ swedish ] = "Sidhuvud";
-    Text[ polish ] = "Header";
-    Text[ portuguese_brazilian ] = "Header";
-    Text[ japanese ] = "ヘッダ";
-    Text[ korean ] = "머리글";
-    Text[ chinese_simplified ] = "页眉";
-    Text[ chinese_traditional ] = "頁首";
-    Text[ turkish ] = "Header";
-    Text[ arabic ] = "Header";
-    Text[ catalan ] = "Header";
-    Text[ thai ] = "Header";
-};
-
-String STR_ACC_HEADER_DESCR
-{
     Text = "Kopfzeile Seite %1";
     Text[ english ] = "Header Page %1";
     Text[ english_us ] = "Header of page %1";
@@ -3593,34 +3568,12 @@ String STR_ACC_HEADER_DESCR
     Text[ thai ] = "Header Page %1";
 };
 
-String STR_ACC_FOOTER_NAME
+String STR_ACC_HEADER_DESCR
 {
-    Text = "Fu�zeile";
-    Text[ english ] = "Footer";
-    Text[ english_us ] = "Footer";
-    Text[ portuguese ] = "Footer";
-    Text[ russian ] = "Footer";
-    Text[ greek ] = "Footer";
-    Text[ dutch ] = "Footer";
-    Text[ french ] = "Pied de page";
-    Text[ spanish ] = "Pie de p�gina";
-    Text[ finnish ] = "Footer";
-    Text[ italian ] = "Pi� di pagina";
-    Text[ danish ] = "Footer";
-    Text[ swedish ] = "Sidfot";
-    Text[ polish ] = "Footer";
-    Text[ portuguese_brazilian ] = "Footer";
-    Text[ japanese ] = "フッタ";
-    Text[ korean ] = "바닥글";
-    Text[ chinese_simplified ] = "页脚";
-    Text[ chinese_traditional ] = "頁尾";
-    Text[ turkish ] = "Footer";
-    Text[ arabic ] = "Footer";
-    Text[ catalan ] = "Footer";
-    Text[ thai ] = "Footer";
+    Text = "";
 };
 
-String STR_ACC_FOOTER_DESCR
+String STR_ACC_FOOTER_NAME
 {
     Text = "Fu�zeile Seite %1";
     Text[ english ] = "Footer Page %1";
@@ -3647,10 +3600,15 @@ String STR_ACC_FOOTER_DESCR
     Text[ thai ] = "Footer Page %1";
 };
 
+String STR_ACC_FOOTER_DESCR
+{
+    Text = "";
+};
+
 String STR_ACC_EDITLINE_NAME
 {
     Text = "Editzeile";
-    Text[ english ] = "Editline";
+    Text[ english ] = "Input line";
     Text[ english_us ] = "Input line";
     Text[ portuguese ] = "Editline";
     Text[ russian ] = "Editline";
@@ -3676,7 +3634,8 @@ String STR_ACC_EDITLINE_NAME
 
 String STR_ACC_EDITLINE_DESCR
 {
-    Text = "";
+    Text = "Hier k�nnen Sie Text, Zahlen und Formeln eingeben und bearbeiten.";
+    Text[ english ] = "This is where you enter or edit text, numbers and formulas.";
 };
 
 String STR_ACC_EDITCELL_NAME
@@ -3711,4 +3670,27 @@ String STR_ACC_EDITCELL_DESCR
     Text = "";
 };
 
+String STR_ACC_DATAPILOT_ROW_DESCR
+{
+    Text = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Zeile angezeigt.";
+    Text[ english ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+};
+
+String STR_ACC_DATAPILOT_COL_DESCR
+{
+    Text = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Spalte angezeigt.";
+    Text[ english ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+};
+
+String STR_ACC_DATAPILOT_DATA_DESCR
+{
+    Text = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle f�r Berechnungen genutzt.";
+    Text[ english ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+};
+
+String STR_ACC_DATAPILOT_SEL_DESCR
+{
+    Text = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen k�nnen.";
+    Text[ english ] = "List the fields that you can drag to one of the other three areas.";
+};
 
