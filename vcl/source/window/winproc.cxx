@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-24 09:14:31 $
+ *  last change: $Author: th $ $Date: 2001-04-25 16:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,10 +1000,16 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     {
         if ( !bDrag )
         {
-            // StartAutoScrollMode-Command-Event
+            // Command-Events
             if ( /*(nRet == 0) &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
                  (nCode == MOUSE_MIDDLE) )
-                nRet = !ImplCallCommand( pChild, COMMAND_STARTAUTOSCROLL, NULL, TRUE, &aChildPos );
+            {
+                USHORT nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
+                if ( nMiddleAction == MOUSE_MIDDLE_AUTOSCROLL )
+                    nRet = !ImplCallCommand( pChild, COMMAND_STARTAUTOSCROLL, NULL, TRUE, &aChildPos );
+                else if ( nMiddleAction == MOUSE_MIDDLE_PASTESELECTION )
+                    nRet = !ImplCallCommand( pChild, COMMAND_PASTESELECTION, NULL, TRUE, &aChildPos );
+            }
             else
             {
                 // ContextMenu
