@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-02 12:45:54 $
+ *  last change: $Author: fme $ $Date: 2002-11-05 14:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,11 +405,11 @@ void SdrDragView::SetDragPolys(BOOL bReset, BOOL bSeparate)
     }
 }
 
-BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos) const
+BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos, BOOL bTR ) const
 {
     Rectangle aR;
     TakeActionRect(aR);
-    rPos=aR.TopLeft();
+    rPos = bTR ? aR.TopRight() : aR.TopLeft();
     if (aMark.GetMarkCount()==1 && IsDragObj() && // nur bei Einzelselektion
         !IsDraggingPoints() && !IsDraggingGluePoints() && // nicht beim Punkteschieben
         !pDragBla->ISA(SdrDragMovHdl)) // nicht beim Handlesschieben
