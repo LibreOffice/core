@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-19 11:51:13 $
+ *  last change: $Author: sab $ $Date: 2001-12-04 18:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _SCERRORS_HXX
 #include "scerrors.hxx"
+#endif
+#ifndef SC_XMLEXPORTSHAREDDATA_HXX
+#include "XMLExportSharedData.hxx"
 #endif
 
 #ifndef SEQTYPE
@@ -790,6 +793,9 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export end" );
         }
+
+        if (pSharedData)
+            delete pSharedData;
 
         if (xStatusIndicator.is())
             xStatusIndicator->end();
