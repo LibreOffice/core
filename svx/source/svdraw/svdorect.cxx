@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:02:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,8 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect):
     bClosedObj=TRUE;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, USHORT eFormat):
-    SdrTextObj(eNewTextKind,rNewRect,rInput,eFormat),
+SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat):
+    SdrTextObj(eNewTextKind,rNewRect,rInput,rBaseURL,eFormat),
     pXPoly(NULL),
     bXPolyIsLine(FALSE)
 {
