@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:38:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #include "undoanim.hxx"
 #endif
 
+#ifndef _SD_EFFECT_MIGRATION_HXX
+#include "EffectMigration.hxx"
+#endif
+
 using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sd;
@@ -174,156 +178,14 @@ void SdPage::removeAnimations( const SdrObject* pObj )
     }
 }
 
-struct deprecated_FadeEffect_conversion_table_entry
-{
-    FadeEffect  meFadeEffect;
-    const sal_Char* mpPresetId;
-}
-deprecated_FadeEffect_conversion_table[] =
-{
-    { FadeEffect_FADE_FROM_LEFT,            "wipe-right" },
-    { FadeEffect_FADE_FROM_TOP,             "wipe-down" },
-    { FadeEffect_FADE_FROM_RIGHT,           "wipe-left" },
-    { FadeEffect_FADE_FROM_BOTTOM,          "wipe-up" },
-    { FadeEffect_FADE_TO_CENTER,            "box-in" },
-    { FadeEffect_FADE_FROM_CENTER,          "box-out" },
-    { FadeEffect_MOVE_FROM_LEFT,            "cover-right" },
-    { FadeEffect_MOVE_FROM_TOP,             "cover-down" },
-    { FadeEffect_MOVE_FROM_RIGHT,           "cover-left" },
-    { FadeEffect_MOVE_FROM_BOTTOM,          "cover-up" },
-    { FadeEffect_ROLL_FROM_LEFT,            "push-right" },
-    { FadeEffect_ROLL_FROM_TOP,             "push-down" },
-    { FadeEffect_ROLL_FROM_RIGHT,           "push-left" },
-    { FadeEffect_ROLL_FROM_BOTTOM,          "push-up" },
-    { FadeEffect_VERTICAL_STRIPES,          "venetian-blinds-vertical" },
-    { FadeEffect_HORIZONTAL_STRIPES,        "venetian-blinds-horizontal" },
-    { FadeEffect_CLOCKWISE,                 "clock-wipe-twelve" },
-    { FadeEffect_COUNTERCLOCKWISE,          "reverse-clock-wipe-twelve" },
-    { FadeEffect_FADE_FROM_UPPERLEFT,       "diagonal-squares-right-down" },
-    { FadeEffect_FADE_FROM_UPPERRIGHT,      "diagonal-squares-left-down" },
-    { FadeEffect_FADE_FROM_LOWERLEFT,       "diagonal-squares-right-up" },
-    { FadeEffect_FADE_FROM_LOWERRIGHT,      "diagonal-squares-left-up" },
-    { FadeEffect_CLOSE_VERTICAL,            "split-horizontal-in" },
-    { FadeEffect_CLOSE_HORIZONTAL,          "split-vertical-in" },
-    { FadeEffect_OPEN_VERTICAL,             "split-horizontal-out" },
-    { FadeEffect_OPEN_HORIZONTAL,           "split-vertical-out" },
-    { FadeEffect_SPIRALIN_LEFT,             "spiral-wipe-top-left-clockwise" },
-    { FadeEffect_SPIRALIN_RIGHT,            "spiral-wipe-top-right-counter-clockwise" },
-    { FadeEffect_SPIRALOUT_LEFT,            "spiral-wipe-out-to-bottom-right-clockwise" },
-    { FadeEffect_SPIRALOUT_RIGHT,           "spiral-wipe-out-to-bottom-left-counter-clockwise" },
-    { FadeEffect_DISSOLVE,                  "dissolve" },
-    { FadeEffect_WAVYLINE_FROM_LEFT,        "snake-wipe-top-left-vertical" },
-    { FadeEffect_WAVYLINE_FROM_TOP,         "snake-wipe-top-left-horizontal" },
-    { FadeEffect_WAVYLINE_FROM_RIGHT,       "snake-wipe-bottom-right-vertical" },
-    { FadeEffect_WAVYLINE_FROM_BOTTOM,      "snake-wipe-bottom-right-horizontal" },
-    { FadeEffect_RANDOM,                    "random-transition" },
-    { FadeEffect_STRETCH_FROM_LEFT,         "wipe-right" }, // todo
-    { FadeEffect_STRETCH_FROM_TOP,          "wipe-down" },  // todo
-    { FadeEffect_STRETCH_FROM_RIGHT,        "wipe-left" },  // todo
-    { FadeEffect_STRETCH_FROM_BOTTOM,       "wipe-up" },    // todo
-    { FadeEffect_VERTICAL_LINES,            "random-bars-vertical" },
-    { FadeEffect_HORIZONTAL_LINES,          "random-bars-horizontal" },
-    { FadeEffect_MOVE_FROM_UPPERLEFT,       "cover-right-down" },
-    { FadeEffect_MOVE_FROM_UPPERRIGHT,      "cover-left-down" },
-    { FadeEffect_MOVE_FROM_LOWERRIGHT,      "cover-left-up" },
-    { FadeEffect_MOVE_FROM_LOWERLEFT,       "cover-right-up" },
-    { FadeEffect_UNCOVER_TO_LEFT,           "uncover-left" },
-    { FadeEffect_UNCOVER_TO_UPPERLEFT,      "uncover-left-up" },
-    { FadeEffect_UNCOVER_TO_TOP,            "uncover-up" },
-    { FadeEffect_UNCOVER_TO_UPPERRIGHT,     "uncover-right-up" },
-    { FadeEffect_UNCOVER_TO_RIGHT,          "uncover-right" },
-    { FadeEffect_UNCOVER_TO_LOWERRIGHT,     "uncover-right-down" },
-    { FadeEffect_UNCOVER_TO_BOTTOM,         "uncover-down" },
-    { FadeEffect_UNCOVER_TO_LOWERLEFT,      "uncover-left-down" },
-    { FadeEffect_VERTICAL_CHECKERBOARD,     "checkerboard-down" },
-    { FadeEffect_HORIZONTAL_CHECKERBOARD,   "checkerboard-across" },
-
-// the following effects have where not supported in OOo 1.0,
-// so we match to a similiar effect
-
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-1-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-2-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-3-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-4-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wheel-clockwise-8-spokes" },
-    { FadeEffect_CLOCKWISE,                 "wedge" },
-    { FadeEffect_CLOCKWISE,                 "zoom-rotate-in" },
-
-    { FadeEffect_HORIZONTAL_LINES,          "comb-horizontal" },
-    { FadeEffect_VERTICAL_LINES,            "comb-vertical" },
-
-    { FadeEffect_DISSOLVE,                  "fade-smoothly" },
-    { FadeEffect_DISSOLVE,                  "fade-through-black" },
-
-    { FadeEffect_NONE, 0 }
-};
-
-/* todo
-cut                             cut                                 (same as NONE?)
-cut-through-black               cut         toBlack
-shape-circle                    circle
-shape-diamond                   diamond
-shape-plus                      plus
-wedge                           wedge
-*/
-
 void SdPage::SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect)
 {
-    deprecated_FadeEffect_conversion_table_entry* pEntry = deprecated_FadeEffect_conversion_table;
-    while( (pEntry->meFadeEffect != FadeEffect_NONE) && (pEntry->meFadeEffect != eNewEffect) )
-        pEntry++;
-
-    if( pEntry->mpPresetId )
-    {
-        const OUString aPresetId( OUString::createFromAscii( pEntry->mpPresetId ) );
-
-        const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-
-        TransitionPresetList::const_iterator aIt( rPresetList.begin());
-        const TransitionPresetList::const_iterator aEndIt( rPresetList.end());
-        for( ; aIt != aEndIt; ++aIt )
-        {
-            if( (*aIt)->getPresetId() == aPresetId)
-            {
-                setTransitionType( (*aIt)->getTransition() );
-                setTransitionSubtype( (*aIt)->getSubtype() );
-                setTransitionDirection( (*aIt)->getDirection() );
-                setTransitionFadeColor( (*aIt)->getFadeColor() );
-                break;
-            }
-        }
-    }
-    else
-    {
-        setTransitionType( 0 );
-        setTransitionSubtype( 0 );
-        setTransitionDirection( 0 );
-        setTransitionFadeColor( 0 );
-    }
+    EffectMigration::SetFadeEffect( this, eNewEffect );
 }
 
 FadeEffect SdPage::GetFadeEffect() const
 {
-    const TransitionPresetList & rPresetList = TransitionPreset::getTransitionPresetList();
-    TransitionPresetList::const_iterator aIt( rPresetList.begin());
-    const TransitionPresetList::const_iterator aEndIt( rPresetList.end());
-    for( ; aIt != aEndIt; ++aIt )
-    {
-        if( ( (*aIt)->getTransition() == getTransitionType() ) &&
-            ( (*aIt)->getSubtype() == getTransitionSubtype() ) &&
-            ( (*aIt)->getDirection() == getTransitionDirection() ) &&
-            ( (*aIt)->getFadeColor() == getTransitionFadeColor() ) )
-        {
-            const OUString& aPresetId = (*aIt)->getPresetId();
-
-            deprecated_FadeEffect_conversion_table_entry* pEntry = deprecated_FadeEffect_conversion_table;
-            while( (pEntry->meFadeEffect != FadeEffect_NONE) && (!aPresetId.equalsAscii( pEntry->mpPresetId ) ) )
-                pEntry++;
-
-            return pEntry->meFadeEffect;
-        }
-    }
-    return FadeEffect_NONE;
+    return EffectMigration::GetFadeEffect( this );
 }
 
 /** callback from the sd::View when a new paragraph for one object on this page is created */
