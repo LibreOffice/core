@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 12:33:41 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6090,6 +6090,28 @@ String RID_STR_SHOW_SCROLLBARS
     Text [ english_us ] = "Scrollbars";
 };
 
+Resource RID_RSC_ENUM_TEXTTYPE
+{
+    String 1
+    {
+        Text = "Einzeilig";
+        Text [ english ] = "Single-line";
+        Text [ english_us ] = "Single-line";
+    };
+    String 2
+    {
+        Text = "Mehrzeilig";
+        Text [ english ] = "Multi-line";
+        Text [ english_us ] = "Multi-line";
+    };
+    String 3
+    {
+        Text = "Mehrzeilig mit Formatierungen";
+        Text [ english ] = "Multi-line with formatting";
+        Text [ english_us ] = "Multi-line with formatting";
+    };
+};
+
 String RID_STR_SYMBOLCOLOR
 {
     Text = "Symbolfarbe" ;
@@ -6146,4 +6168,18 @@ Resource RID_RSC_ENUM_COMMAND_TYPE
         Text [ english ] = "SQL command";
         Text [ english_us ] = "SQL command";
     };
+};
+
+String RID_STR_AUTOLINEBREAK
+{
+    Text = "Automatischer Zeilenumbruch";
+    Text [ english ] = "Wrap text automatically";
+    Text [ english_us ] = "Wrap text automatically";
+};
+
+String RID_STR_TEXTTYPE
+{
+    Text = "Text-Typ";
+    Text [ english ] = "Text type";
+    Text [ english_us ] = "Text type";
 };
