@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-12 06:01:28 $
+ *  last change: $Author: hdu $ $Date: 2001-07-12 12:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,6 @@
 
 #include "charmap.hxx"
 #include "dialmgr.hxx"
-
-class SubsetMap;
 
 // class SvxCharMapData ==================================================
 
@@ -351,15 +349,6 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
         return;
     }
 
-    sal_Unicode cChar = (sal_Unicode)rKEvt.GetCharCode();
-    int mapIndex = UnicodeToMapIndex( maFontCharMap, cChar );
-    if ( mapIndex >= 0 && mapIndex < maFontCharMap.GetCharCount() )
-    {
-        SelectIndex( mapIndex );
-        aPreSelectHdl.Call( this );
-        return;
-    }
-
     int tmpSelected = nSelectedIndex;
 
     switch ( aCode.GetCode() )
@@ -392,8 +381,12 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             tmpSelected = maFontCharMap.GetCharCount() - 1;
             break;
         default:
-            Control::KeyInput( rKEvt );
-            tmpSelected = - 1;  // mark as invalid
+            tmpSelected = UnicodeToMapIndex( maFontCharMap, rKEvt.GetCharCode() );
+            if ( tmpSelected < 0 || tmpSelected >= maFontCharMap.GetCharCount() )
+            {
+                Control::KeyInput( rKEvt );
+                tmpSelected = - 1;  // mark as invalid
+            }
     }
 
     if ( tmpSelected >= 0 )
