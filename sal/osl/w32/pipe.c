@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-23 09:32:32 $
+ *  last change: $Author: hro $ $Date: 2001-11-23 14:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ typedef struct _oslPipePacket {
 struct oslPipeImpl {
     oslInterlockedCount  m_Reference;
     HANDLE               m_File;
+    HANDLE               m_NamedObject;
     HWND                 m_SrcWnd;
     HWND                 m_DstWnd;
     PSECURITY_ATTRIBUTES m_Security;
@@ -290,6 +291,7 @@ oslPipe __osl_createPipeImpl()
     pPipe->m_Name = NULL;
     pPipe->m_NameA = NULL;
     pPipe->m_File = INVALID_HANDLE_VALUE;
+    pPipe->m_NamedObject = INVALID_HANDLE_VALUE;
     pPipe->m_pbAbortAccept = 0;
 
     if (!IS_NT)
@@ -341,6 +343,9 @@ void __osl_destroyPipeImpl(oslPipe pPipe)
 {
     if (pPipe != NULL)
     {
+        if ( pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject != NULL )
+            CloseHandle( pPipe->m_NamedObject );
+
         osl_destroyMutex(pPipe->m_Mutex);
         // terminate the accept
         osl_releaseSemaphore(pPipe->m_Acception);
@@ -535,58 +540,73 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
     if (Options & osl_Pipe_CREATE)
     {
-        pPipe->m_Security = pSecAttr;
-        rtl_uString_assign(&pPipe->m_Name, name);
+        SetLastError( ERROR_SUCCESS );
 
-        if (IS_NT)
+        pPipe->m_NamedObject = CreateMutexW( NULL, FALSE, name->buffer );
+
+        if ( pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject != NULL )
         {
-            /* try to open system pipe */
-            pPipe->m_File = CreateNamedPipeW(
-                path->buffer,
-                PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
-                PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
-                PIPE_UNLIMITED_INSTANCES,
-                4096, 4096,
-                NMPWAIT_WAIT_FOREVER,
-                pPipe->m_Security);
-
-            if (pPipe->m_File != INVALID_HANDLE_VALUE)
+            if ( GetLastError() != ERROR_ALREADY_EXISTS )
             {
-                rtl_uString_release( name );
-                rtl_uString_release( path );
+                pPipe->m_Security = pSecAttr;
+                rtl_uString_assign(&pPipe->m_Name, name);
 
-                return pPipe;
-            }
-        }
-        else
-        {
-            rtl_uString2String(
-                &pPipe->m_NameA,
-                name->buffer,
-                name->length,
-                RTL_TEXTENCODING_UTF8,
-                OUSTRING_TO_OSTRING_CVTFLAGS);
-
-            /* check if pipe already exists */
-            if (FindWindow(ACCEPTORPIPEWINDOWCLASS, pPipe->m_NameA->buffer) == NULL)
-            {
-                if (pPipe->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipe))
+                if (IS_NT)
                 {
-                    osl_resumeThread(pPipe->m_Thread);
+                    /* try to open system pipe */
+                    pPipe->m_File = CreateNamedPipeW(
+                        path->buffer,
+                        PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
+                        PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
+                        PIPE_UNLIMITED_INSTANCES,
+                        4096, 4096,
+                        NMPWAIT_WAIT_FOREVER,
+                        pPipe->m_Security);
 
-                    /* wait for creation */
-                    osl_acquireSemaphore(pPipe->m_Acception);
+                    if (pPipe->m_File != INVALID_HANDLE_VALUE)
+                    {
+                        rtl_uString_release( name );
+                        rtl_uString_release( path );
 
-                    /* wait for thread start ups */
-                    osl_waitCondition(pPipe->m_ThreadStartUpCond, NULL);
-
-                    rtl_uString_release( name );
-                    rtl_uString_release( path );
-
-                    return (pPipe);
+                        return pPipe;
+                    }
                 }
                 else
-                    OSL_TRACE("osl_createPipe failed to start thread.\n");
+                {
+                    rtl_uString2String(
+                        &pPipe->m_NameA,
+                        name->buffer,
+                        name->length,
+                        RTL_TEXTENCODING_UTF8,
+                        OUSTRING_TO_OSTRING_CVTFLAGS);
+
+                    /* check if pipe already exists */
+                    if (FindWindow(ACCEPTORPIPEWINDOWCLASS, pPipe->m_NameA->buffer) == NULL)
+                    {
+                        if (pPipe->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipe))
+                        {
+                            osl_resumeThread(pPipe->m_Thread);
+
+                            /* wait for creation */
+                            osl_acquireSemaphore(pPipe->m_Acception);
+
+                            /* wait for thread start ups */
+                            osl_waitCondition(pPipe->m_ThreadStartUpCond, NULL);
+
+                            rtl_uString_release( name );
+                            rtl_uString_release( path );
+
+                            return (pPipe);
+                        }
+                        else
+                            OSL_TRACE("osl_createPipe failed to start thread.\n");
+                    }
+                }
+            }
+            else
+            {
+                CloseHandle( pPipe->m_NamedObject );
+                pPipe->m_NamedObject = INVALID_HANDLE_VALUE;
             }
         }
     }
