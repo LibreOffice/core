@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:25 $
+#   last change: $Author: mba $ $Date: 2002-03-28 15:44:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=sfxslots
 .INCLUDE :  sv.mk
 
 SDINAME=$(TARGET)
-SDIEXPORT=newslots
+SDIEXPORT=sfx
 SIDHRCNAME=sfx.hrc
 
 # --- Files --------------------------------------------------------
@@ -93,8 +93,7 @@ SVSDIDEPEND= \
         frsslots.sdi \
         object.sdi \
         frmslots.sdi \
-        genslots.sdi \
-        newslots.sdi
+                genslots.sdi
 
 SRCFILES =  \
         sfxslots.src
