@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:53:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@
 
 #ifndef _POLY3D_HXX
 #include "poly3d.hxx"
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
 #include "svxdlg.hxx" //CHINA001
@@ -1011,14 +1019,23 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     UINT32 nInsPos=0xFFFFFFFF;
     UINT32 nAnz=GetMarkedObjectCount();
     const SdrObject* pAttrObj = NULL;
-    PolyPolygon3D aMergePolyPolygonA;
-    PolyPolygon3D aMergePolyPolygonB;
+
+    //PolyPolygon3D aMergePolyPolygonA;
+    //PolyPolygon3D aMergePolyPolygonB;
+    ::basegfx::B2DPolyPolygon aMergePolyPolygonA;
+    ::basegfx::B2DPolyPolygon aMergePolyPolygonB;
+
     SdrObjList* pInsOL = NULL;
     SdrPageView* pInsPV = NULL;
     BOOL bFirstObjectComplete(FALSE);
 
     // make sure selected objects are contour objects
-    ConvertMarkedToPolyObj(TRUE);
+
+    // since now ::basegfx::tools::adaptiveSubdivide() is used, it is no longer
+    // necessary to use ConvertMarkedToPolyObj which will subdivide curves using the old
+    // mechanisms. In a next step the polygon clipper will even be able to clip curves...
+    // ConvertMarkedToPolyObj(TRUE);
+    ConvertMarkedToPathObj(sal_True);
 
     for(UINT32 a=0;a<GetMarkedObjectCount();a++)
     {
@@ -1039,7 +1056,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             // no SetDirections() on single objects can be made. This would lead to
             // wrong results.
             SdrObjList* pObjectList = pObj->GetSubList();
-            Vector3D aCommonNormal(0.0, 0.0, 1.0);
+            //Vector3D aCommonNormal(0.0, 0.0, 1.0);
 
             if(pObjectList)
             {
@@ -1051,13 +1068,27 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                     SdrPathObj* pPathObj = PTR_CAST(SdrPathObj, pCandidate);
                     if(pPathObj)
                     {
-                        PolyPolygon3D aTmpPoly3D(pPathObj->GetPathPoly());
-                        aTmpPoly3D.SetDirections(aCommonNormal);
+                        //PolyPolygon3D aTmpPoly3D(pPathObj->GetPathPoly());
+                        //aTmpPoly3D.SetDirections(aCommonNormal);
+                        ::basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly().getB2DPolyPolygon());
+
+                        if(aTmpPoly.areControlPointsUsed())
+                        {
+                            aTmpPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aTmpPoly);
+                        }
+
+                        ::basegfx::tools::correctOrientations(aTmpPoly);
 
                         if(!bFirstObjectComplete)
-                            aMergePolyPolygonA.Insert(aTmpPoly3D);
+                        {
+                            //aMergePolyPolygonA.Insert(aTmpPoly3D);
+                            aMergePolyPolygonA.append(aTmpPoly);
+                        }
                         else
-                            aMergePolyPolygonB.Insert(aTmpPoly3D);
+                        {
+                            //aMergePolyPolygonB.Insert(aTmpPoly3D);
+                            aMergePolyPolygonB.append(aTmpPoly);
+                        }
                     }
                 }
             }
@@ -1066,19 +1097,36 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 SdrPathObj* pPathObj = PTR_CAST(SdrPathObj, pObj);
                 if(pPathObj)
                 {
-                    PolyPolygon3D aTmpPoly3D(pPathObj->GetPathPoly());
-                    aTmpPoly3D.SetDirections(aCommonNormal);
+                    //PolyPolygon3D aTmpPoly3D(pPathObj->GetPathPoly());
+                    //aTmpPoly3D.SetDirections(aCommonNormal);
+                    ::basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly().getB2DPolyPolygon());
+
+                    if(aTmpPoly.areControlPointsUsed())
+                    {
+                        aTmpPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aTmpPoly);
+                    }
+
+                    ::basegfx::tools::correctOrientations(aTmpPoly);
 
                     if(!bFirstObjectComplete)
-                        aMergePolyPolygonA.Insert(aTmpPoly3D);
+                    {
+                        //aMergePolyPolygonA.Insert(aTmpPoly3D);
+                        aMergePolyPolygonA.append(aTmpPoly);
+                    }
                     else
-                        aMergePolyPolygonB.Insert(aTmpPoly3D);
+                    {
+                        //aMergePolyPolygonB.Insert(aTmpPoly3D);
+                        aMergePolyPolygonB.append(aTmpPoly);
+                    }
                 }
             }
 
             // was there something added to the first poly?
-            if(!bFirstObjectComplete && aMergePolyPolygonA.Count())
+            //if(!bFirstObjectComplete && aMergePolyPolygonA.Count())
+            if(!bFirstObjectComplete && aMergePolyPolygonA.count())
+            {
                 bFirstObjectComplete = TRUE;
+            }
 
             // move object to temporary delete list
             aRemove.InsertEntry(SdrMark(pObj, pM->GetPageView()));
@@ -1090,8 +1138,12 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         case SDR_MERGE_MERGE:
         {
             // simple merge all contained parts (OR)
-            aMergePolyPolygonA.Insert(aMergePolyPolygonB);
-            aMergePolyPolygonA.Merge(FALSE);
+            //aMergePolyPolygonA.Insert(aMergePolyPolygonB);
+            //aMergePolyPolygonA.Merge(FALSE);
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
 
             break;
         }
@@ -1099,31 +1151,56 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         {
             // take selected poly 2..n (is in Polygon B), merge them, flipdirections
             // and merge with poly 1
-            aMergePolyPolygonA.Merge(FALSE);
-            aMergePolyPolygonB.Merge(FALSE);
-            aMergePolyPolygonB.FlipDirections();
-            aMergePolyPolygonA.Insert(aMergePolyPolygonB);
-            aMergePolyPolygonA.Merge(FALSE);
+            //aMergePolyPolygonA.Merge(FALSE);
+            //aMergePolyPolygonB.Merge(FALSE);
+            //aMergePolyPolygonB.FlipDirections();
+            //aMergePolyPolygonA.Insert(aMergePolyPolygonB);
+            //aMergePolyPolygonA.Merge(FALSE);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonB, sal_False);
+            aMergePolyPolygonB = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
+            aMergePolyPolygonB = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
+            aMergePolyPolygonB.flip();
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
 
             // #72995# one more call to resolve self intersections which
             // may have been built by substracting (see bug)
-            aMergePolyPolygonA.Merge(FALSE);
+            //aMergePolyPolygonA.Merge(FALSE);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
 
             break;
         }
         case SDR_MERGE_INTERSECT:
         {
             // cut poly 1 against polys 2..n (AND)
-            aMergePolyPolygonA.Merge(FALSE);
-            aMergePolyPolygonB.Merge(FALSE);
-            aMergePolyPolygonA.Insert(aMergePolyPolygonB);
-            aMergePolyPolygonA.Merge(FALSE, TRUE);
+            //aMergePolyPolygonA.Merge(FALSE);
+            //aMergePolyPolygonB.Merge(FALSE);
+            //aMergePolyPolygonA.Insert(aMergePolyPolygonB);
+            //aMergePolyPolygonA.Merge(FALSE, TRUE);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonB, sal_False);
+            aMergePolyPolygonB = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
+            aMergePolyPolygonB = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+//BFS08         ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False, sal_True);
+            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_False);
 
             break;
         }
     }
 
-    XPolyPolygon aXPP = aMergePolyPolygonA.GetXPolyPolygon();
+    // XPolyPolygon aXPP = aMergePolyPolygonA.GetXPolyPolygon();
+    XPolyPolygon aXPP(aMergePolyPolygonA);
     SdrPathObj* pPath = new SdrPathObj(OBJ_PATHFILL, aXPP);
     ImpCopyAttributes(pAttrObj, pPath);
     SdrInsertReason aReason(SDRREASON_VIEWCALL, pAttrObj);
