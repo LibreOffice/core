@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:25:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ sal_uInt16 XclTools::GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel )
 
 const String XclTools::maCFStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
 
-String XclTools::GetCondFormatStyleName( sal_uInt16 nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
+String XclTools::GetCondFormatStyleName( USHORT nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
     return String( maCFStyleNamePrefix ).Append( String::CreateFromInt32( nScTab + 1 ) ).
                 Append( '_' ).Append( String::CreateFromInt32( nFormat + 1 ) ).
@@ -642,20 +642,20 @@ bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNe
 
 XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges )
 {
-    sal_uInt16 nTab = rStrm.GetRoot().GetScTab();
+    USHORT nScTab = rStrm.GetRoot().GetCurrScTab();
     sal_uInt16 nCount, nRow1, nRow2, nCol1, nCol2;
     rStrm >> nCount;
     for( ; nCount; --nCount )
     {
         rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-        rRanges.Append( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ) );
+        rRanges.Append( ScRange( nCol1, nRow1, nScTab, nCol2, nRow2, nScTab ) );
     }
     return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
 {
-    sal_uInt16 nCount = static_cast< sal_uInt16 >( ::std::min( rRanges.Count(), 0xFFFFUL ) );
+    sal_uInt16 nCount = ::ulimit< sal_uInt16 >( rRanges.Count() );
     rStrm << nCount;
     rStrm.SetSliceSize( 8 );
 
