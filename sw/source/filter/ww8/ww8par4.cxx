@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-16 12:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId,
         UINT32 nWWDate  = SVBT32ToLong(  pSprmCDttmRMark );
         WW8AuthorInfo aEntry( nWWAutNo );
         USHORT nPos;
-        if( pAuthorInfos->Seek_Entry( &aEntry, &nPos ) )
+        if( pAuthorInfos && pAuthorInfos->Seek_Entry( &aEntry, &nPos ) )
         {
             const WW8AuthorInfo* pAuthor = pAuthorInfos->GetObject( nPos );
             if( pAuthor )
