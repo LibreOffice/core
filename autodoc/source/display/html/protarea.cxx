@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protarea.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,9 @@ ProtectionArea::Index( ary::cpp::E_ClassKey i_eClassKey ) const
 
 ProtectionArea::ProtectionArea( const char *        i_sLabel,
                                 const char *        i_sTitle )
-    :   sLabel(i_sLabel),
-        pSglTable( new S_Slot_Table(i_sTitle) )
+    :   pSglTable( new S_Slot_Table(i_sTitle) ),
+        aClassesTables(),
+        sLabel(i_sLabel)
 {
 }
 
@@ -91,8 +92,9 @@ ProtectionArea::ProtectionArea( const char *        i_sLabel,
                                 const char *        i_sTitle_class,
                                 const char *        i_sTitle_struct,
                                 const char *        i_sTitle_union )
-    :   sLabel(i_sLabel),
-        pSglTable(0)
+    :   pSglTable(0),
+        aClassesTables(),
+        sLabel(i_sLabel)
 {
     aClassesTables[ Index(ary::cpp::CK_class) ]
                 = new S_Slot_Table(i_sTitle_class);
