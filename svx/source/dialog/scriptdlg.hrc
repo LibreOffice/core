@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:27:32 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #define IMG_MACRO_HC                    6
 #define IMG_DOCUMENT                    7
 #define IMG_DOCUMENT_HC                 8
+
+#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
+#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
 
 // NewObjectDialog
 #define FT_NEWLIB                       10
