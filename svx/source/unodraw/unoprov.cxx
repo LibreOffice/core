@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:06:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,6 +544,7 @@ SfxItemPropertyMap* ImplGetSvxPluginPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxFramePropertyMap()
 {
+    //TODO/LATER: new properties for ScrollingMode and DefaultBorder
     static SfxItemPropertyMap aFramePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("FrameURL"),                 OWN_ATTR_FRAME_URL          , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
