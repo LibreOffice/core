@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:03:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #define _CUI_DLGFACT_HXX
 // include ---------------------------------------------------------------
 #include "svxdlg.hxx" //CHINA001 #include <svx/svxdlg.hxx>
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
 
 //#include <sfx2/basedlgs.hxx>
 //#include "dstribut.hxx"
@@ -711,11 +715,12 @@ public:
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId );
     virtual DialogGetRanges         GetDialogGetRangesFunc( USHORT nId ); //add for SvxPostItDialog
-    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const String& rLanguage, const ResId& rResId );
+    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const String& rLanguage );
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             Window* pParent, BOOL bShowSlots = FALSE );
+    virtual VclAbstractDialog*          CreateSvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex = 0 );
 };
 
 #endif
