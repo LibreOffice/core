@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetlistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
+ *  last change: $Author: jl $ $Date: 2001-08-14 14:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ void SAL_CALL DropTargetListener::disposing( const EventObject& Source )
 void SAL_CALL DropTargetListener::drop( const DropTargetDropEvent& e )
     throw(RuntimeException)
 {
-//  e.Context->dropComplete( sal_True);
-//  e.Context->acceptDrop( ACTION_COPY);
-    e.Context->rejectDrop();
+    e.Context->dropComplete( sal_True);
+    e.Context->acceptDrop( ACTION_COPY);
+//  e.Context->rejectDrop();
 
     // if the Transferable contains text, then we send it to the edit window
 //  Sequence<DataFlavor> flavors= e.Transferable->getTransferDataFlavors();
@@ -108,9 +108,13 @@ void SAL_CALL DropTargetListener::drop( const DropTargetDropEvent& e )
 void SAL_CALL DropTargetListener::dragEnter( const DropTargetDragEnterEvent& dtde )
      throw(RuntimeException)
 {
+    if( (dtde.SourceActions & dtde.DropAction) )
+    {
+        dtde.Context->acceptDrag( dtde.DropAction);
+    }
     //If one drags something that is not moveable
-    if( !(dtde.SourceActions & dtde.DropAction) )
-        dtde.Context->acceptDrag( ACTION_COPY);
+//      if( !(dtde.SourceActions & dtde.DropAction) )
+//          dtde.Context->acceptDrag( ACTION_COPY);
 
 //  dtde.Context->rejectDrag( );
 
@@ -124,6 +128,11 @@ void SAL_CALL DropTargetListener::dragExit( const DropTargetEvent& dte )
 void SAL_CALL DropTargetListener::dragOver( const DropTargetDragEvent& dtde )
      throw(RuntimeException)
 {
+    if( (dtde.SourceActions & dtde.DropAction) )
+    {
+        dtde.Context->acceptDrag( dtde.DropAction);
+    }
+
 //      if( (dtde.SourceActions & dtde.DropAction) )
 //          dtde.Context->acceptDrag( ACTION_COPY);
 }
