@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:06 $
+ *  last change: $Author: rt $ $Date: 2001-05-08 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "connectivity/commontools.hxx"
+#include "connectivity/CommonTools.hxx"
 #endif
 
 namespace connectivity
