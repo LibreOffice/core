@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,14 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
     rOut << fLatheScale;
 
     // Ab Version 364f (19.06.97)
-    rOut << GetVerticalSegments();
+
+    // #83965# internally the real number of segments (edges) is
+    // used, no longer the number of points
+    sal_Int32 nVSegs = GetVerticalSegments();
+    if(!aPolyPoly3D[0].IsClosed())
+        nVSegs += 1;
+
+    rOut << nVSegs;
 
     // Ab Version 374 (15.12.97)
     rOut << aPolyPoly3D;
@@ -704,6 +711,12 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // Ab Version 364f (19.06.97)
             sal_Int32 nTmp;
             rIn >> nTmp;
+
+            // #83965# internally the real number of segments (edges) is
+            // used, no longer the number of points
+            if(!aPolyPoly3D[0].IsClosed())
+                nTmp -= 1;
+
             mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nTmp));
         }
 
@@ -913,6 +926,14 @@ void E3dLatheObj::SetPolyPoly3D(const PolyPolygon3D& rNew)
     if(aPolyPoly3D != rNew)
     {
         aPolyPoly3D = rNew;
+
+        // #83965# take care of vertical segments, too.
+        sal_Int32 nNumVSegs = aPolyPoly3D[0].GetPointCount();
+        if(!aPolyPoly3D[0].IsClosed())
+            nNumVSegs -= 1;
+        ImpForceItemSet();
+        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nNumVSegs));
+
         bGeometryValid = FALSE;
     }
 }
