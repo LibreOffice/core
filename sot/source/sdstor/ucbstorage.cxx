@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:21:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,22 @@ TYPEINIT1( UCBStorage, BaseStorage );
 
 sal_Int32 GetFormatId_Impl( SvGlobalName aName )
 {
+//    if ( aName == SvGlobalName( SO3_SW_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARWRITER_8;
+//    if ( aName == SvGlobalName( SO3_SWWEB_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARWRITERWEB_8;
+//    if ( aName == SvGlobalName( SO3_SWGLOB_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARWRITERGLOB_8;
+//    if ( aName == SvGlobalName( SO3_SDRAW_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARDRAW_8;
+//    if ( aName == SvGlobalName( SO3_SIMPRESS_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARIMPRESS_8;
+//    if ( aName == SvGlobalName( SO3_SC_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARCALC_8;
+//    if ( aName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARCHART_8;
+//    if ( aName == SvGlobalName( SO3_SM_CLASSID_8 ) )
+//        return SOT_FORMATSTR_ID_STARMATH_8;
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
         return SOT_FORMATSTR_ID_STARWRITER_60;
     if ( aName == SvGlobalName( SO3_SWWEB_CLASSID_60 ) )
@@ -448,6 +464,22 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
 {
     switch ( nFormat )
     {
+        case SOT_FORMATSTR_ID_STARWRITER_8 :
+            return SvGlobalName( SO3_SW_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARWRITERWEB_8 :
+            return SvGlobalName( SO3_SWWEB_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_8 :
+            return SvGlobalName( SO3_SWGLOB_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARDRAW_8 :
+            return SvGlobalName( SO3_SDRAW_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARIMPRESS_8 :
+            return SvGlobalName( SO3_SIMPRESS_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARCALC_8 :
+            return SvGlobalName( SO3_SC_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARCHART_8 :
+            return SvGlobalName( SO3_SCH_CLASSID_60 );
+        case SOT_FORMATSTR_ID_STARMATH_8 :
+            return SvGlobalName( SO3_SM_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARWRITER_60 :
             return SvGlobalName( SO3_SW_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARWRITERWEB_60 :
@@ -2842,7 +2874,14 @@ BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
                 pDest->OpenUCBStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ) :
                 pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
 
-        pOtherStorage->SetClassId( pStorage->GetClassId() );
+        // For UCB storages, the class id and the format id may differ,
+        // do passing the class id is not sufficient.
+        if( bOpenUCBStorage )
+            pOtherStorage->SetClass( pStorage->GetClassName(),
+                                     pStorage->GetFormat(),
+                                     pUCBCopy->pImp->m_aUserTypeName );
+        else
+            pOtherStorage->SetClassId( pStorage->GetClassId() );
         pStorage->CopyTo( pOtherStorage );
         SetError( pStorage->GetError() );
         if( pOtherStorage->GetError() )
@@ -2881,7 +2920,13 @@ BOOL UCBStorage::CopyTo( BaseStorage* pDestStg ) const
     // perhaps it's also a problem if one storage is a parent of the other ?!
     // or if not: could be optimized ?!
 
-    pDestStg->SetClassId( GetClassId() );
+    // For UCB storages, the class id and the format id may differ,
+    // do passing the class id is not sufficient.
+    if( pDestStg->ISA( UCBStorage ) )
+        pDestStg->SetClass( pImp->m_aClassId, pImp->m_nFormat,
+                            pImp->m_aUserTypeName );
+    else
+        pDestStg->SetClassId( GetClassId() );
     pDestStg->SetDirty();
 
     BOOL bRet = TRUE;
