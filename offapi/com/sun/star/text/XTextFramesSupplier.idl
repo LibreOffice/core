@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextFramesSupplier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 /** makes it possible to access the <type>TextFrame</type> instances in this
     context (e.g. document).
  */
-interface XTextFramesSupplier: com::sun::star::uno::XInterface
+published interface XTextFramesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
