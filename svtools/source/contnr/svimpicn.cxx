@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2904,31 +2904,29 @@ void SvImpIconView::InvalidateBoundingRect( SvLBoxEntry* pEntry )
     InvalidateBoundingRect( pViewData->aRect );
 }
 
-void SvImpIconView::PrepareCommandEvent( const CommandEvent& rCEvt )
+void SvImpIconView::PrepareCommandEvent( const Point& rPt )
 {
     aMouseMoveTimer.Stop();
     StopEditTimer();
     nFlags |= F_CMD_ARRIVED;
-    SvLBoxEntry* pEntry = pView->GetEntry( rCEvt.GetMousePosPixel(), TRUE );
+    SvLBoxEntry* pEntry = pView->GetEntry( rPt, TRUE );
     if( (nFlags & F_DOWN_CTRL) && pEntry && !pView->IsSelected(pEntry) )
         pView->Select( pEntry, TRUE );
     nFlags &= ~(F_DOWN_CTRL | F_DOWN_DESELECT);
 }
 
-void SvImpIconView::Command( const CommandEvent& rCEvt )
+void SvImpIconView::SttDrag( const Point& rPos )
 {
-    PrepareCommandEvent( rCEvt );
-    if( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        nFlags |= F_DRAG_SOURCE;
-        if( GetSelectionCount() )
-        {
-            ShowCursor( FALSE );
-            pView->BeginDrag( rCEvt.GetMousePosPixel() );
-            ShowCursor( TRUE );
-        }
-        nFlags &= (~F_DRAG_SOURCE);
-    }
+    PrepareCommandEvent( rPos );
+
+    nFlags |= F_DRAG_SOURCE;
+    ShowCursor( FALSE );
+}
+
+void SvImpIconView::EndDrag()
+{
+    ShowCursor( TRUE );
+    nFlags &= (~F_DRAG_SOURCE);
 }
 
 void SvImpIconView::ToTop( SvLBoxEntry* pEntry )

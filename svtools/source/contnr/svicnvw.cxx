@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svicnvw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ void SvIconView::ReadDragServerInfo( const Point& rPos, SvLBoxDDInfo* pInfo )
 
 void SvIconView::Command( const CommandEvent& rCEvt )
 {
-    pImp->Command( rCEvt );
+    pImp->PrepareCommandEvent( rCEvt.GetMousePosPixel() );
 }
 
 void SvIconView::SetCurParent( SvLBoxEntry* pNewParent )
@@ -728,38 +728,41 @@ void SvIconView::Scroll( long nDeltaX, long nDeltaY )
 
 void SvIconView::PrepareCommandEvent( const CommandEvent& rCEvt )
 {
-    pImp->PrepareCommandEvent( rCEvt );
+    pImp->PrepareCommandEvent( rCEvt.GetMousePosPixel() );
 }
 
-void SvIconView::BeginDrag( const Point& rPos )
+void SvIconView::StartDrag( sal_Int8 nAction, const Point& rPos )
 {
+    pImp->SttDrag( rPos );
     SvLBoxEntry* pEntry = GetEntry( rPos, TRUE );
     pImp->pViewData = pEntry;
-    SvLBox::BeginDrag( rPos );
+    SvLBox::StartDrag( nAction, rPos );
 }
 
-BOOL __EXPORT SvIconView::QueryDrop( DropEvent& rDEvt )
+void SvIconView::DragFinished( sal_Int8 nAction )
+{
+    pImp->EndDrag();
+}
+
+sal_Int8 SvIconView::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     if( pImp->pViewData )
-    {
         pImp->HideDDIcon();
-    }
-    BOOL bResult = SvLBox::QueryDrop( rDEvt );
-    if( bResult )
-    {
-        pImp->ShowDDIcon( pImp->pViewData, rDEvt.GetPosPixel() );
-    }
-    return bResult;
+    sal_Int8 nRet = SvLBox::AcceptDrop( rEvt );
+    if( DND_ACTION_NONE != nRet )
+        pImp->ShowDDIcon( pImp->pViewData, rEvt.maPosPixel );
+
+    return nRet;
 }
 
-BOOL SvIconView::Drop( const DropEvent& rDEvt )
+sal_Int8 SvIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     if( pImp->pViewData )
     {
         pImp->HideDDIcon();
         pImp->pViewData = 0;
     }
-    return SvLBox::Drop( rDEvt );
+    return SvLBox::ExecuteDrop( rEvt );
 }
 
 void SvIconView::ShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPos )

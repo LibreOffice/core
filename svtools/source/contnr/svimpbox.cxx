@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2806,7 +2806,7 @@ void SvImpLBox::BeginDrag()
     if( !bAsyncBeginDrag )
     {
         BeginScroll();
-        pView->BeginDrag( aSelEng.GetMousePosPixel() );
+        pView->StartDrag( 0, aSelEng.GetMousePosPixel() );
         EndScroll();
     }
     else
@@ -2818,7 +2818,7 @@ void SvImpLBox::BeginDrag()
 
 IMPL_LINK( SvImpLBox, BeginDragHdl, void*, EMPTYARG )
 {
-    pView->BeginDrag( aAsyncBeginDragPos );
+    pView->StartDrag( 0, aAsyncBeginDragPos );
     return 0;
 }
 

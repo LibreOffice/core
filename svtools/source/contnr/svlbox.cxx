@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 22:22:20 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
         - SelectAll( FALSE ), nur die deselektierten Entries repainten
 */
 
+#define _SVSTDARR_ULONGSSORT
 
 #include <string.h>
 #ifndef _SVEDI_HXX
@@ -87,6 +88,8 @@
 
 #include <svlbox.hxx>
 #include <svlbitm.hxx>
+#include <svstdarr.hxx>
+
 
 // fuer Drag&Drop
 static SvLBox* pDDSource = 0;
@@ -733,12 +736,11 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
 {
     DBG_CTOR(SvLBox,0);
     nWindowStyle = nWinStyle;
-    nDragOptions = DRAG_ALL;
+    nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = 0;
     pTargetEntry = 0;
     nDragDropMode = 0;
     pReserved = 0;
-    nReserved = 0;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
     SetModel( pTempModel );
@@ -765,8 +767,7 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     nImpFlags = 0;
     nWindowStyle = 0;
     pReserved = 0;
-    nReserved = 0;
-    nDragOptions = DRAG_ALL;
+    nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
@@ -795,10 +796,13 @@ __EXPORT SvLBox::~SvLBox()
         pModel->Clear();
         delete pModel;
     }
-    if( nReserved )
-    {
-        *((BOOL*)nReserved) = TRUE;
-    }
+
+    SvLBox::RemoveBoxFromDDList_Impl( *this );
+
+    if( this == pDDSource )
+        pDDSource = 0;
+    if( this == pDDTarget )
+        pDDTarget = 0;
 }
 
 void SvLBox::SetModel( SvLBoxTreeList* pNewModel )
@@ -887,97 +891,15 @@ BOOL SvLBox::DoubleClickHdl()
     return TRUE;
 }
 
-void __EXPORT SvLBox::BeginDrag( const Point& rPos )
-{
-    DBG_CHKTHIS(SvLBox,0);
-    BOOL bDeleted = FALSE;
 
-    ReleaseMouse();
-    SvLBoxDDInfo aDDInfo;
-    SvLBoxEntry* pEntry = GetEntry( rPos ); // GetDropTarget( rPos );
-    if ( !pEntry )
-    {
-        EndDrag();
-        return;
-    }
-
-    DragServer::Clear();
-
-    DragDropMode nTemp = GetDragDropMode();
-    nDragDropMode = NotifyBeginDrag(pEntry);
-    if( !nDragDropMode || GetSelectionCount() == 0 )
-    {
-        nDragDropMode = nTemp;
-        EndDrag();
-        return;
-    }
-
-    ULONG nDDFormatId = SOT_FORMATSTR_ID_TREELISTBOX;
-    memset(&aDDInfo,0,sizeof(SvLBoxDDInfo));
-    aDDInfo.pApp = GetpApp();
-    aDDInfo.pSource = this;
-    aDDInfo.pDDStartEntry = pEntry;
-    // abgeleitete Views zum Zuge kommen lassen
-    WriteDragServerInfo( rPos, &aDDInfo );
-    DragServer::CopyData( &aDDInfo, sizeof(SvLBoxDDInfo), nDDFormatId );
-    pDDSource = this;
-    pDDTarget = 0;
-    DropAction eAction;
-
-    BOOL bOldUpdateMode = Control::IsUpdateMode();
-    Control::SetUpdateMode( TRUE );
-    Update();
-    Control::SetUpdateMode( bOldUpdateMode );
-
-    // Selektion & deren Childs im Model als DropTargets sperren
-    // Wichtig: Wenn im DropHandler die Selektion der
-    // SourceListBox veraendert wird, muessen vorher die Eintraege
-    // als DropTargets wieder freigeschaltet werden:
-    // (GetSourceListBox()->EnableSelectionAsDropTarget( TRUE, TRUE );)
-    EnableSelectionAsDropTarget( FALSE, TRUE /* with Childs */ );
-
-    Region aRegion( GetDragRegion() ); // fuer die Mac-Leute
-    nReserved = (ULONG)&bDeleted;
-    eAction = ExecuteDrag( aMovePtr, aCopyPtr, nDragOptions, &aRegion );
-    nReserved = 0;
-    if( bDeleted )
-    {
-        EndDrag();
-        return;
-    }
-
-    EnableSelectionAsDropTarget( TRUE, TRUE );
-
-    if( (eAction == DROP_MOVE) &&
-       (
-        (pDDTarget && ((ULONG)(pDDTarget->GetModel())!=(ULONG)(this->GetModel()))) ||
-        !pDDTarget ))
-    {
-        RemoveSelection();
-    }
-
-    ImplShowTargetEmphasis( pTargetEntry, FALSE );
-    EndDrag();
-    nDragDropMode = nTemp;
-}
-
-
-void SvLBox::EndDrag()
-{
-    DBG_CHKTHIS(SvLBox,0);
-    pDDSource = 0;
-    pDDTarget = 0;
-    pTargetEntry = 0;
-}
-
-BOOL SvLBox::CheckDragAndDropMode( SvLBox* pSource, DropAction eAction )
+BOOL SvLBox::CheckDragAndDropMode( SvLBox* pSource, sal_Int8 nAction )
 {
     DBG_CHKTHIS(SvLBox,0);
     if ( pSource == this )
     {
         if ( !(nDragDropMode & (SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY) ) )
             return FALSE; // D&D innerhalb der Liste gesperrt
-        if ( eAction == DROP_MOVE )
+        if( DND_ACTION_MOVE == nAction )
         {
             if ( !(nDragDropMode & SV_DRAGDROP_CTRL_MOVE) )
                  return FALSE; // kein lokales Move
@@ -992,7 +914,7 @@ BOOL SvLBox::CheckDragAndDropMode( SvLBox* pSource, DropAction eAction )
     {
         if ( !(nDragDropMode & SV_DRAGDROP_APP_DROP ) )
             return FALSE; // kein Drop
-        if ( eAction == DROP_MOVE )
+        if ( DND_ACTION_MOVE == nAction )
         {
             if ( !(nDragDropMode & SV_DRAGDROP_APP_MOVE) )
                 return FALSE; // kein globales Move
@@ -1007,98 +929,7 @@ BOOL SvLBox::CheckDragAndDropMode( SvLBox* pSource, DropAction eAction )
 }
 
 
-BOOL __EXPORT SvLBox::QueryDrop( DropEvent& rDEvt )
-{
-    DBG_CHKTHIS(SvLBox,0);
 
-    if ( rDEvt.IsLeaveWindow() || !CheckDragAndDropMode( pDDSource, rDEvt.GetAction() ) )
-    {
-        ImplShowTargetEmphasis( pTargetEntry, FALSE );
-        return FALSE;
-    }
-
-    if ( !nDragDropMode )
-    {
-        DBG_ERRORFILE( "SvLBox::QueryDrop(): no target" );
-        return FALSE;
-    }
-
-    BOOL bAllowDrop = TRUE;
-
-    ULONG nDDFormatId = SOT_FORMATSTR_ID_TREELISTBOX;
-    if ( !DragServer::HasFormat( 0, nDDFormatId ) )
-    {
-        DBG_ERRORFILE( "SvLBox::QueryDrop(): no format" );
-        bAllowDrop = FALSE;
-    }
-
-    SvLBoxEntry* pEntry = GetDropTarget( rDEvt.GetPosPixel() );
-
-    if ( bAllowDrop )
-    {
-        DBG_ASSERT( pDDSource, "SvLBox::QueryDrop(): SourceBox == 0 (__EXPORT?)" );
-        if (    pEntry && pDDSource->GetModel() == this->GetModel()
-            &&  rDEvt.GetAction()==DROP_MOVE
-            &&  ( pEntry->nEntryFlags & SV_ENTRYFLAG_DISABLE_DROP ) )
-        {
-            bAllowDrop = FALSE; // nicht auf sich selbst moven
-        }
-    }
-    if ( bAllowDrop )
-        bAllowDrop = NotifyQueryDrop( pEntry );
-
-
-    // **** Emphasis zeichnen ****
-
-    if ( bAllowDrop )
-    {
-        if ( pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS) )
-        {
-            ImplShowTargetEmphasis( pTargetEntry, FALSE );
-            pTargetEntry = pEntry;
-            ImplShowTargetEmphasis( pTargetEntry, TRUE );
-        }
-    }
-    else
-       ImplShowTargetEmphasis( pTargetEntry, FALSE );
-
-    return bAllowDrop;
-}
-
-BOOL __EXPORT SvLBox::Drop( const DropEvent& rDEvt )
-{
-    DBG_CHKTHIS(SvLBox,0);
-    GetSourceView()->EnableSelectionAsDropTarget( TRUE, TRUE );
-
-    ImplShowTargetEmphasis( pTargetEntry, FALSE );
-    pDDTarget = this;
-    ULONG nDDFormatId = SOT_FORMATSTR_ID_TREELISTBOX;
-
-    SvLBoxDDInfo aDDInfo;
-    if( !DragServer::PasteData(0, &aDDInfo, sizeof(SvLBoxDDInfo),nDDFormatId ))
-        return FALSE;
-    ReadDragServerInfo( rDEvt.GetPosPixel(), &aDDInfo );
-
-    SvLBoxEntry* pTarget = pTargetEntry; // !!! kann 0 sein !!!
-    BOOL bDataAccepted;
-    if ( rDEvt.GetAction() == DROP_COPY )
-        bDataAccepted = CopySelection( aDDInfo.pSource, pTarget );
-    else
-        bDataAccepted = MoveSelection( aDDInfo.pSource, pTarget );
-    return bDataAccepted;
-}
-
-DragDropMode SvLBox::NotifyBeginDrag( SvLBoxEntry* )
-{
-    DBG_CHKTHIS(SvLBox,0);
-    return (DragDropMode)0xffff;
-}
-
-BOOL SvLBox::NotifyQueryDrop( SvLBoxEntry* )
-{
-    DBG_CHKTHIS(SvLBox,0);
-    return TRUE;
-}
 
 void SvLBox::NotifyRemoving( SvLBoxEntry* )
 {
@@ -1598,13 +1429,6 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
-Region SvLBox::GetDragRegion() const
-{
-    DBG_CHKTHIS(SvLBox,0);
-    Region aRegion;
-    return aRegion;
-}
-
 void SvLBox::Command( const CommandEvent& )
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -1694,23 +1518,229 @@ BOOL SvLBox::EditingCanceled() const
 //JP 28.3.2001: new Drag & Drop API
 sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    DBG_ERROR( "must be implemented" );
-    return DND_ACTION_NONE;
+    DBG_CHKTHIS(SvLBox,0);
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+    if( rEvt.mbLeaving || !CheckDragAndDropMode( pDDSource, rEvt.mnAction ) )
+    {
+        ImplShowTargetEmphasis( pTargetEntry, FALSE );
+    }
+    else if( !nDragDropMode )
+    {
+        DBG_ERRORFILE( "SvLBox::QueryDrop(): no target" );
+    }
+    else
+    {
+
+        SvLBoxEntry* pEntry = GetDropTarget( rEvt.maPosPixel );
+        if( !IsDropFormatSupported( SOT_FORMATSTR_ID_TREELISTBOX ) )
+        {
+            DBG_ERRORFILE( "SvLBox::QueryDrop(): no format" );
+        }
+        else
+        {
+            DBG_ASSERT( pDDSource, "SvLBox::QueryDrop(): SourceBox == 0 (__EXPORT?)" );
+            if( !( pEntry && pDDSource->GetModel() == this->GetModel()
+                    && DND_ACTION_MOVE == rEvt.mnAction
+                    && ( pEntry->nEntryFlags & SV_ENTRYFLAG_DISABLE_DROP ) ))
+            {
+                if( NotifyAcceptDrop( pEntry ))
+                    nRet = rEvt.mnAction;
+            }
+        }
+
+        // **** Emphasis zeichnen ****
+        if( DND_ACTION_NONE == nRet )
+               ImplShowTargetEmphasis( pTargetEntry, FALSE );
+        else if( pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS) )
+        {
+            ImplShowTargetEmphasis( pTargetEntry, FALSE );
+            pTargetEntry = pEntry;
+            ImplShowTargetEmphasis( pTargetEntry, TRUE );
+        }
+    }
+    return nRet;
 }
 
 sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    DBG_ERROR( "must be implemented" );
-    return DND_ACTION_NONE;
+    DBG_CHKTHIS(SvLBox,0);
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+    GetSourceView()->EnableSelectionAsDropTarget( TRUE, TRUE );
+
+    ImplShowTargetEmphasis( pTargetEntry, FALSE );
+    pDDTarget = this;
+    ULONG nDDFormatId = SOT_FORMATSTR_ID_TREELISTBOX;
+
+    SvLBoxDDInfo aDDInfo;
+
+    TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
+    if( aData.HasFormat( SOT_FORMATSTR_ID_TREELISTBOX ))
+    {
+        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+        if( aData.GetSequence( SOT_FORMATSTR_ID_TREELISTBOX, aSeq ) &&
+            sizeof(SvLBoxDDInfo) == aSeq.getLength() )
+        {
+            memcpy( &aDDInfo, aSeq.getConstArray(), sizeof(SvLBoxDDInfo) );
+            nRet = rEvt.mnAction;
+        }
+    }
+
+    if( DND_ACTION_NONE != nRet )
+    {
+        nRet = DND_ACTION_NONE;
+
+        ReadDragServerInfo( rEvt.maPosPixel, &aDDInfo );
+
+        SvLBoxEntry* pTarget = pTargetEntry; // !!! kann 0 sein !!!
+
+        if( DND_ACTION_COPY == rEvt.mnAction
+             ? CopySelection( aDDInfo.pSource, pTarget )
+             : MoveSelection( aDDInfo.pSource, pTarget ))
+            nRet = rEvt.mnAction;
+    }
+    return nRet;
 }
 
 void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
-    DBG_ERROR( "must be implemented" );
+    DBG_CHKTHIS(SvLBox,0);
+    BOOL bDeleted = FALSE;
+
+    ReleaseMouse();
+    SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
+    if( !pEntry )
+    {
+        DragFinished( DND_ACTION_NONE );
+        return;
+    }
+
+    TransferDataContainer* pContainer = new TransferDataContainer;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
+
+    nOldDragMode = GetDragDropMode();
+    nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
+    if( !nDragDropMode || 0 == GetSelectionCount() )
+    {
+        nDragDropMode = nOldDragMode;
+        DragFinished( DND_ACTION_NONE );
+        return;
+    }
+
+    SvLBoxDDInfo aDDInfo;
+    memset(&aDDInfo,0,sizeof(SvLBoxDDInfo));
+    aDDInfo.pApp = GetpApp();
+    aDDInfo.pSource = this;
+    aDDInfo.pDDStartEntry = pEntry;
+    // abgeleitete Views zum Zuge kommen lassen
+    WriteDragServerInfo( rPosPixel, &aDDInfo );
+
+    pContainer->CopyAnyData( SOT_FORMATSTR_ID_TREELISTBOX,
+                        (sal_Char*)&aDDInfo, sizeof(SvLBoxDDInfo) );
+    pDDSource = this;
+    pDDTarget = 0;
+
+    BOOL bOldUpdateMode = Control::IsUpdateMode();
+    Control::SetUpdateMode( TRUE );
+    Update();
+    Control::SetUpdateMode( bOldUpdateMode );
+
+    // Selektion & deren Childs im Model als DropTargets sperren
+    // Wichtig: Wenn im DropHandler die Selektion der
+    // SourceListBox veraendert wird, muessen vorher die Eintraege
+    // als DropTargets wieder freigeschaltet werden:
+    // (GetSourceListBox()->EnableSelectionAsDropTarget( TRUE, TRUE );)
+    EnableSelectionAsDropTarget( FALSE, TRUE /* with Childs */ );
+
+    pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
 }
 
-void SvLBox::DragFinished()
+void SvLBox::DragFinished( sal_Int8 nAction )
 {
-    DBG_ERROR( "must be implemented" );
+    EnableSelectionAsDropTarget( TRUE, TRUE );
+
+    if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&
+        ((ULONG)(pDDTarget->GetModel())!=(ULONG)(this->GetModel()))) ||
+        !pDDTarget ))
+    {
+        RemoveSelection();
+    }
+
+    ImplShowTargetEmphasis( pTargetEntry, FALSE );
+    pDDSource = 0;
+    pDDTarget = 0;
+    pTargetEntry = 0;
+    nDragDropMode = nOldDragMode;
+}
+
+DragDropMode SvLBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* )
+{
+    DBG_CHKTHIS(SvLBox,0);
+    return (DragDropMode)0xffff;
+}
+
+BOOL SvLBox::NotifyAcceptDrop( SvLBoxEntry* )
+{
+    DBG_CHKTHIS(SvLBox,0);
+    return TRUE;
+}
+
+// handler and methods for Drag - finished handler.
+// The with get GetDragFinishedHdl() get link can set on the
+// TransferDataContainer. This link is a callback for the DragFinished
+// call. AddBox method is called from the GetDragFinishedHdl() and the
+// remove is called in link callback and in the destructor. So it can't
+// called to a deleted object.
+
+static SvULongsSort aSortLBoxes;
+
+void SvLBox::AddBoxToDDList_Impl( const SvLBox& rB )
+{
+    ULONG nVal = (ULONG)&rB;
+    aSortLBoxes.Insert( nVal );
+}
+
+void SvLBox::RemoveBoxFromDDList_Impl( const SvLBox& rB )
+{
+    ULONG nVal = (ULONG)&rB;
+    aSortLBoxes.Remove( nVal );
+}
+
+IMPL_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8*, pAction )
+{
+    ULONG nVal = (ULONG)pThis;
+    USHORT nFnd;
+    if( aSortLBoxes.Seek_Entry( nVal, &nFnd ) )
+    {
+        pThis->DragFinished( *pAction );
+        aSortLBoxes.Remove( nFnd, 1 );
+    }
+    return 0;
+}
+
+Link SvLBox::GetDragFinishedHdl() const
+{
+    AddBoxToDDList_Impl( *this );
+    return STATIC_LINK( this, SvLBox, DragFinishHdl_Impl );
+}
+
+
+
+//JP 28.3.2001: old Drag & Drop API
+void SvLBox::BeginDrag( const Point& rPos )
+{
+}
+DragDropMode SvLBox::NotifyBeginDrag( SvLBoxEntry* )
+{
+    return (DragDropMode)0xffff;
+}
+void SvLBox::EndDrag()
+{
+}
+BOOL SvLBox::NotifyQueryDrop( SvLBoxEntry* )
+{
+    return TRUE;
 }
 

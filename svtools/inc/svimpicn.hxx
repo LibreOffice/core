@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpicn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,9 @@ public:
     void            SetDragDropMode( DragDropMode eDDMode );
     void            SetSelectionMode( SelectionMode eSelMode  );
 
+    void            SttDrag( const Point& rPos );
+    void            EndDrag();
+
     SvLBoxEntry*    GetCurEntry() const { return pCursor; }
     void            SetCursor( SvLBoxEntry* );
 
@@ -305,7 +308,6 @@ public:
 
     void            WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
     void            ReadDragServerInfo( const Point&, SvLBoxDDInfo* );
-    void            Command( const CommandEvent& rCEvt );
     void            ToTop( SvLBoxEntry* );
 
     void            SetCurParent( SvLBoxEntry* pNewParent );
@@ -315,7 +317,7 @@ public:
     void            Scroll( long nDeltaX, long nDeltaY, BOOL bScrollBar = FALSE );
     const Size&     GetItemSize( SvIconView* pView, SvLBoxEntry*, SvLBoxItem*,
                         const SvIcnVwDataEntry* pViewData = 0 ) const;
-    void            PrepareCommandEvent( const CommandEvent& );
+    void            PrepareCommandEvent( const Point& rPt );
 
     void            HideDDIcon();
     void            ShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPos );
