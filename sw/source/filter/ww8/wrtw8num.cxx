@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-20 17:07:20 $
+ *  last change: $Author: cmc $ $Date: 2002-11-21 11:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,25 +515,40 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
         USHORT nFontId;
         if (wwFont::IsStarSymbol(sFontName))
         {
+            /*
+            If we are starsymbol then in ww7- mode we will always convert to a
+            windows 8bit symbol font and an index into it, to conversion to
+            8 bit is complete at this stage.
+            */
             SubstituteBullet(sNumStr, eChrSet, sFontName);
             wwFont aPseudoFont(sFontName, rFont.GetPitch(), rFont.GetFamily(),
                 eChrSet, bWrtWW8);
             nFontId = maFontHelper.GetId(aPseudoFont);
+            *rpCh = sNumStr.GetChar(0);
         }
         else
-            nFontId = maFontHelper.GetId(rFont);
-        ShortToSVBT16(nFontId, rAnlv.ftc);
-
-        if (eChrSet == RTL_TEXTENCODING_SYMBOL)
         {
+            /*
+            Otherwise we are a unicode char and need to be converted back to
+            an 8 bit format. We happen to know that if the font is already an
+            8 bit windows font currently, staroffice promotes the char into
+            the F000->F0FF range, so we can undo this, and we'll be back to
+            the equivalent 8bit location, otherwise we have to convert from
+            true unicode to an 8bit charset
+            */
+            nFontId = maFontHelper.GetId(rFont);
             sal_Unicode cChar = sNumStr.GetChar(0);
-            if (cChar >= 0xF000 && cChar <= 0xF0FF)
-                sNumStr.SetChar(0, cChar - 0xF000);
+            if ( (eChrSet == RTL_TEXTENCODING_SYMBOL) && (cChar >= 0xF000) && (
+                cChar <= 0xF0FF) )
+            {
+                *rpCh = cChar - 0xF000;
+            }
+            else
+                *rpCh =  ByteString::ConvertFromUnicode(cChar, eChrSet);
         }
-
-        *rpCh =  ByteString::ConvertFromUnicode(sNumStr.GetChar(0), eChrSet);
         rpCh++;
         rCharLen--;
+        ShortToSVBT16(nFontId, rAnlv.ftc);
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
     }
     ShortToSVBT16( -rFmt.GetFirstLineOffset(), rAnlv.dxaIndent );
