@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:30:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,8 @@ private:
     void LoopGrids(sal_Int16 nWhat);
 
     // Invalidierung von Slots
-    void    InvalidateSlot(sal_Int16 nId, sal_Bool bWithItem = sal_True, sal_Bool bWithId = sal_False);
+    void    InvalidateSlot( sal_Int16 nId, sal_Bool bWithId );
+    void    UpdateSlot( sal_Int16 nId );
     // Locking der Invalidierung - wenn der interne Locking-Counter auf 0 geht, werden alle aufgelaufenen Slots
     // (asynchron) invalidiert
     void    LockSlotInvalidation(sal_Bool bLock);
