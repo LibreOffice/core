@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeployParcelAction.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:29:52 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 11:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         }
 
         void addNotify () {
-            SVersionRCFile rcfile = new SVersionRCFile();
+            SVersionRCFile rcfile = SVersionRCFile.createInstance();
 
             try {
                 versions = rcfile.getVersions();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeSettings.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:47 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 11:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public class OfficeSettings extends SystemOption {
         setWarnAfterDirDeploy(true);
         setWarnBeforeMount(true);
 
-        SVersionRCFile sversion = new SVersionRCFile();
+        SVersionRCFile sversion = SVersionRCFile.createInstance();
 
         try {
             Hashtable versions = sversion.getVersions();
@@ -114,7 +114,7 @@ public class OfficeSettings extends SystemOption {
 
         // if no office version is found try a default value
         setOfficeDirectory(System.getProperty("user.home") +
-            System.getProperty("file.separator") + "OpenOffice643C");
+            System.getProperty("file.separator") + "OpenOffice.org643");
     }
 
     public String displayName() {
