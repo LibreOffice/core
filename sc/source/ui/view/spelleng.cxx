@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:40:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #endif
 
 #include "spelleng.hxx"
+#include "spelldialog.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
 #include "cell.hxx"
@@ -104,28 +105,29 @@ bool lclHasString( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const S
 
 ScConversionEngineBase::ScConversionEngineBase(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
-        ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        ESelection* pEdSelection,
-        SCCOL nCol, SCROW nRow, SCTAB nTab,
-        bool bCellSelection ) :
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
     ScEditEngineDefaulter( pEnginePool ),
     mrViewData( rViewData ),
     mrDocShell( *rViewData.GetDocShell() ),
     mrDoc( *rViewData.GetDocShell()->GetDocument() ),
+    maSelState( rViewData ),
     mpUndoDoc( pUndoDoc ),
     mpRedoDoc( pRedoDoc ),
-    mpEditSel( pEdSelection ),
     meCurrLang( LANGUAGE_ENGLISH_US ),
-    mnStartCol( nCol ),
-    mnStartRow( nRow ),
-    mnStartTab( nTab ),
-    mnCurrCol( nCol ),
-    mnCurrRow( nRow ),
-    mbCellSelect( bCellSelection ),
     mbIsAnyModified( false ),
     mbInitialState( true ),
-    mbWrappedInTable( false )
+    mbWrappedInTable( false ),
+    mbFinished( false )
 {
+    maSelState.GetCellCursor().GetVars( mnStartCol, mnStartRow, mnStartTab );
+    // start with cell A1 in cell/range/multi-selection, will seek to first selected
+    if( maSelState.GetSelectionType() == SC_SELECTTYPE_SHEET )
+    {
+        mnStartCol = 0;
+        mnStartRow = 0;
+    }
+    mnCurrCol = mnStartCol;
+    mnCurrRow = mnStartRow;
 }
 
 ScConversionEngineBase::~ScConversionEngineBase()
@@ -209,11 +211,12 @@ bool ScConversionEngineBase::FindNextConversionCell()
         --nNewRow;
     }
 
+    bool bSheetSel = maSelState.GetSelectionType() == SC_SELECTTYPE_SHEET;
     bool bLoop = true;
     bool bFound = false;
     while( bLoop && !bFound )
     {
-        bLoop = mrDoc.GetNextSpellingCell( nNewCol, nNewRow, mnStartTab, mbCellSelect, rMark );
+        bLoop = mrDoc.GetNextSpellingCell( nNewCol, nNewRow, mnStartTab, bSheetSel, rMark );
         if( bLoop )
         {
             FillFromCell( mnCurrCol, mnCurrRow, mnStartTab );
@@ -222,16 +225,18 @@ bool ScConversionEngineBase::FindNextConversionCell()
             {
                 ShowFinishDialog();
                 bLoop = false;
+                mbFinished = true;
             }
             else if( nNewCol > MAXCOL )
             {
                 // no more cells in the sheet - try to restart at top of sheet
 
-                if( mbCellSelect || ((mnStartCol == 0) && (mnStartRow == 0)) )
+                if( bSheetSel || ((mnStartCol == 0) && (mnStartRow == 0)) )
                 {
                     // conversion started at cell A1 or in selection, do not query to restart at top
                     ShowFinishDialog();
                     bLoop = false;
+                    mbFinished = true;
                 }
                 else if( ShowTableWrapDialog() )
                 {
@@ -240,7 +245,10 @@ bool ScConversionEngineBase::FindNextConversionCell()
                     mbWrappedInTable = true;
                 }
                 else
+                {
                     bLoop = false;
+                    mbFinished = true;
+                }
             }
             else
             {
@@ -279,16 +287,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
         pViewShell->SetCursor( nNewCol, nNewRow, TRUE );
         mrViewData.GetView()->MakeEditView( this, nNewCol, nNewRow );
         EditView* pEditView = mrViewData.GetSpellingView();
-        if( mpEditSel )
-        {
-            pEditView->SetSelection( *mpEditSel );
-            mpEditSel = NULL;
-        }
-        else
-        {
-            ESelection aSel;
-            pEditView->SetSelection( aSel );
-        }
+        // maSelState.GetEditSelection() returns (0,0) if not in edit mode -> ok
+        pEditView->SetSelection( maSelState.GetEditSelection() );
 
         ClearModifyFlag();
         mnCurrCol = nNewCol;
@@ -348,10 +348,8 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 ScSpellingEngine::ScSpellingEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        ESelection* pEdSelection,
-        SCCOL nCol, SCROW nRow, SCTAB nTab,
-        bool bCellSelection, XSpellCheckerRef xSpeller ) :
-    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection )
+        XSpellCheckerRef xSpeller ) :
+    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc )
 {
     SetSpeller( xSpeller );
 }
@@ -365,8 +363,9 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     DBG_ASSERT( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
     {
-        ScWaitCursorOff aWaitOff( mrDocShell.GetDialogParent() );
-        InfoBox( mrViewData.GetDialogParent(), ScGlobal::GetRscString( STR_NOLANGERR ) ).Execute();
+        Window* pParent = GetDialogParent();
+        ScWaitCursorOff aWaitOff( pParent );
+        InfoBox( pParent, ScGlobal::GetRscString( STR_NOLANGERR ) ).Execute();
     }
 }
 
@@ -382,8 +381,9 @@ bool ScSpellingEngine::NeedsConversion()
 
 bool ScSpellingEngine::ShowTableWrapDialog()
 {
-    ScWaitCursorOff aWaitOff( mrDocShell.GetDialogParent() );
-    MessBox aMsgBox( mrViewData.GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+    Window* pParent = GetDialogParent();
+    ScWaitCursorOff aWaitOff( pParent );
+    MessBox aMsgBox( pParent, WinBits( WB_YES_NO | WB_DEF_YES ),
         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
         ScGlobal::GetRscString( STR_SPELLING_BEGIN_TAB) );
     return aMsgBox.Execute() == RET_YES;
@@ -391,8 +391,23 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 
 void ScSpellingEngine::ShowFinishDialog()
 {
-    ScWaitCursorOff aWaitOff( mrDocShell.GetDialogParent() );
-    InfoBox( mrViewData.GetDialogParent(), ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) ).Execute();
+    Window* pParent = GetDialogParent();
+    ScWaitCursorOff aWaitOff( pParent );
+    InfoBox( pParent, ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) ).Execute();
+}
+
+Window* ScSpellingEngine::GetDialogParent()
+{
+    USHORT nWinId = ScSpellDialogChildWindow::GetChildWindowId();
+    SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
+    if( pViewFrm->HasChildWindow( nWinId ) )
+        if( SfxChildWindow* pChild = pViewFrm->GetChildWindow( nWinId ) )
+            if( Window* pWin = pChild->GetWindow() )
+                if( pWin->IsVisible() )
+                    return pWin;
+
+    // fall back to standard dialog parent
+    return mrDocShell.GetDialogParent();
 }
 
 // ============================================================================
@@ -400,10 +415,8 @@ void ScSpellingEngine::ShowFinishDialog()
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        ESelection* pEdSelection,
-        SCCOL nCol, SCROW nRow, SCTAB nTab,
-        bool bCellSelection, LanguageType eConvLanguage ) :
-    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection ),
+        LanguageType eConvLanguage ) :
+    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc ),
     meConvLang( eConvLanguage )
 {
 }
