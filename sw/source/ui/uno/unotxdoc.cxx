@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:08:16 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,7 +1871,7 @@ OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextDocument");
 }
-/* -----------------05.11.03 09:59-------------------
+/* -----------------20.01.04 10:14-------------------
  *
  * --------------------------------------------------*/
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
@@ -1892,23 +1892,29 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
             (bTextDoc   && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"  )))
            );
 }
-/* -----------------18.03.99 11:32-------------------
+/* -----------------20.01.04 10:17-------------------
  *
  * --------------------------------------------------*/
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
     BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
     BOOL bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    BOOL bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
-    Sequence< OUString > aRet ( 1 );
+    Sequence< OUString > aRet (3);
     OUString* pArray = aRet.getArray();
 
-    if ( bWebDoc )
-        pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.WebDocument" ) ) );
-    else if ( bGlobalDoc )
-        pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GlobalDocument" ) ) );
+    pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.document.OfficeDocument"  ) ) );
+    pArray[1] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GenericTextDocument" ) ) );
+
+    if (bTextDoc)
+        pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
     else
-        pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
+    if (bWebDoc)
+        pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.WebDocument" ) ) );
+    else
+    if (bGlobalDoc)
+        pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GlobalDocument" ) ) );
 
     return aRet;
 }
