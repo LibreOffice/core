@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-20 12:30:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 12:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,14 +976,16 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
             {
                 if ( !bReadOnly )
                 {
-                    CutCopy( GetWindow()->GetClipboard(), sal_True );
+                    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                    CutCopy( aClipBoard, sal_True );
                     bDone = sal_True;
                 }
             }
             break;
             case KEYFUNC_COPY:
             {
-                CutCopy( GetWindow()->GetClipboard(), sal_False );
+                Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                CutCopy( aClipBoard, sal_False );
                 bDone = TRUE;
             }
             break;
@@ -992,7 +994,8 @@ sal_Bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent )
                 if ( !bReadOnly && IsPasteEnabled() )
                 {
                     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-                    Paste( GetWindow()->GetClipboard(), pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+                    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                    Paste( aClipBoard, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
                     pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
                     bDone = sal_True;
                 }
@@ -1023,11 +1026,13 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        Paste( GetWindow()->GetSelection() );
+        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+        Paste( aClipBoard );
     }
     else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
-        CutCopy( GetWindow()->GetSelection(), FALSE );
+        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+        CutCopy( aClipBoard, FALSE );
     }
 
     return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
