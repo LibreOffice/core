@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
+ *  last change: $Author: dvo $ $Date: 2001-11-08 19:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,15 @@ void XMLRedlineExport::ExportChange(
 {
     if (bAutoStyle)
     {
-        ExportChangeAutoStyle(rPropSet);
+        // For the headers/footers, we have to collect the autostyles
+        // here.  For the general case, however, it's better to collet
+        // the autostyles by iterating over the global redline
+        // list. So that's what we do: Here, we collect autostyles
+        // only if we have no current list of changes. For the
+        // main-document case, the autostyles are collected in
+        // ExportChangesListAutoStyles().
+        if (pCurrentChangesList != NULL)
+            ExportChangeAutoStyle(rPropSet);
     }
     else
     {
@@ -208,7 +216,7 @@ void XMLRedlineExport::ExportChangesList(sal_Bool bAutoStyles)
 {
     if (bAutoStyles)
     {
-//      ExportChangesListAutoStyles();
+        ExportChangesListAutoStyles();
     }
     else
     {
@@ -221,7 +229,8 @@ void XMLRedlineExport::ExportChangesList(
     const Reference<XText> & rText,
     sal_Bool bAutoStyles)
 {
-    // do not export any auto styles
+    // in the header/footer case, auto styles are collected from the
+    // inline change elements.
     if (bAutoStyles)
         return;
 
@@ -401,7 +410,14 @@ void XMLRedlineExport::ExportChangesListAutoStyles()
                            "can't get XPropertySet; skipping Redline");
                 if (xPropSet.is())
                 {
-                    ExportChangeAutoStyle(xPropSet);
+
+                    // export only if not in header or footer
+                    // (those must be exported with their XText)
+                    aAny = xPropSet->getPropertyValue(sIsInHeaderFooter);
+                    if (! *(sal_Bool*)aAny.getValue())
+                    {
+                        ExportChangeAutoStyle(xPropSet);
+                    }
                 }
             }
         }
@@ -634,15 +650,16 @@ void XMLRedlineExport::ExportStartOrEndRedline(
         rPropSet->getPropertyValue(bStart ? sStartRedline : sEndRedline);
     Sequence<PropertyValue> aValues;
     aAny >>= aValues;
+    const PropertyValue* pValues = aValues.getConstArray();
 
     // seek for redline ID
     sal_Int32 nLength = aValues.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
-        if (sRedlineIdentifier.equals(aValues[i].Name))
+        if (sRedlineIdentifier.equals(pValues[i].Name))
         {
             OUString sId;
-            aValues[i].Value >>= sId;
+            pValues[i].Value >>= sId;
 
             // TODO: use GetRedlineID or elimiate that function
             OUStringBuffer sBuffer(sChangePrefix);
