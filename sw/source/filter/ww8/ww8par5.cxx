@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-27 16:25:05 $
+ *  last change: $Author: cmc $ $Date: 2001-03-05 13:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,6 @@ static FNReadField aWW8FieldTab[93] = {
 0,
 0,
 &SwWW8ImplReader::Read_F_Equation,          // 49
-0,
 0,
 &SwWW8ImplReader::Read_F_Macro,             // 51
 &SwWW8ImplReader::Read_F_ANumber,           // 52
@@ -3092,12 +3091,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.12 2001-02-27 16:25:05 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.13 2001-03-05 13:13:24 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/02/27 16:25:05  cmc
+      #81314#,#81326# Index fixes
+
       Revision 1.11  2001/02/26 13:44:24  cmc
       Ruby Text Import
 
