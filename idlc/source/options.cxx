@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: jsc $ $Date: 2001-07-25 14:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         OString tmp(s);
                         sal_Int32 nIndex = 0;
                         inc = OString();
-                        do inc = inc + "-I" + tmp.getToken( 0, ';', nIndex ); while( nIndex != -1 );
+                        do inc = inc + " -I" + tmp.getToken( 0, ';', nIndex ); while( nIndex != -1 );
                     } else
                         inc = OString("-I") + s;
 
