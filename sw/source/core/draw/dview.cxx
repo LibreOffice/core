@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:33:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
 
 void SwDrawView::AddCustomHdl()
 {
-    const SdrMarkList &rMrkList = GetMarkList();
+    const SdrMarkList &rMrkList = GetMarkedObjectList();
 
     if(rMrkList.GetMarkCount() != 1 || !GetUserCall(rMrkList.GetMark( 0 )->GetObj()))
         return;
@@ -484,7 +484,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
 BOOL SwDrawView::TakeDragLimit( SdrDragMode eMode,
                                             Rectangle& rRect ) const
 {
-    const SdrMarkList &rMrkList = GetMarkList();
+    const SdrMarkList &rMrkList = GetMarkedObjectList();
     BOOL bRet = FALSE;
     if( 1 == rMrkList.GetMarkCount() )
     {
@@ -511,7 +511,7 @@ BOOL SwDrawView::TakeDragLimit( SdrDragMode eMode,
 
 const SwFrm* SwDrawView::CalcAnchor()
 {
-    const SdrMarkList &rMrkList = GetMarkList();
+    const SdrMarkList &rMrkList = GetMarkedObjectList();
     if ( rMrkList.GetMarkCount() != 1 )
         return NULL;
 
@@ -717,7 +717,7 @@ void SwDrawView::CheckPossibilities()
     //sein, wenn der Inhalt des Rahmens geschuetzt ist.
     //OLE-Objekte konnen selbst einen Resize-Schutz wuenschen (StarMath)
 
-    const SdrMarkList &rMrkList = GetMarkList();
+    const SdrMarkList &rMrkList = GetMarkedObjectList();
     FASTBOOL bProtect = FALSE,
              bSzProtect = FALSE;
     for ( USHORT i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
@@ -771,7 +771,7 @@ void SwDrawView::CheckPossibilities()
 void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 {
     SdrPageView* pDrawPageView = _rMarkView.GetPageViewPgNum(0);
-    const SdrMarkList& rMarkList = _rMarkView.GetMarkList();
+    const SdrMarkList& rMarkList = _rMarkView.GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() )
     {
@@ -805,7 +805,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
             aMarkedObjs.pop_back();
         }
         // sort marked list in order to assure consistent state in drawing layer
-        _rMarkView.SortMarkList();
+        _rMarkView.SortMarkedObjects();
     }
 }
 
@@ -841,10 +841,10 @@ void SwDrawView::DeleteMarked()
 /********
 JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
             wie Bug 57475
-const SdrMarkList& SwDrawView::GetMarkList() const
+const SdrMarkList& SwDrawView::GetMarkedObjectList() const
 {
     FlushComeBackTimer();
-    return FmFormView::GetMarkList();
+    return FmFormView::GetMarkedObjectList();
 }
 *************/
 
