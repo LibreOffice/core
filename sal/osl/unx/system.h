@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-26 16:48:34 $
+ *  last change: $Author: svesik $ $Date: 2001-05-14 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
 #   define  NO_PTHREAD_PRIORITY
+#     define  NO_PTHREAD_SEMAPHORES
 #   define  NO_PTHREAD_RTL
 /* __progname isn't sufficient here. We need the full path as well
  * for e.g. setup and __progname only points to the binary name.
