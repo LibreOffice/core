@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-21 10:45:39 $
+#   last change: $Author: sb $ $Date: 2002-12-06 10:58:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.58 $$"
+LIBSMKREV!:="$$Revision: 1.59 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -210,6 +210,7 @@ SWLIB=-lswlib
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
 SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
+JVMACCESSLIB = -ljvmaccess$(COMID)
 
 #
 # USED_%NAME%_LIBS
@@ -362,7 +363,7 @@ FREETYPELIBST=freetype.lib
 PKGCHKLIB=$(LIBPRE) ipkgchk.lib
 SYSSHELLLIB=sysshell.lib
 SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
-
+JVMACCESSLIB = $(LIBPRE) ijvmaccess.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
