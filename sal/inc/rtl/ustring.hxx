@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-05-17 10:06:58 $
+ *  last change: $Author: th $ $Date: 2001-07-27 13:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,36 +276,32 @@ public:
       This function can't be used for language specific sorting.
 
       @param    str         the object to be compared.
-      @param    length      the maximum numbers to be compared.
+      @param    maxLength   the maximum count of characters to be compared.
       @return   <code>0</code> - if both strings are equal
                 <code>< 0</code> - if this string is less than the string argument
                 <code>> 0</code> - if this string is greater than the string argument
     */
-    sal_Int32 compareTo( const OUString & str, sal_Int32 length ) const SAL_THROW(())
+    sal_Int32 compareTo( const OUString & str, sal_Int32 maxLength ) const SAL_THROW(())
     {
         return rtl_ustr_shortenedCompare_WithLength( pData->buffer, pData->length,
-                                                     str.pData->buffer, str.pData->length, length );
+                                                     str.pData->buffer, str.pData->length, maxLength );
     }
 
     /**
-      Compares two strings.
+      Compares two strings in reverse order.
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
-      Since this method is optimized for performance, the ASCII character
-      values are not converted in any way. The caller has to make sure that
-      all ASCII characters are in the allowed range between 0 and
-      127. The ASCII string must be NULL-terminated.
       This function can't be used for language specific sorting.
 
-      @param  anotherString   the 8-Bit ASCII character string to be compared.
+      @param    str         the object to be compared.
       @return   <code>0</code> - if both strings are equal
                 <code>< 0</code> - if this string is less than the string argument
                 <code>> 0</code> - if this string is greater than the string argument
     */
-    sal_Int32 compareToAscii( const sal_Char* anotherString ) const
+    sal_Int32 reverseCompareTo( const OUString & str ) const SAL_THROW(())
     {
-        return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length,
-                                                  anotherString );
+        return rtl_ustr_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                   str.pData->buffer, str.pData->length );
     }
 
     /**
@@ -324,8 +320,8 @@ public:
             return sal_False;
         if ( pData == str.pData )
             return sal_True;
-        return rtl_ustr_compare_WithLength( pData->buffer, pData->length,
-                                            str.pData->buffer, str.pData->length ) == 0;
+        return rtl_ustr_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                   str.pData->buffer, str.pData->length ) == 0;
     }
 
     /**
@@ -349,6 +345,266 @@ public:
             return sal_True;
         return rtl_ustr_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                            str.pData->buffer, str.pData->length ) == 0;
+    }
+
+    /**
+      Perform a comparison of a substring in this string.
+      The result is true if and only if second string
+      represents the same sequence of characters in the first string at
+      the given position.
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @param    fromIndex   the index to start the comparion from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   sal_True if str match with the characters in the string
+                at the given position;
+                sal_False, otherwise.
+    */
+    sal_Bool match( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                     str.pData->buffer, str.pData->length, str.pData->length ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of a substring in this string.
+      The result is true if and only if second string
+      represents the same sequence of characters in the first string at
+      the given position.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @param    fromIndex   the index to start the comparion from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   sal_True if str match with the characters in the string
+                at the given position;
+                sal_False, otherwise.
+    */
+    sal_Bool matchIgnoreAsciiCase( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                    str.pData->buffer, str.pData->length,
+                                                                    str.pData->length ) == 0;
+    }
+
+    /**
+      Compares two strings.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
+      This function can't be used for language specific sorting.
+
+      @param  asciiStr      the 8-Bit ASCII character string to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareToAscii( const sal_Char* asciiStr ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length, asciiStr );
+    }
+
+    /**
+      Compares two strings with an maximum count of characters.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
+      This function can't be used for language specific sorting.
+
+      @param  asciiStr          the 8-Bit ASCII character string to be compared.
+      @param  maxLength         the maximum count of characters to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 compareToAscii( const sal_Char * asciiStr, sal_Int32 maxLength ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,
+                                                           asciiStr, maxLength );
+    }
+
+    /**
+      Compares two strings in reverse order. This could be useful,
+      if normally both strings start with the same content.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated and must be greater or
+      equal as asciiStrLength.
+      This function can't be used for language specific sorting.
+
+      @param    asciiStr        the 8-Bit ASCII character string to be compared.
+      @param    asciiStrLength  the length of the ascii string
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 reverseCompareToAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    {
+        return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                          asciiStr, asciiStrLength );
+    }
+
+    /**
+      Perform a comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
+      This function can't be used for language specific comparison.
+
+      @param    asciiStr        the 8-Bit ASCII character string to be compared.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsAscii( const sal_Char* asciiStr ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_compare_WithLength( pData->buffer, pData->length,
+                                                  asciiStr ) == 0;
+    }
+
+    /**
+      Perform a comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated and must be greater or
+      equal as asciiStrLength.
+      This function can't be used for language specific comparison.
+
+      @param    asciiStr         the 8-Bit ASCII character string to be compared.
+      @param    asciiStrLength   the length of the ascii string
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    {
+        if ( pData->length != asciiStrLength )
+            return sal_False;
+
+        return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                          asciiStr, asciiStrLength ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string,
+      ignoring the case.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
+      This function can't be used for language specific comparison.
+
+      @param    asciiStr        the 8-Bit ASCII character string to be compared.
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of two strings.
+      The result is true if and only if second string
+      represents the same sequence of characters as the first string,
+      ignoring the case.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated and must be greater or
+      equal as asciiStrLength.
+      This function can't be used for language specific comparison.
+
+      @param    asciiStr        the 8-Bit ASCII character string to be compared.
+      @param    asciiStrLength  the length of the ascii string
+      @return   sal_True if the strings are equal;
+                sal_False, otherwise.
+    */
+    sal_Bool equalsIgnoreAsciiCaseAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    {
+        if ( pData->length != asciiStrLength )
+            return sal_False;
+
+        return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
+    }
+
+    /**
+      Perform a comparison of a substring in this string.
+      The result is true if and only if second string
+      represents the same sequence of characters in the first string at
+      the given position.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated and must be greater or
+      equal as asciiStrLength.
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @param    fromIndex   the index to start the comparion from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   sal_True if str match with the characters in the string
+                at the given position;
+                sal_False, otherwise.
+    */
+    sal_Bool matchAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                           asciiStr, asciiStrLength ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of a substring in this string.
+      The result is true if and only if second string
+      represents the same sequence of characters in the first string at
+      the given position.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated and must be greater or
+      equal as asciiStrLength.
+      This function can't be used for language specific comparison.
+
+      @param    asciiStr        the 8-Bit ASCII character string to be compared.
+      @param    asciiStrLength  the length of the ascii string
+      @param    fromIndex       the index to start the comparion from.
+                                The index must be greater or equal than 0
+                                and less or equal as the string length.
+      @return   sal_True if str match with the characters in the string
+                at the given position;
+                sal_False, otherwise.
+    */
+    sal_Bool matchIgnoreAsciiCaseAsciiL( const sal_Char* asciiStr, sal_Int32 asciiStrLength, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                          asciiStr, asciiStrLength ) == 0;
     }
 
     friend sal_Bool     operator == ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
@@ -550,7 +806,7 @@ public:
         return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
-    friend OUString operator+( const OUString& rStr1, const OUString& rStr2  )
+    friend OUString operator+( const OUString& rStr1, const OUString& rStr2  ) SAL_THROW(())
     {
         return rStr1.concat( rStr2 );
     }
@@ -839,88 +1095,19 @@ public:
     /**
       Returns a OUString copied without conversion from an ASCII
       character string.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
 
-      @param    value       string in ASCII characters
-      @return   New OUString copied from the ASCII string.
+      @param    value       the 8-Bit ASCII character string
+      @return   a string with the string representation of the argument.
      */
-    static OUString createFromAscii( const sal_Char * value )
+    static OUString createFromAscii( const sal_Char * value ) SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newFromAscii( &pNew, value );
         return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
-    }
-
-
-
-
-
-
-
-
-    /**
-        Compares the string lexicographically with a 8-Bit ASCII
-        character string using only the number of characters given
-        in the length parameter. The comparison is based on the
-        numerical values of each Unicode/ASCII character in the
-        strings with a 8-Bit ASCII character string. Since this
-        method is optimized for performance. the ASCII character
-        values are not converted in any way. The caller has to
-        make sure that all ASCII characters are in the allowed
-       range between 0 and 127.
-        The ASCII string must be NULL-terminated.
-
-        @param  anotherString   the <code>OUString</code> to be compared.
-        @param  shortenedLength   the number of characters that are compared.
-        @return 'This string' and 'argument string' here means the substring
-                defined by the shortenedLength parameter.
-                the value <code>0</code> if the argument string is equal to
-                this string; a value less than <code>0</code> if this string
-                is lexicographically less than the string argument; and a
-                value greater than <code>0</code> if this string is
-                lexicographically greater than the string argument.
-     */
-    sal_Int32 compareToAscii( const sal_Char* anotherString, sal_Int32 shortenedLength ) const
-    {
-        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,
-                                                  anotherString, shortenedLength );
-    }
-
-    /**
-        Compares the string reverse lexicographically with a 8-Bit ASCII
-        character string. <STRONG>The anotherStringLength parameter is the length of
-        the ASCII string and not the number of characters which should be
-        compared.</STRONG> The reverse comparison is based on the
-        numerical values of each Unicode/ASCII character in the
-        strings with a 8-Bit ASCII character string. Since this
-        method is optimized for performance. the ASCII character
-        values are not converted in any way. The caller has to
-        ensure that all ASCII characters are in the allowed
-        range between 0 and 127.
-        The ASCII string must be NULL-terminated.
-
-        @param  anotherString   the <code>OUString</code> to be compared.
-        @param  anotherStringLength   the number of characters that are compared.
-        @return the value <code>0</code> if the argument string is equal to
-                this string; a value less than <code>0</code> if this string
-                is lexicographically less than the string argument; and a
-                value greater than <code>0</code> if this string is
-                lexicographically greater than the string argument.
-                <STRONG>The compare order is from the last character to the
-                first one</STRONG>.
-     */
-    sal_Int32 reverseCompareToAsciiL( const sal_Char* anotherString, sal_Int32 anotherStringLength ) const
-    {
-        return rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
-                                                          anotherString, anotherStringLength );
-    }
-
-    sal_Bool equalsAsciiL( const sal_Char* anotherString, sal_Int32 anotherStringLength ) const
-    {
-        if( pData->length == anotherStringLength )
-            return 0 == rtl_ustr_asciil_reverseCompare_WithLength( pData->buffer, pData->length,
-                                                              anotherString, anotherStringLength );
-        else
-            return sal_False;
     }
 };
 

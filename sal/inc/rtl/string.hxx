@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-05-17 10:06:47 $
+ *  last change: $Author: th $ $Date: 2001-07-27 13:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,15 +281,32 @@ public:
       This function can't be used for language specific sorting.
 
       @param    str         the object to be compared.
-      @param    length      the maximum numbers to be compared.
+      @param    maxLength   the maximum count of characters to be compared.
       @return   <code>0</code> - if both strings are equal
                 <code>< 0</code> - if this string is less than the string argument
                 <code>> 0</code> - if this string is greater than the string argument
     */
-    sal_Int32 compareTo( const OString & rObj, sal_Int32 length ) const SAL_THROW(())
+    sal_Int32 compareTo( const OString & rObj, sal_Int32 maxLength ) const SAL_THROW(())
     {
-        return rtl_str_shortenedCompare_WithLength( pData->buffer, length,
-                                                    rObj.pData->buffer, rObj.pData->length, length );
+        return rtl_str_shortenedCompare_WithLength( pData->buffer, pData->length,
+                                                    rObj.pData->buffer, rObj.pData->length, maxLength );
+    }
+
+    /**
+      Compares two strings in reverse order.
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      This function can't be used for language specific sorting.
+
+      @param    str         the object to be compared.
+      @return   <code>0</code> - if both strings are equal
+                <code>< 0</code> - if this string is less than the string argument
+                <code>> 0</code> - if this string is greater than the string argument
+    */
+    sal_Int32 reverseCompareTo( const OString & str ) const SAL_THROW(())
+    {
+        return rtl_str_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                  str.pData->buffer, str.pData->length );
     }
 
     /**
@@ -308,8 +325,8 @@ public:
             return sal_False;
         if ( pData == str.pData )
             return sal_True;
-        return rtl_str_compare_WithLength( pData->buffer, pData->length,
-                                           str.pData->buffer, str.pData->length ) == 0;
+        return rtl_str_reverseCompare_WithLength( pData->buffer, pData->length,
+                                                  str.pData->buffer, str.pData->length ) == 0;
     }
 
     /**
@@ -333,6 +350,51 @@ public:
             return sal_True;
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                           str.pData->buffer, str.pData->length ) == 0;
+    }
+
+    /**
+      Perform a comparison of a substring in this string.
+      The result is true if and only if second string
+      represents the same sequence of characters in the first string at
+      the given position.
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @param    fromIndex   the index to start the comparion from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   sal_True if str match with the characters in the string
+                at the given position;
+                sal_False, otherwise.
+    */
+    sal_Bool match( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                    str.pData->buffer, str.pData->length, str.pData->length ) == 0;
+    }
+
+    /**
+      Perform a ASCII lowercase comparison of a substring in this string.
+      The result is true if and only if second string
+      represents the same sequence of characters in the first string at
+      the given position.
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @param    fromIndex   the index to start the comparion from.
+                            The index must be greater or equal than 0
+                            and less or equal as the string length.
+      @return   sal_True if str match with the characters in the string
+                at the given position;
+                sal_False, otherwise.
+    */
+    sal_Bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                   str.pData->buffer, str.pData->length,
+                                                                   str.pData->length ) == 0;
     }
 
     friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
