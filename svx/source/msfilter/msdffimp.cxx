@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-15 14:10:54 $
+ *  last change: $Author: sj $ $Date: 2000-11-16 14:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,10 +784,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                     rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
             }
             break;
-            // FillStyle
-            case DFF_Prop_fillOpacity :
-                rSet.Put( XFillTransparenceItem( USHORT( 100 - ( ( nContent * 100 ) >> 16 ) ) ) );
-            break;
+
             case DFF_Prop_fillColor :
                 rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
             break;
@@ -1180,7 +1177,11 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
         switch( eMSO_FillType )
         {
             case mso_fillSolid :            // Fill with a solid color
+            {
                 eXFill = XFILL_SOLID;
+                if ( IsProperty( DFF_Prop_fillOpacity ) )
+                    rSet.Put( XFillTransparenceItem( sal_uInt16( 100 - ( ( GetPropertyValue( DFF_Prop_fillOpacity ) * 100 ) >> 16 ) ) ) );
+            }
             break;
             case mso_fillPattern :          // Fill with a pattern (bitmap)
             case mso_fillTexture :          // A texture (pattern with its own color map)
@@ -2040,8 +2041,6 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                 aSet.Put(SvxColorItem( COL_BLACK ));
                 rOutliner.SetParaAttribs(0,aSet);
-
-//-/                pText->NbcSetAttributes(aSet,FALSE);
                 pText->SetItemSet(aSet);
 
                 bClearParaAttribs = FALSE;
@@ -2379,7 +2378,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         double fCaMX = 3472.0;
         double fCaMY = 3472.0;
         double fCaMZ = fCamZ < 100.0 ? 100.0 : fCamZ;
-        INT32 nVal = GetPropertyValue( DFF_Prop_c3DXViewpoint, 0 );
+        sal_Int32 nVal = GetPropertyValue( DFF_Prop_c3DXViewpoint, 0 );
         if ( nVal )
         {
             ScaleEmu( nVal );
@@ -2406,8 +2405,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
 
         rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PERSPECTIVE : PR_PARALLEL );
         pScene->SetCamera( rCamera );
-
-//-/        pScene->NbcSetAttributes( aSet, FALSE );
         pScene->SetItemSet(aSet);
 
         pScene->SetRectsDirty();
@@ -2446,8 +2443,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             {
                 aSet.Put( XLineStyleItem( XLINE_SOLID ) );  // Linien: Durchgehend
                 aSet.Put( XFillStyleItem ( XFILL_NONE ) );  // Flaeche: unsichtbar
-
-//-/                pScene->NbcSetAttributes( aSet, FALSE );
                 pScene->SetItemSet(aSet);
 
                 // 3D: Doppelseitig
@@ -2458,7 +2453,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                     if ( pSingleObj->ISA(E3dExtrudeObj ) )
                     {
                         E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-//-/                        pSingleExtrude->SetDoubleSided( TRUE );
                         pSingleExtrude->SetItem(Svx3DDoubleSidedItem(TRUE));
                     }
                 }
@@ -2477,21 +2471,17 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                 if ( pSingleObj->ISA( E3dExtrudeObj ) )
                 {
                     E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-//-/                    if ( nVal != (long)pSingleExtrude->GetExtrudeDepth() )
                     sal_Int32 nSingleExtrudeDepth = pSingleExtrude->GetExtrudeDepth();
-                    if( nVal != (sal_Int32)nSingleExtrudeDepth)
+                    if( nVal != nSingleExtrudeDepth )
                     {
                         if ( nVal == 338667 )
                         {
                             // MS unendlich
-//-/                            pSingleExtrude->SetExtrudeDepth( fDepth * 18.0 );
                             pSingleExtrude->SetItem(Svx3DDepthItem(sal_uInt32((fDepth * 18.0)+0.5)));
 
-//-/                            pSingleExtrude->SetExtrudeBackScale( 0.1 );
                             UINT16 nBackScale = (UINT16)((0.1 * 100.0) + 0.5);
                             pSingleExtrude->SetItem(Svx3DBackscaleItem(nBackScale));
 
-//-/                            pSingleExtrude->SetExtrudePercentDiag( 0.01 );
                             UINT16 nPercentDiagonal = (UINT16)((0.01 * 200.0) + 0.5);
                             pSingleExtrude->SetItem(Svx3DPercentDiagonalItem(nPercentDiagonal));
 
@@ -2501,7 +2491,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                             bUseBackSide = TRUE;
                         }
                         else
-//-/                            pSingleExtrude->SetExtrudeDepth( (double)nVal );
                             pSingleExtrude->SetItem(Svx3DDepthItem(sal_uInt32(nVal + 0.5)));
                     }
                 }
@@ -2573,8 +2562,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             if ( pSingleObj->ISA( E3dExtrudeObj ) )
             {
                 E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-
-//-/                double fFrontPlaneDepth = pSingleExtrude->GetExtrudeDepth();
                 double fFrontPlaneDepth = (double)pSingleExtrude->GetExtrudeDepth();
 
                 if ( bUseBackSide )
@@ -2665,8 +2652,6 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
             rSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
             rSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String() ) );
-
-//-/            pNewObj->NbcSetAttributes( rSet, FALSE );
             pNewObj->SetItemSet(rSet);
 
             pRet = pNewObj->ConvertToPolyObj( FALSE, FALSE );
@@ -3263,8 +3248,6 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         if ( aObjData.eShapeType == mso_sptTextBox )
                             aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
                         pRet->SetModel( pSdrModel );
-
-//-/                        pRet->NbcSetAttributes( aSet, FALSE );
                         pRet->SetItemSet(aSet);
 
                         // Rotieren
@@ -3306,7 +3289,6 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                                 {
                                     SdrObject*  pObj = pObjectList->GetObj( i );
                                     if ( pObj )
-//-/                                        pObj->NbcSetAttributes( aSet, FALSE );
                                         pObj->SetItemSet(aSet);
                                 }
                             }
@@ -3603,7 +3585,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
 
             pTextObj->SetModel( pSdrModel );
-//-/            pTextObj->NbcSetAttributes( aSet, FALSE );
             pTextObj->SetItemSet(aSet);
 
             // rotate text with shape ?
@@ -3646,10 +3627,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( SFX_ITEM_DEFAULT == eState )
                 aSet.Put( XFillColorItem( String(),
                           Color( mnDefaultColor ) ) );
-
-//-/            pObj->NbcSetAttributes( aSet, FALSE );
             pObj->SetItemSet(aSet);
-
         }
 
         pImpRec->bDrawHell      = (BOOL)GetPropertyValue( DFF_Prop_fPrint, 0 );
@@ -5092,22 +5070,6 @@ SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
     SdrObject* pRet = NULL;
     switch ( eTyp )
     {
-        case mso_sptSmileyFace                : nNewType= 17; break;
-        case mso_sptDonut                     : nNewType= 18; break;
-        case mso_sptNoSmoking                 : nNewType= 19; break;
-        case mso_sptBlockArc                  : nNewType= 20; break;
-        case mso_sptHeart                     : nNewType= 21; break;
-        case mso_sptLightningBolt             : nNewType= 22; break;
-        case mso_sptSun                       : nNewType= 23; break;
-        case mso_sptMoon                      : nNewType= 24; break;
-        case mso_sptArc                       : nNewType= 25; break;
-        case mso_sptBracketPair               : nNewType= 26; break;
-        case mso_sptBracePair                 : nNewType= 27; break;
-        case mso_sptPlaque                    : nNewType= 28; break;
-        case mso_sptLeftBracket               : nNewType= 29; break;
-        case mso_sptRightBracket              : nNewType= 30; break;
-        case mso_sptLeftBrace                 : nNewType= 31; break;
-        case mso_sptRightBrace                : nNewType= 32; break;
         case mso_sptUturnArrow                : nNewType= 49; break;
         case mso_sptCurvedLeftArrow           : nNewType= 53; break;
         case mso_sptCurvedRightArrow          : nNewType= 52; break;
