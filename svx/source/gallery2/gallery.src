@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:21:42 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ chinese_simplified ] = "æœå¯»æ–‡ä»¶(~F)...";
         Text[ russian ] = "Íàéòè ôàéëû...";
         Text[ polish ] = "Szukaj plików...";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢(~F)...";
+        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®å‚ç…§(~F)...";
         Text[ chinese_traditional ] = "å°‹æ‰¾æª”æ¡ˆ(~F)...";
         Text[ arabic ] = "...ÈÍË Úä ãáİÇÊ";
         Text[ dutch ] = "~Bestanden zoeken...";
