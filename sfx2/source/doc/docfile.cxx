@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:18:42 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,15 +1313,15 @@ void SfxMedium::Transfer_Impl()
                     if ( aURL.Len() )
                         // remove a possibly existing old folder
                         ::utl::UCBContentHelper::Kill( aURL );
-                }
 
-                DELETEZ( pStream );
+                    DELETEZ( pStream );
+                }
 
                 // create a new folder based storage
                 SvStorageRef xStor = new SvStorage( TRUE, GetName(), STREAM_STD_READWRITE, STORAGE_CREATE_UNPACKED );
 
                 // copy package into unpacked storage
-                if ( GetStorage()->CopyTo( xStor ) )
+                if ( xStor->GetError() == ERRCODE_NONE && GetStorage()->CopyTo( xStor ) )
                 {
                     // commit changes, writing will happen now
                     xStor->Commit();
@@ -1332,7 +1332,7 @@ void SfxMedium::Transfer_Impl()
                     SetStorage_Impl( xStor );
                 }
                 else if ( !GetError() )
-                    SetError( GetStorage()->GetError() );
+                    SetError( xStor->GetError() );
                 return;
             }
         }
