@@ -2,9 +2,9 @@
  *
  *  $RCSfile: windowstateconfiguration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:59:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,19 +164,23 @@ static const char CONFIGURATION_PROPERTY_SIZE[]             = WINDOWSTATE_PROPER
 static const char CONFIGURATION_PROPERTY_UINAME[]           = WINDOWSTATE_PROPERTY_UINAME;
 static const char CONFIGURATION_PROPERTY_INTERNALSTATE[]    = WINDOWSTATE_PROPERTY_INTERNALSTATE;
 static const char CONFIGURATION_PROPERTY_STYLE[]            = WINDOWSTATE_PROPERTY_STYLE;
+static const char CONFIGURATION_PROPERTY_CONTEXT[]          = WINDOWSTATE_PROPERTY_CONTEXT;
+static const char CONFIGURATION_PROPERTY_HIDEFROMMENU[]     = WINDOWSTATE_PROPERTY_HIDEFROMENU;
 
 // Zero based indexes, order must be the same as WindowStateMask && CONFIGURATION_PROPERTIES!
 static const sal_Int16 PROPERTY_LOCKED                  = 0;
 static const sal_Int16 PROPERTY_DOCKED                  = 1;
 static const sal_Int16 PROPERTY_VISIBLE                 = 2;
-static const sal_Int16 PROPERTY_DOCKINGAREA             = 3;
-static const sal_Int16 PROPERTY_POS                     = 4;
-static const sal_Int16 PROPERTY_SIZE                    = 5;
-static const sal_Int16 PROPERTY_UINAME                  = 6;
-static const sal_Int16 PROPERTY_INTERNALSTATE           = 7;
-static const sal_Int16 PROPERTY_STYLE                   = 8;
-static const sal_Int16 PROPERTY_DOCKPOS                 = 9;
-static const sal_Int16 PROPERTY_DOCKSIZE                = 10;
+static const sal_Int16 PROPERTY_CONTEXT                 = 3;
+static const sal_Int16 PROPERTY_HIDEFROMMENU            = 4;
+static const sal_Int16 PROPERTY_DOCKINGAREA             = 5;
+static const sal_Int16 PROPERTY_POS                     = 6;
+static const sal_Int16 PROPERTY_SIZE                    = 7;
+static const sal_Int16 PROPERTY_UINAME                  = 8;
+static const sal_Int16 PROPERTY_INTERNALSTATE           = 9;
+static const sal_Int16 PROPERTY_STYLE                   = 10;
+static const sal_Int16 PROPERTY_DOCKPOS                 = 11;
+static const sal_Int16 PROPERTY_DOCKSIZE                = 12;
 
 // Order must be the same as WindowStateMask!!
 static const char* CONFIGURATION_PROPERTIES[]           =
@@ -184,6 +188,8 @@ static const char* CONFIGURATION_PROPERTIES[]           =
     CONFIGURATION_PROPERTY_LOCKED,
     CONFIGURATION_PROPERTY_DOCKED,
     CONFIGURATION_PROPERTY_VISIBLE,
+    CONFIGURATION_PROPERTY_CONTEXT,
+    CONFIGURATION_PROPERTY_HIDEFROMMENU,
     CONFIGURATION_PROPERTY_DOCKINGAREA,
     CONFIGURATION_PROPERTY_POS,
     CONFIGURATION_PROPERTY_SIZE,
@@ -261,14 +267,16 @@ class ConfigurationAccess_WindowState : // interfaces
             WINDOWSTATE_MASK_LOCKED         = 1,
             WINDOWSTATE_MASK_DOCKED         = 2,
             WINDOWSTATE_MASK_VISIBLE        = 4,
-            WINDOWSTATE_MASK_DOCKINGAREA    = 8,
-            WINDOWSTATE_MASK_POS            = 16,
-            WINDOWSTATE_MASK_SIZE           = 32,
-            WINDOWSTATE_MASK_UINAME         = 64,
-            WINDOWSTATE_MASK_INTERNALSTATE  = 128,
-            WINDOWSTATE_MASK_STYLE          = 256,
-            WINDOWSTATE_MASK_DOCKPOS        = 512,
-            WINDOWSTATE_MASK_DOCKSIZE       = 1024
+            WINDOWSTATE_MASK_CONTEXT        = 8,
+            WINDOWSTATE_MASK_HIDEFROMMENU   = 16,
+            WINDOWSTATE_MASK_DOCKINGAREA    = 32,
+            WINDOWSTATE_MASK_POS            = 64,
+            WINDOWSTATE_MASK_SIZE           = 128,
+            WINDOWSTATE_MASK_UINAME         = 256,
+            WINDOWSTATE_MASK_INTERNALSTATE  = 512,
+            WINDOWSTATE_MASK_STYLE          = 1024,
+            WINDOWSTATE_MASK_DOCKPOS        = 2048,
+            WINDOWSTATE_MASK_DOCKSIZE       = 4096
         };
 
         // Cache structure. Valid values are described by tje eMask member. All other values should not be
@@ -285,7 +293,9 @@ class ConfigurationAccess_WindowState : // interfaces
 
             sal_Bool                                bLocked : 1,
                                                     bDocked : 1,
-                                                    bVisible : 1;
+                                                    bVisible : 1,
+                                                    bContext : 1,
+                                                    bHideFromMenu : 1;
             drafts::com::sun::star::ui::DockingArea aDockingArea;
             com::sun::star::awt::Point              aDockPos;
             com::sun::star::awt::Size               aDockSize;
@@ -678,6 +688,10 @@ Any ConfigurationAccess_WindowState::impl_getSequenceFromStruct( const WindowSta
                     aPropSeq[nIndex].Value = makeAny( rWinStateInfo.bDocked ); break;
                 case PROPERTY_VISIBLE:
                     aPropSeq[nIndex].Value = makeAny( rWinStateInfo.bVisible ); break;
+                case PROPERTY_CONTEXT:
+                    aPropSeq[nIndex].Value = makeAny( rWinStateInfo.bContext ); break;
+                case PROPERTY_HIDEFROMMENU:
+                    aPropSeq[nIndex].Value = makeAny( rWinStateInfo.bHideFromMenu ); break;
                 case PROPERTY_DOCKINGAREA:
                     aPropSeq[nIndex].Value = makeAny( rWinStateInfo.aDockingArea ); break;
                 case PROPERTY_POS:
@@ -723,6 +737,8 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                 case PROPERTY_LOCKED:
                 case PROPERTY_DOCKED:
                 case PROPERTY_VISIBLE:
+                case PROPERTY_CONTEXT:
+                case PROPERTY_HIDEFROMMENU:
                 {
                     sal_Bool bValue;
                     if ( a >>= bValue )
@@ -735,8 +751,12 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                             aWindowStateInfo.bLocked = bValue;
                         else if ( i == PROPERTY_DOCKED )
                             aWindowStateInfo.bDocked = bValue;
-                        else
+                        else if ( i == PROPERTY_VISIBLE )
                             aWindowStateInfo.bVisible = bValue;
+                        else if ( i == PROPERTY_CONTEXT )
+                            aWindowStateInfo.bContext = bValue;
+                        else
+                            aWindowStateInfo.bHideFromMenu = bValue;
                     }
                 }
                 break;
@@ -902,6 +922,8 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                 case PROPERTY_LOCKED:
                 case PROPERTY_DOCKED:
                 case PROPERTY_VISIBLE:
+                case PROPERTY_CONTEXT:
+                case PROPERTY_HIDEFROMMENU:
                 {
                     sal_Bool bValue;
                     if ( a >>= bValue )
@@ -912,8 +934,12 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                             aWindowStateInfo.bLocked = bValue;
                         else if ( i == PROPERTY_DOCKED )
                             aWindowStateInfo.bDocked = bValue;
-                        else
+                        else if ( i == PROPERTY_VISIBLE )
                             aWindowStateInfo.bVisible = bValue;
+                        else if ( i == PROPERTY_CONTEXT )
+                            aWindowStateInfo.bContext = bValue;
+                        else
+                            aWindowStateInfo.bHideFromMenu = bValue;
                     }
                 }
                 break;
@@ -1089,6 +1115,8 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                     case PROPERTY_LOCKED:
                     case PROPERTY_DOCKED:
                     case PROPERTY_VISIBLE:
+                    case PROPERTY_CONTEXT:
+                    case PROPERTY_HIDEFROMMENU:
                     {
                         sal_Bool bValue;
                         if ( rSeq[i].Value >>= bValue )
@@ -1099,8 +1127,12 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
                                 rWinStateInfo.bLocked = bValue;
                             else if ( j == PROPERTY_DOCKED )
                                 rWinStateInfo.bDocked = bValue;
-                            else
+                            else if ( j == PROPERTY_VISIBLE )
                                 rWinStateInfo.bVisible = bValue;
+                            else if ( j == PROPERTY_CONTEXT )
+                                rWinStateInfo.bContext = bValue;
+                            else
+                                rWinStateInfo.bHideFromMenu = bValue;
                         }
                     }
                     break;
@@ -1221,6 +1253,10 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bDocked )) ); break;
                     case PROPERTY_VISIBLE:
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bVisible )) ); break;
+                    case PROPERTY_CONTEXT:
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bContext )) ); break;
+                    case PROPERTY_HIDEFROMMENU:
+                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Bool( rWinStateInfo.bHideFromMenu )) ); break;
                     case PROPERTY_DOCKINGAREA:
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Int16( rWinStateInfo.aDockingArea ) ) ); break;
                     case PROPERTY_POS:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: windowstateconfiguration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:51:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ namespace framework
 #define WINDOWSTATE_PROPERTY_UINAME         "UIName"
 #define WINDOWSTATE_PROPERTY_INTERNALSTATE  "InternalState"
 #define WINDOWSTATE_PROPERTY_STYLE          "Style"
+#define WINDOWSTATE_PROPERTY_CONTEXT        "ContextSensitive"
+#define WINDOWSTATE_PROPERTY_HIDEFROMENU    "HideFromToolbarMenu"
 
 class ConfigurationAccess_Windows;
 class WindowStateConfiguration :  public com::sun::star::lang::XTypeProvider    ,
