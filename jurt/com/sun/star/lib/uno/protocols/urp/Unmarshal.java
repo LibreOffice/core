@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 14:35:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,12 +414,12 @@ final class Unmarshal {
 
     private Object readSequenceValue(TypeDescription type) {
         int len = readCompressedNumber();
-        if (type.getTypeClass() == TypeClass.BYTE) {
+        TypeDescription ctype = (TypeDescription) type.getComponentType();
+        if (ctype.getTypeClass() == TypeClass.BYTE) {
             byte[] data = new byte[len];
             readBytes(data);
             return data;
         } else {
-            TypeDescription ctype = (TypeDescription) type.getComponentType();
             Object value = Array.newInstance(
                 ctype.getTypeClass() == TypeClass.ANY
                 ? Object.class : ctype.getZClass(), len);
