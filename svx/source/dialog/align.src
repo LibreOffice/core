@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:20:25 $
+ *  last change: $Author: gt $ $Date: 2002-06-04 12:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
 
  // define ---------------------------------------------------------------
-#define IL_LOCK_MCOL Color { Red=0xFFFF; Green=0xFFFF; Blue=0xFFFF; }
+#define IL_LOCK_MCOL Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
  // RID_SVXPAGE_ALIGNMENT -------------------------------------------------
 TabPage RID_SVXPAGE_ALIGNMENT
 {
@@ -1061,6 +1061,18 @@ TabPage RID_SVXPAGE_ALIGNMENT
     ImageList IL_LOCK_BMPS
     {
         ImageBitmap = Bitmap { File = "lo_ckmode.bmp" ; };
+        MaskColor = IL_LOCK_MCOL ;
+        IdList =
+        {
+            IID_BOTTOMLOCK ;
+            IID_TOPLOCK ;
+            IID_CELLLOCK ;
+        };
+        IdCount = { 3 ; };
+    };
+    ImageList IL_LOCK_BMPS_HC
+    {
+        ImageBitmap = Bitmap { File = "lohckmode.bmp" ; };
         MaskColor = IL_LOCK_MCOL ;
         IdList =
         {

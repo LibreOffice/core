@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 12:17:55 $
+ *  last change: $Author: gt $ $Date: 2002-06-04 12:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
 #endif
 
 // static ----------------------------------------------------------------
@@ -189,23 +192,39 @@ SvxAlignmentTabPage::~SvxAlignmentTabPage()
 
 void SvxAlignmentTabPage::FillForLockMode()
 {
-    ImageList   aIlLock( ResId( IL_LOCK_BMPS ) );
+    ImageList   aIlLock( ResId( GetBackground().GetColor().IsDark()? IL_LOCK_BMPS_HC : IL_LOCK_BMPS ) );
     Size        aItemSize = aIlLock.GetImage(IID_BOTTOMLOCK).GetSizePixel();
     Size        aSize;
 
+    ValueSet&   rValSet = aWinOrient.GetVSLockMode();
 
-    aWinOrient.GetVSLockMode().SetColCount( 3 );
-    aWinOrient.GetVSLockMode().SetStyle(
-        aWinOrient.GetVSLockMode().GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    aSize = aWinOrient.GetVSLockMode().CalcWindowSizePixel( aItemSize );
+    rValSet.SetColCount( 3 );
+    rValSet.SetStyle( rValSet.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
+    aSize = rValSet.CalcWindowSizePixel( aItemSize );
 
-    aWinOrient.GetVSLockMode().SetSizePixel( aSize );
+    rValSet.SetSizePixel( aSize );
     //aWinOrient.GetVSLockMode().SetColCount( 5 );
-    aWinOrient.GetVSLockMode().InsertItem( 1, aIlLock.GetImage(IID_BOTTOMLOCK),String(ResId(STR_BOTTOMLOCK)));
-    aWinOrient.GetVSLockMode().InsertItem( 2, aIlLock.GetImage(IID_TOPLOCK),String(ResId(STR_TOPLOCK)));
-    aWinOrient.GetVSLockMode().InsertItem( 3, aIlLock.GetImage(IID_CELLLOCK),String(ResId(STR_CELLLOCK)));
-    aWinOrient.GetVSLockMode().SetNoSelection();
-    aWinOrient.GetVSLockMode().Show();
+    rValSet.InsertItem( 1, aIlLock.GetImage( IID_BOTTOMLOCK ), String( ResId( STR_BOTTOMLOCK ) ) );
+    rValSet.InsertItem( 2, aIlLock.GetImage( IID_TOPLOCK ), String( ResId( STR_TOPLOCK ) ) );
+    rValSet.InsertItem( 3, aIlLock.GetImage( IID_CELLLOCK ),String( ResId( STR_CELLLOCK ) ) );
+    rValSet.SetNoSelection();
+    rValSet.Show();
+}
+
+//------------------------------------------------------------------------
+
+void SvxAlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxTabPage::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        svt::OLocalResourceAccess   aLocalResAcc( SVX_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
+        aWinOrient.GetVSLockMode().Clear();
+        FillForLockMode();
+
+        aWinOrient.HandleUpdatedSystemsettings();
+    }
 }
 
 //------------------------------------------------------------------------
