@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:59:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,14 +409,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     StringList [ korean ] =
     {
-            < "¥Ÿ¿Ω∞˙ ∞∞¿Ω" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« πÃ∏∏¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« √ ∞˙¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ¿Ã«œ¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ¿ÃªÛ¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω∞˙ ∞∞¡ˆ æ ¿Ω" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ªÁ¿Ã¿”" ; Default ; > ;
-        < "π€¿«" ; Default ; > ;
+            < "∞∞¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°¿€¥Ÿ" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°≈©¥Ÿ" ; Default ; > ;
+        < "¿€∞≈≥™°°∞∞¥Ÿ" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°≈©∞≈≥™°°∞∞¥Ÿ" ; Default ; > ;
+        < "∞∞¡ˆ æ ¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω ªÁ¿Ã¿”" ; Default ; > ;
+        < "ªÁ¿Ã°°æ∆¥‘" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -471,7 +471,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -532,7 +532,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -698,7 +698,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     StringList [ korean ] =
     {
             < "ºø ∞™¿∫" ; Default ; > ;
-        < "ºˆΩƒ¿∫" ; Default ; > ;
+        < "ºˆΩƒ" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -909,14 +909,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     StringList [ korean ] =
     {
-            < "¥Ÿ¿Ω∞˙ ∞∞¿Ω" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« πÃ∏∏¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« √ ∞˙¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ¿Ã«œ¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ¿ÃªÛ¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω∞˙ ∞∞¡ˆ æ ¿Ω" ; Default ; > ;
+            < "∞∞¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°¿€¥Ÿ" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°≈©¥Ÿ" ; Default ; > ;
+        < "¿€∞≈≥™°°∞∞¥Ÿ" ; Default ; > ;
+        < "≈©∞≈≥™°°∞∞¥Ÿ" ; Default ; > ;
+        < "∞∞¡ˆ æ ¿Ω" ; Default ; > ;
         < "¥Ÿ¿Ω¿« ªÁ¿Ã¿”" ; Default ; > ;
-        < "π€ø°" ; Default ; > ;
+        < "£Æ£ÆªÁ¿Ã°°æ∆¥‘" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -971,7 +971,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -1032,7 +1032,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -1409,12 +1409,12 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     StringList [ korean ] =
     {
-            < "¥Ÿ¿Ω∞˙ ∞∞¿Ω" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« πÃ∏∏¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« √ ∞˙¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ¿Ã«œ¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω¿« ¿ÃªÛ¿”" ; Default ; > ;
-        < "¥Ÿ¿Ω∞˙ ∞∞¡ˆ æ ¿Ω" ; Default ; > ;
+            < "∞∞¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°¿€¥Ÿ" ; Default ; > ;
+        < "¥Ÿ¿Ω∫∏¥Ÿ°°≈©¥Ÿ" ; Default ; > ;
+        < "¿€∞≈≥™°°∞∞¥Ÿ" ; Default ; > ;
+        < "≈©∞≈≥™°°∞∞¥Ÿ" ; Default ; > ;
+        < "∞∞¡ˆ æ ¿Ω" ; Default ; > ;
         < "¥Ÿ¿Ω¿« ªÁ¿Ã¿”" ; Default ; > ;
         < "π€ø°" ; Default ; > ;
     };
@@ -1471,7 +1471,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -1532,7 +1532,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -1606,7 +1606,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ chinese_traditional ] = "¶≥±¯•Û™∫ÆÊ¶°";
     Text[ arabic ] = " ‰”Ìﬁ „‘—Êÿ";
     Text[ greek ] = "ÃÔÒˆÔÔﬂÁÛÁ ı¸ ¸ÒÔıÚ";
-    Text[ korean ] = "¡∂∞« º≠Ωƒ";
+    Text[ korean ] = "¡∂∞«¿˚ ∆˜∏À∆√";
     Text[ turkish ] = "Ko˛ullu formatlama";
     Text[ language_user1 ] = " ";
 };
