@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: er $ $Date: 2001-07-02 09:37:54 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:44:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,14 +61,12 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=syslocale
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
