@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:21 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,17 +585,20 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     // Falls nur noch [dbase] in INF-File steht, Datei loeschen
     if(!nPos)
     {
-        ::ucb::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-        aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
+        try
+        {
+            ::ucb::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
+        }
+        catch (const Exception& e )
+        {
+            e;  // make compiler happy
+            // simply silent this. The strange algorithm here does a lot of things even if no files at all were
+            // created or access, so it's possible that the file we're trying to delete does not even exist,
+            // and this is a valid condition.
+            // 2003-05-15 - #109677# - fs@openoffice.org
+        }
     }
-
-//  DirEntry aDirEntry( aFileName );
-//  FileStat aFileStat( aDirEntry );
-//  sal_uInt32 nFileSize = aFileStat.GetSize();
-//  xub_StrLen nGroupIdLen = aGroupIdent.Len();
-//
-//  if( (xub_StrLen)nFileSize == (nGroupIdLen+4) )
-//      aDirEntry.Kill();
 }
 
 //.........................................................................
