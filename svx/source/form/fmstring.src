@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:16:54 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,7 +843,7 @@ String RID_STR_LOCKED
     Text[ chinese_simplified ] = "Λψ¶¨µΔ";
     Text[ russian ] = "Ηΰαλξκθπξβΰνξ";
     Text[ polish ] = "Ochrona";
-    Text[ japanese ] = "Ϋ―Έ‚³‚κ‚Δ‚Ά‚ι";
+    Text[ japanese ] = "Ϋ―Έ‚·‚ι";
     Text[ chinese_traditional ] = "Βκ©wªΊ";
     Text[ greek ] = "Κλειδωμένο";
     Text[ korean ] = "³Π°Τ";
@@ -1854,11 +1854,11 @@ String RID_STR_DELETECONFIRM_RECORD
     Text = "Sie beabsichtigen, 1 Datensatz zu lφschen." ;
     Text [ ENGLISH ] = "You are about to delete 1 record." ;
     Text [ english_us ] = "You intend to delete 1 record." ;
-    Text [ portuguese ] = "Eliminarα # registo." ;
+    Text [ portuguese ] = "Deseja eliminar 1 registo." ;
     Text [ portuguese_brazilian ] = "Sie beabsichtigen # Datensatz zu lφschen." ;
     Text [ swedish ] = "Du kommer att radera 1 datapost." ;
     Text [ danish ] = "Du er i gang med at slette # datapost." ;
-    Text [ italian ] = "Intendete eliminare il record # di dati." ;
+    Text [ italian ] = "Intendete eliminare 1 record di dati." ;
     Text [ spanish ] = "Usted desea eliminar 1 registro de datos." ;
     Text [ french ] = "Vous avez l'intention de supprimer 1 enregistrement." ;
     Text [ dutch ] = "U wilt 1 record wissen." ;
@@ -3794,7 +3794,7 @@ String RID_STR_ENABLED
     Text [ dutch ] = "Geactiveerd" ;
     Text[ chinese_simplified ] = "Ό¤»ξµΔ";
     Text[ russian ] = "ΐκςθβθπξβΰνξ";
-    Text[ polish ] = "Uaktywniony";
+    Text[ polish ] = "Aktywny";
     Text[ japanese ] = "±ΈΓ¨Μή‚Ι‚·‚ι";
     Text[ chinese_traditional ] = "±Ò°ΚªΊ";
     Text[ greek ] = "Ενεργοποιημένο";
@@ -4870,13 +4870,13 @@ String RID_STR_EVT_RELOADING
     Text = "Vor dem erneuten Laden";
     Text [ english ] = "Before reloading" ;
     Text [ english_us ] = "Before reloading" ;
-    Text[ portuguese ] = "Before reloading";
+    Text[ portuguese ] = "Antes de recarregar";
     Text[ russian ] = "Οεπεδ οεπεηΰγπσηκξι";
     Text[ greek ] = "Πριν την επαναφόρτωση";
     Text[ dutch ] = "Alvorens opnieuw te laden";
     Text[ french ] = "Avant le rechargement";
     Text[ spanish ] = "Antes de recargar";
-    Text[ italian ] = "Before reloading";
+    Text[ italian ] = "Prima del ricaricamento";
     Text[ danish ] = "Before reloading";
     Text[ swedish ] = "Innan omladdning";
     Text[ polish ] = "Przed ponownym za³adowaniem";
@@ -5306,13 +5306,13 @@ String RID_STR_EVT_UNLOADING
     Text = "Vor dem Entladen";
     Text [ english ] = "Before unloading" ;
     Text [ english_us ] = "Before unloading" ;
-    Text[ portuguese ] = "Before unloading";
+    Text[ portuguese ] = "Antes de descarregar";
     Text[ russian ] = "Οεπεδ πΰηγπσηκξι";
     Text[ greek ] = "Πριν την αποφόρτωση";
     Text[ dutch ] = "Voor het afsluiten";
     Text[ french ] = "Avant le dιchargement";
     Text[ spanish ] = "Antes de descargar";
-    Text[ italian ] = "Before unloading";
+    Text[ italian ] = "Prima di scaricare";
     Text[ danish ] = "Before unloading";
     Text[ swedish ] = "Innan avladdning";
     Text[ polish ] = "Przed roz³adowaniem";
@@ -5725,7 +5725,7 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text[ chinese_simplified ] = "ΘΥΖΪΧΦ¶Ξ";
     Text[ russian ] = "Οξλε δΰςϋ";
     Text[ polish ] = "Pole daty";
-    Text[ japanese ] = "“ϊ•tΞή―Έ½";
+    Text[ japanese ] = "“ϊ•tΜ¨°ΩΔή";
     Text[ chinese_traditional ] = "¤ι΄ΑΔζ¦μ";
     Text[ greek ] = "Πεδίο ημερομηνίας";
     Text[ korean ] = "³―Β¥ ΗΚµε";
@@ -5749,7 +5749,7 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text[ chinese_simplified ] = "Κ±ΌδΧΦ¶Ξ";
     Text[ russian ] = "Οξλε βπεμενθ";
     Text[ polish ] = "Pole czasu";
-    Text[ japanese ] = "ΤΞή―Έ½";
+    Text[ japanese ] = "Μ¨°ΩΔή";
     Text[ chinese_traditional ] = "®Ι¶΅Δζ¦μ";
     Text[ greek ] = "Πεδίο ώρας";
     Text[ korean ] = "½Γ°£ ΗΚµε";
@@ -5773,7 +5773,7 @@ String RID_STR_PROPTITLE_NUMERICFIELD
     Text[ chinese_simplified ] = "ΚύΧΦΐΈ";
     Text[ russian ] = "Χθρλξβξε οξλε";
     Text[ polish ] = "Pole numeryczne";
-    Text[ japanese ] = "”Ξή―Έ½";
+    Text[ japanese ] = "”Τ†Μ¨°ΩΔή";
     Text[ chinese_traditional ] = "ΌΖ¦rΔζ¦μ";
     Text[ greek ] = "Αριθμητικό πεδίο";
     Text[ korean ] = "ΌύΐΪ ΗΚµε";
@@ -5797,7 +5797,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text[ chinese_simplified ] = "»υ±ÒΧΦ¶Ξ";
     Text[ russian ] = "Οξλε βΰλώςϋ";
     Text[ polish ] = "Pole waluty";
-    Text[ japanese ] = "’Κ‰έΞή―Έ½";
+    Text[ japanese ] = "’Κ‰έΜ¨°ΩΔή";
     Text[ chinese_traditional ] = "³fΉτΔζ¦μ";
     Text[ greek ] = "Πεδίο νομίσματος";
     Text[ korean ] = "ΕλΘ­ ΗΚµε";
@@ -6553,7 +6553,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
 {
     Text = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
     Text [ english ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
-    Text [ english_us ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
+    Text [ english_us ] = "An error occurred while this control was being loaded. It was therefore replaced with a placeholder.";
     Text[ portuguese ] = "Ao carregar este controlo ocorreu um erro. Por esta razγo foi substituνdo por um marcador de posiηγo.";
     Text[ russian ] = "Οπθ ηΰγπσηκε ύςξγξ ύλεμενςΰ σοπΰβλενθÿ (control) οπξθηξψλΰ ξψθακΰ. Οξύςξμσ ξν αϋλ ηΰμενεν μερςξηΰοξλνθςελεμ.";
     Text[ greek ] = "Προέκυψε σφάλμα κατά τη φόρτωση του στοιχείου ελέγχου. Για αυτόν τον λόγο αντικαταστάθηκε με ένα σύμβολο κράτησης θέσης.";
