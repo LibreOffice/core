@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-10 14:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1621,7 +1621,7 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
 
     moveToBookmark((*(*_rUpdateRow))[0].makeAny());
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
-    *m_aMatrixIter = *_rUpdateRow;
+    *(*m_aMatrixIter) = *(*_rUpdateRow);
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
 //      *m_aMatrixIter = m_aInsertRow;
@@ -1807,6 +1807,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.32  2001/04/24 14:40:19  oj
+    view fixes
+
     Revision 1.31  2001/04/19 07:13:59  fs
     throwFunctionSequenceException instead of throw FunctionSequenceException (bridge problems)
 
