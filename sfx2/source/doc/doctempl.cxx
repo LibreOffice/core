@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-21 11:56:05 $
+ *  last change: $Author: dv $ $Date: 2000-12-21 12:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2023,6 +2023,8 @@ int EntryData_Impl::Compare( const OUString& rTitle ) const
 // -----------------------------------------------------------------------
 void EntryData_Impl::SetType( const OUString& rType )
 {
+#ifndef DONT_USE_HIERARCHY
+
     if ( ! rType.len() )
         return;
 
@@ -2059,6 +2061,7 @@ void EntryData_Impl::SetType( const OUString& rType )
     catch ( CommandAbortedException& ) {}
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
+#endif
 }
 
 // -----------------------------------------------------------------------
