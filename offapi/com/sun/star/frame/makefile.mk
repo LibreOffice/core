@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 16:00:43 $
+#   last change: $Author: mav $ $Date: 2002-04-03 11:47:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ IDLFILES=\
     FrameLoaderFactory.idl\
     FramesContainer.idl\
     FrameSearchFlag.idl\
+    IllegalArgumentIOException.idl\
     MediaTypeDetectionHelper.idl\
     ProtocolHandler.idl\
     Settings.idl\
