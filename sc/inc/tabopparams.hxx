@@ -2,7 +2,7 @@
  *
  *  $RCSfile: tabopparams.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
  *  last change: $ $
  *
@@ -65,6 +65,10 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #include <vector>
 
 class ScFormulaCell;
