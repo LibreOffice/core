@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:17:19 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ static USHORT nTitleNo = 0;
         // Rahmen einfuegen
         SwFlyFrmAttrMgr aMgr(FALSE, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
-        aMgr.SetSizeType(ATT_VAR_SIZE);
+        aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
         //Defaults ueberschreiben!
         aMgr.GetAttrSet().Put( SvxBoxItem() );
