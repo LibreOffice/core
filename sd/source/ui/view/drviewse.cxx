@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-30 11:14:06 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 14:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1508,19 +1508,11 @@ void SdDrawViewShell::InsertURLField(const String& rURL, const String& rText,
 
     if (pOLV)
     {
-        const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-
-        if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
-        {
-            // Feld selektieren, so dass es beim Insert geloescht wird
-            ESelection aSel = pOLV->GetSelection();
-            if( aSel.nStartPos == aSel.nEndPos )
-                aSel.nEndPos++;
-            pOLV->SetSelection(aSel);
-        }
-
-        SvxFieldItem aURLItem(SvxURLField(rURL, rText, SVXURLFORMAT_REPR));
-        pOLV->InsertField(aURLItem);
+        ESelection aSel = pOLV->GetSelection();
+        SvxFieldItem aURLItem( SvxURLField( rURL, rText, SVXURLFORMAT_REPR ) );
+        pOLV->InsertField( aURLItem );
+        aSel.nEndPos = aSel.nStartPos + 1;
+        pOLV->SetSelection( aSel );
     }
     else
     {
