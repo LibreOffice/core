@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:24:58 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,11 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
         if( mbDisableGlyphs )
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
+            {
                 nGlyphIndex |= GetVerticalFlags( nGlyphIndex & GF_IDXMASK );
+                if( !(nGlyphIndex & GF_ROTMASK) )
+                    nGlyphIndex |= GF_VERT;
+            }
             nGlyphIndex |= GF_ISCHAR;
         }
         ++nCount;
@@ -1340,7 +1344,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             {
                 VisualItem aVtmp = *pVI0;
                 *(pVI0++) = *pVI1;
-                *(pVI1++) = aVtmp;
+                *pVI1 = aVtmp;
             }
         }
     }
@@ -1374,7 +1378,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                 {
                     VisualItem aVtmp = *pVImin;
                     *(pVImin++) = *pVImax;
-                    *(pVImax++) = aVtmp;
+                    *pVImax = aVtmp;
                 }
             }
         }
